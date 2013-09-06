@@ -1,0 +1,37 @@
+<div id="tab-settings" class="hidden">
+	
+	<form method="post" action="" accept-charset="UTF-8">
+		<input type="hidden" name="action" value="senorform/forms/saveForm">
+		<input type="hidden" name="redirect" value="senorform/forms">
+		<input type="hidden" name="id" value="{{ form is defined ? form.id : '' }}">
+		
+    {{ forms.textField({
+      label: "Form Name"|t,
+      id: 'name',
+      name: 'name',
+      instructions: "Human readable form name"|t,
+      value: (form is defined ? form.name : null),
+      autofocus: true,
+      required: true,
+      first: true,
+      errors: (form is defined ? form.getErrors('name') : null)   
+    }) }}
+
+    {{ forms.textField({
+      label: "Form Handle"|t,
+      id: 'handle',
+      name: 'handle',
+      instructions: "Short name you will use to refer to your form in the code"|t,
+      value: (form is defined ? form.handle : null),
+      required: true,
+      errors: (form is defined ? form.getErrors('handle') : null)   
+    }) }}
+
+  <div class="buttons">
+    {{ btns.submit({ val: "Save Template"|t }) }} 
+    {{ btns.cancel({ url: "senorform/entries"|t }) }} 
+  </div>
+  
+  </form>
+
+</div>

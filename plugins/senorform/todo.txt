@@ -1,0 +1,63 @@
+
+Field Logic Plugin
+------------------------------------------------------------
+Should this be a fieldtype or a Control Panel area?
+In the CP Tab, you can select an existing section and add logic to the existing fields that are there.  But then, we need to apply that logic to the publish form so we will need to use a hook.
+For Señor Form, we should also be able to start applying logic to the fieldtypes.  Is this done in the CP? Or a special tab in Señor form for users that don't have access to the sections, but need to apply logic to Señor Form Fields.  We should build this so we don't need to write any code twice.  Maybe a logic library.
+
+
+
+Gmail has the date in the right column and it always appears on top of the other content.  Can we do this with the delete button or even the DATE for the form entries?  
+
+
+Notifications:
+Textarea: allows a text-based email message
+
+Señor Form
+- Contact Form
+
+
+Popup Surveys?  Those surveys that pop up at the bottom of sites and ask a question or ask how we are doing?
+
+Also consider a Google Documentation Style Feedback field.  A slider that, when selected, opens up a comment field for clarification.
+
+Or a basecamp, happy, ok, angry field.
+
+
+
+AVOIDING DOUBLE SUBMISSIONS
+------------------------------------------------------------
+Selvin says "senor form should be implemented as POST/REDIRECT/GET so that double submissions are eliminated or at the very least greatly reduced"
+
+He also has other ideas we should discuss on this topic.
+
+
+============================================================
+
+Contact Forms
+Surveys
+Polls
+Member Registration
+Spam Prevention
+User Feedback (like in Google documentation)
+Facebook Giveaways
+
+Signatures
+Payment Integration
+Event Sign Ups
+
+Form Builder
+Form Templates
+Login and Branching
+
+Notifications | * with Master Blaster
+
+
+------------------------------------------------------------
+
+Conventions to discuss:
+Variable Names : Human readable vs. Short
+Tabs vs. Spaces vs. Craft Conventions
+
+Template options: postDate.nice vs postDate|date('Y')
+How much abstraction: Buttons as Macros

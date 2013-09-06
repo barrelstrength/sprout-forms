@@ -1,0 +1,64 @@
+{% extends "senorform/_layout" %}
+{% import "_includes/forms" as forms %}
+{% import "SenorForm/common/buttons" as btns %}
+
+
+{# get form and associated fields #}
+{% if formId is defined %}
+	{% set form = craft.senorform.getFormById(formId) %}
+	{% if not form %}
+		{% exit 404 %}
+	{% endif %}
+	{% set formName = form.name %}
+{% else %}
+	{% set formName = 'new' %}
+	{% set formId = 0 %}
+{% endif %}
+
+
+{% if craft.request.getSegment('3') == 'new' %}
+	{% set title = "New Form" %}
+{% else %}
+	{% set title = formName %}
+{% endif %}
+
+{% set crumbs = [
+	{ label: "Señor Form"|t, url: url('senorform/forms') },
+	{ label: formName, url: '' }
+] %}
+
+{% set tabs = {
+    formEntries: { 
+      label: "Entries"|t,
+      url: '#tab-entries'
+    },
+    formFields: { 
+      label: "Fields"|t,
+      url: '#tab-fields'
+    },
+    formNotifcations: { 
+      label: "Notifications"|t,
+      url: '#tab-notifications'
+    },
+    formSettings:    { 
+      label: "Settings"|t,
+      url: '#tab-settings'
+    }
+} %}
+
+
+{% set body %}
+
+<form method="post" action="" accept-charset="UTF-8">
+	<input type="hidden" name="action" value="senorform/forms/saveForm">
+	<input type="hidden" name="redirect" value="senorform/forms">
+	<input type="hidden" name="id" value="{{ formId }}">
+
+	{% include "SenorForm/entries/index" %}
+	{% include "SenorForm/fields/index" %}
+  	{% include "SenorForm/notifications/index" %}
+	{% include "SenorForm/settings/formsettings" %}
+
+</form>
+
+{% endset %}

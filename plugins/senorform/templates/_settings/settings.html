@@ -1,0 +1,12 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.textField({
+	label: "Plugin Name"|t,
+	id: 'pluginNameOverride',
+	name: 'pluginNameOverride',
+	instructions: "Intuitive, human-readable plugin name for the end user."|t,
+	value: settings.pluginNameOverride,
+	autofocus: true,
+  first: true,
+	errors: ''	
+}) }}

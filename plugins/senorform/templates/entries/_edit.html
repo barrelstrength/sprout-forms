@@ -1,0 +1,133 @@
+{% extends "senorform/_layout" %}
+
+{% set title = "New Form" %}
+
+{% set crumbs = [
+	{ label: "Señor Form"|t, url: url('senorform/forms') },
+	{ label: "Add New Form"|t, url: url('content') }
+] %}
+
+{% set tabs = {
+    main: { 
+      label: "Form Settings"|t,
+      url: '#form-settings'
+    },
+    publishinfo:    { 
+      label: "Notifications"|t,
+      url: '#notifications'
+    }
+} %}
+
+{% import "_includes/forms" as forms %}
+
+{% if craft.oneSeo.fallbackId is defined %}
+	{% set fallbackId = craft.oneSeo.fallbackId %}
+{% else %}
+	{% set fallbackId = null %}
+{% endif %}
+
+{% set fallback = craft.oneSeo.getFallbackById(fallbackId) %}
+
+{% set body %}
+
+<form method="post" action="" accept-charset="UTF-8">
+	<input type="hidden" name="action" value="oneseo/seoData/saveFallbacks">
+	<input type="hidden" name="redirect" value="oneseo/fallbacks">
+
+	<input type="hidden" name="id" value="{{ fallbackId }}">
+
+<div id="form-settings">
+	
+	{{ forms.textField({
+		label: "Template Name"|t,
+		instructions: "Human readable template name"|t,
+		name: 'fallback[templateName]',
+		value: fallback.templateName,
+		errors: "",
+		required: true
+	}) }}
+
+	{{ forms.textField({
+		label: "Template Short Name"|t,
+		instructions: "Short name you will use to refer to your template in the code"|t,
+		name: 'fallback[templateHandle]',
+		value: fallback.templateHandle,
+		errors: "",
+		required: true
+	}) }}
+
+	{{ forms.textField({
+		label: "Title"|t,
+		name: 'fallback[seoTitle]',
+		instructions: "The Title will appear in your browser tab, and as the primary Heading in your search results"|t,
+		value: fallback.seoTitle,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Description"|t,
+		instructions: "A 140 word description of your content which will appear as the description in your search results."|t,
+		name: 'seoDescription',
+		value: fallback.seoDescription,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Keywords"|t,
+		instructions: "A list of keywords that describe your content"|t,
+		name: 'fallback[seoKeywords]',
+		value: fallback.seoKeywords,
+		errors: "",
+		required: false
+	}) }}
+
+</div>
+
+<div id="notifications" class="hidden">
+	{{ forms.textField({
+		label: "Region"|t,
+		instructions: "Optional. Advanced settings."|t,
+		name: 'fallback[seoRegion]',
+		value: fallback.seoRegion,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Placename"|t,
+		instructions: "Optional. Advanced settings."|t,
+		name: 'fallback[seoPlacename]',
+		value: fallback.seoPlacename,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Latitude"|t,
+		instructions: "Optional. Advanced settings."|t,
+		name: 'fallback[seoLatitude]',
+		value: fallback.seoLatitude,
+		errors: "",
+		required: false
+	}) }}
+
+	{{ forms.textField({
+		label: "Longitude"|t,
+		instructions: "Optional. Advanced settings."|t,
+		name: 'fallback[seoLongitude]',
+		value: fallback.seoLongitude,
+		errors: "",
+		required: false
+	}) }}
+</div>
+
+
+<div class="buttons">
+	<input class="btn submit" type="submit" value="Save Template">
+</div>
+
+</form>
+
+{% endset %}

@@ -1,0 +1,159 @@
+{% extends "senorform/_layout" %}
+{% import "_includes/forms" as forms %}
+{% import "SenorForm/common/buttons" as btns %}
+
+{% if fieldId is defined %}
+	{% set field = craft.senorform.getFieldById(fieldId) %}
+	{% if not field %}
+		{% exit 404 %}
+	{% endif %}
+	{% set form = craft.senorform.getFormByFieldId({'fieldId':fieldId}) %}
+{% else %}
+	{% set formId = craft.request.getQuery('formId') %}
+	{% set form = craft.senorform.getFormById(formId) %}
+{% endif %}
+
+
+{% if not form %}
+	{% exit 404 %}
+{% endif %}
+
+{% set crumbs = [
+	{ label: "Señor Form"|t, url: url('senorform/forms') },
+	{ label: form.name, url: url('senorform/forms/edit/' ~ form.id) },
+	{ label: fieldId is defined ? field.name : "Create New Field"|t, url: '' }
+] %}
+
+{% if fieldId is defined %}
+	{% set title = "Edit field <i>" ~ field.name ~ '</i> which belongs to form <i>' ~ form.name ~ '</i>' %}
+{% else %}
+	{% set title = "Create a new field"|t %}
+{% endif %}
+
+
+{% set fieldTypes = craft.senorform.getAllFieldTypes %}
+
+{% if field is defined %}
+	{% set fieldType = craft.fields.populateFieldType(field) %}
+	{% set isFieldTypeMissing = not fieldType %}
+{% else %}
+	{% set isFieldTypeMissing = false %}
+{% endif %}
+
+{% if fieldType is not defined or isFieldTypeMissing %}
+	{% set fieldType = craft.fields.getFieldType('PlainText') %}
+{% endif %}
+
+
+{% set body %}
+	<form method="post" action="" accept-charset="UTF-8">
+		<input type="hidden" name="action" value="senorform/fields/saveField">
+		<input type="hidden" name="redirect" value="senorform/forms/edit/{{ form.id }}#tab-fields">
+		<input type="hidden" name="formId" value="{{ form.id }}">
+		
+		{% if fieldId is defined %}
+			<input type="hidden" name="fieldId" value="{{ fieldId }}">
+		{% endif %}
+
+		{{ forms.textField({
+			label: "Name"|t,
+			instructions: "What this field will be called in the CP."|t,
+			id: 'name',
+			name: 'name',
+			value: (field is defined ? field.name : null),
+			errors: (field is defined ? field.getErrors('name') : null),
+			required: true,
+			translatable: true,
+			autofocus: true
+		}) }}
+
+		{{ forms.textField({
+			label: "Handle"|t,
+			instructions: "How you’ll refer to this field in the templates."|t,
+			id: 'handle',
+			class: 'code',
+			name: 'handle',
+			value: (field is defined ? field.handle : null),
+			errors: (field is defined ? field.getErrors('handle') : null),
+			required: true,
+		}) }}
+
+		{{ forms.textareaField({
+			label: "Instructions"|t,
+			instructions: "Helper text to guide the author."|t,
+			name: 'instructions',
+			value: (field is defined ? field.instructions : null),
+			errors: (field is defined ? field.getErrors('instructions') : null),
+			translatable: true
+		}) }}
+
+		{% if craft.hasPackage('Localize') %}
+			{{ forms.checkboxField({
+				label: "This field is translatable"|t,
+				name: 'translatable',
+				checked: (field is defined ? field.translatable : false)
+			}) }}
+		{% endif %}
+
+		<hr>
+
+		{{ forms.selectField({
+			label: "Type",
+			instructions: "What type of field is this?"|t ~ (fieldId is defined ? '<br><span class="error">'~"Careful—changing this may result in data loss."|t~'</span>' : ''),
+			id: 'type',
+			name: 'type',
+			options: fieldTypes,
+			value: fieldType.classHandle,
+			errors: (isFieldTypeMissing ? ["The fieldtype class “{class}” could not be found."|t({ class: field.type })] : null),
+			toggle: true
+		}) }}
+
+		{% for _fieldType in fieldTypes %}
+			{% set isCurrent = (_fieldType.classHandle == fieldType.classHandle) %}
+			{% if isCurrent %}
+				{% set settings = fieldType.settingsHtml %}
+			{% else %}
+				{% set settings = _fieldType.settingsHtml %}
+			{% endif %}
+
+			{% if settings %}
+				<div id="{{ _fieldType.classHandle }}"{% if not isCurrent %} class="hidden"{% endif %}>
+					{% set namespace = 'types[' ~ _fieldType.classHandle ~ ']' %}
+					{{- settings|ns(namespace)|raw -}}
+				</div>
+			{% endif %}
+		{% endfor %}
+
+		<hr>
+		
+		<div class="validation" style="margin-top:20px;">
+			<div class="field">
+				<div class="heading">
+					<label for="validation">Validation</label>
+					<p class="instructions">Select any validation you would like to apply to this field.</p>
+				</div>
+				{{ forms.checkboxGroup({
+					id: 'validation',
+					name: 'validation',
+					options: craft.senorform.getValidationOptions(),
+					values: field is defined  ? field.validation : '',
+					errors: (isFieldTypeMissing ? ["The fieldtype class “{class}” could not be found."|t({ class: field.type })] : null)
+				}) }}
+			</div>
+		</div>
+
+		<hr>
+
+		<div class="buttons">
+				{{ btns.submit() }}	
+				{{ btns.cancel() }}	
+		</div>
+		
+		
+	</form>
+{% endset %}
+
+
+{% if field is not defined or not field.handle %}
+	{% includeJs "new Craft.HandleGenerator('#name', '#handle');" %}
+{% endif %}

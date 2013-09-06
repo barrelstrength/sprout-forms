@@ -1,0 +1,52 @@
+{% extends "senorform/_layout" %}
+{% set title = "Fields"|t %}
+{% includeJsResource "js/fields.js" %}
+
+
+{% set crumbs = [
+	{ label: "Señor Form"|t, url: url('senorform') },
+	{ label: "Forms"|t, url: url('senorform/forms') },
+] %}
+
+{% set body %}
+
+	<table id="fields" class="data collapsible">
+		<thead>
+			<th scope="col">{{ "Name"|t }}</th>
+			<th scope="col">{{ "Handle"|t }}</th>
+			<th scope="col">{{ "Type"|t }}</th>
+			<td class="thin"></td>
+		</thead>
+		<tbody>
+			{% for i in 1..5 %}
+				{#<tr data-id="{{ field.id }}" data-name="{{ field.name|t }}">
+					<th scope="row" data-title="{{ 'Name'|t }}"><a href="{{ url('settings/fields/edit/' ~ field.id) }}">{{ field.name|t }}</a>
+						{%- if field.required %} <span class="required"></span>{% endif -%}
+					</th>
+					<td data-title="{{ 'Handle'|t }}"><code>{{ field.handle }}</code></td>
+					<td data-title="{{ 'Type'|t }}">
+						{% set fieldType = craft.fields.populateFieldType(field) %}
+						{% if fieldType %}
+							{{ fieldType.name }}
+						{% else %}
+							<span class="error">{{ field.type }}</span>
+						{% endif %}
+					</td>
+					<td class="thin"><a class="delete icon" title="{{ 'Delete'|t }}"></a></td>
+				</tr>#}
+			{% endfor %}
+		</tbody>
+	</table>
+
+{% endset %}
+
+
+{% set js %}
+	new Craft.AdminTable({
+		tableSelector: '#fields',
+		noObjectsSelector: '#nofields',
+		deleteAction: 'fields/deleteField'
+	});
+{% endset %}
+{% includeJs js %}
+
