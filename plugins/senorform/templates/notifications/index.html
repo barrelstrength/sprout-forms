@@ -1,28 +1,24 @@
 <div id="tab-notifications" class="hidden">
-
-{% if form is defined %}
-	<form method="post" action="" accept-charset="UTF-8">
-		<input type="hidden" name="action" value="senorform/forms/updateNotifications">
-		<input type="hidden" name="redirect" value="senorform/forms/edit/{{ form is defined ? form.id : '' }}">
-		<input type="hidden" name="formId" value="{{ form is defined ? form.id : '' }}">
-
-		{{ forms.textField({
-			label: "Notification Emails"|t,
-			instructions: "Enter comma seperated email addresses to notify on form submission.  Leave blank to disable notifications."|t,
-			name: 'email_distribution_list',
-			value: form.email_distribution_list,
-			translatable: true,
-			first: true
-		}) }}
-		
-		<hr>
-
-		<div class="buttons">
-				{{ btns.submit() }}	
-				{{ btns.cancel() }}	 
-		</div>
-		
-		</form>
-{% endif %}
-
+	{% if form is defined %}
+		<form method="post" action="" accept-charset="UTF-8">
+			<input type="hidden" name="action" value="senorForm/forms/updateNotifications">
+			<input type="hidden" name="redirect" value="senorForm/forms/edit/{{ form is defined ? form.id : '' }}">
+			<input type="hidden" name="formId" value="{{ form is defined ? form.id : '' }}">
+			{{ forms.textField({
+				label: "Notification Emails"|t,
+				instructions: "Enter comma seperated email addresses to notify on form submission.  Leave blank to disable notifications."|t,
+				name: 'email_distribution_list',
+				value: form.email_distribution_list,
+				translatable: true,
+				first: true
+			}) }}		
+			<hr>
+	
+			<div class="buttons">
+					{{ btns.submit() }}	
+					{{ btns.cancel() }}	 
+			</div>
+			
+			</form>
+	{% endif %}
 </div>

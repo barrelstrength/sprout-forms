@@ -30,7 +30,7 @@ class SenorForm_ContentRecord extends BaseRecord
         );
     }
     
-    public function _setRules()
+    public function _setRules($fields = array())
     {
     	if( ! $this->formId)
     	{
@@ -47,6 +47,10 @@ class SenorForm_ContentRecord extends BaseRecord
     	{
     		if($v->validation)
     		{
+    			if ( ! empty($fields) && ! key_exists($v->handle, $fields))
+    			{
+    				continue;
+    			}
     			$validations = explode(',', $v->validation);
     			
     			foreach($validations as $v2)

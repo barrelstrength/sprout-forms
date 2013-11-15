@@ -1,6 +1,6 @@
-{% extends "senorform/_layout" %}
+{% extends "senorform/_common/_layout" %}
 {% import "_includes/forms" as forms %}
-{% import "SenorForm/common/buttons" as btns %}
+{% import "SenorForm/_common/buttons" as btns %}
 
 {% if fieldId is defined %}
 	{% set field = craft.senorform.getFieldById(fieldId) %}
@@ -47,7 +47,7 @@
 
 {% set body %}
 	<form method="post" action="" accept-charset="UTF-8">
-		<input type="hidden" name="action" value="senorform/fields/saveField">
+		<input type="hidden" name="action" value="senorForm/fields/saveField">
 		<input type="hidden" name="redirect" value="senorform/forms/edit/{{ form.id }}#tab-fields">
 		<input type="hidden" name="formId" value="{{ form.id }}">
 		

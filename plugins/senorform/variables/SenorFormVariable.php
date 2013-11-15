@@ -4,6 +4,12 @@ namespace Craft;
 class SenorFormVariable
 {
 	/**
+	 * Errors for public side validation
+	 * @var array
+	 */
+	public static $errors;
+	
+	/**
 	 * Plugin Name
 	 * Make your plugin name available as a variable 
 	 * in your templates as {{ craft.YourPlugin.name }}
@@ -146,7 +152,14 @@ class SenorFormVariable
 	 */
 	public function getFormFields($form_handle)
 	{
-		$fields = array();
+		craft()->path->setTemplatesPath(craft()->path->getCpTemplatesPath());
+		
+		$fields = array();	
+
+		if( ! isset(self::$errors))
+		{
+			self::$errors = craft()->user->getFlash('errors');
+		}
 
 		if($formFields = craft()->senorForm->getFieldsByFormHandle($form_handle))
 		{			
@@ -155,26 +168,22 @@ class SenorFormVariable
 				// Remove our namespace so the user can use their chosen handle
 				$handle = craft()->senorForm->adjustFieldName($fieldInfo, 'human');	
 				
-				$func = '_sf_' . strtolower($fieldInfo->type);
-				if(function_exists($func))
-				{	
-					// set HTML output with a custom function
-					// @TODO - let's try to do this with a Twig Template.
-					// How does craft do this with Settings in plugins?
-					$fields[$handle] = $func($fieldInfo);
-				}
-				else 
-				{
-					$fields[$handle]['html'] = '';
-				}
+				// get the field type instance
+				$fieldType = craft()->fields->getFieldType($fieldInfo->type);
+				$fieldType->setSettings($fieldInfo->settings);
 				
+				// set output data
+				$fields[$handle]['handle'] = $handle;
+				$fields[$handle]['html'] = $fieldType->getInputHtml($handle, craft()->request->getPost($fieldInfo->handle));
+				$fields[$handle]['settings'] = $fieldInfo->settings;
 				$fields[$handle]['instructions'] = $fieldInfo->instructions;
 				$fields[$handle]['hint'] = isset($fieldInfo->settings['hint']) ? $fieldInfo->settings['hint'] : '';
 				$fields[$handle]['name'] = $fieldInfo->name;
-				$fields[$handle]['error'] = isset($_POST['errors'][$handle]) ? '<div class="field-error">' . implode('<br/>', $_POST['errors'][$handle]) . '</div>' : '';
+				$fields[$handle]['error'] = isset(self::$errors[$fieldInfo->handle]) && self::$errors[$fieldInfo->handle] ? '<div class="field-error">' . implode('<br/>', self::$errors[$fieldInfo->handle]) . '</div>' : '';
 			}
-		}
-		
+		}		
+
+		craft()->path->setTemplatesPath(craft()->path->getSiteTemplatesPath());
 		return $fields;
 	}
 	
@@ -221,7 +230,7 @@ class SenorFormVariable
 	 */
 	public function getAllFieldTypes()
 	{
-		$include = array('Checkboxes', 'Dropdown', 'PlainText', 'RadioButtons');
+		$include = array('Checkboxes', 'Color', 'Dropdown', 'MultiSelect', 'PlainText', 'RadioButtons');
 		$fieldTypes = craft()->fields->getAllFieldTypes();
 		foreach($fieldTypes as $k=>$v)
 		{
@@ -234,14 +243,26 @@ class SenorFormVariable
 	}
 	
 	/**
+	 * Returns a complete form for display in template
+	 * @param string $form_handle
+	 * @return string
+	 */
+	public function displayForm($form_handle)
+	{
+		$formFields = $this->getFormFields($form_handle);
+		Craft::dump($formFields);
+		return 'Simple form';
+	}
+	
+	/**
 	 * Display message to user
 	 * 
 	 * @return void
 	 */
 	public function msg()
 	{
-		$notice = \Yii::app()->user->getFlash('notice');
-		$error = \Yii::app()->user->getFlash('error');
+		$notice = craft()->user->getFlash('notice');
+		$error = craft()->user->getFlash('error');
 		echo $notice ? '<div class="notice">' . $notice . '</div>' : '';
 		echo $error ? '<div class="error">' . $error . '</div>' : '';
 	}
