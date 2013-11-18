@@ -23,7 +23,7 @@ class SenorFormPlugin extends BasePlugin
 
     function getVersion()
     {
-        return '0.5.1.0';
+        return '0.5.1.1';
     }
 
     function getDeveloper()
@@ -51,7 +51,7 @@ class SenorFormPlugin extends BasePlugin
 
     public function getSettingsHtml()
     {
-        return craft()->templates->render('senorform/_plugin_settings/settings', array(
+        return craft()->templates->render('senorform/plugin_settings/settings', array(
             'settings' => $this->getSettings()
         ));
     }
@@ -72,37 +72,16 @@ class SenorFormPlugin extends BasePlugin
             'senorform\/fields\/_edit',
         		
         	'senorform\/entries\/view\/(?P<entryId>\d+)' =>
-        	'senorform/entries/_view'
+        	'senorform/entries/_view',
+        		
+        	'senorform\/install_examples' =>
+        	'senorform/plugin_settings/install_examples'
         );
     }
 
-    public function registerUserPermissions() 
-    { 
-        return array( 
-            'createForms' => array( 
-                  'label' => Craft::t('Create Forms')
-            ),
-            'viewEntries' => array( 
-                  'label' => Craft::t('View Entries') 
-            ),
-            'editSettings' => array( 
-                  'label' => Craft::t('Edit Settings') 
-            )
-        ); 
-    }
-
-    public function masterBlasterTrigger()
+    public function onAfterInstall()
     {
-      $info = array(
-        'hooks' => array(
-          1 => array(
-            'name' => 'On Form Submit',
-            'instructions' => 'Trigger is run every time a form is submitted. Data object shared includes all submitted form data and email object',
-            'hook' => 'senorFormAfterSaveAction'
-          )
-        )
-      );
-      return $info;
+		craft()->request->redirect('../senorform/install_examples');
     }
     
     public function dropTables()
@@ -115,5 +94,9 @@ class SenorFormPlugin extends BasePlugin
 		
 		$formRecord = new SenorForm_FormRecord();
 		$formRecord->dropTable();
+		
+		// remove example templates
+		$fileHelper = new \CFileHelper();
+		$fileHelper->removeDirectory(craft()->path->getSiteTemplatesPath() . 'senorform');
     }
 }

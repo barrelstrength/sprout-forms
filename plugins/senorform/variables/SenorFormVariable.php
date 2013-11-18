@@ -249,9 +249,29 @@ class SenorFormVariable
 	 */
 	public function displayForm($form_handle)
 	{
-		$formFields = $this->getFormFields($form_handle);
-		Craft::dump($formFields);
-		return 'Simple form';
+		if ( ! $formFields = $this->getFormFields($form_handle))
+		{
+			return '';
+		}
+		
+		craft()->path->setTemplatesPath(craft()->path->getPluginsPath() . 'senorform/templates/');
+		
+		$fields = array();
+		foreach ($formFields as $field)
+		{
+			$fields[] =  craft()->templates->render('_common/_frontend_field', array(
+					'field' => $field
+			));
+		}
+		
+		$form = craft()->templates->render('_common/_frontend_form', array(
+					'form' => craft()->senorForm->getFormByHandle($form_handle),
+					'fields' => implode('<br/>', $fields)
+		));
+
+		craft()->path->setTemplatesPath(craft()->path->getSiteTemplatesPath());
+		
+		echo $form;
 	}
 	
 	/**

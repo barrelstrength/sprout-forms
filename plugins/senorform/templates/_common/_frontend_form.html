@@ -1,0 +1,41 @@
+<form method="post" accept-charset="UTF-8">	
+	{{ craft.senorform.msg() }}	    
+
+    <input type="hidden" name="action" value="senorForm/public/post">
+    <input type="hidden" name="redirect" value="senorform/example_2">
+    <input type="hidden" name="handle" value="{{ form.handle }}">
+
+    <div class="form-all">
+    	<ul class="form-section">
+			{{ fields | raw }}
+			<li class="form-line" >
+				<label class="form-label" >&nbsp;</label>
+				<div class="form-element">
+					<input type="submit" value="Register">
+				</div>
+			</li>
+		</ul>
+	</div>
+</form>
+
+<style type="text/css">
+    .form-label{
+        width:150px !important;
+    }
+    .form-line{
+        padding-top:12px;
+        padding-bottom:12px;
+        list-style-type:none;
+    }
+    .form-all{
+        margin:0px auto;
+        padding-top:20px;
+        width:650px;
+        color:#555 !important;
+        font-family:'Lucida Grande';
+        font-size:14px;
+    }
+    .form-instructions{
+    	font-size:10px;
+    }
+</style>
