@@ -89,9 +89,9 @@ class SenorForm_PublicController extends BaseController
 		// @TODO - the else statement needs some love.
 		if($contentRecord->save())
 		{
-			// Send an email with the form information
-			// @TODO - clean this up and integrate this better
-			$this->_notifyAdmin($formRecord, craft()->senorForm->getEntryById($contentRecord->id));
+				// Send an email with the form information
+				// @TODO - clean this up and integrate this better
+				$this->_notifyAdmin($formRecord, craft()->senorForm->getEntryById($contentRecord->id));
 
 	    	\Yii::app()->user->setFlash('notice', Craft::t('Form successfully submitted.'));
 		    $this->redirectToPostedUrl();
@@ -167,9 +167,10 @@ class SenorForm_PublicController extends BaseController
 		{
 			return FALSE;
 		}
-
+		
 		// notify if distribution list is set up
 		$distro_list = array_unique(array_filter(explode(',', $formRecord->email_distribution_list)));
+
 		if( ! empty($distro_list))
 		{
 			// prep data for view
@@ -181,13 +182,25 @@ class SenorForm_PublicController extends BaseController
 			}
 
 			$email = new EmailModel();
-      		$email->htmlBody = craft()->templates->render('senorform/emails/default', array(
-				'data' => $data,
-				'form' => $formRecord->name,
-				'viewFormEntryUrl' => craft()->config->get('cpTrigger') . "/senorform/forms/edit/" . $formRecord->id . "#tab-entries"
+
+      	$email->htmlBody = craft()->templates->render('senorform/emails/default', array(
+					'data' => $data,
+					'form' => $formRecord->name,
+					'viewFormEntryUrl' => craft()->config->get('cpTrigger') . "/senorform/forms/edit/" . $formRecord->id . "#tab-entries"
 			));
 
-			$email->subject = 'A form has been submitted on your website';
+      // @TODO - Think through this a bit more, will 
+      // this always be the way the email field is used?
+      // Maybe we should give the user control over this in some way using 
+      // a form field name variable that we replace, i.e.: 
+      // Reply To Address:	{email}
+      if (isset($data['Email']) && $data['Email'] != "")
+      {
+      	$email->replyTo = $data['Email'];	
+      }      
+
+      // @TODO - make this dynamic
+			$email->subject = 'A form has been submitted on the ' . craft()->siteName . ' website';
 
 			foreach($distro_list as $email_address)
 			{
