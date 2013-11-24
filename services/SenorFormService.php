@@ -328,13 +328,6 @@ class SenorFormService extends BaseApplicationComponent
 
             return $handle[1];  
         }
-        else
-        {
-
-        }
-        
-
-        
     }
     
 }

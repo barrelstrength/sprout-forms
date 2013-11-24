@@ -1,0 +1,17 @@
+
+{% macro cancel(config) %}
+	{%- set url = (config.url is defined ? "window.location='" ~ url(config.url) ~ "';" : 'history.back()' ) %}
+	{%- set val = (config.val is defined ? config.val : 'Cancel' ) %}
+	<input type="button" class="btn delete" value="{{ val }}" onclick="{{ url }};" />
+{% endmacro %}
+
+{% macro submit(config) %}
+	{%- set val = (config.val is defined ? config.val : 'Submit' ) %}
+	<input class="btn submit" type="submit" value="{{ val }}" />
+{% endmacro %}
+
+{% macro add(config) %}
+	{%- set url = (config.url is defined ? url(config.url) : '#' ) %}
+	{%- set val = (config.val is defined ? config.val : 'New Field' ) %}
+	<a href="{{ url }}" class="submit btn add icon">{{ val }}</a>
+{% endmacro %}

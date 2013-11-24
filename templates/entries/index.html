@@ -1,60 +1,35 @@
 {% set entries = craft.senorform.getAllEntries(formId) %}
 {% set fields = craft.senorform.getFields(formId) %}
 
-<style>
-.entries-container {
-	overflow:auto;
-	width:100%;
-}
-.entries-container th.date {
-	min-width:100px;
-	max-width:100px;
-}
-.entries-container td.field {
-	max-width:150px;
-	overflow:hidden;
-	text-overflow:ellipsis;
-}
-</style>
-
 <div id="tab-entries">
-
-<div class="entries-container">
-<table class="data" id="entries">
-	<thead>
-		
-		<th class="date">Date</th>
-		
-		{% for field in fields %}
-		<th>{{ field.name }}</th>
-		{% endfor %}
-		
-		<td class="thin"></td>
-	</thead>
-
-	<tbody>
-		
-		{% for entry in entries %}
-		<tr data-id="{{ entry.id }}" data-name="entry from {{ entry.dateCreated|date('F d, Y h:m A')|t }}" >
-			<td>
-				<a href="{{ url('senorform/entries/view/') }}/{{ entry.id }}">
-				<strong>{{ entry.dateCreated|date('F d, Y h:m A') }}</strong>
-				</a> <span style="text-transform:uppercase;font-size:10px;">{{ entry.form.name }}</span>
-			</td>
-			
-			{% for field in fields %}
-			<td class="field">
-				{{ craft.senorform.getFieldEntry(formId,field,entry) | raw }}
-			</td>
-			{% endfor %}
-			
-			<td class="thin"><a class="delete icon" title="{{ 'Delete'|t }}"></a></td>
-		</tr>
-		{% endfor %}
-	</tbody>
-</table>
-</div>
-
+	<div class="entries-container">
+		<table class="data" id="entries">
+			<thead>				
+				<th class="date">Date</th>				
+				{% for field in fields %}
+				<th>{{ field.name }}</th>
+				{% endfor %}				
+				<td class="thin"></td>
+			</thead>		
+			<tbody>				
+				{% for entry in entries %}
+				<tr data-id="{{ entry.id }}" data-name="entry from {{ entry.dateCreated|date('F d, Y h:m A')|t }}" >
+					<td>
+						<a href="{{ url('senorform/entries/view/') }}/{{ entry.id }}">
+						<strong>{{ entry.dateCreated|date('F d, Y h:m A') }}</strong>
+						</a> <span style="text-transform:uppercase;font-size:10px;">{{ entry.form.name }}</span>
+					</td>					
+					{% for field in fields %}
+					<td class="field">
+						{{ craft.senorform.getFieldEntry(formId,field,entry) | raw }}
+					</td>
+					{% endfor %}					
+					<td class="thin"><a class="delete icon" title="{{ 'Delete'|t }}"></a></td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
 </div>
 
 {% set js %}

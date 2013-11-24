@@ -1,8 +1,10 @@
 <?php
 namespace Craft;
 
-class SenorForm_FormModel extends BaseModel
+class SenorForm_FormModel extends BaseElementModel
 {
+	protected $elementType = 'SenorForm';
+	
     public function defineAttributes()
     {
         $model = array(

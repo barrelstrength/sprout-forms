@@ -13,20 +13,13 @@ class SenorForm_FieldsController extends BaseController
 		$this->requirePostRequest();
 
 		$field = new SenorForm_FieldModel();
-
-		$field->formId 			 = craft()->request->getRequiredPost('formId');
+		$field->formId       = craft()->request->getRequiredPost('formId');
 		$field->id           = craft()->request->getPost('fieldId');		
-		$field->name         = craft()->request->getPost('name');
-		//$field->handle       = craft()->request->getPost('handle') . '_' . craft()->request->getRequiredPost('formId');
-		
-		// Append our FormId on the from of our field name
-		$field->handle       = "formId" . $field->formId . "_" . craft()->request->getPost('handle');
-
+		$field->name         = craft()->request->getPost('name');		
+		$field->handle       = "formId" . $field->formId . "_" . craft()->request->getPost('handle'); // Append our FormId on the from of our field name
 		$field->instructions = craft()->request->getPost('instructions');
 		$field->translatable = (bool) craft()->request->getPost('translatable');
-		
-		$field->type 				 = craft()->request->getRequiredPost('type');
-
+		$field->type         = craft()->request->getRequiredPost('type');
 
 		$typeSettings = craft()->request->getPost('types');
 		if (isset($typeSettings[$field->type]))
@@ -45,8 +38,7 @@ class SenorForm_FieldsController extends BaseController
 			{
 				$field->validation = implode(',', $validation);
 			}
-		}
-		
+		}		
 
 		if (craft()->senorForm_field->saveField($field))
 		{

@@ -1,7 +1,6 @@
-{% extends "senorform/_layout" %}
+{% extends "senorform/_common/_layout" %}
+{% import "SenorForm/_common/buttons" as btns %}
 {% import "_includes/forms" as forms %}
-{% import "SenorForm/common/buttons" as btns %}
-
 
 {# get form and associated fields #}
 {% if formId is defined %}
@@ -14,7 +13,6 @@
 	{% set formName = 'new' %}
 	{% set formId = 0 %}
 {% endif %}
-
 
 {% if craft.request.getSegment('3') == 'new' %}
 	{% set title = "New Form" %}
@@ -46,19 +44,14 @@
     }
 } %}
 
-
 {% set body %}
-
 <form method="post" action="" accept-charset="UTF-8">
 	<input type="hidden" name="action" value="senorForm/forms/saveForm">
 	<input type="hidden" name="redirect" value="senorform/forms">
 	<input type="hidden" name="id" value="{{ formId }}">
-
 	{% include "SenorForm/entries/index" %}
 	{% include "SenorForm/fields/index" %}
   	{% include "SenorForm/notifications/index" %}
 	{% include "SenorForm/settings/formsettings" %}
-
 </form>
-
 {% endset %}

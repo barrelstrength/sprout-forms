@@ -12,14 +12,15 @@
 		</thead>
 		<tbody>
 			{% for field in craft.senorform.getFields(formId) %}
-
+			
 				{% set required = ('required' in field.validation) %}
 				
 				<tr data-id="{{ field.id }}" data-name="{{ field.name|t }}">
-					<th scope="row" data-title=""><a href="{{ url('senorform/fields/edit/'~field.id) }}">{{ field.name }}</a>
+					<th scope="row" data-title="">
+						<a href="{{ url('senorform/fields/edit/'~field.id) }}">{{ field.name }}</a>
 						{% if required %}<span class="required"></span>{% endif %}
 					</th>
-					<td data-title="{{ 'Handle'|t }}"> <code>{{ field.handle }}</code></td>
+					<td data-title="{{ 'Handle'|t }}"><code>{{ field.handle }}</code></td>
 					<td data-title="{{ 'Type'|t }}">{{ field.type?field.type:'n/a'|t }}</td>
 					<td class="thin"><a class="delete icon" title="{{ 'Delete'|t }}"></a></td>
 				</tr>

@@ -1,10 +1,8 @@
-{% extends "senorform/_layout" %}
+{% extends "senorform/_common/_layout" %}
 {% import "_includes/forms" as forms %}
 {% includeJsResource "js/fields.js" %}
 
-
 {% set body %}	
-
 <table class="data" id="forms">
 	<thead>
 		<th width="25%">Form Name</th>
@@ -43,17 +41,15 @@
 	</tr>
 	{% endfor %}
 	
-		{% if forms|length == 0 %}
+	{% if forms|length == 0 %}
 		<p>No forms have been created yet. 	<a href="{{ url('senorform/forms/new#tab-settings') }}">Create your first form</a>!</p>
-		{% endif %}
+	{% endif %}
 	</tbody>
 </table>
-	
 
 <div class="buttons">
 	<a class="btn submit add icon" href="{{ url('senorform/forms/new#tab-settings') }}">New Form</a>
 </div>
-
 {% endset %}
 
 {% set js %}
@@ -61,7 +57,7 @@
 		tableSelector: '#forms',
 		noObjectsSelector: '#noforms',
 		deleteFailMessage: 'All Fields and Entries must be deleted before a Form can be deleted',
-		deleteAction: 'senorform/forms/deleteForm'
+		deleteAction: 'senorForm/forms/deleteForm'
 	});
 {% endset %}
 {% includeJs js %}

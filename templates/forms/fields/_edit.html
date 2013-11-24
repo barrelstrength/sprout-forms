@@ -1,6 +1,6 @@
-{% extends "senorform/_layout" %}
+{% extends "senorform/_common/_layout" %}
 {% import "_includes/forms" as forms %}
-{% import "SenorForm/common/buttons" as btns %}
+{% import "SenorForm/_common/buttons" as btns %}
 
 {% if fieldId is defined %}
 	{% set field = craft.senorform.getFieldById(fieldId) %}
