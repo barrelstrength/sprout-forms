@@ -9,6 +9,6 @@ INSERT INTO `craft_senorform_fields` (`id`, `formId`, `name`, `handle`, `instruc
 (7, 2, 'Example Plain Text', 'formId2_examplePlainText', 'Example Plain Text', 0, 'PlainText', '{"placeholder":"","maxLength":"","multiline":"","initialRows":"4"}', 'required,numerical', '2013-11-15 17:00:51', '2013-11-15 17:41:48', 'ca47cdee-546e-4fac-86e1-4d4262f54afc');
 
 
-ALTER TABLE  `craft_senorform_content` ADD  `formId1_exampleDropdown` TEXT NOT NULL AFTER  `formId`;
-ALTER TABLE  `craft_senorform_content` ADD  `formId1_examplePlainText` TEXT NOT NULL AFTER  `formId`;
-ALTER TABLE  `craft_senorform_content` ADD  `formId2_examplePlainText` TEXT NOT NULL AFTER  `formId`;
+ALTER TABLE  `craft_senorform_content` ADD  `formId1_exampleDropdown` TEXT NULL AFTER  `formId`;
+ALTER TABLE  `craft_senorform_content` ADD  `formId1_examplePlainText` TEXT NULL AFTER  `formId`;
+ALTER TABLE  `craft_senorform_content` ADD  `formId2_examplePlainText` TEXT NULL AFTER  `formId`;

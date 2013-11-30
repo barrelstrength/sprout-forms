@@ -2,7 +2,11 @@
 {% set fields = craft.senorform.getFields(formId) %}
 
 <div id="tab-entries">
+
+	{% if entries|length %}
+	
 	<div class="entries-container">
+
 		<table class="data" id="entries">
 			<thead>				
 				<th class="date">Date</th>				
@@ -30,7 +34,25 @@
 			</tbody>
 		</table>
 	</div>
+
+	{% else %}
+
+	<div style="width:40%;">
+
+	 	<h2>Publish your form and begin sharing!</h2>
+
+	 	<p>Looks like you have a form, but need to get the word out. To publish your form on your website, refer to the quick code snippets on the Publish tab, or to the docs for a more comprehensive overview of how to customize your forms.</p>
+
+	 	<div class="buttons">
+			<a class="btn submit icon" href="{{ url('senorform/publish/' ~ formId ) }}">Publish Your Form &raquo;</a>
+		</div>
+
+	</div>
+
+	{% endif %}
+
 </div>
+
 
 {% set js %}
 	new Craft.AdminTable({

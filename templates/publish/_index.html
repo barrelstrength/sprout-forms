@@ -1,0 +1,93 @@
+<div id="tab-publish" class="hidden">
+	{% if form is defined %}
+	
+	<p>There are several ways to publish your form.  Control every detail or copy and paste a single line of code.</p>
+	<hr>
+
+	<h2>1. Publish your form with one line of code</h2>
+
+	<code class="example">
+	{% verbatim %}{{{% endverbatim %}
+		craft.senorForm.displayForm('<b>{{ form.handle }}</b>')
+	{% verbatim %}}}{% endverbatim %}
+	</code>
+
+	<p><strong>NOTE:</strong> These other examples are pretty hard to output to the page with both code and customized variables.  Might want to retreat and just put a generic code example and reference the docs, and perhaps a table of useful variables to work with.  Form Handle.  Field Handles...</p>
+
+	<hr>
+	
+	<h2>2. Publish your form by accessing the fields and their properties directly.</h2>
+	
+	<p>Assign your form to a Twig variable</p>
+	<code>
+	{% verbatim %}{{{% endverbatim %}
+		set form = craft.senorForm.getFormFields('<b>{{ form.handle }}</b>') %}
+	{% verbatim %}}}{% endverbatim %}
+	</code>
+
+	<p>Build your form in HTML and output your fields with tags</p>
+<textarea class="example" style="height:300px;">
+<form method="post" action="" accept-charset="utf-8">
+  <input type="hidden" name="action" value="senorForm/public/post">
+  <input type="hidden" name="redirect" value="redirect/url">
+  <input type="hidden" name="handle" value="{{ form.handle }}">	
+
+
+  {% verbatim %}{%{% endverbatim %} set form = craft.senorForm.getFormFields('<b>{{ form.handle }}</b>') {% verbatim %}%}{% endverbatim %}
+
+  {% verbatim %}{{{% endverbatim %} exampleForm.examplePlainText.name {% verbatim %}}}{% endverbatim %}<br/>
+  <p>{% verbatim %}{{{% endverbatim %} exampleForm.examplePlainText.instructions {% verbatim %}}}{% endverbatim %}</p>
+  {% verbatim %}{{{% endverbatim %} exampleForm.examplePlainText.html | raw {% verbatim %}}}{% endverbatim %}
+  {% verbatim %}{{{% endverbatim %} exampleForm.examplePlainText.error | raw {% verbatim %}}}{% endverbatim %}
+
+  <input type="submit" value="Submit">
+
+</form>
+
+</textarea>
+		
+	<hr>
+
+	<h2>3. Good ol' fashioned HTML.</h2>
+	
+<textarea class="example" style="height:280px;">
+<form method="post" action="" accept-charset="utf-8">
+  <input type="hidden" name="action" value="senorForm/public/post">
+  <input type="hidden" name="redirect" value="redirect/url">
+  <input type="hidden" name="handle" value="{{ form.handle }}">	
+
+  <div class="field">
+  <label>Custom Title</label>
+  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+  tempor incididunt ut labore et dolore magna aliqua.</p>
+  <input type="text" name="FIELD.HANDLE" value="DEFAULT VALUE" />
+  {% verbatim %}{%{% endverbatim %} if errors.handle is defined {% verbatim %}%}{% endverbatim %}
+    <div class="error">{% verbatim %}{{{% endverbatim %} errors.getError('handle') {% verbatim %}}}{% endverbatim %}</div>
+  {% verbatim %}{%{% endverbatim %} endif {% verbatim %}%}{% endverbatim %}
+  </div>
+
+  <input type="submit" value="Submit">
+
+</form>
+</textarea>
+
+	{% endif %}
+</div>
+
+{% set css %}
+	code.example,
+	textarea.example {
+		background-color: #fffde7;
+		border: 0;
+		border-left: 3px solid #ebde4f;
+		display: inline-block;
+		font-family: Menlo, monospace;
+		font-size: 12px;
+		padding: 10px;
+		width: 80%;
+	}
+	textarea.example:focus {
+		outline: none;
+	}
+{% endset %}
+{% includeCss css %}
