@@ -98,8 +98,8 @@ class SenorForm_FieldService extends FieldsService
 		$isNewField = $fieldRecord->isNewRecord();
 
 		if (!$isNewField)
-		{
-			$fieldRecord->oldHandle = $fieldRecord->handle;
+		{	
+			$fieldRecord->storeOldHandle($fieldRecord->handle);
 		}
 
 		$fieldRecord->formId       = $field->formId;

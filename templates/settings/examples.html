@@ -1,0 +1,15 @@
+{% extends "senorform/_layouts/base" %}
+{% import "_includes/forms" as forms %}
+
+{% set body %}
+<form method="post" action="" accept-charset="UTF-8">
+	<input type="hidden" name="action" value="senorForm/examples/install">
+	<h2>Example Forms</h2>
+	<p>Would you like to install the provided examples? (Includes front end templates and data).  Front-end Templates will be placed in the /senorform folder.</p>
+	
+	<div class="buttons">
+		<input class="btn submit" type="submit" value="Yes, install examples." />
+		<input type="button" class="btn delete" value="No, take me to the plugin." onclick="window.location='{{ url('senorform') }}';" />
+	</div>
+</form>
+{% endset %}

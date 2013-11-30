@@ -1,12 +1,12 @@
-{% extends "senorform/_common/_layout" %}
+{% extends "senorform/_layouts/base" %}
 
 {% set entry = craft.senorform.getEntryById(entryId) %}
 
 {% set title = "Submitted Data for Form:  " ~ entry.form.name %}
 
 {% set crumbs = [
-	{ label: "Señor Form"|t, url: url('senorform/forms') },
-	{ label: entry.form.name, url: url('senorform/forms/edit/' ~ entry.form.id) },
+	{ label: "Señor Form"|t, url: url('senorform') },
+	{ label: entry.form.name, url: url('senorform/edit/' ~ entry.form.id) },
 	{ label: entry.id, url: url('senorform/entries/view/' ~ entry.form.id) }
 ] %}
 

@@ -1,0 +1,12 @@
+<li class="form-line" >
+	<label class="form-label" >{{ field.name }}</label>
+	<div class="form-element">
+		{{ field.html | raw }} 
+	</div>
+	{% if field.instructions is defined and field.instructions %}
+	<div class="form-instructions">{{ field.instructions }}</div>
+	{% endif %}
+	{% if field.error is defined and field.error %}
+	{{ field.error | raw }}
+	{% endif %}
+</li>

@@ -259,12 +259,12 @@ class SenorFormVariable
 		$fields = array();
 		foreach ($formFields as $field)
 		{
-			$fields[] =  craft()->templates->render('_common/_frontend_field', array(
+			$fields[] =  craft()->templates->render('_templates/field', array(
 					'field' => $field
 			));
 		}
 		
-		$form = craft()->templates->render('_common/_frontend_form', array(
+		$form = craft()->templates->render('_templates/form', array(
 					'form' => craft()->senorForm->getFormByHandle($form_handle),
 					'fields' => implode('<br/>', $fields)
 		));

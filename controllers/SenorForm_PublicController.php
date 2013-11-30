@@ -80,7 +80,6 @@ class SenorForm_PublicController extends BaseController
 
 		$contentRecord->formId = $formRecord->id;
 		$contentRecord->_setRules($fieldsToSave);
-		
 
 		// @TODO - the else statement needs some love.
 		if ($contentRecord->save())
@@ -94,6 +93,11 @@ class SenorForm_PublicController extends BaseController
 		}
 		else 
 		{
+			echo "<pre>";
+			print_r($contentRecord->errors);
+			echo "</pre>";
+			die('fin');
+			
 			// make errors available to variable
 			craft()->user->setFlash('error', Craft::t('Error submitting form.'));
 			craft()->user->setFlash('errors', $contentRecord->errors);
@@ -135,7 +139,7 @@ class SenorForm_PublicController extends BaseController
       		$email->htmlBody = craft()->templates->render('senorform/emails/default', array(
 				'data' => $data, 
 				'form' => $formRecord->name,
-				'viewFormEntryUrl' => craft()->config->get('cpTrigger') . "/senorform/forms/edit/" . $formRecord->id . "#tab-entries"
+				'viewFormEntryUrl' => craft()->config->get('cpTrigger') . "/senorform/edit/" . $formRecord->id . "#tab-entries"
 			));
       		
 			$email->subject = 'A form has been submitted on your website';

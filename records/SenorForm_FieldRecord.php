@@ -40,6 +40,7 @@ class SenorForm_FieldRecord extends FieldRecord
     	return array(
     			'name'         => array(AttributeType::Name, 'required' => true),
     			'handle'       => array(AttributeType::Handle, 'maxLength' => 64, 'required' => true, 'reservedWords' => $this->reservedHandleWords),
+                'context'      => array(AttributeType::String, 'default' => 'global', 'required' => true),
     			'instructions' => array(AttributeType::String, 'column' => ColumnType::Text),
     			'translatable' => AttributeType::Bool,
     			'type'         => array(AttributeType::ClassName, 'required' => true),

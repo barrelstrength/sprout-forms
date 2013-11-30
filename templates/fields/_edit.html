@@ -1,6 +1,5 @@
-{% extends "senorform/_layout" %}
+{% extends "senorform/_layouts/base" %}
 {% import "_includes/forms" as forms %}
-{% import "SenorForm/common/buttons" as btns %}
 
 {% if fieldId is defined %}
 	{% set field = craft.senorform.getFieldById(fieldId) %}
@@ -19,8 +18,8 @@
 {% endif %}
 
 {% set crumbs = [
-	{ label: "Señor Form"|t, url: url('senorform/forms') },
-	{ label: form.name, url: url('senorform/forms/edit/' ~ form.id) },
+	{ label: "Señor Form"|t, url: url('senorform') },
+	{ label: form.name, url: url('senorform/edit/' ~ form.id) },
 	{ label: fieldId is defined ? field.name : "Create New Field"|t, url: '' }
 ] %}
 
@@ -48,7 +47,7 @@
 {% set body %}
 	<form method="post" action="" accept-charset="UTF-8">
 		<input type="hidden" name="action" value="senorForm/fields/saveField">
-		<input type="hidden" name="redirect" value="senorform/forms/edit/{{ form.id }}#tab-fields">
+		<input type="hidden" name="redirect" value="senorform/edit/{{ form.id }}#tab-fields">
 		<input type="hidden" name="formId" value="{{ form.id }}">
 		
 		{% if fieldId is defined %}
@@ -145,8 +144,8 @@
 		<hr>
 
 		<div class="buttons">
-				{{ btns.submit() }}	
-				{{ btns.cancel() }}	
+			<input class="btn submit" type="submit" value="Submit" />
+			<input type="button" class="btn delete" value="Cancel" onclick="history.back()" />
 		</div>
 		
 		

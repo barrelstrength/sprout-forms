@@ -23,7 +23,7 @@ class SenorFormPlugin extends BasePlugin
 
     function getVersion()
     {
-        return '0.5.1.1';
+        return '0.5.1.2';
     }
 
     function getDeveloper()
@@ -51,7 +51,7 @@ class SenorFormPlugin extends BasePlugin
 
     public function getSettingsHtml()
     {
-        return craft()->templates->render('senorform/plugin_settings/settings', array(
+        return craft()->templates->render('senorform/settings/_pluginSettings', array(
             'settings' => $this->getSettings()
         ));
     }
@@ -59,29 +59,29 @@ class SenorFormPlugin extends BasePlugin
     public function registerCpRoutes()
     {
         return array(
-            'senorform\/forms\/new' => 
-            'senorform/forms/_edit',
+            'senorform/new' => 
+            'senorform/_edit',
 
-            'senorform\/forms\/edit\/(?P<formId>\d+)' => 
-            'senorform/forms/_edit',
+            'senorform/edit\/(?P<formId>\d+)' => 
+            'senorform/_edit',
 
-            'senorform\/fields\/new' => 
-            'senorform\/fields\/_edit',
+            'senorform/fields/new' => 
+            'senorform/fields/_edit',
 
-            'senorform\/fields\/edit\/(?P<fieldId>\d+)' => 
-            'senorform\/fields\/_edit',
+            'senorform/fields/edit/(?P<fieldId>\d+)' => 
+            'senorform/fields/_edit',
         		
-        	'senorform\/entries\/view\/(?P<entryId>\d+)' =>
+        	'senorform/entries/view/(?P<entryId>\d+)' =>
         	'senorform/entries/_view',
         		
-        	'senorform\/install_examples' =>
+        	'senorform/examples' =>
         	'senorform/plugin_settings/install_examples'
         );
     }
 
     public function onAfterInstall()
     {
-		craft()->request->redirect('../senorform/install_examples');
+		craft()->request->redirect('../senorform/examples');
     }
     
     public function dropTables()
