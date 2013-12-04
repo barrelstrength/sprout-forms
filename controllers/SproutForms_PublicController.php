@@ -21,7 +21,7 @@ class SproutForms_PublicController extends BaseController
 	public function actionPost()
 	{		
 		// pre post processing hook
-		craft()->plugins->call('sproutformsPrePost');
+		craft()->plugins->call('sproutFormsPrePost');
 		
 		// if no $_POST, throws 400
 		$this->requirePostRequest();
