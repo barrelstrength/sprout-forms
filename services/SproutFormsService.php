@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SenorFormService extends BaseApplicationComponent
+class SproutFormsService extends BaseApplicationComponent
 {
 	protected $formRecord;
 	
@@ -12,7 +12,7 @@ class SenorFormService extends BaseApplicationComponent
     	$this->formRecord = $formRecord;
         if (is_null($this->formRecord)) 
         {
-            $this->formRecord = SenorForm_FormRecord::model();
+            $this->formRecord = SproutForms_FormRecord::model();
         }
     }
     
@@ -27,7 +27,7 @@ class SenorFormService extends BaseApplicationComponent
     {
     	if ($formId)
     	{
-    		$formRecord = SenorForm_FormRecord::model()->findById($formId);
+    		$formRecord = SproutForms_FormRecord::model()->findById($formId);
     		$formRecord->scenario = 'update';
     		
     		if (!$formRecord)
@@ -37,7 +37,7 @@ class SenorFormService extends BaseApplicationComponent
     	}
     	else
     	{
-    		$formRecord = new SenorForm_FormRecord();
+    		$formRecord = new SproutForms_FormRecord();
     	}
     
     	return $formRecord;
@@ -52,11 +52,11 @@ class SenorFormService extends BaseApplicationComponent
     {
         $query = craft()->db->createCommand()
                              ->select('id, name, handle')
-                             ->from('senorform_forms')
+                             ->from('sproutforms_forms')
                              ->order('name')
                              ->queryAll();    
 
-        return SenorForm_FormModel::populateModels($query);
+        return SproutForms_FormModel::populateModels($query);
     }
 
     /**
@@ -67,11 +67,11 @@ class SenorFormService extends BaseApplicationComponent
      */
     public function getFormById($formId)
     {   
-        $formRecord = SenorForm_FormRecord::model()->findById($formId);
+        $formRecord = SproutForms_FormRecord::model()->findById($formId);
 
         if ($formRecord)
         {
-            return SenorForm_FormModel::populateModel($formRecord);
+            return SproutForms_FormModel::populateModel($formRecord);
         }
         else
         {
@@ -87,14 +87,14 @@ class SenorFormService extends BaseApplicationComponent
      */
     public function getFormByHandle($handle)
     {   
-    	$formRecord = SenorForm_FormRecord::model()->find(
+    	$formRecord = SproutForms_FormRecord::model()->find(
             'handle=:handle', 
             array(':handle' => $handle)
         );
     
     	if ($formRecord)
     	{
-    		return SenorForm_FormModel::populateModel($formRecord);
+    		return SproutForms_FormModel::populateModel($formRecord);
     	}
     	else
     	{
@@ -112,7 +112,7 @@ class SenorFormService extends BaseApplicationComponent
     {
     	if (!isset($this->_formsById) || !array_key_exists($fieldId, $this->_formsById))
     	{
-    		$formRecord = SenorForm_FormRecord::model()
+    		$formRecord = SproutForms_FormRecord::model()
 				    	->with(array(
 				    	'field' => array(
 				    			'select' => false,
@@ -123,7 +123,7 @@ class SenorFormService extends BaseApplicationComponent
 
     		if ($formRecord)
     		{
-    			$form = SenorForm_FormModel::populateModel($formRecord);
+    			$form = SproutForms_FormModel::populateModel($formRecord);
     			$this->_formsByFieldId[$fieldId] = $form;
     		}
     		else
@@ -143,7 +143,7 @@ class SenorFormService extends BaseApplicationComponent
 	 */
     public function getFields($formId)
     {
-		return SenorForm_FieldRecord::model()->findAll(array('condition' => 'formId=' . $formId));
+		return SproutForms_FieldRecord::model()->findAll(array('condition' => 'formId=' . $formId));
     }
     
     /**
@@ -154,11 +154,11 @@ class SenorFormService extends BaseApplicationComponent
      */
     public function getFieldsByFormHandle($handle)
     {
-    	$form = SenorForm_FormRecord::model()->findAll('handle=:handle', array(':handle' => $handle));
+    	$form = SproutForms_FormRecord::model()->findAll('handle=:handle', array(':handle' => $handle));
 
     	if(isset($form[0]->id))
     	{
-    		return SenorForm_FieldRecord::model()->findAll(array('condition' => 'formId=' . $form[0]->id));
+    		return SproutForms_FieldRecord::model()->findAll(array('condition' => 'formId=' . $form[0]->id));
     	}
     	return null;
     }
@@ -170,7 +170,7 @@ class SenorFormService extends BaseApplicationComponent
      */
     public function getEntries($formId)
     {
-    	return SenorForm_ContentRecord::model()
+    	return SproutForms_ContentRecord::model()
 	    		->with('form')
 	    		->findAll(array(
                     'order' => 't.dateCreated desc',
@@ -180,7 +180,7 @@ class SenorFormService extends BaseApplicationComponent
     
     public function getEntryById($id)
     {
-    	$res = SenorForm_ContentRecord::model()
+    	$res = SproutForms_ContentRecord::model()
     			->with('form', 'form.field')
     			->findByPk($id);
 
@@ -213,7 +213,7 @@ class SenorFormService extends BaseApplicationComponent
     public function deleteForm($id)
     {
     	
-    	if( ! $formRecord = SenorForm_FormRecord::model()->with('field')->findById($id))
+    	if( ! $formRecord = SproutForms_FormRecord::model()->with('field')->findById($id))
     	{
     		return false;
     	}
@@ -224,7 +224,7 @@ class SenorFormService extends BaseApplicationComponent
     	}
     
     	// Delete
-    	$affectedRows = craft()->db->createCommand()->delete('senorform_forms', array('id' => $id));
+    	$affectedRows = craft()->db->createCommand()->delete('sproutforms_forms', array('id' => $id));
     
     	return (bool) $affectedRows;
     }
@@ -238,13 +238,13 @@ class SenorFormService extends BaseApplicationComponent
     public function deleteContent($id)
     {
     	 
-    	if( ! $contentRecord = SenorForm_ContentRecord::model()->findById($id))
+    	if( ! $contentRecord = SproutForms_ContentRecord::model()->findById($id))
     	{
     		return false;
     	}
     
     	// Delete
-    	$affectedRows = craft()->db->createCommand()->delete('senorform_content', array('id' => $id));
+    	$affectedRows = craft()->db->createCommand()->delete('sproutforms_content', array('id' => $id));
     
     	return (bool) $affectedRows;
     }
@@ -252,11 +252,11 @@ class SenorFormService extends BaseApplicationComponent
     /**
      * Saves a form.
      *
-     * @param SenorForm_FormModel $form
+     * @param SproutForms_FormModel $form
      * @throws \Exception
      * @return bool
      */
-    public function saveForm(SenorForm_FormModel $form)
+    public function saveForm(SproutForms_FormModel $form)
     {
     	$formRecord = $this->_getFormRecordById($form->id);
     	$isNew = $formRecord->isNewRecord();

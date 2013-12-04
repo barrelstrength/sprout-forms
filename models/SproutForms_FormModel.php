@@ -1,9 +1,9 @@
 <?php
 namespace Craft;
 
-class SenorForm_FormModel extends BaseElementModel
+class SproutForms_FormModel extends BaseElementModel
 {
-	protected $elementType = 'SenorForm';
+	protected $elementType = 'SproutForms';
 	
     public function defineAttributes()
     {

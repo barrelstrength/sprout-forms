@@ -1,15 +1,15 @@
-{% extends "senorform/_layouts/base" %}
+{% extends "sproutforms/_layouts/base" %}
 {% import "_includes/forms" as forms %}
 
 {% set body %}
 <form method="post" action="" accept-charset="UTF-8">
-	<input type="hidden" name="action" value="senorForm/examples/install">
+	<input type="hidden" name="action" value="sproutForms/examples/install">
 	<h2>Example Forms</h2>
-	<p>Would you like to install the provided examples? (Includes front end templates and data).  Front-end Templates will be placed in the /senorform folder.</p>
+	<p>Would you like to install the provided examples? (Includes front end templates and data).  Front-end Templates will be placed in the /sproutforms folder.</p>
 	
 	<div class="buttons">
 		<input class="btn submit" type="submit" value="Yes, install examples." />
-		<input type="button" class="btn delete" value="No, take me to the plugin." onclick="window.location='{{ url('senorform') }}';" />
+		<input type="button" class="btn delete" value="No, take me to the plugin." onclick="window.location='{{ url('sproutforms') }}';" />
 	</div>
 </form>
 {% endset %}

@@ -1,13 +1,13 @@
 <?php
 namespace Craft;
 
-class SenorForm_ContentRecord extends BaseRecord
+class SproutForms_ContentRecord extends BaseRecord
 {
 	public $rules = array();
 	
     public function getTableName()
     {
-        return 'senorform_content';
+        return 'sproutforms_content';
     }
     
     public function defineAttributes()
@@ -26,7 +26,7 @@ class SenorForm_ContentRecord extends BaseRecord
     public function defineRelations()
     {
         return array(
-           'form' => array(static::BELONGS_TO, 'SenorForm_FormRecord', 'required' => true)
+           'form' => array(static::BELONGS_TO, 'SproutForms_FormRecord', 'required' => true)
         );
     }
     
@@ -37,7 +37,7 @@ class SenorForm_ContentRecord extends BaseRecord
     		return true;
     	}
     	
-    	if( ! $field = SenorForm_FieldRecord::model()->findAll(array('condition' => 'formId=' . $this->formId)))
+    	if( ! $field = SproutForms_FieldRecord::model()->findAll(array('condition' => 'formId=' . $this->formId)))
     	{
     		return true;
     	}

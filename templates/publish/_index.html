@@ -8,7 +8,7 @@
 
 	<code class="example">
 	{% verbatim %}{{{% endverbatim %}
-		craft.senorForm.displayForm('<b>{{ form.handle }}</b>')
+		craft.sproutForms.displayForm('<b>{{ form.handle }}</b>')
 	{% verbatim %}}}{% endverbatim %}
 	</code>
 
@@ -21,19 +21,19 @@
 	<p>Assign your form to a Twig variable</p>
 	<code>
 	{% verbatim %}{{{% endverbatim %}
-		set form = craft.senorForm.getFormFields('<b>{{ form.handle }}</b>') %}
+		set form = craft.sproutForms.getFormFields('<b>{{ form.handle }}</b>') %}
 	{% verbatim %}}}{% endverbatim %}
 	</code>
 
 	<p>Build your form in HTML and output your fields with tags</p>
 <textarea class="example" style="height:300px;">
 <form method="post" action="" accept-charset="utf-8">
-  <input type="hidden" name="action" value="senorForm/public/post">
+  <input type="hidden" name="action" value="sproutForms/public/post">
   <input type="hidden" name="redirect" value="redirect/url">
   <input type="hidden" name="handle" value="{{ form.handle }}">	
 
 
-  {% verbatim %}{%{% endverbatim %} set form = craft.senorForm.getFormFields('<b>{{ form.handle }}</b>') {% verbatim %}%}{% endverbatim %}
+  {% verbatim %}{%{% endverbatim %} set form = craft.sproutForms.getFormFields('<b>{{ form.handle }}</b>') {% verbatim %}%}{% endverbatim %}
 
   {% verbatim %}{{{% endverbatim %} exampleForm.examplePlainText.name {% verbatim %}}}{% endverbatim %}<br/>
   <p>{% verbatim %}{{{% endverbatim %} exampleForm.examplePlainText.instructions {% verbatim %}}}{% endverbatim %}</p>
@@ -52,7 +52,7 @@
 	
 <textarea class="example" style="height:280px;">
 <form method="post" action="" accept-charset="utf-8">
-  <input type="hidden" name="action" value="senorForm/public/post">
+  <input type="hidden" name="action" value="sproutForms/public/post">
   <input type="hidden" name="redirect" value="redirect/url">
   <input type="hidden" name="handle" value="{{ form.handle }}">	
 

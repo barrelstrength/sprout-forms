@@ -11,13 +11,13 @@
 			<td class="thin"></td>
 		</thead>
 		<tbody>
-			{% for field in craft.senorform.getFields(formId) %}
+			{% for field in craft.sproutforms.getFields(formId) %}
 			
 				{% set required = ('required' in field.validation) %}
 				
 				<tr data-id="{{ field.id }}" data-name="{{ field.name|t }}">
 					<th scope="row" data-title="">
-						<a href="{{ url('senorform/fields/edit/' ~ field.id ) }}">{{ field.name }}</a>
+						<a href="{{ url('sproutforms/fields/edit/' ~ field.id ) }}">{{ field.name }}</a>
 						{% if required %}<span class="required"></span>{% endif %}
 					</th>
 					<td data-title="{{ 'Handle'|t }}"><code>{{ field.handle }}</code></td>
@@ -28,7 +28,7 @@
 		</tbody>
 	</table>
 	<div class="buttons">
-		<a href="{{ url('senorform/fields/new?formId=' ~ formId ) }}" class="submit btn add icon">New Field</a>
+		<a href="{{ url('sproutforms/fields/new?formId=' ~ formId ) }}" class="submit btn add icon">New Field</a>
 	</div>
 </div>
 
@@ -36,7 +36,7 @@
 	new Craft.AdminTable({
 		tableSelector: '#fields',
 		noObjectsSelector: '#nofields',
-		deleteAction: 'senorForm/fields/deleteField'
+		deleteAction: 'sproutForms/fields/deleteField'
 	});
 {% endset %}
 {% includeJs js %}

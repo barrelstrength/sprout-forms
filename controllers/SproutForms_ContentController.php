@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SenorForm_ContentController extends BaseController
+class SproutForms_ContentController extends BaseController
 {
 
 	/**
@@ -13,7 +13,7 @@ class SenorForm_ContentController extends BaseController
 		$this->requireAjaxRequest();
 
 		$id = craft()->request->getRequiredPost('id');
-		$success = craft()->senorForm->deleteContent($id);
+		$success = craft()->sproutForms->deleteContent($id);
 		$this->returnJson(array('success' => $success));
 	}
 

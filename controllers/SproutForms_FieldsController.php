@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SenorForm_FieldsController extends BaseController
+class SproutForms_FieldsController extends BaseController
 {
 
 
@@ -12,7 +12,7 @@ class SenorForm_FieldsController extends BaseController
 	{
 		$this->requirePostRequest();
 
-		$field = new SenorForm_FieldModel();
+		$field = new SproutForms_FieldModel();
 		$field->formId       = craft()->request->getRequiredPost('formId');
 		$field->id           = craft()->request->getPost('fieldId');		
 		$field->name         = craft()->request->getPost('name');		
@@ -32,7 +32,7 @@ class SenorForm_FieldsController extends BaseController
 		{
 			if($validation == '*')
 			{
-				$field->validation = implode(',', craft()->senorForm_field->getValidationOptions());
+				$field->validation = implode(',', craft()->sproutForms_field->getValidationOptions());
 			}
 			else 
 			{
@@ -40,7 +40,7 @@ class SenorForm_FieldsController extends BaseController
 			}
 		}		
 
-		if (craft()->senorForm_field->saveField($field))
+		if (craft()->sproutForms_field->saveField($field))
 		{
 			craft()->userSession->setNotice(Craft::t('Field saved.'));
 
@@ -69,7 +69,7 @@ class SenorForm_FieldsController extends BaseController
 		$this->requireAjaxRequest();
 
 		$fieldId = craft()->request->getRequiredPost('id');
-		$success = craft()->senorForm_field->deleteField($fieldId);
+		$success = craft()->sproutForms_field->deleteField($fieldId);
 		$this->returnJson(array('success' => $success));
 	}
 

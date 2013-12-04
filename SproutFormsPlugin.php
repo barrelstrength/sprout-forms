@@ -2,17 +2,17 @@
 
 namespace Craft;
 
-class SenorFormPlugin extends BasePlugin
+class SproutFormsPlugin extends BasePlugin
 {
     function getName()
     {
-         $pluginName = Craft::t('Señor Form');
+         $pluginName = Craft::t('Sprout Forms');
 
         // The plugin name override
         $plugin = craft()->db->createCommand()
                              ->select('settings')
                              ->from('plugins')
-                             ->where('class=:class', array(':class'=> 'SenorForm'))
+                             ->where('class=:class', array(':class'=> 'SproutForms'))
                              ->queryScalar();
         
         $plugin = json_decode( $plugin, true );
@@ -51,7 +51,7 @@ class SenorFormPlugin extends BasePlugin
 
     public function getSettingsHtml()
     {
-        return craft()->templates->render('senorform/settings/_pluginSettings', array(
+        return craft()->templates->render('sproutforms/settings/_pluginSettings', array(
             'settings' => $this->getSettings()
         ));
     }
@@ -59,44 +59,44 @@ class SenorFormPlugin extends BasePlugin
     public function registerCpRoutes()
     {
         return array(
-            'senorform/new' => 
-            'senorform/_edit',
+            'sproutforms/new' => 
+            'sproutforms/_edit',
 
-            'senorform/edit\/(?P<formId>\d+)' => 
-            'senorform/_edit',
+            'sproutforms/edit\/(?P<formId>\d+)' => 
+            'sproutforms/_edit',
 
-            'senorform/fields/new' => 
-            'senorform/fields/_edit',
+            'sproutforms/fields/new' => 
+            'sproutforms/fields/_edit',
 
-            'senorform/fields/edit/(?P<fieldId>\d+)' => 
-            'senorform/fields/_edit',
+            'sproutforms/fields/edit/(?P<fieldId>\d+)' => 
+            'sproutforms/fields/_edit',
         		
-        	'senorform/entries/view/(?P<entryId>\d+)' =>
-        	'senorform/entries/_view',
+        	'sproutforms/entries/view/(?P<entryId>\d+)' =>
+        	'sproutforms/entries/_view',
         		
-        	'senorform/examples' =>
-        	'senorform/plugin_settings/install_examples'
+        	'sproutforms/examples' =>
+        	'sproutforms/plugin_settings/install_examples'
         );
     }
 
     public function onAfterInstall()
     {
-		craft()->request->redirect('../senorform/examples');
+		craft()->request->redirect('../sproutforms/settings/examples');
     }
     
     public function dropTables()
     {
-		$contentRecord = new SenorForm_ContentRecord();	
+		$contentRecord = new SproutForms_ContentRecord();	
 		$contentRecord->dropTable();
 		
-		$fieldRecord = new SenorForm_FieldRecord();
+		$fieldRecord = new SproutForms_FieldRecord();
 		$fieldRecord->dropTable();
 		
-		$formRecord = new SenorForm_FormRecord();
+		$formRecord = new SproutForms_FormRecord();
 		$formRecord->dropTable();
 		
 		// remove example templates
 		$fileHelper = new \CFileHelper();
-		$fileHelper->removeDirectory(craft()->path->getSiteTemplatesPath() . 'senorform');
+		$fileHelper->removeDirectory(craft()->path->getSiteTemplatesPath() . 'sproutforms');
     }
 }

@@ -7,7 +7,7 @@ namespace Craft;
  * @author zig
  *
  */
-class SenorForm_FieldModel extends FieldModel
+class SproutForms_FieldModel extends FieldModel
 {  
 	private $content = '';
 	/**

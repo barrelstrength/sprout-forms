@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SenorForm_FieldService extends FieldsService
+class SproutForms_FieldService extends FieldsService
 {
 	private $_fieldsById;
 	private $_fieldsByHandle;
@@ -17,7 +17,7 @@ class SenorForm_FieldService extends FieldsService
 	{
 		if ($fieldId)
 		{
-			$fieldRecord = SenorForm_FieldRecord::model()->findById($fieldId);
+			$fieldRecord = SproutForms_FieldRecord::model()->findById($fieldId);
 	
 			if (!$fieldRecord)
 			{
@@ -26,7 +26,7 @@ class SenorForm_FieldService extends FieldsService
 		}
 		else
 		{
-			$fieldRecord = new SenorForm_FieldRecord();
+			$fieldRecord = new SproutForms_FieldRecord();
 		}
 	
 		return $fieldRecord;
@@ -42,11 +42,11 @@ class SenorForm_FieldService extends FieldsService
 	{
 		if (!isset($this->_fieldsById) || !array_key_exists($fieldId, $this->_fieldsById))
 		{
-			$fieldRecord = SenorForm_FieldRecord::model()->findById($fieldId);
+			$fieldRecord = SproutForms_FieldRecord::model()->findById($fieldId);
 	
 			if ($fieldRecord)
 			{
-				$field = SenorForm_FieldModel::populateModel($fieldRecord);
+				$field = SproutForms_FieldModel::populateModel($fieldRecord);
 				$this->_fieldsById[$field->id] = $field;
 			}
 			else
@@ -68,12 +68,12 @@ class SenorForm_FieldService extends FieldsService
 	{
 		if (!isset($this->_fieldsByHandle) || !array_key_exists($fieldHandle, $this->_fieldsByHandle))
 		{
-			$fieldRecord = SenorForm_FieldRecord::model()
+			$fieldRecord = SproutForms_FieldRecord::model()
 			->find('handle=:handle', array(':handle' => $fieldHandle));
 
 			if ($fieldRecord)
 			{
-				$field = SenorForm_FieldModel::populateModel($fieldRecord);
+				$field = SproutForms_FieldModel::populateModel($fieldRecord);
 				$this->_fieldsByHandle[$field->handle] = $field;
 			}
 			else
@@ -133,7 +133,7 @@ class SenorForm_FieldService extends FieldsService
 					$field->id = $fieldRecord->id;
 				}
 
-				// Create/alter the senorform content table column
+				// Create/alter the sproutforms content table column
 				$column = $fieldType->defineContentAttribute();
 
 				if ($column)
@@ -142,11 +142,11 @@ class SenorForm_FieldService extends FieldsService
 
 					if ($isNewField)
 					{
-						craft()->db->createCommand()->addColumn('senorform_content', $field->handle, $column);
+						craft()->db->createCommand()->addColumn('sproutforms_content', $field->handle, $column);
 					}
 					else
 					{
-						craft()->db->createCommand()->alterColumn('senorform_content', $fieldRecord->oldHandle, $column, $field->handle);
+						craft()->db->createCommand()->alterColumn('sproutforms_content', $fieldRecord->oldHandle, $column, $field->handle);
 					}
 				}
 
@@ -178,8 +178,8 @@ class SenorForm_FieldService extends FieldsService
 	 */
 	public function deleteField($fieldId)
 	{
-		$fieldRecord = SenorForm_FieldRecord::model()->findById($fieldId);
-		$field = SenorForm_FieldModel::populateModel($fieldRecord);
+		$fieldRecord = SproutForms_FieldRecord::model()->findById($fieldId);
+		$field = SproutForms_FieldModel::populateModel($fieldRecord);
 		
 		// De we need to delete the content column?
 		$fieldType = $this->populateFieldType($field);
@@ -188,11 +188,11 @@ class SenorForm_FieldService extends FieldsService
 
 		if ($column)
 		{
-			craft()->db->createCommand()->dropColumn('senorform_content', $field->handle);
+			craft()->db->createCommand()->dropColumn('sproutforms_content', $field->handle);
 		}
 
 		// Delete the row in fields
-		$affectedRows = craft()->db->createCommand()->delete('senorform_fields', array('id' => $field->id));
+		$affectedRows = craft()->db->createCommand()->delete('sproutforms_fields', array('id' => $field->id));
 
 		return (bool) $affectedRows;
 	}

@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SenorForm_ContactFormModel extends BaseModel
+class SproutForms_ContactFormModel extends BaseModel
 {
     
     public function defineAttributes()

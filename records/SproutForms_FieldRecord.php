@@ -1,13 +1,13 @@
 <?php
 namespace Craft;
 
-class SenorForm_FieldRecord extends FieldRecord
+class SproutForms_FieldRecord extends FieldRecord
 {
 	private $content = '';
 	
     public function getTableName()
     {
-        return 'senorform_fields';
+        return 'sproutforms_fields';
     }
     
 	public function setContent($content)
@@ -55,7 +55,7 @@ class SenorForm_FieldRecord extends FieldRecord
     public function defineRelations()
     {
         return array(
-            'form' => array(static::BELONGS_TO, 'SenorForm_FormRecord', 'onDelete' => static::CASCADE),
+            'form' => array(static::BELONGS_TO, 'SproutForms_FormRecord', 'onDelete' => static::CASCADE),
         );
     }
     

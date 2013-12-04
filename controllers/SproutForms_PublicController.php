@@ -6,7 +6,7 @@ namespace Craft;
  * @author zig
  *
  */
-class SenorForm_PublicController extends BaseController
+class SproutForms_PublicController extends BaseController
 {
 	/**
 	 * Allow anonymous execution
@@ -21,13 +21,13 @@ class SenorForm_PublicController extends BaseController
 	public function actionPost()
 	{		
 		// pre post processing hook
-		craft()->plugins->call('senorformPrePost');
+		craft()->plugins->call('sproutformsPrePost');
 		
 		// if no $_POST, throws 400
 		$this->requirePostRequest();
 
 		// get form w/ fields
-		if ( ! $formRecord = SenorForm_FormRecord::model()
+		if ( ! $formRecord = SproutForms_FormRecord::model()
 		->with('field')
 		->find('t.handle=:handle', array(':handle' => craft()->request->getPost('handle'))))
 		{
@@ -54,7 +54,7 @@ class SenorForm_PublicController extends BaseController
 			}
 		}
 
-		$contentRecord = new SenorForm_ContentRecord();
+		$contentRecord = new SproutForms_ContentRecord();
 		
 		foreach ($contentRecord->attributes as $column => $value)
 		{
@@ -65,7 +65,7 @@ class SenorForm_PublicController extends BaseController
 				if (is_array($field))
 				{
 					// we need to get the options and drill down
-					$fieldRecord = craft()->senorForm_field->getFieldByHandle($column);
+					$fieldRecord = craft()->sproutForms_field->getFieldByHandle($column);
 					
 					$multiField = array();
 					foreach ($post as $option_key => $option_value)
@@ -86,7 +86,7 @@ class SenorForm_PublicController extends BaseController
 		{
 			// Send an email with the form information
 			// @TODO - clean this up and integrate this better
-			//$this->_notifyAdmin($formRecord, craft()->senorForm->getEntryById($contentRecord->id));
+			//$this->_notifyAdmin($formRecord, craft()->sproutForms->getEntryById($contentRecord->id));
 
 	    	craft()->user->setFlash('notice', Craft::t('Form successfully submitted.'));
 		    $this->redirectToPostedUrl();
@@ -136,10 +136,10 @@ class SenorForm_PublicController extends BaseController
 			}
 			
 			$email = new EmailModel();
-      		$email->htmlBody = craft()->templates->render('senorform/emails/default', array(
+      		$email->htmlBody = craft()->templates->render('sproutforms/emails/default', array(
 				'data' => $data, 
 				'form' => $formRecord->name,
-				'viewFormEntryUrl' => craft()->config->get('cpTrigger') . "/senorform/edit/" . $formRecord->id . "#tab-entries"
+				'viewFormEntryUrl' => craft()->config->get('cpTrigger') . "/sproutforms/edit/" . $formRecord->id . "#tab-entries"
 			));
       		
 			$email->subject = 'A form has been submitted on your website';

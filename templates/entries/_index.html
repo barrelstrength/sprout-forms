@@ -1,5 +1,5 @@
-{% set entries = craft.senorform.getAllEntries(formId) %}
-{% set fields = craft.senorform.getFields(formId) %}
+{% set entries = craft.sproutforms.getAllEntries(formId) %}
+{% set fields = craft.sproutforms.getFields(formId) %}
 
 <div id="tab-entries">
 
@@ -19,13 +19,13 @@
 				{% for entry in entries %}
 				<tr data-id="{{ entry.id }}" data-name="entry from {{ entry.dateCreated|date('F d, Y h:m A')|t }}" >
 					<td>
-						<a href="{{ url('senorform/entries/view/') }}/{{ entry.id }}">
+						<a href="{{ url('sproutforms/entries/view/') }}/{{ entry.id }}">
 						<strong>{{ entry.dateCreated|date('F d, Y h:m A') }}</strong>
 						</a> <span style="text-transform:uppercase;font-size:10px;">{{ entry.form.name }}</span>
 					</td>					
 					{% for field in fields %}
 					<td class="field">
-						{{ craft.senorform.getFieldEntry(formId,field,entry) | raw }}
+						{{ craft.sproutforms.getFieldEntry(formId,field,entry) | raw }}
 					</td>
 					{% endfor %}					
 					<td class="thin"><a class="delete icon" title="{{ 'Delete'|t }}"></a></td>
@@ -44,7 +44,7 @@
 	 	<p>Looks like you have a form, but need to get the word out. To publish your form on your website, refer to the quick code snippets on the Publish tab, or to the docs for a more comprehensive overview of how to customize your forms.</p>
 
 	 	<div class="buttons">
-			<a class="btn submit icon" href="{{ url('senorform/publish/' ~ formId ) }}">Publish Your Form &raquo;</a>
+			<a class="btn submit icon" href="{{ url('sproutforms/publish/' ~ formId ) }}">Publish Your Form &raquo;</a>
 		</div>
 
 	</div>
@@ -58,7 +58,7 @@
 	new Craft.AdminTable({
 		tableSelector: '#entries',
 		noObjectsSelector: '#noentries',
-		deleteAction: 'senorForm/content/deleteContent'
+		deleteAction: 'sproutForms/content/deleteContent'
 	});
 {% endset %}
 {% includeJs js %}

@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SenorForm_ContentModel extends \CFormModel
+class SproutForms_ContentModel extends \CFormModel
 {
 
     public function rules()

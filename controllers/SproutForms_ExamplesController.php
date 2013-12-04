@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SenorForm_ExamplesController extends BaseController
+class SproutForms_ExamplesController extends BaseController
 {
 	/**
 	 * Install examples
@@ -13,7 +13,7 @@ class SenorForm_ExamplesController extends BaseController
     	$this->_installExampleTemplates();
     	
     	craft()->userSession->setNotice(Craft::t('Examples successfully installed.'));
-    	$this->redirect('senorform');
+    	$this->redirect('sproutforms');
 	}
 	
 	/**
@@ -25,8 +25,8 @@ class SenorForm_ExamplesController extends BaseController
 		try 
 		{
 			$fileHelper = new \CFileHelper();
-			@ mkdir(craft()->path->getSiteTemplatesPath() . 'senorform');
-			$fileHelper->copyDirectory(craft()->path->getPluginsPath(). 'senorform/examples/templates/senorform', craft()->path->getSiteTemplatesPath() . 'senorform');
+			@ mkdir(craft()->path->getSiteTemplatesPath() . 'sproutforms');
+			$fileHelper->copyDirectory(craft()->path->getPluginsPath(). 'sproutforms/examples/templates/sproutforms', craft()->path->getSiteTemplatesPath() . 'sproutforms');
 		}
 		catch (\Exception $e)
 		{
@@ -42,7 +42,7 @@ class SenorForm_ExamplesController extends BaseController
 	{
 		try 
 		{
-			$sql = file_get_contents(craft()->path->getPluginsPath() . 'senorform/examples/data.sql');
+			$sql = file_get_contents(craft()->path->getPluginsPath() . 'sproutforms/examples/data.sql');
 			craft()->db->createCommand($sql)->execute();
 		}
 		catch (\Exception $e)
@@ -59,6 +59,6 @@ class SenorForm_ExamplesController extends BaseController
 	private function _handleError($exception)
 	{
 		craft()->userSession->setError(Craft::t('There was an error installing the example, possibly because they are already installed.'));
-		$this->redirect('senorform/install_examples');
+		$this->redirect('sproutforms/install_examples');
 	}
 }

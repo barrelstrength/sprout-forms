@@ -1,13 +1,13 @@
 <?php
 namespace Craft;
 
-class SenorForm_FormRecord extends BaseRecord
+class SproutForms_FormRecord extends BaseRecord
 {
 	public $oldHandle = '';
 	
     public function getTableName()
     {
-        return 'senorform_forms';
+        return 'sproutforms_forms';
     }
 
     public function defineAttributes()
@@ -33,7 +33,7 @@ class SenorForm_FormRecord extends BaseRecord
     public function defineRelations()
     {
     	return array(
-    			'field' => array(static::HAS_MANY, 'SenorForm_FieldRecord', 'formId')
+    			'field' => array(static::HAS_MANY, 'SproutForms_FieldRecord', 'formId')
     	);
     }
 }

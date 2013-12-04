@@ -1,9 +1,9 @@
-{% extends "senorform/_layouts/base" %}
+{% extends "sproutforms/_layouts/base" %}
 {% import "_includes/forms" as forms %}
 
 {# get form and associated fields #}
 {% if formId is defined %}
-	{% set form = craft.senorform.getFormById(formId) %}
+	{% set form = craft.sproutforms.getFormById(formId) %}
 	{% if not form %}
 		{% exit 404 %}
 	{% endif %}
@@ -20,7 +20,7 @@
 {% endif %}
 
 {% set crumbs = [
-	{ label: "Señor Form"|t, url: url('senorform') },
+	{ label: "Sprout Forms"|t, url: url('sproutforms') },
 	{ label: formName, url: '' }
 ] %}
 
@@ -49,15 +49,15 @@
 
 {% set body %}
 <form method="post" action="" accept-charset="UTF-8">
-	<input type="hidden" name="action" value="senorForm/forms/saveForm">
-	<input type="hidden" name="redirect" value="senorform">
+	<input type="hidden" name="action" value="sproutForms/forms/saveForm">
+	<input type="hidden" name="redirect" value="sproutforms">
 	<input type="hidden" name="id" value="{{ formId }}">
 	
-	{% include "senorform/entries/_index" %}
-	{% include "senorform/fields/_index" %}
-  {% include "senorform/notifications/_settings" %}
-  {% include "senorform/publish/_index" %}
-	{% include "senorform/settings/_form_settings" %}
+	{% include "sproutforms/entries/_index" %}
+	{% include "sproutforms/fields/_index" %}
+  {% include "sproutforms/notifications/_settings" %}
+  {% include "sproutforms/publish/_index" %}
+	{% include "sproutforms/settings/_form_settings" %}
 
 </form>
 {% endset %}

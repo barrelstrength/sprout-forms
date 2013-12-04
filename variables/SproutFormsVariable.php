@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SenorFormVariable
+class SproutFormsVariable
 {
 	/**
 	 * Errors for public side validation
@@ -18,7 +18,7 @@ class SenorFormVariable
 	 */
 	public function getName()
 	{
-		$plugin = craft()->plugins->getPlugin('senorform');
+		$plugin = craft()->plugins->getPlugin('sproutforms');
 	    return $plugin->getName();
 	}
 
@@ -29,7 +29,7 @@ class SenorFormVariable
 	 */
 	public function getVersion()
 	{
-		$plugin = craft()->plugins->getPlugin('senorform');
+		$plugin = craft()->plugins->getPlugin('sproutforms');
 	    return $plugin->getVersion();
 	}
 
@@ -41,7 +41,7 @@ class SenorFormVariable
      */
     public function getFormById($formId)
     {
-    	return craft()->senorForm->getFormById($formId);
+    	return craft()->sproutForms->getFormById($formId);
     }
 	
 	/**
@@ -52,17 +52,17 @@ class SenorFormVariable
 	 */
 	public function getFieldById($fieldId)
 	{
-		$fieldModel = craft()->senorForm_field->getFieldById($fieldId);
+		$fieldModel = craft()->sproutForms_field->getFieldById($fieldId);
 
 		// Remove our namespace so the user can use their chosen handle
-		$handle = craft()->senorForm->adjustFieldName($fieldModel, 'human');	
+		$handle = craft()->sproutForms->adjustFieldName($fieldModel, 'human');	
 
 		if (isset($handle))
 		{
 			$fieldModel->handle = $handle;
 		}
 
-		$available_validations = craft()->senorForm_field->getValidationOptions();
+		$available_validations = craft()->sproutForms_field->getValidationOptions();
 		$field_validations = explode(',', $fieldModel->validation);
 		$fieldModel->validation = $field_validations;
 		
@@ -88,7 +88,7 @@ class SenorFormVariable
 			return null;
 		}
 		
-		$form = craft()->senorForm->getFormByFieldId($params['fieldId']);
+		$form = craft()->sproutForms->getFormByFieldId($params['fieldId']);
 		
 		if(isset($params['idOnly']) && $params['idOnly'] == true)
 		{
@@ -106,11 +106,11 @@ class SenorFormVariable
 	 */
 	public function getFields($formId)
 	{
-		$fields = craft()->senorForm->getFields($formId);
+		$fields = craft()->sproutForms->getFields($formId);
 
 		foreach ($fields as $key => $value) {
 
-			if ($handle = craft()->senorForm->adjustFieldName($value, 'human'))
+			if ($handle = craft()->sproutForms->adjustFieldName($value, 'human'))
 			{
 				$fields[$key]['handle'] = $handle;
 			}
@@ -125,7 +125,7 @@ class SenorFormVariable
 	 * 
 	 * @param int $formId
 	 * @param int $field
-	 * @param obj $entry SenorForm_ContentEntry
+	 * @param obj $entry SproutForms_ContentEntry
 	 */
 	public function getFieldEntry($formId, $field, $entry)
 	{
@@ -161,12 +161,12 @@ class SenorFormVariable
 			self::$errors = craft()->user->getFlash('errors');
 		}
 
-		if($formFields = craft()->senorForm->getFieldsByFormHandle($form_handle))
+		if($formFields = craft()->sproutForms->getFieldsByFormHandle($form_handle))
 		{			
 			foreach($formFields as $key => $fieldInfo)
 			{
 				// Remove our namespace so the user can use their chosen handle
-				$handle = craft()->senorForm->adjustFieldName($fieldInfo, 'human');	
+				$handle = craft()->sproutForms->adjustFieldName($fieldInfo, 'human');	
 				
 				// get the field type instance
 				$fieldType = craft()->fields->getFieldType($fieldInfo->type);
@@ -189,7 +189,7 @@ class SenorFormVariable
 	
 	public function getValidationOptions()
 	{
-		return craft()->senorForm_field->getValidationOptions();
+		return craft()->sproutForms_field->getValidationOptions();
 	}
 	
 	/**
@@ -199,7 +199,7 @@ class SenorFormVariable
 	 */
 	public function getAllForms()
 	{
-		return craft()->senorForm->getAllForms();
+		return craft()->sproutForms->getAllForms();
 	}
 	
 	/**
@@ -210,7 +210,7 @@ class SenorFormVariable
 	 */
 	public function getAllEntries($formId)
 	{
-		return craft()->senorForm->getEntries($formId);
+		return craft()->sproutForms->getEntries($formId);
 	}
 	
 	/**
@@ -220,7 +220,7 @@ class SenorFormVariable
 	 */
 	public function getEntryById($id)
 	{
-		return craft()->senorForm->getEntryById($id);
+		return craft()->sproutForms->getEntryById($id);
 	}
 	
 	/**
@@ -254,7 +254,7 @@ class SenorFormVariable
 			return '';
 		}
 		
-		craft()->path->setTemplatesPath(craft()->path->getPluginsPath() . 'senorform/templates/');
+		craft()->path->setTemplatesPath(craft()->path->getPluginsPath() . 'sproutforms/templates/');
 		
 		$fields = array();
 		foreach ($formFields as $field)
@@ -265,7 +265,7 @@ class SenorFormVariable
 		}
 		
 		$form = craft()->templates->render('_templates/form', array(
-					'form' => craft()->senorForm->getFormByHandle($form_handle),
+					'form' => craft()->sproutForms->getFormByHandle($form_handle),
 					'fields' => implode('<br/>', $fields)
 		));
 

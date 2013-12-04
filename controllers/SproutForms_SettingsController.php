@@ -1,14 +1,14 @@
 <?php
 namespace Craft;
 
-class SenorForm_SettingsController extends BaseController
+class SproutForms_SettingsController extends BaseController
 {
 
 	public function actionSaveForm() {
         
         $this->requirePostRequest();
 
-        $form = new SenorForm_FormModel;
+        $form = new SproutForms_FormModel;
         
         // Set our variables
         $form->name     = craft()->request->getPost('formName');
@@ -28,7 +28,7 @@ class SenorForm_SettingsController extends BaseController
         }
         else
         {
-            $formRecord = new SenorForm_FormRecord();
+            $formRecord = new SproutForms_FormRecord();
 
             // @TODO - Support Form as an ElementType
             // $elementRecord = new ElementRecord();
@@ -45,7 +45,7 @@ class SenorForm_SettingsController extends BaseController
         if (!$form->hasErrors())
         {               
             craft()->db->createCommand()
-                ->insert('senorform_forms', $form->getAttributes());
+                ->insert('sproutforms_forms', $form->getAttributes());
 
         	craft()->userSession->setNotice(Craft::t('Form settings saved.'));
    			$this->redirectToPostedUrl();
@@ -58,7 +58,7 @@ class SenorForm_SettingsController extends BaseController
             ));
         }
 		
-        // SenorForm_FormModel::populateModel($form);
+        // SproutForms_FormModel::populateModel($form);
 
         // $form['name'] = craft()->request->getPost('formName');
         // $form['handle'] = craft()->request->getPost('formHandle');
@@ -66,7 +66,7 @@ class SenorForm_SettingsController extends BaseController
         
 
         // craft()->db->createCommand()->insert(
-        //     'senorform_forms',
+        //     'sproutforms_forms',
         //     array(
         //         'name' 		=> craft()->request->getPost('formName'), 
         //         'handle'	=> craft()->request->getPost('formHandle')

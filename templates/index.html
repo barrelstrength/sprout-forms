@@ -1,10 +1,10 @@
-{% extends "senorform/_layouts/base" %}
+{% extends "sproutforms/_layouts/base" %}
 {% import "_includes/forms" as forms %}
 {% includeJsResource "js/fields.js" %}
 
 {% set body %}
 
-{% set forms = craft.senorForm.allForms %}
+{% set forms = craft.sproutForms.allForms %}
 
 {% if forms|length %}
 
@@ -21,7 +21,7 @@
 	{% for form in forms %}
 	<tr data-id="{{ form.id }}" data-name="{{ form.name|t }}" >
 		<td>
-			<a href="{{ url('senorform/edit/') }}/{{ form.id }}">
+			<a href="{{ url('sproutforms/edit/') }}/{{ form.id }}">
 				<strong>{{ form.name }}</strong>
 			</a>
 		</td>
@@ -29,16 +29,16 @@
 			<code>{{ form.handle }}</code>
 		</td>
 		<td>
-			<a href="{{ url('senorform/edit/') }}/{{ form.id }}#tab-entries" class="soften">
+			<a href="{{ url('sproutforms/edit/') }}/{{ form.id }}#tab-entries" class="soften">
 				Entries
 			</a> • 
-			<a href="{{ url('senorform/edit/') }}/{{ form.id }}#tab-fields" class="soften">
+			<a href="{{ url('sproutforms/edit/') }}/{{ form.id }}#tab-fields" class="soften">
 				Fields
 			</a> • 
-			<a href="{{ url('senorform/edit/') }}/{{ form.id }}#tab-notifications" class="soften">
+			<a href="{{ url('sproutforms/edit/') }}/{{ form.id }}#tab-notifications" class="soften">
 				Notifications
 			</a> • 
-			<a href="{{ url('senorform/edit/') }}/{{ form.id }}#tab-settings" class="soften">
+			<a href="{{ url('sproutforms/edit/') }}/{{ form.id }}#tab-settings" class="soften">
 				Settings
 			</a>
 		</td>
@@ -51,7 +51,7 @@
 </table>
 
 <div class="buttons">
-	<a class="btn submit add icon" href="{{ url('senorform/new#tab-settings') }}">New Form</a>
+	<a class="btn submit add icon" href="{{ url('sproutforms/new#tab-settings') }}">New Form</a>
 </div>
 
 {% else %}
@@ -63,7 +63,7 @@
 	<p>Whether you need to collect information, leads, create a survey, poll, registrations for an event, or get digital signatures, Forms will help you get the information you need!</p>
 
 	<div class="buttons">
-		<a class="btn submit add icon" href="{{ url('senorform/new#tab-settings') }}">Create a form</a>
+		<a class="btn submit add icon" href="{{ url('sproutforms/new#tab-settings') }}">Create a form</a>
 	</div>
 
 </div>
@@ -78,7 +78,7 @@
 		tableSelector: '#forms',
 		noObjectsSelector: '#noforms',
 		deleteFailMessage: 'All Fields and Entries must be deleted before a Form can be deleted',
-		deleteAction: 'senorForm/forms/deleteForm'
+		deleteAction: 'sproutForms/forms/deleteForm'
 	});
 {% endset %}
 {% includeJs js %}

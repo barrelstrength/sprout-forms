@@ -1,15 +1,15 @@
-{% extends "senorform/_layouts/base" %}
+{% extends "sproutforms/_layouts/base" %}
 {% import "_includes/forms" as forms %}
 
 {% if fieldId is defined %}
-	{% set field = craft.senorform.getFieldById(fieldId) %}
+	{% set field = craft.sproutforms.getFieldById(fieldId) %}
 	{% if not field %}
 		{% exit 404 %}
 	{% endif %}
-	{% set form = craft.senorform.getFormByFieldId({'fieldId':fieldId}) %}
+	{% set form = craft.sproutforms.getFormByFieldId({'fieldId':fieldId}) %}
 {% else %}
 	{% set formId = craft.request.getQuery('formId') %}
-	{% set form = craft.senorform.getFormById(formId) %}
+	{% set form = craft.sproutforms.getFormById(formId) %}
 {% endif %}
 
 
@@ -18,8 +18,8 @@
 {% endif %}
 
 {% set crumbs = [
-	{ label: "Señor Form"|t, url: url('senorform') },
-	{ label: form.name, url: url('senorform/edit/' ~ form.id) },
+	{ label: "Sprout Forms"|t, url: url('sproutforms') },
+	{ label: form.name, url: url('sproutforms/edit/' ~ form.id) },
 	{ label: fieldId is defined ? field.name : "Create New Field"|t, url: '' }
 ] %}
 
@@ -30,7 +30,7 @@
 {% endif %}
 
 
-{% set fieldTypes = craft.senorform.getAllFieldTypes %}
+{% set fieldTypes = craft.sproutforms.getAllFieldTypes %}
 
 {% if field is defined %}
 	{% set fieldType = craft.fields.populateFieldType(field) %}
@@ -46,8 +46,8 @@
 
 {% set body %}
 	<form method="post" action="" accept-charset="UTF-8">
-		<input type="hidden" name="action" value="senorForm/fields/saveField">
-		<input type="hidden" name="redirect" value="senorform/edit/{{ form.id }}#tab-fields">
+		<input type="hidden" name="action" value="sproutForms/fields/saveField">
+		<input type="hidden" name="redirect" value="sproutforms/edit/{{ form.id }}#tab-fields">
 		<input type="hidden" name="formId" value="{{ form.id }}">
 		
 		{% if fieldId is defined %}
@@ -134,7 +134,7 @@
 				{{ forms.checkboxGroup({
 					id: 'validation',
 					name: 'validation',
-					options: craft.senorform.getValidationOptions(),
+					options: craft.sproutforms.getValidationOptions(),
 					values: field is defined  ? field.validation : '',
 					errors: (isFieldTypeMissing ? ["The fieldtype class “{class}” could not be found."|t({ class: field.type })] : null)
 				}) }}

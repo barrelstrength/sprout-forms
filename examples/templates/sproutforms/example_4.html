@@ -1,8 +1,8 @@
-{% extends "senorform/_layout" %}
+{% extends "sproutforms/_layout" %}
 {% block content %}	
 	<h2>Multiple Forms</h2>
 	<p>This example shows how to include multiple forms on one page.</p>
-	<a href="/senorform">Back</a>
+	<a href="/sproutforms">Back</a>
 	<hr/>
 
 	<form method="post" name="form1" action="" accept-charset="UTF-8">	
@@ -10,24 +10,24 @@
 	    MESSAGING
 	    Error/success message set during submission processing will be displayed here.
 	    ~ #}
-	    {{ craft.senorform.msg() }}	    
+	    {{ craft.sproutforms.msg() }}	    
 	    
 	    
 	    {#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	    INSTANTIATION
 	    Get an instance of the 'example' form.
 	    ~ #}
-	    {% set exampleForm = craft.senorform.getFormFields('example') %}
+	    {% set exampleForm = craft.sproutforms.getFormFields('example') %}
     
 		{#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		HIDDEN FORM FIELDS
 		These hidden fields must be present in every form.
-		action: This will always be senorForm/public/post
+		action: This will always be sproutForms/public/post
 		redirect: The page/url to which the user should be redirected upon form submission
 		handle: Form handle, as defined in the form settings section in the admin panel
 		~ #}
-	    <input type="hidden" name="action" value="senorForm/public/post">
-	    <input type="hidden" name="redirect" value="senorform/example_4">
+	    <input type="hidden" name="action" value="sproutForms/public/post">
+	    <input type="hidden" name="redirect" value="sproutforms/example_4">
 	    <input type="hidden" name="handle" value="example">	    
 	    
 		
@@ -62,24 +62,24 @@
 	    MESSAGING
 	    Error/success message set during submission processing will be displayed here.
 	    ~ #}
-	    {{ craft.senorform.msg() }}	    
+	    {{ craft.sproutforms.msg() }}	    
 	    
 	    
 	    {#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	    INSTANTIATION
 	    Get an instance of the 'example' form.
 	    ~ #}
-	    {% set exampleForm2 = craft.senorform.getFormFields('example2') %}
+	    {% set exampleForm2 = craft.sproutforms.getFormFields('example2') %}
     
 		{#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		HIDDEN FORM FIELDS
 		These hidden fields must be present in every form.
-		action: This will always be senorForm/public/post
+		action: This will always be sproutForms/public/post
 		redirect: The page/url to which the user should be redirected upon form submission
 		handle: Form handle, as defined in the form settings section in the admin panel
 		~ #}
-	    <input type="hidden" name="action" value="senorForm/public/post">
-	    <input type="hidden" name="redirect" value="senorform/example_4">
+	    <input type="hidden" name="action" value="sproutForms/public/post">
+	    <input type="hidden" name="redirect" value="sproutforms/example_4">
 	    <input type="hidden" name="handle" value="example2">	    
 	    
 		
@@ -102,5 +102,5 @@
 		<br/><input type="submit" value="Register">
 	</form>
 	
-{% include "senorform/_css" %}		
+{% include "sproutforms/_css" %}		
 {% endblock %}

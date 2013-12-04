@@ -1,8 +1,8 @@
 <div id="tab-notifications" class="hidden">
 	{% if form is defined %}
 		<form method="post" action="" accept-charset="UTF-8">
-			<input type="hidden" name="action" value="senorForm/forms/updateNotifications">
-			<input type="hidden" name="redirect" value="senorForm/forms/edit/{{ form is defined ? form.id : '' }}">
+			<input type="hidden" name="action" value="sproutForms/forms/updateNotifications">
+			<input type="hidden" name="redirect" value="sproutForms/forms/edit/{{ form is defined ? form.id : '' }}">
 			<input type="hidden" name="formId" value="{{ form is defined ? form.id : '' }}">
 			{{ forms.textField({
 				label: "Notification Emails"|t,

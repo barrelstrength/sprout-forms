@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SenorForm_FormsController extends BaseController
+class SproutForms_FormsController extends BaseController
 {
 
 	/**
@@ -11,13 +11,13 @@ class SenorForm_FormsController extends BaseController
 	{
 		$this->requirePostRequest();
 
-		$form = new SenorForm_FormModel();
+		$form = new SproutForms_FormModel();
 
 		$form->id           = craft()->request->getPost('id');		
 		$form->name         = craft()->request->getPost('name');
 		$form->handle       = craft()->request->getPost('handle');
 
-		if (craft()->senorForm->saveForm($form))
+		if (craft()->sproutForms->saveForm($form))
 		{
 			craft()->userSession->setNotice(Craft::t('Form saved.'));
 
@@ -44,7 +44,7 @@ class SenorForm_FormsController extends BaseController
     	$this->requirePostRequest();
     	$this->requireAjaxRequest();
     	
-    	$success = craft()->senorForm->deleteForm(craft()->request->getRequiredPost('id'));
+    	$success = craft()->sproutForms->deleteForm(craft()->request->getRequiredPost('id'));
     	$this->returnJson(array('success' => $success));
     }
     
@@ -52,10 +52,10 @@ class SenorForm_FormsController extends BaseController
     {
 		$this->requirePostRequest();
 
-		$form = craft()->senorForm->getFormById(craft()->request->getPost('id'));
+		$form = craft()->sproutForms->getFormById(craft()->request->getPost('id'));
 		$form->email_distribution_list = craft()->request->getPost('email_distribution_list');
 
-		if (craft()->senorForm->saveForm($form))
+		if (craft()->sproutForms->saveForm($form))
 		{
 			craft()->userSession->setNotice(Craft::t('Changes saved.'));
 
