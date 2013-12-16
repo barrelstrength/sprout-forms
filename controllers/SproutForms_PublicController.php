@@ -1,26 +1,23 @@
 <?php
 namespace Craft;
 
-/**
- * 
- * @author zig
- *
- */
 class SproutForms_PublicController extends BaseController
 {
 	/**
 	 * Allow anonymous execution
+	 * 
 	 * @var bool
 	 */
 	public $allowAnonymous = true;
 
 	/**
 	 * Process form submission
+	 * 
 	 * @return void
 	 */
 	public function actionPost()
 	{		
-		// pre post processing hook
+		// pre $_POST processing hook
 		craft()->plugins->call('sproutFormsPrePost');
 		
 		// if no $_POST, throws 400
@@ -81,7 +78,6 @@ class SproutForms_PublicController extends BaseController
 		$contentRecord->formId = $formRecord->id;
 		$contentRecord->_setRules($fieldsToSave);
 
-		// @TODO - the else statement needs some love.
 		if ($contentRecord->save())
 		{
 			// Send an email with the form information
@@ -92,12 +88,7 @@ class SproutForms_PublicController extends BaseController
 		    $this->redirectToPostedUrl();
 		}
 		else 
-		{
-			echo "<pre>";
-			print_r($contentRecord->errors);
-			echo "</pre>";
-			die('fin');
-			
+		{			
 			// make errors available to variable
 			craft()->user->setFlash('error', Craft::t('Error submitting form.'));
 			craft()->user->setFlash('errors', $contentRecord->errors);
@@ -112,12 +103,13 @@ class SproutForms_PublicController extends BaseController
 
 	/**
 	 * Notify admin
+	 * 
 	 * @param object $formRecord
 	 * @param object $contentRecord
+	 * @return void
 	 */
 	private function _notifyAdmin($formRecord = FALSE, $contentRecord = FALSE)
 	{
-		return true;
 		if ( ! $formRecord || ! $contentRecord)
 		{
 			return FALSE;
@@ -158,5 +150,4 @@ class SproutForms_PublicController extends BaseController
 			}
 		}
 	}
-
 }

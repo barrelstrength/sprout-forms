@@ -197,7 +197,11 @@ class SproutForms_FieldService extends FieldsService
 		return (bool) $affectedRows;
 	}
 	
-	
+	/**
+	 * Return validation options
+	 * 
+	 * @return array
+	 */
 	public function getValidationOptions()
 	{
 		return array(

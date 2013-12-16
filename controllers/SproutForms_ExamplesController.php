@@ -5,6 +5,7 @@ class SproutForms_ExamplesController extends BaseController
 {
 	/**
 	 * Install examples
+	 * 
 	 * @return void
 	 */
 	public function actionInstall()
@@ -18,6 +19,7 @@ class SproutForms_ExamplesController extends BaseController
 	
 	/**
 	 * Install templates
+	 * 
 	 * @return void
 	 */
 	private function _installExampleTemplates()
@@ -36,6 +38,7 @@ class SproutForms_ExamplesController extends BaseController
 	
 	/**
 	 * Install data
+	 * 
 	 * @return void
 	 */
 	private function _installExampleData()
@@ -53,6 +56,7 @@ class SproutForms_ExamplesController extends BaseController
 	
 	/**
 	 * Handle installation errors
+	 * 
 	 * @param Exception $exception
 	 * @return void
 	 */

@@ -4,6 +4,11 @@ namespace Craft;
 class SproutForms_SettingsController extends BaseController
 {
 
+	/**
+	 * Save settings
+	 * 
+	 * @return void
+	 */
 	public function actionSaveForm() {
         
         $this->requirePostRequest();

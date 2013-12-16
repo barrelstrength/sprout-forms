@@ -3,10 +3,10 @@ namespace Craft;
 
 class SproutForms_FieldsController extends BaseController
 {
-
-
 	/**
 	 * Saves a field.
+	 * 
+	 * @return void
 	 */
 	public function actionSaveField()
 	{
@@ -62,6 +62,8 @@ class SproutForms_FieldsController extends BaseController
 
 	/**
 	 * Deletes a field.
+	 * 
+	 * @return void
 	 */
 	public function actionDeleteField()
 	{
@@ -72,5 +74,4 @@ class SproutForms_FieldsController extends BaseController
 		$success = craft()->sproutForms_field->deleteField($fieldId);
 		$this->returnJson(array('success' => $success));
 	}
-
 }

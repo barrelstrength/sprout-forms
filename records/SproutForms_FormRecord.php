@@ -5,11 +5,21 @@ class SproutForms_FormRecord extends BaseRecord
 {
 	public $oldHandle = '';
 	
+	/**
+	 * Return table name
+	 *
+	 * @return string
+	 */
     public function getTableName()
     {
         return 'sproutforms_forms';
     }
 
+    /**
+     * Define attributes
+     *
+     * @return array
+     */
     public function defineAttributes()
     {
         return array(
@@ -19,6 +29,11 @@ class SproutForms_FormRecord extends BaseRecord
         );
     }
     
+    /**
+     * Define validation rules
+     *
+     * @return array
+     */
     public function rules()
     {
     	return array(
@@ -28,6 +43,8 @@ class SproutForms_FormRecord extends BaseRecord
     }
     
     /**
+     * Define relationships
+     * 
      * @return array
      */
     public function defineRelations()

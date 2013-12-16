@@ -6,6 +6,8 @@ class SproutForms_FormsController extends BaseController
 
 	/**
 	 * Saves a form.
+	 * 
+	 * @return void
 	 */
 	public function actionSaveForm()
 	{
@@ -38,6 +40,8 @@ class SproutForms_FormsController extends BaseController
     
     /**
      * Deletes a field.
+     * 
+     * @return void
      */
     public function actionDeleteForm()
     {
@@ -48,6 +52,11 @@ class SproutForms_FormsController extends BaseController
     	$this->returnJson(array('success' => $success));
     }
     
+    /**
+     * Update notifications
+     * 
+     * @return void
+     */
     public function actionUpdateNotifications()
     {
 		$this->requirePostRequest();
@@ -73,5 +82,4 @@ class SproutForms_FormsController extends BaseController
 			'field' => $form
 		));
     }
-
 }

@@ -7,6 +7,11 @@ class SproutFormsService extends BaseApplicationComponent
 	
 	private $_formsByFieldId;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param object $formRecord
+	 */
     public function __construct($formRecord = null)
     {
     	$this->formRecord = $formRecord;
@@ -178,6 +183,12 @@ class SproutFormsService extends BaseApplicationComponent
                 ));
     }
     
+    /**
+     * Return entry by id
+     * 
+     * @param int $id
+     * @return object
+     */
     public function getEntryById($id)
     {
     	$res = SproutForms_ContentRecord::model()
@@ -205,7 +216,7 @@ class SproutFormsService extends BaseApplicationComponent
     }
     
     /**
-     * Delete from
+     * Delete form
      * 
      * @param int $id
      * @return boolean

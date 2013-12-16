@@ -3,7 +3,11 @@ namespace Craft;
 
 class SproutForms_ContactFormModel extends BaseModel
 {
-    
+    /**
+     * Define attributes
+     * 
+     * @return array
+     */
     public function defineAttributes()
     {
 
@@ -17,6 +21,11 @@ class SproutForms_ContactFormModel extends BaseModel
 
     }
 
+    /**
+     * Define validation rules
+     * 
+     * @return array
+     */
     public function rules()
     {
         return array(
