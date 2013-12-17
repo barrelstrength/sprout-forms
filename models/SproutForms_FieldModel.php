@@ -1,17 +1,13 @@
 <?php
 namespace Craft;
 
-/**
- * We extend the Craft FieldModel as we want to re-use as much as possible
- * 
- * @author zig
- *
- */
 class SproutForms_FieldModel extends FieldModel
 {  
 	private $content = '';
+	
 	/**
-	 * @access protected
+	 * Define attributes
+	 * 
 	 * @return array
 	 */
 	public function defineAttributes()

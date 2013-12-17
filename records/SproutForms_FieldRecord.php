@@ -5,16 +5,32 @@ class SproutForms_FieldRecord extends FieldRecord
 {
 	private $content = '';
 	
+	/**
+	 * Return table name
+	 *
+	 * @return string
+	 */
     public function getTableName()
     {
         return 'sproutforms_fields';
     }
     
+    /**
+     * Set content
+     * 
+     * @param string $content
+     * @return void
+     */
 	public function setContent($content)
 	{
 		$this->content = $content;
 	}
 	
+	/**
+	 * Return content
+	 * 
+	 * @return string
+	 */
 	public function getContent()
 	{
         $arr = json_decode($this->content);
@@ -30,11 +46,11 @@ class SproutForms_FieldRecord extends FieldRecord
 		return $this->content;
 	}
 
-    
-    /**
-     * @access protected
-     * @return array
-     */
+	/**
+	 * Define attributes
+	 *
+	 * @return array
+	 */
     protected function defineAttributes()
     {
     	return array(
@@ -50,6 +66,8 @@ class SproutForms_FieldRecord extends FieldRecord
     }
 
     /**
+     * Define relationships
+     * 
      * @return array
      */
     public function defineRelations()
@@ -57,11 +75,5 @@ class SproutForms_FieldRecord extends FieldRecord
         return array(
             'form' => array(static::BELONGS_TO, 'SproutForms_FormRecord', 'onDelete' => static::CASCADE),
         );
-    }
-    
-    public function saveField()
-    {
-    	
-    }
-    
+    }   
 }

@@ -5,22 +5,39 @@ class SproutForms_ContentRecord extends BaseRecord
 {
 	public $rules = array();
 	
+	/**
+	 * Return table name
+	 * 
+	 * @return string
+	 */
     public function getTableName()
     {
         return 'sproutforms_content';
     }
     
+    /**
+     * Define attributes
+     * 
+     * @return array
+     */
     public function defineAttributes()
     {
     	return array();
     }
     
+    /**
+     * Define validation rules
+     * 
+     * @return array
+     */
     public function rules()
     {
     	return $this->rules;
     }
 
     /**
+     * Define relationships
+     * 
      * @return array
      */
     public function defineRelations()
@@ -30,6 +47,12 @@ class SproutForms_ContentRecord extends BaseRecord
         );
     }
     
+    /**
+     * Set validation rules
+     * 
+     * @param array $fields
+     * @return boolean
+     */
     public function _setRules($fields = array())
     {
     	if( ! $this->formId)

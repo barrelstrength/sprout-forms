@@ -5,6 +5,7 @@ class SproutFormsVariable
 {
 	/**
 	 * Errors for public side validation
+	 * 
 	 * @var array
 	 */
 	public static $errors;
@@ -244,6 +245,7 @@ class SproutFormsVariable
 	
 	/**
 	 * Returns a complete form for display in template
+	 * 
 	 * @param string $form_handle
 	 * @return string
 	 */
@@ -288,12 +290,13 @@ class SproutFormsVariable
 	}
 	
 	/**
-	 * Helper function for debugging 
+	 * Helper function for debugging inside twig templates
+	 * 
 	 * @param mixed $msg
 	 * @return void
 	 */
 	public function dump($msg)
 	{
-		dump($msg);die();
+		Craft::dump($msg);die();
 	}
 }

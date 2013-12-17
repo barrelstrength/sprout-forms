@@ -6,6 +6,8 @@ class SproutForms_ContentController extends BaseController
 
 	/**
 	 * Deletes an entry.
+	 * 
+	 * @return void
 	 */
 	public function actionDeleteContent()
 	{
@@ -16,5 +18,4 @@ class SproutForms_ContentController extends BaseController
 		$success = craft()->sproutForms->deleteContent($id);
 		$this->returnJson(array('success' => $success));
 	}
-
 }
