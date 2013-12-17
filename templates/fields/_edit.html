@@ -2,7 +2,9 @@
 {% import "_includes/forms" as forms %}
 
 {% if fieldId is defined %}
-	{% set field = craft.sproutforms.getFieldById(fieldId) %}
+	{% if field is not defined %}
+		{% set field = craft.sproutforms.getFieldById(fieldId) %}
+	{% endif %}
 	{% if not field %}
 		{% exit 404 %}
 	{% endif %}
