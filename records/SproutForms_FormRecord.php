@@ -39,7 +39,31 @@ class SproutForms_FormRecord extends BaseRecord
     	return array(
     			array('name,handle', 'required'),
     			array('name,handle', 'unique', 'on' => 'insert'),
+    			array('email_distribution_list', 'validateDistributionList')
     	);
+    }
+    
+    /**
+     * Custom validator for email distribution list
+     * 
+     * @param string $attribute
+     * @return boolean
+     */
+    public function validateDistributionList($attribute)
+    {
+    	if( $emails = explode(',', $this->email_distribution_list))
+    	{    		
+    		foreach($emails as $email)
+    		{
+    			if( ! $email) continue;
+    			if( ! preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $email))
+    			{
+    				$this->addError($attribute, 'Please make sure all emails are valid.');
+    				return false;
+    			}
+    		}
+    	}
+    	return true;
     }
     
     /**
