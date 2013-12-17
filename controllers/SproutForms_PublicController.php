@@ -81,8 +81,7 @@ class SproutForms_PublicController extends BaseController
 		if ($contentRecord->save())
 		{
 			// Send an email with the form information
-			// @TODO - clean this up and integrate this better
-			//$this->_notifyAdmin($formRecord, craft()->sproutForms->getEntryById($contentRecord->id));
+			$this->_notifyAdmin($formRecord, craft()->sproutForms->getEntryById($contentRecord->id));
 
 	    	craft()->user->setFlash('notice', Craft::t('Form successfully submitted.'));
 		    $this->redirectToPostedUrl();
@@ -106,7 +105,7 @@ class SproutForms_PublicController extends BaseController
 	 * 
 	 * @param object $formRecord
 	 * @param object $contentRecord
-	 * @return void
+	 * @return bool
 	 */
 	private function _notifyAdmin($formRecord = FALSE, $contentRecord = FALSE)
 	{
@@ -133,9 +132,9 @@ class SproutForms_PublicController extends BaseController
 				'form' => $formRecord->name,
 				'viewFormEntryUrl' => craft()->config->get('cpTrigger') . "/sproutforms/edit/" . $formRecord->id . "#tab-entries"
 			));
-      		
 			$email->subject = 'A form has been submitted on your website';
 
+			$error = false;
 			foreach ($distro_list as $email_address)
 			{
 				try
@@ -145,9 +144,10 @@ class SproutForms_PublicController extends BaseController
 				}
 				catch(\Exception $e)
 				{
-					// TODO: handle error					
+					$error = true;				
 				}
 			}
+			return $error;
 		}
 	}
 }

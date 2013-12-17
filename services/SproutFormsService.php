@@ -267,7 +267,7 @@ class SproutFormsService extends BaseApplicationComponent
      * @throws \Exception
      * @return bool
      */
-    public function saveForm(SproutForms_FormModel $form)
+    public function saveForm(SproutForms_FormModel &$form)
     {
     	$formRecord = $this->_getFormRecordById($form->id);
     	$isNew = $formRecord->isNewRecord();

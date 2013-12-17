@@ -3,7 +3,9 @@
 
 {# get form and associated fields #}
 {% if formId is defined %}
-	{% set form = craft.sproutforms.getFormById(formId) %}
+	{% if form is not defined %}
+		{% set form = craft.sproutforms.getFormById(formId) %}
+	{% endif %}
 	{% if not form %}
 		{% exit 404 %}
 	{% endif %}

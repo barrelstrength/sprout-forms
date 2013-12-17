@@ -79,7 +79,7 @@ class SproutForms_FormsController extends BaseController
 
 		// Send the field back to the template
 		craft()->urlManager->setRouteVariables(array(
-			'field' => $form
+			'form' => $form
 		));
     }
 }
