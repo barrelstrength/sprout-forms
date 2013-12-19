@@ -76,4 +76,16 @@ class SproutForms_FieldRecord extends FieldRecord
             'form' => array(static::BELONGS_TO, 'SproutForms_FormRecord', 'onDelete' => static::CASCADE),
         );
     }   
+    
+    /**
+     * Setter
+     * 
+     * @param string $handle
+     * @return void
+     */
+    public function setOldHandle($handle)
+    {
+    	$this->oldHandle = $handle;
+    }
+
 }

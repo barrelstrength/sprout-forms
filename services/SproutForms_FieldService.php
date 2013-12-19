@@ -99,7 +99,7 @@ class SproutForms_FieldService extends FieldsService
 
 		if (!$isNewField)
 		{	
-			$fieldRecord->storeOldHandle($fieldRecord->handle);
+			$fieldRecord->oldHandle = $fieldRecord->handle;
 		}
 
 		$fieldRecord->formId       = $field->formId;
@@ -121,6 +121,7 @@ class SproutForms_FieldService extends FieldsService
 
 		if ($recordValidates && $settingsValidate)
 		{
+			$fieldRecord->handle = "formId" . $field->formId . "_" . $field->handle; // Append our FormId on the from of our field name
 			$transaction = craft()->db->beginTransaction();
 			try
 			{
@@ -142,11 +143,11 @@ class SproutForms_FieldService extends FieldsService
 
 					if ($isNewField)
 					{
-						craft()->db->createCommand()->addColumn('sproutforms_content', $field->handle, $column);
+						craft()->db->createCommand()->addColumn('sproutforms_content', $fieldRecord->handle, $column);
 					}
 					else
 					{
-						craft()->db->createCommand()->alterColumn('sproutforms_content', $fieldRecord->oldHandle, $column, $field->handle);
+						craft()->db->createCommand()->alterColumn('sproutforms_content', $fieldRecord->oldHandle, $column, $fieldRecord->handle);
 					}
 				}
 

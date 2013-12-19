@@ -2,7 +2,9 @@
 {% import "_includes/forms" as forms %}
 
 {% if fieldId is defined %}
-	{% set field = craft.sproutforms.getFieldById(fieldId) %}
+	{% if field is not defined %}
+		{% set field = craft.sproutforms.getFieldById(fieldId) %}
+	{% endif %}
 	{% if not field %}
 		{% exit 404 %}
 	{% endif %}
@@ -107,20 +109,18 @@
 			toggle: true
 		}) }}
 
+		{# This should match Craft's templates/settings/fields/_edit.html fieldtype code, ~ line 140; may change as Craft gets updated #}
 		{% for _fieldType in fieldTypes %}
-			{% set isCurrent = (_fieldType.classHandle == fieldType.classHandle) %}
-			{% if isCurrent %}
-				{% set settings = fieldType.settingsHtml %}
-			{% else %}
-				{% set settings = _fieldType.settingsHtml %}
-			{% endif %}
-
-			{% if settings %}
-				<div id="{{ _fieldType.classHandle }}"{% if not isCurrent %} class="hidden"{% endif %}>
-					{% set namespace = 'types[' ~ _fieldType.classHandle ~ ']' %}
-					{{- settings|ns(namespace)|raw -}}
-				</div>
-			{% endif %}
+			{% set isCurrent = (_fieldType.getClassHandle() == fieldType.getClassHandle()) %}
+			<div id="{{ _fieldType.getClassHandle() }}"{% if not isCurrent %} class="hidden"{% endif %}>
+				{% namespace 'types['~_fieldType.getClassHandle()~']' %}
+					{% if isCurrent %}
+						{{ fieldType.getSettingsHtml()|raw }}
+					{% else %}
+						{{ _fieldType.getSettingsHtml()|raw }}
+					{% endif %}
+				{% endnamespace %}
+			</div>
 		{% endfor %}
 
 		<hr>

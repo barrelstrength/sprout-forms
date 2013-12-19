@@ -16,7 +16,7 @@ class SproutForms_FieldsController extends BaseController
 		$field->formId       = craft()->request->getRequiredPost('formId');
 		$field->id           = craft()->request->getPost('fieldId');		
 		$field->name         = craft()->request->getPost('name');		
-		$field->handle       = "formId" . $field->formId . "_" . craft()->request->getPost('handle'); // Append our FormId on the from of our field name
+		$field->handle       = craft()->request->getPost('handle');
 		$field->instructions = craft()->request->getPost('instructions');
 		$field->translatable = (bool) craft()->request->getPost('translatable');
 		$field->type         = craft()->request->getRequiredPost('type');
