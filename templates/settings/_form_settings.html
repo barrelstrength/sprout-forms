@@ -35,3 +35,7 @@
   </form>
 
 </div>
+
+{% if form is not defined or not form.handle %}
+	{% includeJs "new Craft.HandleGenerator('#name', '#handle');" %}
+{% endif %}
