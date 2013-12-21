@@ -25,6 +25,7 @@ class SproutForms_FormRecord extends BaseRecord
         return array(
             'name'          => array(AttributeType::String, 'required' => true),
             'handle'        => array(AttributeType::String, 'required' => true),
+            'redirect_on_submit' => array(AttributeType::String),
         	'email_distribution_list' => array(AttributeType::String),
         );
     }
