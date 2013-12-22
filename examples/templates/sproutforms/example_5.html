@@ -1,0 +1,106 @@
+{% extends "sproutforms/_layout" %}
+{% block content %}	
+	<h2>Multiple Forms</h2>
+	<p>This example shows how to include multiple forms on one page.</p>
+	<a href="/sproutforms">Back</a>
+	<hr/>
+
+	<form method="post" name="form1" action="" accept-charset="UTF-8">	
+	    {#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	    MESSAGING
+	    Error/success message set during submission processing will be displayed here.
+	    ~ #}
+	    {{ craft.sproutforms.msg() }}	    
+	    
+	    
+	    {#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	    INSTANTIATION
+	    Get an instance of the 'example' form.
+	    ~ #}
+	    {% set exampleForm = craft.sproutforms.getFormFields('example') %}
+    
+		{#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		HIDDEN FORM FIELDS
+		These hidden fields must be present in every form.
+		action: This will always be sproutForms/public/post
+		redirect: The page/url to which the user should be redirected upon form submission
+		handle: Form handle, as defined in the form settings section in the admin panel
+		~ #}
+	    <input type="hidden" name="action" value="sproutForms/public/post">
+	    <input type="hidden" name="redirect" value="sproutforms/example_5">
+	    <input type="hidden" name="handle" value="example">	    
+	    
+		
+		{#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		FORM FIELDS
+		Each form field has the following variables available, which are defined in the form 
+		field section of the admin panel:
+		* name - Form name
+		* html - Html output of the field type (PlainText, Dropdown, etc.)
+		* instructions - Field instructions
+		* error - displays the field error, if any
+		In addition to these, each field may have specific properties available.  For example, 
+		PlainText also has a placeholder and maxLength.
+		~ #}
+		{{ exampleForm.examplePlainText.name }}: 
+		{{ exampleForm.examplePlainText.html | raw }} 
+		{{ exampleForm.examplePlainText.instructions }}		
+		{{ exampleForm.examplePlainText.error | raw }}	
+		
+		{{ exampleForm.exampleDropdown.name }}: 
+		{{ exampleForm.exampleDropdown.html | raw }} 
+		{{ exampleForm.exampleDropdown.instructions }}		
+		{{ exampleForm.exampleDropdown.error | raw }}
+	   			
+		<br/><input type="submit" value="Register">
+	</form>
+
+	<hr/>
+    
+	<form method="post" name="form2" action="" accept-charset="UTF-8">	
+	    {#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	    MESSAGING
+	    Error/success message set during submission processing will be displayed here.
+	    ~ #}
+	    {{ craft.sproutforms.msg() }}	    
+	    
+	    
+	    {#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	    INSTANTIATION
+	    Get an instance of the 'example' form.
+	    ~ #}
+	    {% set exampleForm2 = craft.sproutforms.getFormFields('example2') %}
+    
+		{#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		HIDDEN FORM FIELDS
+		These hidden fields must be present in every form.
+		action: This will always be sproutForms/public/post
+		redirect: The page/url to which the user should be redirected upon form submission
+		handle: Form handle, as defined in the form settings section in the admin panel
+		~ #}
+	    <input type="hidden" name="action" value="sproutForms/public/post">
+	    <input type="hidden" name="redirect" value="sproutforms/example_5">
+	    <input type="hidden" name="handle" value="example2">	    
+	    
+		
+		{#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		FORM FIELDS
+		Each form field has the following variables available, which are defined in the form 
+		field section of the admin panel:
+		* name - Form name
+		* html - Html output of the field type (PlainText, Dropdown, etc.)
+		* instructions - Field instructions
+		* error - displays the field error, if any
+		In addition to these, each field may have specific properties available.  For example, 
+		PlainText also has a placeholder and maxLength.
+		~ #}
+		{{ exampleForm2.examplePlainText.name }}: 
+		{{ exampleForm2.examplePlainText.html | raw }} 
+		{{ exampleForm2.examplePlainText.instructions }}	
+		{{ exampleForm2.examplePlainText.error | raw }}
+	   			
+		<br/><input type="submit" value="Register">
+	</form>
+	
+{% include "sproutforms/_css" %}		
+{% endblock %}

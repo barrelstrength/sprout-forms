@@ -86,6 +86,32 @@ class SproutForms_FieldService extends FieldsService
 	}
 	
 	/**
+	 * Return a field based on a form and field handle
+	 * 
+	 * @param string $formHandle
+	 * @param string $fieldHandle
+	 * @return object|bool
+	 */
+	public function getFieldByFormFieldHandle($formHandle, $fieldHandle)
+	{	    
+	    $field = craft()->db->createCommand()
+	    ->select('csf.*')
+	    ->from('sproutforms_fields csf')
+	    ->join('sproutforms_forms csfo', 'csf.formId=csfo.id')
+	    ->where('csfo.handle=:formHandle', array(':formHandle'=>$formHandle))
+	    ->where(array('like', 'csf.handle', '%_' . $fieldHandle))
+	    ->limit(1)
+	    ->queryRow();
+	    
+	    if( ! $field)
+	    {
+	        return false;
+	    }
+	    
+	    return $this->getFieldByHandle($field['handle']);
+	}
+	
+	/**
 	 * Saves a field.
 	 *
 	 * @param FieldModel $field

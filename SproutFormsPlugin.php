@@ -32,7 +32,7 @@ class SproutFormsPlugin extends BasePlugin
      */
     function getVersion()
     {
-        return '0.5.1.4';
+        return '0.5.1.5';
     }
 
     /**

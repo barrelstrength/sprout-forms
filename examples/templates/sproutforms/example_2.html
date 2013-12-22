@@ -2,8 +2,8 @@
 
 {% block content %}	
 
-	<h2>Advanced</h2>
-	<p>This example shows how to build a form using individual fields and their properties.</p>
+	<h2>Intermediate</h2>
+	<p>This example shows how to build a form using single tag fields.</p>
 	<a href="/sproutforms">Back</a>
 	<hr/>
 
@@ -14,15 +14,8 @@
 	    ~ #}
 	    {{ craft.sproutforms.msg() }}	    
 	    
-	    
 	    {#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	    INSTANTIATION
-	    Get an instance of the 'example' form.
-	    ~ #}
-	    {% set exampleForm = craft.sproutforms.getFormFields('example') %}
-    
-		{#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		HIDDEN FORM FIELDS
+	    HIDDEN FORM FIELDS
 		These hidden fields must be present in every form.
 		action: This will always be sproutForms/public/post
 		redirect: The page/url to which the user should be redirected upon form submission
@@ -31,30 +24,11 @@
 	    <input type="hidden" name="action" value="sproutForms/public/post">
 	    <input type="hidden" name="redirect" value="sproutforms/example_2">
 	    <input type="hidden" name="handle" value="example">	    
-	    
-		
-		{#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		FORM FIELDS
-		Each form field has the following variables available, which are defined in the form 
-		field section of the admin panel:
-		* name - Form name
-		* html - Html output of the field type (PlainText, Dropdown, etc.)
-		* instructions - Field instructions
-		* error - displays the field error, if any
-		In addition to these, each field may have specific properties available.  For example, 
-		PlainText also has a placeholder and maxLength.
-		~ #}
-		{{ exampleForm.examplePlainText.name }}: 
-		{{ exampleForm.examplePlainText.html | raw }} 
-		{{ exampleForm.examplePlainText.instructions }}		
-		{{ exampleForm.examplePlainText.error | raw }}	
-				
-		<br/>
-		
-		{{ exampleForm.exampleDropdown.name }}: 
-		{{ exampleForm.exampleDropdown.html | raw }} 
-		{{ exampleForm.exampleDropdown.instructions }}		
-		{{ exampleForm.exampleDropdown.error | raw }}
+
+	    <ul>
+        {{ craft.sproutForms.displayField('example.examplePlainText') }}		
+		{{ craft.sproutForms.displayField('example.exampleDropdown') }}
+		</ul>
 			   			
 		<br/><input type="submit" value="Register">
 	</form>
