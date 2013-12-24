@@ -2,16 +2,20 @@
 	
 	<p>Add any number of Fields to your form.  Might have to manage this on a separate top level 
 	tab to make saving easier.</p>
+	
+	{% set fields = craft.sproutforms.getFields(formId) %}
+	{% set sortable  = (fields|length > 1) %}
 
 	<table id="fields" class="data collapsible">
 		<thead>
 			<th scope="col">{{ "Name"|t }}</th>
 			<th scope="col">{{ "Handle"|t }}</th>
 			<th scope="col">{{ "Type"|t }}</th>
+			{% if sortable %}<td class="thin"></td>{% endif %}
 			<td class="thin"></td>
 		</thead>
 		<tbody>
-			{% for field in craft.sproutforms.getFields(formId) %}
+			{% for field in fields %}
 			
 				{% set required = ('required' in field.validation) %}
 				
@@ -22,6 +26,7 @@
 					</th>
 					<td data-title="{{ 'Handle'|t }}"><code>{{ field.handle }}</code></td>
 					<td data-title="{{ 'Type'|t }}">{{ field.type?field.type:'n/a'|t }}</td>
+					{% if sortable %}<td class="thin"><a class="move icon" title="{{ 'Reorder'|t }}" role="button"></a></td>{% endif %}
 					<td class="thin"><a class="delete icon" title="{{ 'Delete'|t }}"></a></td>
 				</tr>
 			{% endfor %}
@@ -36,7 +41,9 @@
 	new Craft.AdminTable({
 		tableSelector: '#fields',
 		noObjectsSelector: '#nofields',
-		deleteAction: 'sproutForms/fields/deleteField'
+		sortable: true,
+		deleteAction: 'sproutForms/fields/deleteField',		
+		reorderAction: 'sproutForms/fields/reorderFields',
 	});
 {% endset %}
 {% includeJs js %}

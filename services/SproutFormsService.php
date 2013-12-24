@@ -148,7 +148,7 @@ class SproutFormsService extends BaseApplicationComponent
 	 */
     public function getFields($formId)
     {
-		return SproutForms_FieldRecord::model()->findAll(array('condition' => 'formId=' . $formId));
+		return SproutForms_FieldRecord::model()->findAll(array('condition' => 'formId=' . $formId, 'order' => 'sortOrder'));
     }
     
     /**
@@ -163,7 +163,7 @@ class SproutFormsService extends BaseApplicationComponent
 
     	if(isset($form[0]->id))
     	{
-    		return SproutForms_FieldRecord::model()->findAll(array('condition' => 'formId=' . $form[0]->id));
+    		return SproutForms_FieldRecord::model()->findAll(array('condition' => 'formId=' . $form[0]->id, 'order' => 'sortOrder'));
     	}
     	return null;
     }

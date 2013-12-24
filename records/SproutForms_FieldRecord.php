@@ -61,7 +61,8 @@ class SproutForms_FieldRecord extends FieldRecord
     			'translatable' => AttributeType::Bool,
     			'type'         => array(AttributeType::ClassName, 'required' => true),
     			'settings'     => AttributeType::Mixed,
-    			'validation'     => array(AttributeType::String, 'column' => ColumnType::Text),
+    			'validation'   => array(AttributeType::String, 'column' => ColumnType::Text),
+    	        'sortOrder'    => AttributeType::SortOrder,
     	);
     }
 
