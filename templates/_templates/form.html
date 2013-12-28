@@ -1,18 +1,26 @@
-<form method="post" accept-charset="UTF-8">	
-	
-    {{ craft.sproutforms.msg() }}	    
-
+{%- set submitValue = (customSettings.submitValue is defined ? customSettings.submitValue : "Submit") -%}
+{%- set submitButton = (customSettings.submitButton is defined ? true : false) -%}
+    
+<form method="post" accept-charset="UTF-8">
     <input type="hidden" name="action" value="sproutForms/public/post">
     <input type="hidden" name="handle" value="{{ form.handle }}">
     
-    {% if(form.redirect_on_submit) %}
+    {% if form.redirect_on_submit %}
     <input type="hidden" name="redirect" value="{{ form.redirect_on_submit }}">
     {% endif %}
 
     <div class="fields">
     {{ fields | raw }}
     </div>
-					
-	<input type="submit" value="Submit">
+	
+    <div class="submit">
+    {% if submitButton %}
+        <button type="submit">{{ submitValue }}</button>
+    {% else %}
+        <input type="submit" value="{{ submitValue }}">
+    {% endif %}
+    </div>
+        
+    
 
 </form>
