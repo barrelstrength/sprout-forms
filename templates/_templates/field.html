@@ -3,7 +3,7 @@
 {%- set instructions = (field.instructions is defined ? field.instructions : null) %}
 {%- set errors = (errors is defined ? errors : null) -%}
 
-<div {% if id %}id="{{ id }}-field"{% endif %} class="field">
+<div {% if id %}id="{{ id }}-field"{% endif %} class="field {{ field.type }}">
 	{% if label or instructions %}
 		<div class="heading">
 			{% if label %}
@@ -20,6 +20,6 @@
 		{{ field.html | raw }} 
 	</div>
 	{% if field.error is defined and field.error %}
-	{{ field.error | raw }}
+	<p>{{ field.error | raw }}</p>
 	{% endif %}
 </div>
