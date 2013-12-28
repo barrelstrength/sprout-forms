@@ -18,6 +18,7 @@ class SproutForms_FormsController extends BaseController
 		$form->id           = craft()->request->getPost('id');		
 		$form->name         = craft()->request->getPost('name');
 		$form->handle       = craft()->request->getPost('handle');
+		$form->redirect_on_submit = craft()->request->getPost('redirect_on_submit');
 
 		if (craft()->sproutForms->saveForm($form))
 		{

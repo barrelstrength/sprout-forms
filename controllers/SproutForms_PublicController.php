@@ -123,7 +123,7 @@ class SproutForms_PublicController extends BaseController
 
 			foreach ($contentRecord->form->field as $k=>$v)
 			{
-				$data[$v->name] = $v->getContent();
+				$data[$v->name] = nl2br($v->getContent()); // new lines to <br/>
 			}
 			
 			$email = new EmailModel();
@@ -133,6 +133,7 @@ class SproutForms_PublicController extends BaseController
 				'viewFormEntryUrl' => craft()->config->get('cpTrigger') . "/sproutforms/edit/" . $formRecord->id . "#tab-entries"
 			));
 			$email->subject = 'A form has been submitted on your website';
+			$email->htmlBody = html_entity_decode($email->htmlBody); // mainly for <br/>
 
 			$error = false;
 			foreach ($distro_list as $email_address)

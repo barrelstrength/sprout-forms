@@ -148,7 +148,7 @@ class SproutFormsService extends BaseApplicationComponent
 	 */
     public function getFields($formId)
     {
-		return SproutForms_FieldRecord::model()->findAll(array('condition' => 'formId=' . $formId));
+		return SproutForms_FieldRecord::model()->findAll(array('condition' => 'formId=' . $formId, 'order' => 'sortOrder'));
     }
     
     /**
@@ -163,7 +163,7 @@ class SproutFormsService extends BaseApplicationComponent
 
     	if(isset($form[0]->id))
     	{
-    		return SproutForms_FieldRecord::model()->findAll(array('condition' => 'formId=' . $form[0]->id));
+    		return SproutForms_FieldRecord::model()->findAll(array('condition' => 'formId=' . $form[0]->id, 'order' => 'sortOrder'));
     	}
     	return null;
     }
@@ -279,6 +279,7 @@ class SproutFormsService extends BaseApplicationComponent
 
     	$formRecord->name         = $form->name;
     	$formRecord->handle       = $form->handle;
+    	$formRecord->redirect_on_submit = $form->redirect_on_submit;
     	if(isset($form->email_distribution_list))
     	{
     		$formRecord->email_distribution_list = $form->email_distribution_list;

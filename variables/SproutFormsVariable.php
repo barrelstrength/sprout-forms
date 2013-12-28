@@ -169,23 +169,39 @@ class SproutFormsVariable
 				// Remove our namespace so the user can use their chosen handle
 				$handle = craft()->sproutForms->adjustFieldName($fieldInfo, 'human');	
 				
-				// get the field type instance
-				$fieldType = craft()->fields->getFieldType($fieldInfo->type);
-				$fieldType->setSettings($fieldInfo->settings);
-				
-				// set output data
-				$fields[$handle]['handle'] = $handle;
-				$fields[$handle]['html'] = $fieldType->getInputHtml($handle, craft()->request->getPost($fieldInfo->handle));
-				$fields[$handle]['settings'] = $fieldInfo->settings;
-				$fields[$handle]['instructions'] = $fieldInfo->instructions;
-				$fields[$handle]['hint'] = isset($fieldInfo->settings['hint']) ? $fieldInfo->settings['hint'] : '';
-				$fields[$handle]['name'] = $fieldInfo->name;
-				$fields[$handle]['error'] = isset(self::$errors[$fieldInfo->handle]) && self::$errors[$fieldInfo->handle] ? '<div class="field-error">' . implode('<br/>', self::$errors[$fieldInfo->handle]) . '</div>' : '';
+				$fields[$handle] = $this->_getFieldOutput($fieldInfo);
 			}
 		}		
 
 		craft()->path->setTemplatesPath(craft()->path->getSiteTemplatesPath());
 		return $fields;
+	}
+	
+	/**
+	 * Return individual field output
+	 * 
+	 * @param SproutForms_FieldRecord $fieldInfo
+	 * @return array
+	 */
+	private function _getFieldOutput($fieldInfo)
+	{
+	     // Remove our namespace so the user can use their chosen handle
+	    $handle = craft()->sproutForms->adjustFieldName($fieldInfo, 'human');
+	        
+	    // get the field type instance
+	    $fieldType = craft()->fields->getFieldType($fieldInfo->type);
+	    $fieldType->setSettings($fieldInfo->settings);
+	    
+	    // set output data
+	    $field['handle'] = $handle;
+	    $field['html'] = $fieldType->getInputHtml($handle, craft()->request->getPost($fieldInfo->handle));
+	    $field['settings'] = $fieldInfo->settings;
+	    $field['instructions'] = $fieldInfo->instructions;
+	    $field['hint'] = isset($fieldInfo->settings['hint']) ? $fieldInfo->settings['hint'] : '';
+	    $field['name'] = $fieldInfo->name;
+	    $field['error'] = isset(self::$errors[$fieldInfo->handle]) && self::$errors[$fieldInfo->handle] ? '<div class="field-error">' . implode('<br/>', self::$errors[$fieldInfo->handle]) . '</div>' : ''; 
+	    
+	    return $field;
 	}
 	
 	public function getValidationOptions()
@@ -274,6 +290,35 @@ class SproutFormsVariable
 		craft()->path->setTemplatesPath(craft()->path->getSiteTemplatesPath());
 		
 		echo $form;
+	}
+	
+	/**
+	 * Returns a complete field for display in template
+	 *
+	 * @param string $form_handle
+	 * @return string
+	 */
+	public function displayField($form_field_handle)
+	{
+	    craft()->path->setTemplatesPath(craft()->path->getCpTemplatesPath());
+	    
+	    if( ! isset(self::$errors))
+	    {
+	        self::$errors = craft()->user->getFlash('errors');
+	    }
+	    
+	    list($form_handle, $field_handle) = explode('.', $form_field_handle);
+	    
+	    if( ! $form_handle || ! $field_handle) return '';	    
+	    if( ! $field = craft()->sproutForms_field->getFieldByFormFieldHandle($form_handle, $field_handle)) return '';
+	    
+	    $field = $this->_getFieldOutput($field);	
+	    craft()->path->setTemplatesPath(craft()->path->getPluginsPath() . 'sproutforms/templates/');	
+	    $fieldOutput =  craft()->templates->render('_templates/field', array('field' => $field));
+
+	    craft()->path->setTemplatesPath(craft()->path->getSiteTemplatesPath());
+	
+	    echo $fieldOutput;
 	}
 	
 	/**

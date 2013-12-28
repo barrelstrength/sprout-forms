@@ -74,4 +74,16 @@ class SproutForms_FieldsController extends BaseController
 		$success = craft()->sproutForms_field->deleteField($fieldId);
 		$this->returnJson(array('success' => $success));
 	}
+	
+	public function actionReorderFields()
+	{
+		craft()->userSession->requireAdmin();
+		$this->requirePostRequest();
+		$this->requireAjaxRequest();
+
+		$fieldIds = JsonHelper::decode(craft()->request->getRequiredPost('ids'));
+		craft()->sproutForms_field->reorderFields($fieldIds);
+
+		$this->returnJson(array('success' => true));
+	}
 }

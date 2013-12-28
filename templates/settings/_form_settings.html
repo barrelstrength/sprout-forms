@@ -26,6 +26,17 @@
       required: true,
       errors: (form is defined ? form.getErrors('handle') : null)   
     }) }}
+    
+    {{ forms.textField({
+      label: "Redirect Page"|t,
+      id: 'redirect_on_submit',
+      name: 'redirect_on_submit',
+      instructions: "Where should the user be redirected upon form submission? <i>NOTE: Leaving blank will redirect user back to the form.</i> "|t,
+      placeholder: siteUrl, 
+      value: (form is defined ? form.redirect_on_submit : null),
+      required: true,
+      errors: (form is defined ? form.getErrors('redirect_on_submit') : null)   
+    }) }}
 
     <div class="buttons">
       <input class="btn submit" type="submit" value="Save Template" />
@@ -35,3 +46,7 @@
   </form>
 
 </div>
+
+{% if form is not defined or not form.handle %}
+	{% includeJs "new Craft.HandleGenerator('#name', '#handle');" %}
+{% endif %}

@@ -3,6 +3,9 @@
 
     <input type="hidden" name="action" value="sproutForms/public/post">
     <input type="hidden" name="handle" value="{{ form.handle }}">
+    {% if(form.redirect_on_submit) %}
+        <input type="hidden" name="redirect" value="{{ form.redirect_on_submit }}">
+    {% endif %}
 
     <div class="form-all">
     	<ul class="form-section">

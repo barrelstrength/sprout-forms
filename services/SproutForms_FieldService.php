@@ -7,32 +7,6 @@ class SproutForms_FieldService extends FieldsService
 	private $_fieldsByHandle;
 	
 	/**
-	 * Gets a field record by its ID or creates a new one.
-	 *
-	 * @access private
-	 * @param int $fieldId
-	 * @return FieldRecord
-	 */
-	private function _getFieldRecordById($fieldId = null)
-	{
-		if ($fieldId)
-		{
-			$fieldRecord = SproutForms_FieldRecord::model()->findById($fieldId);
-	
-			if (!$fieldRecord)
-			{
-				throw new Exception(Craft::t('No field exists with the ID “{id}”', array('id' => $fieldId)));
-			}
-		}
-		else
-		{
-			$fieldRecord = new SproutForms_FieldRecord();
-		}
-	
-		return $fieldRecord;
-	}
-	
-	/**
 	 * Return field given field id
 	 *
 	 * @param int $fieldId
@@ -86,6 +60,32 @@ class SproutForms_FieldService extends FieldsService
 	}
 	
 	/**
+	 * Return a field based on a form and field handle
+	 * 
+	 * @param string $formHandle
+	 * @param string $fieldHandle
+	 * @return object|bool
+	 */
+	public function getFieldByFormFieldHandle($formHandle, $fieldHandle)
+	{	    
+	    $field = craft()->db->createCommand()
+	    ->select('csf.*')
+	    ->from('sproutforms_fields csf')
+	    ->join('sproutforms_forms csfo', 'csf.formId=csfo.id')
+	    ->where('csfo.handle=:formHandle', array(':formHandle'=>$formHandle))
+	    ->where(array('like', 'csf.handle', '%_' . $fieldHandle))
+	    ->limit(1)
+	    ->queryRow();
+	    
+	    if( ! $field)
+	    {
+	        return false;
+	    }
+	    
+	    return $this->getFieldByHandle($field['handle']);
+	}
+	
+	/**
 	 * Saves a field.
 	 *
 	 * @param FieldModel $field
@@ -99,7 +99,6 @@ class SproutForms_FieldService extends FieldsService
 
 		if (!$isNewField)
 		{	
-			// $fieldRecord->storeOldHandle($fieldRecord->handle); // not implemented 
 			$fieldRecord->oldHandle = $fieldRecord->handle;
 		}
 
@@ -212,5 +211,80 @@ class SproutForms_FieldService extends FieldsService
 				'url' => 'url',
 				'email' => 'email'
 		);
+	}
+	
+	/**
+	 * Reorders fields.
+	 *
+	 * @param array $fieldIds
+	 * @return bool
+	 */
+	public function reorderFields($fieldIds)
+	{
+	    $transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
+	
+	    try
+	    {
+	        foreach ($fieldIds as $fieldOrder => $fieldId)
+	        {
+	            $fieldRecord = $this->_getFieldRecordById($fieldId);
+	            $fieldRecord->sortOrder = $fieldOrder+1;
+	            $fieldRecord->save();
+	        }
+	
+	        if ($transaction !== null)
+	        {
+	            $transaction->commit();
+	        }
+	    }
+	    catch (\Exception $e)
+	    {
+	        if ($transaction !== null)
+	        {
+	            $transaction->rollback();
+	        }
+	
+	        throw $e;
+	    }
+	
+	    return true;
+	}
+	
+	/**
+	 * Gets a field's record.
+	 *
+	 * @access private
+	 * @param int $fieldId
+	 * @return FieldRecord
+	 */
+	private function _getFieldRecordById($fieldId = null)
+	{
+	    if ($fieldId)
+	    {
+	        $record = SproutForms_FieldRecord::model()->findById($fieldId);
+	
+	        if (!$record)
+	        {
+	            $this->_noFieldExists($fieldId);
+	        }
+	    }
+	    else
+	    {
+	        $record = new SproutForms_FieldRecord();
+	    }
+	
+	    return $record;
+	}
+	
+	/**
+	 * Throws a "No field exists" exception.
+	 *
+	 * @access private
+	 * @param int $fieldId
+	 * @throws Exception
+	 */
+	private function _noFieldExists($fieldId)
+	{
+	    throw new Exception(Craft::t('No field exists with the ID “{id}”', array('id' => $fieldId)));
 	}
 }

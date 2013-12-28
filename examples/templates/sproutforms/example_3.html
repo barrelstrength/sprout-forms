@@ -1,7 +1,9 @@
 {% extends "sproutforms/_layout" %}
+
 {% block content %}	
-	<h2>Advanced with standard html fields</h2>
-	<p>This example shows how to build a form using standard html fields.</p>
+
+	<h2>Advanced</h2>
+	<p>This example shows how to build a form using individual fields and their properties.</p>
 	<a href="/sproutforms">Back</a>
 	<hr/>
 
@@ -43,21 +45,17 @@
 		PlainText also has a placeholder and maxLength.
 		~ #}
 		{{ exampleForm.examplePlainText.name }}: 
-		<input type="text" name="{{ exampleForm.examplePlainText.handle }}" placeholder="{{ exampleForm.examplePlainText.settings.placeholder }}" />
+		{{ exampleForm.examplePlainText.html | raw }} 
 		{{ exampleForm.examplePlainText.instructions }}		
-		{{ exampleForm.examplePlainText.error | raw }}
-		
+		{{ exampleForm.examplePlainText.error | raw }}	
+				
 		<br/>
 		
 		{{ exampleForm.exampleDropdown.name }}: 
-		<select name="exampleDropdown">
-			<option value="Item 1">Item 1</option>
-			<option value="Item 2">Item 2</option>
-			<option value="Item 3">Item 3</option>
-		</select>
+		{{ exampleForm.exampleDropdown.html | raw }} 
 		{{ exampleForm.exampleDropdown.instructions }}		
-		{{ exampleForm.exampleDropdown.error | raw }}	
-	   			
+		{{ exampleForm.exampleDropdown.error | raw }}
+			   			
 		<br/><input type="submit" value="Register">
 	</form>
 	
