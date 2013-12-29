@@ -29,13 +29,12 @@
     
     {{ forms.textField({
       label: "Redirect Page"|t,
-      id: 'redirect_on_submit',
-      name: 'redirect_on_submit',
+      name: 'redirectUri',
       instructions: "Where should the user be redirected upon form submission? <i>NOTE: Leaving blank will redirect user back to the form.</i> "|t,
       placeholder: siteUrl, 
-      value: (form is defined ? form.redirect_on_submit : null),
+      value: (form is defined ? form.redirectUri : null),
       required: true,
-      errors: (form is defined ? form.getErrors('redirect_on_submit') : null)   
+      errors: (form is defined ? form.getErrors('redirectUri') : null)   
     }) }}
 
     <div class="buttons">
