@@ -1,5 +1,5 @@
 {%- set id = (field.id is defined ? field.id : null) %}
-{%- set label = (field.name is defined ? field.name : null) %}
+{%- set label = (field.label is defined ? field.label : null) %}
 {%- set instructions = (field.instructions is defined ? field.instructions : null) %}
 {%- set errors = (errors is defined ? errors : null) -%}
 
@@ -17,7 +17,7 @@
 		</div>
 	{% endif %}
 	<div class="input{% if field.error %} errors{% endif %}">
-		{{ field.html | raw }} 
+		{{ field.input | raw }} 
 	</div>
 	{% if field.error is defined and field.error %}
 	<p>{{ field.error | raw }}</p>
