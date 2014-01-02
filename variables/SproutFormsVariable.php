@@ -219,11 +219,11 @@ class SproutFormsVariable
 	    // set output data
 	    $field['handle'] = $handle;
 	    $field['type'] = strtolower($fieldInfo->type);
-	    $field['html'] = $fieldType->getInputHtml($handle, craft()->request->getPost($fieldInfo->handle));
+	    $field['input'] = $fieldType->getInputHtml($handle, craft()->request->getPost($fieldInfo->handle));
 	    $field['settings'] = $fieldInfo->settings;
 	    $field['instructions'] = $fieldInfo->instructions;
 	    $field['hint'] = isset($fieldInfo->settings['hint']) ? $fieldInfo->settings['hint'] : '';
-	    $field['name'] = $fieldInfo->name;
+	    $field['label'] = $fieldInfo->name;
 	    $field['error'] = isset(self::$errors[$fieldInfo->handle]) && self::$errors[$fieldInfo->handle] ? '<div class="field-error">' . implode('<br/>', self::$errors[$fieldInfo->handle]) . '</div>' : ''; 
 	    
 	    return $field;

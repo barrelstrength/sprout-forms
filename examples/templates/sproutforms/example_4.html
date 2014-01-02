@@ -42,14 +42,14 @@
 		In addition to these, each field may have specific properties available.  For example, 
 		PlainText also has a placeholder and maxLength.
 		~ #}
-		{{ exampleForm.examplePlainText.name }}: 
+		{{ exampleForm.examplePlainText.label }}: 
 		<input type="text" name="{{ exampleForm.examplePlainText.handle }}" placeholder="{{ exampleForm.examplePlainText.settings.placeholder }}" />
 		{{ exampleForm.examplePlainText.instructions }}		
 		{{ exampleForm.examplePlainText.error | raw }}
 		
 		<br/>
 		
-		{{ exampleForm.exampleDropdown.name }}: 
+		{{ exampleForm.exampleDropdown.label }}: 
 		<select name="exampleDropdown">
 			<option value="Item 1">Item 1</option>
 			<option value="Item 2">Item 2</option>
