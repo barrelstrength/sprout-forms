@@ -61,15 +61,7 @@ class SproutForms_PublicController extends BaseController
 			{
 				if (is_array($field))
 				{
-					// we need to get the options and drill down
-					$fieldRecord = craft()->sproutForms_field->getFieldByHandle($column);
-					
-					$multiField = array();
-					foreach ($post as $option_key => $option_value)
-					{
-						$multiField[$fieldRecord->settings['options'][$option_key]['label']] = $option_value;
-					}
-					$field = json_encode($multiField);
+					$field = json_encode($field);
 				}								
 				$contentRecord->$column = $field;
 			}

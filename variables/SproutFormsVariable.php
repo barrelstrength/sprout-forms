@@ -138,9 +138,33 @@ class SproutFormsVariable
 			$options_data = array();
 			foreach($json as $option_label => $option_value)
 			{
-				$options_data[] = str_replace(' ', '&nbsp;', $option_label) . ':&nbsp;' . str_replace(' ', '&nbsp;', $option_value);
+			    // display label instead of value for readability
+    			if(isset($field->settings['options']) && is_array($field->settings['options'])) 
+    			{
+    			    foreach($field->settings['options'] as $option)
+    			    {
+    			        if(isset($option['value']) && in_array($option['value'], $json))
+    			        {
+    			            $json[array_search($option['value'], $json)] = $option['value'];
+    			            // $json[array_search($option['value'], $json)] = $option['label']; // uncomment if you'd rather display the label
+    			        }
+    			    }
+    			}  
 			}
-			return implode('<br/>', $options_data);
+			return implode(',', $json);
+		}
+		
+		// display label instead of value for readability
+		if(isset($field->settings['options']) && is_array($field->settings['options']))
+		{
+		    foreach($field->settings['options'] as $option)
+		    {
+		        if(isset($option['value']) && $option['value'] == $res)
+		        {
+		            $res = $option['value']; 
+		            // $res = $option['label']; // uncomment if you'd rather display the label
+		        }
+		    }
 		}
 		return str_replace(' ', '&nbsp;', $res);
 	}
