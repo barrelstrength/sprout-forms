@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutForms_PublicController extends BaseController
+class SproutForms_EntriesController extends BaseController
 {
 	/**
 	 * Allow anonymous execution
@@ -15,7 +15,7 @@ class SproutForms_PublicController extends BaseController
 	 * 
 	 * @return void
 	 */
-	public function actionPost()
+	public function actionSaveEntry()
 	{		
 		// pre $_POST processing hook
 		craft()->plugins->call('sproutFormsPrePost');
