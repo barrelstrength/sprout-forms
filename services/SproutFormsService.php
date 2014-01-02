@@ -201,14 +201,40 @@ class SproutFormsService extends BaseApplicationComponent
     		if($json && ! is_int($json))
     		{
     			$options_data = array();
+
+    			// display label instead of value for readability
+    			if(isset($field->settings['options']) && is_array($field->settings['options'])) 
+    			{
+    			    foreach($field->settings['options'] as $option)
+    			    {
+    			        if(isset($option['value']) && in_array($option['value'], $json))
+    			        {
+    			            $json[array_search($option['value'], $json)] = $option['value'];
+    			            // $json[array_search($option['value'], $json)] = $option['label']; // uncomment if you'd rather display the label
+    			        }
+    			    }
+    			}    			
+    			
     			foreach($json as $option_label => $option_value)
     			{
-    				$options_data[] = $option_label; //. ': ' . $option_value;
+    				$options_data[] = $option_value; 
     			}
     			$res->form->field[$key]->setContent($options_data);
     		}
     		else 
     		{
+    		    // display label instead of value for readability
+    			if(isset($field->settings['options']) && is_array($field->settings['options'])) 
+    			{
+    			    foreach($field->settings['options'] as $option)
+    			    {
+    			        if(isset($option['value']) && $option['value'] == $res->{$field->handle})
+    			        {
+    			           $res->{$field->handle} = $option['value'];
+    			           // $res->{$field->handle} = $option['label']; // uncomment if you'd rather display the label
+    			        }
+    			    }
+    			}  
     			$res->form->field[$key]->setContent($res->{$field->handle});
     		}
     	}

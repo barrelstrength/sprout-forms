@@ -33,15 +33,14 @@ class SproutForms_FieldRecord extends FieldRecord
 	 */
 	public function getContent()
 	{
-        $arr = json_decode($this->content);
-        if( is_array($arr))
+        if( is_array($this->content))
         {
             $content = array();
-            foreach($arr as $key=>$content_value)
+            foreach($this->content as $key=>$content_value)
             {
-                $content[] = $key . ':' . $content_value;
+                $content[] = $content_value;
             }
-            $this->content = implode("<br/>", $content);
+            $this->content = implode(",", $content);
         }
 		return $this->content;
 	}
