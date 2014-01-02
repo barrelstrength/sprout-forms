@@ -2,7 +2,7 @@
 {%- set submitButton = (customSettings.submitButton is defined ? true : false) -%}
     
 <form method="post" accept-charset="UTF-8">
-    <input type="hidden" name="action" value="sproutForms/public/post">
+    <input type="hidden" name="action" value="sproutForms/entries/saveEntry">
     <input type="hidden" name="handle" value="{{ form.handle }}">
     
     {% if form.redirectUri %}
