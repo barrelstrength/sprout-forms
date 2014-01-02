@@ -305,7 +305,7 @@ class SproutFormsService extends BaseApplicationComponent
 
     	$formRecord->name         = $form->name;
     	$formRecord->handle       = $form->handle;
-    	$formRecord->redirect_on_submit = $form->redirect_on_submit;
+    	$formRecord->redirectUri  = $form->redirectUri;
     	if(isset($form->email_distribution_list))
     	{
     		$formRecord->email_distribution_list = $form->email_distribution_list;

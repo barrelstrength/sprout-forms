@@ -218,6 +218,7 @@ class SproutFormsVariable
 	    
 	    // set output data
 	    $field['handle'] = $handle;
+	    $field['type'] = strtolower($fieldInfo->type);
 	    $field['html'] = $fieldType->getInputHtml($handle, craft()->request->getPost($fieldInfo->handle));
 	    $field['settings'] = $fieldInfo->settings;
 	    $field['instructions'] = $fieldInfo->instructions;
@@ -289,7 +290,7 @@ class SproutFormsVariable
 	 * @param string $form_handle
 	 * @return string
 	 */
-	public function displayForm($form_handle)
+	public function displayForm($form_handle, $customSettings = null)
 	{
 		if ( ! $formFields = $this->getFormFields($form_handle))
 		{
@@ -308,7 +309,8 @@ class SproutFormsVariable
 		
 		$form = craft()->templates->render('_templates/form', array(
 					'form' => craft()->sproutForms->getFormByHandle($form_handle),
-					'fields' => implode('<br/>', $fields)
+					'fields' => implode('<br/>', $fields),
+					'customSettings' => $customSettings
 		));
 
 		craft()->path->setTemplatesPath(craft()->path->getSiteTemplatesPath());

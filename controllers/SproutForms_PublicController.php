@@ -40,10 +40,10 @@ class SproutForms_PublicController extends BaseController
 		
 		foreach (craft()->request->getPost() as $key => $value) 
 		{			
-			if ( ! in_array($key, $adminFields))
+			if ( ! in_array($key, $adminFields) )
 			{				
 				// append field namespace
-				if ( ! preg_match('/^formId\d+_/', $key))
+				if ( ! preg_match('/^formId\d+_/', $key) )
 				{
 					$fieldsToSave['formId' . $formRecord->id . '_' . $key] = $value;
 					$_POST['formId' . $formRecord->id . '_' . $key] = $value;
@@ -79,15 +79,41 @@ class SproutForms_PublicController extends BaseController
 		    $this->redirectToPostedUrl();
 		}
 		else 
-		{			
+		{		
+
+
+			// @TODO - Since we are namespacing our fields, we can't easily 
+			// edit the private Errors messages in our form model so we rebuild 
+			// our error messages here and strip out the reference they have to 
+			// their form IDs.  This limits how our errors can be accessed in 
+			// our templates to the 'errors' object and doesn't allow a user
+			// to use the functions associated with the record/model but it
+			// gets us the right messages until we can find a better way to 
+			// handle this
+			$errors = array();
+			$formIdNamespaceVariable = "formId" . $contentRecord->formId . "_";
+			$formIdNamespaceMessage = "Form Id" . $contentRecord->formId . " ";
+
+			foreach ($contentRecord->errors as $key => $errorArray) {
+
+				// $key = str_replace($formIdNamespaceVariable, "", $key);
+
+				foreach ($errorArray as $_key => $error) {
+					$error = str_replace($formIdNamespaceMessage, "", $error);					
+					$errorArray[$_key] = $error;
+				}
+				$errors[$key] = $errorArray;
+				
+			}
+						
 			// make errors available to variable
 			craft()->user->setFlash('error', Craft::t('Error submitting form.'));
-			craft()->user->setFlash('errors', $contentRecord->errors);
+			craft()->user->setFlash('errors', $errors);
 
 			// make errors available to template
 			craft()->urlManager->setRouteVariables(array(
 				'error' => Craft::t('Error submitting form.'),
-				'errors' => $contentRecord->errors
+				'errors' => $errors
 			));			
 		}
 	}
