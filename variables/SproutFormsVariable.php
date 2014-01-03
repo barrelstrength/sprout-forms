@@ -225,6 +225,15 @@ class SproutFormsVariable
 	    $field['hint'] = isset($fieldInfo->settings['hint']) ? $fieldInfo->settings['hint'] : '';
 	    $field['label'] = $fieldInfo->name;
 	    $field['error'] = isset(self::$errors[$fieldInfo->handle]) && self::$errors[$fieldInfo->handle] ? '<div class="field-error">' . implode('<br/>', self::$errors[$fieldInfo->handle]) . '</div>' : ''; 
+
+	    // distinguish between input type="text" and textarea
+	    if($field['type'] == 'plaintext')
+	    {
+	         if($fieldType->getSettings()->multiline) // textfield
+	         {
+	             $field['type'] = 'textarea';
+	         }
+	    }
 	    
 	    return $field;
 	}
