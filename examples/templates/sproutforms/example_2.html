@@ -6,13 +6,34 @@
 	<p>This example shows how to build a form using single tag fields.</p>
 	<a href="/sproutforms">Back</a>
 	<hr/>
+	
+	{#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    MESSAGING
+    Error/success message set during submission processing will be displayed here.
+    ~ #}
+    {{ craft.sproutforms.msg() }}	
+	
+    {#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    INSTANTIATION
+    Get an instance of the 'example' form.
+    NOTE:  Instantiation in this example is NOT necessary UNLESS you want to use errors object
+    to display errors, as shown below
+    ~ #}
+    {% set exampleForm = craft.sproutforms.getFormFields('example') %}
+    
+    {#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ERRORS
+    Individual errors can be accessed through the errors object.
+    ~ #}
+    {% if exampleForm.errors.all %}
+    <div class="all-errors">
+            {% for error in exampleForm.errors.all %}
+                <div class="field-error">{{ error }}</div>
+            {% endfor %}
+    </div>
+    {% endif %}
 
 	<form method="post" name="form1" action="" accept-charset="UTF-8">	
-	    {#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	    MESSAGING
-	    Error/success message set during submission processing will be displayed here.
-	    ~ #}
-	    {{ craft.sproutforms.msg() }}	    
 	    
 	    {#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	    HIDDEN FORM FIELDS

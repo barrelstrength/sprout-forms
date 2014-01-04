@@ -1,5 +1,13 @@
 {%- set submitValue = (customSettings.submitValue is defined ? customSettings.submitValue : "Submit") -%}
 {%- set submitButton = (customSettings.submitButton is defined ? true : false) -%}
+
+{% if errors.all %}
+    <div class="all-errors">
+    {% for error in errors.all %}
+        <div class="field-error">{{ error }}</div>
+    {% endfor %}
+    </div>
+{% endif %}
     
 <form method="post" accept-charset="UTF-8">
     <input type="hidden" name="action" value="sproutForms/entries/saveEntry">

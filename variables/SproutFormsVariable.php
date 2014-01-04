@@ -196,6 +196,8 @@ class SproutFormsVariable
 				$fields[$handle] = $this->_getFieldOutput($fieldInfo);
 			}
 		}		
+		
+		$fields['errors'] = $this->_getErrors($formFields);
 
 		craft()->path->setTemplatesPath(craft()->path->getSiteTemplatesPath());
 		return $fields;
@@ -236,6 +238,44 @@ class SproutFormsVariable
 	    }
 	    
 	    return $field;
+	}
+	
+	/**
+	 * Return array of errors
+	 * 
+	 * @param arrahy $formFields
+	 * @return array
+	 */
+	private function _getErrors($formFields)
+	{
+	    $fieldErrors = array('all' => array());
+	    foreach($formFields as $field)
+	    {
+	        if(isset(self::$errors[$field->handle]) && self::$errors[$field->handle])
+	        {
+	           $fieldErrors[craft()->sproutForms->adjustFieldName($field, 'human')] = self::$errors[$field->handle];
+	        }
+	        else 
+	       {
+	            $fieldErrors[craft()->sproutForms->adjustFieldName($field, 'human')] = '';
+	        }
+	    }
+	    
+	    if( ! empty($fieldErrors))
+	    {
+	        foreach($fieldErrors as $field => $errors)
+	        {
+	            if($errors)
+	            {
+	                foreach($errors as $error)
+	                {
+	                    $fieldErrors['all'][] = $error;
+	                }
+	            }	            
+	        }
+	    }
+
+	    return $fieldErrors;
 	}
 	
 	public function getValidationOptions()
@@ -305,12 +345,13 @@ class SproutFormsVariable
 		{
 			return '';
 		}
-		
+				
 		craft()->path->setTemplatesPath(craft()->path->getPluginsPath() . 'sproutforms/templates/');
-		
+
 		$fields = array();
-		foreach ($formFields as $field)
+		foreach ($formFields as $key => $field)
 		{
+		    if($key == 'errors') continue;
 			$fields[] =  craft()->templates->render('_templates/field', array(
 					'field' => $field
 			));
@@ -319,7 +360,8 @@ class SproutFormsVariable
 		$form = craft()->templates->render('_templates/form', array(
 					'form' => craft()->sproutForms->getFormByHandle($form_handle),
 					'fields' => implode('<br/>', $fields),
-					'customSettings' => $customSettings
+					'customSettings' => $customSettings,
+		            'errors' => $formFields['errors']
 		));
 
 		craft()->path->setTemplatesPath(craft()->path->getSiteTemplatesPath());
