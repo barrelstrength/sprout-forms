@@ -6,20 +6,33 @@
 	<p>This example shows how to build a form using individual fields and their properties.</p>
 	<a href="/sproutforms">Back</a>
 	<hr/>
+	
+    {#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    INSTANTIATION
+    Get an instance of the 'example' form.
+    ~ #}
+    {% set exampleForm = craft.sproutforms.getFormFields('example') %}
+    
+    {#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    MESSAGING
+    Error/success message set during submission processing will be displayed here.
+    ~ #}
+    {{ craft.sproutforms.msg() }}	
+    
+    {#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ERRORS
+    Individual errors can be accessed through the errors object.
+    ~ #}
+    {% if exampleForm.errors.all %}
+    <div class="all-errors">
+            {% for error in exampleForm.errors.all %}
+                <div class="field-error">{{ error }}</div>
+            {% endfor %}
+    </div>
+    {% endif %}
 
-	<form method="post" name="form1" action="" accept-charset="UTF-8">	
-	    {#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	    MESSAGING
-	    Error/success message set during submission processing will be displayed here.
-	    ~ #}
-	    {{ craft.sproutforms.msg() }}	    
-	    
-	    
-	    {#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	    INSTANTIATION
-	    Get an instance of the 'example' form.
-	    ~ #}
-	    {% set exampleForm = craft.sproutforms.getFormFields('example') %}
+
+	<form method="post" name="form1" action="" accept-charset="UTF-8">
     
 		{#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		HIDDEN FORM FIELDS
@@ -48,6 +61,15 @@
 		{{ exampleForm.examplePlainText.input | raw }} 
 		{{ exampleForm.examplePlainText.instructions }}		
 		{{ exampleForm.examplePlainText.error | raw }}	
+		
+		{# Below is an alternative way to display errors, providing more control over; uncomment to use #}		
+		{#
+        {% if exampleForm.errors.examplePlainText %}
+                {% for error in exampleForm.errors.examplePlainText %}
+                    <div class="field-error">{{ error }}</div>
+                {% endfor %}
+        {% endif %}
+        #}
 				
 		<br/>
 		
