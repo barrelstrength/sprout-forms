@@ -188,6 +188,7 @@ class SproutFormsVariable
 
 		if($formFields = craft()->sproutForms->getFieldsByFormHandle($form_handle))
 		{			
+		    
 			foreach($formFields as $key => $fieldInfo)
 			{
 				// Remove our namespace so the user can use their chosen handle
@@ -196,6 +197,8 @@ class SproutFormsVariable
 				$fields[$handle] = $this->_getFieldOutput($fieldInfo);
 			}
 		}		
+		
+		
 		
 		$fields['errors'] = $this->_getErrors($formFields);
 
@@ -223,6 +226,8 @@ class SproutFormsVariable
 	    $field['type'] = strtolower($fieldInfo->type);
 	    $field['input'] = $fieldType->getInputHtml($handle, craft()->request->getPost($fieldInfo->handle));
 	    $field['settings'] = $fieldInfo->settings;
+	    $field['validation'] = explode(',', $fieldInfo->validation);
+	    $field['required'] = in_array('required', $field['validation']) ? true : false;
 	    $field['instructions'] = $fieldInfo->instructions;
 	    $field['hint'] = isset($fieldInfo->settings['hint']) ? $fieldInfo->settings['hint'] : '';
 	    $field['label'] = $fieldInfo->name;
@@ -321,7 +326,7 @@ class SproutFormsVariable
 	 */
 	public function getAllFieldTypes()
 	{
-		$include = array('Checkboxes', 'Color', 'Dropdown', 'MultiSelect', 'PlainText', 'RadioButtons');
+		$include = array('Checkboxes', 'Dropdown', 'MultiSelect', 'PlainText', 'RadioButtons', 'Date');
 		$fieldTypes = craft()->fields->getAllFieldTypes();
 		foreach($fieldTypes as $k=>$v)
 		{
