@@ -326,7 +326,7 @@ class SproutFormsVariable
 	 */
 	public function getAllFieldTypes()
 	{
-		$include = array('Checkboxes', 'Dropdown', 'MultiSelect', 'PlainText', 'RadioButtons', 'Date');
+		$include = array('Checkboxes', 'Dropdown', 'MultiSelect', 'PlainText', 'RadioButtons');
 		$fieldTypes = craft()->fields->getAllFieldTypes();
 		foreach($fieldTypes as $k=>$v)
 		{
