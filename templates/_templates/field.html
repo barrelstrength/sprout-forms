@@ -11,6 +11,9 @@
 					{{ label | raw }}
 				</label>
 			{% endif %}
+			{% if field.required is defined and field.required %}
+			<span class="required"> * </span>
+			{% endif %}
 			{% if instructions is defined and instructions %}
 				<p>{{ instructions | raw }}</p>
 			{% endif %}
