@@ -55,7 +55,7 @@
 		PlainText also has a placeholder and maxLength.
 		~ #}
 		{{ exampleForm.examplePlainText.label }}: 
-		<input type="text" name="{{ exampleForm.examplePlainText.handle }}" placeholder="{{ exampleForm.examplePlainText.settings.placeholder }}" />
+		<input type="text" name="{{ exampleForm.examplePlainText.handle }}" value="{{ entry.examplePlainText is defined ? entry.examplePlainText : '' }}" placeholder="{{ exampleForm.examplePlainText.settings.placeholder }}" />
 		{{ exampleForm.examplePlainText.instructions }}		
 		{{ exampleForm.examplePlainText.error | raw }}
 		
@@ -72,9 +72,9 @@
 		
 		{{ exampleForm.exampleDropdown.label }}: 
 		<select name="exampleDropdown">
-			<option value="Item 1">Item 1</option>
-			<option value="Item 2">Item 2</option>
-			<option value="Item 3">Item 3</option>
+			<option value="Item 1" {% if entry.exampleDropdown is defined and entry.exampleDropdown == 'Item 1' %}selected="selected"{% endif %}>Item 1</option>
+			<option value="Item 2" {% if entry.exampleDropdown is defined and entry.exampleDropdown == 'Item 2' %}selected="selected"{% endif %}>Item 2</option>
+			<option value="Item 3" {% if entry.exampleDropdown is defined and entry.exampleDropdown == 'Item 3' %}selected="selected"{% endif %}>Item 3</option>
 		</select>
 		{{ exampleForm.exampleDropdown.instructions }}		
 		{{ exampleForm.exampleDropdown.error | raw }}	
