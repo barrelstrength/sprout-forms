@@ -9,10 +9,11 @@
 			{% if label %}
 				<label{% if field.required is defined and field.required %} class="required"{% endif %}{% if id %} for="{{ id }}"{% endif %}>
 					{{ label | raw }}
+
+					{% if field.required is defined and field.required %}
+					<span class="required"> * </span>
+					{% endif %}
 				</label>
-			{% endif %}
-			{% if field.required is defined and field.required %}
-			<span class="required"> * </span>
 			{% endif %}
 			{% if instructions is defined and instructions %}
 				<p>{{ instructions | raw }}</p>
