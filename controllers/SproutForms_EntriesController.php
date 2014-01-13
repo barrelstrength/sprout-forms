@@ -69,8 +69,6 @@ class SproutForms_EntriesController extends BaseController
 
 		$contentRecord->formId = $formRecord->id;
 		$contentRecord->_setRules($fieldsToSave);
-		
-		
 
 		if ($contentRecord->save())
 		{
@@ -81,9 +79,7 @@ class SproutForms_EntriesController extends BaseController
 		    $this->redirectToPostedUrl();
 		}
 		else 
-		{		
-
-
+		{	
 			// @TODO - Since we are namespacing our fields, we can't easily 
 			// edit the private Errors messages in our form model so we rebuild 
 			// our error messages here and strip out the reference they have to 
