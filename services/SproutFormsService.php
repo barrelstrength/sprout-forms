@@ -47,6 +47,38 @@ class SproutFormsService extends BaseApplicationComponent
     
     	return $formRecord;
     }
+    
+    /**
+     * Must be implemented; raised the event with the system
+     * 
+     * @param Event $e
+     * @param array $data
+     */
+    public function onSaveEntry($e, $data)
+    {
+        $e->params['entity'] = $data;
+        $e->params['event'] = 'saveEntry';
+        $this->raiseEvent('onSaveEntry', $e);
+    }
+    
+    /**
+     * Since the save is triggered in a controller, this function is called to raise the event
+     * 
+     * @param SproutForms_ContentRecord $contentRecord
+     * @return void
+     */
+    public function raiseEventSaveEntry($contentRecord)
+    {
+        $data = array();
+        foreach ($contentRecord->form->field as $k=>$v)
+        {
+            $name = $this->adjustFieldName($v);
+            $data[$name]['content'] = nl2br($v->getContent()); // new lines to <br/>
+            $data[$name]['name'] = $v->name;
+        }
+        
+        $this->onSaveEntry(new Event($this, array()), $data);
+    }
 
     /**
      * Get all Fallbacks from the database.
@@ -54,7 +86,7 @@ class SproutFormsService extends BaseApplicationComponent
      * @return array
      */
     public function getAllForms()
-    {
+    {        
         $query = craft()->db->createCommand()
                              ->select('id, name, handle')
                              ->from('sproutforms_forms')

@@ -116,6 +116,22 @@ class SproutFormsPlugin extends BasePlugin
         	'sproutforms/plugin_settings/install_examples'
         );
     }
+    
+    /**
+     * Event registrar
+     * 
+     * @param string $event
+     * @param \Closure $callback
+     */
+    public function sproutformsAddEventListener($event, \Closure $callback)
+    {
+        switch($event)
+        {
+            case 'saveEntry': // only event supported at this time
+                craft()->on('sproutForms.saveEntry', $callback);
+                break;
+        }
+    }
 
     /**
      * Install examples after installation
