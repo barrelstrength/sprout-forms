@@ -78,7 +78,7 @@ class SproutForms_EntriesController extends BaseController
 		    craft()->sproutForms->raiseEventSaveEntry($entry);
 		    
 			// Send an email with the form information
-			//$this->_notifyAdmin($formRecord, $entry);
+			$this->_notifyAdmin($formRecord, $entry);
 
 	    	craft()->user->setFlash('notice', Craft::t('Form successfully submitted.'));
 		    $this->redirectToPostedUrl();
