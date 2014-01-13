@@ -20,7 +20,7 @@
 				<tr data-id="{{ entry.id }}" data-name="entry from {{ entry.dateCreated|date('F d, Y h:m A')|t }}" >
 					<td>
 						<a href="{{ url('sproutforms/entries/view/') }}/{{ entry.id }}">
-						<strong>{{ entry.dateCreated|date('F d, Y h:m A') }}</strong>
+						<strong>{{ entry.dateCreated|date('F d, Y g:i A') }}</strong>
 						</a> <span style="text-transform:uppercase;font-size:10px;">{{ entry.form.name }}</span>
 					</td>					
 					{% for field in fields %}

@@ -79,9 +79,7 @@ class SproutForms_EntriesController extends BaseController
 		    $this->redirectToPostedUrl();
 		}
 		else 
-		{		
-
-
+		{	
 			// @TODO - Since we are namespacing our fields, we can't easily 
 			// edit the private Errors messages in our form model so we rebuild 
 			// our error messages here and strip out the reference they have to 
@@ -109,11 +107,12 @@ class SproutForms_EntriesController extends BaseController
 			// make errors available to variable
 			craft()->user->setFlash('error', Craft::t('Error submitting form.'));
 			craft()->user->setFlash('errors', $errors);
-
+			
 			// make errors available to template
 			craft()->urlManager->setRouteVariables(array(
 				'error' => Craft::t('Error submitting form.'),
-				'errors' => $errors
+				'errors' => $errors,
+				'entry' => craft()->request->getPost()
 			));			
 		}
 	}
