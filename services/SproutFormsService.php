@@ -191,9 +191,11 @@ class SproutFormsService extends BaseApplicationComponent
      */
     public function getEntryById($id)
     {
-    	$res = SproutForms_ContentRecord::model()
-    			->with('form', 'form.field')
-    			->findByPk($id);
+        $res = SproutForms_ContentRecord::model()
+        ->with('form', 'form.field')
+        ->findAll(array('condition' => 't.id=' . $id, 'order' => 'sortOrder'));
+        
+        $res = $res[0];
 
     	foreach($res->form->field as $key => $field)
     	{
