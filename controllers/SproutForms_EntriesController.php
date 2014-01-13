@@ -69,6 +69,8 @@ class SproutForms_EntriesController extends BaseController
 
 		$contentRecord->formId = $formRecord->id;
 		$contentRecord->_setRules($fieldsToSave);
+		
+		
 
 		if ($contentRecord->save())
 		{
@@ -109,11 +111,12 @@ class SproutForms_EntriesController extends BaseController
 			// make errors available to variable
 			craft()->user->setFlash('error', Craft::t('Error submitting form.'));
 			craft()->user->setFlash('errors', $errors);
-
+			
 			// make errors available to template
 			craft()->urlManager->setRouteVariables(array(
 				'error' => Craft::t('Error submitting form.'),
-				'errors' => $errors
+				'errors' => $errors,
+				'entry' => craft()->request->getPost()
 			));			
 		}
 	}
