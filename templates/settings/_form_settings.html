@@ -36,6 +36,27 @@
       required: true,
       errors: (form is defined ? form.getErrors('redirectUri') : null)   
     }) }}
+    
+   {% set buttonOptions = [
+		{value:'button', label: 'Button element'}, 
+		{value:'input', label:'Input element'}
+	] %}
+	
+	{{ forms.radioGroup({
+		options : buttonOptions,	
+		value:(form.submitButtonType is defined and form.submitButtonType ? form.submitButtonType : 'input'),
+		name: 'submitButtonType'
+	}) }}
+	
+    {{ forms.textField({
+      label: "Submit Button Text"|t,
+      name: 'submitButtonText',
+      instructions: "What the text in the submit button should be."|t,
+      placeholder: 'Submit', 
+      value: (form is defined ? form.submitButtonText : null),
+      required: false,
+      errors: (form is defined ? form.getErrors('submitButtonText') : null)   
+    }) }}
 
     <div class="buttons">
       <input class="btn submit" type="submit" value="Save Template" />

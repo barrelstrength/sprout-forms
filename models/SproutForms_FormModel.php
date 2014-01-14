@@ -17,6 +17,8 @@ class SproutForms_FormModel extends BaseElementModel
             'name'          => AttributeType::String,
             'handle'        => AttributeType::String,
             'redirectUri'   => AttributeType::String,
+            'submitButtonType' => AttributeType::String,
+            'submitButtonText' => AttributeType::String,
         	'email_distribution_list' => AttributeType::String
         );
 

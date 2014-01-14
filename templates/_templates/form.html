@@ -1,5 +1,5 @@
-{%- set submitValue = (customSettings.submitValue is defined ? customSettings.submitValue : "Submit") -%}
-{%- set submitButton = (customSettings.submitButton is defined ? true : false) -%}
+{%- set submitValue = (customSettings.submitButtonText is defined ? customSettings.submitButtonText : form.submitButtonText is defined and form.submitButtonText ? form.submitButtonText : "Submit") -%}
+{%- set submitButton = (customSettings.submitButtonType is defined ? customSettings.submitButtonType : form.submitButtonType is defined ? form.submitButtonType : 'input') -%}
 
 {# Let's leave this out for now until we 
    can control it with a setting.
@@ -25,7 +25,7 @@
     </div>
 	
     <div class="submit">
-    {% if submitButton %}
+    {% if submitButton == 'button' %}
         <button type="submit">{{ submitValue }}</button>
     {% else %}
         <input type="submit" value="{{ submitValue }}">
