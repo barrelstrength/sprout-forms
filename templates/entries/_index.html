@@ -1,34 +1,51 @@
 {% set entries = craft.sproutforms.getAllEntries(formId) %}
 {% set fields = craft.sproutforms.getFields(formId) %}
 
+{% set yesterday = now|date_modify("-1 day") %}
+
 <div id="tab-entries">
 
 	{% if entries|length %}
 	
 	<div class="entries-container">
-
 		<table class="data" id="entries">
-			<thead>				
-				<th class="date">Date</th>				
+			<thead>
+				<th class="left-border"></th>
+				<th class="date">Date</th>	
+				<th class="padding"></th>			
 				{% for field in fields %}
 				<th>{{ field.name }}</th>
 				{% endfor %}				
-				<td class="thin"></td>
+				<th class="thin delete"></th>
 			</thead>		
 			<tbody>				
 				{% for entry in entries %}
 				<tr data-id="{{ entry.id }}" data-name="entry from {{ entry.dateCreated|date('F d, Y h:m A')|t }}" >
-					<td>
+					<td class="left-border"><div></div></td>
+					<td class="date">
 						<a href="{{ url('sproutforms/entries/view/') }}/{{ entry.id }}">
-						<strong>{{ entry.dateCreated|date('F d, Y g:i A') }}</strong>
-						</a> <span style="text-transform:uppercase;font-size:10px;">{{ entry.form.name }}</span>
-					</td>					
+							{% if entry.dateCreated|date('F d, Y') == now.format('F d, Y') %}
+								<strong>Today</strong>
+								{{ entry.dateCreated|date('g:i A') }}
+							{% elseif entry.dateCreated|date('F d, Y') == yesterday.format('F d, Y') %}
+								
+								<strong>Yesterday</strong>
+								{{ entry.dateCreated|date('g:i A') }}
+							{% else %}
+								<strong>{{ entry.dateCreated|date('F d, Y') }}</strong>
+								{{ entry.dateCreated|date('g:i A') }}
+							{% endif %}
+						</a>
+					</td>
+					<td class="padding"></td>	
 					{% for field in fields %}
 					<td class="field">
+						<a href="{{ url('sproutforms/entries/view/') }}/{{ entry.id }}">
 						{{ craft.sproutforms.getFieldEntry(formId,field,entry) | raw }}
+						</a>
 					</td>
 					{% endfor %}					
-					<td class="thin"><a class="delete icon" title="{{ 'Delete'|t }}"></a></td>
+					<td class="thin delete"><a class="delete icon" title="{{ 'Delete'|t }}"></a></td>
 				</tr>
 				{% endfor %}
 			</tbody>
@@ -62,3 +79,10 @@
 	});
 {% endset %}
 {% includeJs js %}
+
+{% includeCssResource "sproutforms/css/jquery.scrollpane.css" %}
+{% includeCssResource "sproutforms/css/styles.css" %}
+
+{% includeJsResource "sproutforms/js/jquery.jscrollpane.min.js" %}
+{% includeJsResource "sproutforms/js/jquery.mousewheel.js" %}
+{% includeJsResource "sproutforms/js/scripts.js" %}

@@ -1,0 +1,322 @@
+/* BASE STYLES
+-----------------------------------*/
+
+#content {	
+	overflow: scroll;
+	position: relative;
+}
+
+.entries-container {
+	
+}
+
+table#entries tr {
+	height: 50px;
+	overflow: hidden;
+	position: relative;
+	padding-left: 100px;
+}
+
+table#entries .left-border {
+	width: 3px;
+	height: 50px;
+	min-width: 3px;
+	position: absolute;
+	left: 0;
+	background-color: #fff;
+	z-index: 10;
+}
+
+table#entries tr:hover td.left-border {
+	background-color: #0d78f2;
+}
+
+table#entries td,
+table#entries th {
+	width: 300px;
+	max-width: 300px;
+}
+
+table#entries tbody td,
+table#entries td:not(:first-child),
+table#entries th.delete {
+	padding: 0;
+	vertical-align: top;
+}
+
+table#entries td a {
+	display: block;
+	padding: 7px 0 7px 10px;
+}
+
+table#entries .date {
+	position: absolute;
+	left: 3px;
+	z-index: 10;
+	background-color: #fff;
+}
+
+table#entries th.date {
+	width: 130px;
+	min-width: 130px;
+}
+
+table#entries td.date {
+	width: 140px;
+	padding: 0;
+}
+
+table#entries th.padding,
+table#entries td.padding {
+	display: block;
+	width: 150px;
+	padding: 0;
+}
+
+table#entries .date strong {
+	display: block;
+}
+
+table#entries .date a {
+	
+	color: inherit;
+	text-decoration: none;
+}
+
+table#entries th.thin.delete,
+table#entries td.thin.delete {
+	width: 23px !important;
+	min-width: 23px !important;
+	vertical-align: middle;
+}
+
+table#entries td.delete {
+	position: absolute;
+	overflow: hidden;
+	right: 0;
+	background-color: #fff;
+}
+
+table#entries td.field a {
+	display: block;
+	color: inherit;
+	text-decoration: none;
+	text-overflow:ellipsis;
+	overflow: hidden;
+}
+
+table#entries td:last-child  {
+	border-right: 0px solid transparent;
+}
+
+
+/* RESULTS DATA
+-----------------------------------*/
+
+.tableview {
+	border-top: 1px solid #eee;
+	margin: 0 -30px -31px;
+}
+
+.tableview h1 {
+	padding: 35px 0 0 25px;
+}
+
+.tablefade {
+	height: 100%;
+	width: 60px;
+	right: 0;
+	margin-bottom: 30px;
+	position: absolute;
+	z-index: 100;
+	background: url("../img/fade.png") right top repeat-y transparent;
+}
+
+
+.tablecontent {
+	overflow: auto;
+	max-height: 600px;
+	border-top: 1px dotted #e3e5e8;
+}
+
+
+table.results tbody th,
+table.results tbody td {
+	vertical-align: top;
+	border-top: 1px dotted #e3e5e8;
+}
+
+table.results tbody tr:last-child th,
+table.results tbody tr:last-child td {
+	border-bottom: 1px dotted #e3e5e8;
+}
+
+
+table.results thead th {
+	padding: 10px 15px 10px 25px;
+}
+
+
+.table_row {
+	background-image: url("../img/arrows.png");
+	background-repeat: no-repeat;
+	background-position: 4px -50px;
+	padding-left: 30px;
+	cursor: pointer;
+	-webkit-transition: background-color linear 0.5s;
+	   -moz-transition: background-color linear 0.5s;
+	     -o-transition: background-color linear 0.5s;
+	        transition: background-color linear 0.5s;
+}
+
+.table_row:hover {
+	background-position: 4px 10px;
+}
+
+.table_row.expanded {
+	background-color: #fafafa;
+}
+
+
+.item_content {
+	min-height: 38px;
+	height: 38px;
+	overflow: hidden;
+	padding: 10px 15px 0 25px;
+	display: block;
+}
+
+#main {
+	overflow: hidden;
+}
+
+
+/* SCROLLBAR DESIGN
+-----------------------------------*/
+.jspVerticalBar,
+.jspHorizontalBar {
+	background: transparent;
+}
+	
+.jspTrack {
+	background-color: rgba( 245, 245, 245, 0.7 );
+	-webkit-transition: background linear 0.2s, box-shadow linear 0.2s;
+	   -moz-transition: background linear 0.2s, box-shadow linear 0.2s;
+	     -o-transition: background linear 0.2s, box-shadow linear 0.2s;
+	        transition: background linear 0.2s, box-shadow linear 0.2s;
+	-webkit-box-shadow: inset 0 0 1px #aaa;
+	   -moz-box-shadow: inset 0 0 1px #aaa; 
+	        box-shadow: inset 0 0 1px #aaa;
+	
+		
+}
+
+.jspTrack:hover,
+.jspTrack:active {
+	background-color: rgba( 235, 235, 235, 0.7 );
+	-webkit-box-shadow: inset 0 0 1px #777;
+	   -moz-box-shadow: inset 0 0 1px #777; 
+	        box-shadow: inset 0 0 1px #777;
+	
+}
+
+.jspDrag {
+	background-color: rgba( 220, 220, 220, 0.7 );
+	-webkit-transition: background linear 0.2s, box-shadow linear 0.2s;
+	   -moz-transition: background linear 0.2s, box-shadow linear 0.2s;
+	     -o-transition: background linear 0.2s, box-shadow linear 0.2s;
+	        transition: background linear 0.2s, box-shadow linear 0.2s;
+	-webkit-box-shadow: inset 0 0 1px #aaa;
+	   -moz-box-shadow: inset 0 0 1px #aaa; 
+	        box-shadow: inset 0 0 1px #aaa;
+}
+
+.jspTrack:hover .jspDrag,
+.jspDrag:active {
+	background-color: rgba( 200, 200, 200, 0.8 );
+	-webkit-box-shadow: inset 0 0 1px #888;
+	   -moz-box-shadow: inset 0 0 1px #888; 
+	        box-shadow: inset 0 0 1px #888;
+}
+
+.jspCorner {
+	background-color: #fff;
+}
+
+.jspArrow,
+.jspArrow.jspDisabled {
+	background-image: url('../img/scroll-arrows.png');
+	background-color: #fff;
+	
+	-webkit-transition: background-color linear 0.1s;
+	   -moz-transition: background-color linear 0.1s;
+	     -o-transition: background-color linear 0.1s;
+	        transition: background-color linear 0.1s;
+	
+		
+	
+}
+
+.jspActive {
+	background-color: #eee;
+}
+
+
+.jspArrowUp {
+	background-position: -16px 0;
+}
+
+.jspArrowUp.jspDisabled,
+.jspArrowUp.jspActive.jspDisabled {
+	background-position: 0 0;
+}
+
+.jspArrowUp.jspActive {
+	background-position: -32px 0;
+}
+
+
+.jspArrowDown {
+	background-position: -16px -16px;
+}
+
+.jspArrowDown.jspDisabled,
+.jspArrowDown.jspActive.jspDisabled {
+	background-position: 0 -16px;
+}
+
+
+.jspArrowDown.jspActive {
+	background-position: -32px -16px;
+}
+
+
+
+
+.jspArrowLeft {
+	background-position: -16px -32px;
+}
+
+.jspArrowLeft.jspDisabled,
+.jspArrowLeft.jspActive.jspDisabled {
+	background-position: 0 -32px;
+}
+
+.jspArrowLeft.jspActive {
+	background-position: -32px -32px;
+}
+
+
+.jspArrowRight {
+	background-position: -16px -48px;
+}
+
+.jspArrowRight.jspDisabled,
+.jspArrowRight.jspActive.jspDisabled {
+	background-position: 0 -48px;
+}
+
+
+.jspArrowRight.jspActive {
+	background-position: -32px -48px;
+}
