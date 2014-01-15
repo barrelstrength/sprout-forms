@@ -1,13 +1,15 @@
 /* BASE STYLES
 -----------------------------------*/
 
-#content {	
+#content {	/*
+
 	overflow: scroll;
 	position: relative;
+*/
 }
 
 .entries-container {
-	
+	overflow: visible;
 }
 
 table#entries tr {
@@ -29,6 +31,11 @@ table#entries .left-border {
 
 table#entries tr:hover td.left-border {
 	background-color: #0d78f2;
+}
+
+table#entries tr:hover,
+table#entries tr:hover td {
+	background-color: #fafafa;
 }
 
 table#entries td,
