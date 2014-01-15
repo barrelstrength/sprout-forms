@@ -41,7 +41,7 @@ class Sproutemail_Sproutforms_OnSaveEntry
 	 */
 	public function getDescription()
 	{
-		return Craft::t('This event will fire after an entry has been submited and saved.');
+		return Craft::t('This event will fire after a form has been submited and saved.');
 	}
 	
 	/**
@@ -51,7 +51,36 @@ class Sproutemail_Sproutforms_OnSaveEntry
 	 */
 	public function getOptionsHtml()
 	{
-		return '';
+		return '<hr>
+				<h3>Custom options for SproutForms.</h3>
+	
+                {% set availableForms = [] %}
+		        
+		        {% for availableForm in craft.sproutforms.getAllForms() %}
+		            {% set availableForms = availableForms|merge({ (availableForm.handle) : availableForm.name}) %}
+		        {% endfor %}
+		        
+		        {% if campaign.notificationEvents[0] is defined %}
+					{% set opts = campaign.notificationEvents[0].options %}
+				{% endif %}
+		                        
+                {% if(availableForms|length > 0) %}
+                
+                	{{ forms.field({
+                		label: "Forms"|t,
+                		instructions: "Select one or more forms.  If none selected, notification will apply to all."|t,
+                	}, forms.checkboxGroup({
+                		name: "options[sproutForms]",   
+                		options : availableForms,
+		                values: (opts.sproutForms is defined ? opts.sproutForms : null)
+                	})) }}
+                	
+                {% else %}
+                	
+                	<p>You do not currently have any forms available.</p>
+                
+                {% endif %}
+				<hr>';
 	}
 	
 	/**
@@ -61,8 +90,18 @@ class Sproutemail_Sproutforms_OnSaveEntry
 	 */
 	public function processOptions($event, $entity, $options)
 	{
+        if( ! is_array($options['options']['sproutForms']))
+	    {
+	       return true;
+	    }
+	    
+	    $submittedForm = craft()->request->getPost('handle');
+	    if($submittedForm && in_array($submittedForm, $options['options']['sproutForms']))
+	    {
+	        return true;
+	    }
 
-		return true;
+	    return false;
 	
 	}
 }
