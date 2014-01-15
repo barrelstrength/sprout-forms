@@ -1,28 +1,67 @@
 
-$(document).ready(function() {
-
-
+function getContentHeight() {
 	var viewHeight = $( window ).height();
 	
-	var viewHeight = (viewHeight/10)*6;
+	var viewHeight = (viewHeight/10)*6.5;
 	
-	$("#content").css({
-		"height": viewHeight
-	});
+	if(viewHeight > 500) {
 	
-	
-	/*
+		$("#content").css({
+			"height": viewHeight
+		});
+		setTimeout(function(){api.reinitialise()}, 400);
+		
+	}
+}
 
-	$('#content').jScrollPane({
+var element = $('#content').jScrollPane({
 		showArrows: true,
 		hideFocus: true
 	});
 	
-	$('.entries-container').jScrollPane({
-		showArrows: true,
-		hideFocus: true
-	});
+	var api = element.data('jsp');
 	
-*/
+	var horizontalAmmt = api.getContentPositionX();
+	
+	var horizontalAmmt = -horizontalAmmt;
+
+$(function()
+{
+	$('#content')
+			.bind(
+				'jsp-scroll-x',
+				function(event, scrollPositionX, isAtLeft, isAtRight)
+				{
+				
+	
+	
+					$(".left-border").css({
+						"left" : scrollPositionX
+						
+					});
+					
+					$(".date").css({
+						"left" : scrollPositionX + 3
+					});
+					
+					$("table#entries td.delete").css({
+						"right" : -scrollPositionX
+						
+					});
+					
+				}
+	)});
+	
+$(document).ready(function() {
+
+	getContentHeight();
+
+
+	
+});
+
+$( window ).resize(function() {
+	getContentHeight();
+	
 	
 });
