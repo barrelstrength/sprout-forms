@@ -1,11 +1,11 @@
 /* BASE STYLES
 -----------------------------------*/
 
-#content {	/*
+#main {
+}
 
-	overflow: scroll;
-	position: relative;
-*/
+#content {
+	margin: -30px -30px 0 -30px;
 }
 
 .entries-container {
@@ -14,8 +14,6 @@
 
 table#entries tr {
 	height: 50px;
-	overflow: hidden;
-	position: relative;
 	padding-left: 100px;
 }
 
@@ -33,8 +31,24 @@ table#entries tr:hover td.left-border {
 	background-color: #0d78f2;
 }
 
-table#entries tr:hover,
-table#entries tr:hover td {
+table#entries th {
+	position: relative;
+}
+
+table#entries th div {
+	position: absolute;
+	top:0;
+	z-index: 200;
+	background-color: #fff;
+	border-bottom: 1px solid #eee;
+}
+
+table#entries th h3 {
+	padding-top: 10px;
+}
+
+table#entries tbody tr:hover,
+table#entries tbody tr:hover td {
 	background-color: #fafafa;
 }
 
@@ -64,8 +78,16 @@ table#entries .date {
 }
 
 table#entries th.date {
-	width: 130px;
-	min-width: 130px;
+	width: 140px;
+	min-width: 140px;
+	z-index: 300;
+	padding: 0;
+}
+
+table#entries th.date div {
+	padding: 0 0 0 10px;
+	margin-left: -10px;
+	text-indent: 10px;
 }
 
 table#entries td.date {
@@ -76,8 +98,12 @@ table#entries td.date {
 table#entries th.padding,
 table#entries td.padding {
 	display: block;
-	width: 150px;
+	width: 133px;
 	padding: 0;
+}
+
+table#entries td.padding {
+	border-top: 0px solid transparent;
 }
 
 table#entries .date strong {
@@ -94,14 +120,16 @@ table#entries th.thin.delete,
 table#entries td.thin.delete {
 	width: 23px !important;
 	min-width: 23px !important;
-	vertical-align: middle;
 }
 
 table#entries td.delete {
 	position: absolute;
-	overflow: hidden;
-	right: 0;
 	background-color: #fff;
+	z-index: 10;
+}
+
+table#entries td.thin.delete a {
+	padding: 7px 5px;
 }
 
 table#entries td.field a {
@@ -129,16 +157,6 @@ table#entries td:last-child  {
 	padding: 35px 0 0 25px;
 }
 
-.tablefade {
-	height: 100%;
-	width: 60px;
-	right: 0;
-	margin-bottom: 30px;
-	position: absolute;
-	z-index: 100;
-	background: url("../img/fade.png") right top repeat-y transparent;
-}
-
 
 .tablecontent {
 	overflow: auto;
@@ -146,6 +164,10 @@ table#entries td:last-child  {
 	border-top: 1px dotted #e3e5e8;
 }
 
+table.results th:not(:first-child),
+table.results td:not(:first-child) {
+	padding-left: 10px;
+}
 
 table.results tbody th,
 table.results tbody td {
@@ -155,7 +177,7 @@ table.results tbody td {
 
 table.results tbody tr:last-child th,
 table.results tbody tr:last-child td {
-	border-bottom: 1px dotted #e3e5e8;
+	border-bottom: 0 solid transparent;
 }
 
 
@@ -202,9 +224,17 @@ table.results thead th {
 -----------------------------------*/
 .jspVerticalBar,
 .jspHorizontalBar {
+	z-index: 200;
+}
+
+.jspVerticalBar {
+	background-color: #fff;
+}
+
+.jspHorizontalBar {
 	background: transparent;
 }
-	
+
 .jspTrack {
 	background-color: rgba( 245, 245, 245, 0.7 );
 	-webkit-transition: background linear 0.2s, box-shadow linear 0.2s;

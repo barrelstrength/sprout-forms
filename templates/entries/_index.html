@@ -8,15 +8,15 @@
 	{% if entries|length %}
 	
 	<div class="entries-container">
-		<table class="data" id="entries">
+		<table class="results" id="entries">
 			<thead>
-				<th class="left-border"></th>
-				<th class="date">Date</th>	
-				<th class="padding"></th>			
+				<th class="left-border"><div></div></th>
+				<th class="date"><div><h3>Date</h3></div></th>	
+				<th class="padding"><div></div></th>			
 				{% for field in fields %}
-				<th>{{ field.name }}</th>
+				<th><div><h3>{{ field.name }}</h3></div></th>
 				{% endfor %}				
-				<th class="thin delete"></th>
+				<th class="thin delete"><div></div></th>
 			</thead>		
 			<tbody>				
 				{% for entry in entries %}
