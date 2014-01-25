@@ -1,7 +1,12 @@
 /* BASE STYLES
 -----------------------------------*/
-#content {
+#tab-entries {
 	margin: -30px -30px 0 -30px;
+}
+
+.no-entries {
+	margin: 30px 30px 0 30px;
+	width: 40%;
 }
 
 table#entries tr {
@@ -122,6 +127,9 @@ table#entries td:last-child  {
 	border-right: 0px solid transparent;
 }
 
+table.results {
+	min-width: 100%;
+}
 
 table.results th:not(:first-child),
 table.results td:not(:first-child) {
