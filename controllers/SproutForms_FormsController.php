@@ -20,25 +20,24 @@ class SproutForms_FormsController extends BaseController
 		$form->handle       = craft()->request->getPost('handle');
 		$form->redirectUri  = craft()->request->getPost('redirectUri');
 		$form->submitButtonType = craft()->request->getPost('submitButtonType');
-		$form->submitButtonText  = craft()->request->getPost('submitButtonText');
+		$form->submitButtonText  = craft()->request->getPost('submitButtonText');		
 
 		if (craft()->sproutForms->saveForm($form))
 		{
 			craft()->userSession->setNotice(Craft::t('Form saved.'));
 
-			$this->redirectToPostedUrl(array(
-
-			));
+			$this->redirectToPostedUrl();
 		}
 		else
 		{
 			craft()->userSession->setError(Craft::t('Couldn’t save form.'));
+
+			// Send the field back to the template
+			craft()->urlManager->setRouteVariables(array(
+				'form' => $form
+			));
 		}
 
-		// Send the field back to the template
-		craft()->urlManager->setRouteVariables(array(
-			'form' => $form
-		));
 	}
     
     /**
