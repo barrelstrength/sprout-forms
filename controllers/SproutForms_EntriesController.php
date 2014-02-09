@@ -99,7 +99,7 @@ class SproutForms_EntriesController extends BaseController
 
 			foreach ($contentRecord->errors as $key => $errorArray) {
 
-				// $key = str_replace($formIdNamespaceVariable, "", $key);
+				$key = str_replace($formIdNamespaceVariable, "", $key);
 
 				foreach ($errorArray as $_key => $error) {
 					$error = str_replace($formIdNamespaceMessage, "", $error);					
@@ -108,7 +108,7 @@ class SproutForms_EntriesController extends BaseController
 				$errors[$key] = $errorArray;
 				
 			}
-						
+								
 			// make errors available to variable
 			craft()->user->setFlash('error', Craft::t('Error submitting form.'));
 			craft()->user->setFlash('errors', $errors);
@@ -118,7 +118,7 @@ class SproutForms_EntriesController extends BaseController
 				'error' => Craft::t('Error submitting form.'),
 				'errors' => $errors,
 				'entry' => craft()->request->getPost()
-			));			
+			));
 		}
 	}
 
