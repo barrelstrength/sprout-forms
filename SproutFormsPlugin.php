@@ -3,6 +3,14 @@ namespace Craft;
 
 class SproutFormsPlugin extends BasePlugin
 {
+    /**
+     * Current version
+     * 
+     * @var string
+     */
+    private $version = '0.6.0.2';
+    
+    
 	/**
 	 * Return plugin name
 	 * 
@@ -32,7 +40,7 @@ class SproutFormsPlugin extends BasePlugin
      */
     function getVersion()
     {
-        return '0.6.0.1';
+        return $this->version;
     }
 
     /**
