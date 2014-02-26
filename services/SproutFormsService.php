@@ -342,9 +342,20 @@ class SproutFormsService extends BaseApplicationComponent
     	$formRecord->redirectUri  = $form->redirectUri;
     	$formRecord->submitButtonType = $form->submitButtonType;
     	$formRecord->submitButtonText = $form->submitButtonText;
+    	
     	if(isset($form->email_distribution_list))
     	{
     		$formRecord->email_distribution_list = $form->email_distribution_list;
+    	}
+    	
+    	if(isset($form->notification_subject))
+    	{
+    	    $formRecord->notification_subject = $form->notification_subject;
+    	}
+    	
+    	if(isset($form->notification_reply_to))
+    	{
+    	    $formRecord->notification_reply_to = $form->notification_reply_to;
     	}
 
     	if ($formRecord->validate())

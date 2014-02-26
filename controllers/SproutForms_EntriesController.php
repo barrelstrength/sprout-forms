@@ -99,7 +99,7 @@ class SproutForms_EntriesController extends BaseController
 
 			foreach ($contentRecord->errors as $key => $errorArray) {
 
-				$key = str_replace($formIdNamespaceVariable, "", $key);
+				//$key = str_replace($formIdNamespaceVariable, "", $key);
 
 				foreach ($errorArray as $_key => $error) {
 					$error = str_replace($formIdNamespaceMessage, "", $error);					
@@ -154,8 +154,38 @@ class SproutForms_EntriesController extends BaseController
 				'form' => $formRecord->name,
 				'viewFormEntryUrl' => craft()->config->get('cpTrigger') . "/sproutforms/edit/" . $formRecord->id . "#tab-entries"
 			));
-			$email->subject = 'A form has been submitted on your website';
-			$email->htmlBody = html_entity_decode($email->htmlBody); // mainly for <br/>
+      		$email->htmlBody = html_entity_decode($email->htmlBody); // mainly for <br/>
+      		
+      		$post = (object) $_POST;
+      		
+      		// default subj
+      		$email->subject = 'A form has been submitted on your website'; 
+      		
+      		// custom subj has been set for this form
+      		if ($formRecord->notification_subject) 
+      		{
+          		try {
+          		    $email->subject = craft()->templates->renderString($formRecord->notification_subject, array('entry' => $post));
+          		} catch (\Exception $e) {
+          		     // do nothing;  retain default subj
+          		}
+      		}
+			
+      		// custom replyTo has been set for this form
+      		if ($formRecord->notification_reply_to)
+      		{
+      		    try {
+      		        $email->replyTo = craft()->templates->renderString($formRecord->notification_reply_to, array('entry' => $post));
+      		        
+      		        // we must validate this before attempting to send; invalid email will throw an error/fail to send silently
+      		        if( ! preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $email->replyTo))
+      		        {
+      		            $email->replyTo = null;
+      		        }      		        
+      		    } catch (\Exception $e) {
+      		        // do nothing;  replyTo will not be included
+      		    }
+      		}			
 
 			$error = false;
 			foreach ($distro_list as $email_address)

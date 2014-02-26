@@ -20,7 +20,9 @@ class SproutForms_FormsController extends BaseController
 		$form->handle       = craft()->request->getPost('handle');
 		$form->redirectUri  = craft()->request->getPost('redirectUri');
 		$form->submitButtonType = craft()->request->getPost('submitButtonType');
-		$form->submitButtonText  = craft()->request->getPost('submitButtonText');		
+		$form->submitButtonText  = craft()->request->getPost('submitButtonText');
+		$form->nofitification_subject  = craft()->request->getPost('notification_subject');
+		$form->notification_reply_to  = craft()->request->getPost('notification_reply_to');
 
 		if (craft()->sproutForms->saveForm($form))
 		{
@@ -65,6 +67,8 @@ class SproutForms_FormsController extends BaseController
 
 		$form = craft()->sproutForms->getFormById(craft()->request->getPost('id'));
 		$form->email_distribution_list = craft()->request->getPost('email_distribution_list');
+		$form->notification_subject = craft()->request->getPost('notification_subject');
+		$form->notification_reply_to = craft()->request->getPost('notification_reply_to');
 
 		if (craft()->sproutForms->saveForm($form))
 		{

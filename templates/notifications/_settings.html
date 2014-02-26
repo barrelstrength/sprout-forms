@@ -12,7 +12,26 @@
 				errors: (form is defined ? form.getErrors('email_distribution_list') : null),
 				translatable: true,
 				first: true
+			}) }}	
+			
+			{{ forms.textField({
+				label: "Subject"|t,
+				instructions: "Enter a subject.  You can also use Twig variables matching your form fields.  For example, if you have a field handle named 'userName', you can enter it as {{ entry.userName }}."|t,
+				name: 'notification_subject',
+				value: form.notification_subject,
+				errors: (form is defined ? form.getErrors('notification_subject') : null),
+				translatable: true,
+			}) }}
+			
+			{{ forms.textField({
+				label: "Reply To"|t,
+				instructions: "Enter a replyTo field.  .  You can also use Twig variables matching your form fields.  For example, if you have a field handle named 'userEmail', you can enter it as {{ entry.userEmail }}."|t,
+				name: 'notification_reply_to',
+				value: form.notification_reply_to,
+				errors: (form is defined ? form.getErrors('notification_reply_to') : null),
+				translatable: true,
 			}) }}		
+				
 			<hr>
 	
 			<div class="buttons">
