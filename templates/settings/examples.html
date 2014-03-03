@@ -2,14 +2,33 @@
 {% import "_includes/forms" as forms %}
 
 {% set body %}
-<form method="post" action="" accept-charset="UTF-8">
+
+<style type="text/css">
+	.examples {
+		width: 35%;
+	}
+	.examples .buttons {
+		margin-top: 1em;
+	}
+</style>
+
+<form method="post" action="" accept-charset="UTF-8" class="examples">
 	<input type="hidden" name="action" value="sproutForms/examples/install">
-	<h2>Example Forms</h2>
-	<p>Would you like to install the provided examples? (Includes front end templates and data).  Front-end Templates will be placed in the /sproutforms folder.</p>
 	
+	<h2>Getting Started</h2>
+	
+	<p>Install an example Contact Form with commented templates and example data.  Front-end templates will be initially placed in the `craft/templates/sproutforms` folder.</p>
+
 	<div class="buttons">
-		<input class="btn submit" type="submit" value="Yes, install examples." />
-		<input type="button" class="btn delete" value="No, take me to the plugin." onclick="window.location='{{ url('sproutforms') }}';" />
+		<input class="btn submit" type="submit" value="Install Example Contact Form" />
 	</div>
+
+	<p>Don't install any example forms or data, I will build the forms I need myself.</p>
+
+	<div class="buttons">
+		<input type="button" class="btn delete" value="Take me to Sprout Forms" onclick="window.location='{{ url('sproutforms') }}';" />
+	</div>
+	
+
 </form>
 {% endset %}
