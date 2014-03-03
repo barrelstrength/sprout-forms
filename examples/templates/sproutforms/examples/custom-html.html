@@ -1,0 +1,72 @@
+{% extends "sproutforms/_layout" %}
+
+{% block content %}	
+
+	<h2>Advanced with standard html fields</h2>
+
+	<p>This example shows how to build a form using standard html fields.</p>
+
+	<hr/>
+
+  {% set contactForm = craft.sproutforms.getFormFields('contact') %}
+	
+	<form method="post" action="" accept-charset="UTF-8">	
+    <input type="hidden" name="action" value="sproutForms/entries/saveEntry">
+    <input type="hidden" name="redirect" value="sproutforms/example_4">
+    <input type="hidden" name="handle" value="contact">	    
+	    
+		<div class="field">
+			<div class="header">
+				<label>Name</label>
+			</div>
+			<div class="body">
+				<input type="text" name="fullName" value="" />
+			</div>
+			<div class="error">
+				{% if errors.fullName is defined %}
+					{{ errors.fullName | raw }}
+				{% endif %}
+			</div>	
+		</div>
+		
+		<div class="field">
+			<div class="header">
+				<label>Email</label>
+			</div>
+			<div class="body">
+				<input type="email" name="email" value="" />
+			</div>
+			<div class="error">	
+				{% if errors is defined and errors.email %}
+					<ul class="errors">
+					{% for error in errors.email %}
+						<li class="error">{{ error }}</li>
+					{% endfor %}
+					</ul>
+				{% endif %}  
+			</div>
+		</div>
+
+		<div class="field">
+			<div class="header">
+				<label>Message</label>
+			</div>
+			<div class="body">
+				<textarea name="message"></textarea>
+			</div>
+			<div class="error">
+				{% if errors is defined and errors.message %}
+					<ul class="errors">
+					{% for error in errors.message %}
+						<li class="error">{{ error }}</li>
+					{% endfor %}
+					</ul>
+				{% endif %}  
+			</div>
+		</div>
+	   			
+		<p><input type="submit" value="Submit"></p>
+
+	</form>
+	
+{% endblock %}

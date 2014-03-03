@@ -1,0 +1,124 @@
+{% extends "sproutforms/_layout" %}
+
+{% block content %}	
+	
+	<h2>Multiple Forms</h2>
+
+	<p>** <em>This example will show how to include multiple forms on one page, however, this example currently needs to be improved.</em></p>
+
+	<hr/>
+	
+
+	<h2>Contact Form</h2>
+
+    {#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    INSTANTIATION
+    Get an instance of the 'example' form.
+    ~ #}
+    {% set contactForm = craft.sproutforms.getFormFields('contact') %}
+    
+    {#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    MESSAGING
+    Error/success message set during submission processing will be displayed here.
+    ~ #}
+    {{ craft.sproutforms.msg() }}	
+    
+    {#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Errors can also be accessed through the errors object
+    ~ #}
+    {% if contactForm.errors.all %}
+    <div class="all-errors">
+            {% for error in contactForm.errors.all %}
+                <div class="field-error">{{ error }}</div>
+            {% endfor %}
+    </div>
+    {% endif %}
+
+	<form method="post" action="" accept-charset="UTF-8">	
+    
+		{#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		HIDDEN FORM FIELDS
+		These hidden fields must be present in every form.
+		action: This will always be sproutForms/entries/saveEntry
+		redirect: The page/url to which the user should be redirected upon form submission
+		handle: Form handle, as defined in the form settings section in the admin panel
+		~ #}
+	    <input type="hidden" name="action" value="sproutForms/entries/saveEntry">
+	    <input type="hidden" name="redirect" value="sproutforms">
+	    <input type="hidden" name="handle" value="contact">	    
+	    
+		
+		<div class="field">
+			<div class="header">
+				<label>{{ contactForm.fullName.label }}</label>
+				{% if contactForm.fullName.instructions %}
+				<p>{{ contactForm.fullName.instructions }}</p>
+				{% endif %}
+			</div>
+			<div class="body">
+				{{ contactForm.fullName.input | raw }}
+			</div>
+			<div class="error">
+				{# Output a single, field-specific error #}
+				{% if errors.fullName is defined %}
+					{{ errors.fullName | raw }}
+				{% endif %}
+			</div>	
+		</div>
+		
+		<div class="field">
+			<div class="header">
+				<label>{{ contactForm.email.label }}</label>
+				{% if contactForm.email.instructions %}
+				<p>{{ contactForm.email.instructions }}</p>
+				{% endif %}
+			</div>
+			<div class="body">
+				{{ contactForm.email.input | raw }}
+			</div>
+			<div class="error">
+				{# Output multiple field-specific errors #}		
+				{% if errors is defined and errors.email %}
+					<ul class="errors">
+					{% for error in errors.email %}
+						<li class="error">{{ error }}</li>
+					{% endfor %}
+					</ul>
+				{% endif %}  
+			</div>
+		</div>
+
+		<div class="field">
+			<div class="header">
+				<label>{{ contactForm.message.label }}</label>
+				{% if contactForm.message.instructions %}
+				<p>{{ contactForm.message.instructions }}</p>
+				{% endif %}
+			</div>
+			<div class="body">
+				{{ contactForm.message.input | raw }}
+			</div>
+			<div class="error">
+				{# Output multiple field-specific errors #}
+				{% if errors is defined and errors.message %}
+					<ul class="errors">
+					{% for error in errors.message %}
+						<li class="error">{{ error }}</li>
+					{% endfor %}
+					</ul>
+				{% endif %}
+			</div>
+		</div>
+ 			
+		<p><input type="submit" value="Submit"></p>
+
+	</form>
+
+	<hr/>
+	
+
+	<h2>Example Form 2</h2>
+
+  <p>Second, more comprehensive form example to come featuring all field types.</p>
+
+{% endblock %}
