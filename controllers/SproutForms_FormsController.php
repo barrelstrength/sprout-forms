@@ -41,28 +41,28 @@ class SproutForms_FormsController extends BaseController
 		}
 
 	}
-    
-    /**
-     * Deletes a field.
-     * 
-     * @return void
-     */
-    public function actionDeleteForm()
-    {
-    	$this->requirePostRequest();
-    	$this->requireAjaxRequest();
-    	
-    	$success = craft()->sproutForms->deleteForm(craft()->request->getRequiredPost('id'));
-    	$this->returnJson(array('success' => $success));
-    }
-    
-    /**
-     * Update notifications
-     * 
-     * @return void
-     */
-    public function actionUpdateNotifications()
-    {
+		
+		/**
+		 * Deletes a field.
+		 * 
+		 * @return void
+		 */
+		public function actionDeleteForm()
+		{
+			$this->requirePostRequest();
+			$this->requireAjaxRequest();
+			
+			$success = craft()->sproutForms->deleteForm(craft()->request->getRequiredPost('id'));
+			$this->returnJson(array('success' => $success));
+		}
+		
+		/**
+		 * Update notifications
+		 * 
+		 * @return void
+		 */
+		public function actionUpdateNotifications()
+		{
 		$this->requirePostRequest();
 
 		$form = craft()->sproutForms->getFormById(craft()->request->getPost('id'));
@@ -87,5 +87,5 @@ class SproutForms_FormsController extends BaseController
 		craft()->urlManager->setRouteVariables(array(
 			'form' => $form
 		));
-    }
+		}
 }

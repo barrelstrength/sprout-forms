@@ -72,16 +72,16 @@ class SproutForms_EntriesController extends BaseController
 
 		if ($contentRecord->save())
 		{
-		    $entry = craft()->sproutForms->getEntryById($contentRecord->id);
-		    
-		    // trigger onSaveEntry event
-		    craft()->sproutForms->raiseEventSaveEntry($entry);
-		    
+				$entry = craft()->sproutForms->getEntryById($contentRecord->id);
+				
+				// trigger onSaveEntry event
+				craft()->sproutForms->raiseEventSaveEntry($entry);
+				
 			// Send an email with the form information
 			$this->_notifyAdmin($formRecord, $entry);
 
-	    	craft()->user->setFlash('notice', Craft::t('Form successfully submitted.'));
-		    $this->redirectToPostedUrl();
+				craft()->user->setFlash('notice', Craft::t('Form successfully submitted.'));
+				$this->redirectToPostedUrl();
 		}
 		else 
 		{	
@@ -149,43 +149,43 @@ class SproutForms_EntriesController extends BaseController
 			}
 			
 			$email = new EmailModel();
-      		$email->htmlBody = craft()->templates->render('sproutforms/emails/default', array(
+					$email->htmlBody = craft()->templates->render('sproutforms/emails/default', array(
 				'data' => $data, 
 				'form' => $formRecord->name,
 				'viewFormEntryUrl' => craft()->config->get('cpTrigger') . "/sproutforms/edit/" . $formRecord->id . "#tab-entries"
 			));
-      		$email->htmlBody = html_entity_decode($email->htmlBody); // mainly for <br/>
-      		
-      		$post = (object) $_POST;
-      		
-      		// default subj
-      		$email->subject = 'A form has been submitted on your website'; 
-      		
-      		// custom subj has been set for this form
-      		if ($formRecord->notification_subject) 
-      		{
-          		try {
-          		    $email->subject = craft()->templates->renderString($formRecord->notification_subject, array('entry' => $post));
-          		} catch (\Exception $e) {
-          		     // do nothing;  retain default subj
-          		}
-      		}
+					$email->htmlBody = html_entity_decode($email->htmlBody); // mainly for <br/>
+					
+					$post = (object) $_POST;
+					
+					// default subj
+					$email->subject = 'A form has been submitted on your website'; 
+					
+					// custom subj has been set for this form
+					if ($formRecord->notification_subject) 
+					{
+							try {
+									$email->subject = craft()->templates->renderString($formRecord->notification_subject, array('entry' => $post));
+							} catch (\Exception $e) {
+									 // do nothing;  retain default subj
+							}
+					}
 			
-      		// custom replyTo has been set for this form
-      		if ($formRecord->notification_reply_to)
-      		{
-      		    try {
-      		        $email->replyTo = craft()->templates->renderString($formRecord->notification_reply_to, array('entry' => $post));
-      		        
-      		        // we must validate this before attempting to send; invalid email will throw an error/fail to send silently
-      		        if( ! preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $email->replyTo))
-      		        {
-      		            $email->replyTo = null;
-      		        }      		        
-      		    } catch (\Exception $e) {
-      		        // do nothing;  replyTo will not be included
-      		    }
-      		}			
+					// custom replyTo has been set for this form
+					if ($formRecord->notification_reply_to)
+					{
+							try {
+									$email->replyTo = craft()->templates->renderString($formRecord->notification_reply_to, array('entry' => $post));
+									
+									// we must validate this before attempting to send; invalid email will throw an error/fail to send silently
+									if( ! preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $email->replyTo))
+									{
+											$email->replyTo = null;
+									}      		        
+							} catch (\Exception $e) {
+									// do nothing;  replyTo will not be included
+							}
+					}			
 
 			$error = false;
 			foreach ($distro_list as $email_address)

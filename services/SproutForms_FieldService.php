@@ -68,21 +68,21 @@ class SproutForms_FieldService extends FieldsService
 	 */
 	public function getFieldByFormFieldHandle($formHandle, $fieldHandle)
 	{	    
-	    $field = craft()->db->createCommand()
-	    ->select('csf.*')
-	    ->from('sproutforms_fields csf')
-	    ->join('sproutforms_forms csfo', 'csf.formId=csfo.id')
-	    ->where('csfo.handle=:formHandle', array(':formHandle'=>$formHandle))
-	    ->where(array('like', 'csf.handle', '%_' . $fieldHandle))
-	    ->limit(1)
-	    ->queryRow();
-	    
-	    if( ! $field)
-	    {
-	        return false;
-	    }
-	    
-	    return $this->getFieldByHandle($field['handle']);
+		$field = craft()->db->createCommand()
+		->select('csf.*')
+		->from('sproutforms_fields csf')
+		->join('sproutforms_forms csfo', 'csf.formId=csfo.id')
+		->where('csfo.handle=:formHandle', array(':formHandle'=>$formHandle))
+		->where(array('like', 'csf.handle', '%_' . $fieldHandle))
+		->limit(1)
+		->queryRow();
+		
+		if( ! $field)
+		{
+			return false;
+		}
+		
+		return $this->getFieldByHandle($field['handle']);
 	}
 	
 	/**
@@ -206,10 +206,10 @@ class SproutForms_FieldService extends FieldsService
 	public function getValidationOptions()
 	{
 		return array(
-				'required' => 'required',
-				'numerical' => 'numerical',
-				'url' => 'url',
-				'email' => 'email'
+			'required' => 'required',
+			'numerical' => 'numerical',
+			'url' => 'url',
+			'email' => 'email'
 		);
 	}
 	
@@ -221,33 +221,33 @@ class SproutForms_FieldService extends FieldsService
 	 */
 	public function reorderFields($fieldIds)
 	{
-	    $transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
-	
-	    try
-	    {
-	        foreach ($fieldIds as $fieldOrder => $fieldId)
-	        {
-	            $fieldRecord = $this->_getFieldRecordById($fieldId);
-	            $fieldRecord->sortOrder = $fieldOrder+1;
-	            $fieldRecord->save();
-	        }
-	
-	        if ($transaction !== null)
-	        {
-	            $transaction->commit();
-	        }
-	    }
-	    catch (\Exception $e)
-	    {
-	        if ($transaction !== null)
-	        {
-	            $transaction->rollback();
-	        }
-	
-	        throw $e;
-	    }
-	
-	    return true;
+		$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
+
+		try
+		{
+			foreach ($fieldIds as $fieldOrder => $fieldId)
+			{
+				$fieldRecord = $this->_getFieldRecordById($fieldId);
+				$fieldRecord->sortOrder = $fieldOrder+1;
+				$fieldRecord->save();
+			}
+
+			if ($transaction !== null)
+			{
+				$transaction->commit();
+			}
+		}
+		catch (\Exception $e)
+		{
+			if ($transaction !== null)
+			{
+				$transaction->rollback();
+			}
+
+			throw $e;
+		}
+
+		return true;
 	}
 	
 	/**
@@ -259,21 +259,21 @@ class SproutForms_FieldService extends FieldsService
 	 */
 	private function _getFieldRecordById($fieldId = null)
 	{
-	    if ($fieldId)
-	    {
-	        $record = SproutForms_FieldRecord::model()->findById($fieldId);
-	
-	        if (!$record)
-	        {
-	            $this->_noFieldExists($fieldId);
-	        }
-	    }
-	    else
-	    {
-	        $record = new SproutForms_FieldRecord();
-	    }
-	
-	    return $record;
+		if ($fieldId)
+		{
+			$record = SproutForms_FieldRecord::model()->findById($fieldId);
+
+			if (!$record)
+			{
+				$this->_noFieldExists($fieldId);
+			}
+		}
+		else
+		{
+			$record = new SproutForms_FieldRecord();
+		}
+
+		return $record;
 	}
 	
 	/**
@@ -285,6 +285,6 @@ class SproutForms_FieldService extends FieldsService
 	 */
 	private function _noFieldExists($fieldId)
 	{
-	    throw new Exception(Craft::t('No field exists with the ID “{id}”', array('id' => $fieldId)));
+		throw new Exception(Craft::t('No field exists with the ID “{id}”', array('id' => $fieldId)));
 	}
 }

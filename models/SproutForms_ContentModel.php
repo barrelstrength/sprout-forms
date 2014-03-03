@@ -9,8 +9,8 @@ class SproutForms_ContentModel extends \CFormModel
 	 * 
 	 * @return void
 	 */
-    public function rules()
-    {
-        return $this->rules;
-    }
+		public function rules()
+		{
+				return $this->rules;
+		}
 }
