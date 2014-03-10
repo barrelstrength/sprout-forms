@@ -1,0 +1,115 @@
+{% extends "sproutforms/_layout" %}
+
+{% block content %}	
+
+	<h2>Advanced</h2>
+	
+	<p>This example shows how to build a form using individual fields and their properties.</p>
+
+	<hr/>
+	
+	{# Create your form variable #}
+	{% set contactForm = craft.sproutForms.getFormFields('contact') %}
+
+	{# Output all errors if form doesn't pass validation #}
+	{% if contactForm.errors.all %}
+		<ul class="errors">
+			{% for error in contactForm.errors.all %}
+					<li class="error">{{ error }}</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+
+
+	<form method="post" action="" accept-charset="UTF-8">
+		
+		{# Required: Our Sprout form action will always be sproutForms/entries/saveEntry #}
+    <input type="hidden" name="action" value="sproutForms/entries/saveEntry">
+
+    {# Required: Our Form Handle tells our form where to send our data #}
+    <input type="hidden" name="handle" value="contact">
+
+    {# Optional: 
+    	 The page/url to which the user should be redirected upon form submission
+    	 By default, the user will be redirected back to the same page. #}
+    <input type="hidden" name="redirect" value="sproutforms/custom-html"> 
+			
+		
+		{#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		FORM FIELDS
+		Each form field has the following variables available, which are defined in the form 
+		field section of the admin panel:
+		* name - Form name
+		* html - Html output of the field type (PlainText, Dropdown, etc.)
+		* instructions - Field instructions
+		* error - displays the field error, if any
+		In addition to these, each field may have specific properties available.  For example, 
+		PlainText also has a placeholder and maxLength.
+		~ #}
+		<div class="field">
+			<div class="header">
+				<label>{{ contactForm.fullName.label }}</label>
+				{% if contactForm.fullName.instructions %}
+				<p>{{ contactForm.fullName.instructions }}</p>
+				{% endif %}
+			</div>
+			<div class="body">
+				{{ contactForm.fullName.input | raw }}
+			</div>
+			<div class="error">
+				{# Output a single, field-specific error #}
+				{% if errors.fullName is defined %}
+					{{ errors.fullName | raw }}
+				{% endif %}
+			</div>	
+		</div>
+		
+		<div class="field">
+			<div class="header">
+				<label>{{ contactForm.email.label }}</label>
+				{% if contactForm.email.instructions %}
+				<p>{{ contactForm.email.instructions }}</p>
+				{% endif %}
+			</div>
+			<div class="body">
+				{{ contactForm.email.input | raw }}
+			</div>
+			<div class="error">
+				{# Output multiple field-specific errors #}		
+				{% if errors is defined and errors.email %}
+					<ul class="errors">
+					{% for error in errors.email %}
+						<li class="error">{{ error }}</li>
+					{% endfor %}
+					</ul>
+				{% endif %}  
+			</div>
+		</div>
+
+		<div class="field">
+			<div class="header">
+				<label>{{ contactForm.message.label }}</label>
+				{% if contactForm.message.instructions %}
+				<p>{{ contactForm.message.instructions }}</p>
+				{% endif %}
+			</div>
+			<div class="body">
+				{{ contactForm.message.input | raw }}
+			</div>
+			<div class="error">
+				{# Output multiple field-specific errors #}		
+				{% if errors is defined and errors.message %}
+					<ul class="errors">
+					{% for error in errors.message %}
+						<li class="error">{{ error }}</li>
+					{% endfor %}
+					</ul>
+				{% endif %}  
+			</div>
+		</div>
+							
+		<input type="submit" value="Submit">
+
+	</form>
+	
+{% endblock %}

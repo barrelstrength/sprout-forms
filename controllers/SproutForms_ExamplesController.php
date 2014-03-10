@@ -10,11 +10,11 @@ class SproutForms_ExamplesController extends BaseController
 	 */
 	public function actionInstall()
 	{
-    	$this->_installExampleData();
-    	$this->_installExampleTemplates();
-    	
-    	craft()->userSession->setNotice(Craft::t('Examples successfully installed.'));
-    	$this->redirect('sproutforms');
+			$this->_installExampleData();
+			$this->_installExampleTemplates();
+			
+			craft()->userSession->setNotice(Craft::t('Examples successfully installed.'));
+			$this->redirect('sproutforms');
 	}
 	
 	/**

@@ -20,7 +20,7 @@ class SproutFormsVariable
 	public function getName()
 	{
 		$plugin = craft()->plugins->getPlugin('sproutforms');
-	    return $plugin->getName();
+			return $plugin->getName();
 	}
 
 	/**
@@ -31,19 +31,19 @@ class SproutFormsVariable
 	public function getVersion()
 	{
 		$plugin = craft()->plugins->getPlugin('sproutforms');
-	    return $plugin->getVersion();
+			return $plugin->getVersion();
 	}
 
 	/**
-     * Get a specific form. If no form is found, returns null
-     *
-     * @param  int   $id
-     * @return mixed
-     */
-    public function getFormById($formId)
-    {
-    	return craft()->sproutForms->getFormById($formId);
-    }
+		 * Get a specific form. If no form is found, returns null
+		 *
+		 * @param  int   $id
+		 * @return mixed
+		 */
+		public function getFormById($formId)
+		{
+			return craft()->sproutForms->getFormById($formId);
+		}
 	
 	/**
 	 * Get a form field given field id
@@ -138,18 +138,18 @@ class SproutFormsVariable
 			$options_data = array();
 			foreach($json as $option_label => $option_value)
 			{
-			    // display label instead of value for readability
-    			if(isset($field->settings['options']) && is_array($field->settings['options'])) 
-    			{
-    			    foreach($field->settings['options'] as $option)
-    			    {
-    			        if(isset($option['value']) && in_array($option['value'], $json))
-    			        {
-    			            $json[array_search($option['value'], $json)] = $option['value'];
-    			            // $json[array_search($option['value'], $json)] = $option['label']; // uncomment if you'd rather display the label
-    			        }
-    			    }
-    			}  
+					// display label instead of value for readability
+					if(isset($field->settings['options']) && is_array($field->settings['options'])) 
+					{
+							foreach($field->settings['options'] as $option)
+							{
+									if(isset($option['value']) && in_array($option['value'], $json))
+									{
+											$json[array_search($option['value'], $json)] = $option['value'];
+											// $json[array_search($option['value'], $json)] = $option['label']; // uncomment if you'd rather display the label
+									}
+							}
+					}  
 			}
 			return implode(',', $json);
 		}
@@ -157,14 +157,14 @@ class SproutFormsVariable
 		// display label instead of value for readability
 		if(isset($field->settings['options']) && is_array($field->settings['options']))
 		{
-		    foreach($field->settings['options'] as $option)
-		    {
-		        if(isset($option['value']) && $option['value'] == $res)
-		        {
-		            $res = $option['value']; 
-		            // $res = $option['label']; // uncomment if you'd rather display the label
-		        }
-		    }
+				foreach($field->settings['options'] as $option)
+				{
+						if(isset($option['value']) && $option['value'] == $res)
+						{
+								$res = $option['value']; 
+								// $res = $option['label']; // uncomment if you'd rather display the label
+						}
+				}
 		}
 		return str_replace(' ', '&nbsp;', $res);
 	}
@@ -188,7 +188,7 @@ class SproutFormsVariable
 
 		if($formFields = craft()->sproutForms->getFieldsByFormHandle($form_handle))
 		{			
-		    
+				
 			foreach($formFields as $key => $fieldInfo)
 			{
 				// Remove our namespace so the user can use their chosen handle
@@ -214,35 +214,35 @@ class SproutFormsVariable
 	 */
 	private function _getFieldOutput($fieldInfo)
 	{
-	     // Remove our namespace so the user can use their chosen handle
-	    $handle = craft()->sproutForms->adjustFieldName($fieldInfo, 'human');
-	        
-	    // get the field type instance
-	    $fieldType = craft()->fields->getFieldType($fieldInfo->type);
-	    $fieldType->setSettings($fieldInfo->settings);
-	    
-	    // set output data
-	    $field['handle'] = $handle;
-	    $field['type'] = strtolower($fieldInfo->type);
-	    $field['input'] = $fieldType->getInputHtml($handle, craft()->request->getPost($fieldInfo->handle));
-	    $field['settings'] = $fieldInfo->settings;
-	    $field['validation'] = explode(',', $fieldInfo->validation);
-	    $field['required'] = in_array('required', $field['validation']) ? true : false;
-	    $field['instructions'] = $fieldInfo->instructions;
-	    $field['hint'] = isset($fieldInfo->settings['hint']) ? $fieldInfo->settings['hint'] : '';
-	    $field['label'] = $fieldInfo->name;
-	    $field['error'] = isset(self::$errors[$fieldInfo->handle]) && self::$errors[$fieldInfo->handle] ? '<div class="field-error">' . implode('<br/>', self::$errors[$fieldInfo->handle]) . '</div>' : ''; 
+			 // Remove our namespace so the user can use their chosen handle
+			$handle = craft()->sproutForms->adjustFieldName($fieldInfo, 'human');
+					
+			// get the field type instance
+			$fieldType = craft()->fields->getFieldType($fieldInfo->type);
+			$fieldType->setSettings($fieldInfo->settings);
+			
+			// set output data
+			$field['handle'] = $handle;
+			$field['type'] = strtolower($fieldInfo->type);
+			$field['input'] = $fieldType->getInputHtml($handle, craft()->request->getPost($fieldInfo->handle));
+			$field['settings'] = $fieldInfo->settings;
+			$field['validation'] = explode(',', $fieldInfo->validation);
+			$field['required'] = in_array('required', $field['validation']) ? true : false;
+			$field['instructions'] = $fieldInfo->instructions;
+			$field['hint'] = isset($fieldInfo->settings['hint']) ? $fieldInfo->settings['hint'] : '';
+			$field['label'] = $fieldInfo->name;
+			$field['error'] = isset(self::$errors[$fieldInfo->handle]) && self::$errors[$fieldInfo->handle] ? '<div class="field-error">' . implode('<br/>', self::$errors[$fieldInfo->handle]) . '</div>' : ''; 
 
-	    // distinguish between input type="text" and textarea
-	    if($field['type'] == 'plaintext')
-	    {
-	         if($fieldType->getSettings()->multiline) // textfield
-	         {
-	             $field['type'] = 'textarea';
-	         }
-	    }
-	    
-	    return $field;
+			// distinguish between input type="text" and textarea
+			if($field['type'] == 'plaintext')
+			{
+					 if($fieldType->getSettings()->multiline) // textfield
+					 {
+							 $field['type'] = 'textarea';
+					 }
+			}
+			
+			return $field;
 	}
 	
 	/**
@@ -253,34 +253,34 @@ class SproutFormsVariable
 	 */
 	private function _getErrors($formFields)
 	{
-	    $fieldErrors = array('all' => array());
-	    foreach($formFields as $field)
-	    {
-	        if(isset(self::$errors[$field->handle]) && self::$errors[$field->handle])
-	        {
-	           $fieldErrors[craft()->sproutForms->adjustFieldName($field, 'human')] = self::$errors[$field->handle];
-	        }
-	        else 
-	       {
-	            $fieldErrors[craft()->sproutForms->adjustFieldName($field, 'human')] = '';
-	        }
-	    }
-	    
-	    if( ! empty($fieldErrors))
-	    {
-	        foreach($fieldErrors as $field => $errors)
-	        {
-	            if($errors)
-	            {
-	                foreach($errors as $error)
-	                {
-	                    $fieldErrors['all'][] = $error;
-	                }
-	            }	            
-	        }
-	    }
+			$fieldErrors = array('all' => array());
+			foreach($formFields as $field)
+			{
+					if(isset(self::$errors[$field->handle]) && self::$errors[$field->handle])
+					{
+						 $fieldErrors[craft()->sproutForms->adjustFieldName($field, 'human')] = self::$errors[$field->handle];
+					}
+					else 
+				 {
+							$fieldErrors[craft()->sproutForms->adjustFieldName($field, 'human')] = '';
+					}
+			}
+			
+			if( ! empty($fieldErrors))
+			{
+					foreach($fieldErrors as $field => $errors)
+					{
+							if($errors)
+							{
+									foreach($errors as $error)
+									{
+											$fieldErrors['all'][] = $error;
+									}
+							}	            
+					}
+			}
 
-	    return $fieldErrors;
+			return $fieldErrors;
 	}
 	
 	public function getValidationOptions()
@@ -356,7 +356,7 @@ class SproutFormsVariable
 		$fields = array();
 		foreach ($formFields as $key => $field)
 		{
-		    if($key == 'errors') continue;
+				if($key == 'errors') continue;
 			$fields[] =  craft()->templates->render('_templates/field', array(
 					'field' => $field
 			));
@@ -366,7 +366,7 @@ class SproutFormsVariable
 					'form' => craft()->sproutForms->getFormByHandle($form_handle),
 					'fields' => implode('<br/>', $fields),
 					'customSettings' => $customSettings,
-		            'errors' => $formFields['errors']
+								'errors' => $formFields['errors']
 		));
 
 		craft()->path->setTemplatesPath(craft()->path->getSiteTemplatesPath());
@@ -382,25 +382,25 @@ class SproutFormsVariable
 	 */
 	public function displayField($form_field_handle)
 	{
-	    craft()->path->setTemplatesPath(craft()->path->getCpTemplatesPath());
-	    
-	    if( ! isset(self::$errors))
-	    {
-	        self::$errors = craft()->user->getFlash('errors');
-	    }
-	    
-	    list($form_handle, $field_handle) = explode('.', $form_field_handle);
-	    
-	    if( ! $form_handle || ! $field_handle) return '';	    
-	    if( ! $field = craft()->sproutForms_field->getFieldByFormFieldHandle($form_handle, $field_handle)) return '';
-	    
-	    $field = $this->_getFieldOutput($field);	
-	    craft()->path->setTemplatesPath(craft()->path->getPluginsPath() . 'sproutforms/templates/');	
-	    $fieldOutput =  craft()->templates->render('_templates/field', array('field' => $field));
+		craft()->path->setTemplatesPath(craft()->path->getCpTemplatesPath());
+		
+		if( ! isset(self::$errors))
+		{
+				self::$errors = craft()->user->getFlash('errors');
+		}
+		
+		list($form_handle, $field_handle) = explode('.', $form_field_handle);
+		
+		if( ! $form_handle || ! $field_handle) return '';	    
+		if( ! $field = craft()->sproutForms_field->getFieldByFormFieldHandle($form_handle, $field_handle)) return '';
+		
+		$field = $this->_getFieldOutput($field);	
+		craft()->path->setTemplatesPath(craft()->path->getPluginsPath() . 'sproutforms/templates/');	
+		$fieldOutput =  craft()->templates->render('_templates/field', array('field' => $field));
 
-	    craft()->path->setTemplatesPath(craft()->path->getSiteTemplatesPath());
-	
-	    echo $fieldOutput;
+		craft()->path->setTemplatesPath(craft()->path->getSiteTemplatesPath());
+
+		echo $fieldOutput;
 	}
 	
 	/**
