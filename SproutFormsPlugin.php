@@ -8,7 +8,7 @@ class SproutFormsPlugin extends BasePlugin
      * 
      * @var string
      */
-    private $version = '0.6.0.5';
+    private $version = '0.6.1';
     
     
 	/**
