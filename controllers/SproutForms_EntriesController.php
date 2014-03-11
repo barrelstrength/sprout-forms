@@ -114,10 +114,12 @@ class SproutForms_EntriesController extends BaseController
 			craft()->user->setFlash('errors', $errors);
 			
 			// make errors available to template
+			$formHandle = craft()->request->getPost('handle');
+			$entry = $formHandle ? $formHandle : 'form';
 			craft()->urlManager->setRouteVariables(array(
 				'error' => Craft::t('Error submitting form.'),
 				'errors' => $errors,
-				'entry' => craft()->request->getPost()
+				$entry => craft()->request->getPost()
 			));
 		}
 	}
