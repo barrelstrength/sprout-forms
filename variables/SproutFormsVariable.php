@@ -187,8 +187,7 @@ class SproutFormsVariable
 		}
 
 		if($formFields = craft()->sproutForms->getFieldsByFormHandle($form_handle))
-		{			
-				
+		{		
 			foreach($formFields as $key => $fieldInfo)
 			{
 				// Remove our namespace so the user can use their chosen handle
@@ -196,9 +195,7 @@ class SproutFormsVariable
 				
 				$fields[$handle] = $this->_getFieldOutput($fieldInfo);
 			}
-		}		
-		
-		
+		}
 		
 		$fields['errors'] = $this->_getErrors($formFields);
 
@@ -221,34 +218,36 @@ class SproutFormsVariable
 			$fieldType = craft()->fields->getFieldType($fieldInfo->type);
 			$fieldType->setSettings($fieldInfo->settings);
 			
-			// set output data
-			$field['handle'] = $handle;
-			$field['type'] = strtolower($fieldInfo->type);
-			$field['input'] = $fieldType->getInputHtml($handle, craft()->request->getPost($fieldInfo->handle));
-			$field['settings'] = $fieldInfo->settings;
-			$field['validation'] = explode(',', $fieldInfo->validation);
-			$field['required'] = in_array('required', $field['validation']) ? true : false;
-			$field['instructions'] = $fieldInfo->instructions;
-			$field['hint'] = isset($fieldInfo->settings['hint']) ? $fieldInfo->settings['hint'] : '';
-			$field['label'] = $fieldInfo->name;
-			$field['error'] = isset(self::$errors[$fieldInfo->handle]) && self::$errors[$fieldInfo->handle] ? '<div class="field-error">' . implode('<br/>', self::$errors[$fieldInfo->handle]) . '</div>' : ''; 
+			require_once(dirname(__FILE__) . '/../etc/SproutForms_HtmlDisplay.php');
+			$fieldModel = new SproutForms_HtmlDisplay();
+
+			$fieldModel->input = $fieldType->getInputHtml($handle, craft()->request->getPost($fieldInfo->handle));
+			$fieldModel->handle = $handle;
+			$fieldModel->type = strtolower($fieldInfo->type);
+			$fieldModel->settings = $fieldInfo->settings;
+			$fieldModel->validation = explode(',', $fieldInfo->validation);
+			$fieldModel->required = in_array('required', $fieldModel->validation) ? true : false;
+			$fieldModel->instructions = $fieldInfo->instructions;
+			$fieldModel->hint = isset($fieldInfo->settings['hint']) ? $fieldInfo->settings['hint'] : '';
+			$fieldModel->label = $fieldInfo->name;
+			$fieldModel->error = isset(self::$errors[$handle]) && self::$errors[$handle] ? '<div class="field-error">' . implode('<br/>', self::$errors[$handle]) . '</div>' : ''; 
 
 			// distinguish between input type="text" and textarea
-			if($field['type'] == 'plaintext')
+			if($fieldModel->type == 'plaintext')
 			{
-					 if($fieldType->getSettings()->multiline) // textfield
-					 {
-							 $field['type'] = 'textarea';
-					 }
+				 if($fieldType->getSettings()->multiline) // textfield
+				 {
+					$fieldModel->type = 'textarea';
+				 }
 			}
 			
-			return $field;
+			return $fieldModel;
 	}
 	
 	/**
 	 * Return array of errors
 	 * 
-	 * @param arrahy $formFields
+	 * @param array $formFields
 	 * @return array
 	 */
 	private function _getErrors($formFields)
@@ -256,9 +255,9 @@ class SproutFormsVariable
 			$fieldErrors = array('all' => array());
 			foreach($formFields as $field)
 			{
-					if(isset(self::$errors[$field->handle]) && self::$errors[$field->handle])
+					if(isset(self::$errors[craft()->sproutForms->adjustFieldName($field, 'human')]) && self::$errors[craft()->sproutForms->adjustFieldName($field, 'human')])
 					{
-						 $fieldErrors[craft()->sproutForms->adjustFieldName($field, 'human')] = self::$errors[$field->handle];
+						 $fieldErrors[craft()->sproutForms->adjustFieldName($field, 'human')] = self::$errors[craft()->sproutForms->adjustFieldName($field, 'human')];
 					}
 					else 
 				 {
@@ -354,6 +353,7 @@ class SproutFormsVariable
 		craft()->path->setTemplatesPath(craft()->path->getPluginsPath() . 'sproutforms/templates/');
 
 		$fields = array();
+
 		foreach ($formFields as $key => $field)
 		{
 				if($key == 'errors') continue;

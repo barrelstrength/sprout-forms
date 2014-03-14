@@ -20,8 +20,8 @@
 			{% endif %}
 		</div>
 	{% endif %}
-	<div class="input{% if field.error %} errors{% endif %}">
-		{{ field.input | raw }} 
+	<div class="input">
+		{{ field.input }} 
 	</div>
 	{% if field.error is defined and field.error %}
 	<p>{{ field.error | raw }}</p>

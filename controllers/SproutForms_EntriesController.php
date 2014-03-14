@@ -99,7 +99,7 @@ class SproutForms_EntriesController extends BaseController
 
 			foreach ($contentRecord->errors as $key => $errorArray) {
 
-				//$key = str_replace($formIdNamespaceVariable, "", $key);
+				$key = str_replace($formIdNamespaceVariable, "", $key);
 
 				foreach ($errorArray as $_key => $error) {
 					$error = str_replace($formIdNamespaceMessage, "", $error);					
@@ -116,6 +116,15 @@ class SproutForms_EntriesController extends BaseController
 			// make errors available to template
 			$formHandle = craft()->request->getPost('handle');
 			$entry = $formHandle ? $formHandle : 'form';
+			
+			foreach($errors as $error)
+			{
+			    foreach($error as $err)
+			    {
+			        $errors['all'][] = $err;
+			    }
+			}
+
 			craft()->urlManager->setRouteVariables(array(
 				'errors' => $errors,
 				$entry => craft()->request->getPost()
