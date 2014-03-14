@@ -7,8 +7,6 @@
 	<p>This example shows how to build a form using standard html fields.</p>
 
 	<hr/>
-
-  {% set contactForm = craft.sproutforms.getFormFields('contact') %}
 	
 	<form method="post" action="" accept-charset="UTF-8">	
     <input type="hidden" name="action" value="sproutForms/entries/saveEntry">
@@ -23,9 +21,13 @@
 				<input type="text" name="fullName" value="" />
 			</div>
 			<div class="error">
-				{% if errors.fullName is defined %}
-					{{ errors.fullName | raw }}
-				{% endif %}
+				{% if errors is defined and errors.fullName %}
+					<ul class="errors">
+					{% for error in errors.fullName %}
+						<li class="error">{{ error }}</li>
+					{% endfor %}
+					</ul>
+				{% endif %} 
 			</div>	
 		</div>
 		

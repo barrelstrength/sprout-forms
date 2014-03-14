@@ -52,13 +52,17 @@
 				{% endif %}
 			</div>
 			<div class="body">
-				{{ contactForm.fullName.input | raw }}
+				{{ contactForm.fullName.input }}
 			</div>
 			<div class="error">
 				{# Output a single, field-specific error #}
-				{% if errors.fullName is defined %}
-					{{ errors.fullName | raw }}
-				{% endif %}
+				{% if errors is defined and errors.fullName %}
+					<ul class="errors">
+					{% for error in errors.fullName %}
+						<li class="error">{{ error }}</li>
+					{% endfor %}
+					</ul>
+				{% endif %} 
 			</div>	
 		</div>
 		
@@ -70,7 +74,7 @@
 				{% endif %}
 			</div>
 			<div class="body">
-				{{ contactForm.email.input | raw }}
+				{{ contactForm.email.input }}
 			</div>
 			<div class="error">
 				{# Output multiple field-specific errors #}		
@@ -92,7 +96,7 @@
 				{% endif %}
 			</div>
 			<div class="body">
-				{{ contactForm.message.input | raw }}
+				{{ contactForm.message.input }}
 			</div>
 			<div class="error">
 				{# Output multiple field-specific errors #}

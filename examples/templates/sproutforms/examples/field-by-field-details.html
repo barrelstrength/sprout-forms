@@ -58,9 +58,13 @@
 			</div>
 			<div class="error">
 				{# Output a single, field-specific error #}
-				{% if errors.fullName is defined %}
-					{{ errors.fullName }}
-				{% endif %}
+				{% if errors is defined and errors.fullName %}
+					<ul class="errors">
+					{% for error in errors.fullName %}
+						<li class="error">{{ error }}</li>
+					{% endfor %}
+					</ul>
+				{% endif %} 
 			</div>	
 		</div>
 		
