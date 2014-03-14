@@ -404,19 +404,6 @@ class SproutFormsVariable
 	}
 	
 	/**
-	 * Display message to user
-	 * 
-	 * @return void
-	 */
-	public function msg()
-	{
-		$notice = craft()->user->getFlash('notice');
-		$error = craft()->user->getFlash('error');
-		echo $notice ? '<div class="notice">' . $notice . '</div>' : '';
-		echo $error ? '<div class="error">' . $error . '</div>' : '';
-	}
-	
-	/**
 	 * Helper function for debugging inside twig templates
 	 * 
 	 * @param mixed $msg
