@@ -117,7 +117,6 @@ class SproutForms_EntriesController extends BaseController
 			$formHandle = craft()->request->getPost('handle');
 			$entry = $formHandle ? $formHandle : 'form';
 			craft()->urlManager->setRouteVariables(array(
-				'error' => Craft::t('Error submitting form.'),
 				'errors' => $errors,
 				$entry => craft()->request->getPost()
 			));
