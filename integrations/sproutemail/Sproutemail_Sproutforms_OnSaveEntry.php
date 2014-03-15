@@ -1,57 +1,57 @@
-<?php   
+<?php
 // MUST be in the Craft namespace
-namespace Craft;  
+namespace Craft;
 
 class Sproutemail_Sproutforms_OnSaveEntry
-{	
-	/**
-	 * This is the hook Sproutemail will call to register this event with Commerce
-	 *
-	 * @return string
-	 */
-	public function getHook()
-	{
-		return 'sproutformsAddEventListener';
-	}
-	
-	/**
-	 * Event name
-	 *
-	 * @return string
-	 */
-	public function getEvent()
-	{
-		return 'saveEntry';
-	}
-	
-	/**
-	 * Event name
-	 *
-	 * @return string
-	 */
-	public function getName()
-	{
-		return Craft::t('SproutForms: On Save Entry (after submission)');
-	}
-	
-	/**
-	 * Event description
-	 *
-	 * @return string
-	 */
-	public function getDescription()
-	{
-		return Craft::t('This event will fire after a form has been submited and saved.');
-	}
-	
-	/**
-	 * Display custom Commerce options
-	 * 
-	 * @return string Returns the template which displays our settings
-	 */
-	public function getOptionsHtml()
-	{
-		return '<hr>
+{
+    /**
+     * This is the hook Sproutemail will call to register this event with Commerce
+     *
+     * @return string
+     */
+    public function getHook()
+    {
+        return 'sproutformsAddEventListener';
+    }
+    
+    /**
+     * Event name
+     *
+     * @return string
+     */
+    public function getEvent()
+    {
+        return 'saveEntry';
+    }
+    
+    /**
+     * Event name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return Craft::t('SproutForms: On Save Entry (after submission)');
+    }
+    
+    /**
+     * Event description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return Craft::t('This event will fire after a form has been submited and saved.');
+    }
+    
+    /**
+     * Display custom Commerce options
+     * 
+     * @return string Returns the template which displays our settings
+     */
+    public function getOptionsHtml()
+    {
+        return '<hr>
 				<h3>Custom options for SproutForms.</h3>
 	
                 {% set availableForms = [] %}
@@ -81,27 +81,27 @@ class Sproutemail_Sproutforms_OnSaveEntry
                 
                 {% endif %}
 				<hr>';
-	}
-	
-	/**
-	 * Process the options associated with the event
-	 *
-	 * @return string
-	 */
-	public function processOptions($event, $entity, $options)
-	{
-        if( ! is_array($options['options']['sproutForms']))
-	    {
-	       return true;
-	    }
-	    
-	    $submittedForm = craft()->request->getPost('handle');
-	    if($submittedForm && in_array($submittedForm, $options['options']['sproutForms']))
-	    {
-	        return true;
-	    }
-
-	    return false;
-	
-	}
+    }
+    
+    /**
+     * Process the options associated with the event
+     *
+     * @return string
+     */
+    public function processOptions($event, $entity, $options)
+    {
+        if (!is_array($options['options']['sproutForms']))
+        {
+            return true;
+        }
+        
+        $submittedForm = craft()->request->getPost('handle');
+        if ($submittedForm && in_array($submittedForm, $options['options']['sproutForms']))
+        {
+            return true;
+        }
+        
+        return false;
+        
+    }
 }
