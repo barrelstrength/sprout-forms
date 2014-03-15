@@ -86,6 +86,7 @@ class SproutForms_FormRecord extends BaseRecord
     {
         if ($emails = explode(',', $this->email_distribution_list)) {
             foreach ($emails as $email) {
+                $email = trim($email);
                 if (!$email)
                     continue;
                 if (!preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $email)) {
