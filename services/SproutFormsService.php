@@ -379,5 +379,26 @@ class SproutFormsService extends BaseApplicationComponent
             return $handle[1];
         }
     }
+
+    /**
+     * Return meta data about the form submission
+     * 
+     * @param int $entryId
+     * @return array
+     */
+    public function getEntrySubmissionMeta($entryId)
+    {
+        $contentRecord = SproutForms_ContentRecord::model()->findById($entryId);
+        $meta = json_decode($contentRecord->serverData);
+        
+        // if more info is needed, it can be obtained here - such as geolocation
+        // in addition, it may be good to cache such data so it does not have to be processed again, 
+        // especially if using a third party service
+        
+        return array(
+                'User Agent' => $meta->userAgent,
+                'User IP Address' => $meta->ipAddress
+        );
+    }
     
 }

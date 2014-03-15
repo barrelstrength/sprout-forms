@@ -385,6 +385,17 @@ class SproutFormsVariable
     }
     
     /**
+     * Return meta data about the form submission
+     *
+     * @param int $entryId
+     * @return array
+     */
+    public function getEntrySubmissionMeta($entryId)
+    {
+        return craft()->sproutForms->getEntrySubmissionMeta($entryId);
+    }
+    
+    /**
      * Helper function for debugging inside twig templates
      * 
      * @param mixed $msg
