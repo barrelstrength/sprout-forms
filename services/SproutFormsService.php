@@ -83,9 +83,8 @@ class SproutFormsService extends BaseApplicationComponent
      */
     public function getAllForms()
     {
-        $query = craft()->db->createCommand()->select('id, name, handle')->from('sproutforms_forms')->order('name')->queryAll();
-        
-        return SproutForms_FormModel::populateModels($query);
+        $records = $this->formRecord->findAll(array('order'=>'name'));
+        return SproutForms_FormModel::populateModels($records);
     }
     
     /**

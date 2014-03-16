@@ -1,2 +1,5 @@
 builder
+composer.lock
+vendor
+composer.phar
 .DS_Store
