@@ -414,5 +414,10 @@ class SproutFormsService extends BaseApplicationComponent
 			return $handle[1];  
 		}
 	}
+
+	public function onBeforeSubmitForm(SproutForms_OnBeforeSubmitFormEvent $event)
+	{
+		$this->raiseEvent('onBeforeSubmitForm', $event);
+	}
 	
 }

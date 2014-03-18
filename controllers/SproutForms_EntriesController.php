@@ -16,12 +16,18 @@ class SproutForms_EntriesController extends BaseController
 	 * @return void
 	 */
 	public function actionSaveEntry()
-	{		
-		// pre $_POST processing hook
+	{
+		// @DEPRECATED - pre $_POST processing hook
+		// Use SproutForms_OnBeforeSubmitFormEvent instead
 		craft()->plugins->call('sproutFormsPrePost');
-		
+
 		// if no $_POST, throws 400
 		$this->requirePostRequest();
+
+		// Fire an 'onBeforeSubmitForm' event
+		Craft::import('plugins.sproutforms.events.SproutForms_OnBeforeSubmitFormEvent');
+		$event = new SproutForms_OnBeforeSubmitFormEvent($this, craft()->request->getPost());
+		craft()->sproutForms->onBeforeSubmitForm($event);
 
 		// get form w/ fields
 		if ( ! $formRecord = SproutForms_FormRecord::model()
