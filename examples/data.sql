@@ -4,7 +4,7 @@
 
 INSERT INTO `craft_sproutforms_forms` (`id`, `name`, `handle`, `redirectUri`, `submitButtonType`, `submitButtonText`, `email_distribution_list`, `notification_reply_to`, `notification_subject`, `dateCreated`, `dateUpdated`, `uid`)
 VALUES
-	(1,'Contact','contact','sproutforms/field-by-field','input','',NULL,NULL,NULL,'2013-11-12 21:38:55','2014-03-03 03:22:40','ff67708c-dee4-4242-9f9e-1d5c221763a7');
+	(1,'Contact','contact','sproutforms/examples/field-by-field','input','',NULL,NULL,NULL,'2013-11-12 21:38:55','2014-03-03 03:22:40','ff67708c-dee4-4242-9f9e-1d5c221763a7');
 
 
 # Insert Data Into Sprout Forms Fields table

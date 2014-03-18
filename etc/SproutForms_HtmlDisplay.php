@@ -12,15 +12,15 @@ class SproutForms_HtmlDisplay
     
     public function __get($key)
     {
-        if(isset($this->htmlFields[$key]))
+        if (isset($this->htmlFields[$key]))
         {
             return $this->htmlFields[$key];
         }
     }
     
-    public function __call($key,$args)
+    public function __call($key, $args)
     {
-        if(isset($this->htmlFields[$key]))
+        if (isset($this->htmlFields[$key]))
         {
             echo $this->htmlFields[$key];
         }

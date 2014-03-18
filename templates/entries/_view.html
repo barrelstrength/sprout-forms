@@ -16,7 +16,6 @@
 <p>The following entry was submitted on {{ entry.dateCreated.nice }}</p>
 
     <table>
-
       {% for entry in entry.form.field %}
       <tr>
         <td style="padding-bottom:10px;width:600px;">
@@ -38,5 +37,12 @@
       </tr>
       {% endfor %}
     </table>
+    
+<p>Additional details about the submission.</p>
+
+{% for key, val in craft.sproutforms.getEntrySubmissionMeta(entryId) %}
+    <b>{{ key }}</b>: {{ val }} <br/>
+{% endfor %}
+
 
 {% endset %}
