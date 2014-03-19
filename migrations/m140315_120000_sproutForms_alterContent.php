@@ -23,7 +23,7 @@ class m140315_120000_sproutForms_alterContent extends BaseMigration
             if ($table->getColumn($field) == null) {
                 Craft::log('Adding `' . $field . '` column to the `' . $tableName . '` table.', LogLevel::Info, true);
                 
-                $this->addColumnAfter($tableName, $field, 'text', 'formId');
+                $this->addColumnBefore($tableName, $field, 'TEXT', 'dateCreated');
                 
                 Craft::log('Added `' . $field . '` column to the `' . $tableName . '` table.', LogLevel::Info, true);
             } else {
