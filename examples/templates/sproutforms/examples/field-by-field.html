@@ -7,10 +7,10 @@
 	<p>This example shows how to build a form using single tag fields.</p>
 	
 	<hr/>
-	
-  {% if errors is defined and errors.all %} 
+
+  {% if contact.errors is defined and contact.errors.all %} 
   	<ul class="errors">
-  	{% for error in errors.all %}
+  	{% for error in contact.errors.all %}
   		<li class="error">{{ error }}</li>
   	{% endfor %}
   	</ul>

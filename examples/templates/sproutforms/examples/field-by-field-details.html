@@ -12,9 +12,9 @@
 	{% set contactForm = craft.sproutForms.getFormFields('contact') %}
 
 	{# Output all errors if form doesn't pass validation #}
-	{% if contactForm.errors.all %}
+	{% if contact.errors.all is defined %}
 		<ul class="errors">
-			{% for error in contactForm.errors.all %}
+			{% for error in contact.errors.all %}
 					<li class="error">{{ error }}</li>
 			{% endfor %}
 		</ul>
@@ -58,9 +58,9 @@
 			</div>
 			<div class="error">
 				{# Output a single, field-specific error #}
-				{% if errors is defined and errors.fullName %}
+				{% if contact.errors is defined and contact.errors.fullName %}
 					<ul class="errors">
-					{% for error in errors.fullName %}
+					{% for error in contact.errors.fullName %}
 						<li class="error">{{ error }}</li>
 					{% endfor %}
 					</ul>
@@ -80,9 +80,9 @@
 			</div>
 			<div class="error">
 				{# Output multiple field-specific errors #}		
-				{% if errors is defined and errors.email %}
+				{% if contact.errors is defined and contact.errors.email %}
 					<ul class="errors">
-					{% for error in errors.email %}
+					{% for error in contact.errors.email %}
 						<li class="error">{{ error }}</li>
 					{% endfor %}
 					</ul>
@@ -102,9 +102,9 @@
 			</div>
 			<div class="error">
 				{# Output multiple field-specific errors #}		
-				{% if errors is defined and errors.message %}
+				{% if contact.errors is defined and contact.errors.message %}
 					<ul class="errors">
-					{% for error in errors.message %}
+					{% for error in contact.errors.message %}
 						<li class="error">{{ error }}</li>
 					{% endfor %}
 					</ul>

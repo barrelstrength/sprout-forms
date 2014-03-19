@@ -122,10 +122,14 @@ class SproutForms_EntriesController extends BaseController
                     $errors['all'][] = $err;
                 }
             }
+
+            // Create the array that we will return to the template
+            // so a user can process errors
+            $returnData = craft()->request->getPost();
+            $returnData['errors'] = $errors;
             
             craft()->urlManager->setRouteVariables(array(
-                'errors' => $errors,
-                $entry => craft()->request->getPost()
+                $entry => $returnData
             ));
         }
     }
