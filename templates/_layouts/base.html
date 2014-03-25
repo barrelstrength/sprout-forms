@@ -5,32 +5,15 @@
 {% set content %}
   
 	{{ body }}
-		
-		
-	{% if craft.request.segment(2) != "edit" %}
-		<br/>
-		<footer class="bsd-branding">
-			<p>
-				Powered by <a href="http://barrelstrengthdesign.com" target="_blank">{{ craft.sproutforms.name }}</a> {{ craft.sproutforms.version }} | 
-				Designed by <a href="http://barrelstrengthdesign.com" target="_blank">(Barrel Strength)</a>
-			</p>
-		</footer>
-	{% endif %}
+
+	<footer class="bsd-branding">
+		<p>
+			Powered by <a href="http://barrelstrengthdesign.com" target="_blank">{{ craft.sproutforms.name }}</a> {{ craft.sproutforms.version }} | 
+			Designed by <a href="http://barrelstrengthdesign.com" target="_blank">(Barrel Strength)</a>
+		</p>
+	</footer>
 	
 {% endset %}
 
-{% set pluginCss %}
-	footer.bsd-branding {
-	    bottom:10px;
-	    color:#999;
-	    font-size:11px;
-	    position:absolute;
-	    right:30px;
-  	}
-	footer.bsd-branding a {
-	    color:#999;
-	    font-weight:bold;
-	}
-{% endset %}
-
-{% includeCss pluginCss %}
+{% includeCssResource "sproutforms/css/styles.css" %}
+{% includeJsResource "sproutforms/js/scripts.js" %}

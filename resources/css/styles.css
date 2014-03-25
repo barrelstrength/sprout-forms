@@ -1,10 +1,19 @@
 /* BASE STYLES
 -----------------------------------*/
-/*
-#tab-entries {
-	margin: -30px -30px 0 -30px;
+
+
+footer.bsd-branding {
+    bottom:10px;
+    color:#999;
+    font-size:11px;
+    position:absolute;
+    right:30px;
 }
-*/
+
+footer.bsd-branding a {
+    color:#999;
+    font-weight:bold;
+}
 
 .no-entries {
 	margin: 30px 30px 0 30px;
@@ -67,6 +76,7 @@ table#entries .date {
 	background-color: #fff;
 	width: 140px;
 	min-width: 140px;
+	height: 50px;
 }
 
 table#entries th.date {
