@@ -5,11 +5,11 @@
 }
 
 footer.bsd-branding {
-    bottom:10px;
+    bottom:0;
+    right:0;
     color:#999;
     font-size:11px;
     position:absolute;
-    right:30px;
 }
 
 footer.bsd-branding a {
