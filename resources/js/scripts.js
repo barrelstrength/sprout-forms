@@ -2,17 +2,12 @@ var element = $('#tab-entries').jScrollPane({
 	showArrows: true,
 	hideFocus: true
 });
-var api = element.data('jsp');
-var horizontalAmmt = api.getContentPositionX();
-var horizontalAmmt = -horizontalAmmt;
-var dateHeight = $("td.date").innerHeight();
 
-// Avoid future issues with pane padding changing by making content negative margin dynamic
-var panePaddingLeft = $('.pane').css('padding-left');
-var panePaddingRight = $('.pane').css('padding-right');
-var panePaddingBottom = $('.pane').css('padding-bottom');
+var api = element.data('jsp');
 
 function getContentHeight() {
+	
+
 	var viewHeight = $( window ).height();
 	var viewHeight = (viewHeight/10)*6.5;
 	
@@ -33,7 +28,14 @@ function getContentHeight() {
 }
 
 function checkSelectedTab() {
+
+	// Avoid future issues with pane padding changing by making content negative margin dynamic
+	var panePaddingLeft = $('.pane').css('padding-left');
+	var panePaddingRight = $('.pane').css('padding-right');
+	var panePaddingBottom = $('.pane').css('padding-bottom');
+
 	if ($("#tab-formEntries").hasClass("sel")) {
+	
 		$('.bsd-branding').addClass('hidden');
 		
 		$('#content').css({
@@ -41,10 +43,26 @@ function checkSelectedTab() {
 			'margin-right' : '-' + panePaddingRight,
 			'margin-bottom' : '-' + panePaddingBottom
 		});
+		
+		
+		$('.content').addClass('entries');
+
+		
+		
+		renderEntriesHeadings();
+	} else {
+		$('.bsd-branding').removeClass('hidden');
+		$('.content').removeClass('entries');
+		$('#content').css({
+			'margin' : '0 0 0 0'
+		});
 	}
 }
+
+function renderEntriesHeadings() {
 	
-$(function() {
+	var dateHeight = $("td.date").innerHeight();
+	
 	$('#tab-entries').bind({
 		'jsp-scroll-x': function(event, scrollPositionX, isAtLeft, isAtRight) {
 		
@@ -66,22 +84,9 @@ $(function() {
 				"top" : scrollPositionY
 			});
 		}
-	})
-});
-
-
-$(document).ready(function() {
-	getContentHeight();
-	checkSelectedTab();
-	
-	$('#tab-entries').jScrollPane({
-		showArrows: true,
-		hideFocus: true
 	});
 	
-	$("th.date").css({
-		"height" : dateHeight
-	});
+	
 	
 	$("th > div").each(function() {
 		if ($(this).parent("th").hasClass("padding")) {
@@ -100,23 +105,20 @@ $(document).ready(function() {
 		});
 	});
 	
-	$('a').click(function(event) {
-
-		var currentUrl = String(event.currentTarget);
-		var currentSegment = currentUrl.split("#")[1];
-		
-		//alert(currentSegment);
 	
-		if (currentSegment == "tab-entries") {
-			$('.bsd-branding').addClass('hidden');
-			$('#content').css({
-				'margin' : '0 -24px -24px'
-				
-			});
-			
-		} else {
-			$('.bsd-branding').removeClass('hidden');
-		}
+	$("th.date").css({
+		"height" : dateHeight
+	});
+	
+}
+
+
+$(document).ready(function() {
+	getContentHeight();
+	checkSelectedTab();
+	
+	$('.tabs a').click(function(event) {
+		checkSelectedTab();
 	});
 });
 
