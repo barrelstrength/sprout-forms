@@ -1,6 +1,8 @@
 /* BASE STYLES
 -----------------------------------*/
-
+.content.entries::after {
+	display: none !important;
+}
 
 footer.bsd-branding {
     bottom:10px;
