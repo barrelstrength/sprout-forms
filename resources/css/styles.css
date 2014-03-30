@@ -27,6 +27,10 @@ table#entries tr {
 	height: 50px;
 }
 
+table#entries thead tr {
+	height: 40px;
+}
+
 table#entries .left-border {
 	width: 3px;
 	min-width: 3px;
@@ -79,7 +83,7 @@ table#entries .date {
 	background-color: #fff;
 	width: 140px;
 	min-width: 140px;
-	height: 50px;
+	height: 40px;
 }
 
 table#entries th.date {
