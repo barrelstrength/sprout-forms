@@ -1,5 +1,11 @@
 /* BASE STYLES
 -----------------------------------*/
+
+th {
+	min-width: 100%;
+	width: 100%;
+}
+
 .content.entries::after {
 	display: none !important;
 }
@@ -95,8 +101,8 @@ table#entries th.date div {
 
 table#entries th.padding,
 table#entries td.padding {
-	width: 133px;
-	min-width: 133px;
+	width: 143px;
+	min-width: 143px;
 	padding: 0;
 }
 
@@ -115,8 +121,8 @@ table#entries .date a {
 
 table#entries th.thin.delete,
 table#entries td.thin.delete {
-	width: 23px !important;
-	min-width: 23px !important;
+	width: 31px !important;
+	min-width: 31px !important;
 }
 
 table#entries td.delete {
@@ -146,7 +152,7 @@ table.results {
 	min-width: 100%;
 }
 
-table.results th:not(:first-child),
+table.results th:not(:first-child) div,
 table.results td:not(:first-child) {
 	padding-left: 10px;
 }
