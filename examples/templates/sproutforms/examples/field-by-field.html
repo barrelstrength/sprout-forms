@@ -7,10 +7,10 @@
 	<p>This example shows how to build a form using single tag fields.</p>
 	
 	<hr/>
-	
-  {% if errors is defined and errors.all %} 
+
+  {% if contact.errors is defined and contact.errors.all %} 
   	<ul class="errors">
-  	{% for error in errors.all %}
+  	{% for error in contact.errors.all %}
   		<li class="error">{{ error }}</li>
   	{% endfor %}
   	</ul>
@@ -27,7 +27,7 @@
     {# Optional: 
     	 The page/url to which the user should be redirected upon form submission
     	 By default, the user will be redirected back to the same page. #}
-    <input type="hidden" name="redirect" value="sproutforms/field-by-field-details">
+    <input type="hidden" name="redirect" value="sproutforms/examples/field-by-field-details">
     
     {# Field Output: Option 1
     	 Output individual fields using the displayField() tag #}

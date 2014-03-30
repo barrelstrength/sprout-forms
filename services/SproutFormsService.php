@@ -399,5 +399,12 @@ class SproutFormsService extends BaseApplicationComponent
                 'User IP Address' => $meta['ipAddress']
         );
     }
-    
+
+    /**
+     * Raise onBeforeSubmitForm Event
+     */
+    public function onBeforeSubmitForm(SproutForms_OnBeforeSubmitFormEvent $event)
+    {
+        $this->raiseEvent('onBeforeSubmitForm', $event);
+    }
 }

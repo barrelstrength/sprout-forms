@@ -23,6 +23,11 @@ class SproutForms_EntriesController extends BaseController
         // if no $_POST, throws 400
         $this->requirePostRequest();
         
+        // Fire an 'onBeforeSubmitForm' event
+        Craft::import('plugins.sproutforms.events.SproutForms_OnBeforeSubmitFormEvent');
+        $event = new SproutForms_OnBeforeSubmitFormEvent($this, craft()->request->getPost());
+        craft()->sproutForms->onBeforeSubmitForm($event);
+        
         // get form w/ fields
         if (!$formRecord = SproutForms_FormRecord::model()->with('field')->find('t.handle=:handle', array(
             ':handle' => craft()->request->getPost('handle')
@@ -117,10 +122,14 @@ class SproutForms_EntriesController extends BaseController
                     $errors['all'][] = $err;
                 }
             }
+
+            // Create the array that we will return to the template
+            // so a user can process errors
+            $returnData = craft()->request->getPost();
+            $returnData['errors'] = $errors;
             
             craft()->urlManager->setRouteVariables(array(
-                'errors' => $errors,
-                $entry => craft()->request->getPost()
+                $entry => $returnData
             ));
         }
     }

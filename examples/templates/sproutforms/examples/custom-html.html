@@ -10,7 +10,7 @@
 	
 	<form method="post" action="" accept-charset="UTF-8">	
     <input type="hidden" name="action" value="sproutForms/entries/saveEntry">
-    <input type="hidden" name="redirect" value="sproutforms/example_4">
+    <input type="hidden" name="redirect" value="sproutforms/examples/multiple-forms">
     <input type="hidden" name="handle" value="contact">	    
 	    
 		<div class="field">
@@ -21,9 +21,9 @@
 				<input type="text" name="fullName" value="" />
 			</div>
 			<div class="error">
-				{% if errors is defined and errors.fullName %}
+				{% if contact.errors is defined and contact.errors.fullName %}
 					<ul class="errors">
-					{% for error in errors.fullName %}
+					{% for error in contact.errors.fullName %}
 						<li class="error">{{ error }}</li>
 					{% endfor %}
 					</ul>
@@ -39,9 +39,9 @@
 				<input type="email" name="email" value="" />
 			</div>
 			<div class="error">	
-				{% if errors is defined and errors.email %}
+				{% if contact.errors is defined and contact.errors.email %}
 					<ul class="errors">
-					{% for error in errors.email %}
+					{% for error in contact.errors.email %}
 						<li class="error">{{ error }}</li>
 					{% endfor %}
 					</ul>
@@ -57,9 +57,9 @@
 				<textarea name="message"></textarea>
 			</div>
 			<div class="error">
-				{% if errors is defined and errors.message %}
+				{% if contact.errors is defined and contact.errors.message %}
 					<ul class="errors">
-					{% for error in errors.message %}
+					{% for error in contact.errors.message %}
 						<li class="error">{{ error }}</li>
 					{% endfor %}
 					</ul>
