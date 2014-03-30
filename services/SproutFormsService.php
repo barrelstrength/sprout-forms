@@ -30,7 +30,7 @@ class SproutFormsService extends BaseApplicationComponent
     private function _getFormRecordById($formId = null)
     {
         if ($formId) {
-            $formRecord           = SproutForms_FormRecord::model()->findById($formId);
+            $formRecord           = $this->formRecord->findById($formId);
             $formRecord->scenario = 'update';
             
             if (!$formRecord) {
@@ -95,7 +95,7 @@ class SproutFormsService extends BaseApplicationComponent
      */
     public function getFormById($formId)
     {
-        $formRecord = SproutForms_FormRecord::model()->findById($formId);
+        $formRecord = $this->formRecord->findById($formId);
         
         if ($formRecord) {
             return SproutForms_FormModel::populateModel($formRecord);
@@ -112,7 +112,7 @@ class SproutFormsService extends BaseApplicationComponent
      */
     public function getFormByHandle($handle)
     {
-        $formRecord = SproutForms_FormRecord::model()->find('handle=:handle', array(
+        $formRecord = $this->formRecord->find('handle=:handle', array(
             ':handle' => $handle
         ));
         
@@ -132,7 +132,7 @@ class SproutFormsService extends BaseApplicationComponent
     public function getFormByFieldId($fieldId)
     {
         if (!isset($this->_formsById) || !array_key_exists($fieldId, $this->_formsById)) {
-            $formRecord = SproutForms_FormRecord::model()->with(array(
+            $formRecord = $this->formRecord->with(array(
                 'field' => array(
                     'select' => false,
                     'joinType' => 'INNER JOIN',
@@ -173,7 +173,7 @@ class SproutFormsService extends BaseApplicationComponent
      */
     public function getFieldsByFormHandle($handle)
     {
-        $form = SproutForms_FormRecord::model()->findAll('handle=:handle', array(
+        $form = $this->formRecord->findAll('handle=:handle', array(
             ':handle' => $handle
         ));
         
@@ -258,7 +258,7 @@ class SproutFormsService extends BaseApplicationComponent
     public function deleteForm($id)
     {
         
-        if (!$formRecord = SproutForms_FormRecord::model()->with('field')->findById($id)) {
+        if (!$formRecord = $this->formRecord->with('field')->findById($id)) {
             return false;
         }
         
@@ -388,15 +388,15 @@ class SproutFormsService extends BaseApplicationComponent
     public function getEntrySubmissionMeta($entryId)
     {
         $contentRecord = SproutForms_ContentRecord::model()->findById($entryId);
-        $meta = json_decode($contentRecord->serverData);
+        $meta = $contentRecord->serverData;
         
         // if more info is needed, it can be obtained here - such as geolocation
         // in addition, it may be good to cache such data so it does not have to be processed again, 
         // especially if using a third party service
         
         return array(
-                'User Agent' => $meta->userAgent,
-                'User IP Address' => $meta->ipAddress
+                'User Agent' => $meta['userAgent'],
+                'User IP Address' => $meta['ipAddress']
         );
     }
     

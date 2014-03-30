@@ -2,4 +2,7 @@ builder
 composer.lock
 vendor
 composer.phar
+phpunit.xml
+selenium.jar
+tests/SeleniumHomeTest.php
 .DS_Store

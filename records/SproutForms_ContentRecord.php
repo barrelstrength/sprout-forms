@@ -24,7 +24,7 @@ class SproutForms_ContentRecord extends BaseRecord
     {
         return array(
             'serverData' => array(
-                AttributeType::String
+                AttributeType::Mixed
             )
         );
     }

@@ -26,4 +26,16 @@ class SproutFormsServiceTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, count($results));
         $this->assertInstanceOf('Craft\SproutForms_FormModel', $results[0]);
     }
+    
+    public function testGetFormById()
+    {    
+        $this->formRecord
+        ->shouldReceive('findById')
+        ->with(1)
+        ->andReturn(true);
+        
+        $results = $this->service->getFormById(1);
+    
+        $this->assertInstanceOf('Craft\SproutForms_FormModel', $results);
+    }
 }
