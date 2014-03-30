@@ -6,8 +6,6 @@ var element = $('#tab-entries').jScrollPane({
 var api = element.data('jsp');
 
 function getContentHeight() {
-	
-
 	var viewHeight = $( window ).height();
 	var viewHeight = (viewHeight/10)*6.5;
 	
@@ -20,6 +18,7 @@ function getContentHeight() {
 		
 		setTimeout(function(){api.scrollToX(0, 0)}, 100);
 		setTimeout(function(){api.reinitialise()}, 400);
+		setTimeout(function(){renderEntriesHeadings()}, 400);
 	} else {
 		$("#tab-entries").css({
 			"height": "500px"
@@ -41,15 +40,12 @@ function checkSelectedTab() {
 		$('#content').css({
 			'margin-left' : '-' + panePaddingLeft,
 			'margin-right' : '-' + panePaddingRight,
-			'margin-bottom' : '-' + panePaddingBottom
+			'margin-bottom' : '-' + panePaddingBottom,
+			'overflow' : 'hidden'
 		});
-		
-		
 		$('.content').addClass('entries');
-
-		
-		
 		renderEntriesHeadings();
+		renderLeftBorder();
 	} else {
 		$('.bsd-branding').removeClass('hidden');
 		$('.content').removeClass('entries');
@@ -60,9 +56,7 @@ function checkSelectedTab() {
 }
 
 function renderEntriesHeadings() {
-	
-	var dateHeight = $("td.date").innerHeight();
-	
+	var dateHeight = $("th.date").innerHeight();
 	$('#tab-entries').bind({
 		'jsp-scroll-x': function(event, scrollPositionX, isAtLeft, isAtRight) {
 		
@@ -74,9 +68,7 @@ function renderEntriesHeadings() {
 				"left" : scrollPositionX + 3
 			});
 			
-			$("table#entries td.delete").css({
-				"right" : (-scrollPositionX)+16
-			});
+			
 		},
 		
 		'jsp-scroll-y': function(event, scrollPositionY, isAtTop, isAtBottom) {
@@ -84,44 +76,83 @@ function renderEntriesHeadings() {
 				"top" : scrollPositionY
 			});
 		}
+		
 	});
 	
 	
 	
 	$("th > div").each(function() {
 		if ($(this).parent("th").hasClass("padding")) {
-		
+			
 			var divWidth = ($('.date').innerWidth()) + ($('.left-border').innerWidth());
 		} else {
-			var divWidth = $(this).parent("th").innerWidth();
+			var divWidth = $(this).parent("th").outerWidth();
+			//alert(divWidth);
 		}
 	
 		
 		var divHeight = $(this).parent("th").innerHeight();
 		
 		$(this).css({
-			"width" : divWidth,
+			"width" : divWidth - 10,
 			"height": divHeight
 		});
-	});
-	
+	});	
 	
 	$("th.date").css({
 		"height" : dateHeight
-	});
+	});	
+}
+
+function checkDeletePosition() {
+	setTimeout(function(){
+		if (api.getIsScrollableH() == true) {
+			$('#tab-entries').bind({
+				'jsp-scroll-x': function(event, scrollPositionX, isAtLeft, isAtRight) {
+			
+		
+					$("table#entries td.delete").css({
+						"right" : (-scrollPositionX)+16
+					});
+					
+				}
+			});
+		}
+		
+		if (api.getIsScrollableH() == false) {
+			$("table#entries td.delete").css({
+				"right" : '0'
+			});
+		}
+	}, 500);
+}
+
+function renderLeftBorder() {
 	
+	$(".left-border").each(function() {
+		var parentHeight = $(this).parent('tr').outerHeight();
+		
+		$(this).children('div').css('height', parentHeight);
+		
+	});
 }
 
 
 $(document).ready(function() {
 	getContentHeight();
 	checkSelectedTab();
-	
 	$('.tabs a').click(function(event) {
 		checkSelectedTab();
 	});
 });
 
+$(window).load(function() {
+	checkDeletePosition();
+});
+
 $( window ).resize(function() {
 	getContentHeight();
+	
+	checkDeletePosition();
+	
 });
