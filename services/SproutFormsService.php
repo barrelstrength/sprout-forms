@@ -318,7 +318,17 @@ class SproutFormsService extends BaseApplicationComponent
         $formRecord->submitButtonText = $form->submitButtonText;
         
         if (isset($form->email_distribution_list)) {
-            $formRecord->email_distribution_list = $form->email_distribution_list;
+            
+            // normalize
+            $email_distribution_list = array();
+            foreach (explode(',', $form->email_distribution_list) as $email) {
+                $email = trim($email);
+                if ( ! $email) {
+                    continue;                
+                }
+                $email_distribution_list[] = $email;
+            }           
+            $formRecord->email_distribution_list = implode(',', $email_distribution_list);
         }
         
         if (isset($form->notification_subject)) {
