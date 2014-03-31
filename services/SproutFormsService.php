@@ -417,4 +417,12 @@ class SproutFormsService extends BaseApplicationComponent
     {
         $this->raiseEvent('onBeforeSubmitForm', $event);
     }
+    
+    /**
+     * Raise onBeforeSaveEntry Event
+     */
+    public function onBeforeSaveEntry(SproutForms_OnBeforeSaveEntryEvent $event)
+    {
+        $this->raiseEvent('onBeforeSaveEntry', $event);
+    }
 }

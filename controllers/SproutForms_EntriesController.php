@@ -24,9 +24,9 @@ class SproutForms_EntriesController extends BaseController
         $this->requirePostRequest();
         
         // Fire an 'onBeforeSubmitForm' event
-        Craft::import('plugins.sproutforms.events.SproutForms_OnBeforeSubmitFormEvent');
-        $event = new SproutForms_OnBeforeSubmitFormEvent($this, craft()->request->getPost());
-        craft()->sproutForms->onBeforeSubmitForm($event);
+        Craft::import('plugins.sproutforms.events.SproutForms_OnBeforeSaveEntryEvent');
+        $event = new SproutForms_OnBeforeSaveEntryEvent($this, craft()->request->getPost());
+        craft()->sproutForms->onBeforeSaveEntry($event);
         
         // get form w/ fields
         if (!$formRecord = SproutForms_FormRecord::model()->with('field')->find('t.handle=:handle', array(
@@ -189,8 +189,9 @@ class SproutForms_EntriesController extends BaseController
                         'entry' => $post
                     ));
                     
-                    // we must validate this before attempting to send; invalid email will throw an error/fail to send silently
-                    if (!preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $email->replyTo)) {
+                    // we must validate this before attempting to send; 
+                    // invalid email will throw an error/fail to send silently
+                    if ( ! $this->_valid_email($email->replyTo)) {
                         $email->replyTo = null;
                     }
                 }
@@ -201,9 +202,19 @@ class SproutForms_EntriesController extends BaseController
             
             $error = false;
             foreach ($distro_list as $email_address) {
-                try {
-                    $email->toEmail = trim($email_address);
-                    $res            = craft()->email->sendEmail($email);
+                
+                $email->toEmail = craft()->templates->renderString($email_address, array(
+                        'entry' => $post
+                ));
+                
+                // we must validate this before attempting to send;
+                // invalid email will throw an error/fail to send silently
+                if ( ! $this->_valid_email($email->toEmail)) {
+                    continue;
+                }
+                
+                try {                    
+                    $res = craft()->email->sendEmail($email);
                 }
                 catch (\Exception $e) {
                     $error = true;
@@ -211,6 +222,11 @@ class SproutForms_EntriesController extends BaseController
             }
             return $error;
         }
+    }
+    
+    private function _valid_email($email) 
+    {
+        return preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $email);
     }
     
     private function _getServerData()
