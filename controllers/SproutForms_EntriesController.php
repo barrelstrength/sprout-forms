@@ -59,7 +59,7 @@ class SproutForms_EntriesController extends BaseController
         $contentRecord = new SproutForms_ContentRecord();
         
         foreach ($contentRecord->attributes as $column => $value) {
-            // process only the field was submitted
+            // process only if the field was submitted
             $field = isset($fieldsToSave[$column]) ? $fieldsToSave[$column] : null;
             if ($field) {
                 if (is_array($field)) {
@@ -99,14 +99,14 @@ class SproutForms_EntriesController extends BaseController
             
             foreach ($contentRecord->errors as $key => $errorArray) {
                 
-                $key = str_replace($formIdNamespaceVariable, "", $key);
+                $key_human = str_replace($formIdNamespaceVariable, "", $key);
                 
                 foreach ($errorArray as $_key => $error) {
                     $error             = str_replace($formIdNamespaceMessage, "", $error);
                     $errorArray[$_key] = $error;
                 }
                 $errors[$key] = $errorArray;
-                
+                $errors[$key_human] = $errorArray;
             }
             
             // make errors available to variable
@@ -117,17 +117,20 @@ class SproutForms_EntriesController extends BaseController
             $formHandle = craft()->request->getPost('handle');
             $entry      = $formHandle ? $formHandle : 'form';
             
+            $errors['all'] = array();
             foreach ($errors as $error) {
                 foreach ($error as $err) {
-                    $errors['all'][] = $err;
-                }
+                    if (!in_array($err, $errors['all'])) {
+                        $errors['all'][] = $err;
+                    }
+                }    
             }
 
             // Create the array that we will return to the template
             // so a user can process errors
             $returnData = craft()->request->getPost();
             $returnData['errors'] = $errors;
-            
+
             craft()->urlManager->setRouteVariables(array(
                 $entry => $returnData
             ));

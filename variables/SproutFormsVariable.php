@@ -181,6 +181,8 @@ class SproutFormsVariable
         
         $fields['errors'] = $this->_getErrors($formFields);
         
+        //Craft::dump($fields);
+        
         craft()->path->setTemplatesPath(craft()->path->getSiteTemplatesPath());
         return $fields;
     }
@@ -212,7 +214,7 @@ class SproutFormsVariable
         $fieldModel->instructions = $fieldInfo->instructions;
         $fieldModel->hint         = isset($fieldInfo->settings['hint']) ? $fieldInfo->settings['hint'] : '';
         $fieldModel->label        = $fieldInfo->name;
-        $fieldModel->error        = isset(self::$errors[$handle]) && self::$errors[$handle] ? '<div class="field-error">' . implode('<br/>', self::$errors[$handle]) . '</div>' : '';
+        $fieldModel->error        = isset(self::$errors[$fieldInfo->handle]) && self::$errors[$fieldInfo->handle] ? '<div class="field-error">' . implode('<br/>', self::$errors[$fieldInfo->handle]) . '</div>' : '';
         
         // distinguish between input type="text" and textarea
         if ($fieldModel->type == 'plaintext') {
@@ -237,12 +239,15 @@ class SproutFormsVariable
             'all' => array()
         );
         foreach ($formFields as $field) {
-            if (isset(self::$errors[craft()->sproutForms->adjustFieldName($field, 'human')]) && self::$errors[craft()->sproutForms->adjustFieldName($field, 'human')]) {
+            // human readable 
+            if (isset(self::$errors[$field->handle]) 
+                    && isset(self::$errors[craft()->sproutForms->adjustFieldName($field, 'human')]) 
+                    && self::$errors[craft()->sproutForms->adjustFieldName($field, 'human')]) {
                 $fieldErrors[craft()->sproutForms->adjustFieldName($field, 'human')] = self::$errors[craft()->sproutForms->adjustFieldName($field, 'human')];
             } else {
                 $fieldErrors[craft()->sproutForms->adjustFieldName($field, 'human')] = '';
             }
-        }
+       }
         
         if (!empty($fieldErrors)) {
             foreach ($fieldErrors as $field => $errors) {
@@ -365,7 +370,7 @@ class SproutFormsVariable
         if (!isset(self::$errors)) {
             self::$errors = craft()->user->getFlash('errors');
         }
-        
+
         list($form_handle, $field_handle) = explode('.', $form_field_handle);
         
         if (!$form_handle || !$field_handle)
