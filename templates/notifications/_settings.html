@@ -6,7 +6,7 @@
 			<input type="hidden" name="formId" value="{{ form is defined ? form.id : '' }}">
 			{{ forms.textField({
 				label: "Notification Emails"|t,
-				instructions: "Enter comma seperated email addresses to notify on form submission.  Leave blank to disable notifications."|t,
+				instructions: "Enter comma seperated email addresses to notify on form submission. Leave blank to disable notifications."|t,
 				name: 'email_distribution_list',
 				value: form.email_distribution_list,
 				errors: (form is defined ? form.getErrors('email_distribution_list') : null),

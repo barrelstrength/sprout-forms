@@ -18,6 +18,7 @@ class SproutForms_EntriesController extends BaseController
     public function actionSaveEntry()
     {
         // pre $_POST processing hook
+        // @Deprecated
         craft()->plugins->call('sproutFormsPrePost');
         
         // if no $_POST, throws 400
