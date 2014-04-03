@@ -24,9 +24,15 @@ class SproutForms_EntriesController extends BaseController
         $this->requirePostRequest();
         
         // Fire an 'onBeforeSubmitForm' event
-        Craft::import('plugins.sproutforms.events.SproutForms_OnBeforeSaveEntryEvent');
-        $event = new SproutForms_OnBeforeSaveEntryEvent($this, craft()->request->getPost());
-        craft()->sproutForms->onBeforeSaveEntry($event);
+        Craft::import('plugins.sproutforms.events.SproutForms_OnBeforeSubmitFormEvent');
+        $event = new SproutForms_OnBeforeSubmitFormEvent($this, craft()->request->getPost());
+        craft()->sproutForms->onBeforeSubmitForm($event);
+        
+        if ( ! $event->isValid) {
+            // Pretend it worked.
+            craft()->user->setFlash('notice', Craft::t('Form successfully submitted.'));
+            $this->redirectToPostedUrl();
+        }
         
         // get form w/ fields
         if (!$formRecord = SproutForms_FormRecord::model()->with('field')->find('t.handle=:handle', array(

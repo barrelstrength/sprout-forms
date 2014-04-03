@@ -9,5 +9,5 @@ class SproutForms_OnBeforeSaveEntryEvent extends Event
 	/**
 	 * @var bool Whether the submission is valid.
 	 */
-	public $validates = true;
+	public $isValid = true;
 }
