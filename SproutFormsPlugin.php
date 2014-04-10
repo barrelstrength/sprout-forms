@@ -10,7 +10,6 @@ class SproutFormsPlugin extends BasePlugin
      */
     private $version = '0.7.0';
     
-    
     /**
      * Return plugin name
      * 
