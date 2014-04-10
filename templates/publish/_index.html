@@ -33,12 +33,12 @@
   <input type="hidden" name="handle" value="{{ form.handle }}">	
 
 
-  {% verbatim %}{%{% endverbatim %} set form = craft.sproutForms.getFormFields('<b>{{ form.handle }}</b>') {% verbatim %}%}{% endverbatim %}
+  {% verbatim %}{%{% endverbatim %} set form = craft.sproutForms.getFormFields('{{ form.handle }}') {% verbatim %}%}{% endverbatim %}
 
-  {% verbatim %}{{{% endverbatim %} exampleForm.examplePlainText.name {% verbatim %}}}{% endverbatim %}<br/>
-  <p>{% verbatim %}{{{% endverbatim %} exampleForm.examplePlainText.instructions {% verbatim %}}}{% endverbatim %}</p>
-  {% verbatim %}{{{% endverbatim %} exampleForm.examplePlainText.html | raw {% verbatim %}}}{% endverbatim %}
-  {% verbatim %}{{{% endverbatim %} exampleForm.examplePlainText.error | raw {% verbatim %}}}{% endverbatim %}
+  {% verbatim %}{{{% endverbatim %} form.examplePlainText.label {% verbatim %}}}{% endverbatim %}<br/>
+  <p>{% verbatim %}{{{% endverbatim %} form.examplePlainText.instructions {% verbatim %}}}{% endverbatim %}</p>
+  {% verbatim %}{{{% endverbatim %} form.examplePlainText.input {% verbatim %}}}{% endverbatim %}
+  {% verbatim %}{{{% endverbatim %} form.examplePlainText.error {% verbatim %}}}{% endverbatim %}
 
   <input type="submit" value="Submit">
 
@@ -72,6 +72,11 @@
 </textarea>
 
 	{% endif %}
+
+	<br/>
+	<br/>
+	<br/>
+	<br/>
 </div>
 
 {% set css %}
