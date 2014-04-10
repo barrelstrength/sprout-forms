@@ -405,8 +405,8 @@ class SproutFormsService extends BaseApplicationComponent
         // especially if using a third party service
         
         return array(
-                'User Agent' => $meta['userAgent'],
-                'User IP Address' => $meta['ipAddress']
+                'User Agent' => isset($meta['userAgent']) && $meta['userAgent'] ? $meta['userAgent'] : 'unknown',
+                'User IP Address' => isset($meta['ipAddress']) && $meta['ipAddress'] ? $meta['ipAddress'] : 'unknown'
         );
     }
 
