@@ -139,7 +139,7 @@ class SproutFormsVariable
                     }
                 }
             }
-            return implode(',', $json);
+            return @implode(',', $json);
         }
         
         // display label instead of value for readability
