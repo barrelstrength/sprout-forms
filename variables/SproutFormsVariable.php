@@ -9,7 +9,7 @@ class SproutFormsVariable
      * @var array
      */
     public static $errors;
-    
+
     /**
      * Plugin Name
      * Make your plugin name available as a variable 
