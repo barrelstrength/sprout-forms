@@ -1,0 +1,51 @@
+<p>All fields can use dynamic values from the submitted form fields.  Reference your form fields by wrapping the field name in curly braces.  If your field is name="fields[email]" you would use: {email}</p>
+
+{{ forms.textField({
+	label: "Email Recipients"|t,
+	instructions: "Enter comma seperated email addresses to notify on form submission. Leave blank to disable notifications."|t,
+	name: 'notificationRecipients',
+	value: form.notificationRecipients,
+	errors: (form is defined ? form.getErrors('notificationRecipients') : null),
+	translatable: true,
+	first: true
+}) }}	
+
+{{ forms.textField({
+	label: "Subject"|t,
+	instructions: "Enter a subject."|t,
+	name: 'notificationSubject',
+	value: form.notificationSubject,
+	errors: (form is defined ? form.getErrors('notificationSubject') : null),
+	translatable: true,
+}) }}
+
+{{ forms.textField({
+	label: "Sender Name"|t,
+	instructions: "Who will your email be from?"|t,
+	name: 'notificationSenderName',
+	value: form.notificationSenderName,
+	errors: (form is defined ? form.getErrors('notificationSenderName') : null),
+	translatable: true,
+}) }}
+
+{{ forms.textField({
+	label: "Sender Email Address"|t,
+	instructions: "Your notification 'From' Address"|t,
+	name: 'notificationSenderEmail',
+	value: form.notificationSenderEmail,
+	errors: (form is defined ? form.getErrors('notificationSenderEmail') : null),
+	translatable: true,
+}) }}
+
+{{ forms.textField({
+	label: "Reply To Email Address"|t,
+	instructions: "Enter a replyTo field."|t,
+	name: 'notificationReplyToEmail',
+	value: form.notificationReplyToEmail,
+	errors: (form is defined ? form.getErrors('notificationReplyToEmail') : null),
+	translatable: true,
+}) }}
+
+<div class="buttons">
+	<input class="btn submit" type="submit" value="{{ 'Save'|t }}" />
+</div>

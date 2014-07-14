@@ -31,7 +31,7 @@ class Sproutemail_Sproutforms_OnSaveEntry
      */
     public function getName()
     {
-        return Craft::t('Sprout Forms: When a new form submission is saved');
+        return Craft::t('SproutForms: On Save Entry (after submission)');
     }
     
     /**

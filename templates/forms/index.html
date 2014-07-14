@@ -1,0 +1,63 @@
+{% extends "sproutforms/_layouts/elementindex" %}
+{% set title = "Forms"|t %}
+{% set elementType = 'SproutForms_Form' %}
+
+{% set tabs = {
+  entries:  { 
+    label: "Entries"|t, 
+    url: url('sproutforms/entries') 
+  },
+  forms:  { 
+    label: "Forms"|t, 
+    url: url('sproutforms/forms') 
+  }
+} %}
+
+{% set selectedTab = 'forms' %}
+
+{% set groups = craft.sproutForms.getAllFormGroups('id') %}
+
+{% if groupId is defined %}
+  {% if groups[groupId] is not defined %}
+    {% exit 404 %}
+  {% endif %}
+{% endif %}
+
+{% block sidebar %}
+	<div class="buttons">
+		<a class="btn submit add icon" href="{{ url('sproutforms/forms/new') }}">{{ "New Form"|t }}</a>
+	</div>
+
+  <div id="groups">
+  {{ parent() }}
+  </div>
+
+  {# 
+  @TODO - This doesn't work if we treat our Sources as Groups because we can't assign a Groups ID easily, and if we do like we are here, it still fails to update the rename/delete button for groups properly because the ID is not passed in the URL.  If we switch to below, the rename/group button works but the All Forms item is always selected (this seems to happen in JS outside of our control) #}
+
+  {# <nav>
+    <ul id="groups">  
+      <li><a data-key="*" {% if groupId is not defined %} class="sel"{% endif %}>{{ "All Forms"|t }}</a></li>
+      {% for group in groups %}
+        <li><a href="{{ url('sproutforms/forms/'~group.id) }}"{% if groupId is defined and group.id == groupId %} class="sel"{% endif %} data-key="group:{{ group.id }}" data-id="{{ group.id }}">{{ group.name }}</a></li>
+      {% endfor %}
+    </ul>
+  </nav> #}
+
+  <div class="buttons">
+    <div id="newgroupbtn" class="btn add icon">{{ "New Group"|t }}</div>
+
+    {# {% if groupId is defined %} #}
+      <div id="groupsettingsbtn" class="btn settings icon menubtn" title="{{ 'Settings' }}"></div>
+      <div class="menu">
+        <ul>
+          <li><a data-action="rename" role="button">{{ "Rename selected group"|t }}</a></li>
+          <li><a data-action="delete" role="button">{{ "Delete selected group"|t }}</a></li>
+        </ul>
+      </div>
+    {# {% endif %} #}
+  </div>
+
+{% endblock %}
+
+{% includeJsResource "sproutforms/js/groups.js" %}

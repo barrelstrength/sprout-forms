@@ -1,19 +1,18 @@
 {% extends "_layouts/cp" %}
 
-{% set title = craft.SproutForms.name %}
+{% set selectedTab = craft.request.segment(2) ? craft.request.segment(2) : 'overview' %}
 
 {% set content %}
   
-	{{ body }}
+  {{ body }}
 
-	<footer class="bsd-branding">
-		<p>
-			Powered by <a href="http://barrelstrengthdesign.com" target="_blank">{{ craft.sproutforms.name }}</a> {{ craft.sproutforms.version }} | 
-			Designed by <a href="http://barrelstrengthdesign.com" target="_blank">(Barrel Strength)</a>
-		</p>
-	</footer>
-	
+  <footer class="bsd-branding">
+    <p>
+      Powered by <a href="http://barrelstrengthdesign.com" target="_blank">{{ craft.sproutForms.name }}</a> {{ craft.sproutForms.version }} | 
+      Designed by <a href="http://barrelstrengthdesign.com" target="_blank">Barrel Strength</a>
+    </p>
+  </footer>
+
 {% endset %}
 
-{% includeCssResource "sproutforms/css/styles.css" %}
-{% includeJsResource "sproutforms/js/scripts.js" %}
+{% includeCssResource "sproutemail/css/sproutemail.css" %}

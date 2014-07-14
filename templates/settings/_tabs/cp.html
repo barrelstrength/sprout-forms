@@ -1,0 +1,22 @@
+
+{{ forms.textField({
+  label: "Plugin Name"|t,
+  id: 'pluginNameOverride',
+  name: 'pluginNameOverride',
+  instructions: "Intuitive, human-readable plugin name for the end user."|t,
+  value: settings.pluginNameOverride,
+  autofocus: true,
+  first: true,
+  errors: ''  
+}) }}
+
+{{ forms.textField({
+  label: "Template Folder Override"|t,
+  id: 'templateFolderOverride',
+  name: 'templateFolderOverride',
+  instructions: "If you want more control over the formatting of your templates, Sprout Forms will check in this folder first for any overrides that you want to add.  If none exists, it will fall back to the default templates."|t,
+  value: settings.templateFolderOverride,
+  autofocus: true,
+  first: true,
+  errors: ''  
+}) }}

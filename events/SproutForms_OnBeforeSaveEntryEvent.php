@@ -2,7 +2,7 @@
 namespace Craft;
 
 /**
- * On Before Save Entry Form event
+ * On Before Save Entry event
  */
 class SproutForms_OnBeforeSaveEntryEvent extends Event
 {

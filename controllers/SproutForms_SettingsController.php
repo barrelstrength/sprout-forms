@@ -3,64 +3,52 @@ namespace Craft;
 
 class SproutForms_SettingsController extends BaseController
 {
-    
-    /**
-     * Save settings
-     * 
-     * @return void
-     */
-    public function actionSaveForm()
-    {
-        
-        $this->requirePostRequest();
-        
-        $form = new SproutForms_FormModel;
-        
-        // Set our variables
-        $form->name   = craft()->request->getPost('formName');
-        $form->handle = craft()->request->getPost('formHandle');
-        
-        // If we have an id, update the existing form, otherwise, lets create a new form
-        if ($form->id)
-        {
-            // $entryRecord = EntryRecord::model()->with('element', 'entryTagEntries')->findById($entry->id);
-            
-            // if (!$entryRecord)
-            // {
-            //     throw new Exception(Craft::t('No entry exists with the ID “{id}”', array('id' => $entry->id)));
-            // }
-            
-            // $elementRecord = $entryRecord->element;
-        }
-        else
-        {
-            $formRecord = new SproutForms_FormRecord();
-            
-            // @TODO - Support Form as an ElementType
-            // $elementRecord = new ElementRecord();
-            // $elementRecord->type = ElementType::Form;
-        }
-        
-        $formRecord->name   = $form->name;
-        $formRecord->handle = $form->handle;
-        
-        $formRecord->validate();
-        $form->addErrors($formRecord->getErrors());
-        
-        
-        if (!$form->hasErrors())
-        {
-            craft()->db->createCommand()->insert('sproutforms_forms', $form->getAttributes());
-            
-            craft()->userSession->setNotice(Craft::t('Form settings saved.'));
-            $this->redirectToPostedUrl();
-        }
-        else
-        {
-            craft()->userSession->setError(Craft::t('Couldn’t save form settings.'));
-            craft()->urlManager->setRouteVariables(array(
-                'form' => $form
-            ));
-        }
-    }
+	/**
+	 * Save Settings to the Database
+	 *
+	 * @return mixed Return to Page
+	 */
+	public function actionSettingsIndexTemplate()
+	{
+		$settingsModel = new SproutForms_SettingsModel;
+
+		// Create any variables you want available in your template
+		// $variables['items'] = craft()->pluginName->getAllItems();
+		$settings = craft()->db->createCommand()
+			->select('settings')
+			->from('plugins')
+			->where('class=:class', array(':class'=> 'SproutForms'))
+			->queryScalar();
+
+		$settings = JsonHelper::decode($settings);
+		$settingsModel->setAttributes($settings);
+
+		$variables['settings'] = $settingsModel;
+
+		// Load a particular template and with all of the variables you've created
+		$this->renderTemplate('sproutforms/settings', $variables);
+
+	}
+
+	public function actionSaveSettings()
+	{
+		$this->requirePostRequest();
+		$settings = craft()->request->getPost('settings');
+
+		if (craft()->sproutForms_settings->saveSettings($settings))
+		{
+			craft()->userSession->setNotice(Craft::t('Settings saved.'));
+
+			$this->redirectToPostedUrl();
+		}
+		else
+		{
+			craft()->userSession->setError(Craft::t('Couldn’t save settings.'));
+
+			// Send the settings back to the template
+			craft()->urlManager->setRouteVariables(array(
+				'settings' => $settings
+			));
+		}
+	}
 }

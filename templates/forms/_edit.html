@@ -1,0 +1,72 @@
+{% extends "sproutforms/_layouts/base" %}
+{% import "_includes/forms" as forms %}
+
+{% set crumbs = [
+  { label: craft.sproutForms.name, url: url('sproutforms/entries') },
+  { label: 'Forms', url: url('sproutforms/forms') }
+] %}
+
+{% set tabs = {
+    overview:  { 
+      label: "Overview"|t, 
+      url: '#overview'
+    },
+    notifications:  { 
+      label: "Notifications"|t, 
+      url: '#notification'
+    },
+    fields:  { 
+      label: "Fields"|t, 
+      url: '#fields'
+    },
+    publish:  { 
+      label: "Publish"|t, 
+      url: '#publish'
+    }
+} %}
+
+{% set title = form.name %}
+
+{% set body %}
+
+<form method="post" accept-charset="UTF-8" data-saveshortcut="1">
+  <input type="hidden" name="action" value="sproutForms/forms/saveForm">
+  <input type="hidden" name="redirect" value="sproutforms/forms">
+  <input type="hidden" name="id" value="{{ form.id is defined ? form.id : '' }}">
+
+	<div id="overview" class="hidden">
+		{% include 'sproutforms/forms/_generalsettings' %}
+	</div>
+
+	<div id="notification" class="hidden">	
+		{% include 'sproutforms/forms/_notifications' %}
+	</div>
+
+</form>
+
+	<div id="fields" class="hidden">
+		{% include 'sproutforms/forms/fields/_index' %}
+	</div>
+
+	<div id="publish" class="hidden">
+		{% include 'sproutforms/forms/_publish' %}
+	</div>
+
+{% endset %}
+
+{% includeJsResource "js/fields.js" %}
+
+{% set js %}
+	{% if not form.handle %}
+	new Craft.HandleGenerator('#name', '#handle');
+	{% endif %}
+
+	new Craft.AdminTable({
+		tableSelector: '#formFields',
+		noObjectsSelector: '#noFormfields',
+		sortable: true,
+		reorderAction: 'sproutForms/fields/reorderFields',
+		deleteAction: 'sproutForms/fields/deleteField'
+	});
+{% endset %}
+{% includeJs js %}
