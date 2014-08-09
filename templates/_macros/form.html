@@ -16,8 +16,11 @@
 {% endif %}
 	
 {% if form.submitAction %}
+
 <form action="{{ submitAction }}" method="post" accept-charset="UTF-8">
+
 {% else %}
+
 <form method="post" accept-charset="UTF-8">
 	<input type="hidden" name="action" value="{{ submitAction }}">
 	<input type="hidden" name="handle" value="{{ form.handle }}">

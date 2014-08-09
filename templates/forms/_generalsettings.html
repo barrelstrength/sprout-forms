@@ -46,7 +46,7 @@
 
 {{ forms.textField({
   label: "Title Format"|t,
-  instructions: "The combination of fields that will represent your form Entry Title. i.e. {dateCreated|date('Ymd')} {fullName}"|t,
+  instructions: "Entry Titles are auto-generated based on the Title Format you enter here. All information contained in the Title will also be searchable. You may use the same syntax here as you would with Dynamic Titles in your Sections. (i.e. {dateCreated|date('Ymd')} {fullName})"|t,
   id: 'titleFormat',
   name: 'titleFormat',
   value: form.titleFormat,

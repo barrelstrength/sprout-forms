@@ -26,13 +26,12 @@ class SproutForms_FieldsController extends BaseController
 		$field->type = craft()->request->getRequiredPost('type');
 
 		$typeSettings = craft()->request->getPost('types');
+
 		if (isset($typeSettings[$field->type]))
 		{
 			$field->settings = $typeSettings[$field->type];
 		}
 
-		
-		
 		if (craft()->sproutForms_fields->saveField($form, $field)) 
 		{
 			craft()->userSession->setNotice(Craft::t('Field saved.'));
