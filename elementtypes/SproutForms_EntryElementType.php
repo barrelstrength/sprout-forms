@@ -37,6 +37,16 @@ class SproutForms_EntryElementType extends BaseElementType
 	}
 
 	/**
+	 * Returns whether this element type has titles.
+	 *
+	 * @return bool
+	 */
+	public function hasTitles()
+	{
+		return true;
+	}
+
+	/**
 	 * Returns whether this element type stores data on a per-locale basis.
 	 *
 	 * @return bool
@@ -146,7 +156,7 @@ class SproutForms_EntryElementType extends BaseElementType
 	public function defineTableAttributes($source = null)
 	{
 		return array(
-			'entryId'      => Craft::t('Entry ID'),
+			'title'        => Craft::t('Title'),
 			'formName'     => Craft::t('Form Name'),
 			'dateCreated'  => Craft::t('Date Created'),
 			'dateUpdated'  => Craft::t('Date Updated'),
@@ -179,7 +189,7 @@ class SproutForms_EntryElementType extends BaseElementType
 	public function defineCriteriaAttributes()
 	{
 		return array(
-			'entryId' => AttributeType::Number,
+			'title' => AttributeType::String,
 			'groupId' => AttributeType::Number,
 			'formId' => AttributeType::Number,
 			'formName' => AttributeType::String,
@@ -195,6 +205,7 @@ class SproutForms_EntryElementType extends BaseElementType
 	{
 		return array(
 			'entryId', 
+			'title', 
 			'formName'
 		);
 	}

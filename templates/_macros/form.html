@@ -1,6 +1,9 @@
-{%- set submitValue = (customSettings.submitButtonText is defined ? customSettings.submitButtonText : form.submitButtonText is defined and form.submitButtonText ? form.submitButtonText : "Submit") -%}
+{%- set submitValue = (form.submitButtonText ? form.submitButtonText : "Submit") -%}
+{%- set submitAction = (form.submitAction ? form.submitAction : "sproutForms/entries/saveEntry") -%}
 
-{% if namespace is not defined %}{% set namespace = 'fields' %}{% endif %}
+{% if namespace is not defined %}
+	{% set namespace = (form.submitAction is not empty ? '' : 'fields') %}
+{% endif %}
 
 {# @TODO - allow this to be controlled by a setting and 
 					 also have option to output errors inline  #}
@@ -12,9 +15,14 @@
 	</ul>
 {% endif %}
 	
+{% if form.submitAction %}
+<form action="{{ submitAction }}" method="post" accept-charset="UTF-8">
+{% else %}
 <form method="post" accept-charset="UTF-8">
-	<input type="hidden" name="action" value="sproutForms/entries/saveEntry">
+	<input type="hidden" name="action" value="{{ submitAction }}">
 	<input type="hidden" name="handle" value="{{ form.handle }}">
+
+{% endif %}
 	
 	{% if form.redirectUri %}
 	<input type="hidden" name="redirect" value="{{ form.redirectUri }}">

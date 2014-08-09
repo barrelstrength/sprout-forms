@@ -21,7 +21,7 @@ class SproutForms_FormsService extends BaseApplicationComponent
 			$this->formRecord = SproutForms_FormRecord::model();
 		}
 	}
-	
+
 	/**
 	 * Saves a form.
 	 *
@@ -51,8 +51,10 @@ class SproutForms_FormsService extends BaseApplicationComponent
 
 		$formRecord->name       = $form->name;
 		$formRecord->handle     = $form->handle;
+		$formRecord->titleFormat = $form->titleFormat;
 		$formRecord->groupId    = $form->groupId;
 		$formRecord->redirectUri       = $form->redirectUri;
+		$formRecord->submitAction      = $form->submitAction;
 		$formRecord->submitButtonText    = $form->submitButtonText;
 		$formRecord->notificationRecipients       = $form->notificationRecipients;
 		$formRecord->notificationSubject    = $form->notificationSubject;
@@ -218,7 +220,8 @@ class SproutForms_FormsService extends BaseApplicationComponent
 	{
 		craft()->db->createCommand()->createTable($name, array(
 			'elementId' => array('column' => ColumnType::Int, 'null' => false),
-			'locale'    => array('column' => ColumnType::Locale, 'null' => false)
+			'locale'    => array('column' => ColumnType::Locale, 'null' => false),
+			'title'     => array('column' => ColumnType::Varchar)
 		));
 
 		craft()->db->createCommand()->createIndex($name, 'elementId,locale', true);

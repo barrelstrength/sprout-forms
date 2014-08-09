@@ -30,7 +30,12 @@ class SproutForms_FormRecord extends BaseRecord
 				AttributeType::String,
 				'required' => true
 			),
+			'titleFormat' => array(
+				AttributeType::String,
+				'required' => true
+			),
 			'redirectUri' => AttributeType::String,
+			'submitAction' => AttributeType::String,
 			'submitButtonText' => AttributeType::String,
 			'notificationRecipients' => AttributeType::String,
 			'notificationSubject' => AttributeType::String,
@@ -92,7 +97,7 @@ class SproutForms_FormRecord extends BaseRecord
 					continue;
 				
 				// allow twig syntax
-				if(preg_match('/{{(.*?)}}/', $email))
+				if(preg_match('/{{?(.*?)}?}/', $email))
 				{
 					continue; 
 				}

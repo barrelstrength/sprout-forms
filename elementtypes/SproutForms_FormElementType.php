@@ -157,4 +157,28 @@ class SproutForms_FormElementType extends BaseElementType
 	{
 		return SproutForms_FormModel::populateModel($row);
 	}
+
+	/**
+	 * Returns the HTML for an editor HUD for the given element.
+	 *
+	 * @param BaseElementModel $element
+	 * @return string
+	 */
+	public function getEditorHtml(BaseElementModel $element)
+	{
+		if ($element->getType()->hasTitleField)
+		{
+			$html = craft()->templates->render('entries/_titlefield', array(
+				'entry' => $element
+			));
+		}
+		else
+		{
+			$html = '';
+		}
+
+		$html .= parent::getEditorHtml($element);
+
+		return $html;
+	}
 }

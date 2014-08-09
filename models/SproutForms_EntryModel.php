@@ -15,7 +15,10 @@ class SproutForms_EntryModel extends BaseElementModel
 	 */
 	function __toString()
 	{
-		return $this->id;
+		// @TODO - this works but for some reason, removing __toString
+		// which calls $this->getContent->title does not work.
+		$entry = craft()->sproutForms_entries->getEntryById($this->id);
+		return $entry->getContent()->title;
 	}
 
 	/**
@@ -27,7 +30,7 @@ class SproutForms_EntryModel extends BaseElementModel
 		return array_merge(parent::defineAttributes(), array(
 				
 			// @todo - standardize how IDs are handled on front and back end
-			// 'id'  => AttributeType::Number,
+			'id'  => AttributeType::Number,
 			'entryId'  => AttributeType::Number,
 
 			'formId'  => AttributeType::Number,

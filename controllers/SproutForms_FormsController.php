@@ -21,7 +21,9 @@ class SproutForms_FormsController extends BaseController
 		$form->groupId    = craft()->request->getPost('groupId');
 		$form->name       = craft()->request->getPost('name');
 		$form->handle     = craft()->request->getPost('handle');
+		$form->titleFormat = craft()->request->getPost('titleFormat');
 		$form->redirectUri     = craft()->request->getPost('redirectUri');
+		$form->submitAction    = craft()->request->getPost('submitAction');
 		$form->submitButtonText     = craft()->request->getPost('submitButtonText');
 		$form->notificationRecipients     = craft()->request->getPost('notificationRecipients');
 		$form->notificationSubject     = craft()->request->getPost('notificationSubject');

@@ -54,6 +54,10 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 
 		if (!$entry->hasErrors())
 		{
+			$form = craft()->sproutForms_forms->getFormById($entry->formId);
+
+			$entry->getContent()->title = craft()->templates->renderObjectTemplate($form->titleFormat, $entry);
+
 			$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
 			try
 			{

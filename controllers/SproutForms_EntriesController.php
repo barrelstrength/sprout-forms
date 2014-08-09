@@ -47,7 +47,7 @@ class SproutForms_EntriesController extends BaseController
 		{	
 			// Send an email with the form information
 			// @TODO - enable
-			// $this->_notifyAdmin($formRecord, $entry);
+			$this->_notifyAdmin($this->form, $entry);
 			
 			craft()->userSession->setNotice(Craft::t('Entry saved.'));
 			
@@ -141,9 +141,6 @@ class SproutForms_EntriesController extends BaseController
 		$entry->ipAddress = craft()->request->getUserHostAddress();
 		$entry->userAgent = craft()->request->getUserAgent();
 
-		// @TODO - make dynamic
-		// $entry->getContent()->title = 'Form Entry';
-
 		// Set the entry attributes, defaulting to the existing values for whatever is missing from the post data
 		$fieldsLocation = craft()->request->getParam('fieldsLocation', 'fields');
 		$entry->setContentFromPost($fieldsLocation);
@@ -157,39 +154,42 @@ class SproutForms_EntriesController extends BaseController
 	 * @param object $contentRecord
 	 * @return bool
 	 */
-	private function _notifyAdmin($formRecord = FALSE, $contentRecord = FALSE)
-	{
-		if (!$formRecord || !$contentRecord) {
-			return FALSE;
-		}
+	private function _notifyAdmin(SproutForms_FormModel $form, SproutForms_EntryModel $entry)
+	{	
+		// Get our recipients
+		$recipients = explode(',', $form->notificationRecipients);
+		$recipients = array_map('trim', $recipients);
+		$recipients = array_unique($recipients);
 		
-		// notify if distribution list is set up
-		$distro_list = array_unique(array_filter(explode(',', $formRecord->notificationRecipients)));
-		if (!empty($distro_list)) {
-			// prep data for view
-			$data = array();
+		if (!empty($recipients)) 
+		{
+			$email = new EmailModel();
 			
-			foreach ($contentRecord->form->field as $k => $v) {
-				$data[$v->name] = nl2br($v->getContent()); // new lines to <br/>
-			}
+			// 'notificationSenderName'  => AttributeType::String,
+			// 'notificationSenderEmail' => AttributeType::String,
+			// $email->body     = $form->body;
+
+			$entryCpUrl = craft()->config->get('cpTrigger') . "/sproutforms/entries/edit/" . $entry->id;
+
 			
-			$email           = new EmailModel();
-			$email->htmlBody = craft()->templates->render('sproutforms/emails/default', array(
-				'data' => $data,
-				'form' => $formRecord->name,
-				'viewFormEntryUrl' => craft()->config->get('cpTrigger') . "/sproutforms/edit/" . $formRecord->id . "#tab-entries"
+			$fields = $entry->getFieldLayout()->getFields();
+			
+			$email->htmlBody = craft()->templates->render('sproutforms/_special/email', array(
+				'formName' => $form->name,
+				'entryCpUrl' => $entryCpUrl,
+				'fields' => $fields,
+				'element' => $entry
 			));
-			$email->htmlBody = html_entity_decode($email->htmlBody); // mainly for <br/>
-			
+
 			$post = (object) $_POST;
 			
-			// default subj
-			$email->subject = 'A form has been submitted on your website';
-			
-			// custom subj has been set for this form
-			if ($formRecord->notificationSubject) {
+			$email->subject  = $form->notificationSubject;
+
+			// Has a custom subject been set for this form?
+			if ($form->notificationSubject) 
+			{
 				try {
-					$email->subject = craft()->templates->renderString($formRecord->notificationSubject, array(
+					$email->subject = craft()->templates->renderString($form->notificationSubject, array(
 						'entry' => $post
 					));
 				}
@@ -199,15 +199,18 @@ class SproutForms_EntriesController extends BaseController
 			}
 			
 			// custom replyTo has been set for this form
-			if ($formRecord->notificationReplyToEmail) {
+			if ($form->notificationReplyToEmail) 
+			{
 				try {
-					$email->replyTo = craft()->templates->renderString($formRecord->notificationReplyToEmail, array(
+
+					$email->replyTo = craft()->templates->renderString($form->notificationReplyToEmail, array(
 						'entry' => $post
 					));
 					
 					// we must validate this before attempting to send; 
 					// invalid email will throw an error/fail to send silently
-					if ( ! $this->_valid_email($email->replyTo)) {
+					if ( ! $this->_validEmail($email->replyTo) ) 
+					{
 						$email->replyTo = null;
 					}
 				}
@@ -217,30 +220,34 @@ class SproutForms_EntriesController extends BaseController
 			}
 			
 			$error = false;
-			foreach ($distro_list as $email_address) {
-				
-				$email->toEmail = craft()->templates->renderString($email_address, array(
+			foreach ($recipients as $emailAddress) 
+			{	
+				// Do we need to swap in any email addresses that 
+				// were submitted with the form?
+				$email->toEmail = craft()->templates->renderString($emailAddress, array(
 						'entry' => $post
 				));
 				
 				// we must validate this before attempting to send;
 				// invalid email will throw an error/fail to send silently
-				if ( ! $this->_valid_email($email->toEmail)) {
+				if ( ! $this->_validEmail($email->toEmail) ) 
+				{
 					continue;
 				}
 				
-				try {                    
+				try {
 					$res = craft()->email->sendEmail($email);
 				}
 				catch (\Exception $e) {
 					$error = true;
 				}
 			}
+
 			return $error;
 		}
 	}
 	
-	private function _valid_email($email) 
+	private function _validEmail($email) 
 	{
 		return preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $email);
 	}

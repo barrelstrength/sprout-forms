@@ -107,7 +107,7 @@ class SproutFormsVariable
 					$frontEndFieldTypes = craft()->sproutForms_fields->findAllFrontEndFieldTypes($fieldtypesFolder);
 
 					$type = $fieldtype->model->type;
-
+					
 					if (isset($frontEndFieldTypes[$type])) 
 					{
 						// Instantiate it

@@ -31,6 +31,8 @@ class SproutForms_FieldsController extends BaseController
 			$field->settings = $typeSettings[$field->type];
 		}
 
+		
+		
 		if (craft()->sproutForms_fields->saveField($form, $field)) 
 		{
 			craft()->userSession->setNotice(Craft::t('Field saved.'));
@@ -83,7 +85,7 @@ class SproutForms_FieldsController extends BaseController
 				}
 			}
 
-			$variables['title'] = $field->name;
+			$variables['title'] = (isset($field->name) ? $field->name : "");
 		}
 		else
 		{
