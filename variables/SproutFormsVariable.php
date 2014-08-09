@@ -382,4 +382,9 @@ class SproutFormsVariable
 	{
 		return craft()->sproutForms_groups->getFormsByGroupId($groupId);
 	}
+
+	public function prepareFieldTypesDropdown($fieldTypes)
+	{
+		return craft()->sproutForms_fields->prepareFieldTypesDropdown($fieldTypes);
+	}
 }

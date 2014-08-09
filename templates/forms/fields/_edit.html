@@ -21,8 +21,8 @@
 	{% set title = "Create a new field"|t %}
 {% endif %}
 
-
 {% set fieldTypes = craft.fields.getAllFieldTypes() %}
+{% set fieldTypeGroups = craft.sproutForms.prepareFieldTypesDropdown(fieldTypes) %}
 
 {% if field is defined %}
 	{% set fieldType = field.getFieldType() %}
@@ -99,11 +99,58 @@
 			instructions: "What type of field is this?"|t ~ (fieldId is defined ? '<br><span class="error">'~"Careful—changing this may result in data loss."|t~'</span>' : ''),
 			id: 'type',
 			name: 'type',
-			options: fieldTypes,
+			hasOptgroups: true,
+			options: fieldTypeGroups,
 			value: fieldType.getClassHandle(),
 			errors: (isFieldTypeMissing ? ["The fieldtype class “{class}” could not be found."|t({ class: field.type })] : null),
 			toggle: true
 		}) }}
+
+		{# <div class="field" id="type-field">
+			<div class="heading">
+				<label for="type">
+					Field Type
+				</label>
+				<div class="instructions"><p>What type of field is this?<br><span class="error">Careful—changing this may result in data loss.</span></p>
+				</div>
+			</div>
+			<div class="input">
+				<div class="select">
+					<select id="type" class="fieldtoggle" name="type">
+						<optgroup label="Basic Fields">
+							<option value="Assets" >Assets</option>
+							<option value="Categories">Categories</option>
+							<option value="Checkboxes">Checkboxes</option>
+							<option value="Color">Color</option>
+							<option value="Date">Date/Time</option>
+						</optgroup>
+						<optgroup label="Advanced Fields">
+							<option value="Dropdown">Dropdown</option>
+							<option value="SproutEmailField_Email">Email Address</option>
+							<option value="Entries">Entries</option>
+							<option value="Lightswitch">Lightswitch</option>
+							<option value="SproutLinkField_Link">Link</option>
+							<option value="Matrix">Matrix</option>
+							<option value="SproutSeo_BasicMeta">Meta: Basic</option>
+							<option value="SproutSeo_GeographicMeta">Meta: Geographic</option>
+							<option value="SproutSeo_OpenGraph">Meta: Open Graph</option>
+							<option value="SproutSeo_RobotsMeta">Meta: Robots</option>
+							<option value="SproutSeo_TwitterCard">Meta: Twitter Card</option>
+							<option value="MultiSelect">Multi-select</option>
+							<option value="Number">Number</option>
+							<option value="PlainText" selected="">Plain Text</option>
+							<option value="RadioButtons">Radio Buttons</option>
+							<option value="SproutEmail_Recipient">Recipient</option>
+							<option value="RichText">Rich Text</option>
+							<option value="SproutEmail_SubscriberList">Subscriber List</option>
+							<option value="Table">Table</option>
+							<option value="Tags">Tags</option>
+							<option value="Users">Users</option>
+						</optgroup>
+					</select>
+				</div>
+			</div>
+		</div> #}
 
 		{% for _fieldType in fieldTypes %}
 			{% set isCurrent = (_fieldType.getClassHandle() == fieldType.getClassHandle()) %}

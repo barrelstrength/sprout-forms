@@ -224,4 +224,53 @@ class SproutForms_FieldsService extends FieldsService
 
 		return $frontEndFieldTypes;
 	}
+
+	public function prepareFieldTypesDropdown($fieldTypes)
+	{
+		$basicFields = array();
+		$advancedFields = array();
+
+		$supportedFields = array(
+			'Checkboxes',
+			'Dropdown',
+			'MultiSelect',
+			'Number',
+			'PlainText',
+			'RadioButtons'
+		);
+
+		// @TODO - support certain custom fields out of the box
+		$supportedCustomFields = array(
+			'SproutEmailField_Email',
+			'SproutLinkField_Link'
+		);
+
+		foreach ($fieldTypes as $key => $fieldType) 
+		{
+			if (in_array($key, $supportedFields) OR in_array($key, $supportedCustomFields)) 
+			{
+				$basicFields[$key] = $fieldType;
+			}
+			else
+			{
+				$advancedFields[$key] = $fieldType;
+			}
+		}
+
+		$fieldTypeGroups['basicFieldGroup'] = array('optgroup' => 'Basic Fields');
+
+		foreach ($basicFields as $key => $fieldType) 
+		{
+			$fieldTypeGroups[$key] = $fieldType;
+		}
+
+		$fieldTypeGroups['advancedFieldGroup'] = array('optgroup' => 'Advanced Fields');
+
+		foreach ($advancedFields as $key => $fieldType) 
+		{
+			$fieldTypeGroups[$key] = $fieldType;
+		}
+
+		return $fieldTypeGroups;
+	}
 }
