@@ -57,10 +57,15 @@ class SproutForms_ExamplesController extends BaseController
 					'titleFormat' => "{dateCreated|date('Y-m-d')} – {fullName} – {message|slice(0,22)}..."
 				),
 				array(
-					'name' => 'Example Form with all Simple Fields',
-					'handle' => 'formWithAllFields',
-					'titleFormat' => "{dateCreated|date('Y-m-d')}"
-				)
+					'name' => 'Basic Fields Form',
+					'handle' => 'basic',
+					'titleFormat' => "{plainText} – {dropdown}{% if object.textarea %} – {{ object.textarea|slice(0,15) }}{% endif %}"
+				),
+				// array(
+				// 	'name' => 'All Craft Fields',
+				// 	'handle' => 'advanced',
+				// 	'titleFormat' => "{dateCreated|date('Y-m-d')}"
+				// )
 			);
 
 			$fieldSettings = array(
@@ -102,7 +107,7 @@ class SproutForms_ExamplesController extends BaseController
 						)
 					),
 				),
-				'formWithAllFields' => array(
+				'basic' => array(
 					array(
 						'name'     => 'Plain Text Field',
 						'handle'   => 'plainText',
