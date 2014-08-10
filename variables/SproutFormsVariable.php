@@ -41,8 +41,19 @@ class SproutFormsVariable
 	 * @return string
 	 */
 	public function displayForm($formHandle, $customSettings = null)
-	{		
+	{	
 		$form = craft()->sproutForms_forms->getFormByHandle($formHandle);
+
+		// @TODO - consider what other places this might get accessed from
+		// do we need to do any more checks to make sure this doesn't cause issues?
+		if (isset(craft()->sproutForms_forms->activeEntries[$formHandle]))
+		{
+			$entry = craft()->sproutForms_forms->activeEntries[$formHandle];	
+		}
+		else
+		{
+			$entry = new SproutForms_EntryModel();
+		}
 
 		craft()->content->fieldContext = $form->getFieldContext();
 		craft()->content->contentTable = $form->getContentTable();
@@ -55,8 +66,7 @@ class SproutFormsVariable
 
 		// Loop through all of our fields
 		foreach ($form->getFieldLayout()->getFields() as $field) 
-		{
-			
+		{			
 			// Set some values we'll hand off to the templates
 			$required = $field->required;
 			$field = $field->getField();
@@ -69,12 +79,12 @@ class SproutFormsVariable
 			
 			// @TODO - logic is broken here if element is not empty
 			$value = (!empty($element) ? $element : null);
-			$errors = ((!empty($element) AND $static == false) ? $element->getErrors($field->handle) : null);
+			$errors = ((!empty($element) AND $static == false) ? $entry->getErrors($field->handle) : null);
 			$fieldtype = craft()->fields->populateFieldType($field, $element);
 			$instructions = ($static == false ? Craft::t($field->instructions) : null);
 
 			if ($fieldtype) 
-			{
+			{	
 				// Set our templates path
 				// @TODO - check for template override path first: $templateFolderOverride
 				// @TODO - Do all of these settings need to be at the fieldtype level or some can be elsewhere?
@@ -108,8 +118,11 @@ class SproutFormsVariable
 					$fieldModel = $fieldtype->model;
 					$settings = $fieldtype->getSettings();
 
+					$postFields = craft()->request->getPost('fields');
+					$value = (isset($postFields[$field->handle]) ? $postFields[$field->handle] : "");
+
 					// Create the HTML for the input field
-					$input = $frontEndField->getInputHtml($fieldModel, $settings);
+					$input = $frontEndField->getInputHtml($fieldModel, $value, $settings);
 				}
 				else
 				{	
@@ -127,7 +140,7 @@ class SproutFormsVariable
 					'required'     => $required,
 					'instructions' => $instructions,
 					'id'           => $field->handle,
-					'errors'       => $errors,
+					'errors'       => $entry->getErrors($field->handle),
 					'input'        => $input,
 				));
 			}
@@ -137,7 +150,7 @@ class SproutFormsVariable
 		$formHtml = craft()->templates->render('_macros/form', array(
 			'form'   => $form,
 			'fields' => $fieldsHtml,
-			'errors' => $form->getErrors()
+			'errors' => $entry->getErrors()
 		));
 		
 		return new \Twig_Markup($formHtml, craft()->templates->getTwig()->getCharset());

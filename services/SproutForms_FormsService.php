@@ -3,9 +3,13 @@ namespace Craft;
 
 class SproutForms_FormsService extends BaseApplicationComponent
 {
+	public $activeEntries;
+
 	protected $formRecord;
 	
 	private $_formsByFieldId;
+
+
 
 	/**
 	 * Constructor

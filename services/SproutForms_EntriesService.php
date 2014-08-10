@@ -65,7 +65,7 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 				$this->onBeforeSaveEntry(new Event($this, array(
 					'entry'      => $entry,
 					'isNewEntry' => $isNewEntry
-				)));	
+				)));
 
 				if (craft()->elements->saveElement($entry))
 				{
