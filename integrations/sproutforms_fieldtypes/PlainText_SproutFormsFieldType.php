@@ -13,11 +13,11 @@ class PlainText_SproutFormsFieldType
 	 * @param mixed  $value
 	 * @return string
 	 */
-	public function getInputHtml($field, $settings)
+	public function getInputHtml($field, $value, $settings)
 	{
 		return craft()->templates->render('_macros/fieldtypes/PlainText/input', array(
-			'name' => $field->handle,
-			'value'=> craft()->request->getPost($field->handle),
+			'name'     => $field->handle,
+			'value'    => $value,
 			'settings' => $settings
 		));
 	}

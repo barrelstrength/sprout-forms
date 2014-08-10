@@ -45,9 +45,11 @@ class SproutForms_EntriesController extends BaseController
 
 		if (craft()->sproutForms_entries->saveEntry($entry)) 
 		{	
-			// Send an email with the form information
-			// @TODO - enable
-			$this->_notifyAdmin($this->form, $entry);
+			// Only send notification email for front-end submissions
+			if (!craft()->request->isCpRequest()) 
+			{
+				$this->_notifyAdmin($this->form, $entry);
+			}
 			
 			craft()->userSession->setNotice(Craft::t('Entry saved.'));
 			
@@ -57,10 +59,6 @@ class SproutForms_EntriesController extends BaseController
 		{	
 			// make errors available to variable
 			craft()->userSession->setError(Craft::t('Couldn’t save entry.'));
-			
-			// Create the array that we will return to the template
-			// so a user can process errors
-			$returnData = craft()->request->getPost();
 
 			if (craft()->request->isCpRequest()) 
 			{
@@ -71,6 +69,10 @@ class SproutForms_EntriesController extends BaseController
 			}
 			else
 			{
+				// Store this Form Model in a variable in our Service layer
+				// so that we can access the error object from our displayForm() variable 
+				craft()->sproutForms_forms->activeEntries[$this->form->handle] = $entry;
+
 				// Return the form using it's name as a variable on the front-end
 				$formVariable = (isset($this->form->handle)) ? $this->form->handle : 'form';
 
@@ -181,9 +183,9 @@ class SproutForms_EntriesController extends BaseController
 			$post = (object) $_POST;
 
 			// Set the "from" information.
-			$email->setFrom($form->notificationSenderEmail, $form->notificationSenderName);
-
-			$email->subject  = $form->notificationSubject;
+			$email->fromEmail = $form->notificationSenderEmail;
+			$email->fromName  = $form->notificationSenderName;
+			$email->subject   = $form->notificationSubject;
 
 			// Has a custom subject been set for this form?
 			if ($form->notificationSubject) 
