@@ -1,12 +1,35 @@
-<p>There are several ways to publish your form.  Control every detail or copy and paste a single line of code.</p>
+<style type="text/css">
+	code.example, input.example {
+		color: #666;
+		/*background-color: #efefef;
+		border-radius: 2px;
+		font-size: 2em;
+		padding: 10px;*/
+	}
+</style>
+
+<h2>Publish your form with one line of code</h2>
+
+{% if craft.request.getSegment(3) == 'new' %}
+
+	<code class="example">
+	{% verbatim %}{{{% endverbatim %}
+		craft.sproutForms.displayForm('<b>yourFormHandle</b>')
+	{% verbatim %}}}{% endverbatim %}
+	</code>
+	
+{% else %}
+
+	<code class="example">
+	{% verbatim %}{{{% endverbatim %}
+		craft.sproutForms.displayForm('<b>{{ form.handle }}</b>')
+	{% verbatim %}}}{% endverbatim %}
+	</code>
+
+{% endif %}
+
 <hr>
 
-<h2>1. Publish your form with one line of code</h2>
+<h2>Control every detail of your form with Custom HTML</h2>
 
-<code class="example">
-{% verbatim %}{{{% endverbatim %}
-	craft.sproutForms.displayForm('<b>{{ form.handle }}</b>')
-{% verbatim %}}}{% endverbatim %}
-</code>
-
-<p>Link to other methods in docs</p>
+<p>See the Sprout Forms documentation for an example of how to <a href="http://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/examples/custom-html" target="_blank">publish your form with Custom HTML</a>.</p>

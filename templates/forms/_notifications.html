@@ -1,4 +1,6 @@
-<p>All fields can use dynamic values from the submitted form fields.  Reference your form fields by wrapping the field name in curly braces.  If your field is name="fields[email]" you would use: {email}</p>
+<p>All fields can use dynamic values from the submitted form fields.  Reference your form fields by wrapping the field name in curly braces.  If your field is <code>name="fields[email]"</code> you would use: <code>{email}</code>.  <em>Note: Consider the deliverability implications before you dynamically change your Sender Name and Sender Email address fields.</em></p>
+
+<hr>
 
 {{ forms.textField({
 	label: "Email Recipients"|t,
