@@ -1,19 +1,6 @@
 <?php
 namespace Craft;
 
-/**
- * Craft by Pixel & Tonic
- *
- * @package   Craft
- * @author    Pixel & Tonic, Inc.
- * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @link      http://buildwithcraft.com
- */
-
-/**
- * Matrix block element type
- */
 class SproutForms_FormElementType extends BaseElementType
 {
 	/**
@@ -119,6 +106,11 @@ class SproutForms_FormElementType extends BaseElementType
 		);
 	}
 
+	/**
+	 * Defines which model attributes should be searchable.
+	 *
+	 * @return array
+	 */
 	public function defineSearchableAttributes()
 	{
 		return array(
@@ -168,7 +160,7 @@ class SproutForms_FormElementType extends BaseElementType
 	{
 		if ($element->getType()->hasTitleField)
 		{
-			$html = craft()->templates->render('entries/_titlefield', array(
+			$html = craft()->templates->render('forms/_titlefield', array(
 				'entry' => $element
 			));
 		}

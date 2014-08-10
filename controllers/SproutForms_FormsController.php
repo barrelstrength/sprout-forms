@@ -6,7 +6,6 @@ namespace Craft;
  */
 class SproutForms_FormsController extends BaseController
 {
-
 	/**
 	 * Saves a form
 	 */
@@ -101,16 +100,16 @@ class SproutForms_FormsController extends BaseController
 	 */
 	public function actionDeleteForm()
 	{	
-    $this->requirePostRequest();
-    
-    // Get the Form these fields are related to
+		$this->requirePostRequest();
+		
+		// Get the Form these fields are related to
 		$formId = craft()->request->getRequiredPost('id');
 		$form = craft()->sproutForms_forms->getFormById($formId);
 		
 		// @TODO - handle errors
-    $success = craft()->sproutForms_forms->deleteForm($form);
+		$success = craft()->sproutForms_forms->deleteForm($form);
 
-    $this->redirectToPostedUrl($form);
+		$this->redirectToPostedUrl($form);
 	}
 
 }

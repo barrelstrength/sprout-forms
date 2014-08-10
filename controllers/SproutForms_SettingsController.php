@@ -30,6 +30,11 @@ class SproutForms_SettingsController extends BaseController
 
 	}
 
+	/**
+	 * Save Plugin Settings
+	 * 
+	 * @return void
+	 */
 	public function actionSaveSettings()
 	{
 		$this->requirePostRequest();

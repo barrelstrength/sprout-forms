@@ -1,19 +1,6 @@
 <?php
 namespace Craft;
 
-/**
- * Craft by Pixel & Tonic
- *
- * @package   Craft
- * @author    Pixel & Tonic, Inc.
- * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @link      http://buildwithcraft.com
- */
-
-/**
- * Matrix block element type
- */
 class SproutForms_EntryElementType extends BaseElementType
 {
 	/**
@@ -71,10 +58,6 @@ class SproutForms_EntryElementType extends BaseElementType
 			)
 		);
 
-		// @TODO 
-		// - figure out how to handle multiple content tables in the index page results
-		// - figure out how to get these sorted by groupId
-		// 
 		// Prepare the data for our sources sidebar
 		$groups = craft()->sproutForms_groups->getAllFormGroups('id');
 		$forms = craft()->sproutForms_forms->getAllForms();
@@ -171,9 +154,6 @@ class SproutForms_EntryElementType extends BaseElementType
 	 */
 	public function getContentTableForElementsQuery(ElementCriteriaModel $criteria)
 	{
-		// $groups = craft()->sproutForms_groups->getAllFormGroups('id');
-		// $forms = craft()->sproutForms_forms->getAllForms();
-
 		if ($criteria->id && is_numeric($criteria->formId))
 		{
 			$form = craft()->sproutForms_forms->getFormById($criteria->formId);
@@ -241,6 +221,13 @@ class SproutForms_EntryElementType extends BaseElementType
 		return SproutForms_EntryModel::populateModel($row);
 	}
 
+	/**	
+	 * Sort our Groups Alphbetically 
+	 * 
+	 * @param  string $a Group Name
+	 * @param  string $b Group Name
+	 * @return bool      Response assists to order groups using usort
+	 */
 	private function _sortByGroupName($a, $b) 
 	{
 		return strcmp($a['heading'], $b['heading']);

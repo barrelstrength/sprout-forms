@@ -39,7 +39,7 @@ class SproutForms_ExamplesController extends BaseController
 	}
 	
 	/**
-	 * Install data
+	 * Install example data
 	 * 
 	 * @return void
 	 */

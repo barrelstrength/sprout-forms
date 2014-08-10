@@ -73,7 +73,7 @@ class SproutFormsVariable
 			
 			$required = $field->required;
 			$field = $field->getField();
-
+			
 			// @TODO - logic is broken here if element is not empty
 			$value = (!empty($element) ? $element : null);
 			$errors = ((!empty($element) AND $static == false) ? $element->getErrors($field->handle) : null);

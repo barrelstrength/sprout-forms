@@ -78,7 +78,6 @@ class SproutForms_EntriesController extends BaseController
 					$formVariable => $entry
 				));
 			}
-			
 		}
 	}
 
@@ -106,7 +105,7 @@ class SproutForms_EntriesController extends BaseController
 	 *
 	 * @access private
 	 * @throws Exception
-	 * @return EntryModel
+	 * @return SproutForms_EntryModel
 	 */
 	private function _getEntryModel()
 	{
@@ -130,10 +129,10 @@ class SproutForms_EntriesController extends BaseController
 	}
 
 	/**
-	 * Populates an EntryModel with post data.
+	 * Populates an SproutForms_EntryModel with post data.
 	 *
 	 * @access private
-	 * @param EntryModel $entry
+	 * @param SproutForms_EntryModel $entry
 	 */
 	private function _populateEntryModel(SproutForms_EntryModel $entry)
 	{
@@ -150,8 +149,8 @@ class SproutForms_EntriesController extends BaseController
 	/**
 	 * Notify admin
 	 * 
-	 * @param object $formRecord
-	 * @param object $contentRecord
+	 * @param object $form
+	 * @param object $field
 	 * @return bool
 	 */
 	private function _notifyAdmin(SproutForms_FormModel $form, SproutForms_EntryModel $entry)
@@ -164,25 +163,26 @@ class SproutForms_EntriesController extends BaseController
 		if (!empty($recipients)) 
 		{
 			$email = new EmailModel();
-			
-			// 'notificationSenderName'  => AttributeType::String,
-			// 'notificationSenderEmail' => AttributeType::String,
-			// $email->body     = $form->body;
 
-			$entryCpUrl = craft()->config->get('cpTrigger') . "/sproutforms/entries/edit/" . $entry->id;
+			// $entryCpUrl = craft()->config->get('cpTrigger') . "/sproutforms/entries/edit/" . $entry->id;
 
-			
 			$fields = $entry->getFieldLayout()->getFields();
 			
 			$email->htmlBody = craft()->templates->render('sproutforms/_special/email', array(
 				'formName' => $form->name,
-				'entryCpUrl' => $entryCpUrl,
+				// 'entryCpUrl' => $entryCpUrl,
 				'fields' => $fields,
 				'element' => $entry
 			));
 
+			// @TODO - create fallback text email
+			// $email->body     = $form->body;
+
 			$post = (object) $_POST;
-			
+
+			// Set the "from" information.
+			$email->setFrom($form->notificationSenderEmail, $form->notificationSenderName);
+
 			$email->subject  = $form->notificationSubject;
 
 			// Has a custom subject been set for this form?
@@ -225,7 +225,7 @@ class SproutForms_EntriesController extends BaseController
 				// Do we need to swap in any email addresses that 
 				// were submitted with the form?
 				$email->toEmail = craft()->templates->renderString($emailAddress, array(
-						'entry' => $post
+					'entry' => $post
 				));
 				
 				// we must validate this before attempting to send;
@@ -247,6 +247,12 @@ class SproutForms_EntriesController extends BaseController
 		}
 	}
 	
+	/**
+	 * Validate email
+	 * 
+	 * @param  string $email recipient list email
+	 * @return bool          true/false
+	 */
 	private function _validEmail($email) 
 	{
 		return preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $email);

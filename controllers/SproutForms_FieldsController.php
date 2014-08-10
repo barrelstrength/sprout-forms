@@ -58,8 +58,6 @@ class SproutForms_FieldsController extends BaseController
 	 */
 	public function actionEditFieldTemplate(array $variables = array())
 	{
-		// $variables['brandNewField'] = false;
-
 		$formId = craft()->request->getSegment(3);
 		$form = craft()->sproutForms_forms->getFormById($formId);
 
@@ -75,7 +73,6 @@ class SproutForms_FieldsController extends BaseController
 					'params' => array(':fieldId' => $field->id, ':layoutId' => $form->fieldLayoutId)
 				));
 				
-				// @TODO - seems way overkill to get the required value
 				$variables['required'] = $fieldLayoutField->required;
 				
 				if (!$variables['field'])
@@ -92,7 +89,6 @@ class SproutForms_FieldsController extends BaseController
 			if (empty($variables['field']))
 			{
 				$variables['field'] = new FieldModel();
-				// $variables['brandNewField'] = true;
 			}
 
 			$variables['title'] = Craft::t('Create a new field');
@@ -121,20 +117,19 @@ class SproutForms_FieldsController extends BaseController
 	/**
 	 * Reorder a field
 	 * 
-	 * @return [type] [description]
+	 * @return json
 	 */
 	public function actionReorderFields()
 	{
-	    craft()->userSession->requireAdmin();
-	    $this->requirePostRequest();
-	    $this->requireAjaxRequest();
-			
-			// $formId = craft()->request->getSegment(3)
-	    $fieldIds = JsonHelper::decode(craft()->request->getRequiredPost('ids'));
-	    craft()->sproutForms_fields->reorderFields($fieldIds);
+		craft()->userSession->requireAdmin();
+		$this->requirePostRequest();
+		$this->requireAjaxRequest();
 		
-	    $this->returnJson(array(
-	        'success' => true
-	    ));
+		$fieldIds = JsonHelper::decode(craft()->request->getRequiredPost('ids'));
+		craft()->sproutForms_fields->reorderFields($fieldIds);
+	
+		$this->returnJson(array(
+			'success' => true
+		));
 	}
 }
