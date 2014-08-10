@@ -4,7 +4,7 @@
 <form method="post" accept-charset="UTF-8" enctype="multipart/form-data">
 	<input type="hidden" name="action" value="sproutForms/entries/saveEntry">
 	<input type="hidden" name="handle" value="formName">
-	<input type="hidden" name="fields[asset]" value="">
+	
 	
 	{#  ASSET FIELDS
 	    - - - - - - -
@@ -12,9 +12,9 @@
 	    This example form input would function for an Asset field with a handle 'asset'
 	#}
 	
+	{# <input type="hidden" name="fields[asset]" value=""> #}
 	
-	
-	<div class="field">
+	{# <div class="field">
 		<div class="header">
 			<label for="asset">Assets</label>
 		</div>
@@ -30,7 +30,7 @@
 				</ul>
 			{% endif %} 
 		</div>
-	</div>
+	</div> #}
 	
 	
 	{#  RADIO FIELDS

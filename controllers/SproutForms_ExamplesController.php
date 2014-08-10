@@ -3,6 +3,8 @@ namespace Craft;
 
 class SproutForms_ExamplesController extends BaseController
 {
+	private $_formId;
+
 	/**
 	 * Install examples
 	 * 
@@ -45,58 +47,232 @@ class SproutForms_ExamplesController extends BaseController
 	{
 		try
 		{
-			// $sql = file_get_contents(craft()->path->getPluginsPath() . 'sproutforms/_special/examples/data.sql');
-			// craft()->db->createCommand($sql)->execute();
-			
-			// Create Forms and their Content Tables
-			$contactForm = new SproutForms_FormModel();
-
-			// Shared attributes
-			$contactForm->name       = 'Contact Form';
-			$contactForm->handle     = 'contact';
-			$contactForm->titleFormat = "{dateCreated|date('Ymd')}";
-
-			craft()->sproutForms_forms->saveForm($contactForm);
-
-			$fullNameField = new FieldModel();
-			$fullNameField->name = 'Full Name';
-			$fullNameField->handle = 'fullName';
-			// $field->instructions = craft()->request->getPost('instructions');
-			// $field->required     = craft()->request->getPost('required');
-
-			$fullNameField->type = 'PlainText';
-			$fullNameField->settings = array(
-				'placeholder' => '',
-				'maxLength' => '',
-				'multiline' => '',
-				'initialRows' => 4,
-			);
-
-			$messageField = new FieldModel();
-			$messageField->name = 'Message';
-			$messageField->handle = 'message';
-			$messageField->type = 'PlainText';
-			$messageField->settings = array(
-				'placeholder' => '',
-				'maxLength' => '',
-				'multiline' => 1,
-				'initialRows' => 4,
-			);
-
-			craft()->sproutForms_fields->saveField($contactForm, $fullNameField);
-			craft()->sproutForms_fields->saveField($contactForm, $messageField);
-
+			// Create Example Forms
 			// ------------------------------------------------------------
 			
-			$allFieldsForm = new SproutForms_FormModel();
+			$formSettings = array(
+				array(
+					'name' => 'Contact Form',
+					'handle' => 'contact',
+					'titleFormat' => "{dateCreated|date('Y-m-d')} – {fullName} – {message|slice(0,22)}..."
+				),
+				array(
+					'name' => 'Example Form with all Simple Fields',
+					'handle' => 'formWithAllFields',
+					'titleFormat' => "{dateCreated|date('Y-m-d')}"
+				)
+			);
 
-			// Shared attributes
-			$allFieldsForm->name       = 'Example Form with all Simple Fields';
-			$allFieldsForm->handle     = 'formWithAllFields';
-			$allFieldsForm->titleFormat = "{dateCreated|date('Ymd')}";
+			$fieldSettings = array(
+				'contact' => array(
+					array(
+						'name'     => 'Full Name',
+						'handle'   => 'fullName',
+						'type'     => 'PlainText',
+						'required' => 1,
+						'settings' => array(
+							'placeholder' => '',
+							'maxLength' => '',
+							'multiline' => '',
+							'initialRows' => 4,
+						)
+					),
+					array(
+						'name'     => 'Email',
+						'handle'   => 'email',
+						'type'     => 'PlainText',
+						'required' => 1,
+						'settings' => array(
+							'placeholder' => '',
+							'maxLength' => '',
+							'multiline' => '',
+							'initialRows' => 4,
+						)
+					),
+					array(
+						'name'     => 'Message',
+						'handle'   => 'message',
+						'type'     => 'PlainText',
+						'required' => 1,
+						'settings' => array(
+							'placeholder' => '',
+							'maxLength' => '',
+							'multiline' => 1,
+							'initialRows' => 4,
+						)
+					),
+				),
+				'formWithAllFields' => array(
+					array(
+						'name'     => 'Plain Text Field',
+						'handle'   => 'plainText',
+						'type'     => 'PlainText',
+						'required' => 1,
+						'settings' => array(
+							'placeholder' => '',
+							'maxLength' => '',
+							'multiline' => 0,
+							'initialRows' => 4,
+						)
+					),
+					array(
+						'name'     => 'Dropdown Field',
+						'handle'   => 'dropdown',
+						'type'     => 'Dropdown',
+						'required' => 1,
+						'settings' => array(
+							'options' => array(
+								array(
+									'label' => 'Option 1',
+									'value' => 'option1',
+									'default' => ''
+								),
+								array(
+									'label' => 'Option 2',
+									'value' => 'option2',
+									'default' => ''
+								),
+								array(
+									'label' => 'Option 3',
+									'value' => 'option3',
+									'default' => ''
+								)
+							)
+						)
+					),
+					array(
+						'name'     => 'Number Field',
+						'handle'   => 'number',
+						'type'     => 'Number',
+						'required' => 0,
+						'settings' => array(
+							'min' => 0,
+							'max' => '',
+							'decimals' => ''
+						)
+					),
+					array(
+						'name'     => 'Radio Buttons Field',
+						'handle'   => 'radioButtons',
+						'type'     => 'RadioButtons',
+						'required' => 0,
+						'settings' => array(
+							'options' => array(
+								array(
+									'label' => 'Option 1',
+									'value' => 'option1',
+									'default' => ''
+								),
+								array(
+									'label' => 'Option 2',
+									'value' => 'option2',
+									'default' => ''
+								),
+								array(
+									'label' => 'Option 3',
+									'value' => 'option3',
+									'default' => ''
+								)
+							)
+						)
+					),
+					array(
+						'name'     => 'Checkboxes Field',
+						'handle'   => 'checkboxes',
+						'type'     => 'Checkboxes',
+						'required' => 0,
+						'settings' => array(
+							'options' => array(
+								array(
+									'label' => 'Option 1',
+									'value' => 'option1',
+									'default' => ''
+								),
+								array(
+									'label' => 'Option 2',
+									'value' => 'option2',
+									'default' => ''
+								),
+								array(
+									'label' => 'Option 3',
+									'value' => 'option3',
+									'default' => ''
+								)
+							)
+						)
+					),
+					array(
+						'name'     => 'Multi-select Field',
+						'handle'   => 'multiSelect',
+						'type'     => 'MultiSelect',
+						'required' => 0,
+						'settings' => array(
+							'options' => array(
+								array(
+									'label' => 'Option 1',
+									'value' => 'option1',
+									'default' => ''
+								),
+								array(
+									'label' => 'Option 2',
+									'value' => 'option2',
+									'default' => ''
+								),
+								array(
+									'label' => 'Option 3',
+									'value' => 'option3',
+									'default' => ''
+								)
+							)
+						)
+					),
 
-			craft()->sproutForms_forms->saveForm($allFieldsForm);
+					array(
+						'name'     => 'Textarea Field',
+						'handle'   => 'textarea',
+						'type'     => 'PlainText',
+						'required' => 0,
+						'settings' => array(
+							'placeholder' => '',
+							'maxLength' => '',
+							'multiline' => 1,
+							'initialRows' => 4,
+						)
+					),
+				),
+			);
 
+			// Create Forms and their Content Tables
+			foreach ($formSettings as $settings) 
+			{
+				$form = new SproutForms_FormModel();
+				
+				// Assign our form settings
+				$form->name        = $settings['name'];
+				$form->handle      = $settings['handle'];
+				$form->titleFormat = $settings['titleFormat'];
+
+				// Create the Form
+				craft()->sproutForms_forms->saveForm($form);
+
+				$this->_formId = $form->id;
+
+				// Add Fields to the Form
+				foreach ($fieldSettings[$form->handle] as $settings) 
+				{
+					// Grab our form each time so we are sure to have the latest fieldLayoutId
+					$form = craft()->sproutForms_forms->getFormById($this->_formId);
+
+					$field = new FieldModel();
+					$field->name        = $settings['name'];
+					$field->handle      = $settings['handle'];
+					$field->type        = $settings['type'];
+					$field->required    = $settings['required'];
+					$field->settings    = $settings['settings'];
+
+					craft()->sproutForms_fields->saveField($form, $field);
+				}
+			}
 		}
 		catch (\Exception $e)
 		{

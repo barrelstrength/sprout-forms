@@ -70,7 +70,8 @@ class SproutFormsVariable
 			// Identify Entry ELement Model here if editing Entry 
 			$element = null;
 			$static = false;
-
+			
+			$required = $field->required;
 			$field = $field->getField();
 
 			// @TODO - logic is broken here if element is not empty
@@ -222,10 +223,10 @@ class SproutFormsVariable
 			}
 
 			if ($input OR $instructions) 
-			{
+			{	
 				$fieldsHtml .= craft()->templates->render('_macros/forms/field', array(
 					'label'        => Craft::t($field->name),
-					'required'     => ($static == false ? $field->required : false),
+					'required'     => $required,
 					'instructions' => $instructions,
 					'id'           => $field->handle,
 					'errors'       => $errors,

@@ -1,0 +1,10 @@
+{% import "_macros/forms" as forms %}
+
+{% set config = {
+	id: name,
+	name: name,
+	value: value,
+	size: 5,
+} %}
+
+{{ forms.text(config) }}
