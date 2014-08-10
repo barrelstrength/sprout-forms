@@ -39,7 +39,7 @@ class SproutFormsPlugin extends BasePlugin
 	protected function defineSettings()
 	{
 		return array(
-			'pluginNameOverride' => AttributeType::String,
+			'pluginNameOverride'     => AttributeType::String,
 			'templateFolderOverride' => AttributeType::String
 		);
 	}
@@ -77,17 +77,18 @@ class SproutFormsPlugin extends BasePlugin
 				'action' => 'sproutForms/entries/editEntryTemplate'
 			),
 
-			// Example Forms
-			'sproutforms/examples' => 
-			'sproutforms/_cp/examples',
-
 			/*
 			* @controller SproutSeo_SettingsController
 			* @template   sproutseo/templates/settings/index.html
 			*/
 			'sproutforms/settings' => array(
 				'action' => 'sproutForms/settings/settingsIndexTemplate'
-			)
+			),
+
+			// Example Forms
+			'sproutforms/examples' => 
+			'sproutforms/_cp/examples',
+
 		);
 	}
 	
@@ -126,7 +127,8 @@ class SproutFormsPlugin extends BasePlugin
 			craft()->db->createCommand()->dropTableIfExists($contentTableName);
 		}
 
-		// remove example templates
+		// remove example templates  
+		// @TODO - deliberate whether this is a good idea
 		// $fileHelper = new \CFileHelper();
 		// $fileHelper->removeDirectory(craft()->path->getSiteTemplatesPath() . 'sproutforms');
 	}

@@ -35,23 +35,23 @@ class SproutForms_FormModel extends BaseElementModel
 	protected function defineAttributes()
 	{   
 		return array_merge(parent::defineAttributes(), array(
-			'id'                      => AttributeType::Number,
-			'groupId'	                => AttributeType::Number,
-			'fieldLayoutId'           => AttributeType::Number,
-			'name'                    => AttributeType::String,
-			'handle'                  => AttributeType::String,
-			'titleFormat'             => AttributeType::String,
-			'redirectUri'             => AttributeType::String,
-			'submitAction'            => AttributeType::String,
-			'submitButtonText'        => AttributeType::String,
-			'notificationRecipients'  => AttributeType::String,
-			'notificationSubject'     => AttributeType::String,
-			'notificationSenderName'  => AttributeType::String,
-			'notificationSenderEmail' => AttributeType::String,
-			'notificationReplyToEmail'     => AttributeType::String,
+			'id'                       => AttributeType::Number,
+			'groupId'	                 => AttributeType::Number,
+			'fieldLayoutId'            => AttributeType::Number,
+			'name'                     => AttributeType::String,
+			'handle'                   => AttributeType::String,
+			'titleFormat'              => AttributeType::String,
+			'redirectUri'              => AttributeType::String,
+			'submitAction'             => AttributeType::String,
+			'submitButtonText'         => AttributeType::String,
+			'notificationRecipients'   => AttributeType::String,
+			'notificationSubject'      => AttributeType::String,
+			'notificationSenderName'   => AttributeType::String,
+			'notificationSenderEmail'  => AttributeType::String,
+			'notificationReplyToEmail' => AttributeType::String,
 
-			'ownerId'       => AttributeType::Number,
-			'oldHandle'     => AttributeType::String,
+			'ownerId'                  => AttributeType::Number,
+			'oldHandle'                => AttributeType::String,
 		));
 	}
 
@@ -132,22 +132,6 @@ class SproutForms_FormModel extends BaseElementModel
 		return $this->_fields;
 	}
 
-	// public function getFields()
-	// {
-	// 	if (!isset($this->_fields))
-	// 	{
-	// 		if ($this->id)
-	// 		{
-	// 			$this->_fields = craft()->fields->getLayoutFieldsById($this->id);
-	// 		}
-	// 		else
-	// 		{
-	// 			$this->_fields = array();
-	// 		}
-	// 	}
-	// 		return $this->_fields;
-	// }
-
 	/*
 	 * Sets the fields associated with this form.
 	 *
@@ -157,5 +141,4 @@ class SproutForms_FormModel extends BaseElementModel
 	{
 		$this->_fields = $fields;
 	}
-
 }

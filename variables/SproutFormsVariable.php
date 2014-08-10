@@ -50,29 +50,22 @@ class SproutFormsVariable
 		$settings = craft()->plugins->getPlugin('sproutforms')->getSettings();
 		$templateFolderOverride = $settings->templateFolderOverride;
 		
-		
-		// @TODO - setup ability to override default macros in templates
-		// $templatePath = craft()->path->getPluginsPath() . 'sproutforms/templates/_macros/';
-		// $templateOverridePath = "";
-
-		// if ($templateFolderOverride) 
-		// {
-		// 	$templateOverridePath = craft()->path->getTemplatesPath() . $templateFolderOverride . "/";
-		// }
-		
-	
 		// Build the HTML for our form fields
 		$fieldsHtml = '';
 
 		// Loop through all of our fields
 		foreach ($form->getFieldLayout()->getFields() as $field) 
 		{
-			// Identify Entry ELement Model here if editing Entry 
-			$element = null;
-			$static = false;
 			
+			// Set some values we'll hand off to the templates
 			$required = $field->required;
 			$field = $field->getField();
+	
+			// @TODO - what does this do!?
+			$static = false;
+
+			// Is this field for an Element Type?
+			$element = (isset($field->getFieldType()->elementType)) ? $field->getFieldType()->model : null;
 			
 			// @TODO - logic is broken here if element is not empty
 			$value = (!empty($element) ? $element : null);
@@ -82,146 +75,51 @@ class SproutFormsVariable
 
 			if ($fieldtype) 
 			{
-				if ($static == false)
+				// Set our templates path
+				// @TODO - check for template override path first: $templateFolderOverride
+				// @TODO - Do all of these settings need to be at the fieldtype level or some can be elsewhere?
+				craft()->path->setTemplatesPath(craft()->path->getPluginsPath() . 'sproutforms/templates/');
+
+				// Set our supported fieldtype overrides folder
+				$fieldtypesFolder = craft()->path->getPluginsPath() . 'sproutforms/integrations/sproutforms_fieldtypes/';
+
+				// Create a list of the name, class, and file of fields we support 
+				// based on what we find in our $fieldtypesFolder
+				$frontEndFieldTypes = craft()->sproutForms_fields->findAllFrontEndFieldTypes($fieldtypesFolder);
+				
+				// Get our field type
+				$type = $fieldtype->model->type;
+				
+				// If we support our current fieldtype, render it
+				if (isset($frontEndFieldTypes[$type])) 
 				{
-					// @TODO - ERROR
-					// Unable to find the template “_components/fieldtypes/PlainText/input”.
-					// getInputHtml is not friendly to front end requests... do we need to recreate this path?
-					// craft()->path->setTemplatesPath(craft()->path->getPluginsPath() . 'sproutforms/templates/_macros/forms/craft/');
-					// And we can seem to call getInputHtml in a way that actuall helps a different custom
-					// field find it's templates in its own directory
-					// if ($field->type == 'SproutEmailField_Email')
-					// craft()->path->setTemplatesPath(craft()->path->getPluginsPath());
+					// Instantiate it
+					$class = __NAMESPACE__.'\\'.$frontEndFieldTypes[$type]['class'];
 					
-					// if (file_exists($templateOverridePath))
-					// {
-					// 	craft()->path->setTemplatesPath($templateOverridePath);
-					// } 
-
-
-					craft()->path->setTemplatesPath(craft()->path->getPluginsPath() . 'sproutforms/templates/');
-					
-					// $macroFolder = '_macros';
-					// $fieldtypesFolderOverride = craft()->path->getTemplatesPath() . '_macros/fieldtypes/';
-					$fieldtypesFolder = craft()->path->getPluginsPath() . 'sproutforms/integrations/sproutforms_fieldtypes/';
-
-					$frontEndFieldTypes = craft()->sproutForms_fields->findAllFrontEndFieldTypes($fieldtypesFolder);
-
-					$type = $fieldtype->model->type;
-					
-					if (isset($frontEndFieldTypes[$type])) 
+					// Make sure the our front-end Field Type class exists
+					if (!class_exists($class))
 					{
-						// Instantiate it
-						$class = __NAMESPACE__.'\\'.$frontEndFieldTypes[$type]['class'];
-						
-						// Make sure the class exists
-						if (!class_exists($class))
-						{
-							require $frontEndFieldTypes[$type]['file'];
-						}
-
-						$frontEndField = new $class;
-
-						// $type = $fieldtype->model->type;
-						// $handle = $fieldtype->model->handle;
-						$fieldModel = $fieldtype->model;
-						$settings = $fieldtype->getSettings();
-
-						$input = $frontEndField->getInputHtml($fieldModel, $settings);
+						require $frontEndFieldTypes[$type]['file'];
 					}
-					
-					
-					// switch ($fieldType) {
-					// 	case 'PlainText':
-							
-					// 		$input = craft()->templates->render('_macros/fieldtypes/PlainText/input', array(
-					// 			'name' => $handle,
-					// 			'value'=> craft()->request->getPost($handle),
-					// 			'settings' => $fieldtype->getSettings()
-					// 		));
 
-					// 		break;
+					// Create a new instance of our Field Type
+					$frontEndField = new $class;
 
-					// 	case 'Checkboxes':
-							
-					// 		$input = craft()->templates->render('_macros/fieldtypes/Checkboxes/input', array(
-					// 			'name'    => $handle,
-					// 			'options' => $fieldtype->getSettings()->options,
-					// 			'values'  => array()
-					// 		));
+					$fieldModel = $fieldtype->model;
+					$settings = $fieldtype->getSettings();
 
-					// 		break;
-
-					// 	case 'Dropdown':
-							
-					// 		$input = craft()->templates->render('_macros/fieldtypes/Dropdown/input', array(
-					// 			'name'    => $handle,
-					// 			'options' => $fieldtype->getSettings()->options,
-					// 			'values'  => array()
-					// 		));
-
-					// 		break;
-
-					// 	case 'MultiSelect':
-							
-					// 		$input = craft()->templates->render('_macros/fieldtypes/MultiSelect/input', array(
-					// 			'name'    => $handle,
-					// 			'options' => $fieldtype->getSettings()->options,
-					// 			'values'  => array()
-					// 		));
-
-					// 		break;
-
-					// 	case 'RadioButtons':
-							
-					// 		$input = craft()->templates->render('_macros/fieldtypes/RadioButtons/input', array(
-					// 			'name'    => $handle,
-					// 			'options' => $fieldtype->getSettings()->options,
-					// 			'values'  => array()
-					// 		));
-
-					// 		break;
-
-					// 	case 'SproutEmailField_Email':
-
-					// 		$input = craft()->templates->render('_macros/fieldtypes/SproutEmailField/input', array(
-					// 			// 'id' => $namespaceInputId,
-					// 			'name' => $handle,
-					// 			'value'=> craft()->request->getPost($handle),
-					// 			'settings' => $fieldtype->getSettings()
-					// 		));
-
-					// 		break;
-
-					// 	case 'SproutLinkField_Link':
-
-					// 		$input = craft()->templates->render('_macros/fieldtypes/SproutLinkField/input', array(
-					// 			// 'id' => $namespaceInputId,
-					// 			'name' => $handle,
-					// 			'value'=> craft()->request->getPost($handle),
-					// 			'settings' => $fieldtype->getSettings()
-					// 		));
-
-					// 		break;
-						
-					// 	default:
-					// 		# code...
-					// 		break;
-					// }
-					
-
-					// $input = $fieldtype->getInputHtml($field->handle, $value);
+					// Create the HTML for the input field
+					$input = $frontEndField->getInputHtml($fieldModel, $settings);
 				}
 				else
-				{
-					// $input = $fieldtype->getStaticHtml($value);
+				{	
+					// Field Type is not supported
+					// @TODO - provide better error here pointing to docs on how to solve this.
+					$input = '<p class="error">' . Craft::t("The “".$type."” field is not supported by default to be output in front-end templates.") . '</p>';
 				}
 			}
-			else
-			{
-				$input = '<p class="error">' . Craft::t("The fieldtype class “{class}” could not be found.", array('class', $field->type)) . '</p>';
-			}
 
+			// Render our field
 			if ($input OR $instructions) 
 			{	
 				$fieldsHtml .= craft()->templates->render('_macros/forms/field', array(
@@ -272,12 +170,6 @@ class SproutFormsVariable
 		return new \Twig_Markup($fieldHtml, craft()->templates->getTwig()->getCharset());
 	}
 
-
-
-	// ============================================================
-	// @TODO - Review Variables Below - Migrated from previous plugin
-	// ============================================================
-
 	/**
 	 * Get a specific form. If no form is found, returns null
 	 *
@@ -288,61 +180,7 @@ class SproutFormsVariable
 	{
 		return craft()->sproutForms_forms->getFormById($formId);
 	}
-	
-	
-	/**
-	 * Get a form field given field id
-	 * 
-	 * @param int $fieldId
-	 * @return obj
-	 */
-	public function getFieldById($fieldId)
-	{
-		$field = craft()->fields->getFieldById($fieldId);
-		
-		return $field;
-	}
-	
-	/**
-	 * Get a form given associated field id
-	 *
-	 * @param int $fieldId
-	 * @return obj
-	 */
-	public function getFormByFieldId($params)
-	{
-		if (!isset($params['fieldId'])) {
-			return null;
-		}
-		
-		$form = craft()->sproutForms->getFormByFieldId($params['fieldId']);
-		
-		if (isset($params['idOnly']) && $params['idOnly'] == true) {
-			return $form->id;
-		}
-		
-		return $form;
-	}
-	
-	/** 
-	 * Get form fields for specified form
-	 * 
-	 * @param int $formId
-	 * @return array
-	 */
-	public function getFields($formId)
-	{
-		$fields = craft()->sproutForms->getFields($formId);
-		
-		foreach ($fields as $key => $value) {
-			if ($handle = craft()->sproutForms->adjustFieldName($value, 'human')) {
-				$fields[$key]['handle'] = $handle;
-			}
-		}
-		
-		return $fields;
-	}
-	
+
 	/**
 	 * Get all forms
 	 * 
@@ -350,19 +188,19 @@ class SproutFormsVariable
 	 */
 	public function getAllForms()
 	{
-		return craft()->sproutForms->getAllForms();
+		return craft()->sproutForms_forms->getAllForms();
 	}
-	
+
 	/**
 	 * Returns all entries for all forms
 	 * 
 	 * @param int form id
 	 * @return array
 	 */
-	public function getAllEntries($formId)
-	{
-		return craft()->sproutForms->getEntries($formId);
-	}
+	// public function getAllEntries($formId)
+	// {
+	// 	return craft()->sproutForms_entries->getEntries($formId);
+	// }
 	
 	/**
 	 * Get entry
@@ -374,16 +212,36 @@ class SproutFormsVariable
 		return craft()->sproutForms_entries->getEntryById($id);
 	}
 
+	/**
+	 * Get Form Groups
+	 * 
+	 * @param  int $id Group ID (optional)
+	 * @return array
+	 */
 	public function getAllFormGroups($id = null)
 	{
 		return craft()->sproutForms_groups->getAllFormGroups($id);
 	}
 
+	/**
+	 * Get all forms in a specific group
+	 * 
+	 * @param  int $id         Group ID
+	 * @return SproutForms_FormModel
+	 */
 	public function getFormsByGroupId($groupId)
 	{
 		return craft()->sproutForms_groups->getFormsByGroupId($groupId);
 	}
 
+	/**
+	 * Update fieldtypes into to option groups 
+	 * 1) Basic fields we can output by default
+	 * 2) Advanced fields that need some love before outputting
+	 * 
+	 * @param  array $fieldTypes
+	 * @return array
+	 */
 	public function prepareFieldTypesDropdown($fieldTypes)
 	{
 		return craft()->sproutForms_fields->prepareFieldTypesDropdown($fieldTypes);

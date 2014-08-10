@@ -102,6 +102,8 @@ class SproutForms_FormRecord extends BaseRecord
 					continue; 
 				}
 				
+				// @TODO - standardize how email validation is handled throughout plugins.
+				// Versions of this appear in multiple places.
 				if (!preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $email)) {
 					$this->addError($attribute, 'Please make sure all emails are valid.');
 					return false;

@@ -6,10 +6,11 @@ class SproutForms_FieldsService extends FieldsService
 	/**
 	 * Save a Form Field
 	 * 
-	 * @param  SproutForms_FormModel $form     [description]
-	 * @param  FieldModel            $field    [description]
-	 * @param  boolean               $validate [description]
-	 * @return [type]                          [description]
+	 * @param  SproutForms_FormModel $form
+	 * @param  FieldModel            $field
+	 * @param  boolean               $validate
+	 * @throws \Exception
+	 * @return boolean               true/false
 	 */
 	public function saveField(SproutForms_FormModel $form, FieldModel $field, $validate = true)
 	{
@@ -199,7 +200,12 @@ class SproutForms_FieldsService extends FieldsService
 		return $record;
 	}	
 
-
+	/**
+	 * Create list of supported Front end fieldtypes based on Folders in tempaltes/fieldtypes
+	 * 
+	 * @param  string $fieldtypesFolder Location of fieldtypes folder
+	 * @return array
+	 */
 	public function findAllFrontEndFieldTypes($fieldtypesFolder)
 	{
 		$frontEndFieldTypes = array();
@@ -242,7 +248,8 @@ class SproutForms_FieldsService extends FieldsService
 		// @TODO - support certain custom fields out of the box
 		$supportedCustomFields = array(
 			'SproutEmailField_Email',
-			'SproutLinkField_Link'
+			'SproutLinkField_Link',
+			// 'SproutInvisibleCaptcha'
 		);
 
 		foreach ($fieldTypes as $key => $fieldType) 

@@ -3,7 +3,6 @@ namespace Craft;
 
 class SproutForms_SettingsService extends BaseApplicationComponent
 {
-	
 	public function saveSettings($settings)
 	{		
 		$settings = JsonHelper::encode($settings);
@@ -16,5 +15,4 @@ class SproutForms_SettingsService extends BaseApplicationComponent
 
 		return (bool) $affectedRows;
 	}
-
 }

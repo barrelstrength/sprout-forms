@@ -18,6 +18,7 @@ class Number_SproutFormsFieldType
 		return craft()->templates->render('_macros/fieldtypes/Number/input', array(
 			'name'  => $field->handle,
 			'value'=> craft()->request->getPost($field->handle),
+			'size' => 5
 		));
 	}
 }

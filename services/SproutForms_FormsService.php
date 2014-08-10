@@ -183,50 +183,14 @@ class SproutForms_FormsService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Returns the content table name for a given Form field.
+	 * Get all Fallbacks from the database.
 	 *
-	 * @param FormModel $form
-	 * @param bool $useOldHandle
-	 * @return string|false
+	 * @return array
 	 */
-	public function getContentTableName(SproutForms_FormModel $form, $useOldHandle = false)
+	public function getAllForms()
 	{
-		if ($useOldHandle)
-		{
-			if (!$form->oldHandle)
-			{
-				return false;
-			}
-
-			$handle = $form->oldHandle;
-		}
-		else
-		{
-			$handle = $form->handle;
-		}
-
-		$name = '_'.StringHelper::toLowerCase($handle);
-		
-		return 'sproutformscontent'.$name;
-	}
-
-	/**
-	 * Creates the content table for a Form.
-	 *
-	 * @access private
-	 * @param string $name
-	 */
-	private function _createContentTable($name)
-	{
-		craft()->db->createCommand()->createTable($name, array(
-			'elementId' => array('column' => ColumnType::Int, 'null' => false),
-			'locale'    => array('column' => ColumnType::Locale, 'null' => false),
-			'title'     => array('column' => ColumnType::Varchar)
-		));
-
-		craft()->db->createCommand()->createIndex($name, 'elementId,locale', true);
-		craft()->db->createCommand()->addForeignKey($name, 'elementId', 'elements', 'id', 'CASCADE', null);
-		craft()->db->createCommand()->addForeignKey($name, 'locale', 'locales', 'locale', 'CASCADE', 'CASCADE');
+		$records = $this->formRecord->findAll(array('order'=>'name'));
+		return SproutForms_FormModel::populateModels($records);
 	}
 
 	/**
@@ -272,55 +236,49 @@ class SproutForms_FormsService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Get all Fallbacks from the database.
+	 * Returns the content table name for a given Form field.
 	 *
-	 * @return array
+	 * @param FormModel $form
+	 * @param bool $useOldHandle
+	 * @return string|false
 	 */
-	public function getAllForms()
+	public function getContentTableName(SproutForms_FormModel $form, $useOldHandle = false)
 	{
-		$records = $this->formRecord->findAll(array('order'=>'name'));
-		return SproutForms_FormModel::populateModels($records);
-	}
-
-
-
-
-	
-
-	// ============================================================
-	// @TODO - Review the below functions copied over from the last plugin
-	// ============================================================
-	
-	
-	
-	/**
-	 * Return form given associated field id
-	 *
-	 * @param int $fieldId
-	 * @return NULL|object
-	 */
-	public function getFormByFieldId($fieldId)
-	{
-		if (!isset($this->_formsById) || !array_key_exists($fieldId, $this->_formsById)) {
-			$formRecord = $this->formRecord->with(array(
-				'field' => array(
-					'select' => false,
-					'joinType' => 'INNER JOIN',
-					'condition' => 'field.id=' . $fieldId
-				)
-			))->find();
-			
-			if ($formRecord) {
-				$form                            = SproutForms_FormModel::populateModel($formRecord);
-				$this->_formsByFieldId[$fieldId] = $form;
-			} else {
-				return null;
+		if ($useOldHandle)
+		{
+			if (!$form->oldHandle)
+			{
+				return false;
 			}
-		}
-		
-		return $this->_formsByFieldId[$fieldId];
-	}
-	
-	
 
+			$handle = $form->oldHandle;
+		}
+		else
+		{
+			$handle = $form->handle;
+		}
+
+		$name = '_'.StringHelper::toLowerCase($handle);
+		
+		return 'sproutformscontent'.$name;
+	}
+
+	/**
+	 * Creates the content table for a Form.
+	 *
+	 * @access private
+	 * @param string $name
+	 */
+	private function _createContentTable($name)
+	{
+		craft()->db->createCommand()->createTable($name, array(
+			'elementId' => array('column' => ColumnType::Int, 'null' => false),
+			'locale'    => array('column' => ColumnType::Locale, 'null' => false),
+			'title'     => array('column' => ColumnType::Varchar)
+		));
+
+		craft()->db->createCommand()->createIndex($name, 'elementId,locale', true);
+		craft()->db->createCommand()->addForeignKey($name, 'elementId', 'elements', 'id', 'CASCADE', null);
+		craft()->db->createCommand()->addForeignKey($name, 'locale', 'locales', 'locale', 'CASCADE', 'CASCADE');
+	}
 }

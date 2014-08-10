@@ -1,9 +1,6 @@
 <?php
 namespace Craft;
 
-/**
- * Entry model class
- */
 class SproutForms_EntryModel extends BaseElementModel
 {
 	protected $elementType = 'SproutForms_Entry';
@@ -30,10 +27,10 @@ class SproutForms_EntryModel extends BaseElementModel
 		return array_merge(parent::defineAttributes(), array(
 				
 			// @todo - standardize how IDs are handled on front and back end
-			'id'  => AttributeType::Number,
-			'entryId'  => AttributeType::Number,
+			'id'        => AttributeType::Number,
+			'entryId'   => AttributeType::Number,
 
-			'formId'  => AttributeType::Number,
+			'formId'    => AttributeType::Number,
 			'formName'  => AttributeType::Number,
 			'ipAddress' => AttributeType::String,
 			'userAgent' => AttributeType::Mixed,

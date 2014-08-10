@@ -1,11 +1,6 @@
 <?php
 namespace Craft;
 
-/**
- * Section model class
- *
- * Used for transporting section data throughout the system.
- */
 class SproutForms_FormGroupModel extends BaseModel
 {
 	/**
