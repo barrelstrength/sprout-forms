@@ -37,8 +37,8 @@
                         <p>
                           <strong>{{ field.name }}</strong><br/>  
                           
-                          {% if value[0] is not defined %}
-                          
+                          {% if value[0] is not defined and value is not empty %}
+                            
                             {{ value }}
                           
                           {% else %}
@@ -53,30 +53,6 @@
                         </p>
                         
                       {% endfor %}
-
-                      {# {% for fieldName, fieldValue in entry %}
-                      <tr>
-                        <td style="padding-bottom:10px;width:600px;">
-
-                          <strong>{{ fieldName }}</strong><br>
-
-                          {% if fieldValue[0] is not defined %}
-                          
-                            {{ fieldValue }}
-                          
-                          {% else %}
-
-                            <ul style="margin-left:0;">
-                            {% for item in fieldValue %}
-                              <li>{{ item }}</li>
-                            {% endfor %}
-                            </ul>
-                          
-                          {% endif %}
-
-                        </td>
-                      </tr>
-                      {% endfor %} #}
 
                     </table>
                   </td>

@@ -6,21 +6,17 @@
 {% endif %}
 
 {# @TODO - allow this to be controlled by a setting and 
-					 also have option to output errors inline  #}
-{% if errors %} 
-	<ul class="errors">
-	{% for error in errors %}
-		<li class="error">{{ error }}</li>
-	{% endfor %}
-	</ul>
-{% endif %}
-	
+	 also have option to output errors inline  #}
+
+
 {% if form.submitAction %}
 
+{# Submit form to third party #}
 <form action="{{ submitAction }}" method="post" accept-charset="UTF-8">
 
 {% else %}
 
+{# Submit form to Sprout Forms #}
 <form method="post" accept-charset="UTF-8">
 	<input type="hidden" name="action" value="{{ submitAction }}">
 	<input type="hidden" name="handle" value="{{ form.handle }}">
