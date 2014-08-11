@@ -29,6 +29,7 @@
 	<input type="hidden" name="handle" value="basic">
 	
 	<div class="fields">
+		
 		<div class="field" id="fields-plainText-field">
 			<div class="heading">
 				<label class="required" for="fields-plainText">
@@ -36,7 +37,7 @@
 				</label>
 			</div>
 			<div class="input">
-				<input class="text nicetext fullwidth" type="text" id="fields-plainText" name="fields[plainText]" autocomplete="off">
+				<input class="text nicetext fullwidth" type="text" id="fields-plainText" name="fields[plainText]" {%- if basic is defined %}value="{{ basic.plainText }}"{% endif -%}>
 			</div>
 			{% if basic is defined %}
 			<div class="error">
@@ -44,6 +45,10 @@
 			</div>
 			{% endif %}
 		</div>
+
+
+		{# @TODO - add examples for retaining values below #}
+
 		<div class="field" id="fields-dropdown-field">
 			<div class="heading">
 				<label class="required" for="fields-dropdown">
@@ -53,13 +58,20 @@
 			<div class="input">
 				<div class="select">
 					<select name="fields[dropdown]">
+						<option value="">Select...</option>
 						<option value="option1">Option 1</option>
 						<option value="option2">Option 2</option>
 						<option value="option3">Option 3</option>
 					</select>
 				</div>
 			</div>
+			{% if basic is defined %}
+			<div class="error">
+				{{ errorList(basic.getErrors('dropdown')) }}
+			</div>
+			{% endif %}
 		</div>
+
 		<div class="field" id="fields-number-field">
 			<div class="heading">
 				<label for="fields-number">
@@ -67,87 +79,86 @@
 				</label>
 			</div>
 			<div class="input">
-
-
 				<input class="text" type="text" id="fields-number" size="5" name="fields[number]" autocomplete="off">
 			</div>
 		</div>
+
 		<div class="field" id="fields-radioButtons-field">
 			<div class="heading">
 				<label for="fields-radioButtons">
 					Radio Buttons Field
 				</label>
 			</div>
-		<div class="input">
-			<div>
-				<label>
-					<input type="radio" value="option1" id="" name="fields[radioButtons]">
-					Option 1</label>
+			<div class="input">
+				<div>
+					<label>
+						<input type="radio" value="option1" id="" name="fields[radioButtons]"> Option 1
+					</label>
 				</div>
 				<div>
 					<label>
-						<input type="radio" value="option2" id="" name="fields[radioButtons]">
-						Option 2</label>
-					</div>
-					<div>
-						<label>
-							<input type="radio" value="option3" id="" name="fields[radioButtons]">
-							Option 3</label>
-						</div>
-
-					</div>
+						<input type="radio" value="option2" id="" name="fields[radioButtons]"> Option 2
+					</label>
 				</div>
-				<div class="field" id="fields-checkboxes-field">
-					<div class="heading">
-						<label for="fields-checkboxes">
-							Checkboxes Field
-						</label>
-					</div>
-					<div class="input">
-						<div class="checkbox-select"><div>
-							<label><input type="checkbox" value="option1" class="checkbox" name="fields[checkboxes][]">&nbsp;Option 1</label>		</div>
+				<div>
+					<label>
+						<input type="radio" value="option3" id="" name="fields[radioButtons]"> Option 3
+					</label>
+				</div>
+			</div>
+		</div>
 
-							<div>
-								<label><input type="checkbox" value="option2" class="checkbox" name="fields[checkboxes][]">&nbsp;Option 2</label>		</div>
+		<div class="field" id="fields-checkboxes-field">
+			<div class="heading">
+				<label for="fields-checkboxes">
+					Checkboxes Field
+				</label>
+			</div>
+			<div class="input">
+				<div class="checkbox-select"><div>
+					<label><input type="checkbox" value="option1" class="checkbox" name="fields[checkboxes][]">&nbsp;Option 1</label>
+				</div>
+				<div>
+					<label><input type="checkbox" value="option2" class="checkbox" name="fields[checkboxes][]">&nbsp;Option 2</label>
+				</div>
+				<div>
+					<label><input type="checkbox" value="option3" class="checkbox" name="fields[checkboxes][]">&nbsp;Option 3</label>		</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="field" id="fields-multiSelect-field">
+			<div class="heading">
+				<label for="fields-multiSelect">
+					Multi-select Field
+				</label>
+			</div>
+			<div class="input">
+				<select multiple="" name="fields[multiSelect][]">
+					<option value="option1">Option 1</option>
+					<option value="option2">Option 2</option>
+					<option value="option3">Option 3</option>
+				</select>
+			</div>
+		</div>
 
-								<div>
-									<label><input type="checkbox" value="option3" class="checkbox" name="fields[checkboxes][]">&nbsp;Option 3</label>		</div>
+		<div class="field" id="fields-textarea-field">
+			<div class="heading">
+				<label for="fields-textarea">
+					Textarea Field
+				</label>
+			</div>
+			<div class="input">
+				<textarea class="text nicetext fullwidth" rows="4" cols="50" id="fields-textarea" name="fields[textarea]"></textarea>
+			</div>
+		</div>
 
-								</div>
+	</div>
 
-							</div>
-						</div>
-						<div class="field" id="fields-multiSelect-field">
-							<div class="heading">
-								<label for="fields-multiSelect">
-									Multi-select Field
-								</label>
-							</div>
-							<div class="input">
-								<select multiple="" name="fields[multiSelect][]"><option value="option1">Option 1</option><option value="option2">Option 2</option><option value="option3">Option 3</option></select>
-
-							</div>
-						</div>
-						<div class="field" id="fields-textarea-field">
-							<div class="heading">
-								<label for="fields-textarea">
-									Textarea Field
-								</label>
-							</div>
-							<div class="input">
-
-
-								<textarea class="text nicetext fullwidth" rows="4" cols="50" id="fields-textarea" name="fields[textarea]"></textarea>
-
-
-							</div>
-						</div>
-
-					</div>
-
-					<div class="submit">
-						<input type="submit" value="Submit">
-					</div>
-				</form>
+	<div class="submit">
+		<input type="submit" value="Submit">
+	</div>
+	
+</form>
 
 {% endblock %}
