@@ -86,7 +86,16 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 					// Fire an 'onSaveEntry' event
 					$this->onSaveEntry(new Event($this, array(
 						'entry'      => $entry,
-						'isNewEntry' => $isNewEntry
+						'isNewEntry' => $isNewEntry,
+
+						// @TODO - DEPRECATE and IMPROVE
+						// Support for Sprout Email Event
+						// @TODO - reconsider the best way to do this.
+						'event'      => 'saveEntry',
+
+						// @TODO - add back support for handing off the 
+						// entry values to use in the notification
+						// 'entity'     => $entry
 					)));
 
 					return true;
