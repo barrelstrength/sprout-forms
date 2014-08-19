@@ -43,6 +43,9 @@ class SproutForms_EntriesController extends BaseController
 		$this->form->notificationSenderEmail = craft()->templates->renderObjectTemplate($this->form->notificationSenderEmail, $entry);
 		$this->form->notificationReplyToEmail = craft()->templates->renderObjectTemplate($this->form->notificationReplyToEmail, $entry);
 
+		// Return the form using it's name as a variable on the front-end
+		$formVariable = $this->form->handle;
+
 		if (craft()->sproutForms_entries->saveEntry($entry)) 
 		{	
 			// Only send notification email for front-end submissions
@@ -69,12 +72,9 @@ class SproutForms_EntriesController extends BaseController
 			}
 			else
 			{
-				// Store this Form Model in a variable in our Service layer
+				// Store this Entry Model in a variable in our Service layer
 				// so that we can access the error object from our displayForm() variable 
 				craft()->sproutForms_forms->activeEntries[$this->form->handle] = $entry;
-
-				// Return the form using it's name as a variable on the front-end
-				$formVariable = (isset($this->form->handle)) ? $this->form->handle : 'form';
 
 				craft()->urlManager->setRouteVariables(array(
 					$formVariable => $entry
