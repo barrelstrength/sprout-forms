@@ -8,32 +8,50 @@
 {% set title = 'Edit Entry' %}
 
 {% set body %}
-
-	<form method="post" accept-charset="UTF-8" enctype="multipart/form-data" data-saveshortcut="1">
+	
+	<form method="post" accept-charset="UTF-8" enctype="multipart/form-data" data-saveshortcut="1" data-saveshortcut-redirect="{{ url('sproutforms/entries/edit/' ~ entryId) }}">
 		<input type="hidden" name="action" value="sproutForms/entries/saveEntry">
 		<input type="hidden" name="handle" value="{{ form.handle }}">
 		<input type="hidden" name="entryId" value="{{ entryId }}">
 
 		{% if namespace is not defined %}{% set namespace = 'fields' %}{% endif %}
-		
-		{% namespace namespace %}	
-			{% for field in fields %}
-				{% include "_includes/field" with {
-					field:    field.getField(),
-					required: field.required,
-					element:  entry,
-					static:   (static is defined ? static : null)
-				} only %}
-			{% endfor %}
-		{% endnamespace %}
+	
+		{# <div class="grid first">
+			<div class="item" data-position="left" data-min-colspan="2" data-max-colspan="3">
+				<div id="fields" class="pane"> #}
 
-		<div class="buttons">
-			<input class="btn submit" type="submit" value="Save">
-		</div>
+					{% set tabs = {} %}
+					{% include "_includes/tabs" %}
 
-		<p>
-		  <input type="button" class="btn small formsubmit" value="Delete" data-action="sproutForms/entries/deleteEntry" data-confirm="Are you sure you want to delete this entry and all of it's data?" data-redirect="sproutforms/entries">
-		</p>
+					{% namespace namespace %}	
+						{% for field in fields %}
+							{% include "_includes/field" with {
+								field:    field.getField(),
+								required: field.required,
+								element:  entry,
+								static:   (static is defined ? static : null)
+							} only %}
+						{% endfor %}
+					{% endnamespace %}
+
+					<div class="buttons">
+						<input class="btn submit" type="submit" value="Save">
+					</div>
+
+			{# 	</div>
+			</div>		
+
+			<div class="item" data-position="right" data-colspan="1">
+				<div class="pane"> #}
+
+				<p>
+				  <input type="button" class="btn small formsubmit" value="Delete" data-action="sproutForms/entries/deleteEntry" data-confirm="Are you sure you want to delete this entry and all of it's data?" data-redirect="sproutforms/entries">
+				</p>
+
+		{# 		</div>
+			</div>
+
+		</div> #}
 	
 	</form>
 
