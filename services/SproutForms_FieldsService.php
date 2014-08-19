@@ -28,23 +28,27 @@ class SproutForms_FieldsService extends FieldsService
 				if 	($field->id)
 				{
 					$fieldLayoutFields = array();
+					$sortOrder = 0;
 
 					// Save a new field layout with all form fields
 					// to make sure we capture the required setting
+					$sortOrder++;
 					foreach ($form->getFields() as $oldField)
-					{
+					{	
 						if ($oldField->id == $field->id)
 						{
 							$fieldLayoutFields[] = array(
 								'fieldId'   => $field->id,
-								'required'  => $field->required
+								'required'  => $field->required,
+								'sortOrder' => $sortOrder
 							);
 						}
 						else
 						{
 							$fieldLayoutFields[] = array(
 								'fieldId'   => $oldField->id,
-								'required'  => $oldField->required
+								'required'  => $oldField->required,
+								'sortOrder' => $sortOrder
 							);
 						}
 					}
@@ -75,23 +79,28 @@ class SproutForms_FieldsService extends FieldsService
 				{
 					// Save the new field
 					craft()->fields->saveField($field);
-					
+
 					// Save a new field layout with all form fields
 					$fieldLayoutFields = array();
-					$fieldLayoutFields[] = array(
-						'fieldId'   => $field->id,
-						'required'  => $field->required,
-						// 'sortOrder' => $sortOrder
-					);;
+					$sortOrder = 0;
 
+					
 					foreach ($form->getFields() as $oldField)
 					{
+						$sortOrder++;
 						$fieldLayoutFields[] = array(
 							'fieldId'   => $oldField->id,
 							'required'  => $oldField->required,
-							// 'sortOrder' => $sortOrder
+							'sortOrder' => $sortOrder
 						);
 					}
+
+					$sortOrder++;
+					$fieldLayoutFields[] = array(
+						'fieldId'   => $field->id,
+						'required'  => $field->required,
+						'sortOrder' => $sortOrder
+					);
 					
 					$fieldLayout = new FieldLayoutModel();
 					$fieldLayout->type = 'SproutForms_Form';
@@ -198,7 +207,41 @@ class SproutForms_FieldsService extends FieldsService
 		}
 		
 		return $record;
-	}	
+	}
+
+	public function getSproutFormsTemplates()
+	{
+		$templates = array();
+
+		$settings = craft()->plugins->getPlugin('sproutforms')->getSettings();
+		$templateFolderOverride = $settings->templateFolderOverride;
+
+		// Set our defaults
+		$templates['form'] = craft()->path->getPluginsPath() . 'sproutforms/templates/_special/templates/';
+		$templates['field'] = craft()->path->getPluginsPath() . 'sproutforms/templates/_special/templates/';
+
+		// See if we should override our defaults
+		if ($templateFolderOverride) 
+		{
+			$formTemplate = craft()->path->getSiteTemplatesPath() . $templateFolderOverride . "/form";
+			$fieldTemplate = craft()->path->getSiteTemplatesPath() . $templateFolderOverride . "/field";
+
+			foreach (craft()->config->get('defaultTemplateExtensions') as $extension) 
+			{
+				if (IOHelper::fileExists($formTemplate . "." . $extension)) 
+				{
+					$templates['form'] = craft()->path->getSiteTemplatesPath() . $templateFolderOverride . "/";
+				}
+
+				if (IOHelper::fileExists($fieldTemplate . "." . $extension)) 
+				{
+					$templates['field'] = craft()->path->getSiteTemplatesPath() . $templateFolderOverride . "/";
+				}
+			}
+		}
+
+		return $templates;
+	}
 
 	/**
 	 * Create list of supported Front end fieldtypes based on Folders in tempaltes/fieldtypes
@@ -206,7 +249,7 @@ class SproutForms_FieldsService extends FieldsService
 	 * @param  string $fieldtypesFolder Location of fieldtypes folder
 	 * @return array
 	 */
-	public function findAllFrontEndFieldTypes($fieldtypesFolder)
+	public function getSproutFormsFields($fieldtypesFolder)
 	{
 		$frontEndFieldTypes = array();
 		$frontEndFieldTypeClasses = array();
@@ -215,17 +258,34 @@ class SproutForms_FieldsService extends FieldsService
 		$filter = '_SproutFormsFieldType\.php$';
 		$files = IOHelper::getFolderContents($fieldtypesFolder, false, $filter);
 
+		// Build list of supported supported front-end fields
 		if ($files)
 		{
 			foreach ($files as $file)
 			{
 				$filename = IOHelper::getFileName($file, false);
 				$fieldname = str_replace('_SproutFormsFieldType', '', $filename);
+				$template = craft()->path->getPluginsPath() . 'sproutforms/templates/_special/templates/';
 
 				$frontEndFieldTypes[$fieldname]['name'] = $fieldname;
 				$frontEndFieldTypes[$fieldname]['class'] = $filename;
 				$frontEndFieldTypes[$fieldname]['file'] = $file;
+				$frontEndFieldTypes[$fieldname]['templateFolder'] = $template;
 			}
+		}
+
+		// Check if any other plugins add support for more front-end fields
+		$customSproutFields = craft()->plugins->call('registerSproutField');
+
+		foreach ($customSproutFields as $pluginName => $fieldName) 
+		{	
+			$class = $fieldName . "_SproutFormsFieldType";
+			$frontEndFieldTypes[$fieldName] = array(
+				'name'  => $fieldName,
+				'class' => $class,
+				'file'  => craft()->path->getPluginsPath() . strtolower($pluginName) . "/integrations/sproutforms/fields/" . $class . ".php",
+				'templateFolder' => craft()->path->getPluginsPath() . strtolower($pluginName) . "/integrations/sproutforms/templates/"
+			);
 		}
 
 		return $frontEndFieldTypes;
@@ -246,15 +306,15 @@ class SproutForms_FieldsService extends FieldsService
 		);
 
 		// @TODO - support certain custom fields out of the box
-		$supportedCustomFields = array(
-			'SproutEmailField_Email',
-			'SproutLinkField_Link',
-			// 'SproutInvisibleCaptcha'
-		);
+		// $supportedCustomFields = array(
+		// 	'SproutEmailField_Email',
+		// 	'SproutLinkField_Link',
+		// 	// 'SproutInvisibleCaptcha'
+		// );
 
 		foreach ($fieldTypes as $key => $fieldType) 
 		{
-			if (in_array($key, $supportedFields) OR in_array($key, $supportedCustomFields)) 
+			if (in_array($key, $supportedFields)) 
 			{
 				$basicFields[$key] = $fieldType;
 			}
