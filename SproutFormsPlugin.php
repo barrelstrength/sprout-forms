@@ -92,6 +92,15 @@ class SproutFormsPlugin extends BasePlugin
 		);
 	}
 
+	public function registerUserPermissions()
+	{
+		return array(
+			'editSproutFormsSettings'	=> array(
+				'label' => Craft::t('Edit Form Settings')
+			)
+		);
+	}
+
 	/**
 	 * Event registrar
 	 * 

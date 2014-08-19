@@ -4,7 +4,7 @@ namespace Craft;
 /**
  *
  */
-class RadioButtons_SproutFormsFieldType
+class PlainText_SproutFormsFieldType
 {
 	/**
 	 * Returns the field's input HTML.
@@ -14,11 +14,11 @@ class RadioButtons_SproutFormsFieldType
 	 * @return string
 	 */
 	public function getInputHtml($field, $value, $settings)
-	{	
-		return craft()->templates->render('_macros/fieldtypes/RadioButtons/input', array(
-			'name'  => $field->handle,
-			'options' => $settings->options,
-			'values' => $value,
+	{
+		return craft()->templates->render('fields/PlainText/input', array(
+			'name'     => $field->handle,
+			'value'    => $value,
+			'settings' => $settings
 		));
 	}
 }

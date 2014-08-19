@@ -15,7 +15,7 @@ class SproutLinkField_Link_SproutFormsFieldType
 	 */
 	public function getInputHtml($field, $value, $settings)
 	{
-		return craft()->templates->render('_macros/fieldtypes/SproutLinkField/input', array(
+		return craft()->templates->render('fields/SproutLinkField/input', array(
 			'name'  => $field->handle,
 			'value'=> $value,
 		));

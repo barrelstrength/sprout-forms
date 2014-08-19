@@ -4,7 +4,7 @@ namespace Craft;
 /**
  *
  */
-class SproutEmailField_Email_SproutFormsFieldType
+class Number_SproutFormsFieldType
 {
 	/**
 	 * Returns the field's input HTML.
@@ -15,9 +15,10 @@ class SproutEmailField_Email_SproutFormsFieldType
 	 */
 	public function getInputHtml($field, $value, $settings)
 	{
-		return craft()->templates->render('_macros/fieldtypes/SproutEmailField/input', array(
+		return craft()->templates->render('fields/Number/input', array(
 			'name'  => $field->handle,
 			'value'=> $value,
+			'size' => 5
 		));
 	}
 }

@@ -1,4 +1,4 @@
-{% import "_macros/forms" as forms %}
+{% import "forms" as forms %}
 
 {%- set options = (options is defined ? options : []) %}
 {%- set values = (values is defined ? values : []) -%}
@@ -9,7 +9,7 @@
 		{%- set optionValue = (option.value is defined ? option.value : key) -%}
 		
 		<div>
-			{% include "_macros/fieldtypes/Checkboxes/checkbox" with {
+			{% include "fields/Checkboxes/checkbox" with {
 				label:    optionLabel,
 				name:     (name is defined ? name~'[]' : null),
 				value:    optionValue,

@@ -4,7 +4,7 @@ namespace Craft;
 /**
  *
  */
-class Checkboxes_SproutFormsFieldType
+class SproutEmailField_Email_SproutFormsFieldType
 {
 	/**
 	 * Returns the field's input HTML.
@@ -15,10 +15,9 @@ class Checkboxes_SproutFormsFieldType
 	 */
 	public function getInputHtml($field, $value, $settings)
 	{
-		return craft()->templates->render('_macros/fieldtypes/Checkboxes/input', array(
+		return craft()->templates->render('fields/SproutEmailField/input', array(
 			'name'  => $field->handle,
-			'options' => $settings->options,
-			'values' => $value,
+			'value'=> $value,
 		));
 	}
 }

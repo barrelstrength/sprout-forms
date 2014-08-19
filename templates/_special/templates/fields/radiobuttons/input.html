@@ -5,7 +5,7 @@
 	{%- set optionLabel = (option.label is defined ? option.label : option) %}
 	{%- set optionValue = (option.value is defined ? option.value : key) -%}
 	<div>
-		{% include "_macros/fieldtypes/RadioButtons/radio" with {
+		{% include "fields/RadioButtons/radio" with {
 			label:     optionLabel,
 			id:        (id is defined and loop.first ? id : null),
 			name:      (name is defined ? name : null),

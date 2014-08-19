@@ -19,5 +19,5 @@
 	<div class="input{% if errors %} errors{% endif %}">
 		{{ input|raw }}
 	</div>
-	{% include "_macros/forms/errorList" with { errors: errors } %}
+	{% include "forms/errorList" with { errors: errors } %}
 </div>

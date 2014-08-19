@@ -4,7 +4,7 @@ namespace Craft;
 /**
  *
  */
-class PlainText_SproutFormsFieldType
+class MultiSelect_SproutFormsFieldType
 {
 	/**
 	 * Returns the field's input HTML.
@@ -15,10 +15,10 @@ class PlainText_SproutFormsFieldType
 	 */
 	public function getInputHtml($field, $value, $settings)
 	{
-		return craft()->templates->render('_macros/fieldtypes/PlainText/input', array(
-			'name'     => $field->handle,
-			'value'    => $value,
-			'settings' => $settings
+		return craft()->templates->render('fields/MultiSelect/input', array(
+			'name'  => $field->handle,
+			'options' => $settings->options,
+			'values' => $value,
 		));
 	}
 }

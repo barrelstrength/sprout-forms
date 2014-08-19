@@ -9,6 +9,10 @@ class SproutFormsVariable
 	 * @var array
 	 */
 	public static $errors;
+
+	public $settings;
+	public $fields;
+	public $templates;
 	
 	/**
 	 * Plugin Name
@@ -46,6 +50,9 @@ class SproutFormsVariable
 
 		// @TODO - consider what other places this might get accessed from
 		// do we need to do any more checks to make sure this doesn't cause issues?
+		// 
+		// If a form has been submitted, use are existing EntryModel
+		// otherwise, create a new EntryModel
 		if (isset(craft()->sproutForms_forms->activeEntries[$formHandle]))
 		{
 			$entry = craft()->sproutForms_forms->activeEntries[$formHandle];	
@@ -63,24 +70,40 @@ class SproutFormsVariable
 		craft()->content->fieldContext = $form->getFieldContext();
 		craft()->content->contentTable = $form->getContentTable();
 
-		$settings = craft()->plugins->getPlugin('sproutforms')->getSettings();
-		$templateFolderOverride = $settings->templateFolderOverride;
+		$this->settings = craft()->plugins->getPlugin('sproutforms')->getSettings();
+		
+		// Set our Sprout Forms Front-end Form Template path
+		craft()->path->setTemplatesPath(craft()->path->getPluginsPath() . 'sproutforms/templates/_special/templates/');	
+
+		// Set our Sprout Forms support field classes folder
+		$fieldtypesFolder = craft()->path->getPluginsPath() . 'sproutforms/fields/';
+
+		// Create a list of the name, class, and file of fields we support 
+		$this->fields = craft()->sproutForms_fields->getSproutFormsFields($fieldtypesFolder);
+
+		// Determine where our form and field template should come from
+		$this->templates = craft()->sproutForms_fields->getSproutFormsTemplates();
 		
 		// Build the HTML for our form fields
 		$fieldsHtml = '';
 
 		// Loop through all of our fields
 		foreach ($form->getFieldLayout()->getFields() as $field) 
-		{			
+		{	
 			$fieldsHtml .= $this->_prepareField($field, $entry);
 		}
 
+		// Check if we need to update our Front-end Form Template Path
+		craft()->path->setTemplatesPath($this->templates['form']);
+
 		// Build our complete form
-		$formHtml = craft()->templates->render('_macros/form', array(
+		$formHtml = craft()->templates->render('form', array(
 			'form'   => $form,
 			'fields' => $fieldsHtml,
 			'errors' => $entry->getErrors()
 		));
+
+		craft()->path->setTemplatesPath(craft()->path->getSiteTemplatesPath());
 
 		// Reset our field context and content table to what they were previously
 		craft()->content->fieldContext = $oldFieldContext;
@@ -124,9 +147,6 @@ class SproutFormsVariable
 		craft()->content->fieldContext = $form->getFieldContext();
 		craft()->content->contentTable = $form->getContentTable();
 
-		$settings = craft()->plugins->getPlugin('sproutforms')->getSettings();
-		$templateFolderOverride = $settings->templateFolderOverride;
-		
 		craft()->path->setTemplatesPath(craft()->path->getCpTemplatesPath());
 
 		$fieldHtml = "";
@@ -171,31 +191,19 @@ class SproutFormsVariable
 
 		if ($fieldtype) 
 		{	
-			// Set our templates path
-			// @TODO - check for template override path first: $templateFolderOverride
-			// @TODO - Do all of these settings need to be at the fieldtype level or some can be elsewhere?
-			craft()->path->setTemplatesPath(craft()->path->getPluginsPath() . 'sproutforms/templates/');
-
-			// Set our supported fieldtype overrides folder
-			$fieldtypesFolder = craft()->path->getPluginsPath() . 'sproutforms/integrations/sproutforms_fieldtypes/';
-
-			// Create a list of the name, class, and file of fields we support 
-			// based on what we find in our $fieldtypesFolder
-			$frontEndFieldTypes = craft()->sproutForms_fields->findAllFrontEndFieldTypes($fieldtypesFolder);
-			
 			// Get our field type
-			$type = $fieldtype->model->type;
+			$type = $fieldtype->model->type;		
 			
 			// If we support our current fieldtype, render it
-			if (isset($frontEndFieldTypes[$type])) 
+			if (isset($this->fields[$type])) 
 			{
 				// Instantiate it
-				$class = __NAMESPACE__.'\\'.$frontEndFieldTypes[$type]['class'];
+				$class = __NAMESPACE__.'\\'.$this->fields[$type]['class'];
 				
 				// Make sure the our front-end Field Type class exists
 				if (!class_exists($class))
-				{
-					require $frontEndFieldTypes[$type]['file'];
+				{	
+					require $this->fields[$type]['file'];
 				}
 
 				// Create a new instance of our Field Type
@@ -207,8 +215,12 @@ class SproutFormsVariable
 				$postFields = craft()->request->getPost('fields');
 				$value = (isset($postFields[$field->handle]) ? $postFields[$field->handle] : "");
 
+				// Set template path
+				craft()->path->setTemplatesPath($this->fields[$type]['templateFolder']);
+				
 				// Create the HTML for the input field
 				$input = $frontEndField->getInputHtml($fieldModel, $value, $settings);
+				
 			}
 			else
 			{	
@@ -218,10 +230,14 @@ class SproutFormsVariable
 			}
 		}
 
+		$fieldHtml = "";
+
 		// Render our field
 		if ($input OR $instructions) 
 		{	
-			return craft()->templates->render('_macros/forms/field', array(
+			craft()->path->setTemplatesPath($this->templates['field']);
+
+			$fieldHtml = craft()->templates->render('field', array(
 				'label'        => Craft::t($field->name),
 				'required'     => $required,
 				'instructions' => $instructions,
@@ -230,6 +246,8 @@ class SproutFormsVariable
 				'input'        => $input,
 			));
 		}
+
+		return $fieldHtml;
 	}
 
 	/**

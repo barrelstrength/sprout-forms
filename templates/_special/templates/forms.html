@@ -1,86 +1,86 @@
 {% macro errorList(errors) %}
-	{% include "_macros/forms/errorList" %}
+	{% include "forms/errorList" %}
 {% endmacro %}
 
 
 {# Inputs #}
 
 {% macro hidden(config) -%}
-	{% include "_macros/forms/hidden" with config only %}
+	{% include "forms/hidden" with config only %}
 {%- endmacro %}
 
 
 {% macro text(config) %}
-	{% include "_macros/forms/text" with config only %}
+	{% include "forms/text" with config only %}
 {% endmacro %}
 
 
 {% macro password(config) %}
-	{% include "_macros/forms/text" with config|merge({ type: 'password' }) only %}
+	{% include "forms/text" with config|merge({ type: 'password' }) only %}
 {% endmacro %}
 
 
 {% macro date(config) %}
-	{% include "_macros/forms/date" with config only %}
+	{% include "forms/date" with config only %}
 {% endmacro %}
 
 
 {% macro time(config) %}
-	{% include "_macros/forms/time" with config only %}
+	{% include "forms/time" with config only %}
 {% endmacro %}
 
 
 {% macro textarea(config) %}
-	{% include "_macros/forms/textarea" with config only %}
+	{% include "forms/textarea" with config only %}
 {% endmacro %}
 
 
 {% macro select(config) %}
-	{% include "_macros/forms/select" with config only %}
+	{% include "forms/select" with config only %}
 {% endmacro %}
 
 
 {% macro multiselect(config) %}
-	{% include "_macros/forms/multiselect" with config only %}
+	{% include "forms/multiselect" with config only %}
 {% endmacro %}
 
 
 {% macro checkbox(config) %}
-	{% include "_macros/forms/checkbox" with config only %}
+	{% include "forms/checkbox" with config only %}
 {% endmacro %}
 
 
 {% macro checkboxGroup(config) %}
-	{% include "_macros/forms/checkboxGroup" with config only %}
+	{% include "forms/checkboxGroup" with config only %}
 {% endmacro %}
 
 
 {% macro checkboxSelect(config) %}
-	{% include "_macros/forms/checkboxSelect" with config only %}
+	{% include "forms/checkboxSelect" with config only %}
 {% endmacro %}
 
 
 {% macro radio(config) %}
-	{% include "_macros/forms/radio" with config only %}
+	{% include "forms/radio" with config only %}
 {% endmacro %}
 
 
 {% macro radioGroup(config) %}
-	{% include "_macros/forms/radioGroup" with config only %}
+	{% include "forms/radioGroup" with config only %}
 {% endmacro %}
 
 
 {% macro file(config) %}
-	{% include "_macros/forms/file" with config only %}
+	{% include "forms/file" with config only %}
 {% endmacro %}
 
 
 {% macro lightswitch(config) %}
-	{% include "_macros/forms/lightswitch" with config only %}
+	{% include "forms/lightswitch" with config only %}
 {% endmacro %}
 
 {% macro editableTable(config) %}
-	{% include "_macros/forms/editableTable" with config only %}
+	{% include "forms/editableTable" with config only %}
 {% endmacro %}
 
 
@@ -88,7 +88,7 @@
 
 
 {% macro field(config, input) %}
-	{% include "_macros/forms/field" with config|merge({ input: input }) only %}
+	{% include "forms/field" with config|merge({ input: input }) only %}
 {% endmacro %}
 
 
@@ -158,6 +158,6 @@
 
 
 {% macro editableTableField(config) %}
-	{% set input %}{% include "_macros/forms/editableTable" with config only %}{% endset %}
+	{% set input %}{% include "forms/editableTable" with config only %}{% endset %}
 	{{ _self.field(config, input) }}
 {% endmacro %}

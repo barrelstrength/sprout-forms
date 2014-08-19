@@ -4,7 +4,7 @@ namespace Craft;
 /**
  *
  */
-class MultiSelect_SproutFormsFieldType
+class Dropdown_SproutFormsFieldType
 {
 	/**
 	 * Returns the field's input HTML.
@@ -15,7 +15,7 @@ class MultiSelect_SproutFormsFieldType
 	 */
 	public function getInputHtml($field, $value, $settings)
 	{
-		return craft()->templates->render('_macros/fieldtypes/MultiSelect/input', array(
+		return craft()->templates->render('fields/Dropdown/input', array(
 			'name'  => $field->handle,
 			'options' => $settings->options,
 			'values' => $value,

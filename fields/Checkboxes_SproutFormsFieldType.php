@@ -4,7 +4,7 @@ namespace Craft;
 /**
  *
  */
-class Dropdown_SproutFormsFieldType
+class Checkboxes_SproutFormsFieldType
 {
 	/**
 	 * Returns the field's input HTML.
@@ -15,7 +15,7 @@ class Dropdown_SproutFormsFieldType
 	 */
 	public function getInputHtml($field, $value, $settings)
 	{
-		return craft()->templates->render('_macros/fieldtypes/Dropdown/input', array(
+		return craft()->templates->render('fields/Checkboxes/input', array(
 			'name'  => $field->handle,
 			'options' => $settings->options,
 			'values' => $value,

@@ -34,7 +34,7 @@
 		</div>
 		<div class="body">
 			{# Custom Field handles should be named in your inputs and added in the fields[] array #}
-			<input type="text" id="textName" name="fields[fullName]" autocomplete="off" {%- if contact is defined %}value="{{ contact.fullName }}"{% endif -%}>
+			<input type="text" id="textName" name="fields[fullName]" {%- if contact is defined %}value="{{ contact.fullName }}"{% endif -%}>
 		</div>
 		{% if contact is defined %}
 		<div class="error">
@@ -50,7 +50,7 @@
 			<label for="textEmail">Email</label>
 		</div>
 		<div class="body">
-			<input type="email" id="textEmail" name="fields[email]" autocomplete="off" {%- if contact is defined %}value="{{ contact.email }}"{% endif -%}>
+			<input type="email" id="textEmail" name="fields[email]" {%- if contact is defined %}value="{{ contact.email }}"{% endif -%}>
 		</div>
 		{% if contact is defined %}
 		<div class="error">

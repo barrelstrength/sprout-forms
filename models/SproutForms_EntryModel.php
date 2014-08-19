@@ -15,7 +15,7 @@ class SproutForms_EntryModel extends BaseElementModel
 		// @TODO - this works but for some reason, removing __toString
 		// which calls $this->getContent->title does not work.
 		$entry = craft()->sproutForms_entries->getEntryById($this->id);
-		return $entry->getContent()->title;
+		return HtmlHelper::decode($entry->getContent()->title);
 	}
 
 	/**
