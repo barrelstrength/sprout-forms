@@ -230,6 +230,19 @@ class SproutFormsVariable
 			}
 		}
 
+		// @TODO - hard coded. Abstract this.
+		// if form.submitAction, we want this blank
+		// for fields like inivisble captcha, we want this blank
+		if ($type == 'SproutInvisibleCaptcha_InvisibleCaptcha') 
+		{
+			$namespace = '';
+		}
+		else
+		{
+			$namespace = 'fields';
+		}
+		
+
 		$fieldHtml = "";
 
 		// Render our field
@@ -244,6 +257,7 @@ class SproutFormsVariable
 				'id'           => $field->handle,
 				'errors'       => $entry->getErrors($field->handle),
 				'input'        => $input,
+				'namespace'    => $namespace
 			));
 		}
 
@@ -290,6 +304,14 @@ class SproutFormsVariable
 	public function getEntryById($id)
 	{
 		return craft()->sproutForms_entries->getEntryById($id);
+	}
+
+	public function getLastEntry($formHandle)
+	{
+		if (isset(craft()->sproutForms_forms->activeEntries[$formHandle]))
+		{
+			return $entry = craft()->sproutForms_forms->activeEntries[$formHandle];	
+		}
 	}
 
 	/**

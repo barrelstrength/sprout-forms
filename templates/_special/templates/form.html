@@ -1,14 +1,6 @@
 {%- set submitValue = (form.submitButtonText ? form.submitButtonText : "Submit") -%}
 {%- set submitAction = (form.submitAction ? form.submitAction : "sproutForms/entries/saveEntry") -%}
 
-{% if namespace is not defined %}
-	{% set namespace = (form.submitAction is not empty ? '' : 'fields') %}
-{% endif %}
-
-{# @TODO - allow this to be controlled by a setting and 
-	 also have option to output errors inline  #}
-
-
 {% if form.submitAction %}
 
 {# Submit form to third party #}
@@ -28,10 +20,10 @@
 	{% endif %}
 
 	<div class="fields">
-	{% namespace namespace %}
 	{{ fields | raw }}
-	{% endnamespace %}
 	</div>
+
+
 	
 	<div class="submit">
 		<input type="submit" value="{{ submitValue }}">
