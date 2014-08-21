@@ -5,7 +5,7 @@
 {% else %}
 
 	{% if fields is defined and fields|length %}
-		<table id="formFields" class="data fullwidth collapsible">
+		<table id="formFields" data-formid="{{ form.id }}" class="data fullwidth collapsible">
 			<thead>
 				<th scope="col">{{ "Name"|t }}</th>
 				<th scope="col">{{ "Handle"|t }}</th>
@@ -19,8 +19,9 @@
 					{% set required = field.required %}
 					{% set field = field.getField() %}
 
-					<tr data-id="{{ field.id }}" data-name="{{ field.name|t }}">
-						<th scope="row" data-title="{{ 'Name'|t }}"><a href="{{ url('sproutforms/forms/' ~ formId ~ '/fields/edit/' ~ field.id) }}">{{ field.name|t }}</a>
+					<tr class="field" data-id="{{ field.id }}" data-name="{{ field.name|t }}" data-fieldlayout="Default">
+						<th scope="row" data-title="{{ 'Name'|t }}">
+							<a href="{{ url('sproutforms/forms/' ~ formId ~ '/fields/edit/' ~ field.id) }}">{{ field.name|t }}</a>
 							{%- if required %} <span class="required"></span>{% endif -%}
 						</th>
 						<td data-title="{{ 'Handle'|t }}"><code>{{ field.handle }}</code></td>
@@ -44,6 +45,9 @@
 
 	<div class="buttons">
 		<a href="{{ url('sproutforms/forms/' ~ form.id ~ '/fields/new') }}" class="submit btn add icon">New Field</a>
+		<a id="newSection" data-action="newSection" class="btn add icon">New Section</a>
 	</div>
 
 {% endif %}
+
+{% includeJsResource "sproutforms/js/formfields.js" %}

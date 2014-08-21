@@ -35,7 +35,7 @@ class SproutForms_EntriesController extends BaseController
 		// Populate the entry with post data
 		// @TODO - This function doesn't update our $entry variable, why?
 		$this->_populateEntryModel($entry);
-		
+
 		// Swap out any dynamic variables for our notifications
 		$this->form->notificationRecipients = craft()->templates->renderObjectTemplate($this->form->notificationRecipients, $entry);
 		$this->form->notificationSubject = craft()->templates->renderObjectTemplate($this->form->notificationSubject, $entry);

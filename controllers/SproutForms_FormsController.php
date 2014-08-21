@@ -47,6 +47,42 @@ class SproutForms_FormsController extends BaseController
 		));
 	}
 
+	public function actionSaveFormFields()
+	{	
+		$this->requirePostRequest();
+		$this->requireAjaxRequest();
+
+		$name   = craft()->request->getRequiredPost('name');
+		$formId = craft()->request->getRequiredPost('formId');
+		$fieldLayoutTabs = craft()->request->getRequiredPost('fieldLayoutTabs');
+
+		// Update our field/section info to be in the right format to save as tabs
+		$fieldLayoutArray = array();
+		foreach ($fieldLayoutTabs as $field) 
+		{
+			$fieldLayoutArray[$field['section']][] = $field['fieldId'];
+		}		
+
+		$form = craft()->sproutForms_forms->getFormById($formId);
+
+		// We're handling required fields a bit different than Craft
+		// by default so let's call `assembleLayout()` directly
+		
+		// @TODO - how do we handle these?  Query the values we have directly before calling assembleLayout?
+		// $requiredFields = craft()->request->getPost('requiredFields', array());
+		$requiredFields = array();
+
+		$fieldLayout = craft()->fields->assembleLayout($fieldLayoutArray, $requiredFields);
+		$fieldLayout->type = 'SproutForms_Form';
+		$form->setFieldLayout($fieldLayout);
+
+		// Save it
+		if (craft()->sproutForms_forms->saveForm($form))
+		{
+			$this->returnJson(array('success' => true));
+		}
+	}
+
 	/**
 	 * Edit a form.
 	 *

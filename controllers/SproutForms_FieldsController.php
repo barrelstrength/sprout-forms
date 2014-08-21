@@ -132,4 +132,48 @@ class SproutForms_FieldsController extends BaseController
 			'success' => true
 		));
 	}
+
+	/**
+	 * Saves a section
+	 *
+	 * @param 
+	 * @return bool
+	 */
+	public function actionSaveSection()
+	{
+		// $this->requirePostRequest();
+		// $this->requireAjaxRequest();
+
+		// $name   = craft()->request->getRequiredPost('name');
+		// $formId = craft()->request->getRequiredPost('formId');
+
+		// $form = craft()->sproutForms_form->getFormById($formId);
+		
+		// $section = new FieldLayoutTabModel();
+		// $section->name      = $name;
+		// $section->layoutId  = $form->fieldLayoutId;
+		// $section->sortOrder = $tabSortOrder;
+		// $section->setFields($tabFields);
+
+		// 	$groupRecord = $this->_getGroupRecord($group);
+		// 	$groupRecord->name = $group->name;
+
+		// if ($groupRecord->validate())
+		// {
+		// 	$groupRecord->save(false);
+
+		// 	// Now that we have an ID, save it on the model & models
+		// 	if (!$group->id)
+		// 	{
+		// 		$group->id = $groupRecord->id;
+		// 	}
+
+		// 	return true;
+		// }
+		// else
+		// {
+		// 	$group->addErrors($groupRecord->getErrors());
+		// 	return false;
+		// }
+	}
 }
