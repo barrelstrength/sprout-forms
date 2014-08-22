@@ -169,6 +169,8 @@ class SproutForms_EntriesController extends BaseController
 			// $entryCpUrl = craft()->config->get('cpTrigger') . "/sproutforms/entries/edit/" . $entry->id;
 
 			$fields = $entry->getFieldLayout()->getFields();
+
+			
 			
 			$email->htmlBody = craft()->templates->render('sproutforms/_special/email', array(
 				'formName' => $form->name,
