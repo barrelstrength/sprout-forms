@@ -3,6 +3,19 @@ namespace Craft;
 
 class SproutForms_FormRecord extends BaseRecord
 {
+	private $_oldHandle;
+
+	/**
+	 * Init
+	 */
+	public function init()
+	{
+		parent::init();
+
+		// Store the old handle in case it's ever requested.
+		$this->attachEventHandler('onAfterFind', array($this, 'storeOldHandle'));
+	}
+	
 	/**
 	 * Return table name
 	 *
@@ -111,5 +124,23 @@ class SproutForms_FormRecord extends BaseRecord
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * Store the old handle.
+	 */
+	public function storeOldHandle()
+	{
+		$this->_oldHandle = $this->handle;
+	}
+
+	/**
+	 * Returns the old handle.
+	 *
+	 * @return string
+	 */
+	public function getOldHandle()
+	{
+		return $this->_oldHandle;
 	}
 }

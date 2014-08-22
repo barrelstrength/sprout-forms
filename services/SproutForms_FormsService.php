@@ -9,8 +9,6 @@ class SproutForms_FormsService extends BaseApplicationComponent
 	
 	private $_formsByFieldId;
 
-
-
 	/**
 	 * Constructor
 	 * 
@@ -53,6 +51,10 @@ class SproutForms_FormsService extends BaseApplicationComponent
 			$isNewForm = true;
 		}
 
+		// Add the oldHandle to our model so we can determine if we
+		// need to rename the content table
+		$form->oldHandle = $formRecord->getOldHandle();
+
 		$formRecord->name       = $form->name;
 		$formRecord->handle     = $form->handle;
 		$formRecord->titleFormat = $form->titleFormat;
@@ -74,7 +76,6 @@ class SproutForms_FormsService extends BaseApplicationComponent
 			$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
 			try
 			{
-				
 				// Create a Field Layout if we don't have one already
 				if (!$formRecord->fieldLayoutId)
 				{	
@@ -88,6 +89,15 @@ class SproutForms_FormsService extends BaseApplicationComponent
 					$formRecord->fieldLayoutId = $fieldLayout->id;
 				}
 
+				// Save the field layout
+				$fieldLayout = $form->getFieldLayout();
+				craft()->fields->saveLayout($fieldLayout);
+
+				// Update the form record/model with the new layout ID
+				$form->fieldLayoutId = $fieldLayout->id;
+				$formRecord->fieldLayoutId = $fieldLayout->id;
+
+
 				// Create the content table first since the form will need it
 				$oldContentTable = $this->getContentTableName($form, true);
 				$newContentTable = $this->getContentTableName($form);
@@ -96,11 +106,11 @@ class SproutForms_FormsService extends BaseApplicationComponent
 				if (!craft()->db->tableExists($newContentTable))
 				{
 					if ($oldContentTable && craft()->db->tableExists($oldContentTable))
-					{
+					{	
 						MigrationHelper::renameTable($oldContentTable, $newContentTable);
 					}
 					else
-					{
+					{	
 						$this->_createContentTable($newContentTable);
 					}
 				}
@@ -167,7 +177,6 @@ class SproutForms_FormsService extends BaseApplicationComponent
 			// Delete the Element and Form
 			craft()->elements->deleteElementById($form->id);
 			
-
 			if ($transaction !== null)
 			{
 				$transaction->commit();
