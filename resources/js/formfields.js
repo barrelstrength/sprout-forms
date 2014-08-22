@@ -39,6 +39,7 @@ var FormFieldsAdmin = Garnish.Base.extend(
 					if (response.success)
 					{
 						// location.href = Craft.getUrl('sproutforms/forms/edit/' + response.section.id + '#fields');
+						// @TODO - Make dynamic
 						location.href = Craft.getUrl('sproutforms/forms/edit/2422#fields');
 					}
 					else if (response.errors)
