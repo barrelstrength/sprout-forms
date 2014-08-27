@@ -135,20 +135,7 @@ class SproutFormsPlugin extends BasePlugin
 
 		foreach ($forms as $form) 
 		{
-			// Delete all fields associated with this Form
-			$fields = $form->getFieldLayout()->getFields();
-			foreach ($fields as $field) 
-			{
-				craft()->db->createCommand()->delete('fields', 'id=:id', array(':id'=>$field->fieldId));
-			}
-			
-			// Delete Field Layout and related Field Layout Fields
-			// $fieldLayoutRecord = FieldLayoutRecord::model()->deleteAll('id=:id', array(':id'=>$form->fieldLayoutId));
-			craft()->db->createCommand()->delete('fieldlayouts', 'id=:id', array(':id'=>$form->fieldLayoutId));
-
-			// Delete the content table for each of our forms
-			$contentTableName = 'sproutformscontent_' . $form->handle;
-			craft()->db->createCommand()->dropTableIfExists($contentTableName);
+			craft()->sproutForms_forms->deleteForm($form);
 		}
 
 		// remove example templates  
