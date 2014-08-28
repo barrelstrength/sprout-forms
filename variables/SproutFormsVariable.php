@@ -13,6 +13,7 @@ class SproutFormsVariable
 	public $settings;
 	public $fields;
 	public $templates;
+	public $namespace;
 	
 	/**
 	 * Plugin Name
@@ -80,7 +81,7 @@ class SproutFormsVariable
 
 		// Create a list of the name, class, and file of fields we support 
 		$this->fields = craft()->sproutForms_fields->getSproutFormsFields($fieldtypesFolder);
-
+		
 		// Determine where our form and field template should come from
 		$this->templates = craft()->sproutForms_fields->getSproutFormsTemplates();
 		
@@ -221,6 +222,7 @@ class SproutFormsVariable
 				// Create the HTML for the input field
 				$input = $frontEndField->getInputHtml($fieldModel, $value, $settings);
 				
+				$this->namespace = $frontEndField->getNamespace();
 			}
 			else
 			{	
@@ -230,25 +232,18 @@ class SproutFormsVariable
 			}
 		}
 
-		// @TODO - hard coded. Abstract this.
-		// if form.submitAction, we want this blank
-		// for fields like inivisble captcha, we want this blank
-		if ($type == 'SproutInvisibleCaptcha_InvisibleCaptcha') 
-		{
-			$namespace = '';
-		}
-		else
-		{
-			$namespace = 'fields';
-		}
-		
-
 		$fieldHtml = "";
 
 		// Render our field
 		if ($input OR $instructions) 
 		{	
 			craft()->path->setTemplatesPath($this->templates['field']);
+			
+			// Identity PlainText and Textarea fields distinctly
+			if ($field->type == 'PlainText' && $field->settings['multiline'] == 1) 
+			{
+				$field->type = 'textarea';
+			}
 
 			$fieldHtml = craft()->templates->render('field', array(
 				'label'        => Craft::t($field->name),
@@ -257,7 +252,8 @@ class SproutFormsVariable
 				'id'           => $field->handle,
 				'errors'       => $entry->getErrors($field->handle),
 				'input'        => $input,
-				'namespace'    => $namespace
+				'namespace'    => $this->namespace,
+				'type'         => strtolower($field->type),
 			));
 		}
 
