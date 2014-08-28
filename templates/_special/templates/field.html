@@ -5,7 +5,7 @@
 {%- set namespace = namespace -%}
 
 {% namespace namespace %}
-<div class="field{% if first is defined and first %} first{% endif %}{% if class is defined and class %} {{ class }}{% endif %}"{% if id %} id="{{ id }}-field"{% endif %}>
+<div class="field {{ type }}{% if first is defined and first %} first{% endif %}{% if class is defined and class %} {{ class }}{% endif %}"{% if id %} id="{{ id }}-field"{% endif %}>
 	{% if label or instructions %}
 		<div class="heading">
 			{% if label %}
