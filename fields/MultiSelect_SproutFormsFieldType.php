@@ -4,7 +4,7 @@ namespace Craft;
 /**
  *
  */
-class MultiSelect_SproutFormsFieldType
+class MultiSelect_SproutFormsFieldType extends BaseSproutFormsFieldType
 {
 	/**
 	 * Returns the field's input HTML.

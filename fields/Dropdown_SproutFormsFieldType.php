@@ -4,7 +4,7 @@ namespace Craft;
 /**
  *
  */
-class Dropdown_SproutFormsFieldType
+class Dropdown_SproutFormsFieldType extends BaseSproutFormsFieldType
 {
 	/**
 	 * Returns the field's input HTML.

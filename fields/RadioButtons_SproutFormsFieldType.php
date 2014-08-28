@@ -4,7 +4,7 @@ namespace Craft;
 /**
  *
  */
-class RadioButtons_SproutFormsFieldType
+class RadioButtons_SproutFormsFieldType extends BaseSproutFormsFieldType
 {
 	/**
 	 * Returns the field's input HTML.

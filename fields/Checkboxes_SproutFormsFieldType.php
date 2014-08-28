@@ -4,7 +4,7 @@ namespace Craft;
 /**
  *
  */
-class Checkboxes_SproutFormsFieldType
+class Checkboxes_SproutFormsFieldType extends BaseSproutFormsFieldType
 {
 	/**
 	 * Returns the field's input HTML.

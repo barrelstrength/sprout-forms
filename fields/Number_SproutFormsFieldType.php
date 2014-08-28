@@ -4,7 +4,7 @@ namespace Craft;
 /**
  *
  */
-class Number_SproutFormsFieldType
+class Number_SproutFormsFieldType extends BaseSproutFormsFieldType
 {
 	/**
 	 * Returns the field's input HTML.
