@@ -44,6 +44,24 @@ class SproutForms_FormsService extends BaseApplicationComponent
 
 			$oldForm = SproutForms_FormModel::populateModel($formRecord);
 			$isNewForm = false;
+
+			// Add the oldHandle to our model so we can determine if we
+			// need to rename the content table
+			$form->oldHandle = $formRecord->getOldHandle();
+
+			// If we have a fieldLayoutId, we're saving a field (from he saveField method)
+			// so let's not overwrite that new layout with our old one.  If we don't have
+			// a fieldLayoutId, we're building our form on the form page and can overwrite
+			// our layout with the one we have stored in the database.
+			if (!$form->fieldLayoutId) 
+			{
+				$form->fieldLayoutId = $formRecord->fieldLayoutId;
+
+				$fieldLayout = new FieldLayoutModel();
+				$fieldLayout->type = 'SproutForms_Form';
+				$fieldLayout->setFields($oldForm->getFieldLayout()->getFields());
+				$form->setFieldLayout($fieldLayout);
+			}
 		}
 		else
 		{
@@ -51,22 +69,19 @@ class SproutForms_FormsService extends BaseApplicationComponent
 			$isNewForm = true;
 		}
 
-		// Add the oldHandle to our model so we can determine if we
-		// need to rename the content table
-		$form->oldHandle = $formRecord->getOldHandle();
-
-		$formRecord->name       = $form->name;
-		$formRecord->handle     = $form->handle;
-		$formRecord->titleFormat = $form->titleFormat;
-		$formRecord->groupId    = $form->groupId;
-		$formRecord->redirectUri       = $form->redirectUri;
-		$formRecord->submitAction      = $form->submitAction;
-		$formRecord->submitButtonText    = $form->submitButtonText;
-		$formRecord->notificationRecipients       = $form->notificationRecipients;
-		$formRecord->notificationSubject    = $form->notificationSubject;
-		$formRecord->notificationSenderName     = $form->notificationSenderName;
-		$formRecord->notificationSenderEmail     = $form->notificationSenderEmail;
-		$formRecord->notificationReplyToEmail     = $form->notificationReplyToEmail;
+		// Create our new Form Record
+		$formRecord->name                     = $form->name;
+		$formRecord->handle                   = $form->handle;
+		$formRecord->titleFormat              = (!empty($form->titleFormat) ? $form->titleFormat : "{dateCreated|date('D, d M Y H:i:s')}");
+		$formRecord->groupId                  = $form->groupId;
+		$formRecord->redirectUri              = $form->redirectUri;
+		$formRecord->submitAction             = $form->submitAction;
+		$formRecord->submitButtonText         = $form->submitButtonText;
+		$formRecord->notificationRecipients   = $form->notificationRecipients;
+		$formRecord->notificationSubject      = $form->notificationSubject;
+		$formRecord->notificationSenderName   = $form->notificationSenderName;
+		$formRecord->notificationSenderEmail  = $form->notificationSenderEmail;
+		$formRecord->notificationReplyToEmail = $form->notificationReplyToEmail;
 
 		$formRecord->validate();
 		$form->addErrors($formRecord->getErrors());
@@ -76,27 +91,33 @@ class SproutForms_FormsService extends BaseApplicationComponent
 			$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
 			try
 			{
+				// Set the field context
+				craft()->content->fieldContext = $form->getFieldContext();
+				craft()->content->contentTable = $form->getContentTable();
+
 				// Create a Field Layout if we don't have one already
 				if (!$formRecord->fieldLayoutId)
 				{	
 					$fieldLayout = new FieldLayoutModel();
 					$fieldLayout->type = 'SproutForms_Form';
 					craft()->fields->saveLayout($fieldLayout, false);
-
 					$form->setFieldLayout($fieldLayout);
+					
 					$form->fieldLayoutId = $fieldLayout->id;
-
 					$formRecord->fieldLayoutId = $fieldLayout->id;
 				}
 
 				// Save the field layout
 				$fieldLayout = $form->getFieldLayout();
-				craft()->fields->saveLayout($fieldLayout);
+				craft()->fields->saveLayout($fieldLayout, false);
 
-				// Update the form record/model with the new layout ID
 				$form->fieldLayoutId = $fieldLayout->id;
 				$formRecord->fieldLayoutId = $fieldLayout->id;
 
+				if (!$isNewForm && $oldForm->fieldLayoutId)
+				{
+					craft()->fields->deleteLayoutById($oldForm->fieldLayoutId);
+				}
 
 				// Create the content table first since the form will need it
 				$oldContentTable = $this->getContentTableName($form, true);

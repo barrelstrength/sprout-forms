@@ -20,10 +20,10 @@ class SproutForms_FieldsService extends FieldsService
 			try
 			{
 				// Set the field context
-				craft()->content->fieldContext = $form->getFieldContext();
-				craft()->content->contentTable = $form->getContentTable();
+				// craft()->content->fieldContext = $form->getFieldContext();
+				// craft()->content->contentTable = $form->getContentTable();
 
-				$oldFieldLayoutId = $form->fieldLayoutId;
+				// $oldFieldLayoutId = $form->fieldLayoutId;
 
 				if 	($field->id)
 				{
@@ -56,23 +56,30 @@ class SproutForms_FieldsService extends FieldsService
 					$fieldLayout = new FieldLayoutModel();
 					$fieldLayout->type = 'SproutForms_Form';
 					$fieldLayout->setFields($fieldLayoutFields);
-					craft()->fields->saveLayout($fieldLayout, false);
+					// craft()->fields->saveLayout($fieldLayout);
 
 					// Update the form model & record with our new field layout ID
 					$form->setFieldLayout($fieldLayout);
-					$form->fieldLayoutId = $fieldLayout->id;
-
-					$formRecord = SproutForms_FormRecord::model()->findById($form->id);
-					$formRecord->fieldLayoutId = $fieldLayout->id;
-
-					// Update the form with the field layout ID
-					$formRecord->save(false);
-
-					// Clean up the old layout and fields
-					craft()->fields->deleteLayoutById($oldFieldLayoutId);
 					
-					// Save the new field
-					craft()->fields->saveField($field);
+					// echo "<pre>";
+					// print_r($form->getFieldLayout()->getFields());
+					// echo "</pre>";
+					// die('fin');
+					
+
+					// $form->fieldLayoutId = $fieldLayout->id;
+
+					// $formRecord = SproutForms_FormRecord::model()->findById($form->id);
+					// $formRecord->fieldLayoutId = $fieldLayout->id;
+
+					// // Update the form with the field layout ID
+					// $formRecord->save(false);
+
+					// // Clean up the old layout and fields
+					// craft()->fields->deleteLayoutById($oldFieldLayoutId);
+					
+					// // Save the new field
+					// craft()->fields->saveField($field);
 
 				}
 				else
@@ -84,7 +91,6 @@ class SproutForms_FieldsService extends FieldsService
 					$fieldLayoutFields = array();
 					$sortOrder = 0;
 
-					
 					foreach ($form->getFields() as $oldField)
 					{
 						$sortOrder++;
@@ -105,21 +111,36 @@ class SproutForms_FieldsService extends FieldsService
 					$fieldLayout = new FieldLayoutModel();
 					$fieldLayout->type = 'SproutForms_Form';
 					$fieldLayout->setFields($fieldLayoutFields);
-					craft()->fields->saveLayout($fieldLayout, false);
+					$form->setFieldLayout($fieldLayout);
+
+					// echo "<pre>";
+					// print_r($form->getFieldLayout()->getFields());
+					// echo "</pre>";
+					// die('fin');
+					
+					// craft()->fields->saveLayout($fieldLayout);
+
+					// echo "<pre>";
+					// print_r($fieldLayout->getFields());
+					// echo "</pre>";
+					// die('fin');
+					
 
 					// Update the form model & record with our new field layout ID
-					$form->setFieldLayout($fieldLayout);
-					$form->fieldLayoutId = $fieldLayout->id;
+					// $form->setFieldLayout($fieldLayout);
+					// $form->fieldLayoutId = $fieldLayout->id;
 
-					$formRecord = SproutForms_FormRecord::model()->findById($form->id);
-					$formRecord->fieldLayoutId = $fieldLayout->id;
+					// $formRecord = SproutForms_FormRecord::model()->findById($form->id);
+					// $formRecord->fieldLayoutId = $fieldLayout->id;
 
-					// Update the form with the field layout ID
-					$formRecord->save(false);
+					// // Update the form with the field layout ID
+					// $formRecord->save(false);
 
-					// Clean up the old layout and fields
-					craft()->fields->deleteLayoutById($oldFieldLayoutId);
+					// // Clean up the old layout and fields
+					// craft()->fields->deleteLayoutById($oldFieldLayoutId);
 				}
+
+				craft()->sproutForms_forms->saveForm($form);
 
 				if ($transaction !== null)
 				{

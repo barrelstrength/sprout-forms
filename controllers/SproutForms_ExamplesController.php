@@ -259,15 +259,17 @@ class SproutForms_ExamplesController extends BaseController
 
 				// Create the Form
 				craft()->sproutForms_forms->saveForm($form);
+				
+				// Set our field context
+				craft()->content->fieldContext = $form->getFieldContext();
+				craft()->content->contentTable = $form->getContentTable();
 
-				$this->_formId = $form->id;
+				$fieldLayoutFields = array();
+				$sortOrder = 0;
 
 				// Add Fields to the Form
 				foreach ($fieldSettings[$form->handle] as $settings) 
 				{
-					// Grab our form each time so we are sure to have the latest fieldLayoutId
-					$form = craft()->sproutForms_forms->getFormById($this->_formId);
-
 					$field = new FieldModel();
 					$field->name        = $settings['name'];
 					$field->handle      = $settings['handle'];
@@ -275,8 +277,26 @@ class SproutForms_ExamplesController extends BaseController
 					$field->required    = $settings['required'];
 					$field->settings    = $settings['settings'];
 
-					craft()->sproutForms_fields->saveField($form, $field);
+					// Save our field
+					craft()->fields->saveField($field);
+
+					$sortOrder++;
+					$fieldLayoutFields[] = array(
+						'fieldId'   => $field->id,
+						'required'  => $field->required,
+						'sortOrder' => $sortOrder
+					);
+
 				}
+
+				$fieldLayout = new FieldLayoutModel();
+				$fieldLayout->type = 'SproutForms_Form';
+				$fieldLayout->setFields($fieldLayoutFields);
+				$form->setFieldLayout($fieldLayout);
+
+				// Save our form again with a layouts
+				craft()->sproutForms_forms->saveForm($form);
+
 			}
 		}
 		catch (\Exception $e)

@@ -30,6 +30,8 @@ class SproutForms_FormsController extends BaseController
 		$form->notificationSenderEmail     = craft()->request->getPost('notificationSenderEmail');
 		$form->notificationReplyToEmail     = craft()->request->getPost('notificationReplyToEmail');
 
+		// $this->_assembleLayout($form);
+
 		// Save it
 		if (craft()->sproutForms_forms->saveForm($form))
 		{
@@ -54,6 +56,25 @@ class SproutForms_FormsController extends BaseController
 
 		$name   = craft()->request->getRequiredPost('name');
 		$formId = craft()->request->getRequiredPost('formId');
+		
+		$form = craft()->sproutForms_forms->getFormById($formId);
+
+		$this->_assembleLayout($form);
+
+		// Save it
+		if (craft()->sproutForms_forms->saveForm($form))
+		{
+			$this->returnJson(array('success' => true));
+		}
+	}
+
+	private function _assembleLayout(SproutForms_FormModel $form)
+	{
+		// echo "<pre>";
+		// print_r();
+		// echo "</pre>";
+		// die('fin');
+		
 		$fieldLayoutTabs = craft()->request->getRequiredPost('fieldLayoutTabs');
 
 		// Update our field/section info to be in the right format to save as tabs
@@ -62,9 +83,7 @@ class SproutForms_FormsController extends BaseController
 		{
 			$fieldLayoutArray[$field['section']][] = $field['fieldId'];
 		}		
-
-		$form = craft()->sproutForms_forms->getFormById($formId);
-
+		
 		// We're handling required fields a bit different than Craft
 		// by default so let's call `assembleLayout()` directly
 		
@@ -75,12 +94,6 @@ class SproutForms_FormsController extends BaseController
 		$fieldLayout = craft()->fields->assembleLayout($fieldLayoutArray, $requiredFields);
 		$fieldLayout->type = 'SproutForms_Form';
 		$form->setFieldLayout($fieldLayout);
-
-		// Save it
-		if (craft()->sproutForms_forms->saveForm($form))
-		{
-			$this->returnJson(array('success' => true));
-		}
 	}
 
 	/**

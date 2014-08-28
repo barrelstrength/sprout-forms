@@ -32,7 +32,70 @@ class SproutForms_FieldsController extends BaseController
 			$field->settings = $typeSettings[$field->type];
 		}
 
-		if (craft()->sproutForms_fields->saveField($form, $field)) 
+		// Does our field validate?
+		if (!craft()->fields->validateField($field)) 
+		{
+			return false;
+		}
+
+		$fieldLayoutFields = array();
+		$sortOrder = 0;
+		$isNewField = false;
+
+		// Save a new field
+		if (!$field->id) 
+		{
+			$isNewField = true;
+
+			// Set our field context
+			craft()->content->fieldContext = $form->getFieldContext();
+			craft()->content->contentTable = $form->getContentTable();
+
+			// Save our field
+			craft()->fields->saveField($field);
+		}
+
+		// Save a new field layout with all form fields
+		// to make sure we capture the required setting
+		foreach ($form->getFields() as $oldField)
+		{	
+			$sortOrder++;
+
+			if ($oldField->id == $field->id)
+			{
+				$fieldLayoutFields[] = array(
+					'fieldId'   => $field->id,
+					'required'  => $field->required,
+					'sortOrder' => $sortOrder
+				);
+			}
+			else
+			{
+				$fieldLayoutFields[] = array(
+					'fieldId'   => $oldField->id,
+					'required'  => $oldField->required,
+					'sortOrder' => $sortOrder
+				);
+			}
+		}
+
+		if ($isNewField) 
+		{
+			$sortOrder++;
+			$fieldLayoutFields[] = array(
+				'fieldId'   => $field->id,
+				'required'  => $field->required,
+				'sortOrder' => $sortOrder
+			);
+		}
+		
+		$fieldLayout = new FieldLayoutModel();
+		$fieldLayout->type = 'SproutForms_Form';
+		$fieldLayout->setFields($fieldLayoutFields);
+		$form->setFieldLayout($fieldLayout);
+
+		// Save the fields as a layout on our Form Element
+		if (craft()->sproutForms_forms->saveForm($form)) 
 		{
 			craft()->userSession->setNotice(Craft::t('Field saved.'));
 
