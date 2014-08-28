@@ -31,6 +31,13 @@ class SproutFormsPlugin extends BasePlugin
 		return true;
 	}
 
+	public function init()
+	{
+		// @TODO - Are these necessary?  Or is there a better way to do this?
+		Craft::import('plugins.sproutforms.fields.ISproutFormsFieldType');
+		Craft::import('plugins.sproutforms.fields.BaseSproutFormsFieldType');
+	}
+
 	/**
 	 * Define plugin settings
 	 * 
@@ -111,7 +118,7 @@ class SproutFormsPlugin extends BasePlugin
 	{		
 		switch ($event) {
 			case 'saveEntry': // only event supported at this time
-				craft()->on( 'sproutForms_entries.saveEntry' , $callback);
+				craft()->on( 'sproutForms.saveEntry' , $callback);
 				break;
 		}
 	}
