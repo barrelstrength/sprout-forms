@@ -170,14 +170,35 @@ class SproutForms_EntriesController extends BaseController
 
 			$fields = $entry->getFieldLayout()->getFields();
 
+			$settings = craft()->plugins->getPlugin('sproutforms')->getSettings();
+			$templateFolderOverride = $settings->templateFolderOverride;
+
+			$emailTemplate = craft()->path->getPluginsPath() . 'sproutforms/templates/_special/';
+
+			if ($templateFolderOverride) 
+			{
+				$emailTemplateFile = craft()->path->getSiteTemplatesPath() . $templateFolderOverride . "/email";
+
+				foreach (craft()->config->get('defaultTemplateExtensions') as $extension) 
+				{
+					if (IOHelper::fileExists($emailTemplateFile . "." . $extension)) 
+					{
+						$emailTemplate = craft()->path->getSiteTemplatesPath() . $templateFolderOverride . "/";
+					}
+				}
+			}
+
+			// Set our Sprout Forms Email Template path
+			craft()->path->setTemplatesPath($emailTemplate);
 			
-			
-			$email->htmlBody = craft()->templates->render('sproutforms/_special/email', array(
+			$email->htmlBody = craft()->templates->render('email', array(
 				'formName' => $form->name,
 				// 'entryCpUrl' => $entryCpUrl,
 				'fields' => $fields,
 				'element' => $entry
 			));
+
+			craft()->path->setTemplatesPath(craft()->path->getCpTemplatesPath());
 
 			// @TODO - create fallback text email
 			// $email->body     = $form->body;

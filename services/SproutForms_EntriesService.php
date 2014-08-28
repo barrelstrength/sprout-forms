@@ -61,11 +61,12 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 			$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
 			try
 			{
-				// Fire an 'onBeforeSaveEntry' event
-				$this->onBeforeSaveEntry(new Event($this, array(
+				// Hand off our event to the primary
+				// service for easier naming
+				craft()->sproutForms->sproutRaiseEvent('onBeforeSaveEntry', $this, array(
 					'entry'      => $entry,
 					'isNewEntry' => $isNewEntry
-				)));
+				));
 
 				if (craft()->elements->saveElement($entry))
 				{
@@ -84,7 +85,9 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 					}
 
 					// Fire an 'onSaveEntry' event
-					$this->onSaveEntry(new Event($this, array(
+					// Hand off our event to the primary
+					// service for easier naming
+					craft()->sproutForms->sproutRaiseEvent('onSaveEntry', $this, array(
 						'entry'      => $entry,
 						'isNewEntry' => $isNewEntry,
 
@@ -96,7 +99,7 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 						// @TODO - add back support for handing off the 
 						// entry values to use in the notification
 						// 'entity'     => $entry
-					)));
+					));
 
 					return true;
 				}
