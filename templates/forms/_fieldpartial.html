@@ -1,16 +1,13 @@
-{% if craft.request.getSegment(3) == 'new' %}
+{% if fields is defined and fields|length %}
 
-	<p>Please create your form to add fields.</p>
-	
-{% else %}
+		<h3>{{ tab.name }}</h3>
 
-	{% if fields is defined and fields|length %}
 		<table id="formFields" data-formid="{{ form.id }}" class="data fullwidth collapsible">
 			<thead>
 				<th scope="col">{{ "Name"|t }}</th>
 				<th scope="col">{{ "Handle"|t }}</th>
 				<th scope="col">{{ "Type"|t }}</th>
-				<td class="thin"></td>
+				{# <td class="thin"></td> #}
 				<td class="thin"></td>
 			</thead>
 			<tbody>
@@ -33,21 +30,14 @@
 								<span class="error">{{ field.type }}</span>
 							{% endif %}
 						</td>
-						<td class="thin"><a class="move icon" title="Reorder" role="button"></a></td>
+						{# <td class="thin"><a class="move icon" title="Reorder" role="button"></a></td> #}
 						<td class="thin"><a class="delete icon" title="{{ 'Delete'|t }}" role="button"></a></td>
 					</tr>
 				{% endfor %}
 			</tbody>
 		</table>
+		<br/>
+
 	{% else %}
 		 <p>Add your first field.</p>
 	{% endif %}
-
-	<div class="buttons">
-		<a href="{{ url('sproutforms/forms/' ~ form.id ~ '/fields/new') }}" class="submit btn add icon">New Field</a>
-		<a id="newSection" data-action="newSection" class="btn add icon">New Section</a>
-	</div>
-
-{% endif %}
-
-{% includeJsResource "sproutforms/js/formfields.js" %}

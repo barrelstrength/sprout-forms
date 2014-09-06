@@ -239,7 +239,7 @@ class SproutFormsVariable
 		{	
 			craft()->path->setTemplatesPath($this->templates['field']);
 			
-			// Identity PlainText and Textarea fields distinctly
+			// Identify PlainText and Textarea fields distinctly
 			if ($field->type == 'PlainText' && $field->settings['multiline'] == 1) 
 			{
 				$field->type = 'textarea';

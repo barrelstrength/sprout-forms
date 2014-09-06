@@ -31,7 +31,7 @@ class SproutForms_FormsService extends BaseApplicationComponent
 	 * @throws \Exception
 	 * @return bool
 	 */
-	public function saveForm(SproutForms_FormModel $form)
+	public function saveForm(SproutForms_FormModel $form, $field = null)
 	{
 		if ($form->id)
 		{
@@ -45,23 +45,13 @@ class SproutForms_FormsService extends BaseApplicationComponent
 			$oldForm = SproutForms_FormModel::populateModel($formRecord);
 			$isNewForm = false;
 
+			$hasLayout = !empty($form->getFieldLayout()->getFields());
+			
+
 			// Add the oldHandle to our model so we can determine if we
 			// need to rename the content table
 			$form->oldHandle = $formRecord->getOldHandle();
 
-			// If we have a fieldLayoutId, we're saving a field (from he saveField method)
-			// so let's not overwrite that new layout with our old one.  If we don't have
-			// a fieldLayoutId, we're building our form on the form page and can overwrite
-			// our layout with the one we have stored in the database.
-			if (!$form->fieldLayoutId) 
-			{
-				$form->fieldLayoutId = $formRecord->fieldLayoutId;
-
-				$fieldLayout = new FieldLayoutModel();
-				$fieldLayout->type = 'SproutForms_Form';
-				$fieldLayout->setFields($oldForm->getFieldLayout()->getFields());
-				$form->setFieldLayout($fieldLayout);
-			}
 		}
 		else
 		{
@@ -85,7 +75,7 @@ class SproutForms_FormsService extends BaseApplicationComponent
 
 		$formRecord->validate();
 		$form->addErrors($formRecord->getErrors());
-
+		
 		if (!$form->hasErrors())
 		{
 			$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
@@ -94,29 +84,56 @@ class SproutForms_FormsService extends BaseApplicationComponent
 				// Set the field context
 				craft()->content->fieldContext = $form->getFieldContext();
 				craft()->content->contentTable = $form->getContentTable();
-
-				// Create a Field Layout if we don't have one already
-				if (!$formRecord->fieldLayoutId)
+				
+				if ($isNewForm) 
 				{	
+					die('Shazam!');
+					
+					SproutFormsPlugin::log('Is New Form');
+					
 					$fieldLayout = new FieldLayoutModel();
 					$fieldLayout->type = 'SproutForms_Form';
-					craft()->fields->saveLayout($fieldLayout, false);
-					$form->setFieldLayout($fieldLayout);
-					
+
+					// Save the field layout
+					craft()->fields->saveLayout($fieldLayout);
+
+					// Assign our new layout id info to our 
+					// form model and records
 					$form->fieldLayoutId = $fieldLayout->id;
+					$form->setFieldLayout($fieldLayout);
 					$formRecord->fieldLayoutId = $fieldLayout->id;
 				}
+				else
+				{	
+					SproutFormsPlugin::log('Is Existing Form');
 
-				// Save the field layout
-				$fieldLayout = $form->getFieldLayout();
-				craft()->fields->saveLayout($fieldLayout, false);
+					// If we have a layout use it, otherwise
+					// since this is an existing form, grab the oldForm layout
+					if ($hasLayout)
+					{
+						SproutFormsPlugin::log('Submitted Form has a layout');
 
-				$form->fieldLayoutId = $fieldLayout->id;
-				$formRecord->fieldLayoutId = $fieldLayout->id;
+						$fieldLayout = $form->getFieldLayout();
 
-				if (!$isNewForm && $oldForm->fieldLayoutId)
-				{
-					craft()->fields->deleteLayoutById($oldForm->fieldLayoutId);
+						SproutFormsPlugin::log('Forms Service field layout iD: ' . $form->getFieldLayout()->id);
+
+						// Save the field layout
+						craft()->fields->saveLayout($fieldLayout);
+
+						SproutFormsPlugin::log('Forms Service after saving field layout iD: ' . $fieldLayout->id);
+
+						// Assign our new layout id info to our 
+						// form model and records
+						$form->fieldLayoutId = $fieldLayout->id;
+						$form->setFieldLayout($fieldLayout);
+						$formRecord->fieldLayoutId = $fieldLayout->id;
+
+						SproutFormsPlugin::log('Forms Service old field layout iD: ' . $oldForm->fieldLayoutId);
+						
+						// Delete our previous record
+						craft()->fields->deleteLayoutById($oldForm->fieldLayoutId);
+					}
+					
 				}
 
 				// Create the content table first since the form will need it

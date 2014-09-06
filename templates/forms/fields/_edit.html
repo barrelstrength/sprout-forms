@@ -37,7 +37,11 @@
 {% endif %}
 
 
-{% set body %}
+{% block main %}
+
+<div class="grid">
+	<div class="item">
+		<div class="pane">
 
 	<form method="post" accept-charset="UTF-8" data-saveshortcut="1">
 		<input type="hidden" name="action" value="sproutForms/fields/saveField">
@@ -47,6 +51,30 @@
 
 		{% if fieldId is defined %}
 			<input type="hidden" name="fieldId" value="{{ fieldId }}">
+		{% endif %}
+
+		{% if sections is defined and sections|length %}
+
+			  {% set sectionOptions = [
+			    { label: 'Choose a Tab...', value: '' }
+			  ] %}
+
+			  {% for section in sections %}
+			    {% set sectionOptions = sectionOptions|merge([{ label: section.name, value: section.id }]) %}
+			  {% endfor %}
+
+			  {# {% set sectionOptions = sectionOptions|merge([{ label: 'New Section...', value: '' }]) %} #}
+
+			  {{ forms.selectField({
+			    first: true,
+			    label: "Tab"|t,
+			    instructions: "Which section should this field be displayed in? <a href='#' id='newSection'>Add New Tab</a>"|t,
+			    id: 'tabId',
+			    name: 'tabId',
+			    options: sectionOptions,
+			    value: tabId
+			  }) }}
+
 		{% endif %}
 
 		{{ forms.textField({
@@ -85,12 +113,12 @@
 			translatable: true
 		}) }}
 
-		{{ forms.lightswitchField({
+		{# {{ forms.lightswitchField({
 			label: "Required"|t,
 			name: 'required',
 			small: true,
 			on: (required is defined ? required : null),
-		}) }}
+		}) }} #}
 
 		<hr>
 
@@ -171,9 +199,16 @@
 			<input type="submit" class="btn submit" value="{{ 'Save'|t }}">
 		</div>
 	</form>
-{% endset %}
 
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}
 
 {% if field is not defined or not field.handle %}
 	{% includeJs "new Craft.HandleGenerator('#name', '#handle');" %}
 {% endif %}
+
+{% includeJsResource "sproutforms/js/formfields.js" %}

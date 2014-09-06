@@ -11,48 +11,103 @@
       label: "Overview"|t, 
       url: '#overview'
     },
+    formfields:  { 
+      label: "Fields"|t, 
+      url: '#formfields'
+    },
     notifications:  { 
       label: "Notifications"|t, 
       url: '#notification'
-    },
-    fields:  { 
-      label: "Fields"|t, 
-      url: '#fields'
-    },
-    publish:  { 
-      label: "Publish"|t, 
-      url: '#publish'
     }
 } %}
 
 {% set title = form.name %}
 
-{% set body %}
+{% block main %}
 
-<form method="post" accept-charset="UTF-8" data-saveshortcut="1">
+<form method="post" accept-charset="UTF-8" data-saveshortcut="1" data-saveshortcut-redirect="{{ craft.request.url }}">
   <input type="hidden" name="action" value="sproutForms/forms/saveForm">
   <input type="hidden" name="redirect" value="sproutforms/forms">
   <input type="hidden" name="id" value="{{ form.id is defined ? form.id : '' }}">
+  
+<div class="grid first">
+	<div class="item" data-position="left" data-min-colspan="2" data-max-colspan="3">
+		<div id="fields" class="pane">
+			
+			{% if tabs is defined and tabs %}
+				{% include "_includes/tabs" %}
+			{% endif %}
 
-	<div id="overview" class="hidden">
-		{% include 'sproutforms/forms/_generalsettings' %}
+			<div id="overview">
+				{% include 'sproutforms/forms/_generalsettings' %}
+			</div>
+
+			<div id="formfields" class="hidden">
+				{% include 'sproutforms/forms/_formfields' %}
+			</div>
+
+			<div id="notification" class="hidden">	
+				{% include 'sproutforms/forms/_notifications' %}
+			</div>
+				
+		</div>
+
+
+	</div>		
+
+	<div class="item" data-position="right" data-colspan="1">
+		
+		<div class="pane">
+
+			{% include 'sproutforms/forms/_publish' %}
+
+			<div class="field" id="enabled-field">
+				<div class="heading">
+					{# <label for="enabled">
+						Status
+					</label> #}
+				</div>
+				<div class="input">
+					{# <div class="left">
+						<div class="lightswitch on" tabindex="0">
+							<div class="lightswitch-container">
+								<div class="label on"></div>
+								<div class="handle"></div>
+								<div class="label off"></div>
+							</div>
+							<input type="hidden" name="enabled" value="1">
+						</div>
+					</div> #}
+					
+					<div class="right">
+						<input type="button" class="btn small formsubmit" value="Delete" data-action="sproutForms/forms/deleteForm" data-confirm="Are you sure you want to delete this form, all of it's fields, and all of it's data?" data-redirect="sproutforms/forms">
+					</div>
+					
+				</div>
+			</div>
+		</div>
+
+		<hr>
+
+		<table class="inputs fullwidth">
+			<tr>
+				<td class="thin">
+					<div class="btngroup submit first">
+						<input type="submit" class="btn submit" value="{{ 'Save'|t }}">
+					</div>
+				</td>
+			</tr>
+		</table>
+
+
+	
 	</div>
 
-	<div id="notification" class="hidden">	
-		{% include 'sproutforms/forms/_notifications' %}
-	</div>
+</div>
 
 </form>
 
-	<div id="fields" class="hidden">
-		{% include 'sproutforms/forms/fields/_index' %}
-	</div>
-
-	<div id="publish" class="hidden">
-		{% include 'sproutforms/forms/_publish' %}
-	</div>
-
-{% endset %}
+{% endblock %}
 
 {% includeJsResource "js/fields.js" %}
 

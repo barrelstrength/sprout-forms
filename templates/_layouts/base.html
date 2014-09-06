@@ -2,7 +2,7 @@
 
 {% set selectedTab = craft.request.segment(2) ? craft.request.segment(2) : 'overview' %}
 
-{% set content %}
+{% block main %}
   
   {{ body }}
 
@@ -13,6 +13,6 @@
     </p>
   </footer> #}
 
-{% endset %}
+{% endblock %}
 
 {% includeCssResource "sproutforms/css/brand.css" %}

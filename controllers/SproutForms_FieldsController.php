@@ -10,15 +10,19 @@ class SproutForms_FieldsController extends BaseController
 	{
 		$this->requirePostRequest();
 
+		// Make sure our field has a section
+		// @TODO - handle this much more gracefully
+		$tabId = craft()->request->getRequiredPost('tabId');
+
 		// Get the Form these fields are related to
 		$formId = craft()->request->getRequiredPost('formId');
 		$form = craft()->sproutForms_forms->getFormById($formId);
-		
+
 		$field = new FieldModel();
 		
 		$field->id           = craft()->request->getPost('fieldId');
-		$field->name         = craft()->request->getPost('name');
-		$field->handle       = craft()->request->getPost('handle');
+		$field->name         = craft()->request->getRequiredPost('name');
+		$field->handle       = craft()->request->getRequiredPost('handle');
 		$field->instructions = craft()->request->getPost('instructions');
 		$field->required     = craft()->request->getPost('required');
 		$field->translatable = (bool) craft()->request->getPost('translatable');
@@ -38,71 +42,100 @@ class SproutForms_FieldsController extends BaseController
 			return false;
 		}
 
-		$fieldLayoutFields = array();
-		$sortOrder = 0;
-		$isNewField = false;
-
 		// Save a new field
 		if (!$field->id) 
 		{
+			SproutFormsPlugin::log('New Field');
+
 			$isNewField = true;
-
-			// Set our field context
-			craft()->content->fieldContext = $form->getFieldContext();
-			craft()->content->contentTable = $form->getContentTable();
-
-			// Save our field
-			craft()->fields->saveField($field);
 		}
-
-		// Save a new field layout with all form fields
-		// to make sure we capture the required setting
-		foreach ($form->getFields() as $oldField)
-		{	
-			$sortOrder++;
-
-			if ($oldField->id == $field->id)
-			{
-				$fieldLayoutFields[] = array(
-					'fieldId'   => $field->id,
-					'required'  => $field->required,
-					'sortOrder' => $sortOrder
-				);
-			}
-			else
-			{
-				$fieldLayoutFields[] = array(
-					'fieldId'   => $oldField->id,
-					'required'  => $oldField->required,
-					'sortOrder' => $sortOrder
-				);
-			}
-		}
-
-		if ($isNewField) 
+		else
 		{
-			$sortOrder++;
-			$fieldLayoutFields[] = array(
-				'fieldId'   => $field->id,
-				'required'  => $field->required,
-				'sortOrder' => $sortOrder
-			);
+			SproutFormsPlugin::log('Existing Field');
+
+			$isNewField = false;
 		}
+
+		// Set our field context
+		craft()->content->fieldContext = $form->getFieldContext();
+		craft()->content->contentTable = $form->getContentTable();
+
+		// Save our field
+		craft()->fields->saveField($field);
+
+
+		// Now let's add this field to our field layout
+		// ------------------------------------------------------------
+
+		// Set the field layout
+		$oldFieldLayout =  $form->getFieldLayout();
+
+		$postedFieldLayout = array();
+		$requiredFields = array();
 		
-		$fieldLayout = new FieldLayoutModel();
-		$fieldLayout->type = 'SproutForms_Form';
-		$fieldLayout->setFields($fieldLayoutFields);
-		$form->setFieldLayout($fieldLayout);
+		foreach ($oldFieldLayout->getTabs() as $oldTab) 
+		{	
+			$oldTabFields = $oldTab->getFields();
 
-		// Save the fields as a layout on our Form Element
-		if (craft()->sproutForms_forms->saveForm($form)) 
+			foreach ($oldTabFields as $oldFieldLayoutField) 
+			{
+				// Build the postedFieldLayout array
+				// [fieldLayout] => Array
+				// (
+				//     [Tab%201] => Array
+				//         (
+				//             [0] => 549
+				//             [1] => 311
+				//         )
+				//     [Tab%202] => Array
+				//         (
+				//             [0] => 457
+				//             [1] => 456
+				//             [2] => 295
+				//         )
+				// )
+				
+				$postedFieldLayout[$oldTab->name][] = $oldFieldLayoutField->fieldId;
+
+				// Build the Required field array
+				// Array
+				// (
+				//     [0] => 549
+				//     [1] => 311
+				// )
+				
+				if ($oldFieldLayoutField->required) 
+				{
+					$requiredFields[] = $oldFieldLayoutField->fieldId;
+				}
+			}
+
+			if ($tabId == $oldTab->id) 
+			{
+				$postedFieldLayout[$oldTab->name][] = $field->id;
+			}
+		}
+
+		// Set the field layout
+		$fieldLayout = craft()->fields->assembleLayout($postedFieldLayout, $requiredFields);
+		
+		$fieldLayout->type = 'SproutForms_Form';
+		$form->setFieldLayout($fieldLayout);
+		
+		// Hand the field off to be saved in the 
+		// field layout of our Form Element
+		if (craft()->sproutForms_forms->saveForm($form, $field))
 		{
+			SproutFormsPlugin::log('Field Saved');
+
 			craft()->userSession->setNotice(Craft::t('Field saved.'));
 
 			$this->redirectToPostedUrl($field);
 		}
 		else
 		{
+			SproutFormsPlugin::log("Couldn't save field.");
+
 			craft()->userSession->setError(Craft::t('Couldn’t save field.'));
 
 			// Send the field back to the template
@@ -137,6 +170,8 @@ class SproutForms_FieldsController extends BaseController
 				));
 				
 				$variables['required'] = $fieldLayoutField->required;
+
+				$variables['tabId'] = $fieldLayoutField->tabId;
 				
 				if (!$variables['field'])
 				{
@@ -154,8 +189,13 @@ class SproutForms_FieldsController extends BaseController
 				$variables['field'] = new FieldModel();
 			}
 
+			$variables['tabId'] = null;
+
 			$variables['title'] = Craft::t('Create a new field');
 		}
+
+		$variables['sections'] = $form->getFieldLayout()->getTabs();
+		
 
 		$this->renderTemplate('sproutforms/forms/fields/_edit', $variables);
 	}
@@ -194,49 +234,5 @@ class SproutForms_FieldsController extends BaseController
 		$this->returnJson(array(
 			'success' => true
 		));
-	}
-
-	/**
-	 * Saves a section
-	 *
-	 * @param 
-	 * @return bool
-	 */
-	public function actionSaveSection()
-	{
-		// $this->requirePostRequest();
-		// $this->requireAjaxRequest();
-
-		// $name   = craft()->request->getRequiredPost('name');
-		// $formId = craft()->request->getRequiredPost('formId');
-
-		// $form = craft()->sproutForms_form->getFormById($formId);
-		
-		// $section = new FieldLayoutTabModel();
-		// $section->name      = $name;
-		// $section->layoutId  = $form->fieldLayoutId;
-		// $section->sortOrder = $tabSortOrder;
-		// $section->setFields($tabFields);
-
-		// 	$groupRecord = $this->_getGroupRecord($group);
-		// 	$groupRecord->name = $group->name;
-
-		// if ($groupRecord->validate())
-		// {
-		// 	$groupRecord->save(false);
-
-		// 	// Now that we have an ID, save it on the model & models
-		// 	if (!$group->id)
-		// 	{
-		// 		$group->id = $groupRecord->id;
-		// 	}
-
-		// 	return true;
-		// }
-		// else
-		// {
-		// 	$group->addErrors($groupRecord->getErrors());
-		// 	return false;
-		// }
 	}
 }

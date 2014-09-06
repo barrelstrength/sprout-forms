@@ -29,9 +29,13 @@ class SproutForms_FormsController extends BaseController
 		$form->notificationSenderName     = craft()->request->getPost('notificationSenderName');
 		$form->notificationSenderEmail     = craft()->request->getPost('notificationSenderEmail');
 		$form->notificationReplyToEmail     = craft()->request->getPost('notificationReplyToEmail');
-
-		// $this->_assembleLayout($form);
-
+		
+		// Set the field layout
+		$fieldLayout =  craft()->fields->assembleLayoutFromPost();
+		
+		$fieldLayout->type = 'SproutForms_Form';
+		$form->setFieldLayout($fieldLayout);
+		
 		// Save it
 		if (craft()->sproutForms_forms->saveForm($form))
 		{
@@ -43,57 +47,10 @@ class SproutForms_FormsController extends BaseController
 			craft()->userSession->setError(Craft::t('Couldn’t save form.'));
 		}
 
-		// Send the calendar back to the template
+		// Send the form back to the template
 		craft()->urlManager->setRouteVariables(array(
 			'form' => $form
 		));
-	}
-
-	public function actionSaveFormFields()
-	{	
-		$this->requirePostRequest();
-		$this->requireAjaxRequest();
-
-		$name   = craft()->request->getRequiredPost('name');
-		$formId = craft()->request->getRequiredPost('formId');
-		
-		$form = craft()->sproutForms_forms->getFormById($formId);
-
-		$this->_assembleLayout($form);
-
-		// Save it
-		if (craft()->sproutForms_forms->saveForm($form))
-		{
-			$this->returnJson(array('success' => true));
-		}
-	}
-
-	private function _assembleLayout(SproutForms_FormModel $form)
-	{
-		// echo "<pre>";
-		// print_r();
-		// echo "</pre>";
-		// die('fin');
-		
-		$fieldLayoutTabs = craft()->request->getRequiredPost('fieldLayoutTabs');
-
-		// Update our field/section info to be in the right format to save as tabs
-		$fieldLayoutArray = array();
-		foreach ($fieldLayoutTabs as $field) 
-		{
-			$fieldLayoutArray[$field['section']][] = $field['fieldId'];
-		}		
-		
-		// We're handling required fields a bit different than Craft
-		// by default so let's call `assembleLayout()` directly
-		
-		// @TODO - how do we handle these?  Query the values we have directly before calling assembleLayout?
-		// $requiredFields = craft()->request->getPost('requiredFields', array());
-		$requiredFields = array();
-
-		$fieldLayout = craft()->fields->assembleLayout($fieldLayoutArray, $requiredFields);
-		$fieldLayout->type = 'SproutForms_Form';
-		$form->setFieldLayout($fieldLayout);
 	}
 
 	/**
@@ -112,21 +69,18 @@ class SproutForms_FormsController extends BaseController
 
 		if (!empty($variables['formId']))
 		{
-			if (empty($variables['form']))
+			// Get the Form
+			$form = craft()->sproutForms_forms->getFormById($variables['formId']);
+
+			$variables['form'] = $form;
+			$variables['title'] = $form->name;
+			$variables['groupId'] = $form->groupId;
+			
+			if (!$variables['form'])
 			{
-				$variables['form'] = craft()->sproutForms_forms->getFormById($variables['formId']);
-
-				$variables['fields'] = $variables['form']->getFieldLayout()->getFields();
-
-				$variables['groupId'] = $variables['form']->groupId;
-				
-				if (!$variables['form'])
-				{
-					throw new HttpException(404);
-				}
+				throw new HttpException(404);
 			}
 
-			$variables['title'] = $variables['form']->name;
 		}
 		else
 		{
