@@ -3,7 +3,11 @@
 
 {% set title = craft.sproutForms.name %}
 
-{% set body %}
+{% block main %}
+
+<div class="grid">
+	<div class="item">
+		<div class="pane">
 
 <style type="text/css">
 	.examples {
@@ -32,7 +36,10 @@
 	<div class="buttons">
 		<a href="{{ url('sproutforms') }}" class="btn delete">Take me to Sprout Forms</a>
 	</div>
-	
 
 </form>
-{% endset %}
+
+		</div>
+	</div>
+</div>
+{% endblock %}
