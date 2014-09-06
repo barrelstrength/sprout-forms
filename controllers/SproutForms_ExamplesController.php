@@ -70,183 +70,188 @@ class SproutForms_ExamplesController extends BaseController
 
 			$fieldSettings = array(
 				'contact' => array(
-					array(
-						'name'     => 'Full Name',
-						'handle'   => 'fullName',
-						'type'     => 'PlainText',
-						'required' => 1,
-						'settings' => array(
-							'placeholder' => '',
-							'maxLength' => '',
-							'multiline' => '',
-							'initialRows' => 4,
+					'Default' => array(
+						array(
+							'name'     => 'Full Name',
+							'handle'   => 'fullName',
+							'type'     => 'PlainText',
+							'required' => 1,
+							'settings' => array(
+								'placeholder' => '',
+								'maxLength' => '',
+								'multiline' => '',
+								'initialRows' => 4,
+							)
+						),
+						array(
+							'name'     => 'Email',
+							'handle'   => 'email',
+							'type'     => 'PlainText',
+							'required' => 1,
+							'settings' => array(
+								'placeholder' => '',
+								'maxLength' => '',
+								'multiline' => '',
+								'initialRows' => 4,
+							)
+						),
+						array(
+							'name'     => 'Message',
+							'handle'   => 'message',
+							'type'     => 'PlainText',
+							'required' => 1,
+							'settings' => array(
+								'placeholder' => '',
+								'maxLength' => '',
+								'multiline' => 1,
+								'initialRows' => 4,
+							)
 						)
-					),
-					array(
-						'name'     => 'Email',
-						'handle'   => 'email',
-						'type'     => 'PlainText',
-						'required' => 1,
-						'settings' => array(
-							'placeholder' => '',
-							'maxLength' => '',
-							'multiline' => '',
-							'initialRows' => 4,
-						)
-					),
-					array(
-						'name'     => 'Message',
-						'handle'   => 'message',
-						'type'     => 'PlainText',
-						'required' => 1,
-						'settings' => array(
-							'placeholder' => '',
-							'maxLength' => '',
-							'multiline' => 1,
-							'initialRows' => 4,
-						)
-					),
+					)
 				),
 				'basic' => array(
-					array(
-						'name'     => 'Plain Text Field',
-						'handle'   => 'plainText',
-						'type'     => 'PlainText',
-						'required' => 1,
-						'settings' => array(
-							'placeholder' => '',
-							'maxLength' => '',
-							'multiline' => 0,
-							'initialRows' => 4,
-						)
-					),
-					array(
-						'name'     => 'Dropdown Field',
-						'handle'   => 'dropdown',
-						'type'     => 'Dropdown',
-						'required' => 1,
-						'settings' => array(
-							'options' => array(
-								array(
-									'label' => 'Option 1',
-									'value' => 'option1',
-									'default' => ''
-								),
-								array(
-									'label' => 'Option 2',
-									'value' => 'option2',
-									'default' => ''
-								),
-								array(
-									'label' => 'Option 3',
-									'value' => 'option3',
-									'default' => ''
+					'Section One' => array(
+						array(
+							'name'     => 'Plain Text Field',
+							'handle'   => 'plainText',
+							'type'     => 'PlainText',
+							'required' => 1,
+							'settings' => array(
+								'placeholder' => '',
+								'maxLength' => '',
+								'multiline' => 0,
+								'initialRows' => 4,
+							)
+						),
+						array(
+							'name'     => 'Dropdown Field',
+							'handle'   => 'dropdown',
+							'type'     => 'Dropdown',
+							'required' => 1,
+							'settings' => array(
+								'options' => array(
+									array(
+										'label' => 'Option 1',
+										'value' => 'option1',
+										'default' => ''
+									),
+									array(
+										'label' => 'Option 2',
+										'value' => 'option2',
+										'default' => ''
+									),
+									array(
+										'label' => 'Option 3',
+										'value' => 'option3',
+										'default' => ''
+									)
 								)
+							)
+						),
+						array(
+							'name'     => 'Number Field',
+							'handle'   => 'number',
+							'type'     => 'Number',
+							'required' => 0,
+							'settings' => array(
+								'min' => 0,
+								'max' => '',
+								'decimals' => ''
 							)
 						)
 					),
-					array(
-						'name'     => 'Number Field',
-						'handle'   => 'number',
-						'type'     => 'Number',
-						'required' => 0,
-						'settings' => array(
-							'min' => 0,
-							'max' => '',
-							'decimals' => ''
-						)
-					),
-					array(
-						'name'     => 'Radio Buttons Field',
-						'handle'   => 'radioButtons',
-						'type'     => 'RadioButtons',
-						'required' => 0,
-						'settings' => array(
-							'options' => array(
-								array(
-									'label' => 'Option 1',
-									'value' => 'option1',
-									'default' => ''
-								),
-								array(
-									'label' => 'Option 2',
-									'value' => 'option2',
-									'default' => ''
-								),
-								array(
-									'label' => 'Option 3',
-									'value' => 'option3',
-									'default' => ''
+					'Section Two' => array(
+						array(
+							'name'     => 'Radio Buttons Field',
+							'handle'   => 'radioButtons',
+							'type'     => 'RadioButtons',
+							'required' => 0,
+							'settings' => array(
+								'options' => array(
+									array(
+										'label' => 'Option 1',
+										'value' => 'option1',
+										'default' => ''
+									),
+									array(
+										'label' => 'Option 2',
+										'value' => 'option2',
+										'default' => ''
+									),
+									array(
+										'label' => 'Option 3',
+										'value' => 'option3',
+										'default' => ''
+									)
 								)
 							)
-						)
-					),
-					array(
-						'name'     => 'Checkboxes Field',
-						'handle'   => 'checkboxes',
-						'type'     => 'Checkboxes',
-						'required' => 0,
-						'settings' => array(
-							'options' => array(
-								array(
-									'label' => 'Option 1',
-									'value' => 'option1',
-									'default' => ''
-								),
-								array(
-									'label' => 'Option 2',
-									'value' => 'option2',
-									'default' => ''
-								),
-								array(
-									'label' => 'Option 3',
-									'value' => 'option3',
-									'default' => ''
+						),
+						array(
+							'name'     => 'Checkboxes Field',
+							'handle'   => 'checkboxes',
+							'type'     => 'Checkboxes',
+							'required' => 0,
+							'settings' => array(
+								'options' => array(
+									array(
+										'label' => 'Option 1',
+										'value' => 'option1',
+										'default' => ''
+									),
+									array(
+										'label' => 'Option 2',
+										'value' => 'option2',
+										'default' => ''
+									),
+									array(
+										'label' => 'Option 3',
+										'value' => 'option3',
+										'default' => ''
+									)
 								)
 							)
-						)
-					),
-					array(
-						'name'     => 'Multi-select Field',
-						'handle'   => 'multiSelect',
-						'type'     => 'MultiSelect',
-						'required' => 0,
-						'settings' => array(
-							'options' => array(
-								array(
-									'label' => 'Option 1',
-									'value' => 'option1',
-									'default' => ''
-								),
-								array(
-									'label' => 'Option 2',
-									'value' => 'option2',
-									'default' => ''
-								),
-								array(
-									'label' => 'Option 3',
-									'value' => 'option3',
-									'default' => ''
+						),
+						array(
+							'name'     => 'Multi-select Field',
+							'handle'   => 'multiSelect',
+							'type'     => 'MultiSelect',
+							'required' => 0,
+							'settings' => array(
+								'options' => array(
+									array(
+										'label' => 'Option 1',
+										'value' => 'option1',
+										'default' => ''
+									),
+									array(
+										'label' => 'Option 2',
+										'value' => 'option2',
+										'default' => ''
+									),
+									array(
+										'label' => 'Option 3',
+										'value' => 'option3',
+										'default' => ''
+									)
 								)
 							)
+						),
+						array(
+							'name'     => 'Textarea Field',
+							'handle'   => 'textarea',
+							'type'     => 'PlainText',
+							'required' => 0,
+							'settings' => array(
+								'placeholder' => '',
+								'maxLength' => '',
+								'multiline' => 1,
+								'initialRows' => 4,
+							)
 						)
-					),
-
-					array(
-						'name'     => 'Textarea Field',
-						'handle'   => 'textarea',
-						'type'     => 'PlainText',
-						'required' => 0,
-						'settings' => array(
-							'placeholder' => '',
-							'maxLength' => '',
-							'multiline' => 1,
-							'initialRows' => 4,
-						)
-					),
+					)
 				),
 			);
-
+		
 			// Create Forms and their Content Tables
 			foreach ($formSettings as $settings) 
 			{
@@ -264,39 +269,77 @@ class SproutForms_ExamplesController extends BaseController
 				craft()->content->fieldContext = $form->getFieldContext();
 				craft()->content->contentTable = $form->getContentTable();
 
-				$fieldLayoutFields = array();
-				$sortOrder = 0;
+//------------------------------------------------------------
 
-				// Add Fields to the Form
-				foreach ($fieldSettings[$form->handle] as $settings) 
-				{
-					$field = new FieldModel();
-					$field->name        = $settings['name'];
-					$field->handle      = $settings['handle'];
-					$field->type        = $settings['type'];
-					$field->required    = $settings['required'];
-					$field->settings    = $settings['settings'];
+// Trying to do this another way... let's 
+// 1. Make sure whatever fields we have are saved and exist
+// 2. Try to copy the way Craft does stuff by using assembleLayout
+// 3. Fake $postedFieldLayout array
+// 4. Fake $requiredFields array
+// 
 
-					// Save our field
-					craft()->fields->saveField($field);
+				// Do we have a new field that doesn't exist yet?  
+				// If so, save it and grab the id.
 
-					$sortOrder++;
-					$fieldLayoutFields[] = array(
-						'fieldId'   => $field->id,
-						'required'  => $field->required,
-						'sortOrder' => $sortOrder
-					);
+				$fieldLayout = array();
+				$requiredFields = array();
 
+				$tabs = $fieldSettings[$form->handle];
+
+				foreach ($tabs as $tabName => $newFields) 
+				{	
+					foreach ($newFields as $newField) 
+					{
+						$field = new FieldModel();
+						$field->name        = $newField['name'];
+						$field->handle      = $newField['handle'];
+						$field->type        = $newField['type'];
+						$field->required    = $newField['required'];
+						$field->settings    = $newField['settings'];
+
+						// Save our field
+						craft()->fields->saveField($field);
+
+						// Build the postedFieldLayout array
+						// [fieldLayout] => Array
+						// (
+						//     [Tab%201] => Array
+						//         (
+						//             [0] => 549
+						//             [1] => 311
+						//         )
+						//     [Tab%202] => Array
+						//         (
+						//             [0] => 457
+						//             [1] => 456
+						//             [2] => 295
+						//         )
+						// )
+						
+						$fieldLayout[$tabName][] = $field->id;
+
+						// Build the Required field array
+						// Array
+						// (
+						//     [0] => 549
+						//     [1] => 311
+						// )
+						
+						if ($field->required) 
+						{
+							$requiredFields[] = $field->id;
+						}
+					}
 				}
 
-				$fieldLayout = new FieldLayoutModel();
+				// Set the field layout
+				$fieldLayout = craft()->fields->assembleLayout($fieldLayout, $requiredFields);
+				
 				$fieldLayout->type = 'SproutForms_Form';
-				$fieldLayout->setFields($fieldLayoutFields);
 				$form->setFieldLayout($fieldLayout);
 
 				// Save our form again with a layouts
 				craft()->sproutForms_forms->saveForm($form);
-
 			}
 		}
 		catch (\Exception $e)
