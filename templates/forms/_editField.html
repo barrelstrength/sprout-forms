@@ -55,9 +55,7 @@
 
 		{% if sections is defined and sections|length %}
 
-			  {% set sectionOptions = [
-			    { label: 'Choose a Tab...', value: '' }
-			  ] %}
+			  {% set sectionOptions = [] %}
 
 			  {% for section in sections %}
 			    {% set sectionOptions = sectionOptions|merge([{ label: section.name, value: section.id }]) %}
@@ -68,7 +66,7 @@
 			  {{ forms.selectField({
 			    first: true,
 			    label: "Tab"|t,
-			    instructions: "Which section should this field be displayed in? <a href='#' id='newSection'>Add New Tab</a>"|t,
+			    instructions: "Which section should this field be displayed in?"|t,
 			    id: 'tabId',
 			    name: 'tabId',
 			    options: sectionOptions,

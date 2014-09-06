@@ -93,7 +93,7 @@ class SproutForms_FormsController extends BaseController
 			$variables['title'] = Craft::t('Create a new form');
 		}
 
-		$this->renderTemplate('sproutforms/forms/_edit', $variables);
+		$this->renderTemplate('sproutforms/forms/_editForm', $variables);
 	}
 
 	/**

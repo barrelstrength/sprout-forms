@@ -39,15 +39,15 @@
 			{% endif %}
 
 			<div id="overview">
-				{% include 'sproutforms/forms/_generalsettings' %}
+				{% include 'sproutforms/forms/_tabs/overview' %}
 			</div>
 
 			<div id="formfields" class="hidden">
-				{% include 'sproutforms/forms/_formfields' %}
+				{% include 'sproutforms/forms/_tabs/formfields' %}
 			</div>
 
 			<div id="notification" class="hidden">	
-				{% include 'sproutforms/forms/_notifications' %}
+				{% include 'sproutforms/forms/_tabs/notifications' %}
 			</div>
 				
 		</div>
@@ -59,7 +59,7 @@
 		
 		<div class="pane">
 
-			{% include 'sproutforms/forms/_publish' %}
+			{% include 'sproutforms/forms/_sidebar/publish' %}
 
 			<div class="field" id="enabled-field">
 				<div class="heading">

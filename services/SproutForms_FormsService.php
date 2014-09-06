@@ -87,8 +87,6 @@ class SproutForms_FormsService extends BaseApplicationComponent
 				
 				if ($isNewForm) 
 				{	
-					die('Shazam!');
-					
 					SproutFormsPlugin::log('Is New Form');
 					
 					$fieldLayout = new FieldLayoutModel();

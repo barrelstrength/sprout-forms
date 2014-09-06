@@ -12,7 +12,7 @@ class SproutForms_FieldsController extends BaseController
 
 		// Make sure our field has a section
 		// @TODO - handle this much more gracefully
-		$tabId = craft()->request->getRequiredPost('tabId');
+		$tabId = craft()->request->getPost('tabId');
 
 		// Get the Form these fields are related to
 		$formId = craft()->request->getRequiredPost('formId');
@@ -69,51 +69,73 @@ class SproutForms_FieldsController extends BaseController
 
 		// Set the field layout
 		$oldFieldLayout =  $form->getFieldLayout();
-
+		$oldFields = $oldFieldLayout->getFields();
+		$oldTabs = $oldFieldLayout->getTabs();
+		
+		$tabFields = array();
 		$postedFieldLayout = array();
 		$requiredFields = array();
 		
-		foreach ($oldFieldLayout->getTabs() as $oldTab) 
-		{	
-			$oldTabFields = $oldTab->getFields();
+		// If no tabs exist, let's create a 
+		// default one for all of our fields
+		if (empty($oldTabs)) 
+		{
+			// Create a tab
+			$fieldLayoutTab = new FieldLayoutTabModel();
+			$fieldLayoutTab->name      = Craft::t('Form');
+			$fieldLayoutTab->sortOrder = 1;
 
-			foreach ($oldTabFields as $oldFieldLayoutField) 
+			if (!empty($oldFields))
 			{
-				// Build the postedFieldLayout array
-				// [fieldLayout] => Array
-				// (
-				//     [Tab%201] => Array
-				//         (
-				//             [0] => 549
-				//             [1] => 311
-				//         )
-				//     [Tab%202] => Array
-				//         (
-				//             [0] => 457
-				//             [1] => 456
-				//             [2] => 295
-				//         )
-				// )
-				
-				$postedFieldLayout[$oldTab->name][] = $oldFieldLayoutField->fieldId;
+				$fieldSortOrder = 0;
+				// Add any existing fields to a default tab
+				foreach ($oldFields as $oldFieldLayoutField) 
+				{	
+					$fieldSortOrder++;
 
-				// Build the Required field array
-				// Array
-				// (
-				//     [0] => 549
-				//     [1] => 311
-				// )
-				
-				if ($oldFieldLayoutField->required) 
-				{
-					$requiredFields[] = $oldFieldLayoutField->fieldId;
+					$newField = new FieldLayoutFieldModel();
+					$newField->fieldId   = $oldFieldLayoutField->fieldId;
+					$newField->required  = $oldFieldLayoutField->required;
+					$newField->sortOrder = $fieldSortOrder;
+
+					$tabFields[] = $newField;
+
+					$postedFieldLayout[$fieldLayoutTab->name][] = $oldFieldLayoutField->fieldId;
+			
+					if ($oldFieldLayoutField->required) 
+					{
+						$requiredFields[] = $oldFieldLayoutField->fieldId;
+					}
+				}	
+			}
+
+			// Add our new field
+			$postedFieldLayout[$fieldLayoutTab->name][] = $field->id;
+
+			$fieldLayoutTab->setFields($tabFields);
+		}
+		else
+		{
+			foreach ($oldTabs as $oldTab) 
+			{	
+				$oldTabFields = $oldTab->getFields();
+
+				foreach ($oldTabFields as $oldFieldLayoutField) 
+				{					
+					$postedFieldLayout[$oldTab->name][] = $oldFieldLayoutField->fieldId;
+	
+					if ($oldFieldLayoutField->required) 
+					{
+						$requiredFields[] = $oldFieldLayoutField->fieldId;
+					}
 				}
-			}
 
-			if ($tabId == $oldTab->id) 
-			{
-				$postedFieldLayout[$oldTab->name][] = $field->id;
-			}
+				// Add our new field to the tab it belongs to
+				if ($tabId == $oldTab->id) 
+				{
+					$postedFieldLayout[$oldTab->name][] = $field->id;
+				}
+			}	
 		}
 
 		// Set the field layout
@@ -197,7 +219,7 @@ class SproutForms_FieldsController extends BaseController
 		$variables['sections'] = $form->getFieldLayout()->getTabs();
 		
 
-		$this->renderTemplate('sproutforms/forms/fields/_edit', $variables);
+		$this->renderTemplate('sproutforms/forms/_editField', $variables);
 	}
 
 	/**

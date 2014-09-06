@@ -160,7 +160,7 @@ class SproutForms_FormElementType extends BaseElementType
 	{
 		if ($element->getType()->hasTitleField)
 		{
-			$html = craft()->templates->render('forms/_titlefield', array(
+			$html = craft()->templates->render('_cp/fields/titlefield', array(
 				'entry' => $element
 			));
 		}
