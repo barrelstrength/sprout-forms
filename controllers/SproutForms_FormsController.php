@@ -12,7 +12,7 @@ class SproutForms_FormsController extends BaseController
 	public function actionSaveForm()
 	{
 		$this->requirePostRequest();
-
+		
 		$form = new SproutForms_FormModel();
 
 		// Shared attributes
@@ -35,6 +35,13 @@ class SproutForms_FormsController extends BaseController
 		
 		$fieldLayout->type = 'SproutForms_Form';
 		$form->setFieldLayout($fieldLayout);
+
+		// Delete any fields removed from the layout
+		$deletedFields = craft()->request->getPost('deletedFields');
+		foreach ($deletedFields as $fieldId) 
+		{
+			craft()->fields->deleteFieldById($fieldId);
+		}
 		
 		// Save it
 		if (craft()->sproutForms_forms->saveForm($form))

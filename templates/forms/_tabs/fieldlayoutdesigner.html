@@ -74,61 +74,25 @@
 
 	{% endif %}
 
+	<div id="deletedFieldsContainer" class="hidden">
+		<input type="hidden" name="deletedFields[]" value="" />
+	</div>
+
 </div>
 
-{# {% includeJsResource "sproutforms/js/formfieldlayoutdesigner.js" %} #}
+{% includeJsResource "sproutforms/js/formfieldlayoutdesigner.js" %}
 
 {% set js %}
-
+	
 	var initFLD = function() {
-		new Craft.FieldLayoutDesigner('#fieldlayoutform', {
-			customizableTabs: {{ customizableTabs ? 'true' : 'false' }}
+
+		console.log('On Page js');
+
+		new Sprout.FormFieldLayoutDesigner('#fieldlayoutform', {
+			customizableTabs: true
 		});
+
 	};
-
-	this.$container = $('#fieldlayoutform');
-	this.$tabContainer = this.$container.children('.fld-tabs');
-	var $tabs = this.$tabContainer.children();
-
-	for (var i = 0; i < $tabs.length; i++)
-	{
-		this.initTab($($tabs[i]));
-	}
-
-	function initTab($tab)
-	{
-		var $fields = $tab.children('.fld-tabcontent').children();
-
-		for (var i = 0; i < $fields.length; i++)
-		{
-			this.initField($($fields[i]));
-		}
-	}
-
-	function initField($field)
-	{
-		var $editBtn = $field.find('.settings'),
-			$menu = $('<div class="menu" data-align="center"/>').insertAfter($editBtn),
-			$ul = $('<ul/>').appendTo($menu);
-
-		fieldId = $field.data('id');
-		$('<li><a href="{{ url('sproutforms/forms/2598/fields/edit/109') }}">'+Craft.t('Edit')+'</a></li>').appendTo($ul);
-
-		if ($field.hasClass('fld-required'))
-		{
-			$('<li><a data-action="toggle-required">'+Craft.t('Make not required')+'</a></li>').appendTo($ul);
-		}
-		else
-		{
-			$('<li><a data-action="toggle-required">'+Craft.t('Make required')+'</a></li>').appendTo($ul);
-		}
-
-		$('<li><a data-action="remove">'+Craft.t('Remove')+'</a></li>').appendTo($ul);
-
-		new Garnish.MenuBtn($editBtn, {
-			onOptionSelect: $.proxy(this, 'onFieldOptionSelect')
-		});
-	}
 
 	{% if tab is defined %}
 
