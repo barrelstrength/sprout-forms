@@ -1,9 +1,6 @@
-<p>All fields can use dynamic values from the submitted form fields.  Reference your form fields by wrapping the field name in curly braces.  If your field is <code>name="fields[email]"</code> you would use: <code>{email}</code>.  <em>Note: Consider the deliverability implications before you dynamically change your Sender Name and Sender Email address fields.</em></p>
-
-<hr>
 
 {{ forms.textField({
-	label: "Email Recipients"|t,
+	label: 'Email Recipients <span class="info">All fields can use dynamic values from the submitted form fields. Reference your form fields by wrapping the field name in curly braces.  If your field is <strong><code>name="fields[email]"</code></strong> you would use: <strong><code>{email}</code></strong>.</span>'|t,
 	instructions: "Enter comma seperated email addresses to notify on form submission. Leave blank to disable notifications."|t,
 	name: 'notificationRecipients',
 	value: form.notificationRecipients,
@@ -14,7 +11,7 @@
 
 {{ forms.textField({
 	label: "Subject"|t,
-	instructions: "Enter a subject."|t,
+	instructions: "The subject line of your notification email."|t,
 	name: 'notificationSubject',
 	value: form.notificationSubject,
 	errors: (form is defined ? form.getErrors('notificationSubject') : null),
@@ -22,8 +19,8 @@
 }) }}
 
 {{ forms.textField({
-	label: "Sender Name"|t,
-	instructions: "Who will your email be from?"|t,
+	label: "Sender Name <span class='info'>Consider the deliverability implications before you dynamically change your <strong>Sender Name</strong>.</span>"|t,
+	instructions: "The name of the sender of your notification email"|t,
 	name: 'notificationSenderName',
 	value: form.notificationSenderName,
 	errors: (form is defined ? form.getErrors('notificationSenderName') : null),
@@ -31,8 +28,8 @@
 }) }}
 
 {{ forms.textField({
-	label: "Sender Email Address"|t,
-	instructions: "Your notification 'From' Address"|t,
+	label: "Sender Email Address <span class='info'>Consider the deliverability implications before you dynamically change your <strong>Sender Email Address</strong>.</span>"|t,
+	instructions: "The 'From' email address of your notification email"|t,
 	name: 'notificationSenderEmail',
 	value: form.notificationSenderEmail,
 	errors: (form is defined ? form.getErrors('notificationSenderEmail') : null),
@@ -41,7 +38,7 @@
 
 {{ forms.textField({
 	label: "Reply To Email Address"|t,
-	instructions: "Enter a replyTo field."|t,
+	instructions: "The 'Reply To' email address of your notification email"|t,
 	name: 'notificationReplyToEmail',
 	value: form.notificationReplyToEmail,
 	errors: (form is defined ? form.getErrors('notificationReplyToEmail') : null),
