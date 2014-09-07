@@ -25,7 +25,7 @@
 
 {% block main %}
 
-<form method="post" accept-charset="UTF-8" data-saveshortcut="1" data-saveshortcut-redirect="{{ craft.request.url }}">
+<form method="post" accept-charset="UTF-8" id="form" data-formid="{{ form.id }}" data-saveshortcut="1" data-saveshortcut-redirect="{{ craft.request.url }}">
   <input type="hidden" name="action" value="sproutForms/forms/saveForm">
   <input type="hidden" name="redirect" value="sproutforms/forms">
   <input type="hidden" name="id" value="{{ form.id is defined ? form.id : '' }}">
