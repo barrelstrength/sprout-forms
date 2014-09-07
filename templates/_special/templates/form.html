@@ -19,11 +19,9 @@
 	<input type="hidden" name="redirect" value="{{ form.redirectUri }}">
 	{% endif %}
 
-	<div class="fields">
-	{{ fields | raw }}
-	</div>
-
-
+	{# <div class="fields"> #}
+	{{ body | raw }}
+	{# </div> #}
 	
 	<div class="submit">
 		<input type="submit" value="{{ submitValue }}">

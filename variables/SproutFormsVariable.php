@@ -85,13 +85,26 @@ class SproutFormsVariable
 		// Determine where our form and field template should come from
 		$this->templates = craft()->sproutForms_fields->getSproutFormsTemplates();
 		
-		// Build the HTML for our form fields
+		// Build the HTML for our form tabs and fields
+		$bodyHtml = '';
+		$tabsHtml = '';
 		$fieldsHtml = '';
 
-		// Loop through all of our fields
-		foreach ($form->getFieldLayout()->getFields() as $field) 
-		{	
-			$fieldsHtml .= $this->_prepareField($field, $entry);
+		$loop = 0;
+		// Loop through all of our tabs
+		foreach ($form->getFieldLayout()->getTabs() as $tab)
+		{
+			$loop++;
+
+			$fields = $tab->getFields();
+
+			$bodyHtml .= $this->_prepareTab($tab, $entry, $loop);
+				
+			// Loop through all of our fields
+			foreach ($fields as $field)
+			{	
+				$bodyHtml .= $this->_prepareField($field, $entry);
+			}
 		}
 
 		// Check if we need to update our Front-end Form Template Path
@@ -100,7 +113,9 @@ class SproutFormsVariable
 		// Build our complete form
 		$formHtml = craft()->templates->render('form', array(
 			'form'   => $form,
-			'fields' => $fieldsHtml,
+			// 'tabs'   => $tabsHtml,
+			// 'fields' => $fieldsHtml,
+			'body'   => $bodyHtml,
 			'errors' => $entry->getErrors()
 		));
 
@@ -170,6 +185,18 @@ class SproutFormsVariable
 		craft()->content->contentTable = $oldContentTable;
 
 		return new \Twig_Markup($fieldHtml, craft()->templates->getTwig()->getCharset());
+	}
+
+	private function _prepareTab(FieldLayoutTabModel $tab, SproutForms_EntryModel $entry, $count = 0)
+	{
+		// Render our tab	
+		// craft()->path->setTemplatesPath($this->templates['field']);
+		$tabHtml = craft()->templates->render('tab', array(
+			'name'        => Craft::t($tab->name),
+			'count'        => $count
+		));
+
+		return $tabHtml;
 	}
 
 	private function _prepareField(FieldLayoutFieldModel $field, SproutForms_EntryModel $entry)
