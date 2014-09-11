@@ -89,6 +89,7 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 					// service for easier naming
 					craft()->sproutForms->sproutRaiseEvent('onSaveEntry', $this, array(
 						'entry'      => $entry,
+						'entity'      => $entry,
 						'isNewEntry' => $isNewEntry,
 
 						// @TODO - DEPRECATE and IMPROVE
