@@ -65,10 +65,14 @@ class SproutForms_EntriesController extends BaseController
 
 			if (craft()->request->isCpRequest()) 
 			{
+				// Store this Entry Model in a variable in our Service layer
+				// so that we can access the error object from our actionEditEntryTemplate() method
+				craft()->sproutForms_forms->activeCpEntry = $entry;
+
 				// Return the form as an 'entry' variable if in the cp
-				craft()->urlManager->setRouteVariables(array(
-					'entry' => $entry
-				));
+				// craft()->urlManager->setRouteVariables(array(
+				// 	'entry' => $entry
+				// ));
 			}
 			else
 			{
@@ -294,7 +298,15 @@ class SproutForms_EntriesController extends BaseController
 	{
 		$entryId = craft()->request->getSegment(4);
 
-		$entry = craft()->sproutForms_entries->getEntryById($entryId);
+		if (craft()->sproutForms_forms->activeCpEntry)
+		{
+			$entry = craft()->sproutForms_forms->activeCpEntry;
+		}
+		else
+		{
+			$entry = craft()->sproutForms_entries->getEntryById($entryId);
+		}
+		
 		$form = craft()->sproutForms_forms->getFormById($entry->formId);
 
 		// Set our Entry's Field Context and Content Table

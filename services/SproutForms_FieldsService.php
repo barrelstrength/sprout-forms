@@ -19,12 +19,6 @@ class SproutForms_FieldsService extends FieldsService
 			$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
 			try
 			{
-				// Set the field context
-				// craft()->content->fieldContext = $form->getFieldContext();
-				// craft()->content->contentTable = $form->getContentTable();
-
-				// $oldFieldLayoutId = $form->fieldLayoutId;
-
 				if 	($field->id)
 				{
 					$fieldLayoutFields = array();
@@ -56,30 +50,9 @@ class SproutForms_FieldsService extends FieldsService
 					$fieldLayout = new FieldLayoutModel();
 					$fieldLayout->type = 'SproutForms_Form';
 					$fieldLayout->setFields($fieldLayoutFields);
-					// craft()->fields->saveLayout($fieldLayout);
 
 					// Update the form model & record with our new field layout ID
 					$form->setFieldLayout($fieldLayout);
-					
-					// echo "<pre>";
-					// print_r($form->getFieldLayout()->getFields());
-					// echo "</pre>";
-					// die('fin');
-					
-
-					// $form->fieldLayoutId = $fieldLayout->id;
-
-					// $formRecord = SproutForms_FormRecord::model()->findById($form->id);
-					// $formRecord->fieldLayoutId = $fieldLayout->id;
-
-					// // Update the form with the field layout ID
-					// $formRecord->save(false);
-
-					// // Clean up the old layout and fields
-					// craft()->fields->deleteLayoutById($oldFieldLayoutId);
-					
-					// // Save the new field
-					// craft()->fields->saveField($field);
 
 				}
 				else
@@ -113,31 +86,6 @@ class SproutForms_FieldsService extends FieldsService
 					$fieldLayout->setFields($fieldLayoutFields);
 					$form->setFieldLayout($fieldLayout);
 
-					// echo "<pre>";
-					// print_r($form->getFieldLayout()->getFields());
-					// echo "</pre>";
-					// die('fin');
-					
-					// craft()->fields->saveLayout($fieldLayout);
-
-					// echo "<pre>";
-					// print_r($fieldLayout->getFields());
-					// echo "</pre>";
-					// die('fin');
-					
-
-					// Update the form model & record with our new field layout ID
-					// $form->setFieldLayout($fieldLayout);
-					// $form->fieldLayoutId = $fieldLayout->id;
-
-					// $formRecord = SproutForms_FormRecord::model()->findById($form->id);
-					// $formRecord->fieldLayoutId = $fieldLayout->id;
-
-					// // Update the form with the field layout ID
-					// $formRecord->save(false);
-
-					// // Clean up the old layout and fields
-					// craft()->fields->deleteLayoutById($oldFieldLayoutId);
 				}
 
 				craft()->sproutForms_forms->saveForm($form);
@@ -309,6 +257,31 @@ class SproutForms_FieldsService extends FieldsService
 			);
 		}
 
+		// Check if any other plugins add support for more front-end fields
+		// $overrideFields = craft()->plugins->call('registerSproutField');
+			
+		$settings = craft()->plugins->getPlugin('sproutforms')->getSettings();
+		$templateFolderOverride = $settings->templateFolderOverride;
+
+		if (isset($templateFolderOverride)) 
+		{
+			$templates = $this->getSproutFormsTemplates();
+
+			foreach ($frontEndFieldTypes as $fieldType) 
+			{
+				$inputOverrideFile = $templates['field'] . 'fields/' . strtolower($fieldType['name']) . '/input';
+				
+				foreach (craft()->config->get('defaultTemplateExtensions') as $extension) 
+				{
+					// If we have an override file, update our templateFolder
+					if (IOHelper::fileExists($inputOverrideFile . "." . $extension)) 
+					{
+						$frontEndFieldTypes[$fieldType['name']]['templateFolder'] = $templates['field'];
+					}
+				}
+			}
+		}
+
 		return $frontEndFieldTypes;
 	}
 
@@ -323,14 +296,18 @@ class SproutForms_FieldsService extends FieldsService
 			'MultiSelect',
 			'Number',
 			'PlainText',
-			'RadioButtons'
+			'RadioButtons',
+
+			'SproutEmailField_Email',
+			'SproutLinkField_Link',
+			'SproutInvisibleCaptcha_InvisibleCaptcha',
 		);
 
 		// @TODO - support certain custom fields out of the box
 		// $supportedCustomFields = array(
 		// 	'SproutEmailField_Email',
 		// 	'SproutLinkField_Link',
-		// 	// 'SproutInvisibleCaptcha'
+		// 	'SproutInvisibleCaptcha_InvisibleCaptcha'
 		// );
 
 		foreach ($fieldTypes as $key => $fieldType) 

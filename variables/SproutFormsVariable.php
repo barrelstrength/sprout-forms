@@ -14,6 +14,7 @@ class SproutFormsVariable
 	public $fields;
 	public $templates;
 	public $namespace;
+	public $isNakedField;
 	
 	/**
 	 * Plugin Name
@@ -61,6 +62,7 @@ class SproutFormsVariable
 		else
 		{
 			$entry = new SproutForms_EntryModel();
+			$entry->formId = $form->id;
 		}
 
 		// Backup our field context and content table
@@ -86,26 +88,11 @@ class SproutFormsVariable
 		$this->templates = craft()->sproutForms_fields->getSproutFormsTemplates();
 		
 		// Build the HTML for our form tabs and fields
-		$bodyHtml = '';
-		$tabsHtml = '';
-		$fieldsHtml = '';
-
-		$loop = 0;
-		// Loop through all of our tabs
-		foreach ($form->getFieldLayout()->getTabs() as $tab)
-		{
-			$loop++;
-
-			$fields = $tab->getFields();
-
-			$bodyHtml .= $this->_prepareTab($tab, $entry, $loop);
-				
-			// Loop through all of our fields
-			foreach ($fields as $field)
-			{	
-				$bodyHtml .= $this->_prepareField($field, $entry);
-			}
-		}
+		$bodyHtml = craft()->templates->render('tab', array(
+			'tabs'            => $form->getFieldLayout()->getTabs(),
+			'entry'           => $entry,
+			'supportedFields' => $this->fields
+		));
 
 		// Check if we need to update our Front-end Form Template Path
 		craft()->path->setTemplatesPath($this->templates['form']);
@@ -113,8 +100,6 @@ class SproutFormsVariable
 		// Build our complete form
 		$formHtml = craft()->templates->render('form', array(
 			'form'   => $form,
-			// 'tabs'   => $tabsHtml,
-			// 'fields' => $fieldsHtml,
 			'body'   => $bodyHtml,
 			'errors' => $entry->getErrors()
 		));
@@ -187,104 +172,84 @@ class SproutFormsVariable
 		return new \Twig_Markup($fieldHtml, craft()->templates->getTwig()->getCharset());
 	}
 
-	private function _prepareTab(FieldLayoutTabModel $tab, SproutForms_EntryModel $entry, $count = 0)
+	public function getFieldInfo(FieldModel $field, SproutForms_EntryModel $element)
 	{
-		// Render our tab	
-		// craft()->path->setTemplatesPath($this->templates['field']);
-		$tabHtml = craft()->templates->render('tab', array(
-			'name'        => Craft::t($tab->name),
-			'count'        => $count
-		));
+		// Set our Sprout Forms support field classes folder
+		$fieldtypesFolder = craft()->path->getPluginsPath() . 'sproutforms/fields/';
 
-		return $tabHtml;
-	}
+		// Create a list of the name, class, and file of fields we support 
+		$this->fields = craft()->sproutForms_fields->getSproutFormsFields($fieldtypesFolder);
 
-	private function _prepareField(FieldLayoutFieldModel $field, SproutForms_EntryModel $entry)
-	{
-		// Set some values we'll hand off to the templates
-		$required = $field->required;
-		$field = $field->getField();
-		
-		// @TODO - what does this do!?
-		$static = false;
-
-		// Is this field for an Element Type?
-		$element = (isset($field->getFieldType()->elementType)) ? $field->getFieldType()->model : null;
-		
-		// @TODO - logic is broken here if element is not empty
-		$value = (!empty($element) ? $element : null);
-		$errors = ((!empty($element) AND $static == false) ? $entry->getErrors($field->handle) : null);
 		$fieldtype = craft()->fields->populateFieldType($field, $element);
-		$instructions = ($static == false ? Craft::t($field->instructions) : null);
 
-		if ($fieldtype) 
-		{	
-			// Get our field type
-			$type = $fieldtype->model->type;		
+		// If we support our current fieldtype, render it
+		if (isset($this->fields[$field->type])) 
+		{
+			// Instantiate it
+			$class = __NAMESPACE__.'\\'.$this->fields[$field->type]['class'];
 			
-			// If we support our current fieldtype, render it
-			if (isset($this->fields[$type])) 
-			{
-				// Instantiate it
-				$class = __NAMESPACE__.'\\'.$this->fields[$type]['class'];
-				
-				// Make sure the our front-end Field Type class exists
-				if (!class_exists($class))
-				{	
-					require $this->fields[$type]['file'];
-				}
-
-				// Create a new instance of our Field Type
-				$frontEndField = new $class;
-
-				$fieldModel = $fieldtype->model;
-				$settings = $fieldtype->getSettings();
-
-				$postFields = craft()->request->getPost('fields');
-				$value = (isset($postFields[$field->handle]) ? $postFields[$field->handle] : "");
-
-				// Set template path
-				craft()->path->setTemplatesPath($this->fields[$type]['templateFolder']);
-				
-				// Create the HTML for the input field
-				$input = $frontEndField->getInputHtml($fieldModel, $value, $settings);
-				
-				$this->namespace = $frontEndField->getNamespace();
-			}
-			else
+			// Make sure the our front-end Field Type class exists
+			if (!class_exists($class))
 			{	
-				// Field Type is not supported
-				// @TODO - provide better error here pointing to docs on how to solve this.
-				$input = '<p class="error">' . Craft::t("The “".$type."” field is not supported by default to be output in front-end templates.") . '</p>';
+				require $this->fields[$field->type]['file'];
 			}
-		}
 
-		$fieldHtml = "";
+			// Create a new instance of our Field Type
+			$frontEndField = new $class;
 
-		// Render our field
-		if ($input OR $instructions) 
-		{	
-			craft()->path->setTemplatesPath($this->templates['field']);
+			$fieldModel = $fieldtype->model;
+			$settings = $fieldtype->getSettings();
+
+			$postFields = craft()->request->getPost('fields');
+			$value = (isset($postFields[$field->handle]) ? $postFields[$field->handle] : "");
 			
-			// Identify PlainText and Textarea fields distinctly
-			if ($field->type == 'PlainText' && $field->settings['multiline'] == 1) 
-			{
-				$field->type = 'textarea';
-			}
+			// Determine where our form and field template should come from
+			$this->templates = craft()->sproutForms_fields->getSproutFormsTemplates();
+			
+			// Set template path
+			craft()->path->setTemplatesPath($this->fields[$field->type]['templateFolder']);
+			
+			// Create the HTML for the input field
+			$input = $frontEndField->getInputHtml($fieldModel, $value, $settings);
+			
+			$this->namespace = $frontEndField->getNamespace();
+			$this->isNakedField = $frontEndField->isNakedField;
 
-			$fieldHtml = craft()->templates->render('field', array(
-				'label'        => Craft::t($field->name),
-				'required'     => $required,
-				'instructions' => $instructions,
-				'id'           => $field->handle,
-				'errors'       => $entry->getErrors($field->handle),
-				'input'        => $input,
-				'namespace'    => $this->namespace,
-				'type'         => strtolower($field->type),
-			));
+			// Set template path back to default
+			craft()->path->setTemplatesPath(craft()->path->getPluginsPath() . 'sproutforms/templates/_special/templates/');	
+
+		}
+		else
+		{	
+			// Field Type is not supported
+			// @TODO - provide better error here pointing to docs on how to solve this.
+			$input = '<p class="error">' . Craft::t("The “".$field->type."” field is not supported by default to be output in front-end templates.") . '</p>';
 		}
 
-		return $fieldHtml;
+		// Identify PlainText and Textarea fields distinctly
+		if ($field->type == 'PlainText' && $field->settings['multiline'] == 1) 
+		{
+			$field->type = 'textarea';
+		}
+
+		// Are we setting the right template path?
+		// craft()->path->setTemplatesPath($this->templates['field']);
+		// // ...
+		// craft()->path->setTemplatesPath($this->templates['field']);
+
+		// // Do we have any fields where we just want to output the input?
+		// if ($this->isNakedField)
+		// {
+		// 	$fieldHtml = $input;
+		// }
+		
+		// @TODO - improve naming and handling of this
+		$fieldInfo['namespace'] = $this->namespace;
+		$fieldInfo['type'] = $field->type;
+		$fieldInfo['input'] = new \Twig_Markup($input, craft()->templates->getTwig()->getCharset());
+
+		return $fieldInfo;
+		
 	}
 
 	/**

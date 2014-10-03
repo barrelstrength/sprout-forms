@@ -4,6 +4,7 @@ namespace Craft;
 class SproutForms_FormsService extends BaseApplicationComponent
 {
 	public $activeEntries;
+	public $activeCpEntry;
 
 	protected $formRecord;
 	
@@ -31,7 +32,7 @@ class SproutForms_FormsService extends BaseApplicationComponent
 	 * @throws \Exception
 	 * @return bool
 	 */
-	public function saveForm(SproutForms_FormModel $form, $field = null)
+	public function saveForm(SproutForms_FormModel $form)
 	{
 		if ($form->id)
 		{
@@ -47,7 +48,6 @@ class SproutForms_FormsService extends BaseApplicationComponent
 
 			$hasLayout = !empty($form->getFieldLayout()->getFields());
 			
-
 			// Add the oldHandle to our model so we can determine if we
 			// need to rename the content table
 			$form->oldHandle = $formRecord->getOldHandle();
@@ -63,6 +63,7 @@ class SproutForms_FormsService extends BaseApplicationComponent
 		$formRecord->name                     = $form->name;
 		$formRecord->handle                   = $form->handle;
 		$formRecord->titleFormat              = (!empty($form->titleFormat) ? $form->titleFormat : "{dateCreated|date('D, d M Y H:i:s')}");
+		$formRecord->displaySectionTitles     = $form->displaySectionTitles;
 		$formRecord->groupId                  = $form->groupId;
 		$formRecord->redirectUri              = $form->redirectUri;
 		$formRecord->submitAction             = $form->submitAction;
@@ -109,6 +110,9 @@ class SproutForms_FormsService extends BaseApplicationComponent
 					// since this is an existing form, grab the oldForm layout
 					if ($hasLayout)
 					{
+						// Delete our previous record
+						craft()->fields->deleteLayoutById($oldForm->fieldLayoutId);
+						
 						SproutFormsPlugin::log('Submitted Form has a layout');
 
 						$fieldLayout = $form->getFieldLayout();
@@ -128,8 +132,7 @@ class SproutForms_FormsService extends BaseApplicationComponent
 
 						SproutFormsPlugin::log('Forms Service old field layout iD: ' . $oldForm->fieldLayoutId);
 						
-						// Delete our previous record
-						craft()->fields->deleteLayoutById($oldForm->fieldLayoutId);
+						
 					}
 					
 				}

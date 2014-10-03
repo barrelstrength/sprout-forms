@@ -52,6 +52,18 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 		$entryRecord->validate();
 		$entry->addErrors($entryRecord->getErrors());
 
+		
+		// Fire onBeforeSaveEntry Event
+		// ------------------------------------------------------------
+		Craft::import('plugins.sproutforms.events.SproutForms_OnBeforeSaveEntryEvent');
+		$event = new SproutForms_OnBeforeSaveEntryEvent($this, array(
+			'entry'      => $entry,
+			'isNewEntry' => $isNewEntry
+		));
+		craft()->sproutForms->onBeforeSaveEntry($event);
+		// ------------------------------------------------------------
+
+
 		if (!$entry->hasErrors())
 		{
 			$form = craft()->sproutForms_forms->getFormById($entry->formId);
@@ -60,49 +72,41 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 
 			$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
 			try
-			{
-				// Hand off our event to the primary
-				// service for easier naming
-				craft()->sproutForms->sproutRaiseEvent('onBeforeSaveEntry', $this, array(
-					'entry'      => $entry,
-					'isNewEntry' => $isNewEntry
-				));
-
-				if (craft()->elements->saveElement($entry))
-				{
-					// Now that we have an element ID, save it on the other stuff
-					if ($isNewEntry)
+			{	
+				if ($event->isValid)
+				{	
+					if (craft()->elements->saveElement($entry))
 					{
-						$entryRecord->id = $entry->id;
+						// Now that we have an element ID, save it on the other stuff
+						if ($isNewEntry)
+						{
+							$entryRecord->id = $entry->id;
+						}
+
+						// Save our Entry Settings
+						$entryRecord->save(false);
+
+						if ($transaction !== null)
+						{
+							$transaction->commit();
+						}
+
+						// Fire an 'onSaveEntry' event
+						Craft::import('plugins.sproutforms.events.SproutForms_OnSaveEntryEvent');
+						$event = new SproutForms_OnSaveEntryEvent($this, array(
+							'entry'      => $entry,
+							'entity'      => $entry,
+							'isNewEntry' => $isNewEntry,
+
+							// @TODO - DEPRECATE and IMPROVE
+							// Support for Sprout Email Event
+							// @TODO - reconsider the best way to do this.
+							'event'      => 'saveEntry',
+						));
+						craft()->sproutForms->onSaveEntry($event);
+
+						return true;
 					}
-
-					// Save our Entry Settings
-					$entryRecord->save(false);
-
-					if ($transaction !== null)
-					{
-						$transaction->commit();
-					}
-
-					// Fire an 'onSaveEntry' event
-					// Hand off our event to the primary
-					// service for easier naming
-					craft()->sproutForms->sproutRaiseEvent('onSaveEntry', $this, array(
-						'entry'      => $entry,
-						'entity'      => $entry,
-						'isNewEntry' => $isNewEntry,
-
-						// @TODO - DEPRECATE and IMPROVE
-						// Support for Sprout Email Event
-						// @TODO - reconsider the best way to do this.
-						'event'      => 'saveEntry',
-
-						// @TODO - add back support for handing off the 
-						// entry values to use in the notification
-						// 'entity'     => $entry
-					));
-
-					return true;
 				}
 			}
 			catch (\Exception $e)

@@ -131,7 +131,7 @@ class SproutForms_FieldsController extends BaseController
 				}
 
 				// Add our new field to the tab it belongs to
-				if ($tabId == $oldTab->id) 
+				if ($isNewField && ($tabId == $oldTab->id))
 				{
 					$postedFieldLayout[$oldTab->name][] = $field->id;
 				}
@@ -146,7 +146,7 @@ class SproutForms_FieldsController extends BaseController
 		
 		// Hand the field off to be saved in the 
 		// field layout of our Form Element
-		if (craft()->sproutForms_forms->saveForm($form, $field))
+		if (craft()->sproutForms_forms->saveForm($form))
 		{
 			SproutFormsPlugin::log('Field Saved');
 
