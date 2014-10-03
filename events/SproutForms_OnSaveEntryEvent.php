@@ -6,8 +6,5 @@ namespace Craft;
  */
 class SproutForms_OnSaveEntryEvent extends Event
 {
-	/**
-	 * @var bool Whether the submission is valid.
-	 */
-	public $isValid = true;
+	
 }
