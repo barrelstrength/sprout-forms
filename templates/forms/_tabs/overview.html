@@ -73,6 +73,16 @@
   required: true
 }) }}
 
+{{ forms.lightswitchField({
+  first: true,
+  label: "Display Tab Titles on Forms"|t,
+  id: 'displaySectionTitles',
+  name: 'displaySectionTitles',
+  on: form.displaySectionTitles,
+  onLabel: "Show"|t,
+  offLabel: "Hide"|t
+}) }}
+
 {{ forms.textField({
   label: "Custom Submit Action URL"|t,
   name: 'submitAction',
