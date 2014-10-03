@@ -22,5 +22,5 @@ interface ISproutFormsFieldType
 	 * @return string  Custom fields namespace
 	 */
 	public function getNamespace();
-	
+
 }
