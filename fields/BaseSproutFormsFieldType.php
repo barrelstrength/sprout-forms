@@ -6,6 +6,9 @@ namespace Craft;
  */
 class BaseSproutFormsFieldType implements ISproutFormsFieldType
 {
+	
+	public $isNakedField = false;
+
 	/**
 	 * Returns the field's input HTML.
 	 *
