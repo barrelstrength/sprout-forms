@@ -9,7 +9,7 @@
 		{%- set optionValue = (option.value is defined ? option.value : key) -%}
 		
 		<div>
-			{% include "fields/Checkboxes/checkbox" with {
+			{% include "fields/checkboxes/checkbox" with {
 				label:    optionLabel,
 				name:     (name is defined ? name~'[]' : null),
 				value:    optionValue,

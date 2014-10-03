@@ -15,7 +15,7 @@ class Number_SproutFormsFieldType extends BaseSproutFormsFieldType
 	 */
 	public function getInputHtml($field, $value, $settings)
 	{
-		return craft()->templates->render('fields/Number/input', array(
+		return craft()->templates->render('fields/number/input', array(
 			'name'  => $field->handle,
 			'value'=> $value,
 			'size' => 5
