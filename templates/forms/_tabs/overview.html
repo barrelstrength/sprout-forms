@@ -63,14 +63,15 @@
   errors: (form is defined ? form.getErrors('submitButtonText') : null)   
 }) }}
 
+<hr>
+
 {{ forms.textField({
   label: "Title Format"|t,
   instructions: "Entry Titles are auto-generated based on the Title Format you enter here. All information contained in the Title will also be searchable. You may use the same syntax here as you would with Dynamic Titles in your Sections. (i.e. {dateCreated|date('Ymd')} {fullName})"|t,
   id: 'titleFormat',
   name: 'titleFormat',
   value: form.titleFormat,
-  errors: form.getErrors('titleFormat'),
-  required: true
+  errors: form.getErrors('titleFormat')
 }) }}
 
 {{ forms.lightswitchField({
