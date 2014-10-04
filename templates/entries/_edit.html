@@ -20,18 +20,41 @@
 			<div class="item" data-position="left" data-min-colspan="2" data-max-colspan="3">
 				<div id="fields" class="pane">
 
-					{% set tabs = {} %}
-					{% include "_includes/tabs" %}
-
 					{% namespace namespace %}	
-						{% for field in fields %}
+
+						{% for tab in tabs %}
+						    
+							{% set fields = tab.getFields() %}
+
+							<div class="tab">
+
+								<h2>{{ tab.name }}</h2>
+
+								{% for field in fields %}
+									{% include "_includes/field" with {
+										field:    field.getField(),
+										required: field.required,
+										element:  entry,
+									} only %}
+								{% endfor %}
+
+							</div>
+
+							{% if not loop.last %}
+							<hr>
+							{% endif %}
+
+
+						{% endfor %}
+
+						{# {% for field in fields %}
 							{% include "_includes/field" with {
 								field:    field.getField(),
 								required: field.required,
 								element:  entry,
 								static:   (static is defined ? static : null)
 							} only %}
-						{% endfor %}
+						{% endfor %} #}
 					{% endnamespace %}
 
 				</div>
