@@ -87,6 +87,9 @@ class SproutFormsVariable
 		// Determine where our form and field template should come from
 		$this->templates = craft()->sproutForms_fields->getSproutFormsTemplates();
 		
+		// Set Tab template path
+		craft()->path->setTemplatesPath($this->templates['tab']);
+
 		// Build the HTML for our form tabs and fields
 		$bodyHtml = craft()->templates->render('tab', array(
 			'tabs'            => $form->getFieldLayout()->getTabs(),
