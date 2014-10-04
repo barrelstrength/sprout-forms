@@ -266,6 +266,19 @@ class SproutFormsVariable
 		
 	}
 
+	public function lastEntry()
+	{
+		if (craft()->httpSession->get('lastEntryId')) 
+		{
+			$entryId = craft()->httpSession->get('lastEntryId');
+			$entry = craft()->sproutForms_entries->getEntryById($entryId);
+			
+			craft()->httpSession->destroy('lastEntryId');
+		}
+		
+		return (isset($entry)) ? $entry : null;
+	}
+
 	/**
 	 * Get a specific form. If no form is found, returns null
 	 *

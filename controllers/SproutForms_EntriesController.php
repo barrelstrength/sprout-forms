@@ -56,6 +56,10 @@ class SproutForms_EntriesController extends BaseController
 			
 			craft()->userSession->setNotice(Craft::t('Entry saved.'));
 			
+			// Store our new entry so we can recreate the Entry object 
+			// on our thank you page
+			$_SESSION['lastEntryId'] = $entry->id;
+			
 			$this->redirectToPostedUrl();
 		}
 		else
