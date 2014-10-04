@@ -39,16 +39,22 @@ class SproutForms_FormsController extends BaseController
 
 		// Delete any fields removed from the layout
 		$deletedFields = craft()->request->getPost('deletedFields');
-		foreach ($deletedFields as $fieldId) 
+
+		if ($deletedFields) 
 		{
-			craft()->fields->deleteFieldById($fieldId);
+			foreach ($deletedFields as $fieldId) 
+			{
+				craft()->fields->deleteFieldById($fieldId);
+			}
 		}
 		
 		// Save it
 		if (craft()->sproutForms_forms->saveForm($form))
 		{
 			craft()->userSession->setNotice(Craft::t('Form saved.'));
-			$this->redirectToPostedUrl($form);
+
+			$_POST['redirect'] = str_replace('{id}', $form->id, $_POST['redirect']);
+			$this->redirectToPostedUrl();
 		}
 		else
 		{
