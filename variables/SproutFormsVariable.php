@@ -91,7 +91,9 @@ class SproutFormsVariable
 		$bodyHtml = craft()->templates->render('tab', array(
 			'tabs'            => $form->getFieldLayout()->getTabs(),
 			'entry'           => $entry,
-			'supportedFields' => $this->fields
+			'supportedFields' => $this->fields,
+			'displaySectionTitles' => $form->displaySectionTitles,
+			'thirdPartySubmission' => ($form->submitAction) ? true : false
 		));
 
 		// Check if we need to update our Front-end Form Template Path
@@ -138,6 +140,7 @@ class SproutFormsVariable
 		else
 		{
 			$entry = new SproutForms_EntryModel();
+			$entry->formId = $form->id;
 		}
 
 		// Backup our field context and content table
@@ -148,7 +151,9 @@ class SproutFormsVariable
 		craft()->content->fieldContext = $form->getFieldContext();
 		craft()->content->contentTable = $form->getContentTable();
 
-		craft()->path->setTemplatesPath(craft()->path->getCpTemplatesPath());
+		// Determine where our form and field template should come from
+		$this->templates = craft()->sproutForms_fields->getSproutFormsTemplates();
+		craft()->path->setTemplatesPath($this->templates['field']);
 
 		$fieldHtml = "";
 
@@ -158,7 +163,12 @@ class SproutFormsVariable
 			if ($field->getField()->handle == $fieldHandle) 
 			{
 				// Build the HTML for our form field
-				$fieldHtml = $this->_prepareField($field, $entry);
+				$fieldHtml = craft()->templates->render('field', array(
+					'field'            => $field->getField(),
+					'required'         => $field->required,
+					'element'          => $entry,
+					'thirdPartySubmission' => ($form->submitAction) ? true : false
+				));
 				break;
 			}
 		}
@@ -245,6 +255,7 @@ class SproutFormsVariable
 		
 		// @TODO - improve naming and handling of this
 		$fieldInfo['namespace'] = $this->namespace;
+		$fieldInfo['isNakedField'] = $this->isNakedField;
 		$fieldInfo['type'] = $field->type;
 		$fieldInfo['input'] = new \Twig_Markup($input, craft()->templates->getTwig()->getCharset());
 

@@ -7,13 +7,16 @@
 
 	<div class="tab">
 
-		<h3>{{ tab.name }}</h3>
+		{% if displaySectionTitles %}
+			<h3>{{ tab.name }}</h3>
+		{% endif %}
 
 		{% for field in fields %}
 			{% include "field" with {
 				field:    field.getField(),
 				required: field.required,
-				element:  entry
+				element:  entry,
+				thirdPartySubmission: thirdPartySubmission
 			} only %}
 		{% endfor %}
 
