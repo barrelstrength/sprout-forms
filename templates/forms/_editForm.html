@@ -25,10 +25,11 @@
 
 {% block main %}
 
-<form method="post" accept-charset="UTF-8" id="form" data-formid="{{ form.id }}" data-saveshortcut="1" data-saveshortcut-redirect="{{ craft.request.url }}">
+<form method="post" accept-charset="UTF-8" id="form" data-formid="{{ form.id }}" data-saveshortcut="1" data-saveshortcut-redirect="sproutforms/forms/edit/{id}#overview">
   <input type="hidden" name="action" value="sproutForms/forms/saveForm">
-  <input type="hidden" name="redirect" value="sproutforms/forms">
+	<input type="hidden" name="redirect" value="sproutforms/forms/edit/{id}#overview">
   <input type="hidden" name="id" value="{{ form.id is defined ? form.id : '' }}">
+
   
 <div class="grid first">
 	<div class="item" data-position="left" data-min-colspan="2" data-max-colspan="3">
@@ -38,7 +39,7 @@
 				{% include "_includes/tabs" %}
 			{% endif %}
 
-			<div id="overview">
+			<div id="overview" class="hidden">
 				{% include 'sproutforms/forms/_tabs/overview' %}
 			</div>
 
