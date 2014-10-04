@@ -54,12 +54,14 @@ class SproutForms_ExamplesController extends BaseController
 				array(
 					'name' => 'Contact Form',
 					'handle' => 'contact',
-					'titleFormat' => "{dateCreated|date('Y-m-d')} – {fullName} – {message|slice(0,22)}..."
+					'titleFormat' => "{dateCreated|date('Y-m-d')} – {fullName} – {message|slice(0,22)}...",
+					'redirectUri' => 'sproutforms/examples/contact-form?message=thank-you'
 				),
 				array(
 					'name' => 'Basic Fields Form',
 					'handle' => 'basic',
-					'titleFormat' => "{plainText} – {dropdown}{% if object.textarea %} – {{ object.textarea|slice(0,15) }}{% endif %}"
+					'titleFormat' => "{plainText} – {dropdown}{% if object.textarea %} – {{ object.textarea|slice(0,15) }}{% endif %}",
+					'redirectUri' => 'sproutforms/examples/basic-fields?message=thank-you'
 				),
 				// array(
 				// 	'name' => 'All Craft Fields',
@@ -261,6 +263,7 @@ class SproutForms_ExamplesController extends BaseController
 				$form->name        = $settings['name'];
 				$form->handle      = $settings['handle'];
 				$form->titleFormat = $settings['titleFormat'];
+				$form->redirectUri = $settings['redirectUri'];
 
 				// Create the Form
 				craft()->sproutForms_forms->saveForm($form);
