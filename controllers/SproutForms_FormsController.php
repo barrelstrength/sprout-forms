@@ -7,7 +7,7 @@ namespace Craft;
 class SproutForms_FormsController extends BaseController
 {
 	/**
-	 * Saves a form
+	 * Save a form
 	 */
 	public function actionSaveForm()
 	{
@@ -111,7 +111,7 @@ class SproutForms_FormsController extends BaseController
 	}
 
 	/**
-	 * Deletes a form.
+	 * Delete a form.
 	 * 
 	 * @return void
 	 */

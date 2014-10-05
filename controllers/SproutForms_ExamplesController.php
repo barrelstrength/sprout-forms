@@ -55,13 +55,15 @@ class SproutForms_ExamplesController extends BaseController
 					'name' => 'Contact Form',
 					'handle' => 'contact',
 					'titleFormat' => "{dateCreated|date('Y-m-d')} – {fullName} – {message|slice(0,22)}...",
-					'redirectUri' => 'sproutforms/examples/contact-form?message=thank-you'
+					'redirectUri' => 'sproutforms/examples/contact-form?message=thank-you',
+					'displaySectionTitles' => false
 				),
 				array(
 					'name' => 'Basic Fields Form',
 					'handle' => 'basic',
 					'titleFormat' => "{plainText} – {dropdown}{% if object.textarea %} – {{ object.textarea|slice(0,15) }}{% endif %}",
-					'redirectUri' => 'sproutforms/examples/basic-fields?message=thank-you'
+					'redirectUri' => 'sproutforms/examples/basic-fields?message=thank-you',
+					'displaySectionTitles' => true
 				),
 				// array(
 				// 	'name' => 'All Craft Fields',
@@ -264,6 +266,7 @@ class SproutForms_ExamplesController extends BaseController
 				$form->handle      = $settings['handle'];
 				$form->titleFormat = $settings['titleFormat'];
 				$form->redirectUri = $settings['redirectUri'];
+				$form->displaySectionTitles = $settings['displaySectionTitles'];
 
 				// Create the Form
 				craft()->sproutForms_forms->saveForm($form);
@@ -272,14 +275,7 @@ class SproutForms_ExamplesController extends BaseController
 				craft()->content->fieldContext = $form->getFieldContext();
 				craft()->content->contentTable = $form->getContentTable();
 
-//------------------------------------------------------------
-
-// Trying to do this another way... let's 
-// 1. Make sure whatever fields we have are saved and exist
-// 2. Try to copy the way Craft does stuff by using assembleLayout
-// 3. Fake $postedFieldLayout array
-// 4. Fake $requiredFields array
-// 
+				//------------------------------------------------------------
 
 				// Do we have a new field that doesn't exist yet?  
 				// If so, save it and grab the id.
@@ -302,31 +298,8 @@ class SproutForms_ExamplesController extends BaseController
 
 						// Save our field
 						craft()->fields->saveField($field);
-
-						// Build the postedFieldLayout array
-						// [fieldLayout] => Array
-						// (
-						//     [Tab%201] => Array
-						//         (
-						//             [0] => 549
-						//             [1] => 311
-						//         )
-						//     [Tab%202] => Array
-						//         (
-						//             [0] => 457
-						//             [1] => 456
-						//             [2] => 295
-						//         )
-						// )
 						
 						$fieldLayout[$tabName][] = $field->id;
-
-						// Build the Required field array
-						// Array
-						// (
-						//     [0] => 549
-						//     [1] => 311
-						// )
 						
 						if ($field->required) 
 						{

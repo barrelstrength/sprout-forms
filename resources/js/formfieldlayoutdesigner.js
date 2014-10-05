@@ -6,23 +6,16 @@
 
 (function($) {
 
+// @TODO - standardize use of Sprout object for js throughout plugins
 if (typeof Sprout == 'undefined')
 {
 	Sprout = {};
 }
 
-// new Craft.FieldLayoutDesigner('#fieldlayoutform', {
-// 	customizableTabs: true
-// });
-
 Sprout.FormFieldLayoutDesigner = Craft.FieldLayoutDesigner.extend({
 
 	formId: null,
 	isDirty: false,
-
-	// constructor: function(name) {
- //    this.name = name;
- //  },
 
 	init: function(container, settings) 
 	{

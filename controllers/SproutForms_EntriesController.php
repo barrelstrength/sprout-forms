@@ -56,8 +56,7 @@ class SproutForms_EntriesController extends BaseController
 			
 			craft()->userSession->setNotice(Craft::t('Entry saved.'));
 			
-			// Store our new entry so we can recreate the Entry object 
-			// on our thank you page
+			// Store our new entry so we can recreate the Entry object on our thank you page
 			$_SESSION['lastEntryId'] = $entry->id;
 			
 			$this->redirectToPostedUrl();
@@ -74,9 +73,9 @@ class SproutForms_EntriesController extends BaseController
 				craft()->sproutForms_forms->activeCpEntry = $entry;
 
 				// Return the form as an 'entry' variable if in the cp
-				// craft()->urlManager->setRouteVariables(array(
-				// 	'entry' => $entry
-				// ));
+				craft()->urlManager->setRouteVariables(array(
+					'entry' => $entry
+				));
 			}
 			else
 			{
@@ -92,7 +91,7 @@ class SproutForms_EntriesController extends BaseController
 	}
 
 	/**
-	 * Deletes an entry.
+	 * Delete an entry.
 	 * 
 	 * @return void
 	 */
@@ -111,7 +110,7 @@ class SproutForms_EntriesController extends BaseController
 	}
 
 	/**
-	 * Fetches or creates an SproutForms_EntryModel.
+	 * Fetch or create a SproutForms_EntryModel
 	 *
 	 * @access private
 	 * @throws Exception
@@ -139,7 +138,7 @@ class SproutForms_EntriesController extends BaseController
 	}
 
 	/**
-	 * Populates an SproutForms_EntryModel with post data.
+	 * Populate a SproutForms_EntryModel with post data
 	 *
 	 * @access private
 	 * @param SproutForms_EntryModel $entry
@@ -281,7 +280,7 @@ class SproutForms_EntriesController extends BaseController
 	}
 	
 	/**
-	 * Validate email
+	 * Validate email address
 	 * 
 	 * @param  string $email recipient list email
 	 * @return bool          true/false
@@ -292,7 +291,7 @@ class SproutForms_EntriesController extends BaseController
 	}
 
 	/**
-	 * Edit a form.
+	 * Route Controller for Edit Entry Template
 	 *
 	 * @param array $variables
 	 * @throws HttpException

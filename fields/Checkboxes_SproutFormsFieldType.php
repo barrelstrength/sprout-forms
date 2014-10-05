@@ -16,9 +16,9 @@ class Checkboxes_SproutFormsFieldType extends BaseSproutFormsFieldType
 	public function getInputHtml($field, $value, $settings)
 	{
 		return craft()->templates->render('fields/checkboxes/input', array(
-			'name'  => $field->handle,
+			'name'    => $field->handle,
 			'options' => $settings->options,
-			'values' => $value,
+			'values'  => $value,
 		));
 	}
 }

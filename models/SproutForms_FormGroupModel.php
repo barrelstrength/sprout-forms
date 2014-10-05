@@ -20,8 +20,8 @@ class SproutForms_FormGroupModel extends BaseModel
 	protected function defineAttributes()
 	{
 		return array(
-			'id'            => AttributeType::Number,
-			'name'          => AttributeType::String,
+			'id'   => AttributeType::Number,
+			'name' => AttributeType::String,
 		);
 	}
 }

@@ -6,26 +6,19 @@
 	
 	<p>Take a look at the code of this template to see an example with comments.</p>
 
-	<hr> 
+	<hr>
 
+	{# Check if we should display or form or thank you message #}
 	{% if craft.request.getParam('message') == 'thank-you' %}
 
-		{% set lastEntry = craft.sproutForms.lastEntry() %}
+		{# Display our thank you message #}
+		<p>Thank you for your message. We'll be in touch soon!</p>
 
-		{% if lastEntry %}
-			
-			<p>Thanks for sharing. Here are your answers:</p>
-			
-			<p>
-				Full Name: {{ lastEntry.fullName }}<br/>
-				Email: {{ lastEntry.email }}<br/>
-				Message: {{ lastEntry.message }}<br/>
-			</p>
-
-		{% endif %}
+	{% else %}
+	  
+	  {# Display our Contact Form #}
+	  {{ craft.sproutForms.displayForm('contact') }}
 
 	{% endif %}
-
-	{{ craft.sproutForms.displayForm('contact') }}
 
 {% endblock %}

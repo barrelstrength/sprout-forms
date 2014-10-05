@@ -12,8 +12,6 @@ class SproutForms_SettingsController extends BaseController
 	{
 		$settingsModel = new SproutForms_SettingsModel;
 
-		// Create any variables you want available in your template
-		// $variables['items'] = craft()->pluginName->getAllItems();
 		$settings = craft()->db->createCommand()
 			->select('settings')
 			->from('plugins')
@@ -25,7 +23,7 @@ class SproutForms_SettingsController extends BaseController
 
 		$variables['settings'] = $settingsModel;
 
-		// Load a particular template and with all of the variables you've created
+		// Load our template
 		$this->renderTemplate('sproutforms/settings', $variables);
 
 	}

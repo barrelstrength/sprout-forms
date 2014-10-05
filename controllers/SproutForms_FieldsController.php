@@ -63,7 +63,6 @@ class SproutForms_FieldsController extends BaseController
 		// Save our field
 		craft()->fields->saveField($field);
 
-
 		// Now let's add this field to our field layout
 		// ------------------------------------------------------------
 
@@ -223,7 +222,7 @@ class SproutForms_FieldsController extends BaseController
 	}
 
 	/**
-	 * Deletes a field.
+	 * Delete a field.
 	 * 
 	 * @return void
 	 */

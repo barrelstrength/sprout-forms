@@ -53,16 +53,20 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 		$entry->addErrors($entryRecord->getErrors());
 
 		
-		// Fire onBeforeSaveEntry Event
 		// ------------------------------------------------------------
+		// Fire 'onBeforeSaveEntry' Event
+		// ------------------------------------------------------------
+		
 		Craft::import('plugins.sproutforms.events.SproutForms_OnBeforeSaveEntryEvent');
+
 		$event = new SproutForms_OnBeforeSaveEntryEvent($this, array(
 			'entry'      => $entry,
 			'isNewEntry' => $isNewEntry
 		));
-		craft()->sproutForms->onBeforeSaveEntry($event);
-		// ------------------------------------------------------------
 
+		craft()->sproutForms->onBeforeSaveEntry($event);
+
+		// ------------------------------------------------------------
 
 		if (!$entry->hasErrors())
 		{
@@ -91,19 +95,25 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 							$transaction->commit();
 						}
 
+						// ------------------------------------------------------------
 						// Fire an 'onSaveEntry' event
+						// ------------------------------------------------------------
+						
 						Craft::import('plugins.sproutforms.events.SproutForms_OnSaveEntryEvent');
+						
 						$event = new SproutForms_OnSaveEntryEvent($this, array(
 							'entry'      => $entry,
-							'entity'      => $entry,
 							'isNewEntry' => $isNewEntry,
 
 							// @TODO - DEPRECATE and IMPROVE
 							// Support for Sprout Email Event
-							// @TODO - reconsider the best way to do this.
 							'event'      => 'saveEntry',
+							'entity'     => $entry,
 						));
+
 						craft()->sproutForms->onSaveEntry($event);
+
+						// ------------------------------------------------------------
 
 						return true;
 					}
@@ -124,7 +134,7 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Delete Entry
+	 * Deletes an entry
 	 * 
 	 * @param int $id
 	 * @return boolean
@@ -175,26 +185,26 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 		}
 	}
 
-	// Events
-	// ======
-
 	/**
-	 * Fires an 'onBeforeSaveEntry' event.
-	 *
-	 * @param Event $event
+	 * Gets or creates a new EntryModel
+	 * 
+	 * @param  string $formHandle Form Handle
+	 * @return SproutForms_EntryModel
 	 */
-	public function onBeforeSaveEntry(Event $event)
+	public function getEntryModel(SproutForms_FormModel $form)
 	{
-		$this->raiseEvent('onBeforeSaveEntry', $event);
-	}
+		// If a form has been submitted, use our existing EntryModel
+		// otherwise, create a new EntryModel
+		if (isset(craft()->sproutForms_forms->activeEntries[$form->handle]))
+		{
+			$entry = craft()->sproutForms_forms->activeEntries[$form->handle];	
+		}
+		else
+		{
+			$entry = new SproutForms_EntryModel();
+			$entry->formId = $form->id;
+		}
 
-	/**
-	 * Fires an 'onSaveEntry' event.
-	 *
-	 * @param Event $event
-	 */
-	public function onSaveEntry(Event $event)
-	{
-		$this->raiseEvent('onSaveEntry', $event);
+		return $entry;
 	}
 }

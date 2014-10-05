@@ -18,7 +18,7 @@ class SproutForms_FormGroupRecord extends BaseRecord
 	protected function defineAttributes()
 	{
 		return array(
-			'name'          => array(AttributeType::Name, 'required' => true)
+			'name' => array(AttributeType::Name, 'required' => true)
 		);
 	}
 
@@ -28,7 +28,7 @@ class SproutForms_FormGroupRecord extends BaseRecord
 	public function defineRelations()
 	{
 		return array(
-			'sproutforms_forms'  => array(static::HAS_MANY, 'SproutForms_FormRecord', 'id'),
+			'sproutforms_forms' => array(static::HAS_MANY, 'SproutForms_FormRecord', 'id'),
 		);
 	}
 

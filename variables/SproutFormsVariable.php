@@ -49,21 +49,7 @@ class SproutFormsVariable
 	public function displayForm($formHandle, $customSettings = null)
 	{	
 		$form = craft()->sproutForms_forms->getFormByHandle($formHandle);
-
-		// @TODO - consider what other places this might get accessed from
-		// do we need to do any more checks to make sure this doesn't cause issues?
-		// 
-		// If a form has been submitted, use are existing EntryModel
-		// otherwise, create a new EntryModel
-		if (isset(craft()->sproutForms_forms->activeEntries[$formHandle]))
-		{
-			$entry = craft()->sproutForms_forms->activeEntries[$formHandle];	
-		}
-		else
-		{
-			$entry = new SproutForms_EntryModel();
-			$entry->formId = $form->id;
-		}
+		$entry = craft()->sproutForms_entries->getEntryModel($form);
 
 		// Backup our field context and content table
 		$oldFieldContext = craft()->content->fieldContext;
@@ -119,7 +105,6 @@ class SproutFormsVariable
 	}
 
 	/**
-	 * @todo - this is broken!
 	 * Returns a complete field for display in template
 	 *
 	 * @param string $form_handle
@@ -130,21 +115,8 @@ class SproutFormsVariable
 		list($formHandle, $fieldHandle) = explode('.', $formFieldHandle);
 		if (!$formHandle || !$fieldHandle) return '';
 
-		// @TODO - lots of duplicate code here to clean up that also appears in the
-		// displayForm method
 		$form = craft()->sproutForms_forms->getFormByHandle($formHandle);
-
-		// @TODO - consider what other places this might get accessed from
-		// do we need to do any more checks to make sure this doesn't cause issues?
-		if (isset(craft()->sproutForms_forms->activeEntries[$formHandle]))
-		{
-			$entry = craft()->sproutForms_forms->activeEntries[$formHandle];	
-		}
-		else
-		{
-			$entry = new SproutForms_EntryModel();
-			$entry->formId = $form->id;
-		}
+		$entry = craft()->sproutForms_entries->getEntryModel($form);
 
 		// Backup our field context and content table
 		$oldFieldContext = craft()->content->fieldContext;
@@ -230,7 +202,6 @@ class SproutFormsVariable
 
 			// Set template path back to default
 			craft()->path->setTemplatesPath(craft()->path->getPluginsPath() . 'sproutforms/templates/_special/templates/');	
-
 		}
 		else
 		{	
@@ -245,17 +216,6 @@ class SproutFormsVariable
 			$field->type = 'textarea';
 		}
 
-		// Are we setting the right template path?
-		// craft()->path->setTemplatesPath($this->templates['field']);
-		// // ...
-		// craft()->path->setTemplatesPath($this->templates['field']);
-
-		// // Do we have any fields where we just want to output the input?
-		// if ($this->isNakedField)
-		// {
-		// 	$fieldHtml = $input;
-		// }
-		
 		// @TODO - improve naming and handling of this
 		$fieldInfo['namespace'] = $this->namespace;
 		$fieldInfo['isNakedField'] = $this->isNakedField;
@@ -263,24 +223,10 @@ class SproutFormsVariable
 		$fieldInfo['input'] = new \Twig_Markup($input, craft()->templates->getTwig()->getCharset());
 
 		return $fieldInfo;
-		
-	}
-
-	public function lastEntry()
-	{
-		if (craft()->httpSession->get('lastEntryId')) 
-		{
-			$entryId = craft()->httpSession->get('lastEntryId');
-			$entry = craft()->sproutForms_entries->getEntryById($entryId);
-			
-			craft()->httpSession->destroy('lastEntryId');
-		}
-		
-		return (isset($entry)) ? $entry : null;
 	}
 
 	/**
-	 * Get a specific form. If no form is found, returns null
+	 * Gets a specific form. If no form is found, returns null
 	 *
 	 * @param  int   $id
 	 * @return mixed
@@ -301,36 +247,37 @@ class SproutFormsVariable
 	}
 
 	/**
-	 * Returns all entries for all forms
-	 * 
-	 * @param int form id
-	 * @return array
-	 */
-	// public function getAllEntries($formId)
-	// {
-	// 	return craft()->sproutForms_entries->getEntries($formId);
-	// }
-	
-	/**
-	 * Get entry
+	 * Gets entry by ID
 	 * 
 	 * @param int $id
+	 * @return  SproutForms_EntryModel
 	 */
 	public function getEntryById($id)
 	{
 		return craft()->sproutForms_entries->getEntryById($id);
 	}
 
-	public function getLastEntry($formHandle)
+	/**
+	 * Gets last entry submitted
+	 * 
+	 * @param  string $formHandle Form handle
+	 * @return SproutForms_EntryModel
+	 */
+	public function getLastEntry()
 	{
-		if (isset(craft()->sproutForms_forms->activeEntries[$formHandle]))
+		if (craft()->httpSession->get('lastEntryId')) 
 		{
-			return $entry = craft()->sproutForms_forms->activeEntries[$formHandle];	
+			$entryId = craft()->httpSession->get('lastEntryId');
+			$entry = craft()->sproutForms_entries->getEntryById($entryId);
+			
+			craft()->httpSession->destroy('lastEntryId');
 		}
+		
+		return (isset($entry)) ? $entry : null;
 	}
 
 	/**
-	 * Get Form Groups
+	 * Gets Form Groups
 	 * 
 	 * @param  int $id Group ID (optional)
 	 * @return array
@@ -341,7 +288,7 @@ class SproutFormsVariable
 	}
 
 	/**
-	 * Get all forms in a specific group
+	 * Gets all forms in a specific group by ID
 	 * 
 	 * @param  int $id         Group ID
 	 * @return SproutForms_FormModel
@@ -352,7 +299,8 @@ class SproutFormsVariable
 	}
 
 	/**
-	 * Update fieldtypes into to option groups 
+	 * Builds FieldType dropdown by grouping fields into to basic and advanced
+	 * 
 	 * 1) Basic fields we can output by default
 	 * 2) Advanced fields that need some love before outputting
 	 * 
