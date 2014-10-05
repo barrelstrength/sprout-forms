@@ -32,8 +32,7 @@ class SproutFormsPlugin extends BasePlugin
 	}
 
 	public function init()
-	{
-		// @TODO - Are these necessary?  Or is there a better way to do this?
+	{	
 		Craft::import('plugins.sproutforms.fields.ISproutFormsFieldType');
 		Craft::import('plugins.sproutforms.fields.BaseSproutFormsFieldType');
 	}
@@ -54,45 +53,76 @@ class SproutFormsPlugin extends BasePlugin
 	public function registerCpRoutes()
 	{
 		return array(
-			
-			// Forms by Group
-			'sproutforms/forms/(?P<groupId>\d+)' => 
-			'sproutforms/forms',
 
-			// New Form
+			/*
+			 * Create New Form
+			 * @controller SproutForms_FormsController
+			 * @method     actionEditFormTemplate
+			 * @template   sproutforms/templates/forms/_editForm.html
+			 */
 			'sproutforms/forms/new' => array(
 				'action' => 'sproutForms/forms/editFormTemplate'
 			),
 
-			// Edit Form
+			/*
+			 * Create New Form
+			 * @controller SproutForms_FormsController
+			 * @method     actionEditFormTemplate
+			 * @template   sproutforms/templates/forms/_editForm.html
+			 */
 			'sproutforms/forms/edit/(?P<formId>\d+)' => array(
 				'action' => 'sproutForms/forms/editFormTemplate'
 			),
 
-			// New Field
+			/*
+			 * Create New Field
+			 * @controller SproutForms_FieldsController
+			 * @method     actionEditFieldTemplate
+			 * @template   sproutforms/templates/forms/_editField.html
+			 */
 			'sproutforms/forms/(?P<formId>\d+)/fields/new' => array(
 					'action' => 'sproutForms/fields/editFieldTemplate'
 			),
 
-			// Edit Form
+			/*
+			 * Edit Field
+			 * @controller SproutForms_FieldsController
+			 * @method     actionEditFieldTemplate
+			 * @template   sproutforms/templates/forms/_editField.html
+			 */
 			'sproutforms/forms/(?P<formId>\d+)/fields/edit/(?P<fieldId>\d+)' => array(
 					'action' => 'sproutForms/fields/editFieldTemplate'
 			),
 
-			// Edit Entry
+			/*
+			 * Edit Entry
+			 * @controller SproutForms_EntriesController
+			 * @method     actionEditEntryTemplate
+			 * @template   sproutforms/templates/entries/_edit.html
+			 */
 			'sproutforms/entries/edit/(?P<entryId>\d+)' => array(
 				'action' => 'sproutForms/entries/editEntryTemplate'
 			),
 
 			/*
-			* @controller SproutSeo_SettingsController
-			* @template   sproutseo/templates/settings/index.html
-			*/
+			 * Edit Settings
+			 * @controller SproutSeo_SettingsController
+			 * @method     actionSettingsIndexTemplate
+			 * @template   sproutforms/templates/settings/index.html
+			 */
 			'sproutforms/settings' => array(
 				'action' => 'sproutForms/settings/settingsIndexTemplate'
 			),
 
-			// Example Forms
+			/*
+			 * Filter Forms by Group
+			 */
+			'sproutforms/forms/(?P<groupId>\d+)' => 
+			'sproutforms/forms',
+
+			/*
+			 * Example Form installation page
+			 */
 			'sproutforms/examples' => 
 			'sproutforms/_cp/examples',
 
@@ -130,7 +160,7 @@ class SproutFormsPlugin extends BasePlugin
 	 */
 	public function onAfterInstall()
 	{
-		craft()->request->redirect('../sproutforms/examples');
+		craft()->request->redirect(UrlHelper::getCpUrl() . '/sproutforms/examples');
 	}
 
 	/**
