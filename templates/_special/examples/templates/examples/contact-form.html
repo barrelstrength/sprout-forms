@@ -8,6 +8,24 @@
 
 	<hr> 
 
+	{% if craft.request.getParam('message') == 'thank-you' %}
+
+		{% set lastEntry = craft.sproutForms.lastEntry() %}
+
+		{% if lastEntry %}
+			
+			<p>Thanks for sharing. Here are your answers:</p>
+			
+			<p>
+				Full Name: {{ lastEntry.fullName }}<br/>
+				Email: {{ lastEntry.email }}<br/>
+				Message: {{ lastEntry.message }}<br/>
+			</p>
+
+		{% endif %}
+
+	{% endif %}
+
 	{{ craft.sproutForms.displayForm('contact') }}
 
 {% endblock %}
