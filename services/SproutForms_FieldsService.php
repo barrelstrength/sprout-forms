@@ -296,7 +296,9 @@ class SproutForms_FieldsService extends FieldsService
 	{
 		$basicFields = array();
 		$advancedFields = array();
+		$customFields = array();
 
+		// Supported Craft fields
 		$supportedFields = array(
 			'Checkboxes',
 			'Dropdown',
@@ -304,31 +306,61 @@ class SproutForms_FieldsService extends FieldsService
 			'Number',
 			'PlainText',
 			'RadioButtons',
-
-			'SproutEmailField_Email',
-			'SproutLinkField_Link',
-			'SproutInvisibleCaptcha_InvisibleCaptcha',
 		);
 
-		// @TODO - support certain custom fields out of the box
-		// $supportedCustomFields = array(
-		// 	'SproutEmailField_Email',
-		// 	'SproutLinkField_Link',
-		// 	'SproutInvisibleCaptcha_InvisibleCaptcha'
-		// );
+		// Unsupported Craft fields
+		$unSupportedFields = array(
+			'Assets',
+			'Categories',
+			'Color',
+			'Date',
+			'Entries',
+			'Lightswitch',
+			'Matrix',
+			'PositionSelect',
+			'RichText',
+			'Table',
+			'Tags',
+			'Users'
+		);
 
 		foreach ($fieldTypes as $key => $fieldType) 
 		{
 			if (in_array($key, $supportedFields)) 
 			{
+				// Sort supported fields into "Basic" option group
+				$basicFields[$key] = $fieldType;
+			}
+			elseif (in_array($key, $unSupportedFields)) 
+			{
+				// Sort unsupported fields into "Advanced" option group
+				$advancedFields[$key] = $fieldType;
+			}
+			else
+			{
+				// Sort all other fields into a custom group
+				$customFields[$key] = $fieldType;
+			}
+		}
+
+		// Grab all supported fields
+		$customSproutFields = craft()->plugins->call('registerSproutField');
+		
+		foreach ($customFields as $key => $fieldType) 
+		{
+			if (in_array($key, $customSproutFields)) 
+			{
+				// Sort supported custom fields into "Basic" option group 
 				$basicFields[$key] = $fieldType;
 			}
 			else
 			{
+				// Sort unsupported custom fields into "Advanced" option group
 				$advancedFields[$key] = $fieldType;
 			}
 		}
 
+		// Build our Field Type dropdown
 		$fieldTypeGroups['basicFieldGroup'] = array('optgroup' => 'Basic Fields');
 
 		foreach ($basicFields as $key => $fieldType) 
@@ -342,7 +374,7 @@ class SproutForms_FieldsService extends FieldsService
 		{
 			$fieldTypeGroups[$key] = $fieldType;
 		}
-
+		
 		return $fieldTypeGroups;
 	}
 }
