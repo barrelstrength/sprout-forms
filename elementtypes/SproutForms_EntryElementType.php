@@ -10,7 +10,7 @@ class SproutForms_EntryElementType extends BaseElementType
 	 */
 	public function getName()
 	{
-		return Craft::t('Form Entries');
+		return Craft::t('Sprout Forms Entries');
 	}
 
 	/**
