@@ -3,8 +3,6 @@
     
 	{% set fields = tab.getFields() %}
 
-	<hr>
-
 	<div class="tab">
 
 		{% if displaySectionTitles %}
@@ -21,5 +19,9 @@
 		{% endfor %}
 
 	</div>
+
+	{% if not loop.first and not loop.last %}
+	<hr>
+	{% endif %}
 
 {% endfor %}
