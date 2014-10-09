@@ -21,20 +21,20 @@
 <form method="post" action="" accept-charset="utf-8" class="examples">
 	<input type="hidden" name="action" value="sproutForms/examples/install">
 	
-	<h2>Getting Started</h2>
+	<h2>{{ "Getting Started"|t }}</h2>
 	
-	<p>Install example forms with commented templates and example data. The example templates will be created placed in the `<code>craft/templates/sproutforms</code>` folder.</p>
+	<p>{{ "Install example forms with commented templates and example data. The example templates will be created placed in the `<code>craft/templates/sproutforms</code>` folder."|t }}</p>
 
-	<p><em>Example forms include a Contact Form and a Form with all of the basic front-end fields that can be used with the single-line form tag.</em></p>
+	<p>{{ "<em>Example forms include a Contact Form and a Form with all of the basic front-end fields that can be used with the single-line form tag.</em>"|t }}</p>
 	
 	<div class="buttons">
-		<input class="btn submit" type="submit" value="Install Example Forms" />
+		<input class="btn submit" type="submit" value="{{ 'Install Example Forms'|t }}" />
 	</div>
 
-	<p>Don't install any example forms or data, I will build the forms I need myself.</p>
+	<p>{{ "Don't install any example forms or data, I will build the forms I need myself."|t }}</p>
 
 	<div class="buttons">
-		<a href="{{ url('sproutforms/forms') }}" class="btn delete">Take me to Sprout Forms</a>
+		<a href="{{ url('sproutforms/forms') }}" class="btn delete">{{ "Take me to Sprout Forms"|t }}</a>
 	</div>
 
 </form>
