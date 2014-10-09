@@ -42,10 +42,22 @@ class SproutForms_FormsController extends BaseController
 
 		if ($deletedFields) 
 		{
+			// Backup our field context and content table
+			$oldFieldContext = craft()->content->fieldContext;
+			$oldContentTable = craft()->content->contentTable;
+
+			// Set our field content and content table to work with our form output
+			craft()->content->fieldContext = $form->getFieldContext();
+			craft()->content->contentTable = $form->getContentTable();
+
 			foreach ($deletedFields as $fieldId) 
 			{
 				craft()->fields->deleteFieldById($fieldId);
 			}
+
+			// Reset our field context and content table to what they were previously
+			craft()->content->fieldContext = $oldFieldContext;
+			craft()->content->contentTable = $oldContentTable;
 		}
 		
 		// Save it
