@@ -4,7 +4,8 @@
 {% if form.submitAction %}
 
 {# Submit form to third party #}
-<form action="{{ submitAction }}" method="post" accept-charset="UTF-8">
+<form method="post" accept-charset="utf-8" enctype="multipart/form-data">
+	<input type="hidden" name="action" value="{{ submitAction }}">
 
 {% else %}
 
@@ -22,6 +23,8 @@
 	<div class="fields">
 	{{ body | raw }}
 	</div>
+
+	{% hook 'sproutForms.modifyForm' %}
 	
 	<div class="submit">
 		<input type="submit" value="{{ submitValue }}">
