@@ -190,7 +190,7 @@ class SproutFormsVariable
 			
 			// Determine where our form and field template should come from
 			$this->templates = craft()->sproutForms_fields->getSproutFormsTemplates();
-			
+
 			// Set template path
 			craft()->path->setTemplatesPath($this->fields[$field->type]['templateFolder']);
 			

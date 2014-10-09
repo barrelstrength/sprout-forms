@@ -88,8 +88,6 @@ class SproutForms_FormsService extends BaseApplicationComponent
 				
 				if ($isNewForm) 
 				{	
-					SproutFormsPlugin::log('Is New Form');
-					
 					$fieldLayout = new FieldLayoutModel();
 					$fieldLayout->type = 'SproutForms_Form';
 
@@ -104,35 +102,23 @@ class SproutForms_FormsService extends BaseApplicationComponent
 				}
 				else
 				{	
-					SproutFormsPlugin::log('Is Existing Form');
-
 					// If we have a layout use it, otherwise
 					// since this is an existing form, grab the oldForm layout
 					if ($hasLayout)
 					{
 						// Delete our previous record
 						craft()->fields->deleteLayoutById($oldForm->fieldLayoutId);
-						
-						SproutFormsPlugin::log('Submitted Form has a layout');
 
 						$fieldLayout = $form->getFieldLayout();
 
-						SproutFormsPlugin::log('Forms Service field layout iD: ' . $form->getFieldLayout()->id);
-
 						// Save the field layout
 						craft()->fields->saveLayout($fieldLayout);
-
-						SproutFormsPlugin::log('Forms Service after saving field layout iD: ' . $fieldLayout->id);
 
 						// Assign our new layout id info to our 
 						// form model and records
 						$form->fieldLayoutId = $fieldLayout->id;
 						$form->setFieldLayout($fieldLayout);
 						$formRecord->fieldLayoutId = $fieldLayout->id;
-
-						SproutFormsPlugin::log('Forms Service old field layout iD: ' . $oldForm->fieldLayoutId);
-						
-						
 					}
 					
 				}
