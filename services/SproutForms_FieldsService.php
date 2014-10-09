@@ -361,14 +361,14 @@ class SproutForms_FieldsService extends FieldsService
 		}
 
 		// Build our Field Type dropdown
-		$fieldTypeGroups['basicFieldGroup'] = array('optgroup' => 'Basic Fields');
+		$fieldTypeGroups['basicFieldGroup'] = array('optgroup' => Craft::t('Basic Fields'));
 
 		foreach ($basicFields as $key => $fieldType) 
 		{
 			$fieldTypeGroups[$key] = $fieldType;
 		}
 
-		$fieldTypeGroups['advancedFieldGroup'] = array('optgroup' => 'Advanced Fields');
+		$fieldTypeGroups['advancedFieldGroup'] = array('optgroup' => Craft::t('Advanced Fields'));
 
 		foreach ($advancedFields as $key => $fieldType) 
 		{
