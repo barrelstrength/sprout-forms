@@ -24,6 +24,11 @@ class SproutForms_EntriesController extends BaseController
 		$formHandle = craft()->request->getRequiredPost('handle');
 		$this->form = craft()->sproutForms_forms->getFormByHandle($formHandle);
 
+		if (!isset($this->form)) 
+		{
+			throw new Exception(Craft::t('No form exists with the handle “{handle}”', array('handle' => $formHandle)));
+		}
+		
 		craft()->content->fieldContext = $this->form->getFieldContext();
 		craft()->content->contentTable = $this->form->getContentTable();
 
@@ -82,7 +87,7 @@ class SproutForms_EntriesController extends BaseController
 				// Store this Entry Model in a variable in our Service layer
 				// so that we can access the error object from our displayForm() variable 
 				craft()->sproutForms_forms->activeEntries[$this->form->handle] = $entry;
-
+				
 				craft()->urlManager->setRouteVariables(array(
 					$formVariable => $entry
 				));
