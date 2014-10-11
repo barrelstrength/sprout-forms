@@ -46,7 +46,7 @@ class SproutForms_FormsService extends BaseApplicationComponent
 			$oldForm = SproutForms_FormModel::populateModel($formRecord);
 			$isNewForm = false;
 
-			$hasLayout = !empty($form->getFieldLayout()->getFields());
+			$hasLayout = count($form->getFieldLayout()->getFields()) > 0;
 			
 			// Add the oldHandle to our model so we can determine if we
 			// need to rename the content table
