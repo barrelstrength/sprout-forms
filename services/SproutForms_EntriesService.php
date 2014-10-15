@@ -196,7 +196,7 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 		// If a form has been submitted, use our existing EntryModel
 		// otherwise, create a new EntryModel
 		if (isset(craft()->sproutForms_forms->activeEntries[$form->handle]))
-		{
+		{	
 			$entry = craft()->sproutForms_forms->activeEntries[$form->handle];	
 		}
 		else
