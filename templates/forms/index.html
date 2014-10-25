@@ -24,25 +24,12 @@
 {% endif %}
 
 {% block sidebar %}
-	<div class="buttons">
-		<a class="btn submit add icon" href="{{ url('sproutforms/forms/new') }}">{{ "New Form"|t }}</a>
-	</div>
-
-  <div id="groups">
-  {{ parent() }}
+  
+  <div class="buttons">
+    <a class="btn submit add icon" href="{{ url('sproutforms/forms/new') }}">{{ "New Form"|t }}</a>
   </div>
 
-  {# 
-  @TODO - This doesn't work if we treat our Sources as Groups because we can't assign a Groups ID easily, and if we do like we are here, it still fails to update the rename/delete button for groups properly because the ID is not passed in the URL.  If we switch to below, the rename/group button works but the All Forms item is always selected (this seems to happen in JS outside of our control) #}
-
-  {# <nav>
-    <ul id="groups">  
-      <li><a data-key="*" {% if groupId is not defined %} class="sel"{% endif %}>{{ "All Forms"|t }}</a></li>
-      {% for group in groups %}
-        <li><a href="{{ url('sproutforms/forms/'~group.id) }}"{% if groupId is defined and group.id == groupId %} class="sel"{% endif %} data-key="group:{{ group.id }}" data-id="{{ group.id }}">{{ group.name }}</a></li>
-      {% endfor %}
-    </ul>
-  </nav> #}
+  {{ parent() }}
 
   <div class="buttons">
     <div id="newgroupbtn" class="btn add icon">{{ "New Group"|t }}</div>
