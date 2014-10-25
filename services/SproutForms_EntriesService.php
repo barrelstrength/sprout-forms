@@ -3,6 +3,8 @@ namespace Craft;
 
 class SproutForms_EntriesService extends BaseApplicationComponent
 {
+	public $fakeIt = false;
+
 	protected $entryRecord;
 
 	/**
@@ -65,7 +67,7 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 		));
 
 		craft()->sproutForms->onBeforeSaveEntry($event);
-
+		
 		// ------------------------------------------------------------
 
 		if (!$entry->hasErrors())
@@ -116,6 +118,14 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 						// ------------------------------------------------------------
 
 						return true;
+					}
+				}
+				else
+				{
+					if ($event->fakeIt) 
+					{
+						// Pretend to submit the form even though it didn't submit
+						craft()->sproutForms_entries->fakeIt = true;
 					}
 				}
 			}
