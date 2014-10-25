@@ -78,20 +78,6 @@ class SproutForms_FormElementType extends BaseElementType
 	}
 
 	/**
-	 * Returns the content table name that should be joined in for an elements query.
-	 *
-	 * @param ElementCriteriaModel
-	 * @return string
-	 */
-	public function getContentTableForElementsQuery(ElementCriteriaModel $criteria)
-	{
-		if ($criteria->id && is_numeric($criteria->id))
-		{
-			return craft()->sproutForms_forms->getContentTableName($criteria->id);
-		}
-	}
-
-	/**
 	 * Defines any custom element criteria attributes for this element type.
 	 *
 	 * @return array
