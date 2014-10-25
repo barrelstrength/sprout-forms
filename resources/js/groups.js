@@ -169,7 +169,7 @@ var GroupsAdmin = Garnish.Base.extend({
 Garnish.$doc.ready(function()
 {
 	Craft.GroupsAdmin = new GroupsAdmin({
-		groupsSelector: '#groups nav ul',
+		groupsSelector: '#sidebar nav ul',
 		newGroupButtonSelector: '#newgroupbtn',
 		groupSettingsSelector: '#groupsettingsbtn',
 
