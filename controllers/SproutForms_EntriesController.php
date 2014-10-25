@@ -64,12 +64,12 @@ class SproutForms_EntriesController extends BaseController
 			$this->redirectToPostedUrl();
 		}
 		else
-		{	
-			// make errors available to variable
-			craft()->userSession->setError(Craft::t('Couldn’t save entry.'));
-
+		{
 			if (craft()->request->isCpRequest()) 
 			{
+				// make errors available to variable
+				craft()->userSession->setError(Craft::t('Couldn’t save entry.'));
+
 				// Store this Entry Model in a variable in our Service layer
 				// so that we can access the error object from our actionEditEntryTemplate() method
 				craft()->sproutForms_forms->activeCpEntry = $entry;
@@ -81,14 +81,21 @@ class SproutForms_EntriesController extends BaseController
 			}
 			else
 			{
-				// Store this Entry Model in a variable in our Service layer
-				// so that we can access the error object from our displayForm() variable 
-				craft()->sproutForms_forms->activeEntries[$this->form->handle] = $entry;
-				
-				// Return the form using it's name as a variable on the front-end
-				craft()->urlManager->setRouteVariables(array(
-					$this->form->handle => $entry
-				));
+				if (craft()->sproutForms_entries->fakeIt) 
+				{
+					$this->redirectToPostedUrl();
+				}
+				else
+				{
+					// Store this Entry Model in a variable in our Service layer
+					// so that we can access the error object from our displayForm() variable 
+					craft()->sproutForms_forms->activeEntries[$this->form->handle] = $entry;
+					
+					// Return the form using it's name as a variable on the front-end
+					craft()->urlManager->setRouteVariables(array(
+						$this->form->handle => $entry
+					));
+				}
 			}
 		}
 	}
