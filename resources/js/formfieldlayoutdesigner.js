@@ -15,7 +15,6 @@ if (typeof Sprout == 'undefined')
 Sprout.FormFieldLayoutDesigner = Craft.FieldLayoutDesigner.extend({
 
 	formId: null,
-	isDirty: false,
 
 	init: function(container, settings) 
 	{
@@ -54,37 +53,6 @@ Sprout.FormFieldLayoutDesigner = Craft.FieldLayoutDesigner.extend({
 		// ------------------------------------------------------------
 		// End copied init() parent method
 		// ------------------------------------------------------------
-
-		// Track any changes in the form so we can prompt the user with better warning 
-		// messages if they try to navigate away before saving
-		$(':input').change(function () {
-			isDirty = true;
-		});
-
-		this.addListener($('#newfieldbtn a'), 'activate', 'confirmSavedChanges');
-	},
-	
-	confirmSavedChanges: function(event) 
-	{
-		if (this.isDirty)
-		{
-			// If our form has not changed, warn user they will be losing changes
-			var response = confirm(Craft.t('Be sure to save any changes you made to your form before creating or editing a field. All changes to your form and field layout that have not been saved will be lost when you navigate away from this page.'));
-		}
-		else
-		{
-			// If our form has not changed, go to the next page
-			var response = true;
-		}
-
-		if (response == true) 
-		{ 
-			window.location = event.target.href;
-		}	
-		else
-		{
-			return false;
-		}
 	},
 		
 	initField: function($field)
@@ -124,11 +92,6 @@ Sprout.FormFieldLayoutDesigner = Craft.FieldLayoutDesigner.extend({
 
 		switch (action)
 		{
-			case 'edit':
-			{
-				this.confirmSavedChanges();
-				break;
-			}
 			case 'toggle-required':
 			{
 				this.toggleRequiredField($field, $option);
