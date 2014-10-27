@@ -4,7 +4,7 @@ namespace Craft;
 /**
  * The class name is the UTC timestamp in the format of mYYMMDD_HHMMSS_pluginHandle_migrationName
  */
-class m141026_060000_sproutForms_createFormElementTypes extends BaseMigration
+class m141026_060000_sproutForms_migrateFieldsFormsAndEntries extends BaseMigration
 {
 	/**
 	 * Any migration code in here is wrapped inside of a transaction.
@@ -15,58 +15,7 @@ class m141026_060000_sproutForms_createFormElementTypes extends BaseMigration
 	{
 		$oldTable = 'sproutforms_forms_old';
 		$newTable = 'sproutforms_forms';
-
-		// Rename the old Form table
-		if (craft()->db->tableExists($newTable))
-		{
-			craft()->db->createCommand()->renameTable($newTable, $oldTable);
-			SproutFormsPlugin::log("`$newTable` table renamed `$oldTable`.", LogLevel::Info, true);
-
-			// ------------------------------------------------------------
-			// Create new Form Table
-			
-			SproutFormsPlugin::log("Creating the new `$newTable` table.", LogLevel::Info, true);
-
-			// Create the craft_sproutforms_forms table
-			craft()->db->createCommand()->createTable($newTable, array(
-				'id'                       => array('column' => 'integer', 'required' => true, 'primaryKey' => true),
-				'fieldLayoutId'            => array('column' => 'integer', 'required' => false),
-				'groupId'                  => array('maxLength' => 11, 'decimals' => 0, 'unsigned' => false, 'length' => 10, 'column' => 'integer'),
-				'name'                     => array('required' => true),
-				'handle'                   => array('required' => true),
-				'titleFormat'              => array('required' => true),
-				'displaySectionTitles'     => array(),
-				'redirectUri'              => array(),
-				'submitAction'             => array(),
-				'submitButtonText'         => array(),
-				'notificationRecipients'   => array(),
-				'notificationSubject'      => array(),
-				'notificationSenderName'   => array(),
-				'notificationSenderEmail'  => array(),
-				'notificationReplyToEmail' => array(),
-			), null, false);
-
-			// Add foreign keys to craft_sproutforms_forms
-			craft()->db->createCommand()->addForeignKey($newTable, 'id', 'elements', 'id', 'CASCADE', null);
-			craft()->db->createCommand()->addForeignKey($newTable, 'fieldLayoutId', 'fieldlayouts', 'id', 'SET NULL', null);
-
-			SproutFormsPlugin::log("New `$newTable` table created.", LogLevel::Info, true);
-
-
-			// ------------------------------------------------------------
-			// Clean up Foreign Keys
-
-			craft()->db->createCommand()->dropForeignKey('sproutforms_fields', 'formId');
-			SproutFormsPlugin::log("Removed formId Foreign Key Constraint from 'sproutforms_fields' table.", LogLevel::Info, true);
-
-			craft()->db->createCommand()->dropForeignKey('sproutforms_entries', 'formId');
-			SproutFormsPlugin::log("Removed renamed formId Foreign Key Constraint from 'sproutforms_entries' table.", LogLevel::Info, true);
-
-			craft()->db->createCommand()->addForeignKey('sproutforms_entries', 'formId', 'sproutforms_forms', 'id', 'CASCADE', null);
-			SproutFormsPlugin::log("Added back formId Foreign Key Constraint from 'sproutforms_entries' table.", LogLevel::Info, true);
-
-		}
-
+		
 		// ------------------------------------------------------------
 		// Loop through each form in the old table and migrate it to the new table
 		
@@ -135,16 +84,12 @@ class m141026_060000_sproutForms_createFormElementTypes extends BaseMigration
 				$newFieldHandle = str_replace("formId".$oldForm['id']."_", "", $oldFormField['handle']);
 
 				// Determine if we have a Number field
-				// @TODO - adding Number type breaks things
 				// Might need to update teh Settings object to have the correct values min/max...
-				// if ((strpos($oldFormField['validation'], 'numerical') !== FALSE))
-				// {
-				// 	$oldFormField['type'] = 'Number';
-				// }
-				// else
-				// {
-				// 	$oldFormField['type'] = $oldFormField['type'];
-				// }
+				if ((strpos($oldFormField['validation'], 'numerical') !== FALSE))
+				{
+					$oldFormField['type'] = 'Number';
+					$oldFormField['settings'] = '{"min":"0","max":"","decimals":"0"}';	
+				}
 
 				// Build a field map of our old field handles and our new ones
 				// so we can more easily match things up when inserting fields later
@@ -210,11 +155,24 @@ class m141026_060000_sproutForms_createFormElementTypes extends BaseMigration
 
 	    	$newFormEntry = new SproutForms_EntryModel();
 
-	    	$oldEntryServerData = json_decode($oldFormEntries[24]['serverData']);
+	    	SproutFormsPlugin::log("Server data: ". $oldFormEntry['serverData'], LogLevel::Info, true);
+
+	    	
+	    	$oldEntryServerData = json_decode($oldFormEntry['serverData']);
 
 	    	$newFormEntry->formId = $newForm->id;
-				$newFormEntry->ipAddress = $oldEntryServerData->ipAddress;
-				$newFormEntry->userAgent = $oldEntryServerData->userAgent;
+
+	    	if (isset($oldEntryServerData)) 
+	    	{
+	    		$newFormEntry->ipAddress = $oldEntryServerData->ipAddress;
+					$newFormEntry->userAgent = $oldEntryServerData->userAgent;
+	    	}
+	    	else
+	    	{
+	    		// Add null values if we don't have data for some reason
+	    		$newFormEntry->ipAddress = NULL;
+					$newFormEntry->userAgent = NULL;
+	    	}
 
 	    	$newFormFields = array();
 
