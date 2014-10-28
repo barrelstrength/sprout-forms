@@ -77,14 +77,14 @@ class SproutForms_FieldsController extends BaseController
 		
 		// If no tabs exist, let's create a 
 		// default one for all of our fields
-		if (empty($oldTabs)) 
+		if (!$oldTabs) 
 		{
 			// Create a tab
 			$fieldLayoutTab = new FieldLayoutTabModel();
 			$fieldLayoutTab->name      = Craft::t('Form');
 			$fieldLayoutTab->sortOrder = 1;
 
-			if (!empty($oldFields))
+			if ($oldFields)
 			{
 				$fieldSortOrder = 0;
 				// Add any existing fields to a default tab
@@ -178,9 +178,9 @@ class SproutForms_FieldsController extends BaseController
 		$formId = craft()->request->getSegment(3);
 		$form = craft()->sproutForms_forms->getFormById($formId);
 
-		if (!empty($variables['fieldId']))
+		if (isset($variables['fieldId']))
 		{
-			if (empty($variables['field']))
+			if (!isset($variables['field']))
 			{
 				$field = craft()->fields->getFieldById($variables['fieldId']);
 				$variables['field'] = $field;
@@ -194,7 +194,7 @@ class SproutForms_FieldsController extends BaseController
 
 				$variables['tabId'] = $fieldLayoutField->tabId;
 				
-				if (!$variables['field'])
+				if (!isset($variables['field']))
 				{
 					throw new HttpException(404);
 				}
@@ -205,7 +205,7 @@ class SproutForms_FieldsController extends BaseController
 		else
 		{
 			
-			if (empty($variables['field']))
+			if (!isset($variables['field']))
 			{
 				$variables['field'] = new FieldModel();
 			}

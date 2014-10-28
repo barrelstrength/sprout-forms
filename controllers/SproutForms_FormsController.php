@@ -33,7 +33,6 @@ class SproutForms_FormsController extends BaseController
 		
 		// Set the field layout
 		$fieldLayout =  craft()->fields->assembleLayoutFromPost();
-		
 		$fieldLayout->type = 'SproutForms_Form';
 		$form->setFieldLayout($fieldLayout);
 
@@ -87,13 +86,13 @@ class SproutForms_FormsController extends BaseController
 	 * @throws Exception
 	 */
 	public function actionEditFormTemplate(array $variables = array())
-	{
+	{	
 		$variables['brandNewForm'] = false;
 		
 		$variables['groups'] = craft()->sproutForms_groups->getAllFormGroups();
 		$variables['groupId'] = "";
 
-		if (!empty($variables['formId']))
+		if (isset($variables['formId']))
 		{
 			// Get the Form
 			$form = craft()->sproutForms_forms->getFormById($variables['formId']);
@@ -102,7 +101,7 @@ class SproutForms_FormsController extends BaseController
 			$variables['title'] = $form->name;
 			$variables['groupId'] = $form->groupId;
 			
-			if (!$variables['form'])
+			if (!isset($variables['form']))
 			{
 				throw new HttpException(404);
 			}
@@ -110,7 +109,7 @@ class SproutForms_FormsController extends BaseController
 		}
 		else
 		{
-			if (empty($variables['form']))
+			if (!isset($variables['form']))
 			{
 				$variables['form'] = new SproutForms_FormModel();
 				$variables['brandNewForm'] = true;
