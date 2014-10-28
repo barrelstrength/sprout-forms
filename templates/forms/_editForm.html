@@ -2,15 +2,10 @@
 {% import "_includes/forms" as forms %}
 
 {% set crumbs = [
-  { label: craft.sproutForms.name, url: url('sproutforms/entries') },
-  { label: 'Forms', url: url('sproutforms/forms') }
+  { label: craft.sproutForms.name, url: url('sproutforms/entries') }
 ] %}
 
 {% set tabs = {
-    overview:  { 
-      label: "Overview"|t, 
-      url: '#overview'
-    },
     formfields:  { 
       label: "Fields"|t, 
       url: '#formfields'
@@ -39,12 +34,8 @@
 				{% include "_includes/tabs" %}
 			{% endif %}
 
-			<div id="overview" class="hidden">
-				{% include 'sproutforms/forms/_tabs/overview' %}
-			</div>
-
 			<div id="formfields" class="hidden">
-				{% include 'sproutforms/forms/_tabs/formfields' %}
+				{% include 'sproutforms/forms/_tabs/fieldlayoutdesigner' %}
 			</div>
 
 			<div id="notification" class="hidden">	
@@ -58,9 +49,47 @@
 
 	<div class="item" data-position="right" data-colspan="1">
 		
+		{% if formId is defined %}
+		
 		<div class="pane">
 
-			{% include 'sproutforms/forms/_sidebar/publish' %}
+			{# {% include 'sproutforms/forms/_sidebar/publish' %} #}
+
+			<style type="text/css">
+				code.example, input.example {
+					color: #666;
+					/*background-color: #efefef;
+					border-radius: 2px;
+					font-size: 2em;
+					padding: 10px;*/
+				}
+			</style>
+
+			<h2 style="margin:0;">Publish your form</h2>
+					
+			<p><strong>One line of code</strong></p>
+
+			{% if craft.request.getSegment(3) == 'new' %}
+
+				<input class="text nicetext fullwidth" type="text" value="{% verbatim %}{{ craft.sproutForms.displayForm('yourFormHandle') }}{% endverbatim %}">
+				
+			{% else %}
+
+				<input class="text nicetext fullwidth" type="text" value="{% verbatim %}{{ craft.sproutForms.displayForm('{% endverbatim %}{{ form.handle }}{% verbatim %}') }}{% endverbatim %}">
+
+			{% endif %}
+
+			<p><strong>100% Control</strong></p>
+
+			<p>See the Sprout Forms documentation for an example of how to <a href="http://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/examples/custom-html" target="_blank">publish your form with Custom HTML</a>.</p>
+
+		</div>
+
+		{% endif %}
+
+		<div class="pane">
+
+			{% include 'sproutforms/forms/_sidebar/overview' %}			
 
 			<div class="field" id="enabled-field">
 				<div class="heading">

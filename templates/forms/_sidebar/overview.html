@@ -22,8 +22,7 @@
 
 {{ forms.textField({
   first: (groups is defined and groups|length ? false : true),
-  label: "Name"|t,
-  instructions: "What this form will be called in the CP."|t,
+  label: "Name <span class='info'>What this form will be called in the CP.</span>"|t,
   id: 'name',
   name: 'name',
   value: form.name,
@@ -34,8 +33,7 @@
 }) }}
 
 {{ forms.textField({
-  label: "Handle"|t,
-  instructions: "How you’ll refer to this form in the templates."|t,
+  label: "Handle <span class='info'>How you’ll refer to this form in the templates.</span>"|t,
   id: 'handle',
   class: 'code',
   name: 'handle',
@@ -45,18 +43,16 @@
 }) }}
 
 {{ forms.textField({
-  label: "Redirect Page"|t,
+  label: "Redirect Page <span class='info'>Where should the user be redirected upon form submission? <i>NOTE: Leaving blank will redirect user back to the form.</i></span>"|t,
   name: 'redirectUri',
-  instructions: "Where should the user be redirected upon form submission? <i>NOTE: Leaving blank will redirect user back to the form.</i> "|t,
   placeholder: siteUrl, 
   value: (form is defined ? form.redirectUri : null),
   errors: (form is defined ? form.getErrors('redirectUri') : null)   
 }) }}
 
 {{ forms.textField({
-  label: "Submit Button Text"|t,
+  label: "Submit Button Text <span class='info'>What the text in the submit button should be.</span>"|t,
   name: 'submitButtonText',
-  instructions: "What the text in the submit button should be."|t,
   placeholder: 'Submit', 
   value: (form is defined ? form.submitButtonText : null),
   required: false,
@@ -66,8 +62,7 @@
 <hr>
 
 {{ forms.textField({
-  label: "Title Format"|t,
-  instructions: "Entry Titles are auto-generated based on the Title Format you enter here. All information contained in the Title will also be searchable. You may use the same syntax here as you would with Dynamic Titles in your Sections. (i.e. {dateCreated|date('Ymd')} {fullName})"|t,
+  label: "Title Format <span class='info'>Entry Titles are auto-generated based on the Title Format you enter here. All information contained in the Title will also be searchable. You may use the same syntax here as you would with Dynamic Titles in your Sections. (i.e. {dateCreated|date('Ymd')} {fullName})</span>"|t,
   id: 'titleFormat',
   name: 'titleFormat',
   value: form.titleFormat,
@@ -85,9 +80,8 @@
 }) }}
 
 {{ forms.textField({
-  label: "Custom Submit Action URL"|t,
+  label: "Custom Submit Action URL <span class='info'>If you want to POST your form data to a third party URL, add that URL here. Currently, only fields using the same handle naming convention as Craft are supported.</span>"|t,
   name: 'submitAction',
-  instructions: "If you want to POST your form data to a third party URL, add that URL here. Currently, only fields using the same handle naming convention as Craft are supported."|t,
   placeholder: 'http://example.com/somewhere-else', 
   value: (form is defined ? form.submitAction : null),
   errors: (form is defined ? form.getErrors('submitAction') : null)   

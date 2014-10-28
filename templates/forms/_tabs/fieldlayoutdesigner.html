@@ -1,3 +1,5 @@
+{% set fieldLayout = form.getFieldLayout() %}
+
 {% if customizableTabs is not defined %}{% set customizableTabs = true %}{% endif %}
 {% if not customizableTabs and pretendTabName is not defined %}
 	{% set pretendTabName = "Content"|t %}
@@ -61,16 +63,23 @@
 			{% endif %}
 		{% endif %}
 	</div>
-
-	{% if customizableTabs %}
-		<div class="buttons">
-			<div id="newtabbtn" class="btn add icon">{{ "New Tab"|t }}</div>
-			<div id="newfieldbtn" class="btn add icon">
-				<a href="{{ url('sproutforms/forms/' ~ formId ~ '/fields/new') }}" style="color:inherit;text-decoration:none;">
-					{{ "New Field"|t }}
-				</a>
+	
+	{% if formId is defined and formId != "" %}
+		{% if customizableTabs %}
+			
+			<div class="buttons">
+				<div id="newtabbtn" class="btn add icon">{{ "New Tab"|t }}</div>
+				<div id="newfieldbtn" class="btn add icon">
+					<a href="{{ url('sproutforms/forms/' ~ formId ~ '/fields/new') }}" style="color:inherit;text-decoration:none;">
+						{{ "New Field"|t }}
+					</a>
+				</div>
 			</div>
-		</div>
+
+		{% endif %}
+	{% else %}
+   
+   <p>Give your form a name and save it. Then edit your fields here.</p> 
 
 	{% endif %}
 
