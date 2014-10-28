@@ -62,7 +62,7 @@ class SproutForms_FormsService extends BaseApplicationComponent
 		// Create our new Form Record
 		$formRecord->name                     = $form->name;
 		$formRecord->handle                   = $form->handle;
-		$formRecord->titleFormat              = (!empty($form->titleFormat) ? $form->titleFormat : "{dateCreated|date('D, d M Y H:i:s')}");
+		$formRecord->titleFormat              = (isset($form->titleFormat) ? $form->titleFormat : "{dateCreated|date('D, d M Y H:i:s')}");
 		$formRecord->displaySectionTitles     = $form->displaySectionTitles;
 		$formRecord->groupId                  = $form->groupId;
 		$formRecord->redirectUri              = $form->redirectUri;
@@ -119,6 +119,11 @@ class SproutForms_FormsService extends BaseApplicationComponent
 						$form->fieldLayoutId = $fieldLayout->id;
 						$form->setFieldLayout($fieldLayout);
 						$formRecord->fieldLayoutId = $fieldLayout->id;
+					}
+					else
+					{
+						// We don't have a field layout right now
+						$form->fieldLayoutId = NULL;
 					}
 					
 				}
