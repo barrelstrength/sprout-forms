@@ -41,7 +41,7 @@ class SproutForms_FormModel extends BaseElementModel
 			'name'                     => AttributeType::String,
 			'handle'                   => AttributeType::String,
 			'titleFormat'              => AttributeType::String,
-			'displaySectionTitles'     => AttributeType::String,
+			'displaySectionTitles'     => array(AttributeType::Bool, 'default' => false),
 			'redirectUri'              => AttributeType::String,
 			'submitAction'             => AttributeType::String,
 			'submitButtonText'         => AttributeType::String,

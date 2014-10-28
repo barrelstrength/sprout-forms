@@ -47,7 +47,7 @@ class SproutForms_FormRecord extends BaseRecord
 				AttributeType::String,
 				'required' => true
 			),
-			'displaySectionTitles' => AttributeType::String,
+			'displaySectionTitles' => array(AttributeType::Bool, 'default' => false),
 			'redirectUri' => AttributeType::String,
 			'submitAction' => AttributeType::String,
 			'submitButtonText' => AttributeType::String,
