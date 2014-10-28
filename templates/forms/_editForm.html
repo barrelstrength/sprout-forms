@@ -71,11 +71,11 @@
 
 			{% if craft.request.getSegment(3) == 'new' %}
 
-				<input class="text nicetext fullwidth" type="text" value="{% verbatim %}{{ craft.sproutForms.displayForm('yourFormHandle') }}{% endverbatim %}">
+				<input class="text nicetext fullwidth" type="text" id="display-form-code" value="{% verbatim %}{{ craft.sproutForms.displayForm('yourFormHandle') }}{% endverbatim %}">
 				
 			{% else %}
 
-				<input class="text nicetext fullwidth" type="text" value="{% verbatim %}{{ craft.sproutForms.displayForm('{% endverbatim %}{{ form.handle }}{% verbatim %}') }}{% endverbatim %}">
+				<input class="text nicetext fullwidth" type="text" id="display-form-code" value="{% verbatim %}{{ craft.sproutForms.displayForm('{% endverbatim %}{{ form.handle }}{% verbatim %}') }}{% endverbatim %}">
 
 			{% endif %}
 
@@ -153,5 +153,11 @@
 		reorderAction: 'sproutForms/fields/reorderFields',
 		deleteAction: 'sproutForms/fields/deleteField'
 	});
+
+	$(document).ready(function() {
+    $("input#display-form-code")
+    	.focus(function() { $(this).select(); } )
+      .mouseup(function (e) {e.preventDefault(); });
+});
 {% endset %}
 {% includeJs js %}
