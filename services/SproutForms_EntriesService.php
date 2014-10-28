@@ -176,6 +176,17 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 	}
 
 	/**
+	 * Get all Form Entries from the database.
+	 *
+	 * @return array
+	 */
+	public function getAllEntries()
+	{
+		$records = $this->entryRecord->findAll(array('order'=>'name'));
+		return SproutForms_EntryModel::populateModels($records);
+	}
+
+	/**
 	 * Return entry by id
 	 * 
 	 * @param int $id
