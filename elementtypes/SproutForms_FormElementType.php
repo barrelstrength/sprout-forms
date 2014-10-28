@@ -74,7 +74,55 @@ class SproutForms_FormElementType extends BaseElementType
 		return array(
 			'name'     => Craft::t('Name'),
 			'handle'   => Craft::t('Handle'),
+			'numberOfFields' => Craft::t('Number of Fields'),
+			'totalEntries' => Craft::t('Total Entries'),
 		);
+	}
+
+	/**
+	 * @inheritDoc IElementType::getTableAttributeHtml()
+	 *
+	 * @param BaseElementModel $element
+	 * @param string           $attribute
+	 *
+	 * @return string
+	 */
+	public function getTableAttributeHtml(BaseElementModel $element, $attribute)
+	{
+		switch ($attribute)
+		{
+			case 'handle':
+			{
+				return '<code>'.$element->handle.'</code>';
+			}
+
+			case 'numberOfFields':
+			{
+				$totalFields = craft()->db->createCommand()
+            				->select('COUNT(*)')
+            				->from('fieldlayoutfields')
+            				->where('layoutId=:layoutId', array(':layoutId' => $element->fieldLayoutId))
+            				->queryScalar();
+            				
+				return $totalFields;
+			}
+
+			case 'totalEntries':
+			{
+				$totalEntries = craft()->db->createCommand()
+            				->select('COUNT(*)')
+            				->from('sproutforms_entries')
+            				->where('formId=:formId', array(':formId' => $element->id))
+            				->queryScalar();
+
+				return $totalEntries;
+			}
+
+			default:
+			{
+				return parent::getTableAttributeHtml($element, $attribute);
+			}
+		}
 	}
 
 	/**
@@ -115,7 +163,7 @@ class SproutForms_FormElementType extends BaseElementType
 	public function modifyElementsQuery(DbCommand $query, ElementCriteriaModel $criteria)
 	{
 		$query
-			->addSelect('forms.name, forms.handle')
+			->addSelect('forms.name, forms.handle, forms.fieldLayoutId')
 			->join('sproutforms_forms forms', 'forms.id = elements.id');
 
 		if ($criteria->groupId)
