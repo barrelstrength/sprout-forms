@@ -200,7 +200,9 @@ class SproutForms_EntryElementType extends BaseElementType
 	public function modifyElementsQuery(DbCommand $query, ElementCriteriaModel $criteria)
 	{
 		$query
-			->addSelect('entries.id AS entryId, forms.name AS formName')
+			->addSelect('entries.id AS entryId, 
+									 entries.formId AS formId,
+									 forms.name AS formName')
 			->join('sproutforms_entries entries', 'entries.id = elements.id')
 			->join('sproutforms_forms forms', 'forms.id = entries.formId');
 

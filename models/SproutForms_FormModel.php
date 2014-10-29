@@ -17,16 +17,6 @@ class SproutForms_FormModel extends BaseElementModel
 	{
 		return Craft::t($this->name);
 	}
-
-	/**
-	 * @return array
-	 */
-	public function behaviors()
-	{
-		return array(
-			'fieldLayout' => new FieldLayoutBehavior($this->elementType),
-		);
-	}
 	
 	/**
 	 * @access protected
@@ -57,13 +47,13 @@ class SproutForms_FormModel extends BaseElementModel
 	}
 
 	/**
-	 * Returns whether this is a new component.
-	 *
-	 * @return bool
+	 * @return array
 	 */
-	public function isNew()
+	public function behaviors()
 	{
-		return (!$this->id || strncmp($this->id, 'new', 3) === 0);
+		return array(
+			'fieldLayout' => new FieldLayoutBehavior($this->elementType),
+		);
 	}
 
 	/*
@@ -141,5 +131,15 @@ class SproutForms_FormModel extends BaseElementModel
 	public function setFields($fields)
 	{
 		$this->_fields = $fields;
+	}
+
+	/**
+	 * Returns whether this is a new component.
+	 *
+	 * @return bool
+	 */
+	public function isNew()
+	{
+		return (!$this->id || strncmp($this->id, 'new', 3) === 0);
 	}
 }

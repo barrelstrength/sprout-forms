@@ -62,7 +62,7 @@ class SproutForms_FormsService extends BaseApplicationComponent
 		// Create our new Form Record
 		$formRecord->name                     = $form->name;
 		$formRecord->handle                   = $form->handle;
-		$formRecord->titleFormat              = (isset($form->titleFormat) ? $form->titleFormat : "{dateCreated|date('D, d M Y H:i:s')}");
+		$formRecord->titleFormat              = ($form->titleFormat ? $form->titleFormat : "{dateCreated|date('D, d M Y H:i:s')}");
 		$formRecord->displaySectionTitles     = $form->displaySectionTitles;
 		$formRecord->groupId                  = $form->groupId;
 		$formRecord->redirectUri              = $form->redirectUri;
@@ -232,8 +232,11 @@ class SproutForms_FormsService extends BaseApplicationComponent
 	 */
 	public function getAllForms()
 	{
-		$records = $this->formRecord->findAll(array('order'=>'name'));
-		return SproutForms_FormModel::populateModels($records);
+		$criteria = craft()->elements->getCriteria('SproutForms_Form');
+		$criteria->order = 'name';
+		$forms = $criteria->find();
+
+		return $forms;
 	}
 
 	/**
@@ -244,16 +247,7 @@ class SproutForms_FormsService extends BaseApplicationComponent
 	 */
 	public function getFormById($formId)
 	{
-		$formRecord = $this->formRecord->findById($formId);
-		
-		if ($formRecord) 
-		{
-			return SproutForms_FormModel::populateModel($formRecord);
-		} 
-		else 
-		{
-			return null;
-		}
+		return craft()->elements->getElementById($formId, 'SproutForms_Form');
 	}
 
 	/**
@@ -264,18 +258,12 @@ class SproutForms_FormsService extends BaseApplicationComponent
 	 */
 	public function getFormByHandle($handle)
 	{
-		$formRecord = $this->formRecord->find('handle=:handle', array(
-			':handle' => $handle
-		));
-		
-		if ($formRecord) 
-		{
-			return SproutForms_FormModel::populateModel($formRecord);
-		} 
-		else 
-		{
-			return null;
-		}
+		$formId = craft()->db->createCommand()
+										 ->select('id')
+										 ->from('sproutforms_forms')
+										 ->queryScalar();
+
+		return craft()->elements->getElementById($formId, 'SproutForms_Form');
 	}
 
 	/**

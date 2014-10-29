@@ -18,7 +18,7 @@ class SproutForms_EntriesController extends BaseController
 	 * @return void
 	 */
 	public function actionSaveEntry()
-	{		
+	{	
 		$this->requirePostRequest();
 
 		$formHandle = craft()->request->getRequiredPost('handle');

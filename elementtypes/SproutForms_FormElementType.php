@@ -163,7 +163,22 @@ class SproutForms_FormElementType extends BaseElementType
 	public function modifyElementsQuery(DbCommand $query, ElementCriteriaModel $criteria)
 	{
 		$query
-			->addSelect('forms.name, forms.handle, forms.fieldLayoutId')
+			->addSelect('forms.id,
+									 forms.fieldLayoutId,
+									 forms.groupId,
+									 forms.name, 
+									 forms.handle, 
+									 forms.titleFormat,
+									 forms.displaySectionTitles,
+									 forms.redirectUri,
+									 forms.submitAction,
+									 forms.submitButtonText,
+									 forms.notificationRecipients,
+									 forms.notificationSubject,
+									 forms.notificationSenderName,
+									 forms.notificationSenderEmail,
+									 forms.notificationReplyToEmail
+			')
 			->join('sproutforms_forms forms', 'forms.id = elements.id');
 
 		if ($criteria->groupId)

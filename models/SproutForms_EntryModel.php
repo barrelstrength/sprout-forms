@@ -6,19 +6,6 @@ class SproutForms_EntryModel extends BaseElementModel
 	protected $elementType = 'SproutForms_Entry';
 
 	/**
-	 * Use the element's title as its string representation.
-	 *
-	 * @return string
-	 */
-	function __toString()
-	{
-		// @TODO - this works but for some reason, removing __toString
-		// which calls $this->getContent->title does not work.
-		$entry = craft()->sproutForms_entries->getEntryById($this->id);
-		return HtmlHelper::decode($entry->getContent()->title);
-	}
-
-	/**
 	 * @access protected
 	 * @return array
 	 */
@@ -43,8 +30,7 @@ class SproutForms_EntryModel extends BaseElementModel
 	 */
 	public function getFieldLayout()
 	{
-		$form = craft()->sproutForms_forms->getFormById($this->formId);
-		return $form->getFieldLayout();
+		return $this->_getForm()->getFieldLayout();
 	}
 
 	/**
@@ -54,8 +40,7 @@ class SproutForms_EntryModel extends BaseElementModel
 	 */
 	public function getContentTable()
 	{
-		$form = craft()->sproutForms_forms->getFormById($this->formId);
-		return craft()->sproutForms_forms->getContentTableName($form);
+		return craft()->sproutForms_forms->getContentTableName($this->_getForm());
 	}
 
 	/**
@@ -76,8 +61,6 @@ class SproutForms_EntryModel extends BaseElementModel
 	 */
 	public function getFields()
 	{
-		$form = craft()->sproutForms_forms->getFormById($this->formId);
-
 		if (!isset($form->_fields))
 		{
 			$form->_fields = array();
@@ -102,8 +85,16 @@ class SproutForms_EntryModel extends BaseElementModel
 	 */
 	public function getCpEditUrl()
 	{
-		$url = UrlHelper::getCpUrl('sproutforms/entries/edit/'. $this->id);
+		return UrlHelper::getCpUrl('sproutforms/entries/edit/'. $this->id);
+	}
 
-		return $url;
+	/**
+	 * Gets Form Model associated with this entry
+	 * 
+	 * @return SproutForms_FormModel
+	 */
+	public function _getForm()
+	{
+		return craft()->sproutForms_forms->getFormById($this->formId);
 	}
 }

@@ -82,7 +82,7 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 				if ($event->isValid)
 				{	
 					if (craft()->elements->saveElement($entry))
-					{
+					{	
 						// Now that we have an element ID, save it on the other stuff
 						if ($isNewEntry)
 						{
@@ -182,8 +182,11 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 	 */
 	public function getAllEntries()
 	{
-		$records = $this->entryRecord->findAll(array('order'=>'name'));
-		return SproutForms_EntryModel::populateModels($records);
+		$criteria = craft()->elements->getCriteria('SproutForms_Entry');
+		$criteria->order = 'name';
+		$entries = $criteria->find();
+
+		return $entries;
 	}
 
 	/**
@@ -192,18 +195,9 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 	 * @param int $id
 	 * @return object
 	 */
-	public function getEntryById($id)
+	public function getEntryById($entryId)
 	{
-		$entryRecord = $this->entryRecord->findById($id);
-		
-		if ($entryRecord) 
-		{
-			return SproutForms_EntryModel::populateModel($entryRecord);
-		} 
-		else 
-		{
-			return null;
-		}
+		return craft()->elements->getElementById($entryId, 'SproutForms_Entry');
 	}
 
 	/**
