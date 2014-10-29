@@ -44,29 +44,12 @@
 				
 		</div>
 
-
-	</div>		
-
-	<div class="item" data-position="right" data-colspan="1">
-		
 		{% if formId is defined %}
 		
 		<div class="pane">
 
-			{# {% include 'sproutforms/forms/_sidebar/publish' %} #}
-
-			<style type="text/css">
-				code.example, input.example {
-					color: #666;
-					/*background-color: #efefef;
-					border-radius: 2px;
-					font-size: 2em;
-					padding: 10px;*/
-				}
-			</style>
-
-			<h2 style="margin:0;">Publish your form</h2>
-					
+			<div style="width:45%;padding-left:5%;padding-right:5%;float:left;">
+			
 			<p><strong>One line of code</strong></p>
 
 			{% if craft.request.getSegment(3) == 'new' %}
@@ -79,13 +62,23 @@
 
 			{% endif %}
 
+			</div>
+
+			<div style="width:45%;float:left;">
+
 			<p><strong>100% Control</strong></p>
 
 			<p>See the Sprout Forms documentation for an example of how to <a href="http://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/examples/custom-html" target="_blank">publish your form with Custom HTML</a>.</p>
 
+			</div>
+
 		</div>
 
 		{% endif %}
+
+	</div>		
+
+	<div class="item" data-position="right" data-colspan="1">
 
 		<div class="pane">
 
