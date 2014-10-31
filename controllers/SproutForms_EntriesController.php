@@ -343,7 +343,7 @@ class SproutForms_EntriesController extends BaseController
 
 		// Set our Entry's Field Context and Content Table
 		craft()->content->fieldContext = $form->getFieldContext();
-		craft()->content->contentTable = $form->getContentTable();	
+		craft()->content->contentTable = $form->getContentTable();
 		
 		$variables['form']    = $form;
 		$variables['entryId'] = $entryId;

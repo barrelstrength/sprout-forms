@@ -7,8 +7,6 @@ class SproutForms_FormsService extends BaseApplicationComponent
 	public $activeCpEntry;
 
 	protected $formRecord;
-	
-	private $_formsByFieldId;
 
 	/**
 	 * Constructor
@@ -26,9 +24,21 @@ class SproutForms_FormsService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Saves a form.
+	 * Returns a criteria model for SproutForms_Form elements
 	 *
+	 * @param array $attributes
+	 *
+	 * @return ElementCriteriaModel
+	 * @throws Exception
+	 */
+	public function getCriteria(array $attributes=array())
+	{
+		return craft()->elements->getCriteria('SproutForms_Form', $attributes);
+	}
+
+	/**
 	 * @param SproutForms_FormModel $form
+	 *
 	 * @throws \Exception
 	 * @return bool
 	 */
@@ -177,9 +187,12 @@ class SproutForms_FormsService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Delete form
-	 * 
-	 * @param int $id
+	 * Removes a form and related records from the database
+	 *
+	 * @param SproutForms_FormModel $form
+	 *
+	 * @throws \CDbException
+	 * @throws \Exception
 	 * @return boolean
 	 */
 	public function deleteForm(SproutForms_FormModel $form)
@@ -226,54 +239,48 @@ class SproutForms_FormsService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Get all Fallbacks from the database.
+	 * Returns an array of models for forms found in the database
 	 *
-	 * @return array
+	 * @return SproutForms_FormModel|array|null
 	 */
 	public function getAllForms()
 	{
-		$criteria = craft()->elements->getCriteria('SproutForms_Form');
-		$criteria->order = 'name';
-		$forms = $criteria->find();
+		$attributes	= array('order' => 'name');
 
-		return $forms;
+		return $this->getCriteria($attributes)->find();
 	}
 
 	/**
-	 * Return form by form id
+	 * Returns a form model if one is found in the database by id
 	 * 
 	 * @param int $formId
-	 * @return object form record
+	 * @return null|SproutForms_FormModel
 	 */
 	public function getFormById($formId)
 	{
-		return craft()->elements->getElementById($formId, 'SproutForms_Form');
+		return $this->getCriteria(array('limit' => 1, 'id' => $formId))->first();
 	}
 
 	/**
-	 * Return form by form handle
+	 * Returns a form model if one is found in the database by handle
 	 *
 	 * @param string $handle
-	 * @return object form record
+	 * @return false|SproutForms_FormModel
 	 */
 	public function getFormByHandle($handle)
 	{
-		$formId = craft()->db->createCommand()
-										 ->select('id')
-										 ->from('sproutforms_forms')
-										 ->queryScalar();
-
-		return craft()->elements->getElementById($formId, 'SproutForms_Form');
+		return $this->getCriteria(array('limit' => 1, 'handle' => $handle))->first();
 	}
 
 	/**
-	 * Returns the content table name for a given Form field.
+	 * Returns the content table name for a given form field
 	 *
-	 * @param FormModel $form
+	 * @param SproutForms_FormModel $form
 	 * @param bool $useOldHandle
+	 *
 	 * @return string|false
 	 */
-	public function getContentTableName(SproutForms_FormModel $form, $useOldHandle = false)
+	public function getContentTableName(SproutForms_FormModel $form, $useOldHandle=false)
 	{
 		if ($useOldHandle)
 		{
@@ -292,6 +299,23 @@ class SproutForms_FormsService extends BaseApplicationComponent
 		$name = '_'.StringHelper::toLowerCase($handle);
 		
 		return 'sproutformscontent'.$name;
+	}
+
+	/**
+	 * @param $formId
+	 *
+	 * @return string
+	 */
+	public function getContentTable($formId)
+	{
+		$form = $this->getFormById($formId);
+
+		if ($form)
+		{
+			return sprintf('sproutformscontent_%s', trim(strtolower($form->handle)));
+		}
+
+		return 'content';
 	}
 
 	/**

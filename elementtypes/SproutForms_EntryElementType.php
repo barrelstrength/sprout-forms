@@ -139,10 +139,10 @@ class SproutForms_EntryElementType extends BaseElementType
 	public function defineTableAttributes($source = null)
 	{
 		return array(
-			'title'        => Craft::t('Title'),
-			'formName'     => Craft::t('Form Name'),
-			'dateCreated'  => Craft::t('Date Created'),
-			'dateUpdated'  => Craft::t('Date Updated'),
+			'title'			=> Craft::t('Title'),
+			'formName'		=> Craft::t('Form Name'),
+			'dateCreated'	=> Craft::t('Date Created'),
+			'dateUpdated'	=> Craft::t('Date Updated'),
 		);
 	}
 
@@ -150,14 +150,20 @@ class SproutForms_EntryElementType extends BaseElementType
 	 * Returns the content table name that should be joined in for an elements query.
 	 *
 	 * @param ElementCriteriaModel
+	 *
+	 * @throws Exception
 	 * @return string
 	 */
 	public function getContentTableForElementsQuery(ElementCriteriaModel $criteria)
 	{
-		if ($criteria->id && is_numeric($criteria->formId))
+		if ($criteria->id && $criteria->formId)
 		{
-			$form = craft()->sproutForms_forms->getFormById($criteria->formId);
-			return craft()->sproutForms_forms->getContentTableName($form);
+			$form = SproutForms_FormRecord::model()->findById($criteria->formId);
+
+			if ($form)
+			{
+				return sprintf('sproutformscontent_%s', trim(strtolower($form->handle)));
+			}
 		}
 	}
 
@@ -169,10 +175,10 @@ class SproutForms_EntryElementType extends BaseElementType
 	public function defineCriteriaAttributes()
 	{
 		return array(
-			'title' => AttributeType::String,
-			'groupId' => AttributeType::Number,
-			'formId' => AttributeType::Number,
-			'formName' => AttributeType::String,
+			'title'			=> AttributeType::String,
+			'formId'		=> AttributeType::Number,
+			'formName'		=> AttributeType::String,
+			'formGroupId'	=> AttributeType::Number,
 		);
 	}
 
@@ -183,11 +189,7 @@ class SproutForms_EntryElementType extends BaseElementType
 	 */
 	public function defineSearchableAttributes()
 	{
-		return array(
-			'entryId', 
-			'title', 
-			'formName'
-		);
+		return array('id', 'title', 'formName');
 	}
 
 	/**
@@ -195,20 +197,33 @@ class SproutForms_EntryElementType extends BaseElementType
 	 *
 	 * @param DbCommand $query
 	 * @param ElementCriteriaModel $criteria
+	 *
 	 * @return mixed
 	 */
 	public function modifyElementsQuery(DbCommand $query, ElementCriteriaModel $criteria)
 	{
-		$query
-			->addSelect('entries.id AS entryId, 
-									 entries.formId AS formId,
-									 forms.name AS formName')
-			->join('sproutforms_entries entries', 'entries.id = elements.id')
-			->join('sproutforms_forms forms', 'forms.id = entries.formId');
+		$query->addSelect('
+			entries.id,
+			entries.ipAddress,
+			entries.userAgent,
+			entries.dateCreated,
+			entries.dateUpdated,
+			entries.uid,
+			forms.id as formId,
+			forms.name as formName,
+			forms.groupId as formGroupId
+		');
 
+		$query->join('sproutforms_entries entries', 'entries.id = elements.id');
+		$query->join('sproutforms_forms forms', 'forms.id = entries.formId');
+
+		if ($criteria->id)
+		{
+			$query->andWhere(DbHelper::parseParam('entries.id', $criteria->id, $query->params));
+		}
 		if ($criteria->formId)
 		{
-			$query->andWhere(DbHelper::parseParam('forms.id', $criteria->formId, $query->params));
+			$query->andWhere(DbHelper::parseParam('entries.formId', $criteria->formId, $query->params));
 		}
 	}
 
@@ -221,17 +236,5 @@ class SproutForms_EntryElementType extends BaseElementType
 	public function populateElementModel($row)
 	{
 		return SproutForms_EntryModel::populateModel($row);
-	}
-
-	/**	
-	 * Sort our Groups Alphbetically 
-	 * 
-	 * @param  string $a Group Name
-	 * @param  string $b Group Name
-	 * @return bool      Response assists to order groups using usort
-	 */
-	private function _sortByGroupName($a, $b) 
-	{
-		return strcmp($a['heading'], $b['heading']);
 	}
 }

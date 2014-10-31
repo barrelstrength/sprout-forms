@@ -4,9 +4,8 @@ namespace Craft;
 class SproutForms_FormModel extends BaseElementModel
 {   
 	protected $elementType = 'SproutForms_Form';
-	
+
 	private $_fields;
-	private $_owner;
 
 	/**
 	 * Use the form handle as the string representation.
@@ -56,7 +55,7 @@ class SproutForms_FormModel extends BaseElementModel
 		);
 	}
 
-	/*
+	/**
 	 * Returns the field layout used by this element.
 	 *
 	 * @return FieldLayoutModel|null
@@ -123,7 +122,7 @@ class SproutForms_FormModel extends BaseElementModel
 		return $this->_fields;
 	}
 
-	/*
+	/**
 	 * Sets the fields associated with this form.
 	 *
 	 * @param array $fields
