@@ -21,6 +21,7 @@
 {% block main %}
 
 <form method="post" accept-charset="UTF-8" id="form" data-formid="{{ form.id }}" data-saveshortcut="1" data-saveshortcut-redirect="sproutforms/forms/edit/{id}#overview" data-confirm-unload>
+	<input type="hidden" name="{{ craft.config.csrfTokenName }}" value="{{ craft.request.csrfToken }}">
   <input type="hidden" name="action" value="sproutForms/forms/saveForm">
 	<input type="hidden" name="redirect" value="sproutforms/forms/edit/{id}#overview">
   <input type="hidden" name="id" value="{{ form.id is defined ? form.id : '' }}">

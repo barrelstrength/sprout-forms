@@ -1,4 +1,6 @@
 <form method="post" action="" accept-charset="UTF-8">
+	<input type="hidden" name="{{ craft.config.csrfTokenName }}" value="{{ craft.request.csrfToken }}">
+	
 	<div class="field" id="title-field">
 		<div class="heading">
 			<label class="required" for="title">Title</label>

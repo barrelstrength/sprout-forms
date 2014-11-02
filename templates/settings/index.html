@@ -5,6 +5,7 @@
 
 {% if currentUser.can('editFormSettings') %}
   <form method="post" accept-charset="UTF-8" data-saveshortcut="1">
+    <input type="hidden" name="{{ craft.config.csrfTokenName }}" value="{{ craft.request.csrfToken }}">
     <input type="hidden" name="action" value="sproutForms/settings/saveSettings">
     <input type="hidden" name="redirect" value="sproutforms/settings">
 

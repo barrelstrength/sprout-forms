@@ -19,6 +19,7 @@
 </style>
 
 <form method="post" action="" accept-charset="utf-8" class="examples">
+	<input type="hidden" name="{{ craft.config.csrfTokenName }}" value="{{ craft.request.csrfToken }}">
 	<input type="hidden" name="action" value="sproutForms/examples/install">
 	
 	<h2>{{ "Getting Started"|t }}</h2>
