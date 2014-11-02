@@ -87,6 +87,40 @@ class SproutForms_FormsController extends BaseController
 	 */
 	public function actionEditFormTemplate(array $variables = array())
 	{	
+		// Immediately create a new Form
+		// if (craft()->request->getSegment(3) == "new")
+		// {	
+		// 	$form = new SproutForms_FormModel();
+
+		// 	// Get the total number of forms we have
+		// 	$totalForms = craft()->db->createCommand()
+		// 		->select('count(id)')
+		// 		->from('sproutforms_forms')
+		// 		->queryScalar();
+
+		// 	if ($totalForms == 0)
+		// 	{
+		// 		$form->name = "Form 1";
+		// 		$form->handle = "form1";	
+		// 	}
+		// 	else
+		// 	{
+		// 		$newFormNumber = $totalForms+1;
+		// 		$form->name = "Form ".$newFormNumber;
+		// 		$form->handle = "form".$newFormNumber;	
+		// 	}
+			
+		// 	if (craft()->sproutForms_forms->saveForm($form)) 
+		// 	{
+		// 		$url = UrlHelper::getCpUrl('sproutforms/forms/edit/'.$form->id.'#overview');
+		// 		$this->redirect($url);
+		// 	}
+		// 	else
+		// 	{
+		// 		throw new Exception(Craft::t('Error creating Form'));
+		// 	}			
+		// }
+		
 		$variables['brandNewForm'] = false;
 		
 		$variables['groups'] = craft()->sproutForms_groups->getAllFormGroups();
