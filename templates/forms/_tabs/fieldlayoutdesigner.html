@@ -68,12 +68,12 @@
 		{% if customizableTabs %}
 			
 			<div class="buttons">
-				<div id="newtabbtn" class="btn add icon">{{ "New Tab"|t }}</div>
 				<div id="newfieldbtn" class="btn add icon">
 					<a href="{{ url('sproutforms/forms/' ~ formId ~ '/fields/new') }}" style="color:inherit;text-decoration:none;">
 						{{ "New Field"|t }}
 					</a>
 				</div>
+				<div id="newtabbtn" class="btn add icon">{{ "New Tab"|t }}</div>
 			</div>
 
 		{% endif %}
