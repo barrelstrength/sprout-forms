@@ -19,7 +19,20 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 			$this->entryRecord = SproutForms_EntryRecord::model();
 		}
 	}
-	
+
+	/**
+	 * Returns a criteria model for SproutForms_Entry elements
+	 *
+	 * @param array $attributes
+	 *
+	 * @return ElementCriteriaModel
+	 * @throws Exception
+	 */
+	public function getCriteria(array $attributes=array())
+	{
+		return craft()->elements->getCriteria('SproutForms_Entry', $attributes);
+	}
+
 	/**
 	 * Saves a entry.
 	 *
@@ -176,34 +189,33 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Get all Form Entries from the database.
+	 * Returns an array of models for entries found in the database
 	 *
-	 * @return array
+	 * @return SproutForms_EntryModel|array|null
 	 */
 	public function getAllEntries()
 	{
-		$criteria = craft()->elements->getCriteria('SproutForms_Entry');
-		$criteria->order = 'name';
-		$entries = $criteria->find();
+		$attributes	= array('order' => 'name');
 
-		return $entries;
+		return $this->getCriteria($attributes)->find();
 	}
 
 	/**
-	 * Return entry by id
-	 * 
-	 * @param int $id
-	 * @return object
+	 * Returns a form entry model if one is found in the database by id
+	 *
+	 * @param int $entryId
+	 * @return null|SproutForms_EntryModel
 	 */
 	public function getEntryById($entryId)
 	{
-		return craft()->elements->getElementById($entryId, 'SproutForms_Entry');
+		return $this->getCriteria(array('limit' => 1, 'id' => $entryId))->first();
 	}
 
 	/**
-	 * Gets or creates a new EntryModel
+	 * Returns an active or new entry model
 	 * 
-	 * @param  string $formHandle Form Handle
+	 * @param SproutForms_FormModel $form
+	 *
 	 * @return SproutForms_EntryModel
 	 */
 	public function getEntryModel(SproutForms_FormModel $form)
@@ -212,13 +224,12 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 		// otherwise, create a new EntryModel
 		if (isset(craft()->sproutForms_forms->activeEntries[$form->handle]))
 		{	
-			$entry = craft()->sproutForms_forms->activeEntries[$form->handle];	
+			return craft()->sproutForms_forms->activeEntries[$form->handle];
 		}
-		else
-		{
-			$entry = new SproutForms_EntryModel();
-			$entry->formId = $form->id;
-		}
+
+		$entry = new SproutForms_EntryModel;
+
+		$entry->setAttribute('formId', $form->id);
 
 		return $entry;
 	}

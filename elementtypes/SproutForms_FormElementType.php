@@ -181,6 +181,10 @@ class SproutForms_FormElementType extends BaseElementType
 			')
 			->join('sproutforms_forms forms', 'forms.id = elements.id');
 
+		if ($criteria->handle)
+		{
+			$query->andWhere(DbHelper::parseParam('forms.handle', $criteria->handle, $query->params));
+		}
 		if ($criteria->groupId)
 		{
 			$query->join('sproutforms_formgroups formgroups', 'formgroups.id = forms.groupId');

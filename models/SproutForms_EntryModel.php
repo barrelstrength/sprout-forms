@@ -1,52 +1,70 @@
 <?php
 namespace Craft;
 
+/**
+ * Class SproutForms_EntryModel
+ *
+ * @package Craft
+ *
+ * @property	int						$id
+ * @property	int						$formId
+ * @property	string					$formName
+ * @property	string					$ipAddress
+ * @property	string					$userAgent
+ * @property	SproutForms_FormModel	$form			The related form model for this element model
+ */
 class SproutForms_EntryModel extends BaseElementModel
 {
+	/**
+	 * @var string
+	 */
 	protected $elementType = 'SproutForms_Entry';
 
 	/**
-	 * @access protected
+	 * @var array
+	 */
+	protected $formFields;
+
+	/**
 	 * @return array
 	 */
 	protected function defineAttributes()
 	{
-		return array_merge(parent::defineAttributes(), array(
-
-			// @TODO - standardize how IDs are handled on front and back end
-			'id'        => AttributeType::Number,
-			'entryId'   => AttributeType::Number,
-			'formId'    => AttributeType::Number,
-			'formName'  => AttributeType::Number,
-			'ipAddress' => AttributeType::String,
-			'userAgent' => AttributeType::Mixed,
-		));
+		return array_merge(parent::defineAttributes(),
+			array(
+				'id'        => AttributeType::Number,
+				'form'		=> AttributeType::Mixed,
+				'formId'    => AttributeType::Number,
+				'formName'  => AttributeType::Number,
+				'ipAddress' => AttributeType::String,
+				'userAgent' => AttributeType::Mixed,
+			)
+		);
 	}
 
-	/*
-	 * Returns the field layout used by this element.
+	/**
+	 * Returns the field layout used by this element
 	 *
 	 * @return FieldLayoutModel|null
 	 */
 	public function getFieldLayout()
 	{
-		return $this->_getForm()->getFieldLayout();
+		return $this->getForm()->getFieldLayout();
 	}
 
 	/**
-	 * Returns the name of the table this element's content is stored in.
+	 * Returns the name of the content table this entry is associated with
 	 *
 	 * @return string
 	 */
 	public function getContentTable()
 	{
-		return craft()->sproutForms_forms->getContentTableName($this->_getForm());
+		return craft()->sproutForms_forms->getContentTableName($this->getForm());
 	}
 
 	/**
-	 * Returns the field context this element's content uses.
+	 * Returns the field context this element uses
 	 *
-	 * @access protected
 	 * @return string
 	 */
 	public function getFieldContext()
@@ -61,40 +79,39 @@ class SproutForms_EntryModel extends BaseElementModel
 	 */
 	public function getFields()
 	{
-		if (!isset($form->_fields))
-		{
-			$form->_fields = array();
-
-			$fieldLayoutFields = $form->getFieldLayout()->getFields();
-
-			foreach ($fieldLayoutFields as $fieldLayoutField)
-			{
-				$field = $fieldLayoutField->getField();
-				$field->required = $fieldLayoutField->required;
-				$form->_fields[] = $field;
-			}
-		}
-
-		return $form->_fields;
+		return $this->getForm()->getFields();
 	}
 
 	/**
-	 * Returns the element's CP edit URL.
+	 * Returns the content title for this entry
 	 *
-	 * @return string|false
+	 * @return mixed|string
+	 */
+	public function getTitle()
+	{
+		return $this->getContent()->title;
+	}
+
+	/**
+	 * Returns the form model associated with this entry
+	 *
+	 * @return SproutForms_FormModel
+	 */
+	public function getForm()
+	{
+		if (!isset($this->form))
+		{
+			$this->form = craft()->sproutForms_forms->getFormById($this->formId);
+		}
+
+		return $this->form;
+	}
+
+	/**
+	 * @return false|string
 	 */
 	public function getCpEditUrl()
 	{
 		return UrlHelper::getCpUrl('sproutforms/entries/edit/'. $this->id);
-	}
-
-	/**
-	 * Gets Form Model associated with this entry
-	 * 
-	 * @return SproutForms_FormModel
-	 */
-	public function _getForm()
-	{
-		return craft()->sproutForms_forms->getFormById($this->formId);
 	}
 }
