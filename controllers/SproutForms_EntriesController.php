@@ -28,9 +28,6 @@ class SproutForms_EntriesController extends BaseController
 		{
 			throw new Exception(Craft::t('No form exists with the handle “{handle}”', array('handle' => $formHandle)));
 		}
-		
-		craft()->content->fieldContext = $this->form->getFieldContext();
-		craft()->content->contentTable = $this->form->getContentTable();
 
 		$entry = $this->_getEntryModel();
 
@@ -73,7 +70,7 @@ class SproutForms_EntriesController extends BaseController
 			}
 		}
 		else
-		{
+		{	
 			if (craft()->request->isAjaxRequest())
 			{
 				$this->returnJson(array(
