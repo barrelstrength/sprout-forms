@@ -34,7 +34,10 @@ class m141026_020000_sproutForms_renameOldFormsTableAndCreateNewFormsTable exten
 				'groupId'                  => array('maxLength' => 11, 'decimals' => 0, 'unsigned' => false, 'length' => 10, 'column' => 'integer'),
 				'name'                     => array('required' => true),
 				'handle'                   => array('required' => true),
-				'titleFormat'              => array('required' => true),
+				'titleFormat'              => array(
+																				'required' => true,
+																				'default' => "{dateCreated|date('D, d M Y H:i:s')}"
+																			),
 				'displaySectionTitles'     => array(),
 				'redirectUri'              => array(),
 				'submitAction'             => array(),
