@@ -16,7 +16,7 @@ class SproutForms_ExamplesController extends BaseController
 		$this->_installExampleData();
 		
 		craft()->userSession->setNotice(Craft::t('Examples successfully installed.'));
-		$this->redirect('sproutforms');
+		$this->redirect(UrlHelper::getCpUrl() . '/sproutforms');
 	}
 	
 	/**
