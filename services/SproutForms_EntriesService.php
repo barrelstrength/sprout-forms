@@ -134,7 +134,7 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 					}
 				}
 				else
-				{
+				{	
 					if ($event->fakeIt) 
 					{
 						// Pretend to submit the form even though it didn't submit
