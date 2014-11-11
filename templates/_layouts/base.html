@@ -4,7 +4,9 @@
 
 {% block main %}
   
-  {{ body }}
+  {% if body is defined %}
+  	{{ body }}
+  {% endif %}
 
 {#   <footer class="bsd-branding">
     <p>
