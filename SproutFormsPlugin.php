@@ -13,7 +13,7 @@ class SproutFormsPlugin extends BasePlugin
 
 	public function getVersion()
 	{
-		return '0.8.08';
+		return '0.8.1';
 	}
 
 	public function getDeveloper()
