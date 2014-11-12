@@ -25,7 +25,7 @@
 
 
 <form method="post" accept-charset="UTF-8">
-	<input type="hidden" name="{{ craft.config.csrfTokenName }}" value="{{ craft.request.csrfToken }}">
+	{{ getCsrfInput() }}
 	<input type="hidden" name="action" value="sproutForms/entries/saveEntry">
 	<input type="hidden" name="handle" value="basic">
 	

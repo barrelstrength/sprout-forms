@@ -11,7 +11,7 @@
 
 {# Submit form to Sprout Forms #}
 <form method="post" accept-charset="UTF-8">
-	<input type="hidden" name="{{ craft.config.csrfTokenName }}" value="{{ craft.request.csrfToken }}">
+	{{ getCsrfInput() }}
 	<input type="hidden" name="action" value="{{ submitAction }}">
 	<input type="hidden" name="handle" value="{{ form.handle }}">
 

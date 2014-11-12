@@ -10,7 +10,7 @@
 {% block main %}
 	
 	<form method="post" accept-charset="UTF-8" enctype="multipart/form-data" data-saveshortcut="1" data-saveshortcut-redirect="{{ url('sproutforms/entries/edit/' ~ entryId) }}">
-		<input type="hidden" name="{{ craft.config.csrfTokenName }}" value="{{ craft.request.csrfToken }}">
+		{{ getCsrfInput() }}
 		<input type="hidden" name="action" value="sproutForms/entries/saveEntry">
 		<input type="hidden" name="handle" value="{{ form.handle }}">
 		<input type="hidden" name="entryId" value="{{ entryId }}">

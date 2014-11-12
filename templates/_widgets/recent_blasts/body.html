@@ -1,5 +1,5 @@
 <form method="post" action="" accept-charset="UTF-8">
-	<input type="hidden" name="{{ craft.config.csrfTokenName }}" value="{{ craft.request.csrfToken }}">
+	{{ getCsrfInput() }}
 	
 	<div class="field" id="title-field">
 		<div class="heading">

@@ -47,7 +47,7 @@
 {% else %}
     
 	<form method="post" accept-charset="utf-8">
-		<input type="hidden" name="{{ craft.config.csrfTokenName }}" value="{{ craft.request.csrfToken }}">
+		{{ getCsrfInput() }}
 		<input type="hidden" name="action" value="sproutForms/entries/saveEntry">
 		<input type="hidden" name="handle" value="contact">
 		<input type="hidden" name="redirect" value="sproutforms/examples/contact-form-custom?message=thank-you">
