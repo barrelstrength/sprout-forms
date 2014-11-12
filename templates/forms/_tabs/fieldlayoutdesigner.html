@@ -1,0 +1,130 @@
+{% set fieldLayout = form.getFieldLayout() %}
+
+{% if customizableTabs is not defined %}{% set customizableTabs = true %}{% endif %}
+{% if not customizableTabs and pretendTabName is not defined %}
+	{% set pretendTabName = "Content"|t %}
+{% endif %}
+
+{% set fields = craft.fields.getAllFields('id') %}
+
+{% includeTranslations
+	"Rename",
+	"Delete",
+	"Make required",
+	"Make not required",
+	"Remove",
+	"Give your tab a name."
+%}
+
+{% includeCssFile "//fonts.googleapis.com/css?family=Coming+Soon" %}
+
+{% macro tab(customizableTabs, tabName, tabFields) %}
+	<div class="fld-tab">
+		<div class="tabs">
+			<div class="tab sel{% if customizableTabs %} draggable{% endif %}">
+				<span>{{ tabName }}</span>
+				{% if customizableTabs %}
+					<a class="settings icon" title="{{ 'Edit'|t }}"></a>
+				{% endif %}
+			</div>
+		</div>
+		<div class="fld-tabcontent">
+			{% for field in tabFields %}
+				<div class="fld-field{% if field.required %} fld-required{% endif %}" data-id="{{ field.fieldId }}">
+					<a class="settings icon" title="{{ 'Edit'|t }}"></a>
+					<span>{{ field.getField().name }}</span>
+					<input class="id-input" type="hidden" name="fieldLayout[{{ tabName|e('url') }}][]" value="{{ field.fieldId }}">
+					{% if field.required %}<input class="required-input" type="hidden" name="requiredFields[]" value="{{ field.fieldId }}">{% endif %}
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+{% endmacro %}
+
+
+<div id="fieldlayoutform" class="fieldlayoutform">
+
+	<h2>{{ "Design your form"|t }}</h2>
+
+	{% if instructions is defined %}
+		<div class="instructions">{{ instructions|md }}</div>
+	{% endif %}
+
+	<div class="fld-tabs">
+		{% if fieldLayout %}
+			{% import _self as macros %}
+
+			{% if customizableTabs %}
+				{% for tab in fieldLayout.getTabs() %}
+					{{ macros.tab(customizableTabs, tab.name, tab.getFields()) }}
+				{% endfor %}
+			{% else %}
+				{{ macros.tab(customizableTabs, pretendTabName, fieldLayout.getFields()) }}
+			{% endif %}
+		{% endif %}
+	</div>
+	
+	{% if formId is defined and formId != "" %}
+		{% if customizableTabs %}
+			
+			<div class="buttons">
+				<div id="newfieldbtn" class="btn add icon">
+					<a href="{{ url('sproutforms/forms/' ~ formId ~ '/fields/new') }}" style="color:inherit;text-decoration:none;">
+						{{ "New Field"|t }}
+					</a>
+				</div>
+				<div id="newtabbtn" class="btn add icon">{{ "New Tab"|t }}</div>
+			</div>
+
+		{% endif %}
+	{% else %}
+   
+   <p>Give your form a name and save it. Then edit your fields here.</p> 
+
+	{% endif %}
+
+	<div id="deletedFieldsContainer" class="hidden">
+		<input type="hidden" name="deletedFields[]" value="" />
+	</div>
+
+</div>
+
+{% includeJsResource "sproutforms/js/formfieldlayoutdesigner.js" %}
+
+{% set js %}
+	
+	var initFLD = function() {
+
+		console.log('On Page js');
+
+		new Sprout.FormFieldLayoutDesigner('#fieldlayoutform', {
+			customizableTabs: true
+		});
+
+	};
+
+	{% if tab is defined %}
+
+		var $fldTab = $('#tab-{{ tab }}');
+
+		if ($fldTab.hasClass('sel'))
+		{
+			initFLD();
+		}
+		else
+		{
+			$fldTab.on('activate.fld', function() {
+				initFLD();
+				$fldTab.off('activate.fld');
+			});
+		}
+
+	{% else %}
+
+		initFLD();
+
+	{% endif %}
+
+{% endset %}
+
+{% includeJs js %}

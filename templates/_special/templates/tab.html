@@ -1,0 +1,27 @@
+
+{% for tab in tabs %}
+    
+	{% set fields = tab.getFields() %}
+
+	<div class="tab">
+
+		{% if displaySectionTitles %}
+			<h3>{{ tab.name }}</h3>
+		{% endif %}
+
+		{% for field in fields %}
+			{% include "field" with {
+				field:    field.getField(),
+				required: field.required,
+				element:  entry,
+				thirdPartySubmission: thirdPartySubmission
+			} only %}
+		{% endfor %}
+
+	</div>
+
+	{% if not loop.first and not loop.last %}
+	<hr>
+	{% endif %}
+
+{% endfor %}

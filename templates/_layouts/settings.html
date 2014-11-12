@@ -1,0 +1,24 @@
+{% extends "_layouts/cp" %}
+
+{% set title  = "Settings"|t %}
+
+{% set crumbs = [
+  { label: "Sprout Forms"|t, url: url('sproutforms') }
+] %}
+
+{% set tabs = {
+    settings: {
+        label: "Control Panel"|t,
+        url: "#settings-cp"
+    }
+} %}
+
+{% set content %}
+
+  {{ body }}
+
+  {% include 'sproutforms/_partials/brand/footer' %}
+
+{% endset %}
+
+{% includeCssResource "sproutforms/css/brand.css" %}

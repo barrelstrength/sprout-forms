@@ -1,0 +1,26 @@
+{% extends "sproutforms/_layouts/settings" %}
+{% import "_includes/forms" as forms %}
+
+{% set body %}
+
+{% if currentUser.can('editFormSettings') %}
+  <form method="post" accept-charset="UTF-8" data-saveshortcut="1">
+    {{ getCsrfInput() }}
+    <input type="hidden" name="action" value="sproutForms/settings/saveSettings">
+    <input type="hidden" name="redirect" value="sproutforms/settings">
+
+    <div id="settings-cp">
+
+      {% namespace 'settings' %}
+        {% include 'sproutforms/settings/_tabs/cp' %}
+      {% endnamespace %}
+
+    </div>
+
+    <div class="buttons">
+      <input class="btn submit" type="submit" value="{{ 'Save'|t }}">
+    </div>
+  </form>
+{% endif %}
+
+{% endset %}

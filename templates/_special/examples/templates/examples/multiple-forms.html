@@ -1,0 +1,23 @@
+{% extends "sproutforms/_layout" %}
+
+{% block content %}
+	
+	<h1>Output multiple forms on a single page.</h1>
+	
+	<p>Take a look at the code of this template to see an example with comments.  Errors and submitted values will be returned to a specific form based on it's handle.  So you can have multiple forms on one page, with custom HTML, or just being output with one line.</p>
+
+	<hr>
+
+	<h2>Contact Form</h2>
+
+	{# Output as many forms as you want on a page.  
+		 Some can be Custom HTML.  Some can use the displayForm() tag.  #}
+	{{ craft.sproutForms.displayForm('contact') }}
+
+	<hr>
+
+	<h2>Basic Fields Form</h2>
+
+	{{ craft.sproutForms.displayForm('basic') }}
+
+{% endblock %}

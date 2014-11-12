@@ -1,0 +1,50 @@
+{% extends "sproutforms/_layouts/elementindex" %}
+{% set title = "Forms"|t %}
+{% set elementType = 'SproutForms_Form' %}
+
+{% set tabs = {
+  entries:  { 
+    label: "Entries"|t, 
+    url: url('sproutforms/entries') 
+  },
+  forms:  { 
+    label: "Forms"|t, 
+    url: url('sproutforms/forms') 
+  }
+} %}
+
+{% set selectedTab = 'forms' %}
+
+{% set groups = craft.sproutForms.getAllFormGroups('id') %}
+
+{% if groupId is defined %}
+  {% if groups[groupId] is not defined %}
+    {% exit 404 %}
+  {% endif %}
+{% endif %}
+
+{% block sidebar %}
+  
+  <div class="buttons">
+    <a class="btn submit add icon" href="{{ url('sproutforms/forms/new') }}">{{ "New Form"|t }}</a>
+  </div>
+
+  {{ parent() }}
+
+  <div class="buttons">
+    <div id="newgroupbtn" class="btn add icon">{{ "New Group"|t }}</div>
+
+    {# {% if groupId is defined %} #}
+      <div id="groupsettingsbtn" class="btn settings icon menubtn" title="{{ 'Settings'|t }}"></div>
+      <div class="menu">
+        <ul>
+          <li><a data-action="rename" role="button">{{ "Rename selected group"|t }}</a></li>
+          <li><a data-action="delete" role="button">{{ "Delete selected group"|t }}</a></li>
+        </ul>
+      </div>
+    {# {% endif %} #}
+  </div>
+
+{% endblock %}
+
+{% includeJsResource "sproutforms/js/groups.js" %}

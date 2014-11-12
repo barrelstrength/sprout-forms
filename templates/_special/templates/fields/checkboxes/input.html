@@ -1,0 +1,21 @@
+{% import "forms" as forms %}
+
+{%- set options = (options is defined ? options : []) %}
+{%- set values = (values is defined ? values : []) -%}
+
+<div class="checkbox-select{% if class is defined %} {{ class }}{% endif %}">
+	{%- for key, option in options %}
+		{%- set optionLabel = (option.label is defined ? option.label : option) %}
+		{%- set optionValue = (option.value is defined ? option.value : key) -%}
+		
+		<div>
+			{% include "fields/checkboxes/checkbox" with {
+				label:    optionLabel,
+				name:     (name is defined ? name~'[]' : null),
+				value:    optionValue,
+				checked:  (optionValue in values),
+			} only %}
+		</div>
+		
+	{% endfor %}
+</div>

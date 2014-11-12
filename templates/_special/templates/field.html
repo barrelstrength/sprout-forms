@@ -1,0 +1,47 @@
+{%- set handle = (field.handle is defined ? field.handle : null) %}
+{%- set label = (field.name is defined ? field.name: null) %}
+{%- set instructions = (field.instructions is defined ? field.instructions : null) %}
+{%- set fieldInfo = craft.sproutForms.getFieldInfo(field, element) -%}
+{%- set input = fieldInfo.input -%}
+
+{%- set namespace = (fieldInfo.namespace is defined ? fieldInfo.namespace : 'fields') -%}
+{# If this is a third party submission, don't append namespace to anything #}
+{%- set namespace = (not thirdPartySubmission) ? namespace : null -%}
+
+{%- set isNakedField = (fieldInfo.isNakedField is defined ? fieldInfo.isNakedField : null) -%}
+{%- set type = fieldInfo.type|lower -%}
+{%- set value = (element ? element.getFieldValue(field.handle) : null) -%}
+{%- set errors = element.getErrors(field.handle) -%}
+
+{% namespace namespace %}
+	{% if isNakedField %}
+		
+		{{ input }}
+
+	{% else %}
+
+		<div class="field {{ type }}{% if first is defined and first %} first{% endif %}{% if class is defined and class %} {{ class }}{% endif %}"{% if handle %} id="{{ handle }}-field"{% endif %}>
+
+			{% if label or instructions %}
+				<div class="heading">
+					{% if label %}
+						<label{% if required is defined and required %} class="required"{% endif %}{% if handle %} for="{{ handle }}"{% endif %}>
+							{{ label|raw }}
+						</label>
+					{% endif %}
+					{% if instructions %}
+						<p class="instructions">{{ instructions|raw }}</p>
+					{% endif %}
+				</div>
+			{% endif %}
+
+			<div class="input{% if errors %} errors{% endif %}">
+				{{ input }}
+			</div>
+			
+			{% include "errorList" with { errors: errors } %}
+
+		</div>
+
+	{% endif %}
+{% endnamespace %}

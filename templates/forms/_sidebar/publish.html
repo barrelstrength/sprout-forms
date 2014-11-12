@@ -1,0 +1,41 @@
+<style type="text/css">
+	code.example, input.example {
+		color: #666;
+		/*background-color: #efefef;
+		border-radius: 2px;
+		font-size: 2em;
+		padding: 10px;*/
+	}
+</style>
+
+<h2 style="margin:0;">
+	Publish your form
+
+	<span class="info">
+		
+		<p><strong>One line of code</strong></p>
+
+		{% if craft.request.getSegment(3) == 'new' %}
+
+			<code class="example">
+			{% verbatim %}{{{% endverbatim %}
+				craft.sproutForms.displayForm('<b>yourFormHandle</b>')
+			{% verbatim %}}}{% endverbatim %}
+			</code>
+			
+		{% else %}
+
+			<code class="example">
+			{% verbatim %}{{{% endverbatim %}
+				craft.sproutForms.displayForm('<b>{{ form.handle }}</b>')
+			{% verbatim %}}}{% endverbatim %}
+			</code>
+
+		{% endif %}
+
+		<p><strong>100% Control</strong></p>
+
+		<p>See the Sprout Forms documentation for an example of how to <a href="http://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/examples/custom-html" target="_blank">publish your form with Custom HTML</a>.</p>
+		
+	</span>
+</h2>

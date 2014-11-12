@@ -1,0 +1,16 @@
+{% extends "sproutforms/_layouts/elementindex" %}
+{% set title = "Entries"|t %}
+{% set elementType = 'SproutForms_Entry' %}
+
+{% set tabs = {
+  entries:  { 
+    label: "Entries"|t, 
+    url: url('sproutforms/entries') 
+  },
+  forms:  { 
+    label: "Forms"|t, 
+    url: url('sproutforms/forms') 
+  }
+} %}
+
+{% set selectedTab = 'entries' %}

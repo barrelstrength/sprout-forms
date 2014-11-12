@@ -1,0 +1,48 @@
+{% extends "sproutforms/_layout" %}
+
+{% block content %}	
+
+<h1>Example Contact Form</h1>
+
+<p>The example templates below illustrate several different ways you can output your forms in your templates.</p>
+
+<hr> 
+
+<ul class="examples">
+	<li>
+		<a href="/sproutforms/examples/contact-form">Contact Form (Single Line)</a><br/>
+		Output your form using a single tag.
+	</li>
+	<li>
+		<a href="/sproutforms/examples/contact-form-fields">Contact Form (Field by Field)</a><br/>
+		Output your form field by field.
+	</li>
+	<li> 
+		<a href="/sproutforms/examples/contact-form-custom">Contact Form (Custom HTML)</a><br/>
+		Build your form in pure HTML and have it submit to Sprout Forms.
+	</li>
+</ul>
+<br/>
+
+<h1>Advanced Examples</h1>
+
+<p>The example form below has been created as a template for all of the different types of fields you may wish to submit from the front end.  Sprout Forms can accept data for all of field types that Craft supports.</p>
+
+<hr> 
+
+<ul class="examples">
+	<li>
+		<a href="/sproutforms/examples/basic-fields-custom">All Basic Fields (Custom HTML)</a><br/>
+		Sprout Forms gives you the option to build your forms using HTML. This example shows you how to handle all of the basic, supported field types using HTML.
+	</li>
+	<li>
+		<a href="/sproutforms/examples/multiple-forms">Multiple forms</a><br/>
+		Output multiple forms on a single page.
+	</li>
+	{# <li>
+		<a href="/sproutforms/examples/all-fields">All Craft Fields</a><br/>
+		Several of the fields in this form are hard-coded and provided as examples of what the HTML structure needs to be to submit those form fields from the front-end of your website.  In practice, you will likely need to add custom javascript and styling to make many of these fields work as desired.
+	</li> #}
+</ul>
+		
+{% endblock %}

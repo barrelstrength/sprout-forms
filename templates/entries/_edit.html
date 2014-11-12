@@ -1,0 +1,107 @@
+{% extends "sproutforms/_layouts/base" %}
+
+{% set crumbs = [
+	{ label: craft.sproutForms.name|t, url: url('sproutforms') },
+	{ label: "Entries"|t, url: url('sproutforms/entries') },
+] %}
+
+{% set title = 'Edit Entry' %}
+
+{% block main %}
+	
+	<form method="post" accept-charset="UTF-8" enctype="multipart/form-data" data-saveshortcut="1" data-saveshortcut-redirect="{{ url('sproutforms/entries/edit/' ~ entryId) }}">
+		{{ getCsrfInput() }}
+		<input type="hidden" name="action" value="sproutForms/entries/saveEntry">
+		<input type="hidden" name="handle" value="{{ form.handle }}">
+		<input type="hidden" name="entryId" value="{{ entryId }}">
+
+		{% if namespace is not defined %}{% set namespace = 'fields' %}{% endif %}
+	
+		<div class="grid first">
+			<div class="item" data-position="left" data-min-colspan="2" data-max-colspan="3">
+				<div id="fields" class="pane">
+
+					{% namespace namespace %}	
+
+						{% for tab in tabs %}
+						    
+							{% set fields = tab.getFields() %}
+
+							<div class="tab">
+
+								<h2>{{ tab.name }}</h2>
+
+								{% for field in fields %}
+									{% include "_includes/field" with {
+										field:    field.getField(),
+										required: field.required,
+										element:  entry,
+										static: null
+									} only %}
+								{% endfor %}
+
+							</div>
+
+							{% if not loop.last %}
+							<hr>
+							{% endif %}
+
+
+						{% endfor %}
+
+						{# {% for field in fields %}
+							{% include "_includes/field" with {
+								field:    field.getField(),
+								required: field.required,
+								element:  entry,
+								static:   (static is defined ? static : null)
+							} only %}
+						{% endfor %} #}
+					{% endnamespace %}
+
+				</div>
+			</div>		
+
+			<div class="item" data-position="right" data-colspan="1">
+				
+				<div class="pane">
+
+					<p>
+						Date Submitted<br/>
+						<strong>{{ entry.dateCreated|date('m F Y') }}</strong>
+					</p>
+
+					<p>
+						Form Name<br/>
+						<strong>{{ form.name }}</strong>
+					</p>
+					
+
+					<div class="field" id="enabled-field">
+						<div class="heading"></div>
+						<div class="input">
+							<div class="right">
+								<input type="button" class="btn small formsubmit" value="Delete" data-action="sproutForms/entries/deleteEntry" data-confirm="Are you sure you want to delete this entry and all of it's data?" data-redirect="sproutforms/entries">
+							</div>
+						</div>
+					</div>
+					
+				</div>
+
+				<table class="inputs fullwidth">
+					<tr>
+						<td class="thin">
+							<div class="btngroup submit first">
+								<input type="submit" class="btn submit" value="{{ 'Save'|t }}">
+							</div>
+						</td>
+					</tr>
+				</table>
+
+			</div>
+
+		</div>
+	
+	</form>
+
+{% endblock %}

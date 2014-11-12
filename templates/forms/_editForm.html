@@ -1,0 +1,157 @@
+{% extends "sproutforms/_layouts/base" %}
+{% import "_includes/forms" as forms %}
+
+{% set crumbs = [
+  { label: craft.sproutForms.name, url: url('sproutforms/entries') }
+] %}
+
+{% set tabs = {
+    formfields:  { 
+      label: "Fields"|t, 
+      url: '#formfields'
+    },
+    notifications:  { 
+      label: "Notifications"|t, 
+      url: '#notification'
+    }
+} %}
+
+{% set title = form.name %}
+
+{% block main %}
+
+<form method="post" accept-charset="UTF-8" id="form" data-formid="{{ form.id }}" data-saveshortcut="1" data-saveshortcut-redirect="sproutforms/forms/edit/{id}#overview" data-confirm-unload>
+	{{ getCsrfInput() }}
+  <input type="hidden" name="action" value="sproutForms/forms/saveForm">
+	<input type="hidden" name="redirect" value="sproutforms/forms/edit/{id}#overview">
+  <input type="hidden" name="id" value="{{ form.id is defined ? form.id : '' }}">
+
+  
+<div class="grid first">
+	<div class="item" data-position="left" data-min-colspan="2" data-max-colspan="3">
+		<div id="fields" class="pane">
+			
+			{% if tabs is defined and tabs %}
+				{% include "_includes/tabs" %}
+			{% endif %}
+
+			<div id="formfields" class="hidden">
+				{% include 'sproutforms/forms/_tabs/fieldlayoutdesigner' %}
+			</div>
+
+			<div id="notification" class="hidden">	
+				{% include 'sproutforms/forms/_tabs/notifications' %}
+			</div>
+				
+		</div>
+
+		{% if formId is defined %}
+		
+		<div class="pane">
+
+			<div style="width:45%;padding-left:5%;padding-right:5%;float:left;">
+			
+			<p><strong>One line of code</strong></p>
+
+			{% if craft.request.getSegment(3) == 'new' %}
+
+				<input class="text nicetext fullwidth" type="text" id="display-form-code" value="{% verbatim %}{{ craft.sproutForms.displayForm('yourFormHandle') }}{% endverbatim %}">
+				
+			{% else %}
+
+				<input class="text nicetext fullwidth" type="text" id="display-form-code" value="{% verbatim %}{{ craft.sproutForms.displayForm('{% endverbatim %}{{ form.handle }}{% verbatim %}') }}{% endverbatim %}">
+
+			{% endif %}
+
+			</div>
+
+			<div style="width:45%;float:left;">
+
+			<p><strong>100% Control</strong></p>
+
+			<p>See the Sprout Forms documentation for an example of how to <a href="http://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/examples/custom-html" target="_blank">publish your form with Custom HTML</a>.</p>
+
+			</div>
+
+		</div>
+
+		{% endif %}
+
+	</div>		
+
+	<div class="item" data-position="right" data-colspan="1">
+
+		<div class="pane">
+
+			{% include 'sproutforms/forms/_sidebar/overview' %}			
+
+			<div class="field" id="enabled-field">
+				<div class="heading">
+					{# <label for="enabled">
+						Status
+					</label> #}
+				</div>
+				<div class="input">
+					{# <div class="left">
+						<div class="lightswitch on" tabindex="0">
+							<div class="lightswitch-container">
+								<div class="label on"></div>
+								<div class="handle"></div>
+								<div class="label off"></div>
+							</div>
+							<input type="hidden" name="enabled" value="1">
+						</div>
+					</div> #}
+					
+					<div class="right">
+						<input type="button" class="btn small formsubmit" value="Delete" data-action="sproutForms/forms/deleteForm" data-confirm="Are you sure you want to delete this form, all of it's fields, and all of it's data?" data-redirect="sproutforms/forms">
+					</div>
+					
+				</div>
+			</div>
+		</div>
+
+		<hr>
+
+		<table class="inputs fullwidth">
+			<tr>
+				<td class="thin">
+					<div class="btngroup submit first">
+						<input type="submit" class="btn submit" value="{{ 'Save'|t }}">
+					</div>
+				</td>
+			</tr>
+		</table>
+
+
+	
+	</div>
+
+</div>
+
+</form>
+
+{% endblock %}
+
+{% includeJsResource "js/fields.js" %}
+
+{% set js %}
+	{% if not form.handle %}
+	new Craft.HandleGenerator('#name', '#handle');
+	{% endif %}
+
+	new Craft.AdminTable({
+		tableSelector: '#formFields',
+		noObjectsSelector: '#noFormfields',
+		sortable: true,
+		reorderAction: 'sproutForms/fields/reorderFields',
+		deleteAction: 'sproutForms/fields/deleteField'
+	});
+
+	$(document).ready(function() {
+    $("input#display-form-code")
+    	.focus(function() { $(this).select(); } )
+      .mouseup(function (e) {e.preventDefault(); });
+});
+{% endset %}
+{% includeJs js %}

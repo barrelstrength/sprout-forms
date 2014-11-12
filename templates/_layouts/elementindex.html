@@ -1,0 +1,9 @@
+{% extends "_layouts/elementindex" %}
+
+{% set title = craft.SproutForms.name %}
+
+{% if currentUser.can('editSproutFormsSettings') %}
+	{% set extraPageHeaderHtml %}
+	  <a class="btn settings icon" href="{{ url('sproutforms/settings') }}" title="{{ 'Settings'|t }}"></a>
+	{% endset %}
+{% endif %}
