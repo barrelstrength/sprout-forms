@@ -29,6 +29,12 @@ class SproutForms_EntriesController extends BaseController
 			throw new Exception(Craft::t('No form exists with the handle “{handle}”', array('handle' => $formHandle)));
 		}
 
+		$oldFieldContext = craft()->content->fieldContext;
+		$oldContentTable = craft()->content->contentTable;
+
+		craft()->content->fieldContext = $this->form->getFieldContext();
+		craft()->content->contentTable = $this->form->getContentTable();
+
 		$entry = $this->_getEntryModel();
 
 		// Our SproutForms_EntryModel requires that we assign it a SproutForms_FormModel
@@ -79,6 +85,9 @@ class SproutForms_EntriesController extends BaseController
 			}
 			else
 			{
+				craft()->content->fieldContext = $oldFieldContext;
+				craft()->content->contentTable = $oldContentTable;
+
 				if (craft()->request->isCpRequest()) 
 				{
 					// make errors available to variable
