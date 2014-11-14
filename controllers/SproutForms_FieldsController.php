@@ -36,6 +36,10 @@ class SproutForms_FieldsController extends BaseController
 			$field->settings = $typeSettings[$field->type];
 		}
 
+		// Set our field context
+		craft()->content->fieldContext = $form->getFieldContext();
+		craft()->content->contentTable = $form->getContentTable();
+
 		// Does our field validate?
 		if (!craft()->fields->validateField($field)) 
 		{
@@ -55,10 +59,6 @@ class SproutForms_FieldsController extends BaseController
 
 			$isNewField = false;
 		}
-
-		// Set our field context
-		craft()->content->fieldContext = $form->getFieldContext();
-		craft()->content->contentTable = $form->getContentTable();
 
 		// Save our field
 		craft()->fields->saveField($field);
