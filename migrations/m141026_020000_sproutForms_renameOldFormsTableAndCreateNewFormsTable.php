@@ -59,6 +59,7 @@ class m141026_020000_sproutForms_renameOldFormsTableAndCreateNewFormsTable exten
 			// Clean up Foreign Keys
 
 			craft()->db->createCommand()->dropForeignKey('sproutforms_fields', 'formId');
+			
 			SproutFormsPlugin::log("Removed formId Foreign Key Constraint from 'sproutforms_fields' table.", LogLevel::Info, true);
 
 		}

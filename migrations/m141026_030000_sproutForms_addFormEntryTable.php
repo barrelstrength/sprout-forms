@@ -34,8 +34,6 @@ class m141026_030000_sproutForms_addFormEntryTable extends BaseMigration
 			craft()->db->createCommand()->addForeignKey($tableName, 'id', 'elements', 'id', 'CASCADE', null);
 			craft()->db->createCommand()->addForeignKey($tableName, 'formId', 'sproutforms_forms', 'id', 'CASCADE', null);
 		}
-		
-		
 
 		return true;
 	}

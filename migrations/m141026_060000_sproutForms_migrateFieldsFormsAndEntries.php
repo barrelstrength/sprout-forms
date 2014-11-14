@@ -26,11 +26,12 @@ class m141026_060000_sproutForms_migrateFieldsFormsAndEntries extends BaseMigrat
 								    ->from($oldTable)
 								    ->queryAll();
 
+		$user = craft()->userSession->getUser();
+		$email = (isset($user->email) && $user->email != "") ? $user->email : "";
+
 		foreach ($oldForms as $oldForm) 
 		{
 			SproutFormsPlugin::log("Build SproutForms_FormModel for " . $oldForm['name'] . " Form", LogLevel::Info, true);
-
-			$user = craft()->userSession->getUser();
 
 			// Map any values from the old form to their 
 			// new column names to save to the new form
@@ -47,7 +48,7 @@ class m141026_060000_sproutForms_migrateFieldsFormsAndEntries extends BaseMigrat
 			$newForm->notificationRecipients = $oldForm['email_distribution_list'];
 			$newForm->notificationSubject = $oldForm['notification_subject'];
 			$newForm->notificationSenderName = craft()->getSiteName();
-			$newForm->notificationSenderEmail = $user->email;
+			$newForm->notificationSenderEmail = $email;
 			$newForm->notificationReplyToEmail = $oldForm['notification_reply_to'];
 
 			// Save the Form
@@ -199,42 +200,41 @@ class m141026_060000_sproutForms_migrateFieldsFormsAndEntries extends BaseMigrat
 
 	    	SproutFormsPlugin::log("Save New Form Entry ID ". $newFormEntry->id, LogLevel::Info, true);
 	    }
+		}
 
+		// Drop old field table
+		if (craft()->db->tableExists('sproutforms_fields'))
+		{
+			SproutFormsPlugin::log("Dropping the 'sproutforms_fields' table.", LogLevel::Info, true);
 
-	    // Drop old field table
-	    if (craft()->db->tableExists('sproutforms_fields'))
-	    {
-	    	SproutFormsPlugin::log("Dropping the 'sproutforms_fields' table.", LogLevel::Info, true);
+			craft()->db->createCommand()->dropTable('sproutforms_fields');
 
-	    	craft()->db->createCommand()->dropTable('sproutforms_fields');
+			SproutFormsPlugin::log("'sproutforms_fields' table dropped.", LogLevel::Info, true);	
+		}
 
-	    	SproutFormsPlugin::log("'sproutforms_fields' table dropped.", LogLevel::Info, true);	
-	    }
+		// Drop old entries table
+		if (craft()->db->tableExists('sproutforms_content'))
+		{
+			SproutFormsPlugin::log("Dropping the 'sproutforms_content' table.", LogLevel::Info, true);
 
-	    // Drop old entries table
-	    if (craft()->db->tableExists('sproutforms_content'))
-	    {
-	    	SproutFormsPlugin::log("Dropping the 'sproutforms_content' table.", LogLevel::Info, true);
+			craft()->db->createCommand()->dropTable('sproutforms_content');
 
-	    	craft()->db->createCommand()->dropTable('sproutforms_content');
+			SproutFormsPlugin::log("'sproutforms_content' table dropped.", LogLevel::Info, true);	
+		}
+		
+		// Drop old forms table
+		if (craft()->db->tableExists($oldTable))
+		{
+			SproutFormsPlugin::log("Dropping the old `$oldTable` table.", LogLevel::Info, true);
 
-	    	SproutFormsPlugin::log("'sproutforms_content' table dropped.", LogLevel::Info, true);	
-	    }
-	    
-	    // Drop old forms table
-	    if (craft()->db->tableExists($oldTable))
-	    {
-	    	SproutFormsPlugin::log("Dropping the old `$oldTable` table.", LogLevel::Info, true);
+			craft()->db->createCommand('SET FOREIGN_KEY_CHECKS = 0;')->execute();
+			
+			// Need to drop this after we drop the fields table because fields has a fk
+			craft()->db->createCommand()->dropTable($oldTable);
 
-	    	craft()->db->createCommand('SET FOREIGN_KEY_CHECKS = 0;')->execute();
-	    	
-	    	// Need to drop this after we drop the fields table because fields has a fk
-	    	craft()->db->createCommand()->dropTable($oldTable);
+			craft()->db->createCommand('SET FOREIGN_KEY_CHECKS = 1;')->execute();
 
-	    	craft()->db->createCommand('SET FOREIGN_KEY_CHECKS = 1;')->execute();
-
-	    	SproutFormsPlugin::log("`$oldTable` table dropped.", LogLevel::Info, true);
-	    }
+			SproutFormsPlugin::log("`$oldTable` table dropped.", LogLevel::Info, true);
 		}
 
 		return true;
