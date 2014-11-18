@@ -167,6 +167,8 @@ class m141026_060000_sproutForms_migrateFieldsFormsAndEntries extends BaseMigrat
 	    	{
 	    		$newFormEntry->ipAddress = $oldEntryServerData->ipAddress;
 					$newFormEntry->userAgent = $oldEntryServerData->userAgent;
+					$newFormEntry->dateCreated = $oldFormEntry['dateCreated'];
+					$newFormEntry->dateUpdated = $oldFormEntry['dateUpdated'];
 	    	}
 	    	else
 	    	{
