@@ -65,15 +65,15 @@ class SproutForms_EntryElementType extends BaseElementType
 		$noSources = array();
 		$prepSources = array();
 
-		foreach ($forms as $form) 
+		foreach ($forms as $form)
 		{
-			if ($form->groupId) 
+			if ($form->groupId)
 			{
 				if (!isset($prepSources[$form->groupId]['heading']))
 				{
-					$prepSources[$form->groupId]['heading'] = $groups[$form->groupId]->name;	
+					$prepSources[$form->groupId]['heading'] = $groups[$form->groupId]->name;
 				}
-				
+
 				$prepSources[$form->groupId]['forms'][$form->id] = array(
 					'label' => $form->name,
 					'data' => array('formId' => $form->id),
@@ -93,7 +93,7 @@ class SproutForms_EntryElementType extends BaseElementType
 		usort($prepSources, 'self::_sortByGroupName');
 
 		// Build our sources for forms with no group
-		foreach ($noSources as $form) 
+		foreach ($noSources as $form)
 		{
 			$sources[$form['data']['formId']] = array(
 				'label' => $form['label'],
@@ -107,13 +107,13 @@ class SproutForms_EntryElementType extends BaseElementType
 		}
 
 		// Build our sources sidebar for forms in groups
-		foreach ($prepSources as $source) 
+		foreach ($prepSources as $source)
 		{
 			$sources[] = array(
 				'heading' => $source['heading']
 			);
 
-			foreach ($source['forms'] as $form) 
+			foreach ($source['forms'] as $form)
 			{
 				$sources[] = array(
 					'label' => $form['label'],
@@ -140,6 +140,20 @@ class SproutForms_EntryElementType extends BaseElementType
 	{
 		return array(
 			'title'			=> Craft::t('Title'),
+			'formName'		=> Craft::t('Form Name'),
+			'dateCreated'	=> Craft::t('Date Created'),
+			'dateUpdated'	=> Craft::t('Date Updated'),
+		);
+	}
+
+	/**
+	 * Returns the attributes that can be sorted by in table views.
+	 *
+	 * @return array
+	 */
+	public function defineSortableAttributes()
+	{
+		return array(
 			'formName'		=> Craft::t('Form Name'),
 			'dateCreated'	=> Craft::t('Date Created'),
 			'dateUpdated'	=> Craft::t('Date Updated'),
@@ -202,8 +216,8 @@ class SproutForms_EntryElementType extends BaseElementType
 	 */
 	public function modifyElementsQuery(DbCommand $query, ElementCriteriaModel $criteria)
 	{
-		$query->addSelect('
-			entries.id,
+		$select =
+			'entries.id,
 			entries.ipAddress,
 			entries.userAgent,
 			entries.dateCreated,
@@ -211,11 +225,13 @@ class SproutForms_EntryElementType extends BaseElementType
 			entries.uid,
 			forms.id as formId,
 			forms.name as formName,
-			forms.groupId as formGroupId
-		');
+			forms.groupId as formGroupId';
 
 		$query->join('sproutforms_entries entries', 'entries.id = elements.id');
 		$query->join('sproutforms_forms forms', 'forms.id = entries.formId');
+
+		$this->joinContentTableAndAddContentSelects($query, $criteria, $select);
+		$query->addSelect($select);
 
 		if ($criteria->id)
 		{
@@ -224,6 +240,48 @@ class SproutForms_EntryElementType extends BaseElementType
 		if ($criteria->formId)
 		{
 			$query->andWhere(DbHelper::parseParam('entries.formId', $criteria->formId, $query->params));
+		}
+		if ($criteria->order)
+		{
+			// Trying to order by date creates ambiguity errors
+			// Let's make sure mysql knows what we want to sort by
+			if (stripos($criteria->order, 'elements.') === false)
+			{
+				$criteria->order = str_replace('dateCreated', 'entries.dateCreated', $criteria->order);
+				$criteria->order = str_replace('dateUpdated', 'entries.dateUpdated', $criteria->order);
+			}
+
+			// If we are sorting by title and do not have a source
+			// We won't be able to sort, so bail on it
+			if (stripos($criteria->order, 'title') !== false && !$criteria->formId)
+			{
+				$criteria->order = null;
+			}
+		}
+	}
+
+	/**
+	 * Updates the query command, criteria, and select fields when a source is available
+	 *
+	 * @param DbCommand            $query
+	 * @param ElementCriteriaModel $criteria
+	 * @param string               $select
+	 */
+	protected function joinContentTableAndAddContentSelects(DbCommand &$query, ElementCriteriaModel &$criteria, &$select)
+	{
+		// Do we have a source selected in the sidebar?
+		// If so, we have a form id and we can use that to fetch the content table
+		if ($criteria->formId)
+		{
+			$form = craft()->sproutForms_forms->getFormById($criteria->formId);
+
+			if ($form)
+			{
+				$content    = "{$form->handle}.title";
+				$select     = empty($select) ? $content : $select.', '.$content;
+
+				$query->join($form->getContentTable().' '.$form->handle, 'entries.formId = '.$form->id);
+			}
 		}
 	}
 
