@@ -104,6 +104,69 @@ class SproutFormsVariable
 		return new \Twig_Markup($formHtml, craft()->templates->getTwig()->getCharset());
 	}
 
+	public function displayTab($formTabHandle)
+	{
+		list($formHandle, $tabHandle) = explode('.', $formTabHandle);
+		if (!$formHandle || !$tabHandle) return '';
+
+		$form = craft()->sproutForms_forms->getFormByHandle($formHandle);
+		$entry = craft()->sproutForms_entries->getEntryModel($form);
+
+		// Backup our field context and content table
+		$oldFieldContext = craft()->content->fieldContext;
+		$oldContentTable = craft()->content->contentTable;
+
+		// Set our field content and content table to work with our form output
+		craft()->content->fieldContext = $form->getFieldContext();
+		craft()->content->contentTable = $form->getContentTable();
+
+		// Set our Sprout Forms Front-end Form Template path
+		craft()->path->setTemplatesPath(craft()->path->getPluginsPath() . 'sproutforms/templates/_special/templates/');	
+
+		// Set our Sprout Forms support field classes folder
+		$fieldtypesFolder = craft()->path->getPluginsPath() . 'sproutforms/fields/';
+
+		// Create a list of the name, class, and file of fields we support 
+		$this->fields = craft()->sproutForms_fields->getSproutFormsFields($fieldtypesFolder);
+		
+		// Determine where our form and field template should come from
+		$this->templates = craft()->sproutForms_fields->getSproutFormsTemplates();
+
+		// Set Tab template path
+		craft()->path->setTemplatesPath($this->templates['tab']);
+
+		$tabIndex = null;
+		foreach ($form->getFieldLayout()->getTabs() as $key => $tabInfo) 
+		{
+			$thisTabHandle = str_replace(" ", "_", strtolower($tabInfo->name));
+
+			// If our tab exists, grab the id
+			if ($tabHandle == $thisTabHandle) 
+			{
+				$tabIndex = $key;
+			}
+		}
+
+		if (is_null($tabIndex)) return '';
+
+		// Build the HTML for our form tabs and fields
+		$tabHtml = craft()->templates->render('tab', array(
+			'tabs'            => array($form->getFieldLayout()->getTabs()[$tabIndex]),
+			'entry'           => $entry,
+			'supportedFields' => $this->fields,
+			'displaySectionTitles' => $form->displaySectionTitles,
+			'thirdPartySubmission' => ($form->submitAction) ? true : false
+		));
+
+		craft()->path->setTemplatesPath(craft()->path->getSiteTemplatesPath());
+
+		// Reset our field context and content table to what they were previously
+		craft()->content->fieldContext = $oldFieldContext;
+		craft()->content->contentTable = $oldContentTable;
+
+		return new \Twig_Markup($tabHtml, craft()->templates->getTwig()->getCharset());
+	}
+
 	/**
 	 * Returns a complete field for display in template
 	 *
@@ -126,8 +189,13 @@ class SproutFormsVariable
 		craft()->content->fieldContext = $form->getFieldContext();
 		craft()->content->contentTable = $form->getContentTable();
 
+		// Set our Sprout Forms Front-end Form Template path
+		craft()->path->setTemplatesPath(craft()->path->getPluginsPath() . 'sproutforms/templates/_special/templates/');	
+		
 		// Determine where our form and field template should come from
 		$this->templates = craft()->sproutForms_fields->getSproutFormsTemplates();
+
+		// Set Tab template path
 		craft()->path->setTemplatesPath($this->templates['field']);
 
 		$fieldHtml = "";
@@ -221,6 +289,16 @@ class SproutFormsVariable
 		$fieldInfo['isNakedField'] = $this->isNakedField;
 		$fieldInfo['type'] = $field->type;
 		$fieldInfo['input'] = new \Twig_Markup($input, craft()->templates->getTwig()->getCharset());
+
+
+		// Set our Sprout Forms Front-end Form Template path
+		craft()->path->setTemplatesPath(craft()->path->getPluginsPath() . 'sproutforms/templates/_special/templates/');	
+		
+		// Determine where our form and field template should come from
+		$this->templates = craft()->sproutForms_fields->getSproutFormsTemplates();
+
+		// Set Tab template path
+		craft()->path->setTemplatesPath($this->templates['field']);
 
 		return $fieldInfo;
 	}
