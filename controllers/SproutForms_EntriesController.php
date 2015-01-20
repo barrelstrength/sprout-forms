@@ -58,6 +58,12 @@ class SproutForms_EntriesController extends BaseController
 
 		if (craft()->sproutForms_entries->saveEntry($entry))
 		{
+			// Only send notification email for front-end submissions
+			if (!craft()->request->isCpRequest())
+			{
+				$this->_notifyAdmin($this->form, $entry);
+			}
+			
 			if (craft()->request->isAjaxRequest())
 			{
 				$return['success'] = true;
@@ -66,12 +72,6 @@ class SproutForms_EntriesController extends BaseController
 			}
 			else
 			{
-				// Only send notification email for front-end submissions
-				if (!craft()->request->isCpRequest())
-				{
-					$this->_notifyAdmin($this->form, $entry);
-				}
-
 				craft()->userSession->setNotice(Craft::t('Entry saved.'));
 
 				// Store our new entry so we can recreate the Entry object on our thank you page
