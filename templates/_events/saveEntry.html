@@ -1,0 +1,13 @@
+
+{{
+	forms.field({
+		label: "Forms"|t,
+		instructions: "Select one or more forms."|t,
+		errors: errors is defined ? errors : null,
+	},
+	forms.checkboxGroup({
+		name: "entryFormIds",
+		options : entryForms,
+		values: options.entryFormIds is defined ? options.entryFormIds : null
+	}))
+}}

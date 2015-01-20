@@ -152,10 +152,6 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 			}
 			catch (\Exception $e)
 			{
-				if ($transaction !== null)
-				{
-					$transaction->rollback();
-				}
 
 				throw $e;
 			}

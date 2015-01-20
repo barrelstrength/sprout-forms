@@ -32,7 +32,7 @@ class SproutFormsPlugin extends BasePlugin
 	}
 
 	public function init()
-	{	
+	{
 		Craft::import('plugins.sproutforms.fields.ISproutFormsFieldType');
 		Craft::import('plugins.sproutforms.fields.BaseSproutFormsFieldType');
 	}
@@ -140,19 +140,39 @@ class SproutFormsPlugin extends BasePlugin
 
 	/**
 	 * Event registrar
-	 * 
+	 *
 	 * @param string $event
 	 * @param \Closure $callback
+	 *
+	 * @deprecate Deprecated for version 0.9.0 in favour of defineSproutEmailEvents()
 	 */
 	public function sproutformsAddEventListener($event, \Closure $callback)
-	{		
-		switch ($event) {
-			case 'saveEntry': // only event supported at this time
+	{
+		switch ($event)
+		{
+			case 'saveEntry':
+			{
+				// only event supported at this time
 				craft()->on( 'sproutForms.saveEntry' , $callback);
 				break;
+			}
 		}
 	}
-	
+
+	/**
+	 * Using the Sprout Email Event API to register native Sprout Form events
+	 *
+	 * @return array
+	 */
+	public function defineSproutEmailEvents()
+	{
+		require_once dirname(__FILE__).'/integrations/sproutemail/SproutEmail_SaveEntryEvent.php';
+
+		return array(
+			'sproutForms.saveEntry' => new SproutEmail_SaveEntryEvent(),
+		);
+	}
+
 	/**
 	 * Install examples after installation
 	 * 
