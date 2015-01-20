@@ -149,14 +149,19 @@ class SproutFormsVariable
 
 		if (is_null($tabIndex)) return '';
 
+		$layoutTabs = $form->getFieldLayout()->getTabs();
+		$layoutTab  = isset($layoutTabs[$tabIndex]) ? $layoutTabs[$tabIndex] : null;
+
 		// Build the HTML for our form tabs and fields
-		$tabHtml = craft()->templates->render('tab', array(
-			'tabs'            => array($form->getFieldLayout()->getTabs()[$tabIndex]),
-			'entry'           => $entry,
-			'supportedFields' => $this->fields,
-			'displaySectionTitles' => $form->displaySectionTitles,
-			'thirdPartySubmission' => ($form->submitAction) ? true : false
-		));
+		$tabHtml = craft()->templates->render('tab',
+			array(
+				'tabs'                 => array($layoutTab),
+				'entry'                => $entry,
+				'supportedFields'      => $this->fields,
+				'displaySectionTitles' => $form->displaySectionTitles,
+				'thirdPartySubmission' => ($form->submitAction) ? true : false
+			)
+		);
 
 		craft()->path->setTemplatesPath(craft()->path->getSiteTemplatesPath());
 
