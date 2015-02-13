@@ -220,7 +220,7 @@ class SproutForms_FieldsService extends FieldsService
 	}
 
 	/**
-	 * Create list of supported Front end fieldtypes based on Folders in tempaltes/fieldtypes
+	 * Create list of supported Front-end Field Types based on Folders in templates/fieldtypes
 	 * 
 	 * @param  string $fieldtypesFolder Location of fieldtypes folder
 	 * @return array
@@ -228,7 +228,6 @@ class SproutForms_FieldsService extends FieldsService
 	public function getSproutFormsFields($fieldtypesFolder)
 	{
 		$frontEndFieldTypes = array();
-		$frontEndFieldTypeClasses = array();
 
 		// Find all of the built-in components
 		$filter = '_SproutFormsFieldType\.php$';
@@ -251,7 +250,7 @@ class SproutForms_FieldsService extends FieldsService
 		}
 
 		// Check if any other plugins add support for more front-end fields
-		$customSproutFields = craft()->plugins->call('registerSproutField');
+		 $customSproutFields = craft()->plugins->call('registerSproutField');
 
 		foreach ($customSproutFields as $pluginName => $fieldName) 
 		{	
