@@ -160,23 +160,6 @@ class SproutFormsPlugin extends BasePlugin
 	}
 
 	/**
-	 * Using the Sprout Email Event API to register native Sprout Form events
-	 *
-	 * @return array|null
-	 */
-	public function defineSproutEmailEvents()
-	{
-		if (class_exists('Craft\\SproutEmailBaseEvent'))
-		{
-			require_once dirname(__FILE__).'/integrations/sproutemail/SproutEmail_SaveEntryEvent.php';
-
-			return array(
-				'sproutForms.saveEntry' => new SproutEmail_SaveEntryEvent(),
-			);
-		}
-	}
-
-	/**
 	 * Install examples after installation
 	 * 
 	 * @return void
