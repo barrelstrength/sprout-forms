@@ -107,6 +107,8 @@ class SproutFormsVariable
 	public function displayTab($formTabHandle)
 	{
 		list($formHandle, $tabHandle) = explode('.', $formTabHandle);
+		$tabHandle = strtolower($tabHandle);
+
 		if (!$formHandle || !$tabHandle) return '';
 
 		$form = craft()->sproutForms_forms->getFormByHandle($formHandle);
@@ -138,7 +140,7 @@ class SproutFormsVariable
 		$tabIndex = null;
 		foreach ($form->getFieldLayout()->getTabs() as $key => $tabInfo) 
 		{
-			$thisTabHandle = str_replace(" ", "_", strtolower($tabInfo->name));
+			$thisTabHandle = str_replace(" ", "", strtolower($tabInfo->name));
 
 			// If our tab exists, grab the id
 			if ($tabHandle == $thisTabHandle) 
