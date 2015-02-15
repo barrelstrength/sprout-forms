@@ -46,7 +46,6 @@ class SproutForms_EntriesController extends BaseController
 		$entry->formId = $this->form->id;
 
 		// Populate the entry with post data
-		// @TODO - This function doesn't update our $entry variable, why?
 		$this->_populateEntryModel($entry);
 
 		// Swap out any dynamic variables for our notifications
@@ -62,6 +61,16 @@ class SproutForms_EntriesController extends BaseController
 			if (!craft()->request->isCpRequest())
 			{
 				$this->_notifyAdmin($this->form, $entry);
+
+				// Store our Entry ID for a multi-step form
+				craft()->httpSession->add('multiStepFormEntryId', $entry->id);
+
+				// Remove our multiStepForm reference. It will be
+				// set by the template again if it needs to be.
+				craft()->httpSession->remove('multiStepForm');
+
+				// Store our new entry so we can recreate the Entry object on our thank you page
+				craft()->httpSession->add('lastEntryId', $entry->id);
 			}
 			
 			if (craft()->request->isAjaxRequest())
@@ -74,14 +83,15 @@ class SproutForms_EntriesController extends BaseController
 			{
 				craft()->userSession->setNotice(Craft::t('Entry saved.'));
 
-				// Store our new entry so we can recreate the Entry object on our thank you page
-				$_SESSION['lastEntryId'] = $entry->id;
-
 				$this->redirectToPostedUrl();
 			}
 		}
 		else
 		{
+			// Remove our multiStepForm reference.  It will be
+			// set by the template again if it needs to be.
+			craft()->httpSession->remove('multiStepForm');
+
 			if (craft()->request->isAjaxRequest())
 			{
 				$this->returnJson(
@@ -165,7 +175,39 @@ class SproutForms_EntriesController extends BaseController
 	 */
 	private function _getEntryModel()
 	{
-		$entryId = craft()->request->getPost('entryId');
+		$entryId = null;
+
+		// If we're building our EntryModel on the front end, we have a few
+		// different scenarios we need to check for:
+		// 1. If entryId is included in the request, we're editing not creating a new entry
+		// 2. If multiStepForm is set, we edit based on the entryId stored in session data
+		if (!craft()->request->isCpRequest())
+		{
+			$multiStepForm = craft()->httpSession->get('multiStepForm');
+			$multiStepFormEntryId = craft()->httpSession->get('multiStepFormEntryId');
+
+			// Check if this is a secondary step in a multiStep form
+			if ($multiStepForm && $multiStepFormEntryId)
+			{
+				// If so, assign our $multiStepFormEntryId to be our entryId
+				$entryId = $multiStepFormEntryId;
+			}
+			else
+			{
+				// @TODO - Allow using entryId in front-end forms
+				// only if it is turned on in the form settings.  This should only be used
+				// in secure environments where HTML cannot the submitter can be
+				// identified.
+				//
+				// If we are explicitly modifying an existing entry, use the entryId
+				// $entryId = craft()->request->getPost('entryId');
+			}
+		}
+
+		if (craft()->request->isCpRequest())
+		{
+			$entryId = craft()->request->getPost('entryId');
+		}
 
 		if ($entryId)
 		{
@@ -201,6 +243,7 @@ class SproutForms_EntriesController extends BaseController
 		$fieldsLocation = craft()->request->getParam('fieldsLocation', 'fields');
 		$entry->setContentFromPost($fieldsLocation);
 		$entry->setContentPostLocation($fieldsLocation);
+
 	}
 
 	/**
