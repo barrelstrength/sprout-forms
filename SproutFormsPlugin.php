@@ -180,10 +180,5 @@ class SproutFormsPlugin extends BasePlugin
 		{
 			craft()->sproutForms_forms->deleteForm($form);
 		}
-
-		// remove example templates  
-		// @TODO - deliberate whether this is a good idea
-		// $fileHelper = new \CFileHelper();
-		// $fileHelper->removeDirectory(craft()->path->getSiteTemplatesPath() . 'sproutforms');
 	}
 }
