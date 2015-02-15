@@ -38,7 +38,7 @@ class SproutForms_SettingsController extends BaseController
 		$this->requirePostRequest();
 		$settings = craft()->request->getPost('settings');
 
-		if (craft()->sproutForms_settings->saveSettings($settings))
+		if (sproutForms()->settings->saveSettings($settings))
 		{
 			craft()->userSession->setNotice(Craft::t('Settings saved.'));
 

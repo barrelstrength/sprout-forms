@@ -88,7 +88,7 @@ class SproutForms_FieldsService extends FieldsService
 
 				}
 
-				craft()->sproutForms_forms->saveForm($form);
+				sproutForms()->forms->saveForm($form);
 
 				if ($transaction !== null)
 				{

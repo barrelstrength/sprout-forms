@@ -47,7 +47,7 @@ class SproutForms_FormElementType extends BaseElementType
 			)
 		);
 
-		$groups = craft()->sproutForms_groups->getAllFormGroups();
+		$groups = sproutForms()->groups->getAllFormGroups();
 
 		foreach ($groups as $group)
 		{

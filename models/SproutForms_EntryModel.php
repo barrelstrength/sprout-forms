@@ -59,7 +59,7 @@ class SproutForms_EntryModel extends BaseElementModel
 	 */
 	public function getContentTable()
 	{
-		return craft()->sproutForms_forms->getContentTableName($this->getForm());
+		return sproutForms()->forms->getContentTableName($this->getForm());
 	}
 
 	/**
@@ -101,7 +101,7 @@ class SproutForms_EntryModel extends BaseElementModel
 	{
 		if (!isset($this->form))
 		{
-			$this->form = craft()->sproutForms_forms->getFormById($this->formId);
+			$this->form = sproutForms()->forms->getFormById($this->formId);
 		}
 
 		return $this->form;

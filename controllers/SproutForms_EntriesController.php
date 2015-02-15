@@ -27,7 +27,7 @@ class SproutForms_EntriesController extends BaseController
 		craft()->templates->renderObjectTemplate('{env}', array('env' => true));
 
 		$formHandle = craft()->request->getRequiredPost('handle');
-		$this->form = craft()->sproutForms_forms->getFormByHandle($formHandle);
+		$this->form = sproutForms()->forms->getFormByHandle($formHandle);
 
 		if (!isset($this->form))
 		{
@@ -55,7 +55,7 @@ class SproutForms_EntriesController extends BaseController
 		$this->form->notificationSenderEmail  = craft()->templates->renderObjectTemplate($this->form->notificationSenderEmail, $entry);
 		$this->form->notificationReplyToEmail = craft()->templates->renderObjectTemplate($this->form->notificationReplyToEmail, $entry);
 
-		if (craft()->sproutForms_entries->saveEntry($entry))
+		if (sproutForms()->entries->saveEntry($entry))
 		{
 			// Only send notification email for front-end submissions
 			if (!craft()->request->isCpRequest())
@@ -113,7 +113,7 @@ class SproutForms_EntriesController extends BaseController
 
 					// Store this Entry Model in a variable in our Service layer
 					// so that we can access the error object from our actionEditEntryTemplate() method
-					craft()->sproutForms_forms->activeCpEntry = $entry;
+					sproutForms()->forms->activeCpEntry = $entry;
 
 					// Return the form as an 'entry' variable if in the cp
 					craft()->urlManager->setRouteVariables(
@@ -124,7 +124,7 @@ class SproutForms_EntriesController extends BaseController
 				}
 				else
 				{
-					if (craft()->sproutForms_entries->fakeIt)
+					if (sproutForms()->entries->fakeIt)
 					{
 						$this->redirectToPostedUrl();
 					}
@@ -132,7 +132,7 @@ class SproutForms_EntriesController extends BaseController
 					{
 						// Store this Entry Model in a variable in our Service layer
 						// so that we can access the error object from our displayForm() variable 
-						craft()->sproutForms_forms->activeEntries[$this->form->handle] = $entry;
+						sproutForms()->forms->activeEntries[$this->form->handle] = $entry;
 
 						// Return the form using it's name as a variable on the front-end
 						craft()->urlManager->setRouteVariables(
@@ -158,10 +158,10 @@ class SproutForms_EntriesController extends BaseController
 
 		// Get the Entry
 		$entryId = craft()->request->getRequiredPost('entryId');
-		$entry   = craft()->sproutForms_entries->getEntryById($entryId);
+		$entry   = sproutForms()->entries->getEntryById($entryId);
 
 		// @TODO - handle errors
-		$success = craft()->sproutForms_entries->deleteEntry($entry);
+		$success = sproutForms()->entries->deleteEntry($entry);
 
 		$this->redirectToPostedUrl($entry);
 	}
@@ -211,7 +211,7 @@ class SproutForms_EntriesController extends BaseController
 
 		if ($entryId)
 		{
-			$entry = craft()->sproutForms_entries->getEntryById($entryId);
+			$entry = sproutForms()->entries->getEntryById($entryId);
 
 			if (!$entry)
 			{
@@ -409,16 +409,16 @@ class SproutForms_EntriesController extends BaseController
 	{
 		$entryId = craft()->request->getSegment(4);
 
-		if (craft()->sproutForms_forms->activeCpEntry)
+		if (sproutForms()->forms->activeCpEntry)
 		{
-			$entry = craft()->sproutForms_forms->activeCpEntry;
+			$entry = sproutForms()->forms->activeCpEntry;
 		}
 		else
 		{
-			$entry = craft()->sproutForms_entries->getEntryById($entryId);
+			$entry = sproutForms()->entries->getEntryById($entryId);
 		}
 
-		$form = craft()->sproutForms_forms->getFormById($entry->formId);
+		$form = sproutForms()->forms->getFormById($entry->formId);
 
 		// Set our Entry's Field Context and Content Table
 		craft()->content->fieldContext = $form->getFieldContext();

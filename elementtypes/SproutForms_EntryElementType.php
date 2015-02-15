@@ -59,8 +59,8 @@ class SproutForms_EntryElementType extends BaseElementType
 		);
 
 		// Prepare the data for our sources sidebar
-		$groups = craft()->sproutForms_groups->getAllFormGroups('id');
-		$forms = craft()->sproutForms_forms->getAllForms();
+		$groups = sproutForms()->groups->getAllFormGroups('id');
+		$forms = sproutForms()->forms->getAllForms();
 
 		$noSources = array();
 		$prepSources = array();
@@ -271,7 +271,7 @@ class SproutForms_EntryElementType extends BaseElementType
 		// If so, we have a form id and we can use that to fetch the content table
 		if ($criteria->formId)
 		{
-			$form = craft()->sproutForms_forms->getFormById($criteria->formId);
+			$form = sproutForms()->forms->getFormById($criteria->formId);
 
 			if ($form)
 			{

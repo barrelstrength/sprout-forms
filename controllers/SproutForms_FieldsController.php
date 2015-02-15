@@ -16,7 +16,7 @@ class SproutForms_FieldsController extends BaseController
 
 		// Get the Form these fields are related to
 		$formId = craft()->request->getRequiredPost('formId');
-		$form = craft()->sproutForms_forms->getFormById($formId);
+		$form = sproutForms()->forms->getFormById($formId);
 
 		$field = new FieldModel();
 		
@@ -145,7 +145,7 @@ class SproutForms_FieldsController extends BaseController
 		
 		// Hand the field off to be saved in the 
 		// field layout of our Form Element
-		if (craft()->sproutForms_forms->saveForm($form))
+		if (sproutForms()->forms->saveForm($form))
 		{
 			SproutFormsPlugin::log('Field Saved');
 
@@ -176,7 +176,7 @@ class SproutForms_FieldsController extends BaseController
 	public function actionEditFieldTemplate(array $variables = array())
 	{
 		$formId = craft()->request->getSegment(3);
-		$form = craft()->sproutForms_forms->getFormById($formId);
+		$form = sproutForms()->forms->getFormById($formId);
 
 		if (isset($variables['fieldId']))
 		{
@@ -250,7 +250,7 @@ class SproutForms_FieldsController extends BaseController
 		$this->requireAjaxRequest();
 		
 		$fieldIds = JsonHelper::decode(craft()->request->getRequiredPost('ids'));
-		craft()->sproutForms_fields->reorderFields($fieldIds);
+		sproutForms()->fields->reorderFields($fieldIds);
 	
 		$this->returnJson(array(
 			'success' => true

@@ -89,7 +89,7 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 
 		if (!$entry->hasErrors())
 		{
-			$form = craft()->sproutForms_forms->getFormById($entry->formId);
+			$form = sproutForms()->forms->getFormById($entry->formId);
 
 			// @warning
 			// Rendering an object template is context sensitive
@@ -146,7 +146,7 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 					if ($event->fakeIt)
 					{
 						// Pretend to submit the form even though it didn't submit
-						craft()->sproutForms_entries->fakeIt = true;
+						sproutForms()->entries->fakeIt = true;
 					}
 				}
 			}
@@ -228,9 +228,9 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 	{
 		// If a form has been submitted, use our existing EntryModel
 		// otherwise, create a new EntryModel
-		if (isset(craft()->sproutForms_forms->activeEntries[$form->handle]))
+		if (isset(sproutForms()->forms->activeEntries[$form->handle]))
 		{
-			return craft()->sproutForms_forms->activeEntries[$form->handle];
+			return sproutForms()->forms->activeEntries[$form->handle];
 		}
 
 		$entry = new SproutForms_EntryModel;

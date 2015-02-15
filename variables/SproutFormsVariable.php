@@ -50,8 +50,8 @@ class SproutFormsVariable
 	 */
 	public function displayForm($formHandle, $customSettings = null)
 	{
-		$form  = craft()->sproutForms_forms->getFormByHandle($formHandle);
-		$entry = craft()->sproutForms_entries->getEntryModel($form);
+		$form  = sproutForms()->forms->getFormByHandle($formHandle);
+		$entry = sproutForms()->entries->getEntryModel($form);
 
 		// Backup our field context and content table
 		$oldFieldContext = craft()->content->fieldContext;
@@ -70,10 +70,10 @@ class SproutFormsVariable
 		$fieldtypesFolder = craft()->path->getPluginsPath() . 'sproutforms/fields/';
 
 		// Create a list of the name, class, and file of fields we support 
-		$this->fields = craft()->sproutForms_fields->getSproutFormsFields($fieldtypesFolder);
+		$this->fields = sproutForms()->fields->getSproutFormsFields($fieldtypesFolder);
 
 		// Determine where our form and field template should come from
-		$this->templates = craft()->sproutForms_fields->getSproutFormsTemplates();
+		$this->templates = sproutForms()->fields->getSproutFormsTemplates();
 
 		// Set Tab template path
 		craft()->path->setTemplatesPath($this->templates['tab']);
@@ -120,8 +120,8 @@ class SproutFormsVariable
 
 		if (!$formHandle || !$tabHandle) return '';
 
-		$form  = craft()->sproutForms_forms->getFormByHandle($formHandle);
-		$entry = craft()->sproutForms_entries->getEntryModel($form);
+		$form  = sproutForms()->forms->getFormByHandle($formHandle);
+		$entry = sproutForms()->entries->getEntryModel($form);
 
 		// Backup our field context and content table
 		$oldFieldContext = craft()->content->fieldContext;
@@ -138,10 +138,10 @@ class SproutFormsVariable
 		$fieldtypesFolder = craft()->path->getPluginsPath() . 'sproutforms/fields/';
 
 		// Create a list of the name, class, and file of fields we support 
-		$this->fields = craft()->sproutForms_fields->getSproutFormsFields($fieldtypesFolder);
+		$this->fields = sproutForms()->fields->getSproutFormsFields($fieldtypesFolder);
 
 		// Determine where our form and field template should come from
-		$this->templates = craft()->sproutForms_fields->getSproutFormsTemplates();
+		$this->templates = sproutForms()->fields->getSproutFormsTemplates();
 
 		// Set Tab template path
 		craft()->path->setTemplatesPath($this->templates['tab']);
@@ -192,8 +192,8 @@ class SproutFormsVariable
 		list($formHandle, $fieldHandle) = explode('.', $formFieldHandle);
 		if (!$formHandle || !$fieldHandle) return '';
 
-		$form  = craft()->sproutForms_forms->getFormByHandle($formHandle);
-		$entry = craft()->sproutForms_entries->getEntryModel($form);
+		$form  = sproutForms()->forms->getFormByHandle($formHandle);
+		$entry = sproutForms()->entries->getEntryModel($form);
 
 		// Backup our field context and content table
 		$oldFieldContext = craft()->content->fieldContext;
@@ -207,7 +207,7 @@ class SproutFormsVariable
 		craft()->path->setTemplatesPath(craft()->path->getPluginsPath() . 'sproutforms/templates/_special/templates/');
 
 		// Determine where our form and field template should come from
-		$this->templates = craft()->sproutForms_fields->getSproutFormsTemplates();
+		$this->templates = sproutForms()->fields->getSproutFormsTemplates();
 
 		// Set Tab template path
 		craft()->path->setTemplatesPath($this->templates['field']);
@@ -243,7 +243,7 @@ class SproutFormsVariable
 		$fieldtypesFolder = craft()->path->getPluginsPath() . 'sproutforms/fields/';
 
 		// Create a list of the name, class, and file of fields we support 
-		$this->fields = craft()->sproutForms_fields->getSproutFormsFields($fieldtypesFolder);
+		$this->fields = sproutForms()->fields->getSproutFormsFields($fieldtypesFolder);
 
 		$fieldtype = craft()->fields->populateFieldType($field, $element);
 
@@ -267,7 +267,7 @@ class SproutFormsVariable
 			$value      = (isset($postFields[$field->handle]) ? $postFields[$field->handle] : "");
 
 			// Determine where our form and field template should come from
-			$this->templates = craft()->sproutForms_fields->getSproutFormsTemplates();
+			$this->templates = sproutForms()->fields->getSproutFormsTemplates();
 
 			// Set template path
 			craft()->path->setTemplatesPath($this->fields[$field->type]['templateFolder']);
@@ -302,7 +302,7 @@ class SproutFormsVariable
 		craft()->path->setTemplatesPath(craft()->path->getPluginsPath() . 'sproutforms/templates/_special/templates/');
 
 		// Determine where our form and field template should come from
-		$this->templates = craft()->sproutForms_fields->getSproutFormsTemplates();
+		$this->templates = sproutForms()->fields->getSproutFormsTemplates();
 
 		// Set Tab template path
 		craft()->path->setTemplatesPath($this->templates['field']);
@@ -318,7 +318,7 @@ class SproutFormsVariable
 	 */
 	public function getFormById($formId)
 	{
-		return craft()->sproutForms_forms->getFormById($formId);
+		return sproutForms()->forms->getFormById($formId);
 	}
 
 	/**
@@ -328,7 +328,7 @@ class SproutFormsVariable
 	 */
 	public function getAllForms()
 	{
-		return craft()->sproutForms_forms->getAllForms();
+		return sproutForms()->forms->getAllForms();
 	}
 
 	/**
@@ -339,7 +339,7 @@ class SproutFormsVariable
 	 */
 	public function getEntryById($id)
 	{
-		return craft()->sproutForms_entries->getEntryById($id);
+		return sproutForms()->entries->getEntryById($id);
 	}
 
 	/**
@@ -352,7 +352,7 @@ class SproutFormsVariable
 	{
 		if (craft()->httpSession->get('lastEntryId')) {
 			$entryId = craft()->httpSession->get('lastEntryId');
-			$entry   = craft()->sproutForms_entries->getEntryById($entryId);
+			$entry   = sproutForms()->entries->getEntryById($entryId);
 
 			craft()->httpSession->destroy('lastEntryId');
 		}
@@ -368,7 +368,7 @@ class SproutFormsVariable
 	 */
 	public function getAllFormGroups($id = null)
 	{
-		return craft()->sproutForms_groups->getAllFormGroups($id);
+		return sproutForms()->groups->getAllFormGroups($id);
 	}
 
 	/**
@@ -379,7 +379,7 @@ class SproutFormsVariable
 	 */
 	public function getFormsByGroupId($groupId)
 	{
-		return craft()->sproutForms_groups->getFormsByGroupId($groupId);
+		return sproutForms()->groups->getFormsByGroupId($groupId);
 	}
 
 	/**
@@ -393,7 +393,7 @@ class SproutFormsVariable
 	 */
 	public function prepareFieldTypesDropdown($fieldTypes)
 	{
-		return craft()->sproutForms_fields->prepareFieldTypesDropdown($fieldTypes);
+		return sproutForms()->fields->prepareFieldTypesDropdown($fieldTypes);
 	}
 
 	public function multiStepForm($settings)

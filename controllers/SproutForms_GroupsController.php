@@ -17,7 +17,7 @@ class SproutForms_GroupsController extends BaseController
 		
 		$isNewGroup = empty($group->id);
 
-		if (craft()->sproutForms_groups->saveGroup($group))
+		if (sproutForms()->groups->saveGroup($group))
 		{	
 			if ($isNewGroup)
 			{
@@ -46,7 +46,7 @@ class SproutForms_GroupsController extends BaseController
 		$this->requireAjaxRequest();
 
 		$groupId = craft()->request->getRequiredPost('id');
-		$success = craft()->sproutForms_groups->deleteGroupById($groupId);
+		$success = sproutForms()->groups->deleteGroupById($groupId);
 
 		craft()->userSession->setNotice(Craft::t('Group deleted.'));
 

@@ -174,11 +174,19 @@ class SproutFormsPlugin extends BasePlugin
 	 */
 	public function onBeforeUninstall()
 	{
-		$forms = craft()->sproutForms_forms->getAllForms();
+		$forms = sproutForms()->forms->getAllForms();
 
 		foreach ($forms as $form) 
 		{
-			craft()->sproutForms_forms->deleteForm($form);
+			sproutForms()->forms->deleteForm($form);
 		}
 	}
+}
+
+/**
+ * @return SproutFormsService
+ */
+function sproutForms()
+{
+	return Craft::app()->getComponent('sproutForms');
 }

@@ -269,7 +269,7 @@ class SproutForms_ExamplesController extends BaseController
 				$form->displaySectionTitles = $settings['displaySectionTitles'];
 
 				// Create the Form
-				craft()->sproutForms_forms->saveForm($form);
+				sproutForms()->forms->saveForm($form);
 				
 				// Set our field context
 				craft()->content->fieldContext = $form->getFieldContext();
@@ -315,7 +315,7 @@ class SproutForms_ExamplesController extends BaseController
 				$form->setFieldLayout($fieldLayout);
 
 				// Save our form again with a layouts
-				craft()->sproutForms_forms->saveForm($form);
+				sproutForms()->forms->saveForm($form);
 			}
 		}
 		catch (\Exception $e)

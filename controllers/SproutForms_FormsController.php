@@ -60,7 +60,7 @@ class SproutForms_FormsController extends BaseController
 		}
 		
 		// Save it
-		if (craft()->sproutForms_forms->saveForm($form))
+		if (sproutForms()->forms->saveForm($form))
 		{
 			craft()->userSession->setNotice(Craft::t('Form saved.'));
 
@@ -110,7 +110,7 @@ class SproutForms_FormsController extends BaseController
 		// 		$form->handle = "form".$newFormNumber;	
 		// 	}
 			
-		// 	if (craft()->sproutForms_forms->saveForm($form)) 
+		// 	if (sproutForms()->forms->saveForm($form))
 		// 	{
 		// 		$url = UrlHelper::getCpUrl('sproutforms/forms/edit/'.$form->id.'#overview');
 		// 		$this->redirect($url);
@@ -123,13 +123,13 @@ class SproutForms_FormsController extends BaseController
 		
 		$variables['brandNewForm'] = false;
 		
-		$variables['groups'] = craft()->sproutForms_groups->getAllFormGroups();
+		$variables['groups'] = sproutForms()->groups->getAllFormGroups();
 		$variables['groupId'] = "";
 
 		if (isset($variables['formId']))
 		{
 			// Get the Form
-			$form = craft()->sproutForms_forms->getFormById($variables['formId']);
+			$form = sproutForms()->forms->getFormById($variables['formId']);
 
 			$variables['form'] = $form;
 			$variables['title'] = $form->name;
@@ -166,10 +166,10 @@ class SproutForms_FormsController extends BaseController
 		
 		// Get the Form these fields are related to
 		$formId = craft()->request->getRequiredPost('id');
-		$form = craft()->sproutForms_forms->getFormById($formId);
+		$form = sproutForms()->forms->getFormById($formId);
 		
 		// @TODO - handle errors
-		$success = craft()->sproutForms_forms->deleteForm($form);
+		$success = sproutForms()->forms->deleteForm($form);
 
 		$this->redirectToPostedUrl($form);
 	}

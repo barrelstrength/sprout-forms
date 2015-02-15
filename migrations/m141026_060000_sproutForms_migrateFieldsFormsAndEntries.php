@@ -53,7 +53,7 @@ class m141026_060000_sproutForms_migrateFieldsFormsAndEntries extends BaseMigrat
 
 			// Save the Form
 			// Create a new content table			
-			craft()->sproutForms_forms->saveForm($newForm);
+			sproutForms()->forms->saveForm($newForm);
 
 			SproutFormsPlugin::log($newForm->name . " Form saved anew. Form ID: " . $newForm->id, LogLevel::Info, true);
 
@@ -135,7 +135,7 @@ class m141026_060000_sproutForms_migrateFieldsFormsAndEntries extends BaseMigrat
 			$newForm->setFieldLayout($fieldLayout);
 
 			// Save our form again with a layouts
-			craft()->sproutForms_forms->saveForm($newForm);
+			sproutForms()->forms->saveForm($newForm);
 
 			SproutFormsPlugin::log("Form saved again with fieldLayout", LogLevel::Info, true);
 
@@ -198,7 +198,7 @@ class m141026_060000_sproutForms_migrateFieldsFormsAndEntries extends BaseMigrat
 
 	    	SproutFormsPlugin::log("Try to Save Old Form Entry ID ". $oldFormEntry['id'], LogLevel::Info, true);
 
-	    	craft()->sproutForms_entries->saveEntry($newFormEntry);
+	    	sproutForms()->entries->saveEntry($newFormEntry);
 
 	    	SproutFormsPlugin::log("Save New Form Entry ID ". $newFormEntry->id, LogLevel::Info, true);
 	    }
