@@ -51,14 +51,6 @@ class SproutFormsVariable
 		$form = craft()->sproutForms_forms->getFormByHandle($formHandle);
 		$entry = craft()->sproutForms_entries->getEntryModel($form);
 
-		// Backup our field context and content table
-		$oldFieldContext = craft()->content->fieldContext;
-		$oldContentTable = craft()->content->contentTable;
-
-		// Set our field content and content table to work with our form output
-		craft()->content->fieldContext = $form->getFieldContext();
-		craft()->content->contentTable = $form->getContentTable();
-
 		$this->settings = craft()->plugins->getPlugin('sproutforms')->getSettings();
 		
 		// Set our Sprout Forms Front-end Form Template path
@@ -96,10 +88,6 @@ class SproutFormsVariable
 		));
 
 		craft()->path->setTemplatesPath(craft()->path->getSiteTemplatesPath());
-
-		// Reset our field context and content table to what they were previously
-		craft()->content->fieldContext = $oldFieldContext;
-		craft()->content->contentTable = $oldContentTable;
 		
 		return new \Twig_Markup($formHtml, craft()->templates->getTwig()->getCharset());
 	}
@@ -111,14 +99,6 @@ class SproutFormsVariable
 
 		$form = craft()->sproutForms_forms->getFormByHandle($formHandle);
 		$entry = craft()->sproutForms_entries->getEntryModel($form);
-
-		// Backup our field context and content table
-		$oldFieldContext = craft()->content->fieldContext;
-		$oldContentTable = craft()->content->contentTable;
-
-		// Set our field content and content table to work with our form output
-		craft()->content->fieldContext = $form->getFieldContext();
-		craft()->content->contentTable = $form->getContentTable();
 
 		// Set our Sprout Forms Front-end Form Template path
 		craft()->path->setTemplatesPath(craft()->path->getPluginsPath() . 'sproutforms/templates/_special/templates/');	
@@ -165,10 +145,6 @@ class SproutFormsVariable
 
 		craft()->path->setTemplatesPath(craft()->path->getSiteTemplatesPath());
 
-		// Reset our field context and content table to what they were previously
-		craft()->content->fieldContext = $oldFieldContext;
-		craft()->content->contentTable = $oldContentTable;
-
 		return new \Twig_Markup($tabHtml, craft()->templates->getTwig()->getCharset());
 	}
 
@@ -185,14 +161,6 @@ class SproutFormsVariable
 
 		$form = craft()->sproutForms_forms->getFormByHandle($formHandle);
 		$entry = craft()->sproutForms_entries->getEntryModel($form);
-
-		// Backup our field context and content table
-		$oldFieldContext = craft()->content->fieldContext;
-		$oldContentTable = craft()->content->contentTable;
-
-		// Set our field content and content table to work with our form output
-		craft()->content->fieldContext = $form->getFieldContext();
-		craft()->content->contentTable = $form->getContentTable();
 
 		// Set our Sprout Forms Front-end Form Template path
 		craft()->path->setTemplatesPath(craft()->path->getPluginsPath() . 'sproutforms/templates/_special/templates/');	
@@ -222,10 +190,6 @@ class SproutFormsVariable
 		}
 
 		craft()->path->setTemplatesPath(craft()->path->getSiteTemplatesPath());
-		
-		// Reset our field context and content table to what they were previously
-		craft()->content->fieldContext = $oldFieldContext;
-		craft()->content->contentTable = $oldContentTable;
 
 		return new \Twig_Markup($fieldHtml, craft()->templates->getTwig()->getCharset());
 	}
