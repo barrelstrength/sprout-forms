@@ -10,7 +10,7 @@
 {% else %}
 
 {# Submit form to Sprout Forms #}
-<form method="post" accept-charset="UTF-8">
+<form method="post" accept-charset="UTF-8" enctype="multipart/form-data">
 	{{ getCsrfInput() }}
 	<input type="hidden" name="action" value="{{ submitAction }}">
 	<input type="hidden" name="handle" value="{{ form.handle }}">
