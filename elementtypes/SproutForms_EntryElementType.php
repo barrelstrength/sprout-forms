@@ -90,8 +90,6 @@ class SproutForms_EntryElementType extends BaseElementType
 			}
 		}
 
-		usort($prepSources, 'self::_sortByGroupName');
-
 		// Build our sources for forms with no group
 		foreach ($noSources as $form)
 		{
