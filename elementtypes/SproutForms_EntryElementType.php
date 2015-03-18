@@ -189,7 +189,7 @@ class SproutForms_EntryElementType extends BaseElementType
 		return array(
 			'title'			=> AttributeType::String,
 			'formId'		=> AttributeType::Number,
-			'formName'		=> AttributeType::String,
+			'formHandle'	=> AttributeType::String,
 			'formGroupId'	=> AttributeType::Number,
 		);
 	}
@@ -238,6 +238,10 @@ class SproutForms_EntryElementType extends BaseElementType
 		if ($criteria->formId)
 		{
 			$query->andWhere(DbHelper::parseParam('entries.formId', $criteria->formId, $query->params));
+		}
+		if ($criteria->formHandle)
+		{
+			$query->andWhere(DbHelper::parseParam('forms.handle', $criteria->formHandle, $query->params));
 		}
 		if ($criteria->order)
 		{

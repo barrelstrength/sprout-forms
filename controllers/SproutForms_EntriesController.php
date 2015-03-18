@@ -35,7 +35,7 @@ class SproutForms_EntriesController extends BaseController
 		}
 
 		$entry = $this->_getEntryModel();
-		
+
 		// Our SproutForms_EntryModel requires that we assign it a SproutForms_FormModel
 		$entry->formId = $this->form->id;
 
@@ -48,7 +48,7 @@ class SproutForms_EntriesController extends BaseController
 		$this->form->notificationSenderName   = craft()->templates->renderObjectTemplate($this->form->notificationSenderName, $entry);
 		$this->form->notificationSenderEmail  = craft()->templates->renderObjectTemplate($this->form->notificationSenderEmail, $entry);
 		$this->form->notificationReplyToEmail = craft()->templates->renderObjectTemplate($this->form->notificationReplyToEmail, $entry);
-		
+
 		if (sproutForms()->entries->saveEntry($entry))
 		{
 			// Only send notification email for front-end submissions
@@ -66,7 +66,7 @@ class SproutForms_EntriesController extends BaseController
 				// Store our new entry so we can recreate the Entry object on our thank you page
 				craft()->httpSession->add('lastEntryId', $entry->id);
 			}
-			
+
 			if (craft()->request->isAjaxRequest())
 			{
 				$return['success'] = true;
@@ -239,26 +239,19 @@ class SproutForms_EntriesController extends BaseController
 	/**
 	 * Notify admin
 	 *
-	 * @param object $form
-	 * @param object $field
-	 *
-	 * @return bool
+	 * @param SproutForms_FormModel $form
+	 * @param SproutForms_EntryModel $entry
 	 */
 	private function _notifyAdmin(SproutForms_FormModel $form, SproutForms_EntryModel $entry)
 	{
 		// Get our recipients
-		$recipients = explode(',', $form->notificationRecipients);
-		$recipients = array_map('trim', $recipients);
+		$recipients = ArrayHelper::stringToArray($form->notificationRecipients);
 		$recipients = array_unique($recipients);
 
-		if ($recipients)
+		if (count($recipients))
 		{
-			$email = new EmailModel();
-
-			// $entryCpUrl = craft()->config->get('cpTrigger') . "/sproutforms/entries/edit/" . $entry->id;
-
-			$fields = $entry->getFieldLayout()->getFields();
-
+			$email                  = new EmailModel();
+			$fields                 = $entry->getFieldLayout()->getFields();
 			$settings               = craft()->plugins->getPlugin('sproutforms')->getSettings();
 			$templateFolderOverride = $settings->templateFolderOverride;
 
@@ -266,13 +259,13 @@ class SproutForms_EntriesController extends BaseController
 
 			if ($templateFolderOverride)
 			{
-				$emailTemplateFile = craft()->path->getSiteTemplatesPath().$templateFolderOverride."/email";
+				$emailTemplateFile = craft()->path->getSiteTemplatesPath().$templateFolderOverride.'/email';
 
 				foreach (craft()->config->get('defaultTemplateExtensions') as $extension)
 				{
-					if (IOHelper::fileExists($emailTemplateFile.".".$extension))
+					if (IOHelper::fileExists($emailTemplateFile.'.'.$extension))
 					{
-						$emailTemplate = craft()->path->getSiteTemplatesPath().$templateFolderOverride."/";
+						$emailTemplate = craft()->path->getSiteTemplatesPath().$templateFolderOverride.'/';
 					}
 				}
 			}
@@ -283,7 +276,6 @@ class SproutForms_EntriesController extends BaseController
 			$email->htmlBody = craft()->templates->render(
 				'email', array(
 					'formName' => $form->name,
-					// 'entryCpUrl' => $entryCpUrl,
 					'fields'   => $fields,
 					'element'  => $entry
 				)
@@ -291,12 +283,8 @@ class SproutForms_EntriesController extends BaseController
 
 			craft()->path->setTemplatesPath(craft()->path->getCpTemplatesPath());
 
-			// @TODO - create fallback text email
-			// $email->body     = $form->body;
-
 			$post = (object) $_POST;
 
-			// Set the "from" information.
 			$email->fromEmail = $form->notificationSenderEmail;
 			$email->fromName  = $form->notificationSenderName;
 			$email->subject   = $form->notificationSubject;
@@ -306,15 +294,11 @@ class SproutForms_EntriesController extends BaseController
 			{
 				try
 				{
-					$email->subject = craft()->templates->renderString(
-						$form->notificationSubject, array(
-							'entry' => $post
-						)
-					);
+					$email->subject = craft()->templates->renderObjectTemplate($form->notificationSubject, $post);
 				}
 				catch (\Exception $e)
 				{
-					// do nothing;  retain default subj
+					SproutFormsPlugin::log($e->getMessage(), LogLevel::Error);
 				}
 			}
 
@@ -323,15 +307,8 @@ class SproutForms_EntriesController extends BaseController
 			{
 				try
 				{
+					$email->replyTo = craft()->templates->renderObjectTemplate($form->notificationReplyToEmail, $post);
 
-					$email->replyTo = craft()->templates->renderString(
-						$form->notificationReplyToEmail, array(
-							'entry' => $post
-						)
-					);
-
-					// we must validate this before attempting to send; 
-					// invalid email will throw an error/fail to send silently
 					if (!$this->_validEmail($email->replyTo))
 					{
 						$email->replyTo = null;
@@ -339,39 +316,26 @@ class SproutForms_EntriesController extends BaseController
 				}
 				catch (\Exception $e)
 				{
-					// do nothing;  replyTo will not be included
+					SproutFormsPlugin::log($e->getMessage(), LogLevel::Error);
 				}
 			}
 
-			$error = false;
 			foreach ($recipients as $emailAddress)
 			{
-				// Do we need to swap in any email addresses that 
-				// were submitted with the form?
-				$email->toEmail = craft()->templates->renderString(
-					$emailAddress, array(
-						'entry' => $post
-					)
-				);
-
-				// we must validate this before attempting to send;
-				// invalid email will throw an error/fail to send silently
-				if (!$this->_validEmail($email->toEmail))
-				{
-					continue;
-				}
-
 				try
 				{
-					$res = craft()->email->sendEmail($email);
+					$email->toEmail = craft()->templates->renderObjectTemplate($emailAddress, $post);
+
+					if ($this->_validEmail($email->toEmail))
+					{
+						craft()->email->sendEmail($email);
+					}
 				}
 				catch (\Exception $e)
 				{
-					$error = true;
+					SproutFormsPlugin::log($e->getMessage(), LogLevel::Error);
 				}
 			}
-
-			return $error;
 		}
 	}
 

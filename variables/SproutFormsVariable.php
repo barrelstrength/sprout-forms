@@ -17,6 +17,16 @@ class SproutFormsVariable
 	public $isNakedField;
 
 	/**
+	 * @var ElementCriteriaModel
+	 */
+	public $entries;
+
+	public function __construct()
+	{
+		$this->entries = craft()->elements->getCriteria('SproutForms_Entry');
+	}
+
+	/**
 	 * Plugin Name
 	 * Make your plugin name available as a variable
 	 * in your templates as {{ craft.YourPlugin.name }}
@@ -96,13 +106,6 @@ class SproutFormsVariable
 
 	public function displayTab($formTabHandle)
 	{
-		//		unset($_SESSION['multiStepForm']);
-		//		unset($_SESSION['lastEntryId']);
-		SproutFormsPlugin::log("displayTab multiStepForm: " . (isset($_SESSION['totalSteps']) ?
-				$_SESSION['totalSteps'] : null));
-		SproutFormsPlugin::log("displayTab lastEntryId: " . (isset($_SESSION['currentStep']) ?
-				$_SESSION['currentStep'] : null));
-
 		list($formHandle, $tabHandle) = explode('.', $formTabHandle);
 		$tabHandle = strtolower($tabHandle);
 
