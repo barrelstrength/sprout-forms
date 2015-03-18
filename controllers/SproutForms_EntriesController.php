@@ -24,7 +24,7 @@ class SproutForms_EntriesController extends BaseController
 		$this->requirePostRequest();
 
 		// Triggers loading of environment (globals) before context switching
-		craft()->templates->renderObjectTemplate('{env}', array('env' => true));
+		// craft()->templates->renderObjectTemplate('{env}', array('env' => true));
 
 		$formHandle = craft()->request->getRequiredPost('handle');
 		$this->form = sproutForms()->forms->getFormByHandle($formHandle);
@@ -34,14 +34,8 @@ class SproutForms_EntriesController extends BaseController
 			throw new Exception(Craft::t('No form exists with the handle “{handle}”', array('handle' => $formHandle)));
 		}
 
-		// Switching context to let craft know about our custom entry content
-		$oldFieldContext               = craft()->content->fieldContext;
-		$oldContentTable               = craft()->content->contentTable;
-		craft()->content->fieldContext = $this->form->getFieldContext();
-		craft()->content->contentTable = $this->form->getContentTable();
-
 		$entry = $this->_getEntryModel();
-
+		
 		// Our SproutForms_EntryModel requires that we assign it a SproutForms_FormModel
 		$entry->formId = $this->form->id;
 
@@ -54,7 +48,7 @@ class SproutForms_EntriesController extends BaseController
 		$this->form->notificationSenderName   = craft()->templates->renderObjectTemplate($this->form->notificationSenderName, $entry);
 		$this->form->notificationSenderEmail  = craft()->templates->renderObjectTemplate($this->form->notificationSenderEmail, $entry);
 		$this->form->notificationReplyToEmail = craft()->templates->renderObjectTemplate($this->form->notificationReplyToEmail, $entry);
-
+		
 		if (sproutForms()->entries->saveEntry($entry))
 		{
 			// Only send notification email for front-end submissions
@@ -102,10 +96,6 @@ class SproutForms_EntriesController extends BaseController
 			}
 			else
 			{
-				// Switching context back so any final rendering has proper context
-				craft()->content->fieldContext = $oldFieldContext;
-				craft()->content->contentTable = $oldContentTable;
-
 				if (craft()->request->isCpRequest())
 				{
 					// make errors available to variable
@@ -419,10 +409,6 @@ class SproutForms_EntriesController extends BaseController
 		}
 
 		$form = sproutForms()->forms->getFormById($entry->formId);
-
-		// Set our Entry's Field Context and Content Table
-		craft()->content->fieldContext = $form->getFieldContext();
-		craft()->content->contentTable = $form->getContentTable();
 
 		$variables['form']    = $form;
 		$variables['entryId'] = $entryId;

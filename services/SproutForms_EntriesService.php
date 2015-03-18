@@ -69,7 +69,6 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 		$entryRecord->validate();
 		$entry->addErrors($entryRecord->getErrors());
 
-
 		// ------------------------------------------------------------
 		// Fire 'onBeforeSaveEntry' Event
 		// ------------------------------------------------------------
@@ -89,6 +88,7 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 
 		if (!$entry->hasErrors())
 		{
+
 			$form = sproutForms()->forms->getFormById($entry->formId);
 
 			// @warning
@@ -101,7 +101,21 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 			{
 				if ($event->isValid)
 				{
-					if (craft()->elements->saveElement($entry))
+					// // Backup our field context and content table
+					$oldFieldContext = craft()->content->fieldContext;
+					$oldContentTable = craft()->content->contentTable;
+
+					// Set our field content and content table to work with our form output
+					craft()->content->fieldContext = $entry->getFieldContext();
+					craft()->content->contentTable = $entry->getContentTable();
+
+					SproutFormsPlugin::log("Transaction: Event is Valid");
+
+					$success = craft()->elements->saveElement($entry);
+
+					SproutFormsPlugin::log("Element Saved: ". $success);
+
+					if ($success)
 					{
 						// Now that we have an element ID, save it on the other stuff
 						if ($isNewEntry)
@@ -115,6 +129,8 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 						if ($transaction !== null)
 						{
 							$transaction->commit();
+
+							SproutFormsPlugin::log("Transaction committed");
 						}
 
 						// ------------------------------------------------------------
@@ -136,13 +152,22 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 
 						craft()->sproutForms->onSaveEntry($event);
 
-						// ------------------------------------------------------------
-
+						// Reset our field context and content table to what they were previously
+						craft()->content->fieldContext = $oldFieldContext;
+						craft()->content->contentTable = $oldContentTable;
+						
 						return true;
 					}
+
+					// @TODO - rework this code so we don't need to unset these things twice
+					// Reset our field context and content table to what they were previously
+					craft()->content->fieldContext = $oldFieldContext;
+					craft()->content->contentTable = $oldContentTable;
 				}
 				else
 				{
+					SproutFormsPlugin::log("OnBeforeSaveEntryEvent is not valid", LogLevel::Error);
+
 					if ($event->fakeIt)
 					{
 						// Pretend to submit the form even though it didn't submit
@@ -152,11 +177,14 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 			}
 			catch (\Exception $e)
 			{
+				SproutFormsPlugin::log("Failed to save element");
 
 				throw $e;
 			}
 		}
 
+		SproutFormsPlugin::log("Service returns false");
+		
 		return false;
 	}
 
