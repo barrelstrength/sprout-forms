@@ -77,7 +77,7 @@ class SproutForms_EntriesController extends BaseController
 			{
 				craft()->userSession->setNotice(Craft::t('Entry saved.'));
 
-				$this->redirectToPostedUrl();
+				$this->doSmartRedirect();
 			}
 		}
 		else
@@ -116,7 +116,7 @@ class SproutForms_EntriesController extends BaseController
 				{
 					if (sproutForms()->entries->fakeIt)
 					{
-						$this->redirectToPostedUrl();
+						$this->doSmartRedirect();
 					}
 					else
 					{
@@ -384,5 +384,19 @@ class SproutForms_EntriesController extends BaseController
 		$variables['tabs'] = $entry->getFieldLayout()->getTabs();
 
 		$this->renderTemplate('sproutforms/entries/_edit', $variables);
+	}
+
+	/**
+	 * Parses supported {placeholders} in redirect URL before redirecting
+	 */
+	public function doSmartRedirect()
+	{
+		$siteUrl = craft()->config->get('siteUrl');
+
+		$vars = array(
+			'siteUrl' => !empty($siteUrl) ? $siteUrl : craft()->getSiteUrl()
+		);
+
+		$this->redirectToPostedUrl($vars);
 	}
 }
