@@ -182,10 +182,12 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 				throw $e;
 			}
 		}
-
-		SproutFormsPlugin::log("Service returns false");
+		else
+		{	
+			SproutFormsPlugin::log("Service returns false");
 		
-		return false;
+			return false;
+		}
 	}
 
 	/**
