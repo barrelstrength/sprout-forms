@@ -43,7 +43,17 @@ class SproutForms_FieldsController extends BaseController
 		// Does our field validate?
 		if (!craft()->fields->validateField($field)) 
 		{
-			return false;
+			SproutFormsPlugin::log("Field does not validate.");
+
+			// Send the field back to the template
+			craft()->urlManager->setRouteVariables(array(
+				'field' => $field
+			));
+
+			// Route our request back to the field template
+			$route = craft()->urlManager->parseUrl(craft()->request);
+			craft()->runController($route);
+			craft()->end();
 		}
 
 		// Save a new field
