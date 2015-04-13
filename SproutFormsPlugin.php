@@ -5,15 +5,15 @@ class SproutFormsPlugin extends BasePlugin
 {
 	public function getName()
 	{
-		$pluginName	= Craft::t('Sprout Forms');
-		$pluginNameOverride	= $this->getSettings()->pluginNameOverride;
+		$pluginName         = Craft::t('Sprout Forms');
+		$pluginNameOverride = $this->getSettings()->pluginNameOverride;
 
 		return ($pluginNameOverride) ? $pluginNameOverride : $pluginName;
 	}
 
 	public function getVersion()
 	{
-		return '0.8.7';
+		return '0.8.8';
 	}
 
 	public function getDeveloper()
@@ -35,11 +35,11 @@ class SproutFormsPlugin extends BasePlugin
 	{
 		Craft::import('plugins.sproutforms.fields.ISproutFormsFieldType');
 		Craft::import('plugins.sproutforms.fields.BaseSproutFormsFieldType');
+
+		craft()->on('email.onBeforeSendEmail', array(sproutForms(), 'handleOnBeforeSendEmail'));
 	}
 
 	/**
-	 * Define plugin settings
-	 * 
 	 * @return array
 	 */
 	protected function defineSettings()
@@ -60,30 +60,27 @@ class SproutFormsPlugin extends BasePlugin
 			 * @method     actionEditFormTemplate
 			 * @template   sproutforms/templates/forms/_editForm.html
 			 */
-			'sproutforms/forms/new' => array(
+			'sproutforms/forms/new'                                          => array(
 				'action' => 'sproutForms/forms/editFormTemplate'
 			),
-
 			/*
 			 * Create New Form
 			 * @controller SproutForms_FormsController
 			 * @method     actionEditFormTemplate
 			 * @template   sproutforms/templates/forms/_editForm.html
 			 */
-			'sproutforms/forms/edit/(?P<formId>\d+)' => array(
+			'sproutforms/forms/edit/(?P<formId>\d+)'                         => array(
 				'action' => 'sproutForms/forms/editFormTemplate'
 			),
-
 			/*
 			 * Create New Field
 			 * @controller SproutForms_FieldsController
 			 * @method     actionEditFieldTemplate
 			 * @template   sproutforms/templates/forms/_editField.html
 			 */
-			'sproutforms/forms/(?P<formId>\d+)/fields/new' => array(
-					'action' => 'sproutForms/fields/editFieldTemplate'
+			'sproutforms/forms/(?P<formId>\d+)/fields/new'                   => array(
+				'action' => 'sproutForms/fields/editFieldTemplate'
 			),
-
 			/*
 			 * Edit Field
 			 * @controller SproutForms_FieldsController
@@ -91,40 +88,36 @@ class SproutFormsPlugin extends BasePlugin
 			 * @template   sproutforms/templates/forms/_editField.html
 			 */
 			'sproutforms/forms/(?P<formId>\d+)/fields/edit/(?P<fieldId>\d+)' => array(
-					'action' => 'sproutForms/fields/editFieldTemplate'
+				'action' => 'sproutForms/fields/editFieldTemplate'
 			),
-
 			/*
 			 * Edit Entry
 			 * @controller SproutForms_EntriesController
 			 * @method     actionEditEntryTemplate
 			 * @template   sproutforms/templates/entries/_edit.html
 			 */
-			'sproutforms/entries/edit/(?P<entryId>\d+)' => array(
+			'sproutforms/entries/edit/(?P<entryId>\d+)'                      => array(
 				'action' => 'sproutForms/entries/editEntryTemplate'
 			),
-
 			/*
 			 * Edit Settings
 			 * @controller SproutSeo_SettingsController
 			 * @method     actionSettingsIndexTemplate
 			 * @template   sproutforms/templates/settings/index.html
 			 */
-			'sproutforms/settings' => array(
+			'sproutforms/settings'                                           => array(
 				'action' => 'sproutForms/settings/settingsIndexTemplate'
 			),
-
 			/*
 			 * Filter Forms by Group
 			 */
-			'sproutforms/forms/(?P<groupId>\d+)' => 
-			'sproutforms/forms',
-
+			'sproutforms/forms/(?P<groupId>\d+)'                             =>
+				'sproutforms/forms',
 			/*
 			 * Example Form installation page
 			 */
-			'sproutforms/examples' => 
-			'sproutforms/_cp/examples',
+			'sproutforms/examples'                                           =>
+				'sproutforms/_cp/examples',
 
 		);
 	}
@@ -132,7 +125,7 @@ class SproutFormsPlugin extends BasePlugin
 	public function registerUserPermissions()
 	{
 		return array(
-			'editSproutFormsSettings'	=> array(
+			'editSproutFormsSettings' => array(
 				'label' => Craft::t('Edit Form Settings')
 			)
 		);
@@ -141,7 +134,7 @@ class SproutFormsPlugin extends BasePlugin
 	/**
 	 * Event registrar
 	 *
-	 * @param string $event
+	 * @param string   $event
 	 * @param \Closure $callback
 	 *
 	 * @deprecate Deprecated for version 0.9.0 in favour of defineSproutEmailEvents()
@@ -153,30 +146,30 @@ class SproutFormsPlugin extends BasePlugin
 			case 'saveEntry':
 			{
 				// only event supported at this time
-				craft()->on( 'sproutForms.saveEntry' , $callback);
+				craft()->on('sproutForms.saveEntry', $callback);
 				break;
 			}
 		}
 	}
 
 	/**
-	 * Install examples after installation
-	 * 
+	 * Redirects to examples after installation
+	 *
 	 * @return void
 	 */
 	public function onAfterInstall()
 	{
-		craft()->request->redirect(UrlHelper::getCpUrl() . '/sproutforms/examples');
+		craft()->request->redirect(UrlHelper::getCpUrl().'/sproutforms/examples');
 	}
 
 	/**
-	 * Perform any actions before the plugin gets uninstalled.
+	 * @throws \Exception
 	 */
 	public function onBeforeUninstall()
 	{
 		$forms = sproutForms()->forms->getAllForms();
 
-		foreach ($forms as $form) 
+		foreach ($forms as $form)
 		{
 			sproutForms()->forms->deleteForm($form);
 		}

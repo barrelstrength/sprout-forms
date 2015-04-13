@@ -4,16 +4,19 @@ namespace Craft;
 class SproutForms_EntriesController extends BaseController
 {
 	/**
-	 * Allow anonymous execution
+	 * Allows anonymous execution
 	 *
 	 * @var bool
 	 */
 	protected $allowAnonymous = array('actionSaveEntry');
 
+	/**
+	 * @var SproutForms_FormModel
+	 */
 	public $form;
 
 	/**
-	 * Process form submission
+	 * Processes form submissions
 	 *
 	 * @throws Exception
 	 * @throws HttpException
@@ -22,9 +25,6 @@ class SproutForms_EntriesController extends BaseController
 	public function actionSaveEntry()
 	{
 		$this->requirePostRequest();
-
-		// Triggers loading of environment (globals) before context switching
-		// craft()->templates->renderObjectTemplate('{env}', array('env' => true));
 
 		$formHandle = craft()->request->getRequiredPost('handle');
 		$this->form = sproutForms()->forms->getFormByHandle($formHandle);
@@ -309,7 +309,7 @@ class SproutForms_EntriesController extends BaseController
 				{
 					$email->replyTo = craft()->templates->renderObjectTemplate($form->notificationReplyToEmail, $post);
 
-					if (!$this->_validEmail($email->replyTo))
+					if (!filter_var($email->replyTo, FILTER_VALIDATE_EMAIL))
 					{
 						$email->replyTo = null;
 					}
@@ -326,9 +326,9 @@ class SproutForms_EntriesController extends BaseController
 				{
 					$email->toEmail = craft()->templates->renderObjectTemplate($emailAddress, $post);
 
-					if ($this->_validEmail($email->toEmail))
+					if (filter_var($email->toEmail, FILTER_VALIDATE_EMAIL))
 					{
-						craft()->email->sendEmail($email);
+						craft()->email->sendEmail($email, array('sproutFormsEntry' => $entry));
 					}
 				}
 				catch (\Exception $e)
@@ -337,18 +337,6 @@ class SproutForms_EntriesController extends BaseController
 				}
 			}
 		}
-	}
-
-	/**
-	 * Validate email address
-	 *
-	 * @param  string $email recipient list email
-	 *
-	 * @return bool          true/false
-	 */
-	private function _validEmail($email)
-	{
-		return preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $email);
 	}
 
 	/**
