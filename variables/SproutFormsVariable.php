@@ -92,6 +92,9 @@ class SproutFormsVariable
 		// Check if we need to update our Front-end Form Template Path
 		craft()->path->setTemplatesPath($this->templates['form']);
 
+		// Process any environmental variables in our redirect value
+		$form->redirectUri = craft()->config->parseEnvironmentString($form->redirectUri);
+
 		// Build our complete form
 		$formHtml = craft()->templates->render('form', array(
 			'form'   => $form,
