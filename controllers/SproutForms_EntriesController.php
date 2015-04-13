@@ -251,7 +251,7 @@ class SproutForms_EntriesController extends BaseController
 		if (count($recipients))
 		{
 			$email                  = new EmailModel();
-			$fields                 = $entry->getFieldLayout()->getFields();
+			$tabs                   = $form->getFieldLayout()->getTabs();
 			$settings               = craft()->plugins->getPlugin('sproutforms')->getSettings();
 			$templateFolderOverride = $settings->templateFolderOverride;
 
@@ -276,7 +276,7 @@ class SproutForms_EntriesController extends BaseController
 			$email->htmlBody = craft()->templates->render(
 				'email', array(
 					'formName' => $form->name,
-					'fields'   => $fields,
+					'tabs'     => $tabs,
 					'element'  => $entry
 				)
 			);

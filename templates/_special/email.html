@@ -27,34 +27,56 @@
               <table>
                 <tr>
                   <td style="border-top:1px solid #eee;border-bottom:1px solid #eee;background-color:#fefefe;width:600px;">
-                    <table>
 
-                      {% for field in fields %}
-                        
-                        {% set field = field.getField() %}
-                        {% set value = attribute(element, field.handle) %}
+                      {% for tab in tabs %}
 
-                        <p>
-                          <strong>{{ field.name }}</strong><br/>  
-                          
-                          {% if value is not iterable and value is not empty %}
-                            
-                            {{ value }}
-                          
-                          {% else %}
+		                  <table>
+			                  <tr>
+				                  <td>
 
-                            <ul style="margin-left:0;">
-                            {% for item in value %}
-                              <li>{{ item }}</li>
-                            {% endfor %}
-                            </ul>
-                          
-                          {% endif %}
-                        </p>
-                        
+	                        {% set fields = tab.getFields() %}
+
+		                      {% for field in fields %}
+
+		                        {% set field = field.getField() %}
+		                        {% set value = attribute(element, field.handle) %}
+
+														{% if tabs|length > 1 %}
+														<p><strong>{{ tab.name }}</strong></p>
+		                        {% endif %}
+
+		                        <p>
+		                          <strong>{{ field.name }}</strong><br/>
+
+		                          {% if value is not iterable and value is not empty %}
+
+		                            {{ value }}
+
+		                          {% else %}
+
+		                            <ul style="margin-left:0;">
+		                            {% for item in value %}
+		                              <li>{{ item }}</li>
+		                            {% endfor %}
+		                            </ul>
+
+		                          {% endif %}
+		                        </p>
+
+													{% endfor %}
+
+				                  </td>
+			                  </tr>
+		                    <tr>
+			                    <td {% if not loop.last %}style="border-top:1px solid #eee;background-color:#fefefe;
+			                    width:600px;"{% endif %}>
+
+				                  </td>
+			                  </tr>
+		                  </table>
+
                       {% endfor %}
 
-                    </table>
                   </td>
                 </tr>
               </table>
