@@ -10,6 +10,9 @@
   errors: ''  
 }) }}
 
+{% if craft.config.get('sproutForms')['enableTemplateOverrides'] is defined and craft.config.get('sproutForms')
+['enableTemplateOverrides'] == 1 %}
+
 {{ forms.textField({
   label: "Template Folder Override"|t,
   id: 'templateFolderOverride',
@@ -20,3 +23,5 @@
   first: true,
   errors: ''  
 }) }}
+
+{% endif %}
