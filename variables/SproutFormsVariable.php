@@ -55,10 +55,13 @@ class SproutFormsVariable
 	/**
 	 * Returns a complete form for display in template
 	 *
-	 * @param string $form_handle
+	 * @param string $formHandle
+	 * @param array|null $customSettings
+	 *
 	 * @return string
+	 * @internal param string $form_handle
 	 */
-	public function displayForm($formHandle, $customSettings = null)
+	public function displayForm($formHandle, array $customSettings = null)
 	{
 		$form  = sproutForms()->forms->getFormByHandle($formHandle);
 		$entry = sproutForms()->entries->getEntryModel($form);
@@ -91,9 +94,6 @@ class SproutFormsVariable
 
 		// Check if we need to update our Front-end Form Template Path
 		craft()->path->setTemplatesPath($this->templates['form']);
-
-		// Process any environmental variables in our redirect value
-		$form->redirectUri = craft()->config->parseEnvironmentString($form->redirectUri);
 
 		// Build our complete form
 		$formHtml = craft()->templates->render('form', array(

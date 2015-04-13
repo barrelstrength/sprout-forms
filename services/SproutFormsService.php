@@ -1,6 +1,17 @@
 <?php
 namespace Craft;
 
+/**
+ * Class SproutFormsService
+ *
+ * @package Craft
+ * --
+ * @property SproutForms_EntriesService  $entries
+ * @property SproutForms_FieldsService   $fields
+ * @property SproutForms_FormsService    $forms
+ * @property SproutForms_GroupsService   $groups
+ * @property SproutForms_SettingsService $settings
+ */
 class SproutFormsService extends BaseApplicationComponent
 {
 	public $entries;

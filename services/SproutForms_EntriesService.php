@@ -42,7 +42,7 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 	 * @throws \Exception
 	 * @return bool
 	 */
-	public function saveEntry(SproutForms_EntryModel $entry)
+	public function saveEntry(SproutForms_EntryModel &$entry)
 	{
 		$isNewEntry = !$entry->id;
 

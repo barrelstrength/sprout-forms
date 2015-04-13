@@ -77,7 +77,7 @@ class SproutForms_EntriesController extends BaseController
 			{
 				craft()->userSession->setNotice(Craft::t('Entry saved.'));
 
-				$this->doSmartRedirect();
+				$this->doSmartRedirect($entry);
 			}
 		}
 		else
@@ -116,7 +116,7 @@ class SproutForms_EntriesController extends BaseController
 				{
 					if (sproutForms()->entries->fakeIt)
 					{
-						$this->doSmartRedirect();
+						$this->doSmartRedirect($entry);
 					}
 					else
 					{
@@ -173,7 +173,7 @@ class SproutForms_EntriesController extends BaseController
 		// 2. If multiStepForm is set, we edit based on the entryId stored in session data
 		if (!craft()->request->isCpRequest())
 		{
-			$multiStepForm = craft()->httpSession->get('multiStepForm');
+			$multiStepForm        = craft()->httpSession->get('multiStepForm');
 			$multiStepFormEntryId = craft()->httpSession->get('multiStepFormEntryId');
 
 			// Check if this is a secondary step in a multiStep form
@@ -239,7 +239,7 @@ class SproutForms_EntriesController extends BaseController
 	/**
 	 * Notify admin
 	 *
-	 * @param SproutForms_FormModel $form
+	 * @param SproutForms_FormModel  $form
 	 * @param SproutForms_EntryModel $entry
 	 */
 	private function _notifyAdmin(SproutForms_FormModel $form, SproutForms_EntryModel $entry)
@@ -388,13 +388,18 @@ class SproutForms_EntriesController extends BaseController
 
 	/**
 	 * Parses supported {placeholders} in redirect URL before redirecting
+	 *
+	 * @param SproutForms_EntryModel $entry
 	 */
-	public function doSmartRedirect()
+	public function doSmartRedirect(SproutForms_EntryModel $entry)
 	{
-		$siteUrl = craft()->config->get('siteUrl');
-
-		$vars = array(
-			'siteUrl' => !empty($siteUrl) ? $siteUrl : craft()->getSiteUrl()
+		$vars = array_merge(
+			array(
+				'id'      => 0,
+				'siteUrl' => craft()->getSiteUrl()
+			),
+			$entry->getContent()->getAttributes(),
+			$entry->getAttributes()
 		);
 
 		$this->redirectToPostedUrl($vars);
