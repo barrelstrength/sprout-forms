@@ -8,13 +8,12 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 	protected $entryRecord;
 
 	/**
-	 * Constructor
-	 *
 	 * @param object $entryRecord
 	 */
 	public function __construct($entryRecord = null)
 	{
 		$this->entryRecord = $entryRecord;
+
 		if (is_null($this->entryRecord))
 		{
 			$this->entryRecord = SproutForms_EntryRecord::model();
@@ -35,8 +34,6 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Saves a entry.
-	 *
 	 * @param SproutForms_EntryModel $entry
 	 *
 	 * @throws \Exception
@@ -52,10 +49,8 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 
 			if (!$entryRecord)
 			{
-				throw new Exception(Craft::t('No entry exists with the ID “{id}”', array('id' => $entry->id)));
+				throw new Exception(Craft::t('No entry exists with id “{id}”', array('id' => $entry->id)));
 			}
-
-			$oldEntry = SproutForms_EntryModel::populateModel($entryRecord);
 		}
 		else
 		{
@@ -69,10 +64,6 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 		$entryRecord->validate();
 		$entry->addErrors($entryRecord->getErrors());
 
-		// ------------------------------------------------------------
-		// Fire 'onBeforeSaveEntry' Event
-		// ------------------------------------------------------------
-
 		Craft::import('plugins.sproutforms.events.SproutForms_OnBeforeSaveEntryEvent');
 
 		$event = new SproutForms_OnBeforeSaveEntryEvent(
@@ -84,16 +75,11 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 
 		craft()->sproutForms->onBeforeSaveEntry($event);
 
-		// ------------------------------------------------------------
-
 		if (!$entry->hasErrors())
 		{
 
 			$form = sproutForms()->forms->getFormById($entry->formId);
 
-			// @warning
-			// Rendering an object template is context sensitive
-			// The environment and globals should have been initialized by now
 			$entry->getContent()->title = craft()->templates->renderObjectTemplate($form->titleFormat, $entry);
 
 			$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
@@ -101,19 +87,17 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 			{
 				if ($event->isValid)
 				{
-					// // Backup our field context and content table
 					$oldFieldContext = craft()->content->fieldContext;
 					$oldContentTable = craft()->content->contentTable;
 
-					// Set our field content and content table to work with our form output
 					craft()->content->fieldContext = $entry->getFieldContext();
 					craft()->content->contentTable = $entry->getContentTable();
 
-					SproutFormsPlugin::log("Transaction: Event is Valid");
+					SproutFormsPlugin::log('Transaction: Event is Valid');
 
 					$success = craft()->elements->saveElement($entry);
 
-					SproutFormsPlugin::log("Element Saved: ". $success);
+					SproutFormsPlugin::log('Element Saved: '. $success);
 
 					if ($success)
 					{
@@ -130,12 +114,8 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 						{
 							$transaction->commit();
 
-							SproutFormsPlugin::log("Transaction committed");
+							SproutFormsPlugin::log('Transaction committed');
 						}
-
-						// ------------------------------------------------------------
-						// Fire an 'onSaveEntry' event
-						// ------------------------------------------------------------
 
 						Craft::import('plugins.sproutforms.events.SproutForms_OnSaveEntryEvent');
 
@@ -143,8 +123,6 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 							$this, array(
 								'entry'      => $entry,
 								'isNewEntry' => $isNewEntry,
-								// @TODO - DEPRECATE and IMPROVE
-								// Support for Sprout Email Event
 								'event'      => 'saveEntry',
 								'entity'     => $entry,
 							)
@@ -155,36 +133,33 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 						// Reset our field context and content table to what they were previously
 						craft()->content->fieldContext = $oldFieldContext;
 						craft()->content->contentTable = $oldContentTable;
-						
+
 						return true;
 					}
 
-					// @TODO - rework this code so we don't need to unset these things twice
-					// Reset our field context and content table to what they were previously
 					craft()->content->fieldContext = $oldFieldContext;
 					craft()->content->contentTable = $oldContentTable;
 				}
 				else
 				{
-					SproutFormsPlugin::log("OnBeforeSaveEntryEvent is not valid", LogLevel::Error);
+					SproutFormsPlugin::log('OnBeforeSaveEntryEvent is not valid', LogLevel::Error);
 
 					if ($event->fakeIt)
 					{
-						// Pretend to submit the form even though it didn't submit
 						sproutForms()->entries->fakeIt = true;
 					}
 				}
 			}
 			catch (\Exception $e)
 			{
-				SproutFormsPlugin::log("Failed to save element");
+				SproutFormsPlugin::log('Failed to save element');
 
 				throw $e;
 			}
 		}
 		else
 		{	
-			SproutFormsPlugin::log("Service returns false");
+			SproutFormsPlugin::log('Service returns false');
 		
 			return false;
 		}
@@ -193,13 +168,17 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 	/**
 	 * Deletes an entry
 	 *
-	 * @param int $id
+	 * @param SproutForms_EntryModel $entry
 	 *
-	 * @return boolean
+	 * @throws \CDbException
+	 * @throws \Exception
+	 *
+	 * @return bool
 	 */
 	public function deleteEntry(SproutForms_EntryModel $entry)
 	{
 		$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
+
 		try
 		{
 			// Delete the Element and Entry
@@ -256,8 +235,6 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 	 */
 	public function getEntryModel(SproutForms_FormModel $form)
 	{
-		// If a form has been submitted, use our existing EntryModel
-		// otherwise, create a new EntryModel
 		if (isset(sproutForms()->forms->activeEntries[$form->handle]))
 		{
 			return sproutForms()->forms->activeEntries[$form->handle];
