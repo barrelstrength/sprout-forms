@@ -16,7 +16,6 @@
                 <exclude name="${pluginName}/.idea/" />
                 <exclude name="${pluginName}/build/" />
                 <exclude name="${pluginName}/composer.json" />
-                <exclude name="${pluginName}/README.md" />
                 <exclude name="${pluginName}/phpunit.xml" />
                 <exclude name="${pluginName}/sync.sh" />
                 <exclude name="${pluginName}/tests/" />
