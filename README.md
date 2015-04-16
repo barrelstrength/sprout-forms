@@ -1,4 +1,4 @@
-Sprout Forms!
+Hello, Sprout Forms!
 
 Here are some online resources you might find useful:
 
