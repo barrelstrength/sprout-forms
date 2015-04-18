@@ -51,6 +51,7 @@ class SproutForms_FormRecord extends BaseRecord
 			'redirectUri' => AttributeType::String,
 			'submitAction' => AttributeType::String,
 			'submitButtonText' => AttributeType::String,
+			'notificationEnabled' => array(AttributeType::Bool, 'default' => false),
 			'notificationRecipients' => AttributeType::String,
 			'notificationSubject' => AttributeType::String,
 			'notificationSenderName' => AttributeType::String,
@@ -77,9 +78,13 @@ class SproutForms_FormRecord extends BaseRecord
 				'on' => 'insert'
 			),
 			array(
-				'notificationRecipients',
-				'validateDistributionList'
-			)
+				'notificationRecipients, notificationSenderEmail, notificationReplyToEmail',
+				'validateRecipients'
+			),
+			array(
+				'notificationRecipients, notificationSubject, notificationSenderName, notificationSenderEmail, notificationReplyToEmail',
+				'validateEnabledNotification'
+			),
 		);
 	}
 
@@ -97,34 +102,66 @@ class SproutForms_FormRecord extends BaseRecord
 	}
 
 	/**
+	 * Custom validator for email notifications
+	 *
+	 * @param string $attribute
+	 * @return boolean
+	 */
+	public function validateEnabledNotification($attribute)
+	{
+		// If Notifications are enabled, make sure all Notification fields are set
+		// @todo - update to provide specific validation for email fields and allow {objectSyntax}
+		if ($this->notificationEnabled && ($this->{$attribute} == ""))
+		{
+			$this->addError($attribute, 'All notification fields are required when notifications are enabled.');
+			return false;
+		}
+	}
+
+	/**
 	 * Custom validator for email distribution list
 	 * 
 	 * @param string $attribute
 	 * @return boolean
 	 */
-	public function validateDistributionList($attribute)
+	public function validateRecipients($attribute)
 	{
-		if ($emails = explode(',', $this->notificationRecipients)) {
-			foreach ($emails as $email) {
-				$email = trim($email);
-				if (!$email)
-					continue;
-				
-				// allow twig syntax
-				if(preg_match('/{{?(.*?)}?}/', $email))
+		if ($emails = explode(',', $this->{$attribute}))
+		{
+			foreach ($emails as $email)
+			{
+				if ($email)
 				{
-					continue; 
-				}
-				
-				// @TODO - standardize how email validation is handled throughout plugins.
-				// Versions of this appear in multiple places.
-				if (!preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $email)) {
-					$this->addError($attribute, 'Please make sure all emails are valid.');
-					return false;
+					$this->validateRecipient($attribute, $email);
 				}
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * Custom validator for email distribution list
+	 *
+	 * @param string $attribute
+	 * @return boolean
+	 */
+	public function validateRecipient($attribute, $email)
+	{
+		$email = trim($email);
+
+		// Allow twig syntax
+		if (preg_match('/^{{?(.*?)}}?$/', $email))
+		{
+			return true;
+		}
+
+		// @todo - standardize how email validation is handled throughout plugins.
+		// Versions of this appear in multiple places.
+		if (!preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $email))
+		{
+			$this->addError($attribute, Craft::t('Please make sure all emails are valid.'));
+			return false;
+		}
 	}
 
 	/**

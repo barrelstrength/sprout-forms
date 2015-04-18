@@ -51,11 +51,15 @@ class SproutForms_EntriesController extends BaseController
 
 		if (sproutForms()->entries->saveEntry($entry))
 		{
-			// Only send notification email for front-end submissions
-			if (!craft()->request->isCpRequest())
+			// Only send notification email for front-end submissions if they are enabled
+			if (!craft()->request->isCpRequest() && $this->form->notificationEnabled)
 			{
 				$this->_notifyAdmin($this->form, $entry);
+			}
 
+			// Only handle multi-page forms on the front-end
+			if (!craft()->request->isCpRequest())
+			{
 				// Store our Entry ID for a multi-step form
 				craft()->httpSession->add('multiStepFormEntryId', $entry->id);
 
@@ -66,6 +70,7 @@ class SproutForms_EntriesController extends BaseController
 				// Store our new entry so we can recreate the Entry object on our thank you page
 				craft()->httpSession->add('lastEntryId', $entry->id);
 			}
+
 
 			if (craft()->request->isAjaxRequest())
 			{

@@ -25,12 +25,14 @@ class SproutForms_FormsController extends BaseController
 		$form->redirectUri     = craft()->request->getPost('redirectUri');
 		$form->submitAction    = craft()->request->getPost('submitAction');
 		$form->submitButtonText     = craft()->request->getPost('submitButtonText');
-		$form->notificationRecipients     = craft()->request->getPost('notificationRecipients');
-		$form->notificationSubject     = craft()->request->getPost('notificationSubject');
-		$form->notificationSenderName     = craft()->request->getPost('notificationSenderName');
-		$form->notificationSenderEmail     = craft()->request->getPost('notificationSenderEmail');
-		$form->notificationReplyToEmail     = craft()->request->getPost('notificationReplyToEmail');
-		
+
+		$form->notificationEnabled      = craft()->request->getPost('notificationEnabled');
+		$form->notificationRecipients   = craft()->request->getPost('notificationRecipients');
+		$form->notificationSubject      = craft()->request->getPost('notificationSubject');
+		$form->notificationSenderName   = craft()->request->getPost('notificationSenderName');
+		$form->notificationSenderEmail  = craft()->request->getPost('notificationSenderEmail');
+		$form->notificationReplyToEmail = craft()->request->getPost('notificationReplyToEmail');
+
 		// Set the field layout
 		$fieldLayout =  craft()->fields->assembleLayoutFromPost();
 		$fieldLayout->type = 'SproutForms_Form';
@@ -70,12 +72,31 @@ class SproutForms_FormsController extends BaseController
 		else
 		{
 			craft()->userSession->setError(Craft::t('Couldn’t save form.'));
-		}
 
-		// Send the form back to the template
-		craft()->urlManager->setRouteVariables(array(
-			'form' => $form
-		));
+			$notificationFields = array(
+				'notificationRecipients',
+				'notificationSubject',
+				'notificationSenderName',
+				'notificationSenderEmail',
+				'notificationReplyToEmail'
+			);
+//Craft::dd($form->getErrors());
+			$notificationErrors = false;
+			foreach ($form->getErrors() as $fieldHandle => $error)
+			{
+				if (in_array($fieldHandle, $notificationFields))
+				{
+					$notificationErrors = 'error';
+					break;
+				}
+			}
+
+			// Send the form back to the template
+			craft()->urlManager->setRouteVariables(array(
+				'form' => $form,
+				'notificationErrors' => $notificationErrors
+			));
+		}
 	}
 
 	/**
@@ -120,36 +141,42 @@ class SproutForms_FormsController extends BaseController
 		// 		throw new Exception(Craft::t('Error creating Form'));
 		// 	}			
 		// }
-		
-		$variables['brandNewForm'] = false;
-		
-		$variables['groups'] = sproutForms()->groups->getAllFormGroups();
-		$variables['groupId'] = "";
 
-		if (isset($variables['formId']))
+		// Check for a Form, if we have it we have submission errors
+		// and should just return to the template
+		if (!isset($variables['form']))
 		{
-			// Get the Form
-			$form = sproutForms()->forms->getFormById($variables['formId']);
+			$variables['brandNewForm'] = false;
 
-			$variables['form'] = $form;
-			$variables['title'] = $form->name;
-			$variables['groupId'] = $form->groupId;
-			
-			if (!isset($variables['form']))
+			$variables['groups'] = sproutForms()->groups->getAllFormGroups();
+			$variables['groupId'] = "";
+
+			if (isset($variables['formId']))
 			{
-				throw new HttpException(404);
-			}
 
-		}
-		else
-		{
-			if (!isset($variables['form']))
+				// Get the Form
+				$form = sproutForms()->forms->getFormById($variables['formId']);
+
+				$variables['form'] = $form;
+				$variables['title'] = $form->name;
+				$variables['groupId'] = $form->groupId;
+
+				if (!isset($variables['form']))
+				{
+					throw new HttpException(404);
+				}
+
+			}
+			else
 			{
-				$variables['form'] = new SproutForms_FormModel();
-				$variables['brandNewForm'] = true;
-			}
+				if (!isset($variables['form']))
+				{
+					$variables['form'] = new SproutForms_FormModel();
+					$variables['brandNewForm'] = true;
+				}
 
-			$variables['title'] = Craft::t('Create a new form');
+				$variables['title'] = Craft::t('Create a new form');
+			}
 		}
 
 		$this->renderTemplate('sproutforms/forms/_editForm', $variables);

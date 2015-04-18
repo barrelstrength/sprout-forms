@@ -47,7 +47,7 @@
   name: 'redirectUri',
   placeholder: siteUrl, 
   value: (form is defined ? form.redirectUri : null),
-  errors: (form is defined ? form.getErrors('redirectUri') : null)   
+  errors: (form is defined ? form.getErrors('redirectUri') : null)
 }) }}
 
 {{ forms.textField({
@@ -56,7 +56,7 @@
   placeholder: 'Submit', 
   value: (form is defined ? form.submitButtonText : null),
   required: false,
-  errors: (form is defined ? form.getErrors('submitButtonText') : null)   
+  errors: (form is defined ? form.getErrors('submitButtonText') : null)
 }) }}
 
 <hr>

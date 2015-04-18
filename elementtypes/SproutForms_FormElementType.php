@@ -186,6 +186,7 @@ class SproutForms_FormElementType extends BaseElementType
 									 forms.redirectUri,
 									 forms.submitAction,
 									 forms.submitButtonText,
+									 forms.notificationEnabled,
 									 forms.notificationRecipients,
 									 forms.notificationSubject,
 									 forms.notificationSenderName,

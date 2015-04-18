@@ -1,13 +1,13 @@
+{{ forms.lightswitchField({
+	first: true,
+	label: "Enable Notification"|t,
+	id: 'notificationEnabled',
+	name: 'notificationEnabled',
+	on: form.notificationEnabled,
+	onLabel: "Enable"|t,
+	offLabel: "Disable"|t
+}) }}
 
-<h2>All Fields Required</h2>
-<p>
-	If you want to send a notification when your form is submitted,
-	make sure all of the fields below are complete.<br>
-	If any fields are left blank or fail validation when your notification is triggered,
-	the notification may not be delivered.
-</p>
-<p>If you don't need to send a notification, leave all fields blank.</p>
-<hr>
 {{ forms.textField({
 	label: 'Email Recipients <span class="info">All fields can use dynamic values from the submitted form fields. Reference your form fields by wrapping the field name in curly braces.  If your field is <strong><code>name="fields[email]"</code></strong> you would use: <strong><code>{email}</code></strong>.</span>'|t,
 	instructions: "Enter comma seperated email addresses to notify on form submission. Leave blank to disable notifications."|t,

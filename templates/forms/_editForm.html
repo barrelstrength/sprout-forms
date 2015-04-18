@@ -8,11 +8,12 @@
 {% set tabs = {
     formfields:  { 
       label: "Fields"|t, 
-      url: '#formfields'
+      url: '#formfields',
     },
     notifications:  { 
       label: "Notifications"|t, 
-      url: '#notification'
+      url: '#notification',
+			class: (notificationErrors is defined ? notificationErrors : null)
     }
 } %}
 

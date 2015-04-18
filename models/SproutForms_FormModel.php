@@ -34,6 +34,7 @@ class SproutForms_FormModel extends BaseElementModel
 			'redirectUri'              => AttributeType::String,
 			'submitAction'             => AttributeType::String,
 			'submitButtonText'         => AttributeType::String,
+			'notificationEnabled'      => array(AttributeType::Bool, 'default' => false),
 			'notificationRecipients'   => AttributeType::String,
 			'notificationSubject'      => AttributeType::String,
 			'notificationSenderName'   => AttributeType::String,
