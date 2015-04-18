@@ -80,6 +80,19 @@ class SproutForms_FormElementType extends BaseElementType
 	}
 
 	/**
+	 * Returns the attributes that can be sorted by in table views.
+	 *
+	 * @return array
+	 */
+	public function defineSortableAttributes()
+	{
+		return array(
+			'name'     => Craft::t('Name'),
+			'handle'   => Craft::t('Handle'),
+		);
+	}
+
+	/**
 	 * @inheritDoc IElementType::getTableAttributeHtml()
 	 *
 	 * @param BaseElementModel $element
