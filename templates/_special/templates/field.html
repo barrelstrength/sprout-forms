@@ -20,7 +20,9 @@
 
 	{% else %}
 
-		<div class="field {{ type }}{% if first is defined and first %} first{% endif %}{% if class is defined and class %} {{ class }}{% endif %}"{% if handle %} id="{{ handle }}-field"{% endif %}>
+		<div class="field {{ type }}{% if first is defined and first %} first{% endif %}{% if class is defined and class
+		%} {{ class }}{% endif %}{% if errors %} has-errors{% endif %}"{% if handle %} id="{{ handle }}-field"{% endif
+		%}>
 
 			{% if label or instructions %}
 				<div class="heading">
