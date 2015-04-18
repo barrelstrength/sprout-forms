@@ -255,7 +255,7 @@ class SproutForms_EntriesController extends BaseController
 			$settings               = craft()->plugins->getPlugin('sproutforms')->getSettings();
 			$templateFolderOverride = $settings->templateFolderOverride;
 
-			$emailTemplate = craft()->path->getPluginsPath().'sproutforms/templates/_special/';
+			$emailTemplate = craft()->path->getPluginsPath().'sproutforms/templates/_special/templates/';
 
 			if ($templateFolderOverride)
 			{
