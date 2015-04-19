@@ -292,6 +292,17 @@ class SproutFormsVariable
 	}
 
 	/**
+	 * Gets a specific form by handle. If no form is found, returns null
+	 *
+	 * @param  string $formHandle
+	 * @return mixed
+	 */
+	public function getForm($formHandle)
+	{
+		return sproutForms()->forms->getFormByHandle($formHandle);
+	}
+
+	/**
 	 * Get all forms
 	 *
 	 * @return array
