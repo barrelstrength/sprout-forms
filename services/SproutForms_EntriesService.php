@@ -77,7 +77,6 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 
 		if (!$entry->hasErrors())
 		{
-
 			$form = sproutForms()->forms->getFormById($entry->formId);
 
 			$entry->getContent()->title = craft()->templates->renderObjectTemplate($form->titleFormat, $entry);
@@ -85,6 +84,7 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 			$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
 			try
 			{
+
 				if ($event->isValid)
 				{
 					$oldFieldContext = craft()->content->fieldContext;
