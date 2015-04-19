@@ -21,15 +21,15 @@
 			<div class="item" data-position="left" data-min-colspan="2" data-max-colspan="3">
 				<div id="fields" class="pane">
 
-					{% namespace namespace %}	
+					{% include "_includes/tabs" %}
 
-						{% for tab in tabs %}
-						    
-							{% set fields = tab.getFields() %}
+					{% for tab in fieldLayoutTabs %}
 
-							<div class="tab">
+						{% set fields = tab.getFields() %}
 
-								<h2>{{ tab.name }}</h2>
+						<div id="tab{{ loop.index}}" {% if not loop.first %}class="hidden"{% endif %}>
+
+							{% namespace namespace %}
 
 								{% for field in fields %}
 									{% include "_includes/field" with {
@@ -40,24 +40,11 @@
 									} only %}
 								{% endfor %}
 
-							</div>
+							{% endnamespace %}
 
-							{% if not loop.last %}
-							<hr>
-							{% endif %}
+						</div>
 
-
-						{% endfor %}
-
-						{# {% for field in fields %}
-							{% include "_includes/field" with {
-								field:    field.getField(),
-								required: field.required,
-								element:  entry,
-								static:   (static is defined ? static : null)
-							} only %}
-						{% endfor %} #}
-					{% endnamespace %}
+					{% endfor %}
 
 				</div>
 			</div>		

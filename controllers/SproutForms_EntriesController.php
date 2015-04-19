@@ -374,7 +374,16 @@ class SproutForms_EntriesController extends BaseController
 		$variables['entry'] = $entry;
 
 		// Get the fields for this entry
-		$variables['tabs'] = $entry->getFieldLayout()->getTabs();
+		$fieldLayoutTabs = $entry->getFieldLayout()->getTabs();
+
+		foreach ($fieldLayoutTabs as $tab)
+		{
+			$tabs[$tab->id]['label'] = $tab->name;
+			$tabs[$tab->id]['url'] = '#tab' . $tab->sortOrder;
+		}
+
+		$variables['tabs'] = $tabs;
+		$variables['fieldLayoutTabs'] = $fieldLayoutTabs;
 
 		$this->renderTemplate('sproutforms/entries/_edit', $variables);
 	}
