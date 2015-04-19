@@ -175,18 +175,18 @@ Garnish.$doc.ready(function()
 
 		newGroupAction: 'sproutForms/groups/saveGroup',
 		newGroupOnSuccessUrlBase: 'sproutforms/forms/',
-		newGroupOnErrorMessage: 'Could not create the group:',
+		newGroupOnErrorMessage: Craft.t('Could not create the group:'),
 
 		renameGroupAction: 'sproutForms/groups/saveGroup',
-		renameGroupOnSuccessMessage: 'Group renamed.',
-		renameGroupOnErrorMessage: 'Could not rename the group:',
+		renameGroupOnSuccessMessage: Craft.t('Group renamed.'),
+		renameGroupOnErrorMessage: Craft.t('Could not rename the group:'),
 
-		promptForGroupNameMessage: 'What do you want to name your group?',
+		promptForGroupNameMessage: Craft.t('What do you want to name your group?'),
 
-		deleteGroupConfirmMessage: 'Are you sure you want to delete this group and all its fields?',
+		deleteGroupConfirmMessage: Craft.t('Are you sure you want to delete this group and all its fields?'),
 		deleteGroupAction: 'sproutForms/groups/deleteGroup',
 		deleteGroupOnSuccessUrl: 'sproutforms/forms/',
-		deleteGroupOnErrorMessage: 'Could not delete the group.',
+		deleteGroupOnErrorMessage: Craft.t('Could not delete the group.'),
 	});
 });
 

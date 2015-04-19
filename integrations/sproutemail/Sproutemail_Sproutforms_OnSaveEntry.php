@@ -51,7 +51,7 @@ class SproutEmail_SproutForms_OnSaveEntry
 	public function getOptionsHtml()
 	{
 		return '<hr>
-			<h3>Custom options for SproutForms.</h3>
+			<h3>{{ "Custom options for SproutForms."|t }}</h3>
 
 			{% set availableForms = [] %}
 			
@@ -76,7 +76,7 @@ class SproutEmail_SproutForms_OnSaveEntry
 				
 			{% else %}
 				
-				<p>You do not currently have any forms available.</p>
+				<p>{{ "You do not currently have any forms available."|t }}</p>
 			
 			{% endif %}
 			<hr>';
@@ -101,6 +101,5 @@ class SproutEmail_SproutForms_OnSaveEntry
 		}
 		
 		return false;
-		
 	}
 }

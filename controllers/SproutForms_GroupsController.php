@@ -11,8 +11,8 @@ class SproutForms_GroupsController extends BaseController
 		$this->requirePostRequest();
 		$this->requireAjaxRequest();
 
-		$group = new SproutForms_FormGroupModel();
-		$group->id = craft()->request->getPost('id');
+		$group       = new SproutForms_FormGroupModel();
+		$group->id   = craft()->request->getPost('id');
 		$group->name = craft()->request->getRequiredPost('name');
 		
 		$isNewGroup = empty($group->id);

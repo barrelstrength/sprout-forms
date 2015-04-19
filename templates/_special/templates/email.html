@@ -14,7 +14,7 @@
                 <tr>
                   <td valign="top" style="width:600px;">
 
-                    <p>Form submission from {{ siteName }}</p>
+                    <p>{{ "Form submission from" }} {{ siteName }}</p>
 
                     <p>
                       <span style="text-transform: uppercase;"><strong>{{ formName }}</strong></span>
@@ -63,11 +63,11 @@
                                   {% endif %}
                                 </p>
 
-                                                    {% endfor %}
+                              {% endfor %}
 
                                   </td>
                               </tr>
-                            <tr>
+                              <tr>
                                 <td {% if not loop.last %}style="border-top:1px solid #eee;background-color:#fefefe;
                                 width:600px;"{% endif %}>
 

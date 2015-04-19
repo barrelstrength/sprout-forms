@@ -214,19 +214,16 @@ class SproutForms_FieldsController extends BaseController
 		}
 		else
 		{
-			
 			if (!isset($variables['field']))
 			{
 				$variables['field'] = new FieldModel();
 			}
 
 			$variables['tabId'] = null;
-
 			$variables['title'] = Craft::t('Create a new field');
 		}
 
 		$variables['sections'] = $form->getFieldLayout()->getTabs();
-		
 
 		$this->renderTemplate('sproutforms/forms/_editField', $variables);
 	}

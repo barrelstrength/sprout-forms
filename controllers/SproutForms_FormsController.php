@@ -16,10 +16,10 @@ class SproutForms_FormsController extends BaseController
 		$form = new SproutForms_FormModel();
 
 		// Shared attributes
-		$form->id         = craft()->request->getPost('id');
-		$form->groupId    = craft()->request->getPost('groupId');
-		$form->name       = craft()->request->getPost('name');
-		$form->handle     = craft()->request->getPost('handle');
+		$form->id          = craft()->request->getPost('id');
+		$form->groupId     = craft()->request->getPost('groupId');
+		$form->name        = craft()->request->getPost('name');
+		$form->handle      = craft()->request->getPost('handle');
 		$form->titleFormat = craft()->request->getPost('titleFormat');
 		$form->displaySectionTitles = craft()->request->getPost('displaySectionTitles');
 		$form->redirectUri     = craft()->request->getPost('redirectUri');
@@ -80,7 +80,7 @@ class SproutForms_FormsController extends BaseController
 				'notificationSenderEmail',
 				'notificationReplyToEmail'
 			);
-//Craft::dd($form->getErrors());
+
 			$notificationErrors = false;
 			foreach ($form->getErrors() as $fieldHandle => $error)
 			{
@@ -200,5 +200,4 @@ class SproutForms_FormsController extends BaseController
 
 		$this->redirectToPostedUrl($form);
 	}
-
 }

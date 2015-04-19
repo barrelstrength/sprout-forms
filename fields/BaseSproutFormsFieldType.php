@@ -30,5 +30,4 @@ class BaseSproutFormsFieldType implements ISproutFormsFieldType
 	{
 		return "fields";
 	}
-
 }

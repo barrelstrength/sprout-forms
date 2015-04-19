@@ -2,7 +2,7 @@
 {% if groups is defined and groups|length %}
 
   {% set groupOptions = [
-    { label: 'All Forms', value: '*' }
+    { label: 'All Forms'|t , value: '*' }
   ] %}
   {% for group in groups %}
     {% set groupOptions = groupOptions|merge([{ label: group.name, value: group.id }]) %}
@@ -86,4 +86,3 @@
   value: (form is defined ? form.submitAction : null),
   errors: (form is defined ? form.getErrors('submitAction') : null)   
 }) }}
-

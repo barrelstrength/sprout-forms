@@ -1,4 +1,4 @@
-{%- set submitValue = (form.submitButtonText ? form.submitButtonText : "Submit") -%}
+{%- set submitValue = (form.submitButtonText ? form.submitButtonText : "Submit"|t) -%}
 {%- set submitAction = (form.submitAction ? form.submitAction : "sproutForms/entries/saveEntry") -%}
 
 {% if form.submitAction %}

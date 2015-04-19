@@ -25,7 +25,6 @@ class SproutForms_SettingsController extends BaseController
 
 		// Load our template
 		$this->renderTemplate('sproutforms/settings', $variables);
-
 	}
 
 	/**

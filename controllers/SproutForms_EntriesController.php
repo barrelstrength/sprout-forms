@@ -238,7 +238,6 @@ class SproutForms_EntriesController extends BaseController
 		$fieldsLocation = craft()->request->getParam('fieldsLocation', 'fields');
 		$entry->setContentFromPost($fieldsLocation);
 		$entry->setContentPostLocation($fieldsLocation);
-
 	}
 
 	/**

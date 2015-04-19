@@ -53,7 +53,6 @@ class SproutForms_FieldsService extends FieldsService
 
 					// Update the form model & record with our new field layout ID
 					$form->setFieldLayout($fieldLayout);
-
 				}
 				else
 				{
@@ -85,7 +84,6 @@ class SproutForms_FieldsService extends FieldsService
 					$fieldLayout->type = 'SproutForms_Form';
 					$fieldLayout->setFields($fieldLayoutFields);
 					$form->setFieldLayout($fieldLayout);
-
 				}
 
 				sproutForms()->forms->saveForm($form);
@@ -158,7 +156,6 @@ class SproutForms_FieldsService extends FieldsService
 	 */
 	private function _getFieldLayoutFieldRecordByFieldId($fieldId = null)
 	{
-
 		if ($fieldId) 
 		{
 			$record = FieldLayoutFieldRecord::model()->find('fieldId=:fieldId', array(':fieldId'=>$fieldId));

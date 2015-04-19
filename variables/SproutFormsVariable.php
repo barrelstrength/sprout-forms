@@ -250,14 +250,17 @@ class SproutFormsVariable
 
 			// Set template path back to default
 			craft()->path->setTemplatesPath(craft()->path->getPluginsPath() . 'sproutforms/templates/_special/templates/');
-		} else {
+		}
+		else
+		{
 			// Field Type is not supported
 			// @TODO - provide better error here pointing to docs on how to solve this.
 			$input = '<p class="error">' . Craft::t("The “" . $field->type . "” field is not supported by default to be output in front-end templates.") . '</p>';
 		}
 
 		// Identify PlainText and Textarea fields distinctly
-		if ($field->type == 'PlainText' && $field->settings['multiline'] == 1) {
+		if ($field->type == 'PlainText' && $field->settings['multiline'] == 1)
+		{
 			$field->type = 'textarea';
 		}
 
@@ -266,7 +269,6 @@ class SproutFormsVariable
 		$fieldInfo['isNakedField'] = $this->isNakedField;
 		$fieldInfo['type']         = $field->type;
 		$fieldInfo['input']        = new \Twig_Markup($input, craft()->templates->getTwig()->getCharset());
-
 
 		// Set our Sprout Forms Front-end Form Template path
 		craft()->path->setTemplatesPath(craft()->path->getPluginsPath() . 'sproutforms/templates/_special/templates/');
@@ -331,7 +333,8 @@ class SproutFormsVariable
 	 */
 	public function getLastEntry()
 	{
-		if (craft()->httpSession->get('lastEntryId')) {
+		if (craft()->httpSession->get('lastEntryId'))
+		{
 			$entryId = craft()->httpSession->get('lastEntryId');
 			$entry   = sproutForms()->entries->getEntryById($entryId);
 
