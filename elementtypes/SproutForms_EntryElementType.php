@@ -47,6 +47,7 @@ class SproutForms_EntryElementType extends BaseElementType
 	 * Returns this element type's sources.
 	 *
 	 * @param string|null $context
+	 *
 	 * @return array|false
 	 */
 	public function getSources($context = null)
@@ -54,15 +55,15 @@ class SproutForms_EntryElementType extends BaseElementType
 		// Start with an option for everything
 		$sources = array(
 			'*' => array(
-				'label'    => Craft::t('All Entries'),
+				'label' => Craft::t('All Entries'),
 			)
 		);
 
 		// Prepare the data for our sources sidebar
 		$groups = sproutForms()->groups->getAllFormGroups('id');
-		$forms = sproutForms()->forms->getAllForms();
+		$forms  = sproutForms()->forms->getAllForms();
 
-		$noSources = array();
+		$noSources   = array();
 		$prepSources = array();
 
 		foreach ($forms as $form)
@@ -75,16 +76,16 @@ class SproutForms_EntryElementType extends BaseElementType
 				}
 
 				$prepSources[$form->groupId]['forms'][$form->id] = array(
-					'label' => $form->name,
-					'data' => array('formId' => $form->id),
+					'label'    => $form->name,
+					'data'     => array('formId' => $form->id),
 					'criteria' => array('formId' => $form->id)
 				);
 			}
 			else
 			{
 				$noSources[$form->id] = array(
-					'label' => $form->name,
-					'data' => array('formId' => $form->id),
+					'label'    => $form->name,
+					'data'     => array('formId' => $form->id),
 					'criteria' => array('formId' => $form->id)
 				);
 			}
@@ -94,8 +95,8 @@ class SproutForms_EntryElementType extends BaseElementType
 		foreach ($noSources as $form)
 		{
 			$sources[$form['data']['formId']] = array(
-				'label' => $form['label'],
-				'data' => array(
+				'label'    => $form['label'],
+				'data'     => array(
 					'formId' => $form['data']['formId'],
 				),
 				'criteria' => array(
@@ -114,8 +115,8 @@ class SproutForms_EntryElementType extends BaseElementType
 			foreach ($source['forms'] as $form)
 			{
 				$sources[] = array(
-					'label' => $form['label'],
-					'data' => array(
+					'label'    => $form['label'],
+					'data'     => array(
 						'formId' => $form['data']['formId'],
 					),
 					'criteria' => array(
@@ -132,15 +133,16 @@ class SproutForms_EntryElementType extends BaseElementType
 	 * Returns the attributes that can be shown/sorted by in table views.
 	 *
 	 * @param string|null $source
+	 *
 	 * @return array
 	 */
 	public function defineTableAttributes($source = null)
 	{
 		return array(
-			'title'			=> Craft::t('Title'),
-			'formName'		=> Craft::t('Form Name'),
-			'dateCreated'	=> Craft::t('Date Created'),
-			'dateUpdated'	=> Craft::t('Date Updated'),
+			'title'       => Craft::t('Title'),
+			'formName'    => Craft::t('Form Name'),
+			'dateCreated' => Craft::t('Date Created'),
+			'dateUpdated' => Craft::t('Date Updated'),
 		);
 	}
 
@@ -152,9 +154,9 @@ class SproutForms_EntryElementType extends BaseElementType
 	public function defineSortableAttributes()
 	{
 		return array(
-			'formName'		=> Craft::t('Form Name'),
-			'dateCreated'	=> Craft::t('Date Created'),
-			'dateUpdated'	=> Craft::t('Date Updated'),
+			'formName'    => Craft::t('Form Name'),
+			'dateCreated' => Craft::t('Date Created'),
+			'dateUpdated' => Craft::t('Date Updated'),
 		);
 	}
 
@@ -187,10 +189,11 @@ class SproutForms_EntryElementType extends BaseElementType
 	public function defineCriteriaAttributes()
 	{
 		return array(
-			'title'			=> AttributeType::String,
-			'formId'		=> AttributeType::Number,
-			'formHandle'	=> AttributeType::String,
-			'formGroupId'	=> AttributeType::Number,
+			'order'       => array(AttributeType::String, 'default' => 'entries.dateCreated desc'),
+			'title'       => AttributeType::String,
+			'formId'      => AttributeType::Number,
+			'formHandle'  => AttributeType::String,
+			'formGroupId' => AttributeType::Number,
 		);
 	}
 
@@ -207,7 +210,7 @@ class SproutForms_EntryElementType extends BaseElementType
 	/**
 	 * Modifies an element query targeting elements of this type.
 	 *
-	 * @param DbCommand $query
+	 * @param DbCommand            $query
 	 * @param ElementCriteriaModel $criteria
 	 *
 	 * @return mixed
@@ -269,8 +272,11 @@ class SproutForms_EntryElementType extends BaseElementType
 	 * @param ElementCriteriaModel $criteria
 	 * @param string               $select
 	 */
-	protected function joinContentTableAndAddContentSelects(DbCommand &$query, ElementCriteriaModel &$criteria, &$select)
-	{
+	protected function joinContentTableAndAddContentSelects(
+		DbCommand &$query,
+		ElementCriteriaModel &$criteria,
+		&$select
+	) {
 		// Do we have a source selected in the sidebar?
 		// If so, we have a form id and we can use that to fetch the content table
 		if ($criteria->formId)
@@ -279,8 +285,8 @@ class SproutForms_EntryElementType extends BaseElementType
 
 			if ($form)
 			{
-				$content    = "{$form->handle}.title";
-				$select     = empty($select) ? $content : $select.', '.$content;
+				$content = "{$form->handle}.title";
+				$select  = empty($select) ? $content : $select.', '.$content;
 
 				$query->join($form->getContentTable().' '.$form->handle, 'entries.formId = '.$form->id);
 			}
@@ -291,6 +297,7 @@ class SproutForms_EntryElementType extends BaseElementType
 	 * Populates an element model based on a query result.
 	 *
 	 * @param array $row
+	 *
 	 * @return array
 	 */
 	public function populateElementModel($row)
