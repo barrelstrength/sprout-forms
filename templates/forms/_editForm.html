@@ -63,6 +63,9 @@
 
 				{% endif %}
 
+					{% set brandAlign = 'left' %}
+					{% include 'sproutforms/_partials/brand/footer' %}
+
 				</div>
 
 				<div style="width:45%;float:left;">
@@ -71,13 +74,11 @@
 
 				<p>{{ 'See the Sprout Forms documentation for an example of how to <a href="http://sprout
 					.barrelstrengthdesign.com/craft-plugins/forms/docs/examples/custom-html" target="_blank">publish your form
-					with Custom HTML</a>.'|t }}</p>
+					with Custom HTML</a>.'|t|raw }}</p>
 
 				</div>
 
-				<div style="float:left;width:100%;">
-					{% include 'sproutforms/_partials/brand/footer' %}
-				</div>
+
 
 			</div>
 
