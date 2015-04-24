@@ -189,7 +189,7 @@ class SproutForms_EntryElementType extends BaseElementType
 	public function defineCriteriaAttributes()
 	{
 		return array(
-			'order'       => array(AttributeType::String, 'default' => 'entries.dateCreated desc'),
+			'order'       => array(AttributeType::String, 'default' => 'dateCreated desc'),
 			'title'       => AttributeType::String,
 			'formId'      => AttributeType::Number,
 			'formHandle'  => AttributeType::String,
