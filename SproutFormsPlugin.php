@@ -153,6 +153,23 @@ class SproutFormsPlugin extends BasePlugin
 	}
 
 	/**
+	 * @return array
+	 */
+	public function defineSproutEmailEvents()
+	{
+		$sproutEmail = craft()->plugins->getPlugin('sproutEmail');
+
+		if ($sproutEmail && version_compare($sproutEmail->getVersion(), '0.9.2', '>='))
+		{
+			require_once dirname(__FILE__).'/integrations/sproutemail/SproutForms_SaveEntryEvent.php';
+
+			return array(new SproutForms_SaveEntryEvent());
+		}
+
+		sproutForms()->log('Sprout Email 0.9.2+ is required for Dynamic Events integration.');
+	}
+
+	/**
 	 * Redirects to examples after installation
 	 *
 	 * @return void

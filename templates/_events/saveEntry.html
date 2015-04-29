@@ -1,13 +1,18 @@
+{{ forms.checkboxField({
+	label: "Only for new entries?"|t,
+	name: "entriesSaveEntryOnlyWhenNew",
+	checked: options.entriesSaveEntryOnlyWhenNew is defined ? options.entriesSaveEntryOnlyWhenNew : false
+}) }}
 
 {{
 	forms.field({
 		label: "Forms"|t,
-		instructions: "Select one or more forms."|t,
+		instructions: "Select forms or leave unchecked for all forms."|t,
 		errors: errors is defined ? errors : null,
 	},
 	forms.checkboxGroup({
-		name: "entryFormIds",
-		options : entryForms,
-		values: options.entryFormIds is defined ? options.entryFormIds : null
+		name: "entriesSaveEntrySectionIds",
+		options : availableForms,
+		values: options.entriesSaveEntrySectionIds is defined ? options.entriesSaveEntrySectionIds : null
 	}))
 }}

@@ -6,5 +6,4 @@ namespace Craft;
  */
 class SproutForms_OnSaveEntryEvent extends Event
 {
-	
 }
