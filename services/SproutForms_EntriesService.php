@@ -117,6 +117,10 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 							SproutFormsPlugin::log('Transaction committed');
 						}
 
+						// Reset our field context and content table to what they were previously
+						craft()->content->fieldContext = $oldFieldContext;
+						craft()->content->contentTable = $oldContentTable;
+
 						Craft::import('plugins.sproutforms.events.SproutForms_OnSaveEntryEvent');
 
 						$event = new SproutForms_OnSaveEntryEvent(
@@ -129,10 +133,6 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 						);
 
 						craft()->sproutForms->onSaveEntry($event);
-
-						// Reset our field context and content table to what they were previously
-						craft()->content->fieldContext = $oldFieldContext;
-						craft()->content->contentTable = $oldContentTable;
 
 						return true;
 					}
