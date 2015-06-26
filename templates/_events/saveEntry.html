@@ -1,18 +1,23 @@
+{% set whenNew = (options.sproutForms.saveEntry.whenNew is defined)
+                     ? options.sproutForms.saveEntry.whenNew
+                     : false %}
+{% set formIds = (options.sproutForms.saveEntry.formIds is defined)
+                 ? options.sproutForms.saveEntry.formIds
+                 : null %}
+
 {{ forms.checkboxField({
 	label: "Only for new entries?"|t,
-	name: "entriesSaveEntryOnlyWhenNew",
-	checked: options.entriesSaveEntryOnlyWhenNew is defined ? options.entriesSaveEntryOnlyWhenNew : false
+	name: "rules[sproutForms][saveEntry][whenNew]",
+	checked: whenNew
 }) }}
 
-{{
-	forms.field({
+{{ forms.field({
 		label: "Forms"|t,
 		instructions: "Select forms or leave unchecked for all forms."|t,
 		errors: errors is defined ? errors : null,
 	},
 	forms.checkboxGroup({
-		name: "entriesSaveEntrySectionIds",
+		name: "rules[sproutForms][saveEntry][formIds]",
 		options : availableForms,
-		values: options.entriesSaveEntrySectionIds is defined ? options.entriesSaveEntrySectionIds : null
-	}))
-}}
+		values: formIds
+})) }}

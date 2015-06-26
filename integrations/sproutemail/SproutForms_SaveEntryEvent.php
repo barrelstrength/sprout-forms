@@ -15,7 +15,7 @@ class SproutForms_SaveEntryEvent extends SproutEmailBaseEvent
 
 	public function getTitle()
 	{
-		return Craft::t('Sprout Forms Save Entry');
+		return Craft::t('When a Sprout Forms entry is saved');
 	}
 
 	public function getDescription()
@@ -35,9 +35,10 @@ class SproutForms_SaveEntryEvent extends SproutEmailBaseEvent
 
 	public function prepareOptions()
 	{
+		$rules = craft()->request->getPost('rules.sproutForms');
+
 		return array(
-			'entriesSaveEntrySectionIds'  => craft()->request->getPost('entriesSaveEntrySectionIds'),
-			'entriesSaveEntryOnlyWhenNew' => craft()->request->getPost('entriesSaveEntryOnlyWhenNew'),
+			'sproutForms' => $rules,
 		);
 	}
 
@@ -53,13 +54,15 @@ class SproutForms_SaveEntryEvent extends SproutEmailBaseEvent
 	public function validateOptions($options, SproutForms_EntryModel $entry, array $params = array())
 	{
 		$isNewEntry  = isset($params['isNewEntry']) && $params['isNewEntry'];
-		$onlyWhenNew = isset($options['entriesSaveEntryOnlyWhenNew']) && $options['entriesSaveEntryOnlyWhenNew'];
+		$whenNew = isset($options['sproutForms']['saveEntry']['whenNew']) &&
+			$options['sproutForms']['saveEntry']['whenNew'];
 
 		// If any section ids were checked
 		// Make sure the entry belongs in one of them
-		if (!empty($options['entriesSaveEntrySectionIds']) && count($options['entriesSaveEntrySectionIds']))
+		if (!empty($options['sproutForms']['saveEntry']['formIds']) &&
+			  count($options['sproutForms']['saveEntry']['formIds']))
 		{
-			if (!in_array($entry->getForm()->id, $options['entriesSaveEntrySectionIds']))
+			if (!in_array($entry->getForm()->id, $options['sproutForms']['saveEntry']['formIds']))
 			{
 				return false;
 			}
@@ -67,7 +70,7 @@ class SproutForms_SaveEntryEvent extends SproutEmailBaseEvent
 
 		// If only new entries was checked
 		// Make sure the entry is new
-		if (!$onlyWhenNew || ($onlyWhenNew && $isNewEntry))
+		if (!$whenNew || ($whenNew && $isNewEntry))
 		{
 			return true;
 		}
@@ -94,9 +97,12 @@ class SproutForms_SaveEntryEvent extends SproutEmailBaseEvent
 	{
 		$criteria = craft()->elements->getCriteria('SproutForms_Entry');
 
-		if (isset($this->options['entriesSaveEntrySectionIds']) && count($this->options['entriesSaveEntrySectionIds']))
+		$formIds = isset($options['sproutForms']['saveEntry']['formIds']) &&
+			count($options['sproutForms']['saveEntry']['formIds']);
+
+		if ($formIds)
 		{
-			$ids = $this->options['entriesSaveEntrySectionIds'];
+			$ids = $formIds;
 
 			if (is_array($ids) && count($ids))
 			{
