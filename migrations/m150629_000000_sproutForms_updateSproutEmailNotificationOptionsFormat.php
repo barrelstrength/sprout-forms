@@ -20,13 +20,13 @@ class m150629_000000_sproutForms_updateSproutEmailNotificationOptionsFormat exte
 
 				if ($count = count($notifications))
 				{
-					SproutEmailPlugin::log('Notifications found: '. $count, LogLevel::Info, true);
+					SproutFormsPlugin::log('Notifications found: '. $count, LogLevel::Info, true);
 
 					$newOptions = array();
 
 					foreach ($notifications as $notification)
 					{
-						SproutEmailPlugin::log('Migrating Sprout Forms saveEntry notification', LogLevel::Info, true);
+						SproutFormsPlugin::log('Migrating Sprout Forms saveEntry notification', LogLevel::Info, true);
 
 						$newOptions = $this->_updateSaveFormEntryOptions($notification['options']);
 
@@ -35,20 +35,20 @@ class m150629_000000_sproutForms_updateSproutEmailNotificationOptionsFormat exte
 						), 'id= :id', array(':id' => $notification['id'])
 						);
 
-						SproutEmailPlugin::log('Migration of notification complete', LogLevel::Info, true);
+						SproutFormsPlugin::log('Migration of notification complete', LogLevel::Info, true);
 					}
 				}
 
-				SproutEmailPlugin::log('No notifications found to migrate.', LogLevel::Info, true);
+				SproutFormsPlugin::log('No notifications found to migrate.', LogLevel::Info, true);
 			}
 			else
 			{
-				SproutEmailPlugin::log('Could not find the `options` column.', LogLevel::Info, true);
+				SproutFormsPlugin::log('Could not find the `options` column.', LogLevel::Info, true);
 			}
 		}
 		else
 		{
-			SproutEmailPlugin::log('Could not find the `sproutemail_campaigns_notifications` table.', LogLevel::Info, true);
+			SproutFormsPlugin::log('Could not find the `sproutemail_campaigns_notifications` table.', LogLevel::Info, true);
 		}
 
 		return true;
