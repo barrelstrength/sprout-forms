@@ -64,6 +64,27 @@ class SproutForms_FormElementType extends BaseElementType
 	}
 
 	/**
+	 * @inheritDoc IElementType::getAvailableActions()
+	 *
+	 * @param string|null $source
+	 *
+	 * @return array|null
+	 */
+	public function getAvailableActions($source = null)
+	{
+		$deleteAction = craft()->elements->getAction('Delete');
+
+		$deleteAction->setParams(
+			array(
+				'confirmationMessage' => Craft::t('Are you sure you want to delete the selected forms?'),
+				'successMessage'      => Craft::t('Forms deleted.'),
+			)
+		);
+
+		return array($deleteAction);
+	}
+
+	/**
 	 * Returns the attributes that can be shown/sorted by in table views.
 	 *
 	 * @param string|null $source
@@ -116,7 +137,7 @@ class SproutForms_FormElementType extends BaseElementType
             				->from('fieldlayoutfields')
             				->where('layoutId=:layoutId', array(':layoutId' => $element->fieldLayoutId))
             				->queryScalar();
-            				
+
 				return $totalFields;
 			}
 
@@ -161,7 +182,7 @@ class SproutForms_FormElementType extends BaseElementType
 	public function defineSearchableAttributes()
 	{
 		return array(
-			'name', 
+			'name',
 			'handle'
 		);
 	}
@@ -179,8 +200,8 @@ class SproutForms_FormElementType extends BaseElementType
 			->addSelect('forms.id,
 									 forms.fieldLayoutId,
 									 forms.groupId,
-									 forms.name, 
-									 forms.handle, 
+									 forms.name,
+									 forms.handle,
 									 forms.titleFormat,
 									 forms.displaySectionTitles,
 									 forms.redirectUri,

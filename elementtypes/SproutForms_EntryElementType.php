@@ -130,6 +130,27 @@ class SproutForms_EntryElementType extends BaseElementType
 	}
 
 	/**
+	 * @inheritDoc IElementType::getAvailableActions()
+	 *
+	 * @param string|null $source
+	 *
+	 * @return array|null
+	 */
+	public function getAvailableActions($source = null)
+	{
+		$deleteAction = craft()->elements->getAction('Delete');
+
+		$deleteAction->setParams(
+			array(
+				'confirmationMessage' => Craft::t('Are you sure you want to delete the selected entries?'),
+				'successMessage'      => Craft::t('Entries deleted.'),
+			)
+		);
+
+		return array($deleteAction);
+	}
+
+	/**
 	 * Returns the attributes that can be shown/sorted by in table views.
 	 *
 	 * @param string|null $source
