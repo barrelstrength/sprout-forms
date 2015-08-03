@@ -110,6 +110,8 @@ class SproutForms_FormElementType extends BaseElementType
 		return array(
 			'name'     => Craft::t('Name'),
 			'handle'   => Craft::t('Handle'),
+			'numberOfFields' => Craft::t('Number of Fields'),
+			'totalEntries'   => Craft::t('Total Entries'),
 		);
 	}
 
@@ -171,6 +173,8 @@ class SproutForms_FormElementType extends BaseElementType
 			'fieldLayoutId'           => AttributeType::Number,
 			'name'                    => AttributeType::String,
 			'handle'                  => AttributeType::String,
+			'totalEntries'            => array(AttributeType::Number, 'default' => 'totalEntries'),
+			'numberOfFields'          => array(AttributeType::Number, 'default' => 'numberOfFields'),
 		);
 	}
 
@@ -216,6 +220,16 @@ class SproutForms_FormElementType extends BaseElementType
 			')
 			->join('sproutforms_forms forms', 'forms.id = elements.id');
 
+		if($criteria->totalEntries)
+		{
+			$query->addSelect('COUNT(entries.id) totalEntries');
+			$query->leftJoin('sproutforms_entries entries', 'entries.formId = forms.id');
+		}
+		if($criteria->numberOfFields)
+		{
+			$query->addSelect('COUNT(fields.id) numberOfFields');
+			$query->leftJoin('fieldlayoutfields fields', 'fields.layoutId = forms.fieldLayoutId');
+		}
 		if ($criteria->handle)
 		{
 			$query->andWhere(DbHelper::parseParam('forms.handle', $criteria->handle, $query->params));
