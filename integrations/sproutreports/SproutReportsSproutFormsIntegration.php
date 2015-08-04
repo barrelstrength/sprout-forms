@@ -112,7 +112,7 @@ class SproutReportsSproutFormsIntegration extends SproutReportsBaseReport
 	{
 		$report = new SproutReportsSproutFormsIntegration();
 		$report->setName($form->name);
-		$report->setQuery('SELECT * FROM `sproutformscontent_'.$form->handle.'`');
+		$report->setQuery('SELECT * FROM {{sproutformscontent_'.$form->handle.'}}');
         $userOptions = array();
         $userOptions['dateCreatedFrom'] = array(
             'type' => 'date',
