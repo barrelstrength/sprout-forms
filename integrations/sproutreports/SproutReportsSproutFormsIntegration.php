@@ -118,13 +118,17 @@ class SproutReportsSproutFormsIntegration extends SproutReportsBaseReport
             'type' => 'date',
             'column' => 'dateCreated',
             'name' => 'Creation date: from',
-            'comparisonOperator' => '>='
+            'comparisonOperator' => '>=',
+            'showDate' => true,
+            'showTime' =>  true
         );
         $userOptions['dateCreatedTill'] = array(
             'type' => 'date',
             'column' => 'dateCreated',
             'name' => 'Creation date: till',
-            'comparisonOperator' => '<'
+            'comparisonOperator' => '<',
+            'showDate' => true,
+            'showTime' =>  true
         );
         $formFields = $form->getFieldLayout()->getFields();
         foreach ($formFields as $field)
