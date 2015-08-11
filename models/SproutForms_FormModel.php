@@ -11,6 +11,8 @@ class SproutForms_FormModel extends BaseElementModel
 
 	public $numberOfFields;
 
+	public $saveAsNew;
+
 	/**
 	 * Use the form handle as the string representation.
 	 *
