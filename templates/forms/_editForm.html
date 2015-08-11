@@ -6,12 +6,12 @@
 ] %}
 
 {% set tabs = {
-    formfields:  { 
-      label: "Fields"|t, 
+    formfields:  {
+      label: "Fields"|t,
       url: '#formfields',
     },
-    notifications:  { 
-      label: "Notifications"|t, 
+    notifications:  {
+      label: "Notifications"|t,
       url: '#notification',
 			class: (notificationErrors is defined ? notificationErrors : null)
     }
@@ -125,7 +125,16 @@
 					<td class="thin">
 						<div class="btngroup submit first">
 							<input type="submit" class="btn submit" value="{{ 'Save'|t }}">
+							{% if form.id != null %}
+								<div class="btn submit menubtn"></div>
+								<div class="menu">
+									<ul>
+										<li><a class="formsubmit" data-param='saveAsNew' data-value="true">{{ "Save as a new entry"|t }}</a></li>
+									</ul>
+								</div>
+							{% endif %}
 						</div>
+					</div>
 					</td>
 				</tr>
 			</table>

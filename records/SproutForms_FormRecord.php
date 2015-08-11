@@ -15,7 +15,7 @@ class SproutForms_FormRecord extends BaseRecord
 		// Store the old handle in case it's ever requested.
 		$this->attachEventHandler('onAfterFind', array($this, 'storeOldHandle'));
 	}
-	
+
 	/**
 	 * Return table name
 	 *
@@ -25,7 +25,7 @@ class SproutForms_FormRecord extends BaseRecord
 	{
 		return 'sproutforms_forms';
 	}
-	
+
 	/**
 	 * Define attributes
 	 *
@@ -59,7 +59,7 @@ class SproutForms_FormRecord extends BaseRecord
 			'notificationReplyToEmail' => AttributeType::String,
 		);
 	}
-	
+
 	/**
 	 * Define validation rules
 	 *
@@ -90,7 +90,7 @@ class SproutForms_FormRecord extends BaseRecord
 
 	/**
 	 * Define relationships
-	 * 
+	 *
 	 * @return array
 	 */
 	public function defineRelations()
@@ -120,7 +120,7 @@ class SproutForms_FormRecord extends BaseRecord
 
 	/**
 	 * Custom validator for email distribution list
-	 * 
+	 *
 	 * @param string $attribute
 	 * @return boolean
 	 */
@@ -180,5 +180,56 @@ class SproutForms_FormRecord extends BaseRecord
 	public function getOldHandle()
 	{
 		return $this->_oldHandle;
+	}
+
+	/**
+	 * Create a secuencial string for the "name" and "handle" fields if they are already taken
+	 * @param string
+	 * @param string
+	 * return string
+	*/
+	private function getFieldAsNew($field, $value)
+	{
+		$newField = null;
+		$i = 1;
+		$band = true;
+		do
+		{
+			$newField = $value.$i;
+			$form = sproutForms()->forms->getFieldValue($field, $newField);
+			if ( is_null($form) )
+			{
+				$band = false;
+			}
+
+			$i++;
+		} while ( $band );
+
+		return $newField;
+	}
+	/**
+	 * Before Validate
+	 *
+	 */
+	protected function beforeValidate()
+	{
+		// Validate the name and handle fields when the record is save as new
+		if (isset($_POST["saveAsNew"]))
+		{
+			if($_POST['saveAsNew'])
+			{
+				if( sproutForms()->forms->getFieldValue('name', $this->name) )
+				{
+					$this->name = $this->getFieldAsNew('name', $this->name);
+				}
+
+				if( sproutForms()->forms->getFieldValue('handle', $this->handle) )
+				{
+					$this->handle = $this->getFieldAsNew('handle', $this->handle);
+				}
+			}
+		}
+
+		return true;
 	}
 }

@@ -12,11 +12,17 @@ class SproutForms_FormsController extends BaseController
 	public function actionSaveForm()
 	{
 		$this->requirePostRequest();
-		
+
 		$form = new SproutForms_FormModel();
 
-		// Shared attributes
-		$form->id          = craft()->request->getPost('id');
+		if(craft()->request->getPost('saveAsNew'))
+		{
+			$form->saveAsNew  = true;
+		}
+		else
+		{
+			$form->id        = craft()->request->getPost('id');
+		}
 		$form->groupId     = craft()->request->getPost('groupId');
 		$form->name        = craft()->request->getPost('name');
 		$form->handle      = craft()->request->getPost('handle');
@@ -41,7 +47,7 @@ class SproutForms_FormsController extends BaseController
 		// Delete any fields removed from the layout
 		$deletedFields = craft()->request->getPost('deletedFields');
 
-		if ($deletedFields) 
+		if ($deletedFields)
 		{
 			// Backup our field context and content table
 			$oldFieldContext = craft()->content->fieldContext;
@@ -51,7 +57,7 @@ class SproutForms_FormsController extends BaseController
 			craft()->content->fieldContext = $form->getFieldContext();
 			craft()->content->contentTable = $form->getContentTable();
 
-			foreach ($deletedFields as $fieldId) 
+			foreach ($deletedFields as $fieldId)
 			{
 				craft()->fields->deleteFieldById($fieldId);
 			}
@@ -60,7 +66,7 @@ class SproutForms_FormsController extends BaseController
 			craft()->content->fieldContext = $oldFieldContext;
 			craft()->content->contentTable = $oldContentTable;
 		}
-		
+
 		// Save it
 		if (sproutForms()->forms->saveForm($form))
 		{
@@ -107,10 +113,10 @@ class SproutForms_FormsController extends BaseController
 	 * @throws Exception
 	 */
 	public function actionEditFormTemplate(array $variables = array())
-	{	
+	{
 		// Immediately create a new Form
 		// if (craft()->request->getSegment(3) == "new")
-		// {	
+		// {
 		// 	$form = new SproutForms_FormModel();
 
 		// 	// Get the total number of forms we have
@@ -122,15 +128,15 @@ class SproutForms_FormsController extends BaseController
 		// 	if ($totalForms == 0)
 		// 	{
 		// 		$form->name = "Form 1";
-		// 		$form->handle = "form1";	
+		// 		$form->handle = "form1";
 		// 	}
 		// 	else
 		// 	{
 		// 		$newFormNumber = $totalForms+1;
 		// 		$form->name = "Form ".$newFormNumber;
-		// 		$form->handle = "form".$newFormNumber;	
+		// 		$form->handle = "form".$newFormNumber;
 		// 	}
-			
+
 		// 	if (sproutForms()->forms->saveForm($form))
 		// 	{
 		// 		$url = UrlHelper::getCpUrl('sproutforms/forms/edit/'.$form->id.'#overview');
@@ -139,7 +145,7 @@ class SproutForms_FormsController extends BaseController
 		// 	else
 		// 	{
 		// 		throw new Exception(Craft::t('Error creating Form'));
-		// 	}			
+		// 	}
 		// }
 
 		// Check for a Form, if we have it we have submission errors
@@ -179,22 +185,25 @@ class SproutForms_FormsController extends BaseController
 			}
 		}
 
+		// Set the "Continue Editing" URL
+		$variables['continueEditingUrl'] = 'sproutforms/forms/edit/{id}';
+
 		$this->renderTemplate('sproutforms/forms/_editForm', $variables);
 	}
 
 	/**
 	 * Delete a form.
-	 * 
+	 *
 	 * @return void
 	 */
 	public function actionDeleteForm()
-	{	
+	{
 		$this->requirePostRequest();
-		
+
 		// Get the Form these fields are related to
 		$formId = craft()->request->getRequiredPost('id');
 		$form = sproutForms()->forms->getFormById($formId);
-		
+
 		// @TODO - handle errors
 		$success = sproutForms()->forms->deleteForm($form);
 
