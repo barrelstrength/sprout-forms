@@ -163,8 +163,8 @@ class SproutForms_FormsService extends BaseApplicationComponent
 					//Create the new filds
 					if($form->saveAsNew)
 					{
-						// duplicate the filds in the newContent Table also set the filds in the craft filds table
-						// same logic on the field service after lunch!!
+						// Duplicate the filds in the newContent Table also set the filds in the craft filds table
+						$newFields = array();
 						foreach ($form->getFields() as $key => $value)
 						{
 							$field = new FieldModel();
@@ -184,10 +184,21 @@ class SproutForms_FormsService extends BaseApplicationComponent
 							craft()->content->contentTable = $form->getContentTable();
 
 							craft()->fields->saveField($field);
-							SproutFormsPlugin::log('Saved field as new '.$form->getContentTable());
+							array_push($newFields, $field);
+							SproutFormsPlugin::log('Saved field as new '.$field->id);
+						}
+						// Update fieldId on layoutfields table
+						$fieldLayout = $form->getFieldLayout();
+						$fieldLayoutIds = FieldLayoutFieldRecord::model()->findAll("layoutId = {$fieldLayout->id}");
+
+						foreach ($fieldLayoutIds as $key => $layout)
+						{
+							SproutFormsPlugin::log('UPDATED field layout  '.$layout->id);
+							$model = FieldLayoutFieldRecord::model()->findByPk($layout->id);
+							$model->fieldId = $newFields[$key]->id;
+							$model->save();
 						}
 					}
-
 					// Now that we have an element ID, save it on the other stuff
 					if ($isNewForm)
 					{
