@@ -85,6 +85,7 @@ class SproutForms_FormsService extends BaseApplicationComponent
 
 		$formRecord->validate();
 		$form->addErrors($formRecord->getErrors());
+
 		if($form->saveAsNew)
 		{
 			$form->name = $formRecord->name;
@@ -107,8 +108,7 @@ class SproutForms_FormsService extends BaseApplicationComponent
 					// Save the field layout
 					craft()->fields->saveLayout($fieldLayout);
 
-					// Assign our new layout id info to our
-					// form model and records
+					// Assign our new layout id info to our form model and records
 					$form->fieldLayoutId = $fieldLayout->id;
 					$form->setFieldLayout($fieldLayout);
 					$formRecord->fieldLayoutId = $fieldLayout->id;
@@ -160,10 +160,10 @@ class SproutForms_FormsService extends BaseApplicationComponent
 
 				if (craft()->elements->saveElement($form))
 				{
-					//Create the new filds
+					// Create the new fields
 					if($form->saveAsNew)
 					{
-						// Duplicate the filds in the newContent Table also set the filds in the craft filds table
+						// Duplicate the fields in the newContent Table also set the fields in the craft fields table
 						$newFields = array();
 						foreach ($form->getFields() as $key => $value)
 						{
@@ -187,18 +187,20 @@ class SproutForms_FormsService extends BaseApplicationComponent
 							array_push($newFields, $field);
 							SproutFormsPlugin::log('Saved field as new '.$field->id);
 						}
+
 						// Update fieldId on layoutfields table
 						$fieldLayout = $form->getFieldLayout();
 						$fieldLayoutIds = FieldLayoutFieldRecord::model()->findAll("layoutId = {$fieldLayout->id}");
 
 						foreach ($fieldLayoutIds as $key => $layout)
 						{
-							SproutFormsPlugin::log('UPDATED field layout  '.$layout->id);
+							SproutFormsPlugin::log('Updated field layout  '.$layout->id);
 							$model = FieldLayoutFieldRecord::model()->findByPk($layout->id);
 							$model->fieldId = $newFields[$key]->id;
 							$model->save();
 						}
 					}
+
 					// Now that we have an element ID, save it on the other stuff
 					if ($isNewForm)
 					{
