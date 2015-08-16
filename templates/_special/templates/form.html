@@ -1,7 +1,9 @@
 {%- set submitValue = (form.submitButtonText ? form.submitButtonText : "Submit"|t) -%}
-{%- set submitAction = (form.submitAction ? form.submitAction : "sproutForms/entries/saveEntry") -%}
+{%- set submitAction = (form.submitAction ? form.submitAction : "sproutForms/entries/saveEntry") %}
 
-{% if form.submitAction %}
+<!-- Custom form created using the Sprout Forms form builder plugin v{{ craft.sproutForms.version }} - http://sprout.barrelstrengthdesign.com/craft-plugins/forms -->
+
+{%- if form.submitAction %}
 
 {# Submit form to third party #}
 <form method="post" accept-charset="utf-8" enctype="multipart/form-data">
@@ -32,3 +34,4 @@
 	</div>
 
 </form>
+<!-- / Sprout Forms Craft CMS plugin -->
