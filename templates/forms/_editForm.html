@@ -2,7 +2,8 @@
 {% import "_includes/forms" as forms %}
 
 {% set crumbs = [
-  { label: craft.sproutForms.name, url: url('sproutforms/entries') }
+  { label: craft.sproutForms.name, url: url('sproutforms/entries') },
+	{ label: "Forms"|t, url: url('sproutforms/forms') }
 ] %}
 
 {% set tabs = {
@@ -134,8 +135,11 @@
 								</div>
 							{% endif %}
 						</div>
-					</div>
 					</td>
+					{# @todo - see if we can remove this at some point
+						 This is an extraneous td but it cleans up unwanted full-width box-shadow
+						 that displays on the prior td probably due to a bug in Craft ui styles.#}
+					<td></td>
 				</tr>
 			</table>
 
