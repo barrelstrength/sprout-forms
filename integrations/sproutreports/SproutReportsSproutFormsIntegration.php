@@ -5,9 +5,10 @@ class SproutReportsSproutFormsIntegration extends SproutReportsBaseReport
 {
 	protected $name;
 	protected $query;
-	protected $group='Sprout Forms';
-	protected $userOptions=array();
-	protected $description='';
+	protected $group = 'Sprout Forms';
+	protected $userOptions = array();
+	protected $description = '';
+	protected $isCustomQueryEditable = false;
 
 	/*
 	* Set report group
@@ -16,7 +17,7 @@ class SproutReportsSproutFormsIntegration extends SproutReportsBaseReport
 	*/
 	public function setGroup($group)
 	{
-		$this->group=$group;
+		$this->group = $group;
 	}
 
 	/*
@@ -35,7 +36,7 @@ class SproutReportsSproutFormsIntegration extends SproutReportsBaseReport
 	 */
 	public function setName($name)
 	{
-		$this->name=$name;
+		$this->name = $name;
 	}
 
 	/*
@@ -54,7 +55,7 @@ class SproutReportsSproutFormsIntegration extends SproutReportsBaseReport
 	 */
 	public function setDescription($description)
 	{
-		$this->description=$description;
+		$this->description = $description;
 	}
 
 	/*
@@ -73,7 +74,7 @@ class SproutReportsSproutFormsIntegration extends SproutReportsBaseReport
 	 */
 	public function setQuery($query)
 	{
-		$this->query=$query;
+		$this->query = $query;
 	}
 
 	/*
@@ -87,11 +88,11 @@ class SproutReportsSproutFormsIntegration extends SproutReportsBaseReport
 
 	/*
 	 * Set user options for report
-	 * @return array
+	 * @return void
 	 */
 	public function setUserOptions(array $userOptions)
 	{
-		$this->userOptions=$userOptions;
+		$this->userOptions = $userOptions;
 	}
 
 	/*
@@ -103,6 +104,24 @@ class SproutReportsSproutFormsIntegration extends SproutReportsBaseReport
 		return $this->userOptions;
 	}
 
+    /*
+     * Set is custom query editable or not
+     * @return void
+     */
+    public function setIsCustomQueryEditable($isEditable)
+    {
+        $this->isCustomQueryEditable = $isEditable;
+    }
+
+    /*
+     * Is custom query editable or not
+     * @return boolean
+     */
+    public function getIsCustomQueryEditable()
+    {
+        return $this->isCustomQueryEditable;
+    }
+
 	/*
 	 * Create ReportBase from SproutForm object
 	 * @param SproutForms
@@ -113,6 +132,7 @@ class SproutReportsSproutFormsIntegration extends SproutReportsBaseReport
 		$report = new SproutReportsSproutFormsIntegration();
 		$report->setName($form->name);
 		$report->setQuery('SELECT * FROM {{sproutformscontent_'.$form->handle.'}}');
+        $report->setIsCustomQueryEditable(false);
         $userOptions = array();
         $userOptions['dateCreatedFrom'] = array(
             'type' => 'date',
