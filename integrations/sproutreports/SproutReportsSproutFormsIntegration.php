@@ -140,7 +140,11 @@ class SproutReportsSproutFormsIntegration extends SproutReportsBaseReport
             'name' => 'Creation date: from',
             'comparisonOperator' => '>=',
             'showDate' => true,
-            'showTime' =>  true
+            'showTime' =>  true,
+            'defaultValue' => array(
+                'isSQL' => true,
+                'value' => 'SELECT MIN(dateCreated) FROM {{sproutformscontent_'.$form->handle.'}}'
+            )
         );
         $userOptions['dateCreatedTill'] = array(
             'type' => 'date',
@@ -148,7 +152,11 @@ class SproutReportsSproutFormsIntegration extends SproutReportsBaseReport
             'name' => 'Creation date: till',
             'comparisonOperator' => '<',
             'showDate' => true,
-            'showTime' =>  true
+            'showTime' =>  true,
+            'defaultValue' => array(
+                'isSQL' => true,
+                'value' => 'SELECT MAX(dateCreated) FROM {{sproutformscontent_'.$form->handle.'}}'
+            )
         );
         $formFields = $form->getFieldLayout()->getFields();
         foreach ($formFields as $field)
@@ -158,6 +166,7 @@ class SproutReportsSproutFormsIntegration extends SproutReportsBaseReport
             {
                 case 'Dropdown':
                     $fieldOptions = array();
+                    $default = false;
                     foreach ($field['settings']['options'] as $option)
                     {
                         if ($option['value'])
@@ -166,6 +175,10 @@ class SproutReportsSproutFormsIntegration extends SproutReportsBaseReport
                                 'label' => $option['label'],
                                 'value' => $option['value']
                             );
+                        }
+                        if ($option['default'])
+                        {
+                            $default = $option['value'];
                         }
                     }
 
@@ -176,7 +189,11 @@ class SproutReportsSproutFormsIntegration extends SproutReportsBaseReport
                             'column' => 'field_'.$field['handle'],
                             'name' => $field['name'],
                             'comparisonOperator' => '=',
-                            'values' => $fieldOptions
+                            'values' => $fieldOptions,
+                            'defaultValue' => array(
+                                'isSQL' => false,
+                                'value' => $default
+                            )
                         );
                     }
                     break;
