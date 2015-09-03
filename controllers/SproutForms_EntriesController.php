@@ -36,6 +36,17 @@ class SproutForms_EntriesController extends BaseController
 
 		$entry = $this->_getEntryModel();
 
+		Craft::import('plugins.sproutforms.events.SproutForms_OnBeforePopulateEntryEvent');
+
+		$event = new SproutForms_OnBeforePopulateEntryEvent(
+			$this, array(
+				'form'  => $this->form,
+				'entry' => $entry
+			)
+		);
+
+		craft()->sproutForms->onBeforePopulateEntry($event);
+
 		// Our SproutForms_EntryModel requires that we assign it a SproutForms_FormModel
 		$entry->formId = $this->form->id;
 

@@ -47,6 +47,16 @@ class SproutFormsService extends BaseApplicationComponent
 	}
 
 	/**
+	 * @param Event|SproutForms_OnBeforePopulateEntryEvent $event
+	 *
+	 * @throws \CException
+	 */
+	public function onBeforePopulateEntry(SproutForms_OnBeforePopulateEntryEvent $event)
+	{
+		$this->raiseEvent('onBeforePopulateEntry', $event);
+	}
+
+	/**
 	 * @param Event|SproutForms_OnBeforeSaveEntryEvent $event
 	 *
 	 * @throws \CException
