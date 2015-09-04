@@ -18,7 +18,7 @@
 	<input type="hidden" name="handle" value="{{ form.handle }}">
 
 {% endif %}
-	
+
 	{% if form.redirectUri %}
 	<input type="hidden" name="redirect" value="{{ form.redirectUri }}">
 	{% endif %}
@@ -28,7 +28,7 @@
 	</div>
 
 	{% hook 'sproutForms.modifyForm' %}
-	
+
 	<div class="submit">
 		<input type="submit" value="{{ submitValue }}">
 	</div>

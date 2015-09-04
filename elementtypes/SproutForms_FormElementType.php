@@ -216,7 +216,9 @@ class SproutForms_FormElementType extends BaseElementType
 									 forms.notificationSubject,
 									 forms.notificationSenderName,
 									 forms.notificationSenderEmail,
-									 forms.notificationReplyToEmail
+									 forms.notificationReplyToEmail,
+									 forms.enableTemplateOverrides,
+									 forms.templateOverridesFolder
 			')
 			->join('sproutforms_forms forms', 'forms.id = elements.id');
 

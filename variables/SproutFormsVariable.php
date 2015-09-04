@@ -74,11 +74,11 @@ class SproutFormsVariable
 		// Set our Sprout Forms support field classes folder
 		$fieldtypesFolder = craft()->path->getPluginsPath() . 'sproutforms/fields/';
 
-		// Create a list of the name, class, and file of fields we support 
+		// Create a list of the name, class, and file of fields we support
 		$this->fields = sproutForms()->fields->getSproutFormsFields($fieldtypesFolder);
 
 		// Determine where our form and field template should come from
-		$this->templates = sproutForms()->fields->getSproutFormsTemplates();
+		$this->templates = sproutForms()->fields->getSproutFormsTemplates($form);
 
 		// Set Tab template path
 		craft()->path->setTemplatesPath($this->templates['tab']);
@@ -123,11 +123,11 @@ class SproutFormsVariable
 		// Set our Sprout Forms support field classes folder
 		$fieldtypesFolder = craft()->path->getPluginsPath() . 'sproutforms/fields/';
 
-		// Create a list of the name, class, and file of fields we support 
+		// Create a list of the name, class, and file of fields we support
 		$this->fields = sproutForms()->fields->getSproutFormsFields($fieldtypesFolder);
 
 		// Determine where our form and field template should come from
-		$this->templates = sproutForms()->fields->getSproutFormsTemplates();
+		$this->templates = sproutForms()->fields->getSproutFormsTemplates($form);
 
 		// Set Tab template path
 		craft()->path->setTemplatesPath($this->templates['tab']);
@@ -181,7 +181,7 @@ class SproutFormsVariable
 		craft()->path->setTemplatesPath(craft()->path->getPluginsPath() . 'sproutforms/templates/_special/templates/');
 
 		// Determine where our form and field template should come from
-		$this->templates = sproutForms()->fields->getSproutFormsTemplates();
+		$this->templates = sproutForms()->fields->getSproutFormsTemplates($form);
 
 		// Set Tab template path
 		craft()->path->setTemplatesPath($this->templates['field']);
@@ -212,10 +212,14 @@ class SproutFormsVariable
 		// Set our Sprout Forms support field classes folder
 		$fieldtypesFolder = craft()->path->getPluginsPath() . 'sproutforms/fields/';
 
-		// Create a list of the name, class, and file of fields we support 
+		// Create a list of the name, class, and file of fields we support
 		$this->fields = sproutForms()->fields->getSproutFormsFields($fieldtypesFolder);
 
 		$fieldtype = craft()->fields->populateFieldType($field, $element);
+
+		list($plugin, $formId) = explode(':', $field->context);
+
+		$form = sproutForms()->forms->getFormById($formId);
 
 		// If we support our current fieldtype, render it
 		if (isset($this->fields[$field->type])) {
@@ -237,7 +241,7 @@ class SproutFormsVariable
 			$value      = (isset($postFields[$field->handle]) ? $postFields[$field->handle] : "");
 
 			// Determine where our form and field template should come from
-			$this->templates = sproutForms()->fields->getSproutFormsTemplates();
+			$this->templates = sproutForms()->fields->getSproutFormsTemplates($form);
 
 			// Set template path
 			craft()->path->setTemplatesPath($this->fields[$field->type]['templateFolder']);
@@ -274,7 +278,7 @@ class SproutFormsVariable
 		craft()->path->setTemplatesPath(craft()->path->getPluginsPath() . 'sproutforms/templates/_special/templates/');
 
 		// Determine where our form and field template should come from
-		$this->templates = sproutForms()->fields->getSproutFormsTemplates();
+		$this->templates = sproutForms()->fields->getSproutFormsTemplates($form);
 
 		// Set Tab template path
 		craft()->path->setTemplatesPath($this->templates['field']);

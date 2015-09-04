@@ -57,6 +57,8 @@ class SproutForms_FormRecord extends BaseRecord
 			'notificationSenderName' => AttributeType::String,
 			'notificationSenderEmail' => AttributeType::String,
 			'notificationReplyToEmail' => AttributeType::String,
+			'enableTemplateOverrides' => array(AttributeType::Bool, 'default' => false),
+			'templateOverridesFolder' => array(AttributeType::String),
 		);
 	}
 

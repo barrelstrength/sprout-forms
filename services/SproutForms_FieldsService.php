@@ -2,10 +2,10 @@
 namespace Craft;
 
 class SproutForms_FieldsService extends FieldsService
-{	
+{
 	/**
 	 * Save a Form Field
-	 * 
+	 *
 	 * @param  SproutForms_FormModel $form
 	 * @param  FieldModel            $field
 	 * @param  boolean               $validate
@@ -28,7 +28,7 @@ class SproutForms_FieldsService extends FieldsService
 					// to make sure we capture the required setting
 					$sortOrder++;
 					foreach ($form->getFields() as $oldField)
-					{	
+					{
 						if ($oldField->id == $field->id)
 						{
 							$fieldLayoutFields[] = array(
@@ -46,7 +46,7 @@ class SproutForms_FieldsService extends FieldsService
 							);
 						}
 					}
-					
+
 					$fieldLayout = new FieldLayoutModel();
 					$fieldLayout->type = 'SproutForms_Form';
 					$fieldLayout->setFields($fieldLayoutFields);
@@ -79,7 +79,7 @@ class SproutForms_FieldsService extends FieldsService
 						'required'  => $field->required,
 						'sortOrder' => $sortOrder
 					);
-					
+
 					$fieldLayout = new FieldLayoutModel();
 					$fieldLayout->type = 'SproutForms_Form';
 					$fieldLayout->setFields($fieldLayoutFields);
@@ -120,33 +120,33 @@ class SproutForms_FieldsService extends FieldsService
 	public function reorderFields($fieldIds)
 	{
 		$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
-		
+
 		try {
-			foreach ($fieldIds as $fieldOrder => $fieldId) 
+			foreach ($fieldIds as $fieldOrder => $fieldId)
 			{
 				$fieldLayoutFieldRecord            = $this->_getFieldLayoutFieldRecordByFieldId($fieldId);
 				$fieldLayoutFieldRecord->sortOrder = $fieldOrder + 1;
 				$fieldLayoutFieldRecord->save();
 			}
-			
-			if ($transaction !== null) 
+
+			if ($transaction !== null)
 			{
 				$transaction->commit();
 			}
 		}
 		catch (\Exception $e) {
-			
-			if ($transaction !== null) 
+
+			if ($transaction !== null)
 			{
 				$transaction->rollback();
 			}
-			
+
 			throw $e;
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Gets a Field Layout Field's record.
 	 *
@@ -156,57 +156,71 @@ class SproutForms_FieldsService extends FieldsService
 	 */
 	private function _getFieldLayoutFieldRecordByFieldId($fieldId = null)
 	{
-		if ($fieldId) 
+		if ($fieldId)
 		{
 			$record = FieldLayoutFieldRecord::model()->find('fieldId=:fieldId', array(':fieldId'=>$fieldId));
-			
-			if (!$record) 
+
+			if (!$record)
 			{
 				throw new Exception(Craft::t('No field exists with the ID “{id}”', array(
 					'id' => $fieldId
 				)));
 			}
-		} 
-		else 
+		}
+		else
 		{
 			$record = new FieldLayoutFieldRecord();
 		}
-		
+
 		return $record;
 	}
 
-	public function getSproutFormsTemplates()
+	public function getSproutFormsTemplates($form = null)
 	{
 		$templates = array();
 
 		$settings = craft()->plugins->getPlugin('sproutforms')->getSettings();
+		// first, the global template folder
 		$templateFolderOverride = $settings->templateFolderOverride;
+		if($form != null)
+		{
+			if($form->enableTemplateOverrides && $form->templateOverridesFolder!=null)
+			{
+				SproutFormsPlugin::log("!!Check!!! the form: {$form->enableTemplateOverrides} ", LogLevel::Info, true);
+				// last, the custom template folder
+				$templateFolderOverride = $form->templateOverridesFolder;
+
+			}
+		}
+
+		$defaultTemplate = craft()->path->getPluginsPath() . 'sproutforms/templates/_special/templates/';
 
 		// Set our defaults
-		$templates['form'] = craft()->path->getPluginsPath() . 'sproutforms/templates/_special/templates/';
-		$templates['tab'] = craft()->path->getPluginsPath() . 'sproutforms/templates/_special/templates/';
-		$templates['field'] = craft()->path->getPluginsPath() . 'sproutforms/templates/_special/templates/';
+		$templates['form']  = $defaultTemplate;
+		$templates['tab']   = $defaultTemplate;
+		$templates['field'] = $defaultTemplate;
 
 		// See if we should override our defaults
-		if ($templateFolderOverride) 
+		if ($templateFolderOverride)
 		{
 			$formTemplate = craft()->path->getSiteTemplatesPath() . $templateFolderOverride . "/form";
 			$tabTemplate = craft()->path->getSiteTemplatesPath() . $templateFolderOverride . "/tab";
 			$fieldTemplate = craft()->path->getSiteTemplatesPath() . $templateFolderOverride . "/field";
 
-			foreach (craft()->config->get('defaultTemplateExtensions') as $extension) 
+			foreach (craft()->config->get('defaultTemplateExtensions') as $extension)
 			{
-				if (IOHelper::fileExists($formTemplate . "." . $extension)) 
+				if (IOHelper::fileExists($formTemplate . "." . $extension))
 				{
+					SproutFormsPlugin::log("Check58 the form: {$formTemplate} ", LogLevel::Info, true);
 					$templates['form'] = craft()->path->getSiteTemplatesPath() . $templateFolderOverride . "/";
 				}
 
-				if (IOHelper::fileExists($tabTemplate . "." . $extension)) 
+				if (IOHelper::fileExists($tabTemplate . "." . $extension))
 				{
 					$templates['tab'] = craft()->path->getSiteTemplatesPath() . $templateFolderOverride . "/";
 				}
 
-				if (IOHelper::fileExists($fieldTemplate . "." . $extension)) 
+				if (IOHelper::fileExists($fieldTemplate . "." . $extension))
 				{
 					$templates['field'] = craft()->path->getSiteTemplatesPath() . $templateFolderOverride . "/";
 				}
@@ -218,7 +232,7 @@ class SproutForms_FieldsService extends FieldsService
 
 	/**
 	 * Create list of supported Front-end Field Types based on Folders in templates/fieldtypes
-	 * 
+	 *
 	 * @param  string $fieldtypesFolder Location of fieldtypes folder
 	 * @return array
 	 */
@@ -249,8 +263,8 @@ class SproutForms_FieldsService extends FieldsService
 		// Check if any other plugins add support for more front-end fields
 		 $customSproutFields = craft()->plugins->call('registerSproutField');
 
-		foreach ($customSproutFields as $pluginName => $fieldName) 
-		{	
+		foreach ($customSproutFields as $pluginName => $fieldName)
+		{
 			$class = $fieldName . "_SproutFormsFieldType";
 			$frontEndFieldTypes[$fieldName] = array(
 				'name'  => $fieldName,
@@ -262,22 +276,22 @@ class SproutForms_FieldsService extends FieldsService
 
 		// Check if any other plugins add support for more front-end fields
 		// $overrideFields = craft()->plugins->call('registerSproutField');
-			
+
 		$settings = craft()->plugins->getPlugin('sproutforms')->getSettings();
 		$templateFolderOverride = $settings->templateFolderOverride;
 
-		if (isset($templateFolderOverride)) 
+		if (isset($templateFolderOverride))
 		{
 			$templates = $this->getSproutFormsTemplates();
 
-			foreach ($frontEndFieldTypes as $fieldType) 
+			foreach ($frontEndFieldTypes as $fieldType)
 			{
 				$inputOverrideFile = $templates['field'] . 'fields/' . strtolower($fieldType['name']) . '/input';
-				
-				foreach (craft()->config->get('defaultTemplateExtensions') as $extension) 
+
+				foreach (craft()->config->get('defaultTemplateExtensions') as $extension)
 				{
 					// If we have an override file, update our templateFolder
-					if (IOHelper::fileExists($inputOverrideFile . "." . $extension)) 
+					if (IOHelper::fileExists($inputOverrideFile . "." . $extension))
 					{
 						$frontEndFieldTypes[$fieldType['name']]['templateFolder'] = $templates['field'];
 					}
@@ -320,14 +334,14 @@ class SproutForms_FieldsService extends FieldsService
 			'Users'
 		);
 
-		foreach ($fieldTypes as $key => $fieldType) 
+		foreach ($fieldTypes as $key => $fieldType)
 		{
-			if (in_array($key, $supportedFields)) 
+			if (in_array($key, $supportedFields))
 			{
 				// Sort supported fields into "Basic" option group
 				$basicFields[$key] = $fieldType;
 			}
-			elseif (in_array($key, $unSupportedFields)) 
+			elseif (in_array($key, $unSupportedFields))
 			{
 				// Sort unsupported fields into "Advanced" option group
 				$advancedFields[$key] = $fieldType;
@@ -341,12 +355,12 @@ class SproutForms_FieldsService extends FieldsService
 
 		// Grab all supported fields
 		$customSproutFields = craft()->plugins->call('registerSproutField');
-		
-		foreach ($customFields as $key => $fieldType) 
+
+		foreach ($customFields as $key => $fieldType)
 		{
-			if (in_array($key, $customSproutFields)) 
+			if (in_array($key, $customSproutFields))
 			{
-				// Sort supported custom fields into "Basic" option group 
+				// Sort supported custom fields into "Basic" option group
 				$basicFields[$key] = $fieldType;
 			}
 			else
@@ -359,18 +373,18 @@ class SproutForms_FieldsService extends FieldsService
 		// Build our Field Type dropdown
 		$fieldTypeGroups['basicFieldGroup'] = array('optgroup' => Craft::t('Basic Fields'));
 
-		foreach ($basicFields as $key => $fieldType) 
+		foreach ($basicFields as $key => $fieldType)
 		{
 			$fieldTypeGroups[$key] = $fieldType;
 		}
 
 		$fieldTypeGroups['advancedFieldGroup'] = array('optgroup' => Craft::t('Advanced Fields'));
 
-		foreach ($advancedFields as $key => $fieldType) 
+		foreach ($advancedFields as $key => $fieldType)
 		{
 			$fieldTypeGroups[$key] = $fieldType;
 		}
-		
+
 		return $fieldTypeGroups;
 	}
 }

@@ -49,6 +49,9 @@ class SproutForms_FormModel extends BaseElementModel
 
 			'ownerId'                  => AttributeType::Number,
 			'oldHandle'                => AttributeType::String,
+
+			'enableTemplateOverrides' => array(AttributeType::Bool, 'default' => false),
+			'templateOverridesFolder' => array(AttributeType::String),
 		));
 	}
 
