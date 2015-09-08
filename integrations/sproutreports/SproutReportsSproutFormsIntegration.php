@@ -203,4 +203,15 @@ class SproutReportsSproutFormsIntegration extends SproutReportsBaseReport
         $report->setUserOptions($userOptions);
 		return $report;
 	}
+
+    /*
+     * Prepare query params for using in sql query, they override query params in SproutReports plugin
+     * @var $params array
+     * @return array
+     */
+    public static function prepareQueryParams($params)
+    {
+        $processedParams = array();
+        return $processedParams;
+    }
 }
