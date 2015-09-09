@@ -180,13 +180,13 @@ class SproutForms_FieldsService extends FieldsService
 		$templates = array();
 
 		$settings = craft()->plugins->getPlugin('sproutforms')->getSettings();
+		$generalSettings = craft()->config->get('sproutForms');
 		// first, the global template folder
 		$templateFolderOverride = $settings->templateFolderOverride;
 		if($form != null)
 		{
 			if($form->enableTemplateOverrides && $form->templateOverridesFolder!=null)
 			{
-				SproutFormsPlugin::log("!!Check!!! the form: {$form->enableTemplateOverrides} ", LogLevel::Info, true);
 				// last, the custom template folder
 				$templateFolderOverride = $form->templateOverridesFolder;
 
@@ -201,7 +201,7 @@ class SproutForms_FieldsService extends FieldsService
 		$templates['field'] = $defaultTemplate;
 
 		// See if we should override our defaults
-		if ($templateFolderOverride)
+		if ($templateFolderOverride && $generalSettings["enableTemplateOverrides"])
 		{
 			$formTemplate = craft()->path->getSiteTemplatesPath() . $templateFolderOverride . "/form";
 			$tabTemplate = craft()->path->getSiteTemplatesPath() . $templateFolderOverride . "/tab";
@@ -211,7 +211,6 @@ class SproutForms_FieldsService extends FieldsService
 			{
 				if (IOHelper::fileExists($formTemplate . "." . $extension))
 				{
-					SproutFormsPlugin::log("Check58 the form: {$formTemplate} ", LogLevel::Info, true);
 					$templates['form'] = craft()->path->getSiteTemplatesPath() . $templateFolderOverride . "/";
 				}
 
