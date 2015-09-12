@@ -6,7 +6,7 @@ namespace Craft;
  */
 class BaseSproutFormsFieldType implements ISproutFormsFieldType
 {
-	
+
 	public $isNakedField = false;
 
 	/**
@@ -16,14 +16,14 @@ class BaseSproutFormsFieldType implements ISproutFormsFieldType
 	 * @param mixed  $value
 	 * @return string
 	 */
-	public function getInputHtml($field, $value, $settings)
+	public function getInputHtml($field, $value, $settings, $customSettings = null)
 	{
 		return "";
 	}
 
 	/**
 	 * Default to use the 'fields' namespace for all custom fields
-	 * 
+	 *
 	 * @return string  Custom fields namespace
 	 */
 	public function getNamespace()

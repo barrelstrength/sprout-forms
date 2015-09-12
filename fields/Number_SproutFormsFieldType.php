@@ -13,12 +13,13 @@ class Number_SproutFormsFieldType extends BaseSproutFormsFieldType
 	 * @param mixed  $value
 	 * @return string
 	 */
-	public function getInputHtml($field, $value, $settings)
+	public function getInputHtml($field, $value, $settings, $customSettings = null)
 	{
 		return craft()->templates->render('fields/number/input', array(
 			'name'  => $field->handle,
 			'value' => $value,
-			'size'  => 5
+			'size'  => 5,
+			'customSettings' => $customSettings,
 		));
 	}
 }

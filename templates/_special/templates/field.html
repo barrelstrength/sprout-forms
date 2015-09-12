@@ -1,9 +1,8 @@
 {%- set handle = (field.handle is defined ? field.handle : null) %}
 {%- set label = (field.name is defined ? field.name: null) %}
 {%- set instructions = (field.instructions is defined ? field.instructions : null) %}
-{%- set fieldInfo = craft.sproutForms.getFieldInfo(field, element) -%}
+{%- set fieldInfo = craft.sproutForms.getFieldInfo(field, element, customSettings) -%}
 {%- set input = fieldInfo.input -%}
-
 {%- set namespace = (fieldInfo.namespace is defined ? fieldInfo.namespace : 'fields') -%}
 {# If this is a third party submission, don't append namespace to anything #}
 {%- set namespace = (not thirdPartySubmission) ? namespace : null -%}

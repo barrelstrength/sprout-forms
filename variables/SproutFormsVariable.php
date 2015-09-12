@@ -89,7 +89,8 @@ class SproutFormsVariable
 			'entry'                => $entry,
 			'supportedFields'      => $this->fields,
 			'displaySectionTitles' => $form->displaySectionTitles,
-			'thirdPartySubmission' => ($form->submitAction) ? true : false
+			'thirdPartySubmission' => ($form->submitAction) ? true : false,
+			'customSettings'       => $customSettings
 		));
 
 		// Check if we need to update our Front-end Form Template Path
@@ -133,11 +134,13 @@ class SproutFormsVariable
 		craft()->path->setTemplatesPath($this->templates['tab']);
 
 		$tabIndex = null;
-		foreach ($form->getFieldLayout()->getTabs() as $key => $tabInfo) {
+		foreach ($form->getFieldLayout()->getTabs() as $key => $tabInfo)
+		{
 			$thisTabHandle = str_replace(" ", "", strtolower($tabInfo->name));
 
 			// If our tab exists, grab the id
-			if ($tabHandle == $thisTabHandle) {
+			if ($tabHandle == $thisTabHandle)
+			{
 				$tabIndex = $key;
 			}
 		}
@@ -189,8 +192,10 @@ class SproutFormsVariable
 		$fieldHtml = "";
 
 		// @TODO - there's got to be a better way to do this
-		foreach ($form->getFieldLayout()->getFields() as $field) {
-			if ($field->getField()->handle == $fieldHandle) {
+		foreach ($form->getFieldLayout()->getFields() as $field)
+		{
+			if ($field->getField()->handle == $fieldHandle)
+			{
 				// Build the HTML for our form field
 				$fieldHtml = craft()->templates->render('field', array(
 					'field'                => $field->getField(),
@@ -207,7 +212,7 @@ class SproutFormsVariable
 		return new \Twig_Markup($fieldHtml, craft()->templates->getTwig()->getCharset());
 	}
 
-	public function getFieldInfo(FieldModel $field, SproutForms_EntryModel $element)
+	public function getFieldInfo(FieldModel $field, SproutForms_EntryModel $element, array $customSettings = null)
 	{
 		// Set our Sprout Forms support field classes folder
 		$fieldtypesFolder = craft()->path->getPluginsPath() . 'sproutforms/fields/';
@@ -247,7 +252,7 @@ class SproutFormsVariable
 			craft()->path->setTemplatesPath($this->fields[$field->type]['templateFolder']);
 
 			// Create the HTML for the input field
-			$input = $frontEndField->getInputHtml($fieldModel, $value, $settings);
+			$input = $frontEndField->getInputHtml($fieldModel, $value, $settings, $customSettings);
 
 			$this->namespace    = $frontEndField->getNamespace();
 			$this->isNakedField = $frontEndField->isNakedField;

@@ -13,12 +13,13 @@ class Checkboxes_SproutFormsFieldType extends BaseSproutFormsFieldType
 	 * @param mixed  $value
 	 * @return string
 	 */
-	public function getInputHtml($field, $value, $settings)
+	public function getInputHtml($field, $value, $settings, $customSettings = null)
 	{
 		return craft()->templates->render('fields/checkboxes/input', array(
 			'name'    => $field->handle,
 			'options' => $settings->options,
 			'values'  => $value,
+			'customSettings' => $customSettings,
 		));
 	}
 }
