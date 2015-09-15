@@ -1,8 +1,10 @@
 {%- set options = (options is defined ? options : []) %}
 {%- set values = (values is defined ? values : []) -%}
-
+{%- set fieldSettings = attribute(customSettings, name) is defined ? attribute(customSettings, name) : null %}
+{%- set id = name -%}
 <select multiple
 	{%- if id is defined %} id="{{ id }}"{% endif %}
+	{%- if fieldSettings.class is defined %} class="{{fieldSettings.class}}" {% endif %}
 	{%- if name is defined and name %} name="{{ name }}[]"{% endif %}
 	{%- if autofocus is defined and autofocus and not craft.request.isMobileBrowser(true) %} autofocus{% endif %}
 	{%- if disabled is defined and disabled %} disabled{% endif %}
@@ -13,3 +15,9 @@
 		<option value="{{ optionValue }}"{% if optionValue in values %} selected{% endif %}>{{ optionLabel }}</option>
 	{%- endfor %}
 </select>
+
+{% includejs %}
+	var dataJson = '{{ fieldSettings.data is defined ? fieldSettings.data|json_encode|raw : null }}';
+	var fieldId = '{{name}}';
+	setCustomAttributes(dataJson, fieldId);
+{% endincludejs %}

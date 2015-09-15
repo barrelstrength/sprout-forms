@@ -2,10 +2,11 @@
 	'select',
 	(class is defined ? class : null)
 ]|filter|join(' ') %}
-
+{%- set fieldSettings = attribute(customSettings, name) is defined ? attribute(customSettings, name) : null %}
 {%- set options = (options is defined ? options : []) %}
 {%- set value = (value is defined ? value : null) %}
 {%- set hasOptgroups = false -%}
+{%- set id = name -%}
 
 <div class="{{ class }}">
 	<select
@@ -35,3 +36,9 @@
 		{% endif %}
 	</select>
 </div>
+
+{% includejs %}
+	var dataJson = '{{ fieldSettings.data is defined ? fieldSettings.data|json_encode|raw : null }}';
+	var fieldId = '{{name}}';
+	setCustomAttributes(dataJson, fieldId);
+{% endincludejs %}

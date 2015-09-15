@@ -1,10 +1,17 @@
 {% import "forms" as forms %}
-
+{% set fieldSettings = attribute(customSettings, name) is defined ? attribute(customSettings, name) : null %}
 {% set config = {
 	id: name,
 	name: name,
 	value: value,
 	size: size,
+	class: fieldSettings.class is defined ? fieldSettings.class : 'nicetext' ,
 } %}
 
 {{ forms.text(config) }}
+
+{% includejs %}
+	var dataJson = '{{ fieldSettings.data is defined ? fieldSettings.data|json_encode|raw : null }}';
+	var fieldId = '{{name}}';
+	setCustomAttributes(dataJson, fieldId);
+{% endincludejs %}

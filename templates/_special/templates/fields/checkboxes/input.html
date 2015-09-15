@@ -2,20 +2,22 @@
 
 {%- set options = (options is defined ? options : []) %}
 {%- set values = (values is defined ? values : []) -%}
+{%- set fieldSettings = attribute(customSettings, name) is defined ? attribute(customSettings, name) : null %}
 
 <div class="checkbox-select{% if class is defined %} {{ class }}{% endif %}">
 	{%- for key, option in options %}
 		{%- set optionLabel = (option.label is defined ? option.label : option) %}
 		{%- set optionValue = (option.value is defined ? option.value : key) -%}
-		
+
 		<div>
 			{% include "fields/checkboxes/checkbox" with {
 				label:    optionLabel,
 				name:     (name is defined ? name~'[]' : null),
 				value:    optionValue,
 				checked:  (optionValue in values),
+				fieldSettings: fieldSettings,
 			} only %}
 		</div>
-		
+
 	{% endfor %}
 </div>

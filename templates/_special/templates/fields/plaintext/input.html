@@ -15,18 +15,8 @@
 	{{ forms.text(config) }}
 {% endif %}
 
-<script>
-	var fieldSettings = JSON.parse(
-			'{{ fieldSettings.data is defined ? fieldSettings.data|json_encode() : null }}'
-		);
-	var id = '{{name}}';
-	console.log(fieldSettings);
-	if(fieldSettings.data != null)
-	{
-		for (var key in fieldSettings.data)
-		{
-			console.log(key);
-			$('#'+id).data(key, fieldSettings[key]);
-		}
-	}
-</script>
+{% includejs %}
+	var dataJson = '{{ fieldSettings.data is defined ? fieldSettings.data|json_encode|raw : null }}';
+	var fieldId = '{{name}}';
+	setCustomAttributes(dataJson, fieldId);
+{% endincludejs %}

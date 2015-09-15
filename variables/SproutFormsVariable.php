@@ -98,9 +98,10 @@ class SproutFormsVariable
 
 		// Build our complete form
 		$formHtml = craft()->templates->render('form', array(
-			'form'   => $form,
-			'body'   => $bodyHtml,
-			'errors' => $entry->getErrors()
+			'form'   					=> $form,
+			'body'   					=> $bodyHtml,
+			'errors' 					=> $entry->getErrors(),
+			'customSettings' 	=> $customSettings
 		));
 
 		craft()->path->setTemplatesPath(craft()->path->getSiteTemplatesPath());
