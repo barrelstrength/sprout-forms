@@ -19,7 +19,7 @@
 		{{ input }}
 
 	{% else %}
-		<div class="field {{ type }}{% if first is defined and first %} first{% endif %}{% if class is defined and class
+		<div class="{% if customSettings.mainDivClass is defined %} {{customSettings.mainDivClass}} {% endif %} field {{ type }}{% if first is defined and first %} first{% endif %}{% if class is defined and class
 		%} {{ class }}{% endif %}{% if errors %} has-errors{% endif %}"{% if handle %} id="{{ handle }}-field"{% endif
 		%}>
 
@@ -37,7 +37,9 @@
 			{% endif %}
 
 			<div class="input{% if errors %} errors{% endif %}">
-				{{ input }}
+				<div class="{% if customSettings.inputDivClass is defined %} {{customSettings.inputDivClass}} {% endif %}">
+					{{ input }}
+				</div>
 			</div>
 
 			{% include "errorList" with { errors: errors } %}

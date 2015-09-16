@@ -27,7 +27,7 @@
 	{% hook 'sproutForms.modifyForm' %}
 
 	<div class="submit">
-		<input type="submit" value="{{ submitValue }}">
+		<input class="{% if customSettings.submitButtonClass is defined %} {{customSettings.submitButtonClass}} {% endif %}" type="submit" value="{{ submitValue }}">
 	</div>
 
 </form>
