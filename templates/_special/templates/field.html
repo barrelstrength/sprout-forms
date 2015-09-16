@@ -37,9 +37,7 @@
 			{% endif %}
 
 			<div class="input{% if errors %} errors{% endif %}">
-				<div>
-					{{ input }}
-				</div>
+				{{ input }}
 			</div>
 
 			{% include "errorList" with { errors: errors } %}
