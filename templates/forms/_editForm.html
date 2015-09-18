@@ -2,16 +2,17 @@
 {% import "_includes/forms" as forms %}
 
 {% set crumbs = [
-  { label: craft.sproutForms.name, url: url('sproutforms/entries') }
+  { label: craft.sproutForms.name, url: url('sproutforms/entries') },
+	{ label: "Forms"|t, url: url('sproutforms/forms') }
 ] %}
 
 {% set tabs = {
-    formfields:  { 
-      label: "Fields"|t, 
+    formfields:  {
+      label: "Fields"|t,
       url: '#formfields',
     },
-    notifications:  { 
-      label: "Notifications"|t, 
+    notifications:  {
+      label: "Notifications"|t,
       url: '#notification',
 			class: (notificationErrors is defined ? notificationErrors : null)
     }
@@ -125,8 +126,20 @@
 					<td class="thin">
 						<div class="btngroup submit first">
 							<input type="submit" class="btn submit" value="{{ 'Save'|t }}">
+							{% if form.id != null %}
+								<div class="btn submit menubtn"></div>
+								<div class="menu">
+									<ul>
+										<li><a class="formsubmit" data-param='saveAsNew' data-value="true">{{ "Save as a new form"|t }}</a></li>
+									</ul>
+								</div>
+							{% endif %}
 						</div>
 					</td>
+					{# @todo - see if we can remove this at some point
+						 This is an extraneous td but it cleans up unwanted full-width box-shadow
+						 that displays on the prior td probably due to a bug in Craft ui styles.#}
+					<td></td>
 				</tr>
 			</table>
 

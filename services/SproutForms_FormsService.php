@@ -10,14 +10,14 @@ class SproutForms_FormsService extends BaseApplicationComponent
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param object $formRecord
 	 */
 	public function __construct($formRecord = null)
 	{
 		$this->formRecord = $formRecord;
-		
-		if (is_null($this->formRecord)) 
+
+		if (is_null($this->formRecord))
 		{
 			$this->formRecord = SproutForms_FormRecord::model();
 		}
@@ -44,7 +44,10 @@ class SproutForms_FormsService extends BaseApplicationComponent
 	 */
 	public function saveForm(SproutForms_FormModel $form)
 	{
-		if ($form->id)
+		$formRecord = new SproutForms_FormRecord();
+		$isNewForm = true;
+
+		if ($form->id && !$form->saveAsNew)
 		{
 			$formRecord = SproutForms_FormRecord::model()->findById($form->id);
 
@@ -57,16 +60,11 @@ class SproutForms_FormsService extends BaseApplicationComponent
 			$isNewForm = false;
 
 			$hasLayout = count($form->getFieldLayout()->getFields()) > 0;
-			
+
 			// Add the oldHandle to our model so we can determine if we
 			// need to rename the content table
 			$form->oldHandle = $formRecord->getOldHandle();
 
-		}
-		else
-		{
-			$formRecord = new SproutForms_FormRecord();
-			$isNewForm = true;
 		}
 
 		// Create our new Form Record
@@ -87,7 +85,13 @@ class SproutForms_FormsService extends BaseApplicationComponent
 
 		$formRecord->validate();
 		$form->addErrors($formRecord->getErrors());
-		
+
+		if($form->saveAsNew)
+		{
+			$form->name = $formRecord->name;
+			$form->handle = $formRecord->handle;
+		}
+
 		if (!$form->hasErrors())
 		{
 			$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
@@ -96,23 +100,21 @@ class SproutForms_FormsService extends BaseApplicationComponent
 				// Set the field context
 				craft()->content->fieldContext = $form->getFieldContext();
 				craft()->content->contentTable = $form->getContentTable();
-				
-				if ($isNewForm) 
-				{	
-					$fieldLayout = new FieldLayoutModel();
-					$fieldLayout->type = 'SproutForms_Form';
+
+				if ($isNewForm)
+				{
+					$fieldLayout = $form->getFieldLayout();
 
 					// Save the field layout
 					craft()->fields->saveLayout($fieldLayout);
 
-					// Assign our new layout id info to our 
-					// form model and records
+					// Assign our new layout id info to our form model and records
 					$form->fieldLayoutId = $fieldLayout->id;
 					$form->setFieldLayout($fieldLayout);
 					$formRecord->fieldLayoutId = $fieldLayout->id;
 				}
 				else
-				{	
+				{
 					// If we have a layout use it, otherwise
 					// since this is an existing form, grab the oldForm layout
 					if ($hasLayout)
@@ -125,7 +127,7 @@ class SproutForms_FormsService extends BaseApplicationComponent
 						// Save the field layout
 						craft()->fields->saveLayout($fieldLayout);
 
-						// Assign our new layout id info to our 
+						// Assign our new layout id info to our
 						// form model and records
 						$form->fieldLayoutId = $fieldLayout->id;
 						$form->setFieldLayout($fieldLayout);
@@ -136,7 +138,7 @@ class SproutForms_FormsService extends BaseApplicationComponent
 						// We don't have a field layout right now
 						$form->fieldLayoutId = NULL;
 					}
-					
+
 				}
 
 				// Create the content table first since the form will need it
@@ -147,17 +149,58 @@ class SproutForms_FormsService extends BaseApplicationComponent
 				if (!craft()->db->tableExists($newContentTable))
 				{
 					if ($oldContentTable && craft()->db->tableExists($oldContentTable))
-					{	
+					{
 						MigrationHelper::renameTable($oldContentTable, $newContentTable);
 					}
 					else
-					{	
+					{
 						$this->_createContentTable($newContentTable);
 					}
 				}
 
 				if (craft()->elements->saveElement($form))
 				{
+					// Create the new fields
+					if($form->saveAsNew)
+					{
+						// Duplicate the fields in the newContent Table also set the fields in the craft fields table
+						$newFields = array();
+						foreach ($form->getFields() as $key => $value)
+						{
+							$field = new FieldModel();
+							$field->name         = $value->name;
+							$field->handle       = $value->handle;
+							$field->instructions = $value->instructions;
+							$field->required     = $value->required;
+							$field->translatable = (bool) $value->translatable;
+							$field->type = $value->type;
+
+							if (isset($value->settings))
+							{
+								$field->settings = $value->settings;
+							}
+
+							craft()->content->fieldContext = $form->getFieldContext();
+							craft()->content->contentTable = $form->getContentTable();
+
+							craft()->fields->saveField($field);
+							array_push($newFields, $field);
+							SproutFormsPlugin::log('Saved field as new '.$field->id);
+						}
+
+						// Update fieldId on layoutfields table
+						$fieldLayout = $form->getFieldLayout();
+						$fieldLayoutIds = FieldLayoutFieldRecord::model()->findAll("layoutId = {$fieldLayout->id}");
+
+						foreach ($fieldLayoutIds as $key => $layout)
+						{
+							SproutFormsPlugin::log('Updated field layout  '.$layout->id);
+							$model = FieldLayoutFieldRecord::model()->findByPk($layout->id);
+							$model->fieldId = $newFields[$key]->id;
+							$model->save();
+						}
+					}
+
 					// Now that we have an element ID, save it on the other stuff
 					if ($isNewForm)
 					{
@@ -220,7 +263,7 @@ class SproutForms_FormsService extends BaseApplicationComponent
 
 			// Delete the Element and Form
 			craft()->elements->deleteElementById($form->id);
-			
+
 			if ($transaction !== null)
 			{
 				$transaction->commit();
@@ -253,7 +296,7 @@ class SproutForms_FormsService extends BaseApplicationComponent
 
 	/**
 	 * Returns a form model if one is found in the database by id
-	 * 
+	 *
 	 * @param int $formId
 	 * @return null|SproutForms_FormModel
 	 */
@@ -298,7 +341,7 @@ class SproutForms_FormsService extends BaseApplicationComponent
 		}
 
 		$name = '_'.StringHelper::toLowerCase($handle);
-		
+
 		return 'sproutformscontent'.$name;
 	}
 
@@ -336,5 +379,23 @@ class SproutForms_FormsService extends BaseApplicationComponent
 		craft()->db->createCommand()->createIndex($name, 'elementId,locale', true);
 		craft()->db->createCommand()->addForeignKey($name, 'elementId', 'elements', 'id', 'CASCADE', null);
 		craft()->db->createCommand()->addForeignKey($name, 'locale', 'locales', 'locale', 'CASCADE', 'CASCADE');
+	}
+
+	/**
+	 * Returns the value of a given field
+	 *
+	 * @param string $field
+	 * @param string $value
+	 * @return SproutForms_FormRecord
+	 */
+	public function getFieldValue($field, $value)
+	{
+		$criteria = new \CDbCriteria();
+		$criteria->condition = "{$field} =:value";
+		$criteria->params = array(':value'=>$value);
+		$criteria->limit = 1;
+
+		$result = SproutForms_FormRecord::model()->find($criteria);
+		return $result;
 	}
 }

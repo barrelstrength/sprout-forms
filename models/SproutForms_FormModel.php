@@ -2,10 +2,16 @@
 namespace Craft;
 
 class SproutForms_FormModel extends BaseElementModel
-{   
+{
 	protected $elementType = 'SproutForms_Form';
 
 	private $_fields;
+
+	public $totalEntries;
+
+	public $numberOfFields;
+
+	public $saveAsNew;
 
 	/**
 	 * Use the form handle as the string representation.
@@ -16,13 +22,13 @@ class SproutForms_FormModel extends BaseElementModel
 	{
 		return Craft::t($this->name);
 	}
-	
+
 	/**
 	 * @access protected
 	 * @return array
 	 */
 	protected function defineAttributes()
-	{   
+	{
 		return array_merge(parent::defineAttributes(), array(
 			'id'                       => AttributeType::Number,
 			'groupId'	                 => AttributeType::Number,
