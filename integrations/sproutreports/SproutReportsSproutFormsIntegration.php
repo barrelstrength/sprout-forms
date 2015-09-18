@@ -150,7 +150,7 @@ class SproutReportsSproutFormsIntegration extends SproutReportsBaseReport
             'type' => 'date',
             'column' => 'dateCreated',
             'name' => 'Creation date: till',
-            'comparisonOperator' => '<',
+            'comparisonOperator' => '<=',
             'showDate' => true,
             'showTime' =>  true,
             'defaultValue' => array(
@@ -165,6 +165,8 @@ class SproutReportsSproutFormsIntegration extends SproutReportsBaseReport
             switch ($field->type)
             {
                 case 'Dropdown':
+                case 'Checkboxes':
+                case 'RadioButtons':
                     $fieldOptions = array();
                     $default = false;
                     foreach ($field['settings']['options'] as $option)
@@ -185,10 +187,10 @@ class SproutReportsSproutFormsIntegration extends SproutReportsBaseReport
                     if (count($fieldOptions))
                     {
                         $userOptions['field_'.$field['handle']] = array(
-                            'type' => 'dropdown',
+                            'type' => strtolower($field->type),
                             'column' => 'field_'.$field['handle'],
                             'name' => $field['name'],
-                            'comparisonOperator' => '=',
+                            'comparisonOperator' => ($field->type == 'Checkboxes') ? 'LIKE' : '=',
                             'values' => $fieldOptions,
                             'defaultValue' => array(
                                 'isSQL' => false,
