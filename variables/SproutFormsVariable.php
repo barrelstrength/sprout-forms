@@ -173,10 +173,18 @@ class SproutFormsVariable
 	 * @param string $form_handle
 	 * @return string
 	 */
-	public function displayField($formFieldHandle)
+	public function displayField($formFieldHandle, array $renderingOption = null)
 	{
 		list($formHandle, $fieldHandle) = explode('.', $formFieldHandle);
 		if (!$formHandle || !$fieldHandle) return '';
+		if ($renderingOption!=null)
+		{
+			$renderingOption = array(
+				'fields' =>array(
+					$fieldHandle => $renderingOption
+				)
+			);
+		}
 
 		$form  = sproutForms()->forms->getFormByHandle($formHandle);
 		$entry = sproutForms()->entries->getEntryModel($form);
@@ -202,7 +210,8 @@ class SproutFormsVariable
 					'field'                => $field->getField(),
 					'required'             => $field->required,
 					'element'              => $entry,
-					'thirdPartySubmission' => ($form->submitAction) ? true : false
+					'thirdPartySubmission' => ($form->submitAction) ? true : false,
+					'renderingOption'      => $renderingOption
 				));
 				break;
 			}
