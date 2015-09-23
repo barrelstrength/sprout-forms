@@ -14,7 +14,7 @@ interface ISproutFormsFieldType
 	 * @param mixed  $value
 	 * @return string
 	 */
-	public function getInputHtml($field, $value, $settings, $customSettings = null);
+	public function getInputHtml($field, $value, $settings, $renderingOption = null);
 
 	/**
 	 * Default to use the 'fields' namespace for all custom fields

@@ -13,13 +13,13 @@ class MultiSelect_SproutFormsFieldType extends BaseSproutFormsFieldType
 	 * @param mixed  $value
 	 * @return string
 	 */
-	public function getInputHtml($field, $value, $settings, $customSettings = null)
+	public function getInputHtml($field, $value, $settings, $renderingOption = null)
 	{
 		return craft()->templates->render('fields/multiselect/input', array(
 			'name'    => $field->handle,
 			'options' => $settings->options,
 			'values'  => $value,
-			'customSettings' => $customSettings,
+			'renderingOption' => $renderingOption,
 		));
 	}
 }

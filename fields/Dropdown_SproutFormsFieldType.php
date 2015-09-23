@@ -13,13 +13,13 @@ class Dropdown_SproutFormsFieldType extends BaseSproutFormsFieldType
 	 * @param mixed  $value
 	 * @return string
 	 */
-	public function getInputHtml($field, $value, $settings, $customSettings = null)
+	public function getInputHtml($field, $value, $settings, $renderingOption = null)
 	{
 		return craft()->templates->render('fields/dropdown/input', array(
 			'name'    => $field->handle,
 			'options' => $settings->options,
 			'value'   => $value,
-			'customSettings' => $customSettings,
+			'renderingOption' => $renderingOption,
 		));
 	}
 }

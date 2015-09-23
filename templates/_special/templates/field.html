@@ -2,7 +2,7 @@
 {%- set handle = (field.handle is defined ? field.handle : null) %}
 {%- set label = (field.name is defined ? field.name: null) %}
 {%- set instructions = (field.instructions is defined ? field.instructions : null) %}
-{%- set fieldInfo = craft.sproutForms.getFieldInfo(field, element, customSettings) -%}
+{%- set fieldInfo = craft.sproutForms.getFieldInfo(field, element, renderingOption) -%}
 {%- set input = fieldInfo.input -%}
 {%- set namespace = (fieldInfo.namespace is defined ? fieldInfo.namespace : 'fields') -%}
 {# If this is a third party submission, don't append namespace to anything #}
@@ -19,7 +19,7 @@
 		{{ input }}
 
 	{% else %}
-		<div class="{% if customSettings.mainDivClass is defined %} {{customSettings.mainDivClass}} {% endif %} field {{ type }}{% if first is defined and first %} first{% endif %}{% if class is defined and class
+		<div class="{% if renderingOption.mainDivClass is defined %} {{renderingOption.mainDivClass}} {% endif %} field {{ type }}{% if first is defined and first %} first{% endif %}{% if class is defined and class
 		%} {{ class }}{% endif %}{% if errors %} has-errors{% endif %}"{% if handle %} id="{{ handle }}-field"{% endif
 		%}>
 
@@ -37,7 +37,7 @@
 			{% endif %}
 
 			<div class="input{% if errors %} errors{% endif %}">
-				<div class="{% if customSettings.inputDivClass is defined %} {{customSettings.inputDivClass}} {% endif %}">
+				<div class="{% if renderingOption.inputDivClass is defined %} {{renderingOption.inputDivClass}} {% endif %}">
 					{{ input }}
 				</div>
 			</div>

@@ -16,7 +16,7 @@ class BaseSproutFormsFieldType implements ISproutFormsFieldType
 	 * @param mixed  $value
 	 * @return string
 	 */
-	public function getInputHtml($field, $value, $settings, $customSettings = null)
+	public function getInputHtml($field, $value, $settings, $renderingOption = null)
 	{
 		return "";
 	}

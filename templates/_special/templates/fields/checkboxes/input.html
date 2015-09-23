@@ -2,7 +2,7 @@
 
 {%- set options = (options is defined ? options : []) %}
 {%- set values = (values is defined ? values : []) -%}
-{%- set fieldSettings = attribute(customSettings, name) is defined ? attribute(customSettings, name) : null %}
+{%- set fieldSettings = attribute(renderingOption, name) is defined ? attribute(renderingOption, name) : null %}
 
 <div class="checkbox-select{% if class is defined %} {{ class }}{% endif %} {% if fieldSettings.class is defined %} {{fieldSettings.class}} {% endif %}">
 	{%- for key, option in options %}

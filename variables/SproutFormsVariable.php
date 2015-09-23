@@ -56,12 +56,12 @@ class SproutFormsVariable
 	 * Returns a complete form for display in template
 	 *
 	 * @param string $formHandle
-	 * @param array|null $customSettings
+	 * @param array|null $renderingOption
 	 *
 	 * @return string
 	 * @internal param string $form_handle
 	 */
-	public function displayForm($formHandle, array $customSettings = null)
+	public function displayForm($formHandle, array $renderingOption = null)
 	{
 		$form  = sproutForms()->forms->getFormByHandle($formHandle);
 		$entry = sproutForms()->entries->getEntryModel($form);
@@ -90,7 +90,7 @@ class SproutFormsVariable
 			'supportedFields'      => $this->fields,
 			'displaySectionTitles' => $form->displaySectionTitles,
 			'thirdPartySubmission' => ($form->submitAction) ? true : false,
-			'customSettings'       => $customSettings
+			'renderingOption'       => $renderingOption
 		));
 
 		// Check if we need to update our Front-end Form Template Path
@@ -101,7 +101,7 @@ class SproutFormsVariable
 			'form'   					=> $form,
 			'body'   					=> $bodyHtml,
 			'errors' 					=> $entry->getErrors(),
-			'customSettings' 	=> $customSettings
+			'renderingOption' 	=> $renderingOption
 		));
 
 		craft()->path->setTemplatesPath(craft()->path->getSiteTemplatesPath());
@@ -213,7 +213,7 @@ class SproutFormsVariable
 		return new \Twig_Markup($fieldHtml, craft()->templates->getTwig()->getCharset());
 	}
 
-	public function getFieldInfo(FieldModel $field, SproutForms_EntryModel $element, array $customSettings = null)
+	public function getFieldInfo(FieldModel $field, SproutForms_EntryModel $element, array $renderingOption = null)
 	{
 		// Set our Sprout Forms support field classes folder
 		$fieldtypesFolder = craft()->path->getPluginsPath() . 'sproutforms/fields/';
@@ -253,7 +253,7 @@ class SproutFormsVariable
 			craft()->path->setTemplatesPath($this->fields[$field->type]['templateFolder']);
 
 			// Create the HTML for the input field
-			$input = $frontEndField->getInputHtml($fieldModel, $value, $settings, $customSettings);
+			$input = $frontEndField->getInputHtml($fieldModel, $value, $settings, $renderingOption);
 
 			$this->namespace    = $frontEndField->getNamespace();
 			$this->isNakedField = $frontEndField->isNakedField;
