@@ -56,12 +56,12 @@ class SproutFormsVariable
 	 * Returns a complete form for display in template
 	 *
 	 * @param string $formHandle
-	 * @param array|null $renderingOption
+	 * @param array|null $renderingOptions
 	 *
 	 * @return string
 	 * @internal param string $form_handle
 	 */
-	public function displayForm($formHandle, array $renderingOption = null)
+	public function displayForm($formHandle, array $renderingOptions = null)
 	{
 		$form  = sproutForms()->forms->getFormByHandle($formHandle);
 		$entry = sproutForms()->entries->getEntryModel($form);
@@ -90,7 +90,7 @@ class SproutFormsVariable
 			'supportedFields'      => $this->fields,
 			'displaySectionTitles' => $form->displaySectionTitles,
 			'thirdPartySubmission' => ($form->submitAction) ? true : false,
-			'renderingOption'       => $renderingOption
+			'renderingOptions'       => $renderingOptions
 		));
 
 		// Check if we need to update our Front-end Form Template Path
@@ -101,7 +101,7 @@ class SproutFormsVariable
 			'form'   					=> $form,
 			'body'   					=> $bodyHtml,
 			'errors' 					=> $entry->getErrors(),
-			'renderingOption' 	=> $renderingOption
+			'renderingOptions' 	=> $renderingOptions
 		));
 
 		craft()->path->setTemplatesPath(craft()->path->getSiteTemplatesPath());
@@ -173,15 +173,15 @@ class SproutFormsVariable
 	 * @param string $form_handle
 	 * @return string
 	 */
-	public function displayField($formFieldHandle, array $renderingOption = null)
+	public function displayField($formFieldHandle, array $renderingOptions = null)
 	{
 		list($formHandle, $fieldHandle) = explode('.', $formFieldHandle);
 		if (!$formHandle || !$fieldHandle) return '';
-		if ($renderingOption!=null)
+		if ($renderingOptions!=null)
 		{
-			$renderingOption = array(
+			$renderingOptions = array(
 				'fields' =>array(
-					$fieldHandle => $renderingOption
+					$fieldHandle => $renderingOptions
 				)
 			);
 		}
@@ -211,7 +211,7 @@ class SproutFormsVariable
 					'required'             => $field->required,
 					'element'              => $entry,
 					'thirdPartySubmission' => ($form->submitAction) ? true : false,
-					'renderingOption'      => $renderingOption
+					'renderingOptions'      => $renderingOptions
 				));
 				break;
 			}
@@ -222,7 +222,7 @@ class SproutFormsVariable
 		return new \Twig_Markup($fieldHtml, craft()->templates->getTwig()->getCharset());
 	}
 
-	public function getFieldInfo(FieldModel $field, SproutForms_EntryModel $element, array $renderingOption = null)
+	public function getFieldInfo(FieldModel $field, SproutForms_EntryModel $element, array $renderingOptions = null)
 	{
 		// Set our Sprout Forms support field classes folder
 		$fieldtypesFolder = craft()->path->getPluginsPath() . 'sproutforms/fields/';
@@ -262,7 +262,7 @@ class SproutFormsVariable
 			craft()->path->setTemplatesPath($this->fields[$field->type]['templateFolder']);
 
 			// Create the HTML for the input field
-			$input = $frontEndField->getInputHtml($fieldModel, $value, $settings, $renderingOption);
+			$input = $frontEndField->getInputHtml($fieldModel, $value, $settings, $renderingOptions);
 
 			$this->namespace    = $frontEndField->getNamespace();
 			$this->isNakedField = $frontEndField->isNakedField;

@@ -13,13 +13,13 @@ class RadioButtons_SproutFormsFieldType extends BaseSproutFormsFieldType
 	 * @param mixed  $value
 	 * @return string
 	 */
-	public function getInputHtml($field, $value, $settings, $renderingOption = null)
+	public function getInputHtml($field, $value, $settings, $renderingOptions = null)
 	{
 		return craft()->templates->render('fields/radiobuttons/input', array(
 			'name'    => $field->handle,
 			'options' => $settings->options,
 			'value'   => $value,
-			'renderingOption' => $renderingOption,
+			'renderingOptions' => $renderingOptions,
 		));
 	}
 }

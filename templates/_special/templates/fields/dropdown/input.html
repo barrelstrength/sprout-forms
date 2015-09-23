@@ -2,7 +2,7 @@
 	'select',
 	(class is defined ? class : null)
 ]|filter|join(' ') %}
-{%- set fieldSettings = attribute(renderingOption.fields, name) is defined ? attribute(renderingOption.fields, name) : null %}
+{%- set fieldSettings = attribute(renderingOptions.fields, name) is defined ? attribute(renderingOptions.fields, name) : null %}
 {%- set data = (fieldSettings.data is defined ? fieldSettings.data : null) %}
 {%- set options = (options is defined ? options : []) %}
 {%- set value = (value is defined ? value : null) %}

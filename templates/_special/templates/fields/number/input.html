@@ -1,5 +1,5 @@
 {% import "forms" as forms %}
-{% set fieldSettings = attribute(renderingOption.fields, name) is defined ? attribute(renderingOption.fields, name) : null %}
+{% set fieldSettings = attribute(renderingOptions.fields, name) is defined ? attribute(renderingOptions.fields, name) : null %}
 {% set config = {
 	id: name,
 	name: name,

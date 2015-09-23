@@ -13,13 +13,13 @@ class PlainText_SproutFormsFieldType extends BaseSproutFormsFieldType
 	 * @param mixed  $value
 	 * @return string
 	 */
-	public function getInputHtml($field, $value, $settings, $renderingOption = null)
+	public function getInputHtml($field, $value, $settings, $renderingOptions = null)
 	{
 		return craft()->templates->render('fields/plaintext/input', array(
 			'name'     => $field->handle,
 			'value'    => $value,
 			'settings' => $settings,
-			'renderingOption' => $renderingOption,
+			'renderingOptions' => $renderingOptions,
 		));
 	}
 }

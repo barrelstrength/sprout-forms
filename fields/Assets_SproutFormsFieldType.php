@@ -10,11 +10,11 @@ class Assets_SproutFormsFieldType extends BaseSproutFormsFieldType
 	 *
 	 * @return string
 	 */
-	public function getInputHtml($field, $value, $settings, $renderingOption = null)
+	public function getInputHtml($field, $value, $settings, $renderingOptions = null)
 	{
 		return craft()->templates->render('fields/assets/input', array(
 			'name'           => $field->handle,
-			'renderingOption' => $renderingOption,
+			'renderingOptions' => $renderingOptions,
 		));
 	}
 }
