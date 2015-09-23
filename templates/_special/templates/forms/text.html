@@ -1,5 +1,5 @@
 {%- set type = (type is defined ? type : 'text') %}
-
+{%- set data = (fieldSettings.data is defined ? fieldSettings.data : null) %}
 {%- set class = [
 	'text',
 	(class is defined and class ? class : null),
@@ -7,6 +7,8 @@
 	(type is defined and type == 'password' ? 'password' : null),
 	(size is defined and size ? null : 'fullwidth')
 ]|filter|join(' ') %}
+
+
 
 {%- if type == 'password' %}<div class="passwordwrapper">{% endif -%}
 <input class="{{ class }}" type="{{ type }}"
@@ -18,5 +20,9 @@
 	{%- if autofocus is defined and autofocus and not craft.request.isMobileBrowser(true) %} autofocus{% endif %}
 	{%- if autocomplete is not defined or not autocomplete %} autocomplete="off"{% endif %}
 	{%- if disabled is defined and disabled %} disabled {% endif %}
-	{%- if placeholder is defined and placeholder %} placeholder="{{ placeholder }}"{% endif %}>
+	{%- if placeholder is defined and placeholder %} placeholder="{{ placeholder }}"{% endif %}
+	{% for key,value in data %}
+		 {{ 'data-'~key~'='~value }}
+	{% endfor %}
+	>
 {%- if type == 'password' %}</div>{% endif %}

@@ -1,17 +1,12 @@
 {% import "forms" as forms %}
-{% set fieldSettings = attribute(renderingOption, name) is defined ? attribute(renderingOption, name) : null %}
+{% set fieldSettings = attribute(renderingOption.fields, name) is defined ? attribute(renderingOption.fields, name) : null %}
 {% set config = {
 	id: name,
 	name: name,
 	value: value,
 	size: size,
-	class: fieldSettings.class is defined ? fieldSettings.class : 'nicetext' ,
+	class: fieldSettings.class is defined ? fieldSettings.class : '' ,
+	fieldSettings: fieldSettings,
 } %}
 
 {{ forms.text(config) }}
-
-{% includejs %}
-	var dataJson = '{{ fieldSettings.data is defined ? fieldSettings.data|json_encode|raw : null }}';
-	var fieldId = '{{name}}';
-	setCustomAttributes(dataJson, fieldId);
-{% endincludejs %}

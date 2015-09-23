@@ -2,7 +2,8 @@
 	'select',
 	(class is defined ? class : null)
 ]|filter|join(' ') %}
-{%- set fieldSettings = attribute(renderingOption, name) is defined ? attribute(renderingOption, name) : null %}
+{%- set fieldSettings = attribute(renderingOption.fields, name) is defined ? attribute(renderingOption.fields, name) : null %}
+{%- set data = (fieldSettings.data is defined ? fieldSettings.data : null) %}
 {%- set options = (options is defined ? options : []) %}
 {%- set value = (value is defined ? value : null) %}
 {%- set hasOptgroups = false -%}
@@ -15,7 +16,10 @@
 		{%- if name is defined %} name="{{ name }}"{% endif %}
 		{%- if autofocus is defined and autofocus and not craft.request.isMobileBrowser(true) %} autofocus{% endif %}
 		{%- if disabled is defined and disabled %} disabled{% endif %}
-		{%- if targetPrefix is defined %} data-target-prefix="{{ targetPrefix }}"{% endif %}>
+		{%- if targetPrefix is defined %} data-target-prefix="{{ targetPrefix }}"{% endif %}
+		{% for key,value in data %}
+			{{ 'data-'~key~'='~value }}
+		{% endfor %}>
 		{% for key, option in options %}
 			{% if option.optgroup is defined %}
 				{% if hasOptgroups %}
@@ -36,9 +40,3 @@
 		{% endif %}
 	</select>
 </div>
-
-{% includejs %}
-	var dataJson = '{{ fieldSettings.data is defined ? fieldSettings.data|json_encode|raw : null }}';
-	var fieldId = '{{name}}';
-	setCustomAttributes(dataJson, fieldId);
-{% endincludejs %}

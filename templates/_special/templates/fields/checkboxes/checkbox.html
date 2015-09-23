@@ -4,7 +4,7 @@
 	((toggle is defined and toggle is not empty) or (reverseToggle is defined and reverseToggle is not empty) ? 'fieldtoggle' : null),
 	'checkbox'
 ]|filter|join(' ') %}
-
+{%- set data = (fieldSettings.data is defined ? fieldSettings.data : null) %}
 {% set value = (value is defined ? value : 1) %}
 {%- set id = name -%}
 
@@ -21,13 +21,10 @@
 		{%- if autofocus is defined and autofocus and not craft.request.isMobileBrowser(true) %} autofocus{% endif %}
 		{%- if disabled is defined and disabled %} disabled{% endif %}
 		{%- if toggle is defined %} data-target="{{ toggle }}"{% endif %}
-		{%- if reverseToggle is defined %} data-reverse-target="{{ reverseToggle }}"{% endif %}>
+		{%- if reverseToggle is defined %} data-reverse-target="{{ reverseToggle }}"{% endif %}
+		{% for key,value in data %}
+			{{ 'data-'~key~'='~value }}
+		{% endfor %}>
 	{%- if label is defined %}&nbsp;{{ label|raw }}{% endif %}
 </label>
 {% endspaceless -%}
-
-{% includejs %}
-	var dataJson = '{{ fieldSettings.data is defined ? fieldSettings.data|json_encode|raw : null }}';
-	var fieldId = '{{name}}';
-	setCustomAttributes(dataJson, fieldId);
-{% endincludejs %}
