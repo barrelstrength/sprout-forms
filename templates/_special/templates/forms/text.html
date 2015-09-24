@@ -12,6 +12,7 @@
 
 {%- if type == 'password' %}<div class="passwordwrapper">{% endif -%}
 <input class="{{ class }}" type="{{ type }}"
+	{% if field.required is defined and field.required %} required {% endif %}
 	{%- if id is defined and id %} id="{{ id }}"{% endif %}
 	{%- if size is defined and size %} size="{{ size }}"{% endif %}
 	{%- if name is defined and name %} name="{{ name }}"{% endif %}

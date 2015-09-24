@@ -2,6 +2,9 @@
 {%- set handle = (field.handle is defined ? field.handle : null) %}
 {%- set label = (field.name is defined ? field.name: null) %}
 {%- set instructions = (field.instructions is defined ? field.instructions : null) %}
+
+{% do field.setAttribute('required', required is defined ? required : null) %}
+
 {%- set fieldInfo = craft.sproutForms.getFieldInfo(field, element, renderingOptions) -%}
 {%- set input = fieldInfo.input -%}
 {%- set namespace = (fieldInfo.namespace is defined ? fieldInfo.namespace : 'fields') -%}
@@ -38,6 +41,7 @@
 
 			<div class="input{% if errors %} errors{% endif %}">
 				<div class="{% if renderingOptions.inputDivClass is defined %} {{renderingOptions.inputDivClass}} {% endif %}">
+					<!-- {{ field.required }} -->
 					{{ input }}
 				</div>
 			</div>

@@ -18,6 +18,7 @@ class PlainText_SproutFormsFieldType extends BaseSproutFormsFieldType
 		return craft()->templates->render('fields/plaintext/input', array(
 			'name'     => $field->handle,
 			'value'    => $value,
+			'field'    => $field,
 			'settings' => $settings,
 			'renderingOptions' => $renderingOptions,
 		));
