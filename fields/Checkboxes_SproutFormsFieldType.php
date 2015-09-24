@@ -18,6 +18,7 @@ class Checkboxes_SproutFormsFieldType extends BaseSproutFormsFieldType
 		return craft()->templates->render('fields/checkboxes/input', array(
 			'name'    => $field->handle,
 			'options' => $settings->options,
+			'field'    => $field,
 			'values'  => $value,
 			'renderingOptions' => $renderingOptions,
 		));

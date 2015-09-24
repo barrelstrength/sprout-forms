@@ -18,6 +18,7 @@ class MultiSelect_SproutFormsFieldType extends BaseSproutFormsFieldType
 		return craft()->templates->render('fields/multiselect/input', array(
 			'name'    => $field->handle,
 			'options' => $settings->options,
+			'field'    => $field,
 			'values'  => $value,
 			'renderingOptions' => $renderingOptions,
 		));

@@ -9,7 +9,7 @@
 
 {% else %}
 {# Submit form to Sprout Forms #}
-<form {{ renderingOptions.class is defined ? "class="~renderingOptions.class : ""}} method="post" accept-charset="UTF-8" enctype="multipart/form-data">
+<form id="{{ renderingOptions.id is defined ? renderingOptions.id : form.handle}}" {{ renderingOptions.class is defined ? "class="~renderingOptions.class : ""}} method="post" accept-charset="UTF-8" enctype="multipart/form-data">
 	{{ getCsrfInput() }}
 	<input type="hidden" name="action" value="{{ submitAction }}">
 	<input type="hidden" name="handle" value="{{ form.handle }}">
@@ -27,7 +27,7 @@
 	{% hook 'sproutForms.modifyForm' %}
 
 	<div class="submit">
-		<input class="{% if renderingOptions.submitButtonClass is defined %} {{renderingOptions.submitButtonClass}} {% endif %}" type="submit" value="{{ submitValue }}">
+		<input type="submit" value="{{ submitValue }}">
 	</div>
 
 </form>

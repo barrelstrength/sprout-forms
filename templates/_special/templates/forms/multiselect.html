@@ -3,6 +3,7 @@
 {%- set data = (fieldSettings.data is defined ? fieldSettings.data : null) %}
 
 <select multiple
+	{% if field.required is defined and field.required %} required {% endif %}
 	{%- if id is defined %} id="{{ id }}"{% endif %}
 	{%- if class is defined %} class="{{class}}" {% endif %}
 	{%- if name is defined and name %} name="{{ name }}[]"{% endif %}

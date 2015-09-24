@@ -1,8 +1,7 @@
-{% includeJsResource "sproutforms/js/customFieldSettings.js" %}
 {%- set handle = (field.handle is defined ? field.handle : null) %}
 {%- set label = (field.name is defined ? field.name: null) %}
 {%- set instructions = (field.instructions is defined ? field.instructions : null) %}
-
+{% set fieldSettings = attribute(renderingOptions.fields, handle) is defined ? attribute(renderingOptions.fields, handle) : null %}
 {% do field.setAttribute('required', required is defined ? required : null) %}
 
 {%- set fieldInfo = craft.sproutForms.getFieldInfo(field, element, renderingOptions) -%}
@@ -22,8 +21,8 @@
 		{{ input }}
 
 	{% else %}
-		<div class="{% if renderingOptions.mainDivClass is defined %} {{renderingOptions.mainDivClass}} {% endif %} field {{ type }}{% if first is defined and first %} first{% endif %}{% if class is defined and class
-		%} {{ class }}{% endif %}{% if errors %} has-errors{% endif %}"{% if handle %} id="{{ handle }}-field"{% endif
+		<div class="field {{ type }}{% if first is defined and first %} first{% endif %}{% if class is defined and class
+		%} {{ class }}{% endif %}{% if errors %} {{ renderingOptions.errorClass is defined ? renderingOptions.errorClass : 'has-errors' }} {% endif %}"{% if handle %} id="{{ handle }}-field"{% endif
 		%}>
 
 			{% if label or instructions %}
@@ -39,9 +38,8 @@
 				</div>
 			{% endif %}
 
-			<div class="input{% if errors %} errors{% endif %}">
-				<div class="{% if renderingOptions.inputDivClass is defined %} {{renderingOptions.inputDivClass}} {% endif %}">
-					<!-- {{ field.required }} -->
+			<div class="input{% if errors %} {{ fieldSettings.errorClass is defined ? fieldSettings.errorClass : 'errors' }} {% endif %}">
+				<div>
 					{{ input }}
 				</div>
 			</div>

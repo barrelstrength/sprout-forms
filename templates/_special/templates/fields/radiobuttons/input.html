@@ -1,5 +1,7 @@
 {%- set options = (options is defined ? options : []) %}
 {%- set value = (value is defined ? value : null) %}
+{%- set fieldSettings = attribute(renderingOptions.fields, name) is defined ? attribute(renderingOptions.fields, name) : null %}
+{%- set data = (fieldSettings.data is defined ? fieldSettings.data : null) %}
 
 {%- for key, option in options %}
 	{%- set optionLabel = (option.label is defined ? option.label : option) %}
@@ -10,6 +12,8 @@
 			id:        (id is defined and loop.first ? id : null),
 			name:      (name is defined ? name : null),
 			value:     optionValue,
+			field:     field,
+			data: 		 data,
 			checked:   (optionValue == value),
 			autofocus: (autofocus is defined and autofocus and loop.first and not craft.request.isMobileBrowser(true))
 		} only %}
