@@ -9,13 +9,22 @@
 		{% endif %}
 
 		{% for field in fields %}
-			{% include "field" with {
-				field:    field.getField(),
-				required: field.required,
-				element:  entry,
-				thirdPartySubmission: thirdPartySubmission,
-				renderingOptions: renderingOptions,
-			} only %}
+
+			{% if field.getField().type == 'PlainText' %}
+				{% set type      = field.getField().type %}
+				{% set required  = field.required %}
+				{% set formField = attribute(formFields, type) is defined ? attribute(formFields, type) %}
+
+				{% include "field" with {
+					field:                field.getField(),
+					element:              entry,
+					required:             required,
+					formField:            formField,
+					renderingOptions:     renderingOptions,
+					thirdPartySubmission: thirdPartySubmission,
+				} only %}
+			{% endif %}
+
 		{% endfor %}
 
 	</div>

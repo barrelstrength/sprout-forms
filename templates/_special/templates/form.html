@@ -1,34 +1,30 @@
-{%- set submitValue = (form.submitButtonText ? form.submitButtonText : "Submit"|t) -%}
-{%- set submitAction = (form.submitAction ? form.submitAction : "sproutForms/entries/saveEntry") %}
 <!-- Custom form created using the Sprout Forms form builder plugin v{{ craft.sproutForms.version }} - http://sprout.barrelstrengthdesign.com/craft-plugins/forms -->
-{%- if form.submitAction %}
 
-{# Submit form to third party #}
-<form {{ renderingOptions.class is defined ? "class="~renderingOptions.class : ""}} method="post" accept-charset="utf-8" enctype="multipart/form-data">
-	<input type="hidden" name="action" value="{{ submitAction }}">
+{% set action  = form.submitAction is empty ? 'sproutForms/saveEntry' : form.submitAction %}
+{% set options = renderingOptions is defined and renderingOptions is not empty ? renderingOptions : {} %}
+{% set id      = options.id is defined ? options.id : form.handle %}
+{% set class   = options.class is defined ? options.class : 'sproutforms-form' %}
 
-{% else %}
-{# Submit form to Sprout Forms #}
-<form id="{{ renderingOptions.id is defined ? renderingOptions.id : form.handle}}" {{ renderingOptions.class is defined ? "class="~renderingOptions.class : ""}} method="post" accept-charset="UTF-8" enctype="multipart/form-data">
-	{{ getCsrfInput() }}
-	<input type="hidden" name="action" value="{{ submitAction }}">
-	<input type="hidden" name="handle" value="{{ form.handle }}">
+<form id="{{ id}}" class="{{ class }}" method="post" accept-charset="utf-8" enctype="multipart/form-data">
 
-{% endif %}
+	{% if form.submitAction is empty %}
+		{{ getCsrfInput() }}
+		<input type="hidden" name="handle" value="{{ form.handle }}">
+	{% endif %}
 
-	{% if form.redirectUri %}
-	<input type="hidden" name="redirect" value="{{ form.redirectUri }}">
+	<input type="hidden" name="action" value="{{ action }}">
+
+	{% if form.redirectUri is not empty %}
+		<input type="hidden" name="redirect" value="{{ form.redirectUri }}">
 	{% endif %}
 
 	<div class="fields">
-	{{ body | raw }}
+		{{ body | raw }}
 	</div>
 
 	{% hook 'sproutForms.modifyForm' %}
 
 	<div class="submit">
-		<input type="submit" value="{{ submitValue }}">
+		<input type="submit" value="{{ form.submitButtonText is not empty ? form.submitButtonText : 'Submit' }}">
 	</div>
-
 </form>
-<!-- / Sprout Forms Craft CMS plugin -->
