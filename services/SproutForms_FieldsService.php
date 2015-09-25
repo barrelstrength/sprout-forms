@@ -248,7 +248,7 @@ class SproutForms_FieldsService extends FieldsService
 						 */
 						foreach ($fields as $instance)
 						{
-							$this->registeredFields[$instance->getType()] = $instance;
+							$this->registeredFields[get_class($instance)] = $instance;
 						}
 					}
 				}

@@ -470,9 +470,12 @@ class SproutFormsVariable
 	{
 		$fields = sproutForms()->fields->getRegisteredFields();
 
-		if (isset($fields[$type]))
+		foreach ($fields as $field)
 		{
-			return $fields[$type];
+			if ($field->getType() == $type)
+			{
+				return $field;
+			}
 		}
 	}
 

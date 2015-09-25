@@ -13,7 +13,7 @@
 			{% if field.getField().type == 'PlainText' %}
 				{% set type      = field.getField().type %}
 				{% set required  = field.required %}
-				{% set formField = attribute(formFields, type) is defined ? attribute(formFields, type) %}
+				{% set formField = craft.sproutForms.getRegisteredField(field.getField().type) %}
 
 				{% include "field" with {
 					field:                field.getField(),
