@@ -10,20 +10,18 @@
 
 		{% for field in fields %}
 
-			{% if field.getField().type == 'PlainText' %}
-				{% set type      = field.getField().type %}
-				{% set required  = field.required %}
-				{% set formField = craft.sproutForms.getRegisteredField(field.getField().type) %}
+			{% set type      = field.getField().type %}
+			{% set required  = field.required %}
+			{% set formField = craft.sproutForms.getRegisteredField(field.getField().type) %}
 
-				{% include "field" with {
-					field:                field.getField(),
-					element:              entry,
-					required:             required,
-					formField:            formField,
-					renderingOptions:     renderingOptions,
-					thirdPartySubmission: thirdPartySubmission,
-				} only %}
-			{% endif %}
+			{% include "field" with {
+				field:                field.getField(),
+				element:              entry,
+				required:             required,
+				formField:            formField,
+				renderingOptions:     renderingOptions,
+				thirdPartySubmission: thirdPartySubmission,
+			} only %}
 
 		{% endfor %}
 
