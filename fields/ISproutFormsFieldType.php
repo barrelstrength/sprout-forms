@@ -14,11 +14,11 @@ interface ISproutFormsFieldType
 	 * @param mixed  $value
 	 * @return string
 	 */
-	public function getInputHtml($field, $value, $settings);
+	public function getInputHtml($field, $value, $settings, $renderingOptions = null);
 
 	/**
 	 * Default to use the 'fields' namespace for all custom fields
-	 * 
+	 *
 	 * @return string  Custom fields namespace
 	 */
 	public function getNamespace();

@@ -82,6 +82,8 @@ class SproutForms_FormsService extends BaseApplicationComponent
 		$formRecord->notificationSenderName   = $form->notificationSenderName;
 		$formRecord->notificationSenderEmail  = $form->notificationSenderEmail;
 		$formRecord->notificationReplyToEmail = $form->notificationReplyToEmail;
+		$formRecord->enableTemplateOverrides  = $form->enableTemplateOverrides;
+		$formRecord->templateOverridesFolder  = $form->templateOverridesFolder;
 
 		$formRecord->validate();
 		$form->addErrors($formRecord->getErrors());

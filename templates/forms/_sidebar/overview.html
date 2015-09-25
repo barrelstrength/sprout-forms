@@ -1,88 +1,130 @@
+{% set tab  = 1 %}
+{% set tab2 = false %}
 
-{% if groups is defined and groups|length %}
+<nav id="tabs" class="tabs">
+	<ul>
+		<li>
+			<a class="tab {{ tab == 1 ? ' sel' : '' }}" href="#tab-sproutforms-overview">
+				Overview
+			</a>
+		</li>
+		<li>
+			<a class="tab {{ tab == 2 ? ' sel' : '' }} {{ tab2 ? 'error' : '' }}" href="#tab-sproutforms-custom">
+				Custom
+			</a>
+		</li>
+	</ul>
+</nav>
 
-  {% set groupOptions = [
-    { label: 'All Forms'|t , value: '*' }
-  ] %}
-  {% for group in groups %}
-    {% set groupOptions = groupOptions|merge([{ label: group.name, value: group.id }]) %}
-  {% endfor %}
+<div>
+	<div class="{{ tab != 1 ? 'hidden' : '' }}" id="tab-sproutforms-overview">
 
-  {{ forms.selectField({
-    first: true,
-    label: "Group"|t,
-    instructions: "Which group should this form be displayed in?"|t,
-    id: 'groupId',
-    name: 'groupId',
-    options: groupOptions,
-    value: groupId
-  }) }}
+		{% if groups is defined and groups|length %}
 
-{% endif %}
+			{% set groupOptions = [
+				{ label: 'All Forms'|t , value: '*' }
+			] %}
+			{% for group in groups %}
+				{% set groupOptions = groupOptions|merge([{ label: group.name, value: group.id }]) %}
+			{% endfor %}
 
-{{ forms.textField({
-  first: (groups is defined and groups|length ? false : true),
-  label: "Name <span class='info'>What this form will be called in the CP.</span>"|t,
-  id: 'name',
-  name: 'name',
-  value: form.name,
-  errors: form.getErrors('name'),
-  autofocus: true,
-  required: true,
-  translatable: true
-}) }}
+			{{ forms.selectField({
+				first: true,
+				label: "Group"|t,
+				instructions: "Which group should this form be displayed in?"|t,
+				id: 'groupId',
+				name: 'groupId',
+				options: groupOptions,
+				value: groupId
+			}) }}
 
-{{ forms.textField({
-  label: "Handle <span class='info'>How you’ll refer to this form in the templates.</span>"|t,
-  id: 'handle',
-  class: 'code',
-  name: 'handle',
-  value: form.handle,
-  errors: form.getErrors('handle'),
-  required: true
-}) }}
+		{% endif %}
 
-{{ forms.textField({
-  label: "Redirect Page <span class='info'>Where should the user be redirected upon form submission? <i>NOTE: Leaving blank will redirect user back to the form.</i></span>"|t,
-  name: 'redirectUri',
-  placeholder: siteUrl, 
-  value: (form is defined ? form.redirectUri : null),
-  errors: (form is defined ? form.getErrors('redirectUri') : null)
-}) }}
+		{{ forms.textField({
+			first: (groups is defined and groups|length ? false : true),
+			label: "Name <span class='info'>What this form will be called in the CP.</span>"|t,
+			id: 'name',
+			name: 'name',
+			value: form.name,
+			errors: form.getErrors('name'),
+			autofocus: true,
+			required: true,
+			translatable: true
+		}) }}
 
-{{ forms.textField({
-  label: "Submit Button Text <span class='info'>What the text in the submit button should be.</span>"|t,
-  name: 'submitButtonText',
-  placeholder: 'Submit', 
-  value: (form is defined ? form.submitButtonText : null),
-  required: false,
-  errors: (form is defined ? form.getErrors('submitButtonText') : null)
-}) }}
+		{{ forms.textField({
+			label: "Handle <span class='info'>How you’ll refer to this form in the templates.</span>"|t,
+			id: 'handle',
+			class: 'code',
+			name: 'handle',
+			value: form.handle,
+			errors: form.getErrors('handle'),
+			required: true
+		}) }}
 
-<hr>
+		{{ forms.textField({
+			label: "Redirect Page <span class='info'>Where should the user be redirected upon form submission? <i>NOTE: Leaving blank will redirect user back to the form.</i></span>"|t,
+			name: 'redirectUri',
+			placeholder: siteUrl,
+			value: (form is defined ? form.redirectUri : null),
+			errors: (form is defined ? form.getErrors('redirectUri') : null)
+		}) }}
 
-{{ forms.textField({
-  label: "Title Format <span class='info'>Entry Titles are auto-generated based on the Title Format you enter here. All information contained in the Title will also be searchable. You may use the same syntax here as you would with Dynamic Titles in your Sections. (i.e. {dateCreated|date('Ymd')} {fullName})</span>"|t,
-  id: 'titleFormat',
-  name: 'titleFormat',
-  value: form.titleFormat,
-  errors: form.getErrors('titleFormat')
-}) }}
+		{{ forms.textField({
+			label: "Submit Button Text <span class='info'>What the text in the submit button should be.</span>"|t,
+			name: 'submitButtonText',
+			placeholder: 'Submit',
+			value: (form is defined ? form.submitButtonText : null),
+			required: false,
+			errors: (form is defined ? form.getErrors('submitButtonText') : null)
+		}) }}
+	</div><!-- Overview div -->
 
-{{ forms.lightswitchField({
-  first: true,
-  label: "Display Tab Titles on Forms"|t,
-  id: 'displaySectionTitles',
-  name: 'displaySectionTitles',
-  on: form.displaySectionTitles,
-  onLabel: "Show"|t,
-  offLabel: "Hide"|t
-}) }}
+	<div id="tab-sproutforms-custom" class="{{ tab != 2 ? 'hidden' : '' }}">
 
-{{ forms.textField({
-  label: "Custom Submit Action URL <span class='info'>If you want to POST your form data to a third party URL, add that URL here. Currently, only fields using the same handle naming convention as Craft are supported.</span>"|t,
-  name: 'submitAction',
-  placeholder: 'http://example.com/somewhere-else', 
-  value: (form is defined ? form.submitAction : null),
-  errors: (form is defined ? form.getErrors('submitAction') : null)   
-}) }}
+		{{ forms.textField({
+			label: "Title Format <span class='info'>Entry Titles are auto-generated based on the Title Format you enter here. All information contained in the Title will also be searchable. You may use the same syntax here as you would with Dynamic Titles in your Sections. (i.e. {dateCreated|date('Ymd')} {fullName})</span>"|t,
+			id: 'titleFormat',
+			name: 'titleFormat',
+			value: form.titleFormat,
+			errors: form.getErrors('titleFormat')
+		}) }}
+
+		{{ forms.lightswitchField({
+			first: true,
+			label: "Display Tab Titles on Forms"|t,
+			id: 'displaySectionTitles',
+			name: 'displaySectionTitles',
+			on: form.displaySectionTitles,
+			onLabel: "Show"|t,
+			offLabel: "Hide"|t
+		}) }}
+
+		{{ forms.textField({
+			label: "Custom Submit Action URL <span class='info'>If you want to POST your form data to a third party URL, add that URL here. Currently, only fields using the same handle naming convention as Craft are supported.</span>"|t,
+			name: 'submitAction',
+			placeholder: 'http://example.com/somewhere-else',
+			value: (form is defined ? form.submitAction : null),
+			errors: (form is defined ? form.getErrors('submitAction') : null)
+		}) }}
+
+		{% from "_includes/forms" import checkboxField %}
+
+		{{ checkboxField({
+			label: "Enable Custom Template Overrides Folder"|t,
+			id: 'enableTemplateOverrides',
+			name: 'enableTemplateOverrides',
+			checked: form.enableTemplateOverrides,
+			toggle: 'overrides-settings'
+		}) }}
+		<div id="overrides-settings" class="nested-fields{% if not form.enableTemplateOverrides %} hidden{% endif %}">
+			{{ forms.textField({
+				label: "Sprout Forms will check in this folder first for any overrides that you want to add."|t,
+				name: 'templateOverridesFolder',
+				id: 'templateOverridesFolder',
+				on: form.templateOverridesFolder,
+				value: (form is defined ? form.templateOverridesFolder : null),
+			}) }}
+		</div>
+	</div>
+</div>

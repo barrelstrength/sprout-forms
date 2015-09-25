@@ -1,12 +1,14 @@
 {% import "forms" as forms %}
-
+{% set fieldSettings = attribute(renderingOptions.fields, name) is defined ? attribute(renderingOptions.fields, name) : null %}
 {% set config = {
 	id: name,
 	name: name,
 	value: value,
-	class: 'nicetext',
-    placeholder: settings.placeholder,
-	rows: settings.initialRows
+	field: field,
+	class: fieldSettings.class is defined ? fieldSettings.class : '' ,
+	placeholder: settings.placeholder,
+	rows: settings.initialRows,
+	fieldSettings: fieldSettings,
 } %}
 
 {% if settings.multiline %}

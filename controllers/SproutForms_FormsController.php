@@ -38,6 +38,8 @@ class SproutForms_FormsController extends BaseController
 		$form->notificationSenderName   = craft()->request->getPost('notificationSenderName');
 		$form->notificationSenderEmail  = craft()->request->getPost('notificationSenderEmail');
 		$form->notificationReplyToEmail = craft()->request->getPost('notificationReplyToEmail');
+		$form->enableTemplateOverrides  = craft()->request->getPost('enableTemplateOverrides');
+		$form->templateOverridesFolder  = craft()->request->getPost('templateOverridesFolder');
 
 		// Set the field layout
 		$fieldLayout =  craft()->fields->assembleLayoutFromPost();

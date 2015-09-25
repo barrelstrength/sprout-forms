@@ -1,15 +1,15 @@
+{% import "forms" as forms %}
 {%- set options = (options is defined ? options : []) %}
 {%- set values = (values is defined ? values : []) -%}
+{%- set fieldSettings = attribute(renderingOptions.fields, name) is defined ? attribute(renderingOptions.fields, name) : null %}
+{% set config = {
+	id: name,
+	name: name,
+	field: field,
+	values: values,
+	options: options,
+	class: fieldSettings.class is defined ? fieldSettings.class : '' ,
+	fieldSettings: fieldSettings,
+} %}
 
-<select multiple
-	{%- if id is defined %} id="{{ id }}"{% endif %}
-	{%- if name is defined and name %} name="{{ name }}[]"{% endif %}
-	{%- if autofocus is defined and autofocus and not craft.request.isMobileBrowser(true) %} autofocus{% endif %}
-	{%- if disabled is defined and disabled %} disabled{% endif %}
-	{%- if size is defined %} size="{{ size }}"{% endif %}>
-	{%- for key, option in options %}
-		{%- set optionLabel = (option.label is defined ? option.label : option) %}
-		{%- set optionValue = (option.value is defined ? option.value : key) -%}
-		<option value="{{ optionValue }}"{% if optionValue in values %} selected{% endif %}>{{ optionLabel }}</option>
-	{%- endfor %}
-</select>
+{{ forms.multiselect(config) }}
