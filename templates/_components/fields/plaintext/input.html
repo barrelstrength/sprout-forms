@@ -1,0 +1,17 @@
+{%- set sett = settings -%}
+{%- set opts = renderingOptions is defined ? renderingOptions : {} -%}
+
+{% if settings.miltiline is defined and settings.multiline %}
+	<textarea
+		id="{{ opts.id is defined ? opts.id : name }}"
+		class="{{ opts.class is defined ? opts.class : 'text' }}"
+		rows="{{ sett.initialRows is defined ? sett.initialRows : 10 }}"
+		{% if sett.placeholder is defined %}placeholder="{{ sett.placeholder }}"{% endif %}
+		>{{ value }}</textarea>
+{% else %}
+    <input
+    	type="{{ opts.type is defined ? opts.type : 'text' }}"
+    	class="{{ opts.class is defined ? opts.class : 'text' }}"
+    	id="{{ opts.id is defined ? opts.id : name }}"
+    	/>
+{% endif %}

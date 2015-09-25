@@ -1,28 +1,37 @@
 {% includeJsResource "sproutforms/js/customFieldSettings.js" %}
-{%- set handle = (field.handle is defined ? field.handle : null) %}
-{%- set label = (field.name is defined ? field.name: null) %}
-{%- set instructions = (field.instructions is defined ? field.instructions : null) %}
 
-{% do field.setAttribute('required', required is defined ? required : null) %}
+{%- set value        = element is not empty ? element.getFieldValue(field.handle) -%}
+{%- set errors       = element is not empty ? element.getErrors(field.handle) -%}
+{%- set label        = field.name is defined ? field.name -%}
+{%- set handle       = field.handle is defined ? field.handle -%}
+{%- set options      = attribute(renderingOptions.fields, handle) is defined ? attribute(renderingOptions.fields, handle) : {} -%}
+{%- set settings     = field.settings -%}
+{%- set instructions = field.instructions is defined ? field.instructions -%}
+{%- set input        = formField.getInputHtml(field, value, settings, options) -%}
 
-{%- set fieldInfo = craft.sproutForms.getFieldInfo(field, element, renderingOptions) -%}
-{%- set input = fieldInfo.input -%}
-{%- set namespace = (fieldInfo.namespace is defined ? fieldInfo.namespace : 'fields') -%}
-{# If this is a third party submission, don't append namespace to anything #}
-{%- set namespace = (not thirdPartySubmission) ? namespace : null -%}
+{#{% do field.setAttribute('required', required is defined ? required : null) %}#}
 
-{%- set isNakedField = (fieldInfo.isNakedField is defined ? fieldInfo.isNakedField : null) -%}
-{%- set type = fieldInfo.type|lower -%}
-{%- set value = (element ? element.getFieldValue(field.handle) : null) -%}
-{%- set errors = element.getErrors(field.handle) -%}
+{#{%- set fieldInfo = craft.sproutForms.getFieldInfo(field, element, renderingOptions) -%}#}
+{#{%- set input = fieldInfo.input -%}#}
+{#{%- set namespace = (fieldInfo.namespace is defined ? fieldInfo.namespace : 'fields') -%}#}
+{#&#123;&#35; If this is a third party submission, don't append namespace to anything &#35;&#125;#}
+{#{%- set namespace = (not thirdPartySubmission) ? namespace : null -%}#}
+
+{#{%- set isNakedField = (fieldInfo.isNakedField is defined ? fieldInfo.isNakedField : null) -%}#}
+{#{%- set type = fieldInfo.type|lower -%}#}
+{#{%- set value = (element ? element.getFieldValue(field.handle) : null) -%}#}
+{#{%- set errors = element.getErrors(field.handle) -%}#}
+
+{% set namespace = not thirdPartySubmission ? formField.getNamespace() %}
 
 {% namespace namespace %}
-	{% if isNakedField %}
+	{% if formField.isPlainInput() %}
 
 		{{ input }}
 
 	{% else %}
-		<div class="{% if renderingOptions.mainDivClass is defined %} {{renderingOptions.mainDivClass}} {% endif %} field {{ type }}{% if first is defined and first %} first{% endif %}{% if class is defined and class
+		<div class="
+			{% if renderingOptions.mainDivClass is defined %} {{renderingOptions.mainDivClass}} {% endif %} field {{ field.type }}{% if first is defined and first %} first{% endif %}{% if class is defined and class
 		%} {{ class }}{% endif %}{% if errors %} has-errors{% endif %}"{% if handle %} id="{{ handle }}-field"{% endif
 		%}>
 
@@ -41,7 +50,6 @@
 
 			<div class="input{% if errors %} errors{% endif %}">
 				<div class="{% if renderingOptions.inputDivClass is defined %} {{renderingOptions.inputDivClass}} {% endif %}">
-					<!-- {{ field.required }} -->
 					{{ input }}
 				</div>
 			</div>
@@ -49,6 +57,5 @@
 			{% include "errorList" with { errors: errors } %}
 
 		</div>
-
 	{% endif %}
 {% endnamespace %}

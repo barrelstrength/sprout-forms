@@ -55,6 +55,7 @@ class SproutFormsPlugin extends BasePlugin
 	{
 		Craft::import('plugins.sproutforms.fields.ISproutFormsFieldType');
 		Craft::import('plugins.sproutforms.fields.BaseSproutFormsFieldType');
+		Craft::import('plugins.sproutforms.contracts.SproutFormsBaseFormField');
 
 		craft()->on('email.onBeforeSendEmail', array(sproutForms(), 'handleOnBeforeSendEmail'));
 	}
@@ -170,6 +171,15 @@ class SproutFormsPlugin extends BasePlugin
 		{
 			sproutForms()->forms->deleteForm($form);
 		}
+	}
+
+	public function registerSproutFormsFields()
+	{
+		require_once craft()->path->getPluginsPath().'sproutforms/integrations/sproutforms/formfields/SproutFormsPlainTextFormField.php';
+
+		return array(
+			new SproutFormsPlainTextFormField()
+		);
 	}
 }
 
