@@ -2,18 +2,18 @@
 namespace Craft;
 
 /**
- * Class SproutFormsCheckboxField
+ * Class SproutFormsPlainTextField
  *
  * @package Craft
  */
-class SproutFormsCheckboxField extends SproutFormsBaseField
+class SproutFormsPlainTextField extends SproutFormsBaseField
 {
 	/**
 	 * @return string
 	 */
 	public function getType()
 	{
-		return 'Checkbox';
+		return 'PlainText';
 	}
 
 	/**
@@ -29,7 +29,7 @@ class SproutFormsCheckboxField extends SproutFormsBaseField
 		$this->beginRendering();
 
 		$rendered = craft()->templates->render(
-			'checkbox/input',
+			'plaintext/input',
 			array(
 				'name'             => $field->handle,
 				'value'            => $value,
