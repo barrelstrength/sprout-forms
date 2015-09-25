@@ -1,0 +1,7 @@
+    <input
+	    type="{{ opts.type is defined ? opts.type : 'text' }}"
+	    {{ field.required is defined ? 'required' }}
+	    class="{{ opts.class is defined ? opts.class : 'text' }}"
+	    id="{{ opts.id is defined ? opts.id : name }}"
+	    value="{{ value }}"
+	    />

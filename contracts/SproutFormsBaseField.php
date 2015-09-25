@@ -2,11 +2,11 @@
 namespace Craft;
 
 /**
- * Class SproutFormsBaseFormField
+ * Class SproutFormsBaseField
  *
  * @package Craft
  */
-abstract class SproutFormsBaseFormField
+abstract class SproutFormsBaseField
 {
 	/**
 	 * @var string

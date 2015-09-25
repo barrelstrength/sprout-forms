@@ -4,7 +4,7 @@ namespace Craft;
 class SproutForms_FieldsService extends FieldsService
 {
 	/**
-	 * @var SproutFormsBaseFormField[]
+	 * @var SproutFormsBaseField[]
 	 */
 	protected $registeredFields;
 
@@ -228,7 +228,7 @@ class SproutForms_FieldsService extends FieldsService
 	}
 
 	/**
-	 * @return array|SproutFormsBaseFormField[]
+	 * @return array|SproutFormsBaseField[]
 	 */
 	public function getRegisteredFields()
 	{
@@ -244,7 +244,7 @@ class SproutForms_FieldsService extends FieldsService
 					if (is_array($fields) && count($fields))
 					{
 						/**
-						 * @var SproutFormsBaseFormField $instance
+						 * @var SproutFormsBaseField $instance
 						 */
 						foreach ($fields as $instance)
 						{
@@ -256,78 +256,6 @@ class SproutForms_FieldsService extends FieldsService
 		}
 
 		return $this->registeredFields;
-	}
-
-	/**
-	 * Create list of supported Front-end Field Types based on Folders in templates/fieldtypes
-	 *
-	 * @deprecated Deprecated, use getRegisteredFields() instead
-	 *
-	 * @param  string $fieldtypesFolder Location of fieldtypes folder
-	 *
-	 * @return array
-	 */
-	public function getSproutFormsFields($fieldtypesFolder)
-	{
-		$frontEndFieldTypes = array();
-
-		// Find all of the built-in components
-		$filter = '_SproutFormsFieldType\.php$';
-		$files  = IOHelper::getFolderContents($fieldtypesFolder, false, $filter);
-
-		// Build list of supported supported front-end fields
-		if ($files)
-		{
-			foreach ($files as $file)
-			{
-				$filename  = IOHelper::getFileName($file, false);
-				$fieldname = str_replace('_SproutFormsFieldType', '', $filename);
-				$template  = craft()->path->getPluginsPath().'sproutforms/templates/_special/templates/';
-
-				$frontEndFieldTypes[$fieldname]['name']           = $fieldname;
-				$frontEndFieldTypes[$fieldname]['class']          = $filename;
-				$frontEndFieldTypes[$fieldname]['file']           = $file;
-				$frontEndFieldTypes[$fieldname]['templateFolder'] = $template;
-			}
-		}
-
-		// Check if any other plugins add support for more front-end fields
-		$customSproutFields = craft()->plugins->call('registerSproutField');
-
-		foreach ($customSproutFields as $pluginName => $fieldName)
-		{
-			$class                          = $fieldName.'_SproutFormsFieldType';
-			$frontEndFieldTypes[$fieldName] = array(
-				'templateFolder' => craft()->path->getPluginsPath().strtolower($pluginName).'/integrations/sproutforms/templates/'
-			);
-		}
-
-		// Check if any other plugins add support for more front-end fields
-		// $overrideFields = craft()->plugins->call('registerSproutField');
-
-		$settings               = craft()->plugins->getPlugin('sproutforms')->getSettings();
-		$templateFolderOverride = $settings->templateFolderOverride;
-
-		if (isset($templateFolderOverride))
-		{
-			$templates = $this->getSproutFormsTemplates();
-
-			foreach ($frontEndFieldTypes as $fieldType)
-			{
-				$inputOverrideFile = $templates['field'].'fields/'.strtolower($fieldType['name']).'/input';
-
-				foreach (craft()->config->get('defaultTemplateExtensions') as $extension)
-				{
-					// If we have an override file, update our templateFolder
-					if (IOHelper::fileExists($inputOverrideFile.'.'.$extension))
-					{
-						$frontEndFieldTypes[$fieldType['name']]['templateFolder'] = $templates['field'];
-					}
-				}
-			}
-		}
-
-		return $frontEndFieldTypes;
 	}
 
 	public function prepareFieldTypesDropdown($fieldTypes)

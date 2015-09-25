@@ -193,10 +193,12 @@ class SproutFormsPlugin extends BasePlugin
 
 	public function registerSproutFormsFields()
 	{
-		require_once craft()->path->getPluginsPath().'sproutforms/integrations/sproutforms/formfields/SproutFormsPlainTextFormField.php';
+		require_once craft()->path->getPluginsPath().'sproutforms/integrations/sproutforms/fields/SproutFormsNumberField.php';
+		require_once craft()->path->getPluginsPath().'sproutforms/integrations/sproutforms/fields/SproutFormsPlainTextField.php';
 
 		return array(
-			new SproutFormsPlainTextFormField()
+			new SproutFormsNumberField(),
+			new SproutFormsPlainTextField()
 		);
 	}
 }

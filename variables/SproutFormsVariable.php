@@ -93,18 +93,7 @@ class SproutFormsVariable
 
 		$form  = sproutForms()->forms->getFormByHandle($formHandle);
 		$entry = sproutForms()->entries->getEntryModel($form);
-
-		// Set our Sprout Forms Front-end Form Template path
-		// craft()->path->setTemplatesPath(craft()->path->getPluginsPath().'sproutforms/templates/_special/templates/');
-
-		// Set our Sprout Forms support field classes folder
-		// $fieldtypesFolder = craft()->path->getPluginsPath().'sproutforms/fields/';
-
-		// Create a list of the name, class, and file of fields we support
-		// $fields = sproutForms()->fields->getSproutFormsFields($fieldtypesFolder);
 		$fields = sproutForms()->fields->getRegisteredFields(true);
-
-		// Determine where our form and field template should come from
 		$templatePaths = sproutForms()->fields->getSproutFormsTemplates($form);
 
 		// Set Tab template path
@@ -136,7 +125,7 @@ class SproutFormsVariable
 			array(
 				'tabs'                 => array($layoutTab),
 				'entry'                => $entry,
-				'supportedFields'      => $fields,
+				'formFields'           => $fields,
 				'displaySectionTitles' => $form->displaySectionTitles,
 				'thirdPartySubmission' => ($form->submitAction) ? true : false
 			)
@@ -218,103 +207,6 @@ class SproutFormsVariable
 				return TemplateHelper::getRaw($fieldHtml);
 			}
 		}
-	}
-
-	public function getFieldInfo(
-		FieldModel $field,
-		SproutForms_EntryModel $element,
-		array $renderingOptions = null
-	) {
-
-		// Set our Sprout Forms support field classes folder
-		$fieldtypesFolder = craft()->path->getPluginsPath().'sproutforms/fields/';
-
-		// Create a list of the name, class, and file of fields we support
-		$fields = sproutForms()->fields->getSproutFormsFields($fieldtypesFolder);
-
-		$fieldtype = craft()->fields->populateFieldType($field, $element);
-
-		$formId = array_pop(explode(':', $field->context));
-
-		$form = sproutForms()->forms->getFormById($formId);
-
-		// If we support our current fieldtype, render it
-		Craft::dump($fields);
-
-		$registeredFormFields = sproutForms()->fields->getRegisteredFields();
-
-		if (array_key_exists($field->type, $registeredFormFields))
-		{
-
-			$value = craft()->request->getPost($field->handle);
-
-			Craft::dd($registeredFormFields[$field->type]->getInputHtml($field, $value, $field->getFieldType()->getSettings(), $renderingOptions));
-		}
-
-		if (isset($fields[$field->type]))
-		{
-			// Instantiate it
-			$class = __NAMESPACE__.'\\'.$fields[$field->type]['class'];
-
-			// Make sure the our front-end Field Type class exists
-			if (!class_exists($class))
-			{
-				require $fields[$field->type]['file'];
-			}
-
-			// Create a new instance of our Field Type
-			$frontEndField = new $class;
-
-			$fieldModel = $fieldtype->model;
-			$settings   = $fieldtype->getSettings();
-
-			$postFields = craft()->request->getPost('fields');
-			$value      = (isset($postFields[$field->handle]) ? $postFields[$field->handle] : "");
-
-			// Determine where our form and field template should come from
-			$templatePaths = sproutForms()->fields->getSproutFormsTemplates($form);
-
-			// Set template path
-			craft()->path->setTemplatesPath();
-
-			// Create the HTML for the input field
-			$input = $frontEndField->getInputHtml($fieldModel, $value, $settings, $renderingOptions);
-
-			$this->namespace    = $frontEndField->getNamespace();
-			$this->isNakedField = $frontEndField->isNakedField;
-
-			// Set template path back to default
-			craft()->path->setTemplatesPath(craft()->path->getPluginsPath().'sproutforms/templates/_special/templates/');
-		}
-		else
-		{
-			// Field Type is not supported
-			// @TODO - provide better error here pointing to docs on how to solve this.
-			$input = '<p class="error">'.Craft::t("The “".$field->type."” field is not supported by default to be output in front-end templates.").'</p>';
-		}
-
-		// Identify PlainText and Textarea fields distinctly
-		if ($field->type == 'PlainText' && $field->settings['multiline'] == 1)
-		{
-			$field->type = 'textarea';
-		}
-
-		// @TODO - improve naming and handling of this
-		$fieldInfo['namespace']    = $this->namespace;
-		$fieldInfo['isNakedField'] = $this->isNakedField;
-		$fieldInfo['type']         = $field->type;
-		$fieldInfo['input']        = new \Twig_Markup($input, craft()->templates->getTwig()->getCharset());
-
-		// Set our Sprout Forms Front-end Form Template path
-		craft()->path->setTemplatesPath(craft()->path->getPluginsPath().'sproutforms/templates/_special/templates/');
-
-		// Determine where our form and field template should come from
-		$templatePaths = sproutForms()->fields->getSproutFormsTemplates($form);
-
-		// Set Tab template path
-		craft()->path->setTemplatesPath($templatePaths['field']);
-
-		return $fieldInfo;
 	}
 
 	/**

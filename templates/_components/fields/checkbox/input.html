@@ -1,0 +1,27 @@
+{%- spaceless %}
+{% set class = [
+	(class is defined ? class : null),
+	((toggle is defined and toggle is not empty) or (reverseToggle is defined and reverseToggle is not empty) ? 'fieldtoggle' : null),
+	'checkbox'
+]|filter|join(' ') %}
+{%- set data = (fieldSettings.data is defined ? fieldSettings.data : null) %}
+{% set value = (value is defined ? value : 1) %}
+
+{% if name is defined and (name|length < 3 or name|slice(-2) != '[]') %}
+	<input type="hidden" name="{{ name }}" value="">
+{% endif %}
+
+<label>
+
+	<input type="checkbox" value="{{ value }}"
+		class="{{ class }}"
+		{%- if id is defined %} id="{{ id }}"{% endif %}
+		{%- if name is defined %} name="{{ name }}"{% endif %}
+		{%- if checked is defined and checked %} checked{% endif %}
+		{%- if disabled is defined and disabled %} disabled{% endif %}
+		{% for key,value in data %}
+			{{ 'data-'~key~'='~value }}
+		{% endfor %}>
+	{%- if label is defined %}&nbsp;{{ label|raw }}{% endif %}
+</label>
+{% endspaceless -%}
