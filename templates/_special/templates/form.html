@@ -1,6 +1,6 @@
 <!-- Custom form created using the Sprout Forms form builder plugin v{{ craft.sproutForms.version }} - http://sprout.barrelstrengthdesign.com/craft-plugins/forms -->
 
-{% set action  = form.submitAction is empty ? 'sproutForms/saveEntry' : form.submitAction %}
+{% set action  = form.submitAction is empty ? 'sproutForms/entries/saveEntry' : form.submitAction %}
 {% set options = renderingOptions is defined and renderingOptions is not empty ? renderingOptions : {} %}
 {% set id      = options.id is defined ? options.id : form.handle %}
 {% set class   = options.class is defined ? options.class : 'sproutforms-form' %}
