@@ -1,3 +1,7 @@
+{%- if formField.needsGlobalContext() -%}
+	{%- do formField.setContext(_context) -%}
+{%- endif -%}
+
 {%- set value        = element is not empty ? element.getFieldValue(field.handle) -%}
 {%- set errors       = element is not empty ? element.getErrors(field.handle) -%}
 {%- set label        = field.name is defined ? field.name -%}
@@ -6,8 +10,7 @@
 {%- set settings     = field.settings -%}
 {%- set instructions = field.instructions is defined ? field.instructions -%}
 {%- set input        = formField.getInputHtml(field, value, settings, options) -%}
-
-{% set namespace = not thirdPartySubmission ? formField.getNamespace() %}
+{% set namespace     = not thirdPartySubmission ? formField.getNamespace() %}
 
 {% namespace namespace %}
 
