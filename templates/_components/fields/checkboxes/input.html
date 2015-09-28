@@ -1,0 +1,29 @@
+{%- set sett    = settings -%}
+{%- set opts    = renderingOptions is defined ? renderingOptions : {} -%}
+{%- set class   = opts.class is defined ? opts.class : 'text' %}
+{%- set data    = (opts.data is defined ? opts.data : null) %}
+{%- set values  = (value is defined ? value : []) -%}
+{%- set options = (sett.options is defined ? sett.options : []) %}
+{%- set name = (name is defined ? name~'[]' : null) %}
+<div class="checkbox-select{% if class is defined %} {{ class }} {% endif %}">
+	{%- for key, option in options %}
+		{%- set label = (option.label is defined ? option.label : option) %}
+		{%- set value = (option.value is defined ? option.value : key) -%}
+		{%- set checked = (value in values) %}
+		{% if name is defined and (name|length < 3 or name|slice(-2) != '[]') %}
+			<input type="hidden" name="{{ name }}" value="">
+		{% endif %}
+		<label>
+			<input type="checkbox" value="{{ value }}"
+				class="{{ class }}"
+				{%- if id is defined %} id="{{ id }}"{% endif %}
+				{%- if name is defined %} name="{{ name }}"{% endif %}
+				{%- if checked is defined and checked %} checked{% endif %}
+				{%- if disabled is defined and disabled %} disabled{% endif %}
+				{% for key,value in data %}
+					{{ 'data-'~key~'='~value }}
+				{% endfor %}>
+			{%- if label is defined %}&nbsp;{{ label|raw }}{% endif %}
+		</label>
+	{% endfor %}
+</div>

@@ -195,10 +195,12 @@ class SproutFormsPlugin extends BasePlugin
 	{
 		require_once craft()->path->getPluginsPath().'sproutforms/integrations/sproutforms/fields/SproutFormsNumberField.php';
 		require_once craft()->path->getPluginsPath().'sproutforms/integrations/sproutforms/fields/SproutFormsPlainTextField.php';
+		require_once craft()->path->getPluginsPath().'sproutforms/integrations/sproutforms/fields/SproutFormsCheckboxesField.php';
 
 		return array(
 			new SproutFormsNumberField(),
-			new SproutFormsPlainTextField()
+			new SproutFormsPlainTextField(),
+			new SproutFormsCheckboxesField(),
 		);
 	}
 }

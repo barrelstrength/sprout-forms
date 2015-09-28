@@ -12,7 +12,7 @@
 
 			{% set type      = field.getField().type %}
 			{% set required  = field.required %}
-			{% set formField = craft.sproutForms.getRegisteredField(field.getField().type) %}
+			{% set formField = craft.sproutForms.getRegisteredField(type) %}
 
 			{% include "field" with {
 				field:                field.getField(),

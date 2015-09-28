@@ -6,7 +6,6 @@
 {%- set settings     = field.settings -%}
 {%- set instructions = field.instructions is defined ? field.instructions -%}
 {%- set input        = formField.getInputHtml(field, value, settings, options) -%}
-
 {% set namespace = not thirdPartySubmission ? formField.getNamespace() %}
 
 {% namespace namespace %}
