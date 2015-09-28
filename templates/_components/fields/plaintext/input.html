@@ -13,7 +13,7 @@
     <input
 	    name="{{ name}}"
 	    type="{{ opts.type is defined ? opts.type : 'text' }}"
-	    {{ field.required is defined ? 'required' }}
+	    {{ field.required is defined and field.required ? 'required' }}
 	    class="{{ opts.class is defined ? opts.class : 'text' }}"
 	    id="{{ opts.id is defined ? opts.id : name }}"
 	    />

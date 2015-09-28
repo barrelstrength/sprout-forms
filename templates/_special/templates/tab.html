@@ -9,7 +9,6 @@
 		{% endif %}
 
 		{% for field in fields %}
-
 			{% set type      = field.getField().type %}
 			{% set required  = field.required %}
 			{% set formField = craft.sproutForms.getRegisteredField(type) %}

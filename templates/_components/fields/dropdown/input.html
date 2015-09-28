@@ -1,0 +1,39 @@
+{%- set sett         = settings -%}
+{%- set class        = opts.class is defined ? opts.class : 'select' %}
+{%- set opts         = renderingOptions is defined ? renderingOptions : {} -%}
+{%- set data         = (opts.data is defined ? opts.data : null) %}
+{%- set options      = (sett.options is defined ? sett.options : []) %}
+{%- set value        = (value is defined ? value : null) %}
+{%- set hasOptgroups = false -%}
+{%- set id           = name -%}
+
+<div class="{{ class }}">
+	<select
+		{% if field.required is defined and field.required %} required {% endif %}
+		{%- if id is defined %} id="{{ id }}"{% endif %}
+		{%- if name is defined %} name="{{ name }}"{% endif %}
+		{%- if disabled is defined and disabled %} disabled{% endif %}
+		{%- if targetPrefix is defined %} data-target-prefix="{{ targetPrefix }}"{% endif %}
+		{% for key,value in data %}
+			{{ 'data-'~key~'='~value }}
+		{% endfor %}>
+		{% for key, option in options %}
+			{% if option.optgroup is defined %}
+				{% if hasOptgroups %}
+					</optgroup>
+				{% else %}
+					{% set hasOptgroups = true %}
+				{% endif %}
+				<optgroup label="{{ option.optgroup }}">
+			{% else %}
+				{% set optionLabel = (option.label is defined ? option.label : option) %}
+				{% set optionValue = (option.value is defined ? option.value : key) %}
+				{% set optionDisabled = (option.disabled is defined ? option.disabled : false) %}
+				<option value="{{ optionValue }}"{% if optionValue == value %} selected{% endif %}{% if optionDisabled %} disabled{% endif %}>{{ optionLabel }}</option>
+			{% endif %}
+		{% endfor %}
+		{% if hasOptgroups %}
+			</optgroup>
+		{% endif %}
+	</select>
+</div>

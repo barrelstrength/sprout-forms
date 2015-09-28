@@ -193,14 +193,21 @@ class SproutFormsPlugin extends BasePlugin
 
 	public function registerSproutFormsFields()
 	{
-		require_once craft()->path->getPluginsPath().'sproutforms/integrations/sproutforms/fields/SproutFormsNumberField.php';
-		require_once craft()->path->getPluginsPath().'sproutforms/integrations/sproutforms/fields/SproutFormsPlainTextField.php';
-		require_once craft()->path->getPluginsPath().'sproutforms/integrations/sproutforms/fields/SproutFormsCheckboxesField.php';
+		$basePath = craft()->path->getPluginsPath().'sproutforms/integrations/sproutforms/fields/';
+		require_once $basePath.'SproutFormsNumberField.php';
+		require_once $basePath.'SproutFormsPlainTextField.php';
+		require_once $basePath.'SproutFormsCheckboxesField.php';
+		require_once $basePath.'SproutFormsDropdownField.php';
+		require_once $basePath.'SproutFormsMultiSelectField.php';
+		require_once $basePath.'SproutFormsRadioButtonsField.php';
 
 		return array(
 			new SproutFormsNumberField(),
 			new SproutFormsPlainTextField(),
 			new SproutFormsCheckboxesField(),
+			new SproutFormsDropdownField(),
+			new SproutFormsMultiSelectField(),
+			new SproutFormsRadioButtonsField(),
 		);
 	}
 }
