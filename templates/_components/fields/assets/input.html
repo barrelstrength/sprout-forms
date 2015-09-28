@@ -1,16 +1,22 @@
-
+{% set multiple   = false %}
 {% if settings.limit is defined and settings.limit > 1 %}
 	{% set name     = name ~ '[]' %}
 	{% set multiple = true %}
 {% endif %}
+{%- set opts  = renderingOptions is defined ? renderingOptions : {} -%}
+{%- set data  = (opts.data is defined ? opts.data : null) %}
+{%- set class = opts.class is defined ? opts.class : 'file' %}
 
-{% set id    = renderingOptions.id is defined ? renderingOptions.id : name %}
-{% set class = renderingOptions.class is defined ? renderingOptions.class : 'sproutforms-field' %}
+{% set id    = opts.id is defined ? opts.id : name %}
+{% set class = opts.class is defined ? opts.class : 'sproutforms-file' %}
 
 <input type="file"
-	{{ if multiple is defined ? 'multiple' }}
-	{% if field.required is defined and field.required %} required {% endif %}
+	{%- if multiple %} multiple {% endif %}
+	{%- if field.required is defined and field.required %} required {% endif %}
 	{%- if id is defined %} id="{{ id }}"{% endif %}
-	{%- if class is defined %} class="{{ class }}"{% endif %}
+	{%- if class is defined %} class="{{class}}" {%endif%}
 	{%- if name is defined %} name="{{ name }}"{% endif %}
-	{%- if disabled is defined and disabled %} disabled{% endif %}>
+	{%- if disabled is defined and disabled %} disabled{% endif %}
+	{% for key,value in data %}
+		{{ 'data-'~key~'='~value }}
+	{% endfor %} >

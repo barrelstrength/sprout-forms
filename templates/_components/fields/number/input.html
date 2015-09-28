@@ -1,8 +1,15 @@
-    <input
-    	name="{{ name }}"
-	    type="{{ opts.type is defined ? opts.type : 'text' }}"
-	    {{ field.required is defined and field.required ? 'required' }}
-	    class="{{ opts.class is defined ? opts.class : 'text' }}"
-	    id="{{ opts.id is defined ? opts.id : name }}"
-	    value="{{ value }}"
-	    />
+{%- set sett = settings -%}
+{%- set opts = renderingOptions is defined ? renderingOptions : {} -%}
+{%- set data = (opts.data is defined ? opts.data : null) %}
+
+<input
+	name="{{ name }}"
+	type="{{ opts.type is defined ? opts.type : 'text' }}"
+	{{ field.required is defined and field.required ? 'required' }}
+	class="{{ opts.class is defined ? opts.class : 'sproutforms-mumber' }}"
+	id="{{ opts.id is defined ? opts.id : name }}"
+	{%- if value is defined and value %} value="{{ value }}"{% endif %}
+	{% for key,dataValue in data %}
+		{{ 'data-'~key~'='~dataValue }}
+	{% endfor %}
+	/>

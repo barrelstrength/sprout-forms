@@ -200,6 +200,7 @@ class SproutFormsPlugin extends BasePlugin
 		require_once $basePath.'SproutFormsDropdownField.php';
 		require_once $basePath.'SproutFormsMultiSelectField.php';
 		require_once $basePath.'SproutFormsRadioButtonsField.php';
+		require_once $basePath.'SproutFormsAssetsField.php';
 
 		return array(
 			new SproutFormsNumberField(),
@@ -208,6 +209,7 @@ class SproutFormsPlugin extends BasePlugin
 			new SproutFormsDropdownField(),
 			new SproutFormsMultiSelectField(),
 			new SproutFormsRadioButtonsField(),
+			new SproutFormsAssetsField(),
 		);
 	}
 }
