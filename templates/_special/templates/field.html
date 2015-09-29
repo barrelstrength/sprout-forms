@@ -1,6 +1,7 @@
 {%- if formField.needsGlobalContext() -%}
 	{%- do formField.setContext(_context) -%}
 {%- endif -%}
+{%- do field.setAttribute('required', required) -%}
 
 {%- set value        = element is not empty ? element.getFieldValue(field.handle) -%}
 {%- set errors       = element is not empty ? element.getErrors(field.handle) -%}
