@@ -9,6 +9,11 @@ namespace Craft;
 abstract class SproutFormsBaseField
 {
 	/**
+	 * @var mixed
+	 */
+	protected $context;
+
+	/**
 	 * @var string
 	 */
 	protected $originalTemplatesPath;
@@ -40,12 +45,40 @@ abstract class SproutFormsBaseField
 		craft()->path->setTemplatesPath($this->originalTemplatesPath);
 	}
 
+	final public function setValue($handle, $value)
+	{
+		craft()->httpSession->add($handle, $value);
+	}
+
+	final public function getValue($handle, $default = null)
+	{
+		return craft()->httpSession->get($handle, $default);
+	}
+
+	final public function setContext($context)
+	{
+		$this->context = $context;
+	}
+
+	final public function getContext()
+	{
+		return $this->context;
+	}
+
 	/**
 	 * @return string
 	 */
 	public function getNamespace()
 	{
 		return 'fields';
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function needsGlobalContext()
+	{
+		return false;
 	}
 
 	/**

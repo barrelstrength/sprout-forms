@@ -13,15 +13,20 @@
 			{% set required  = field.required %}
 			{% set formField = craft.sproutForms.getRegisteredField(type) %}
 
-			{% include "field" with {
-				field:                field.getField(),
-				element:              entry,
-				required:             required,
-				formField:            formField,
-				renderingOptions:     renderingOptions,
-				thirdPartySubmission: thirdPartySubmission,
-			} only %}
-
+			{% if formField %}
+				{% include "field" with {
+					field:                field.getField(),
+					element:              entry,
+					required:             required,
+					formField:            formField,
+					renderingOptions:     renderingOptions,
+					thirdPartySubmission: thirdPartySubmission,
+				} only %}
+			{% else %}
+				<!-- Sprout Forms Log -->
+				<!-- The {{ type }} field type is not supported on the front end -->
+				<!-- Review the Sprout Forms Field API to see how you can add support -->
+			{% endif %}
 		{% endfor %}
 
 	</div>

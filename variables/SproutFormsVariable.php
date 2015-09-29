@@ -91,9 +91,9 @@ class SproutFormsVariable
 			return '';
 		}
 
-		$form  = sproutForms()->forms->getFormByHandle($formHandle);
-		$entry = sproutForms()->entries->getEntryModel($form);
-		$fields = sproutForms()->fields->getRegisteredFields(true);
+		$form          = sproutForms()->forms->getFormByHandle($formHandle);
+		$entry         = sproutForms()->entries->getEntryModel($form);
+		$fields        = sproutForms()->fields->getRegisteredFields();
 		$templatePaths = sproutForms()->fields->getSproutFormsTemplates($form);
 
 		// Set Tab template path
@@ -216,11 +216,9 @@ class SproutFormsVariable
 	 *
 	 * @return mixed
 	 */
-	public
-	function getFormById(
-		$formId
-	) {
-		return sproutForms()->forms->getFormById($formId);
+	public function getFormById($id)
+	{
+		return sproutForms()->forms->getFormById($id);
 	}
 
 	/**
@@ -230,10 +228,8 @@ class SproutFormsVariable
 	 *
 	 * @return mixed
 	 */
-	public
-	function getForm(
-		$formHandle
-	) {
+	public function getForm($formHandle)
+	{
 		return sproutForms()->forms->getFormByHandle($formHandle);
 	}
 
@@ -254,10 +250,8 @@ class SproutFormsVariable
 	 *
 	 * @return  SproutForms_EntryModel
 	 */
-	public
-	function getEntryById(
-		$id
-	) {
+	public function getEntryById($id)
+	{
 		return sproutForms()->entries->getEntryById($id);
 	}
 
@@ -268,8 +262,7 @@ class SproutFormsVariable
 	 *
 	 * @return SproutForms_EntryModel
 	 */
-	public
-	function getLastEntry()
+	public function getLastEntry()
 	{
 		if (craft()->httpSession->get('lastEntryId'))
 		{
@@ -289,10 +282,8 @@ class SproutFormsVariable
 	 *
 	 * @return array
 	 */
-	public
-	function getAllFormGroups(
-		$id = null
-	) {
+	public function getAllFormGroups($id = null)
+	{
 		return sproutForms()->groups->getAllFormGroups($id);
 	}
 
@@ -303,11 +294,9 @@ class SproutFormsVariable
 	 *
 	 * @return SproutForms_FormModel
 	 */
-	public
-	function getFormsByGroupId(
-		$groupId
-	) {
-		return sproutForms()->groups->getFormsByGroupId($groupId);
+	public function getFormsByGroupId($id)
+	{
+		return sproutForms()->groups->getFormsByGroupId($id);
 	}
 
 	/**
@@ -320,17 +309,13 @@ class SproutFormsVariable
 	 *
 	 * @return array
 	 */
-	public
-	function prepareFieldTypesDropdown(
-		$fieldTypes
-	) {
+	public function prepareFieldTypesDropdown($fieldTypes)
+	{
 		return sproutForms()->fields->prepareFieldTypesDropdown($fieldTypes);
 	}
 
-	public
-	function multiStepForm(
-		$settings
-	) {
+	public function multiStepForm($settings)
+	{
 		$currentStep = isset($settings['currentStep']) ? $settings['currentStep'] : null;
 		$totalSteps  = isset($settings['totalSteps']) ? $settings['totalSteps'] : null;
 
@@ -356,7 +341,7 @@ class SproutFormsVariable
 	/**
 	 * @param $type
 	 *
-	 * @return null|SproutFormsBaseFormField
+	 * @return null|SproutFormsBaseField
 	 */
 	public function getRegisteredField($type)
 	{
