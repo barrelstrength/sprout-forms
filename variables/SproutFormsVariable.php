@@ -300,18 +300,13 @@ class SproutFormsVariable
 	}
 
 	/**
-	 * Builds FieldType dropdown by grouping fields into to basic and advanced
-	 *
-	 * 1) Basic fields we can output by default
-	 * 2) Advanced fields that need some love before outputting
-	 *
-	 * @param  array $fieldTypes
+	 * @see sproutForms()->fields->prepareFieldTypeSelection()
 	 *
 	 * @return array
 	 */
-	public function prepareFieldTypesDropdown($fieldTypes)
+	public function prepareFieldTypeSelection()
 	{
-		return sproutForms()->fields->prepareFieldTypesDropdown($fieldTypes);
+		return sproutForms()->fields->prepareFieldTypeSelection();
 	}
 
 	public function multiStepForm($settings)

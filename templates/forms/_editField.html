@@ -22,7 +22,7 @@
 {% endif %}
 
 {% set fieldTypes = craft.fields.getAllFieldTypes() %}
-{% set fieldTypeGroups = craft.sproutForms.prepareFieldTypesDropdown(fieldTypes) %}
+{% set fieldTypeGroups = craft.sproutForms.prepareFieldTypeSelection() %}
 
 {% if field is defined %}
 	{% set fieldType = field.getFieldType() %}

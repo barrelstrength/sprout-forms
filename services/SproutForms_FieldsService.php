@@ -258,89 +258,83 @@ class SproutForms_FieldsService extends FieldsService
 		return $this->registeredFields;
 	}
 
-	public function prepareFieldTypesDropdown($fieldTypes)
+	/**
+	 * Returns a field type selection array grouped by category
+	 *
+	 * Categories
+	 * - Standard fields with front end rendering support
+	 * - Custom fields that need to be registered using the Sprout Forms Field API
+	 *
+	 * @return array
+	 */
+	public function prepareFieldTypeSelection()
 	{
-		$basicFields    = array();
-		$advancedFields = array();
+		$fields         = $this->getRegisteredFields();
+		$fieldTypes     = craft()->fields->getAllFieldTypes();
+		$standardFields = array();
 		$customFields   = array();
 
-		// Supported Craft fields
-		$supportedFields = array(
-			'Checkboxes',
-			'Dropdown',
-			'MultiSelect',
-			'Number',
-			'PlainText',
-			'RadioButtons',
-		);
-
-		// Unsupported Craft fields
-		$unSupportedFields = array(
-			'Assets',
-			'Categories',
-			'Color',
-			'Date',
-			'Entries',
-			'Lightswitch',
-			'Matrix',
-			'PositionSelect',
-			'RichText',
-			'Table',
-			'Tags',
-			'Users'
-		);
-
-		foreach ($fieldTypes as $key => $fieldType)
+		if (count($fields))
 		{
-			if (in_array($key, $supportedFields))
+			// Loop through registered fields and add them to the standard group
+			foreach ($fields as $field)
 			{
-				// Sort supported fields into 'Basic' option group
-				$basicFields[$key] = $fieldType;
+				if (array_key_exists($field->getType(), $fieldTypes))
+				{
+					/**
+					 * @var BaseFieldType $fieldType
+					 */
+					$fieldType = $fieldTypes[$field->getType()];
+
+					$standardFields[$fieldType->getClassHandle()] = $fieldType->getName();
+
+					// Remove the field type associate with the current field from the group
+					// The remaining field types will be added to the custom group
+					unset($fieldTypes[$field->getType()]);
+				}
 			}
-			elseif (in_array($key, $unSupportedFields))
-			{
-				// Sort unsupported fields into 'Advanced' option group
-				$advancedFields[$key] = $fieldType;
-			}
-			else
-			{
-				// Sort all other fields into a custom group
-				$customFields[$key] = $fieldType;
-			}
+
+			// Sort fields alphabetically
+			ksort($standardFields);
+
+			// Add the group label to the beginning of the standard group
+			$standardFields = $this->prependKeyValue($standardFields, 'standardFieldGroup', array('optgroup' => Craft::t('Standard Fields')));
 		}
 
-		// Grab all supported fields
-		$customSproutFields = craft()->plugins->call('registerSproutField');
-
-		foreach ($customFields as $key => $fieldType)
+		if (count($fieldTypes))
 		{
-			if (in_array($key, $customSproutFields))
+			// Loop through remaining field types and add them to the custom group
+			foreach ($fieldTypes as $handle => $fieldType)
 			{
-				// Sort supported custom fields into 'Basic' option group
-				$basicFields[$key] = $fieldType;
+				$customFields[$handle] = $fieldType->getName();
 			}
-			else
-			{
-				// Sort unsupported custom fields into 'Advanced' option group
-				$advancedFields[$key] = $fieldType;
-			}
+
+			// Sort fields alphabetically
+			ksort($customFields);
+
+			// Add the group label to the beginning of the custom group
+			$customFields = $this->prependKeyValue($customFields, 'customFieldGroup', array('optgroup' => Craft::t('Custom Fields')));
 		}
 
-		// Build our Field Type dropdown
-		$fieldTypeGroups['basicFieldGroup'] = array('optgroup' => Craft::t('Basic Fields'));
+		return array_merge($standardFields, $customFields);
+	}
 
-		foreach ($basicFields as $key => $fieldType)
-		{
-			$fieldTypeGroups[$key] = $fieldType;
-		}
+	/**
+	 * Prepends a key/value pair to an array
+	 *
+	 * @see array_unshift()
+	 *
+	 * @param array  $haystack
+	 * @param string $key
+	 * @param mixed  $value
+	 *
+	 * @return array
+	 */
+	protected function prependKeyValue(array $haystack, $key, $value)
+	{
+		$haystack       = array_reverse($haystack, true);
+		$haystack[$key] = $value;
 
-		$fieldTypeGroups['advancedFieldGroup'] = array('optgroup' => Craft::t('Advanced Fields'));
-
-		foreach ($advancedFields as $key => $fieldType)
-		{
-			$fieldTypeGroups[$key] = $fieldType;
-		}
-
-		return $fieldTypeGroups;
+		return array_reverse($haystack, true);
 	}
 }
