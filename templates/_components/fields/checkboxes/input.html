@@ -16,7 +16,7 @@
 		<label>
 			<input type="checkbox" value="{{ value }}"
 				class="{{ class }}"
-				{%- if id is defined %} id="{{ id }}"{% endif %}
+				id="{{ opts.id is defined ? opts.id : name }}"
 				{%- if name is defined %} name="{{ name }}"{% endif %}
 				{%- if checked is defined and checked %} checked{% endif %}
 				{%- if disabled is defined and disabled %} disabled{% endif %}

@@ -4,12 +4,10 @@
 {%- set data         = (opts.data is defined ? opts.data : null) %}
 {%- set options      = (sett.options is defined ? sett.options : []) %}
 {%- set values       = (value is defined ? value : []) -%}
-{%- set id           = name -%}
-
 
 <select multiple
 	{%- if field.required is defined and field.required %} required {% endif %}
-	{%- if id is defined %} id="{{ id }}"{% endif %}
+	id="{{ opts.id is defined ? opts.id : name }}"
 	{%- if class is defined %} class="{{class}}" {% endif %}
 	{%- if name is defined and name %} name="{{ name }}[]"{% endif %}
 	{%- if disabled is defined and disabled %} disabled{% endif %}
