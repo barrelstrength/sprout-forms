@@ -1,6 +1,8 @@
 <?php
 namespace Craft;
 
+use Guzzle\Http\Client;
+
 class SproutForms_EntriesService extends BaseApplicationComponent
 {
 	public $fakeIt = false;
@@ -31,6 +33,51 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 	public function getCriteria(array $attributes = array())
 	{
 		return craft()->elements->getCriteria('SproutForms_Entry', $attributes);
+	}
+
+	/**
+	 * @param SproutForms_EntryModel $entry
+	 *
+	 * @throws \Exception
+	 * @return bool
+	 */
+	public function forwardEntry(SproutForms_EntryModel &$entry)
+	{
+		if (!$entry->validate())
+		{
+			sproutForms()->log($entry->getErrors());
+
+			return false;
+		}
+
+		$fields   = $entry->getPayloadFields();
+		$endpoint = $entry->form->submitAction;
+
+		if (empty($endpoint) || !filter_var($endpoint, FILTER_VALIDATE_URL))
+		{
+			sproutForms()->log('{form} has no submit action or submit action is an invalid URL', array('form' => $entry->formName));
+
+			return false;
+		}
+
+		$client = new Client();
+
+		try
+		{
+			sproutForms()->log($fields);
+
+			$response = $client->post($entry->form->submitAction, null, $fields);
+
+			sproutForms()->log($response->getBody());
+
+			return true;
+		}
+		catch (\Exception $e)
+		{
+			$entry->addError('general', $e->getMessage());
+
+			return false;
+		}
 	}
 
 	/**
@@ -158,9 +205,9 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 			}
 		}
 		else
-		{	
+		{
 			SproutFormsPlugin::log('Service returns false');
-		
+
 			return false;
 		}
 	}

@@ -8,13 +8,67 @@ class SproutForms_EntriesController extends BaseController
 	 *
 	 * @var bool
 	 */
-	protected $allowAnonymous = array('actionSaveEntry');
+	protected $allowAnonymous = array(
+		'actionSaveEntry',
+	    'actionForwardEntry',
+	);
 
 	/**
 	 * @var SproutForms_FormModel
 	 */
 	public $form;
 
+	/**
+	 * Forward form entry submissions to third party endpoint
+	 *
+	 * @throws Exception
+	 * @throws HttpException
+	 *
+	 * @return void
+	 */
+	public function actionForwardEntry()
+	{
+		$this->requirePostRequest();
+
+		$formHandle = craft()->request->getRequiredPost('handle');
+		$this->form = sproutForms()->forms->getFormByHandle($formHandle);
+
+		if (!isset($this->form))
+		{
+			throw new Exception(Craft::t('No form exists with the handle “{handle}”', array('handle' => $formHandle)));
+		}
+
+		$entry = $this->_getEntryModel();
+		$entry->formId = $this->form->id;
+
+		Craft::import('plugins.sproutforms.events.SproutForms_OnBeforePopulateEntryEvent');
+
+		$event = new SproutForms_OnBeforePopulateEntryEvent(
+			$this, array(
+				'form'  => $this->form,
+				'entry' => $entry
+			)
+		);
+
+		sproutForms()->onBeforePopulateEntry($event);
+
+
+		$this->_populateEntryModel($entry);
+
+		// Swap out any dynamic variables for our notifications
+		$this->form->notificationRecipients   = craft()->templates->renderObjectTemplate($this->form->notificationRecipients, $entry);
+		$this->form->notificationSubject      = craft()->templates->renderObjectTemplate($this->form->notificationSubject, $entry);
+		$this->form->notificationSenderName   = craft()->templates->renderObjectTemplate($this->form->notificationSenderName, $entry);
+		$this->form->notificationSenderEmail  = craft()->templates->renderObjectTemplate($this->form->notificationSenderEmail, $entry);
+		$this->form->notificationReplyToEmail = craft()->templates->renderObjectTemplate($this->form->notificationReplyToEmail, $entry);
+
+		if (!sproutForms()->entries->forwardEntry($entry))
+		{
+			Craft::dd($entry->getErrors());
+		}
+
+		$this->doSmartRedirect($entry);
+	}
 	/**
 	 * Processes form submissions
 	 *
@@ -137,7 +191,7 @@ class SproutForms_EntriesController extends BaseController
 					else
 					{
 						// Store this Entry Model in a variable in our Service layer
-						// so that we can access the error object from our displayForm() variable 
+						// so that we can access the error object from our displayForm() variable
 						sproutForms()->forms->activeEntries[$this->form->handle] = $entry;
 
 						// Return the form using it's name as a variable on the front-end

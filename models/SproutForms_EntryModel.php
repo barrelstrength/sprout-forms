@@ -6,12 +6,12 @@ namespace Craft;
  *
  * @package Craft
  *
- * @property	int						$id
- * @property	int						$formId
- * @property	string					$formName
- * @property	string					$ipAddress
- * @property	string					$userAgent
- * @property	SproutForms_FormModel	$form			The related form model for this element model
+ * @property    int                   $id
+ * @property    int                   $formId
+ * @property    string                $formName
+ * @property    string                $ipAddress
+ * @property    string                $userAgent
+ * @property    SproutForms_FormModel $form            The related form model for this element model
  */
 class SproutForms_EntryModel extends BaseElementModel
 {
@@ -30,10 +30,11 @@ class SproutForms_EntryModel extends BaseElementModel
 	 */
 	protected function defineAttributes()
 	{
-		return array_merge(parent::defineAttributes(),
+		return array_merge(
+			parent::defineAttributes(),
 			array(
 				'id'        => AttributeType::Number,
-				'form'		=> AttributeType::Mixed,
+				'form'      => AttributeType::Mixed,
 				'formId'    => AttributeType::Number,
 				'formName'  => AttributeType::Number,
 				'ipAddress' => AttributeType::String,
@@ -112,6 +113,37 @@ class SproutForms_EntryModel extends BaseElementModel
 	 */
 	public function getCpEditUrl()
 	{
-		return UrlHelper::getCpUrl('sproutforms/entries/edit/'. $this->id);
+		return UrlHelper::getCpUrl('sproutforms/entries/edit/'.$this->id);
+	}
+
+	/**
+	 * Returns an array of key/value pairs to send along in payload forwarding requests
+	 *
+	 * @return array
+	 */
+	public function getPayloadFields()
+	{
+		$fields = array();
+		$ignore = array(
+			'id',
+			'slug',
+			'title',
+			'handle',
+			'locale',
+			'element',
+			'elementId',
+		);
+
+		$content = $this->getContent()->getAttributes();
+
+		foreach ($content as $field => $value)
+		{
+			if (!in_array($field, $ignore))
+			{
+				$fields[$field] = $value;
+			}
+		}
+
+		return $fields;
 	}
 }
