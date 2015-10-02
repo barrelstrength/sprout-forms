@@ -5,12 +5,11 @@
 {%- set options      = (sett.options is defined ? sett.options : []) %}
 {%- set value        = (value is defined ? value : null) %}
 {%- set hasOptgroups = false -%}
-{%- set id           = name -%}
 
 <div class="{{ class }}">
 	<select
 		{% if field.required is defined and field.required %} required {% endif %}
-		{%- if id is defined %} id="{{ id }}"{% endif %}
+		id="{{ opts.id is defined ? opts.id : name }}"
 		{%- if name is defined %} name="{{ name }}"{% endif %}
 		{%- if disabled is defined and disabled %} disabled{% endif %}
 		{%- if targetPrefix is defined %} data-target-prefix="{{ targetPrefix }}"{% endif %}

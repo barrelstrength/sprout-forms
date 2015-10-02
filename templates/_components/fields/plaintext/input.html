@@ -2,7 +2,8 @@
 {%- set opts  = renderingOptions is defined ? renderingOptions : {} -%}
 {%- set data  = (opts.data is defined ? opts.data : null) %}
 {%- set class = opts.class is defined ? opts.class : 'sproutforms-text' %}
-{% if sett.miltiline is defined and sett.multiline %}
+
+{% if sett.multiline is defined and sett.multiline %}
 	<textarea
 		id="{{ opts.id is defined ? opts.id : name }}"
 		name="{{ name }}"
