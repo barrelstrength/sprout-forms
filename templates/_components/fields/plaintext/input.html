@@ -1,29 +1,28 @@
-{%- set sett  = settings -%}
 {%- set opts  = renderingOptions is defined ? renderingOptions : {} -%}
-{%- set data  = (opts.data is defined ? opts.data : null) %}
+{%- set data  = opts.data is defined ? opts.data : {} %}
 {%- set class = opts.class is defined ? opts.class : 'sproutforms-text' %}
 
-{% if sett.multiline is defined and sett.multiline %}
+{% if settings.multiline is defined and settings.multiline %}
 	<textarea
 		id="{{ opts.id is defined ? opts.id : name }}"
 		name="{{ name }}"
 		class="{{ class }}"
-		rows="{{ sett.initialRows is defined ? sett.initialRows : 10 }}"
+		rows="{{ settings.initialRows is defined ? settings.initialRows : 10 }}"
 		{% for key,dataValue in data %}
 			{{ 'data-'~key~'='~dataValue }}
 		{% endfor %}
-		{% if sett.placeholder is defined %}placeholder="{{ sett.placeholder }}"{% endif %}
+		{% if settings.placeholder is defined and settings.placeholder is not empty %}placeholder="{{ settings.placeholder }}"{% endif %}
 		>{{ value }}
 	</textarea>
 {% else %}
 		<input
+			id="{{ opts.id is defined ? opts.id : name }}"
 			name="{{ name}}"
 			type="{{ opts.type is defined ? opts.type : 'text' }}"
-			{{ field.required is defined and field.required ? 'required' }}
 			class="{{ class }}"
-			id="{{ opts.id is defined ? opts.id : name }}"
+			{{ field.required is defined and field.required ? 'required' }}
 			{%- if value is defined and value %} value="{{ value }}"{% endif %}
-			{% for key,dataValue in data %}
+			{% for key, dataValue in data %}
 				{{ 'data-'~key~'='~dataValue }}
 			{% endfor %}
 			/>
