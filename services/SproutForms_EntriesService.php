@@ -62,6 +62,27 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 
 		$client = new Client();
 
+		// Annoying context switching
+		$oldFieldContext = craft()->content->fieldContext;
+		$oldContentTable = craft()->content->contentTable;
+
+		craft()->content->fieldContext = $entry->getFieldContext();
+		craft()->content->contentTable = $entry->getContentTable();
+
+		$success = craft()->content->validateContent($entry);
+
+		craft()->content->fieldContext = $oldFieldContext;
+		craft()->content->contentTable = $oldContentTable;
+
+		if (!$success)
+		{
+			$entry->addErrors($entry->getContent()->getErrors());
+
+			sproutForms()->log($entry->getErrors());
+
+			return false;
+		}
+
 		try
 		{
 			sproutForms()->log($fields);

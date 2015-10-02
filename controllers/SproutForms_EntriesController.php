@@ -39,7 +39,6 @@ class SproutForms_EntriesController extends BaseController
 		}
 
 		$entry = $this->_getEntryModel();
-		$entry->formId = $this->form->id;
 
 		Craft::import('plugins.sproutforms.events.SproutForms_OnBeforePopulateEntryEvent');
 
@@ -52,6 +51,7 @@ class SproutForms_EntriesController extends BaseController
 
 		sproutForms()->onBeforePopulateEntry($event);
 
+		$entry->formId = $this->form->id;
 
 		$this->_populateEntryModel($entry);
 
@@ -62,12 +62,71 @@ class SproutForms_EntriesController extends BaseController
 		$this->form->notificationSenderEmail  = craft()->templates->renderObjectTemplate($this->form->notificationSenderEmail, $entry);
 		$this->form->notificationReplyToEmail = craft()->templates->renderObjectTemplate($this->form->notificationReplyToEmail, $entry);
 
-		if (!sproutForms()->entries->forwardEntry($entry))
+		if (sproutForms()->entries->forwardEntry($entry))
 		{
-			Craft::dd($entry->getErrors());
-		}
+			if (craft()->request->isAjaxRequest())
+			{
+				$return['success'] = true;
 
-		$this->doSmartRedirect($entry);
+				$this->returnJson($return);
+			}
+			else
+			{
+				craft()->userSession->setNotice(Craft::t('Entry saved.'));
+
+				$this->doSmartRedirect($entry);
+			}
+		}
+		else
+		{
+			if (craft()->request->isAjaxRequest())
+			{
+				$this->returnJson(
+					array(
+						'errors' => $entry->getErrors(),
+					)
+				);
+			}
+			else
+			{
+				if (craft()->request->isCpRequest())
+				{
+					// make errors available to variable
+					craft()->userSession->setError(Craft::t('Couldn’t save entry.'));
+
+					// Store this Entry Model in a variable in our Service layer
+					// so that we can access the error object from our actionEditEntryTemplate() method
+					sproutForms()->forms->activeCpEntry = $entry;
+
+					// Return the form as an 'entry' variable if in the cp
+					craft()->urlManager->setRouteVariables(
+						array(
+							'entry' => $entry
+						)
+					);
+				}
+				else
+				{
+					if (sproutForms()->entries->fakeIt)
+					{
+						$this->doSmartRedirect($entry);
+					}
+					else
+					{
+						// Store this Entry Model in a variable in our Service layer
+						// so that we can access the error object from our displayForm() variable
+						sproutForms()->forms->activeEntries[$this->form->handle] = $entry;
+
+						// Return the form using it's name as a variable on the front-end
+						craft()->urlManager->setRouteVariables(
+							array(
+								$this->form->handle => $entry
+							)
+						);
+					}
+				}
+			}
+		}
 	}
 	/**
 	 * Processes form submissions
