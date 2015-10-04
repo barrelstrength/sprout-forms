@@ -142,7 +142,7 @@ class SproutForms_FormsController extends BaseController
 
 		// 	if (sproutForms()->forms->saveForm($form))
 		// 	{
-		// 		$url = UrlHelper::getCpUrl('sproutforms/forms/edit/'.$form->id.'#overview');
+		// 		$url = UrlHelper::getCpUrl('sproutforms/forms/edit/'.$form->id.'#settings');
 		// 		$this->redirect($url);
 		// 	}
 		// 	else

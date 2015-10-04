@@ -22,10 +22,10 @@
 
 {% block main %}
 
-<form method="post" accept-charset="UTF-8" id="form" data-formid="{{ form.id }}" data-saveshortcut="1" data-saveshortcut-redirect="sproutforms/forms/edit/{id}#overview" data-confirm-unload>
+<form method="post" accept-charset="UTF-8" id="form" data-formid="{{ form.id }}" data-saveshortcut="1" data-saveshortcut-redirect="sproutforms/forms/edit/{id}#settings" data-confirm-unload>
 	{{ getCsrfInput() }}
   <input type="hidden" name="action" value="sproutForms/forms/saveForm">
-	<input type="hidden" name="redirect" value="sproutforms/forms/edit/{id}#overview">
+	<input type="hidden" name="redirect" value="sproutforms/forms/edit/{id}#settings">
   <input type="hidden" name="id" value="{{ form.id is defined ? form.id : '' }}">
 
 	<div class="grid first">
@@ -91,7 +91,7 @@
 
 			<div class="pane">
 
-				{% include 'sproutforms/forms/_sidebar/overview' %}
+				{% include 'sproutforms/forms/_sidebar/settings' %}
 
 				<div class="field" id="enabled-field">
 					<div class="heading">
