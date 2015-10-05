@@ -186,7 +186,7 @@ class SproutForms_FieldsService extends FieldsService
 		$fileConfigs            = craft()->config->get('sproutForms');
 		$templateFolderOverride = $settings->templateFolderOverride;
 
-		if (isset($form->enableTemplateOverrides))
+		if ($form->enableTemplateOverrides)
 		{
 			$templateFolderOverride = $form->templateOverridesFolder;
 		}
