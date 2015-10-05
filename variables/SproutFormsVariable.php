@@ -336,11 +336,28 @@ class SproutFormsVariable
 	/**
 	 * @param $type
 	 *
-	 * @return null|SproutFormsBaseField
+	 * @return Exception|SproutFormsBaseField
 	 */
 	public function getRegisteredField($type)
 	{
-		return sproutForms()->fields->getRegisteredField($type);
+		$fields = sproutForms()->fields->getRegisteredFields();
+
+		foreach ($fields as $field)
+		{
+			if ($field->getType() == $type)
+			{
+				return $field;
+			}
+		}
+
+		$message = $type . ' field does not support front-end display using Sprout Forms.';
+
+		SproutFormsPlugin::log($message, LogLevel::Warning);
+
+		if (craft()->config->get('devMode'))
+		{
+			throw new Exception(Craft::t($message));
+		}
 	}
 
 	public function getTemplatesPath()
