@@ -6,11 +6,8 @@
   value: settings.pluginNameOverride,
   autofocus: true,
   first: true,
-  errors: ''  
+  errors: ''
 }) }}
-
-{% if craft.config.get('sproutForms')['enableTemplateOverrides'] is defined and craft.config.get('sproutForms')
-['enableTemplateOverrides'] == 1 %}
 
 {{ forms.textField({
   label: "Template Folder Override"|t,
@@ -20,7 +17,5 @@
   value: settings.templateFolderOverride,
   autofocus: true,
   first: true,
-  errors: ''  
+  errors: ''
 }) }}
-
-{% endif %}

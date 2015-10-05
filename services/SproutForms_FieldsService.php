@@ -183,7 +183,6 @@ class SproutForms_FieldsService extends FieldsService
 	{
 		$templates              = array();
 		$settings               = craft()->plugins->getPlugin('sproutforms')->getSettings();
-		$fileConfigs            = craft()->config->get('sproutForms');
 		$templateFolderOverride = $settings->templateFolderOverride;
 
 		if ($form->enableTemplateOverrides)
@@ -199,7 +198,7 @@ class SproutForms_FieldsService extends FieldsService
 		$templates['field'] = $defaultTemplate;
 
 		// See if we should override our defaults
-		if ($templateFolderOverride && $fileConfigs['enableTemplateOverrides'])
+		if ($templateFolderOverride)
 		{
 			$formTemplate  = craft()->path->getSiteTemplatesPath().$templateFolderOverride.'/form';
 			$tabTemplate   = craft()->path->getSiteTemplatesPath().$templateFolderOverride.'/tab';
