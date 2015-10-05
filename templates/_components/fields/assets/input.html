@@ -1,5 +1,5 @@
 {% set multiple   = false %}
-{% if settings.limit is defined and settings.limit > 1 %}
+{% if settings.limit is defined and (settings.limit is empty or settings.limit > 1) %}
 	{% set name     = name ~ '[]' %}
 	{% set multiple = true %}
 {% endif %}
