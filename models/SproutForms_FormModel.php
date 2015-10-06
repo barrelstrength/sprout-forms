@@ -46,12 +46,11 @@ class SproutForms_FormModel extends BaseElementModel
 			'notificationSenderName'   => AttributeType::String,
 			'notificationSenderEmail'  => AttributeType::String,
 			'notificationReplyToEmail' => AttributeType::String,
-
 			'ownerId'                  => AttributeType::Number,
 			'oldHandle'                => AttributeType::String,
-
-			'enableTemplateOverrides' => array(AttributeType::Bool, 'default' => false),
-			'templateOverridesFolder' => array(AttributeType::String),
+			'enableTemplateOverrides'  => array(AttributeType::Bool, 'default' => false),
+			'templateOverridesFolder'  => array(AttributeType::String),
+			'enableFileAttachments'    => array(AttributeType::Bool, 'default' => false),
 		));
 	}
 

@@ -83,14 +83,15 @@ class SproutFormsService extends BaseApplicationComponent
 	 */
 	public function handleOnBeforeSendEmail(Event $event)
 	{
-		$attachmentConfig = 'enableFileAttachments';
+		$variables             = $event->params['variables'];
+		$enableFileAttachments = $variables['enableFileAttachments'];
 
 		// We only act if...
 		// 1. This is a side effect of submitting a form
 		// 2. File attachments are enabled for Sprout Forms
-		if (isset($event->params['variables']['sproutFormsEntry']) && $this->getConfig($attachmentConfig))
+		if (isset($variables['sproutFormsEntry']) && $enableFileAttachments )
 		{
-			$entry = $event->params['variables']['sproutFormsEntry'];
+			$entry = $variables['sproutFormsEntry'];
 
 			/**
 			 * @var $field FieldModel
@@ -116,7 +117,7 @@ class SproutFormsService extends BaseApplicationComponent
 			}
 		}
 
-		if (isset($event->params['variables']['sproutFormsEntry']) && !$this->getConfig($attachmentConfig))
+		if (isset($variables['sproutFormsEntry']) && !$enableFileAttachments)
 		{
 			$this->log('File attachments are currently not enabled for Sprout Forms.');
 		}

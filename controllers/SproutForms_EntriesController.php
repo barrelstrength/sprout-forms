@@ -456,7 +456,12 @@ class SproutForms_EntriesController extends BaseController
 
 					if (filter_var($email->toEmail, FILTER_VALIDATE_EMAIL))
 					{
-						craft()->email->sendEmail($email, array('sproutFormsEntry' => $entry));
+						$options =
+							array(
+								'sproutFormsEntry'      => $entry,
+								'enableFileAttachments' => $form->enableFileAttachments,
+							);
+						craft()->email->sendEmail($email, $options);
 					}
 				}
 				catch (\Exception $e)
