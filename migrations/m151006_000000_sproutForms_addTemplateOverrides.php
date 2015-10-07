@@ -4,7 +4,7 @@ namespace Craft;
 /**
  * The class name is the UTC timestamp in the format of mYYMMDD_HHMMSS_pluginHandle_migrationName
  */
-class m150635_000000_sproutForms_addTemplateOverrides extends BaseMigration
+class m151006_000000_sproutForms_addTemplateOverrides extends BaseMigration
 {
 	/**
 	 * Any migration code in here is wrapped inside of a transaction.

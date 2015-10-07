@@ -258,6 +258,24 @@ class SproutForms_FieldsService extends FieldsService
 	}
 
 	/**
+	 * @param $type
+	 *
+	 * @return null|SproutFormsBaseField
+	 */
+	public function getRegisteredField($type)
+	{
+		$fields = $this->getRegisteredFields();
+
+		foreach ($fields as $field)
+		{
+			if ($field->getType() == $type)
+			{
+				return $field;
+			}
+		}
+	}
+
+	/**
 	 * Returns a field type selection array grouped by category
 	 *
 	 * Categories

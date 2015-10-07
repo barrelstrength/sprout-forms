@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class m150640_000000_sproutForms_addFileAttachments extends BaseMigration
+class m151007_000000_sproutForms_addFileAttachments extends BaseMigration
 {
 	/**
 	 * Any migration code in here is wrapped inside of a transaction.

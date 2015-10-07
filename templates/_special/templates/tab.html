@@ -1,6 +1,6 @@
 {% for tab in tabs %}
 
-	{% set fields = tab.getFields() %}
+	{% set layoutFields = tab.getFields() %}
 
 	<div class="tab">
 
@@ -8,14 +8,16 @@
 			<h3>{{ tab.name }}</h3>
 		{% endif %}
 
-		{% for field in fields %}
-			{% set type      = field.getField().type %}
-			{% set required  = field.required %}
-			{% set formField = craft.sproutForms.getRegisteredField(type) %}
+		{% for layoutField in layoutFields %}
+			{% set field     = layoutField.getField() %}
+			{% set required  = layoutField.required %}
+			{% set formField = craft.sproutForms.getRegisteredField(field.type) %}
+
+			{% do field.setAttribute('required', layoutField.required) %}
 
 			{% if formField %}
 				{% include "field" with {
-					field:                field.getField(),
+					field:                field,
 					element:              entry,
 					required:             required,
 					formField:            formField,
@@ -24,7 +26,7 @@
 				} only %}
 			{% else %}
 				<!-- Sprout Forms Log -->
-				<!-- The {{ type }} field type is not supported on the front end -->
+				<!-- The {{ field.type }} field type is not supported on the front end -->
 				<!-- Review the Sprout Forms Field API to see how you can add support -->
 			{% endif %}
 		{% endfor %}

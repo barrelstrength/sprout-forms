@@ -150,7 +150,6 @@ class SproutFormsVariable
 	{
 		list($formHandle, $fieldHandle) = explode('.', $handle);
 
-
 		if (empty($formHandle) || empty($fieldHandle))
 		{
 			return false;
@@ -171,20 +170,27 @@ class SproutFormsVariable
 		// Determine where our form and field template should come from
 		$templatePaths = sproutForms()->fields->getSproutFormsTemplates($form);
 
+		$context = craft()->content->fieldContext;
+
+		craft()->content->fieldContext = $form->getFieldContext();
+
 		$field = craft()->fields->getFieldByHandle($fieldHandle);
+
+		craft()->content->fieldContext = $context;
 
 		if ($field)
 		{
-			$registeredFields = sproutForms()->fields->getRegisteredFields();
+			$fieldTypeClass  = get_class($field->getFieldType());
+			$fieldTypeString = str_replace('Craft\\', '', str_replace('FieldType', '', $fieldTypeClass));
+			$formField       = sproutForms()->fields->getRegisteredField($fieldTypeString);
 
-			if (isset($registeredFields[$field->getFieldType()->type]))
+			if ($formField)
 			{
-				$value     = craft()->request->getPost($field->handle);
-				$formField = isset($registeredFields[$field->type]) ? $registeredFields[$field->type] : null;
+				$value = craft()->request->getPost($field->handle);
 
 				craft()->path->setTemplatesPath($formField->getTemplatesPath());
 
-				$formField->getInputHtml($field, $value, $field->getSettings(), $renderingOptions);
+				$formField->getInputHtml($field, $value, $field->getFieldType()->getSettings(), $renderingOptions);
 
 				// Set Tab template path
 				craft()->path->setTemplatesPath($templatePaths['field']);
@@ -195,7 +201,6 @@ class SproutFormsVariable
 						'value'                => $value,
 						'field'                => $field,
 						'element'              => $entry,
-						'required'             => $field->getFieldType()->required,
 						'formField'            => $formField,
 						'renderingOptions'     => $renderingOptions,
 						'thirdPartySubmission' => !!$form->submitAction,
@@ -340,15 +345,7 @@ class SproutFormsVariable
 	 */
 	public function getRegisteredField($type)
 	{
-		$fields = sproutForms()->fields->getRegisteredFields();
-
-		foreach ($fields as $field)
-		{
-			if ($field->getType() == $type)
-			{
-				return $field;
-			}
-		}
+		return sproutForms()->fields->getRegisteredField($type);
 	}
 
 	public function getTemplatesPath()
