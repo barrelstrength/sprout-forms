@@ -114,7 +114,7 @@ class SproutForms_FormModel extends BaseElementModel
 	 */
 	public function getFields()
 	{
-		if (!isset($this->_fields))
+		if (is_null($this->_fields))
 		{
 			$this->_fields = array();
 
@@ -123,12 +123,29 @@ class SproutForms_FormModel extends BaseElementModel
 			foreach ($fieldLayoutFields as $fieldLayoutField)
 			{
 				$field = $fieldLayoutField->getField();
-				$field->required = $fieldLayoutField->required;
-				$this->_fields[] = $field;
+
+				$field->setAttribute('required', $fieldLayoutField->required);
+
+				$this->_fields[$field->handle] = $field;
 			}
 		}
 
 		return $this->_fields;
+	}
+
+	/**
+	 * @param string $handle
+	 *
+	 * @return null|FieldModel
+	 */
+	public function getField($handle)
+	{
+		$fields = $this->getFields();
+
+		if (is_string($handle) && !empty($handle))
+		{
+			return isset($fields[$handle]) ? $fields[$handle] : null;
+		}
 	}
 
 	/**

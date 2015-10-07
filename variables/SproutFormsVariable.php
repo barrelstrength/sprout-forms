@@ -170,13 +170,7 @@ class SproutFormsVariable
 		// Determine where our form and field template should come from
 		$templatePaths = sproutForms()->fields->getSproutFormsTemplates($form);
 
-		$context = craft()->content->fieldContext;
-
-		craft()->content->fieldContext = $form->getFieldContext();
-
-		$field = craft()->fields->getFieldByHandle($fieldHandle);
-
-		craft()->content->fieldContext = $context;
+		$field = $form->getField($fieldHandle);
 
 		if ($field)
 		{
@@ -200,6 +194,7 @@ class SproutFormsVariable
 					'field', array(
 						'value'                => $value,
 						'field'                => $field,
+						'required'             => $field->required,
 						'element'              => $entry,
 						'formField'            => $formField,
 						'renderingOptions'     => $renderingOptions,
