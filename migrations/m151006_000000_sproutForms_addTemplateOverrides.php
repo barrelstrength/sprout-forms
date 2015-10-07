@@ -35,7 +35,7 @@ class m151006_000000_sproutForms_addTemplateOverrides extends BaseMigration
 			// check if the column does NOT exist
 			if (!craft()->db->columnExists($tableName, $columnName))
 			{
-				if($tableName == "enableTemplateOverrides")
+				if($columnName == "enableTemplateOverrides")
 				{
 					$this->addColumn($tableName, $columnName, array(
 						'column' => $columnType,
