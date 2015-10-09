@@ -84,7 +84,7 @@ class SproutFormsService extends BaseApplicationComponent
 	public function handleOnBeforeSendEmail(Event $event)
 	{
 		$variables             = $event->params['variables'];
-		$enableFileAttachments = $variables['enableFileAttachments'];
+		$enableFileAttachments = isset($variables['enableFileAttachments']) ? $variables['enableFileAttachments'] : null;
 
 		// We only act if...
 		// 1. This is a side effect of submitting a form
