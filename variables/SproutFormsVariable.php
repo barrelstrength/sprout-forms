@@ -256,6 +256,17 @@ class SproutFormsVariable
 	}
 
 	/**
+	 * Returns an active or new entry model
+	 *
+	 * @param SproutForms_FormModel $form
+	 * @return mixed
+	 */
+	public function getEntry(SproutForms_FormModel $form)
+	{
+		return sproutForms()->entries->getEntryModel($form);
+	}
+
+	/**
 	 * Gets last entry submitted
 	 *
 	 * @param  string $formHandle Form handle
