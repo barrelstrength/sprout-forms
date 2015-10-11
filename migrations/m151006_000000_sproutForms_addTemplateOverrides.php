@@ -50,7 +50,8 @@ class m151006_000000_sproutForms_addTemplateOverrides extends BaseMigration
 				{
 					$this->addColumn($tableName, $columnName, array(
 						'column' => $columnType,
-						'null'   => false,
+						'null'   => true,
+						'default' => null,
 						)
 					);
 				}
