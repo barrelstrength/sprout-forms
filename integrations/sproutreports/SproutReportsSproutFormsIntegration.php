@@ -158,49 +158,6 @@ class SproutReportsSproutFormsIntegration extends SproutReportsBaseReport
                 'value' => 'SELECT MAX(dateCreated) FROM {{sproutformscontent_'.$form->handle.'}}'
             )
         );
-        $formFields = $form->getFieldLayout()->getFields();
-        foreach ($formFields as $field)
-        {
-            $field = $field->getField();
-            switch ($field->type)
-            {
-                case 'Dropdown':
-                case 'Checkboxes':
-                case 'RadioButtons':
-                    $fieldOptions = array();
-                    $default = false;
-                    foreach ($field['settings']['options'] as $option)
-                    {
-                        if ($option['value'])
-                        {
-                            $fieldOptions[] = array(
-                                'label' => $option['label'],
-                                'value' => $option['value']
-                            );
-                        }
-                        if ($option['default'])
-                        {
-                            $default = $option['value'];
-                        }
-                    }
-
-                    if (count($fieldOptions))
-                    {
-                        $userOptions['field_'.$field['handle']] = array(
-                            'type' => strtolower($field->type),
-                            'column' => 'field_'.$field['handle'],
-                            'name' => $field['name'],
-                            'comparisonOperator' => ($field->type == 'Checkboxes') ? 'LIKE' : '=',
-                            'values' => $fieldOptions,
-                            'defaultValue' => array(
-                                'isSQL' => false,
-                                'value' => $default
-                            )
-                        );
-                    }
-                    break;
-            }
-        }
 
         $report->setUserOptions($userOptions);
 		return $report;
