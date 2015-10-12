@@ -81,7 +81,7 @@ class SproutFormsVariable
 		return TemplateHelper::getRaw($formHtml);
 	}
 
-	public function displayTab($formTabHandle)
+	public function displayTab($formTabHandle, array $renderingOptions = null)
 	{
 		list($formHandle, $tabHandle) = explode('.', $formTabHandle);
 		$tabHandle = strtolower($tabHandle);
@@ -111,7 +111,7 @@ class SproutFormsVariable
 			}
 		}
 
-		if (empty($tabIndex))
+		if (is_null($tabIndex))
 		{
 			return false;
 		}
@@ -127,7 +127,9 @@ class SproutFormsVariable
 				'entry'                => $entry,
 				'formFields'           => $fields,
 				'displaySectionTitles' => $form->displaySectionTitles,
-				'thirdPartySubmission' => ($form->submitAction) ? true : false
+				'thirdPartySubmission' => !!$form->submitAction,
+				'displaySectionTitles' => $form->displaySectionTitles,
+				'renderingOptions'     => $renderingOptions
 			)
 		);
 
@@ -256,6 +258,17 @@ class SproutFormsVariable
 	}
 
 	/**
+	 * Returns an active or new entry model
+	 *
+	 * @param SproutForms_FormModel $form
+	 * @return mixed
+	 */
+	public function getEntry(SproutForms_FormModel $form)
+	{
+		return sproutForms()->entries->getEntryModel($form);
+	}
+
+	/**
 	 * Gets last entry submitted
 	 *
 	 * @param  string $formHandle Form handle
@@ -336,11 +349,28 @@ class SproutFormsVariable
 	/**
 	 * @param $type
 	 *
-	 * @return null|SproutFormsBaseField
+	 * @return Exception|SproutFormsBaseField
 	 */
 	public function getRegisteredField($type)
 	{
-		return sproutForms()->fields->getRegisteredField($type);
+		$fields = sproutForms()->fields->getRegisteredFields();
+
+		foreach ($fields as $field)
+		{
+			if ($field->getType() == $type)
+			{
+				return $field;
+			}
+		}
+
+		$message = $type . ' field does not support front-end display using Sprout Forms.';
+
+		SproutFormsPlugin::log($message, LogLevel::Warning);
+
+		if (craft()->config->get('devMode'))
+		{
+			throw new Exception(Craft::t($message));
+		}
 	}
 
 	public function getTemplatesPath()

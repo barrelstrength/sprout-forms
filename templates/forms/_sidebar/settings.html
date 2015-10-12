@@ -4,20 +4,20 @@
 <nav id="tabs" class="tabs">
 	<ul>
 		<li>
-			<a class="tab {{ tab == 1 ? ' sel' : '' }}" href="#tab-sproutforms-overview">
-				Overview
+			<a class="tab {{ tab == 1 ? ' sel' : '' }}" href="#tab-sproutforms-settings">
+				{{ "Settings"|t }}
 			</a>
 		</li>
 		<li>
-			<a class="tab {{ tab == 2 ? ' sel' : '' }} {{ tab2 ? 'error' : '' }}" href="#tab-sproutforms-custom">
-				Custom
+			<a class="tab {{ tab == 2 ? ' sel' : '' }} {{ tab2 ? 'error' : '' }}" href="#tab-sproutforms-advanced">
+				{{ "Advanced"|t }}
 			</a>
 		</li>
 	</ul>
 </nav>
 
 <div>
-	<div class="{{ tab != 1 ? 'hidden' : '' }}" id="tab-sproutforms-overview">
+	<div class="{{ tab != 1 ? 'hidden' : '' }}" id="tab-sproutforms-settings">
 
 		{% if groups is defined and groups|length %}
 
@@ -30,8 +30,7 @@
 
 			{{ forms.selectField({
 				first: true,
-				label: "Group"|t,
-				instructions: "Which group should this form be displayed in?"|t,
+				label: "Group <span class='info'>Which group should this form be displayed in?</span>"|t,
 				id: 'groupId',
 				name: 'groupId',
 				options: groupOptions,
@@ -63,7 +62,7 @@
 		}) }}
 
 		{{ forms.textField({
-			label: "Redirect Page <span class='info'>Where should the user be redirected upon form submission? <i>NOTE: Leaving blank will redirect user back to the form.</i></span>"|t,
+			label: "Redirect Page <span class='info'>Where should the user be redirected upon form submission? Leaving blank will redirect user back to the form.</span>"|t,
 			name: 'redirectUri',
 			placeholder: siteUrl,
 			value: (form is defined ? form.redirectUri : null),
@@ -78,9 +77,9 @@
 			required: false,
 			errors: (form is defined ? form.getErrors('submitButtonText') : null)
 		}) }}
-	</div><!-- Overview div -->
+	</div><!-- settings div -->
 
-	<div id="tab-sproutforms-custom" class="{{ tab != 2 ? 'hidden' : '' }}">
+	<div id="tab-sproutforms-advanced" class="{{ tab != 2 ? 'hidden' : '' }}">
 
 		{{ forms.textField({
 			label: "Title Format <span class='info'>Entry Titles are auto-generated based on the Title Format you enter here. All information contained in the Title will also be searchable. You may use the same syntax here as you would with Dynamic Titles in your Sections. (i.e. {dateCreated|date('Ymd')} {fullName})</span>"|t,
@@ -90,23 +89,7 @@
 			errors: form.getErrors('titleFormat')
 		}) }}
 
-		{{ forms.lightswitchField({
-			first: true,
-			label: "Display Tab Titles on Forms"|t,
-			id: 'displaySectionTitles',
-			name: 'displaySectionTitles',
-			on: form.displaySectionTitles,
-			onLabel: "Show"|t,
-			offLabel: "Hide"|t
-		}) }}
-
-		{{ forms.textField({
-			label: "Custom Submit Action URL <span class='info'>If you want to POST your form data to a third party URL, add that URL here. Currently, only fields using the same handle naming convention as Craft are supported.</span>"|t,
-			name: 'submitAction',
-			placeholder: 'http://example.com/somewhere-else',
-			value: (form is defined ? form.submitAction : null),
-			errors: (form is defined ? form.getErrors('submitAction') : null)
-		}) }}
+		<hr>
 
 		{% from "_includes/forms" import checkboxField %}
 
@@ -119,12 +102,33 @@
 		}) }}
 		<div id="overrides-settings" class="nested-fields{% if not form.enableTemplateOverrides %} hidden{% endif %}">
 			{{ forms.textField({
-				label: "Sprout Forms will check in this folder first for any overrides that you want to add."|t,
+				label: "Template Overrides Folder <span class='info'>The template folder to use for overrides</span>"|t,
 				name: 'templateOverridesFolder',
 				id: 'templateOverridesFolder',
 				on: form.templateOverridesFolder,
 				value: (form is defined ? form.templateOverridesFolder : null),
 			}) }}
 		</div>
+
+		{{ forms.lightswitchField({
+			label: "Display Tab Titles on Forms"|t,
+			id: 'displaySectionTitles',
+			name: 'displaySectionTitles',
+			on: form.displaySectionTitles,
+			onLabel: "Show"|t,
+			offLabel: "Hide"|t
+		}) }}
+
+		<hr>
+
+		{{ forms.textField({
+			label: "Custom Submit URL <span class='info'>Submit your form data to this URL, instead of directly to Sprout
+			Forms.</span>"|t,
+			name: 'submitAction',
+			placeholder: 'http://example.com/somewhere-else',
+			value: (form is defined ? form.submitAction : null),
+			errors: (form is defined ? form.getErrors('submitAction') : null)
+		}) }}
+
 	</div>
 </div>

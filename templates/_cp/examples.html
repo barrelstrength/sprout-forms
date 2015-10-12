@@ -3,45 +3,61 @@
 
 {% set title = craft.sproutForms.name %}
 
+{% set crumbs = [
+{ label: "Sprout Forms"|t, url: url('sproutforms') },
+{ label: "Settings"|t, url: url('sproutforms/settings') }
+] %}
+
 {% block main %}
 
 <div class="grid">
-	<div class="item">
+	<div class="item" data-position="left" data-colspan="1">
 		<div class="pane">
 
-<style type="text/css">
-	.examples {
-		width: 35%;
-	}
-	.examples .buttons {
-		margin-top: 1em;
-	}
-</style>
+			<style type="text/css">
+				.examples h2 {
+					margin-top: 0;
+				}
+				.examples .buttons {
+					margin-top: 1em;
+				}
+			</style>
 
-<form method="post" action="" accept-charset="utf-8" class="examples">
-	{{ getCsrfInput() }}
-	<input type="hidden" name="action" value="sproutForms/examples/install">
-	
-	<h2>{{ "Getting Started"|t }}</h2>
-	
-	<p>{{ "Install example forms with commented templates and example data. The example templates will be created
-	and placed in the `<code>craft/templates/sproutforms</code>` folder."| t | raw }}</p>
+			<form method="post" action="" accept-charset="utf-8" class="examples">
+				{{ getCsrfInput() }}
+				<input type="hidden" name="action" value="sproutForms/examples/install">
 
-	<p><em>{{ "Example forms include a Contact Form and a Form with all of the basic front-end fields that can be used with the single-line form tag."| t | raw }}</em></p>
-	
-	<div class="buttons">
-		<input class="btn submit" type="submit" value="{{ 'Install Example Forms'|t }}" />
-	</div>
+				<h2>{{ "Get Started with Examples"|t }}</h2>
 
-	<p>{{ "Don't install any example forms or data, I will build the forms I need myself."|t }}</p>
+				<p>{{ "Install example forms with commented templates and example data. The example templates will be created
+				and placed in the `<code>craft/templates/sproutforms</code>` folder."|t | raw }}</p>
 
-	<div class="buttons">
-		<a href="{{ url('sproutforms/forms') }}" class="btn delete">{{ "Take me to Sprout Forms"|t }}</a>
-	</div>
+				<p>{{ "Example forms include a Contact Form and Basic Fields Form and illustrate how to output your forms
+				with one line of code or customize them with 100% control."|t | raw
+					}}</p>
 
-</form>
+				<div class="buttons">
+					<input class="btn submit" type="submit" value="{{ 'Install Example Forms'|t }}" />
+				</div>
+
+
+
+			</form>
 
 		</div>
 	</div>
+	<div class="item" data-position="left" data-colspan="1">
+		<div class="pane">
+
+			<h2>{{ "I know what I'm doing"|t }}</h2>
+
+			<div class="buttons">
+				<a href="{{ url('sproutforms/forms') }}" class="btn delete">{{ "Take me to Sprout Forms"|t }}</a>
+			</div>
+
+
+		</div>
+	</div>
+
 </div>
 {% endblock %}

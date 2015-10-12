@@ -53,13 +53,9 @@ class SproutFormsPlugin extends BasePlugin
 
 	public function init()
 	{
-		Craft::import('plugins.sproutforms.fields.ISproutFormsFieldType');
-		Craft::import('plugins.sproutforms.fields.BaseSproutFormsFieldType');
 		Craft::import('plugins.sproutforms.contracts.SproutFormsBaseField');
-
-		Craft::import('plugins.sproutreports.fields.BaseSproutFormsFieldTypessss');
-		Craft::import('plugins.sproutforms.integrations.sproutreports.SproutReportsSproutFormsIntegration');
 		Craft::import('plugins.sproutreports.vendor.sproutreports.SproutReportsBaseReport');
+		Craft::import('plugins.sproutforms.integrations.sproutreports.SproutReportsSproutFormsIntegration');
 
 		craft()->on('email.onBeforeSendEmail', array(sproutForms(), 'handleOnBeforeSendEmail'));
 	}

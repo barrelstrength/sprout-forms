@@ -6,7 +6,7 @@
 	name="{{ name }}"
 	type="{{ opts.type is defined ? opts.type : 'text' }}"
 	{{ field.required is defined and field.required ? 'required' }}
-	class="{{ opts.class is defined ? opts.class : 'sproutforms-mumber' }}"
+	class="{{ opts.class is defined ? opts.class : 'sproutforms-number' }}"
 	id="{{ opts.id is defined ? opts.id : name }}"
 	{%- if value is defined and value %} value="{{ value }}"{% endif %}
 	{% for key,dataValue in data %}

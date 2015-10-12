@@ -2,24 +2,24 @@
 
 {% block content %}	
 
-<h1>Example Contact Form</h1>
+<h1>Example Forms</h1>
 
-<p>The example templates below illustrate several different ways you can output your forms in your templates.</p>
+<p>The example templates below illustrate several different ways you can output your forms in your templates.  The <code>displayForm</code>, <code>displayField</code>, and <code>displayTab</code> tags all support retaining submitted values if a form fails submission and displaying field-specific errors.</p>
 
 <hr> 
 
 <ul class="examples">
 	<li>
 		<a href="/sproutforms/examples/contact-form">Contact Form (Single Line)</a><br/>
-		Output your form using a single tag.
+		<code>craft.sproutForms.displayForm('formHandle')</code>
 	</li>
 	<li>
 		<a href="/sproutforms/examples/contact-form-fields">Contact Form (Field by Field)</a><br/>
-		Output your form field by field.
+		<code>craft.sproutForms.displayField('formHandle.fieldHandle')</code>
 	</li>
 	<li> 
-		<a href="/sproutforms/examples/contact-form-custom">Contact Form (Custom HTML)</a><br/>
-		Build your form in pure HTML and have it submit to Sprout Forms.
+		<a href="/sproutforms/examples/basic-fields-tabs">Basic Fields Form (Tabs by Tab)</a><br/>
+		<code>craft.sproutForms.displayTab('formHandle.tabHandle')</code>
 	</li>
 </ul>
 <br/>
@@ -33,7 +33,11 @@
 <ul class="examples">
 	<li>
 		<a href="/sproutforms/examples/basic-fields-custom">All Basic Fields (Custom HTML)</a><br/>
-		Sprout Forms gives you the option to build your forms using HTML. This example shows you how to handle all of the basic, supported field types using HTML.
+		Sprout Forms gives you the option to build your forms using HTML. This example shows you how to handle all of the basic, supported field types using HTML; retain field values after a form is submitted, and display field-specific error messages.
+	</li>
+	<li>
+		<a href="/sproutforms/examples/contact-form-options">Dynamic Rendering Options</a><br/>
+		Take a look at how <code>displayForm</code>, <code>displayField</code>, and <code>displayTab</code> tags allow you to pass in a second parameter to customize several settings on the fly.
 	</li>
 	<li>
 		<a href="/sproutforms/examples/multiple-forms">Multiple forms</a><br/>

@@ -91,6 +91,6 @@ Then, inside of your `getInputHtml()`, you can access the context via `getContex
 See `needsGlobalContext()`
 
 ## Examples
-If you'd like to take a pick at how we're using this API, you can look at Sprout Forms integrations folder.
+If you'd like to take a peek at how we're using this API, you can look at Sprout Forms integrations folder.
 
 All the default fields that we provide front end rendering for, are using this very API:)
