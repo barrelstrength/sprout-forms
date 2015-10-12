@@ -39,10 +39,12 @@ class SproutForms_FormsController extends BaseController
 		$form->notificationSenderEmail  = craft()->request->getPost('notificationSenderEmail');
 		$form->notificationReplyToEmail = craft()->request->getPost('notificationReplyToEmail');
 		$form->enableTemplateOverrides  = craft()->request->getPost('enableTemplateOverrides');
-		$form->templateOverridesFolder  = craft()->request->getPost('templateOverridesFolder');
+		$form->templateOverridesFolder  = $form->enableTemplateOverrides
+																			? craft()->request->getPost('templateOverridesFolder')
+																			: null;
 		$form->enableFileAttachments    = craft()->request->getPost('enableFileAttachments');
 
-		// Set the field layout
+			// Set the field layout
 		$fieldLayout =  craft()->fields->assembleLayoutFromPost();
 		$fieldLayout->type = 'SproutForms_Form';
 		$form->setFieldLayout($fieldLayout);
