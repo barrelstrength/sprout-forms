@@ -81,7 +81,7 @@ class SproutFormsVariable
 		return TemplateHelper::getRaw($formHtml);
 	}
 
-	public function displayTab($formTabHandle)
+	public function displayTab($formTabHandle, array $renderingOptions = null)
 	{
 		list($formHandle, $tabHandle) = explode('.', $formTabHandle);
 		$tabHandle = strtolower($tabHandle);
@@ -111,7 +111,7 @@ class SproutFormsVariable
 			}
 		}
 
-		if (empty($tabIndex))
+		if (is_null($tabIndex))
 		{
 			return false;
 		}
@@ -127,7 +127,9 @@ class SproutFormsVariable
 				'entry'                => $entry,
 				'formFields'           => $fields,
 				'displaySectionTitles' => $form->displaySectionTitles,
-				'thirdPartySubmission' => ($form->submitAction) ? true : false
+				'thirdPartySubmission' => !!$form->submitAction,
+				'displaySectionTitles' => $form->displaySectionTitles,
+				'renderingOptions'     => $renderingOptions
 			)
 		);
 
