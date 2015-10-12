@@ -2,7 +2,7 @@
 
 {% block content %}
 	
-	<h1>Output your form field by field.</h1>
+	<h1>Output your form tab by tab.</h1>
 	
 	<p>Take a look at the code of this template to see an example with comments.</p>
 
@@ -17,7 +17,7 @@
 	{% else %}
 	  
 	  {# Retrieve your Form Model from the database #}
-	  {% set form = craft.sproutForms.form('contact') %}
+	  {% set form = craft.sproutForms.form('basic') %}
 
 	  {# If you want more fine-grained control over your fields, you will have to build the 
 	     Form youself, and then you can control the specific fields more directly. #}
@@ -33,12 +33,11 @@
 	  	
 	  	<div class="fields">
 
-	  		{# To output a specific field, use the syntax: formHandle.fieldHandle #}
-	  		{{ craft.sproutForms.displayField('contact.fullName') }}
+	  		{# To output a specific field, use the syntax: formHandle.tabHandle
+	  			 A tabHandle is the lowercase Tab name with all spaces removed #}
+	  		{{ craft.sproutForms.displayTab('basic.sectionone') }}
 
-	  		{{ craft.sproutForms.displayField('contact.email') }}
-
-	  		{{ craft.sproutForms.displayField('contact.message') }}
+	  		{{ craft.sproutForms.displayTab('basic.sectiontwo') }}
 
 	  	</div>
 

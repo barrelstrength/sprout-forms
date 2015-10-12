@@ -1,0 +1,53 @@
+{% extends "sproutforms/_layout" %}
+
+{% block content %}
+
+	<h1>Output your form using dynamic rendering options.</h1>
+
+	<p>Take a look at the code of this template to see an example with comments.</p>
+
+	<hr>
+
+	{# Check if we should display or form or thank you message #}
+	{% if craft.request.getParam('message') == 'thank-you' %}
+
+		{# Display our thank you message #}
+		<p>Thank you for your message. We'll be in touch soon!</p>
+
+	{% else %}
+
+		{# The displayForm, displayTab, and displayField tags take a second argument
+		   where you can define several options that will be added to the underlying 
+		   template code.
+
+		   In this example, we set a custom id, class, and error class on the form 
+		   and target the fullName field by handle to add custom id, class, and error
+		   values as well. In addition, the data array adds data attributes to the
+		   target fields input field.  In our example the attribute `data-animal-type="bird"
+		   gets added to the fullName input field #}
+		{% set options = {
+			"id": "contactform-" ~ craft.request.getSegment(3),
+			"class": "form-class form-class-customized",
+			"errorClass": "form-has-errors",
+			"fields": {
+				"fullName": {
+					"id": "fullName-field",
+					"class": "field-class field-class-text",
+					"errorClass": "field-has-error",
+					"data": {
+						"animal-type": "bird",
+					}
+				}
+			}
+		} %}
+
+		{# Provide our options to our Contact Form via the displayForm tag.
+
+			 This options could also be handed off to the displayTab or displayField tags
+			 however, only the options specific to the fields would be used as the displayTab
+			 and displayField tags don't know anything about their parent form code. #}
+		{{ craft.sproutForms.displayForm('contact', options) }}
+
+	{% endif %}
+
+{% endblock %}
