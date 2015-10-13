@@ -1,21 +1,25 @@
-{% set multiple   = false %}
-{% if settings.limit is defined and (settings.limit is empty or settings.limit > 1) %}
-	{% set name     = name ~ '[]' %}
-	{% set multiple = true %}
-{% endif %}
-{%- set opts  = renderingOptions is defined ? renderingOptions : {} -%}
-{%- set data  = (opts.data is defined ? opts.data : null) %}
-{%- set class = opts.class is defined ? opts.class : 'file' %}
-{% set id    = opts.id is defined ? opts.id : name %}
-{% set class = opts.class is defined ? opts.class : 'sproutforms-file' %}
+{%- set type     = field.type|lower %}
+{%- set data     = renderingOptions.data is defined ? renderingOptions.data : null %}
+{%- set id       = renderingOptions.id is defined ? renderingOptions.id : type %}
+{%- set class    = renderingOptions.class is defined ? renderingOptions.class : type %}
+{%- set required = field.required is defined and field.required ? " required" %}
+
+{%- set dataAttributes = null %}
+{%- for key, dataValue in data %}
+	{%- set dataAttributes = dataAttributes ~ ' data-'~key~'='~dataValue %}
+{% endfor -%}
+
+{%- set multiple   = false %}
+{%- if settings.limit is defined and (settings.limit is empty or settings.limit > 1) %}
+	{%- set name     = name ~ '[]' %}
+	{%- set multiple = true %}
+{%- endif -%}
 
 <input type="file"
-	{%- if multiple %} multiple {% endif %}
-	{%- if field.required is defined and field.required %} required {% endif %}
-	{%- if id is defined %} id="{{ id }}"{% endif %}
-	{%- if class is defined %} class="{{class}}" {%endif%}
-	{%- if name is defined %} name="{{ name }}"{% endif %}
-	{%- if disabled is defined and disabled %} disabled{% endif %}
-	{% for key,value in data %}
-		{{ 'data-'~key~'='~value }}
-	{% endfor %} >
+	{%- if id %} id="{{ id }}"{% endif %}
+	{%- if class %} class="{{ class }}"{% endif %}
+	{%- if name %} name="{{ name }}"{% endif %}
+	{%- if multiple %} multiple{% endif %}
+	{{- required -}}
+	{{- dataAttributes -}}
+	>

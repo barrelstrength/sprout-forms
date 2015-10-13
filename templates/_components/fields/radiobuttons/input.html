@@ -1,27 +1,37 @@
-{%- set sett    = settings -%}
-{%- set opts    = renderingOptions is defined ? renderingOptions : {} -%}
-{%- set class   = opts.class is defined ? opts.class : 'radiobutton' %}
-{%- set data    = (opts.data is defined ? opts.data : null) %}
-{%- set radioValue   = (value is defined ? value : null) %}
-{%- set options = (sett.options is defined ? sett.options : []) %}
-<div class="radiobutton-select{% if class is defined %} {{ class }} {% endif %}">
+{%- set type          = field.type|lower %}
+{%- set options       = renderingOptions is defined ? renderingOptions : {} %}
+{%- set data          = options.data is defined ? options.data : null %}
+{%- set id            = options.id is defined ? options.id : type %}
+{%- set class         = options.class is defined ? options.class : type %}
+{%- set selectedValue = value is defined ? value : null %}
+{%- set required      = field.required is defined and field.required ? " required" %}
+{%- set options       = (settings.options is defined ? settings.options : []) %}
+
+{%- set dataAttributes = null %}
+{%- for key, dataValue in data %}
+	{%- set dataAttributes = dataAttributes ~ ' data-'~key~'='~dataValue %}
+{% endfor -%}
+
+{% spaceless %}
+<div
+	{%- if id %} id="{{ id }}"{% endif %}
+	{%- if class %} class="{{ class }}{% endif %}">
 	{%- for key, option in options %}
+
 		{%- set label = (option.label is defined ? option.label : option) %}
-		{%- set value = (option.value is defined ? option.value : key) -%}
-		{%- set checked = value == radioValue %}
+		{%- set value = (option.value is defined ? option.value : key) %}
+		{%- set checked = (value == selectedValue) %}
 
 		<label>
-			<input type="radio" value="{{ value }}"
-				{% if field.required is defined and field.required %} required {% endif %}
-				{%- if id is defined %} id="{{ id }}"{% endif %}
-				{%- if class is defined %} class="{{ class }}"{% endif %}
-				{%- if name is defined %} name="{{ name }}"{% endif %}
+			<input type="radio"
+				{%- if name %} name="{{ name }}"{% endif %}
+				{%- if value %} value="{{ value }}"{% endif %}
 				{%- if checked is defined and checked %} checked{% endif %}
-				{%- if disabled is defined and disabled %} disabled{% endif %}
-				{% for key,value in data %}
-					{{ 'data-'~key~'='~value }}
-				{% endfor %}>
-			{% if label is defined %}{{ label|raw }}{% endif %}
+				{{- required -}}
+				{{- dataAttributes -}}
+				>
+				{%- if label is defined %}{{ label|raw }}{% endif -%}
 		</label>
 	{% endfor %}
 </div>
+{% endspaceless %}

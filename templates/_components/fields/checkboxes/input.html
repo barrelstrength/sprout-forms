@@ -1,29 +1,40 @@
-{%- set sett    = settings -%}
-{%- set opts    = renderingOptions is defined ? renderingOptions : {} -%}
-{%- set class   = opts.class is defined ? opts.class : 'sproutforms-checkbox' %}
-{%- set data    = (opts.data is defined ? opts.data : null) %}
-{%- set values  = (value is defined ? value : []) -%}
-{%- set options = (sett.options is defined ? sett.options : []) %}
-{%- set name = (name is defined ? name~'[]' : null) %}
-<div class="checkbox-select{% if class is defined %} {{ class }} {% endif %}">
+{%- set type     = field.type|lower %}
+{%- set data     = renderingOptions.data is defined ? renderingOptions.data : null %}
+{%- set id       = renderingOptions.id is defined ? renderingOptions.id : type %}
+{%- set class    = renderingOptions.class is defined ? renderingOptions.class : type %}
+{%- set values   = value is defined ? value : [] %}
+{%- set required = field.required is defined and field.required ? " required" %}
+{%- set options  = settings.options is defined ? settings.options : [] %}
+
+{%- set dataAttributes = null %}
+{%- for key, dataValue in data %}
+	{%- set dataAttributes = dataAttributes ~ ' data-'~key~'='~dataValue %}
+{% endfor -%}
+
+{% spaceless %}
+<div
+	{%- if id %} id="{{ id }}"{% endif %}
+	{%- if class %} class="{{ class }}"{% endif %}>
 	{%- for key, option in options %}
+
 		{%- set label = (option.label is defined ? option.label : option) %}
-		{%- set value = (option.value is defined ? option.value : key) -%}
-		{%- set checked = (value in values) %}
+		{%- set value = (option.value is defined ? option.value : key) %}
+
 		{% if name is defined and (name|length < 3 or name|slice(-2) != '[]') %}
 			<input type="hidden" name="{{ name }}" value="">
 		{% endif %}
+
 		<label>
-			<input type="checkbox" value="{{ value }}"
-				class="{{ class }}"
-				id="{{ opts.id is defined ? opts.id : name }}"
-				{%- if name is defined %} name="{{ name }}"{% endif %}
-				{%- if checked is defined and checked %} checked{% endif %}
-				{%- if disabled is defined and disabled %} disabled{% endif %}
-				{% for key,value in data %}
-					{{ 'data-'~key~'='~value }}
-				{% endfor %}>
-			{%- if label is defined %}&nbsp;{{ label|raw }}{% endif %}
+			<input type="checkbox"
+				{%- if name %} name="{{ name }}[]"{% endif %}
+				{%- if value is not empty %} value="{{ value }}"{% endif %}
+				{%- if value in values %} checked{% endif %}
+				{{- required -}}
+				{{- dataAttributes -}}
+				>
+			{%- if label is defined %}&nbsp;{{ label|raw }}{% endif -%}
 		</label>
+
 	{% endfor %}
 </div>
+{% endspaceless %}

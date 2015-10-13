@@ -1,15 +1,32 @@
-{%- set sett = settings -%}
-{%- set opts = renderingOptions is defined ? renderingOptions : {} -%}
-{%- set data = (opts.data is defined ? opts.data : null) %}
+{%- set type     = field.type|lower %}
+{%- set data     = renderingOptions.data is defined ? renderingOptions.data : null %}
+{%- set id       = renderingOptions.id is defined ? renderingOptions.id : type %}
+{%- set class    = renderingOptions.class is defined ? renderingOptions.class : type %}
+{%- set value    = value is defined and value is not empty ? value : null %}
+{%- set required = field.required is defined and field.required ? " required" %}
 
-<input
-	name="{{ name }}"
-	type="{{ opts.type is defined ? opts.type : 'text' }}"
-	{{ field.required is defined and field.required ? 'required' }}
-	class="{{ opts.class is defined ? opts.class : 'sproutforms-number' }}"
-	id="{{ opts.id is defined ? opts.id : name }}"
-	{%- if value is defined and value %} value="{{ value }}"{% endif %}
-	{% for key,dataValue in data %}
-		{{ 'data-'~key~'='~dataValue }}
-	{% endfor %}
-	/>
+{%- set min      = settings.min is not empty ? settings.min : null %}
+{%- set max      = settings.max is not empty ? settings.max : null %}
+{%- set decimals = settings.decimals is not empty ? settings.decimals : null %}
+
+{%- set dataAttributes = null %}
+{%- for key, dataValue in data %}
+	{%- set dataAttributes = dataAttributes ~ ' data-'~key~'='~dataValue %}
+{% endfor -%}
+
+{% set step = null %}
+{% for i in 1..decimals  %}
+	{% set step = (loop.last ? step ~ 1 : step ~ 0) %}
+{% endfor %}
+
+<input type="number"
+	{%- if id %} id="{{ id }}"{% endif %}
+	{%- if class %} class="{{ class }}"{% endif %}
+	{%- if name %} name="{{ name }}"{% endif %}
+	{%- if value %} value="{{ value }}"{% endif %}
+	{%- if min is not null %} min="{{ min }}"{% endif %}
+	{%- if max is not null %} max="{{ max }}"{% endif %}
+	{%- if step is not null %} step=".{{ step }}"{% endif %}
+	{{- required -}}
+	{{- dataAttributes -}}
+	>

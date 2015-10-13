@@ -1,38 +1,33 @@
-{%- set sett         = settings -%}
-{%- set class        = opts.class is defined ? opts.class : 'sproutforms-dropdown' %}
-{%- set opts         = renderingOptions is defined ? renderingOptions : {} -%}
-{%- set data         = (opts.data is defined ? opts.data : null) %}
-{%- set options      = (sett.options is defined ? sett.options : []) %}
-{%- set value        = (value is defined ? value : null) %}
-{%- set hasOptgroups = false -%}
+{%- set type      = field.type|lower %}
+{%- set data      = renderingOptions.data is defined ? renderingOptions.data : null %}
+{%- set id        = renderingOptions.id is defined ? renderingOptions.id : type %}
+{%- set class     = renderingOptions.class is defined ? renderingOptions.class : type %}
+{%- set value     = value is defined ? value : null %}
+{%- set required  = field.required is defined and field.required ? " required" %}
+{%- set options   = settings.options is defined ? settings.options : [] %}
 
-<div class="{{ class }}">
+{%- set dataAttributes = null %}
+{%- for key, dataValue in data %}
+	{%- set dataAttributes = dataAttributes ~ ' data-'~key~'='~dataValue %}
+{%- endfor -%}
+
+{% spaceless %}
+<div {%- if class %} class="{{ class }}"{% endif %}>
 	<select
-		{% if field.required is defined and field.required %} required {% endif %}
-		id="{{ opts.id is defined ? opts.id : name }}"
-		{%- if name is defined %} name="{{ name }}"{% endif %}
-		{%- if disabled is defined and disabled %} disabled{% endif %}
-		{%- if targetPrefix is defined %} data-target-prefix="{{ targetPrefix }}"{% endif %}
-		{% for key,value in data %}
-			{{ 'data-'~key~'='~value }}
-		{% endfor %}>
-		{% for key, option in options %}
-			{% if option.optgroup is defined %}
-				{% if hasOptgroups %}
-					</optgroup>
-				{% else %}
-					{% set hasOptgroups = true %}
-				{% endif %}
-				<optgroup label="{{ option.optgroup }}">
-			{% else %}
-				{% set optionLabel = (option.label is defined ? option.label : option) %}
-				{% set optionValue = (option.value is defined ? option.value : key) %}
-				{% set optionDisabled = (option.disabled is defined ? option.disabled : false) %}
-				<option value="{{ optionValue }}"{% if optionValue == value %} selected{% endif %}{% if optionDisabled %} disabled{% endif %}>{{ optionLabel }}</option>
-			{% endif %}
+		{%- if id %} id="{{ id }}"{% endif %}
+		{%- if class %} class="{{ class }}"{% endif %}
+		{%- if name %} name="{{ name }}"{% endif %}
+		{{- required -}}
+		{{- dataAttributes -}}
+		>
+		{%- for key, option in options -%}
+
+			{%- set optionLabel = (option.label is defined ? option.label : null) -%}
+			{%- set optionValue = (option.value is defined ? option.value : key) -%}
+
+			<option value="{{ optionValue }}" {% if optionValue == value %}selected{% endif %}{% if optionDisabled %}
+			disabled{% endif %}>{{ optionLabel }} {{  optionValue }}::{{ value }}</option>
 		{% endfor %}
-		{% if hasOptgroups %}
-			</optgroup>
-		{% endif %}
 	</select>
 </div>
+{% endspaceless %}
