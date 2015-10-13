@@ -70,6 +70,7 @@ class SproutFormsVariable
 		$formHtml = craft()->templates->render(
 			'form', array(
 				'form'             => $form,
+				'entry'            => $entry,
 				'body'             => $bodyHtml,
 				'errors'           => $entry->getErrors(),
 				'renderingOptions' => $renderingOptions
