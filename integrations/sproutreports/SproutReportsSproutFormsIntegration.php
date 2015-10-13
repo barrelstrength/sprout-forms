@@ -137,7 +137,7 @@ class SproutReportsSproutFormsIntegration extends SproutReportsBaseReport
         $userOptions['dateCreatedFrom'] = array(
             'type' => 'date',
             'column' => 'dateCreated',
-            'name' => 'Creation date: from',
+            'name' => 'Start Date',
             'comparisonOperator' => '>=',
             'showDate' => true,
             'showTime' =>  true,
@@ -149,7 +149,7 @@ class SproutReportsSproutFormsIntegration extends SproutReportsBaseReport
         $userOptions['dateCreatedTill'] = array(
             'type' => 'date',
             'column' => 'dateCreated',
-            'name' => 'Creation date: till',
+            'name' => 'End Date',
             'comparisonOperator' => '<=',
             'showDate' => true,
             'showTime' =>  true,
