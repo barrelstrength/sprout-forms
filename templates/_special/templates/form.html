@@ -1,16 +1,20 @@
 <!-- Custom form created using the Sprout Forms form builder plugin v{{ craft.sproutForms.version }} - http://sprout.barrelstrengthdesign.com/craft-plugins/forms -->
 
-{% set action  = form.submitAction is empty ? 'sproutForms/entries/saveEntry' : 'sproutForms/entries/forwardEntry' %}
-{% set options = renderingOptions is defined and renderingOptions is not empty ? renderingOptions : {} %}
-{% set id      = options.id is defined ? options.id : form.handle %}
-{% set class   = options.class is defined ? options.class : 'sproutforms-form' %}
+{% set action   = form.submitAction is empty ? 'sproutForms/entries/saveEntry' : 'sproutForms/entries/forwardEntry' -%}
+{%- set options = renderingOptions is defined and renderingOptions is not empty ? renderingOptions : {} -%}
+{%- set errorClass = entry.getErrors()|length ? ' form-has-errors' : null -%}
+{%- set id      = options.id is defined ? options.id : form.handle ~ '-form' -%}
+{%- set class   = options.class is defined ? options.class ~ errorClass : form.handle ~ '-form' ~ errorClass -%}
 
-<form id="{{ id}}" class="{{ class }}" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+
+<form method="post" accept-charset="utf-8" enctype="multipart/form-data"
+	{%- if id %} id="{{ id }}"{% endif -%}
+	{%- if class %} class="{{ class }}"{% endif -%}
+	>
 	{{ getCsrfInput() }}
-	<input type="hidden" name="handle" value="{{ form.handle }}">
 	<input type="hidden" name="action" value="{{ action }}">
-
-	{% if form.redirectUri is not empty %}
+	<input type="hidden" name="handle" value="{{ form.handle }}">
+	{% if form.redirectUri is not empty -%}
 		<input type="hidden" name="redirect" value="{{ form.redirectUri }}">
 	{% endif %}
 
@@ -24,3 +28,4 @@
 		<input type="submit" value="{{ form.submitButtonText is not empty ? form.submitButtonText : 'Submit' }}">
 	</div>
 </form>
+

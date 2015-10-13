@@ -1,47 +1,48 @@
-{%- if formField.needsGlobalContext() -%}
-	{%- do formField.setContext(_context) -%}
-{%- endif -%}
+	{%- if formField.needsGlobalContext() -%}
+		{%- do formField.setContext(_context) -%}
+	{%- endif -%}
 
-{%- set value        = element is not empty ? element.getFieldValue(field.handle) -%}
-{%- set errors       = element is not empty ? element.getErrors(field.handle) -%}
-{%- set label        = field.name is defined ? field.name -%}
-{%- set handle       = field.handle is defined ? field.handle -%}
-{%- set options      = attribute(renderingOptions.fields, handle) is defined ? attribute(renderingOptions.fields, handle) : {} -%}
-{%- set settings     = field.settings -%}
-{%- set instructions = field.instructions is defined ? field.instructions -%}
-{%- set input        = formField.getInputHtml(field, value, settings, options) -%}
+	{%- set type             = field.type|lower %}
+	{%- set value            = element is not empty ? element.getFieldValue(field.handle) %}
+	{%- set label            = field.name is defined ? field.name %}
+	{%- set handle           = field.handle is defined ? field.handle %}
+	{%- set renderingOptions = attribute(renderingOptions.fields, handle) is defined ? attribute(renderingOptions
+	.fields, handle) : {} %}
+	{%- set settings         = field.settings %}
+	{%- set instructions     = field.instructions is defined ? field.instructions %}
+	{%- set input            = formField.getInputHtml(field, value, settings, renderingOptions) %}
+	{%- set errors           = element is not empty ? element.getErrors(field.handle) : null %}
+	{%- set errorClass       = renderingOptions.errorClass is defined ? renderingOptions.errorClass : 'errors' %}
 
-{% namespace formField.getNamespace() %}
+	{%- namespace formField.getNamespace() -%}
 
-	{% if formField.isPlainInput() %}
+		{%- if formField.isPlainInput() -%}
 
-		{{ input }}
+			{{ input }}
 
-	{% else %}
-		<div class="field {{ field.type }}{% if first is defined and first %} first{% endif %}{% if class is defined and class %} {{ class }}{% endif %}{% if errors %} {{ options.errorClass is defined ? options.errorClass : 'has-errors' }} {% endif %}"{% if handle %} id="{{ handle }}-field"{% endif
-		%}>
+		{%- else %}
 
-			{% if label or instructions %}
-				<div class="heading">
-					{% if label %}
+			<div {% if handle %}id="{{ handle }}-field"{% endif %} class="field {{ type }}{% if first is defined and first %} first{% endif %}{% if class is defined and class %} {{ class }}{% endif %}{% if errors %} field-has-errors{% endif %}{% if required is defined and required %} field-required{% endif %}">
+				{% if label or instructions -%}
+					<div class="heading">
+					{% if label -%}
 						<label{% if required is defined and required %} class="required"{% endif %}{% if handle %} for="{{ handle }}"{% endif %}>
-							{{ label|raw }}
+							{{- label|raw -}}
 						</label>
-					{% endif %}
+					{%- endif -%}
 					{% if instructions %}
-						<p class="instructions">{{ instructions|raw }}</p>
-					{% endif %}
-				</div>
-			{% endif %}
 
-			<div class="input{% if errors %} {{ options.errorClass is defined ? options.errorClass : 'errors' }} {% endif %}">
-				<div>
+					<p class="instructions">{{ instructions|raw }}</p>
+					{%- endif %}
+
+				</div>
+				{% endif -%}
+
+				<div class="input{% if errors %} {{ errorClass }}{% endif %}">
 					{{ input }}
 				</div>
+				{% include "errors" with { errors: errors } %}
+
 			</div>
-
-			{% include "errors" with { errors: errors } %}
-
-		</div>
-	{% endif %}
-{% endnamespace %}
+		{%- endif -%}
+	{%- endnamespace -%}
