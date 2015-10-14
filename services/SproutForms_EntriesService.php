@@ -50,6 +50,9 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 			return false;
 		}
 
+		// Setting the title explicitly to perform field validation
+		$entry->getContent()->setAttribute('title', sha1(time()));
+
 		$fields   = $entry->getPayloadFields();
 		$endpoint = $entry->form->submitAction;
 
@@ -87,7 +90,7 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 		{
 			sproutForms()->log($fields);
 
-			$response = $client->post($entry->form->submitAction, null, $fields);
+			$response = $client->post($endpoint, null, $fields)->send();
 
 			sproutForms()->log($response->getBody());
 
