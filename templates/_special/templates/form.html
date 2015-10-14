@@ -1,10 +1,11 @@
 <!-- Custom form created using the Sprout Forms form builder plugin v{{ craft.sproutForms.version }} - http://sprout.barrelstrengthdesign.com/craft-plugins/forms -->
 
-{% set action   = form.submitAction is empty ? 'sproutForms/entries/saveEntry' : 'sproutForms/entries/forwardEntry' -%}
-{%- set options = renderingOptions is defined and renderingOptions is not empty ? renderingOptions : {} -%}
-{%- set errorClass = entry.getErrors()|length ? ' form-has-errors' : null -%}
-{%- set id      = options.id is defined ? options.id : form.handle ~ '-form' -%}
-{%- set class   = options.class is defined ? options.class ~ errorClass : form.handle ~ '-form' ~ errorClass -%}
+{% set action = form.submitAction is empty ? 'sproutForms/entries/saveEntry' : 'sproutForms/entries/forwardEntry' %}
+{%- set renderingOptions = renderingOptions is defined and renderingOptions is not empty ? renderingOptions : {} %}
+{%- set errorClass = entry.getErrors()|length ? (renderingOptions.errorClass is defined ? renderingOptions.errorClass :
+' errors') : null %}
+{%- set id      = renderingOptions.id is defined ? renderingOptions.id : form.handle ~ '-form' %}
+{%- set class   = renderingOptions.class is defined ? renderingOptions.class ~ errorClass : form.handle ~ '-form' ~ errorClass -%}
 
 
 <form method="post" accept-charset="utf-8" enctype="multipart/form-data"
