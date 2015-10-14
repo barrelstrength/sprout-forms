@@ -19,7 +19,7 @@ class SproutForms_FieldsController extends BaseController
 		$form = sproutForms()->forms->getFormById($formId);
 
 		$field = new FieldModel();
-		
+
 		$field->id           = craft()->request->getPost('fieldId');
 		$field->name         = craft()->request->getRequiredPost('name');
 		$field->handle       = craft()->request->getRequiredPost('handle');
@@ -41,14 +41,14 @@ class SproutForms_FieldsController extends BaseController
 		craft()->content->contentTable = $form->getContentTable();
 
 		// Does our field validate?
-		if (!craft()->fields->validateField($field)) 
+		if (!craft()->fields->validateField($field))
 		{
 			SproutFormsPlugin::log("Field does not validate.");
+			$variables['tabId'] = $tabId;
+			$variables['field'] = $field;
 
 			// Send the field back to the template
-			craft()->urlManager->setRouteVariables(array(
-				'field' => $field
-			));
+			craft()->urlManager->setRouteVariables($variables);
 
 			// Route our request back to the field template
 			$route = craft()->urlManager->parseUrl(craft()->request);
@@ -57,7 +57,7 @@ class SproutForms_FieldsController extends BaseController
 		}
 
 		// Save a new field
-		if (!$field->id) 
+		if (!$field->id)
 		{
 			SproutFormsPlugin::log('New Field');
 
@@ -80,14 +80,14 @@ class SproutForms_FieldsController extends BaseController
 		$oldFieldLayout =  $form->getFieldLayout();
 		$oldFields = $oldFieldLayout->getFields();
 		$oldTabs = $oldFieldLayout->getTabs();
-		
+
 		$tabFields = array();
 		$postedFieldLayout = array();
 		$requiredFields = array();
-		
-		// If no tabs exist, let's create a 
+
+		// If no tabs exist, let's create a
 		// default one for all of our fields
-		if (!$oldTabs) 
+		if (!$oldTabs)
 		{
 			// Create a tab
 			$fieldLayoutTab = new FieldLayoutTabModel();
@@ -98,8 +98,8 @@ class SproutForms_FieldsController extends BaseController
 			{
 				$fieldSortOrder = 0;
 				// Add any existing fields to a default tab
-				foreach ($oldFields as $oldFieldLayoutField) 
-				{	
+				foreach ($oldFields as $oldFieldLayoutField)
+				{
 					$fieldSortOrder++;
 
 					$newField = new FieldLayoutFieldModel();
@@ -110,12 +110,12 @@ class SproutForms_FieldsController extends BaseController
 					$tabFields[] = $newField;
 
 					$postedFieldLayout[$fieldLayoutTab->name][] = $oldFieldLayoutField->fieldId;
-			
-					if ($oldFieldLayoutField->required) 
+
+					if ($oldFieldLayoutField->required)
 					{
 						$requiredFields[] = $oldFieldLayoutField->fieldId;
 					}
-				}	
+				}
 			}
 
 			// Add our new field
@@ -125,15 +125,15 @@ class SproutForms_FieldsController extends BaseController
 		}
 		else
 		{
-			foreach ($oldTabs as $oldTab) 
-			{	
+			foreach ($oldTabs as $oldTab)
+			{
 				$oldTabFields = $oldTab->getFields();
 
-				foreach ($oldTabFields as $oldFieldLayoutField) 
-				{					
+				foreach ($oldTabFields as $oldFieldLayoutField)
+				{
 					$postedFieldLayout[$oldTab->name][] = $oldFieldLayoutField->fieldId;
-	
-					if ($oldFieldLayoutField->required) 
+
+					if ($oldFieldLayoutField->required)
 					{
 						$requiredFields[] = $oldFieldLayoutField->fieldId;
 					}
@@ -144,16 +144,16 @@ class SproutForms_FieldsController extends BaseController
 				{
 					$postedFieldLayout[$oldTab->name][] = $field->id;
 				}
-			}	
+			}
 		}
 
 		// Set the field layout
 		$fieldLayout = craft()->fields->assembleLayout($postedFieldLayout, $requiredFields);
-		
+
 		$fieldLayout->type = 'SproutForms_Form';
 		$form->setFieldLayout($fieldLayout);
-		
-		// Hand the field off to be saved in the 
+
+		// Hand the field off to be saved in the
 		// field layout of our Form Element
 		if (sproutForms()->forms->saveForm($form))
 		{
@@ -166,13 +166,13 @@ class SproutForms_FieldsController extends BaseController
 		else
 		{
 			SproutFormsPlugin::log("Couldn't save field.");
+			$variables['tabId'] = $tabId;
+			$variables['field'] = $field;
 
 			craft()->userSession->setError(Craft::t('Couldn’t save field.'));
 
 			// Send the field back to the template
-			craft()->urlManager->setRouteVariables(array(
-				'field' => $field
-			)); 
+			craft()->urlManager->setRouteVariables($variables);
 		}
 	}
 
@@ -194,16 +194,16 @@ class SproutForms_FieldsController extends BaseController
 			{
 				$field = craft()->fields->getFieldById($variables['fieldId']);
 				$variables['field'] = $field;
-	
+
 				$fieldLayoutField = FieldLayoutFieldRecord::model()->find(array(
 					'condition' => 'fieldId = :fieldId AND layoutId = :layoutId',
 					'params' => array(':fieldId' => $field->id, ':layoutId' => $form->fieldLayoutId)
 				));
-				
+
 				$variables['required'] = $fieldLayoutField->required;
 
 				$variables['tabId'] = $fieldLayoutField->tabId;
-				
+
 				if (!isset($variables['field']))
 				{
 					throw new HttpException(404);
@@ -230,24 +230,24 @@ class SproutForms_FieldsController extends BaseController
 
 	/**
 	 * Delete a field.
-	 * 
+	 *
 	 * @return void
 	 */
 	public function actionDeleteField()
 	{
 		$this->requirePostRequest();
 		$this->requireAjaxRequest();
-		
+
 		$fieldId = craft()->request->getRequiredPost('id');
 		$success = craft()->fields->deleteFieldById($fieldId);
 		$this->returnJson(array(
 			'success' => $success
 		));
 	}
-	
+
 	/**
 	 * Reorder a field
-	 * 
+	 *
 	 * @return json
 	 */
 	public function actionReorderFields()
@@ -255,10 +255,10 @@ class SproutForms_FieldsController extends BaseController
 		craft()->userSession->requireAdmin();
 		$this->requirePostRequest();
 		$this->requireAjaxRequest();
-		
+
 		$fieldIds = JsonHelper::decode(craft()->request->getRequiredPost('ids'));
 		sproutForms()->fields->reorderFields($fieldIds);
-	
+
 		$this->returnJson(array(
 			'success' => true
 		));
