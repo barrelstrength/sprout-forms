@@ -7,7 +7,7 @@
 
 {%- set min      = settings.min is not empty ? settings.min : null %}
 {%- set max      = settings.max is not empty ? settings.max : null %}
-{%- set decimals = settings.decimals is not empty ? settings.decimals : null %}
+{%- set decimals = settings.decimals > 0 ? settings.decimals : null %}
 
 {%- set dataAttributes = null %}
 {%- for key, dataValue in data %}
@@ -15,9 +15,11 @@
 {% endfor -%}
 
 {%- set step = null %}
-{%- for i in 1..decimals  %}
-	{%- set step = (loop.last ? step ~ 1 : step ~ 0) %}
-{%- endfor -%}
+{%- if decimals -%}
+	{%- for i in 1..decimals  %}
+		{%- set step = (loop.last ? step ~ 1 : step ~ 0) %}
+	{%- endfor -%}
+{%- endif -%}
 
 <input type="number"
 	{%- if id %} id="{{ id }}"{% endif %}
@@ -26,7 +28,10 @@
 	{%- if value %} value="{{ value }}"{% endif %}
 	{%- if min is not null %} min="{{ min }}"{% endif %}
 	{%- if max is not null %} max="{{ max }}"{% endif %}
-	{%- if step is not null %} step=".{{ step }}"{% endif %}
+	{%- if step is not null %} step="0.{{ step }}"{% endif %}
 	{{- required -}}
 	{{- dataAttributes -}}
 	>
+
+STEP: {{ step }}<br>
+DECIMALS: {{ decimals }}
