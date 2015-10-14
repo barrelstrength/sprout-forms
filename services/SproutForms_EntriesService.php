@@ -90,7 +90,7 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 		{
 			sproutForms()->log($fields);
 
-			$response = $client->post($entry->form->submitAction, null, $fields);
+			$response = $client->post($endpoint, null, $fields)->send();
 
 			sproutForms()->log($response->getBody());
 
