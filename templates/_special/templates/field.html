@@ -22,7 +22,7 @@
 
 		{%- else %}
 
-			<div {% if handle %}id="{{ handle }}-field"{% endif %} class="field {{ type }}{% if first is defined and first %} first{% endif %}{% if class is defined and class %} {{ class }}{% endif %}{% if errors %} field-has-errors{% endif %}{% if required is defined and required %} field-required{% endif %}">
+			<div {% if handle %}id="{{ handle }}-field"{% endif %} class="field {{ type }}{% if class is defined and class %} {{ class }}{% endif %}{% if errors %} field-has-errors{% endif %}{% if required is defined and required %} field-required{% endif %}">
 				{% if label or instructions -%}
 					<div class="heading">
 					{% if label -%}
