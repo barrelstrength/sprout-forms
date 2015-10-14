@@ -311,8 +311,8 @@ class SproutForms_FieldsService extends FieldsService
 				}
 			}
 
-			// Sort fields alphabetically
-			ksort($standardFields);
+			// Sort fields alphabetically by name
+			asort($standardFields);
 
 			// Add the group label to the beginning of the standard group
 			$standardFields = $this->prependKeyValue($standardFields, 'standardFieldGroup', array('optgroup' => Craft::t('Standard Fields')));
