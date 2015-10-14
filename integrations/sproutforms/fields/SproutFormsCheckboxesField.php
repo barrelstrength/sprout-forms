@@ -17,6 +17,14 @@ class SproutFormsCheckboxesField extends SproutFormsBaseField
 	}
 
 	/**
+	 * @return bool
+	 */
+	public function hasMultipleLabels()
+	{
+		return true;
+	}
+
+	/**
 	 * @param FieldModel $field
 	 * @param mixed      $value
 	 * @param array      $settings

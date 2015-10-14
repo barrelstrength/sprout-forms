@@ -89,7 +89,26 @@ abstract class SproutFormsBaseField
 		return craft()->path->getPluginsPath().'sproutforms/templates/_components/fields/';
 	}
 
+	/**
+	 * Tells Sprout Forms NOT to wrap your getInputHtml() content inside any extra HTML
+	 *
+	 * @return bool
+	 */
 	public function isPlainInput()
+	{
+		return false;
+	}
+
+	/**
+	 * Tells Sprout Forms NOT to add a (for) attribute to your field's top leve label
+	 *
+	 * @note
+	 * Sprout Forms renders a label with a (for) attribute for all fields.
+	 * If your field has multiple labels, like radio buttons do for example,
+	 * it would make sense for your field no to have a (for) attribute at the top level
+	 * but have them at the radio field level
+	 */
+	public function hasMultipleLabels()
 	{
 		return false;
 	}
