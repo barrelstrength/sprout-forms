@@ -1,7 +1,7 @@
 {%- set type     = field.type|lower %}
 {%- set data     = renderingOptions.data is defined ? renderingOptions.data : null %}
-{%- set id       = renderingOptions.id is defined ? renderingOptions.id : type %}
-{%- set class    = renderingOptions.class is defined ? renderingOptions.class : type %}
+{%- set id       = renderingOptions.id is defined ? renderingOptions.id : name %}
+{%- set class    = renderingOptions.class is defined ? renderingOptions.class : name %}
 {%- set values   = value is defined ? value : [] %}
 {%- set required = field.required is defined and field.required ? " required" %}
 {%- set options  = settings.options is defined ? settings.options : [] %}
