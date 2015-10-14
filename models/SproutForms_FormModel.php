@@ -29,6 +29,11 @@ class SproutForms_FormModel extends BaseElementModel
 	 */
 	protected function defineAttributes()
 	{
+		$settings = craft()->plugins->getPlugin('sproutforms')->getSettings();
+
+		$templateOverridesFolder = $settings['templateFolderOverride'];
+		$enableTemplateOverrides = !empty($templateOverridesFolder);
+
 		return array_merge(parent::defineAttributes(), array(
 			'id'                       => AttributeType::Number,
 			'groupId'	                 => AttributeType::Number,
@@ -48,8 +53,8 @@ class SproutForms_FormModel extends BaseElementModel
 			'notificationReplyToEmail' => AttributeType::String,
 			'ownerId'                  => AttributeType::Number,
 			'oldHandle'                => AttributeType::String,
-			'enableTemplateOverrides'  => array(AttributeType::Bool, 'default' => false),
-			'templateOverridesFolder'  => array(AttributeType::String),
+			'enableTemplateOverrides'  => array(AttributeType::Bool, 'default' => $enableTemplateOverrides ),
+			'templateOverridesFolder'  => array(AttributeType::String, 'default' => $templateOverridesFolder),
 			'enableFileAttachments'    => array(AttributeType::Bool, 'default' => false),
 		));
 	}
