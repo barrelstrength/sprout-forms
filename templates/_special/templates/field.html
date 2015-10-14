@@ -2,13 +2,14 @@
 		{%- do formField.setContext(_context) -%}
 	{%- endif -%}
 
-	{%- set label            = field.name is defined ? field.name %}
-	{%- set instructions     = field.instructions is defined ? field.instructions %}
-	{%- set name             = field.handle is defined ? field.handle %}
+	{%- set label            = field.name is defined ? field.name : null %}
+	{%- set instructions     = field.instructions is defined ? field.instructions : null %}
+	{%- set name             = field.handle is defined ? field.handle : null %}
+	{%- set required         = field.required is defined and field.required ? true : false %}
 	{%- set renderingOptions = attribute(renderingOptions.fields, name) is defined ? attribute(renderingOptions
 	.fields, name) : {} %}
 	{%- set type             = field.type|lower %}
-	{%- set id               = renderingOptions.id is defined ? renderingOptions.id : name %}
+	{%- set id               = renderingOptions.id is defined ? renderingOptions.id : name ~ '-field' %}
 	{%- set class            = renderingOptions.class is defined ? renderingOptions.class : name ~ '-field' %}
 	{%- set value            = element is not empty ? element.getFieldValue(name) : null %}
 	{%- set errors           = element is not empty ? element.getErrors(name) : null %}
@@ -23,7 +24,12 @@
 
 		{%- else %}
 
-			<div {% if id %}id="{{ id }}-field"{% endif %} class="field {{ type }}{% if class is defined and class %} {{ class }}{% endif %}{% if errors %} {{ errorClass }}{% endif %}{% if required is defined and required %} required{% endif %}">
+			<div
+				{%- if id %} id="{{ id }}"{% endif %} class="field {{ type }}
+				{%- if class %} {{ class }}{% endif -%}
+				{%- if errors %} {{ errorClass }}{% endif -%}
+				{%- if required %} required{% endif -%}
+				">
 				{% if label or instructions -%}
 					<div class="heading">
 					{% if label -%}

@@ -2,15 +2,14 @@
 
 {% set action = form.submitAction is empty ? 'sproutForms/entries/saveEntry' : 'sproutForms/entries/forwardEntry' %}
 {%- set renderingOptions = renderingOptions is defined and renderingOptions is not empty ? renderingOptions : {} %}
-{%- set errorClass = entry.getErrors()|length ? (renderingOptions.errorClass is defined ? renderingOptions.errorClass :
-' errors') : null %}
-{%- set id      = renderingOptions.id is defined ? renderingOptions.id : form.handle ~ '-form' %}
-{%- set class   = renderingOptions.class is defined ? renderingOptions.class ~ errorClass : form.handle ~ '-form' ~ errorClass -%}
-
+{%- set errors      = entry.getErrors()|length ? entry.getErrors() : false %}
+{%- set errorClass  = renderingOptions.errorClass is defined ? renderingOptions.errorClass : 'errors' %}
+{%- set id          = renderingOptions.id is defined ? renderingOptions.id : form.handle ~ '-form' %}
+{%- set class       = renderingOptions.class is defined ? renderingOptions.class : form.handle ~ '-form' -%}
 
 <form method="post" accept-charset="utf-8" enctype="multipart/form-data"
 	{%- if id %} id="{{ id }}"{% endif -%}
-	{%- if class %} class="{{ class }}"{% endif -%}
+	{%- if class %} class="{{ class -}}{%- if errors %} {{ errorClass }}{% endif -%}"{% endif -%}
 	>
 	{{ getCsrfInput() }}
 	<input type="hidden" name="action" value="{{ action }}">
