@@ -364,7 +364,9 @@ class SproutFormsVariable
 			}
 		}
 
-		$message = $type . ' field does not support front-end display using Sprout Forms.';
+		$message = Craft::t('{type} field does not support front-end display using Sprout Forms.', array(
+			'type' => $type
+		));
 
 		SproutFormsPlugin::log($message, LogLevel::Warning);
 
