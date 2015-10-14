@@ -24,8 +24,9 @@
 			<input type="hidden" name="{{ name }}" value="">
 		{% endif %}
 
-		<label>
+		<label {%- if id %} for="{{ id }}-{{ loop.index }}"{% endif %}>
 			<input type="checkbox"
+				{%- if id %} id="{{ id }}-{{ loop.index }}"{% endif %}
 				{%- if name %} name="{{ name }}[]"{% endif %}
 				{%- if value is not empty %} value="{{ value }}"{% endif %}
 				{%- if value in values %} checked{% endif %}
