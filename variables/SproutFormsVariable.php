@@ -272,8 +272,6 @@ class SproutFormsVariable
 	/**
 	 * Gets last entry submitted
 	 *
-	 * @param  string $formHandle Form handle
-	 *
 	 * @return SproutForms_EntryModel
 	 */
 	public function getLastEntry()
@@ -350,7 +348,8 @@ class SproutFormsVariable
 	/**
 	 * @param $type
 	 *
-	 * @return Exception|SproutFormsBaseField
+	 * @throws Exception
+	 * @return null|SproutFormsBaseField
 	 */
 	public function getRegisteredField($type)
 	{
@@ -379,5 +378,13 @@ class SproutFormsVariable
 	public function getTemplatesPath()
 	{
 		return craft()->path->getTemplatesPath();
+	}
+
+	/**
+	 * @param array $variables
+	 */
+	public function addFieldVariables(array $variables)
+	{
+		SproutFormsBaseField::addFieldVariables($variables);
 	}
 }

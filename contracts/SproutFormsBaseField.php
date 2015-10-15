@@ -9,9 +9,9 @@ namespace Craft;
 abstract class SproutFormsBaseField
 {
 	/**
-	 * @var mixed
+	 * @var array
 	 */
-	protected $context;
+	protected static $fieldVariables = array();
 
 	/**
 	 * @var string
@@ -55,14 +55,14 @@ abstract class SproutFormsBaseField
 		return craft()->httpSession->get($handle, $default);
 	}
 
-	final public function setContext($context)
+	public static function addFieldVariables(array $variables)
 	{
-		$this->context = $context;
+		static::$fieldVariables = array_merge(static::$fieldVariables, $variables);
 	}
 
-	final public function getContext()
+	public static function getFieldVariables()
 	{
-		return $this->context;
+		return static::$fieldVariables;
 	}
 
 	/**
@@ -71,14 +71,6 @@ abstract class SproutFormsBaseField
 	public function getNamespace()
 	{
 		return 'fields';
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function needsGlobalContext()
-	{
-		return false;
 	}
 
 	/**

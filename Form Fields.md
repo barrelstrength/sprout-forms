@@ -82,13 +82,23 @@ public function getTemplatesPath()
 }
 ```
 
-## needsGlobalContext()
-If your field needs access to the `twig context` to be able to access variables within the template your field is being redered, you can return `true` from here.
+## parent::getFieldVariables()
+You can use this method to access the `twig global context` and any variables added via `craft.sproutForms.addFieldVariables()`.
 
-Then, inside of your `getInputHtml()`, you can access the context via `getContext()`
+This is useful when you need to use those variables in your `getInputHtml()` method to render values at run time.
 
-## getContext()
-See `needsGlobalContext()`
+---
+
+The user can add variables before calling `displayForm()`, `displayTab()`, or `displayField()` like so:
+
+```twig
+{% set entry = craft.entries.limit(1)first() %}
+{% do craft.sproutForms.addFieldVariables({entry: entry }) %}
+
+{{ craft.sproutForms.displayForm('handle') }}
+```
+
+Then, inside your field, you could call `parent::getFieldVariables()` to access them.
 
 ## Examples
 If you'd like to take a peek at how we're using this API, you can look at Sprout Forms integrations folder.
