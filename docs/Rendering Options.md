@@ -26,7 +26,7 @@ The `displayField()` method accepts rendering options for the field only and all
     "errorClass": "field-has-error",
     "required": true,
     "data": {
-        "animal-type": "bird",
+        "hidden": "true",
     }
 } %}
 
@@ -34,7 +34,7 @@ The `displayField()` method accepts rendering options for the field only and all
 ```
 
 ```html
-<input type="text" class="field field-text" data-animal-type="bird" required value="" />
+<input type="text" class="field field-text" data-hidden="true" required value="" />
 ```
 
 #### displayForm()
@@ -52,7 +52,7 @@ The `displayForm()` accepts rendering for itself (form tag) and for its associat
             "class": "field-class field-class-text",
             "errorClass": "field-has-error",
             "data": {
-                "animal-type": "bird",
+                "hidden": "true",
             }
         }
     }
@@ -64,7 +64,7 @@ The `displayForm()` accepts rendering for itself (form tag) and for its associat
 
 ```html
 <form method="post" id="formHandle">
-  <input type="text" class="field field-text" data-animal-type="bird" required value="" />
+  <input type="text" class="field field-text" data-hidden="true" required value="" />
 </form>
 ```
 
