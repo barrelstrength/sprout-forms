@@ -155,7 +155,7 @@ class SproutForms_FormRecord extends BaseRecord
 		// @done - new email validation
 		if (!filter_var($email, FILTER_VALIDATE_EMAIL))
 		{
-			$this->addError($attribute, Craft::t('Please make sure all emails are valid :D.'));
+			$this->addError($attribute, Craft::t('Please make sure all emails are valid.'));
 			return false;
 		}
 
