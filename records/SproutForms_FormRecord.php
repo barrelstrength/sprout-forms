@@ -152,19 +152,14 @@ class SproutForms_FormRecord extends BaseRecord
 	{
 		$email = trim($email);
 
-		// Allow twig syntax
-		if (preg_match('/^{{?(.*?)}}?$/', $email))
+		// @done - new email validation
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL))
 		{
-			return true;
-		}
-
-		// @todo - standardize how email validation is handled throughout plugins.
-		// Versions of this appear in multiple places.
-		if (!preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $email))
-		{
-			$this->addError($attribute, Craft::t('Please make sure all emails are valid.'));
+			$this->addError($attribute, Craft::t('Please make sure all emails are valid :D.'));
 			return false;
 		}
+
+		return true;
 	}
 
 	/**
