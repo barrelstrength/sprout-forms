@@ -20,7 +20,7 @@ class SproutForms_TitleFormatTask extends BaseTask
 	{
 		//content table and array
 		return array(
-			'contentRows'    => AttributeType::Mixed,
+			'contentRows'   => AttributeType::Mixed,
 			'contentTable'  => AttributeType::String,
 			'newFormat'     => AttributeType::String,
 		);
@@ -46,7 +46,7 @@ class SproutForms_TitleFormatTask extends BaseTask
 		$settings            = $this->getSettings();
 		$this->_contentRows  = $settings->contentRows;
 		$this->_newFormat    = $settings->newFormat;
-		$this->_contentTable  = $settings->contentTable;
+		$this->_contentTable = $settings->contentTable;
 
 		return count($this->_contentRows);
 	}
@@ -61,7 +61,7 @@ class SproutForms_TitleFormatTask extends BaseTask
 	{
 		$contentRow = $this->_contentRows[$step];
 		//Call the update process
-		$response  = sproutForms()->entries->updateTitleFormat($contentRow, $this->_newFormat, $this->_contentTable);
+		$response   = sproutForms()->entries->updateTitleFormat($contentRow, $this->_newFormat, $this->_contentTable);
 
 		if(!$response)
 		{

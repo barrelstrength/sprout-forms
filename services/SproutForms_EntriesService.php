@@ -332,9 +332,9 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 		try
 		{
 			// get the entry
-			$entry = sproutForms()->entries->getEntryById($contentRow['elementId']);
+			$entry       = sproutForms()->entries->getEntryById($contentRow['elementId']);
 			// update the title with the new format
-			$newTitle = craft()->templates->renderObjectTemplate($newFormat, $entry);
+			$newTitle    = craft()->templates->renderObjectTemplate($newFormat, $entry);
 			$tablePrefix = Craft()->db->tablePrefix;
 			// update single entry
 			Craft()->db->createCommand("UPDATE {$tablePrefix}{$contentTable} SET title = '{$newTitle}' WHERE id=:contentId")
