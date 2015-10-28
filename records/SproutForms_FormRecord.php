@@ -4,6 +4,7 @@ namespace Craft;
 class SproutForms_FormRecord extends BaseRecord
 {
 	private $_oldHandle;
+	public  $oldRecord;
 
 	/**
 	 * Init
@@ -168,6 +169,7 @@ class SproutForms_FormRecord extends BaseRecord
 	public function storeOldHandle()
 	{
 		$this->_oldHandle = $this->handle;
+		$this->oldRecord  = clone $this;
 	}
 
 	/**
@@ -225,6 +227,33 @@ class SproutForms_FormRecord extends BaseRecord
 				{
 					$this->handle = $this->getFieldAsNew('handle', $this->handle);
 				}
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Before Save
+	 *
+	 */
+	public function beforeSave()
+	{
+		// Check if the titleFormat is updated
+		if(!$this->isNewRecord())
+		{
+			if($this->titleFormat != $this->oldRecord->titleFormat)
+			{
+				$contentTable = 'sproutformscontent_'.trim(strtolower($this->handle));
+				$entries      = sproutForms()->entries->getContentEntries($contentTable);
+				// Call the update task
+				craft()->tasks->createTask('SproutForms_TitleFormat', null,
+					array(
+						'contentRows'     => $entries,
+						'newFormat'       => $this->titleFormat,
+						'contentTable'    => $contentTable
+					)
+				);
 			}
 		}
 

@@ -317,4 +317,51 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 
 		return $entry;
 	}
+
+	/**
+	 * Updates previous title formats
+	 *
+	 * @param Mixed $contentRow
+	 * @param String $newFormat
+	 * @param String $contentTable
+	 *
+	 * @return boolean
+	 */
+	public function updateTitleFormat($contentRow, $newFormat, $contentTable)
+	{
+		try
+		{
+			// get the entry
+			$entry = sproutForms()->entries->getEntryById($contentRow['elementId']);
+			// update the title with the new format
+			$newTitle = craft()->templates->renderObjectTemplate($newFormat, $entry);
+			$tablePrefix = Craft()->db->tablePrefix;
+			// update single entry
+			Craft()->db->createCommand("UPDATE {$tablePrefix}{$contentTable} SET title = '{$newTitle}' WHERE id=:contentId")
+				->bindValues(array(':contentId' => $contentRow['id']))
+				->execute();
+		}
+		catch (Exception $e)
+		{
+			SproutFormsPlugin::log('An error has occurred: '.$e->getMessage(), LogLevel::Info, true);
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Get Content Entries
+	 * @param String $contentTable
+	 * @return boolean
+	 */
+	public function getContentEntries($contentTable)
+	{
+		$entries = Craft()->db->createCommand()
+			->select('id, elementId')
+			->from($contentTable)
+			->queryAll();
+
+		return $entries;
+	}
 }
