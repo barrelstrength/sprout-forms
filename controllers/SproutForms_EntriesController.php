@@ -225,6 +225,7 @@ class SproutForms_EntriesController extends BaseController
 			}
 			else
 			{
+
 				if (craft()->request->isCpRequest())
 				{
 					// make errors available to variable
@@ -249,6 +250,7 @@ class SproutForms_EntriesController extends BaseController
 					}
 					else
 					{
+						craft()->userSession->setError(Craft::t('Couldn’t save form entry.'));
 						// Store this Entry Model in a variable in our Service layer
 						// so that we can access the error object from our displayForm() variable
 						sproutForms()->forms->activeEntries[$this->form->handle] = $entry;

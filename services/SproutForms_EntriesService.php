@@ -148,13 +148,14 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 
 		if (!$entry->hasErrors())
 		{
-			$form = sproutForms()->forms->getFormById($entry->formId);
 
-			$entry->getContent()->title = craft()->templates->renderObjectTemplate($form->titleFormat, $entry);
-
-			$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
 			try
 			{
+				$form = sproutForms()->forms->getFormById($entry->formId);
+
+				$entry->getContent()->title = craft()->templates->renderObjectTemplate($form->titleFormat, $entry);
+
+				$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
 
 				if ($event->isValid)
 				{
@@ -224,7 +225,7 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 			catch (\Exception $e)
 			{
 				SproutFormsPlugin::log('Failed to save element');
-
+				return false;
 				throw $e;
 			}
 		}

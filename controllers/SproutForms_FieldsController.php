@@ -67,11 +67,24 @@ class SproutForms_FieldsController extends BaseController
 		{
 			SproutFormsPlugin::log('Existing Field');
 
-			$isNewField = false;
+			$isNewField   = false;
+			$oldHandle = craft()->fields->getFieldById($field->id)->handle;
 		}
 
 		// Save our field
 		craft()->fields->saveField($field);
+
+		// Check if the handle is updated to also update the titleFormat
+		if(!$isNewField)
+		{
+			// Let's update the title format
+			if($oldHandle != $field->handle && strpos($form->titleFormat, $oldHandle) !== false)
+			{
+				$newTitleFormat    = sproutForms()->forms->updateTitleFormat($oldHandle, $field->handle, $form->titleFormat);
+				$form->titleFormat = $newTitleFormat;
+				SproutFormsPlugin::log('newTitleFormat '.$newTitleFormat, LogLevel::Info, true);
+			}
+		}
 
 		// Now let's add this field to our field layout
 		// ------------------------------------------------------------
@@ -238,8 +251,9 @@ class SproutForms_FieldsController extends BaseController
 		$this->requirePostRequest();
 		$this->requireAjaxRequest();
 
-		$fieldId = craft()->request->getRequiredPost('id');
-		$success = craft()->fields->deleteFieldById($fieldId);
+		$fieldId  = craft()->request->getRequiredPost('id');
+		$response = sproutForms()->forms->cleanTitleFormat($fieldId);
+		$success  = craft()->fields->deleteFieldById($fieldId);
 		$this->returnJson(array(
 			'success' => $success
 		));

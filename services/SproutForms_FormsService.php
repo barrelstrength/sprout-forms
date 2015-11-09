@@ -292,7 +292,7 @@ class SproutForms_FormsService extends BaseApplicationComponent
 	 */
 	public function getAllForms()
 	{
-		$attributes	= array('order' => 'name');
+		$attributes = array('order' => 'name');
 
 		return $this->getCriteria($attributes)->find();
 	}
@@ -401,4 +401,51 @@ class SproutForms_FormsService extends BaseApplicationComponent
 		$result = SproutForms_FormRecord::model()->find($criteria);
 		return $result;
 	}
+
+	/**
+	 * Remove a field handle from title format
+	 *
+	 * @param int $fieldId
+	 * @return string newTitleFormat
+	 */
+	public function cleanTitleFormat($fieldId)
+	{
+		$field = craft()->fields->getFieldById($fieldId);
+
+		if($field)
+		{
+			$context    = explode(":", $field->context);
+			$formId     = $context[1];
+			$formRecord = SproutForms_FormRecord::model()->findById($formId);
+
+			// Check if the field is in the titleformat
+			if(strpos($formRecord->titleFormat, $field->handle) !== false)
+			{
+				// Let's remove the field from the titleFormat
+				$newTitleFormat = preg_replace('/\{'.$field->handle.'.*\}/', '', $formRecord->titleFormat);
+				$formRecord->titleFormat = $newTitleFormat;
+				$formRecord->save(false);
+				return $formRecord->titleFormat;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Update a field handle from title format
+	 *
+	 * @param string $oldHandle
+	 * @param string $newHandle
+	 * @param string $titleFormat
+	 * @return string newTitleFormat
+	 */
+	public function updateTitleFormat($oldHandle, $newHandle, $titleFormat)
+	{
+		// Let's replace the field from the titleFormat
+		$newTitleFormat = str_replace($oldHandle, $newHandle, $titleFormat);
+
+		return $newTitleFormat;
+	}
+
 }

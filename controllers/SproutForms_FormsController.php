@@ -62,9 +62,18 @@ class SproutForms_FormsController extends BaseController
 			craft()->content->fieldContext = $form->getFieldContext();
 			craft()->content->contentTable = $form->getContentTable();
 
+			$currentTitleFormat = null;
 			foreach ($deletedFields as $fieldId)
 			{
+				// Each field deleted will be update the titleFormat
+				$currentTitleFormat = sproutForms()->forms->cleanTitleFormat($fieldId);
 				craft()->fields->deleteFieldById($fieldId);
+			}
+
+			if($currentTitleFormat)
+			{
+				// update the titleFormat
+				$form->titleFormat = $currentTitleFormat;
 			}
 
 			// Reset our field context and content table to what they were previously
