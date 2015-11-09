@@ -67,8 +67,8 @@ class SproutForms_FieldsController extends BaseController
 		{
 			SproutFormsPlugin::log('Existing Field');
 
-			$isNewField   = false;
-			$oldHandle = craft()->fields->getFieldById($field->id)->handle;
+			$isNewField = false;
+			$oldHandle  = craft()->fields->getFieldById($field->id)->handle;
 		}
 
 		// Save our field
@@ -82,7 +82,6 @@ class SproutForms_FieldsController extends BaseController
 			{
 				$newTitleFormat    = sproutForms()->forms->updateTitleFormat($oldHandle, $field->handle, $form->titleFormat);
 				$form->titleFormat = $newTitleFormat;
-				SproutFormsPlugin::log('newTitleFormat '.$newTitleFormat, LogLevel::Info, true);
 			}
 		}
 
