@@ -249,6 +249,14 @@ class SproutFormsPlugin extends BasePlugin
 			new SproutFormsAssetsField(),
 		);
 	}
+
+	/**
+	 * Get Settings URL
+	 */
+	public function getSettingsUrl()
+	{
+		return 'sproutforms/settings';
+	}
 }
 
 /**
