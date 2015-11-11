@@ -1,17 +1,13 @@
-{% extends "sproutforms/_layouts/base" %}
+{% extends "sproutforms/_layouts/settings" %}
 {% import "_includes/forms" as forms %}
 
 {% set title = craft.sproutForms.name %}
 
-{% set crumbs = [
-{ label: "Sprout Forms"|t, url: url('sproutforms') },
-{ label: "Settings"|t, url: url('sproutforms/settings') }
-] %}
-
-{% block main %}
+{% set body %}
 
 <div class="grid">
-	<div class="item" data-position="left" data-colspan="1">
+
+	<div class="item" data-colspan="1">
 		<div class="pane">
 
 			<style type="text/css">
@@ -46,18 +42,6 @@
 
 		</div>
 	</div>
-	<div class="item" data-position="left" data-colspan="1">
-		<div class="pane">
-
-			<h2>{{ "I know what I'm doing"|t }}</h2>
-
-			<div class="buttons">
-				<a href="{{ url('sproutforms/forms') }}" class="btn delete">{{ "Take me to Sprout Forms"|t }}</a>
-			</div>
-
-
-		</div>
-	</div>
 
 </div>
-{% endblock %}
+{% endset %}
