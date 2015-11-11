@@ -3,19 +3,20 @@
 {% set title  = "Settings"|t %}
 
 {% set crumbs = [
-  { label: "Sprout Forms"|t, url: url('sproutforms') }
+{ label: craft.sproutForms.name, url: url('sproutforms/entries') }
 ] %}
 
-{% set tabs = {
-  settings: {
-    label: "Settings"|t,
-    url: "#settings-cp"
-  },
-  examples: {
-		label: "Examples"|t,
-		url: cpUrl('sproutforms/examples')
-	}
-} %}
+{% set selectedSidebarItem = craft.request.getSegment(2) %}
+{% set sidebar %}
+
+  <nav class="last">
+    <ul>
+      <li><a href="{{ cpUrl('sproutforms/settings') }}" {% if selectedSidebarItem == 'settings' %}class="sel"{% endif %}>General Settings</a></li>
+      <li><a href="{{ cpUrl('sproutforms/examples') }}" {% if selectedSidebarItem == 'examples' %}class="sel"{% endif %}>Examples</a></li>
+    </ul>
+  </nav>
+
+{% endset %}
 
 {% set content %}
 
