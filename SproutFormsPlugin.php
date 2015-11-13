@@ -164,6 +164,22 @@ class SproutFormsPlugin extends BasePlugin
 		return $reports;
 	}
 
+	public function sproutMigrateRegisterElements()
+	{
+		return array(
+			'sproutforms_form'     => array(
+					'model'   => 'Craft\\SproutForms_FormModel',
+					'method'  => 'saveForm',
+					'service' => 'sproutForms_forms',
+			),
+			'sproutforms_entry'    => array(
+					'model'   => 'Craft\\SproutForms_EntryModel',
+					'method'  => 'saveEntry',
+					'service' => 'sproutForms_entries',
+			),
+		);
+	}
+
 	/**
 	 * Redirects to examples after installation
 	 *
