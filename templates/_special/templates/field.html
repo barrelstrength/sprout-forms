@@ -23,8 +23,7 @@
 		{%- else %}
 
 			<div
-				{%- if id %} id="{{ id }}"{% endif %} class="field {{ type }}
-				{%- if class %} {{ class }}{% endif -%}
+				class="field {{ type }}
 				{%- if errors %} {{ errorClass }}{% endif -%}
 				{%- if required %} required{% endif -%}
 				">
