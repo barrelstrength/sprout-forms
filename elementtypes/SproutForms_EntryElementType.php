@@ -94,7 +94,8 @@ class SproutForms_EntryElementType extends BaseElementType
 		// Build our sources for forms with no group
 		foreach ($noSources as $form)
 		{
-			$sources[$form['data']['formId']] = array(
+			$key = "form:" . $form['data']['formId'];
+			$sources[$key] = array(
 				'label'    => $form['label'],
 				'data'     => array(
 					'formId' => $form['data']['formId'],
@@ -114,7 +115,8 @@ class SproutForms_EntryElementType extends BaseElementType
 
 			foreach ($source['forms'] as $form)
 			{
-				$sources[] = array(
+				$key = "form:" . $form['data']['formId'];
+				$sources[$key] = array(
 					'label'    => $form['label'],
 					'data'     => array(
 						'formId' => $form['data']['formId'],
