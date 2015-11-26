@@ -82,6 +82,23 @@ class SproutFormsPlugin extends BasePlugin
 		Craft::import('plugins.sproutforms.integrations.sproutreports.SproutReportsSproutFormsIntegration');
 
 		craft()->on('email.onBeforeSendEmail', array(sproutForms(), 'handleOnBeforeSendEmail'));
+
+		if (craft()->request->isCpRequest() && craft()->request->getSegment(1) == 'sproutforms')
+		{
+			// @todo Craft 3 - update to use info from config.json
+			craft()->templates->includeJsResource('sproutforms/js/brand.js');
+			craft()->templates->includeJs("
+				sproutFormsBrand = new Craft.SproutBrand();
+				sproutFormsBrand.displayFooter({
+					pluginName: 'Sprout Forms',
+					pluginUrl: 'http://sprout.barrelstrengthdesign.com/craft-plugins/forms',
+					pluginVersion: '" . $this->getVersion() . "',
+					pluginDescription: '" . $this->getDescription() . "',
+					developerName: '" . $this->getDeveloper() . "',
+					developerUrl: '" . $this->getDeveloperUrl() . "'
+				});
+			");
+		}
 	}
 
 	/**

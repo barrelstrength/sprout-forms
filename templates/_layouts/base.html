@@ -1,7 +1,5 @@
 {% extends "_layouts/cp" %}
 
-{% set selectedTab = craft.request.segment(2) ? craft.request.segment(2) : 'settings' %}
-
 {% block main %}
   
   {% if body is defined %}
@@ -9,5 +7,3 @@
   {% endif %}
 
 {% endblock %}
-
-{% includeCssResource "sproutforms/css/brand.css" %}
