@@ -70,7 +70,7 @@ class SproutForms_EntryElementType extends BaseElementType
 		{
 			if ($form->groupId)
 			{
-				if (!isset($prepSources[$form->groupId]['heading']))
+				if (!isset($prepSources[$form->groupId]['heading']) && isset($groups[$form->groupId]))
 				{
 					$prepSources[$form->groupId]['heading'] = $groups[$form->groupId]->name;
 				}
@@ -109,9 +109,12 @@ class SproutForms_EntryElementType extends BaseElementType
 		// Build our sources sidebar for forms in groups
 		foreach ($prepSources as $source)
 		{
-			$sources[] = array(
-				'heading' => $source['heading']
-			);
+			if(isset($source['heading']))
+			{
+				$sources[] = array(
+					'heading' => $source['heading']
+				);
+			}
 
 			foreach ($source['forms'] as $form)
 			{
