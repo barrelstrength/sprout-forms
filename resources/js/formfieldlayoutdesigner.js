@@ -87,9 +87,9 @@ Sprout.FormFieldLayoutDesigner = Craft.FieldLayoutDesigner.extend({
 	onFieldOptionSelect: function(option)
 	{
 		var $option = $(option),
-			$field = $option.data('menu').$trigger.parent(),
+			$field = $option.data('menu').$anchor.parent(),
 			action = $option.data('action');
-
+		console.log($option.data('menu'));
 		switch (action)
 		{
 			case 'toggle-required':
