@@ -22,6 +22,14 @@ class SproutFormsPlugin extends BasePlugin
 	/**
 	 * @return string
 	 */
+	public function getDescription()
+	{
+		return 'Simple, beautiful forms. 100% control.';
+	}
+
+	/**
+	 * @return string
+	 */
 	public function getVersion()
 	{
 		return '2.0.0';
@@ -32,7 +40,7 @@ class SproutFormsPlugin extends BasePlugin
 	 */
 	public function getDeveloper()
 	{
-		return 'Barrel Strength Design';
+		return 'Barrel Strength';
 	}
 
 	/**
@@ -44,11 +52,27 @@ class SproutFormsPlugin extends BasePlugin
 	}
 
 	/**
+	 * @return string
+	 */
+	public function getDocumentationUrl()
+	{
+		return 'http://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs';
+	}
+
+	/**
 	 * @return bool
 	 */
 	public function hasCpSection()
 	{
 		return true;
+	}
+
+	/**
+	 * Get Settings URL
+	 */
+	public function getSettingsUrl()
+	{
+		return 'sproutforms/settings';
 	}
 
 	public function init()
@@ -207,14 +231,6 @@ class SproutFormsPlugin extends BasePlugin
 			new SproutFormsRadioButtonsField(),
 			new SproutFormsAssetsField(),
 		);
-	}
-
-	/**
-	 * Get Settings URL
-	 */
-	public function getSettingsUrl()
-	{
-		return 'sproutforms/settings';
 	}
 }
 
