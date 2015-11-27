@@ -2,7 +2,6 @@
 {% import "_includes/forms" as forms %}
 
 {% set crumbs = [
-  { label: craft.sproutForms.name, url: url('sproutforms/entries') },
 	{ label: "Forms"|t, url: url('sproutforms/forms') }
 ] %}
 
@@ -20,16 +19,34 @@
 
 {% set title = form.name %}
 
+{% set fullPageForm = true %}
+{% set saveShortcutRedirect = 'sproutforms/forms/edit/{id}#settings' %}
+{% set selectedTab = 'fields' %}
+
+{% block saveButton %}
+
+	<input type="hidden" name="action" value="sproutForms/forms/saveForm">
+	<input type="hidden" name="redirect" value="sproutforms/forms/edit/{id}#settings">
+	<input type="hidden" id="formId" name="id" value="{{ form.id is defined ? form.id : '' }}">
+
+	<div class="btngroup submit first">
+		<input type="submit" class="btn submit" value="{{ 'Save'|t }}">
+		{% if form.id != null %}
+			<div class="btn submit menubtn"></div>
+			<div class="menu">
+				<ul>
+					<li><a class="formsubmit" data-param='saveAsNew' data-value="true">{{ "Save as a new form"|t }}</a></li>
+				</ul>
+			</div>
+		{% endif %}
+	</div>
+
+{% endblock %}
+
 {% block main %}
 
-<form method="post" accept-charset="UTF-8" id="form" data-formid="{{ form.id }}" data-saveshortcut="1" data-saveshortcut-redirect="sproutforms/forms/edit/{id}#settings" data-confirm-unload>
-	{{ getCsrfInput() }}
-  <input type="hidden" name="action" value="sproutForms/forms/saveForm">
-	<input type="hidden" name="redirect" value="sproutforms/forms/edit/{id}#settings">
-  <input type="hidden" name="id" value="{{ form.id is defined ? form.id : '' }}">
-
-	<div class="grid first">
-		<div class="item" data-position="left" data-min-colspan="2" data-max-colspan="3">
+	<div class="grid first" data-max-cols="3">
+		<div class="item" data-position="left" data-colspan="2">
 			<div id="fields" class="pane">
 
 				{% if tabs is defined and tabs %}
@@ -48,99 +65,85 @@
 
 			{% if formId is defined %}
 
-			<div class="pane">
+				<div class="pane">
 
-				<div style="width:45%;padding-left:5%;padding-right:5%;float:left;">
+					<div style="width:45%;padding-left:5%;padding-right:5%;float:left;">
 
-				<p><strong>{{ "One line of code"|t }}</strong></p>
+						<p><strong>{{ "One line of code"|t }}</strong></p>
 
-				{% if craft.request.getSegment(3) == 'new' %}
+						{% if craft.request.getSegment(3) == 'new' %}
 
-					<input class="text nicetext fullwidth" type="text" id="display-form-code" value="{% verbatim %}{{ craft.sproutForms.displayForm('yourFormHandle') }}{% endverbatim %}">
+							<input class="text nicetext fullwidth" type="text" id="display-form-code" value="{% verbatim %}{{ craft.sproutForms.displayForm('yourFormHandle') }}{% endverbatim %}">
 
-				{% else %}
+						{% else %}
 
-					<input class="text nicetext fullwidth" type="text" id="display-form-code" value="{% verbatim %}{{ craft.sproutForms.displayForm('{% endverbatim %}{{ form.handle }}{% verbatim %}') }}{% endverbatim %}">
+							<input class="text nicetext fullwidth" type="text" id="display-form-code" value="{% verbatim %}{{ craft.sproutForms.displayForm('{% endverbatim %}{{ form.handle }}{% verbatim %}') }}{% endverbatim %}">
 
-				{% endif %}
+						{% endif %}
+
+					</div>
+
+					<div style="width:45%;float:left;">
+
+						<p><strong>{{ "100% Control"|t }}</strong></p>
+
+						<p>{{ 'Customize your form using <a href="http://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/customization/template-overrides" target="_blank">Template Overrides</a>, <a href="http://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/customization/rendering-options" target="_blank">Rendering Options</a>, additional <a href="http://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/customization/rendering-options"
+						target="_blank">Fields</a>, Notifications, or <a href="http://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/examples/custom-html" target="_blank">Custom HTML</a>.'|t|raw }}</p>
+
+					</div>
 
 				</div>
-
-				<div style="width:45%;float:left;">
-
-				<p><strong>{{ "100% Control"|t }}</strong></p>
-
-				<p>{{ 'See the Sprout Forms documentation for an example of how to <a href="http://sprout
-					.barrelstrengthdesign.com/craft-plugins/forms/docs/examples/custom-html" target="_blank">publish your form
-					with Custom HTML</a>.'|t|raw }}</p>
-
-				</div>
-
-			</div>
 
 			{% endif %}
 
 		</div>
 
-		<div class="item" data-position="right" data-colspan="1">
+		<div class="sproutforms-sidebar item" data-position="right">
 
-			<div class="pane">
+			<div class="pane meta">
 
 				{% include 'sproutforms/forms/_sidebar/settings' %}
 
-				<div class="field" id="enabled-field">
-					<div class="heading">
-						{# <label for="enabled">
-							Status
-						</label> #}
-					</div>
+				<div class="sproutforms-deleteform field">
+					<div class="heading"></div>
 					<div class="input">
-						{# <div class="left">
-							<div class="lightswitch on" tabindex="0">
-								<div class="lightswitch-container">
-									<div class="label on"></div>
-									<div class="handle"></div>
-									<div class="label off"></div>
-								</div>
-								<input type="hidden" name="enabled" value="1">
-							</div>
-						</div> #}
-
 						<div class="right">
 							<input type="button" class="btn small formsubmit" value="Delete" data-action="sproutForms/forms/deleteForm" data-confirm="Are you sure you want to delete this form, all of it's fields, and all of it's data?" data-redirect="sproutforms/forms">
 						</div>
-
 					</div>
 				</div>
+
 			</div>
 
-			<hr>
+			{% set plugins = craft.plugins.getPlugins(false) %}
+			{% set sproutFieldsIsInstalled = plugins['sproutfields'].isInstalled() %}
+			{% set sproutReportsIsInstalled = plugins['sproutreports'].isInstalled() %}
+			{% set sproutEmailIsInstalled = plugins['sproutemail'].isInstalled() %}
 
-			<table class="inputs fullwidth">
-				<tr>
-					<td class="thin">
-						<div class="btngroup submit first">
-							<input type="submit" class="btn submit" value="{{ 'Save'|t }}">
-							{% if form.id != null %}
-								<div class="btn submit menubtn"></div>
-								<div class="menu">
-									<ul>
-										<li><a class="formsubmit" data-param='saveAsNew' data-value="true">{{ "Save as a new form"|t }}</a></li>
-									</ul>
-								</div>
-							{% endif %}
-						</div>
-					</td>
-					{# @todo - see if we can remove this at some point
-						 This is an extraneous td but it cleans up unwanted full-width box-shadow
-						 that displays on the prior td probably due to a bug in Craft ui styles.#}
-					<td></td>
-				</tr>
-			</table>
+			{% if not sproutFieldsIsInstalled or not sproutReportsIsInstalled or not sproutEmailIsInstalled %}
+
+				<div class="pane">
+					<h6>Improve your forms</h6>
+
+					{% if not sproutFieldsIsInstalled %}
+					<p class="light"><a href="http://sprout.barrelstrengthdesign.com/craft-plugins/fields" target="_blank">Sprout Fields</a> &ndash; Validate Email Addresses, Phone Numbers, and URLs. Capture hidden values for your workflows and analytics. </p>
+					{% endif %}
+
+					{% if not sproutReportsIsInstalled %}
+					<p class="light"><a href="http://sprout.barrelstrengthdesign.com/craft-plugins/reports" target="_blank">Sprout Reports</a> &ndash; Generate reports and export your form data as a CSV.</p>
+					{% endif %}
+
+					{% if not sproutEmailIsInstalled %}
+					<p class="light"><a href="http://sprout.barrelstrengthdesign.com/craft-plugins/email" target="_blank">Sprout Email</a> &ndash; Send multiple, customized notification emails to admins and users.</p>
+					{% endif %}
+
+				</div>
+
+			{% endif %}
+
 
 		</div>
 	</div>
-</form>
 
 {% endblock %}
 
@@ -166,3 +169,14 @@
 });
 {% endset %}
 {% includeJs js %}
+
+{% set css %}
+	.sproutforms-sidebar .pane > .tabs {
+		border-radius: 4px 4px 0 0;
+		margin:0;
+	}
+	.sproutforms-deleteform {
+		border-top: 1px solid #e3e5e8;
+	}
+{% endset %}
+{% includeCss css %}
