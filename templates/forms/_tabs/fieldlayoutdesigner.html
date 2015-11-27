@@ -94,13 +94,9 @@
 {% set js %}
 	
 	var initFLD = function() {
-
-		console.log('On Page js');
-
 		new Sprout.FormFieldLayoutDesigner('#fieldlayoutform', {
 			customizableTabs: true
 		});
-
 	};
 
 	{% if tab is defined %}
