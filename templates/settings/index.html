@@ -1,26 +1,53 @@
+{% requirePermission "editSproutFormsSettings" %}
+
 {% extends "sproutforms/_layouts/settings" %}
 {% import "_includes/forms" as forms %}
+
+{% set fullPageForm = true %}
+{% set saveShortcutRedirect = 'sproutforms/settings' %}
+
+{% set saveButton %}
+	<div class="buttons">
+		<input class="btn submit" type="submit" value="{{ 'Save'|t }}">
+	</div>
+{% endset %}
 
 {% set body %}
 
 {% if currentUser.can('editFormSettings') %}
-  <form method="post" accept-charset="UTF-8" data-saveshortcut="1">
-    {{ getCsrfInput() }}
-    <input type="hidden" name="action" value="sproutForms/settings/saveSettings">
-    <input type="hidden" name="redirect" value="sproutforms/settings">
 
-    <div id="settings-cp">
+  <input type="hidden" name="action" value="sproutForms/settings/saveSettings">
 
-      {% namespace 'settings' %}
-        {% include 'sproutforms/settings/_tabs/cp' %}
-      {% endnamespace %}
+  <div id="settings-cp">
 
-    </div>
+    {% namespace 'settings' %}
 
-    <div class="buttons">
-      <input class="btn submit" type="submit" value="{{ 'Save'|t }}">
-    </div>
-  </form>
+		   {{ forms.textField({
+			  label: "Template Folder Override"|t,
+			  id: 'templateFolderOverride',
+			  name: 'templateFolderOverride',
+			  instructions: "If you want more control over the formatting of your templates, Sprout Forms will check in this folder first for any overrides that you want to add.  If none exists, it will fall back to the default templates."|t,
+			  value: settings.templateFolderOverride,
+			  autofocus: true,
+			  first: true,
+			  errors: ''
+		  }) }}
+
+		  {{ forms.textField({
+			  label: "Plugin Name"|t,
+			  id: 'pluginNameOverride',
+			  name: 'pluginNameOverride',
+			  instructions: "Intuitive, human-readable plugin name for the end user."|t,
+			  value: settings.pluginNameOverride,
+			  autofocus: true,
+			  first: true,
+			  errors: ''
+		  }) }}
+
+	  {% endnamespace %}
+
+  </div>
+
 {% endif %}
 
 {% endset %}
