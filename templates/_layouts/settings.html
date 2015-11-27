@@ -2,17 +2,35 @@
 
 {% set title  = "Settings"|t %}
 
-{% set crumbs = [
-{ label: craft.sproutForms.name, url: url('sproutforms/entries') }
-] %}
+{% set subnav = {
+  entries: {
+    label: "Entries"|t,
+    url: url('sproutforms/entries')
+  },
+  forms: {
+    label: "Forms"|t,
+    url: url('sproutforms/forms')
+  }
+} %}
 
-{% set selectedSidebarItem = craft.request.getSegment(2) %}
+{% if currentUser.can('editSproutFormsSettings') %}
+	{% set subnav = subnav|merge({
+		settings: {
+			label: "Settings"|t,
+			url: url('sproutforms/settings')
+		}
+	}) %}
+{% endif %}
+
+{% set selectedSubnavItem = craft.request.segment(2) %}
+{% set selectedSidebarItem = craft.request.getSegment(3) ? craft.request.getSegment(3) : craft.request.getSegment(2) %}
+
 {% set sidebar %}
 
   <nav class="last">
     <ul>
       <li><a href="{{ cpUrl('sproutforms/settings') }}" {% if selectedSidebarItem == 'settings' %}class="sel"{% endif %}>General Settings</a></li>
-      <li><a href="{{ cpUrl('sproutforms/examples') }}" {% if selectedSidebarItem == 'examples' %}class="sel"{% endif %}>Examples</a></li>
+      <li><a href="{{ cpUrl('sproutforms/settings/examples') }}" {% if selectedSidebarItem == 'examples' %}class="sel"{% endif %}>Examples</a></li>
     </ul>
   </nav>
 
