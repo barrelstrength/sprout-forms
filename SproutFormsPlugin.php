@@ -40,7 +40,7 @@ class SproutFormsPlugin extends BasePlugin
 	 */
 	public function getDeveloper()
 	{
-		return 'Barrel Strength';
+		return 'Barrel Strength Design';
 	}
 
 	/**
@@ -94,7 +94,7 @@ class SproutFormsPlugin extends BasePlugin
 					pluginUrl: 'http://sprout.barrelstrengthdesign.com/craft-plugins/forms',
 					pluginVersion: '" . $this->getVersion() . "',
 					pluginDescription: '" . $this->getDescription() . "',
-					developerName: '" . $this->getDeveloper() . "',
+					developerName: '(Barrel Strength)',
 					developerUrl: '" . $this->getDeveloperUrl() . "'
 				});
 			");
