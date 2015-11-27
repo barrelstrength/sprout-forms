@@ -61,7 +61,7 @@ Sprout.FormFieldLayoutDesigner = Craft.FieldLayoutDesigner.extend({
 			$menu = $('<div class="menu" data-align="center"/>').insertAfter($editBtn),
 			$ul = $('<ul/>').appendTo($menu);
 
-		this.formId = $('#form').data('formid');
+		this.formId = $('#formId').val();
 		var fieldId = $field.data('id');
 
 		var editUrl = Craft.getCpUrl('sproutforms/forms/'+this.formId+'/fields/edit/'+fieldId);
