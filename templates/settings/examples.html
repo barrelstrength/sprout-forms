@@ -1,0 +1,29 @@
+{% extends "sproutforms/_layouts/settings" %}
+{% import "_includes/forms" as forms %}
+
+{% set body %}
+
+<style type="text/css">
+	.examples { width: 66%; }
+</style>
+
+<form method="post" action="" accept-charset="utf-8" class="examples">
+	{{ getCsrfInput() }}
+	<input type="hidden" name="action" value="sproutForms/examples/install">
+
+	<h2>{{ "Get Started with Examples"|t }}</h2>
+
+	<p>{{ "Install example forms with commented templates and example data. The example templates will be created
+	and placed in the `<code>craft/templates/sproutforms</code>` folder."|t | raw }}</p>
+
+	<p>{{ "Example forms include a Contact Form and Basic Fields Form and illustrate how to output your forms
+	with one line of code or customize them with 100% control."|t | raw
+		}}</p>
+
+	<div class="buttons">
+		<input class="btn submit" type="submit" value="{{ 'Install Example Forms'|t }}" />
+	</div>
+
+</form>
+
+{% endset %}
