@@ -86,6 +86,14 @@ class SproutForms_FormsService extends BaseApplicationComponent
 		$formRecord->templateOverridesFolder  = $form->templateOverridesFolder;
 		$formRecord->enableFileAttachments    = $form->enableFileAttachments;
 
+		// @todo - Why do we need these now?
+		// Things were working fine without these and now 2.5 is throwing errors unless we set them explicitly
+		if ($isNewForm)
+		{
+			$formRecord->dateCreated = date('Y-m-d h:m:s');
+			$formRecord->dateUpdated = date('Y-m-d h:m:s');
+		}
+
 		$formRecord->validate();
 		$form->addErrors($formRecord->getErrors());
 
