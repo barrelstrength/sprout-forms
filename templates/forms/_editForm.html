@@ -116,9 +116,9 @@
 			</div>
 
 			{% set plugins = craft.plugins.getPlugins(false) %}
-			{% set sproutFieldsIsInstalled = plugins['sproutfields'].isInstalled() %}
-			{% set sproutReportsIsInstalled = plugins['sproutreports'].isInstalled() %}
-			{% set sproutEmailIsInstalled = plugins['sproutemail'].isInstalled() %}
+			{% set sproutFieldsIsInstalled = plugins['sproutfields'] is defined ? plugins['sproutfields'].isInstalled() : false %}
+			{% set sproutReportsIsInstalled = plugins['sproutreports'] is defined ? plugins['sproutreports'].isInstalled() : false %}
+			{% set sproutEmailIsInstalled = plugins['sproutemail'] is defined ? plugins['sproutemail'].isInstalled() : false %}
 
 			{% if not sproutFieldsIsInstalled or not sproutReportsIsInstalled or not sproutEmailIsInstalled %}
 
