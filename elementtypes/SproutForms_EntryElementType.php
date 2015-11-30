@@ -156,6 +156,51 @@ class SproutForms_EntryElementType extends BaseElementType
 	}
 
 	/**
+	 * Returns the attributes that can be selected as table columns
+	 *
+	 * @return array
+	 */
+	public function defineAvailableTableAttributes()
+	{
+		$attributes = array(
+				'title'       => array('label' => Craft::t('Title')),
+				'formName'    => array('label' => Craft::t('Form Name')),
+				'dateCreated' => array('label' => Craft::t('Date Created')),
+				'dateUpdated' => array('label' => Craft::t('Date Updated')),
+		);
+
+		// Mix in custom fields defined on the SproutForms_Form Element
+		foreach (craft()->elementIndexes->getAvailableTableFields('SproutForms_Form') as $field)
+		{
+			$attributes['field:'.$field->id] = array('label' => $field->name);
+		}
+
+		return $attributes;
+	}
+
+	/**
+	 * Returns default table columns for table views
+	 *
+	 * @return array
+	 */
+	public function getDefaultTableAttributes($source = null)
+	{
+		$attributes = array();
+
+		$attributes[] = 'title';
+
+		if ($source == '*')
+		{
+			$attributes[] = 'formName';
+		}
+
+		$attributes[] = 'dateCreated';
+		$attributes[] = 'dateUpdated';
+
+		return $attributes;
+	}
+
+	/**
 	 * Returns the attributes that can be shown/sorted by in table views.
 	 *
 	 * @param string|null $source

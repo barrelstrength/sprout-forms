@@ -116,6 +116,40 @@ class SproutForms_FormElementType extends BaseElementType
 	}
 
 	/**
+	 * Returns the attributes that can be selected as table columns
+	 *
+	 * @return array
+	 */
+	public function defineAvailableTableAttributes()
+	{
+		$attributes = array(
+			'name'     => array('label' => Craft::t('Name')),
+			'handle'   => array('label' => Craft::t('Handle')),
+			'numberOfFields' => array('label' => Craft::t('Number of Fields')),
+			'totalEntries'   => array('label' => Craft::t('Total Entries'))
+		);
+
+		return $attributes;
+	}
+
+	/**
+	 * Returns default table columns for table views
+	 *
+	 * @return array
+	 */
+	public function getDefaultTableAttributes($source = null)
+	{
+		$attributes = array();
+
+		$attributes[] = 'name';
+		$attributes[] = 'handle';
+		$attributes[] = 'numberOfFields';
+		$attributes[] = 'totalEntries';
+
+		return $attributes;
+	}
+
+	/**
 	 * @inheritDoc IElementType::getTableAttributeHtml()
 	 *
 	 * @param BaseElementModel $element
