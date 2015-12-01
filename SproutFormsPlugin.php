@@ -60,6 +60,14 @@ class SproutFormsPlugin extends BasePlugin
 	}
 
 	/**
+	 * @return string
+	 */
+	public function getReleaseFeedUrl()
+	{
+		return 'http://sprout.barrelstrengthdesign.com/craft-plugins/forms/releases.json';
+	}
+
+	/**
 	 * @return bool
 	 */
 	public function hasCpSection()
