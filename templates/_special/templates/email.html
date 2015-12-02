@@ -51,13 +51,13 @@
 
                                   {% if value is not iterable and value is not empty %}
 
-                                    {{ value|raw }}
+                                    {{ value }}
 
                                   {% else %}
 
                                     <ul style="margin-left:0;">
                                     {% for item in value %}
-                                      <li>{{ item|raw }}</li>
+                                      <li>{{ item }}</li>
                                     {% endfor %}
                                     </ul>
 
