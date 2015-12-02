@@ -387,4 +387,20 @@ class SproutFormsVariable
 	{
 		SproutFormsBaseField::addFieldVariables($variables);
 	}
+
+	/**
+	 * @return bool
+	 */
+	public function canCreateExamples()
+	{
+		return sproutForms()->canCreateExamples();
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function hasExamples()
+	{
+		return sproutForms()->hasExamples();
+	}
 }

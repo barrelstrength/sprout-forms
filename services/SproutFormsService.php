@@ -165,4 +165,30 @@ class SproutFormsService extends BaseApplicationComponent
 	{
 		return $asset->getSource()->getSourceType()->getBasePath().$asset->getFolder()->path.$asset->filename;
 	}
+
+	/**
+	 * Returns whether or not the templates directory is writable
+	 *
+	 * @return bool
+	 */
+	public function canCreateExamples()
+	{
+		return is_writable(craft()->path->getSiteTemplatesPath());
+	}
+
+	/**
+	 * Return wether or not the example template already exist
+	 * @return bool
+	 */
+	public function hasExamples()
+	{
+		$path = craft()->path->getSiteTemplatesPath() . 'sproutforms';
+
+		if(file_exists($path))
+		{
+			return true;
+		}
+
+		return false;
+	}
 }
