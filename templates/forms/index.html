@@ -18,7 +18,9 @@
 
 {% block sidebar %}
 
-	{{ parent() }}
+	{% set customizableSources = false %}
+
+  {{ parent() }}
 
 	<div class="buttons">
 		<div id="newgroupbtn" class="btn add icon">{{ "New Group"|t }}</div>

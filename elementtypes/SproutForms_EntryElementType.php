@@ -201,20 +201,25 @@ class SproutForms_EntryElementType extends BaseElementType
 	}
 
 	/**
-	 * Returns the attributes that can be shown/sorted by in table views.
+	 * @inheritDoc IElementType::getTableAttributeHtml()
 	 *
-	 * @param string|null $source
+	 * @param BaseElementModel $element
+	 * @param string           $attribute
 	 *
-	 * @return array
+	 * @return string
 	 */
-	public function defineTableAttributes($source = null)
+	public function getTableAttributeHtml(BaseElementModel $element, $attribute)
 	{
-		return array(
-			'title'       => Craft::t('Title'),
-			'formName'    => Craft::t('Form Name'),
-			'dateCreated' => Craft::t('Date Created'),
-			'dateUpdated' => Craft::t('Date Updated'),
-		);
+		//@todo - can we improve this?
+		try
+		{
+			return parent::getTableAttributeHtml($element, $attribute);
+		}
+		catch(Exception $e)
+		{
+			return '';
+		}
+
 	}
 
 	/**
