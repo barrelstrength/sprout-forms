@@ -15,14 +15,15 @@
 <div
 	{%- if id %} id="{{ id }}"{% endif %}
 	{%- if class %} class="{{ class }}"{% endif %}>
+
+	{% if name is defined and (name|length < 3 or name|slice(-2) != '[]') %}
+		<input type="hidden" name="{{ name }}" value="">
+	{% endif %}
+
 	{%- for key, option in options %}
 
 		{%- set label = (option.label is defined ? option.label : option) %}
 		{%- set value = (option.value is defined ? option.value : key) %}
-
-		{% if name is defined and (name|length < 3 or name|slice(-2) != '[]') %}
-			<input type="hidden" name="{{ name }}" value="">
-		{% endif %}
 
 		<label {%- if id %} for="{{ id }}-{{ loop.index }}"{% endif %}>
 			<input type="checkbox"
