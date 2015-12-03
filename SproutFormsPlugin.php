@@ -38,6 +38,14 @@ class SproutFormsPlugin extends BasePlugin
 	/**
 	 * @return string
 	 */
+	public function getSchemaVersion()
+	{
+		return '2.0.0';
+	}
+
+	/**
+	 * @return string
+	 */
 	public function getDeveloper()
 	{
 		return 'Barrel Strength Design';
