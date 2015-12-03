@@ -244,7 +244,7 @@ class SproutFormsPlugin extends BasePlugin
 	 */
 	public function onAfterInstall()
 	{
-		craft()->request->redirect(UrlHelper::getCpUrl().'/sproutforms/examples');
+		craft()->request->redirect(UrlHelper::getCpUrl().'/sproutforms/settings/examples');
 	}
 
 	/**
