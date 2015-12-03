@@ -33,7 +33,7 @@ class SproutForms_TitleFormatTask extends BaseTask
 	 */
 	public function getDescription()
 	{
-		return Craft::t('Updating previous title formats');
+		return Craft::t('Updating form entry titles');
 	}
 
 	/**
@@ -60,6 +60,7 @@ class SproutForms_TitleFormatTask extends BaseTask
 	public function runStep($step)
 	{
 		$contentRow = $this->_contentRows[$step];
+
 		//Call the update process
 		$response   = sproutForms()->entries->updateTitleFormat($contentRow, $this->_newFormat, $this->_contentTable);
 
