@@ -196,6 +196,7 @@ class SproutForms_FieldsService extends FieldsService
 		$templates['form']  = $defaultTemplate;
 		$templates['tab']   = $defaultTemplate;
 		$templates['field'] = $defaultTemplate;
+		$templates['email'] = $defaultTemplate;
 
 		// See if we should override our defaults
 		if ($templateFolderOverride)
@@ -203,6 +204,7 @@ class SproutForms_FieldsService extends FieldsService
 			$formTemplate  = craft()->path->getSiteTemplatesPath().$templateFolderOverride.'/form';
 			$tabTemplate   = craft()->path->getSiteTemplatesPath().$templateFolderOverride.'/tab';
 			$fieldTemplate = craft()->path->getSiteTemplatesPath().$templateFolderOverride.'/field';
+			$emailTemplate = craft()->path->getSiteTemplatesPath().$templateFolderOverride.'/email';
 
 			foreach (craft()->config->get('defaultTemplateExtensions') as $extension)
 			{
@@ -219,6 +221,11 @@ class SproutForms_FieldsService extends FieldsService
 				if (IOHelper::fileExists($fieldTemplate.'.'.$extension))
 				{
 					$templates['field'] = craft()->path->getSiteTemplatesPath().$templateFolderOverride.'/';
+				}
+
+				if (IOHelper::fileExists($emailTemplate.'.'.$extension))
+				{
+					$templates['email'] = craft()->path->getSiteTemplatesPath().$templateFolderOverride.'/';
 				}
 			}
 		}

@@ -380,25 +380,10 @@ class SproutForms_EntriesController extends BaseController
 
 		if (count($recipients))
 		{
-			$email                  = new EmailModel();
-			$tabs                   = $form->getFieldLayout()->getTabs();
-			$settings               = craft()->plugins->getPlugin('sproutforms')->getSettings();
-			$templateFolderOverride = $settings->templateFolderOverride;
-
-			$emailTemplate = craft()->path->getPluginsPath().'sproutforms/templates/_special/templates/';
-
-			if ($templateFolderOverride)
-			{
-				$emailTemplateFile = craft()->path->getSiteTemplatesPath().$templateFolderOverride.'/email';
-
-				foreach (craft()->config->get('defaultTemplateExtensions') as $extension)
-				{
-					if (IOHelper::fileExists($emailTemplateFile.'.'.$extension))
-					{
-						$emailTemplate = craft()->path->getSiteTemplatesPath().$templateFolderOverride.'/';
-					}
-				}
-			}
+			$email         = new EmailModel();
+			$tabs          = $form->getFieldLayout()->getTabs();
+			$templatePaths = sproutForms()->fields->getSproutFormsTemplates($form);
+			$emailTemplate = $templatePaths['email'];
 
 			// Set our Sprout Forms Email Template path
 			craft()->path->setTemplatesPath($emailTemplate);
