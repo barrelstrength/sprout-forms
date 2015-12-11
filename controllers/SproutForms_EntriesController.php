@@ -417,6 +417,8 @@ class SproutForms_EntriesController extends BaseController
 				}
 			}
 
+			$email->subject = $this->trimSubject($email->subject);
+
 			// custom replyTo has been set for this form
 			if ($form->notificationReplyToEmail)
 			{
@@ -520,5 +522,19 @@ class SproutForms_EntriesController extends BaseController
 		);
 
 		$this->redirectToPostedUrl($vars);
+	}
+
+	/**
+	 * Fix funky characters
+	 * @param string $subject
+	 * @return string
+	 */
+	private function trimSubject($subject)
+	{
+		$accents       = '/&([A-Za-z]{1,2})(grave|acute|circ|cedil|uml|lig);/';
+		$stringEncoded = htmlentities($subject,ENT_NOQUOTES,'UTF-8');
+		$subject       = preg_replace($accents,'$1',$stringEncoded);
+
+		return $subject;
 	}
 }
