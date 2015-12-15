@@ -417,7 +417,7 @@ class SproutForms_EntriesController extends BaseController
 				}
 			}
 
-			$email->subject = $this->trimSubject($email->subject);
+			$email->subject = $this->encodeSubjectLine($email->subject);
 
 			// custom replyTo has been set for this form
 			if ($form->notificationReplyToEmail)
@@ -525,16 +525,11 @@ class SproutForms_EntriesController extends BaseController
 	}
 
 	/**
-	 * Fix funky characters
-	 * @param string $subject
+	 * @param $subject
 	 * @return string
 	 */
-	private function trimSubject($subject)
+	public function encodeSubjectLine($subject)
 	{
-		$accents       = '/&([A-Za-z]{1,2})(grave|acute|circ|cedil|uml|lig);/';
-		$stringEncoded = htmlentities($subject,ENT_NOQUOTES,'UTF-8');
-		$subject       = preg_replace($accents,'$1',$stringEncoded);
-
-		return $subject;
+		return '=?UTF-8?B?'.base64_encode($subject).'?=';
 	}
 }
