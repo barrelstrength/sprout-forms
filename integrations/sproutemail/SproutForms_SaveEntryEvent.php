@@ -97,19 +97,14 @@ class SproutForms_SaveEntryEvent extends SproutEmailBaseEvent
 	{
 		$criteria = craft()->elements->getCriteria('SproutForms_Entry');
 
-		$formIds = isset($options['sproutForms']['saveEntry']['formIds']) &&
-			count($options['sproutForms']['saveEntry']['formIds']);
+		$formIds = isset($this->options['sproutForms']['saveEntry']['formIds']) ?
+			$this->options['sproutForms']['saveEntry']['formIds'] : array();
 
-		if ($formIds)
+		if (is_array($formIds) && count($formIds))
 		{
-			$ids = $formIds;
+			$formId = array_shift($formIds);
 
-			if (is_array($ids) && count($ids))
-			{
-				$id = array_shift($ids);
-
-				$criteria->formId = $id;
-			}
+			$criteria->formId = $formId;
 		}
 
 		return $criteria->first();
