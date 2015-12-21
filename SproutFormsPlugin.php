@@ -94,8 +94,8 @@ class SproutFormsPlugin extends BasePlugin
 	public function init()
 	{
 		Craft::import('plugins.sproutforms.contracts.SproutFormsBaseField');
-		Craft::import('plugins.sproutreports.vendor.sproutreports.SproutReportsBaseReport');
-		Craft::import('plugins.sproutforms.integrations.sproutreports.SproutReportsSproutFormsIntegration');
+
+		Craft::import('plugins.sproutforms.integrations.sproutreports.datasources.*');
 
 		craft()->on('email.onBeforeSendEmail', array(sproutForms(), 'handleOnBeforeSendEmail'));
 
@@ -207,18 +207,14 @@ class SproutFormsPlugin extends BasePlugin
 		sproutForms()->log('Sprout Email 0.9.2+ is required for Dynamic Events integration.');
 	}
 
-	/*
-	 * SproutReports hook
+	/**
+	 * @return array
 	 */
-	public function registerSproutReports()
+	public function registerSproutReportsDataSources()
 	{
-		$reports = array();
-		$forms = sproutForms()->forms->getAllForms();
-		foreach ($forms as $form)
-		{
-			$reports[] = SproutReportsSproutFormsIntegration::createReport($form);
-		}
-		return $reports;
+		return array(
+			new SproutFormsEntriesDataSource()
+		);
 	}
 
 	public function sproutMigrateRegisterElements()
