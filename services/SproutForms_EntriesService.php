@@ -338,8 +338,8 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 			$newTitle    = craft()->templates->renderObjectTemplate($newFormat, $entry);
 			$tablePrefix = Craft()->db->tablePrefix;
 			// update single entry
-			Craft()->db->createCommand("UPDATE {$tablePrefix}{$contentTable} SET title = '{$newTitle}' WHERE id=:contentId")
-				->bindValues(array(':contentId' => $contentRow['id']))
+			Craft()->db->createCommand("UPDATE {$tablePrefix}{$contentTable} SET title =:newTitle WHERE id=:contentId")
+				->bindValues(array(':contentId' => $contentRow['id'], ':newTitle' => $newTitle))
 				->execute();
 		}
 		catch (Exception $e)
