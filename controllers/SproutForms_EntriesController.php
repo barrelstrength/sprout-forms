@@ -437,10 +437,21 @@ class SproutForms_EntriesController extends BaseController
 				}
 			}
 
-			foreach ($recipients as $emailAddress)
+			foreach ($recipients as $key => $emailAddress)
 			{
 				try
 				{
+					$email->cc  = null;
+					$email->bcc = null;
+
+					if($key == 0 && ($form->notificationCc != null || $form->notificationBcc != null))
+					{
+						// Set CC and BCC
+						$email->cc   = $this->getMixedRecipients($form->notificationCc);
+						$email->bcc  = $this->getMixedRecipients($form->notificationBcc);
+						SproutFormsPlugin::log("cc: ".$form->notificationCc , LogLevel::Info);
+					}
+
 					$email->toEmail = craft()->templates->renderObjectTemplate($emailAddress, $post);
 
 					if (filter_var($email->toEmail, FILTER_VALIDATE_EMAIL))
@@ -528,8 +539,28 @@ class SproutForms_EntriesController extends BaseController
 	 * @param $subject
 	 * @return string
 	 */
-	public function encodeSubjectLine($subject)
+	private function encodeSubjectLine($subject)
 	{
 		return '=?UTF-8?B?'.base64_encode($subject).'?=';
+	}
+
+	/**
+	 * @param $recipents
+	 * @return array
+	 */
+	private function getMixedRecipients($recipents)
+	{
+		$mixed     = array();
+		$recipents = explode(",",$recipents);
+
+		foreach ($recipents as $key => $value)
+		{
+			if((filter_var($value, FILTER_VALIDATE_EMAIL)))
+			{
+				array_push($mixed, array('name'=>$value,'email'=>$value));
+			}
+		}
+
+		return $mixed;
 	}
 }

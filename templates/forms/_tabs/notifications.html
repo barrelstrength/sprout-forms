@@ -54,6 +54,24 @@
 	translatable: true,
 }) }}
 
+{{ forms.textField({
+	label: "CC To Email Address"|t,
+	instructions: "Enter comma seperated email addresses to notify on form submission."|t,
+	name: 'notificationCc',
+	value: form.notificationCc,
+	errors: (form is defined ? form.getErrors('notificationCc') : null),
+	translatable: true,
+}) }}
+
+{{ forms.textField({
+	label: "BCC To Email Address"|t,
+	instructions: "Enter comma seperated email addresses to notify on form submission."|t,
+	name: 'notificationBcc',
+	value: form.notificationBcc,
+	errors: (form is defined ? form.getErrors('notificationBcc') : null),
+	translatable: true,
+}) }}
+
 {{ forms.lightswitchField({
 	first: true,
 	label: "Enable File Attachments"|t,
