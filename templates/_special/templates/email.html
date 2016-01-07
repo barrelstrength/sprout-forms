@@ -49,7 +49,7 @@
                                 <p>
                                   <strong>{{ field.name }}</strong><br/>
 
-                                  {% if value is not iterable and value is not empty %}
+                                  {% if value is not iterable and value is not empty and not craft.sproutforms.isInvisibleCaptcha(field) %}
 
                                     {{ value }}
 

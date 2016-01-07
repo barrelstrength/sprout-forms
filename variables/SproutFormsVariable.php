@@ -403,4 +403,19 @@ class SproutFormsVariable
 	{
 		return sproutForms()->hasExamples();
 	}
+
+	/**
+	 * @return bool
+	 */
+	public function isInvisibleCaptcha($field)
+	{
+		$fieldType = $field->getFieldType();
+
+		if (get_class($fieldType) === 'Craft\\SproutInvisibleCaptcha_InvisibleCaptchaFieldType')
+		{
+			return true;
+		}
+
+		return false;
+	}
 }
