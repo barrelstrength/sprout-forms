@@ -403,4 +403,47 @@ class SproutFormsVariable
 	{
 		return sproutForms()->hasExamples();
 	}
+
+	/**
+	 * @param string
+	 * @return bool
+	 */
+	public function isPluginInstalled($plugin)
+	{
+		$plugins = craft()->plugins->getPlugins(false);
+
+		if(array_key_exists($plugin,$plugins))
+		{
+			$invisibleCaptcha = $plugins[$plugin];
+
+			if ($invisibleCaptcha->isInstalled)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isInvisibleCaptchaEnabled()
+	{
+		$plugins = craft()->plugins->getPlugins(false);
+
+		if(array_key_exists('sproutinvisiblecaptcha',$plugins))
+		{
+			$invisibleCaptcha = $plugins["sproutinvisiblecaptcha"];
+
+			if ($invisibleCaptcha->getSettings()->sproutFormsDisplayFormTagOutput
+			and $invisibleCaptcha->isInstalled)
+			{
+				return true;
+			}
+
+		}
+
+		return false;
+	}
 }

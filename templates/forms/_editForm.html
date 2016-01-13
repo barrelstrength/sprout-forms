@@ -65,9 +65,9 @@
 
 			{% if formId is defined %}
 
-				<div class="pane">
+				<div class="pane" style="float:left;width:100%;">
 
-					<div style="width:45%;padding-left:5%;padding-right:5%;float:left;">
+					<div style="width:35%;padding-left:5%;padding-right:5%;float:left;">
 
 						<p><strong>{{ "One line of code"|t }}</strong></p>
 
@@ -83,7 +83,7 @@
 
 					</div>
 
-					<div style="width:45%;float:left;">
+					<div style="width:35%;float:left;">
 
 						<p><strong>{{ "100% Control"|t }}</strong></p>
 
@@ -115,12 +115,12 @@
 
 			</div>
 
-			{% set plugins = craft.plugins.getPlugins(false) %}
-			{% set sproutFieldsIsInstalled = plugins['sproutfields'] is defined ? plugins['sproutfields'].isInstalled() : false %}
-			{% set sproutReportsIsInstalled = plugins['sproutreports'] is defined ? plugins['sproutreports'].isInstalled() : false %}
-			{% set sproutEmailIsInstalled = plugins['sproutemail'] is defined ? plugins['sproutemail'].isInstalled() : false %}
+			{% set sproutFieldsIsInstalled  = craft.sproutForms.isPluginInstalled('sproutfields') %}
+			{% set sproutReportsIsInstalled = craft.sproutForms.isPluginInstalled('sproutreports')%}
+			{% set sproutEmailIsInstalled   = craft.sproutForms.isPluginInstalled('sproutemail') %}
+			{% set sproutInvisibleCaptchaIsInstalled  = craft.sproutForms.isPluginInstalled('sproutinvisiblecaptcha') %}
 
-			{% if not sproutFieldsIsInstalled or not sproutReportsIsInstalled or not sproutEmailIsInstalled %}
+			{% if not sproutFieldsIsInstalled or not sproutReportsIsInstalled or not sproutEmailIsInstalled or not sproutInvisibleCaptchaIsInstalled %}
 
 				<div class="pane">
 					<h6>Improve your forms</h6>
@@ -137,8 +137,22 @@
 					<p class="light"><a href="http://sprout.barrelstrengthdesign.com/craft-plugins/email" target="_blank">Sprout Email</a> &ndash; Send multiple, customized notification emails to admins and users.</p>
 					{% endif %}
 
+					{% if not sproutInvisibleCaptchaIsInstalled %}
+					<p class="light"><a href="http://sprout.barrelstrengthdesign.com/craft-plugins/invisible-captcha" target="_blank">Sprout Invisible Captcha</a> &ndash; Provides several user-friendly methods to protect your forms from vile spammers and evil robots.</p>
+					{% endif %}
+
 				</div>
 
+			{% endif %}
+
+			{% if sproutInvisibleCaptchaIsInstalled %}
+				<div class="pane">
+					{% if craft.sproutForms.isInvisibleCaptchaEnabled %}
+					<p class="light"><img src="https://dl.dropboxusercontent.com/u/3014268/check.png" width="10" height="10" alt="">{{"This form is protected by Sprout Invisible Captcha!"|t}} <a href="/admin/settings/plugins/sproutinvisiblecaptcha" target="_blank">{{"go settigns"|t}}</a></p>
+					{% else %}
+					<p class="light"><img style="padding-right:2px;" src="https://dl.dropboxusercontent.com/u/3014268/warning.png" width="15" height="15" alt="">{{"Sprout Invisible Captcha is not enable to protected this form yet!"|t}} <a href="/admin/settings/plugins/sproutinvisiblecaptcha" target="_blank">{{"enable it here"|t}}</a></p>
+					{%endif%}
+				</div>
 			{% endif %}
 
 
