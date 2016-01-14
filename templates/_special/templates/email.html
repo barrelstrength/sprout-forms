@@ -46,10 +46,11 @@
                                 <p><strong>{{ tab.name }}</strong></p>
                                 {% endif %}
 
+                                {% if not craft.sproutForms.isInvisibleCaptcha(field) %}
                                 <p>
                                   <strong>{{ field.name }}</strong><br/>
 
-                                  {% if value is not iterable and value is not empty and not craft.sproutforms.isInvisibleCaptcha(field) %}
+                                  {% if value is not iterable and value is not empty %}
 
                                     {{ value }}
 
@@ -63,6 +64,7 @@
 
                                   {% endif %}
                                 </p>
+                                {% endif %}
 
                               {% endfor %}
 
