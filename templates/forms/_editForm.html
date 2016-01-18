@@ -152,7 +152,8 @@
 					{% if craft.sproutForms.isInvisibleCaptchaEnabled %}
 						<p class="light">{{"This form is protected by Sprout Invisible Captcha."|t}} <a href="{{ cpUrl('settings/plugins/sproutinvisiblecaptcha') }}">{{"Edit&nbsp;settings"|t|raw }}.</a></p>
 					{% else %}
-						<p class="light">{{"<a href='{{ cpUrl('settings/plugins/sproutinvisiblecaptcha') }}'>Enable Sprout Invisible Captcha</a> to protect this form from vile spammers and evil robots."|t|raw }}</p>
+						<p class="light">
+							<a href="{{ cpUrl('settings/plugins/sproutinvisiblecaptcha') }}">{{"Enable Sprout Invisible Captcha"|t|raw }}.</a> {{" to protect this form from vile spammers and evil robots."|t}}</p>
 					{%endif%}
 				</div>
 			{% endif %}
