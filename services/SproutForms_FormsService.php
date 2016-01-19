@@ -456,4 +456,29 @@ class SproutForms_FormsService extends BaseApplicationComponent
 		return $newTitleFormat;
 	}
 
+	/**
+	 * Create a secuencial string for the "name" and "handle" fields if they are already taken
+	 * @param string
+	 * @param string
+	 * return string
+	*/
+	public function getFieldAsNew($field, $value)
+	{
+		$newField = null;
+		$i = 1;
+		$band = true;
+		do
+		{
+			$newField = $value.$i;
+			$form = sproutForms()->forms->getFieldValue($field, $newField);
+			if ( is_null($form) )
+			{
+				$band = false;
+			}
+
+			$i++;
+		} while ( $band );
+
+		return $newField;
+	}
 }
