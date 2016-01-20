@@ -355,13 +355,29 @@ class SproutForms_EntryElementType extends BaseElementType
 	) {
 		// Do we have a source selected in the sidebar?
 		// If so, we have a form id and we can use that to fetch the content table
-		if ($criteria->formId)
+		if ($criteria->formId || $criteria->formHandle)
 		{
-			$form = sproutForms()->forms->getFormById($criteria->formId);
+			$form = null;
+
+			if($criteria->formId)
+			{
+				$form = sproutForms()->forms->getFormById($criteria->formId);
+			}
+			else if($criteria->formHandle)
+			{
+				$form = sproutForms()->forms->getFormByHandle($criteria->formHandle);
+			}
 
 			if ($form)
 			{
+				$fields  = $form->getFields();
 				$content = "{$form->handle}.title";
+
+				foreach ($fields as $key => $field)
+				{
+					$content .=",{$form->handle}.field_{$field->handle}";
+				}
+
 				$select  = empty($select) ? $content : $select.', '.$content;
 
 				$query->join($form->getContentTable().' '.$form->handle, 'entries.formId = '.$form->id);
