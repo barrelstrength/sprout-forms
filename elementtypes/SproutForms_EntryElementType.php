@@ -372,15 +372,19 @@ class SproutForms_EntryElementType extends BaseElementType
 			{
 				$fields  = $form->getFields();
 				$content = "{$form->handle}.title";
-
+				// Added support for filtering any sproutform content table
 				foreach ($fields as $key => $field)
 				{
 					$content .=",{$form->handle}.field_{$field->handle}";
+					$handle = $field->handle;
+					if(isset($criteria->$handle))
+					{
+						$query->andWhere(DbHelper::parseParam($form->handle.".field_".$field->handle, $criteria->$handle, $query->params));
+					}
 				}
 
 				$select  = empty($select) ? $content : $select.', '.$content;
-
-				$query->join($form->getContentTable().' '.$form->handle, 'entries.formId = '.$form->id);
+				$query->join($form->getContentTable().' '.$form->handle, $form->handle.'.elementId = elements.id');
 			}
 		}
 	}
