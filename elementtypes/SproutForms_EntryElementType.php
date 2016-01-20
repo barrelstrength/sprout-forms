@@ -375,7 +375,7 @@ class SproutForms_EntryElementType extends BaseElementType
 				// Added support for filtering any sproutform content table
 				foreach ($fields as $key => $field)
 				{
-					$content .=",{$form->handle}.field_{$field->handle}";
+					$content .=",{$form->handle}.field_{$field->handle} {$field->handle}";
 					$handle = $field->handle;
 					if(isset($criteria->$handle))
 					{
