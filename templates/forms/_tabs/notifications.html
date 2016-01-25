@@ -63,21 +63,24 @@
 
 {{ forms.textField({
 	label: "Sender Email Address <span class='info'>Consider the deliverability implications before you dynamically change your <strong>Sender Email Address</strong>.</span>"|t,
-	instructions: "The 'From' email address of your notification email"|t,
+	instructions: "The 'From' email address of your notification email. Add: <a href='#' id='reply-to-link'>Reply to</a>"|t,
 	name: 'notificationSenderEmail',
 	value: form.notificationSenderEmail,
 	errors: (form is defined ? form.getErrors('notificationSenderEmail') : null),
 	translatable: true,
 }) }}
 
-{{ forms.textField({
-	label: "Reply To Email Address"|t,
-	instructions: "The 'Reply To' email address of your notification email"|t,
-	name: 'notificationReplyToEmail',
-	value: form.notificationReplyToEmail,
-	errors: (form is defined ? form.getErrors('notificationReplyToEmail') : null),
-	translatable: true,
-}) }}
+<div id="reply-to-field" class="field {% if form['notificationReplyToEmail'] is defined and not form['notificationReplyToEmail']
+%}hidden{% endif %}">
+	{{ forms.textField({
+		label: "Reply To Email Address"|t,
+		instructions: "The 'Reply To' email address of your notification email"|t,
+		name: 'notificationReplyToEmail',
+		value: form.notificationReplyToEmail,
+		errors: (form is defined ? form.getErrors('notificationReplyToEmail') : null),
+		translatable: true,
+	}) }}
+</div>
 
 {{ forms.lightswitchField({
 	first: true,
@@ -103,6 +106,13 @@
 			e.preventDefault();
 			$('#recipients-bcc-field').toggleClass('hidden');
 			$('#recipients-bcc-field input').val('');
+		});
+
+		$('#reply-to-link').on('click', function(e) {
+			e.preventDefault();
+			$('#reply-to-field').toggleClass('hidden');
+			var value = $('input[name=notificationSenderEmail]').val();
+			$('#reply-to-field input').val(value);
 		});
 	})();
 
