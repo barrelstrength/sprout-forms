@@ -63,7 +63,7 @@
 
 {{ forms.textField({
 	label: "Sender Email Address <span class='info'>Consider the deliverability implications before you dynamically change your <strong>Sender Email Address</strong>.</span>"|t,
-	instructions: "The 'From' email address of your notification email. Add: <a href='#' id='reply-to-link'>Reply to</a>"|t,
+	instructions: "The 'From' email address of your notification email. Add: <a href='#' id='reply-to-link'>Reply To</a>"|t,
 	name: 'notificationSenderEmail',
 	value: form.notificationSenderEmail,
 	errors: (form is defined ? form.getErrors('notificationSenderEmail') : null),
