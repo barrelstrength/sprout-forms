@@ -70,7 +70,7 @@
 	translatable: true,
 }) }}
 
-<div id="reply-to-field" class="field {% if form['notificationReplyToEmail'] is defined and not form['notificationReplyToEmail']
+<div id="reply-to-field" class="field {% if form['notificationSenderEmail'] == form['notificationReplyToEmail'] or form['notificationSenderEmail'] is empty
 %}hidden{% endif %}">
 	{{ forms.textField({
 		label: "Reply To Email Address"|t,
@@ -111,8 +111,13 @@
 		$('#reply-to-link').on('click', function(e) {
 			e.preventDefault();
 			$('#reply-to-field').toggleClass('hidden');
-			var value = $('input[name=notificationSenderEmail]').val();
-			$('#reply-to-field input').val(value);
+			var sender;
+			var reply = $('input[name=notificationReplyToEmail]').val();
+			if(reply=='')
+			{
+				sender= $('input[name=notificationSenderEmail]').val();
+				$('#reply-to-field input').val(sender);
+			}
 		});
 	})();
 
