@@ -129,74 +129,36 @@ class SproutForms_FormsController extends BaseController
 	public function actionEditFormTemplate(array $variables = array())
 	{
 		// Immediately create a new Form
-		// if (craft()->request->getSegment(3) == "new")
-		// {
-		// 	$form = new SproutForms_FormModel();
+		if (craft()->request->getSegment(3) == "new")
+		{
+			$form = new SproutForms_FormModel();
 
-		// 	// Get the total number of forms we have
-		// 	$totalForms = craft()->db->createCommand()
-		// 		->select('count(id)')
-		// 		->from('sproutforms_forms')
-		// 		->queryScalar();
+			$form->name   = sproutForms()->forms->getFieldAsNew('name', 'Form');
+			$form->handle = sproutForms()->forms->getFieldAsNew('handle', 'form');
 
-		// 	if ($totalForms == 0)
-		// 	{
-		// 		$form->name = "Form 1";
-		// 		$form->handle = "form1";
-		// 	}
-		// 	else
-		// 	{
-		// 		$newFormNumber = $totalForms+1;
-		// 		$form->name = "Form ".$newFormNumber;
-		// 		$form->handle = "form".$newFormNumber;
-		// 	}
-
-		// 	if (sproutForms()->forms->saveForm($form))
-		// 	{
-		// 		$url = UrlHelper::getCpUrl('sproutforms/forms/edit/'.$form->id.'#settings');
-		// 		$this->redirect($url);
-		// 	}
-		// 	else
-		// 	{
-		// 		throw new Exception(Craft::t('Error creating Form'));
-		// 	}
-		// }
-
-		// Check for a Form, if we have it we have submission errors
-		// and should just return to the template
-		if (!isset($variables['form']))
+			if (sproutForms()->forms->saveForm($form))
+			{
+				$url = UrlHelper::getCpUrl('sproutforms/forms/edit/'.$form->id);
+				$this->redirect($url);
+			}
+			else
+			{
+				throw new Exception(Craft::t('Error creating Form'));
+			}
+		}
+		else if (!isset($variables['form']) && isset($variables['formId']))
 		{
 			$variables['brandNewForm'] = false;
 
 			$variables['groups'] = sproutForms()->groups->getAllFormGroups();
 			$variables['groupId'] = "";
 
-			if (isset($variables['formId']))
-			{
+			// Get the Form
+			$form = sproutForms()->forms->getFormById($variables['formId']);
 
-				// Get the Form
-				$form = sproutForms()->forms->getFormById($variables['formId']);
-
-				$variables['form'] = $form;
-				$variables['title'] = $form->name;
-				$variables['groupId'] = $form->groupId;
-
-				if (!isset($variables['form']))
-				{
-					throw new HttpException(404);
-				}
-
-			}
-			else
-			{
-				if (!isset($variables['form']))
-				{
-					$variables['form'] = new SproutForms_FormModel();
-					$variables['brandNewForm'] = true;
-				}
-
-				$variables['title'] = Craft::t('Create a new form');
-			}
+			$variables['form'] = $form;
+			$variables['title'] = $form->name;
+			$variables['groupId'] = $form->groupId;
 		}
 
 		// Set the "Continue Editing" URL

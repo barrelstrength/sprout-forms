@@ -167,9 +167,7 @@
 {% includeJsResource "js/fields.js" %}
 
 {% set js %}
-	{% if not form.handle %}
 	new Craft.HandleGenerator('#name', '#handle');
-	{% endif %}
 
 	new Craft.AdminTable({
 		tableSelector: '#formFields',
