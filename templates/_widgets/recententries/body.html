@@ -1,0 +1,24 @@
+{% if entries|length %}
+	<table class="data fullwidth collapsible">
+		<thead>
+			{% if settings.form == 0 -%}<th scope="col">{{ 'Form'|t }}</th>{% endif %}
+			<th scope="col">{{ 'Entries'|t }}</th>
+		</thead>
+		<tbody>
+			{% for entry in entries %}
+				<tr>
+					{% if settings.form == 0 -%}<td data-title="{{ 'Form'|t }}">{{ entry.formName }}</td>{% endif %}
+					<td data-title="{{ 'Entry'|t }}">
+						{% if currentUser.can('accessPlugin-SproutForms') -%}
+							<a href="{{ entry.getCpEditUrl() }}" title="{{ 'Edit entry'|t }}">{{ entry.title }}</a>
+						{% else -%}
+							{{ entry.title }}
+						{% endif %}
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% else %}
+	<p>{{ 'No recent entries available.'|t }}</p>
+{% endif %}
