@@ -10,13 +10,38 @@
 
 {{ forms.textField({
 	label: 'Email Recipients <span class="info">All fields can use dynamic values from the submitted form fields. Reference your form fields by wrapping the field name in curly braces.  If your field is <strong><code>name="fields[email]"</code></strong> you would use: <strong><code>{email}</code></strong>.</span>'|t,
-	instructions: "Enter comma seperated email addresses to notify on form submission. Leave blank to disable notifications."|t,
+	instructions: "A comma-separated list of email addresses to notify when your form is submitted. Add: <a href='#' id='recipients-cc-link'>Cc</a> <a href='#' id='recipients-bcc-link'>Bcc</a>"|t,
 	name: 'notificationRecipients',
 	value: form.notificationRecipients,
 	errors: (form is defined ? form.getErrors('notificationRecipients') : null),
 	translatable: true,
 	first: true
 }) }}
+
+
+<div id="recipients-cc-field" class="field {% if form['notificationCc'] is defined and not form['notificationCc']
+%}hidden{% endif %}">
+	{{ forms.textField({
+		label: "CC Recipients"|t,
+		instructions: "A comma-separated list of email addresses to notify when your form is submitted."|t,
+		name: 'notificationCc',
+		value: form.notificationCc,
+		errors: (form is defined ? form.getErrors('notificationCc') : null),
+		translatable: true,
+	}) }}
+</div>
+
+<div id="recipients-bcc-field" class="field {% if form['notificationBcc'] is defined and not form['notificationBcc']
+%}hidden{% endif %}">
+	{{ forms.textField({
+		label: "BCC Recipients"|t,
+		instructions: "A comma-separated list of email addresses to notify when your form is submitted."|t,
+		name: 'notificationBcc',
+		value: form.notificationBcc,
+		errors: (form is defined ? form.getErrors('notificationBcc') : null),
+		translatable: true,
+	}) }}
+</div>
 
 {{ forms.textField({
 	label: "Subject"|t,
@@ -38,21 +63,24 @@
 
 {{ forms.textField({
 	label: "Sender Email Address <span class='info'>Consider the deliverability implications before you dynamically change your <strong>Sender Email Address</strong>.</span>"|t,
-	instructions: "The 'From' email address of your notification email"|t,
+	instructions: "The 'From' email address of your notification email. Add: <a href='#' id='reply-to-link'>Reply To</a>"|t,
 	name: 'notificationSenderEmail',
 	value: form.notificationSenderEmail,
 	errors: (form is defined ? form.getErrors('notificationSenderEmail') : null),
 	translatable: true,
 }) }}
 
-{{ forms.textField({
-	label: "Reply To Email Address"|t,
-	instructions: "The 'Reply To' email address of your notification email"|t,
-	name: 'notificationReplyToEmail',
-	value: form.notificationReplyToEmail,
-	errors: (form is defined ? form.getErrors('notificationReplyToEmail') : null),
-	translatable: true,
-}) }}
+<div id="reply-to-field" class="field {% if form['notificationSenderEmail'] == form['notificationReplyToEmail'] or form['notificationSenderEmail'] is empty
+%}hidden{% endif %}">
+	{{ forms.textField({
+		label: "Reply To Email Address"|t,
+		instructions: "The 'Reply To' email address of your notification email"|t,
+		name: 'notificationReplyToEmail',
+		value: form.notificationReplyToEmail,
+		errors: (form is defined ? form.getErrors('notificationReplyToEmail') : null),
+		translatable: true,
+	}) }}
+</div>
 
 {{ forms.lightswitchField({
 	first: true,
@@ -64,3 +92,35 @@
 	onLabel: "Enable"|t,
 	offLabel: "Disable"|t
 }) }}
+
+{% set js %}
+
+	(function() {
+		$('#recipients-cc-link').on('click', function(e) {
+			e.preventDefault();
+			$('#recipients-cc-field').toggleClass('hidden');
+			$('#recipients-cc-field input').val('');
+		});
+
+		$('#recipients-bcc-link').on('click', function(e) {
+			e.preventDefault();
+			$('#recipients-bcc-field').toggleClass('hidden');
+			$('#recipients-bcc-field input').val('');
+		});
+
+		$('#reply-to-link').on('click', function(e) {
+			e.preventDefault();
+			$('#reply-to-field').toggleClass('hidden');
+			var sender;
+			var reply = $('input[name=notificationReplyToEmail]').val();
+			if(reply=='')
+			{
+				sender= $('input[name=notificationSenderEmail]').val();
+				$('#reply-to-field input').val(sender);
+			}
+		});
+	})();
+
+{% endset %}
+
+{% includeJs js %}

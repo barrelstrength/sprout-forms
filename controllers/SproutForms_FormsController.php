@@ -38,6 +38,9 @@ class SproutForms_FormsController extends BaseController
 		$form->notificationSenderName   = craft()->request->getPost('notificationSenderName');
 		$form->notificationSenderEmail  = craft()->request->getPost('notificationSenderEmail');
 		$form->notificationReplyToEmail = craft()->request->getPost('notificationReplyToEmail');
+		$form->notificationReplyToEmail = $form->notificationReplyToEmail == '' ? $form->notificationSenderEmail : $form->notificationReplyToEmail ;
+		$form->notificationCc           = craft()->request->getPost('notificationCc');
+		$form->notificationBcc          = craft()->request->getPost('notificationBcc');
 		$form->enableTemplateOverrides  = craft()->request->getPost('enableTemplateOverrides');
 		$form->templateOverridesFolder  = $form->enableTemplateOverrides
 																			? craft()->request->getPost('templateOverridesFolder')
@@ -98,7 +101,9 @@ class SproutForms_FormsController extends BaseController
 				'notificationSubject',
 				'notificationSenderName',
 				'notificationSenderEmail',
-				'notificationReplyToEmail'
+				'notificationReplyToEmail',
+				'notificationCc',
+				'notificationBcc'
 			);
 
 			$notificationErrors = false;

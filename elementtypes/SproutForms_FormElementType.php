@@ -251,6 +251,8 @@ class SproutForms_FormElementType extends BaseElementType
 									 forms.notificationSenderName,
 									 forms.notificationSenderEmail,
 									 forms.notificationReplyToEmail,
+									 forms.notificationCc,
+									 forms.notificationBcc,
 									 forms.enableTemplateOverrides,
 									 forms.templateOverridesFolder,
 									 forms.enableFileAttachments
