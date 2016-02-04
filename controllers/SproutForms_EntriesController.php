@@ -10,7 +10,7 @@ class SproutForms_EntriesController extends BaseController
 	 */
 	protected $allowAnonymous = array(
 		'actionSaveEntry',
-	    'actionForwardEntry',
+			'actionForwardEntry',
 	);
 
 	/**
@@ -436,38 +436,42 @@ class SproutForms_EntriesController extends BaseController
 					SproutFormsPlugin::log($e->getMessage(), LogLevel::Error);
 				}
 			}
-
-			foreach ($recipients as $key => $emailAddress)
+			try
 			{
-				try
+				// Set the first recipient for toEmail
+				$toEmail = $recipients[0];
+				// Remove toEmail and leave the others emails for cc.
+				if(($key = array_search($toEmail, $recipients)) !== false)
 				{
-					$email->cc  = null;
-					$email->bcc = null;
-
-					if($key == 0 && ($form->notificationCc != null || $form->notificationBcc != null))
-					{
-						// Set CC and BCC
-						$email->cc   = $this->getMixedRecipients($form->notificationCc);
-						$email->bcc  = $this->getMixedRecipients($form->notificationBcc);
-						SproutFormsPlugin::log("cc: ".$form->notificationCc , LogLevel::Info);
-					}
-
-					$email->toEmail = craft()->templates->renderObjectTemplate($emailAddress, $post);
-
-					if (filter_var($email->toEmail, FILTER_VALIDATE_EMAIL))
-					{
-						$options =
-							array(
-								'sproutFormsEntry'      => $entry,
-								'enableFileAttachments' => $form->enableFileAttachments,
-							);
-						craft()->email->sendEmail($email, $options);
-					}
+					unset($recipients[$key]);
 				}
-				catch (\Exception $e)
+
+				$email->toEmail = craft()->templates->renderObjectTemplate($toEmail, $post);
+				$email->cc  = null;
+				$email->bcc = null;
+
+				if($form->notificationCc != null || $form->notificationBcc != null)
 				{
-					SproutFormsPlugin::log($e->getMessage(), LogLevel::Error);
+					// Set CC and BCC
+					$email->cc   = $this->getMixedRecipients($form->notificationCc);
+					$email->bcc  = $this->getMixedRecipients($form->notificationBcc);
 				}
+				// Add recipients to $email->cc.
+				$email->cc = $this->mergeCcWithRecipients($email->cc, $recipients);
+
+				if (filter_var($email->toEmail, FILTER_VALIDATE_EMAIL))
+				{
+					$options =
+						array(
+							'sproutFormsEntry'      => $entry,
+							'enableFileAttachments' => $form->enableFileAttachments,
+						);
+					craft()->email->sendEmail($email, $options);
+				}
+			}
+			catch (\Exception $e)
+			{
+				SproutFormsPlugin::log($e->getMessage(), LogLevel::Error);
 			}
 		}
 	}
@@ -545,15 +549,15 @@ class SproutForms_EntriesController extends BaseController
 	}
 
 	/**
-	 * @param $recipents
+	 * @param $recipients
 	 * @return array
 	 */
-	private function getMixedRecipients($recipents)
+	private function getMixedRecipients($recipients)
 	{
 		$mixed     = array();
-		$recipents = explode(",",$recipents);
+		$recipients = explode(",",$recipients);
 
-		foreach ($recipents as $key => $value)
+		foreach ($recipients as $key => $value)
 		{
 			if((filter_var($value, FILTER_VALIDATE_EMAIL)))
 			{
@@ -562,5 +566,28 @@ class SproutForms_EntriesController extends BaseController
 		}
 
 		return $mixed;
+	}
+
+	/**
+	 * @param $cc
+	 * @param $recipients
+	 * @return array
+	 */
+	private function mergeCcWithRecipients($cc, $recipients)
+	{
+		if (is_null($cc))
+		{
+			$cc = array();
+		}
+
+		foreach ($recipients as $ccEmail)
+		{
+			if((filter_var($ccEmail, FILTER_VALIDATE_EMAIL)))
+			{
+				array_push($cc, array('name'=>$ccEmail,'email'=>$ccEmail));
+			}
+		}
+
+		return $cc;
 	}
 }
