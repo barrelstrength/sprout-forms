@@ -51,8 +51,6 @@ class SproutForms_FormModel extends BaseElementModel
 			'notificationSenderName'   => AttributeType::String,
 			'notificationSenderEmail'  => AttributeType::String,
 			'notificationReplyToEmail' => AttributeType::String,
-			'notificationCc'           => AttributeType::String,
-			'notificationBcc'          => AttributeType::String,
 			'ownerId'                  => AttributeType::Number,
 			'oldHandle'                => AttributeType::String,
 			'enableTemplateOverrides'  => array(AttributeType::Bool, 'default' => $enableTemplateOverrides ),

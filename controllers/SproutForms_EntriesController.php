@@ -10,7 +10,7 @@ class SproutForms_EntriesController extends BaseController
 	 */
 	protected $allowAnonymous = array(
 		'actionSaveEntry',
-			'actionForwardEntry',
+	    'actionForwardEntry',
 	);
 
 	/**
@@ -436,42 +436,27 @@ class SproutForms_EntriesController extends BaseController
 					SproutFormsPlugin::log($e->getMessage(), LogLevel::Error);
 				}
 			}
-			try
+
+			foreach ($recipients as $emailAddress)
 			{
-				// Set the first recipient for toEmail
-				$toEmail = $recipients[0];
-				// Remove toEmail and leave the others emails for cc.
-				if(($key = array_search($toEmail, $recipients)) !== false)
+				try
 				{
-					unset($recipients[$key]);
+					$email->toEmail = craft()->templates->renderObjectTemplate($emailAddress, $post);
+
+					if (filter_var($email->toEmail, FILTER_VALIDATE_EMAIL))
+					{
+						$options =
+							array(
+								'sproutFormsEntry'      => $entry,
+								'enableFileAttachments' => $form->enableFileAttachments,
+							);
+						craft()->email->sendEmail($email, $options);
+					}
 				}
-
-				$email->toEmail = craft()->templates->renderObjectTemplate($toEmail, $post);
-				$email->cc  = null;
-				$email->bcc = null;
-
-				if($form->notificationCc != null || $form->notificationBcc != null)
+				catch (\Exception $e)
 				{
-					// Set CC and BCC
-					$email->cc   = $this->getMixedRecipients($form->notificationCc);
-					$email->bcc  = $this->getMixedRecipients($form->notificationBcc);
+					SproutFormsPlugin::log($e->getMessage(), LogLevel::Error);
 				}
-				// Add recipients to $email->cc.
-				$email->cc = $this->mergeCcWithRecipients($email->cc, $recipients);
-
-				if (filter_var($email->toEmail, FILTER_VALIDATE_EMAIL))
-				{
-					$options =
-						array(
-							'sproutFormsEntry'      => $entry,
-							'enableFileAttachments' => $form->enableFileAttachments,
-						);
-					craft()->email->sendEmail($email, $options);
-				}
-			}
-			catch (\Exception $e)
-			{
-				SproutFormsPlugin::log($e->getMessage(), LogLevel::Error);
 			}
 		}
 	}
@@ -543,51 +528,8 @@ class SproutForms_EntriesController extends BaseController
 	 * @param $subject
 	 * @return string
 	 */
-	private function encodeSubjectLine($subject)
+	public function encodeSubjectLine($subject)
 	{
 		return '=?UTF-8?B?'.base64_encode($subject).'?=';
-	}
-
-	/**
-	 * @param $recipients
-	 * @return array
-	 */
-	private function getMixedRecipients($recipients)
-	{
-		$mixed     = array();
-		$recipients = explode(",",$recipients);
-
-		foreach ($recipients as $key => $value)
-		{
-			if((filter_var($value, FILTER_VALIDATE_EMAIL)))
-			{
-				array_push($mixed, array('name'=>$value,'email'=>$value));
-			}
-		}
-
-		return $mixed;
-	}
-
-	/**
-	 * @param $cc
-	 * @param $recipients
-	 * @return array
-	 */
-	private function mergeCcWithRecipients($cc, $recipients)
-	{
-		if (is_null($cc))
-		{
-			$cc = array();
-		}
-
-		foreach ($recipients as $ccEmail)
-		{
-			if((filter_var($ccEmail, FILTER_VALIDATE_EMAIL)))
-			{
-				array_push($cc, array('name'=>$ccEmail,'email'=>$ccEmail));
-			}
-		}
-
-		return $cc;
 	}
 }
