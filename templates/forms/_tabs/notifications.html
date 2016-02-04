@@ -10,7 +10,7 @@
 
 {{ forms.textField({
 	label: 'Email Recipients <span class="info">All fields can use dynamic values from the submitted form fields. Reference your form fields by wrapping the field name in curly braces.  If your field is <strong><code>name="fields[email]"</code></strong> you would use: <strong><code>{email}</code></strong>.</span>'|t,
-	instructions: "Enter comma seperated email addresses to notify on form submission. Leave blank to disable notifications."|t,
+	instructions: "A comma-delimited list of email addresses to notify when your form is submitted."|t,
 	name: 'notificationRecipients',
 	value: form.notificationRecipients,
 	errors: (form is defined ? form.getErrors('notificationRecipients') : null),
