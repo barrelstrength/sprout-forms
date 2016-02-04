@@ -7,7 +7,7 @@ class SproutForms_RecentEntriesWidget extends BaseWidget
 
 	public function getName()
 	{
-		$name = Craft::t('Sprout Forms');
+		$name = Craft::t('Recent Form Entries');
 
 		// Concat form name if the user select a specific form
 		if($this->getSettings()->form != 0 && $this->getSettings()->form != null)
@@ -16,11 +16,18 @@ class SproutForms_RecentEntriesWidget extends BaseWidget
 
 			if($form)
 			{
-				$name .= ': ' . $form->name;
+				$name = Craft::t('Recent {formName} Entries', array(
+					'formName' => $form->name
+				));
 			}
 		}
 
 		return $name;
+	}
+
+	public function getIconPath()
+	{
+		return craft()->path->getPluginsPath().'sproutforms/resources/icon.svg';
 	}
 
 	public function getBodyHtml()
