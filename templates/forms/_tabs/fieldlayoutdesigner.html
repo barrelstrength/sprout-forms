@@ -63,25 +63,7 @@
 			{% endif %}
 		{% endif %}
 	</div>
-	
-	{% if formId is defined and formId != "" %}
-		{% if customizableTabs %}
-			
-			<div class="buttons">
-				<div id="newfieldbtn" class="btn add icon">
-					<a href="{{ url('sproutforms/forms/' ~ formId ~ '/fields/new') }}" style="color:inherit;text-decoration:none;">
-						{{ "New Field"|t }}
-					</a>
-				</div>
-				<div id="newtabbtn" class="btn add icon">{{ "New Tab"|t }}</div>
-			</div>
 
-		{% endif %}
-	{% else %}
-   
-   <p>Give your form a name and save it. Then edit your fields here.</p> 
-
-	{% endif %}
 
 	<div id="deletedFieldsContainer" class="hidden">
 		<input type="hidden" name="deletedFields[]" value="" />
@@ -92,7 +74,7 @@
 {% includeJsResource "sproutforms/js/formfieldlayoutdesigner.js" %}
 
 {% set js %}
-	
+
 	var initFLD = function() {
 		new Sprout.FormFieldLayoutDesigner('#fieldlayoutform', {
 			customizableTabs: true

@@ -4,6 +4,20 @@ namespace Craft;
 class SproutForms_FieldsController extends BaseController
 {
 	/**
+	 * Gets the HTML, CSS and Javascript of a field setting page.
+	 *
+	 * @throws HttpException
+	 */
+	public function actionGetFieldSettings()
+	{
+		$this->requireAdmin();
+		$this->requireAjaxRequest();
+		$formId = craft()->request->getRequiredParam('formId');
+
+		$this->returnJson($this->_getTemplate(null, $formId));
+	}
+
+	/**
 	 * Save a field.
 	 */
 	public function actionSaveField()
@@ -197,6 +211,10 @@ class SproutForms_FieldsController extends BaseController
 	 */
 	public function actionEditFieldTemplate(array $variables = array())
 	{
+		$this->requireAdmin();
+		$this->requirePostRequest();
+		$this->requireAjaxRequest();
+
 		$formId = craft()->request->getSegment(3);
 		$form = sproutForms()->forms->getFormById($formId);
 
@@ -275,5 +293,47 @@ class SproutForms_FieldsController extends BaseController
 		$this->returnJson(array(
 			'success' => true
 		));
+	}
+
+	/**
+	 * Loads the field settings template and returns all HTML, CSS and Javascript.
+	 *
+	 * @param FieldModel|null $field
+	 * @param int form id
+	 * @return array
+	 */
+	private function _getTemplate(FieldModel $field = null, $formId)
+	{
+		$data = array();
+		$form = sproutForms()->forms->getFormById($formId);
+
+		if($field)
+		{
+			$data['field'] = $field;
+
+			if($field->id != null)
+			{
+				$data['fieldId'] = $field->id;
+			}
+		}
+		else
+		{
+			$data['field'] = new FieldModel();
+
+			$data['tabId'] = null;
+			$data['title'] = Craft::t('Create a new field');
+		}
+		$data['sections'] = $form->getFieldLayout()->getTabs();
+		$data['formId']   = $formId;
+
+		$html = craft()->templates->render('sproutforms/forms/_fieldsettings', $data);
+		$js   = craft()->templates->getFootHtml();
+		$css  = craft()->templates->getHeadHtml();
+
+		return array(
+			'html' => $html,
+			'js'   => $js,
+			'css'  => $css
+		);
 	}
 }
