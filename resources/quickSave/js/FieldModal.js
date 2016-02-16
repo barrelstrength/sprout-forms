@@ -266,7 +266,6 @@
 
 			this.addListener(this.$cancelBtn, 'activate', 'closeModal');
 			this.addListener(this.$saveBtn,   'activate', 'saveField');
-			this.addListener(this.$deleteBtn, 'activate', 'deleteField');
 
 			this.on('show',    this.initSettings);
 			this.on('fadeOut', this.destroySettings);
@@ -284,7 +283,6 @@
 
 			this.removeListener(this.$cancelBtn, 'activate');
 			this.removeListener(this.$saveBtn,   'activate');
-			this.removeListener(this.$deleteBtn, 'activate');
 
 			this.off('show',    this.initSettings);
 			this.off('fadeOut', this.destroySettings);
@@ -363,52 +361,6 @@
 		},
 
 		/**
-		 *
-		 * @param id
-		 */
-		editField: function(id)
-		{
-			this.destroyListeners();
-			this.show();
-			this.initListeners();
-
-			this.$loadSpinner.removeClass('hidden');
-			var data = {fieldId: id};
-
-			Craft.postActionRequest('quickField/editField', data, $.proxy(function(response, textStatus)
-			{
-				this.$loadSpinner.addClass('hidden');
-
-				var statusSuccess = (textStatus === 'success');
-
-				if(statusSuccess && response.success)
-				{
-					var callback = $.proxy(function(e)
-					{
-						this.destroySettings();
-						this.initSettings(e);
-						this.off('parseTemplate', callback);
-					}, this);
-
-					this.on('parseTemplate', callback);
-					this.parseTemplate(response.template);
-				}
-				else if(statusSuccess && response.error)
-				{
-					Craft.cp.displayError(response.error);
-
-					this.hide();
-				}
-				else
-				{
-					Craft.cp.displayError(Craft.t('An unknown error occurred.'));
-
-					this.hide();
-				}
-			}, this));
-		},
-
-		/**
 		 * Event handler for the save button.
 		 * Saves the new field form to the database.
 		 *
@@ -431,7 +383,7 @@
 			var inputId = this.$container.find('input[name="fieldId"]');
 			var id = inputId.length ? inputId.val() : false;
 
-			Craft.postActionRequest('quickField/saveField', data, $.proxy(function(response, textStatus)
+			Craft.postActionRequest('sproutForms/fields/saveField', data, $.proxy(function(response, textStatus)
 			{
 				this.$saveSpinner.addClass('hidden');
 
@@ -491,82 +443,6 @@
 					Craft.cp.displayError(Craft.t('An unknown error occurred.'));
 				}
 			}, this));
-		},
-
-		/**
-		 * Event handler for the delete button.
-		 * Deletes the field from the database.
-		 *
-		 * @param e
-		 */
-		deleteField: function(e)
-		{
-			if(e) e.preventDefault();
-
-			if(this.$deleteBtn.hasClass('disabled') || !this.$deleteSpinner.hasClass('hidden'))
-			{
-				return;
-			}
-
-			if(this.promptForDelete())
-			{
-				this.destroyListeners();
-
-				this.$deleteSpinner.removeClass('hidden');
-
-				var inputId = this.$container.find('input[name="fieldId"]');
-				var id = inputId.length ? inputId.val() : false;
-
-				if(id === false)
-				{
-					Craft.cp.displayError(Craft.t('An unknown error occurred.'));
-
-					return;
-				}
-
-				var data = {fieldId: id};
-
-				Craft.postActionRequest('quickField/deleteField', data, $.proxy(function(response, textStatus)
-				{
-					this.$deleteSpinner.addClass('hidden');
-
-					var statusSuccess = (textStatus === 'success');
-
-					if(statusSuccess && response.success)
-					{
-						this.initListeners();
-
-						this.trigger('deleteField', {
-							target: this,
-							field: response.field
-						});
-
-						Craft.cp.displayNotice(Craft.t('\'{name}\' field deleted.', {name: response.field.name}));
-
-						this.hide();
-					}
-					else if(statusSuccess && response.error)
-					{
-						this.initListeners();
-
-						Craft.cp.displayError(response.error);
-					}
-					else
-					{
-						this.initListeners();
-
-						Craft.cp.displayError(Craft.t('An unknown error occurred.'));
-					}
-				}, this));
-			}
-		},
-
-		/**
-		 * Delete confirmation dialog box.
-		 */
-		promptForDelete: function()
-		{
-			return confirm(Craft.t('Are you sure you want to delete this field?'));
 		},
 
 		/**

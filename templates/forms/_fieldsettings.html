@@ -9,9 +9,6 @@
 	{% endif %}
 {% endif %}
 
-{% set form = craft.sproutForms.getFormById(formId) %}
-
-
 {% set fieldTypes = craft.fields.getAllFieldTypes() %}
 {% set fieldTypeGroups = craft.sproutForms.prepareFieldTypeSelection() %}
 
@@ -30,6 +27,7 @@
 {% if fieldId is defined %}
 	<input type="hidden" name="fieldId" value="{{ fieldId }}">
 {% endif %}
+<input type="hidden" name="formId" value="{{ formId }}">
 
 {% if sections is defined and sections|length %}
 

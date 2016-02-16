@@ -13,8 +13,9 @@ class SproutForms_FieldsController extends BaseController
 		$this->requireAdmin();
 		$this->requireAjaxRequest();
 		$formId = craft()->request->getRequiredParam('formId');
+		$form = sproutForms()->forms->getFormById($formId);
 
-		$this->returnJson($this->_getTemplate(null, $formId));
+		$this->returnJson($this->_getTemplate(null, $form));
 	}
 
 	/**
@@ -22,8 +23,9 @@ class SproutForms_FieldsController extends BaseController
 	 */
 	public function actionSaveField()
 	{
+		$this->requireAdmin();
 		$this->requirePostRequest();
-
+		$isAjax = craft()->request->isAjaxRequest();
 		// Make sure our field has a section
 		// @TODO - handle this much more gracefully
 		$tabId = craft()->request->getPost('tabId');
@@ -61,26 +63,29 @@ class SproutForms_FieldsController extends BaseController
 			$variables['tabId'] = $tabId;
 			$variables['field'] = $field;
 
-			// Send the field back to the template
-			craft()->urlManager->setRouteVariables($variables);
+			if($isAjax)
+			{
+				$this->_returnJson(false, $field, $form);
+			}
+			else
+			{
+				// Send the field back to the template
+				craft()->urlManager->setRouteVariables($variables);
 
-			// Route our request back to the field template
-			$route = craft()->urlManager->parseUrl(craft()->request);
-			craft()->runController($route);
-			craft()->end();
+				// Route our request back to the field template
+				$route = craft()->urlManager->parseUrl(craft()->request);
+				craft()->runController($route);
+				craft()->end();
+			}
 		}
 
 		// Save a new field
 		if (!$field->id)
 		{
-			SproutFormsPlugin::log('New Field');
-
 			$isNewField = true;
 		}
 		else
 		{
-			SproutFormsPlugin::log('Existing Field');
-
 			$isNewField = false;
 			$oldHandle  = craft()->fields->getFieldById($field->id)->handle;
 		}
@@ -110,6 +115,7 @@ class SproutForms_FieldsController extends BaseController
 		$tabFields = array();
 		$postedFieldLayout = array();
 		$requiredFields = array();
+		$tabName = null;
 
 		// If no tabs exist, let's create a
 		// default one for all of our fields
@@ -148,6 +154,7 @@ class SproutForms_FieldsController extends BaseController
 			$postedFieldLayout[$fieldLayoutTab->name][] = $field->id;
 
 			$fieldLayoutTab->setFields($tabFields);
+			$tabName = $fieldLayoutTab->name;
 		}
 		else
 		{
@@ -169,6 +176,7 @@ class SproutForms_FieldsController extends BaseController
 				if ($isNewField && ($tabId == $oldTab->id))
 				{
 					$postedFieldLayout[$oldTab->name][] = $field->id;
+					$tabName = $oldTab->name;
 				}
 			}
 		}
@@ -185,20 +193,32 @@ class SproutForms_FieldsController extends BaseController
 		{
 			SproutFormsPlugin::log('Field Saved');
 
-			craft()->userSession->setNotice(Craft::t('Field saved.'));
-
-			$this->redirectToPostedUrl($field);
+			if($isAjax)
+			{
+				$this->_returnJson(true, $field, $form, $tabName);
+			}
+			else
+			{
+				craft()->userSession->setNotice(Craft::t('Field saved.'));
+				$this->redirectToPostedUrl($field);
+			}
 		}
 		else
 		{
-			SproutFormsPlugin::log("Couldn't save field.");
 			$variables['tabId'] = $tabId;
 			$variables['field'] = $field;
-
+			SproutFormsPlugin::log("Couldn't save field.");
 			craft()->userSession->setError(Craft::t('Couldn’t save field.'));
 
-			// Send the field back to the template
-			craft()->urlManager->setRouteVariables($variables);
+			if($isAjax)
+			{
+				$this->_returnJson(false, $field, $form);
+			}
+			else
+			{
+				// Send the field back to the template
+				craft()->urlManager->setRouteVariables($variables);
+			}
 		}
 	}
 
@@ -212,8 +232,6 @@ class SproutForms_FieldsController extends BaseController
 	public function actionEditFieldTemplate(array $variables = array())
 	{
 		$this->requireAdmin();
-		$this->requirePostRequest();
-		$this->requireAjaxRequest();
 
 		$formId = craft()->request->getSegment(3);
 		$form = sproutForms()->forms->getFormById($formId);
@@ -299,13 +317,12 @@ class SproutForms_FieldsController extends BaseController
 	 * Loads the field settings template and returns all HTML, CSS and Javascript.
 	 *
 	 * @param FieldModel|null $field
-	 * @param int form id
+	 * @param SproutForms_FormRecord $form
 	 * @return array
 	 */
-	private function _getTemplate(FieldModel $field = null, $formId)
+	private function _getTemplate(FieldModel $field = null, $form)
 	{
 		$data = array();
-		$form = sproutForms()->forms->getFormById($formId);
 
 		if($field)
 		{
@@ -324,7 +341,7 @@ class SproutForms_FieldsController extends BaseController
 			$data['title'] = Craft::t('Create a new field');
 		}
 		$data['sections'] = $form->getFieldLayout()->getTabs();
-		$data['formId']   = $formId;
+		$data['formId']   = $form->id;
 
 		$html = craft()->templates->render('sproutforms/forms/_fieldsettings', $data);
 		$js   = craft()->templates->getFootHtml();
@@ -335,5 +352,40 @@ class SproutForms_FieldsController extends BaseController
 			'js'   => $js,
 			'css'  => $css
 		);
+	}
+
+	private function _returnJson($success, $field, $form, $tabName = null)
+	{
+		$group = null;
+
+		if(isset($tabName))
+		{
+			$tabs  = $form->getFieldLayout()->getTabs();
+
+			foreach ($tabs as $tab)
+			{
+				if($tab->name == $tabName)
+				{
+					$group = $tab;
+				}
+			}
+		}
+
+		$this->returnJson(array(
+			'success' => $success,
+			'errors'  => $field->getAllErrors(),
+			'field'   => array(
+				'id'           => $field->id,
+				'name'         => $field->name,
+				'handle'       => $field->handle,
+				'instructions' => $field->instructions,
+				'translatable' => $field->translatable,
+				'group'        => !$group ? array() : array(
+					'id'   => $group->id,
+					'name' => $group->name,
+				),
+			),
+			'template' => $success ? false : $this->_getTemplate($field, $form),
+		));
 	}
 }

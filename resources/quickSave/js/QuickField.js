@@ -33,22 +33,12 @@
 
 			this.$container   = $('<div class="newfieldbtn-container">').insertAfter($(".fld-tabs"));
 
-			this.$groupButton = $('<div class="btn add icon" tabindex="0">').text(Craft.t('New Tab')).appendTo(this.$container);
-			this.$fieldButton = $('<div class="btn add icon" tabindex="0">').text(Craft.t('New Field')).appendTo(this.$container);
-
-			this.initButtons();
+			this.$fieldButton = $('<div class="btn add icon" tabindex="0">').text(Craft.t('New Field')).appendTo($(".buttons"));
 
 			this.dialog = QuickField.GroupDialog.getInstance();
 			this.modal  = QuickField.FieldModal.getInstance();
 
-			this.addListener(this.$groupButton, 'activate', 'newGroup');
 			this.addListener(this.$fieldButton, 'activate', 'newField');
-
-			this.dialog.on('newGroup', $.proxy(function(e)
-			{
-				var group = e.group;
-				this.addGroup(group.id, group.name);
-			}, this));
 
 			this.modal.on('newField', $.proxy(function(e)
 			{
@@ -63,44 +53,6 @@
 				var group = field.group;
 				this.resetField(field.id, group.name, field.name);
 			}, this));
-
-			this.modal.on('deleteField', $.proxy(function(e)
-			{
-				var field = e.field;
-				this.removeField(field.id);
-			}, this));
-		},
-
-		/**
-		 * Adds edit buttons to existing fields.
-		 */
-		initButtons: function()
-		{
-			var that = this;
-
-			var $tabs = this.fld.$unusedFieldContainer.find('.fld-tab .tab.sel');
-			var $fields = this.fld.$unusedFieldContainer.find('.fld-field.unused');
-
-			/*
-			$tabs.each(function()
-			{
-				var $tab = $(this);
-				var $button = $('<a class="qf-settings icon" title="Edit"></a>');
-
-				// Add the extra space in there for consistent padding
-				$tab.append('&nbsp;').append($button);
-			});
-			*/
-
-			$fields.each(function()
-			{
-				var $field = $(this);
-				var $button = $('<a class="qf-edit icon" title="Edit"></a>');
-
-				that.addListener($button, 'activate', 'editField');
-
-				$field.prepend($button);
-			});
 		},
 
 		/**
@@ -110,21 +62,6 @@
 		newField: function()
 		{
 			this.modal.show();
-		},
-
-		/**
-		 * Event handler for the edit buttons on fields.
-		 * Opens a modal window that contains the field settings.
-		 *
-		 * @param e
-		 */
-		editField: function(e)
-		{
-			var $button = $(e.target);
-			var $field = $button.parent();
-			var id = $field.data('id');
-
-			this.modal.editField(id);
 		},
 
 		/**
@@ -146,11 +83,14 @@
 			{
 				var $groupContent = $group.children('.fld-tabcontent');
 				var $field = $([
-					'<div class="fld-field unused" data-id="', id, '">',
+					'<div class="fld-field" data-id="', id, '">',
 						'<span>', name, '</span>',
-						'<a class="qf-edit icon" title="Edit"></a>',
+						'<input class="id-input" type="hidden" name="fieldLayout[',groupName,'][]" value="',id,'">',
+						'<a class="settings icon" title="Edit"></a>',
 					'</div>'
 				].join('')).appendTo($groupContent);
+
+				fld.initField($field);
 
 				fld.$allFields = fields.add($field);
 
@@ -162,26 +102,6 @@
 			{
 				Craft.cp.displayError(Craft.t('Invalid field group:') + groupName);
 			}
-		},
-
-		/**
-		 * Removes a field from the field layout designer.
-		 *
-		 * @param id
-		 */
-		removeField: function(id)
-		{
-			var fld = this.fld;
-			var grid = fld.unusedFieldGrid;
-			var drag = fld.fieldDrag;
-			var $container = fld.$container;
-			var $fields = fld.$allFields;
-			var $field = $container.find('.fld-field[data-id="' + id + '"]');
-
-			$field.remove();
-			fld.$allFields = $fields.not($field);
-			drag.removeItems($field);
-			grid.refreshCols(true);
 		},
 
 		/**
@@ -221,42 +141,6 @@
 		},
 
 		/**
-		 * Adds a new unused (dashed border) group tab to the field layout designer.
-		 *
-		 * @param name
-		 * @param id
-		 */
-		addGroup: function(id, name)
-		{
-			var fld = this.fld;
-			var settings = fld.settings;
-			var grid = fld.unusedFieldGrid;
-			var drag = fld.tabDrag;
-
-			var $container = fld.$unusedFieldContainer;
-			var $tab = $([
-				'<div class="fld-tab unused">',
-					'<div class="tabs">',
-						'<div class="tab sel">',
-							'<span>', name, '</span>',
-							// '&nbsp;<a class="qf-settings icon" title="Edit"></a>',
-						'</div>',
-					'</div>',
-					'<div class="fld-tabcontent"></div>',
-				'</div>'
-			].join('')).appendTo($container);
-
-			grid.addItems($tab);
-
-			if(settings.customizableTabs)
-			{
-				drag.addItems($tab);
-			}
-
-			grid.refreshCols(true);
-		},
-
-		/**
 		 * Finds the group tab element from it's name.
 		 *
 		 * @param name
@@ -265,7 +149,7 @@
 		 */
 		_getGroupByName: function(name)
 		{
-			var $container = this.fld.$unusedFieldContainer;
+			var $container = this.fld.$tabContainer;
 			var $groups = $container.children('.fld-tab');
 			var $group = null;
 
@@ -274,7 +158,6 @@
 				var $this = $(this);
 				var $tab = $this.children('.tabs').children('.tab.sel');
 				var $span = $tab.children('span');
-
 				if($span.text() === name)
 				{
 					$group = $this;
