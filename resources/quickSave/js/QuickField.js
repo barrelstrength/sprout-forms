@@ -12,7 +12,6 @@
 		$settings:    null,
 
 		fld:          null,
-		dialog:       null,
 		modal:        null,
 
 		/**
@@ -35,7 +34,6 @@
 
 			this.$fieldButton = $('<div class="btn add icon" tabindex="0">').text(Craft.t('New Field')).appendTo($(".buttons"));
 
-			this.dialog = QuickField.GroupDialog.getInstance();
 			this.modal  = QuickField.FieldModal.getInstance();
 
 			this.addListener(this.$fieldButton, 'activate', 'newField');
@@ -100,7 +98,9 @@
 			}
 			else
 			{
-				Craft.cp.displayError(Craft.t('Invalid field group:') + groupName);
+				// New field without tab or new field with renamed unsaved tab let's just reload
+				//Craft.cp.displayError(Craft.t('Invalid field group:') + groupName);
+				location.reload();
 			}
 		},
 
@@ -130,14 +130,6 @@
 				$content.append($unusedField);
 				grid.refreshCols(true);
 			}
-		},
-
-		/**
-		 * Event listener for the new group button
-		 */
-		newGroup: function()
-		{
-			this.dialog.addNewGroup();
 		},
 
 		/**

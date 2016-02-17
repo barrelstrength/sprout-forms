@@ -109,10 +109,8 @@ class SproutForms_FieldsController extends BaseController
 
 		// Set the field layout
 		$oldFieldLayout =  $form->getFieldLayout();
-		$oldFields = $oldFieldLayout->getFields();
 		$oldTabs = $oldFieldLayout->getTabs();
 
-		$tabFields = array();
 		$postedFieldLayout = array();
 		$requiredFields = array();
 		$tabName = null;
@@ -121,40 +119,8 @@ class SproutForms_FieldsController extends BaseController
 		// default one for all of our fields
 		if (!$oldTabs)
 		{
-			// Create a tab
-			$fieldLayoutTab = new FieldLayoutTabModel();
-			$fieldLayoutTab->name      = Craft::t('Form');
-			$fieldLayoutTab->sortOrder = 1;
-
-			if ($oldFields)
-			{
-				$fieldSortOrder = 0;
-				// Add any existing fields to a default tab
-				foreach ($oldFields as $oldFieldLayoutField)
-				{
-					$fieldSortOrder++;
-
-					$newField = new FieldLayoutFieldModel();
-					$newField->fieldId   = $oldFieldLayoutField->fieldId;
-					$newField->required  = $oldFieldLayoutField->required;
-					$newField->sortOrder = $fieldSortOrder;
-
-					$tabFields[] = $newField;
-
-					$postedFieldLayout[$fieldLayoutTab->name][] = $oldFieldLayoutField->fieldId;
-
-					if ($oldFieldLayoutField->required)
-					{
-						$requiredFields[] = $oldFieldLayoutField->fieldId;
-					}
-				}
-			}
-
-			// Add our new field
-			$postedFieldLayout[$fieldLayoutTab->name][] = $field->id;
-
-			$fieldLayoutTab->setFields($tabFields);
-			$tabName = $fieldLayoutTab->name;
+			$form    = sproutForms()->fields->createDefaultTab($form, $field);
+			$tabName = sproutForms()->fields->getDefaultTabName();
 		}
 		else
 		{
@@ -179,13 +145,13 @@ class SproutForms_FieldsController extends BaseController
 					$tabName = $oldTab->name;
 				}
 			}
+			// Set the field layout
+			$fieldLayout = craft()->fields->assembleLayout($postedFieldLayout, $requiredFields);
+
+			$fieldLayout->type = 'SproutForms_Form';
+			$fieldLayout->id = $oldFieldLayout->id;
+			$form->setFieldLayout($fieldLayout);
 		}
-
-		// Set the field layout
-		$fieldLayout = craft()->fields->assembleLayout($postedFieldLayout, $requiredFields);
-
-		$fieldLayout->type = 'SproutForms_Form';
-		$form->setFieldLayout($fieldLayout);
 
 		// Hand the field off to be saved in the
 		// field layout of our Form Element

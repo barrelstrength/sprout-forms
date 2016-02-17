@@ -1,6 +1,6 @@
 /*!
  * Manage our groups
- * 
+ *
  * Based off the Craft fields.js file
  */
 
@@ -26,11 +26,11 @@ var GroupsAdmin = Garnish.Base.extend({
 		// Should we dispay the Groups Setting Selector or not?
 		this.toggleGroupSettingsSelector();
 		this.addListener(this.$groups, 'click', 'toggleGroupSettingsSelector');
-	
+
 		if (this.$groupSettingsBtn.length)
 		{
 			var menuBtn = this.$groupSettingsBtn.data('menubtn');
-			
+
 			menuBtn.settings.onOptionSelect = $.proxy(function(elem)
 			{
 				var action = $(elem).data('action');
@@ -117,7 +117,6 @@ var GroupsAdmin = Garnish.Base.extend({
 	deleteSelectedGroup: function()
 	{
 		this.$selectedGroup = this.$groups.find('a.sel:first');
-		
 		if (confirm(Craft.t(settings.deleteGroupConfirmMessage)))
 		{
 			var data = {
@@ -139,7 +138,7 @@ var GroupsAdmin = Garnish.Base.extend({
 	},
 
 	toggleGroupSettingsSelector: function()
-	{	
+	{
 		this.$selectedGroup = this.$groups.find('a.sel:first');
 
 		if (this.$selectedGroup.data('key') == '*')

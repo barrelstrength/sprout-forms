@@ -135,9 +135,18 @@ class SproutForms_FormsController extends BaseController
 
 			$form->name   = sproutForms()->forms->getFieldAsNew('name', 'Form');
 			$form->handle = sproutForms()->forms->getFieldAsNew('handle', 'form');
+			// Set default tab
+			$field = null;
+			$form  = sproutForms()->fields->addDefaultTab($form, $field);
 
 			if (sproutForms()->forms->saveForm($form))
 			{
+				// Lets delete the default field
+				if(isset($field) && $field->id)
+				{
+					craft()->fields->deleteFieldById($field->id);
+				}
+
 				$url = UrlHelper::getCpUrl('sproutforms/forms/edit/'.$form->id);
 				$this->redirect($url);
 			}
