@@ -114,6 +114,7 @@ class SproutForms_FieldsController extends BaseController
 		$postedFieldLayout = array();
 		$requiredFields = array();
 		$tabName = null;
+		$response = false;
 
 		// If no tabs exist, let's create a
 		// default one for all of our fields
@@ -124,43 +125,67 @@ class SproutForms_FieldsController extends BaseController
 		}
 		else
 		{
-			foreach ($oldTabs as $oldTab)
+			if($isAjax)
 			{
-				$oldTabFields = $oldTab->getFields();
+				$fieldLayoutFields = FieldLayoutFieldRecord::model()->findAll(array(
+					'condition' => 'tabId = :tabId AND layoutId = :layoutId',
+					'params' => array(':tabId' => $tabId, ':layoutId' => $form->fieldLayoutId)
+				));
+				$sortOrder = count($fieldLayoutFields) + 1;
 
-				foreach ($oldTabFields as $oldFieldLayoutField)
+				$fieldRecord = new FieldLayoutFieldRecord();
+				$fieldRecord->layoutId  = $form->fieldLayoutId;
+				$fieldRecord->tabId     = $tabId;
+				$fieldRecord->fieldId   = $field->id;
+				$fieldRecord->required  = 0;
+				$fieldRecord->sortOrder = $sortOrder;
+
+				$response = $fieldRecord->save(false);
+				$tabName  = FieldLayoutTabRecord::model()->findByPk($tabId)->name;
+			}
+			else
+			{
+				foreach ($oldTabs as $oldTab)
 				{
-					$postedFieldLayout[$oldTab->name][] = $oldFieldLayoutField->fieldId;
+					$oldTabFields = $oldTab->getFields();
 
-					if ($oldFieldLayoutField->required)
+					foreach ($oldTabFields as $oldFieldLayoutField)
 					{
-						$requiredFields[] = $oldFieldLayoutField->fieldId;
+						$postedFieldLayout[$oldTab->name][] = $oldFieldLayoutField->fieldId;
+
+						if ($oldFieldLayoutField->required)
+						{
+							$requiredFields[] = $oldFieldLayoutField->fieldId;
+						}
+					}
+
+					// Add our new field to the tab it belongs to
+					if ($isNewField && ($tabId == $oldTab->id))
+					{
+						$postedFieldLayout[$oldTab->name][] = $field->id;
 					}
 				}
+				// Set the field layout
+				$fieldLayout = craft()->fields->assembleLayout($postedFieldLayout, $requiredFields);
 
-				// Add our new field to the tab it belongs to
-				if ($isNewField && ($tabId == $oldTab->id))
-				{
-					$postedFieldLayout[$oldTab->name][] = $field->id;
-					$tabName = $oldTab->name;
-				}
+				$fieldLayout->type = 'SproutForms_Form';
+				$fieldLayout->id = $oldFieldLayout->id;
+				$form->setFieldLayout($fieldLayout);
+
+				// save the form
+				$response = sproutForms()->forms->saveForm($form);
 			}
-			// Set the field layout
-			$fieldLayout = craft()->fields->assembleLayout($postedFieldLayout, $requiredFields);
-
-			$fieldLayout->type = 'SproutForms_Form';
-			$fieldLayout->id = $oldFieldLayout->id;
-			$form->setFieldLayout($fieldLayout);
 		}
 
 		// Hand the field off to be saved in the
 		// field layout of our Form Element
-		if (sproutForms()->forms->saveForm($form))
+		if ($response)
 		{
 			SproutFormsPlugin::log('Field Saved');
 
 			if($isAjax)
 			{
+				// Lets keep the old tab id just for ajax
 				$this->_returnJson(true, $field, $form, $tabName);
 			}
 			else
@@ -289,23 +314,25 @@ class SproutForms_FieldsController extends BaseController
 	private function _getTemplate(FieldModel $field = null, $form)
 	{
 		$data = array();
+		$data['tabId'] = null;
+		$data['field'] = new FieldModel();
 
 		if($field)
 		{
 			$data['field'] = $field;
+			$tabId = craft()->request->getPost('tabId');
+
+			if(isset($tabId))
+			{
+				$data['tabId'] = craft()->request->getPost('tabId');
+			}
 
 			if($field->id != null)
 			{
 				$data['fieldId'] = $field->id;
 			}
 		}
-		else
-		{
-			$data['field'] = new FieldModel();
 
-			$data['tabId'] = null;
-			$data['title'] = Craft::t('Create a new field');
-		}
 		$data['sections'] = $form->getFieldLayout()->getTabs();
 		$data['formId']   = $form->id;
 
@@ -322,21 +349,6 @@ class SproutForms_FieldsController extends BaseController
 
 	private function _returnJson($success, $field, $form, $tabName = null)
 	{
-		$group = null;
-
-		if(isset($tabName))
-		{
-			$tabs  = $form->getFieldLayout()->getTabs();
-
-			foreach ($tabs as $tab)
-			{
-				if($tab->name == $tabName)
-				{
-					$group = $tab;
-				}
-			}
-		}
-
 		$this->returnJson(array(
 			'success' => $success,
 			'errors'  => $field->getAllErrors(),
@@ -346,9 +358,8 @@ class SproutForms_FieldsController extends BaseController
 				'handle'       => $field->handle,
 				'instructions' => $field->instructions,
 				'translatable' => $field->translatable,
-				'group'        => !$group ? array() : array(
-					'id'   => $group->id,
-					'name' => $group->name,
+				'group'        => array(
+					'name' => $tabName,
 				),
 			),
 			'template' => $success ? false : $this->_getTemplate($field, $form),

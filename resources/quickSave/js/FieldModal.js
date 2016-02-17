@@ -102,6 +102,7 @@
 			};
 
 			// Loads the field settings template file, as well as all the resources that come with it
+
 			Craft.postActionRequest('sproutForms/fields/getFieldSettings', postData, $.proxy(function(response, textStatus)
 			{
 				if(textStatus === 'success')

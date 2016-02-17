@@ -72,7 +72,7 @@
 		addField: function(id, name, groupName)
 		{
 			var fld = this.fld;
-			var grid = fld.unusedFieldGrid;
+			var grid = fld.tabGrid;
 			var drag = fld.fieldDrag;
 			var fields = fld.$allFields;
 			var $group = this._getGroupByName(groupName);
