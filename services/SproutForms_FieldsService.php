@@ -397,6 +397,42 @@ class SproutForms_FieldsService extends FieldsService
 		return null;
 	}
 
+	/**
+	 * This service allows add a field to a current FieldLayoutFieldRecord
+	 * @param FieldModel $field
+	 * @param SproutForms_FormModel $form
+	 * @param int $tabId
+	 *
+	 * @return boolean
+	*/
+	public function addFieldToLayout($field, $form, $tabId)
+	{
+		$response = false;
+
+		if(isset($field) && isset($form))
+		{
+			$sortOrder = 0;
+
+			$fieldLayoutFields = FieldLayoutFieldRecord::model()->findAll(array(
+				'condition' => 'tabId = :tabId AND layoutId = :layoutId',
+				'params' => array(':tabId' => $tabId, ':layoutId' => $form->fieldLayoutId)
+			));
+
+			$sortOrder = count($fieldLayoutFields) + 1;
+
+			$fieldRecord = new FieldLayoutFieldRecord();
+			$fieldRecord->layoutId  = $form->fieldLayoutId;
+			$fieldRecord->tabId     = $tabId;
+			$fieldRecord->fieldId   = $field->id;
+			$fieldRecord->required  = 0;
+			$fieldRecord->sortOrder = $sortOrder;
+
+			$response = $fieldRecord->save(false);
+		}
+
+		return $response;
+	}
+
 	public function getDefaultTabName()
 	{
 		return Craft::t('Form');

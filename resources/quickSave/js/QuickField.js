@@ -95,12 +95,14 @@
 				$group.removeClass('hidden');
 				drag.addItems($field);
 				grid.refreshCols(true);
+
+				Craft.cp.displayNotice(Craft.t('New field created.'));
 			}
 			else
 			{
-				// New field without tab or new field with renamed unsaved tab let's just reload
-				//Craft.cp.displayError(Craft.t('Invalid field group:') + groupName);
-				location.reload();
+				// New field without tab or new field with renamed unsaved tab let's just display a message
+				Craft.cp.displayError(Craft.t('Please Save the form after you rename any tab.'));
+				//Save the form does not work because the field is not added to the tab.
 			}
 		},
 

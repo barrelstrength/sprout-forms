@@ -127,20 +127,7 @@ class SproutForms_FieldsController extends BaseController
 		{
 			if($isAjax)
 			{
-				$fieldLayoutFields = FieldLayoutFieldRecord::model()->findAll(array(
-					'condition' => 'tabId = :tabId AND layoutId = :layoutId',
-					'params' => array(':tabId' => $tabId, ':layoutId' => $form->fieldLayoutId)
-				));
-				$sortOrder = count($fieldLayoutFields) + 1;
-
-				$fieldRecord = new FieldLayoutFieldRecord();
-				$fieldRecord->layoutId  = $form->fieldLayoutId;
-				$fieldRecord->tabId     = $tabId;
-				$fieldRecord->fieldId   = $field->id;
-				$fieldRecord->required  = 0;
-				$fieldRecord->sortOrder = $sortOrder;
-
-				$response = $fieldRecord->save(false);
+				$response = sproutForms()->fields->addFieldToLayout($field, $form, $tabId);
 				$tabName  = FieldLayoutTabRecord::model()->findByPk($tabId)->name;
 			}
 			else

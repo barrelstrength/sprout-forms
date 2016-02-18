@@ -400,8 +400,6 @@
 							target: this,
 							field: response.field
 						});
-
-						Craft.cp.displayNotice(Craft.t('New field created.'));
 					}
 					else
 					{

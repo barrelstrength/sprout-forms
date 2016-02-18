@@ -1,5 +1,4 @@
 {% requireAdmin %}
-{#% extends "sproutforms/_layouts/base" %#}
 {% import "_includes/forms" as forms %}
 
 {% if field is not defined and fieldId is defined %}
@@ -53,7 +52,7 @@
 {{ forms.textField({
 	label: "Name"|t,
 	instructions: "The user-friendly name of your field."|t,
-	id: 'name',
+	id: 'field-name',
 	name: 'name',
 	value: (field is defined ? field.name : null),
 	errors: (field is defined ? field.getErrors('name') : null),
@@ -66,7 +65,7 @@
 {{ forms.textField({
 	label: "Handle"|t,
 	instructions: "How you’ll refer to this field in the templates."|t,
-	id: 'handle',
+	id: 'field-handle',
 	class: 'code',
 	name: 'handle',
 	maxlength: 64,
@@ -114,5 +113,5 @@
 {% endfor %}
 
 {% if field is not defined or not field.handle %}
-	{% includeJs "new Craft.HandleGenerator('#name', '#handle');" %}
+	{% includeJs "new Craft.HandleGenerator('#field-name', '#field-handle');" %}
 {% endif %}
