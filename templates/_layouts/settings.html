@@ -1,6 +1,7 @@
 {% extends "_layouts/cp" %}
 
 {% set title  = "Settings"|t %}
+{% set bodyClass = craft.request.getSegments()|slice(0, 3)|join(' ') %}
 
 {% set subnav = {
   entries: {
@@ -35,3 +36,5 @@
   </nav>
 
 {% endset %}
+
+{% includeCssResource 'sproutforms/css/sproutforms.css' %}

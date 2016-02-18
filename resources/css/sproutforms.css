@@ -1,0 +1,28 @@
+.sproutforms.forms div.formcontrol {
+	margin: 0;
+}
+.sproutforms.forms div.oneline {
+	padding: 3% 3% 0;
+}
+.sproutforms.forms div.totalcontrol {
+	padding: 3% 3% 0;
+}
+.sproutforms.forms div.deleteform {
+	border-top: 1px solid #e3e5e8;
+}
+.sproutforms.forms div.editform-sidebar .pane > .tabs {
+	border-radius: 4px 4px 0 0;
+	margin:0;
+}
+.sproutforms.forms .field.field-heading {
+	background-color: rgb(244, 245, 246);
+	color:rgb(85, 85, 85);
+	font-size: .8em;
+	min-height: auto;
+	padding: 8px auto;
+	text-transform: uppercase;
+}
+
+.sproutforms.examples .field > .warning {
+	font-size:1em;
+}

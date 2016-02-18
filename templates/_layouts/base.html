@@ -1,5 +1,7 @@
 {% extends "_layouts/cp" %}
 
+{% set bodyClass = craft.request.getSegments()|slice(0, 3)|join(' ') %}
+
 {% set subnav = {
 	entries: {
 		label: "Entries"|t,
@@ -29,3 +31,5 @@
   {% endif %}
 
 {% endblock %}
+
+{% includeCssResource 'sproutforms/css/sproutforms.css' %}
