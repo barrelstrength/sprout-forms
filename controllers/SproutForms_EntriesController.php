@@ -178,7 +178,7 @@ class SproutForms_EntriesController extends BaseController
 			// Only send notification email for front-end submissions if they are enabled
 			if (!craft()->request->isCpRequest() && $this->form->notificationEnabled)
 			{
-				$this->_notifyAdmin($this->form, $entry);
+				sproutForms()->forms->sendNotification($this->form, $entry);
 			}
 
 			// Only handle multi-page forms on the front-end
@@ -367,101 +367,6 @@ class SproutForms_EntriesController extends BaseController
 	}
 
 	/**
-	 * Notify admin
-	 *
-	 * @param SproutForms_FormModel  $form
-	 * @param SproutForms_EntryModel $entry
-	 */
-	private function _notifyAdmin(SproutForms_FormModel $form, SproutForms_EntryModel $entry)
-	{
-		// Get our recipients
-		$recipients = ArrayHelper::stringToArray($form->notificationRecipients);
-		$recipients = array_unique($recipients);
-
-		if (count($recipients))
-		{
-			$email         = new EmailModel();
-			$tabs          = $form->getFieldLayout()->getTabs();
-			$templatePaths = sproutForms()->fields->getSproutFormsTemplates($form);
-			$emailTemplate = $templatePaths['email'];
-
-			// Set our Sprout Forms Email Template path
-			craft()->path->setTemplatesPath($emailTemplate);
-
-			$email->htmlBody = craft()->templates->render(
-				'email', array(
-					'formName' => $form->name,
-					'tabs'     => $tabs,
-					'element'  => $entry
-				)
-			);
-
-			craft()->path->setTemplatesPath(craft()->path->getCpTemplatesPath());
-
-			$post = (object) $_POST;
-
-			$email->fromEmail = $form->notificationSenderEmail;
-			$email->fromName  = $form->notificationSenderName;
-			$email->subject   = $form->notificationSubject;
-
-			// Has a custom subject been set for this form?
-			if ($form->notificationSubject)
-			{
-				try
-				{
-					$email->subject = craft()->templates->renderObjectTemplate($form->notificationSubject, $post);
-				}
-				catch (\Exception $e)
-				{
-					SproutFormsPlugin::log($e->getMessage(), LogLevel::Error);
-				}
-			}
-
-			$email->subject = $this->encodeSubjectLine($email->subject);
-
-			// custom replyTo has been set for this form
-			if ($form->notificationReplyToEmail)
-			{
-				try
-				{
-					$email->replyTo = craft()->templates->renderObjectTemplate($form->notificationReplyToEmail, $post);
-
-					if (!filter_var($email->replyTo, FILTER_VALIDATE_EMAIL))
-					{
-						$email->replyTo = null;
-					}
-				}
-				catch (\Exception $e)
-				{
-					SproutFormsPlugin::log($e->getMessage(), LogLevel::Error);
-				}
-			}
-
-			foreach ($recipients as $emailAddress)
-			{
-				try
-				{
-					$email->toEmail = craft()->templates->renderObjectTemplate($emailAddress, $post);
-
-					if (filter_var($email->toEmail, FILTER_VALIDATE_EMAIL))
-					{
-						$options =
-							array(
-								'sproutFormsEntry'      => $entry,
-								'enableFileAttachments' => $form->enableFileAttachments,
-							);
-						craft()->email->sendEmail($email, $options);
-					}
-				}
-				catch (\Exception $e)
-				{
-					SproutFormsPlugin::log($e->getMessage(), LogLevel::Error);
-				}
-			}
-		}
-	}
-
-	/**
 	 * Route Controller for Edit Entry Template
 	 *
 	 * @param array $variables
@@ -522,14 +427,5 @@ class SproutForms_EntriesController extends BaseController
 		);
 
 		$this->redirectToPostedUrl($vars);
-	}
-
-	/**
-	 * @param $subject
-	 * @return string
-	 */
-	public function encodeSubjectLine($subject)
-	{
-		return '=?UTF-8?B?'.base64_encode($subject).'?=';
 	}
 }

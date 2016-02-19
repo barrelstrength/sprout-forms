@@ -191,4 +191,13 @@ class SproutFormsService extends BaseApplicationComponent
 
 		return false;
 	}
+
+	/**
+	 * @param $subject
+	 * @return string
+	 */
+	public function encodeSubjectLine($subject)
+	{
+		return '=?UTF-8?B?'.base64_encode($subject).'?=';
+	}
 }
