@@ -1,10 +1,10 @@
 (function($)
 {
 	/**
-	 * QuickField class
+	 * SproutField class
 	 * Handles the buttons for creating new groups and fields inside a FieldLayoutDesigner
 	 */
-	var QuickField = Garnish.Base.extend({
+	var SproutField = Garnish.Base.extend({
 
 		$container:   null,
 		$groupButton: null,
@@ -23,18 +23,17 @@
 		{
 			if(!(fld instanceof Craft.FieldLayoutDesigner))
 			{
-				// Fail silently - just means the quick field feature will not be initialised, no big deal
 				return;
 			}
 
 			this.fld = fld;
-			this.fld.$container.addClass('quick-field');
+			this.fld.$container.addClass('sprout-field');
 
 			this.$container   = $('<div class="newfieldbtn-container">').insertAfter($(".fld-tabs"));
 
 			this.$fieldButton = $('<div class="btn add icon" tabindex="0">').text(Craft.t('New Field')).appendTo($(".buttons"));
 
-			this.modal  = QuickField.FieldModal.getInstance();
+			this.modal  = SproutField.FieldModal.getInstance();
 
 			this.addListener(this.$fieldButton, 'activate', 'newField');
 
@@ -163,6 +162,6 @@
 		}
 	});
 
-	window.QuickField = QuickField;
+	window.SproutField = SproutField;
 
 })(jQuery);

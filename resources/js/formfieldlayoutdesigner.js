@@ -133,7 +133,7 @@ FLD.prototype.init = function()
 	FLDinit.apply(this, arguments);
 	if(this.$container.is('#fieldlayoutform'))
 	{
-		new QuickField(this);
+		new SproutField(this);
 	}
 };
 

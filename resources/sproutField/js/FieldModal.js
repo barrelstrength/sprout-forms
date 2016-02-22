@@ -62,13 +62,7 @@
 			this.executedJs   = {};
 			this.loadedCss    = {};
 
-			// It's important to observe the DOM for new nodes when rendering the field settings template, as more
-			// complex fields may be adding elements to the body such as modal windows or helper elements. Since the
-			// settings template gets re-rendered each time the modal window is opened, these elements also get
-			// recreated, so if the old ones aren't tracked and removed then they start polluting the DOM and
-			// potentially affect performance.
-			// This feels like a hack, but unfortunately since field type behaviour cannot be predicted (for example,
-			// third-party field type plugins) this is the cleanest possible solution.
+			// Observe the DOM
 			this.observer = new MutationObserver($.proxy(function(mutations)
 			{
 				for(var i = 0; i < mutations.length; i++)
@@ -77,7 +71,7 @@
 				}
 			}, this));
 
-			var $container      = $('<form class="modal quick-field-modal" style="display: none; opacity: 0;">').appendTo(Garnish.$bod);
+			var $container      = $('<form class="modal sprout-field-modal" style="display: none; opacity: 0;">').appendTo(Garnish.$bod);
 
 			this.$body          = $('<div class="body">').appendTo($container);
 			this.$content       = $('<div class="content">').appendTo(this.$body);
@@ -489,6 +483,6 @@
 		}
 	});
 
-	window.QuickField.FieldModal = FieldModal;
+	window.SproutField.FieldModal = FieldModal;
 
 })(jQuery);

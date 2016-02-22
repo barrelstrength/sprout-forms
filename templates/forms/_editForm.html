@@ -177,10 +177,9 @@
 
 {% includeJsResource "js/fields.js" %}
 
-{# Add quick save resources #}
-{% includeCssResource "sproutforms/quicksave/css/main.css" %}
-{% includeJsResource "sproutforms/quicksave/js/QuickField.js" %}
-{% includeJsResource "sproutforms/quicksave/js/FieldModal.js" %}
+{% includeCssResource "sproutforms/sproutField/css/main.css" %}
+{% includeJsResource  "sproutforms/sproutField/js/SproutField.js" %}
+{% includeJsResource  "sproutforms/sproutField/js/FieldModal.js" %}
 
 {% set js %}
   {% if not form.handle %}
