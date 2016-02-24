@@ -89,6 +89,10 @@ class SproutForms_FormRecord extends BaseRecord
 				'notificationRecipients, notificationSubject, notificationSenderName, notificationSenderEmail, notificationReplyToEmail',
 				'validateEnabledNotification'
 			),
+			array(
+				'handle',
+				'Craft\HandleValidator'
+			),
 		);
 	}
 
