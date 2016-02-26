@@ -141,9 +141,6 @@ class SproutFormsPlugin extends BasePlugin
 			'sproutforms/forms/edit/(?P<formId>\d+)' => array(
 				'action' => 'sproutForms/forms/editFormTemplate'
 			),
-			'sproutforms/forms/(?P<formId>\d+)/fields/new' => array(
-				'action' => 'sproutForms/fields/editFieldTemplate'
-			),
 			'sproutforms/forms/(?P<formId>\d+)/fields/edit/(?P<fieldId>\d+)' => array(
 				'action' => 'sproutForms/fields/editFieldTemplate'
 			),
