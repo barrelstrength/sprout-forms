@@ -172,7 +172,6 @@ class SproutForms_FieldsController extends BaseController
 
 			if($isAjax)
 			{
-				// Lets keep the old tab id just for ajax
 				$this->_returnJson(true, $field, $form, $tabName);
 			}
 			else

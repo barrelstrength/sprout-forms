@@ -120,6 +120,41 @@ Sprout.FormFieldLayoutDesigner = Craft.FieldLayoutDesigner.extend({
 		$('<input type="hidden" name="deletedFields[]" value="'+fieldId+'">').appendTo($deletedFieldsContainer);
 	},
 
+	onTabOptionSelect: function(option)
+	{
+		if (!this.settings.customizableTabs)
+		{
+			return;
+		}
+
+		var $option = $(option),
+			$tab = $option.data('menu').$anchor.parent().parent().parent(),
+			action = $option.data('action');
+
+		switch (action)
+		{
+			// Let's disable the "New Field button after any tab action."
+			case 'rename':
+			{
+				this.renameTab($tab);
+				this.disableNewFieldButton();
+				break;
+			}
+			case 'delete':
+			{
+				this.deleteTab($tab);
+				this.disableNewFieldButton();
+				break;
+			}
+		}
+	},
+
+	disableNewFieldButton: function()
+	{
+		$("#sproutField").addClass("disabled");
+		Craft.cp.displayNotice(Craft.t('Please save the form to add a new field.'));
+	},
+
 });
 
 var FLD = Sprout.FormFieldLayoutDesigner;

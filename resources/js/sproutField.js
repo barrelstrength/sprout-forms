@@ -31,7 +31,7 @@
 
 			this.$container   = $('<div class="newfieldbtn-container">').insertAfter($(".fld-tabs"));
 
-			this.$fieldButton = $('<div class="btn add icon" tabindex="0">').text(Craft.t('New Field')).appendTo($(".buttons"));
+			this.$fieldButton = $('<div id="sproutField" class="btn add icon" tabindex="0">').text(Craft.t('New Field')).appendTo($(".buttons"));
 
 			this.modal  = SproutField.FieldModal.getInstance();
 
