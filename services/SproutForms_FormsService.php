@@ -481,4 +481,93 @@ class SproutForms_FormsService extends BaseApplicationComponent
 
 		return $newField;
 	}
+
+	/**
+	 * Sprout Forms Send Notification service.
+	 *
+	 * @param SproutForms_FormModel  $form
+	 * @param SproutForms_EntryModel $entry
+	 *
+	 * @return boolean
+	 */
+	public function sendNotification(SproutForms_FormModel $form, SproutForms_EntryModel $entry)
+	{
+		// Get our recipients
+		$recipients = ArrayHelper::stringToArray($form->notificationRecipients);
+		$recipients = array_unique($recipients);
+		$response   = false;
+
+		if (count($recipients))
+		{
+			$email         = new EmailModel();
+			$tabs          = $form->getFieldLayout()->getTabs();
+			$templatePaths = sproutForms()->fields->getSproutFormsTemplates($form);
+			$emailTemplate = $templatePaths['email'];
+
+			// Set our Sprout Forms Email Template path
+			craft()->path->setTemplatesPath($emailTemplate);
+
+			$email->htmlBody = craft()->templates->render(
+				'email', array(
+					'formName' => $form->name,
+					'tabs'     => $tabs,
+					'element'  => $entry
+				)
+			);
+
+			craft()->path->setTemplatesPath(craft()->path->getCpTemplatesPath());
+
+			$post = (object) $_POST;
+
+			$email->fromEmail = $form->notificationSenderEmail;
+			$email->fromName  = $form->notificationSenderName;
+			$email->subject   = $form->notificationSubject;
+
+			try
+			{
+				// Has a custom subject been set for this form?
+				if ($form->notificationSubject)
+				{
+					$email->subject = craft()->templates->renderObjectTemplate($form->notificationSubject, $post);
+				}
+
+				$email->subject = sproutForms()->encodeSubjectLine($email->subject);
+
+				// custom replyTo has been set for this form
+				if ($form->notificationReplyToEmail)
+				{
+					$email->replyTo = craft()->templates->renderObjectTemplate($form->notificationReplyToEmail, $post);
+
+					if (!filter_var($email->replyTo, FILTER_VALIDATE_EMAIL))
+					{
+						$email->replyTo = null;
+					}
+				}
+
+				foreach ($recipients as $emailAddress)
+				{
+					$email->toEmail = craft()->templates->renderObjectTemplate($emailAddress, $post);
+
+					if (filter_var($email->toEmail, FILTER_VALIDATE_EMAIL))
+					{
+						$options =
+							array(
+								'sproutFormsEntry'      => $entry,
+								'enableFileAttachments' => $form->enableFileAttachments,
+							);
+						craft()->email->sendEmail($email, $options);
+					}
+				}
+
+				$response = true;
+			}
+			catch (\Exception $e)
+			{
+				$response = false;
+				SproutFormsPlugin::log($e->getMessage(), LogLevel::Error);
+			}
+		}
+
+		return $response;
+	}
 }
