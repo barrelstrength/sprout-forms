@@ -4,12 +4,28 @@ namespace Craft;
 class SproutForms_FieldsController extends BaseController
 {
 	/**
+	 * Gets the HTML, CSS and Javascript of a field setting page.
+	 *
+	 * @throws HttpException
+	 */
+	public function actionGetFieldSettings()
+	{
+		$this->requireAdmin();
+		$this->requireAjaxRequest();
+		$formId = craft()->request->getRequiredParam('formId');
+		$form = sproutForms()->forms->getFormById($formId);
+
+		$this->returnJson($this->_getTemplate(null, $form));
+	}
+
+	/**
 	 * Save a field.
 	 */
 	public function actionSaveField()
 	{
+		$this->requireAdmin();
 		$this->requirePostRequest();
-
+		$isAjax = craft()->request->isAjaxRequest();
 		// Make sure our field has a section
 		// @TODO - handle this much more gracefully
 		$tabId = craft()->request->getPost('tabId');
@@ -47,26 +63,29 @@ class SproutForms_FieldsController extends BaseController
 			$variables['tabId'] = $tabId;
 			$variables['field'] = $field;
 
-			// Send the field back to the template
-			craft()->urlManager->setRouteVariables($variables);
+			if($isAjax)
+			{
+				$this->_returnJson(false, $field, $form);
+			}
+			else
+			{
+				// Send the field back to the template
+				craft()->urlManager->setRouteVariables($variables);
 
-			// Route our request back to the field template
-			$route = craft()->urlManager->parseUrl(craft()->request);
-			craft()->runController($route);
-			craft()->end();
+				// Route our request back to the field template
+				$route = craft()->urlManager->parseUrl(craft()->request);
+				craft()->runController($route);
+				craft()->end();
+			}
 		}
 
 		// Save a new field
 		if (!$field->id)
 		{
-			SproutFormsPlugin::log('New Field');
-
 			$isNewField = true;
 		}
 		else
 		{
-			SproutFormsPlugin::log('Existing Field');
-
 			$isNewField = false;
 			$oldHandle  = craft()->fields->getFieldById($field->id)->handle;
 		}
@@ -90,101 +109,93 @@ class SproutForms_FieldsController extends BaseController
 
 		// Set the field layout
 		$oldFieldLayout =  $form->getFieldLayout();
-		$oldFields = $oldFieldLayout->getFields();
 		$oldTabs = $oldFieldLayout->getTabs();
 
-		$tabFields = array();
 		$postedFieldLayout = array();
 		$requiredFields = array();
+		$tabName = null;
+		$response = false;
 
 		// If no tabs exist, let's create a
 		// default one for all of our fields
 		if (!$oldTabs)
 		{
-			// Create a tab
-			$fieldLayoutTab = new FieldLayoutTabModel();
-			$fieldLayoutTab->name      = Craft::t('Form');
-			$fieldLayoutTab->sortOrder = 1;
-
-			if ($oldFields)
-			{
-				$fieldSortOrder = 0;
-				// Add any existing fields to a default tab
-				foreach ($oldFields as $oldFieldLayoutField)
-				{
-					$fieldSortOrder++;
-
-					$newField = new FieldLayoutFieldModel();
-					$newField->fieldId   = $oldFieldLayoutField->fieldId;
-					$newField->required  = $oldFieldLayoutField->required;
-					$newField->sortOrder = $fieldSortOrder;
-
-					$tabFields[] = $newField;
-
-					$postedFieldLayout[$fieldLayoutTab->name][] = $oldFieldLayoutField->fieldId;
-
-					if ($oldFieldLayoutField->required)
-					{
-						$requiredFields[] = $oldFieldLayoutField->fieldId;
-					}
-				}
-			}
-
-			// Add our new field
-			$postedFieldLayout[$fieldLayoutTab->name][] = $field->id;
-
-			$fieldLayoutTab->setFields($tabFields);
+			$form    = sproutForms()->fields->createDefaultTab($form, $field);
+			$tabName = sproutForms()->fields->getDefaultTabName();
 		}
 		else
 		{
-			foreach ($oldTabs as $oldTab)
+			if($isAjax)
 			{
-				$oldTabFields = $oldTab->getFields();
-
-				foreach ($oldTabFields as $oldFieldLayoutField)
+				$response = sproutForms()->fields->addFieldToLayout($field, $form, $tabId);
+				$tabName  = FieldLayoutTabRecord::model()->findByPk($tabId)->name;
+			}
+			else
+			{
+				foreach ($oldTabs as $oldTab)
 				{
-					$postedFieldLayout[$oldTab->name][] = $oldFieldLayoutField->fieldId;
+					$oldTabFields = $oldTab->getFields();
 
-					if ($oldFieldLayoutField->required)
+					foreach ($oldTabFields as $oldFieldLayoutField)
 					{
-						$requiredFields[] = $oldFieldLayoutField->fieldId;
+						$postedFieldLayout[$oldTab->name][] = $oldFieldLayoutField->fieldId;
+
+						if ($oldFieldLayoutField->required)
+						{
+							$requiredFields[] = $oldFieldLayoutField->fieldId;
+						}
+					}
+
+					// Add our new field to the tab it belongs to
+					if ($isNewField && ($tabId == $oldTab->id))
+					{
+						$postedFieldLayout[$oldTab->name][] = $field->id;
 					}
 				}
+				// Set the field layout
+				$fieldLayout = craft()->fields->assembleLayout($postedFieldLayout, $requiredFields);
 
-				// Add our new field to the tab it belongs to
-				if ($isNewField && ($tabId == $oldTab->id))
-				{
-					$postedFieldLayout[$oldTab->name][] = $field->id;
-				}
+				$fieldLayout->type = 'SproutForms_Form';
+				$fieldLayout->id = $oldFieldLayout->id;
+				$form->setFieldLayout($fieldLayout);
+
+				// save the form
+				$response = sproutForms()->forms->saveForm($form);
 			}
 		}
-
-		// Set the field layout
-		$fieldLayout = craft()->fields->assembleLayout($postedFieldLayout, $requiredFields);
-
-		$fieldLayout->type = 'SproutForms_Form';
-		$form->setFieldLayout($fieldLayout);
 
 		// Hand the field off to be saved in the
 		// field layout of our Form Element
-		if (sproutForms()->forms->saveForm($form))
+		if ($response)
 		{
 			SproutFormsPlugin::log('Field Saved');
 
-			craft()->userSession->setNotice(Craft::t('Field saved.'));
-
-			$this->redirectToPostedUrl($field);
+			if($isAjax)
+			{
+				$this->_returnJson(true, $field, $form, $tabName);
+			}
+			else
+			{
+				craft()->userSession->setNotice(Craft::t('Field saved.'));
+				$this->redirectToPostedUrl($field);
+			}
 		}
 		else
 		{
-			SproutFormsPlugin::log("Couldn't save field.");
 			$variables['tabId'] = $tabId;
 			$variables['field'] = $field;
-
+			SproutFormsPlugin::log("Couldn't save field.");
 			craft()->userSession->setError(Craft::t('Couldn’t save field.'));
 
-			// Send the field back to the template
-			craft()->urlManager->setRouteVariables($variables);
+			if($isAjax)
+			{
+				$this->_returnJson(false, $field, $form);
+			}
+			else
+			{
+				// Send the field back to the template
+				craft()->urlManager->setRouteVariables($variables);
+			}
 		}
 	}
 
@@ -197,6 +208,8 @@ class SproutForms_FieldsController extends BaseController
 	 */
 	public function actionEditFieldTemplate(array $variables = array())
 	{
+		$this->requireAdmin();
+
 		$formId = craft()->request->getSegment(3);
 		$form = sproutForms()->forms->getFormById($formId);
 
@@ -274,6 +287,68 @@ class SproutForms_FieldsController extends BaseController
 
 		$this->returnJson(array(
 			'success' => true
+		));
+	}
+
+	/**
+	 * Loads the field settings template and returns all HTML, CSS and Javascript.
+	 *
+	 * @param FieldModel|null $field
+	 * @param SproutForms_FormRecord $form
+	 * @return array
+	 */
+	private function _getTemplate(FieldModel $field = null, $form)
+	{
+		$data = array();
+		$data['tabId'] = null;
+		$data['field'] = new FieldModel();
+
+		if($field)
+		{
+			$data['field'] = $field;
+			$tabId = craft()->request->getPost('tabId');
+
+			if(isset($tabId))
+			{
+				$data['tabId'] = craft()->request->getPost('tabId');
+			}
+
+			if($field->id != null)
+			{
+				$data['fieldId'] = $field->id;
+			}
+		}
+
+		$data['sections'] = $form->getFieldLayout()->getTabs();
+		$data['formId']   = $form->id;
+
+		$html = craft()->templates->render('sproutforms/forms/_fieldsettings', $data);
+		$js   = craft()->templates->getFootHtml();
+		$css  = craft()->templates->getHeadHtml();
+
+		return array(
+			'html' => $html,
+			'js'   => $js,
+			'css'  => $css
+		);
+	}
+
+	private function _returnJson($success, $field, $form, $tabName = null)
+	{
+		$this->returnJson(array(
+			'success' => $success,
+			'errors'  => $field->getAllErrors(),
+			'field'   => array(
+				'id'           => $field->id,
+				'name'         => $field->name,
+				'handle'       => $field->handle,
+				'instructions' => $field->instructions,
+				'translatable' => $field->translatable,
+				'group'        => array(
+					'name' => $tabName,
+				),
+			),
+			'template' => $success ? false : $this->_getTemplate($field, $form),
 		));
 	}
 }

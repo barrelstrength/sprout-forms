@@ -16,13 +16,13 @@ Sprout.FormFieldLayoutDesigner = Craft.FieldLayoutDesigner.extend({
 
 	formId: null,
 
-	init: function(container, settings) 
+	init: function(container, settings)
 	{
 		// ------------------------------------------------------------
 		// @TODO - how do I just call the parent init() method here?
 		// right now, I'm copying the whole method here and adding to it
 		// ------------------------------------------------------------
-		
+
 		this.$container = $(container);
 		this.setSettings(settings, Craft.FieldLayoutDesigner.defaults);
 
@@ -54,7 +54,7 @@ Sprout.FormFieldLayoutDesigner = Craft.FieldLayoutDesigner.extend({
 		// End copied init() parent method
 		// ------------------------------------------------------------
 	},
-		
+
 	initField: function($field)
 	{
 		var $editBtn = $field.find('.settings'),
@@ -65,7 +65,7 @@ Sprout.FormFieldLayoutDesigner = Craft.FieldLayoutDesigner.extend({
 		var fieldId = $field.data('id');
 
 		var editUrl = Craft.getCpUrl('sproutforms/forms/'+this.formId+'/fields/edit/'+fieldId);
-		
+
 		$('<li><a href="' + editUrl + '" data-action="edit">'+Craft.t('Edit')+'</a></li>').appendTo($ul);
 
 		if ($field.hasClass('fld-required'))
@@ -89,7 +89,7 @@ Sprout.FormFieldLayoutDesigner = Craft.FieldLayoutDesigner.extend({
 		var $option = $(option),
 			$field = $option.data('menu').$anchor.parent(),
 			action = $option.data('action');
-		
+
 		switch (action)
 		{
 			case 'toggle-required':
@@ -120,6 +120,56 @@ Sprout.FormFieldLayoutDesigner = Craft.FieldLayoutDesigner.extend({
 		$('<input type="hidden" name="deletedFields[]" value="'+fieldId+'">').appendTo($deletedFieldsContainer);
 	},
 
+	onTabOptionSelect: function(option)
+	{
+		if (!this.settings.customizableTabs)
+		{
+			return;
+		}
+
+		var $option = $(option),
+			$tab = $option.data('menu').$anchor.parent().parent().parent(),
+			action = $option.data('action');
+
+		switch (action)
+		{
+			// Let's disable the "New Field button after any tab action."
+			case 'rename':
+			{
+				this.renameTab($tab);
+				this.disableNewFieldButton();
+				break;
+			}
+			case 'delete':
+			{
+				this.deleteTab($tab);
+				this.disableNewFieldButton();
+				break;
+			}
+		}
+	},
+
+	disableNewFieldButton: function()
+	{
+		$("#sproutField").addClass("disabled");
+		Craft.cp.displayNotice(Craft.t('Please save the form to add a new field.'));
+	},
+
 });
+
+var FLD = Sprout.FormFieldLayoutDesigner;
+var FLDinit = FLD.prototype.init;
+
+/**
+ * Override the current FieldLayoutDesigner "constructor" so new buttons can be initialised.
+ */
+FLD.prototype.init = function()
+{
+	FLDinit.apply(this, arguments);
+	if(this.$container.is('#fieldlayoutform'))
+	{
+		new SproutField(this);
+	}
+};
 
 })(jQuery);

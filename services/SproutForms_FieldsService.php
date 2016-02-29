@@ -344,6 +344,100 @@ class SproutForms_FieldsService extends FieldsService
 	}
 
 	/**
+	 * This service allows create a default tab given a form
+	 * @param SproutForms_FormModel $form
+	 *
+	 * @return SproutForms_FormModel | null
+	*/
+	public function addDefaultTab($form, &$field = null)
+	{
+		if($form)
+		{
+			if(is_null($field))
+			{
+				$field = new FieldModel();
+				$field->name         = Craft::t('Default Field');
+				$field->handle       = "defaultField";
+				$field->instructions = "";
+				$field->required     = 0;
+				$field->translatable = 0;
+				$field->type         = "PlainText";
+				// Save our field
+				craft()->fields->saveField($field);
+			}
+
+			// Create a tab
+			$fieldLayoutTab = new FieldLayoutTabModel();
+			$fieldLayoutTab->name      = $this->getDefaultTabName();
+			$fieldLayoutTab->sortOrder = 1;
+
+			$requiredFields = array();
+			$postedFieldLayout = array();
+
+			// Add our new field
+			if(isset($field) && $field->id != null)
+			{
+				$postedFieldLayout[$fieldLayoutTab->name][] = $field->id;
+			}
+			// lets the tab empty
+			$tabFields = array();
+			$fieldLayoutTab->setFields($tabFields);
+			$tabName = $fieldLayoutTab->name;
+
+			// Set the field layout
+			$fieldLayout = craft()->fields->assembleLayout($postedFieldLayout, $requiredFields);
+
+			$fieldLayout->type = 'SproutForms_Form';
+			// Set the tab to the form
+			$form->setFieldLayout($fieldLayout);
+
+			return $form;
+		}
+
+		return null;
+	}
+
+	/**
+	 * This service allows add a field to a current FieldLayoutFieldRecord
+	 * @param FieldModel $field
+	 * @param SproutForms_FormModel $form
+	 * @param int $tabId
+	 *
+	 * @return boolean
+	*/
+	public function addFieldToLayout($field, $form, $tabId)
+	{
+		$response = false;
+
+		if(isset($field) && isset($form))
+		{
+			$sortOrder = 0;
+
+			$fieldLayoutFields = FieldLayoutFieldRecord::model()->findAll(array(
+				'condition' => 'tabId = :tabId AND layoutId = :layoutId',
+				'params' => array(':tabId' => $tabId, ':layoutId' => $form->fieldLayoutId)
+			));
+
+			$sortOrder = count($fieldLayoutFields) + 1;
+
+			$fieldRecord = new FieldLayoutFieldRecord();
+			$fieldRecord->layoutId  = $form->fieldLayoutId;
+			$fieldRecord->tabId     = $tabId;
+			$fieldRecord->fieldId   = $field->id;
+			$fieldRecord->required  = 0;
+			$fieldRecord->sortOrder = $sortOrder;
+
+			$response = $fieldRecord->save(false);
+		}
+
+		return $response;
+	}
+
+	public function getDefaultTabName()
+	{
+		return Craft::t('Form');
+	}
+	/**
 	 * Prepends a key/value pair to an array
 	 *
 	 * @see array_unshift()
@@ -361,4 +455,5 @@ class SproutForms_FieldsService extends FieldsService
 
 		return array_reverse($haystack, true);
 	}
+
 }
