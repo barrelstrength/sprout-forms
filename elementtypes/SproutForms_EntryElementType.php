@@ -371,28 +371,29 @@ class SproutForms_EntryElementType extends BaseElementType
 			if ($form)
 			{
 				$fields               = $form->getFields();
-				$content              = "{$form->handle}.title";
+				$selectContentTable   = "{$form->handle}.title";
 				$contentTable         = $form->getContentTable();
 				$fullContentTableName = craft()->db->addTablePrefix($contentTable);
 				$fieldsAllowed        = craft()->db->schema->getTable($fullContentTableName)->columns;
+				$fieldPrefix          = craft()->content->fieldColumnPrefix;
 
 				// Added support for filtering any sproutform content table
 				foreach ($fields as $key => $field)
 				{
-					if (isset($fieldsAllowed["field_{$field->handle}"]))
+					if (isset($fieldsAllowed[$fieldPrefix.$field->handle]))
 					{
-						$content .=",{$form->handle}.field_{$field->handle} {$field->handle}";
+						$selectContentTable .=",{$form->handle}.{$fieldPrefix}{$field->handle} as {$field->handle}";
 						$handle = $field->handle;
 
 						if(isset($criteria->$handle))
 						{
-							$query->andWhere(DbHelper::parseParam($form->handle.".field_".$field->handle, $criteria->$handle, $query->params));
+							$query->andWhere(DbHelper::parseParam($form->handle.".".$fieldPrefix.$field->handle, $criteria->$handle, $query->params));
 						}
 					}
 				}
 
-				$select  = empty($select) ? $content : $select.', '.$content;
-				$query->join($form->getContentTable().' '.$form->handle, $form->handle.'.elementId = elements.id');
+				$select  = empty($select) ? $selectContentTable : $select.', '.$selectContentTable;
+				$query->join($form->getContentTable().' as '.$form->handle, $form->handle.'.elementId = elements.id');
 			}
 		}
 	}
