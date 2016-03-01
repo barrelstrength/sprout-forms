@@ -469,7 +469,7 @@ class SproutForms_FormsService extends BaseApplicationComponent
 		$band = true;
 		do
 		{
-			$newField = $value.$i;
+			$newField = $field == "handle" ? $value.$i : $value." ".$i ;
 			$form = sproutForms()->forms->getFieldValue($field, $newField);
 			if ( is_null($form) )
 			{
