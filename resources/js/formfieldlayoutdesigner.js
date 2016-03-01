@@ -152,6 +152,7 @@ Sprout.FormFieldLayoutDesigner = Craft.FieldLayoutDesigner.extend({
 	disableNewFieldButton: function()
 	{
 		$("#sproutField").addClass("disabled");
+		$("#sproutforms-tabupdatemessage").removeClass('hidden');
 		Craft.cp.displayNotice(Craft.t('Please save the form to add a new field.'));
 	},
 
