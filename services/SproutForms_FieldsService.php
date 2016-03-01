@@ -435,7 +435,7 @@ class SproutForms_FieldsService extends FieldsService
 
 	public function getDefaultTabName()
 	{
-		return Craft::t('Form');
+		return Craft::t('Tab 1');
 	}
 	/**
 	 * Prepends a key/value pair to an array
