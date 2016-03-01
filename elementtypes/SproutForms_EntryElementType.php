@@ -370,17 +370,14 @@ class SproutForms_EntryElementType extends BaseElementType
 
 			if ($form)
 			{
-				$fields               = $form->getFields();
-				$selectContentTable   = "{$form->handle}.title";
-				$contentTable         = $form->getContentTable();
-				$fullContentTableName = craft()->db->addTablePrefix($contentTable);
-				$fieldsAllowed        = craft()->db->schema->getTable($fullContentTableName)->columns;
-				$fieldPrefix          = craft()->content->fieldColumnPrefix;
+				$fields             = $form->getFields();
+				$fieldPrefix        = craft()->content->fieldColumnPrefix;
+				$selectContentTable = "{$form->handle}.title";
 
 				// Added support for filtering any sproutform content table
 				foreach ($fields as $key => $field)
 				{
-					if (isset($fieldsAllowed[$fieldPrefix.$field->handle]))
+					if ($field->hasContentColumn())
 					{
 						$selectContentTable .=",{$form->handle}.{$fieldPrefix}{$field->handle} as {$field->handle}";
 						$handle = $field->handle;
