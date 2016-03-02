@@ -10,7 +10,6 @@ class SproutForms_FieldsController extends BaseController
 	 */
 	public function actionGetFieldSettings()
 	{
-		$this->requireAdmin();
 		$this->requireAjaxRequest();
 		$formId = craft()->request->getRequiredParam('formId');
 		$form   = sproutForms()->forms->getFormById($formId);
