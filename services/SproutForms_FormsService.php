@@ -612,7 +612,7 @@ class SproutForms_FormsService extends BaseApplicationComponent
 		$data['sections'] = $form->getFieldLayout()->getTabs();
 		$data['formId']   = $form->id;
 
-		$html = craft()->templates->render('sproutforms/forms/_editModalField', $data);
+		$html = craft()->templates->render('sproutforms/forms/_editFieldModal', $data);
 		$js   = craft()->templates->getFootHtml();
 		$css  = craft()->templates->getHeadHtml();
 
