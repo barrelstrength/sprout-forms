@@ -1,0 +1,117 @@
+{% import "_includes/forms" as forms %}
+
+{% if field is not defined and fieldId is defined %}
+	{% set field = craft.fields.getFieldById(fieldId) %}
+	{% if not field %}
+		{% exit 404 %}
+	{% endif %}
+{% endif %}
+
+{% set fieldTypes = craft.fields.getAllFieldTypes() %}
+{% set fieldTypeGroups = craft.sproutForms.prepareFieldTypeSelection() %}
+
+{% if field is defined %}
+	{% set fieldType = field.getFieldType() %}
+	{% set isFieldTypeMissing = not fieldType %}
+{% else %}
+	{% set isFieldTypeMissing = false %}
+{% endif %}
+
+{% if fieldType is not defined or isFieldTypeMissing %}
+	{% set fieldType = craft.fields.getFieldType('PlainText') %}
+	{% set isFieldTypeMissing = false %}
+{% endif %}
+
+<input type="hidden" name="formId" value="{{ formId }}">
+
+{% if fieldId is defined %}
+	<input type="hidden" name="fieldId" value="{{ fieldId }}">
+{% endif %}
+
+{% if sections is defined and sections|length %}
+
+	{% set sectionOptions = [] %}
+
+	{% for section in sections %}
+		{% set sectionOptions = sectionOptions|merge([{ label: section.name, value: section.id }]) %}
+	{% endfor %}
+
+	{{ forms.selectField({
+		first: true,
+		required: true,
+		label: "Tab"|t,
+		instructions: "Which section should this field be displayed in?"|t,
+		id: 'tabId',
+		name: 'tabId',
+		options: sectionOptions,
+		value: tabId
+	}) }}
+
+{% endif %}
+
+{{ forms.textField({
+	label: "Name"|t,
+	instructions: "The user-friendly name of your field."|t,
+	id: 'field-name',
+	name: 'name',
+	value: (field is defined ? field.name : null),
+	errors: (field is defined ? field.getErrors('name') : null),
+	required: true,
+	translatable: true,
+	autofocus: true,
+	first: true
+}) }}
+
+{{ forms.textField({
+	label: "Handle"|t,
+	instructions: "How you’ll refer to this field in the templates."|t,
+	id: 'field-handle',
+	class: 'code',
+	name: 'handle',
+	maxlength: 64,
+	value: (field is defined ? field.handle : null),
+	errors: (field is defined ? field.getErrors('handle') : null),
+	required: true,
+}) }}
+
+{{ forms.textareaField({
+	label: "Instructions"|t,
+	instructions: "Helper text to guide the author."|t,
+	id: 'instructions',
+	class: 'nicetext',
+	name: 'instructions',
+	value: (field is defined ? field.instructions : null),
+	errors: (field is defined ? field.getErrors('instructions') : null),
+	translatable: true
+}) }}
+
+<hr>
+
+{{ forms.selectField({
+	label: "Field Type"|t,
+	instructions: "What type of field is this?"|t ~ (fieldId is defined ? '<br><span class="error">'~"Careful—changing this may result in data loss."|t~'</span>' : ''),
+	id: 'type',
+	name: 'type',
+	hasOptgroups: true,
+	options: fieldTypeGroups,
+	value: fieldType.getClassHandle(),
+	errors: (isFieldTypeMissing ? ["The fieldtype class “{class}” could not be found."|t({ class: field.type })] : null),
+	toggle: true
+}) }}
+
+{% for _fieldType in fieldTypes %}
+	{% set isCurrent = (_fieldType.getClassHandle() == fieldType.getClassHandle()) %}
+	<div id="{{ _fieldType.getClassHandle() }}"{% if not isCurrent %} class="hidden"{% endif %}>
+		{% namespace 'types['~_fieldType.getClassHandle()~']' %}
+			{% if isCurrent %}
+				{{ fieldType.getSettingsHtml()|raw }}
+			{% else %}
+				{{ _fieldType.getSettingsHtml()|raw }}
+			{% endif %}
+		{% endnamespace %}
+	</div>
+{% endfor %}
+
+{% if field is not defined or not field.handle %}
+	{% includeJs "new Craft.HandleGenerator('#field-name', '#field-handle');" %}
+{% endif %}
