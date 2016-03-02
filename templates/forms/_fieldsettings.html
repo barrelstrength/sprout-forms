@@ -1,4 +1,3 @@
-{% requireAdmin %}
 {% import "_includes/forms" as forms %}
 
 {% if field is not defined and fieldId is defined %}
@@ -23,10 +22,11 @@
 	{% set isFieldTypeMissing = false %}
 {% endif %}
 
+<input type="hidden" name="formId" value="{{ formId }}">
+
 {% if fieldId is defined %}
 	<input type="hidden" name="fieldId" value="{{ fieldId }}">
 {% endif %}
-<input type="hidden" name="formId" value="{{ formId }}">
 
 {% if sections is defined and sections|length %}
 
