@@ -578,4 +578,48 @@ class SproutForms_FormsService extends BaseApplicationComponent
 
 		return $response;
 	}
+
+	/**
+	 * Loads the sprout modal field via ajax.
+	 *
+	 * @param SproutForms_FormRecord $form
+	 * @param FieldModel|null        $field
+	 *
+	 * @return array
+	 */
+	public function getModalFieldTemplate($form, FieldModel $field = null)
+	{
+		$data          = array();
+		$data['tabId'] = null;
+		$data['field'] = new FieldModel();
+
+		if ($field)
+		{
+			$data['field'] = $field;
+			$tabId         = craft()->request->getPost('tabId');
+
+			if (isset($tabId))
+			{
+				$data['tabId'] = craft()->request->getPost('tabId');
+			}
+
+			if ($field->id != null)
+			{
+				$data['fieldId'] = $field->id;
+			}
+		}
+
+		$data['sections'] = $form->getFieldLayout()->getTabs();
+		$data['formId']   = $form->id;
+
+		$html = craft()->templates->render('sproutforms/forms/_editModalField', $data);
+		$js   = craft()->templates->getFootHtml();
+		$css  = craft()->templates->getHeadHtml();
+
+		return array(
+			'html' => $html,
+			'js'   => $js,
+			'css'  => $css
+		);
+	}
 }

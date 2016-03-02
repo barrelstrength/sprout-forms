@@ -4,17 +4,16 @@ namespace Craft;
 class SproutForms_FieldsController extends BaseController
 {
 	/**
-	 * Gets the HTML, CSS and Javascript of a field setting page.
+	 * This action allows to load the modal field template.
 	 *
-	 * @throws HttpException
 	 */
-	public function actionGetFieldSettings()
+	public function actionModalField()
 	{
 		$this->requireAjaxRequest();
 		$formId = craft()->request->getRequiredParam('formId');
 		$form   = sproutForms()->forms->getFormById($formId);
 
-		$this->returnJson($this->_getTemplate(null, $form));
+		$this->returnJson(sproutForms()->forms->getModalFieldTemplate($form));
 	}
 
 	/**
@@ -22,7 +21,6 @@ class SproutForms_FieldsController extends BaseController
 	 */
 	public function actionSaveField()
 	{
-		$this->requireAdmin();
 		$this->requirePostRequest();
 		$isAjax = craft()->request->isAjaxRequest();
 		// Make sure our field has a section
@@ -208,8 +206,6 @@ class SproutForms_FieldsController extends BaseController
 	 */
 	public function actionEditFieldTemplate(array $variables = array())
 	{
-		$this->requireAdmin();
-
 		$formId = craft()->request->getSegment(3);
 		$form   = sproutForms()->forms->getFormById($formId);
 
@@ -290,50 +286,6 @@ class SproutForms_FieldsController extends BaseController
 		));
 	}
 
-	/**
-	 * Loads the field settings template and returns all HTML, CSS and Javascript.
-	 *
-	 * @param FieldModel|null        $field
-	 * @param SproutForms_FormRecord $form
-	 *
-	 * @return array
-	 */
-	private function _getTemplate(FieldModel $field = null, $form)
-	{
-		$data          = array();
-		$data['tabId'] = null;
-		$data['field'] = new FieldModel();
-
-		if ($field)
-		{
-			$data['field'] = $field;
-			$tabId         = craft()->request->getPost('tabId');
-
-			if (isset($tabId))
-			{
-				$data['tabId'] = craft()->request->getPost('tabId');
-			}
-
-			if ($field->id != null)
-			{
-				$data['fieldId'] = $field->id;
-			}
-		}
-
-		$data['sections'] = $form->getFieldLayout()->getTabs();
-		$data['formId']   = $form->id;
-
-		$html = craft()->templates->render('sproutforms/forms/_editModalField', $data);
-		$js   = craft()->templates->getFootHtml();
-		$css  = craft()->templates->getHeadHtml();
-
-		return array(
-			'html' => $html,
-			'js'   => $js,
-			'css'  => $css
-		);
-	}
-
 	private function _returnJson($success, $field, $form, $tabName = null)
 	{
 		$this->returnJson(array(
@@ -349,7 +301,7 @@ class SproutForms_FieldsController extends BaseController
 					'name' => $tabName,
 				),
 			),
-			'template' => $success ? false : $this->_getTemplate($field, $form),
+			'template' => $success ? false : sproutForms()->forms->getModalFieldTemplate($form, $field),
 		));
 	}
 }
