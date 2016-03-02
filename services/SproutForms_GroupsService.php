@@ -10,11 +10,12 @@ class SproutForms_GroupsService extends BaseApplicationComponent
 	 * Saves a group
 	 *
 	 * @param FormGroupModel $group
+	 *
 	 * @return bool
 	 */
 	public function saveGroup(SproutForms_FormGroupModel $group)
-	{		
-		$groupRecord = $this->_getGroupRecord($group);
+	{
+		$groupRecord       = $this->_getGroupRecord($group);
 		$groupRecord->name = $group->name;
 
 		if ($groupRecord->validate())
@@ -32,6 +33,7 @@ class SproutForms_GroupsService extends BaseApplicationComponent
 		else
 		{
 			$group->addErrors($groupRecord->getErrors());
+
 			return false;
 		}
 	}
@@ -40,34 +42,36 @@ class SproutForms_GroupsService extends BaseApplicationComponent
 	 * Deletes a group
 	 *
 	 * @param int $groupId
+	 *
 	 * @return bool
 	 */
 	public function deleteGroupById($groupId)
 	{
-			$groupRecord = SproutForms_FormGroupRecord::model()->findById($groupId);
+		$groupRecord = SproutForms_FormGroupRecord::model()->findById($groupId);
 
-			if (!$groupRecord)
-			{
-					return false;
-			}
+		if (!$groupRecord)
+		{
+			return false;
+		}
 
-			$affectedRows = craft()->db->createCommand()->delete('sproutforms_formgroups', array('id' => $groupId));
+		$affectedRows = craft()->db->createCommand()->delete('sproutforms_formgroups', array('id' => $groupId));
 
-			return (bool) $affectedRows;
+		return (bool) $affectedRows;
 	}
 
 	/**
 	 * Returns all groups.
 	 *
 	 * @param string|null $indexBy
+	 *
 	 * @return array
 	 */
 	public function getAllFormGroups($indexBy = null)
 	{
 		if (!$this->_fetchedAllGroups)
 		{
-			$groupRecords = SproutForms_FormGroupRecord::model()->ordered()->findAll();
-			$this->_groupsById = SproutForms_FormGroupModel::populateModels($groupRecords, 'id');
+			$groupRecords            = SproutForms_FormGroupRecord::model()->ordered()->findAll();
+			$this->_groupsById       = SproutForms_FormGroupModel::populateModels($groupRecords, 'id');
 			$this->_fetchedAllGroups = true;
 		}
 
@@ -75,16 +79,19 @@ class SproutForms_GroupsService extends BaseApplicationComponent
 		{
 			$groups = $this->_groupsById;
 		}
-		else if (!$indexBy)
-		{
-			$groups = array_values($this->_groupsById);
-		}
 		else
 		{
-			$groups = array();
-			foreach ($this->_groupsById as $group)
+			if (!$indexBy)
 			{
-				$groups[$group->$indexBy] = $group;
+				$groups = array_values($this->_groupsById);
+			}
+			else
+			{
+				$groups = array();
+				foreach ($this->_groupsById as $group)
+				{
+					$groups[$group->$indexBy] = $group;
+				}
 			}
 		}
 
@@ -93,17 +100,18 @@ class SproutForms_GroupsService extends BaseApplicationComponent
 
 	/**
 	 * Get Forms by Group ID
-	 * 
+	 *
 	 * @param  int $groupId
+	 *
 	 * @return SproutForms_FormModel
 	 */
 	public function getFormsByGroupId($groupId)
 	{
 		$query = craft()->db->createCommand()
-							->from('sproutforms_forms')
-							->where('groupId=:groupId', array('groupId' => $groupId))
-							->order('name')
-							->queryAll();    
+			->from('sproutforms_forms')
+			->where('groupId=:groupId', array('groupId' => $groupId))
+			->order('name')
+			->queryAll();
 
 		return SproutForms_FormModel::populateModels($query);
 	}
@@ -112,7 +120,9 @@ class SproutForms_GroupsService extends BaseApplicationComponent
 	 * Gets a group record or creates a new one.
 	 *
 	 * @access private
+	 *
 	 * @param FormGroupModel $group
+	 *
 	 * @throws Exception
 	 * @return FormGroupRecord
 	 */

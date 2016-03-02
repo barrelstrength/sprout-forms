@@ -36,7 +36,7 @@ class SproutForms_FormModel extends BaseElementModel
 
 		return array_merge(parent::defineAttributes(), array(
 			'id'                       => AttributeType::Number,
-			'groupId'	                 => AttributeType::Number,
+			'groupId'                  => AttributeType::Number,
 			'fieldLayoutId'            => AttributeType::Number,
 			'name'                     => AttributeType::String,
 			'handle'                   => AttributeType::String,
@@ -53,7 +53,7 @@ class SproutForms_FormModel extends BaseElementModel
 			'notificationReplyToEmail' => AttributeType::String,
 			'ownerId'                  => AttributeType::Number,
 			'oldHandle'                => AttributeType::String,
-			'enableTemplateOverrides'  => array(AttributeType::Bool, 'default' => $enableTemplateOverrides ),
+			'enableTemplateOverrides'  => array(AttributeType::Bool, 'default' => $enableTemplateOverrides),
 			'templateOverridesFolder'  => array(AttributeType::String, 'default' => $templateOverridesFolder),
 			'enableFileAttachments'    => array(AttributeType::Bool, 'default' => false),
 		));
@@ -86,7 +86,7 @@ class SproutForms_FormModel extends BaseElementModel
 	 */
 	public function getCpEditUrl()
 	{
-		$url = UrlHelper::getCpUrl('sproutforms/forms/edit/'. $this->id);
+		$url = UrlHelper::getCpUrl('sproutforms/forms/edit/' . $this->id);
 
 		return $url;
 	}
@@ -109,7 +109,7 @@ class SproutForms_FormModel extends BaseElementModel
 	 */
 	public function getFieldContext()
 	{
-		return 'sproutForms:'.$this->id;
+		return 'sproutForms:' . $this->id;
 	}
 
 	/**

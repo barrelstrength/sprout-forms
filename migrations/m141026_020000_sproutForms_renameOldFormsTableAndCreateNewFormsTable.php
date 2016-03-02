@@ -24,7 +24,7 @@ class m141026_020000_sproutForms_renameOldFormsTableAndCreateNewFormsTable exten
 
 			// ------------------------------------------------------------
 			// Create new Form Table
-			
+
 			SproutFormsPlugin::log("Creating the new `$newTable` table.", LogLevel::Info, true);
 
 			// Create the craft_sproutforms_forms table
@@ -35,9 +35,9 @@ class m141026_020000_sproutForms_renameOldFormsTableAndCreateNewFormsTable exten
 				'name'                     => array('required' => true),
 				'handle'                   => array('required' => true),
 				'titleFormat'              => array(
-																				'required' => true,
-																				'default' => "{dateCreated|date('D, d M Y H:i:s')}"
-																			),
+					'required' => true,
+					'default'  => "{dateCreated|date('D, d M Y H:i:s')}"
+				),
 				'displaySectionTitles'     => array(),
 				'redirectUri'              => array(),
 				'submitAction'             => array(),
@@ -59,9 +59,8 @@ class m141026_020000_sproutForms_renameOldFormsTableAndCreateNewFormsTable exten
 			// Clean up Foreign Keys
 
 			craft()->db->createCommand()->dropForeignKey('sproutforms_fields', 'formId');
-			
-			SproutFormsPlugin::log("Removed formId Foreign Key Constraint from 'sproutforms_fields' table.", LogLevel::Info, true);
 
+			SproutFormsPlugin::log("Removed formId Foreign Key Constraint from 'sproutforms_fields' table.", LogLevel::Info, true);
 		}
 
 		return true;

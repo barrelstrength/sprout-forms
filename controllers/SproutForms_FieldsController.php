@@ -13,7 +13,7 @@ class SproutForms_FieldsController extends BaseController
 		$this->requireAdmin();
 		$this->requireAjaxRequest();
 		$formId = craft()->request->getRequiredParam('formId');
-		$form = sproutForms()->forms->getFormById($formId);
+		$form   = sproutForms()->forms->getFormById($formId);
 
 		$this->returnJson($this->_getTemplate(null, $form));
 	}
@@ -32,7 +32,7 @@ class SproutForms_FieldsController extends BaseController
 
 		// Get the Form these fields are related to
 		$formId = craft()->request->getRequiredPost('formId');
-		$form = sproutForms()->forms->getFormById($formId);
+		$form   = sproutForms()->forms->getFormById($formId);
 
 		$field = new FieldModel();
 
@@ -63,7 +63,7 @@ class SproutForms_FieldsController extends BaseController
 			$variables['tabId'] = $tabId;
 			$variables['field'] = $field;
 
-			if($isAjax)
+			if ($isAjax)
 			{
 				$this->_returnJson(false, $field, $form);
 			}
@@ -94,10 +94,10 @@ class SproutForms_FieldsController extends BaseController
 		craft()->fields->saveField($field);
 
 		// Check if the handle is updated to also update the titleFormat
-		if(!$isNewField)
+		if (!$isNewField)
 		{
 			// Let's update the title format
-			if($oldHandle != $field->handle && strpos($form->titleFormat, $oldHandle) !== false)
+			if ($oldHandle != $field->handle && strpos($form->titleFormat, $oldHandle) !== false)
 			{
 				$newTitleFormat    = sproutForms()->forms->updateTitleFormat($oldHandle, $field->handle, $form->titleFormat);
 				$form->titleFormat = $newTitleFormat;
@@ -108,13 +108,13 @@ class SproutForms_FieldsController extends BaseController
 		// ------------------------------------------------------------
 
 		// Set the field layout
-		$oldFieldLayout =  $form->getFieldLayout();
-		$oldTabs = $oldFieldLayout->getTabs();
+		$oldFieldLayout = $form->getFieldLayout();
+		$oldTabs        = $oldFieldLayout->getTabs();
 
 		$postedFieldLayout = array();
-		$requiredFields = array();
-		$tabName = null;
-		$response = false;
+		$requiredFields    = array();
+		$tabName           = null;
+		$response          = false;
 
 		// If no tabs exist, let's create a
 		// default one for all of our fields
@@ -125,7 +125,7 @@ class SproutForms_FieldsController extends BaseController
 		}
 		else
 		{
-			if($isAjax)
+			if ($isAjax)
 			{
 				$response = sproutForms()->fields->addFieldToLayout($field, $form, $tabId);
 				$tabName  = FieldLayoutTabRecord::model()->findByPk($tabId)->name;
@@ -156,7 +156,7 @@ class SproutForms_FieldsController extends BaseController
 				$fieldLayout = craft()->fields->assembleLayout($postedFieldLayout, $requiredFields);
 
 				$fieldLayout->type = 'SproutForms_Form';
-				$fieldLayout->id = $oldFieldLayout->id;
+				$fieldLayout->id   = $oldFieldLayout->id;
 				$form->setFieldLayout($fieldLayout);
 
 				// save the form
@@ -170,7 +170,7 @@ class SproutForms_FieldsController extends BaseController
 		{
 			SproutFormsPlugin::log('Field Saved');
 
-			if($isAjax)
+			if ($isAjax)
 			{
 				$this->_returnJson(true, $field, $form, $tabName);
 			}
@@ -187,7 +187,7 @@ class SproutForms_FieldsController extends BaseController
 			SproutFormsPlugin::log("Couldn't save field.");
 			craft()->userSession->setError(Craft::t('Couldn’t save field.'));
 
-			if($isAjax)
+			if ($isAjax)
 			{
 				$this->_returnJson(false, $field, $form);
 			}
@@ -203,6 +203,7 @@ class SproutForms_FieldsController extends BaseController
 	 * Edit a field.
 	 *
 	 * @param array $variables
+	 *
 	 * @throws HttpException
 	 * @throws Exception
 	 */
@@ -211,18 +212,18 @@ class SproutForms_FieldsController extends BaseController
 		$this->requireAdmin();
 
 		$formId = craft()->request->getSegment(3);
-		$form = sproutForms()->forms->getFormById($formId);
+		$form   = sproutForms()->forms->getFormById($formId);
 
 		if (isset($variables['fieldId']))
 		{
 			if (!isset($variables['field']))
 			{
-				$field = craft()->fields->getFieldById($variables['fieldId']);
+				$field              = craft()->fields->getFieldById($variables['fieldId']);
 				$variables['field'] = $field;
 
 				$fieldLayoutField = FieldLayoutFieldRecord::model()->find(array(
 					'condition' => 'fieldId = :fieldId AND layoutId = :layoutId',
-					'params' => array(':fieldId' => $field->id, ':layoutId' => $form->fieldLayoutId)
+					'params'    => array(':fieldId' => $field->id, ':layoutId' => $form->fieldLayoutId)
 				));
 
 				$variables['required'] = $fieldLayoutField->required;
@@ -293,27 +294,28 @@ class SproutForms_FieldsController extends BaseController
 	/**
 	 * Loads the field settings template and returns all HTML, CSS and Javascript.
 	 *
-	 * @param FieldModel|null $field
+	 * @param FieldModel|null        $field
 	 * @param SproutForms_FormRecord $form
+	 *
 	 * @return array
 	 */
 	private function _getTemplate(FieldModel $field = null, $form)
 	{
-		$data = array();
+		$data          = array();
 		$data['tabId'] = null;
 		$data['field'] = new FieldModel();
 
-		if($field)
+		if ($field)
 		{
 			$data['field'] = $field;
-			$tabId = craft()->request->getPost('tabId');
+			$tabId         = craft()->request->getPost('tabId');
 
-			if(isset($tabId))
+			if (isset($tabId))
 			{
 				$data['tabId'] = craft()->request->getPost('tabId');
 			}
 
-			if($field->id != null)
+			if ($field->id != null)
 			{
 				$data['fieldId'] = $field->id;
 			}
@@ -336,9 +338,9 @@ class SproutForms_FieldsController extends BaseController
 	private function _returnJson($success, $field, $form, $tabName = null)
 	{
 		$this->returnJson(array(
-			'success' => $success,
-			'errors'  => $field->getAllErrors(),
-			'field'   => array(
+			'success'  => $success,
+			'errors'   => $field->getAllErrors(),
+			'field'    => array(
 				'id'           => $field->id,
 				'name'         => $field->name,
 				'handle'       => $field->handle,

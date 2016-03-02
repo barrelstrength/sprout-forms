@@ -53,14 +53,15 @@ class SproutForms_SaveEntryEvent extends SproutEmailBaseEvent
 	 */
 	public function validateOptions($options, SproutForms_EntryModel $entry, array $params = array())
 	{
-		$isNewEntry  = isset($params['isNewEntry']) && $params['isNewEntry'];
-		$whenNew = isset($options['sproutForms']['saveEntry']['whenNew']) &&
+		$isNewEntry = isset($params['isNewEntry']) && $params['isNewEntry'];
+		$whenNew    = isset($options['sproutForms']['saveEntry']['whenNew']) &&
 			$options['sproutForms']['saveEntry']['whenNew'];
 
 		// If any section ids were checked
 		// Make sure the entry belongs in one of them
 		if (!empty($options['sproutForms']['saveEntry']['formIds']) &&
-			  count($options['sproutForms']['saveEntry']['formIds']))
+			count($options['sproutForms']['saveEntry']['formIds'])
+		)
 		{
 			if (!in_array($entry->getForm()->id, $options['sproutForms']['saveEntry']['formIds']))
 			{

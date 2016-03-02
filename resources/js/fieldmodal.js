@@ -4,11 +4,14 @@
 
 	// If mutation observer is not supported, create a harness for it for graceful degradation.
 	// Older browsers could be supported through the DOMNodeInserted event, but that can be saved for another day...
-	if(!MutationObserver)
+	if (!MutationObserver)
 	{
-		MutationObserver = function(){};
-		MutationObserver.prototype.observe = function(){};
-		MutationObserver.prototype.disconnect = function(){};
+		MutationObserver = function() {
+		};
+		MutationObserver.prototype.observe = function() {
+		};
+		MutationObserver.prototype.disconnect = function() {
+		};
 	}
 
 	/**
@@ -17,32 +20,32 @@
 	 */
 	var FieldModal = Garnish.Modal.extend({
 
-		$body:          null,
-		$content:       null,
-		$main:          null,
-		$footer:        null,
-		$leftButtons:   null,
-		$rightButtons:  null,
-		$deleteBtn:     null,
-		$saveBtn:       null,
-		$cancelBtn:     null,
-		$saveSpinner:   null,
+		$body: null,
+		$content: null,
+		$main: null,
+		$footer: null,
+		$leftButtons: null,
+		$rightButtons: null,
+		$deleteBtn: null,
+		$saveBtn: null,
+		$cancelBtn: null,
+		$saveSpinner: null,
 		$deleteSpinner: null,
-		$loadSpinner:   null,
+		$loadSpinner: null,
 
-		$html:          null,
-		$js:            null,
-		$css:           null,
-		$currentHtml:   null,
-		$currentJs:     null,
-		$currentCss:    null,
+		$html: null,
+		$js: null,
+		$css: null,
+		$currentHtml: null,
+		$currentJs: null,
+		$currentCss: null,
 
-		$observed:      null,
-		observer:       null,
+		$observed: null,
+		observer: null,
 
 		templateLoaded: false,
-		executedJs:     null,
-		loadedCss:      null,
+		executedJs: null,
+		loadedCss: null,
 
 		/**
 		 * The constructor.
@@ -55,39 +58,39 @@
 			});
 
 			this.$currentHtml = $();
-			this.$currentJs   = $();
-			this.$currentCss  = $();
-			this.$observed    = $();
+			this.$currentJs = $();
+			this.$currentCss = $();
+			this.$observed = $();
 
-			this.executedJs   = {};
-			this.loadedCss    = {};
+			this.executedJs = {};
+			this.loadedCss = {};
 
 			// Observe the DOM
 			this.observer = new MutationObserver($.proxy(function(mutations)
 			{
-				for(var i = 0; i < mutations.length; i++)
+				for (var i = 0; i < mutations.length; i++)
 				{
 					this.$observed = this.$observed.add(mutations[i].addedNodes);
 				}
 			}, this));
 
-			var $container      = $('<form class="modal sprout-field-modal" style="display: none; opacity: 0;">').appendTo(Garnish.$bod);
+			var $container = $('<form class="modal sprout-field-modal" style="display: none; opacity: 0;">').appendTo(Garnish.$bod);
 
-			this.$body          = $('<div class="body">').appendTo($container);
-			this.$content       = $('<div class="content">').appendTo(this.$body);
-			this.$main          = $('<div class="main">').appendTo(this.$content);
-			this.$footer        = $('<div class="footer">').appendTo($container);
-			this.$loadSpinner   = $('<div class="spinner big">').appendTo($container);
+			this.$body = $('<div class="body">').appendTo($container);
+			this.$content = $('<div class="content">').appendTo(this.$body);
+			this.$main = $('<div class="main">').appendTo(this.$content);
+			this.$footer = $('<div class="footer">').appendTo($container);
+			this.$loadSpinner = $('<div class="spinner big">').appendTo($container);
 
-			this.$leftButtons   = $('<div class="buttons left">').appendTo(this.$footer);
-			this.$rightButtons  = $('<div class="buttons right">').appendTo(this.$footer);
+			this.$leftButtons = $('<div class="buttons left">').appendTo(this.$footer);
+			this.$rightButtons = $('<div class="buttons right">').appendTo(this.$footer);
 
-			this.$deleteBtn     = $('<a class="delete error hidden">').text(Craft.t('Delete')).appendTo(this.$leftButtons);
+			this.$deleteBtn = $('<a class="delete error hidden">').text(Craft.t('Delete')).appendTo(this.$leftButtons);
 			this.$deleteSpinner = $('<div class="spinner hidden">').appendTo(this.$leftButtons);
 
-			this.$cancelBtn     = $('<div class="btn disabled" role="button">').text(Craft.t('Cancel')).appendTo(this.$rightButtons);
-			this.$saveBtn       = $('<div class="btn submit disabled" role="button">').text(Craft.t('Save')).appendTo(this.$rightButtons);
-			this.$saveSpinner   = $('<div class="spinner hidden">').appendTo(this.$rightButtons);
+			this.$cancelBtn = $('<div class="btn disabled" role="button">').text(Craft.t('Cancel')).appendTo(this.$rightButtons);
+			this.$saveBtn = $('<div class="btn submit disabled" role="button">').text(Craft.t('Save')).appendTo(this.$rightButtons);
+			this.$saveSpinner = $('<div class="spinner hidden">').appendTo(this.$rightButtons);
 
 			this.setContainer($container);
 			var formId = $("#formId").val();
@@ -99,7 +102,7 @@
 
 			Craft.postActionRequest('sproutForms/fields/getFieldSettings', postData, $.proxy(function(response, textStatus)
 			{
-				if(textStatus === 'success')
+				if (textStatus === 'success')
 				{
 					this.$loadSpinner.addClass('hidden');
 					this.initTemplate(response);
@@ -121,13 +124,13 @@
 			var callback = $.proxy(function(e)
 			{
 				this.$html = e.$html;
-				this.$js   = e.$js;
-				this.$css  = e.$css;
+				this.$js = e.$js;
+				this.$css = e.$css;
 
 				this.templateLoaded = true;
 				this.initListeners();
 
-				if(this.visible)
+				if (this.visible)
 				{
 					this.initSettings();
 				}
@@ -151,11 +154,11 @@
 			var $head = Garnish.$doc.find('head');
 
 			var $html = $(template.html);
-			var $js   = $(template.js).filter('script');
-			var $css  = $(template.css).filter('style, link');
+			var $js = $(template.js).filter('script');
+			var $css = $(template.css).filter('style, link');
 
 			// Ensure that external stylesheets are loaded asynchronously
-			var $cssFiles  = $css.filter('link').prop('async', true);
+			var $cssFiles = $css.filter('link').prop('async', true);
 			var $cssInline = $css.filter('style');
 
 			$cssFiles.each(function()
@@ -163,7 +166,7 @@
 				var $this = $(this);
 				var src = $this.prop('href');
 
-				if(!that.loadedCss.hasOwnProperty(src))
+				if (!that.loadedCss.hasOwnProperty(src))
 				{
 					$head.append($this);
 					that.loadedCss[src] = $this;
@@ -176,7 +179,7 @@
 			// reused later on.
 			// The Javascript tags that directly contain code are assumed to be context-dependent, so they are
 			// saved to be executed each time the modal is opened.
-			var $jsFiles  = $js.filter('[src]');
+			var $jsFiles = $js.filter('[src]');
 			var $jsInline = $js.filter(':not([src])');
 
 			var jsFiles = [];
@@ -185,7 +188,7 @@
 				var $this = $(this);
 				var src = $this.prop('src');
 
-				if(!that.executedJs.hasOwnProperty(src))
+				if (!that.executedJs.hasOwnProperty(src))
 				{
 					jsFiles.push(src);
 					that.executedJs[src] = true;
@@ -217,19 +220,19 @@
 		{
 			var filesCount = files.length;
 
-			if(filesCount > 0)
+			if (filesCount > 0)
 			{
-				for(var i = 0; i < files.length; i++)
+				for (var i = 0; i < files.length; i++)
 				{
 					var src = files[i];
 
 					$.getScript(src, $.proxy(function(data, status)
 					{
-						if(status === 'success')
+						if (status === 'success')
 						{
 							filesCount--;
 
-							if(filesCount === 0)
+							if (filesCount === 0)
 							{
 								this.trigger('runExternalScripts', {
 									target: this
@@ -260,9 +263,9 @@
 			this.$saveBtn.removeClass('disabled');
 
 			this.addListener(this.$cancelBtn, 'activate', 'closeModal');
-			this.addListener(this.$saveBtn,   'activate', 'saveField');
+			this.addListener(this.$saveBtn, 'activate', 'saveField');
 
-			this.on('show',    this.initSettings);
+			this.on('show', this.initSettings);
 			this.on('fadeOut', this.destroySettings);
 
 			this.enable();
@@ -277,9 +280,9 @@
 			this.$saveBtn.addClass('disabled');
 
 			this.removeListener(this.$cancelBtn, 'activate');
-			this.removeListener(this.$saveBtn,   'activate');
+			this.removeListener(this.$saveBtn, 'activate');
 
-			this.off('show',    this.initSettings);
+			this.off('show', this.initSettings);
 			this.off('fadeOut', this.destroySettings);
 
 			this.disable();
@@ -293,15 +296,18 @@
 			var that = e && e.target ? e.target : this;
 
 			// If the template files are not loaded yet, just cancel initialisation of the settings.
-			if(!that.templateLoaded) return;
+			if (!that.templateLoaded)
+			{
+				return;
+			}
 
 			that.$currentHtml = e && e.$html ? e.$html : that.$html.clone();
-			that.$currentJs   = e && e.$js   ? e.$js   : that.$js.clone();
-			that.$currentCss  = e && e.$css  ? e.$css  : that.$css.clone();
+			that.$currentJs = e && e.$js ? e.$js : that.$js.clone();
+			that.$currentCss = e && e.$css ? e.$css : that.$css.clone();
 
 			// Save any new nodes that are added to the body during initialisation, so they can be safely removed later.
 			that.$observed = $();
-			that.observer.observe(Garnish.$bod[0], {childList: true, subtree: false});
+			that.observer.observe(Garnish.$bod[0], { childList: true, subtree: false });
 
 			that.$main.append(that.$currentHtml);
 			Garnish.$bod.append(that.$currentJs);
@@ -363,9 +369,9 @@
 		 */
 		saveField: function(e)
 		{
-			if(e) e.preventDefault();
+			if (e) e.preventDefault();
 
-			if(this.$saveBtn.hasClass('disabled') || !this.$saveSpinner.hasClass('hidden'))
+			if (this.$saveBtn.hasClass('disabled') || !this.$saveSpinner.hasClass('hidden'))
 			{
 				return;
 			}
@@ -384,11 +390,11 @@
 
 				var statusSuccess = (textStatus === 'success');
 
-				if(statusSuccess && response.success)
+				if (statusSuccess && response.success)
 				{
 					this.initListeners();
 
-					if(id === false)
+					if (id === false)
 					{
 						this.trigger('newField', {
 							target: this,
@@ -402,14 +408,14 @@
 							field: response.field
 						});
 
-						Craft.cp.displayNotice(Craft.t('\'{name}\' field saved.', {name: response.field.name}));
+						Craft.cp.displayNotice(Craft.t('\'{name}\' field saved.', { name: response.field.name }));
 					}
 
 					this.hide();
 				}
-				else if(statusSuccess && response.template)
+				else if (statusSuccess && response.template)
 				{
-					if(this.visible)
+					if (this.visible)
 					{
 						var callback = $.proxy(function(e)
 						{
@@ -444,7 +450,7 @@
 		 */
 		hide: function()
 		{
-			if(!this._disabled)
+			if (!this._disabled)
 			{
 				this.base();
 			}
@@ -474,7 +480,7 @@
 		 */
 		getInstance: function()
 		{
-			if(!this._instance)
+			if (!this._instance)
 			{
 				this._instance = new FieldModal();
 			}

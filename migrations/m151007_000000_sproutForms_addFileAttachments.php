@@ -34,6 +34,7 @@ class m151007_000000_sproutForms_addFileAttachments extends BaseMigration
 			// tell craft that we couldn't create the column as it alredy exists.
 			SproutFormsPlugin::log("Column `$columnName` already exists in the `$tableName` table.", LogLevel::Info, true);
 		}
+
 		// return true and let craft know its done
 		return true;
 	}

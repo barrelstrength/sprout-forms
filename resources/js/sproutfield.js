@@ -6,13 +6,13 @@
 	 */
 	var SproutField = Garnish.Base.extend({
 
-		$container:   null,
+		$container: null,
 		$groupButton: null,
 		$fieldButton: null,
-		$settings:    null,
+		$settings: null,
 
-		fld:          null,
-		modal:        null,
+		fld: null,
+		modal: null,
 
 		/**
 		 * The constructor.
@@ -21,7 +21,7 @@
 		 */
 		init: function(fld)
 		{
-			if(!(fld instanceof Craft.FieldLayoutDesigner))
+			if (!(fld instanceof Craft.FieldLayoutDesigner))
 			{
 				return;
 			}
@@ -29,11 +29,11 @@
 			this.fld = fld;
 			this.fld.$container.addClass('sprout-field');
 
-			this.$container   = $('<div class="newfieldbtn-container">').insertAfter($(".fld-tabs"));
+			this.$container = $('<div class="newfieldbtn-container">').insertAfter($(".fld-tabs"));
 
 			this.$fieldButton = $('<div id="sproutField" class="btn add icon" tabindex="0">').text(Craft.t('New Field')).appendTo($(".buttons"));
 
-			this.modal  = SproutField.FieldModal.getInstance();
+			this.modal = SproutField.FieldModal.getInstance();
 
 			this.addListener(this.$fieldButton, 'activate', 'newField');
 
@@ -76,14 +76,14 @@
 			var fields = fld.$allFields;
 			var $group = this._getGroupByName(groupName);
 
-			if($group)
+			if ($group)
 			{
 				var $groupContent = $group.children('.fld-tabcontent');
 				var $field = $([
 					'<div class="fld-field" data-id="', id, '">',
-						'<span>', name, '</span>',
-						'<input class="id-input" type="hidden" name="fieldLayout[',groupName,'][]" value="',id,'">',
-						'<a class="settings icon" title="Edit"></a>',
+					'<span>', name, '</span>',
+					'<input class="id-input" type="hidden" name="fieldLayout[', groupName, '][]" value="', id, '">',
+					'<a class="settings icon" title="Edit"></a>',
 					'</div>'
 				].join('')).appendTo($groupContent);
 
@@ -126,7 +126,7 @@
 
 			$span.text(name);
 
-			if($currentGroup[0] !== $group[0])
+			if ($currentGroup[0] !== $group[0])
 			{
 				$content.append($unusedField);
 				grid.refreshCols(true);
@@ -151,7 +151,7 @@
 				var $this = $(this);
 				var $tab = $this.children('.tabs').children('.tab.sel');
 				var $span = $tab.children('span');
-				if($span.text() === name)
+				if ($span.text() === name)
 				{
 					$group = $this;
 					return false;

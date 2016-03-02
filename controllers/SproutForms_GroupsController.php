@@ -14,11 +14,11 @@ class SproutForms_GroupsController extends BaseController
 		$group       = new SproutForms_FormGroupModel();
 		$group->id   = craft()->request->getPost('id');
 		$group->name = craft()->request->getRequiredPost('name');
-		
+
 		$isNewGroup = empty($group->id);
 
 		if (sproutForms()->groups->saveGroup($group))
-		{	
+		{
 			if ($isNewGroup)
 			{
 				craft()->userSession->setNotice(Craft::t('Group added.'));

@@ -94,7 +94,7 @@ class SproutForms_EntryElementType extends BaseElementType
 		// Build our sources for forms with no group
 		foreach ($noSources as $form)
 		{
-			$key = "form:" . $form['data']['formId'];
+			$key           = "form:" . $form['data']['formId'];
 			$sources[$key] = array(
 				'label'    => $form['label'],
 				'data'     => array(
@@ -109,7 +109,7 @@ class SproutForms_EntryElementType extends BaseElementType
 		// Build our sources sidebar for forms in groups
 		foreach ($prepSources as $source)
 		{
-			if(isset($source['heading']))
+			if (isset($source['heading']))
 			{
 				$sources[] = array(
 					'heading' => $source['heading']
@@ -118,7 +118,7 @@ class SproutForms_EntryElementType extends BaseElementType
 
 			foreach ($source['forms'] as $form)
 			{
-				$key = "form:" . $form['data']['formId'];
+				$key           = "form:" . $form['data']['formId'];
 				$sources[$key] = array(
 					'label'    => $form['label'],
 					'data'     => array(
@@ -163,16 +163,16 @@ class SproutForms_EntryElementType extends BaseElementType
 	public function defineAvailableTableAttributes()
 	{
 		$attributes = array(
-				'title'       => array('label' => Craft::t('Title')),
-				'formName'    => array('label' => Craft::t('Form Name')),
-				'dateCreated' => array('label' => Craft::t('Date Created')),
-				'dateUpdated' => array('label' => Craft::t('Date Updated')),
+			'title'       => array('label' => Craft::t('Title')),
+			'formName'    => array('label' => Craft::t('Form Name')),
+			'dateCreated' => array('label' => Craft::t('Date Created')),
+			'dateUpdated' => array('label' => Craft::t('Date Updated')),
 		);
 
 		// Mix in custom fields defined on the SproutForms_Form Element
 		foreach (craft()->elementIndexes->getAvailableTableFields('SproutForms_Form') as $field)
 		{
-			$attributes['field:'.$field->id] = array('label' => $field->name);
+			$attributes['field:' . $field->id] = array('label' => $field->name);
 		}
 
 		return $attributes;
@@ -215,11 +215,10 @@ class SproutForms_EntryElementType extends BaseElementType
 		{
 			return parent::getTableAttributeHtml($element, $attribute);
 		}
-		catch(Exception $e)
+		catch (Exception $e)
 		{
 			return '';
 		}
-
 	}
 
 	/**
@@ -352,20 +351,24 @@ class SproutForms_EntryElementType extends BaseElementType
 		DbCommand &$query,
 		ElementCriteriaModel &$criteria,
 		&$select
-	) {
+	)
+	{
 		// Do we have a source selected in the sidebar?
 		// If so, we have a form id and we can use that to fetch the content table
 		if ($criteria->formId || $criteria->formHandle)
 		{
 			$form = null;
 
-			if($criteria->formId)
+			if ($criteria->formId)
 			{
 				$form = sproutForms()->forms->getFormById($criteria->formId);
 			}
-			else if($criteria->formHandle)
+			else
 			{
-				$form = sproutForms()->forms->getFormByHandle($criteria->formHandle);
+				if ($criteria->formHandle)
+				{
+					$form = sproutForms()->forms->getFormByHandle($criteria->formHandle);
+				}
 			}
 
 			if ($form)
@@ -379,18 +382,18 @@ class SproutForms_EntryElementType extends BaseElementType
 				{
 					if ($field->hasContentColumn())
 					{
-						$selectContentTable .=",{$form->handle}.{$fieldPrefix}{$field->handle} as {$field->handle}";
+						$selectContentTable .= ",{$form->handle}.{$fieldPrefix}{$field->handle} as {$field->handle}";
 						$handle = $field->handle;
 
-						if(isset($criteria->$handle))
+						if (isset($criteria->$handle))
 						{
-							$query->andWhere(DbHelper::parseParam($form->handle.".".$fieldPrefix.$field->handle, $criteria->$handle, $query->params));
+							$query->andWhere(DbHelper::parseParam($form->handle . "." . $fieldPrefix . $field->handle, $criteria->$handle, $query->params));
 						}
 					}
 				}
 
-				$select  = empty($select) ? $selectContentTable : $select.', '.$selectContentTable;
-				$query->join($form->getContentTable().' as '.$form->handle, $form->handle.'.elementId = elements.id');
+				$select = empty($select) ? $selectContentTable : $select . ', ' . $selectContentTable;
+				$query->join($form->getContentTable() . ' as ' . $form->handle, $form->handle . '.elementId = elements.id');
 			}
 		}
 	}

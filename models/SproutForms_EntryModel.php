@@ -70,7 +70,7 @@ class SproutForms_EntryModel extends BaseElementModel
 	 */
 	public function getFieldContext()
 	{
-		return 'sproutForms:'.$this->formId;
+		return 'sproutForms:' . $this->formId;
 	}
 
 	/**
@@ -113,7 +113,7 @@ class SproutForms_EntryModel extends BaseElementModel
 	 */
 	public function getCpEditUrl()
 	{
-		return UrlHelper::getCpUrl('sproutforms/entries/edit/'.$this->id);
+		return UrlHelper::getCpUrl('sproutforms/entries/edit/' . $this->id);
 	}
 
 	/**

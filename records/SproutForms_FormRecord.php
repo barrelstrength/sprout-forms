@@ -4,7 +4,7 @@ namespace Craft;
 class SproutForms_FormRecord extends BaseRecord
 {
 	private $_oldHandle;
-	public  $oldRecord;
+	public $oldRecord;
 
 	/**
 	 * Init
@@ -35,31 +35,31 @@ class SproutForms_FormRecord extends BaseRecord
 	public function defineAttributes()
 	{
 		return array(
-			'groupId' => AttributeType::Number,
-			'name' => array(
+			'groupId'                  => AttributeType::Number,
+			'name'                     => array(
 				AttributeType::String,
 				'required' => true
 			),
-			'handle' => array(
+			'handle'                   => array(
 				AttributeType::String,
 				'required' => true
 			),
-			'titleFormat' => array(
+			'titleFormat'              => array(
 				AttributeType::String,
 				'required' => true
 			),
-			'displaySectionTitles' => array(AttributeType::Bool, 'default' => false),
-			'redirectUri' => AttributeType::String,
-			'submitAction' => AttributeType::String,
-			'submitButtonText' => AttributeType::String,
-			'notificationEnabled' => array(AttributeType::Bool, 'default' => false),
-			'notificationRecipients' => AttributeType::String,
-			'notificationSubject' => AttributeType::String,
-			'notificationSenderName' => AttributeType::String,
-			'notificationSenderEmail' => AttributeType::String,
+			'displaySectionTitles'     => array(AttributeType::Bool, 'default' => false),
+			'redirectUri'              => AttributeType::String,
+			'submitAction'             => AttributeType::String,
+			'submitButtonText'         => AttributeType::String,
+			'notificationEnabled'      => array(AttributeType::Bool, 'default' => false),
+			'notificationRecipients'   => AttributeType::String,
+			'notificationSubject'      => AttributeType::String,
+			'notificationSenderName'   => AttributeType::String,
+			'notificationSenderEmail'  => AttributeType::String,
 			'notificationReplyToEmail' => AttributeType::String,
-			'enableTemplateOverrides' => array(AttributeType::Bool, 'default' => false),
-			'templateOverridesFolder' => array(AttributeType::String),
+			'enableTemplateOverrides'  => array(AttributeType::Bool, 'default' => false),
+			'templateOverridesFolder'  => array(AttributeType::String),
 			'enableFileAttachments'    => array(AttributeType::Bool, 'default' => false),
 		);
 	}
@@ -113,6 +113,7 @@ class SproutForms_FormRecord extends BaseRecord
 	 * Custom validator for email notifications
 	 *
 	 * @param string $attribute
+	 *
 	 * @return boolean
 	 */
 	public function validateEnabledNotification($attribute)
@@ -122,6 +123,7 @@ class SproutForms_FormRecord extends BaseRecord
 		if ($this->notificationEnabled && ($this->{$attribute} == ""))
 		{
 			$this->addError($attribute, 'All notification fields are required when notifications are enabled.');
+
 			return false;
 		}
 	}
@@ -130,6 +132,7 @@ class SproutForms_FormRecord extends BaseRecord
 	 * Custom validator for email distribution list
 	 *
 	 * @param string $attribute
+	 *
 	 * @return boolean
 	 */
 	public function validateRecipients($attribute)
@@ -144,6 +147,7 @@ class SproutForms_FormRecord extends BaseRecord
 				}
 			}
 		}
+
 		return true;
 	}
 
@@ -151,6 +155,7 @@ class SproutForms_FormRecord extends BaseRecord
 	 * Custom validator for email distribution list
 	 *
 	 * @param string $attribute
+	 *
 	 * @return boolean
 	 */
 	public function validateRecipient($attribute, $email)
@@ -166,6 +171,7 @@ class SproutForms_FormRecord extends BaseRecord
 		if (!filter_var($email, FILTER_VALIDATE_EMAIL))
 		{
 			$this->addError($attribute, Craft::t('Please make sure all emails are valid.'));
+
 			return false;
 		}
 
@@ -200,14 +206,14 @@ class SproutForms_FormRecord extends BaseRecord
 		// Validate the name and handle fields when the record is save as new
 		if (isset($_POST["saveAsNew"]))
 		{
-			if($_POST['saveAsNew'])
+			if ($_POST['saveAsNew'])
 			{
-				if( sproutForms()->forms->getFieldValue('name', $this->name) )
+				if (sproutForms()->forms->getFieldValue('name', $this->name))
 				{
 					$this->name = sproutForms()->forms->getFieldAsNew('name', $this->name);
 				}
 
-				if( sproutForms()->forms->getFieldValue('handle', $this->handle) )
+				if (sproutForms()->forms->getFieldValue('handle', $this->handle))
 				{
 					$this->handle = sproutForms()->forms->getFieldAsNew('handle', $this->handle);
 				}
@@ -224,18 +230,18 @@ class SproutForms_FormRecord extends BaseRecord
 	public function beforeSave()
 	{
 		// Check if the titleFormat is updated
-		if(!$this->isNewRecord())
+		if (!$this->isNewRecord())
 		{
-			if($this->titleFormat != $this->oldRecord->titleFormat)
+			if ($this->titleFormat != $this->oldRecord->titleFormat)
 			{
-				$contentTable = 'sproutformscontent_'.trim(strtolower($this->handle));
+				$contentTable = 'sproutformscontent_' . trim(strtolower($this->handle));
 				$entries      = sproutForms()->entries->getContentEntries($contentTable);
 				// Call the update task
 				craft()->tasks->createTask('SproutForms_TitleFormat', null,
 					array(
-						'contentRows'     => $entries,
-						'newFormat'       => $this->titleFormat,
-						'contentTable'    => $contentTable
+						'contentRows'  => $entries,
+						'newFormat'    => $this->titleFormat,
+						'contentTable' => $contentTable
 					)
 				);
 			}

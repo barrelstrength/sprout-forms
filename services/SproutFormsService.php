@@ -89,7 +89,7 @@ class SproutFormsService extends BaseApplicationComponent
 		// We only act if...
 		// 1. This is a side effect of submitting a form
 		// 2. File attachments are enabled for Sprout Forms
-		if (isset($variables['sproutFormsEntry']) && $enableFileAttachments )
+		if (isset($variables['sproutFormsEntry']) && $enableFileAttachments)
 		{
 			$entry = $variables['sproutFormsEntry'];
 
@@ -163,7 +163,7 @@ class SproutFormsService extends BaseApplicationComponent
 	 */
 	protected function getAssetFilePath(AssetFileModel $asset)
 	{
-		return $asset->getSource()->getSourceType()->getBasePath().$asset->getFolder()->path.$asset->filename;
+		return $asset->getSource()->getSourceType()->getBasePath() . $asset->getFolder()->path . $asset->filename;
 	}
 
 	/**
@@ -178,13 +178,14 @@ class SproutFormsService extends BaseApplicationComponent
 
 	/**
 	 * Return wether or not the example template already exist
+	 *
 	 * @return bool
 	 */
 	public function hasExamples()
 	{
 		$path = craft()->path->getSiteTemplatesPath() . 'sproutforms';
 
-		if(file_exists($path))
+		if (file_exists($path))
 		{
 			return true;
 		}
@@ -194,10 +195,11 @@ class SproutFormsService extends BaseApplicationComponent
 
 	/**
 	 * @param $subject
+	 *
 	 * @return string
 	 */
 	public function encodeSubjectLine($subject)
 	{
-		return '=?UTF-8?B?'.base64_encode($subject).'?=';
+		return '=?UTF-8?B?' . base64_encode($subject) . '?=';
 	}
 }

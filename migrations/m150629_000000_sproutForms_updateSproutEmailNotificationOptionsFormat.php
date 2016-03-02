@@ -15,12 +15,12 @@ class m150629_000000_sproutForms_updateSproutEmailNotificationOptionsFormat exte
 				$notifications = craft()->db->createCommand()
 					->select('id, eventId, options')
 					->from('sproutemail_campaigns_notifications')
-					->where('eventId=:eventId', array(':eventId'=>'sproutForms-saveEntry'))
+					->where('eventId=:eventId', array(':eventId' => 'sproutForms-saveEntry'))
 					->queryAll();
 
 				if ($count = count($notifications))
 				{
-					SproutFormsPlugin::log('Notifications found: '. $count, LogLevel::Info, true);
+					SproutFormsPlugin::log('Notifications found: ' . $count, LogLevel::Info, true);
 
 					$newOptions = array();
 
@@ -67,9 +67,8 @@ class m150629_000000_sproutForms_updateSproutEmailNotificationOptionsFormat exte
 		{
 			$oldOptions = JsonHelper::decode($options);
 
-			$whenNew = isset($oldOptions['entriesSaveEntryOnlyWhenNew']) ? $oldOptions['entriesSaveEntryOnlyWhenNew'] : '';
+			$whenNew    = isset($oldOptions['entriesSaveEntryOnlyWhenNew']) ? $oldOptions['entriesSaveEntryOnlyWhenNew'] : '';
 			$sectionIds = isset($oldOptions['entriesSaveEntrySectionIds']) ? $oldOptions['entriesSaveEntrySectionIds'] : '';
-
 		}
 
 		$newOptions = array(

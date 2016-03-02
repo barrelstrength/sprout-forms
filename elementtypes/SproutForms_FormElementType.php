@@ -37,13 +37,14 @@ class SproutForms_FormElementType extends BaseElementType
 	 * Returns this element type's sources.
 	 *
 	 * @param string|null $context
+	 *
 	 * @return array|false
 	 */
 	public function getSources($context = null)
 	{
 		$sources = array(
 			'*' => array(
-				'label'    => Craft::t('All Forms'),
+				'label' => Craft::t('All Forms'),
 			)
 		);
 
@@ -51,7 +52,7 @@ class SproutForms_FormElementType extends BaseElementType
 
 		foreach ($groups as $group)
 		{
-			$key = 'group:'.$group->id;
+			$key = 'group:' . $group->id;
 
 			$sources[$key] = array(
 				'label'    => $group->name,
@@ -88,15 +89,16 @@ class SproutForms_FormElementType extends BaseElementType
 	 * Returns the attributes that can be shown/sorted by in table views.
 	 *
 	 * @param string|null $source
+	 *
 	 * @return array
 	 */
 	public function defineTableAttributes($source = null)
 	{
 		return array(
-			'name'     => Craft::t('Name'),
-			'handle'   => Craft::t('Handle'),
+			'name'           => Craft::t('Name'),
+			'handle'         => Craft::t('Handle'),
 			'numberOfFields' => Craft::t('Number of Fields'),
-			'totalEntries' => Craft::t('Total Entries'),
+			'totalEntries'   => Craft::t('Total Entries'),
 		);
 	}
 
@@ -108,8 +110,8 @@ class SproutForms_FormElementType extends BaseElementType
 	public function defineSortableAttributes()
 	{
 		return array(
-			'name'     => Craft::t('Name'),
-			'handle'   => Craft::t('Handle'),
+			'name'           => Craft::t('Name'),
+			'handle'         => Craft::t('Handle'),
 			'numberOfFields' => Craft::t('Number of Fields'),
 			'totalEntries'   => Craft::t('Total Entries'),
 		);
@@ -123,8 +125,8 @@ class SproutForms_FormElementType extends BaseElementType
 	public function defineAvailableTableAttributes()
 	{
 		$attributes = array(
-			'name'     => array('label' => Craft::t('Name')),
-			'handle'   => array('label' => Craft::t('Handle')),
+			'name'           => array('label' => Craft::t('Name')),
+			'handle'         => array('label' => Craft::t('Handle')),
 			'numberOfFields' => array('label' => Craft::t('Number of Fields')),
 			'totalEntries'   => array('label' => Craft::t('Total Entries'))
 		);
@@ -163,16 +165,16 @@ class SproutForms_FormElementType extends BaseElementType
 		{
 			case 'handle':
 			{
-				return '<code>'.$element->handle.'</code>';
+				return '<code>' . $element->handle . '</code>';
 			}
 
 			case 'numberOfFields':
 			{
 				$totalFields = craft()->db->createCommand()
-            				->select('COUNT(*)')
-            				->from('fieldlayoutfields')
-            				->where('layoutId=:layoutId', array(':layoutId' => $element->fieldLayoutId))
-            				->queryScalar();
+					->select('COUNT(*)')
+					->from('fieldlayoutfields')
+					->where('layoutId=:layoutId', array(':layoutId' => $element->fieldLayoutId))
+					->queryScalar();
 
 				return $totalFields;
 			}
@@ -180,10 +182,10 @@ class SproutForms_FormElementType extends BaseElementType
 			case 'totalEntries':
 			{
 				$totalEntries = craft()->db->createCommand()
-            				->select('COUNT(*)')
-            				->from('sproutforms_entries')
-            				->where('formId=:formId', array(':formId' => $element->id))
-            				->queryScalar();
+					->select('COUNT(*)')
+					->from('sproutforms_entries')
+					->where('formId=:formId', array(':formId' => $element->id))
+					->queryScalar();
 
 				return $totalEntries;
 			}
@@ -203,12 +205,12 @@ class SproutForms_FormElementType extends BaseElementType
 	public function defineCriteriaAttributes()
 	{
 		return array(
-			'groupId'	                => AttributeType::Number,
-			'fieldLayoutId'           => AttributeType::Number,
-			'name'                    => AttributeType::String,
-			'handle'                  => AttributeType::String,
-			'totalEntries'            => array(AttributeType::Number, 'default' => 'totalEntries'),
-			'numberOfFields'          => array(AttributeType::Number, 'default' => 'numberOfFields'),
+			'groupId'        => AttributeType::Number,
+			'fieldLayoutId'  => AttributeType::Number,
+			'name'           => AttributeType::String,
+			'handle'         => AttributeType::String,
+			'totalEntries'   => array(AttributeType::Number, 'default' => 'totalEntries'),
+			'numberOfFields' => array(AttributeType::Number, 'default' => 'numberOfFields'),
 		);
 	}
 
@@ -228,8 +230,9 @@ class SproutForms_FormElementType extends BaseElementType
 	/**
 	 * Modifies an element query targeting elements of this type.
 	 *
-	 * @param DbCommand $query
+	 * @param DbCommand            $query
 	 * @param ElementCriteriaModel $criteria
+	 *
 	 * @return mixed
 	 */
 	public function modifyElementsQuery(DbCommand $query, ElementCriteriaModel $criteria)
@@ -257,12 +260,12 @@ class SproutForms_FormElementType extends BaseElementType
 			')
 			->join('sproutforms_forms forms', 'forms.id = elements.id');
 
-		if($criteria->totalEntries)
+		if ($criteria->totalEntries)
 		{
 			$query->addSelect('COUNT(entries.id) totalEntries');
 			$query->leftJoin('sproutforms_entries entries', 'entries.formId = forms.id');
 		}
-		if($criteria->numberOfFields)
+		if ($criteria->numberOfFields)
 		{
 			$query->addSelect('COUNT(fields.id) numberOfFields');
 			$query->leftJoin('fieldlayoutfields fields', 'fields.layoutId = forms.fieldLayoutId');
@@ -282,6 +285,7 @@ class SproutForms_FormElementType extends BaseElementType
 	 * Populates an element model based on a query result.
 	 *
 	 * @param array $row
+	 *
 	 * @return array
 	 */
 	public function populateElementModel($row)
@@ -293,6 +297,7 @@ class SproutForms_FormElementType extends BaseElementType
 	 * Returns the HTML for an editor HUD for the given element.
 	 *
 	 * @param BaseElementModel $element
+	 *
 	 * @return string
 	 */
 	public function getEditorHtml(BaseElementModel $element)

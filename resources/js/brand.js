@@ -1,8 +1,8 @@
-(function ($) {
+(function($) {
 
 	Craft.SproutBrand = Garnish.Base.extend(
 	{
-		displayFooter: function (plugin) {
+		displayFooter: function(plugin) {
 			brandHtml = '<ul>';
 			brandHtml += '<li><a href="' + plugin.pluginUrl + '" target="_blank">' + plugin.pluginName + '</a> ' + plugin.pluginVersion + '</li>';
 			brandHtml += '<li>' + plugin.pluginDescription + '</li>';

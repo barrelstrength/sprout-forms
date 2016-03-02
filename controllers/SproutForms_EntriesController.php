@@ -10,7 +10,7 @@ class SproutForms_EntriesController extends BaseController
 	 */
 	protected $allowAnonymous = array(
 		'actionSaveEntry',
-	    'actionForwardEntry',
+		'actionForwardEntry',
 	);
 
 	/**
@@ -128,6 +128,7 @@ class SproutForms_EntriesController extends BaseController
 			}
 		}
 	}
+
 	/**
 	 * Processes form submissions
 	 *
@@ -194,7 +195,6 @@ class SproutForms_EntriesController extends BaseController
 				// Store our new entry so we can recreate the Entry object on our thank you page
 				craft()->httpSession->add('lastEntryId', $entry->id);
 			}
-
 
 			if (craft()->request->isAjaxRequest())
 			{
@@ -264,7 +264,6 @@ class SproutForms_EntriesController extends BaseController
 					}
 				}
 			}
-
 		}
 	}
 
@@ -401,10 +400,10 @@ class SproutForms_EntriesController extends BaseController
 		foreach ($fieldLayoutTabs as $tab)
 		{
 			$tabs[$tab->id]['label'] = $tab->name;
-			$tabs[$tab->id]['url'] = '#tab' . $tab->sortOrder;
+			$tabs[$tab->id]['url']   = '#tab' . $tab->sortOrder;
 		}
 
-		$variables['tabs'] = $tabs;
+		$variables['tabs']            = $tabs;
 		$variables['fieldLayoutTabs'] = $fieldLayoutTabs;
 
 		$this->renderTemplate('sproutforms/entries/_edit', $variables);

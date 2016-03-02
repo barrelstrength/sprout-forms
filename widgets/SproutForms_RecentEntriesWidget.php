@@ -10,11 +10,11 @@ class SproutForms_RecentEntriesWidget extends BaseWidget
 		$name = Craft::t('Recent Form Entries');
 
 		// Concat form name if the user select a specific form
-		if($this->getSettings()->form != 0 && $this->getSettings()->form != null)
+		if ($this->getSettings()->form != 0 && $this->getSettings()->form != null)
 		{
 			$form = sproutForms()->forms->getFormById($this->getSettings()->form);
 
-			if($form)
+			if ($form)
 			{
 				$name = Craft::t('Recent {formName} Entries', array(
 					'formName' => $form->name
@@ -27,7 +27,7 @@ class SproutForms_RecentEntriesWidget extends BaseWidget
 
 	public function getIconPath()
 	{
-		return craft()->path->getPluginsPath().'sproutforms/resources/icon.svg';
+		return craft()->path->getPluginsPath() . 'sproutforms/resources/icon.svg';
 	}
 
 	public function getBodyHtml()
@@ -62,17 +62,17 @@ class SproutForms_RecentEntriesWidget extends BaseWidget
 		}
 
 		return craft()->templates->render('sproutforms/_widgets/recententries/settings', array(
-				'settings'    => $this->getSettings(),
-				'sproutForms' => $forms
+			'settings'    => $this->getSettings(),
+			'sproutForms' => $forms
 		));
 	}
 
 	protected function defineSettings()
 	{
 		return array(
-		   'form'     => array(AttributeType::Number, 'required' => true),
-		   'limit'    => array(AttributeType::Number, 'min' => 0, 'default' => 10),
-		   'showDate' => array(AttributeType::String)
+			'form'     => array(AttributeType::Number, 'required' => true),
+			'limit'    => array(AttributeType::Number, 'min' => 0, 'default' => 10),
+			'showDate' => array(AttributeType::String)
 		);
 	}
 }

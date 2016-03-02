@@ -29,7 +29,7 @@ class SproutFormsEntriesDataSource extends SproutReportsBaseDataSource
 	public function getResults(SproutReports_ReportModel &$report)
 	{
 		$startDate = DateTime::createFromString($report->getOption('startDate'));
-		$endDate = DateTime::createFromString($report->getOption('endDate'));
+		$endDate   = DateTime::createFromString($report->getOption('endDate'));
 
 		$formId = $report->getOption('formId');
 
@@ -53,7 +53,7 @@ class SproutFormsEntriesDataSource extends SproutReportsBaseDataSource
 	 */
 	public function getOptionsHtml(array $options = array())
 	{
-		$criteria = craft()->elements->getCriteria('SproutForms_Form');
+		$criteria        = craft()->elements->getCriteria('SproutForms_Form');
 		$criteria->limit = null;
 		$criteria->order = 'name';
 
@@ -80,16 +80,16 @@ class SproutFormsEntriesDataSource extends SproutReportsBaseDataSource
 
 		// @todo Determine sensible default start and end date based on Order data
 		$defaultStartDate = null;
-		$defaultEndDate = null;
+		$defaultEndDate   = null;
 
 		$startDate = DateTime::createFromString($this->report->getOption('startDate'));
-		$endDate = DateTime::createFromString($this->report->getOption('endDate'));
+		$endDate   = DateTime::createFromString($this->report->getOption('endDate'));
 
 		$options['startDate'] = $startDate;
-		$options['endDate'] = $endDate;
+		$options['endDate']   = $endDate;
 
 		$options['defaultStartDate'] = new DateTime($defaultStartDate);
-		$options['defaultEndDate'] = new DateTime($defaultEndDate);
+		$options['defaultEndDate']   = new DateTime($defaultEndDate);
 
 		return craft()->templates->render(
 			'sproutforms/_reports/options/entries',

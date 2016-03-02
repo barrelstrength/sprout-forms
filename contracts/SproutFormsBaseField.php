@@ -25,9 +25,9 @@ abstract class SproutFormsBaseField
 
 	/**
 	 * @param FieldModel $field
-	 * @param mixed $value
-	 * @param mixed $settings
-	 * @param array $renderingOptions
+	 * @param mixed      $value
+	 * @param mixed      $settings
+	 * @param array      $renderingOptions
 	 *
 	 * @return \Twig_Markup
 	 */
@@ -78,7 +78,7 @@ abstract class SproutFormsBaseField
 	 */
 	public function getTemplatesPath()
 	{
-		return craft()->path->getPluginsPath().'sproutforms/templates/_components/fields/';
+		return craft()->path->getPluginsPath() . 'sproutforms/templates/_components/fields/';
 	}
 
 	/**

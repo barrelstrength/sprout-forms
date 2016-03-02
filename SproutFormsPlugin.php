@@ -135,23 +135,23 @@ class SproutFormsPlugin extends BasePlugin
 	public function registerCpRoutes()
 	{
 		return array(
-			'sproutforms/forms/new' => array(
+			'sproutforms/forms/new'                                          => array(
 				'action' => 'sproutForms/forms/editFormTemplate'
 			),
-			'sproutforms/forms/edit/(?P<formId>\d+)' => array(
+			'sproutforms/forms/edit/(?P<formId>\d+)'                         => array(
 				'action' => 'sproutForms/forms/editFormTemplate'
 			),
 			'sproutforms/forms/(?P<formId>\d+)/fields/edit/(?P<fieldId>\d+)' => array(
 				'action' => 'sproutForms/fields/editFieldTemplate'
 			),
-			'sproutforms/entries/edit/(?P<entryId>\d+)' => array(
+			'sproutforms/entries/edit/(?P<entryId>\d+)'                      => array(
 				'action' => 'sproutForms/entries/editEntryTemplate'
 			),
-			'sproutforms/settings' => array(
+			'sproutforms/settings'                                           => array(
 				'action' => 'sproutForms/settings/settingsIndexTemplate'
 			),
-			'sproutforms/forms/(?P<groupId>\d+)' => 'sproutforms/forms',
-			'sproutforms/examples' => 'sproutforms/_cp/examples',
+			'sproutforms/forms/(?P<groupId>\d+)'                             => 'sproutforms/forms',
+			'sproutforms/examples'                                           => 'sproutforms/_cp/examples',
 		);
 	}
 
@@ -197,7 +197,7 @@ class SproutFormsPlugin extends BasePlugin
 
 		if ($sproutEmail && version_compare($sproutEmail->getVersion(), '0.9.2', '>='))
 		{
-			require_once dirname(__FILE__).'/integrations/sproutemail/SproutForms_SaveEntryEvent.php';
+			require_once dirname(__FILE__) . '/integrations/sproutemail/SproutForms_SaveEntryEvent.php';
 
 			return array(new SproutForms_SaveEntryEvent());
 		}
@@ -218,15 +218,15 @@ class SproutFormsPlugin extends BasePlugin
 	public function registerSproutImportElements()
 	{
 		return array(
-			'sproutforms_form'     => array(
-					'model'   => 'Craft\\SproutForms_FormModel',
-					'method'  => 'saveForm',
-					'service' => 'sproutForms_forms',
+			'sproutforms_form'  => array(
+				'model'   => 'Craft\\SproutForms_FormModel',
+				'method'  => 'saveForm',
+				'service' => 'sproutForms_forms',
 			),
-			'sproutforms_entry'    => array(
-					'model'   => 'Craft\\SproutForms_EntryModel',
-					'method'  => 'saveEntry',
-					'service' => 'sproutForms_entries',
+			'sproutforms_entry' => array(
+				'model'   => 'Craft\\SproutForms_EntryModel',
+				'method'  => 'saveEntry',
+				'service' => 'sproutForms_entries',
 			),
 		);
 	}
@@ -245,7 +245,7 @@ class SproutFormsPlugin extends BasePlugin
 	 */
 	public function onAfterInstall()
 	{
-		craft()->request->redirect(UrlHelper::getCpUrl().'/sproutforms/settings/examples');
+		craft()->request->redirect(UrlHelper::getCpUrl() . '/sproutforms/settings/examples');
 	}
 
 	/**
@@ -263,14 +263,14 @@ class SproutFormsPlugin extends BasePlugin
 
 	public function registerSproutFormsFields()
 	{
-		$basePath = craft()->path->getPluginsPath().'sproutforms/integrations/sproutforms/fields/';
-		require_once $basePath.'SproutFormsNumberField.php';
-		require_once $basePath.'SproutFormsPlainTextField.php';
-		require_once $basePath.'SproutFormsCheckboxesField.php';
-		require_once $basePath.'SproutFormsDropdownField.php';
-		require_once $basePath.'SproutFormsMultiSelectField.php';
-		require_once $basePath.'SproutFormsRadioButtonsField.php';
-		require_once $basePath.'SproutFormsAssetsField.php';
+		$basePath = craft()->path->getPluginsPath() . 'sproutforms/integrations/sproutforms/fields/';
+		require_once $basePath . 'SproutFormsNumberField.php';
+		require_once $basePath . 'SproutFormsPlainTextField.php';
+		require_once $basePath . 'SproutFormsCheckboxesField.php';
+		require_once $basePath . 'SproutFormsDropdownField.php';
+		require_once $basePath . 'SproutFormsMultiSelectField.php';
+		require_once $basePath . 'SproutFormsRadioButtonsField.php';
+		require_once $basePath . 'SproutFormsAssetsField.php';
 
 		return array(
 			new SproutFormsNumberField(),

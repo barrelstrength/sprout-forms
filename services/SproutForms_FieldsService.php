@@ -190,7 +190,7 @@ class SproutForms_FieldsService extends FieldsService
 			$templateFolderOverride = $form->templateOverridesFolder;
 		}
 
-		$defaultTemplate = craft()->path->getPluginsPath().'sproutforms/templates/_special/templates/';
+		$defaultTemplate = craft()->path->getPluginsPath() . 'sproutforms/templates/_special/templates/';
 
 		// Set our defaults
 		$templates['form']  = $defaultTemplate;
@@ -201,31 +201,31 @@ class SproutForms_FieldsService extends FieldsService
 		// See if we should override our defaults
 		if ($templateFolderOverride)
 		{
-			$formTemplate  = craft()->path->getSiteTemplatesPath().$templateFolderOverride.'/form';
-			$tabTemplate   = craft()->path->getSiteTemplatesPath().$templateFolderOverride.'/tab';
-			$fieldTemplate = craft()->path->getSiteTemplatesPath().$templateFolderOverride.'/field';
-			$emailTemplate = craft()->path->getSiteTemplatesPath().$templateFolderOverride.'/email';
+			$formTemplate  = craft()->path->getSiteTemplatesPath() . $templateFolderOverride . '/form';
+			$tabTemplate   = craft()->path->getSiteTemplatesPath() . $templateFolderOverride . '/tab';
+			$fieldTemplate = craft()->path->getSiteTemplatesPath() . $templateFolderOverride . '/field';
+			$emailTemplate = craft()->path->getSiteTemplatesPath() . $templateFolderOverride . '/email';
 
 			foreach (craft()->config->get('defaultTemplateExtensions') as $extension)
 			{
-				if (IOHelper::fileExists($formTemplate.'.'.$extension))
+				if (IOHelper::fileExists($formTemplate . '.' . $extension))
 				{
-					$templates['form'] = craft()->path->getSiteTemplatesPath().$templateFolderOverride.'/';
+					$templates['form'] = craft()->path->getSiteTemplatesPath() . $templateFolderOverride . '/';
 				}
 
-				if (IOHelper::fileExists($tabTemplate.'.'.$extension))
+				if (IOHelper::fileExists($tabTemplate . '.' . $extension))
 				{
-					$templates['tab'] = craft()->path->getSiteTemplatesPath().$templateFolderOverride.'/';
+					$templates['tab'] = craft()->path->getSiteTemplatesPath() . $templateFolderOverride . '/';
 				}
 
-				if (IOHelper::fileExists($fieldTemplate.'.'.$extension))
+				if (IOHelper::fileExists($fieldTemplate . '.' . $extension))
 				{
-					$templates['field'] = craft()->path->getSiteTemplatesPath().$templateFolderOverride.'/';
+					$templates['field'] = craft()->path->getSiteTemplatesPath() . $templateFolderOverride . '/';
 				}
 
-				if (IOHelper::fileExists($emailTemplate.'.'.$extension))
+				if (IOHelper::fileExists($emailTemplate . '.' . $extension))
 				{
-					$templates['email'] = craft()->path->getSiteTemplatesPath().$templateFolderOverride.'/';
+					$templates['email'] = craft()->path->getSiteTemplatesPath() . $templateFolderOverride . '/';
 				}
 			}
 		}
@@ -345,17 +345,18 @@ class SproutForms_FieldsService extends FieldsService
 
 	/**
 	 * This service allows create a default tab given a form
+	 *
 	 * @param SproutForms_FormModel $form
 	 *
 	 * @return SproutForms_FormModel | null
-	*/
+	 */
 	public function addDefaultTab($form, &$field = null)
 	{
-		if($form)
+		if ($form)
 		{
-			if(is_null($field))
+			if (is_null($field))
 			{
-				$field = new FieldModel();
+				$field               = new FieldModel();
 				$field->name         = Craft::t('Default Field');
 				$field->handle       = "defaultField";
 				$field->instructions = "";
@@ -367,15 +368,15 @@ class SproutForms_FieldsService extends FieldsService
 			}
 
 			// Create a tab
-			$fieldLayoutTab = new FieldLayoutTabModel();
+			$fieldLayoutTab            = new FieldLayoutTabModel();
 			$fieldLayoutTab->name      = $this->getDefaultTabName();
 			$fieldLayoutTab->sortOrder = 1;
 
-			$requiredFields = array();
+			$requiredFields    = array();
 			$postedFieldLayout = array();
 
 			// Add our new field
-			if(isset($field) && $field->id != null)
+			if (isset($field) && $field->id != null)
 			{
 				$postedFieldLayout[$fieldLayoutTab->name][] = $field->id;
 			}
@@ -399,28 +400,29 @@ class SproutForms_FieldsService extends FieldsService
 
 	/**
 	 * This service allows add a field to a current FieldLayoutFieldRecord
-	 * @param FieldModel $field
+	 *
+	 * @param FieldModel            $field
 	 * @param SproutForms_FormModel $form
-	 * @param int $tabId
+	 * @param int                   $tabId
 	 *
 	 * @return boolean
-	*/
+	 */
 	public function addFieldToLayout($field, $form, $tabId)
 	{
 		$response = false;
 
-		if(isset($field) && isset($form))
+		if (isset($field) && isset($form))
 		{
 			$sortOrder = 0;
 
 			$fieldLayoutFields = FieldLayoutFieldRecord::model()->findAll(array(
 				'condition' => 'tabId = :tabId AND layoutId = :layoutId',
-				'params' => array(':tabId' => $tabId, ':layoutId' => $form->fieldLayoutId)
+				'params'    => array(':tabId' => $tabId, ':layoutId' => $form->fieldLayoutId)
 			));
 
 			$sortOrder = count($fieldLayoutFields) + 1;
 
-			$fieldRecord = new FieldLayoutFieldRecord();
+			$fieldRecord            = new FieldLayoutFieldRecord();
 			$fieldRecord->layoutId  = $form->fieldLayoutId;
 			$fieldRecord->tabId     = $tabId;
 			$fieldRecord->fieldId   = $field->id;
@@ -437,6 +439,7 @@ class SproutForms_FieldsService extends FieldsService
 	{
 		return Craft::t('Tab 1');
 	}
+
 	/**
 	 * Prepends a key/value pair to an array
 	 *

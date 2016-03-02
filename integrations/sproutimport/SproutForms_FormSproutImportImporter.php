@@ -8,6 +8,7 @@ class SproutForms_FormSproutImportImporter extends SproutImportBaseImporter
 	public function getModel()
 	{
 		$model = 'Craft\\SproutForms_FormModel';
+
 		return new $model;
 	}
 
@@ -28,7 +29,7 @@ class SproutForms_FormSproutImportImporter extends SproutImportBaseImporter
 	public function save()
 	{
 		//$this->isNewForm = ($model->id) ? false : true;
-		
+
 		return craft()->sproutForms_forms->saveForm($this->model);
 	}
 
@@ -45,13 +46,13 @@ class SproutForms_FormSproutImportImporter extends SproutImportBaseImporter
 	public function resolveNestedSettings($model, $settings)
 	{
 		// Check to see if we have any Entry Types we should also save
-		if (empty($settings['attributes']['fieldLayout']) OR empty($model->id)) 
+		if (empty($settings['attributes']['fieldLayout']) OR empty($model->id))
 		{
 			return true;
 		}
 
 		$fieldLayoutTabs = $settings['attributes']['fieldLayout'];
-			
+
 		craft()->content->fieldContext = $model->fieldContext;
 		craft()->content->contentTable = $model->contentTable;
 
@@ -60,21 +61,21 @@ class SproutForms_FormSproutImportImporter extends SproutImportBaseImporter
 		// Do we have a new field that doesn't exist yet?  
 		// If so, save it and grab the id.		
 
-		$fieldLayout = array();
+		$fieldLayout    = array();
 		$requiredFields = array();
 
 		foreach ($fieldLayoutTabs as $tab)
-		{	
+		{
 			$tabName = $tab['name'];
-			$fields = $tab['fields'];
-			
-			foreach ($fields as $fieldSettings) 
+			$fields  = $tab['fields'];
+
+			foreach ($fields as $fieldSettings)
 			{
 				$field = craft()->sproutImport->saveSetting($fieldSettings);
 
 				$fieldLayout[$tabName][] = $field->id;
-				
-				if ($field->required) 
+
+				if ($field->required)
 				{
 					$requiredFields[] = $field->id;
 				}
@@ -82,7 +83,7 @@ class SproutForms_FormSproutImportImporter extends SproutImportBaseImporter
 		}
 
 		// @TODO - move this to a different place to save?
-		
+
 		// Set the field layout
 		$fieldLayout = craft()->fields->assembleLayout($fieldLayout, $requiredFields);
 
@@ -101,6 +102,7 @@ class SproutForms_FormSproutImportImporter extends SproutImportBaseImporter
 		else
 		{
 			Craft::dd($model->getErrors());
+
 			return false;
 		}
 	}

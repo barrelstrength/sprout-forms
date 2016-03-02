@@ -262,6 +262,7 @@ class SproutFormsVariable
 	 * Returns an active or new entry model
 	 *
 	 * @param SproutForms_FormModel $form
+	 *
 	 * @return mixed
 	 */
 	public function getEntry(SproutForms_FormModel $form)
@@ -406,13 +407,14 @@ class SproutFormsVariable
 
 	/**
 	 * @param string
+	 *
 	 * @return bool
 	 */
 	public function isPluginInstalled($plugin)
 	{
 		$plugins = craft()->plugins->getPlugins(false);
 
-		if(array_key_exists($plugin,$plugins))
+		if (array_key_exists($plugin, $plugins))
 		{
 			$invisibleCaptcha = $plugins[$plugin];
 
@@ -432,12 +434,13 @@ class SproutFormsVariable
 	{
 		$plugins = craft()->plugins->getPlugins(false);
 
-		if(array_key_exists('sproutinvisiblecaptcha',$plugins))
+		if (array_key_exists('sproutinvisiblecaptcha', $plugins))
 		{
 			$invisibleCaptcha = $plugins["sproutinvisiblecaptcha"];
 
 			if ($invisibleCaptcha->getSettings()->sproutFormsDisplayFormTagOutput
-			and $invisibleCaptcha->isInstalled)
+				and $invisibleCaptcha->isInstalled
+			)
 			{
 				return true;
 			}

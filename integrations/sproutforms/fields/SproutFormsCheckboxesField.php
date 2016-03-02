@@ -57,6 +57,6 @@ class SproutFormsCheckboxesField extends SproutFormsBaseField
 	 */
 	public function getTemplatesPath()
 	{
-		return craft()->path->getPluginsPath().'sproutforms/templates/_components/fields/';
+		return craft()->path->getPluginsPath() . 'sproutforms/templates/_components/fields/';
 	}
 }

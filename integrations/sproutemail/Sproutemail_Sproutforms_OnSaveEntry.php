@@ -12,7 +12,7 @@ class SproutEmail_SproutForms_OnSaveEntry
 	{
 		return 'sproutformsAddEventListener';
 	}
-	
+
 	/**
 	 * Event name
 	 *
@@ -22,7 +22,7 @@ class SproutEmail_SproutForms_OnSaveEntry
 	{
 		return 'saveEntry';
 	}
-	
+
 	/**
 	 * Event name
 	 *
@@ -32,7 +32,7 @@ class SproutEmail_SproutForms_OnSaveEntry
 	{
 		return Craft::t('SproutForms: On Save Entry (after submission)');
 	}
-	
+
 	/**
 	 * Event description
 	 *
@@ -42,10 +42,10 @@ class SproutEmail_SproutForms_OnSaveEntry
 	{
 		return Craft::t('This event will fire after a form has been submited and saved.');
 	}
-	
+
 	/**
 	 * Display custom Commerce options
-	 * 
+	 *
 	 * @return string Returns the template which displays our settings
 	 */
 	public function getOptionsHtml()
@@ -81,7 +81,7 @@ class SproutEmail_SproutForms_OnSaveEntry
 			{% endif %}
 			<hr>';
 	}
-	
+
 	/**
 	 * Process the options associated with the event
 	 *
@@ -93,13 +93,13 @@ class SproutEmail_SproutForms_OnSaveEntry
 		{
 			return true;
 		}
-		
+
 		$submittedForm = craft()->request->getPost('handle');
 		if ($submittedForm && in_array($submittedForm, $options['options']['sproutForms']))
 		{
 			return true;
 		}
-		
+
 		return false;
 	}
 }

@@ -15,7 +15,7 @@ class SproutForms_SettingsController extends BaseController
 		$settings = craft()->db->createCommand()
 			->select('settings')
 			->from('plugins')
-			->where('class=:class', array(':class'=> 'SproutForms'))
+			->where('class=:class', array(':class' => 'SproutForms'))
 			->queryScalar();
 
 		$settings = JsonHelper::decode($settings);
@@ -29,7 +29,7 @@ class SproutForms_SettingsController extends BaseController
 
 	/**
 	 * Save Plugin Settings
-	 * 
+	 *
 	 * @return void
 	 */
 	public function actionSaveSettings()

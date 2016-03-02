@@ -14,14 +14,14 @@ class m141026_030000_sproutForms_addFormEntryTable extends BaseMigration
 	public function safeUp()
 	{
 		// ADD A TABLE TO THE DATABASE
-		
+
 		// The Table you wish to add. 'craft_' prefix will be added automatically.
 		$tableName = 'sproutforms_entries';
-		
+
 		if (!craft()->db->tableExists($tableName))
 		{
 			Craft::log('Creating the `$tableName` table.', LogLevel::Info, true);
-			
+
 			// Create the craft_sproutforms_entries table
 			craft()->db->createCommand()->createTable($tableName, array(
 				'id'        => array('column' => 'integer', 'required' => true, 'primaryKey' => true),

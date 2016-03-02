@@ -12,7 +12,7 @@ class SproutForms_EntryRecord extends BaseRecord
 	{
 		return 'sproutforms_entries';
 	}
-	
+
 	/**
 	 * Define attributes
 	 *
@@ -25,7 +25,7 @@ class SproutForms_EntryRecord extends BaseRecord
 			'userAgent' => AttributeType::Mixed,
 		);
 	}
-	
+
 	/**
 	 * @return array
 	 */
@@ -33,7 +33,7 @@ class SproutForms_EntryRecord extends BaseRecord
 	{
 		return array(
 			'element' => array(static::BELONGS_TO, 'ElementRecord', 'id', 'required' => true, 'onDelete' => static::CASCADE),
-			'form' => array(static::BELONGS_TO, 'SproutForms_FormRecord', 'required' => true, 'onDelete' => static::CASCADE),
+			'form'    => array(static::BELONGS_TO, 'SproutForms_FormRecord', 'required' => true, 'onDelete' => static::CASCADE),
 		);
 	}
 }

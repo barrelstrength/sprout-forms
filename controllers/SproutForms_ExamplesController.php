@@ -7,21 +7,21 @@ class SproutForms_ExamplesController extends BaseController
 
 	/**
 	 * Install examples
-	 * 
+	 *
 	 * @return void
 	 */
 	public function actionInstall()
 	{
 		$this->_installExampleTemplates();
 		$this->_installExampleData();
-		
+
 		craft()->userSession->setNotice(Craft::t('Examples successfully installed.'));
 		$this->redirect(UrlHelper::getCpUrl() . '/sproutforms');
 	}
-	
+
 	/**
 	 * Install templates
-	 * 
+	 *
 	 * @return void
 	 */
 	private function _installExampleTemplates()
@@ -37,10 +37,10 @@ class SproutForms_ExamplesController extends BaseController
 			$this->_handleError($e);
 		}
 	}
-	
+
 	/**
 	 * Install example data
-	 * 
+	 *
 	 * @return void
 	 */
 	private function _installExampleData()
@@ -49,20 +49,20 @@ class SproutForms_ExamplesController extends BaseController
 		{
 			// Create Example Forms
 			// ------------------------------------------------------------
-			
+
 			$formSettings = array(
 				array(
-					'name' => 'Contact Form',
-					'handle' => 'contact',
-					'titleFormat' => "{dateCreated|date('Y-m-d')} – {fullName} – {message|slice(0,22)}...",
-					'redirectUri' => 'sproutforms/examples/contact-form?message=thank-you',
+					'name'                 => 'Contact Form',
+					'handle'               => 'contact',
+					'titleFormat'          => "{dateCreated|date('Y-m-d')} – {fullName} – {message|slice(0,22)}...",
+					'redirectUri'          => 'sproutforms/examples/contact-form?message=thank-you',
 					'displaySectionTitles' => false
 				),
 				array(
-					'name' => 'Basic Fields Form',
-					'handle' => 'basic',
-					'titleFormat' => "{plainText} – {dropdown}{% if object.textarea %} – {{ object.textarea|slice(0,15) }}{% endif %}",
-					'redirectUri' => 'sproutforms/examples/basic-fields?message=thank-you',
+					'name'                 => 'Basic Fields Form',
+					'handle'               => 'basic',
+					'titleFormat'          => "{plainText} – {dropdown}{% if object.textarea %} – {{ object.textarea|slice(0,15) }}{% endif %}",
+					'redirectUri'          => 'sproutforms/examples/basic-fields?message=thank-you',
 					'displaySectionTitles' => true
 				),
 				// array(
@@ -82,8 +82,8 @@ class SproutForms_ExamplesController extends BaseController
 							'required' => 1,
 							'settings' => array(
 								'placeholder' => '',
-								'maxLength' => '',
-								'multiline' => '',
+								'maxLength'   => '',
+								'multiline'   => '',
 								'initialRows' => 4,
 							)
 						),
@@ -94,8 +94,8 @@ class SproutForms_ExamplesController extends BaseController
 							'required' => 1,
 							'settings' => array(
 								'placeholder' => '',
-								'maxLength' => '',
-								'multiline' => '',
+								'maxLength'   => '',
+								'multiline'   => '',
 								'initialRows' => 4,
 							)
 						),
@@ -106,14 +106,14 @@ class SproutForms_ExamplesController extends BaseController
 							'required' => 1,
 							'settings' => array(
 								'placeholder' => '',
-								'maxLength' => '',
-								'multiline' => 1,
+								'maxLength'   => '',
+								'multiline'   => 1,
 								'initialRows' => 4,
 							)
 						)
 					)
 				),
-				'basic' => array(
+				'basic'   => array(
 					'Section One' => array(
 						array(
 							'name'     => 'Plain Text Field',
@@ -122,8 +122,8 @@ class SproutForms_ExamplesController extends BaseController
 							'required' => 1,
 							'settings' => array(
 								'placeholder' => '',
-								'maxLength' => '',
-								'multiline' => 0,
+								'maxLength'   => '',
+								'multiline'   => 0,
 								'initialRows' => 4,
 							)
 						),
@@ -135,18 +135,18 @@ class SproutForms_ExamplesController extends BaseController
 							'settings' => array(
 								'options' => array(
 									array(
-										'label' => 'Option 1',
-										'value' => 'option1',
+										'label'   => 'Option 1',
+										'value'   => 'option1',
 										'default' => ''
 									),
 									array(
-										'label' => 'Option 2',
-										'value' => 'option2',
+										'label'   => 'Option 2',
+										'value'   => 'option2',
 										'default' => ''
 									),
 									array(
-										'label' => 'Option 3',
-										'value' => 'option3',
+										'label'   => 'Option 3',
+										'value'   => 'option3',
 										'default' => ''
 									)
 								)
@@ -158,8 +158,8 @@ class SproutForms_ExamplesController extends BaseController
 							'type'     => 'Number',
 							'required' => 0,
 							'settings' => array(
-								'min' => 0,
-								'max' => '',
+								'min'      => 0,
+								'max'      => '',
 								'decimals' => ''
 							)
 						)
@@ -173,18 +173,18 @@ class SproutForms_ExamplesController extends BaseController
 							'settings' => array(
 								'options' => array(
 									array(
-										'label' => 'Option 1',
-										'value' => 'option1',
+										'label'   => 'Option 1',
+										'value'   => 'option1',
 										'default' => ''
 									),
 									array(
-										'label' => 'Option 2',
-										'value' => 'option2',
+										'label'   => 'Option 2',
+										'value'   => 'option2',
 										'default' => ''
 									),
 									array(
-										'label' => 'Option 3',
-										'value' => 'option3',
+										'label'   => 'Option 3',
+										'value'   => 'option3',
 										'default' => ''
 									)
 								)
@@ -198,18 +198,18 @@ class SproutForms_ExamplesController extends BaseController
 							'settings' => array(
 								'options' => array(
 									array(
-										'label' => 'Option 1',
-										'value' => 'option1',
+										'label'   => 'Option 1',
+										'value'   => 'option1',
 										'default' => ''
 									),
 									array(
-										'label' => 'Option 2',
-										'value' => 'option2',
+										'label'   => 'Option 2',
+										'value'   => 'option2',
 										'default' => ''
 									),
 									array(
-										'label' => 'Option 3',
-										'value' => 'option3',
+										'label'   => 'Option 3',
+										'value'   => 'option3',
 										'default' => ''
 									)
 								)
@@ -223,18 +223,18 @@ class SproutForms_ExamplesController extends BaseController
 							'settings' => array(
 								'options' => array(
 									array(
-										'label' => 'Option 1',
-										'value' => 'option1',
+										'label'   => 'Option 1',
+										'value'   => 'option1',
 										'default' => ''
 									),
 									array(
-										'label' => 'Option 2',
-										'value' => 'option2',
+										'label'   => 'Option 2',
+										'value'   => 'option2',
 										'default' => ''
 									),
 									array(
-										'label' => 'Option 3',
-										'value' => 'option3',
+										'label'   => 'Option 3',
+										'value'   => 'option3',
 										'default' => ''
 									)
 								)
@@ -247,30 +247,30 @@ class SproutForms_ExamplesController extends BaseController
 							'required' => 0,
 							'settings' => array(
 								'placeholder' => '',
-								'maxLength' => '',
-								'multiline' => 1,
+								'maxLength'   => '',
+								'multiline'   => 1,
 								'initialRows' => 4,
 							)
 						)
 					)
 				),
 			);
-		
+
 			// Create Forms and their Content Tables
-			foreach ($formSettings as $settings) 
+			foreach ($formSettings as $settings)
 			{
 				$form = new SproutForms_FormModel();
-				
+
 				// Assign our form settings
-				$form->name        = $settings['name'];
-				$form->handle      = $settings['handle'];
-				$form->titleFormat = $settings['titleFormat'];
-				$form->redirectUri = $settings['redirectUri'];
+				$form->name                 = $settings['name'];
+				$form->handle               = $settings['handle'];
+				$form->titleFormat          = $settings['titleFormat'];
+				$form->redirectUri          = $settings['redirectUri'];
 				$form->displaySectionTitles = $settings['displaySectionTitles'];
 
 				// Create the Form
 				sproutForms()->forms->saveForm($form);
-				
+
 				// Set our field context
 				craft()->content->fieldContext = $form->getFieldContext();
 				craft()->content->contentTable = $form->getContentTable();
@@ -280,28 +280,28 @@ class SproutForms_ExamplesController extends BaseController
 				// Do we have a new field that doesn't exist yet?  
 				// If so, save it and grab the id.
 
-				$fieldLayout = array();
+				$fieldLayout    = array();
 				$requiredFields = array();
 
 				$tabs = $fieldSettings[$form->handle];
 
-				foreach ($tabs as $tabName => $newFields) 
-				{	
-					foreach ($newFields as $newField) 
+				foreach ($tabs as $tabName => $newFields)
+				{
+					foreach ($newFields as $newField)
 					{
-						$field = new FieldModel();
-						$field->name        = $newField['name'];
-						$field->handle      = $newField['handle'];
-						$field->type        = $newField['type'];
-						$field->required    = $newField['required'];
-						$field->settings    = $newField['settings'];
+						$field           = new FieldModel();
+						$field->name     = $newField['name'];
+						$field->handle   = $newField['handle'];
+						$field->type     = $newField['type'];
+						$field->required = $newField['required'];
+						$field->settings = $newField['settings'];
 
 						// Save our field
 						craft()->fields->saveField($field);
-						
+
 						$fieldLayout[$tabName][] = $field->id;
-						
-						if ($field->required) 
+
+						if ($field->required)
 						{
 							$requiredFields[] = $field->id;
 						}
@@ -310,7 +310,7 @@ class SproutForms_ExamplesController extends BaseController
 
 				// Set the field layout
 				$fieldLayout = craft()->fields->assembleLayout($fieldLayout, $requiredFields);
-				
+
 				$fieldLayout->type = 'SproutForms_Form';
 				$form->setFieldLayout($fieldLayout);
 
@@ -323,16 +323,17 @@ class SproutForms_ExamplesController extends BaseController
 			$this->_handleError($e);
 		}
 	}
-	
+
 	/**
 	 * Handle installation errors
-	 * 
+	 *
 	 * @param Exception $exception
+	 *
 	 * @return void
 	 */
 	private function _handleError($exception)
 	{
 		craft()->userSession->setError(Craft::t('Unable to install the examples.'));
-			$this->redirect('sproutforms/examples');
+		$this->redirect('sproutforms/examples');
 	}
 }

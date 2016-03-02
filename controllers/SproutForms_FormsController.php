@@ -15,21 +15,21 @@ class SproutForms_FormsController extends BaseController
 
 		$form = new SproutForms_FormModel();
 
-		if(craft()->request->getPost('saveAsNew'))
+		if (craft()->request->getPost('saveAsNew'))
 		{
-			$form->saveAsNew  = true;
+			$form->saveAsNew = true;
 		}
 		else
 		{
-			$form->id        = craft()->request->getPost('id');
+			$form->id = craft()->request->getPost('id');
 		}
-		$form->groupId     = craft()->request->getPost('groupId');
-		$form->name        = craft()->request->getPost('name');
-		$form->handle      = craft()->request->getPost('handle');
-		$form->titleFormat = craft()->request->getPost('titleFormat');
+		$form->groupId              = craft()->request->getPost('groupId');
+		$form->name                 = craft()->request->getPost('name');
+		$form->handle               = craft()->request->getPost('handle');
+		$form->titleFormat          = craft()->request->getPost('titleFormat');
 		$form->displaySectionTitles = craft()->request->getPost('displaySectionTitles');
-		$form->redirectUri     = craft()->request->getPost('redirectUri');
-		$form->submitAction    = craft()->request->getPost('submitAction');
+		$form->redirectUri          = craft()->request->getPost('redirectUri');
+		$form->submitAction         = craft()->request->getPost('submitAction');
 		$form->submitButtonText     = craft()->request->getPost('submitButtonText');
 
 		$form->notificationEnabled      = craft()->request->getPost('notificationEnabled');
@@ -40,12 +40,12 @@ class SproutForms_FormsController extends BaseController
 		$form->notificationReplyToEmail = craft()->request->getPost('notificationReplyToEmail');
 		$form->enableTemplateOverrides  = craft()->request->getPost('enableTemplateOverrides');
 		$form->templateOverridesFolder  = $form->enableTemplateOverrides
-																			? craft()->request->getPost('templateOverridesFolder')
-																			: null;
+			? craft()->request->getPost('templateOverridesFolder')
+			: null;
 		$form->enableFileAttachments    = craft()->request->getPost('enableFileAttachments');
 
-			// Set the field layout
-		$fieldLayout =  craft()->fields->assembleLayoutFromPost();
+		// Set the field layout
+		$fieldLayout       = craft()->fields->assembleLayoutFromPost();
 		$fieldLayout->type = 'SproutForms_Form';
 		$form->setFieldLayout($fieldLayout);
 
@@ -70,7 +70,7 @@ class SproutForms_FormsController extends BaseController
 				craft()->fields->deleteFieldById($fieldId);
 			}
 
-			if($currentTitleFormat)
+			if ($currentTitleFormat)
 			{
 				// update the titleFormat
 				$form->titleFormat = $currentTitleFormat;
@@ -113,7 +113,7 @@ class SproutForms_FormsController extends BaseController
 
 			// Send the form back to the template
 			craft()->urlManager->setRouteVariables(array(
-				'form' => $form,
+				'form'               => $form,
 				'notificationErrors' => $notificationErrors
 			));
 		}
@@ -123,6 +123,7 @@ class SproutForms_FormsController extends BaseController
 	 * Edit a form.
 	 *
 	 * @param array $variables
+	 *
 	 * @throws HttpException
 	 * @throws Exception
 	 */
@@ -142,12 +143,12 @@ class SproutForms_FormsController extends BaseController
 			if (sproutForms()->forms->saveForm($form))
 			{
 				// Lets delete the default field
-				if(isset($field) && $field->id)
+				if (isset($field) && $field->id)
 				{
 					craft()->fields->deleteFieldById($field->id);
 				}
 
-				$url = UrlHelper::getCpUrl('sproutforms/forms/edit/'.$form->id);
+				$url = UrlHelper::getCpUrl('sproutforms/forms/edit/' . $form->id);
 				$this->redirect($url);
 			}
 			else
@@ -155,19 +156,22 @@ class SproutForms_FormsController extends BaseController
 				throw new Exception(Craft::t('Error creating Form'));
 			}
 		}
-		else if (!isset($variables['form']) && isset($variables['formId']))
+		else
 		{
-			$variables['brandNewForm'] = false;
+			if (!isset($variables['form']) && isset($variables['formId']))
+			{
+				$variables['brandNewForm'] = false;
 
-			$variables['groups'] = sproutForms()->groups->getAllFormGroups();
-			$variables['groupId'] = "";
+				$variables['groups']  = sproutForms()->groups->getAllFormGroups();
+				$variables['groupId'] = "";
 
-			// Get the Form
-			$form = sproutForms()->forms->getFormById($variables['formId']);
+				// Get the Form
+				$form = sproutForms()->forms->getFormById($variables['formId']);
 
-			$variables['form'] = $form;
-			$variables['title'] = $form->name;
-			$variables['groupId'] = $form->groupId;
+				$variables['form']    = $form;
+				$variables['title']   = $form->name;
+				$variables['groupId'] = $form->groupId;
+			}
 		}
 
 		// Set the "Continue Editing" URL
@@ -187,7 +191,7 @@ class SproutForms_FormsController extends BaseController
 
 		// Get the Form these fields are related to
 		$formId = craft()->request->getRequiredPost('id');
-		$form = sproutForms()->forms->getFormById($formId);
+		$form   = sproutForms()->forms->getFormById($formId);
 
 		// @TODO - handle errors
 		$success = sproutForms()->forms->deleteForm($form);

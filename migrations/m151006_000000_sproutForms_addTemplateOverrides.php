@@ -14,7 +14,7 @@ class m151006_000000_sproutForms_addTemplateOverrides extends BaseMigration
 	public function safeUp()
 	{
 		// specify columns and AttributeType
-		$columns = array (
+		$columns = array(
 			'enableTemplateOverrides' => ColumnType::TinyInt,
 			'templateOverridesFolder' => ColumnType::Varchar,
 		);
@@ -35,23 +35,23 @@ class m151006_000000_sproutForms_addTemplateOverrides extends BaseMigration
 			// check if the column does NOT exist
 			if (!craft()->db->columnExists($tableName, $columnName))
 			{
-				if($columnName == "enableTemplateOverrides")
+				if ($columnName == "enableTemplateOverrides")
 				{
 					$this->addColumn($tableName, $columnName, array(
-						'column' => $columnType,
-						'length' => 1,
-						'null' => false,
-						'default' => 0,
-						'unsigned' => true
+							'column'   => $columnType,
+							'length'   => 1,
+							'null'     => false,
+							'default'  => 0,
+							'unsigned' => true
 						)
 					);
 				}
 				else
 				{
 					$this->addColumn($tableName, $columnName, array(
-						'column' => $columnType,
-						'null'   => true,
-						'default' => null,
+							'column'  => $columnType,
+							'null'    => true,
+							'default' => null,
 						)
 					);
 				}

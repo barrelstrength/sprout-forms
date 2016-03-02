@@ -38,7 +38,6 @@ class m150418_000000_sproutForms_addNotificationEnabledSetting extends BaseMigra
 			Craft::log('Could not find the `sproutforms_forms` table.', LogLevel::Error);
 		}
 
-
 		return true;
 	}
 }

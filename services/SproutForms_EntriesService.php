@@ -169,7 +169,7 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 
 					$success = craft()->elements->saveElement($entry);
 
-					SproutFormsPlugin::log('Element Saved: '. $success);
+					SproutFormsPlugin::log('Element Saved: ' . $success);
 
 					if ($success)
 					{
@@ -225,6 +225,7 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 			catch (\Exception $e)
 			{
 				SproutFormsPlugin::log('Failed to save element');
+
 				return false;
 				throw $e;
 			}
@@ -322,7 +323,7 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 	/**
 	 * Updates previous title formats
 	 *
-	 * @param Mixed $contentRow
+	 * @param Mixed  $contentRow
 	 * @param String $newFormat
 	 * @param String $contentTable
 	 *
@@ -333,7 +334,7 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 		try
 		{
 			// get the entry
-			$entry       = sproutForms()->entries->getEntryById($contentRow['elementId']);
+			$entry = sproutForms()->entries->getEntryById($contentRow['elementId']);
 			// update the title with the new format
 			$newTitle    = craft()->templates->renderObjectTemplate($newFormat, $entry);
 			$tablePrefix = Craft()->db->tablePrefix;
@@ -344,7 +345,8 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 		}
 		catch (Exception $e)
 		{
-			SproutFormsPlugin::log('An error has occurred: '.$e->getMessage(), LogLevel::Info, true);
+			SproutFormsPlugin::log('An error has occurred: ' . $e->getMessage(), LogLevel::Info, true);
+
 			return false;
 		}
 
@@ -353,7 +355,9 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 
 	/**
 	 * Get Content Entries
+	 *
 	 * @param String $contentTable
+	 *
 	 * @return boolean
 	 */
 	public function getContentEntries($contentTable)

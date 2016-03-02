@@ -20,9 +20,9 @@ class SproutForms_TitleFormatTask extends BaseTask
 	{
 		//content table and array
 		return array(
-			'contentRows'   => AttributeType::Mixed,
-			'contentTable'  => AttributeType::String,
-			'newFormat'     => AttributeType::String,
+			'contentRows'  => AttributeType::Mixed,
+			'contentTable' => AttributeType::String,
+			'newFormat'    => AttributeType::String,
 		);
 	}
 
@@ -55,6 +55,7 @@ class SproutForms_TitleFormatTask extends BaseTask
 	 * Runs a task step.
 	 *
 	 * @param int $step
+	 *
 	 * @return bool
 	 */
 	public function runStep($step)
@@ -62,11 +63,11 @@ class SproutForms_TitleFormatTask extends BaseTask
 		$contentRow = $this->_contentRows[$step];
 
 		//Call the update process
-		$response   = sproutForms()->entries->updateTitleFormat($contentRow, $this->_newFormat, $this->_contentTable);
+		$response = sproutForms()->entries->updateTitleFormat($contentRow, $this->_newFormat, $this->_contentTable);
 
-		if(!$response)
+		if (!$response)
 		{
-			SproutFormsPlugin::log('SproutForms has failed to update the title format for '.$this->_contentTable.' Id:'.$contentId, LogLevel::Error);
+			SproutFormsPlugin::log('SproutForms has failed to update the title format for ' . $this->_contentTable . ' Id:' . $contentId, LogLevel::Error);
 		}
 
 		return true;
