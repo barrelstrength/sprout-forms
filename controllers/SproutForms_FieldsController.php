@@ -324,7 +324,7 @@ class SproutForms_FieldsController extends BaseController
 		$data['sections'] = $form->getFieldLayout()->getTabs();
 		$data['formId']   = $form->id;
 
-		$html = craft()->templates->render('sproutforms/forms/_editField', $data);
+		$html = craft()->templates->render('sproutforms/forms/_editModalField', $data);
 		$js   = craft()->templates->getFootHtml();
 		$css  = craft()->templates->getHeadHtml();
 
