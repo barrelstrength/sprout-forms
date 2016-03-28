@@ -11,7 +11,7 @@ class SproutForms_EntriesChartWidget extends BaseWidget
 	 */
 	public function getName()
 	{
-		return Craft::t('Sprout Forms Entries Chart');
+		return Craft::t('Recent Form Entries (Chart)');
 	}
 
 	/**
@@ -19,7 +19,22 @@ class SproutForms_EntriesChartWidget extends BaseWidget
 	 */
 	public function getTitle()
 	{
-		return Craft::t('Recent Form Entries');
+		$name = Craft::t('Recent Form Entries');
+
+		// Concat form name if the user select a specific form
+		if ($this->getSettings()->formId != 0 && $this->getSettings()->formId != null)
+		{
+			$form = sproutForms()->forms->getFormById($this->getSettings()->formId);
+
+			if ($form)
+			{
+				$name = Craft::t('Recent {formName} Entries', array(
+					'formName' => $form->name
+				));
+			}
+		}
+
+		return $name;
 	}
 
 	/**
@@ -45,15 +60,16 @@ class SproutForms_EntriesChartWidget extends BaseWidget
 	 */
 	public function getBodyHtml()
 	{
-		//$settings = $this->getSettings();
-		//
-		//$groupId = $settings->userGroupId;
-		//$userGroup = craft()->userGroups->getGroupById($groupId);
+		$settings = $this->getSettings();
 
-		//$options = $settings->getAttributes();
-
-		$options['dateRange']   = 'd30';
 		$options['orientation'] = craft()->locale->getOrientation();
+		$options['dateRange'] = $settings->dateRange;
+		$options['formId'] = $settings->formId;
+
+		craft()->templates->includeCss('.sproutforms_entrieschart .chart {
+        height: 200px; 
+        margin: -10px -24px;
+    }');
 
 		craft()->templates->includeJsResource('sproutforms/js/SproutFormsEntriesChartWidget.js');
 		craft()->templates->includeJs(
@@ -68,9 +84,21 @@ class SproutForms_EntriesChartWidget extends BaseWidget
 	 */
 	public function getSettingsHtml()
 	{
-		//return craft()->templates->render('_components/widgets/NewUsers/settings', array(
-		//	'settings' => $this->getSettings()
-		//));
+		$forms = array(0 => Craft::t('All forms'));
+
+		$sproutForms = sproutForms()->forms->getAllForms();
+		if ($sproutForms)
+		{
+			foreach ($sproutForms as $form)
+			{
+				$forms[$form->id] = $form->name;
+			}
+		}
+
+		return craft()->templates->render('sproutforms/_widgets/entrieschart/settings', array(
+			'settings'    => $this->getSettings(),
+			'sproutForms' => $forms
+		));
 	}
 
 	// Protected Methods
@@ -82,7 +110,7 @@ class SproutForms_EntriesChartWidget extends BaseWidget
 	protected function defineSettings()
 	{
 		return array(
-			'formId'    => AttributeType::Number,
+			'formId'    => array(AttributeType::Number, 'required' => true),
 			'dateRange' => AttributeType::String,
 		);
 	}

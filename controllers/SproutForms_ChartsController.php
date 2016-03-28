@@ -15,6 +15,7 @@ class SproutForms_ChartsController extends BaseController
 	{
 		$startDateParam = craft()->request->getRequiredPost('startDate');
 		$endDateParam = craft()->request->getRequiredPost('endDate');
+		$formId = craft()->request->getRequiredPost('formId');
 
 		$startDate = DateTime::createFromString($startDateParam, craft()->timezone);
 		$endDate = DateTime::createFromString($endDateParam, craft()->timezone);
@@ -31,6 +32,11 @@ class SproutForms_ChartsController extends BaseController
 
 		$query = craft()->elements->buildElementsQuery($criteria)
 			->select('COUNT(*) as value');
+
+		if ($formId != 0)
+		{
+			$query->andWhere('forms.id = ' . $formId);
+		}
 
 		// Get the chart data table
 		$dataTable = ChartHelper::getRunChartDataFromQuery($query, $startDate, $endDate, 'entries.dateCreated', [

@@ -51,7 +51,8 @@
 			// Request orders report
 			var requestData = {
 				startDate: Craft.SproutForms.EntriesChartWidget.getDateValue(this.startDate),
-				endDate: Craft.SproutForms.EntriesChartWidget.getDateValue(this.endDate)
+				endDate: Craft.SproutForms.EntriesChartWidget.getDateValue(this.endDate),
+				formId: this.settings.formId
 			};
 
 			Craft.postActionRequest('sproutForms/charts/getEntriesData', requestData, $.proxy(function(response, textStatus)

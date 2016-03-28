@@ -3,16 +3,14 @@
 		<tbody>
 			{% for entry in entries %}
 				<tr>
+					{% if settings.form == 0 -%}<td data-title="{{ 'Form'|t }}">{{ entry.formName }}</td>{% endif %}
 					<td data-title="{{ 'Entry'|t }}">
 						{% if currentUser.can('accessPlugin-SproutForms') -%}
 							<a href="{{ entry.getCpEditUrl() }}" title="{{ 'Edit entry'|t }}">{{ entry.title }}</a>
 						{% else -%}
 							{{ entry.title }}
 						{% endif %}
-						{% if settings.form == 0 -%}
-							<br>
-							{{ entry.formName }} – <span class="light">{{ entry.dateCreated|date('n/j/Y') }}</span>
-						{% endif %}
+						<span class="light">{{ entry.dateCreated|date('j/n/Y') }}</span>
 					</td>
 				</tr>
 			{% endfor %}
