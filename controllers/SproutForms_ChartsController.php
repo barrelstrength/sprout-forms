@@ -4,7 +4,7 @@ namespace Craft;
 /**
  * Class SproutForms_ChartsController
  */
-class SproutForms_ChartsController extends BaseController
+class SproutForms_ChartsController extends ElementIndexController
 {
 	/**
 	 * Returns the data needed to display a Submissions chart.
@@ -13,9 +13,11 @@ class SproutForms_ChartsController extends BaseController
 	 */
 	public function actionGetEntriesData()
 	{
+		// Required for Dashboard widget, unnecessary for Entries Index view
+		$formId = craft()->request->getPost('formId');
+
 		$startDateParam = craft()->request->getRequiredPost('startDate');
 		$endDateParam = craft()->request->getRequiredPost('endDate');
-		$formId = craft()->request->getRequiredPost('formId');
 
 		$startDate = DateTime::createFromString($startDateParam, craft()->timezone);
 		$endDate = DateTime::createFromString($endDateParam, craft()->timezone);
@@ -24,7 +26,7 @@ class SproutForms_ChartsController extends BaseController
 		$intervalUnit = ChartHelper::getRunChartIntervalUnit($startDate, $endDate);
 
 		// Prep the query
-		$criteria = craft()->elements->getCriteria('SproutForms_Entry');
+		$criteria = $this->getElementCriteria();
 		$criteria->limit = null;
 
 		// Don't use the search

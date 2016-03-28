@@ -2,9 +2,9 @@
 namespace Craft;
 
 /**
- * Class SproutForms_EntriesChartWidget
+ * Class SproutForms_RecentEntriesChartWidget
  */
-class SproutForms_EntriesChartWidget extends BaseWidget
+class SproutForms_RecentEntriesChartWidget extends BaseWidget
 {
 	/**
 	 * @return string
@@ -66,17 +66,10 @@ class SproutForms_EntriesChartWidget extends BaseWidget
 		$options['dateRange'] = $settings->dateRange;
 		$options['formId'] = $settings->formId;
 
-		craft()->templates->includeCss('.sproutforms_entrieschart .chart {
-        height: 200px; 
-        margin: -10px -24px;
-    }');
+		craft()->templates->includeJsResource('sproutforms/js/SproutFormsRecentEntriesChartWidget.js');
+		craft()->templates->includeJs('new Craft.SproutForms.RecentEntriesChartWidget('.$this->model->id.', '.JsonHelper::encode($options).');');
 
-		craft()->templates->includeJsResource('sproutforms/js/SproutFormsEntriesChartWidget.js');
-		craft()->templates->includeJs(
-			'new Craft.SproutForms.EntriesChartWidget(' . $this->model->id . ', ' . JsonHelper::encode($options) . ');'
-		);
-
-		return '<div></div>';
+		return craft()->templates->render('sproutforms/_widgets/recententrieschart/body');
 	}
 
 	/**
@@ -95,15 +88,12 @@ class SproutForms_EntriesChartWidget extends BaseWidget
 			}
 		}
 
-		return craft()->templates->render('sproutforms/_widgets/entrieschart/settings', array(
+		return craft()->templates->render('sproutforms/_widgets/recententrieschart/settings', array(
 			'settings'    => $this->getSettings(),
 			'sproutForms' => $forms
 		));
 	}
-
-	// Protected Methods
-	// =========================================================================
-
+	
 	/**
 	 * @return array
 	 */
