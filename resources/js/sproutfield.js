@@ -201,7 +201,6 @@
 		 */
 		resetField: function(id, groupName, name)
 		{
-			console.log(groupName);
 			var fld = this.fld;
 			var grid = fld.tabGrid;
 			var $container = fld.$container;

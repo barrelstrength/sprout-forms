@@ -26,7 +26,6 @@
 		$footer: null,
 		$leftButtons: null,
 		$rightButtons: null,
-		$deleteBtn: null,
 		$saveBtn: null,
 		$cancelBtn: null,
 		$saveSpinner: null,
@@ -85,7 +84,6 @@
 			this.$leftButtons = $('<div class="buttons left">').appendTo(this.$footer);
 			this.$rightButtons = $('<div class="buttons right">').appendTo(this.$footer);
 
-			this.$deleteBtn = $('<a class="delete error hidden">').text(Craft.t('Delete')).appendTo(this.$leftButtons);
 			this.$deleteSpinner = $('<div class="spinner hidden">').appendTo(this.$leftButtons);
 
 			this.$cancelBtn = $('<div class="btn disabled" role="button">').text(Craft.t('Cancel')).appendTo(this.$rightButtons);
@@ -314,7 +312,6 @@
 
 			// Only show the delete button if editing a field
 			var $fieldId = that.$main.find('input[name="fieldId"]');
-			that.$deleteBtn.toggleClass('hidden', $fieldId.length === 0);
 
 			Craft.initUiElements();
 
@@ -348,8 +345,6 @@
 			that.$currentJs.remove();
 			that.$currentCss.remove();
 			that.$observed.remove();
-
-			that.$deleteBtn.addClass('hidden');
 		},
 
 		/**

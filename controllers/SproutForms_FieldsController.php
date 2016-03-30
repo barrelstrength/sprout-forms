@@ -13,7 +13,7 @@ class SproutForms_FieldsController extends BaseController
 		$formId = craft()->request->getRequiredParam('formId');
 		$form   = sproutForms()->forms->getFormById($formId);
 
-		$this->returnJson(sproutForms()->forms->getModalFieldTemplate($form));
+		$this->returnJson(sproutForms()->fields->getModalFieldTemplate($form));
 	}
 
 	/**
@@ -22,7 +22,6 @@ class SproutForms_FieldsController extends BaseController
 	public function actionSaveField()
 	{
 		$this->requirePostRequest();
-		$isAjax = craft()->request->isAjaxRequest();
 		// Make sure our field has a section
 		// @TODO - handle this much more gracefully
 		$tabId = craft()->request->getPost('tabId');
@@ -147,10 +146,8 @@ class SproutForms_FieldsController extends BaseController
 
 		$id     = craft()->request->getRequiredParam('fieldId');
 		$formId = craft()->request->getRequiredParam('formId');
-
-		$field = craft()->fields->getFieldById($id);
-		$form  = sproutForms()->forms->getFormById($formId);
-
+		$field  = craft()->fields->getFieldById($id);
+		$form   = sproutForms()->forms->getFormById($formId);
 
 		if($field)
 		{
@@ -158,10 +155,6 @@ class SproutForms_FieldsController extends BaseController
 				'condition' => 'fieldId = :fieldId AND layoutId = :layoutId',
 				'params'    => array(':fieldId' => $field->id, ':layoutId' => $form->fieldLayoutId)
 			));
-
-			#$variables['required'] = $fieldLayoutField->required;
-
-			#$variables['tabId'] = $fieldLayoutField->tabId;
 
 			$group = FieldLayoutTabRecord::model()->findByPk($fieldLayoutField->tabId);
 
@@ -178,36 +171,19 @@ class SproutForms_FieldsController extends BaseController
 						'name' => $group->name,
 					),
 				),
-				'template' => sproutForms()->forms->getModalFieldTemplate($form, $field),
+				'template' => sproutForms()->fields->getModalFieldTemplate($form, $field, $group->id),
 			));
 		}
 		else
 		{
-			SproutFormsPlugin::log("The field requested to edit no longer exists.");
+			$message = Craft::t("The field requested to edit no longer exists.");
+			SproutFormsPlugin::log($message);
 
 			$this->returnJson(array(
 				'success' => false,
-				'error'   => Craft::t('The field requested to edit no longer exists.'),
+				'error'   => $message,
 			));
 		}
-	}
-
-	/**
-	 * Delete a field.
-	 *
-	 * @return void
-	 */
-	public function actionDeleteField()
-	{
-		$this->requirePostRequest();
-		$this->requireAjaxRequest();
-
-		$fieldId  = craft()->request->getRequiredPost('id');
-		$response = sproutForms()->forms->cleanTitleFormat($fieldId);
-		$success  = craft()->fields->deleteFieldById($fieldId);
-		$this->returnJson(array(
-			'success' => $success
-		));
 	}
 
 	/**
@@ -244,7 +220,7 @@ class SproutForms_FieldsController extends BaseController
 					'name' => $tabName,
 				),
 			),
-			'template' => $success ? false : sproutForms()->forms->getModalFieldTemplate($form, $field),
+			'template' => $success ? false : sproutForms()->fields->getModalFieldTemplate($form, $field),
 		));
 	}
 }
