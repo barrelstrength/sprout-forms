@@ -60,30 +60,13 @@
 		{
 			var that = this;
 
-			var $tabs = this.fld.$container.find('.fld-tab .tab.sel');
 			var $fields = this.fld.$container.find('.fld-field');
 
 			$fields.each(function()
 			{
 				var $field = $(this);
-				$('<a class="settings icon" title="Edit"></a>').appendTo($field)
 
-				var $editBtn = $field.find('.settings'),
-			    $menu    = $('<div class="menu" data-align="center"/>').insertAfter($editBtn),
-			    $ul      = $('<ul/>').appendTo($menu);
-
-				$('<li><a data-action="edit">' + Craft.t('Edit') + '</a></li>').appendTo($ul);
-
-				if ($field.hasClass('fld-required'))
-				{
-					$('<li><a data-action="toggle-required">' + Craft.t('Make not required') + '</a></li>').appendTo($ul);
-				}
-				else
-				{
-					$('<li><a data-action="toggle-required">' + Craft.t('Make required') + '</a></li>').appendTo($ul);
-				}
-
-				$('<li><a data-action="remove">' + Craft.t('Remove') + '</a></li>').appendTo($ul);
+				var $editBtn = $field.find('.settings');
 
 				new Garnish.MenuBtn($editBtn, {
 					onOptionSelect: $.proxy(that, 'onFieldOptionSelect')
@@ -151,9 +134,7 @@
 			// Grab the fieldId in this context so we know what to delete
 			var fieldId = this.$field.attr('data-id');
 
-			console.log("so the id is: "+fieldId);
-
-			//this.modal.editField(id);
+			this.modal.editField(fieldId);
 		},
 
 		/**
@@ -184,6 +165,8 @@
 
 				fld.initField($field);
 
+				this.addFieldListener($field);
+
 				fld.$allFields = fields.add($field);
 
 				$group.removeClass('hidden');
@@ -200,6 +183,15 @@
 			}
 		},
 
+		addFieldListener: function($field)
+		{
+			var $editBtn = $field.find('.settings');
+
+			new Garnish.MenuBtn($editBtn, {
+				onOptionSelect: $.proxy(this, 'onFieldOptionSelect')
+			});
+		},
+
 		/**
 		 * Renames and regroups an existing field on the field layout designer.
 		 *
@@ -209,21 +201,21 @@
 		 */
 		resetField: function(id, groupName, name)
 		{
+			console.log(groupName);
 			var fld = this.fld;
-			var grid = fld.unusedFieldGrid;
+			var grid = fld.tabGrid;
 			var $container = fld.$container;
 			var $group = this._getGroupByName(groupName);
 			var $content = $group.children('.fld-tabcontent');
 			var $field = $container.find('.fld-field[data-id="' + id + '"]');
-			var $unusedField = $field.filter('.unused');
-			var $currentGroup = $unusedField.closest('.fld-tab');
+			var $currentGroup = $field.closest('.fld-tab');
 			var $span = $field.children('span');
 
 			$span.text(name);
 
 			if ($currentGroup[0] !== $group[0])
 			{
-				$content.append($unusedField);
+				$content.append($field);
 				grid.refreshCols(true);
 			}
 		},

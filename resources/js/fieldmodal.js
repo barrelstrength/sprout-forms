@@ -445,6 +445,54 @@
 		},
 
 		/**
+		 *
+		 * @param id
+		 */
+		editField: function(id)
+		{
+			this.destroyListeners();
+			this.show();
+			this.initListeners();
+
+			this.$loadSpinner.removeClass('hidden');
+
+			var formId = $("#formId").val();
+			var data = {'fieldId': id, 'formId': formId};
+
+			Craft.postActionRequest('sproutForms/fields/editField', data, $.proxy(function(response, textStatus)
+			{
+				this.$loadSpinner.addClass('hidden');
+
+				var statusSuccess = (textStatus === 'success');
+
+				if(statusSuccess && response.success)
+				{
+					var callback = $.proxy(function(e)
+					{
+						this.destroySettings();
+						this.initSettings(e);
+						this.off('parseTemplate', callback);
+					}, this);
+
+					this.on('parseTemplate', callback);
+					this.parseTemplate(response.template);
+				}
+				else if(statusSuccess && response.error)
+				{
+					Craft.cp.displayError(response.error);
+
+					this.hide();
+				}
+				else
+				{
+					Craft.cp.displayError(Craft.t('An unknown error occurred. '));
+
+					this.hide();
+				}
+			}, this));
+		},
+
+		/**
 		 * Prevents the modal from closing if it's disabled.
 		 * This fixes issues if the modal is closed when saving/deleting fields.
 		 */

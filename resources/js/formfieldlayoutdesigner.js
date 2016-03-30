@@ -57,10 +57,23 @@
 
 		initField: function($field)
 		{
-			$field.find('.settings').remove();
+			var $editBtn = $field.find('.settings'),
+					$menu    = $('<div class="menu" data-align="center"/>').insertAfter($editBtn),
+					$ul      = $('<ul/>').appendTo($menu);
 
+			$('<li><a data-action="edit">' + Craft.t('Edit') + '</a></li>').appendTo($ul);
+
+			if ($field.hasClass('fld-required'))
+			{
+				$('<li><a data-action="toggle-required">' + Craft.t('Make not required') + '</a></li>').appendTo($ul);
+			}
+			else
+			{
+				$('<li><a data-action="toggle-required">' + Craft.t('Make required') + '</a></li>').appendTo($ul);
+			}
+
+			$('<li><a data-action="remove">' + Craft.t('Remove') + '</a></li>').appendTo($ul);
 		},
-
 
 		onTabOptionSelect: function(option)
 		{
@@ -70,8 +83,8 @@
 			}
 
 			var $option = $(option),
-			    $tab    = $option.data('menu').$anchor.parent().parent().parent(),
-			    action  = $option.data('action');
+					$tab    = $option.data('menu').$anchor.parent().parent().parent(),
+					action  = $option.data('action');
 
 			switch (action)
 			{
