@@ -57,68 +57,10 @@
 
 		initField: function($field)
 		{
-			var $editBtn = $field.find('.settings'),
-			    $menu    = $('<div class="menu" data-align="center"/>').insertAfter($editBtn),
-			    $ul      = $('<ul/>').appendTo($menu);
+			$field.find('.settings').remove();
 
-			this.formId = $('#formId').val();
-			var fieldId = $field.data('id');
-
-			var editUrl = Craft.getCpUrl('sproutforms/forms/' + this.formId + '/fields/edit/' + fieldId);
-
-			$('<li><a href="' + editUrl + '" data-action="edit">' + Craft.t('Edit') + '</a></li>').appendTo($ul);
-
-			if ($field.hasClass('fld-required'))
-			{
-				$('<li><a data-action="toggle-required">' + Craft.t('Make not required') + '</a></li>').appendTo($ul);
-			}
-			else
-			{
-				$('<li><a data-action="toggle-required">' + Craft.t('Make required') + '</a></li>').appendTo($ul);
-			}
-
-			$('<li><a data-action="remove">' + Craft.t('Remove') + '</a></li>').appendTo($ul);
-
-			new Garnish.MenuBtn($editBtn, {
-				onOptionSelect: $.proxy(this, 'onFieldOptionSelect')
-			});
 		},
 
-		onFieldOptionSelect: function(option)
-		{
-			var $option = $(option),
-			    $field  = $option.data('menu').$anchor.parent(),
-			    action  = $option.data('action');
-
-			switch (action)
-			{
-				case 'toggle-required':
-				{
-					this.toggleRequiredField($field, $option);
-					break;
-				}
-				case 'remove':
-				{
-					this.removeField($field);
-					break;
-				}
-			}
-		},
-
-		removeField: function($field)
-		{
-			// Make our field available to our parent function
-			this.$field = $field;
-			this.base($field);
-
-			// Grab the fieldId in this context so we know what to delete
-			var fieldId = this.$field.attr('data-id');
-
-			// Added behavior, store an array of deleted field IDs
-			// that will be processed by the sproutForms/forms/saveForm method
-			$deletedFieldsContainer = $('#deletedFieldsContainer');
-			$('<input type="hidden" name="deletedFields[]" value="' + fieldId + '">').appendTo($deletedFieldsContainer);
-		},
 
 		onTabOptionSelect: function(option)
 		{

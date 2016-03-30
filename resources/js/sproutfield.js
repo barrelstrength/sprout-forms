@@ -33,6 +33,7 @@
 
 			this.$fieldButton = $('<div id="sproutField" class="btn add icon" tabindex="0">').text(Craft.t('New Field')).appendTo($(".buttons"));
 
+			this.initButtons();
 			this.modal = SproutField.FieldModal.getInstance();
 
 			this.addListener(this.$fieldButton, 'activate', 'newField');
@@ -53,12 +54,106 @@
 		},
 
 		/**
+		 * Adds edit buttons to existing fields.
+		 */
+		initButtons: function()
+		{
+			var that = this;
+
+			var $tabs = this.fld.$container.find('.fld-tab .tab.sel');
+			var $fields = this.fld.$container.find('.fld-field');
+
+			$fields.each(function()
+			{
+				var $field = $(this);
+				$('<a class="settings icon" title="Edit"></a>').appendTo($field)
+
+				var $editBtn = $field.find('.settings'),
+			    $menu    = $('<div class="menu" data-align="center"/>').insertAfter($editBtn),
+			    $ul      = $('<ul/>').appendTo($menu);
+
+				$('<li><a data-action="edit">' + Craft.t('Edit') + '</a></li>').appendTo($ul);
+
+				if ($field.hasClass('fld-required'))
+				{
+					$('<li><a data-action="toggle-required">' + Craft.t('Make not required') + '</a></li>').appendTo($ul);
+				}
+				else
+				{
+					$('<li><a data-action="toggle-required">' + Craft.t('Make required') + '</a></li>').appendTo($ul);
+				}
+
+				$('<li><a data-action="remove">' + Craft.t('Remove') + '</a></li>').appendTo($ul);
+
+				new Garnish.MenuBtn($editBtn, {
+					onOptionSelect: $.proxy(that, 'onFieldOptionSelect')
+				});
+
+			});
+		},
+
+		onFieldOptionSelect: function(option)
+		{
+			var $option = $(option),
+			    $field  = $option.data('menu').$anchor.parent(),
+			    action  = $option.data('action');
+
+			switch (action)
+			{
+				case 'toggle-required':
+				{
+					this.fld.toggleRequiredField($field, $option);
+					break;
+				}
+				case 'remove':
+				{
+					this.removeField($field);
+					break;
+				}
+				case 'edit':
+				{
+					this.editField($field);
+					break;
+				}
+			}
+		},
+
+		removeField: function($field)
+		{
+			// Make our field available to our parent function
+			this.$field = $field;
+			this.base($field);
+
+			// Grab the fieldId in this context so we know what to delete
+			var fieldId = this.$field.attr('data-id');
+
+			// Added behavior, store an array of deleted field IDs
+			// that will be processed by the sproutForms/forms/saveForm method
+			$deletedFieldsContainer = $('#deletedFieldsContainer');
+			$('<input type="hidden" name="deletedFields[]" value="' + fieldId + '">').appendTo($deletedFieldsContainer);
+		},
+
+		/**
 		 * Event handler for the New Field button.
 		 * Creates a modal window that contains new field settings.
 		 */
 		newField: function()
 		{
 			this.modal.show();
+		},
+
+		editField: function($field)
+		{
+			// Make our field available to our parent function
+			this.$field = $field;
+			this.base($field);
+
+			// Grab the fieldId in this context so we know what to delete
+			var fieldId = this.$field.attr('data-id');
+
+			console.log("so the id is: "+fieldId);
+
+			//this.modal.editField(id);
 		},
 
 		/**
