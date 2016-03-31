@@ -11,7 +11,7 @@
 
 {%- set dataAttributes = null %}
 {%- for key, dataValue in data %}
-	{%- set dataAttributes = dataAttributes ~ ' data-'~key~'='~dataValue %}
+	{%- set dataAttributes = dataAttributes ~ ' data-'~key~'="'~dataValue~'"' %}
 {% endfor -%}
 
 {%- if settings.multiline -%}
@@ -23,7 +23,7 @@
 		{%- if maxLength is not null %} maxlength="{{ maxLength }}"{% endif %}
 		{%- if initialRows is not empty %} rows="{{ initialRows }}"{% endif %}
 		{{- required -}}
-		{{- dataAttributes -}}
+		{{- dataAttributes|raw -}}
 		>{{ value }}</textarea>
 {%- else -%}
 	<input type="text"
@@ -34,6 +34,6 @@
 		{%- if placeholder is not null %} placeholder="{{ placeholder }}"{% endif %}
 		{%- if maxLength is not null %} maxlength="{{ maxLength }}"{% endif %}
 		{{- required -}}
-		{{- dataAttributes -}}
+		{{- dataAttributes|raw -}}
 		/>
 {%- endif -%}

@@ -7,7 +7,7 @@
 
 {%- set dataAttributes = null %}
 {%- for key, dataValue in data %}
-	{%- set dataAttributes = dataAttributes ~ ' data-'~key~'='~dataValue %}
+	{%- set dataAttributes = dataAttributes ~ ' data-'~key~'="'~dataValue~'"' %}
 {% endfor -%}
 
 {%- set multiple   = false %}
@@ -21,5 +21,5 @@
 		{%- if name %} name="{{ name }}"{% endif %}
 		{%- if multiple %} multiple{% endif %}
 		{{- required -}}
-		{{- dataAttributes -}}
+		{{- dataAttributes|raw -}}
 >

@@ -26,10 +26,23 @@ class SproutFormsEntriesDataSource extends SproutReportsBaseDataSource
 	 *
 	 * @return \CDbDataReader
 	 */
-	public function getResults(SproutReports_ReportModel &$report)
+	public function getResults(SproutReports_ReportModel &$report, $options = array())
 	{
-		$startDate = DateTime::createFromString($report->getOption('startDate'));
-		$endDate   = DateTime::createFromString($report->getOption('endDate'));
+		$startDate = DateTime::createFromString($report->getOption('startDate'), craft()->timezone);
+		$endDate   = DateTime::createFromString($report->getOption('endDate'), craft()->timezone);
+
+		if (count($options))
+		{
+			if (isset($options['startDate']))
+			{
+				$startDate = DateTime::createFromString($options['startDate'], craft()->timezone);
+			}
+
+			if (isset($options['endDate']))
+			{
+				$endDate = DateTime::createFromString($options['endDate'], craft()->timezone);
+			}
+		}
 
 		$formId = $report->getOption('formId');
 
@@ -40,8 +53,8 @@ class SproutFormsEntriesDataSource extends SproutReportsBaseDataSource
 		$query = craft()->db->createCommand()
 			->select('*')
 			->from($contentTable . ' AS entries')
-			->where('entries.dateCreated > :startDate', array(':startDate' => $startDate))
-			->andWhere('entries.dateCreated < :endDate', array(':endDate' => $endDate));
+			->where('entries.dateCreated > :startDate', array(':startDate' => $startDate->mySqlDateTime()))
+			->andWhere('entries.dateCreated < :endDate', array(':endDate' => $endDate->mySqlDateTime()));
 
 		return $query->queryAll();
 	}
@@ -59,13 +72,6 @@ class SproutFormsEntriesDataSource extends SproutReportsBaseDataSource
 
 		$forms = $criteria->find();
 
-		// @todo - can we add an all forms options?
-		// Selecting from multiple content tables may get tricky.
-		//$formOptions[] = array(
-		//	'label' => 'All Forms',
-		//	'value' => '*'
-		//);
-
 		foreach ($forms as $form)
 		{
 			$formOptions[] = array(
@@ -74,26 +80,35 @@ class SproutFormsEntriesDataSource extends SproutReportsBaseDataSource
 			);
 		}
 
-		$options['forms'] = $formOptions;
-
-		$options['formId'] = $this->report->getOption('formId');
-
 		// @todo Determine sensible default start and end date based on Order data
 		$defaultStartDate = null;
 		$defaultEndDate   = null;
 
-		$startDate = DateTime::createFromString($this->report->getOption('startDate'));
-		$endDate   = DateTime::createFromString($this->report->getOption('endDate'));
+		if (count($options))
+		{
+			if (isset($options['startDate']))
+			{
+				$options['startDate'] = DateTime::createFromString($options['startDate'], craft()->timezone);
+			}
 
-		$options['startDate'] = $startDate;
-		$options['endDate']   = $endDate;
+			if (isset($options['endDate']))
+			{
+				$options['endDate'] = DateTime::createFromString($options['endDate'], craft()->timezone);
+			}
+		}
+		else
+		{
+			$options = $this->report->getOptions();
 
-		$options['defaultStartDate'] = new DateTime($defaultStartDate);
-		$options['defaultEndDate']   = new DateTime($defaultEndDate);
+			$options['startDate'] = DateTime::createFromString($this->report->getOption('startDate'), craft()->timezone);
+			$options['endDate']   = DateTime::createFromString($this->report->getOption('endDate'), craft()->timezone);
+		}
 
-		return craft()->templates->render(
-			'sproutforms/_reports/options/entries',
-			compact('options')
-		);
+		return craft()->templates->render('sproutforms/_reports/options/entries', array(
+			'formOptions'      => $formOptions,
+			'defaultStartDate' => new DateTime($defaultStartDate),
+			'defaultEndDate'   => new DateTime($defaultEndDate),
+			'options'          => $options
+		));
 	}
 }

@@ -9,7 +9,7 @@
 
 {%- set dataAttributes = null %}
 {%- for key, dataValue in data %}
-	{%- set dataAttributes = dataAttributes ~ ' data-'~key~'='~dataValue %}
+	{%- set dataAttributes = dataAttributes ~ ' data-'~key~'="'~dataValue~'"' %}
 {% endfor -%}
 
 {% spaceless %}
@@ -29,7 +29,7 @@
 				{%- if value %} value="{{ value }}"{% endif %}
 				{%- if checked is defined and checked %} checked{% endif %}
 				{{- required -}}
-				{{- dataAttributes -}}
+				{{- dataAttributes|raw -}}
 				>
 				{%- if label is defined %}{{ label|raw }}{% endif -%}
 		</label>
