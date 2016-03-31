@@ -73,14 +73,7 @@ class SproutForms_FormElementType extends BaseElementType
 	 */
 	public function getAvailableActions($source = null)
 	{
-		$deleteAction = craft()->elements->getAction('Delete');
-
-		$deleteAction->setParams(
-			array(
-				'confirmationMessage' => Craft::t('Are you sure you want to delete the selected forms?'),
-				'successMessage'      => Craft::t('Forms deleted.'),
-			)
-		);
+		$deleteAction = craft()->elements->getAction('SproutForms_Delete');
 
 		return array($deleteAction);
 	}

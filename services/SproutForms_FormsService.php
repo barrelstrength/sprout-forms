@@ -622,4 +622,32 @@ class SproutForms_FormsService extends BaseApplicationComponent
 			'css'  => $css
 		);
 	}
+
+	/**
+	 * Removes forms and related records from the database given the ids
+	 *
+	 * @param mixed ids
+	 *
+	 * @throws \CDbException
+	 * @throws \Exception
+	 * @return boolean
+	 */
+	public function deleteForms($ids)
+	{
+		foreach ($ids as $key => $id)
+		{
+			$form = sproutForms()->forms->getFormById($id);
+
+			if ($form)
+			{
+				sproutForms()->forms->deleteForm($form);
+			}
+			else
+			{
+				SproutFormsPlugin::log("Can't delete the form with id: ".$id);
+			}
+		}
+
+		return true;
+	}
 }
