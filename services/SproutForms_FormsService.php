@@ -578,4 +578,76 @@ class SproutForms_FormsService extends BaseApplicationComponent
 
 		return $response;
 	}
+
+	/**
+	 * Loads the sprout modal field via ajax.
+	 *
+	 * @param SproutForms_FormRecord $form
+	 * @param FieldModel|null        $field
+	 *
+	 * @return array
+	 */
+	public function getModalFieldTemplate($form, FieldModel $field = null)
+	{
+		$data          = array();
+		$data['tabId'] = null;
+		$data['field'] = new FieldModel();
+
+		if ($field)
+		{
+			$data['field'] = $field;
+			$tabId         = craft()->request->getPost('tabId');
+
+			if (isset($tabId))
+			{
+				$data['tabId'] = craft()->request->getPost('tabId');
+			}
+
+			if ($field->id != null)
+			{
+				$data['fieldId'] = $field->id;
+			}
+		}
+
+		$data['sections'] = $form->getFieldLayout()->getTabs();
+		$data['formId']   = $form->id;
+
+		$html = craft()->templates->render('sproutforms/forms/_editFieldModal', $data);
+		$js   = craft()->templates->getFootHtml();
+		$css  = craft()->templates->getHeadHtml();
+
+		return array(
+			'html' => $html,
+			'js'   => $js,
+			'css'  => $css
+		);
+	}
+
+	/**
+	 * Removes forms and related records from the database given the ids
+	 *
+	 * @param mixed ids
+	 *
+	 * @throws \CDbException
+	 * @throws \Exception
+	 * @return boolean
+	 */
+	public function deleteForms($ids)
+	{
+		foreach ($ids as $key => $id)
+		{
+			$form = sproutForms()->forms->getFormById($id);
+
+			if ($form)
+			{
+				sproutForms()->forms->deleteForm($form);
+			}
+			else
+			{
+				SproutFormsPlugin::log("Can't delete the form with id: ".$id);
+			}
+		}
+
+		return true;
+	}
 }
