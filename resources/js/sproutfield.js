@@ -79,10 +79,11 @@
 			if ($group)
 			{
 				var $groupContent = $group.children('.fld-tabcontent');
+				var encodeGroupName    = encodeURIComponent(groupName);
 				var $field = $([
 					'<div class="fld-field" data-id="', id, '">',
 					'<span>', name, '</span>',
-					'<input class="id-input" type="hidden" name="fieldLayout[', groupName, '][]" value="', id, '">',
+					'<input class="id-input" type="hidden" name="fieldLayout[', encodeGroupName, '][]" value="', id, '">',
 					'<a class="settings icon" title="Edit"></a>',
 					'</div>'
 				].join('')).appendTo($groupContent);
