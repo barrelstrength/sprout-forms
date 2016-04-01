@@ -146,16 +146,16 @@
 		 */
 		addField: function(id, name, groupName)
 		{
-			var fld = this.fld;
-			var grid = fld.tabGrid;
-			var drag = fld.fieldDrag;
+			var fld    = this.fld;
+			var grid   = fld.tabGrid;
+			var drag   = fld.fieldDrag;
 			var fields = fld.$allFields;
 			var $group = this._getGroupByName(groupName);
 
 			if ($group)
 			{
-				var $groupContent = $group.children('.fld-tabcontent');
-				var encodeGroupName    = encodeURIComponent(groupName);
+				var $groupContent   = $group.children('.fld-tabcontent');
+				var encodeGroupName = encodeURIComponent(groupName);
 				var $field = $([
 					'<div class="fld-field" data-id="', id, '">',
 					'<span>', name, '</span>',
