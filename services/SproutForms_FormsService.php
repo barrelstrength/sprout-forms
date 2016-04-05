@@ -513,7 +513,7 @@ class SproutForms_FormsService extends BaseApplicationComponent
 			$emailTemplate = $templatePaths['email'];
 
 			// Set our Sprout Forms Email Template path
-			craft()->path->setTemplatesPath($emailTemplate);
+			craft()->templates->setTemplatesPath($emailTemplate);
 
 			$email->htmlBody = craft()->templates->render(
 				'email', array(
@@ -523,7 +523,7 @@ class SproutForms_FormsService extends BaseApplicationComponent
 				)
 			);
 
-			craft()->path->setTemplatesPath(craft()->path->getCpTemplatesPath());
+			craft()->templates->setTemplatesPath(craft()->path->getCpTemplatesPath());
 
 			$post = (object) $_POST;
 

@@ -50,7 +50,7 @@ class SproutFormsVariable
 		$templatePaths = sproutForms()->fields->getSproutFormsTemplates($form);
 
 		// Set Tab template path
-		craft()->path->setTemplatesPath($templatePaths['tab']);
+		craft()->templates->setTemplatesPath($templatePaths['tab']);
 
 		$bodyHtml = craft()->templates->render(
 			'tab', array(
@@ -64,7 +64,7 @@ class SproutFormsVariable
 		);
 
 		// Check if we need to update our Front-end Form Template Path
-		craft()->path->setTemplatesPath($templatePaths['form']);
+		craft()->templates->setTemplatesPath($templatePaths['form']);
 
 		// Build our complete form
 		$formHtml = craft()->templates->render(
@@ -77,7 +77,7 @@ class SproutFormsVariable
 			)
 		);
 
-		craft()->path->setTemplatesPath(craft()->path->getSiteTemplatesPath());
+		craft()->templates->setTemplatesPath(craft()->path->getSiteTemplatesPath());
 
 		return TemplateHelper::getRaw($formHtml);
 	}
@@ -98,7 +98,7 @@ class SproutFormsVariable
 		$templatePaths = sproutForms()->fields->getSproutFormsTemplates($form);
 
 		// Set Tab template path
-		craft()->path->setTemplatesPath($templatePaths['tab']);
+		craft()->templates->setTemplatesPath($templatePaths['tab']);
 
 		$tabIndex = null;
 
@@ -134,7 +134,7 @@ class SproutFormsVariable
 			)
 		);
 
-		craft()->path->setTemplatesPath(craft()->path->getSiteTemplatesPath());
+		craft()->templates->setTemplatesPath(craft()->path->getSiteTemplatesPath());
 
 		return TemplateHelper::getRaw($tabHtml);
 	}
@@ -185,12 +185,12 @@ class SproutFormsVariable
 			{
 				$value = craft()->request->getPost($field->handle);
 
-				craft()->path->setTemplatesPath($formField->getTemplatesPath());
+				craft()->templates->setTemplatesPath($formField->getTemplatesPath());
 
 				$formField->getInputHtml($field, $value, $field->getFieldType()->getSettings(), $renderingOptions);
 
 				// Set Tab template path
-				craft()->path->setTemplatesPath($templatePaths['field']);
+				craft()->templates->setTemplatesPath($templatePaths['field']);
 
 				// Build the HTML for our form field
 				$fieldHtml = craft()->templates->render(
@@ -205,7 +205,7 @@ class SproutFormsVariable
 					)
 				);
 
-				craft()->path->setTemplatesPath(craft()->path->getSiteTemplatesPath());
+				craft()->templates->setTemplatesPath(craft()->path->getSiteTemplatesPath());
 
 				return TemplateHelper::getRaw($fieldHtml);
 			}
