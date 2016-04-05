@@ -33,6 +33,7 @@
 
 			this.$fieldButton = $('<div id="sproutField" class="btn add icon" tabindex="0">').text(Craft.t('New Field')).appendTo($(".buttons"));
 
+			this.initButtons();
 			this.modal = SproutField.FieldModal.getInstance();
 
 			this.addListener(this.$fieldButton, 'activate', 'newField');
@@ -53,12 +54,87 @@
 		},
 
 		/**
+		 * Adds edit buttons to existing fields.
+		 */
+		initButtons: function()
+		{
+			var that = this;
+
+			var $fields = this.fld.$container.find('.fld-field');
+
+			$fields.each(function()
+			{
+				var $field = $(this);
+
+				var $editBtn = $field.find('.settings');
+
+				new Garnish.MenuBtn($editBtn, {
+					onOptionSelect: $.proxy(that, 'onFieldOptionSelect')
+				});
+
+			});
+		},
+
+		onFieldOptionSelect: function(option)
+		{
+			var $option = $(option),
+			    $field  = $option.data('menu').$anchor.parent(),
+			    action  = $option.data('action');
+
+			switch (action)
+			{
+				case 'toggle-required':
+				{
+					this.fld.toggleRequiredField($field, $option);
+					break;
+				}
+				case 'remove':
+				{
+					this.removeField($field);
+					break;
+				}
+				case 'edit':
+				{
+					this.editField($field);
+					break;
+				}
+			}
+		},
+
+		removeField: function($field)
+		{
+			// Make our field available to our parent function
+			this.$field = $field;
+			this.base($field);
+
+			// Grab the fieldId in this context so we know what to delete
+			var fieldId = this.$field.attr('data-id');
+
+			// Added behavior, store an array of deleted field IDs
+			// that will be processed by the sproutForms/forms/saveForm method
+			$deletedFieldsContainer = $('#deletedFieldsContainer');
+			$('<input type="hidden" name="deletedFields[]" value="' + fieldId + '">').appendTo($deletedFieldsContainer);
+		},
+
+		/**
 		 * Event handler for the New Field button.
 		 * Creates a modal window that contains new field settings.
 		 */
 		newField: function()
 		{
 			this.modal.show();
+		},
+
+		editField: function($field)
+		{
+			// Make our field available to our parent function
+			this.$field = $field;
+			this.base($field);
+
+			// Grab the fieldId in this context so we know what to delete
+			var fieldId = this.$field.attr('data-id');
+
+			this.modal.editField(fieldId);
 		},
 
 		/**
@@ -70,16 +146,16 @@
 		 */
 		addField: function(id, name, groupName)
 		{
-			var fld = this.fld;
-			var grid = fld.tabGrid;
-			var drag = fld.fieldDrag;
+			var fld    = this.fld;
+			var grid   = fld.tabGrid;
+			var drag   = fld.fieldDrag;
 			var fields = fld.$allFields;
 			var $group = this._getGroupByName(groupName);
 
 			if ($group)
 			{
-				var $groupContent = $group.children('.fld-tabcontent');
-				var encodeGroupName    = encodeURIComponent(groupName);
+				var $groupContent   = $group.children('.fld-tabcontent');
+				var encodeGroupName = encodeURIComponent(groupName);
 				var $field = $([
 					'<div class="fld-field" data-id="', id, '">',
 					'<span>', name, '</span>',
@@ -89,6 +165,8 @@
 				].join('')).appendTo($groupContent);
 
 				fld.initField($field);
+
+				this.addFieldListener($field);
 
 				fld.$allFields = fields.add($field);
 
@@ -106,6 +184,15 @@
 			}
 		},
 
+		addFieldListener: function($field)
+		{
+			var $editBtn = $field.find('.settings');
+
+			new Garnish.MenuBtn($editBtn, {
+				onOptionSelect: $.proxy(this, 'onFieldOptionSelect')
+			});
+		},
+
 		/**
 		 * Renames and regroups an existing field on the field layout designer.
 		 *
@@ -116,20 +203,19 @@
 		resetField: function(id, groupName, name)
 		{
 			var fld = this.fld;
-			var grid = fld.unusedFieldGrid;
+			var grid = fld.tabGrid;
 			var $container = fld.$container;
 			var $group = this._getGroupByName(groupName);
 			var $content = $group.children('.fld-tabcontent');
 			var $field = $container.find('.fld-field[data-id="' + id + '"]');
-			var $unusedField = $field.filter('.unused');
-			var $currentGroup = $unusedField.closest('.fld-tab');
+			var $currentGroup = $field.closest('.fld-tab');
 			var $span = $field.children('span');
 
 			$span.text(name);
 
 			if ($currentGroup[0] !== $group[0])
 			{
-				$content.append($unusedField);
+				$content.append($field);
 				grid.refreshCols(true);
 			}
 		},

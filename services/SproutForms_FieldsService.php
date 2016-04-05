@@ -435,9 +435,93 @@ class SproutForms_FieldsService extends FieldsService
 		return $response;
 	}
 
+	/**
+	 * This service allows update a field to a current FieldLayoutFieldRecord
+	 *
+	 * @param FieldModel            $field
+	 * @param SproutForms_FormModel $form
+	 * @param int                   $tabId
+	 *
+	 * @return boolean
+	 */
+	public function updateFieldToLayout($field, $form, $tabId)
+	{
+		$response = false;
+
+		if (isset($field) && isset($form))
+		{
+			$fieldRecord  = FieldLayoutFieldRecord::model()->find(array(
+				'condition' => 'fieldId = :fieldId AND layoutId = :layoutId',
+				'params'    => array(':fieldId' => $field->id, ':layoutId' => $form->fieldLayoutId)
+			));
+
+			if ($fieldRecord)
+			{
+				$fieldRecord->tabId = $tabId;
+
+				$response = $fieldRecord->save(false);
+			}
+			else
+			{
+				SproutFormsPlugin::log("Unable to find the FieldLayoutFieldRecord");
+			}
+		}
+
+		return $response;
+	}
+
 	public function getDefaultTabName()
 	{
 		return Craft::t('Tab 1');
+	}
+
+	/**
+	 * Loads the sprout modal field via ajax.
+	 *
+	 * @param SproutForms_FormRecord $form
+	 * @param FieldModel|null        $field
+	 * @param int|null               $tabId
+	 *
+	 * @return array
+	 */
+	public function getModalFieldTemplate($form, FieldModel $field = null, $tabId = null)
+	{
+		$data          = array();
+		$data['tabId'] = null;
+		$data['field'] = new FieldModel();
+
+		if ($field)
+		{
+			$data['field'] = $field;
+			$tabIdByPost   = craft()->request->getPost('tabId');
+
+			if (isset($tabIdByPost))
+			{
+				$data['tabId'] = $tabIdByPost;
+			}
+			else if($tabId != null) //edit field
+			{
+				$data['tabId'] = $tabId;
+			}
+
+			if ($field->id != null)
+			{
+				$data['fieldId'] = $field->id;
+			}
+		}
+
+		$data['sections'] = $form->getFieldLayout()->getTabs();
+		$data['formId']   = $form->id;
+
+		$html = craft()->templates->render('sproutforms/forms/_editFieldModal', $data);
+		$js   = craft()->templates->getFootHtml();
+		$css  = craft()->templates->getHeadHtml();
+
+		return array(
+			'html' => $html,
+			'js'   => $js,
+			'css'  => $css
+		);
 	}
 
 	/**

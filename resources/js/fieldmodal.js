@@ -26,7 +26,6 @@
 		$footer: null,
 		$leftButtons: null,
 		$rightButtons: null,
-		$deleteBtn: null,
 		$saveBtn: null,
 		$cancelBtn: null,
 		$saveSpinner: null,
@@ -85,7 +84,6 @@
 			this.$leftButtons = $('<div class="buttons left">').appendTo(this.$footer);
 			this.$rightButtons = $('<div class="buttons right">').appendTo(this.$footer);
 
-			this.$deleteBtn = $('<a class="delete error hidden">').text(Craft.t('Delete')).appendTo(this.$leftButtons);
 			this.$deleteSpinner = $('<div class="spinner hidden">').appendTo(this.$leftButtons);
 
 			this.$cancelBtn = $('<div class="btn disabled" role="button">').text(Craft.t('Cancel')).appendTo(this.$rightButtons);
@@ -314,7 +312,6 @@
 
 			// Only show the delete button if editing a field
 			var $fieldId = that.$main.find('input[name="fieldId"]');
-			that.$deleteBtn.toggleClass('hidden', $fieldId.length === 0);
 
 			Craft.initUiElements();
 
@@ -348,8 +345,6 @@
 			that.$currentJs.remove();
 			that.$currentCss.remove();
 			that.$observed.remove();
-
-			that.$deleteBtn.addClass('hidden');
 		},
 
 		/**
@@ -440,6 +435,54 @@
 					this.initListeners();
 
 					Craft.cp.displayError(Craft.t('An unknown error occurred.'));
+				}
+			}, this));
+		},
+
+		/**
+		 *
+		 * @param id
+		 */
+		editField: function(id)
+		{
+			this.destroyListeners();
+			this.show();
+			this.initListeners();
+
+			this.$loadSpinner.removeClass('hidden');
+
+			var formId = $("#formId").val();
+			var data = {'fieldId': id, 'formId': formId};
+
+			Craft.postActionRequest('sproutForms/fields/editField', data, $.proxy(function(response, textStatus)
+			{
+				this.$loadSpinner.addClass('hidden');
+
+				var statusSuccess = (textStatus === 'success');
+
+				if(statusSuccess && response.success)
+				{
+					var callback = $.proxy(function(e)
+					{
+						this.destroySettings();
+						this.initSettings(e);
+						this.off('parseTemplate', callback);
+					}, this);
+
+					this.on('parseTemplate', callback);
+					this.parseTemplate(response.template);
+				}
+				else if(statusSuccess && response.error)
+				{
+					Craft.cp.displayError(response.error);
+
+					this.hide();
+				}
+				else
+				{
+					Craft.cp.displayError(Craft.t('An unknown error occurred. '));
+
+					this.hide();
 				}
 			}, this));
 		},

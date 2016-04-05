@@ -224,7 +224,7 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 			}
 			catch (\Exception $e)
 			{
-				SproutFormsPlugin::log('Failed to save element');
+				SproutFormsPlugin::log('Failed to save element: '.$e->getMessage());
 
 				return false;
 				throw $e;
