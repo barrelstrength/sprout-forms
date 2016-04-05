@@ -35,14 +35,14 @@ abstract class SproutFormsBaseField
 
 	final public function beginRendering()
 	{
-		$this->originalTemplatesPath = craft()->path->getTemplatesPath();
+		$this->originalTemplatesPath = craft()->templates->getTemplatesPath();
 
-		craft()->path->setTemplatesPath($this->getTemplatesPath());
+		craft()->templates->setTemplatesPath($this->getTemplatesPath());
 	}
 
 	final public function endRendering()
 	{
-		craft()->path->setTemplatesPath($this->originalTemplatesPath);
+		craft()->templates->setTemplatesPath($this->originalTemplatesPath);
 	}
 
 	final public function setValue($handle, $value)
