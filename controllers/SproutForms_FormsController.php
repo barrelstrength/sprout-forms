@@ -52,7 +52,7 @@ class SproutForms_FormsController extends BaseController
 		// Delete any fields removed from the layout
 		$deletedFields = craft()->request->getPost('deletedFields');
 
-		if ($deletedFields)
+		if (count($deletedFields) > 0)
 		{
 			// Backup our field context and content table
 			$oldFieldContext = craft()->content->fieldContext;
