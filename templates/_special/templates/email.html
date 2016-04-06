@@ -42,7 +42,7 @@
                                 {% set field = field.getField() %}
                                 {% set value = attribute(element, field.handle) %}
 
-                                {% if tabs|length > 1 %}
+                                {% if loop.first and tabs|length > 1 %}
                                 <p><strong>{{ tab.name }}</strong></p>
                                 {% endif %}
 
