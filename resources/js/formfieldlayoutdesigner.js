@@ -75,6 +75,21 @@
 			$('<li><a data-action="remove">' + Craft.t('Remove') + '</a></li>').appendTo($ul);
 		},
 
+		removeField: function($field)
+		{
+			// Make our field available to our parent function
+			this.$field = $field;
+			this.base($field);
+
+			// Grab the fieldId in this context so we know what to delete
+			var fieldId = this.$field.attr('data-id');
+
+			// Added behavior, store an array of deleted field IDs
+			// that will be processed by the sproutForms/forms/saveForm method
+			$deletedFieldsContainer = $('#deletedFieldsContainer');
+			$('<input type="hidden" name="deletedFields[]" value="' + fieldId + '">').appendTo($deletedFieldsContainer);
+		},
+
 		onTabOptionSelect: function(option)
 		{
 			if (!this.settings.customizableTabs)
