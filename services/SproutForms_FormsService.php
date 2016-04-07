@@ -47,7 +47,7 @@ class SproutForms_FormsService extends BaseApplicationComponent
 		$formRecord = new SproutForms_FormRecord();
 		$isNewForm  = true;
 
-		if ($form->id && !$form->saveAsNew)
+		if ($form->id)
 		{
 			$formRecord = SproutForms_FormRecord::model()->findById($form->id);
 
@@ -64,6 +64,13 @@ class SproutForms_FormsService extends BaseApplicationComponent
 			// Add the oldHandle to our model so we can determine if we
 			// need to rename the content table
 			$form->oldHandle = $formRecord->getOldHandle();
+
+			if ($form->saveAsNew)
+			{
+				$form->name   = $oldForm->name;
+				$form->handle = $oldForm->handle;
+				$form->oldHandle = null;
+			}
 		}
 
 		// Create our new Form Record
@@ -95,12 +102,6 @@ class SproutForms_FormsService extends BaseApplicationComponent
 
 		$formRecord->validate();
 		$form->addErrors($formRecord->getErrors());
-
-		if ($form->saveAsNew)
-		{
-			$form->name   = $formRecord->name;
-			$form->handle = $formRecord->handle;
-		}
 
 		if (!$form->hasErrors())
 		{
@@ -155,7 +156,7 @@ class SproutForms_FormsService extends BaseApplicationComponent
 				$newContentTable = $this->getContentTableName($form);
 
 				// Do we need to create/rename the content table?
-				if (!craft()->db->tableExists($newContentTable))
+				if (!craft()->db->tableExists($newContentTable) && !$form->saveAsNew)
 				{
 					if ($oldContentTable && craft()->db->tableExists($oldContentTable))
 					{
@@ -169,47 +170,6 @@ class SproutForms_FormsService extends BaseApplicationComponent
 
 				if (craft()->elements->saveElement($form))
 				{
-					// Create the new fields
-					if ($form->saveAsNew)
-					{
-						// Duplicate the fields in the newContent Table also set the fields in the craft fields table
-						$newFields = array();
-						foreach ($form->getFields() as $key => $value)
-						{
-							$field               = new FieldModel();
-							$field->name         = $value->name;
-							$field->handle       = $value->handle;
-							$field->instructions = $value->instructions;
-							$field->required     = $value->required;
-							$field->translatable = (bool) $value->translatable;
-							$field->type         = $value->type;
-
-							if (isset($value->settings))
-							{
-								$field->settings = $value->settings;
-							}
-
-							craft()->content->fieldContext = $form->getFieldContext();
-							craft()->content->contentTable = $form->getContentTable();
-
-							craft()->fields->saveField($field);
-							array_push($newFields, $field);
-							SproutFormsPlugin::log('Saved field as new ' . $field->id);
-						}
-
-						// Update fieldId on layoutfields table
-						$fieldLayout    = $form->getFieldLayout();
-						$fieldLayoutIds = FieldLayoutFieldRecord::model()->findAll("layoutId = {$fieldLayout->id}");
-
-						foreach ($fieldLayoutIds as $key => $layout)
-						{
-							SproutFormsPlugin::log('Updated field layout  ' . $layout->id);
-							$model          = FieldLayoutFieldRecord::model()->findByPk($layout->id);
-							$model->fieldId = $newFields[$key]->id;
-							$model->save();
-						}
-					}
-
 					// Now that we have an element ID, save it on the other stuff
 					if ($isNewForm)
 					{

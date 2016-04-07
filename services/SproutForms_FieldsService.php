@@ -399,6 +399,77 @@ class SproutForms_FieldsService extends FieldsService
 	}
 
 	/**
+	 * This service allows duplicate fields from Layout
+	 *
+	 * @param SproutForms_FormModel $form
+	 *
+	 * @return SproutForms_FormModel | null
+	 */
+	public function getDuplicateLayout($form, $fieldLayoutOriginal)
+	{
+		if ($form && $fieldLayoutOriginal)
+		{
+			$tabs = $fieldLayoutOriginal->getTabs();
+
+			foreach ($tabs as $tab)
+			{
+				$fields = array();
+				$requiredFields = array();
+				$originalFields = $tab->getFields();
+
+				foreach ($originalFields as $fieldLayoutField)
+				{
+					$originalField = $fieldLayoutField->getField();
+
+					$field               = new FieldModel();
+					$field->name         = $originalField->name;
+					$field->handle       = $originalField->handle;
+					$field->instructions = $originalField->instructions;
+					$field->required     = $originalField->required;
+					$field->translatable = $originalField->translatable;
+					$field->type         = $originalField->type;
+
+					if (isset($originalField->settings))
+					{
+						$field->settings = $originalField->settings;
+					}
+
+					craft()->content->fieldContext = $form->getFieldContext();
+					craft()->content->contentTable = $form->getContentTable();
+					// Save duplicate field
+					craft()->fields->saveField($field);
+					array_push($fields, $field);
+
+					if ($field->required)
+					{
+						array_push($requiredFields, $field->id);
+					}
+				}
+
+				$postedFieldLayout = array();
+
+				foreach ($fields as $field)
+				{
+					// Add our new field
+					if (isset($field) && $field->id != null)
+					{
+						$postedFieldLayout[$tab->name][] = $field->id;
+					}
+				}
+			}
+
+			// Set the field layout
+			$fieldLayout = craft()->fields->assembleLayout($postedFieldLayout, $requiredFields);
+
+			$fieldLayout->type = 'SproutForms_Form';
+
+			return $fieldLayout;
+		}
+
+		return null;
+	}
+
+	/**
 	 * This service allows add a field to a current FieldLayoutFieldRecord
 	 *
 	 * @param FieldModel            $field

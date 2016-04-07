@@ -198,32 +198,6 @@ class SproutForms_FormRecord extends BaseRecord
 	}
 
 	/**
-	 * Before Validate
-	 *
-	 */
-	protected function beforeValidate()
-	{
-		// Validate the name and handle fields when the record is save as new
-		if (isset($_POST["saveAsNew"]))
-		{
-			if ($_POST['saveAsNew'])
-			{
-				if (sproutForms()->forms->getFieldValue('name', $this->name))
-				{
-					$this->name = sproutForms()->forms->getFieldAsNew('name', $this->name);
-				}
-
-				if (sproutForms()->forms->getFieldValue('handle', $this->handle))
-				{
-					$this->handle = sproutForms()->forms->getFieldAsNew('handle', $this->handle);
-				}
-			}
-		}
-
-		return true;
-	}
-
-	/**
 	 * Before Save
 	 *
 	 */
