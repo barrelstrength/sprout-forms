@@ -344,6 +344,55 @@ class SproutForms_FieldsService extends FieldsService
 	}
 
 	/**
+	 * Returns the value of a given field
+	 *
+	 * @param string $field
+	 * @param string $value
+	 *
+	 * @return SproutForms_FormRecord
+	 */
+	public function getFieldHandle($value)
+	{
+		$criteria            = new \CDbCriteria();
+		$criteria->condition = "handle =:value";
+		$criteria->params    = array(':value' => $value);
+		$criteria->limit     = 1;
+
+		$result = FieldRecord::model()->find($criteria);
+
+		return $result;
+	}
+
+	/**
+	 * Create a secuencial string for "handle" if it's already taken
+	 *
+	 * @param string
+	 * @param string
+	 * return string
+	 */
+	public function getHandleAsNew($value)
+	{
+		$newHandle = null;
+		$aux       = true;
+		$i         = 1;
+		do
+		{
+			$newHandle = $value . $i;
+			$field     = sproutForms()->fields->getFieldHandle($newHandle);
+
+			if (is_null($field))
+			{
+				$aux = false;
+			}
+
+			$i++;
+		}
+		while ($aux);
+
+		return $newHandle;
+	}
+
+	/**
 	 * This service allows create a default tab given a form
 	 *
 	 * @param SproutForms_FormModel $form
@@ -356,9 +405,11 @@ class SproutForms_FieldsService extends FieldsService
 		{
 			if (is_null($field))
 			{
+				$handle = $this->getHandleAsNew("defaultField");
+
 				$field               = new FieldModel();
 				$field->name         = Craft::t('Default Field');
-				$field->handle       = "defaultField";
+				$field->handle       = $handle;
 				$field->instructions = "";
 				$field->required     = 0;
 				$field->translatable = 0;
@@ -368,22 +419,15 @@ class SproutForms_FieldsService extends FieldsService
 			}
 
 			// Create a tab
-			$fieldLayoutTab            = new FieldLayoutTabModel();
-			$fieldLayoutTab->name      = $this->getDefaultTabName();
-			$fieldLayoutTab->sortOrder = 1;
-
+			$tabName           = $this->getDefaultTabName();
 			$requiredFields    = array();
 			$postedFieldLayout = array();
 
 			// Add our new field
 			if (isset($field) && $field->id != null)
 			{
-				$postedFieldLayout[$fieldLayoutTab->name][] = $field->id;
+				$postedFieldLayout[$tabName][] = $field->id;
 			}
-			// lets the tab empty
-			$tabFields = array();
-			$fieldLayoutTab->setFields($tabFields);
-			$tabName = $fieldLayoutTab->name;
 
 			// Set the field layout
 			$fieldLayout = craft()->fields->assembleLayout($postedFieldLayout, $requiredFields);

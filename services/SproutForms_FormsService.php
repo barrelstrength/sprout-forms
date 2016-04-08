@@ -610,4 +610,38 @@ class SproutForms_FormsService extends BaseApplicationComponent
 
 		return true;
 	}
+
+	/**
+	 * Creates a form with a empty default tab
+	 *
+	 * @param mixed ids
+	 *
+	 * @throws \CDbException
+	 * @throws \Exception
+	 * @return boolean
+	 */
+
+	public function createNewForm()
+	{
+		$form = new SproutForms_FormModel();
+
+		$form->name   = sproutForms()->forms->getFieldAsNew('name', 'Form');
+		$form->handle = sproutForms()->forms->getFieldAsNew('handle', 'form');
+		// Set default tab
+		$field = null;
+		$form  = sproutForms()->fields->addDefaultTab($form, $field);
+
+		if (sproutForms()->forms->saveForm($form))
+		{
+			// Let's delete the default field
+			if (isset($field) && $field->id)
+			{
+				craft()->fields->deleteFieldById($field->id);
+			}
+
+			return $form;
+		}
+
+		return false;
+	}
 }

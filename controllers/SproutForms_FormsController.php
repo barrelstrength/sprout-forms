@@ -18,23 +18,15 @@ class SproutForms_FormsController extends BaseController
 		if (craft()->request->getPost('saveAsNew'))
 		{
 			$form->saveAsNew = true;
-			$duplicateForm = new SproutForms_FormModel();
+			$duplicateForm = sproutForms()->forms->createNewForm();
 
-			$duplicateForm->name   = sproutForms()->forms->getFieldAsNew('name', 'Form');
-			$duplicateForm->handle = sproutForms()->forms->getFieldAsNew('handle', 'form');
-			// Set default tab
-			$field = null;
-			$duplicateForm  = sproutForms()->fields->addDefaultTab($duplicateForm, $field);
-
-			if (sproutForms()->forms->saveForm($duplicateForm))
+			if ($duplicateForm)
 			{
-				// Lets delete the default field
-				if (isset($field) && $field->id)
-				{
-					craft()->fields->deleteFieldById($field->id);
-				}
-
 				$form->id = $duplicateForm->id;
+			}
+			else
+			{
+				throw new Exception(Craft::t('Error creating Form'));
 			}
 		}
 		else
@@ -156,22 +148,10 @@ class SproutForms_FormsController extends BaseController
 		// Immediately create a new Form
 		if (craft()->request->getSegment(3) == "new")
 		{
-			$form = new SproutForms_FormModel();
+			$form = sproutForms()->forms->createNewForm();
 
-			$form->name   = sproutForms()->forms->getFieldAsNew('name', 'Form');
-			$form->handle = sproutForms()->forms->getFieldAsNew('handle', 'form');
-			// Set default tab
-			$field = null;
-			$form  = sproutForms()->fields->addDefaultTab($form, $field);
-
-			if (sproutForms()->forms->saveForm($form))
+			if ($form)
 			{
-				// Lets delete the default field
-				if (isset($field) && $field->id)
-				{
-					craft()->fields->deleteFieldById($field->id);
-				}
-
 				$url = UrlHelper::getCpUrl('sproutforms/forms/edit/' . $form->id);
 				$this->redirect($url);
 			}
