@@ -18,15 +18,15 @@ class SproutForms_FormsController extends BaseController
 		if (craft()->request->getPost('saveAsNew'))
 		{
 			$form->saveAsNew = true;
-			$formAsNew = new SproutForms_FormModel();
+			$duplicateForm = new SproutForms_FormModel();
 
-			$formAsNew->name   = sproutForms()->forms->getFieldAsNew('name', 'Form');
-			$formAsNew->handle = sproutForms()->forms->getFieldAsNew('handle', 'form');
+			$duplicateForm->name   = sproutForms()->forms->getFieldAsNew('name', 'Form');
+			$duplicateForm->handle = sproutForms()->forms->getFieldAsNew('handle', 'form');
 			// Set default tab
 			$field = null;
-			$formAsNew  = sproutForms()->fields->addDefaultTab($formAsNew, $field);
+			$duplicateForm  = sproutForms()->fields->addDefaultTab($duplicateForm, $field);
 
-			if (sproutForms()->forms->saveForm($formAsNew))
+			if (sproutForms()->forms->saveForm($duplicateForm))
 			{
 				// Lets delete the default field
 				if (isset($field) && $field->id)
@@ -34,7 +34,7 @@ class SproutForms_FormsController extends BaseController
 					craft()->fields->deleteFieldById($field->id);
 				}
 
-				$form->id = $formAsNew->id;
+				$form->id = $duplicateForm->id;
 			}
 		}
 		else
@@ -67,7 +67,7 @@ class SproutForms_FormsController extends BaseController
 
 		if ($form->saveAsNew)
 		{
-			$fieldLayout = sproutForms()->fields->getDuplicateLayout($form, $fieldLayout);
+			$fieldLayout = sproutForms()->fields->getDuplicateLayout($duplicateForm, $fieldLayout);
 		}
 
 		$fieldLayout->type = 'SproutForms_Form';

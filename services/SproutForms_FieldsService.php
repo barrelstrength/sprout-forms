@@ -410,6 +410,7 @@ class SproutForms_FieldsService extends FieldsService
 		if ($form && $fieldLayoutOriginal)
 		{
 			$tabs = $fieldLayoutOriginal->getTabs();
+			$postedFieldLayout = array();
 
 			foreach ($tabs as $tab)
 			{
@@ -445,8 +446,6 @@ class SproutForms_FieldsService extends FieldsService
 						array_push($requiredFields, $field->id);
 					}
 				}
-
-				$postedFieldLayout = array();
 
 				foreach ($fields as $field)
 				{
