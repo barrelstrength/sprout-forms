@@ -449,20 +449,20 @@ class SproutForms_FieldsService extends FieldsService
 	 *
 	 * @return SproutForms_FormModel | null
 	 */
-	public function getDuplicateLayout($form, $fieldLayoutOriginal)
+	public function getDuplicateLayout($form, $postFieldLayout)
 	{
-		if ($form && $fieldLayoutOriginal)
+		if ($form && $postFieldLayout)
 		{
-			$tabs = $fieldLayoutOriginal->getTabs();
 			$postedFieldLayout = array();
+			$requiredFields    = array();
+			$tabs              = $postFieldLayout->getTabs();
 
 			foreach ($tabs as $tab)
 			{
 				$fields = array();
-				$requiredFields = array();
-				$originalFields = $tab->getFields();
+				$fieldLayoutFields = $tab->getFields();
 
-				foreach ($originalFields as $fieldLayoutField)
+				foreach ($fieldLayoutFields as $fieldLayoutField)
 				{
 					$originalField = $fieldLayoutField->getField();
 
@@ -470,7 +470,7 @@ class SproutForms_FieldsService extends FieldsService
 					$field->name         = $originalField->name;
 					$field->handle       = $originalField->handle;
 					$field->instructions = $originalField->instructions;
-					$field->required     = $originalField->required;
+					$field->required     = $fieldLayoutField->required;
 					$field->translatable = $originalField->translatable;
 					$field->type         = $originalField->type;
 
