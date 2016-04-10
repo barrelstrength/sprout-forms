@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutForms_FormSproutImportImporter extends SproutImportBaseImporter
+class SproutForms_FormSproutImportImporter extends BaseSproutImportImporter
 {
 	public $isNewForm;
 
