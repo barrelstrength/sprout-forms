@@ -212,18 +212,16 @@ class SproutFormsPlugin extends BasePlugin
 		);
 	}
 
-	public function registerSproutImportElements()
-	{
-		return array(
-			new SproutForms_FormSproutImportElementImporter,
-			new SproutForms_EntrySproutImportElementImporter
-		);
-	}
-
+	/**
+	 * Register Sprout Import importers classes for the Sprout Import plugin integration
+	 *
+	 * @return array
+	 */
 	public function registerSproutImportImporters()
 	{
 		return array(
-			new SproutForms_FormSproutImportImporter()
+			new SproutForms_EntrySproutImportElementImporter,
+			new SproutForms_FormSproutImportElementImporter
 		);
 	}
 
