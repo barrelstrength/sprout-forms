@@ -415,6 +415,7 @@ class SproutForms_FieldsService extends FieldsService
 				$field->translatable = 0;
 				$field->type         = "PlainText";
 				// Save our field
+				craft()->content->fieldContext = $form->getFieldContext();
 				craft()->fields->saveField($field);
 			}
 
