@@ -1,9 +1,10 @@
 {% if errors -%}
+	{% set labelId = name is defined ? name : null %}
 	<ul class="errors">
 		{% for error in errors %}
 			{% if loop.last %}
 				<script>
-					document.getElementById('fields-'+'{{name}}').focus();
+					document.getElementById('fields-'+'{{labelId}}').focus();
 				</script>
 			{%endif%}
 			<li>{{ error }}</li>
