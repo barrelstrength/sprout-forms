@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class SproutForms_FieldsService extends FieldsService
+class SproutForms_FieldsService extends BaseApplicationComponent
 {
 	/**
 	 * @var SproutFormsBaseField[]
