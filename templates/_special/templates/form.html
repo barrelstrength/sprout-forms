@@ -35,4 +35,17 @@
 	</div>
 </form>
 
+{# Add focus to the first field which has an error #}
+{% if errors -%}
+	{%- for labelId, error in errors %}
+		{%- if loop.first %}
+		<script>
+			(function() {
+				document.getElementById('fields-'+'{{ labelId }}').focus();
+			})();
+		</script>
+		{%- endif %}
+	{%- endfor %}
+{%- endif %}
+
 <!-- / Sprout Forms Craft CMS form builder plugin -->
