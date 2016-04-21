@@ -18,7 +18,10 @@ class SproutForms_FormsController extends BaseController
 		if (craft()->request->getPost('saveAsNew'))
 		{
 			$form->saveAsNew = true;
-			$duplicateForm = sproutForms()->forms->createNewForm();
+			$duplicateForm = sproutForms()->forms->createNewForm(
+				craft()->request->getPost('name'),
+				craft()->request->getPost('handle')
+			);
 
 			if ($duplicateForm)
 			{
@@ -33,6 +36,7 @@ class SproutForms_FormsController extends BaseController
 		{
 			$form->id = craft()->request->getPost('id');
 		}
+
 		$form->groupId              = craft()->request->getPost('groupId');
 		$form->name                 = craft()->request->getPost('name');
 		$form->handle               = craft()->request->getPost('handle');
