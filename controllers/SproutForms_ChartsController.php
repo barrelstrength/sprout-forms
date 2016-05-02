@@ -37,7 +37,9 @@ class SproutForms_ChartsController extends ElementIndexController
 
 		if ($formId != 0)
 		{
-			$query->andWhere('forms.id = ' . $formId);
+			$query->andWhere('forms.id = :formId',
+					array(':formId' => $formId)
+			);
 		}
 
 		// Get the chart data table
