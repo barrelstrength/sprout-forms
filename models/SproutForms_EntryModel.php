@@ -25,6 +25,10 @@ class SproutForms_EntryModel extends BaseElementModel
 	 */
 	protected $formFields;
 
+	const UNREAD   = 'unread';
+	const READ     = 'read';
+	const ARCHIVED = 'archived';
+
 	/**
 	 * @return array
 	 */
@@ -39,6 +43,12 @@ class SproutForms_EntryModel extends BaseElementModel
 				'formName'  => AttributeType::Number,
 				'ipAddress' => AttributeType::String,
 				'userAgent' => AttributeType::Mixed,
+				'status'    => array(AttributeType::Number,
+												'column'   => ColumnType::TinyInt,
+												'length'   => 2,
+												'null'     => false,
+												'default'  => 0,
+												'unsigned' => true )
 			)
 		);
 	}

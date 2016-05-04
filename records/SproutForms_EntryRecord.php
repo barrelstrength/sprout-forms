@@ -23,6 +23,12 @@ class SproutForms_EntryRecord extends BaseRecord
 		return array(
 			'ipAddress' => AttributeType::String,
 			'userAgent' => AttributeType::Mixed,
+			'status'    => array(AttributeType::Number,
+											'column'   => ColumnType::TinyInt,
+											'length'   => 2,
+											'null'     => false,
+											'default'  => 0,
+											'unsigned' => true )
 		);
 	}
 

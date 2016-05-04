@@ -34,6 +34,16 @@ class SproutForms_EntryElementType extends BaseElementType
 	}
 
 	/**
+	 * @inheritDoc IElementType::hasStatuses()
+	 *
+	 * @return bool
+	 */
+	public function hasStatuses()
+	{
+		return true;
+	}
+
+	/**
 	 * Returns whether this element type stores data on a per-locale basis.
 	 *
 	 * @return bool
@@ -152,7 +162,9 @@ class SproutForms_EntryElementType extends BaseElementType
 			)
 		);
 
-		return array($deleteAction);
+		$setStatusAction = craft()->elements->getAction('SproutForm_SetStatus');
+
+		return array($deleteAction, $setStatusAction);
 	}
 
 	/**
