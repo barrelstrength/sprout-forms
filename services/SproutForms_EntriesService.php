@@ -169,10 +169,9 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 
 					$success = craft()->elements->saveElement($entry);
 
-					SproutFormsPlugin::log('Element Saved: ' . $success);
-
 					if ($success)
 					{
+						SproutFormsPlugin::log('Element Saved: ' . $success);
 						// Now that we have an element ID, save it on the other stuff
 						if ($isNewEntry)
 						{
@@ -207,6 +206,10 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 						craft()->sproutForms->onSaveEntry($event);
 
 						return true;
+					}
+					else
+					{
+						SproutFormsPlugin::log("Couldn’t save Element on saveEntry service.", LogLevel::Error, true);
 					}
 
 					craft()->content->fieldContext = $oldFieldContext;
