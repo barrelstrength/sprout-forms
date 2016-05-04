@@ -129,6 +129,15 @@
 			errors: (form is defined ? form.getErrors('submitAction') : null)
 		}) }}
 
+		{{ forms.lightswitchField({
+			label: "Save Payload <span class='info'>Save the payload as form entry.</span>"|t,
+			id: 'savePayload',
+			name: 'savePayload',
+			instructions: '',
+			value: form.savePayload,
+			on: (form.savePayload is defined) ? form.savePayload : ""
+		}) }}
+
 	</div>
 </div>
 

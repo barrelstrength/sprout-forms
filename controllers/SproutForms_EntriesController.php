@@ -64,6 +64,30 @@ class SproutForms_EntriesController extends BaseController
 
 		if (sproutForms()->entries->forwardEntry($entry))
 		{
+			if ($this->form->savePayload)
+			{
+				if (sproutForms()->entries->saveEntry($entry))
+				{
+					// Only handle multi-page forms on the front-end
+					if (!craft()->request->isCpRequest())
+					{
+						// Store our Entry ID for a multi-step form
+						craft()->httpSession->add('multiStepFormEntryId', $entry->id);
+
+						// Remove our multiStepForm reference. It will be
+						// set by the template again if it needs to be.
+						craft()->httpSession->remove('multiStepForm');
+
+						// Store our new entry so we can recreate the Entry object on our thank you page
+						craft()->httpSession->add('lastEntryId', $entry->id);
+					}
+				}
+				else
+				{
+					$this->_errorRedirect($entry);
+				}
+			}
+
 			if (craft()->request->isAjaxRequest())
 			{
 				$return['success'] = true;
