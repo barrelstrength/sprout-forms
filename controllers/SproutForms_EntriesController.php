@@ -66,25 +66,9 @@ class SproutForms_EntriesController extends BaseController
 		{
 			if ($this->form->savePayload)
 			{
-				if (sproutForms()->entries->saveEntry($entry))
+				if (!sproutForms()->entries->saveEntry($entry))
 				{
-					// Only handle multi-page forms on the front-end
-					if (!craft()->request->isCpRequest())
-					{
-						// Store our Entry ID for a multi-step form
-						craft()->httpSession->add('multiStepFormEntryId', $entry->id);
-
-						// Remove our multiStepForm reference. It will be
-						// set by the template again if it needs to be.
-						craft()->httpSession->remove('multiStepForm');
-
-						// Store our new entry so we can recreate the Entry object on our thank you page
-						craft()->httpSession->add('lastEntryId', $entry->id);
-					}
-				}
-				else
-				{
-					$this->_errorRedirect($entry);
+					SproutFormsPlugin::log("Unable to save payload data to Craft.", LogLevel::Error, true);
 				}
 			}
 
@@ -103,7 +87,7 @@ class SproutForms_EntriesController extends BaseController
 		}
 		else
 		{
-			$this->_errorRedirect($entry);
+			$this->_redirectOnError($entry);
 		}
 	}
 
@@ -193,7 +177,7 @@ class SproutForms_EntriesController extends BaseController
 			// set by the template again if it needs to be.
 			craft()->httpSession->remove('multiStepForm');
 
-			$this->_errorRedirect($entry);
+			$this->_redirectOnError($entry);
 		}
 	}
 
@@ -363,7 +347,7 @@ class SproutForms_EntriesController extends BaseController
 	 *
 	 * @param SproutForms_EntryModel $entry
 	 */
-	private function _errorRedirect(SproutForms_EntryModel $entry)
+	private function _redirectOnError(SproutForms_EntryModel $entry)
 	{
 		SproutFormsPlugin::log("Couldn’t save form entry.", LogLevel::Error, true);
 
