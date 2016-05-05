@@ -372,4 +372,18 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 
 		return $entries;
 	}
+
+	/**
+	 * Get entries statuses
+	 *
+	 * @return array
+	 */
+	public function getStatuses()
+	{
+		$statuses = array('1'=>array('color'=>'white', 'name'=>'Unread'),
+			'2'=>array('color'=>'green', 'name'=>'Read'),
+			'3'=>array('color'=>'orange', 'name'=>'Archived'));
+
+		return $statuses;
+	}
 }

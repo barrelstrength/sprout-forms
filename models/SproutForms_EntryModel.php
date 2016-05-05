@@ -47,7 +47,7 @@ class SproutForms_EntryModel extends BaseElementModel
 												'column'   => ColumnType::TinyInt,
 												'length'   => 2,
 												'null'     => false,
-												'default'  => 0,
+												'default'  => 1,
 												'unsigned' => true )
 			)
 		);

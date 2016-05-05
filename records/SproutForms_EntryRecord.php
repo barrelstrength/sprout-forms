@@ -27,7 +27,7 @@ class SproutForms_EntryRecord extends BaseRecord
 											'column'   => ColumnType::TinyInt,
 											'length'   => 2,
 											'null'     => false,
-											'default'  => 0,
+											'default'  => 1,
 											'unsigned' => true )
 		);
 	}

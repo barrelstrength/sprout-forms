@@ -24,7 +24,7 @@ class m160504_000000_sproutForms_addStatusColumn extends BaseMigration
 					'column'   => ColumnType::TinyInt,
 					'length'   => 2,
 					'null'     => false,
-					'default'  => 0,
+					'default'  => 1,
 					'unsigned' => true
 				),
 				'userAgent'

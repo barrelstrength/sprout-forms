@@ -27,18 +27,18 @@ class SproutForms_SetStatusElementAction extends BaseElementAction
 	{
 		$status = $this->getParams()->status;
 		//Unread by default
-		$enable = 0;
+		$sqlStatus = 1;
 
 		switch ($status)
 		{
 			case SproutForms_EntryModel::UNREAD:
-				$enable = '0';
+				$sqlStatus = '1';
 				break;
 			case SproutForms_EntryModel::READ:
-				$enable = '1';
+				$sqlStatus = '2';
 				break;
 			case SproutForms_EntryModel::ARCHIVED:
-				$enable = '2';
+				$sqlStatus = '3';
 				break;
 		}
 
@@ -46,21 +46,10 @@ class SproutForms_SetStatusElementAction extends BaseElementAction
 
 		// Update their statuses
 		craft()->db->createCommand()->update(
-			'elements',
-			array('enabled' => $enable),
+			'sproutforms_entries',
+			array('status' => $sqlStatus),
 			array('in', 'id', $elementIds)
 		);
-
-		if ($status == SproutSeo_RedirectStatuses::ON)
-		{
-			// Enable their locale as well
-			craft()->db->createCommand()->update(
-				'elements_i18n',
-				array('enabled' => $enable),
-				array('and', array('in', 'elementId', $elementIds), 'locale = :locale'),
-				array(':locale' => $criteria->locale)
-			);
-		}
 
 		// Clear their template caches
 		craft()->templateCache->deleteCachesByElementId($elementIds);
@@ -72,7 +61,7 @@ class SproutForms_SetStatusElementAction extends BaseElementAction
 			'status'     => $status,
 		)));
 
-		$this->setMessage(Craft::t('Statuses updated.'));
+		$this->setMessage(Craft::t('Status updated.'));
 
 		return true;
 	}
