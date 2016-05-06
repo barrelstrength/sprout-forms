@@ -64,6 +64,14 @@ class SproutForms_EntriesController extends BaseController
 
 		if (sproutForms()->entries->forwardEntry($entry))
 		{
+			if ($this->form->savePayload)
+			{
+				if (!sproutForms()->entries->saveEntry($entry))
+				{
+					SproutFormsPlugin::log("Unable to save payload data to Craft.", LogLevel::Error, true);
+				}
+			}
+
 			if (craft()->request->isAjaxRequest())
 			{
 				$return['success'] = true;
@@ -79,7 +87,7 @@ class SproutForms_EntriesController extends BaseController
 		}
 		else
 		{
-			$this->_errorRedirect($entry);
+			$this->_redirectOnError($entry);
 		}
 	}
 
@@ -169,7 +177,7 @@ class SproutForms_EntriesController extends BaseController
 			// set by the template again if it needs to be.
 			craft()->httpSession->remove('multiStepForm');
 
-			$this->_errorRedirect($entry);
+			$this->_redirectOnError($entry);
 		}
 	}
 
@@ -339,7 +347,7 @@ class SproutForms_EntriesController extends BaseController
 	 *
 	 * @param SproutForms_EntryModel $entry
 	 */
-	private function _errorRedirect(SproutForms_EntryModel $entry)
+	private function _redirectOnError(SproutForms_EntryModel $entry)
 	{
 		SproutFormsPlugin::log("Couldn’t save form entry.", LogLevel::Error, true);
 

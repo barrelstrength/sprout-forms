@@ -81,6 +81,7 @@ class SproutForms_FormsService extends BaseApplicationComponent
 		$formRecord->groupId                  = $form->groupId;
 		$formRecord->redirectUri              = $form->redirectUri;
 		$formRecord->submitAction             = $form->submitAction;
+		$formRecord->savePayload              = $form->savePayload;
 		$formRecord->submitButtonText         = $form->submitButtonText;
 		$formRecord->notificationEnabled      = $form->notificationEnabled;
 		$formRecord->notificationRecipients   = $form->notificationRecipients;
