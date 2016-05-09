@@ -240,6 +240,7 @@ class SproutForms_FormElementType extends BaseElementType
 									 forms.displaySectionTitles,
 									 forms.redirectUri,
 									 forms.submitAction,
+									 forms.savePayload,
 									 forms.submitButtonText,
 									 forms.notificationEnabled,
 									 forms.notificationRecipients,
