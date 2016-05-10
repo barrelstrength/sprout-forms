@@ -40,7 +40,7 @@ class SproutFormsPlugin extends BasePlugin
 	 */
 	public function getSchemaVersion()
 	{
-		return '2.1.3';
+		return '2.1.4';
 	}
 
 	/**
