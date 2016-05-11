@@ -81,8 +81,7 @@ class SproutForms_EntriesController extends BaseController
 			else
 			{
 				craft()->userSession->setNotice(Craft::t('Entry saved.'));
-
-				$this->doSmartRedirect($entry);
+				$this->redirectToPostedUrl($entry);
 			}
 		}
 		else
@@ -168,7 +167,7 @@ class SproutForms_EntriesController extends BaseController
 			{
 				craft()->userSession->setNotice(Craft::t('Entry saved.'));
 
-				$this->doSmartRedirect($entry);
+				$this->redirectToPostedUrl($entry);
 			}
 		}
 		else
@@ -324,25 +323,6 @@ class SproutForms_EntriesController extends BaseController
 	}
 
 	/**
-	 * Parses supported {placeholders} in redirect URL before redirecting
-	 *
-	 * @param SproutForms_EntryModel $entry
-	 */
-	public function doSmartRedirect(SproutForms_EntryModel $entry)
-	{
-		$vars = array_merge(
-			array(
-				'id'      => 0,
-				'siteUrl' => craft()->getSiteUrl()
-			),
-			$entry->getContent()->getAttributes(),
-			$entry->getAttributes()
-		);
-
-		$this->redirectToPostedUrl($vars);
-	}
-
-	/**
 	 * Verifies scenarios for error redirect
 	 *
 	 * @param SproutForms_EntryModel $entry
@@ -381,7 +361,7 @@ class SproutForms_EntriesController extends BaseController
 			{
 				if (sproutForms()->entries->fakeIt)
 				{
-					$this->doSmartRedirect($entry);
+					$this->redirectToPostedUrl($entry);
 				}
 				else
 				{
