@@ -35,6 +35,7 @@ class SproutForms_EntryRecord extends BaseRecord
 		return array(
 			'element' => array(static::BELONGS_TO, 'ElementRecord', 'id', 'required' => true, 'onDelete' => static::CASCADE),
 			'form'    => array(static::BELONGS_TO, 'SproutForms_FormRecord', 'required' => true, 'onDelete' => static::CASCADE),
+			'entryStatus' => array(static::BELONGS_TO, 'SproutForms_EntryStatusRecord', 'statusId', 'required' => true, 'onDelete' => static::CASCADE),
 		);
 	}
 }

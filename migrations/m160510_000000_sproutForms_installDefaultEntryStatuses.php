@@ -28,7 +28,7 @@ class m160510_000000_sproutForms_installDefaultEntryStatuses extends BaseMigrati
 				1 => array(
 					'name'      => 'Read',
 					'handle'    => 'read',
-					'color'     => 'orange',
+					'color'     => 'green',
 					'sortOrder' => 2,
 					'isDefault' => 0
 				)

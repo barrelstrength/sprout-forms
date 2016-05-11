@@ -386,7 +386,7 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 			1 => array(
 				'name'      => 'Read',
 				'handle'    => 'read',
-				'color'     => 'orange',
+				'color'     => 'green',
 				'sortOrder' => 2,
 				'isDefault' => 0
 			)
