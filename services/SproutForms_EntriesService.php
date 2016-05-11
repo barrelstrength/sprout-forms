@@ -131,6 +131,7 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 		$entryRecord->formId    = $entry->formId;
 		$entryRecord->ipAddress = $entry->ipAddress;
 		$entryRecord->userAgent = $entry->userAgent;
+		$entryRecord->statusId  = $entry->statusId != null ? $entry->statusId : $this->getDefaultEntryStatusId();
 
 		$entryRecord->validate();
 		$entry->addErrors($entryRecord->getErrors());
@@ -148,7 +149,6 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 
 		if (!$entry->hasErrors())
 		{
-
 			try
 			{
 				$form = sproutForms()->forms->getFormById($entry->formId);
@@ -448,7 +448,7 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 
 		if ($entryStatus->id)
 		{
-			$record = SproutCommerce_EntryStatusRecord::model()->findByPk($entryStatus->id);
+			$record = SproutForms_EntryStatusRecord::model()->findByPk($entryStatus->id);
 
 			if (!$record)
 			{
@@ -469,6 +469,11 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 			$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
 			try
 			{
+				if ($record->isDefault)
+				{
+					SproutForms_EntryStatusRecord::model()->updateAll(array('isDefault' => 0));
+				}
+
 				$record->save(false);
 
 				if (!$entryStatus->id)
@@ -562,6 +567,13 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 		}
 
 		return true;
+	}
+
+	public function getDefaultEntryStatusId()
+	{
+		$entryStatus = SproutForms_EntryStatusRecord::model()->find(array('order'=>'isDefault DESC'));
+
+		return $entryStatus != null ? $entryStatus->id : null;
 	}
 
 	/**
