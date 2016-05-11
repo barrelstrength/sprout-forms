@@ -38,7 +38,8 @@ class SproutForms_EntryStatusModel extends BaseModel
 			'name'      => array(AttributeType::String, 'required' => true),
 			'handle'    => array(AttributeType::Handle, 'required' => true),
 			'color'     => array(AttributeType::String, 'default' => 'blue'),
-			'sortOrder' => AttributeType::Number
+			'sortOrder' => array(AttributeType::SortOrder),
+			'isDefault' => array(AttributeType::Bool, 'default' => 0)
 		);
 	}
 }

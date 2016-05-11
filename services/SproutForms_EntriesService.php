@@ -373,17 +373,222 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 		return $entries;
 	}
 
+	public function installDefaultEntryStatuses()
+	{
+		$defaultEntryStatuses = array(
+			0 => array(
+				'name'      => 'Unread',
+				'handle'    => 'unread',
+				'color'     => 'blue',
+				'sortOrder' => 1,
+				'isDefault' => 1
+			),
+			1 => array(
+				'name'      => 'Read',
+				'handle'    => 'read',
+				'color'     => 'orange',
+				'sortOrder' => 2,
+				'isDefault' => 0
+			)
+		);
+
+		foreach ($defaultEntryStatuses as $entryStatus)
+		{
+			craft()->db->createCommand()->insert('sproutforms_entrystatuses', array(
+				'name'      => $entryStatus['name'],
+				'handle'    => $entryStatus['handle'],
+				'color'     => $entryStatus['color'],
+				'sortOrder' => $entryStatus['sortOrder'],
+				'isDefault' => $entryStatus['isDefault']
+			));
+		}
+	}
+
 	/**
-	 * Get entries statuses
-	 *
 	 * @return array
 	 */
-	public function getStatuses()
+	public function getAllEntryStatuses()
 	{
-		$statuses = array('1'=>array('color'=>'white', 'name'=>'Unread'),
-			'2'=>array('color'=>'green', 'name'=>'Read'),
-			'3'=>array('color'=>'orange', 'name'=>'Archived'));
+		$entryStatuses = craft()->db->createCommand()
+			->select('*')
+			->from('sproutforms_entrystatuses')
+			->order('sortOrder asc')
+			->queryAll();
 
-		return $statuses;
+		return SproutForms_EntryStatusModel::populateModels($entryStatuses);
 	}
+
+	/**
+	 * @param $entryStatusId
+	 *
+	 * @return BaseModel
+	 */
+	public function getEntryStatusById($entryStatusId)
+	{
+		$entryStatus = craft()->db->createCommand()
+			->select('*')
+			->from('sproutforms_entrystatuses')
+			->where('id=:id', array(':id' => $entryStatusId))
+			->queryRow();
+
+		return $entryStatus != null ? SproutForms_EntryStatusModel::populateModel($entryStatus) : null;
+	}
+
+	/**
+	 * @param SproutForms_EntryStatusModel $entryStatus
+	 *
+	 * @return bool
+	 * @throws Exception
+	 * @throws \CDbException
+	 * @throws \Exception
+	 */
+	public function saveEntryStatus(SproutForms_EntryStatusModel $entryStatus)
+	{
+		$record = new SproutForms_EntryStatusRecord;
+
+		if ($entryStatus->id)
+		{
+			$record = SproutCommerce_EntryStatusRecord::model()->findByPk($entryStatus->id);
+
+			if (!$record)
+			{
+				throw new Exception(Craft::t('No Entry Status exists with the id of “{id}”', array('id' => $entryStatus->id)));
+			}
+		}
+
+		$record->setAttributes($entryStatus->getAttributes(), false);
+
+		$record->sortOrder = $entryStatus->sortOrder ? $entryStatus->sortOrder : 999;
+
+		$record->validate();
+
+		$entryStatus->addErrors($record->getErrors());
+
+		if (!$entryStatus->hasErrors())
+		{
+			$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
+			try
+			{
+				$record->save(false);
+
+				if (!$entryStatus->id)
+				{
+					$entryStatus->id = $record->id;
+				}
+
+				if ($transaction !== null)
+				{
+					$transaction->commit();
+				}
+			}
+			catch (\Exception $e)
+			{
+				if ($transaction !== null)
+				{
+					$transaction->rollback();
+				}
+
+				throw $e;
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * @param int
+	 *
+	 * @return bool
+	 */
+	public function deleteEntryStatusById($id)
+	{
+		$statuses = $this->getAllEntryStatuses();
+
+		$criteria = craft()->elements->getCriteria('SproutForms_Entry');
+		$criteria->statusId = $id;
+		$order = $criteria->first();
+
+		if ($order)
+		{
+			return false;
+		}
+
+		if (count($statuses) >= 2)
+		{
+			SproutForms_EntryStatusRecord::model()->deleteByPk($id);
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Reorders Entry Statuses
+	 *
+	 * @param array $entryStatusIds
+	 *
+	 * @throws \Exception
+	 * @return bool
+	 */
+	public function reorderEntryStatuses($entryStatusIds)
+	{
+		$transaction = craft()->db->getCurrentTransaction() === null ? craft()->db->beginTransaction() : null;
+
+		try
+		{
+			foreach ($entryStatusIds as $entryStatus => $entryStatusId)
+			{
+				$entryStatusRecord            = $this->_getEntryStatusRecordById($entryStatusId);
+				$entryStatusRecord->sortOrder = $entryStatus + 1;
+				$entryStatusRecord->save();
+			}
+
+			if ($transaction !== null)
+			{
+				$transaction->commit();
+			}
+		}
+		catch (\Exception $e)
+		{
+			if ($transaction !== null)
+			{
+				$transaction->rollback();
+			}
+
+			throw $e;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Gets an Entry Status's record.
+	 *
+	 * @param int $sourceId
+	 *
+	 * @throws Exception
+	 * @return AssetSourceRecord
+	 */
+	private function _getEntryStatusRecordById($entryStatusId = null)
+	{
+		if ($entryStatusId)
+		{
+			$entryStatusRecord = SproutForms_EntryStatusRecord::model()->findById($entryStatusId);
+
+			if (!$entryStatusRecord)
+			{
+				throw new Exception(Craft::t('No Entry Status exists with the ID “{id}”.', array('id' => $entryStatusId)));
+			}
+		}
+		else
+		{
+			$entryStatusRecord = new SproutForms_EntryStatusRecord();
+		}
+
+		return $entryStatusRecord;
+	}
+
 }

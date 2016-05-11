@@ -22,9 +22,12 @@ class m160509_000000_sproutForms_addEntryStatusTable extends BaseMigration
 			// Create the craft_sproutforms_entries table
 			$this->createTable($tableName, array(
 				'id' => array(
-					'column'     => ColumnType::Int,
-					'required'   => true,
-					'primaryKey' => true
+					'column'     => ColumnType::PK,
+					'required'   => true
+				),
+				'name' => array(
+					'column'   => ColumnType::Varchar,
+					'required' => true
 				),
 				'handle' => array(
 					'column'   => ColumnType::Varchar,
@@ -40,7 +43,11 @@ class m160509_000000_sproutForms_addEntryStatusTable extends BaseMigration
 					'default'  => 'blue'
 				),
 				'sortOrder' => array(
-					'column' => ColumnType::Int
+					'column' => ColumnType::SmallInt
+				),
+				'isDefault' => array(
+					'column'  => ColumnType::TinyInt,
+					'default' => 0
 				),
 			));
 		}

@@ -40,7 +40,7 @@ class SproutFormsPlugin extends BasePlugin
 	 */
 	public function getSchemaVersion()
 	{
-		return '2.1.4';
+		return '2.1.6';
 	}
 
 	/**
@@ -135,20 +135,29 @@ class SproutFormsPlugin extends BasePlugin
 	public function registerCpRoutes()
 	{
 		return array(
-			'sproutforms/forms/new'                                          => array(
+			'sproutforms/forms/new'                                     => array(
 				'action' => 'sproutForms/forms/editFormTemplate'
 			),
-			'sproutforms/forms/edit/(?P<formId>\d+)'                         => array(
+			'sproutforms/forms/edit/(?P<formId>\d+)'                    => array(
 				'action' => 'sproutForms/forms/editFormTemplate'
 			),
-			'sproutforms/entries/edit/(?P<entryId>\d+)'                      => array(
+			'sproutforms/entries/edit/(?P<entryId>\d+)'                 => array(
 				'action' => 'sproutForms/entries/editEntryTemplate'
 			),
-			'sproutforms/settings'                                           => array(
+			'sproutforms/settings'                                      => array(
 				'action' => 'sproutForms/settings/settingsIndexTemplate'
 			),
-			'sproutforms/forms/(?P<groupId>\d+)'                             => 'sproutforms/forms',
-			'sproutforms/examples'                                           => 'sproutforms/_cp/examples',
+			'sproutforms/settings/entrystatuses'                        => array(
+				'action' => 'sproutForms/entryStatuses/index'
+			),
+			'sproutforms/settings/entrystatuses/new'                    => array(
+				'action' => 'sproutForms/entryStatuses/edit'
+			),
+			'sproutforms/settings/entrystatuses/(?P<entryStatusId>\d+)' => array(
+				'action' => 'sproutForms/entryStatuses/edit'
+			),
+			'sproutforms/forms/(?P<groupId>\d+)'                        => 'sproutforms/forms',
+			'sproutforms/examples'                                      => 'sproutforms/_cp/examples',
 		);
 	}
 
@@ -232,6 +241,7 @@ class SproutFormsPlugin extends BasePlugin
 	 */
 	public function onAfterInstall()
 	{
+		sproutForms()->entries->installDefaultEntryStatuses();
 		craft()->request->redirect(UrlHelper::getCpUrl() . '/sproutforms/settings/examples');
 	}
 

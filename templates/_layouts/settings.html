@@ -30,8 +30,15 @@
 
   <nav class="last">
     <ul>
-      <li><a href="{{ cpUrl('sproutforms/settings') }}" {% if selectedSidebarItem == 'settings' %}class="sel"{% endif %}>General Settings</a></li>
+      <li><a href="{{ cpUrl('sproutforms/settings') }}" {% if selectedSidebarItem == 'settings' %}class="sel"{% endif %}>{{"General Settings"|t}}</a></li>
+
       <li><a href="{{ cpUrl('sproutforms/settings/examples') }}" {% if selectedSidebarItem == 'examples' %}class="sel"{% endif %}>Examples</a></li>
+
+      <li class="heading">
+        <span>{{"Entries"|t}}</span>
+      </li>
+      <li><a href="{{ url('sproutforms/settings/entrystatuses') }}" {% if selectedSidebarItem == 'entrystatuses'
+        %}class="sel"{% endif %}>{{ "Entry Statuses"|t }}</a></li>
     </ul>
   </nav>
 

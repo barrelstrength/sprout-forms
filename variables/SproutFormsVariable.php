@@ -448,4 +448,12 @@ class SproutFormsVariable
 
 		return false;
 	}
+
+	/**
+	 * @return bool
+	 */
+	public function getEntryStatuses()
+	{
+		return sproutForms()->entries->getAllEntryStatuses();
+	}
 }

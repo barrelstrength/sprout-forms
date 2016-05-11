@@ -26,7 +26,8 @@ class SproutForms_EntryStatusRecord extends BaseRecord
 				'required' => true,
 				'default'  => 'blue'
 			),
-			'sortOrder' => AttributeType::Number
+			'sortOrder' => array(AttributeType::SortOrder),
+			'isDefault' => array(AttributeType::Bool, 'default' => 0)
 		);
 	}
 }
