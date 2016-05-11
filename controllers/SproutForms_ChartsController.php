@@ -43,11 +43,14 @@ class SproutForms_ChartsController extends ElementIndexController
 		}
 
 		// Get the chart data table
-		$dataTable = ChartHelper::getRunChartDataFromQuery($query, $startDate, $endDate, 'entries.dateCreated', [
-			'intervalUnit' => $intervalUnit,
-			'valueLabel' => Craft::t('Submissions'),
-			'valueType' => 'number',
-		]);
+		$dataTable = ChartHelper::getRunChartDataFromQuery($query, $startDate, $endDate,
+			'entries.dateCreated',
+			array(
+				'intervalUnit' => $intervalUnit,
+				'valueLabel' => Craft::t('Submissions'),
+				'valueType' => 'number',
+			)
+		);
 
 		// Get the total submissions
 		$total = 0;
@@ -65,7 +68,7 @@ class SproutForms_ChartsController extends ElementIndexController
 			'formats' => ChartHelper::getFormats(),
 			'orientation' => craft()->locale->getOrientation(),
 			'scale' => $intervalUnit,
-			'localeDefinition' => [],
+			'localeDefinition' => array(),
 		));
 	}
 }
