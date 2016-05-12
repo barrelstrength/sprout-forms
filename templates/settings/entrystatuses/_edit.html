@@ -2,7 +2,7 @@
 {% import "_includes/forms" as forms %}
 
 {% set crumbs	= [
-	{ label: "Settings"|t, url: url('sproutforms/settings/general') },
+	{ label: "Settings"|t, url: url('sproutforms/settings') },
 	{ label: "Entry Statuses"|t, url: url('sproutforms/settings/entrystatuses') }
 ] %}
 
@@ -74,8 +74,8 @@
 	},colorField) }}
 
 	{{ forms.lightswitchField({
-		label: "Default Order Status"|t,
-		instructions: "Use this Order Status as the default when a successful order is completed."|t,
+		label: "Default Entry Status"|t,
+		instructions: "Use this Entry Status as the default when a form is submitted."|t,
 		name: 'isDefault',
 		on:   entryStatus.isDefault
 	}) }}
