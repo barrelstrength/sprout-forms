@@ -35,7 +35,7 @@ class m160511_000000_sproutForms_setDefaultColorToEntries extends BaseMigration
 							array('statusId'=>$status['id']), 'id = :id', array(':id' => $entry['id']));
 				}
 
-				Craft::log('Set default status id to entry:'.$entry['id'], LogLevel::Info, true);
+				Craft::log('Set default status id to entries', LogLevel::Info, true);
 			}
 			else
 			{
