@@ -69,7 +69,7 @@ class SproutForms_EntryElementType extends BaseElementType
 			)
 		);
 
-		$sources[] = ['heading' => Craft::t("Entries Status")];
+		$sources[] = ['heading' => Craft::t("Status")];
 		$statuses  = sproutForms()->entries->getAllEntryStatuses();
 
 		foreach ($statuses as $value => $status)
@@ -83,6 +83,8 @@ class SproutForms_EntryElementType extends BaseElementType
 				'defaultSort' => array('dateCreated', 'desc')
 			);
 		}
+
+		$sources[] = ['heading' => Craft::t("Forms")];
 
 		// Prepare the data for our sources sidebar
 		$groups = sproutForms()->groups->getAllFormGroups('id');
