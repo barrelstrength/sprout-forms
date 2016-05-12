@@ -299,10 +299,12 @@ class SproutForms_EntriesController extends BaseController
 			$entry = sproutForms()->entries->getEntryById($entryId);
 		}
 
-		$form = sproutForms()->forms->getFormById($entry->formId);
+		$form        = sproutForms()->forms->getFormById($entry->formId);
+		$entryStatus = sproutForms()->entries->getEntryStatusById($entry->statusId);
 
-		$variables['form']    = $form;
-		$variables['entryId'] = $entryId;
+		$variables['form']        = $form;
+		$variables['entryId']     = $entryId;
+		$variables['entryStatus'] = $entryStatus;
 
 		// This is our element, so we know where to get the field values
 		$variables['entry'] = $entry;

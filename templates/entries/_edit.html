@@ -59,7 +59,7 @@
 
 				<div class="field">
 					<div class="heading">
-						Submitted
+						{{"Submitted"|t}}
 					</div>
 					<div class="input">
 						{{ entry.dateCreated|date('F j, Y') }}
@@ -68,10 +68,19 @@
 
 				<div class="field">
 					<div class="heading">
-						Form Name
+						{{"Form Name"|t}}
 					</div>
 					<div class="input">
 						{{ form.name }}
+					</div>
+				</div>
+
+				<div class="field">
+					<div class="heading">
+						{{"Entry Status"|t}}
+					</div>
+					<div class="input ltr">
+						{{ entryStatus.htmlLabel() | raw }}
 					</div>
 				</div>
 
