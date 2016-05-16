@@ -4,6 +4,7 @@
 {%- set class     = renderingOptions.class is defined ? renderingOptions.class : name %}
 {%- set value     = value is defined ? value : null %}
 {%- set required  = field.required is defined and field.required ? " required" %}
+{%- set multiple  = settings.limit == '' ? true : settings.limit > 1 ? true : false %}
 
 {%- set dataAttributes = null %}
 {%- for key, dataValue in data %}
@@ -12,7 +13,7 @@
 
 
 {% spaceless %}
-<select
+<select {%- if multiple %} multiple {% endif %}
 	{%- if id %} id="{{ id }}"{% endif %}
 	{%- if class %} class="{{ class }}"{% endif %}
 	{%- if name %} name="{{ name }}[]"{% endif %}
