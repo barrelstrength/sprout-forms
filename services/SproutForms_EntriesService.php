@@ -372,4 +372,87 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 
 		return $entries;
 	}
+
+	/**
+	 * @param array $settings field settings
+	 *
+	 * @return array
+	 */
+	public function getFrontEndEntries($settings)
+	{
+		$entries  = array();
+
+		$criteria = craft()->elements->getCriteria(ElementType::Entry);
+
+		if (is_array($settings['sources']))
+		{
+			foreach ($settings['sources'] as $source)
+			{
+				$section = explode(":", $source);
+				$pos     = count($entries) + 1;
+
+				if (count($section) == 2)
+				{
+					$sectionId = craft()->sections->getSectionById($section[1]);
+
+					$criteria->sectionId = $section[1];
+					$entries[$pos]['entries'] = $criteria->find();
+					$entries[$pos]['section'] = $sectionId;
+				}
+				else
+				{
+					if ($section[0] == 'singles')
+					{
+						$singles = $this->_getSinglesEntries();
+
+						$entries[$pos]['entries'] = $singles;
+						$entries[$pos]['singles'] = true;
+					}
+				}
+			}
+		}
+		else
+		{
+			if ($settings['sources'] == '*')
+			{
+				$sections = craft()->sections->getAllSections();
+
+				foreach ($sections as $section)
+				{
+					$pos = count($entries) + 1;
+
+					if ($section->type != SectionType::Single)
+					{
+						$sectionId = craft()->sections->getSectionById($section->id);
+
+						$criteria->sectionId = $section->id;
+						$entries[$pos]['entries'] = $criteria->find();
+						$entries[$pos]['section'] = $sectionId;
+					}
+				}
+
+				$singles = $this->_getSinglesEntries();
+				$pos     = count($entries) + 1;
+				$entries[$pos]['entries'] = $singles;
+				$entries[$pos]['singles'] = true;
+			}
+		}
+
+		return $entries;
+	}
+
+	private function _getSinglesEntries()
+	{
+		$criteria = craft()->elements->getCriteria(ElementType::Entry);
+		$sections = craft()->sections->getSectionsByType(SectionType::Single);
+		$singles  = array();
+
+		foreach ($sections as $key => $section)
+		{
+			$criteria->sectionId = $section->id;
+			$singles[] = $criteria->find()[0];
+		}
+
+		return $singles;
+	}
 }
