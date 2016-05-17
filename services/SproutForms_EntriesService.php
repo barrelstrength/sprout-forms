@@ -470,6 +470,35 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 		return $categories;
 	}
 
+	/**
+	 * @param array $settings field settings
+	 *
+	 * @return array
+	 */
+	public function getFrontEndTags($settings)
+	{
+		$tags  = array();
+
+		$criteria = craft()->elements->getCriteria(ElementType::Tag);
+
+		if (isset($settings['source']))
+		{
+			$group = explode(":", $settings['source']);
+			$pos   = count($tags) + 1;
+
+			if (count($group) == 2)
+			{
+				$groupById = craft()->tags->getTagGroupById($group[1]);
+
+				$criteria->groupId = $group[1];
+				$tags[$pos]['tags'] = $criteria->find();
+				$tags[$pos]['group'] = $groupById;
+			}
+		}
+
+		return $tags;
+	}
+
 	private function _getSinglesEntries()
 	{
 		$criteria = craft()->elements->getCriteria(ElementType::Entry);
