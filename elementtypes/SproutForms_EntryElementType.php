@@ -60,12 +60,13 @@ class SproutForms_EntryElementType extends BaseElementType
 	 */
 	public function getStatuses()
 	{
-		$statuses  = sproutForms()->entries->getAllEntryStatuses();
-
+		$statuses    = sproutForms()->entries->getAllEntryStatuses();
 		$statusArray = array();
+
 		foreach ($statuses as $status)
 		{
-			$statusArray[$status['handle'] . ' ' . $status['color']] = $status['name'];
+			$key = $status['handle'] . ' ' . $status['color'];
+			$statusArray[$key] = $status['name'];
 		}
 
 		return $statusArray;
@@ -86,21 +87,6 @@ class SproutForms_EntryElementType extends BaseElementType
 				'label' => Craft::t('All Entries'),
 			)
 		);
-
-		$sources[] = ['heading' => Craft::t("Status")];
-		$statuses  = sproutForms()->entries->getAllEntryStatuses();
-
-		foreach ($statuses as $value => $status)
-		{
-			$key = 'entryStatusId:' . $status->handle;
-			$sources[$key] = array(
-				'status' => $status->color,
-				'label' => $status->name,
-				'criteria' => array(
-				'entryStatus' => $status),
-				'defaultSort' => array('dateCreated', 'desc')
-			);
-		}
 
 		$sources[] = ['heading' => Craft::t("Forms")];
 
@@ -211,7 +197,6 @@ class SproutForms_EntryElementType extends BaseElementType
 	{
 		$attributes = array(
 			'title'       => array('label' => Craft::t('Title')),
-			'statusId'    => array('label' => Craft::t('Status')),
 			'formName'    => array('label' => Craft::t('Form Name')),
 			'dateCreated' => array('label' => Craft::t('Date Created')),
 			'dateUpdated' => array('label' => Craft::t('Date Updated')),
@@ -236,7 +221,6 @@ class SproutForms_EntryElementType extends BaseElementType
 		$attributes = array();
 
 		$attributes[] = 'title';
-		$attributes[] = 'statusId';
 
 		if ($source == '*')
 		{
@@ -264,19 +248,6 @@ class SproutForms_EntryElementType extends BaseElementType
 		{
 			switch ($attribute)
 			{
-				case 'statusId':
-				{
-					$status = sproutForms()->entries->getEntryStatusById($element->statusId);
-
-					if ($status)
-					{
-						return $status->htmlLabel() . $element->title;
-					}
-					else
-					{
-						return '<span class="status"></span>';
-					}
-				}
 				default:
 				{
 					return parent::getTableAttributeHtml($element, $attribute);
@@ -354,7 +325,11 @@ class SproutForms_EntryElementType extends BaseElementType
 	{
 		$statusClasses = explode(' ', $status);
 
-		$query->andWhere('entrystatuses.handle = "' . $statusClasses[0] .'"');
+		if (count($statusClasses)>0)
+		{
+			$handle = $statusClasses[0];
+			$query->andWhere(DbHelper::parseParam('entrystatuses.handle', $handle, $query->params));
+		}
 	}
 
 	/**
@@ -403,17 +378,6 @@ class SproutForms_EntryElementType extends BaseElementType
 		if ($criteria->formId)
 		{
 			$query->andWhere(DbHelper::parseParam('entries.formId', $criteria->formId, $query->params));
-		}
-		if ($criteria->entryStatus)
-		{
-			if (isset($criteria->entryStatus->id))
-			{
-				$query->andWhere(DbHelper::parseParam('entries.statusId', $criteria->entryStatus->id, $query->params));
-			}
-			else
-			{
-				$query->andWhere(DbHelper::parseParam('entries.statusId', $criteria->entryStatus, $query->params));
-			}
 		}
 		if ($criteria->statusId)
 		{
