@@ -65,7 +65,7 @@ class SproutForms_EntryElementType extends BaseElementType
 		$statusArray = array();
 		foreach ($statuses as $status)
 		{
-			$statusArray[$status['color']] = $status['name'];
+			$statusArray[$status['handle'] . ' ' . $status['color']] = $status['name'];
 		}
 
 		return $statusArray;
@@ -270,7 +270,7 @@ class SproutForms_EntryElementType extends BaseElementType
 
 					if ($status)
 					{
-						return $status->htmlLabel();
+						return $status->htmlLabel() . $element->title;
 					}
 					else
 					{
@@ -343,6 +343,21 @@ class SproutForms_EntryElementType extends BaseElementType
 	}
 
 	/**
+	 * @inheritDoc IElementType::getElementQueryStatusCondition()
+	 *
+	 * @param DbCommand $query
+	 * @param string    $status
+	 *
+	 * @return array|false|string|void
+	 */
+	public function getElementQueryStatusCondition(DbCommand $query, $status)
+	{
+		$statusClasses = explode(' ', $status);
+
+		$query->andWhere('entrystatuses.handle = "' . $statusClasses[0] .'"');
+	}
+
+	/**
 	 * Defines which model attributes should be searchable.
 	 *
 	 * @return array
@@ -375,6 +390,7 @@ class SproutForms_EntryElementType extends BaseElementType
 			forms.groupId as formGroupId';
 
 		$query->join('sproutforms_entries entries', 'entries.id = elements.id');
+		$query->join('sproutforms_entrystatuses entrystatuses', 'entrystatuses.id = entries.statusId');
 		$query->join('sproutforms_forms forms', 'forms.id = entries.formId');
 
 		$this->joinContentTableAndAddContentSelects($query, $criteria, $select);

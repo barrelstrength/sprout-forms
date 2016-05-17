@@ -44,6 +44,8 @@ class SproutForms_EntryModel extends BaseElementModel
 		);
 	}
 
+
+
 	/**
 	 * Returns the field layout used by this element
 	 *
@@ -115,6 +117,20 @@ class SproutForms_EntryModel extends BaseElementModel
 	public function getCpEditUrl()
 	{
 		return UrlHelper::getCpUrl('sproutforms/entries/edit/' . $this->id);
+	}
+
+	/**
+	 * @inheritDoc BaseElementModel::getStatus()
+	 *
+	 * @return string|null
+	 */
+	public function getStatus()
+	{
+		$statusId = $this->statusId;
+
+		$status = sproutForms()->entries->getEntryStatusById($statusId);
+
+		return $status->color;
 	}
 
 	/**
