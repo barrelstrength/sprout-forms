@@ -393,11 +393,11 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 
 				if (count($section) == 2)
 				{
-					$sectionId = craft()->sections->getSectionById($section[1]);
+					$sectionById = craft()->sections->getSectionById($section[1]);
 
 					$criteria->sectionId = $section[1];
 					$entries[$pos]['entries'] = $criteria->find();
-					$entries[$pos]['section'] = $sectionId;
+					$entries[$pos]['section'] = $sectionById;
 				}
 				else
 				{
@@ -423,11 +423,11 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 
 					if ($section->type != SectionType::Single)
 					{
-						$sectionId = craft()->sections->getSectionById($section->id);
+						$sectionById = craft()->sections->getSectionById($section->id);
 
 						$criteria->sectionId = $section->id;
 						$entries[$pos]['entries'] = $criteria->find();
-						$entries[$pos]['section'] = $sectionId;
+						$entries[$pos]['section'] = $sectionById;
 					}
 				}
 
@@ -439,6 +439,35 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 		}
 
 		return $entries;
+	}
+
+	/**
+	 * @param array $settings field settings
+	 *
+	 * @return array
+	 */
+	public function getFrontEndCategories($settings)
+	{
+		$categories  = array();
+
+		$criteria = craft()->elements->getCriteria(ElementType::Category);
+
+		if (isset($settings['source']))
+		{
+			$group = explode(":", $settings['source']);
+			$pos   = count($categories) + 1;
+
+			if (count($group) == 2)
+			{
+				$groupById = craft()->categories->getGroupById($group[1]);
+
+				$criteria->groupId = $group[1];
+				$categories[$pos]['categories'] = $criteria->find();
+				$categories[$pos]['group'] = $groupById;
+			}
+		}
+
+		return $categories;
 	}
 
 	private function _getSinglesEntries()

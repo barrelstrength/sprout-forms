@@ -6,14 +6,14 @@ namespace Craft;
  *
  * @package Craft
  */
-class SproutFormsEntriesField extends SproutFormsBaseField
+class SproutFormsCategoriesField extends SproutFormsBaseField
 {
 	/**
 	 * @return string
 	 */
 	public function getType()
 	{
-		return 'Entries';
+		return 'Categories';
 	}
 
 	/**
@@ -28,17 +28,17 @@ class SproutFormsEntriesField extends SproutFormsBaseField
 	{
 		$this->beginRendering();
 
-		$entries = sproutForms()->entries->getFrontEndEntries($settings);
+		$categories = sproutForms()->entries->getFrontEndCategories($settings);
 
 		$rendered = craft()->templates->render(
-			'entries/input',
+			'categories/input',
 			array(
 				'name'             => $field->handle,
 				'value'            => $value,
 				'field'            => $field,
 				'settings'         => $settings,
 				'renderingOptions' => $renderingOptions,
-				'entries'          => $entries,
+				'categories'       => $categories,
 			)
 		);
 
