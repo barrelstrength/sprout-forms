@@ -50,7 +50,8 @@
 			reorderAction: 'sproutForms/entryStatuses/reorder',
 			reorderSuccessMessage: Craft.t('Entry statuses reordered.'),
 			reorderFailMessage:    Craft.t('Couldn’t reorder statuses..'),
-			confirmDeleteMessage: '{{ "Are you sure you want to delete the Entry Status “{name}”?"|t }}'
+			confirmDeleteMessage: '{{ "Are you sure you want to delete the Entry Status “{name}”?"|t }}',
+			deleteFailMessage: '{{ "Unable to delete status. Please remove this status from all Form Entries first."|t }}'
 	});
 {% endincludejs %}
 
