@@ -40,7 +40,7 @@ class SproutForms_EntryElementType extends BaseElementType
 	 */
 	public function hasStatuses()
 	{
-		return false;
+		return true;
 	}
 
 	/**
@@ -51,6 +51,24 @@ class SproutForms_EntryElementType extends BaseElementType
 	public function isLocalized()
 	{
 		return false;
+	}
+
+	/**
+	 * Returns a list of statuses for this element type
+	 *
+	 * @return array
+	 */
+	public function getStatuses()
+	{
+		$statuses  = sproutForms()->entries->getAllEntryStatuses();
+
+		$statusArray = array();
+		foreach ($statuses as $status)
+		{
+			$statusArray[$status['color']] = $status['name'];
+		}
+
+		return $statusArray;
 	}
 
 	/**
