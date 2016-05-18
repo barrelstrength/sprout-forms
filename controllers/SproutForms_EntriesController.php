@@ -124,6 +124,12 @@ class SproutForms_EntriesController extends BaseController
 
 		// Our SproutForms_EntryModel requires that we assign it a SproutForms_FormModel
 		$entry->formId = $this->form->id;
+		$statusId = craft()->request->getParam('statusId');
+
+		if (isset($statusId))
+		{
+			$entry->statusId = $statusId;
+		}
 
 		// Populate the entry with post data
 		$this->_populateEntryModel($entry);
@@ -299,12 +305,20 @@ class SproutForms_EntriesController extends BaseController
 			$entry = sproutForms()->entries->getEntryById($entryId);
 		}
 
-		$form        = sproutForms()->forms->getFormById($entry->formId);
-		$entryStatus = sproutForms()->entries->getEntryStatusById($entry->statusId);
+		$form          = sproutForms()->forms->getFormById($entry->formId);
+		$entryStatus   = sproutForms()->entries->getEntryStatusById($entry->statusId);
+		$statuses      = sproutForms()->entries->getAllEntryStatuses();
+		$entryStatuses = array();
+
+		foreach ($statuses as $key => $status)
+		{
+			$entryStatuses[$status->id] = $status->name;
+		}
 
 		$variables['form']        = $form;
 		$variables['entryId']     = $entryId;
 		$variables['entryStatus'] = $entryStatus;
+		$variables['statuses']    = $entryStatuses;
 
 		// This is our element, so we know where to get the field values
 		$variables['entry'] = $entry;
