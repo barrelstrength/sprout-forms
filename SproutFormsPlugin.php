@@ -268,6 +268,9 @@ class SproutFormsPlugin extends BasePlugin
 		require_once $basePath . 'SproutFormsMultiSelectField.php';
 		require_once $basePath . 'SproutFormsRadioButtonsField.php';
 		require_once $basePath . 'SproutFormsAssetsField.php';
+		require_once $basePath . 'SproutFormsEntriesField.php';
+		require_once $basePath . 'SproutFormsCategoriesField.php';
+		require_once $basePath . 'SproutFormsTagsField.php';
 
 		return array(
 			new SproutFormsNumberField(),
@@ -277,6 +280,9 @@ class SproutFormsPlugin extends BasePlugin
 			new SproutFormsMultiSelectField(),
 			new SproutFormsRadioButtonsField(),
 			new SproutFormsAssetsField(),
+			new SproutFormsEntriesField(),
+			new SproutFormsCategoriesField(),
+			new SproutFormsTagsField(),
 		);
 	}
 }
