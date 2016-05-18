@@ -21,16 +21,13 @@
 	{{- dataAttributes|raw -}}
 	>
 	{%- for options in categories -%}
-		{% set label =  options.group.name %}
-		<optgroup label="{{label}}">
-			{%- for option in options.categories -%}
-				{%- set optionLabel = option.title -%}
-				{%- set optionValue = option.id -%}
+		{%- for option in options.categories -%}
+			{%- set optionLabel = option.title -%}
+			{%- set optionValue = option.id -%}
 
-				<option value="{{ optionValue }}" {% if optionValue == value %}selected{% endif %}>{{ optionLabel }}</option>
+			<option value="{{ optionValue }}" {% if optionValue == value %}selected{% endif %}>{{ optionLabel }}</option>
 
-			{% endfor %}
-		</optgroup>
+		{% endfor %}
 	{% endfor %}
 </select>
 {% endspaceless %}
