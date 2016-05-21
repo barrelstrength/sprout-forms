@@ -58,38 +58,26 @@
 		<div class="item" data-position="right" data-colspan="1">
 			<div class="pane meta">
 
-				<div class="field">
-					<div class="heading">
-						{{"Submitted"|t}}
-					</div>
-					<div class="input">
-						{{ entry.dateCreated|date('F j, Y') }}
-					</div>
-				</div>
+				{% set formName = "<h6>" ~ form.name ~ "</h6>" %}
 
-				<div class="field">
-					<div class="heading">
-						{{"Form Name"|t}}
-					</div>
-					<div class="input">
-						{{ form.name }}
-					</div>
-				</div>
+				{{ forms.field({
+					label: "Form Name"|t,
+				}, formName) }}
 
-				<div class="field">
-					<div class="heading">
-						{{"Entry Status"|t}}
-					</div>
-					<div class="input ltr">
-						{{ forms.selectField({
-							id: 'statusId',
-							name: 'statusId',
-							value: entry.statusId,
-							options: statuses,
-							errors: entry.getErrors('statusId')
-						}) }}
-					</div>
-				</div>
+				{% set dateSubmitted = entry.dateCreated|date('F j, Y') %}
+
+				{{ forms.field({
+					label: "Submitted"|t,
+				}, dateSubmitted) }}
+
+				{{ forms.selectField({
+					label: "Entry Status"|t,
+					id: 'statusId',
+					name: 'statusId',
+					value: entry.statusId,
+					options: statuses,
+					errors: entry.getErrors('statusId')
+				}) }}
 
 				<div class="field" id="enabled-field">
 					<div class="heading"></div>
@@ -105,3 +93,4 @@
 	</div>
 
 {% endblock %}
+
