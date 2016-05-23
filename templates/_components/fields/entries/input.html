@@ -5,6 +5,7 @@
 {%- set value     = value is defined ? value : null %}
 {%- set required  = field.required is defined and field.required ? " required" %}
 {%- set multiple  = settings.limit == '' ? true : settings.limit > 1 ? true : false %}
+{%- set hasTitle  = entries|length > 1 %}
 
 {%- set dataAttributes = null %}
 {%- for key, dataValue in data %}
@@ -21,8 +22,10 @@
 	{{- dataAttributes|raw -}}
 	>
 	{%- for options in entries -%}
-		{% set label = options.singles is defined ? 'Singles' : options.section.name %}
-		<optgroup label="{{label}}">
+		{% if hasTitle %}
+			{% set label = options.singles is defined ? 'Singles' : options.section.name %}
+			<optgroup label="{{label}}">
+		{% endif %}
 			{%- for option in options.entries -%}
 				{% set section = craft.sections.getSectionById(option.sectionId) %}
 				{%- set optionLabel = options.singles is defined ? section.name : option.title -%}
@@ -31,7 +34,9 @@
 				<option value="{{ optionValue }}" {% if optionValue == value %}selected{% endif %}>{{ optionLabel }}</option>
 
 			{% endfor %}
-		</optgroup>
+		{% if hasTitle %}
+			</optgroup>
+		{% endif %}
 	{% endfor %}
 </select>
 {% endspaceless %}

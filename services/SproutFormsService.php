@@ -6,11 +6,12 @@ namespace Craft;
  *
  * @package Craft
  * --
- * @property SproutForms_EntriesService  $entries
- * @property SproutForms_FieldsService   $fields
- * @property SproutForms_FormsService    $forms
- * @property SproutForms_GroupsService   $groups
- * @property SproutForms_SettingsService $settings
+ * @property SproutForms_EntriesService        $entries
+ * @property SproutForms_FieldsService         $fields
+ * @property SproutForms_FormsService          $forms
+ * @property SproutForms_GroupsService         $groups
+ * @property SproutForms_SettingsService       $settings
+ * @property SproutForms_FrontEndFieldsService $frontend
  */
 class SproutFormsService extends BaseApplicationComponent
 {
@@ -19,6 +20,7 @@ class SproutFormsService extends BaseApplicationComponent
 	public $forms;
 	public $groups;
 	public $settings;
+	public $frontend;
 
 	public function init()
 	{
@@ -29,6 +31,7 @@ class SproutFormsService extends BaseApplicationComponent
 		$this->forms    = Craft::app()->getComponent('sproutForms_forms');
 		$this->groups   = Craft::app()->getComponent('sproutForms_groups');
 		$this->settings = Craft::app()->getComponent('sproutForms_settings');
+		$this->frontend = Craft::app()->getComponent('sproutForms_frontEndFields');
 	}
 
 	/**

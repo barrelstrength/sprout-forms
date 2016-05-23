@@ -28,7 +28,7 @@ class SproutFormsTagsField extends SproutFormsBaseField
 	{
 		$this->beginRendering();
 
-		$tags = sproutForms()->entries->getFrontEndTags($settings);
+		$tags = sproutForms()->frontend->getFrontEndTags($settings);
 
 		$rendered = craft()->templates->render(
 			'tags/input',
