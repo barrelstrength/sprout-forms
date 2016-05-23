@@ -150,7 +150,18 @@ class SproutFormsService extends BaseApplicationComponent
 		foreach ($assets as $asset)
 		{
 			$name = $asset->filename;
-			$path = $this->getAssetFilePath($asset);
+			$type = $asset->getSource()->getSourceType();
+			$path = null;
+
+			// Adds support for S3
+			if (get_class($type) === 'Craft\\S3AssetSourceType')
+			{
+				$path = $type->getImageSourcePath($asset);
+			}
+			else
+			{
+				$path = $this->getAssetFilePath($asset);
+			}
 
 			$email->addAttachment($path, $name);
 		}
