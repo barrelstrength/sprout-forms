@@ -345,7 +345,8 @@ class SproutForms_EntriesController extends BaseController
 	 */
 	private function _redirectOnError(SproutForms_EntryModel $entry)
 	{
-		SproutFormsPlugin::log("Couldn’t save form entry.", LogLevel::Error, true);
+		$errors = json_encode($entry->getErrors());
+		SproutFormsPlugin::log("Couldn’t save form entry. Errors: ".$errors, LogLevel::Error, true);
 
 		if (craft()->request->isAjaxRequest())
 		{
