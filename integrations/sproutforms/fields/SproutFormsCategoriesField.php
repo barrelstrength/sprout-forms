@@ -28,7 +28,7 @@ class SproutFormsCategoriesField extends SproutFormsBaseField
 	{
 		$this->beginRendering();
 
-		$categories = sproutForms()->frontend->getFrontEndCategories($settings);
+		$categories = sproutForms()->frontEndFields->getFrontEndCategories($settings);
 
 		$rendered = craft()->templates->render(
 			'categories/input',

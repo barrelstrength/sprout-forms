@@ -28,7 +28,7 @@ class SproutFormsEntriesField extends SproutFormsBaseField
 	{
 		$this->beginRendering();
 
-		$entries = sproutForms()->frontend->getFrontEndEntries($settings);
+		$entries = sproutForms()->frontEndFields->getFrontEndEntries($settings);
 
 		$rendered = craft()->templates->render(
 			'entries/input',

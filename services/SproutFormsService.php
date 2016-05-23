@@ -11,7 +11,7 @@ namespace Craft;
  * @property SproutForms_FormsService          $forms
  * @property SproutForms_GroupsService         $groups
  * @property SproutForms_SettingsService       $settings
- * @property SproutForms_FrontEndFieldsService $frontend
+ * @property SproutForms_FrontEndFieldsService $frontEndFields
  */
 class SproutFormsService extends BaseApplicationComponent
 {
@@ -20,18 +20,18 @@ class SproutFormsService extends BaseApplicationComponent
 	public $forms;
 	public $groups;
 	public $settings;
-	public $frontend;
+	public $frontEndFields;
 
 	public function init()
 	{
 		parent::init();
 
-		$this->entries  = Craft::app()->getComponent('sproutForms_entries');
-		$this->fields   = Craft::app()->getComponent('sproutForms_fields');
-		$this->forms    = Craft::app()->getComponent('sproutForms_forms');
-		$this->groups   = Craft::app()->getComponent('sproutForms_groups');
-		$this->settings = Craft::app()->getComponent('sproutForms_settings');
-		$this->frontend = Craft::app()->getComponent('sproutForms_frontEndFields');
+		$this->entries        = Craft::app()->getComponent('sproutForms_entries');
+		$this->fields         = Craft::app()->getComponent('sproutForms_fields');
+		$this->forms          = Craft::app()->getComponent('sproutForms_forms');
+		$this->groups         = Craft::app()->getComponent('sproutForms_groups');
+		$this->settings       = Craft::app()->getComponent('sproutForms_settings');
+		$this->frontEndFields = Craft::app()->getComponent('sproutForms_frontEndFields');
 	}
 
 	/**
