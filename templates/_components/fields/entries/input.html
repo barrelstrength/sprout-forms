@@ -21,6 +21,9 @@
 	{{- required -}}
 	{{- dataAttributes|raw -}}
 	>
+	{% if not multiple %}
+		<option disabled selected value> {{"-- select a entry --"|t}} </option>
+	{% endif %}
 	{%- for options in entries -%}
 		{% if hasTitle %}
 			{% set label = options.singles is defined ? 'Singles' : options.section.name %}
