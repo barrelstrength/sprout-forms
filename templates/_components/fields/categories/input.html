@@ -21,7 +21,7 @@
 	{{- dataAttributes|raw -}}
 	>
 	{%- if not multiple -%}
-		<option value="">{{ selectionLabel }}</option>
+		<option value="" disabled selected>{{ selectionLabel }}</option>
 	{%- endif -%}
 	{%- for options in categories -%}
 		{%- for option in options.categories -%}
