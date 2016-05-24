@@ -124,8 +124,10 @@ class SproutFormsPlugin extends BasePlugin
 	protected function defineSettings()
 	{
 		return array(
-			'pluginNameOverride'     => AttributeType::String,
-			'templateFolderOverride' => AttributeType::String
+			'pluginNameOverride'                  => AttributeType::String,
+			'templateFolderOverride'              => AttributeType::String,
+			'enablePerFormTemplateFolderOverride' => AttributeType::Bool,
+			'enablePayloadForwarding'             => AttributeType::Bool,
 		);
 	}
 
@@ -144,7 +146,7 @@ class SproutFormsPlugin extends BasePlugin
 			'sproutforms/entries/edit/(?P<entryId>\d+)'                 => array(
 				'action' => 'sproutForms/entries/editEntryTemplate'
 			),
-			'sproutforms/settings'                                      => array(
+			'sproutforms/settings/(general|advanced)'                   => array(
 				'action' => 'sproutForms/settings/settingsIndexTemplate'
 			),
 			'sproutforms/settings/entrystatuses'                        => array(
@@ -156,8 +158,8 @@ class SproutFormsPlugin extends BasePlugin
 			'sproutforms/settings/entrystatuses/(?P<entryStatusId>\d+)' => array(
 				'action' => 'sproutForms/entryStatuses/edit'
 			),
-			'sproutforms/forms/(?P<groupId>\d+)'                        => 'sproutforms/forms',
-			'sproutforms/examples'                                      => 'sproutforms/_cp/examples',
+			'sproutforms/forms/(?P<groupId>\d+)'                        =>
+				'sproutforms/forms',
 		);
 	}
 

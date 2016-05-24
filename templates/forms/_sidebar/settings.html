@@ -92,9 +92,19 @@
 		<div class="field field-heading">Template Customization</div>
 
 		{{ forms.lightswitchField({
-			label: "Enable <span class='info'>Enable Custom Template Overrides Folder</span>"|t,
-			id: 'enableTemplateOverrides',
-			name: 'enableTemplateOverrides',
+			label: "Tab Titles <span class='info'>Display Tab Titles on Forms</span>"|t,
+			id: 'displaySectionTitles',
+			name: 'displaySectionTitles',
+			on: form.displaySectionTitles,
+			onLabel: "Show"|t,
+			offLabel: "Hide"|t
+		}) }}
+
+		{% if settings.enablePerFormTemplateFolderOverride %}
+
+		{{ forms.lightswitchField({
+			label: "Custom Templates <span class='info'>Enable Custom Template Overrides Folder</span>"|t,
+			name: 'toggleEnableTemplateOverrides',
 			toggle: 'templateOverridesFolder-field',
 			on: form.enableTemplateOverrides,
 			onLabel: "Enable"|t,
@@ -109,14 +119,9 @@
 			value: (form is defined ? form.templateOverridesFolder : null),
 		}) }}
 
-		{{ forms.lightswitchField({
-			label: "Tab Titles <span class='info'>Display Tab Titles on Forms</span>"|t,
-			id: 'displaySectionTitles',
-			name: 'displaySectionTitles',
-			on: form.displaySectionTitles,
-			onLabel: "Show"|t,
-			offLabel: "Hide"|t
-		}) }}
+		{% endif %}
+
+		{% if settings.enablePayloadForwarding %}
 
 		<div class="field field-heading">Payload Forwarding</div>
 
@@ -137,6 +142,8 @@
 			value: form.savePayload,
 			on: (form.savePayload is defined) ? form.savePayload : ""
 		}) }}
+
+		{% endif %}
 
 	</div>
 </div>

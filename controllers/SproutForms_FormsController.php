@@ -186,6 +186,8 @@ class SproutForms_FormsController extends BaseController
 		// Set the "Continue Editing" URL
 		$variables['continueEditingUrl'] = 'sproutforms/forms/edit/{id}';
 
+		$variables['settings'] = craft()->plugins->getPlugin('sproutforms')->getSettings();
+		
 		$this->renderTemplate('sproutforms/forms/_editForm', $variables);
 	}
 

@@ -10,21 +10,21 @@ class SproutForms_SettingsController extends BaseController
 	 */
 	public function actionSettingsIndexTemplate()
 	{
-		$settingsModel = new SproutForms_SettingsModel;
+		$settingsTemplate = craft()->request->getSegment(3);
 
-		$settings = craft()->db->createCommand()
+		$results = craft()->db->createCommand()
 			->select('settings')
 			->from('plugins')
 			->where('class=:class', array(':class' => 'SproutForms'))
 			->queryScalar();
 
-		$settings = JsonHelper::decode($settings);
-		$settingsModel->setAttributes($settings);
+		$results = JsonHelper::decode($results);
 
-		$variables['settings'] = $settingsModel;
+		$settings = SproutForms_SettingsModel::populateModel($results);
 
-		// Load our template
-		$this->renderTemplate('sproutforms/settings', $variables);
+		$this->renderTemplate('sproutforms/settings/' . $settingsTemplate, array(
+			'settings' => $settings
+		));
 	}
 
 	/**
