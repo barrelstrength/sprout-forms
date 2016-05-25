@@ -20,13 +20,13 @@ class m160524_000000_sproutForms_setAdvancedSettings extends BaseMigration
 			$payloadForward = craft()->db->createCommand()
 				->select('*')
 				->from($tableName)
-				->where('submitAction != null')
+				->where("submitAction <> ''")
 				->queryRow();
 
 			$templateOverride = craft()->db->createCommand()
 				->select('*')
 				->from($tableName)
-				->where('enableTempalteOverrides = 1')
+				->where('enableTemplateOverrides = 1')
 				->queryRow();
 
 			$settings = craft()->plugins->getPlugin('sproutforms')->getSettings();
@@ -43,7 +43,7 @@ class m160524_000000_sproutForms_setAdvancedSettings extends BaseMigration
 				$settings['enablePerFormTemplateFolderOverride'] = "1";
 			}
 
-			$settings = JsonHelper::encode($seoSettings);
+			$settings = JsonHelper::encode($settings);
 
 			craft()->db->createCommand()->update('plugins',
 				array('settings' => $settings),
