@@ -100,7 +100,7 @@
 			offLabel: "Hide"|t
 		}) }}
 
-		{% if settings.enablePerFormTemplateFolderOverride %}
+		{% if settings.enablePerFormTemplateFolderOverride or form.enableTemplateOverrides %}
 
 		{{ forms.lightswitchField({
 			label: "Custom Templates <span class='info'>Enable Custom Template Overrides Folder</span>"|t,
@@ -121,7 +121,7 @@
 
 		{% endif %}
 
-		{% if settings.enablePayloadForwarding %}
+		{% if settings.enablePayloadForwarding or form.submitAction %}
 
 		<div class="field field-heading">Payload Forwarding</div>
 
