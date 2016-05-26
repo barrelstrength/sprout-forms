@@ -27,11 +27,11 @@
 			  instructions: "Enable this setting if you wish to override the default form templates globally and provide your own custom templates. Sprout Forms will display your dynamic forms using the form templates it finds with the following priority: 1) individual custom form template folder, 2) global custom form templates folder, and 3) Sprout Forms default form templates."|t,
 			  name: 'toggleTemplateFolderOverride',
 			  toggle: 'settings-defaulttemplateoverride',
-			  on: (settings.templateFolderOverride != '' ? true : false),
+			  on: (settings.templateFolderOverride is empty ? false : true),
 			  onLabel: "Enable"|t,
 		  }) }}
 
-	    <div id="settings-defaulttemplateoverride">
+	    <div id="settings-defaulttemplateoverride" class="{{ (settings.templateFolderOverride is empty ? "hidden") }}">
 
 		    {{ forms.textField({
 				  label: "Global custom form templates folder"|t,
