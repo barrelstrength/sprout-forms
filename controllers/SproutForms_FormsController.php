@@ -44,7 +44,7 @@ class SproutForms_FormsController extends BaseController
 		$form->displaySectionTitles = craft()->request->getPost('displaySectionTitles');
 		$form->redirectUri          = craft()->request->getPost('redirectUri');
 		$form->submitAction         = craft()->request->getPost('submitAction');
-		$form->savePayload          = craft()->request->getPost('savePayload');
+		$form->savePayload          = craft()->request->getPost('savePayload', 0);
 		$form->submitButtonText     = craft()->request->getPost('submitButtonText');
 
 		$form->notificationEnabled      = craft()->request->getPost('notificationEnabled');
@@ -53,7 +53,7 @@ class SproutForms_FormsController extends BaseController
 		$form->notificationSenderName   = craft()->request->getPost('notificationSenderName');
 		$form->notificationSenderEmail  = craft()->request->getPost('notificationSenderEmail');
 		$form->notificationReplyToEmail = craft()->request->getPost('notificationReplyToEmail');
-		$form->enableTemplateOverrides  = craft()->request->getPost('enableTemplateOverrides');
+		$form->enableTemplateOverrides  = craft()->request->getPost('enableTemplateOverrides', 0);
 		$form->templateOverridesFolder  = $form->enableTemplateOverrides
 			? craft()->request->getPost('templateOverridesFolder')
 			: null;
@@ -177,6 +177,11 @@ class SproutForms_FormsController extends BaseController
 				// Get the Form
 				$form = sproutForms()->forms->getFormById($variables['formId']);
 
+				if (!$form)
+				{
+					throw new HttpException(404);
+				}
+
 				$variables['form']    = $form;
 				$variables['title']   = $form->name;
 				$variables['groupId'] = $form->groupId;
@@ -187,7 +192,7 @@ class SproutForms_FormsController extends BaseController
 		$variables['continueEditingUrl'] = 'sproutforms/forms/edit/{id}';
 
 		$variables['settings'] = craft()->plugins->getPlugin('sproutforms')->getSettings();
-		
+
 		$this->renderTemplate('sproutforms/forms/_editForm', $variables);
 	}
 
