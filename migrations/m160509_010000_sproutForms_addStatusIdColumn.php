@@ -23,7 +23,7 @@ class m160509_010000_sproutForms_addStatusIdColumn extends BaseMigration
 				array(
 					'column'   => ColumnType::Int
 				),
-				'userAgent'
+				'formId'
 			);
 			// log that we created the new column
 			SproutFormsPlugin::log("Created the `$columnName` in the `$tableName` table.", LogLevel::Info, true);

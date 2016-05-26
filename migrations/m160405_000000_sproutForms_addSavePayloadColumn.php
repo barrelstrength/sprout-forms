@@ -25,7 +25,7 @@ class m160405_000000_sproutForms_addSavePayloadColumn extends BaseMigration
 					'null'     => false,
 					'unsigned' => true
 				),
-				'submitAction'
+				'submitButtonText'
 			);
 
 			SproutFormsPlugin::log("Created the column `$columnName` in `$tableName` .", LogLevel::Info, true);

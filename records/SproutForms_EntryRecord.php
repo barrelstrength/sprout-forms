@@ -21,9 +21,9 @@ class SproutForms_EntryRecord extends BaseRecord
 	public function defineAttributes()
 	{
 		return array(
+			'statusId'  => AttributeType::Number,
 			'ipAddress' => AttributeType::String,
 			'userAgent' => AttributeType::Mixed,
-			'statusId'  => AttributeType::Number
 		);
 	}
 
