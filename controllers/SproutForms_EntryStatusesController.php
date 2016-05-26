@@ -11,7 +11,7 @@ class SproutForms_EntryStatusesController extends BaseController
 	{
 		$variables['entryStatuses'] = sproutForms()->entries->getAllEntryStatuses();
 
-		$this->renderTemplate('sproutForms/settings/entryStatuses/index', $variables);
+		$this->renderTemplate('sproutForms/settings/entrystatuses/index', $variables);
 	}
 
 	/**
