@@ -3,10 +3,34 @@ namespace Craft;
 
 class SproutForms_SettingsService extends BaseApplicationComponent
 {
-	public function saveSettings($settings)
+	public function saveSettings($postSettings)
 	{
-		$settings = JsonHelper::encode($settings);
+		if (isset($postSettings['toggleTemplateFolderOverride']) && $postSettings['toggleTemplateFolderOverride'] != 1)
+		{
+			$postSettings['templateFolderOverride'] = '';
+		}
 
+		$plugin   = craft()->plugins->getPlugin('sproutforms');
+		$settings = $plugin->getSettings();
+
+		if (isset($postSettings['templateFolderOverride']))
+		{
+			$settings['templateFolderOverride'] = $postSettings['templateFolderOverride'];
+		}
+		if (isset($postSettings['pluginNameOverride']))
+		{
+			$settings['pluginNameOverride'] = $postSettings['pluginNameOverride'];
+		}
+		if (isset($postSettings['enablePerFormTemplateFolderOverride']))
+		{
+			$settings['enablePerFormTemplateFolderOverride'] = $postSettings['enablePerFormTemplateFolderOverride'];
+		}
+		if (isset($postSettings['enablePayloadForwarding']))
+		{
+			$settings['enablePayloadForwarding'] = $postSettings['enablePayloadForwarding'];
+		}
+
+		$settings = JsonHelper::encode($settings);
 		$affectedRows = craft()->db->createCommand()->update('plugins', array(
 			'settings' => $settings
 		), array(
