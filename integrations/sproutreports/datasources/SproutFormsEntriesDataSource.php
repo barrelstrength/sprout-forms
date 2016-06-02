@@ -52,9 +52,13 @@ class SproutFormsEntriesDataSource extends SproutReportsBaseDataSource
 
 		$query = craft()->db->createCommand()
 			->select('*')
-			->from($contentTable . ' AS entries')
-			->where('entries.dateCreated > :startDate', array(':startDate' => $startDate->mySqlDateTime()))
-			->andWhere('entries.dateCreated < :endDate', array(':endDate' => $endDate->mySqlDateTime()));
+			->from($contentTable . ' AS entries');
+
+		if ($startDate && $endDate)
+		{
+			$query->where('entries.dateCreated > :startDate', array(':startDate' => $startDate->mySqlDateTime()));
+			$query->andWhere('entries.dateCreated < :endDate', array(':endDate' => $endDate->mySqlDateTime()));
+		}
 
 		return $query->queryAll();
 	}
