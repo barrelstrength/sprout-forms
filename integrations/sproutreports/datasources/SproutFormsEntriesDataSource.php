@@ -48,6 +48,11 @@ class SproutFormsEntriesDataSource extends SproutReportsBaseDataSource
 
 		$form = craft()->sproutForms_forms->getFormById($formId);
 
+		if (!$form)
+		{
+			return null;
+		}
+
 		$contentTable = $form->contentTable;
 
 		$query = craft()->db->createCommand()
