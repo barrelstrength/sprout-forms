@@ -285,7 +285,7 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 	 */
 	public function getAllEntries()
 	{
-		$attributes = array('order' => 'name');
+		$attributes = array('order' => 'forms.name');
 
 		return $this->getCriteria($attributes)->find();
 	}
