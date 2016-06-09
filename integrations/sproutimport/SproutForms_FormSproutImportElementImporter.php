@@ -5,11 +5,9 @@ class SproutForms_FormSproutImportElementImporter extends BaseSproutImportElemen
 {
 	public $isNewForm;
 
-	public function getModel()
+	public function defineModel()
 	{
-		$model = 'Craft\\SproutForms_FormModel';
-
-		return new $model;
+		return 'SproutForms_FormModel';
 	}
 
 	//public function populateModel($model, $settings)
