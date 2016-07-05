@@ -13,6 +13,14 @@ class SproutForms_EntrySproutImportElementImporter extends BaseSproutImportEleme
 
 	/**
 	 * @return bool
+	 */
+	public function hasSeedGenerator()
+	{
+		return true;
+	}
+
+	/**
+	 * @return bool
 	 * @throws Exception
 	 * @throws \Exception
 	 */
@@ -21,6 +29,75 @@ class SproutForms_EntrySproutImportElementImporter extends BaseSproutImportEleme
 		return craft()->sproutForms_entries->saveEntry($this->model);
 	}
 
+	/**
+	 * @return string
+	 */
+	public function getSettingsHtml()
+	{
+		$forms = sproutForms()->forms->getAllForms();
+
+		$formOptions[''] = Craft::t("Select a form...");
+
+		foreach ($forms as $form)
+		{
+			$formOptions[$form->id] = $form->name;
+		}
+
+		return craft()->templates->render('sproutforms/_integrations/sproutimport/entries/settings', array(
+			'id'          => $this->getName(),
+			'formOptions' => $formOptions
+		));
+	}
+
+	/**
+	 * Generate mock data for a Channel or Structure.
+	 *
+	 * Singles are not supported.
+	 *
+	 * @param $settings
+	 *
+	 * @return array
+	 */
+	public function getMockData($quantity, $settings)
+	{
+		$saveIds = array();
+		$formId  = $settings['formId'];
+
+		$form = sproutForms()->forms->getFormById($formId);
+
+		if (!empty($quantity))
+		{
+			for ($i = 1; $i <= $quantity; $i++)
+			{
+				$fakerDate = $this->fakerService->dateTimeThisYear('now');
+
+				$formEntry              = new SproutForms_EntryModel();
+				$formEntry->formId      = $form->id;
+				$formEntry->ipAddress   = "127.0.0.1";
+				$formEntry->userAgent   = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.116 Safari/537.36";
+				$formEntry->dateCreated = $fakerDate;
+				$formEntry->dateUpdated = $fakerDate;
+
+				$fields = sproutImport()->mockData->getMockFieldsByElementName('SproutForms_Form');
+
+				$formEntry->setContentFromPost($fields);
+
+				sproutForms()->entries->saveEntry($formEntry);
+
+				// Avoid duplication of saveIds
+				if (!in_array($formEntry->id, $saveIds) && $formEntry->id !== false)
+				{
+					$saveIds[] = $formEntry->id;
+				}
+			}
+		}
+
+		return $saveIds;
+	}
+
+	/**
+	 * @return array
+	 */
 	public function getAllFieldHandles()
 	{
 		$fields = $this->model->getFields();

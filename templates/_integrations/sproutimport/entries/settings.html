@@ -1,0 +1,14 @@
+{% import "_includes/forms" as forms %}
+
+<div class="field element-options {{ id }}" style="display: none">
+
+	{{ forms.selectField({
+		label: "Form"|t,
+		instructions: "Generate entries for this form."|t,
+		name: "settings[formId]",
+		options: formOptions,
+		value: formOptions is defined ? formOptions : '',
+	}) }}
+
+</div>
+
