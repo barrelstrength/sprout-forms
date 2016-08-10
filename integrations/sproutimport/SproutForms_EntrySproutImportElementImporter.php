@@ -6,9 +6,9 @@ class SproutForms_EntrySproutImportElementImporter extends BaseSproutImportEleme
 	/**
 	 * @return mixed
 	 */
-	public function defineModel()
+	public function getModelName()
 	{
-		return 'SproutForms_EntryModel';
+		return 'SproutForms_Entry';
 	}
 
 	/**
