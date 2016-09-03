@@ -96,7 +96,11 @@ class SproutFormsPlugin extends BasePlugin
 		Craft::import('plugins.sproutforms.contracts.SproutFormsBaseField');
 
 		Craft::import('plugins.sproutforms.integrations.sproutreports.datasources.*');
-		Craft::import('plugins.sproutforms.integrations.sproutimport.*');
+		Craft::import('plugins.sproutforms.integrations.sproutimport.SproutForms_EntrySproutImportElementImporter');
+		Craft::import('plugins.sproutforms.integrations.sproutimport.SproutForms_FormSproutImportElementImporter');
+
+		Craft::import('plugins.sproutforms.integrations.sproutimport.SproutForms_FormsSproutImportFieldImporter');
+		Craft::import('plugins.sproutforms.integrations.sproutimport.SproutForms_EntrySproutImportFieldImporter');
 
 		craft()->on('email.onBeforeSendEmail', array(sproutForms(), 'handleOnBeforeSendEmail'));
 
@@ -231,9 +235,24 @@ class SproutFormsPlugin extends BasePlugin
 	public function registerSproutImportImporters()
 	{
 		return array(
-			new SproutForms_EntrySproutImportElementImporter,
-			new SproutForms_FormSproutImportElementImporter
+			new SproutForms_EntrySproutImportElementImporter(),
+			new SproutForms_FormSproutImportElementImporter()
 		);
+	}
+
+	/**
+	 * Register importer fields
+	 *
+	 * @return array
+	 */
+	public function registerSproutImportFields()
+	{
+		$fields = array(
+			new SproutForms_FormsSproutImportFieldImporter(),
+			new SproutForms_EntrySproutImportFieldImporter()
+		);
+
+		return $fields;
 	}
 
 	/**

@@ -44,7 +44,7 @@ class SproutForms_EntrySproutImportElementImporter extends BaseSproutImportEleme
 		}
 
 		return craft()->templates->render('sproutforms/_integrations/sproutimport/entries/settings', array(
-			'id'          => $this->getName(),
+			'id'          => $this->getModelName(),
 			'formOptions' => $formOptions
 		));
 	}
