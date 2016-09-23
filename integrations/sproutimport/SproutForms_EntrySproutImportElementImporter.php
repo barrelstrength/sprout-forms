@@ -14,6 +14,14 @@ class SproutForms_EntrySproutImportElementImporter extends BaseSproutImportEleme
 	}
 
 	/**
+	 * @return mixed
+	 */
+	public function getModelName()
+	{
+		return 'SproutForms_Entry';
+	}
+
+	/**
 	 * @return bool
 	 * @throws Exception
 	 * @throws \Exception

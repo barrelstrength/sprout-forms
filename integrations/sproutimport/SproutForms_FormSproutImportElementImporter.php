@@ -12,6 +12,14 @@ class SproutForms_FormSproutImportElementImporter extends BaseSproutImportElemen
 		return new $model;
 	}
 
+	/**
+	 * @return mixed
+	 */
+	public function getModelName()
+	{
+		return 'SproutForms_Form';
+	}
+
 	//public function populateModel($model, $settings)
 	//{
 	//	// @todo - we need this because we should refactor how deleting/weeding
