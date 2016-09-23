@@ -34,7 +34,11 @@ class SproutForms_ExamplesController extends BaseController
 		}
 		catch (\Exception $e)
 		{
-			$this->_handleError($e);
+			SproutFormsPlugin::log($e->getMessage());
+
+			craft()->userSession->setError(Craft::t('Unable to install the examples.'));
+
+			$this->redirect('sproutforms/settings/examples');
 		}
 	}
 
@@ -320,20 +324,11 @@ class SproutForms_ExamplesController extends BaseController
 		}
 		catch (\Exception $e)
 		{
-			$this->_handleError($e);
-		}
-	}
+			SproutFormsPlugin::log($e->getMessage());
 
-	/**
-	 * Handle installation errors
-	 *
-	 * @param Exception $exception
-	 *
-	 * @return void
-	 */
-	private function _handleError($exception)
-	{
-		craft()->userSession->setError(Craft::t('Unable to install the examples.'));
-		$this->redirect('sproutforms/examples');
+			craft()->userSession->setError(Craft::t('Unable to install the examples.'));
+
+			$this->redirect('sproutforms/settings/examples');
+		}
 	}
 }
