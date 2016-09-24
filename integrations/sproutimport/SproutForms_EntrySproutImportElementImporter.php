@@ -3,6 +3,15 @@ namespace Craft;
 
 class SproutForms_EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 {
+
+	/**
+	 * @return null|string
+	 */
+	public function getName()
+	{
+		return Craft::t("Sprout Forms Entries");
+	}
+
 	/**
 	 * @return mixed
 	 */
@@ -17,14 +26,6 @@ class SproutForms_EntrySproutImportElementImporter extends BaseSproutImportEleme
 	public function hasSeedGenerator()
 	{
 		return true;
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function getModelName()
-	{
-		return 'SproutForms_Entry';
 	}
 
 	/**

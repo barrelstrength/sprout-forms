@@ -245,7 +245,7 @@ class SproutFormsPlugin extends BasePlugin
 	 *
 	 * @return array
 	 */
-	public function registerSproutImportFields()
+	public function registerSproutImportFieldImporters()
 	{
 		$fields = array(
 			new SproutForms_FormsSproutImportFieldImporter(),
