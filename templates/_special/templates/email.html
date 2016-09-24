@@ -35,36 +35,36 @@
                               <tr>
                                   <td>
 
-                            {% set fields = tab.getFields() %}
+                                    {% set fields = tab.getFields() %}
 
-                              {% for field in fields %}
+                                    {% for field in fields %}
 
-                                {% set field = field.getField() %}
-                                {% set value = attribute(element, field.handle) %}
+                                      {% set field = field.getField() %}
+                                      {% set value = attribute(element, field.handle) %}
 
-                                {% if loop.first and tabs|length > 1 %}
-                                <p><strong>{{ tab.name }}</strong></p>
-                                {% endif %}
+                                      {% if loop.first and tabs|length > 1 %}
+                                      <p><strong>{{ tab.name }}</strong></p>
+                                      {% endif %}
 
-                                <p>
-                                  <strong>{{ field.name }}</strong><br/>
+                                      <p>
+                                        <strong>{{ field.name }}</strong><br/>
 
-                                  {% if value is not iterable and value is not empty %}
+                                        {% if value is not iterable and value is not empty %}
 
-                                    {{ value }}
+                                          {{ value|nl2br }}
 
-                                  {% else %}
+                                        {% else %}
 
-                                    <ul style="margin-left:0;">
-                                    {% for item in value %}
-                                      <li>{{ item }}</li>
+                                          <ul style="margin-left:0;">
+                                          {% for item in value %}
+                                            <li>{{ item }}</li>
+                                          {% endfor %}
+                                          </ul>
+
+                                        {% endif %}
+                                      </p>
+
                                     {% endfor %}
-                                    </ul>
-
-                                  {% endif %}
-                                </p>
-
-                              {% endfor %}
 
                                   </td>
                               </tr>
