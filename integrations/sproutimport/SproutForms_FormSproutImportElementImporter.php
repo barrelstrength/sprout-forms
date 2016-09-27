@@ -5,6 +5,14 @@ class SproutForms_FormSproutImportElementImporter extends BaseSproutImportElemen
 {
 	public $isNewForm;
 
+	/**
+	 * @return null|string
+	 */
+	public function getName()
+	{
+		return Craft::t("Sprout Forms Forms");
+	}
+
 	public function getModelName()
 	{
 		return 'SproutForms_Form';

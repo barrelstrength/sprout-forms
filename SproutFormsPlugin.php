@@ -32,7 +32,7 @@ class SproutFormsPlugin extends BasePlugin
 	 */
 	public function getVersion()
 	{
-		return '2.3.2';
+		return '2.3.4';
 	}
 
 	/**
@@ -245,7 +245,7 @@ class SproutFormsPlugin extends BasePlugin
 	 *
 	 * @return array
 	 */
-	public function registerSproutImportFields()
+	public function registerSproutImportFieldImporters()
 	{
 		$fields = array(
 			new SproutForms_FormsSproutImportFieldImporter(),

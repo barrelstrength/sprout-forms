@@ -3,6 +3,15 @@ namespace Craft;
 
 class SproutForms_EntrySproutImportElementImporter extends BaseSproutImportElementImporter
 {
+
+	/**
+	 * @return null|string
+	 */
+	public function getName()
+	{
+		return Craft::t("Sprout Forms Entries");
+	}
+
 	/**
 	 * @return mixed
 	 */

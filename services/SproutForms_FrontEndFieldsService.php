@@ -138,7 +138,8 @@ class SproutForms_FrontEndFieldsService extends BaseApplicationComponent
 		foreach ($sections as $key => $section)
 		{
 			$criteria->sectionId = $section->id;
-			$singles[] = $criteria->find()[0];
+			$results = $criteria->find();
+			$singles[] = $results[0];
 		}
 
 		return $singles;

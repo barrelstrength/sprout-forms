@@ -88,7 +88,9 @@ class SproutForms_EntryElementType extends BaseElementType
 			)
 		);
 
-		$sources[] = ['heading' => Craft::t("Forms")];
+		$sources[] = array(
+			'heading' => Craft::t("Forms")
+		);
 
 		// Prepare the data for our sources sidebar
 		$groups = sproutForms()->groups->getAllFormGroups('id');
