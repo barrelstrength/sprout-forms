@@ -133,4 +133,27 @@ class SproutForms_SaveEntryEvent extends SproutEmailBaseEvent
 
 		return $options;
 	}
+
+	public function validateObjects($rules = array())
+	{
+		$objects = array();
+
+		if (isset($rules['sproutForms']['saveEntry']['formIds']))
+		{
+			$formIds = $rules['sproutForms']['saveEntry']['formIds'];
+
+			if (!empty($formIds))
+			{
+				foreach ($formIds as $formId)
+				{
+					$model = sproutForms()->forms->getFormById($formId);
+					$keys = array_keys($model->getFields());
+					$objects = array_merge($objects, $keys);
+				}
+
+			}
+		}
+
+		return $objects;
+	}
 }
