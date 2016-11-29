@@ -41,7 +41,11 @@
 		{%- if loop.first %}
 		<script>
 			(function() {
-				document.getElementById('fields-'+'{{ labelId }}').focus();
+				var field = document.getElementById('fields-'+'{{ labelId }}');
+				if(field)
+				{
+					field.focus();
+				}
 			})();
 		</script>
 		{%- endif %}
