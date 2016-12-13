@@ -146,7 +146,8 @@ class SproutForms_EntriesController extends BaseController
 			// Only send notification email for front-end submissions if they are enabled
 			if (!craft()->request->isCpRequest() && $this->form->notificationEnabled)
 			{
-				sproutForms()->forms->sendNotification($this->form, $entry);
+				$post = $_POST;
+				sproutForms()->forms->sendNotification($this->form, $entry, $post);
 			}
 
 			// Only handle multi-page forms on the front-end
