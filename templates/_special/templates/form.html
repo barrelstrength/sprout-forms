@@ -1,5 +1,5 @@
 
-<!-- Custom form created using the Sprout Forms form builder plugin - http://sprout.barrelstrengthdesign.com/craft-plugins/forms -->
+<!-- Custom form created using the Sprout Forms form builder plugin - https://sprout.barrelstrengthdesign.com/craft-plugins/forms -->
 
 {% set action = form.submitAction is empty ? 'sproutForms/entries/saveEntry' : 'sproutForms/entries/forwardEntry' %}
 {%- set renderingOptions = renderingOptions is defined and renderingOptions is not empty ? renderingOptions : {} %}
@@ -41,7 +41,11 @@
 		{%- if loop.first %}
 		<script>
 			(function() {
-				document.getElementById('fields-'+'{{ labelId }}').focus();
+				var field = document.getElementById('fields-'+'{{ labelId }}');
+				if(field)
+				{
+					field.focus();
+				}
 			})();
 		</script>
 		{%- endif %}

@@ -54,6 +54,7 @@ class SproutFormsVariable
 
 		$bodyHtml = craft()->templates->render(
 			'tab', array(
+				'form'                 => $form,
 				'tabs'                 => $form->getFieldLayout()->getTabs(),
 				'entry'                => $entry,
 				'formFields'           => $fields,
@@ -124,6 +125,7 @@ class SproutFormsVariable
 		$tabHtml = craft()->templates->render(
 			'tab',
 			array(
+				'form'                 => $form,
 				'tabs'                 => array($layoutTab),
 				'entry'                => $entry,
 				'formFields'           => $fields,
@@ -195,6 +197,7 @@ class SproutFormsVariable
 				// Build the HTML for our form field
 				$fieldHtml = craft()->templates->render(
 					'field', array(
+						'form'                 => $form,
 						'value'                => $value,
 						'field'                => $field,
 						'required'             => $field->required,
