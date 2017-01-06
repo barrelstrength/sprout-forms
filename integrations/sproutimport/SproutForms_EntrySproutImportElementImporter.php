@@ -84,10 +84,12 @@ class SproutForms_EntrySproutImportElementImporter extends BaseSproutImportEleme
 				$formEntry->formId      = $form->id;
 				$formEntry->ipAddress   = "127.0.0.1";
 				$formEntry->userAgent   = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.116 Safari/537.36";
-				$formEntry->dateCreated = $fakerDate;
-				$formEntry->dateUpdated = $fakerDate;
+				$formEntry->dateCreated = date("Y-m-d H:i:s",$fakerDate->getTimestamp());
+				$formEntry->dateUpdated = date("Y-m-d H:i:s",$fakerDate->getTimestamp());
 
-				$fields = sproutImport()->mockData->getMockFieldsByElementName('SproutForms_Form');
+				$fieldTypes = $form->getFields();
+
+				$fields = $this->getFieldsWithMockData($fieldTypes);
 
 				$formEntry->setContentFromPost($fields);
 
@@ -102,6 +104,30 @@ class SproutForms_EntrySproutImportElementImporter extends BaseSproutImportEleme
 		}
 
 		return $saveIds;
+	}
+
+	public function getFieldsWithMockData($fields)
+	{
+		$fieldsWithMockData = array();
+
+		if (!empty($fields))
+		{
+			foreach ($fields as $field)
+			{
+				$fieldHandle        = $field->handle;
+				$fieldType          = $field->type;
+				$fieldImporterClass = sproutImport()->getFieldImporterClassByType($fieldType);
+
+				if ($fieldImporterClass != null)
+				{
+					$fieldImporterClass->setModel($field);
+
+					$fieldsWithMockData[$fieldHandle] = $fieldImporterClass->getMockData();
+				}
+			}
+		}
+
+		return $fieldsWithMockData;
 	}
 
 	/**
