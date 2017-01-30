@@ -244,10 +244,7 @@ class SproutForms_EntriesController extends BaseController
 			}
 		}
 
-		if (craft()->request->isCpRequest())
-		{
-			$entryId = craft()->request->getPost('entryId');
-		}
+		$entryId = craft()->request->getPost('entryId');
 
 		if ($entryId)
 		{
@@ -304,6 +301,11 @@ class SproutForms_EntriesController extends BaseController
 		else
 		{
 			$entry = sproutForms()->entries->getEntryById($entryId);
+
+			if (!$entry)
+			{
+				throw new HttpException(404);
+			}
 		}
 
 		$form          = sproutForms()->forms->getFormById($entry->formId);
