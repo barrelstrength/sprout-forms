@@ -32,16 +32,16 @@
 					<div class="heading">
 					{% if label -%}
 						{%- if formField.hasMultipleLabels() -%}
-							{{- label|raw -}}
+							{{- label|raw|t -}}
 						{%- else -%}
 							<label{% if name %} for="{{ name }}"{% endif %}>
-								{{- label|raw -}}
+								{{- label|raw|t -}}
 							</label>
 						{%- endif -%}
 					{%- endif -%}
 					{% if instructions %}
 
-					<p class="instructions">{{ instructions|raw }}</p>
+					<p class="instructions">{{ instructions|raw|t }}</p>
 					{%- endif %}
 
 				</div>

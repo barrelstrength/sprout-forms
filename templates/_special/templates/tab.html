@@ -5,7 +5,7 @@
 		<div class="tab">
 
 			{% if displaySectionTitles -%}
-				<h3>{{ tab.name }}</h3>
+				<h3>{{ tab.name|t }}</h3>
 			{%- endif %}
 
 			{% for layoutField in layoutFields -%}
