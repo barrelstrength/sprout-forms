@@ -1,9 +1,0 @@
-<div class="btn menubtn">{{ "Set status"|t }}</div>
-{% set statues = craft.sproutforms.getEntryStatuses() %}
-<div class="menu">
-	<ul>
-		{% for status in statues %}
-			<li><a class="formsubmit" data-param="status" data-value="{{status.id}}"><span class="status {{status.color}}"></span> {{ status.name }}</a></li>
-		{% endfor %}
-	</ul>
-</div>

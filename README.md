@@ -16,12 +16,13 @@ http://sprout.barrelstrengthdesign.com/craft-plugins/forms/updates
 
 Sprout Forms Translations
 ------------------------------------------------------------
-A default translation file is provided on GitHub and can be modified 
+A default translation file is provided on GitHub and can be modified
 as needed for your language requirements.
 https://github.com/BarrelStrength/Sprout-Plugin-Translations
+---------
 
 
-Sprout Forms Support
+##Sprout Forms Support
 ------------------------------------------------------------
 
 Via Craft Stack Exchange: Tag your questions with `plugin-sproutforms`:

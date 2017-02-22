@@ -1,0 +1,23 @@
+{
+  "name": "barrelstrength/sproutforms",
+  "description": "Simple, beautiful forms. 100% control.",
+  "version": "3.0.0",
+  "type": "craft-plugin",
+  "autoload": {
+    "psr-4": {
+      "barrelstrength\\sproutforms\\": "src/"
+    }
+  },
+  "extra": {
+    "name": "Sprout Forms",
+    "handle": "sproutForms",
+    "version": "3.0.0",
+    "schemaVersion": "3.0.0",
+    "hasSettings": true,
+    "developer": "Barrel Strength",
+    "class": "barrelstrength\\sproutforms\\SproutForms",
+    "components": {
+      "api": "barrelstrength\\sproutforms\\services\\Api"
+    }
+  }
+}
