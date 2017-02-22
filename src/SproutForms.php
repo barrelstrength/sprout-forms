@@ -13,7 +13,7 @@ use barrelstrength\sproutforms\variables\SproutFormsVariable;
 class SproutForms extends \craft\base\Plugin
 {
 	/**
-	 * Enable use of SproutFields::$plugin-> in place of Craft::$app->
+	 * Enable use of SproutForms::$plugin-> in place of Craft::$app->
 	 *
 	 * @var [type]
 	 */
@@ -45,19 +45,6 @@ class SproutForms extends \craft\base\Plugin
 	public static function t($message, array $params = [])
 	{
 		return Craft::t('sproutForms', $message, $params);
-	}
-
-	/**
-	 * @return array
-	 */
-	protected function defineSettings()
-	{
-		return array(
-			'pluginNameOverride'                  => AttributeType::String,
-			'templateFolderOverride'              => AttributeType::String,
-			'enablePerFormTemplateFolderOverride' => AttributeType::Bool,
-			'enablePayloadForwarding'             => AttributeType::Bool,
-		);
 	}
 
 	/**
