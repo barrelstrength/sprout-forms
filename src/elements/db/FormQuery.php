@@ -204,7 +204,6 @@ class FormQuery extends ElementQuery
 	 */
 	protected function beforePrepare(): bool
 	{
-		$test =" as";
 		// See if 'group' was set to an invalid handle
 		if ($this->groupId === []) {
 			return false;

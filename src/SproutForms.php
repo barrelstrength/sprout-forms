@@ -6,6 +6,7 @@ use craft\events\RegisterUrlRulesEvent;
 use craft\web\UrlManager;
 use yii\base\Event;
 
+use barrelstrength\sproutforms\models\Settings;
 use barrelstrength\sproutforms\services\Groups;
 use barrelstrength\sproutforms\variables\SproutFormsVariable;
 
@@ -24,13 +25,15 @@ class SproutForms extends \craft\base\Plugin
 
 		self::$api = $this->get('api');
 
-		// Something breaks this event
-
 		Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $event) {
-				$event->rules = $this->getCpUrlRules();
+				$event->rules = array_merge($event->rules, $this->getCpUrlRules());
 			}
 		);
+	}
 
+	protected function createSettingsModel()
+	{
+		return new Settings();
 	}
 
 	/**
@@ -42,6 +45,19 @@ class SproutForms extends \craft\base\Plugin
 	public static function t($message, array $params = [])
 	{
 		return Craft::t('sproutForms', $message, $params);
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function defineSettings()
+	{
+		return array(
+			'pluginNameOverride'                  => AttributeType::String,
+			'templateFolderOverride'              => AttributeType::String,
+			'enablePerFormTemplateFolderOverride' => AttributeType::Bool,
+			'enablePayloadForwarding'             => AttributeType::Bool,
+		);
 	}
 
 	/**

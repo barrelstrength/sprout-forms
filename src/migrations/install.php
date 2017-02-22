@@ -27,6 +27,7 @@ class Install extends Migration
 	 */
 	public function safeDown()
 	{
+		$this->dropTable('{{%sproutforms_entries}}');
 		$this->dropTable('{{%sproutforms_forms}}');
 		$this->dropTable('{{%sproutforms_formgroups}}');
 	}

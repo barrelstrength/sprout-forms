@@ -124,7 +124,7 @@ class FormsController extends BaseController
 			Craft::$app->userSession->setNotice(SproutForms::t('Form saved.'));
 
 			$_POST['redirect'] = str_replace('{id}', $form->id, $_POST['redirect']);
-			$this->redirectToPostedUrl();
+			return $this->redirectToPostedUrl();
 		}
 		else
 		{
@@ -175,7 +175,7 @@ class FormsController extends BaseController
 			if ($form)
 			{
 				$url = UrlHelper::cpUrl('sproutforms/forms/edit/' . $form->id);
-				$this->redirect($url);
+				return $this->redirect($url);
 			}
 			else
 			{

@@ -7,14 +7,14 @@
 
 {% set fields = craft.fields.getAllFields('id') %}
 
-{% includeTranslations
+{% do view.registerTranslations('sproutForms', [
 	"Rename",
 	"Delete",
 	"Make required",
 	"Make not required",
 	"Remove",
 	"Give your tab a name."
-%}
+]) %}
 
 {% includeCssFile "//fonts.googleapis.com/css?family=Coming+Soon" %}
 
@@ -77,7 +77,7 @@
 
 </div>
 
-{% includeJsResource "sproutforms/js/formfieldlayoutdesigner.js" %}
+{% do view.registerJsFile("sproutforms/js/formfieldlayoutdesigner.js") %}
 
 {% set js %}
 
