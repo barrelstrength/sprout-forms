@@ -8,6 +8,7 @@ use craft\helpers\UrlHelper;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\assetbundles\FormAsset;
 use barrelstrength\sproutforms\elements\Form;
+use barrelstrength\sproutforms\models\Form as FormModel;
 
 class FormsController extends BaseController
 {
@@ -192,7 +193,8 @@ class FormsController extends BaseController
 				$variables['groupId'] = "";
 
 				// Get the Form
-				$form = SproutForms::$api->forms->getFormById($formId);
+				$formElement = SproutForms::$api->forms->getFormById($formId);
+				$form = new FormModel($formElement->getAttributes());
 
 				if (!$form)
 				{

@@ -666,7 +666,7 @@ class Forms extends Component
 			// Let's delete the default field
 			if (isset($field) && $field->id)
 			{
-				#Craft::$app->getFields()->deleteFieldById($field->id);
+				Craft::$app->getFields()->deleteFieldById($field->id);
 			}
 
 			return $form;

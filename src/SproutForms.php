@@ -19,6 +19,8 @@ class SproutForms extends \craft\base\Plugin
 	 */
 	public static $api;
 
+	public $hasCpSection = true;
+
 	public function init()
 	{
 		parent::init();
@@ -45,14 +47,6 @@ class SproutForms extends \craft\base\Plugin
 	public static function t($message, array $params = [])
 	{
 		return Craft::t('sproutForms', $message, $params);
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function hasCpSection()
-	{
-		return true;
 	}
 
 	/**

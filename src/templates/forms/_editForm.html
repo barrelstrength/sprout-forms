@@ -110,10 +110,10 @@
 			</div>
 		</div>
 
-		{% set sproutFieldsIsInstalled           = craft.sproutForms.isPluginInstalled('sproutfields') %}
-		{% set sproutReportsIsInstalled          = craft.sproutForms.isPluginInstalled('sproutreports')%}
-		{% set sproutEmailIsInstalled            = craft.sproutForms.isPluginInstalled('sproutemail') %}
-		{% set sproutInvisibleCaptchaIsInstalled = craft.sproutForms.isPluginInstalled('sproutinvisiblecaptcha') %}
+		{% set sproutFieldsIsInstalled           = craft.sproutforms.isPluginInstalled('sproutfields') %}
+		{% set sproutReportsIsInstalled          = craft.sproutforms.isPluginInstalled('sproutreports')%}
+		{% set sproutEmailIsInstalled            = craft.sproutforms.isPluginInstalled('sproutemail') %}
+		{% set sproutInvisibleCaptchaIsInstalled = craft.sproutforms.isPluginInstalled('sproutinvisiblecaptcha') %}
 
 		{% if not sproutFieldsIsInstalled or not sproutReportsIsInstalled or not sproutEmailIsInstalled or not
 		sproutInvisibleCaptchaIsInstalled %}

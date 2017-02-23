@@ -426,16 +426,19 @@ class SproutFormsVariable
 	 */
 	public function isPluginInstalled($plugin)
 	{
-		$plugins = Craft::$app->plugins->getPlugins(false);
+		$plugins = Craft::$app->plugins->getAllPlugins();
 
 		if (array_key_exists($plugin, $plugins))
 		{
 			$invisibleCaptcha = $plugins[$plugin];
 
+			/* @todo the isInstalled variable was removed on craft3
 			if ($invisibleCaptcha->isInstalled)
 			{
 				return true;
 			}
+			*/
+			return true;
 		}
 
 		return false;

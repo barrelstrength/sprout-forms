@@ -6,6 +6,7 @@ use craft\base\Element;
 use craft\elements\db\ElementQueryInterface;
 use yii\base\ErrorHandler;
 use craft\db\Query;
+use craft\helpers\UrlHelper;
 
 use barrelstrength\sproutforms\elements\db\FormQuery;
 use barrelstrength\sproutforms\records\Form as FormRecord;
@@ -33,8 +34,6 @@ class Form extends Element
 	public $fieldLayoutId;
 	public $titleFormat;
 	public $displaySectionTitles;
-	public $element;
-	public $group;
 	public $redirectUri;
 	public $submitAction;
 	public $submitButtonText;
@@ -87,6 +86,16 @@ class Form extends Element
 	public static function isLocalized(): bool
 	{
 		return false;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function getCpEditUrl()
+	{
+		return UrlHelper::cpUrl(
+			'sproutforms/forms/edit/'.$this->id
+		);
 	}
 
 	/**
