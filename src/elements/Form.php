@@ -115,12 +115,45 @@ class Form extends Element
 
 	/**
 	 * @inheritdoc
+	 */
+	public function getFieldLayout()
+	{
+		$formModel = $this->_getFormModel();
+
+		if ($formModel)
+		{
+			return $formModel->getFieldLayout();
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the tag's group.
+	 *
+	 * @return TagGroup
+	 * @throws InvalidConfigException if [[groupId]] is missing or invalid
+	 */
+	private function _getFormModel()
+	{
+		if ($this->id === null) {
+			throw new InvalidConfigException('Form is missing its element ID');
+		}
+
+		if (($form = SproutForms::$api->forms->getFormModelById($this->id)) === null) {
+			throw new InvalidConfigException('Invalid Form ID: '.$this->id);
+		}
+
+		return $form;
+	}
+
+	/**
+	 * @inheritdoc
 	 *
 	 * @return FormQuery The newly created [[FormQuery]] instance.
 	 */
 	public static function find(): ElementQueryInterface
 	{
-		$test = "as";
 		return new FormQuery(get_called_class());
 	}
 

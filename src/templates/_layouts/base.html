@@ -1,6 +1,6 @@
 {% extends "_layouts/cp" %}
 
-{% set bodyClass = craft.request.getSegments()|slice(0, 3)|join(' ') %}
+{% set bodyClass = craft.app.request.getSegments()|slice(0, 3)|join(' ') %}
 
 {% set subnav = {
 	entries: {
@@ -32,4 +32,4 @@
 
 {% endblock %}
 
-{% includeCssFile 'sproutforms/css/sproutforms.css' %}
+{% do view.registerAssetBundle("barrelstrength\\sproutforms\\assetbundles\\FormBaseAsset") %}

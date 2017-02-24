@@ -674,4 +674,26 @@ class Forms extends Component
 
 		return false;
 	}
+
+	/**
+	 * Returns a form model by its ID.
+	 *
+	 * @param int $formId
+	 *
+	 * @return FormModel|null
+	 */
+	public function getFormModelById(int $formId)
+	{
+		if (($formRecord = FormRecord::findOne($formId)) === null)
+		{
+			return null;
+		}
+
+		return $model = new FormModel($formRecord->toArray([
+			'id',
+			'name',
+			'handle',
+			'fieldLayoutId',
+		]));
+	}
 }
