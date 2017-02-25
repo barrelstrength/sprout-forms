@@ -165,7 +165,7 @@ class FormsController extends BaseController
 	 * @throws HttpException
 	 * @throws Exception
 	 */
-	public function actionEditFormTemplate(int $formId = null)
+	public function actionEditFormTemplate(int $formId = null): string
 	{
 		// Immediately create a new Form
 		if (Craft::$app->request->getSegment(3) == "new")
@@ -210,8 +210,9 @@ class FormsController extends BaseController
 
 		$variables['settings'] = Craft::$app->plugins->getPlugin('sproutforms')->getSettings();
 
+
 		$this->getView()->registerAssetBundle(FormAsset::class);
 
-		$this->renderTemplate('sproutforms/forms/_editForm', $variables);
+		return $this->renderTemplate('sproutforms/forms/_editForm', $variables);
 	}
 }
