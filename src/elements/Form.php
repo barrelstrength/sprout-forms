@@ -7,9 +7,11 @@ use craft\elements\db\ElementQueryInterface;
 use yii\base\ErrorHandler;
 use craft\db\Query;
 use craft\helpers\UrlHelper;
+use yii\base\InvalidConfigException;
 
 use barrelstrength\sproutforms\elements\db\FormQuery;
 use barrelstrength\sproutforms\records\Form as FormRecord;
+use barrelstrength\sproutforms\models\Form as FormModel;
 use barrelstrength\sproutforms\SproutForms;
 
 /**
@@ -131,13 +133,21 @@ class Form extends Element
 	/**
 	 * Returns the tag's group.
 	 *
-	 * @return TagGroup
+	 * @return FormModel
 	 * @throws InvalidConfigException if [[groupId]] is missing or invalid
 	 */
 	private function _getFormModel()
 	{
-		if ($this->id === null) {
-			throw new InvalidConfigException('Form is missing its element ID');
+		if ($this->id === null && $this->fieldLayoutId)
+		{
+			$form = new FormModel(
+				[
+				'name' => $this->name,
+				'handle' => $this->handle,
+				'fieldLayoutId' => $this->fieldLayoutId,
+				]
+			);
+			return $form;
 		}
 
 		if (($form = SproutForms::$api->forms->getFormModelById($this->id)) === null) {
