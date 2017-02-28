@@ -283,7 +283,7 @@ class Forms extends Component
 	 * @param int $formId
 	 * @param int $siteId
 	 *
-	 * @return null|SproutForms_FormModel
+	 * @return null|FormElement
 	 */
 	public function getFormById(int $formId, int $siteId = null)
 	{

@@ -210,9 +210,6 @@ class FormsController extends BaseController
 
 		$variables['settings'] = Craft::$app->plugins->getPlugin('sproutforms')->getSettings();
 
-
-		$this->getView()->registerAssetBundle(FormAsset::class);
-
 		return $this->renderTemplate('sproutforms/forms/_editForm', $variables);
 	}
 }

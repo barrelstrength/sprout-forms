@@ -7,20 +7,9 @@
 	{% endif %}
 {% endif %}
 
-{% set fieldTypes = craft.fields.getAllFieldTypes() %}
-{% set fieldTypeGroups = craft.sproutForms.prepareFieldTypeSelection() %}
+{% set fieldTypes = craft.app.fields.getAllFieldTypes() %}
+{% set fieldTypeGroups = craft.sproutforms.prepareFieldTypeSelection() %}
 
-{% if field is defined %}
-	{% set fieldType = field.getFieldType() %}
-	{% set isFieldTypeMissing = not fieldType %}
-{% else %}
-	{% set isFieldTypeMissing = false %}
-{% endif %}
-
-{% if fieldType is not defined or isFieldTypeMissing %}
-	{% set fieldType = craft.fields.getFieldType('PlainText') %}
-	{% set isFieldTypeMissing = false %}
-{% endif %}
 
 <input type="hidden" name="formId" value="{{ formId }}">
 
@@ -39,8 +28,8 @@
 	{{ forms.selectField({
 		first: true,
 		required: true,
-		label: "Tab"|t,
-		instructions: "Which section should this field be displayed in?"|t,
+		label: "Tab"|t('sproutForms'),
+		instructions: "Which section should this field be displayed in?"|t('sproutForms'),
 		id: 'tabId',
 		name: 'tabId',
 		options: sectionOptions,
@@ -50,8 +39,8 @@
 {% endif %}
 
 {{ forms.textField({
-	label: "Name"|t,
-	instructions: "The user-friendly name of your field."|t,
+	label: "Name"|t('sproutForms'),
+	instructions: "The user-friendly name of your field."|t('sproutForms'),
 	id: 'field-name',
 	name: 'name',
 	value: (field is defined ? field.name : null),
@@ -63,8 +52,8 @@
 }) }}
 
 {{ forms.textField({
-	label: "Handle"|t,
-	instructions: "How you’ll refer to this field in the templates."|t,
+	label: "Handle"|t('sproutForms'),
+	instructions: "How you’ll refer to this field in the templates."|t('sproutForms'),
 	id: 'field-handle',
 	class: 'code',
 	name: 'handle',
@@ -75,8 +64,8 @@
 }) }}
 
 {{ forms.textareaField({
-	label: "Instructions"|t,
-	instructions: "Helper text to guide the author."|t,
+	label: "Instructions"|t('sproutForms'),
+	instructions: "Helper text to guide the author."|t('sproutForms'),
 	id: 'instructions',
 	class: 'nicetext',
 	name: 'instructions',
@@ -88,30 +77,29 @@
 <hr>
 
 {{ forms.selectField({
-	label: "Field Type"|t,
-	instructions: "What type of field is this?"|t ~ (fieldId is defined ? '<br><span class="error">'~"Careful—changing this may result in data loss."|t~'</span>' : ''),
+	label: "Field Type"|t('sproutForms'),
+	instructions: "What type of field is this?"|t('sproutForms') ~ (fieldId is defined ? '<br><span class="error">'~"Careful—changing this may result in data loss."|t('sproutForms')~'</span>' : ''),
 	id: 'type',
 	name: 'type',
 	hasOptgroups: true,
 	options: fieldTypeGroups,
-	value: fieldType.getClassHandle(),
-	errors: (isFieldTypeMissing ? ["The fieldtype class “{class}” could not be found."|t({ class: field.type })] : null),
+	value: className(field),
+	errors: field.getErrors('type') ?? null,
 	toggle: true
 }) }}
 
-{% for _fieldType in fieldTypes %}
-	{% set isCurrent = (_fieldType.getClassHandle() == fieldType.getClassHandle()) %}
-	<div id="{{ _fieldType.getClassHandle() }}"{% if not isCurrent %} class="hidden"{% endif %}>
-		{% namespace 'types['~_fieldType.getClassHandle()~']' %}
-			{% if isCurrent %}
-				{{ fieldType.getSettingsHtml()|raw }}
-			{% else %}
-				{{ _fieldType.getSettingsHtml()|raw }}
-			{% endif %}
+{% for type in fieldTypes %}
+	{% set isCurrent = (type == className(field)) %}
+	<div id="{{ type|id }}"{% if not isCurrent %} class="hidden"{% endif %}>
+		{% namespace 'types['~type~']' %}
+			{% set _field = isCurrent ? field : craft.app.fields.createField(type) %}
+			{{ _field.getSettingsHtml()|raw }}
 		{% endnamespace %}
 	</div>
 {% endfor %}
 
 {% if field is not defined or not field.handle %}
-	{% includeJs "new Craft.HandleGenerator('#field-name', '#field-handle');" %}
+	{% js %}
+		new Craft.HandleGenerator('#field-name', '#field-handle');
+	{% endjs %}
 {% endif %}

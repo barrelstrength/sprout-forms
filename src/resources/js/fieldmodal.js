@@ -86,8 +86,8 @@
 
 			this.$deleteSpinner = $('<div class="spinner hidden">').appendTo(this.$leftButtons);
 
-			this.$cancelBtn = $('<div class="btn disabled" role="button">').text(Craft.t('Cancel')).appendTo(this.$rightButtons);
-			this.$saveBtn = $('<div class="btn submit disabled" role="button">').text(Craft.t('Save')).appendTo(this.$rightButtons);
+			this.$cancelBtn = $('<div class="btn" role="button">').text(Craft.t('sproutForms','Cancel')).appendTo(this.$rightButtons);
+			this.$saveBtn = $('<div class="btn submit" role="button">').text(Craft.t('sproutForms','Save')).appendTo(this.$rightButtons);
 			this.$saveSpinner = $('<div class="spinner hidden">').appendTo(this.$rightButtons);
 
 			this.setContainer($container);
@@ -98,7 +98,7 @@
 
 			// Loads the field settings template file, as well as all the resources that come with it
 
-			Craft.postActionRequest('sproutForms/fields/modalField', postData, $.proxy(function(response, textStatus)
+			Craft.postActionRequest('sprout-forms/fields/modal-field', postData, $.proxy(function(response, textStatus)
 			{
 				if (textStatus === 'success')
 				{
@@ -239,7 +239,7 @@
 						}
 						else
 						{
-							Craft.displayError(Craft.t('Could not load all resources.'));
+							Craft.displayError(Craft.t('sproutForms','Could not load all resources.'));
 						}
 					}, this));
 				}
@@ -379,7 +379,7 @@
 			var inputId = this.$container.find('input[name="fieldId"]');
 			var id = inputId.length ? inputId.val() : false;
 
-			Craft.postActionRequest('sproutForms/fields/saveField', data, $.proxy(function(response, textStatus)
+			Craft.postActionRequest('sprout-forms/fields/save-field', data, $.proxy(function(response, textStatus)
 			{
 				this.$saveSpinner.addClass('hidden');
 
@@ -403,7 +403,7 @@
 							field: response.field
 						});
 
-						Craft.cp.displayNotice(Craft.t('\'{name}\' field saved.', { name: response.field.name }));
+						Craft.cp.displayNotice(Craft.t('sproutForms','\'{name}\' field saved.', { name: response.field.name }));
 					}
 
 					this.hide();
@@ -434,7 +434,7 @@
 				{
 					this.initListeners();
 
-					Craft.cp.displayError(Craft.t('An unknown error occurred.'));
+					Craft.cp.displayError(Craft.t('sproutForms','An unknown error occurred.'));
 				}
 			}, this));
 		},
@@ -454,7 +454,7 @@
 			var formId = $("#formId").val();
 			var data = {'fieldId': id, 'formId': formId};
 
-			Craft.postActionRequest('sproutForms/fields/editField', data, $.proxy(function(response, textStatus)
+			Craft.postActionRequest('sprout-forms/fields/edit-field', data, $.proxy(function(response, textStatus)
 			{
 				this.$loadSpinner.addClass('hidden');
 
@@ -480,7 +480,7 @@
 				}
 				else
 				{
-					Craft.cp.displayError(Craft.t('An unknown error occurred. '));
+					Craft.cp.displayError(Craft.t('sproutForms','An unknown error occurred. '));
 
 					this.hide();
 				}

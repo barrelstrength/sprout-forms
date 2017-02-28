@@ -49,6 +49,11 @@ class SproutForms extends \craft\base\Plugin
 		return Craft::t('sproutForms', $message, $params);
 	}
 
+	public static function log($message, $type = 'info')
+	{
+		Craft::$type($this::t($message), __METHOD__);
+	}
+
 	/**
 	 * @return array
 	 */
@@ -77,7 +82,7 @@ class SproutForms extends \craft\base\Plugin
 			'sprout-forms/entry-statuses/edit',
 
 			'sproutforms/forms/<groupId:\d+>'                        =>
-			'sproutforms/forms',
+			'sprout-forms/forms',
 		];
 	}
 

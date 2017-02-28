@@ -120,7 +120,7 @@ class Form extends Element
 	 */
 	public function getFieldLayout()
 	{
-		$formModel = $this->_getFormModel();
+		$formModel = $this->getFormModel();
 
 		if ($formModel)
 		{
@@ -136,7 +136,7 @@ class Form extends Element
 	 * @return FormModel
 	 * @throws InvalidConfigException if [[groupId]] is missing or invalid
 	 */
-	private function _getFormModel()
+	public function getFormModel()
 	{
 		if ($this->id === null && $this->fieldLayoutId)
 		{

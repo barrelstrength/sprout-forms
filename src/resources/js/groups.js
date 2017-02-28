@@ -174,18 +174,18 @@
 
 			newGroupAction: 'sprout-forms/sprout-forms/groups/save-group',
 			newGroupOnSuccessUrlBase: 'sprout-forms/forms/',
-			newGroupOnErrorMessage: Craft.t('Could not create the group:'),
+			newGroupOnErrorMessage: Craft.t('sproutForms','Could not create the group:'),
 
 			renameGroupAction: 'sprout-forms/sprout-forms/groups/save-group',
-			renameGroupOnSuccessMessage: Craft.t('Group renamed.'),
-			renameGroupOnErrorMessage: Craft.t('Could not rename the group:'),
+			renameGroupOnSuccessMessage: Craft.t('sproutForms','Group renamed.'),
+			renameGroupOnErrorMessage: Craft.t('sproutForms','Could not rename the group:'),
 
-			promptForGroupNameMessage: Craft.t('What do you want to name your group?'),
+			promptForGroupNameMessage: Craft.t('sproutForms','What do you want to name your group?'),
 
-			deleteGroupConfirmMessage: Craft.t('Are you sure you want to delete this group and all its fields?'),
+			deleteGroupConfirmMessage: Craft.t('sproutForms','Are you sure you want to delete this group and all its fields?'),
 			deleteGroupAction: 'sprout-forms/sprout-forms/groups/delete-group',
 			deleteGroupOnSuccessUrl: 'sprout-forms/forms/',
-			deleteGroupOnErrorMessage: Craft.t('Could not delete the group.'),
+			deleteGroupOnErrorMessage: Craft.t('sproutForms','Could not delete the group.'),
 		});
 	});
 

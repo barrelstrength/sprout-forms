@@ -168,7 +168,8 @@
 
 {% endblock %}
 
-{% includeJsFile "js/fields.js" %}
+{% do view.registerAssetBundle("craft\\web\\assets\\fields\\FieldsAsset") %}
+{% do view.registerAssetBundle("barrelstrength\\sproutforms\\assetbundles\\FormAsset") %}
 
 {% js %}
 	{% if not form.handle %}

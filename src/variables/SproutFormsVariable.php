@@ -55,10 +55,10 @@ class SproutFormsVariable
 	 */
 	public function displayForm($formHandle, array $renderingOptions = null)
 	{
-		$form          = sproutForms()->forms->getFormByHandle($formHandle);
-		$entry         = sproutForms()->entries->getEntryModel($form);
-		$fields        = sproutForms()->fields->getRegisteredFields();
-		$templatePaths = sproutForms()->fields->getSproutFormsTemplates($form);
+		$form          = SproutForms::$api->forms->getFormByHandle($formHandle);
+		$entry         = SproutForms::$api->entries->getEntryModel($form);
+		$fields        = SproutForms::$api->fields->getRegisteredFields();
+		$templatePaths = SproutForms::$api->fields->getSproutFormsTemplates($form);
 
 		// Set Tab template path
 		Craft::$app->templates->setTemplatesPath($templatePaths['tab']);
@@ -104,10 +104,10 @@ class SproutFormsVariable
 			return '';
 		}
 
-		$form          = sproutForms()->forms->getFormByHandle($formHandle);
-		$entry         = sproutForms()->entries->getEntryModel($form);
-		$fields        = sproutForms()->fields->getRegisteredFields();
-		$templatePaths = sproutForms()->fields->getSproutFormsTemplates($form);
+		$form          = SproutForms::$api->forms->getFormByHandle($formHandle);
+		$entry         = SproutForms::$api->entries->getEntryModel($form);
+		$fields        = SproutForms::$api->fields->getRegisteredFields();
+		$templatePaths = SproutForms::$api->fields->getSproutFormsTemplates($form);
 
 		// Set Tab template path
 		Craft::$app->templates->setTemplatesPath($templatePaths['tab']);
@@ -180,11 +180,11 @@ class SproutFormsVariable
 			);
 		}
 
-		$form  = sproutForms()->forms->getFormByHandle($formHandle);
-		$entry = sproutForms()->entries->getEntryModel($form);
+		$form  = SproutForms::$api->forms->getFormByHandle($formHandle);
+		$entry = SproutForms::$api->entries->getEntryModel($form);
 
 		// Determine where our form and field template should come from
-		$templatePaths = sproutForms()->fields->getSproutFormsTemplates($form);
+		$templatePaths = SproutForms::$api->fields->getSproutFormsTemplates($form);
 
 		$field = $form->getField($fieldHandle);
 
@@ -192,7 +192,7 @@ class SproutFormsVariable
 		{
 			$fieldTypeClass  = get_class($field->getFieldType());
 			$fieldTypeString = str_replace('Craft\\', '', str_replace('FieldType', '', $fieldTypeClass));
-			$formField       = sproutForms()->fields->getRegisteredField($fieldTypeString);
+			$formField       = SproutForms::$api->fields->getRegisteredField($fieldTypeString);
 
 			if ($formField)
 			{
@@ -235,7 +235,7 @@ class SproutFormsVariable
 	 */
 	public function getFormById($id)
 	{
-		return sproutForms()->forms->getFormById($id);
+		return SproutForms::$api->forms->getFormById($id);
 	}
 
 	/**
@@ -247,7 +247,7 @@ class SproutFormsVariable
 	 */
 	public function getForm($formHandle)
 	{
-		return sproutForms()->forms->getFormByHandle($formHandle);
+		return SproutForms::$api->forms->getFormByHandle($formHandle);
 	}
 
 	/**
@@ -257,7 +257,7 @@ class SproutFormsVariable
 	 */
 	public function getAllForms()
 	{
-		return sproutForms()->forms->getAllForms();
+		return SproutForms::$api->forms->getAllForms();
 	}
 
 	/**
@@ -269,7 +269,7 @@ class SproutFormsVariable
 	 */
 	public function getEntryById($id)
 	{
-		return sproutForms()->entries->getEntryById($id);
+		return SproutForms::$api->entries->getEntryById($id);
 	}
 
 	/**
@@ -281,7 +281,7 @@ class SproutFormsVariable
 	 */
 	public function getEntry(SproutForms_FormModel $form)
 	{
-		return sproutForms()->entries->getEntryModel($form);
+		return SproutForms::$api->entries->getEntryModel($form);
 	}
 
 	/**
@@ -294,7 +294,7 @@ class SproutFormsVariable
 		if (Craft::$app->httpSession->get('lastEntryId'))
 		{
 			$entryId = Craft::$app->httpSession->get('lastEntryId');
-			$entry   = sproutForms()->entries->getEntryById($entryId);
+			$entry   = SproutForms::$api->entries->getEntryById($entryId);
 
 			Craft::$app->httpSession->destroy('lastEntryId');
 		}
@@ -323,17 +323,17 @@ class SproutFormsVariable
 	 */
 	public function getFormsByGroupId($id)
 	{
-		return sproutForms()->groups->getFormsByGroupId($id);
+		return SproutForms::$api->groups->getFormsByGroupId($id);
 	}
 
 	/**
-	 * @see sproutForms()->fields->prepareFieldTypeSelection()
+	 * @see SproutForms::$api->fields->prepareFieldTypeSelection()
 	 *
 	 * @return array
 	 */
 	public function prepareFieldTypeSelection()
 	{
-		return sproutForms()->fields->prepareFieldTypeSelection();
+		return SproutForms::$api->fields->prepareFieldTypeSelection();
 	}
 
 	public function multiStepForm($settings)
@@ -368,7 +368,7 @@ class SproutFormsVariable
 	 */
 	public function getRegisteredField($type)
 	{
-		$fields = sproutForms()->fields->getRegisteredFields();
+		$fields = SproutForms::$api->fields->getRegisteredFields();
 
 		foreach ($fields as $field)
 		{
@@ -408,7 +408,7 @@ class SproutFormsVariable
 	 */
 	public function canCreateExamples()
 	{
-		return sproutForms()->canCreateExamples();
+		return SproutForms::$api->canCreateExamples();
 	}
 
 	/**
@@ -416,7 +416,7 @@ class SproutFormsVariable
 	 */
 	public function hasExamples()
 	{
-		return sproutForms()->hasExamples();
+		return SproutForms::$api->hasExamples();
 	}
 
 	/**
@@ -471,7 +471,7 @@ class SproutFormsVariable
 	 */
 	public function getEntryStatuses()
 	{
-		return sproutForms()->entries->getAllEntryStatuses();
+		return SproutForms::$api->entries->getAllEntryStatuses();
 	}
 }
 

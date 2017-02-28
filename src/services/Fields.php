@@ -6,6 +6,8 @@ use yii\base\Component;
 use craft\base\Field;
 use craft\records\Field as FieldRecord;
 use craft\fields\PlainText;
+use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
+use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
 
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\models\Form as FormModel;
@@ -175,7 +177,7 @@ class Fields extends Component
 	{
 		if ($fieldId)
 		{
-			$record = FieldLayoutFieldRecord::model()->find('fieldId=:fieldId', array(':fieldId' => $fieldId));
+			$record = FieldLayoutFieldRecord::find('fieldId=:fieldId', array(':fieldId' => $fieldId));
 
 			if (!$record)
 			{
@@ -251,7 +253,10 @@ class Fields extends Component
 	{
 		if (is_null($this->registeredFields))
 		{
-			$this->registeredFields = array();
+			// @todo - research how to hooks works
+			//https://github.com/craftcms/docs/blob/abcae19f1bf95881ffbc9166e1da59f7dc74b6ee/en/updating-plugins.md#plugin-hooks
+			$this->registeredFields = [];
+			/*
 			$results                = Craft::$app->plugins->call('registerSproutFormsFields');
 
 			if (!empty($results))
@@ -262,7 +267,7 @@ class Fields extends Component
 					{
 						/**
 						 * @var SproutFormsBaseField $instance
-						 */
+
 						foreach ($fields as $instance)
 						{
 							$this->registeredFields[get_class($instance)] = $instance;
@@ -270,6 +275,7 @@ class Fields extends Component
 					}
 				}
 			}
+			*/
 		}
 
 		return $this->registeredFields;
@@ -306,8 +312,8 @@ class Fields extends Component
 	{
 		$fields         = $this->getRegisteredFields();
 		$fieldTypes     = Craft::$app->fields->getAllFieldTypes();
-		$standardFields = array();
-		$customFields   = array();
+		$standardFields = [];
+		$customFields   = [];
 
 		if (count($fields))
 		{
@@ -339,16 +345,23 @@ class Fields extends Component
 		if (count($fieldTypes))
 		{
 			// Loop through remaining field types and add them to the custom group
-			foreach ($fieldTypes as $handle => $fieldType)
+
+			foreach ($fieldTypes as $class)
 			{
-				$customFields[$handle] = $fieldType->getName();
+				if ($class::isSelectable())
+				{
+					$customFields[] = [
+						'value' => $class,
+						'label' => $class::displayName()
+					];
+				}
 			}
 
 			// Sort fields alphabetically
 			ksort($customFields);
 
 			// Add the group label to the beginning of the custom group
-			$customFields = $this->prependKeyValue($customFields, 'customFieldGroup', array('optgroup' => Craft::t('Custom Fields')));
+			$customFields = $this->prependKeyValue($customFields, 'customFieldGroup', ['optgroup' => SproutForms::t('Custom Fields')]);
 		}
 
 		return array_merge($standardFields, $customFields);
@@ -539,10 +552,10 @@ class Fields extends Component
 		{
 			$sortOrder = 0;
 
-			$fieldLayoutFields = FieldLayoutFieldRecord::model()->findAll(array(
+			$fieldLayoutFields = FieldLayoutFieldRecord::findAll([
 				'condition' => 'tabId = :tabId AND layoutId = :layoutId',
-				'params'    => array(':tabId' => $tabId, ':layoutId' => $form->fieldLayoutId)
-			));
+				'params'    => [':tabId' => $tabId, ':layoutId' => $form->fieldLayoutId]
+			]);
 
 			$sortOrder = count($fieldLayoutFields) + 1;
 
@@ -574,10 +587,10 @@ class Fields extends Component
 
 		if (isset($field) && isset($form))
 		{
-			$fieldRecord  = FieldLayoutFieldRecord::model()->find(array(
+			$fieldRecord  = FieldLayoutFieldRecord::find([
 				'condition' => 'fieldId = :fieldId AND layoutId = :layoutId',
-				'params'    => array(':fieldId' => $field->id, ':layoutId' => $form->fieldLayoutId)
-			));
+				'params'    => [':fieldId' => $field->id, ':layoutId' => $form->fieldLayoutId]
+			]);
 
 			if ($fieldRecord)
 			{
@@ -587,7 +600,7 @@ class Fields extends Component
 			}
 			else
 			{
-				SproutFormsPlugin::log("Unable to find the FieldLayoutFieldRecord");
+				SproutForms::log("Unable to find the FieldLayoutFieldRecord");
 			}
 		}
 
@@ -602,17 +615,19 @@ class Fields extends Component
 	/**
 	 * Loads the sprout modal field via ajax.
 	 *
-	 * @param SproutForms_FormRecord $form
+	 * @param FormElement $form
 	 * @param FieldModel|null        $field
 	 * @param int|null               $tabId
 	 *
 	 * @return array
 	 */
-	public function getModalFieldTemplate($form, FieldModel $field = null, $tabId = null)
+	public function getModalFieldTemplate($form, $field = null, $tabId = null)
 	{
-		$data          = array();
+		$fieldsService = Craft::$app->getFields();
+
+		$data          = [];
 		$data['tabId'] = null;
-		$data['field'] = new FieldModel();
+		$data['field'] = $fieldsService->createField(PlainText::class);
 
 		if ($field)
 		{
@@ -637,15 +652,15 @@ class Fields extends Component
 		$data['sections'] = $form->getFieldLayout()->getTabs();
 		$data['formId']   = $form->id;
 
-		$html = Craft::$app->templates->render('sproutforms/forms/_editFieldModal', $data);
-		$js   = Craft::$app->templates->getFootHtml();
-		$css  = Craft::$app->templates->getHeadHtml();
+		$html = Craft::$app->getView()->renderTemplate('sproutforms/forms/_editFieldModal', $data);
+		$js   = Craft::$app->getView()->getHeadHtml();
+		$css  = Craft::$app->getView()->getBodyHtml();
 
-		return array(
+		return [
 			'html' => $html,
 			'js'   => $js,
 			'css'  => $css
-		);
+		];
 	}
 
 	/**
