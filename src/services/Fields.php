@@ -544,7 +544,7 @@ class Fields extends Component
 	 *
 	 * @return boolean
 	 */
-	public function addFieldToLayout($field, $form, $tabId)
+	public function addFieldToLayout($field, $form, $tabId): bool
 	{
 		$response = false;
 
@@ -553,8 +553,7 @@ class Fields extends Component
 			$sortOrder = 0;
 
 			$fieldLayoutFields = FieldLayoutFieldRecord::findAll([
-				'condition' => 'tabId = :tabId AND layoutId = :layoutId',
-				'params'    => [':tabId' => $tabId, ':layoutId' => $form->fieldLayoutId]
+				'tabId' => $tabId, 'layoutId' => $form->fieldLayoutId
 			]);
 
 			$sortOrder = count($fieldLayoutFields) + 1;
@@ -575,21 +574,21 @@ class Fields extends Component
 	/**
 	 * This service allows update a field to a current FieldLayoutFieldRecord
 	 *
-	 * @param FieldModel            $field
-	 * @param SproutForms_FormModel $form
+	 * @param FieldInterface        $field
+	 * @param FormElement $form
 	 * @param int                   $tabId
 	 *
 	 * @return boolean
 	 */
-	public function updateFieldToLayout($field, $form, $tabId)
+	public function updateFieldToLayout($field, $form, $tabId): bool
 	{
 		$response = false;
 
 		if (isset($field) && isset($form))
 		{
-			$fieldRecord  = FieldLayoutFieldRecord::find([
-				'condition' => 'fieldId = :fieldId AND layoutId = :layoutId',
-				'params'    => [':fieldId' => $field->id, ':layoutId' => $form->fieldLayoutId]
+			$fieldRecord  = FieldLayoutFieldRecord::findOne([
+				'fieldId' => $field->id,
+				'layoutId' => $form->fieldLayoutId
 			]);
 
 			if ($fieldRecord)

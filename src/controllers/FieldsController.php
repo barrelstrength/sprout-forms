@@ -5,6 +5,7 @@ use Craft;
 use craft\web\Controller as BaseController;
 use craft\helpers\UrlHelper;
 use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
+use craft\base\Field;
 
 use barrelstrength\sproutforms\SproutForms;
 
@@ -29,47 +30,32 @@ class FieldsController extends BaseController
 	public function actionSaveField()
 	{
 		$this->requirePostRequest();
+		$request       = Craft::$app->getRequest();
 		$fieldsService = Craft::$app->getFields();
 		// Make sure our field has a section
 		// @TODO - handle this much more gracefully
-		$tabId = Craft::$app->getRequest()->getBodyParam('tabId');
+		$tabId = $request->getBodyParam('tabId');
 
 		// Get the Form these fields are related to
-		$formId = Craft::$app->request->getRequiredBodyParam('formId');
+		$formId = $request->getRequiredBodyParam('formId');
 		$form   = SproutForms::$api->forms->getFormById($formId);
 
-		$field = $fieldsService->createField(PlainText::class);
+		$type = $request->getRequiredBodyParam('type');
 
-
-		$field->id           = Craft::$app->getRequest()->getBodyParam('fieldId');
-		$field->name         = Craft::$app->request->getRequiredBodyParam('name');
-		$field->handle       = Craft::$app->request->getRequiredBodyParam('handle');
-		$field->instructions = Craft::$app->getRequest()->getBodyParam('instructions');
-		$field->required     = Craft::$app->getRequest()->getBodyParam('required');
-		$field->translatable = (bool) Craft::$app->getRequest()->getBodyParam('translatable');
-
-		$field->type = Craft::$app->request->getRequiredBodyParam('type');
-
-		$typeSettings = Craft::$app->getRequest()->getBodyParam('types');
-
-		if (isset($typeSettings[$field->type]))
-		{
-			$field->settings = $typeSettings[$field->type];
-		}
+		$field = $fieldsService->createField([
+			'type' => $type,
+			'id' => $request->getBodyParam('fieldId'),
+			'name' => $request->getBodyParam('name'),
+			'handle' => $request->getBodyParam('handle'),
+			'instructions' => $request->getBodyParam('instructions'),
+			// @todo - add locales
+			'translationMethod' =>Field::TRANSLATION_METHOD_NONE,
+			'settings' => $request->getBodyParam('types.'.$type),
+		]);
 
 		// Set our field context
 		Craft::$app->content->fieldContext = $form->getFormModel()->getFieldContext();
 		Craft::$app->content->contentTable = $form->getFormModel()->getContentTable();
-
-		// Does our field validate?
-		if (!Craft::$app->fields->validateField($field))
-		{
-			SproutForms::log("Field does not validate.");
-			$variables['tabId'] = $tabId;
-			$variables['field'] = $field;
-
-			$this->_returnJson(false, $field, $form);
-		}
 
 		// Save a new field
 		if (!$field->id)
@@ -83,7 +69,16 @@ class FieldsController extends BaseController
 		}
 
 		// Save our field
-		Craft::$app->fields->saveField($field);
+		if (!$fieldsService->saveField($field))
+		{
+			// Does not validate
+			$errros = $field->getErrors();
+			SproutForms::log("Field does not validate.");
+			$variables['tabId'] = $tabId;
+			$variables['field'] = $field;
+
+			return $this->_returnJson(false, $field, $form);
+		}
 
 		// Check if the handle is updated to also update the titleFormat
 		if (!$isNewField)
@@ -105,16 +100,9 @@ class FieldsController extends BaseController
 		$tabName        = null;
 		$response       = false;
 
-		// If no tabs exist, let's create a
-		// default one for all of our fields
-		if (!$oldTabs)
+		if ($oldTabs)
 		{
-			$form    = SproutForms::$api->fields->createDefaultTab($form, $field);
-			$tabName = SproutForms::$api->fields->getDefaultTabName();
-		}
-		else
-		{
-			$tabName  = FieldLayoutTabRecord::model()->findByPk($tabId)->name;
+			$tabName  = FieldLayoutTabRecord::findOne($tabId)->name;
 
 			if ($isNewField)
 			{
@@ -130,18 +118,18 @@ class FieldsController extends BaseController
 		// field layout of our Form Element
 		if ($response)
 		{
-			SproutFormsPlugin::log('Field Saved');
+			SproutForms::log('Field Saved');
 
-			$this->_returnJson(true, $field, $form, $tabName);
+			return $this->_returnJson(true, $field, $form, $tabName);
 		}
 		else
 		{
 			$variables['tabId'] = $tabId;
 			$variables['field'] = $field;
-			SproutFormsPlugin::log("Couldn't save field.");
-			Craft::$app->userSession->setError(Craft::t('Couldn’t save field.'));
+			SproutForms::log("Couldn't save field.");
+			Craft::$app->user->setError(SproutForms::t('Couldn’t save field.'));
 
-			$this->_returnJson(false, $field, $form);
+			return $this->_returnJson(false, $field, $form);
 		}
 	}
 
@@ -186,7 +174,7 @@ class FieldsController extends BaseController
 		else
 		{
 			$message = Craft::t("The field requested to edit no longer exists.");
-			SproutFormsPlugin::log($message);
+			SproutForms::log($message);
 
 			$this->returnJson(array(
 				'success' => false,
@@ -214,17 +202,16 @@ class FieldsController extends BaseController
 		));
 	}
 
-	private function _returnJson($success, $field, $form, $tabName = null)
+	public function _returnJson($success, $field, $form, $tabName = null)
 	{
 		return $this->asJson([
 			'success'  => $success,
-			'errors'   => $field->getAllErrors(),
+			'errors'   => $field->getErrors(),
 			'field'    => [
 				'id'           => $field->id,
 				'name'         => $field->name,
 				'handle'       => $field->handle,
 				'instructions' => $field->instructions,
-				'translatable' => $field->translatable,
 				'group'        => [
 					'name' => $tabName,
 				],

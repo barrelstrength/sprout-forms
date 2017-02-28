@@ -51,7 +51,7 @@ class SproutForms extends \craft\base\Plugin
 
 	public static function log($message, $type = 'info')
 	{
-		Craft::$type($this::t($message), __METHOD__);
+		Craft::$type(self::t($message), __METHOD__);
 	}
 
 	/**
