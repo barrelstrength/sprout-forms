@@ -128,7 +128,7 @@ class FieldsController extends BaseController
 			$variables['tabId'] = $tabId;
 			$variables['field'] = $field;
 			SproutForms::log("Couldn't save field.");
-			Craft::$app->user->setError(SproutForms::t('Couldn’t save field.'));
+			Craft::$app->getSession()->setError(SproutForms::t('Couldn’t save field.'));
 
 			return $this->_returnJson(false, $field, $form);
 		}
@@ -192,7 +192,7 @@ class FieldsController extends BaseController
 	 */
 	public function actionReorderFields()
 	{
-		Craft::$app->userSession->requireAdmin();
+		Craft::$app->getSession()->requireAdmin();
 		$this->requirePostRequest();
 		$this->requireAjaxRequest();
 

@@ -7,7 +7,8 @@ use craft\helpers\UrlHelper;
 
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\assetbundles\FormAsset;
-use barrelstrength\sproutforms\elements\Form;
+use barrelstrength\sproutforms\elements\Form as FormElement;
+use barrelstrength\sproutforms\models\Form as FormModel;
 
 class FormsController extends BaseController
 {
@@ -28,14 +29,15 @@ class FormsController extends BaseController
 	{
 		$this->requirePostRequest();
 
-		$form = new Form();
+		$request = Craft::$app->getRequest();
+		$form    = new FormModel();
 
-		if (Craft::$app->getRequest()->getBodyParam('saveAsNew'))
+		if ($request->getBodyParam('saveAsNew'))
 		{
 			$form->saveAsNew = true;
 			$duplicateForm = SproutForms::$api()->forms->createNewForm(
-				Craft::$app->getRequest()->getBodyParam('name'),
-				Craft::$app->getRequest()->getBodyParam('handle')
+				$request->getBodyParam('name'),
+				$request->getBodyParam('handle')
 			);
 
 			if ($duplicateForm)
@@ -49,30 +51,30 @@ class FormsController extends BaseController
 		}
 		else
 		{
-			$form->id = Craft::$app->getRequest()->getBodyParam('id');
+			$form->id = $request->getBodyParam('id');
 		}
 
-		$form->groupId              = Craft::$app->getRequest()->getBodyParam('groupId');
-		$form->name                 = Craft::$app->getRequest()->getBodyParam('name');
-		$form->handle               = Craft::$app->getRequest()->getBodyParam('handle');
-		$form->titleFormat          = Craft::$app->getRequest()->getBodyParam('titleFormat');
-		$form->displaySectionTitles = Craft::$app->getRequest()->getBodyParam('displaySectionTitles');
-		$form->redirectUri          = Craft::$app->getRequest()->getBodyParam('redirectUri');
-		$form->submitAction         = Craft::$app->getRequest()->getBodyParam('submitAction');
-		$form->savePayload          = Craft::$app->getRequest()->getBodyParam('savePayload', 0);
-		$form->submitButtonText     = Craft::$app->getRequest()->getBodyParam('submitButtonText');
+		$form->groupId              = $request->getBodyParam('groupId');
+		$form->name                 = $request->getBodyParam('name');
+		$form->handle               = $request->getBodyParam('handle');
+		$form->titleFormat          = $request->getBodyParam('titleFormat');
+		$form->displaySectionTitles = $request->getBodyParam('displaySectionTitles');
+		$form->redirectUri          = $request->getBodyParam('redirectUri');
+		$form->submitAction         = $request->getBodyParam('submitAction');
+		$form->savePayload          = $request->getBodyParam('savePayload', 0);
+		$form->submitButtonText     = $request->getBodyParam('submitButtonText');
 
-		$form->notificationEnabled      = Craft::$app->getRequest()->getBodyParam('notificationEnabled');
-		$form->notificationRecipients   = Craft::$app->getRequest()->getBodyParam('notificationRecipients');
-		$form->notificationSubject      = Craft::$app->getRequest()->getBodyParam('notificationSubject');
-		$form->notificationSenderName   = Craft::$app->getRequest()->getBodyParam('notificationSenderName');
-		$form->notificationSenderEmail  = Craft::$app->getRequest()->getBodyParam('notificationSenderEmail');
-		$form->notificationReplyToEmail = Craft::$app->getRequest()->getBodyParam('notificationReplyToEmail');
-		$form->enableTemplateOverrides  = Craft::$app->getRequest()->getBodyParam('enableTemplateOverrides', 0);
+		$form->notificationEnabled      = $request->getBodyParam('notificationEnabled');
+		$form->notificationRecipients   = $request->getBodyParam('notificationRecipients');
+		$form->notificationSubject      = $request->getBodyParam('notificationSubject');
+		$form->notificationSenderName   = $request->getBodyParam('notificationSenderName');
+		$form->notificationSenderEmail  = $request->getBodyParam('notificationSenderEmail');
+		$form->notificationReplyToEmail = $request->getBodyParam('notificationReplyToEmail');
+		$form->enableTemplateOverrides  = $request->getBodyParam('enableTemplateOverrides', 0);
 		$form->templateOverridesFolder  = $form->enableTemplateOverrides
-			? Craft::$app->getRequest()->getBodyParam('templateOverridesFolder')
+			? $request->getBodyParam('templateOverridesFolder')
 			: null;
-		$form->enableFileAttachments    = Craft::$app->getRequest()->getBodyParam('enableFileAttachments');
+		$form->enableFileAttachments    = $request->getBodyParam('enableFileAttachments');
 
 		// Set the field layout
 		$fieldLayout = Craft::$app->getFields()->assembleLayoutFromPost();
@@ -86,7 +88,7 @@ class FormsController extends BaseController
 		$form->setFieldLayout($fieldLayout);
 
 		// Delete any fields removed from the layout
-		$deletedFields = Craft::$app->getRequest()->getBodyParam('deletedFields');
+		$deletedFields = $request->getBodyParam('deletedFields');
 
 		if (count($deletedFields) > 0)
 		{
@@ -121,14 +123,14 @@ class FormsController extends BaseController
 		// Save it
 		if (SproutForms::$api->forms->saveForm($form))
 		{
-			Craft::$app->userSession->setNotice(SproutForms::t('Form saved.'));
+			Craft::$app->getSession()->setNotice(SproutForms::t('Form saved.'));
 
 			$_POST['redirect'] = str_replace('{id}', $form->id, $_POST['redirect']);
 			return $this->redirectToPostedUrl();
 		}
 		else
 		{
-			Craft::$app->userSession->setError(SproutForms::t('Couldn’t save form.'));
+			Craft::$app->getSession()->setError(SproutForms::t('Couldn’t save form.'));
 
 			$notificationFields = [
 				'notificationRecipients',
@@ -154,6 +156,8 @@ class FormsController extends BaseController
 					'notificationErrors' => $notificationErrors
 				]
 			);
+
+			return null;
 		}
 	}
 

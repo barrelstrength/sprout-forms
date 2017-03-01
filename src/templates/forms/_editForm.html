@@ -20,13 +20,13 @@
 {% set title = form.name %}
 
 {% set fullPageForm = true %}
-{% set saveShortcutRedirect = 'sproutforms/forms/edit/{id}#settings' %}
+{% set saveShortcutRedirect = 'sprout-forms/forms/edit/{id}#settings' %}
 {% set selectedTab = 'fields' %}
 
 {% block saveButton %}
 
-<input type="hidden" name="action" value="sproutForms/forms/saveForm">
-<input type="hidden" name="redirect" value="sproutforms/forms">
+<input type="hidden" name="action" value="sprout-forms/forms/save-form">
+<input type="hidden" name="redirect" value="sprout-forms/forms">
 <input type="hidden" id="formId" name="id" value="{{ form.id is defined ? form.id : '' }}">
 
 <div class="btngroup submit first">
