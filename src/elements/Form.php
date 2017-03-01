@@ -8,6 +8,8 @@ use yii\base\ErrorHandler;
 use craft\db\Query;
 use craft\helpers\UrlHelper;
 use yii\base\InvalidConfigException;
+use craft\validators\HandleValidator;
+use craft\validators\UniqueValidator;
 
 use craft\behaviors\FieldLayoutBehavior;
 use craft\behaviors\FieldLayoutTrait;
@@ -363,7 +365,7 @@ class Form extends Element
 	{
 		return [
 			[['name', 'handle'], 'required'],
-			[['name', 'handle'], 'string', 'max' => 255],
+			[['name', 'handle'], 'string', 'max' => 10],
 			[
 				['handle'],
 				HandleValidator::class,

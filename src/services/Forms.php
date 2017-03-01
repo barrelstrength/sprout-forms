@@ -87,35 +87,18 @@ class Forms extends Component
 		}
 
 		// Create our new Form Record
-		$formRecord->name                     = $form->name;
-		$formRecord->handle                   = $form->handle;
-		$formRecord->titleFormat              = ($form->titleFormat ? $form->titleFormat : "{dateCreated|date('D, d M Y H:i:s')}");
-		$formRecord->displaySectionTitles     = $form->displaySectionTitles;
-		$formRecord->groupId                  = $form->groupId;
-		$formRecord->redirectUri              = $form->redirectUri;
-		$formRecord->submitAction             = $form->submitAction;
-		$formRecord->savePayload              = $form->savePayload;
-		$formRecord->submitButtonText         = $form->submitButtonText;
-		$formRecord->notificationEnabled      = $form->notificationEnabled;
-		$formRecord->notificationRecipients   = $form->notificationRecipients;
-		$formRecord->notificationSubject      = $form->notificationSubject;
-		$formRecord->notificationSenderName   = $form->notificationSenderName;
-		$formRecord->notificationSenderEmail  = $form->notificationSenderEmail;
-		$formRecord->notificationReplyToEmail = $form->notificationReplyToEmail;
-		$formRecord->enableTemplateOverrides  = $form->enableTemplateOverrides;
-		$formRecord->templateOverridesFolder  = $form->templateOverridesFolder;
-		$formRecord->enableFileAttachments    = $form->enableFileAttachments;
+
+		$form->titleFormat = ($form->titleFormat ? $form->titleFormat : "{dateCreated|date('D, d M Y H:i:s')}");
 
 		// @todo - Why do we need these now?
 		// Things were working fine without these and now 2.5 is throwing errors unless we set them explicitly
 		if ($isNewForm)
 		{
-			$formRecord->dateCreated = date('Y-m-d h:m:s');
-			$formRecord->dateUpdated = date('Y-m-d h:m:s');
+			$form->dateCreated = date('Y-m-d h:m:s');
+			$form->dateUpdated = date('Y-m-d h:m:s');
 		}
 
-		$formRecord->validate();
-		$form->addErrors($formRecord->getErrors());
+		$form->validate();
 
 		if (!$form->hasErrors())
 		{
@@ -136,7 +119,7 @@ class Forms extends Component
 					// Assign our new layout id info to our form model and records
 					$form->fieldLayoutId = $fieldLayout->id;
 					$form->setFieldLayout($fieldLayout);
-					$formRecord->fieldLayoutId = $fieldLayout->id;
+					$form->fieldLayoutId = $fieldLayout->id;
 				}
 				else
 				{
@@ -156,7 +139,7 @@ class Forms extends Component
 						// form model and records
 						$form->fieldLayoutId = $fieldLayout->id;
 						$form->setFieldLayout($fieldLayout);
-						$formRecord->fieldLayoutId = $fieldLayout->id;
+						$form->fieldLayoutId = $fieldLayout->id;
 					}
 					else
 					{
@@ -182,14 +165,10 @@ class Forms extends Component
 					}
 				}
 
-				// Craft 3 new stuff
-				$formElement = new FormElement($formRecord->attributes);
-
-				if (Craft::$app->elements->saveElement($formElement, false))
+				if (Craft::$app->elements->saveElement($form, false))
 				{
 					// Save our Form Settings - Craft3 afterSave form element
-					//$formRecord->save(false);
-					$form->id = $formElement->id;
+					//$form->save(false);
 
 					if ($transaction !== null)
 					{
@@ -387,7 +366,7 @@ class Forms extends Component
 	 * @param string $field
 	 * @param string $value
 	 *
-	 * @return FormRecord
+	 * @return $form
 	 */
 	public function getFieldValue($field, $value)
 	{
