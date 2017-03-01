@@ -55,8 +55,8 @@ class FieldsController extends BaseController
 		]);
 
 		// Set our field context
-		Craft::$app->content->fieldContext = $form->getFormModel()->getFieldContext();
-		Craft::$app->content->contentTable = $form->getFormModel()->getContentTable();
+		Craft::$app->content->fieldContext = $form->getFieldContext();
+		Craft::$app->content->contentTable = $form->getContentTable();
 
 		// Save a new field
 		if (!$field->id)

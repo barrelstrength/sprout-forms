@@ -10,7 +10,6 @@ use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
 use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
 
 use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutforms\models\Form as FormModel;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\records\Form as FormRecord;
 
@@ -416,7 +415,7 @@ class Fields extends Component
 	/**
 	 * This service allows create a default tab given a form
 	 *
-	 * @param FormModel $form
+	 * @param FormElement $form
 	 *
 	 * @return SproutForms_FormModel | null
 	 */

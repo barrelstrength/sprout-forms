@@ -5,9 +5,11 @@ use Craft;
 use yii\base\Component;
 use craft\helpers\StringHelper;
 use craft\helpers\MigrationHelper;
+use craft\validators\HandleValidator;
+use craft\validators\UniqueValidator;
+
 
 use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutforms\models\Form as FormModel;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\records\Form as FormRecord;
 use barrelstrength\sproutforms\migrations\CreateFormContentTable;
@@ -48,12 +50,12 @@ class Forms extends Component
 	}
 
 	/**
-	 * @param FormModel $form
+	 * @param FormElement $form
 	 *
 	 * @throws \Exception
 	 * @return bool
 	 */
-	public function saveForm(FormModel $form)
+	public function saveForm(FormElement $form)
 	{
 		$formRecord = new FormRecord();
 		$isNewForm  = true;
@@ -323,7 +325,7 @@ class Forms extends Component
 	 *
 	 * @return string|false
 	 */
-	public function getContentTableName(FormModel $form, $useOldHandle = false)
+	public function getContentTableName(FormElement $form, $useOldHandle = false)
 	{
 		if ($useOldHandle)
 		{
@@ -651,7 +653,7 @@ class Forms extends Component
 
 	public function createNewForm($name = null, $handle = null)
 	{
-		$form   = new FormModel();
+		$form   = new FormElement();
 		$name   = empty($name) ? 'Form' : $name ;
 		$handle = empty($handle) ? 'form' : $handle;
 
@@ -675,25 +677,4 @@ class Forms extends Component
 		return false;
 	}
 
-	/**
-	 * Returns a form model by its ID.
-	 *
-	 * @param int $formId
-	 *
-	 * @return FormModel|null
-	 */
-	public function getFormModelById(int $formId)
-	{
-		if (($formRecord = FormRecord::findOne($formId)) === null)
-		{
-			return null;
-		}
-
-		return $model = new FormModel($formRecord->toArray([
-			'id',
-			'name',
-			'handle',
-			'fieldLayoutId',
-		]));
-	}
 }

@@ -65,25 +65,25 @@ class SproutForms extends \craft\base\Plugin
 			'sproutforms/forms/new'                                  =>
 			'sprout-forms/forms/edit-form-template',
 
-			'sproutforms/forms/edit/<formId:\d+>'                    =>
+			'sprout-forms/forms/edit/<formId:\d+>'                    =>
 			'sprout-forms/forms/edit-form-template',
 
-			'sproutforms/entries/edit/<entryId:\d+>'                 =>
+			'sprout-forms/entries/edit/<entryId:\d+>'                 =>
 			'sprout-forms/entries/edit-entry-template',
 
-			'sproutforms/settings/(general|advanced)'                =>
+			'sprout-forms/settings/(general|advanced)'                =>
 			'sprout-forms/settings/settings-index-template',
 
-			'sproutforms/settings/entrystatuses'                     =>
+			'sprout-forms/settings/entrystatuses'                     =>
 			'sprout-forms/entry-statuses/index',
 
-			'sproutforms/settings/entrystatuses/new'                 =>
+			'sprout-forms/settings/entrystatuses/new'                 =>
 			'sprout-forms/entry-statuses/edit',
 
-			'sproutforms/settings/entrystatuses/<entryStatusId:\d+>' =>
+			'sprout-forms/settings/entrystatuses/<entryStatusId:\d+>' =>
 			'sprout-forms/entry-statuses/edit',
 
-			'sproutforms/forms/<groupId:\d+>'                        =>
+			'sprout-forms/forms/<groupId:\d+>'                        =>
 			'sprout-forms/forms',
 		];
 	}

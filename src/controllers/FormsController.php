@@ -8,7 +8,6 @@ use craft\helpers\UrlHelper;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\assetbundles\FormAsset;
 use barrelstrength\sproutforms\elements\Form as FormElement;
-use barrelstrength\sproutforms\models\Form as FormModel;
 
 class FormsController extends BaseController
 {
@@ -30,7 +29,7 @@ class FormsController extends BaseController
 		$this->requirePostRequest();
 
 		$request = Craft::$app->getRequest();
-		$form    = new FormModel();
+		$form    = new FormElement();
 
 		if ($request->getBodyParam('saveAsNew'))
 		{

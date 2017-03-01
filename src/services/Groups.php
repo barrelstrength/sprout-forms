@@ -5,7 +5,7 @@ use Craft;
 use yii\base\Component;
 
 use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutforms\models\Form as FormModel;
+use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\models\FormGroup as FormGroupModel;
 use barrelstrength\sproutforms\records\FormGroup as FormGroupRecord;
 
@@ -122,7 +122,7 @@ class Groups extends Component
 	 *
 	 * @param  int $groupId
 	 *
-	 * @return SproutForms_FormModel
+	 * @return FormElement
 	 */
 	public function getFormsByGroupId($groupId)
 	{
@@ -135,7 +135,7 @@ class Groups extends Component
 
 		foreach ($query as $key => $value)
 		{
-			$query[$key] = new FormModel($value);
+			$query[$key] = new FormElement($value);
 		}
 
 		return $query;
