@@ -3,11 +3,11 @@
 {% set subnav = {
 	entries: {
 		label: "Entries"|t,
-		url: url('sproutforms/entries')
+		url: url('sprout-forms/entries')
 	},
 	forms: {
 		label: "Forms"|t,
-		url: url('sproutforms/forms')
+		url: url('sprout-forms/forms')
 	}
 } %}
 
@@ -15,9 +15,9 @@
 	{% set subnav = subnav|merge({
 		settings: {
 			label: "Settings"|t,
-			url: url('sproutforms/settings')
+			url: url('sprout-forms/settings')
 		}
 	}) %}
 {% endif %}
 
-{% set selectedSubnavItem = craft.request.segment(2) %}
+{% set selectedSubnavItem = craft.app.request.segment(2) %}

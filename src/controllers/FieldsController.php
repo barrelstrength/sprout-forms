@@ -5,6 +5,7 @@ use Craft;
 use craft\web\Controller as BaseController;
 use craft\helpers\UrlHelper;
 use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
+use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
 use craft\base\Field;
 
 use barrelstrength\sproutforms\SproutForms;
@@ -139,47 +140,48 @@ class FieldsController extends BaseController
 	 */
 	public function actionEditField()
 	{
-		$this->requireAjaxRequest();
+		$this->requireAcceptsJson();
+		$request = Craft::$app->getRequest();
 
-		$id     = Craft::$app->getRequest()->getBodyParam('fieldId');
-		$formId = Craft::$app->getRequest()->getBodyParam('formId');
+		$id     = $request->getBodyParam('fieldId');
+		$formId = $request->getBodyParam('formId');
 		$field  = Craft::$app->fields->getFieldById($id);
 		$form   = SproutForms::$api->forms->getFormById($formId);
 
-		if($field)
+		if ($field)
 		{
-			$fieldLayoutField = FieldLayoutFieldRecord::model()->find(array(
-				'condition' => 'fieldId = :fieldId AND layoutId = :layoutId',
-				'params'    => array(':fieldId' => $field->id, ':layoutId' => $form->fieldLayoutId)
-			));
+			$fieldLayoutField = FieldLayoutFieldRecord::findOne([
+				'fieldId' =>  $field->id,
+				'layoutId'=> $form->fieldLayoutId
+			]);
 
-			$group = FieldLayoutTabRecord::model()->findByPk($fieldLayoutField->tabId);
+			$group = FieldLayoutTabRecord::findOne($fieldLayoutField->tabId);
 
-			$this->returnJson(array(
+			return $this->asJson([
 				'success'  => true,
-				'errors'   => $field->getAllErrors(),
-				'field'    => array(
+				'errors'   => $field->getErrors(),
+				'field'    => [
 					'id'           => $field->id,
 					'name'         => $field->name,
 					'handle'       => $field->handle,
 					'instructions' => $field->instructions,
-					'translatable' => $field->translatable,
-					'group'        => array(
+					//'translatable' => $field->translatable,
+					'group'        => [
 						'name' => $group->name,
-					),
-				),
+					],
+				],
 				'template' => SproutForms::$api->fields->getModalFieldTemplate($form, $field, $group->id),
-			));
+			]);
 		}
 		else
 		{
-			$message = Craft::t("The field requested to edit no longer exists.");
+			$message = SproutForms::t("The field requested to edit no longer exists.");
 			SproutForms::log($message);
 
-			$this->returnJson(array(
+			return $this->asJson([
 				'success' => false,
 				'error'   => $message,
-			));
+			]);
 		}
 	}
 
@@ -197,12 +199,12 @@ class FieldsController extends BaseController
 		$fieldIds = JsonHelper::decode(Craft::$app->request->getRequiredBodyParam('ids'));
 		SproutForms::$api->fields->reorderFields($fieldIds);
 
-		$this->returnJson(array(
+		return $this->asJson([
 			'success' => true
-		));
+		]);
 	}
 
-	public function _returnJson($success, $field, $form, $tabName = null)
+	private function _returnJson($success, $field, $form, $tabName = null)
 	{
 		return $this->asJson([
 			'success'  => $success,

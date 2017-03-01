@@ -16,9 +16,9 @@ class FormsController extends BaseController
 	 *
 	 * @return string The rendering result
 	 */
-	public function actionFormIndex(): string
+	public function actionIndex(): string
 	{
-		return $this->renderTemplate('forms/index');
+		return $this->renderTemplate('sproutforms/forms/index');
 	}
 
 	/**

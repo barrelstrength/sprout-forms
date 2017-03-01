@@ -623,6 +623,7 @@ class Fields extends Component
 	public function getModalFieldTemplate($form, $field = null, $tabId = null)
 	{
 		$fieldsService = Craft::$app->getFields();
+		$request       = Craft::$app->getRequest();
 
 		$data          = [];
 		$data['tabId'] = null;
@@ -631,7 +632,7 @@ class Fields extends Component
 		if ($field)
 		{
 			$data['field'] = $field;
-			$tabIdByPost   = Craft::$app->request->getPost('tabId');
+			$tabIdByPost   = $request->getBodyParam('tabId');
 
 			if (isset($tabIdByPost))
 			{
