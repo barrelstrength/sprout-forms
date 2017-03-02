@@ -18,9 +18,8 @@
 } %}
 
 {% set title = form.name %}
-
+{% set saveShortcutRedirect = continueEditingUrl %}
 {% set fullPageForm = true %}
-{% set saveShortcutRedirect = 'sprout-forms/forms/edit/{id}#settings' %}
 {% set selectedTab = 'fields' %}
 
 {% block saveButton %}
@@ -35,7 +34,7 @@
 	<div class="btn submit menubtn"></div>
 	<div class="menu">
 		<ul>
-			<li><a class="formsubmit" data-redirect="{{'sprout-forms/forms/edit/'~form.id|hash}}">{{ "Save and continue editing"|t }} <span class="shortcut">⌘S</span></a></li>
+			<li><a class="formsubmit" data-redirect="{{('sprout-forms/forms/edit/'~form.id)|hash}}">{{ "Save and continue editing"|t }} <span class="shortcut">⌘S</span></a></li>
 			<li><a class="formsubmit" data-redirect="{{'sprout-forms/forms/edit/'~form.id|hash}}" data-param='saveAsNew' data-value="true">{{ "Save as a new form"|t }}</a></li>
 		</ul>
 	</div>

@@ -144,6 +144,7 @@ class FormsController extends BaseController
 
 			//@todo - error for some reason the $form.getErrors() is not
 			//passing to the view. either the variable form or notificationErrors
+			//Craft::dd($form->getErrors());
 
 			// Send the form back to the template
 			Craft::$app->getUrlManager()->setRouteParams([
@@ -157,8 +158,9 @@ class FormsController extends BaseController
 
 		Craft::$app->getSession()->setNotice(SproutForms::t('Form saved.'));
 
-		$_POST['redirect'] = str_replace('{id}', $form->id, $_POST['redirect']);
-		return $this->redirectToPostedUrl();
+		#$_POST['redirect'] = str_replace('{id}', $form->id, $_POST['redirect']);
+
+		return $this->redirectToPostedUrl($form);
 	}
 
 	/**
@@ -210,7 +212,7 @@ class FormsController extends BaseController
 		}
 
 		// Set the "Continue Editing" URL
-		$variables['continueEditingUrl'] = 'sproutforms/forms/edit/{id}';
+		$variables['continueEditingUrl'] = 'sprout-forms/forms/edit/{id}';
 
 		$variables['settings'] = Craft::$app->plugins->getPlugin('sproutforms')->getSettings();
 

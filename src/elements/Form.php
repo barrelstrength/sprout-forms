@@ -365,7 +365,7 @@ class Form extends Element
 	{
 		return [
 			[['name', 'handle'], 'required'],
-			[['name', 'handle'], 'string', 'max' => 10],
+			[['name', 'handle'], 'string', 'max' => 255],
 			[
 				['handle'],
 				HandleValidator::class,
