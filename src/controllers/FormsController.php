@@ -142,6 +142,9 @@ class FormsController extends BaseController
 				}
 			}
 
+			//@todo - error for some reason the $form.getErrors() is not
+			//passing to the view. either the variable form or notificationErrors
+
 			// Send the form back to the template
 			Craft::$app->getUrlManager()->setRouteParams([
 					'form'               => $form,

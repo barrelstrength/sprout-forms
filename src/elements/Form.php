@@ -371,10 +371,7 @@ class Form extends Element
 				HandleValidator::class,
 				'reservedWords' => ['id', 'dateCreated', 'dateUpdated', 'uid', 'title']
 			],
-			[
-				['handle'],
-				UniqueValidator::class,
-			],
+			[['name', 'handle'], UniqueValidator::class, 'targetClass' => FormRecord::class],
 		];
 		/*$rules = parent::rules();
 		$rules[] = [['fieldLayoutId'], 'number', 'integerOnly' => true];
