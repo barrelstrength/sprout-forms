@@ -218,4 +218,25 @@ class FormsController extends BaseController
 
 		return $this->renderTemplate('sproutforms/forms/_editForm', $variables);
 	}
+
+	/**
+	 * Delete a form.
+	 *
+	 * @return void
+	 */
+	public function actionDeleteForm()
+	{
+		$this->requirePostRequest();
+
+		$request = Craft::$app->getRequest();
+
+		// Get the Form these fields are related to
+		$formId = $request->getRequiredBodyParam('id');
+		$form   = SproutForms::$api->forms->getFormById($formId);
+
+		// @TODO - handle errors
+		$success = SproutForms::$api->forms->deleteForm($form);
+
+		return $this->redirectToPostedUrl($form);
+	}
 }

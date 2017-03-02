@@ -17,6 +17,7 @@ use craft\behaviors\FieldLayoutTrait;
 use barrelstrength\sproutforms\elements\db\FormQuery;
 use barrelstrength\sproutforms\records\Form as FormRecord;
 use barrelstrength\sproutforms\SproutForms;
+use barrelstrength\sproutforms\elements\actions\Delete;
 
 /**
  * Form represents a form element.
@@ -27,6 +28,7 @@ class Form extends Element
 
 	// Properties
 	// =========================================================================
+	private $_fields;
 	/**
 	 * @var int|null Group ID
 	 */
@@ -216,6 +218,21 @@ class Form extends Element
 	/**
 	 * @inheritdoc
 	 */
+	protected static function defineActions(string $source = null): array
+	{
+		$actions = [];
+
+		// Delete
+		$actions[] = Craft::$app->getElements()->createAction([
+			'type' => Delete::class,
+		]);
+
+		return $actions;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
 	protected static function defineSearchableAttributes(): array
 	{
 		return ['name', 'handle'];
@@ -356,6 +373,28 @@ class Form extends Element
 		$record->save(false);
 
 		parent::afterSave($isNew);
+	}
+
+	/**
+	 * Returns the fields associated with this form.
+	 *
+	 * @return array
+	 */
+	public function getFields()
+	{
+		if (is_null($this->_fields))
+		{
+			$this->_fields = array();
+
+			$fields = $this->getFieldLayout()->getFields();
+
+			foreach ($fields as $field)
+			{
+				$this->_fields[$field->handle] = $field;
+			}
+		}
+
+		return $this->_fields;
 	}
 
 	/**

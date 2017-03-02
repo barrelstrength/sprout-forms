@@ -193,15 +193,15 @@ class Forms extends Component
 	/**
 	 * Removes a form and related records from the database
 	 *
-	 * @param SproutForms_FormModel $form
+	 * @param FormElement $form
 	 *
 	 * @throws \CDbException
 	 * @throws \Exception
 	 * @return boolean
 	 */
-	public function deleteForm(SproutForms_FormModel $form)
+	public function deleteForm(FormElement $form)
 	{
-		$transaction = Craft::$app->db->getCurrentTransaction() === null ? Craft::$app->db->beginTransaction() : null;
+		$transaction = Craft::$app->db->getTransaction() === null ? Craft::$app->db->beginTransaction() : null;
 		try
 		{
 			$originalContentTable          = Craft::$app->content->contentTable;
@@ -218,7 +218,10 @@ class Forms extends Component
 			Craft::$app->getFields()->deleteLayoutById($form->fieldLayoutId);
 
 			// Drop the content table
-			Craft::$app->db->createCommand()->dropTable($contentTable);
+			Craft::$app->db->createCommand()
+			->dropTable($contentTable)
+			->execute();
+
 			Craft::$app->content->contentTable = $originalContentTable;
 
 			// Delete the Element and Form
@@ -540,7 +543,7 @@ class Forms extends Component
 			catch (\Exception $e)
 			{
 				$response = false;
-				SproutFormsPlugin::log($e->getMessage(), LogLevel::Error);
+				SproutForms::log($e->getMessage(), LogLevel::Error);
 			}
 		}
 
@@ -600,19 +603,19 @@ class Forms extends Component
 	 * @throws \Exception
 	 * @return boolean
 	 */
-	public function deleteForms($ids)
+	public function deleteForms($formElements)
 	{
-		foreach ($ids as $key => $id)
+		foreach ($formElements as $key => $formElement)
 		{
-			$form = sproutForms()->forms->getFormById($id);
+			$form = SproutForms::$api->forms->getFormById($formElement->id);
 
 			if ($form)
 			{
-				sproutForms()->forms->deleteForm($form);
+				SproutForms::$api->forms->deleteForm($form);
 			}
 			else
 			{
-				SproutFormsPlugin::log("Can't delete the form with id: ".$id);
+				SproutForms::log("Can't delete the form with id: ".$id);
 			}
 		}
 

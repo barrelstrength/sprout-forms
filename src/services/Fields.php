@@ -21,113 +21,6 @@ class Fields extends Component
 	protected $registeredFields;
 
 	/**
-	 * @param  FormElement $form
-	 * @param  FieldModel            $field
-	 * @param  boolean               $validate
-	 *
-	 * @throws \Exception
-	 * @return bool
-	 */
-	public function saveField(SproutForms_FormModel $form, FieldModel $field, $validate = true)
-	{
-		if (!$validate || Craft::$app->fields->validateField($field))
-		{
-			$transaction = Craft::$app->db->getCurrentTransaction() === null ? Craft::$app->db->beginTransaction() : null;
-			try
-			{
-				if ($field->id)
-				{
-					$fieldLayoutFields = array();
-					$sortOrder         = 0;
-
-					// Save a new field layout with all form fields
-					// to make sure we capture the required setting
-					$sortOrder++;
-					foreach ($form->getFields() as $oldField)
-					{
-						if ($oldField->id == $field->id)
-						{
-							$fieldLayoutFields[] = array(
-								'fieldId'   => $field->id,
-								'required'  => $field->required,
-								'sortOrder' => $sortOrder
-							);
-						}
-						else
-						{
-							$fieldLayoutFields[] = array(
-								'fieldId'   => $oldField->id,
-								'required'  => $oldField->required,
-								'sortOrder' => $sortOrder
-							);
-						}
-					}
-
-					$fieldLayout       = new FieldLayoutModel();
-					$fieldLayout->type = 'SproutForms_Form';
-					$fieldLayout->setFields($fieldLayoutFields);
-
-					// Update the form model & record with our new field layout ID
-					$form->setFieldLayout($fieldLayout);
-				}
-				else
-				{
-					// Save the new field
-					Craft::$app->fields->saveField($field);
-
-					// Save a new field layout with all form fields
-					$fieldLayoutFields = array();
-					$sortOrder         = 0;
-
-					foreach ($form->getFields() as $oldField)
-					{
-						$sortOrder++;
-						$fieldLayoutFields[] = array(
-							'fieldId'   => $oldField->id,
-							'required'  => $oldField->required,
-							'sortOrder' => $sortOrder
-						);
-					}
-
-					$sortOrder++;
-					$fieldLayoutFields[] = array(
-						'fieldId'   => $field->id,
-						'required'  => $field->required,
-						'sortOrder' => $sortOrder
-					);
-
-					$fieldLayout       = new FieldLayoutModel();
-					$fieldLayout->type = 'SproutForms_Form';
-					$fieldLayout->setFields($fieldLayoutFields);
-					$form->setFieldLayout($fieldLayout);
-				}
-
-				sproutForms()->forms->saveForm($form);
-
-				if ($transaction !== null)
-				{
-					$transaction->commit();
-				}
-			}
-			catch (\Exception $e)
-			{
-				if ($transaction !== null)
-				{
-					$transaction->rollback();
-				}
-
-				throw $e;
-			}
-
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	/**
 	 * @param array $fieldIds
 	 *
 	 * @throws \CDbException
@@ -136,7 +29,7 @@ class Fields extends Component
 	 */
 	public function reorderFields($fieldIds)
 	{
-		$transaction = Craft::$app->db->getCurrentTransaction() === null ? Craft::$app->db->beginTransaction() : null;
+		$transaction = Craft::$app->db->getTransaction() === null ? Craft::$app->db->beginTransaction() : null;
 
 		try
 		{
