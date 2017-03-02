@@ -120,14 +120,7 @@ class FormsController extends BaseController
 		}
 
 		// Save it
-		if (SproutForms::$api->forms->saveForm($form))
-		{
-			Craft::$app->getSession()->setNotice(SproutForms::t('Form saved.'));
-
-			$_POST['redirect'] = str_replace('{id}', $form->id, $_POST['redirect']);
-			return $this->redirectToPostedUrl();
-		}
-		else
+		if (!SproutForms::$api->forms->saveForm($form))
 		{
 			Craft::$app->getSession()->setError(SproutForms::t('Couldn’t save form.'));
 
@@ -158,6 +151,11 @@ class FormsController extends BaseController
 
 			return null;
 		}
+
+		Craft::$app->getSession()->setNotice(SproutForms::t('Form saved.'));
+
+		$_POST['redirect'] = str_replace('{id}', $form->id, $_POST['redirect']);
+		return $this->redirectToPostedUrl();
 	}
 
 	/**
@@ -168,7 +166,7 @@ class FormsController extends BaseController
 	 * @throws HttpException
 	 * @throws Exception
 	 */
-	public function actionEditFormTemplate(int $formId = null): string
+	public function actionEditFormTemplate(int $formId = null)
 	{
 		// Immediately create a new Form
 		if (Craft::$app->request->getSegment(3) == "new")
@@ -177,7 +175,7 @@ class FormsController extends BaseController
 
 			if ($form)
 			{
-				$url = UrlHelper::cpUrl('sproutforms/forms/edit/' . $form->id);
+				$url = UrlHelper::cpUrl('sprout-forms/forms/edit/' . $form->id);
 				return $this->redirect($url);
 			}
 			else

@@ -372,7 +372,7 @@ class Form extends Element
 				'reservedWords' => ['id', 'dateCreated', 'dateUpdated', 'uid', 'title']
 			],
 			[
-				['name', 'handle'],
+				['handle'],
 				UniqueValidator::class,
 			],
 		];

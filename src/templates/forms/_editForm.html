@@ -26,17 +26,17 @@
 {% block saveButton %}
 
 <input type="hidden" name="action" value="sprout-forms/forms/save-form">
-<input type="hidden" name="redirect" value="sprout-forms/forms">
+{{ redirectInput('sprout-forms/forms') }}
 <input type="hidden" id="formId" name="id" value="{{ form.id is defined ? form.id : '' }}">
 
 <div class="btngroup submit first">
-	<input type="submit" class="btn submit" value="{{ 'Save'|t }}">
+	<input type="submit" class="btn submit" value="{{ 'Save'|t('sproutForms') }}">
 	{% if form.id != null %}
 	<div class="btn submit menubtn"></div>
 	<div class="menu">
 		<ul>
-			<li><a class="formsubmit" data-redirect="sproutforms/forms/edit/{{ form.id  }}">{{ "Save and continue editing"|t }} <span class="shortcut">⌘S</span></a></li>
-			<li><a class="formsubmit" data-redirect="sproutforms/forms/edit/{id}" data-param='saveAsNew' data-value="true">{{ "Save as a new form"|t }}</a></li>
+			<li><a class="formsubmit" data-redirect="{{'sprout-forms/forms/edit/'~form.id|hash}}">{{ "Save and continue editing"|t }} <span class="shortcut">⌘S</span></a></li>
+			<li><a class="formsubmit" data-redirect="{{'sprout-forms/forms/edit/'~form.id|hash}}" data-param='saveAsNew' data-value="true">{{ "Save as a new form"|t }}</a></li>
 		</ul>
 	</div>
 	{% endif %}
@@ -45,7 +45,6 @@
 {% endblock %}
 
 {% block main %}
-
 <div class="grid first" data-max-cols="3">
 	<div class="item" data-position="left" data-colspan="2">
 		<div id="fields" class="pane">

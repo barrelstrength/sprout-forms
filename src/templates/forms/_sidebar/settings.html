@@ -6,12 +6,12 @@
 	<ul>
 		<li>
 			<a class="tab {{ tab == 1 ? ' sel' : '' }}" href="#tab-sproutforms-settings">
-				{{ "Settings"|t }}
+				{{ "Settings"|t('sproutForms') }}
 			</a>
 		</li>
 		<li>
 			<a class="tab {{ tab == 2 ? ' sel' : '' }} {{ tab2 ? 'error' : '' }}" href="#tab-sproutforms-advanced">
-				{{ "Advanced"|t }}
+				{{ "Advanced"|t('sproutForms') }}
 			</a>
 		</li>
 	</ul>
@@ -23,7 +23,7 @@
 		{% if groups is defined and groups|length %}
 
 			{% set groupOptions = [
-				{ label: 'All Forms'|t , value: '*' }
+				{ label: 'All Forms'|t('sproutForms') , value: '*' }
 			] %}
 			{% for group in groups %}
 				{% set groupOptions = groupOptions|merge([{ label: group.name, value: group.id }]) %}
@@ -31,7 +31,7 @@
 
 			{{ forms.selectField({
 				first: true,
-				label: "Group <span class='info'>Which group should this form be displayed in?</span>"|t,
+				label: "Group <span class='info'>Which group should this form be displayed in?</span>"|t('sproutForms'),
 				id: 'groupId',
 				name: 'groupId',
 				options: groupOptions,
@@ -42,7 +42,7 @@
 
 		{{ forms.textField({
 			first: (groups is defined and groups|length ? false : true),
-			label: "Name <span class='info'>What this form will be called in the CP.</span>"|t,
+			label: "Name <span class='info'>What this form will be called in the CP.</span>"|t('sproutForms'),
 			id: 'name',
 			name: 'name',
 			value: form.name,
@@ -53,7 +53,7 @@
 		}) }}
 
 		{{ forms.textField({
-			label: "Handle <span class='info'>How you’ll refer to this form in the templates.</span>"|t,
+			label: "Handle <span class='info'>How you’ll refer to this form in the templates.</span>"|t('sproutForms'),
 			id: 'handle',
 			class: 'code',
 			name: 'handle',
@@ -63,7 +63,7 @@
 		}) }}
 
 		{{ forms.textField({
-			label: "Redirect <span class='info'>Where should the user be redirected upon form submission? Leaving blank will redirect user back to the form.</span>"|t,
+			label: "Redirect <span class='info'>Where should the user be redirected upon form submission? Leaving blank will redirect user back to the form.</span>"|t('sproutForms'),
 			name: 'redirectUri',
 			placeholder: siteUrl,
 			value: (form is defined ? form.redirectUri : null),
@@ -71,7 +71,7 @@
 		}) }}
 
 		{{ forms.textField({
-			label: "Button <span class='info'>What the text in the submit button should be.</span>"|t,
+			label: "Button <span class='info'>What the text in the submit button should be.</span>"|t('sproutForms'),
 			name: 'submitButtonText',
 			placeholder: 'Submit',
 			value: (form is defined ? form.submitButtonText : null),
@@ -83,7 +83,7 @@
 	<div id="tab-sproutforms-advanced" class="{{ tab != 2 ? 'hidden' : '' }} meta">
 
 		{{ forms.textField({
-			label: "Title Format <span class='info'>Entry Titles are auto-generated based on the Title Format you enter here. All information contained in the Title will also be searchable. You may use the same syntax here as you would with Dynamic Titles in your Sections. (i.e. {dateCreated|date('Ymd')} {fullName})</span>"|t,
+			label: "Title Format <span class='info'>Entry Titles are auto-generated based on the Title Format you enter here. All information contained in the Title will also be searchable. You may use the same syntax here as you would with Dynamic Titles in your Sections. (i.e. {dateCreated|date('Ymd')} {fullName})</span>"|t('sproutForms'),
 			id: 'titleFormat',
 			name: 'titleFormat',
 			value: form.titleFormat,
@@ -93,26 +93,26 @@
 		<div class="field field-heading">Template Customization</div>
 
 		{{ forms.lightswitchField({
-			label: "Tab Titles <span class='info'>Display Tab Titles on Forms</span>"|t,
+			label: "Tab Titles <span class='info'>Display Tab Titles on Forms</span>"|t('sproutForms'),
 			id: 'displaySectionTitles',
 			name: 'displaySectionTitles',
 			on: form.displaySectionTitles,
-			onLabel: "Show"|t,
-			offLabel: "Hide"|t
+			onLabel: "Show"|t('sproutForms'),
+			offLabel: "Hide"|t('sproutForms')
 		}) }}
 
 		{% if settings.enablePerFormTemplateFolderOverride or form.enableTemplateOverrides %}
 
 		{{ forms.lightswitchField({
-			label: "Custom Templates <span class='info'>Enable Custom Template Overrides Folder</span>"|t,
+			label: "Custom Templates <span class='info'>Enable Custom Template Overrides Folder</span>"|t('sproutForms'),
 			name: 'enableTemplateOverrides',
 			toggle: 'templateOverridesFolder-field',
 			on: form.enableTemplateOverrides,
-			onLabel: "Enable"|t,
+			onLabel: "Enable"|t('sproutForms'),
 		}) }}
 
 		{{ forms.textField({
-			label: "Templates Folder <span class='info'>The template folder to use for overrides</span>"|t,
+			label: "Templates Folder <span class='info'>The template folder to use for overrides</span>"|t('sproutForms'),
 			name: 'templateOverridesFolder',
 			placeholder: '_forms/formHandle',
 			id: 'templateOverridesFolder',
@@ -128,7 +128,7 @@
 
 		{{ forms.textField({
 			label: "Submit URL <span class='info'>Submit your form data to this URL, instead of directly to Sprout
-			Forms.</span>"|t,
+			Forms.</span>"|t('sproutForms'),
 			name: 'submitAction',
 			placeholder: 'http://example.com/somewhere-else',
 			value: (form is defined ? form.submitAction : null),
@@ -136,7 +136,7 @@
 		}) }}
 
 		{{ forms.lightswitchField({
-			label: "Save Copy <span class='info'>Save the submitted payload data as a Form Entry in Craft. By default, when Payload Forwarding is enabled, all submitted data is forwarded to your Submit URL location and no data is saved in Craft.</span>"|t,
+			label: "Save Copy <span class='info'>Save the submitted payload data as a Form Entry in Craft. By default, when Payload Forwarding is enabled, all submitted data is forwarded to your Submit URL location and no data is saved in Craft.</span>"|t('sproutForms'),
 			id: 'savePayload',
 			name: 'savePayload',
 			instructions: '',
