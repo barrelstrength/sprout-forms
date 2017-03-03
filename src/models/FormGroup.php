@@ -18,6 +18,21 @@ class FormGroup extends Model
 	public $name;
 
 	/**
+	 * @var string
+	 */
+	public $dateCreated;
+
+	/**
+	 * @var string
+	 */
+	public $dateUpdated;
+
+	/**
+	 * @var string
+	 */
+	public $uid;
+
+	/**
 	 * Use the translated section name as the string representation.
 	 *
 	 * @return string

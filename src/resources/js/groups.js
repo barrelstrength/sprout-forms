@@ -71,7 +71,7 @@
 					else
 					{
 						var errors = this.flattenErrors(response.errors);
-						alert(Craft.t(settings.newGroupOnErrorMessage) + "\n\n" + errors.join("\n"));
+						alert(settings.newGroupOnErrorMessage + "\n\n" + errors.join("\n"));
 					}
 
 				}, this));
@@ -97,12 +97,12 @@
 					if (response.success)
 					{
 						this.$selectedGroup.text(response.group.name);
-						Craft.cp.displayNotice(Craft.t(settings.renameGroupOnSuccessMessage));
+						Craft.cp.displayNotice(settings.renameGroupOnSuccessMessage);
 					}
 					else
 					{
 						var errors = this.flattenErrors(response.errors);
-						alert(Craft.t(settings.renameGroupOnErrorMessage) + "\n\n" + errors.join("\n"));
+						alert(settings.renameGroupOnErrorMessage + "\n\n" + errors.join("\n"));
 					}
 
 				}, this));
@@ -111,13 +111,13 @@
 
 		promptForGroupName: function(oldName)
 		{
-			return prompt(Craft.t(settings.promptForGroupNameMessage), oldName);
+			return prompt(settings.promptForGroupNameMessage, oldName);
 		},
 
 		deleteSelectedGroup: function()
 		{
 			this.$selectedGroup = this.$groups.find('a.sel:first');
-			if (confirm(Craft.t(settings.deleteGroupConfirmMessage)))
+			if (confirm(settings.deleteGroupConfirmMessage))
 			{
 				var data = {
 					id: this.$selectedGroup.data('id')
@@ -131,7 +131,7 @@
 					}
 					else
 					{
-						alert(Craft.t(settings.deleteGroupOnErrorMessage));
+						alert(settings.deleteGroupOnErrorMessage);
 					}
 				}, this));
 			}
@@ -172,18 +172,18 @@
 			newGroupButtonSelector: '#newgroupbtn',
 			groupSettingsSelector: '#groupsettingsbtn',
 
-			newGroupAction: 'sprout-forms/sprout-forms/groups/save-group',
+			newGroupAction: 'sprout-forms/groups/save-group',
 			newGroupOnSuccessUrlBase: 'sprout-forms/forms/',
 			newGroupOnErrorMessage: Craft.t('sproutForms','Could not create the group:'),
 
-			renameGroupAction: 'sprout-forms/sprout-forms/groups/save-group',
+			renameGroupAction: 'sprout-forms/groups/save-group',
 			renameGroupOnSuccessMessage: Craft.t('sproutForms','Group renamed.'),
 			renameGroupOnErrorMessage: Craft.t('sproutForms','Could not rename the group:'),
 
 			promptForGroupNameMessage: Craft.t('sproutForms','What do you want to name your group?'),
 
-			deleteGroupConfirmMessage: Craft.t('sproutForms','Are you sure you want to delete this group and all its fields?'),
-			deleteGroupAction: 'sprout-forms/sprout-forms/groups/delete-group',
+			deleteGroupConfirmMessage: Craft.t('app','Are you sure you want to delete this group and all its fields?'),
+			deleteGroupAction: 'sprout-forms/groups/delete-group',
 			deleteGroupOnSuccessUrl: 'sprout-forms/forms/',
 			deleteGroupOnErrorMessage: Craft.t('sproutForms','Could not delete the group.'),
 		});

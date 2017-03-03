@@ -55,7 +55,7 @@ class Groups extends Component
 	 */
 	public function deleteGroupById($groupId)
 	{
-		$groupRecord = FormGroupRecord::find()->findOne($groupId);
+		$groupRecord = FormGroupRecord::findOne($groupId);
 
 		if (!$groupRecord)
 		{
@@ -155,14 +155,13 @@ class Groups extends Component
 	{
 		if ($group->id)
 		{
-			$groupRecord = FormGroupRecord::find()->findOne($group->id);
+			$groupRecord = FormGroupRecord::findOne($group->id);
 
 			if (!$groupRecord)
 			{
 				throw new Exception(
 					SproutForms::t(
-						'No field group exists with the ID “{id}”',
-						['id' => $group->id]
+						'No field group exists with the ID '.$group->id
 					)
 				);
 			}

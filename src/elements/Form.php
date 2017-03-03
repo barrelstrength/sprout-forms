@@ -31,16 +31,17 @@ class Form extends Element
 	// Properties
 	// =========================================================================
 	private $_fields;
+
 	/**
 	 * @var int|null Group ID
 	 */
-	public $name;
+	public $groupId;
 
 	/**
-	 * @var int|null New parent ID
+	 * @var int|null name
 	 */
+	public $name;
 	public $handle;
-
 	public $oldHandle;
 	public $saveAsNew;
 	public $fieldLayoutId;
@@ -181,14 +182,6 @@ class Form extends Element
 		return new FormQuery(get_called_class());
 	}
 
-	// Properties
-	// =========================================================================
-
-	/**
-	 * @var int|null Group ID
-	 */
-	public $groupId;
-
 	/**
 	 * @inheritdoc
 	 */
@@ -207,7 +200,8 @@ class Form extends Element
 		{
 			$key = 'group:' . $group->id;
 
-			$sources[$key] = [
+			$sources[] = [
+				'key'      => $key,
 				'label'    => SproutForms::t($group->name),
 				'data'     => ['id' => $group->id],
 				'criteria' => ['groupId' => $group->id]
