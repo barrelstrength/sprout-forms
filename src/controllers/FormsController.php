@@ -142,11 +142,6 @@ class FormsController extends BaseController
 				}
 			}
 
-			//@todo - error for some reason the $form.getErrors() is not
-			//passing to the view. either the variable form or notificationErrors
-			//Craft::dd($form->getErrors());
-
-			// Send the form back to the template
 			Craft::$app->getUrlManager()->setRouteParams([
 					'form'               => $form,
 					'notificationErrors' => $notificationErrors
@@ -167,11 +162,12 @@ class FormsController extends BaseController
 	 * Edit a form.
 	 *
 	 * @param int|null  $formId The form's ID, if editing an existing form.
+	 * @param FormElement|null  $form The form send back by setRouteParams if any errors on saveForm
 	 *
 	 * @throws HttpException
 	 * @throws Exception
 	 */
-	public function actionEditFormTemplate(int $formId = null)
+	public function actionEditFormTemplate(int $formId = null, FormElement $form = null): string
 	{
 		// Immediately create a new Form
 		if (Craft::$app->request->getSegment(3) == "new")
@@ -190,25 +186,28 @@ class FormsController extends BaseController
 		}
 		else
 		{
-			if ($formId)
+			if ($formId !== null)
 			{
-				$variables['brandNewForm'] = false;
-
-				$variables['groups']  = SproutForms::$api->groups->getAllFormGroups();
-				$variables['groupId'] = "";
-
-				// Get the Form
-				$form = SproutForms::$api->forms->getFormById($formId);
-
-				if (!$form)
+				if ($form === null)
 				{
-					throw new HttpException(404);
-				}
+					$variables['brandNewForm'] = false;
 
-				$variables['form']    = $form;
-				$variables['title']   = $form->name;
-				$variables['groupId'] = $form->groupId;
+					$variables['groups']  = SproutForms::$api->groups->getAllFormGroups();
+					$variables['groupId'] = "";
+
+					// Get the Form
+					$form = SproutForms::$api->forms->getFormById($formId);
+
+					if (!$form)
+					{
+						throw new HttpException(404);
+					}
+				}
 			}
+
+			$variables['form']    = $form;
+			$variables['title']   = $form->name;
+			$variables['groupId'] = $form->groupId;
 		}
 
 		// Set the "Continue Editing" URL

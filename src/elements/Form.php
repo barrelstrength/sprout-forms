@@ -18,6 +18,7 @@ use barrelstrength\sproutforms\elements\db\FormQuery;
 use barrelstrength\sproutforms\records\Form as FormRecord;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\actions\Delete;
+use barrelstrength\sproutforms\validators\RecipientsValidator;
 
 /**
  * Form represents a form element.
@@ -411,11 +412,7 @@ class Form extends Element
 				'reservedWords' => ['id', 'dateCreated', 'dateUpdated', 'uid', 'title']
 			],
 			[['name', 'handle'], UniqueValidator::class, 'targetClass' => FormRecord::class],
+			[['notificationRecipients','notificationSenderEmail','notificationReplyToEmail'], RecipientsValidator::class],
 		];
-		/*$rules = parent::rules();
-		$rules[] = [['fieldLayoutId'], 'number', 'integerOnly' => true];
-		$rules[] = [['handle', 'name', 'titleFormat', 'numberOfFields', 'totalEntries'], 'safe'];
-
-		return $rules;*/
 	}
 }
