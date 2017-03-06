@@ -167,7 +167,7 @@ class FormsController extends BaseController
 	 * @throws HttpException
 	 * @throws Exception
 	 */
-	public function actionEditFormTemplate(int $formId = null, FormElement $form = null): string
+	public function actionEditFormTemplate(int $formId = null, FormElement $form = null)
 	{
 		// Immediately create a new Form
 		if (Craft::$app->request->getSegment(3) == "new")

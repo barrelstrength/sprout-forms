@@ -20,6 +20,7 @@ class Install extends Migration
 		$this->createTables();
 		$this->createIndexes();
 		$this->addForeignKeys();
+		$this->insertDefaultData();
 	}
 
 	/**
@@ -30,6 +31,7 @@ class Install extends Migration
 		$this->dropTable('{{%sproutforms_entries}}');
 		$this->dropTable('{{%sproutforms_forms}}');
 		$this->dropTable('{{%sproutforms_formgroups}}');
+		$this->dropTable('{{%sproutforms_entrystatuses}}');
 	}
 
 	/**
@@ -79,6 +81,23 @@ class Install extends Migration
 			'statusId'    => $this->integer(),
 			'ipAddress'   => $this->string(),
 			'userAgent'   => $this->longText(),
+			'dateCreated' => $this->dateTime()->notNull(),
+			'dateUpdated' => $this->dateTime()->notNull(),
+			'uid'         => $this->uid(),
+		]);
+
+		$this->createTable('{{%sproutforms_entrystatuses}}', [
+			'id'          => $this->primaryKey(),
+			'name'        => $this->string()->notNull(),
+			'handle'      => $this->string()->notNull(),
+			'color'       => $this->enum('color',
+					['green', 'orange', 'red', 'blue',
+					'yellow', 'pink', 'purple', 'turquoise',
+					'light', 'grey', 'black'
+					])
+					->notNull()->defaultValue('blue'),
+			'sortOrder'   => $this->smallInteger()->unsigned(),
+			'isDefault'   => $this->boolean(),
 			'dateCreated' => $this->dateTime()->notNull(),
 			'dateUpdated' => $this->dateTime()->notNull(),
 			'uid'         => $this->uid(),
@@ -162,5 +181,33 @@ class Install extends Migration
 	 */
 	protected function insertDefaultData()
 	{
+		// populate default Entry Statuses
+		$defaultEntryStatuses = [
+			0 => [
+				'name'      => 'Unread',
+				'handle'    => 'unread',
+				'color'     => 'blue',
+				'sortOrder' => 1,
+				'isDefault' => 1
+			],
+			1 => [
+				'name'      => 'Read',
+				'handle'    => 'read',
+				'color'     => 'grey',
+				'sortOrder' => 2,
+				'isDefault' => 0
+			]
+		];
+
+		foreach ($defaultEntryStatuses as $entryStatus)
+		{
+			$this->db->createCommand()->insert('{{%sproutforms_entrystatuses}}', [
+				'name'      => $entryStatus['name'],
+				'handle'    => $entryStatus['handle'],
+				'color'     => $entryStatus['color'],
+				'sortOrder' => $entryStatus['sortOrder'],
+				'isDefault' => $entryStatus['isDefault']
+			])->execute();
+		}
 	}
 }

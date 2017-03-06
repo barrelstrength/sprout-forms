@@ -101,7 +101,7 @@ class Form extends Element
 	 */
 	public static function displayName(): string
 	{
-		return Craft::t('app', 'Sprout Forms');
+		return SproutForms::t('Sprout Forms');
 	}
 
 	/**
@@ -240,9 +240,9 @@ class Form extends Element
 	protected static function defineSortOptions(): array
 	{
 		$attributes = [
-			'name' => Craft::t('app', 'Form Name'),
-			'elements.dateCreated' => Craft::t('app', 'Date Created'),
-			'elements.dateUpdated' => Craft::t('app', 'Date Updated'),
+			'name' => SproutForms::t('Form Name'),
+			'elements.dateCreated' => SproutForms::t('Date Created'),
+			'elements.dateUpdated' => SproutForms::t('Date Updated'),
 		];
 
 		return $attributes;
@@ -253,10 +253,10 @@ class Form extends Element
 	 */
 	protected static function defineTableAttributes(): array
 	{
-		$attributes['name']           = ['label' => Craft::t('app', 'Name')];
-		$attributes['handle']         = ['label' => Craft::t('app', 'Handle')];
-		$attributes['numberOfFields'] = ['label' => Craft::t('app', 'Number of Fields')];
-		$attributes['totalEntries']   = ['label' => Craft::t('app', 'Total Entries')];
+		$attributes['name']           = ['label' => SproutForms::t('Name')];
+		$attributes['handle']         = ['label' => SproutForms::t('Handle')];
+		$attributes['numberOfFields'] = ['label' => SproutForms::t('Number of Fields')];
+		$attributes['totalEntries']   = ['label' => SproutForms::t('Total Entries')];
 
 		return $attributes;
 	}
@@ -331,7 +331,7 @@ class Form extends Element
 	 */
 	public function afterSave(bool $isNew)
 	{
-		// Get the tag record
+		// Get the form record
 		if (!$isNew)
 		{
 			$record = FormRecord::findOne($this->id);
