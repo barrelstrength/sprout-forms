@@ -10,15 +10,15 @@ use craft\helpers\UrlHelper;
 use yii\base\InvalidConfigException;
 use craft\elements\actions\Delete;
 
-use barrelstrength\sproutforms\elements\db\FormQuery;
+use barrelstrength\sproutforms\elements\db\EntryQuery;
 use barrelstrength\sproutforms\records\Form as FormRecord;
 use barrelstrength\sproutforms\records\Entry as EntryRecord;
 use barrelstrength\sproutforms\SproutForms;
 
 /**
- * Form represents a form element.
+ * Entry represents a entry element.
  */
-class Form extends Element
+class Entry extends Element
 {
 	// Properties
 	// =========================================================================
@@ -57,7 +57,7 @@ class Form extends Element
 	 *
 	 * @return string
 	 */
-	public function displayName()
+	public static function displayName(): string
 	{
 		return SproutForms::t('Sprout Forms Entries');
 	}
@@ -97,7 +97,7 @@ class Form extends Element
 	/**
 	 * @inheritdoc
 	 */
-	public function hasStatuses()
+	public static function hasStatuses(): bool
 	{
 		return true;
 	}
@@ -157,12 +157,12 @@ class Form extends Element
 	public function getStatuses()
 	{
 		$statuses    = SproutForms::$api->entries->getAllEntryStatuses();
-		$statusArray = array();
+		$statusArray = [];
 
 		foreach ($statuses as $status)
 		{
-			$key = $status['handle'] . ' ' . $status->['color'];
-			$statusArray[$key] = $status->['name'];
+			$key = $status['handle'] . ' ' . $status['color'];
+			$statusArray[$key] = $status['name'];
 		}
 
 		return $statusArray;
@@ -206,7 +206,7 @@ class Form extends Element
 	 */
 	public static function find(): ElementQueryInterface
 	{
-		return new FormQuery(get_called_class());
+		return new EntryQuery(get_called_class());
 	}
 
 	/**
@@ -270,7 +270,7 @@ class Form extends Element
 				'criteria' => [
 					'formId' => $form['criteria']['formId'],
 				]
-			);
+			];
 		}
 
 		// Build our sources sidebar for forms in groups
@@ -278,9 +278,9 @@ class Form extends Element
 		{
 			if (isset($source['heading']))
 			{
-				$sources[] = array(
+				$sources[] = [
 					'heading' => $source['heading']
-				);
+				];
 			}
 
 			foreach ($source['forms'] as $form)
@@ -312,8 +312,8 @@ class Form extends Element
 		// Delete
 		$actions[] = Craft::$app->getElements()->createAction([
 			'type' => Delete::class,
-			'confirmationMessage' => Craft::t('app', 'Are you sure you want to delete the selected entries?'),
-			'successMessage' => Craft::t('app', 'Entries deleted.'),
+			'confirmationMessage' => SproutForms::t('Are you sure you want to delete the selected entries?'),
+			'successMessage' => SproutForms::t('Entries deleted.'),
 		]);
 
 		return $actions;
@@ -333,9 +333,9 @@ class Form extends Element
 	protected static function defineSortOptions(): array
 	{
 		$attributes = [
-			'formName' => Craft::t('Form Name'),
-			'elements.dateCreated' => Craft::t('Date Created'),
-			'elements.dateUpdated' => Craft::t('Date Updated'),
+			'sproutforms_entries.dateCreated' => SproutForms::t('Date Created'),
+			'name'                            => SproutForms::t('Form Name'),
+			'sproutforms_entries.dateUpdated' => SproutForms::t('Date Updated'),
 		];
 
 		return $attributes;
@@ -356,7 +356,7 @@ class Form extends Element
 
 	protected static function defineDefaultTableAttributes(string $source): array
 	{
-		$attributes = ['name', 'handle', 'numberOfFields', 'totalEntries'];
+		$attributes = ['title', 'formName', 'dateCreated', 'dateUpdated'];
 
 		return $attributes;
 	}
