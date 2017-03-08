@@ -4,6 +4,8 @@ namespace barrelstrength\sproutforms\variables;
 
 use Craft;
 
+use craft\helpers\Template as TemplateHelper;
+
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\models\FieldGroup;
 use barrelstrength\sproutforms\models\FieldLayout;
@@ -56,14 +58,16 @@ class SproutFormsVariable
 	public function displayForm($formHandle, array $renderingOptions = null)
 	{
 		$form          = SproutForms::$api->forms->getFormByHandle($formHandle);
-		$entry         = SproutForms::$api->entries->getEntryModel($form);
+		$entry         = SproutForms::$api->entries->getEntry($form);
 		$fields        = SproutForms::$api->fields->getRegisteredFields();
 		$templatePaths = SproutForms::$api->fields->getSproutFormsTemplates($form);
 
-		// Set Tab template path
-		Craft::$app->templates->setTemplatesPath($templatePaths['tab']);
+		$view = Craft::$app->getView();
 
-		$bodyHtml = Craft::$app->templates->render(
+		// Set Tab template path
+		$view->setTemplatesPath($templatePaths['tab']);
+
+		$bodyHtml = $view->renderTemplate(
 			'tab', array(
 				'form'                 => $form,
 				'tabs'                 => $form->getFieldLayout()->getTabs(),
@@ -76,10 +80,10 @@ class SproutFormsVariable
 		);
 
 		// Check if we need to update our Front-end Form Template Path
-		Craft::$app->templates->setTemplatesPath($templatePaths['form']);
+		$view->setTemplatesPath($templatePaths['form']);
 
 		// Build our complete form
-		$formHtml = Craft::$app->templates->render(
+		$formHtml = $view->renderTemplate(
 			'form', array(
 				'form'             => $form,
 				'entry'            => $entry,
@@ -89,9 +93,14 @@ class SproutFormsVariable
 			)
 		);
 
-		Craft::$app->templates->setTemplatesPath(Craft::$app->path->getSiteTemplatesPath());
+		$view->setTemplatesPath(Craft::$app->path->getSiteTemplatesPath());
 
-		return TemplateHelper::getRaw($formHtml);
+		return TemplateHelper::raw($formHtml);
+	}
+
+	public function getFieldClass($field): string
+	{
+		return get_class($field);
 	}
 
 	public function displayTab($formTabHandle, array $renderingOptions = null)
@@ -149,7 +158,7 @@ class SproutFormsVariable
 
 		Craft::$app->templates->setTemplatesPath(Craft::$app->path->getSiteTemplatesPath());
 
-		return TemplateHelper::getRaw($tabHtml);
+		return TemplateHelper::raw($tabHtml);
 	}
 
 	/**
@@ -221,7 +230,7 @@ class SproutFormsVariable
 
 				Craft::$app->templates->setTemplatesPath(Craft::$app->path->getSiteTemplatesPath());
 
-				return TemplateHelper::getRaw($fieldHtml);
+				return TemplateHelper::raw($fieldHtml);
 			}
 		}
 	}
@@ -291,12 +300,12 @@ class SproutFormsVariable
 	 */
 	public function getLastEntry()
 	{
-		if (Craft::$app->httpSession->get('lastEntryId'))
+		if (Craft::$app->getSession()->get('lastEntryId'))
 		{
-			$entryId = Craft::$app->httpSession->get('lastEntryId');
+			$entryId = Craft::$app->getSession()->get('lastEntryId');
 			$entry   = SproutForms::$api->entries->getEntryById($entryId);
 
-			Craft::$app->httpSession->destroy('lastEntryId');
+			Craft::$app->getSession()->destroy('lastEntryId');
 		}
 
 		return (isset($entry)) ? $entry : null;
@@ -349,15 +358,15 @@ class SproutFormsVariable
 		if ($currentStep == 1)
 		{
 			// Make sure we are starting from scratch
-			Craft::$app->httpSession->remove('multiStepForm');
-			Craft::$app->httpSession->remove('multiStepFormEntryId');
-			Craft::$app->httpSession->remove('currentStep');
-			Craft::$app->httpSession->remove('totalSteps');
+			Craft::$app->getSession()->remove('multiStepForm');
+			Craft::$app->getSession()->remove('multiStepFormEntryId');
+			Craft::$app->getSession()->remove('currentStep');
+			Craft::$app->getSession()->remove('totalSteps');
 		}
 
-		Craft::$app->httpSession->add('multiStepForm', true);
-		Craft::$app->httpSession->add('currentStep', $currentStep);
-		Craft::$app->httpSession->add('totalSteps', $totalSteps);
+		Craft::$app->getSession()->add('multiStepForm', true);
+		Craft::$app->getSession()->add('currentStep', $currentStep);
+		Craft::$app->getSession()->add('totalSteps', $totalSteps);
 	}
 
 	/**
@@ -378,15 +387,16 @@ class SproutFormsVariable
 			}
 		}
 
-		$message = Craft::t('{type} field does not support front-end display using Sprout Forms.', array(
+		$message = SproutForms::t('{type} field does not support front-end display using Sprout Forms.', [
 			'type' => $type
-		));
+			]
+		);
 
-		SproutFormsPlugin::log($message, LogLevel::Warning);
+		SproutForms::log($message);
 
 		if (Craft::$app->config->get('devMode'))
 		{
-			throw new Exception(Craft::t($message));
+			throw new \Exception($message);
 		}
 	}
 

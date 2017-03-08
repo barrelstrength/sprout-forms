@@ -1,0 +1,53 @@
+{% extends "sproutforms/_layout" %}
+
+{% block content %}
+	
+	<h1>Output your form field by field.</h1>
+	
+	<p>Take a look at the code of this template to see an example with comments.</p>
+
+	<hr>
+
+	{# Check if we should display or form or thank you message #}
+	{% if craft.request.getParam('message') == 'thank-you' %}
+
+		{# Display our thank you message #}
+		<p>Thank you for your message. We'll be in touch soon!</p>
+
+	{% else %}
+	  
+	  {# Retrieve your Form Model from the database #}
+	  {% set form = craft.sproutForms.form('contact') %}
+
+	  {# If you want more fine-grained control over your fields, you will have to build the 
+	     Form youself, and then you can control the specific fields more directly. #}
+	  <form method="post" accept-charset="UTF-8">
+	  	{{ getCsrfInput() }}
+			<input type="hidden" name="action" value="sproutForms/entries/saveEntry">
+
+			{# Set your handle and redirect values from your database.
+				 This helps prevent against errors if somebody changes these
+				 settings in the Control Panel later. #}
+			<input type="hidden" name="handle" value="{{ form.handle }}">
+			<input type="hidden" name="redirect" value="{{ form.redirectUri }}">
+	  	
+	  	<div class="fields">
+
+	  		{# To output a specific field, use the syntax: formHandle.fieldHandle #}
+	  		{{ craft.sproutForms.displayField('contact.fullName') }}
+
+	  		{{ craft.sproutForms.displayField('contact.email') }}
+
+	  		{{ craft.sproutForms.displayField('contact.message') }}
+
+	  	</div>
+
+	  	<div class="submit">
+	  		<input type="submit" value="Submit">
+	  	</div>
+
+	  </form>
+
+	{% endif %}
+
+{% endblock %}

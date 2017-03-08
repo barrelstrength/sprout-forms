@@ -136,7 +136,6 @@ class Entry extends Element
 	}
 
 	/**
-	 * @inheritDoc BaseElementModel::getStatus()
 	 *
 	 * @return string|null
 	 */
@@ -154,7 +153,7 @@ class Entry extends Element
 	 *
 	 * @return array
 	 */
-	public function getStatuses()
+	public static function statuses(): array
 	{
 		$statuses    = SproutForms::$api->entries->getAllEntryStatuses();
 		$statusArray = [];

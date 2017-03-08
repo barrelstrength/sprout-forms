@@ -10,11 +10,13 @@ class Api extends Component
 	public $groups;
 	public $forms;
 	public $fields;
+	public $entries;
 
 	public function init()
 	{
-		$this->groups = new Groups();
-		$this->forms = new Forms();
-		$this->fields = new Fields();
+		$this->groups  = new Groups();
+		$this->forms   = new Forms();
+		$this->fields  = new Fields();
+		$this->entries = new Entries();
 	}
 }

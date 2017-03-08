@@ -1,0 +1,55 @@
+
+<!-- Custom form created using the Sprout Forms form builder plugin - https://sprout.barrelstrengthdesign.com/craft-plugins/forms -->
+
+{% set action = form.submitAction is empty ? 'sproutForms/entries/saveEntry' : 'sproutForms/entries/forwardEntry' %}
+{%- set renderingOptions = renderingOptions is defined and renderingOptions is not empty ? renderingOptions : {} %}
+{%- set errors      = entry.getErrors()|length ? entry.getErrors() : false %}
+{%- set errorClass  = renderingOptions.errorClass is defined ? renderingOptions.errorClass : 'errors' %}
+{%- set id          = renderingOptions.id is defined ? renderingOptions.id : form.handle ~ '-form' %}
+{%- set class       = renderingOptions.class is defined ? renderingOptions.class : form.handle ~ '-form' -%}
+{%- set redirectUri = form.redirectUri -%}
+
+<form method="post" accept-charset="utf-8" enctype="multipart/form-data"
+	{%- if id %} id="{{ id }}"{% endif -%}
+	{%- if class %} class="{{ class -}}{%- if errors %} {{ errorClass }}{% endif -%}"{% endif -%}
+	>
+	{{ getCsrfInput() }}
+	<input type="hidden" name="action" value="{{ action }}">
+	<input type="hidden" name="handle" value="{{ form.handle }}">
+	{% if redirectUri is not empty -%}
+		{% if redirectUri|slice(0, 1)|lower == '?' %}
+			{%- set redirectUri = craft.request.getUrl()~redirectUri %}
+		{% endif %}
+
+		<input type="hidden" name="redirect" value="{{ redirectUri }}">
+	{% endif %}
+
+	<div class="fields">
+		{{ body | raw }}
+	</div>
+
+	{% hook 'sproutForms.modifyForm' %}
+
+	<div class="submit">
+		<input type="submit" value="{{ form.submitButtonText is not empty ? form.submitButtonText : 'Submit' }}">
+	</div>
+</form>
+
+{# Add focus to the first field which has an error #}
+{% if errors -%}
+	{%- for labelId, error in errors %}
+		{%- if loop.first %}
+		<script>
+			(function() {
+				var field = document.getElementById('fields-'+'{{ labelId }}');
+				if(field)
+				{
+					field.focus();
+				}
+			})();
+		</script>
+		{%- endif %}
+	{%- endfor %}
+{%- endif %}
+
+<!-- / Sprout Forms Craft CMS form builder plugin -->

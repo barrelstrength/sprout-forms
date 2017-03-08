@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+	<meta charset="utf-8" />
+	<title>{{ siteName }}</title>
+
+	<style type="text/css">
+		html {
+			overflow-y:scroll;
+		}
+		body { 
+			background: #fff; 
+			color: #333;
+			font-family: sans-serif;
+			line-height: 1.5;
+			margin: 50px; 
+		}
+		#container { 
+			background: #fdfdfd; 
+			margin: 0 auto;
+			padding: 30px;
+			width: 700px;
+			-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+							box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+		}
+		hr {
+			background-color: #f3f3f3;
+			border: 0;
+			color: #ccc;
+			height: 1px;
+			margin-bottom: 30px;
+		}
+
+		h1 {
+			font-size: 24px;
+			width: 80%;
+		}
+
+		p.back {
+			float: right;
+			margin-top: -16px;
+		}
+
+		ul.examples {
+			list-style-type: none;
+			padding: 0;
+		}
+		ul.examples li {
+			padding: 0 0 1.2em;
+		}
+		ul.examples li a {
+			font-weight: bold;
+		}
+
+		div.field {
+			margin-bottom: 20px;
+		}
+		div.field label {
+			font-weight: bold;
+		}
+		div.field .input label {
+			font-weight: normal;
+		}
+		div.field .heading p {
+			color: #999;
+			font-size: .8em;
+			margin: 0 0 .5em;
+		}
+
+		.required label:after {
+			content: '*';
+			color: red;
+			padding-left: .2em;
+		}
+
+		ul.errors {
+			color:red;
+		}
+
+	</style>
+</head>
+
+<body>
+	<div id="container">
+
+		{% if craft.request.getSegment(2) %}
+		<p class="back">
+			<a href="/sproutforms">&larr; Return to examples</a>
+		</p>
+		{% endif %}
+
+		{% block content %}{% endblock %}
+
+	</div>
+</body>
+</html>

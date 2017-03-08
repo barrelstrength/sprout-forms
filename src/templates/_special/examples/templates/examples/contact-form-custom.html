@@ -1,0 +1,121 @@
+{% extends "sproutforms/_layout" %}
+
+{% block content %}
+
+<h1>Output your form using Custom HTML.</h1>
+
+<p>Take a look at the code of this template to see an example with comments.</p>
+
+<hr>
+
+{# Prepare our error macro #}
+{% macro errorList(errors) %}
+	{# To display errors, you want to make sure errors exist, 
+		 and then you can loop through and display them #}
+	{% if errors %}
+			<ul class="errors">
+					{% for error in errors %}
+							<li>{{ error }}</li>
+					{% endfor %}
+			</ul>
+	{% endif %}
+{% endmacro %}
+
+{% from _self import errorList %}
+
+
+{# Check if we should display or form or thank you message #}
+{% if craft.request.getParam('message') == 'thank-you' %}
+
+	{# Check for the last entry submitted #}
+	{% set lastEntry = craft.sproutForms.lastEntry() %}
+
+	{% if lastEntry %}
+		
+		{# If the last entry exists, we can output any of the variables
+		   that were present in the form submission. #}
+		<p>Thanks <strong>{{ lastEntry.fullName }}</strong>! We'll be in touch soon! Did you know you can display any of the values that were submitted in the form?  Here's a list of all the values in the last form submission:</p>
+		
+		<p>
+			Full Name: <em>{{ lastEntry.fullName }}</em><br/>
+			Email: <em>{{ lastEntry.email }}</em><br/>
+			Message: <em>{{ lastEntry.message }}</em><br/>
+		</p>
+
+	{% endif %}
+
+{% else %}
+	
+	{# Retrieve our Form from the database #}
+	{% set form = craft.sproutForms.form('contact') %}
+
+	{# Retrieve our Form Entry with any errors if we have a failed submission #}
+	{% set submittedEntry = craft.sproutForms.getEntry(form) %}
+    
+	<form method="post" accept-charset="utf-8">
+		{{ getCsrfInput() }}
+		<input type="hidden" name="action" value="sproutForms/entries/saveEntry">
+		<input type="hidden" name="handle" value="{{ form.handle }}">
+		<input type="hidden" name="redirect" value="{{ form.redirectUri }}">
+
+		{# Retrieve the Full Name Field Model #}
+		{% set fullName = form.getField('fullName') %}
+
+		{# Check to confirm we have a fullName Field
+			 Dynamically assign all the values from the Field Model so our
+			 template will update if anybody changes those values in the Control Panel. Doing this this way is a little more risky than overriding the templates. Using this method, if someone adds a field changes a field handle in the Control Panel, you will also have to update your templates.  This example is mostly to illustrate how you have access to just about any value you need in your templates.  For more robust custom form behavior, see the documentation on template overrides. #}
+		{% if fullName is defined %}
+		
+			<div class="field">
+				<div class="header">
+					<label for="textName">{{ fullName.name }}</label>
+				</div>
+				<div class="body">
+					{# Custom Field handles should be named in your inputs and added in the fields[] array #}
+					<input type="text" id="{{ fullName.handle }}" name="fields[{{ fullName.handle }}]" {%- if submittedEntry is defined %} value="{{ submittedEntry.fullName }}"{% endif -%} {%- if fullName.required %} required{% endif-%}>
+				</div>
+				{% if submittedEntry is defined %}
+				<div class="error">
+					{{ errorList(submittedEntry.getErrors(fullName.handle)) }}
+				</div>
+				{% endif %}
+			</div>
+
+		{% endif %}
+
+
+		{# Email Field #}
+		<div class="field">
+			<div class="header">
+				<label for="textEmail">Email</label>
+			</div>
+			<div class="body">
+				<input type="email" id="textEmail" name="fields[email]" {%- if contact is defined %}value="{{ contact.email }}"{% endif -%}>
+			</div>
+			{% if contact is defined %}
+			<div class="error">
+				{{ errorList(contact.getErrors('email')) }}
+			</div>
+			{% endif %}
+		</div>
+
+		{# Message Field #}
+		<div class="field">
+			<div class="header">
+				<label for="textareaMessage">Message</label>
+			</div>
+			<div class="body">
+				<textarea class="text nicetext fullwidth" rows="4" cols="50" id="fields-message" name="fields[message]">{%- if contact is defined %}{{ contact.message }}{% endif -%}</textarea>
+			</div>
+			{% if contact is defined %}
+			<div class="error">
+				{{ errorList(contact.getErrors('message')) }}
+			</div>
+			{% endif %}
+		</div>
+		<input type="submit" value="Submit">
+	</form>
+
+{% endif %}
+
+{% endblock %}

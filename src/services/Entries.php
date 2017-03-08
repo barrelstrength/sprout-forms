@@ -6,7 +6,9 @@ use yii\base\Component;
 
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Form as FormElement;
+use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\records\Entry as EntryRecord;
+use barrelstrength\sproutforms\records\EntryStatus as EntryStatusRecord;
 
 use Guzzle\Http\Client;
 
@@ -29,14 +31,34 @@ class Entries extends Component
 	}
 
 	/**
+	 * Returns an active or new entry element
+	 *
+	 * @param SproutForms_FormModel $form
+	 *
+	 * @return EntryElement
+	 */
+	public function getEntry(FormElement $form)
+	{
+		if (isset(SproutForms::$api->forms->activeEntries[$form->handle]))
+		{
+			return SproutForms::$api->forms->activeEntries[$form->handle];
+		}
+
+		$entry = new EntryElement;
+
+		$entry->formId = $form->id;
+
+		return $entry;
+	}
+
+	/**
 	 * @param $entryStatusId
 	 *
 	 * @return BaseModel
 	 */
 	public function getEntryStatusById($entryStatusId)
 	{
-		$entryStatus = Craft::$app->getDb()->createCommand()
-			->from('{{%sproutforms_entrystatuses}}')
+		$entryStatus = EntryStatusRecord::find()
 			->where(['id' => $entryStatusId])
 			->one();
 
@@ -48,9 +70,8 @@ class Entries extends Component
 	 */
 	public function getAllEntryStatuses()
 	{
-		$entryStatuses = Craft::$app->getDb()->createCommand()
-			->from('{{%sproutforms_entrystatuses}}')
-			->order('sortOrder asc')
+		$entryStatuses = EntryStatusRecord::find()
+			->orderBy(['sortOrder' => 'asc'])
 			->all();
 
 		return $entryStatuses;

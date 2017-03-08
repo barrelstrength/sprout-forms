@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+<head>
+  <title>{{ siteName }}</title>
+</head>
+<body marginwidth="0" marginheight="0" topmargin="0" leftmargin="0" offset="0">
+  <table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+      <td valign="top">
+        <table>
+          <tr>
+            <td valign="top" style="width:600px;">
+
+              <table>
+                <tr>
+                  <td valign="top" style="width:600px;">
+
+                    <p>{{ "Form submission from" }} {{ siteName }}</p>
+
+                    <p>
+                      <span style="text-transform: uppercase;"><strong>{{ formName }}</strong></span>
+                    </p>
+
+                  </td>
+                </tr>
+              </table>
+
+              <table>
+                <tr>
+                  <td style="border-top:1px solid #eee;border-bottom:1px solid #eee;background-color:#fefefe;width:600px;">
+
+                      {% for tab in tabs %}
+
+                          <table>
+                              <tr>
+                                  <td>
+
+                                    {% set fields = tab.getFields() %}
+
+                                    {% for field in fields %}
+
+                                      {% set field = field.getField() %}
+                                      {% set value = attribute(element, field.handle) %}
+
+                                      {% if loop.first and tabs|length > 1 %}
+                                      <p><strong>{{ tab.name }}</strong></p>
+                                      {% endif %}
+
+                                      <p>
+                                        <strong>{{ field.name }}</strong><br/>
+
+                                        {% if value is not iterable and value is not empty %}
+
+                                          {{ value|nl2br }}
+
+                                        {% else %}
+
+                                          <ul style="margin-left:0;">
+                                          {% for item in value %}
+                                            <li>{{ item }}</li>
+                                          {% endfor %}
+                                          </ul>
+
+                                        {% endif %}
+                                      </p>
+
+                                    {% endfor %}
+
+                                  </td>
+                              </tr>
+                              <tr>
+                                <td {% if not loop.last %}style="border-top:1px solid #eee;background-color:#fefefe;
+                                width:600px;"{% endif %}>
+
+                                  </td>
+                              </tr>
+                          </table>
+
+                      {% endfor %}
+
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+        </table>
+        <!-- END TEMPLATE CONTAINER -->
+
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

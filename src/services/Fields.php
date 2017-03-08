@@ -84,7 +84,7 @@ class Fields extends Component
 		return $record;
 	}
 
-	public function getSproutFormsTemplates($form = null)
+	public function getSproutFormsTemplates(FormElement $form = null)
 	{
 		$templates              = array();
 		$settings               = Craft::$app->plugins->getPlugin('sproutforms')->getSettings();
@@ -95,7 +95,7 @@ class Fields extends Component
 			$templateFolderOverride = $form->templateOverridesFolder;
 		}
 
-		$defaultTemplate = Craft::$app->path->getPluginsPath() . 'sproutforms/templates/_special/templates/';
+		$defaultTemplate = Craft::$app->path->getPluginsPath() . '/sproutforms/src/templates/_special/templates/';
 
 		// Set our defaults
 		$templates['form']  = $defaultTemplate;
@@ -146,7 +146,7 @@ class Fields extends Component
 		if (is_null($this->registeredFields))
 		{
 			// @todo - research how to hooks works
-			//https://github.com/craftcms/docs/blob/abcae19f1bf95881ffbc9166e1da59f7dc74b6ee/en/updating-plugins.md#plugin-hooks
+			//https://github.com/craftcms/docs/blob/master/en/updating-plugins.md#plugin-hooks
 			$this->registeredFields = [];
 			/*
 			$results                = Craft::$app->plugins->call('registerSproutFormsFields');
@@ -166,8 +166,7 @@ class Fields extends Component
 						}
 					}
 				}
-			}
-			*/
+			}*/
 		}
 
 		return $this->registeredFields;
