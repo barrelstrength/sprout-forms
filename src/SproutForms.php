@@ -9,6 +9,9 @@ use yii\base\Event;
 use barrelstrength\sproutforms\models\Settings;
 use barrelstrength\sproutforms\services\Groups;
 use barrelstrength\sproutforms\variables\SproutFormsVariable;
+use barrelstrength\sproutforms\events\RegisterFieldsEvent;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\PlainText;
+use barrelstrength\sproutforms\services\Fields;
 
 class SproutForms extends \craft\base\Plugin
 {
@@ -29,6 +32,11 @@ class SproutForms extends \craft\base\Plugin
 
 		Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $event) {
 				$event->rules = array_merge($event->rules, $this->getCpUrlRules());
+			}
+		);
+
+		Event::on(Fields::class, Fields::EVENT_REGISTER_FIELDS, function(RegisterFieldsEvent $event) {
+				$event->fields[] = new PlainText();
 			}
 		);
 	}

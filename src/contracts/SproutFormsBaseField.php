@@ -1,5 +1,7 @@
 <?php
-namespace Craft;
+namespace barrelstrength\sproutforms\contracts;
+
+use Craft;
 
 /**
  * Class SproutFormsBaseField

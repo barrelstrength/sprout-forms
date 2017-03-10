@@ -12,6 +12,7 @@ use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\records\Form as FormRecord;
+use barrelstrength\sproutforms\events\RegisterFieldsEvent;
 
 class Fields extends Component
 {
@@ -19,6 +20,11 @@ class Fields extends Component
 	 * @var SproutFormsBaseField[]
 	 */
 	protected $registeredFields;
+
+	/**
+	 * @event RegisterFieldsEvent The event that is triggered when registering the fields available.
+	 */
+	const EVENT_REGISTER_FIELDS = 'registerFieldsEvent';
 
 	/**
 	 * @param array $fieldIds
@@ -73,7 +79,7 @@ class Fields extends Component
 
 			if (!$record)
 			{
-				throw new Exception(Craft::t('No field exists with the ID “{id}”', array('id' => $fieldId)));
+				throw new Exception(SproutForms::t('No field exists with the ID “{id}”', array('id' => $fieldId)));
 			}
 		}
 		else
@@ -145,28 +151,24 @@ class Fields extends Component
 	{
 		if (is_null($this->registeredFields))
 		{
-			// @todo - research how to hooks works
-			//https://github.com/craftcms/docs/blob/master/en/updating-plugins.md#plugin-hooks
 			$this->registeredFields = [];
-			/*
-			$results                = Craft::$app->plugins->call('registerSproutFormsFields');
 
-			if (!empty($results))
+			// Our fields are registered in the SproutForms main class
+			$event = new RegisterFieldsEvent([
+				'fields' => []
+			]);
+
+			$this->trigger(self::EVENT_REGISTER_FIELDS, $event);
+
+			$fields = $event->fields;
+
+			/**
+			 * @var SproutFormsBaseField $instance
+			*/
+			foreach ($fields as $instance)
 			{
-				foreach ($results as $plugin => $fields)
-				{
-					if (is_array($fields) && count($fields))
-					{
-						/**
-						 * @var SproutFormsBaseField $instance
-
-						foreach ($fields as $instance)
-						{
-							$this->registeredFields[get_class($instance)] = $instance;
-						}
-					}
-				}
-			}*/
+				$this->registeredFields[get_class($instance)] = $instance;
+			}
 		}
 
 		return $this->registeredFields;
@@ -209,20 +211,23 @@ class Fields extends Component
 		if (count($fields))
 		{
 			// Loop through registered fields and add them to the standard group
-			foreach ($fields as $field)
+			foreach ($fields as $class => $field)
 			{
-				if (array_key_exists($field->getType(), $fieldTypes))
+				$type = $field->getType();
+
+				if (in_array($type, $fieldTypes))
 				{
 					/**
 					 * @var BaseFieldType $fieldType
 					 */
-					$fieldType = $fieldTypes[$field->getType()];
 
-					$standardFields[$fieldType->getClassHandle()] = $fieldType->getName();
+					$standardFields[$class] = $type::displayName();
 
 					// Remove the field type associate with the current field from the group
 					// The remaining field types will be added to the custom group
-					unset($fieldTypes[$field->getType()]);
+					if(($key = array_search($type, $fieldTypes)) !== false) {
+						unset($fieldTypes[$key]);
+					}
 				}
 			}
 
@@ -230,7 +235,7 @@ class Fields extends Component
 			asort($standardFields);
 
 			// Add the group label to the beginning of the standard group
-			$standardFields = $this->prependKeyValue($standardFields, 'standardFieldGroup', array('optgroup' => Craft::t('Standard Fields')));
+			$standardFields = $this->prependKeyValue($standardFields, 'standardFieldGroup', array('optgroup' => SproutForms::t('Standard Fields')));
 		}
 
 		if (count($fieldTypes))

@@ -1,0 +1,36 @@
+{%- set type           = field.type|lower %}
+{%- set data           = renderingOptions.data is defined ? renderingOptions.data : null %}
+{%- set id             = renderingOptions.id is defined ? renderingOptions.id : name %}
+{%- set class          = renderingOptions.class is defined ? renderingOptions.class : name %}
+{%- set value          = value is defined ? value : null %}
+{%- set required       = field.required is defined and field.required ? " required" %}
+{%- set multiple       = settings.limit == '' ? true : settings.limit > 1 ? true : false %}
+{%- set selectionLabel = settings.selectionLabel != '' ? settings.selectionLabel : "Select a category..."|t -%}
+
+{%- set dataAttributes = null %}
+{%- for key, dataValue in data %}
+	{%- set dataAttributes = dataAttributes ~ ' data-'~key~'="'~dataValue~'"' %}
+{%- endfor -%}
+
+{% spaceless %}
+<select {%- if multiple %} multiple {% endif %}
+	{%- if id %} id="{{ id }}"{% endif %}
+	{%- if class %} class="{{ class }}"{% endif %}
+	{%- if name %} name="{{ name }}[]"{% endif %}
+	{{- required -}}
+	{{- dataAttributes|raw -}}
+	>
+	{%- if not multiple -%}
+		<option value="" disabled selected>{{ selectionLabel }}</option>
+	{%- endif -%}
+	{%- for options in categories -%}
+		{%- for option in options.categories -%}
+			{%- set optionLabel = option.title -%}
+			{%- set optionValue = option.id -%}
+
+			<option value="{{ optionValue }}" {% if optionValue == value %}selected{% endif %}>{{ optionLabel }}</option>
+
+		{% endfor %}
+	{% endfor %}
+</select>
+{% endspaceless %}

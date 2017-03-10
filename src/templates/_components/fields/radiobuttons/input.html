@@ -1,0 +1,38 @@
+{%- set type          = field.type|lower %}
+{%- set options       = renderingOptions is defined ? renderingOptions : {} %}
+{%- set data          = options.data is defined ? options.data : null %}
+{%- set id            = options.id is defined ? options.id : name %}
+{%- set class         = options.class is defined ? options.class : name %}
+{%- set selectedValue = value is defined ? value : null %}
+{%- set required      = field.required is defined and field.required ? " required" %}
+{%- set options       = (settings.options is defined ? settings.options : []) %}
+
+{%- set dataAttributes = null %}
+{%- for key, dataValue in data %}
+	{%- set dataAttributes = dataAttributes ~ ' data-'~key~'="'~dataValue~'"' %}
+{% endfor -%}
+
+{% spaceless %}
+<div
+	{%- if id %} id="{{ id }}"{% endif %}
+	{%- if class %} class="{{ class }}{% endif %}">
+	{%- for key, option in options %}
+
+		{%- set label = (option.label is defined ? option.label : option) %}
+		{%- set value = (option.value is defined ? option.value : key) %}
+		{%- set checked = (value == selectedValue) %}
+
+		<label {%- if id %} for="{{ id }}-{{ loop.index }}"{% endif %}>
+			<input type="radio"
+				{%- if id %} id="{{ id }}-{{ loop.index }}"{% endif %}
+				{%- if name %} name="{{ name }}"{% endif %}
+				{%- if value %} value="{{ value }}"{% endif %}
+				{%- if checked is defined and checked %} checked{% endif %}
+				{{- required -}}
+				{{- dataAttributes|raw -}}
+				>
+				{%- if label is defined %}{{ label|raw }}{% endif -%}
+		</label>
+	{% endfor %}
+</div>
+{% endspaceless %}
