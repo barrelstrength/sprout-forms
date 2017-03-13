@@ -59,6 +59,7 @@ abstract class SproutFormsBaseField
 
 	public static function addFieldVariables(array $variables)
 	{
+		$var = "S";
 		static::$fieldVariables = array_merge(static::$fieldVariables, $variables);
 	}
 

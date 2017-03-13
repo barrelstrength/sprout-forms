@@ -221,7 +221,7 @@ class Fields extends Component
 					 * @var BaseFieldType $fieldType
 					 */
 
-					$standardFields[$class] = $type::displayName();
+					$standardFields[$type] = $type::displayName();
 
 					// Remove the field type associate with the current field from the group
 					// The remaining field types will be added to the custom group

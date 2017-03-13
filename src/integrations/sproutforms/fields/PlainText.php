@@ -18,7 +18,7 @@ class PlainText extends SproutFormsBaseField
 	 */
 	public function getType()
 	{
-		return get_class(new CraftPlainText());
+		return CraftPlainText::class;
 	}
 
 	/**
@@ -32,6 +32,8 @@ class PlainText extends SproutFormsBaseField
 	public function getInputHtml($field, $value, $settings, array $renderingOptions = null)
 	{
 		$this->beginRendering();
+
+		$as = Craft::$app->getView()->getTemplatesPath();
 
 		$rendered = Craft::$app->getView()->render(
 			'plaintext/input',

@@ -9,6 +9,7 @@ use craft\helpers\Template as TemplateHelper;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\models\FieldGroup;
 use barrelstrength\sproutforms\models\FieldLayout;
+use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 
 /**
  * SproutForms provides an API for accessing information about forms. It is accessible from templates via `craft.sproutforms`.

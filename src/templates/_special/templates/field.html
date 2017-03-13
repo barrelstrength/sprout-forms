@@ -1,4 +1,4 @@
-	{%- do craft.sproutForms.addFieldVariables(_context) -%}
+	{%- do craft.sproutforms.addFieldVariables(_context) -%}
 
 	{%- set label            = field.name is defined ? field.name : null %}
 	{%- set instructions     = field.instructions is defined ? field.instructions : null %}
@@ -6,11 +6,13 @@
 	{%- set required         = field.required is defined and field.required ? true : false %}
 	{%- set renderingOptions = attribute(renderingOptions.fields, name) is defined ? attribute(renderingOptions
 	.fields, name) : {} %}
-	{%- set type             = field.type|lower %}
+	{#%- set type             = field.type|lower %#}
+	{%- set type = "error on craft3" %}
 	{%- set id               = renderingOptions.id is defined ? renderingOptions.id : name %}
 	{%- set class            = renderingOptions.class is defined ? renderingOptions.class : name ~ '-field' %}
-	{%- set value            = element is not empty ? element.getFieldValue(name) : null %}
-	{%- set errors           = element is not empty ? element.getErrors(name) : null %}
+	{{dump(element.getFieldValue(name))}}
+	{#%- set value            = element is not empty ? element.getFieldValue(name) : null %}
+	{#%- set errors           = element is not empty ? element.getErrors(name) : null %}
 	{%- set errorClass       = renderingOptions.errorClass is defined ? renderingOptions.errorClass : 'errors' %}
 	{%- set input            = formField.getInputHtml(field, value, field.settings, renderingOptions) %}
 
@@ -54,4 +56,4 @@
 
 			</div>
 		{%- endif -%}
-	{%- endnamespace -%}
+	{%- endnamespace -%#}

@@ -82,7 +82,7 @@
 				else
 				{
 					// Error
-					var msg = Craft.t('sproutForms','An unknown error occurred.');
+					var msg = Craft.t('sproutforms','An unknown error occurred.');
 
 					if (typeof(response) != 'undefined' && response && typeof(response.error) != 'undefined')
 					{

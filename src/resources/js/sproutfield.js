@@ -31,7 +31,7 @@
 
 			this.$container = $('<div class="newfieldbtn-container">').insertAfter($(".fld-tabs"));
 
-			this.$fieldButton = $('<div id="sproutField" class="btn add icon" tabindex="0">').text(Craft.t('sproutForms','New Field')).appendTo($(".buttons"));
+			this.$fieldButton = $('<div id="sproutField" class="btn add icon" tabindex="0">').text(Craft.t('sproutforms','New Field')).appendTo($(".buttons"));
 
 			this.initButtons();
 			this.modal = SproutField.FieldModal.getInstance();
@@ -159,12 +159,12 @@
 				drag.addItems($field);
 				grid.refreshCols(true);
 
-				Craft.cp.displayNotice(Craft.t('sproutForms','New field created.'));
+				Craft.cp.displayNotice(Craft.t('sproutforms','New field created.'));
 			}
 			else
 			{
 				// New field without tab or new field with renamed unsaved tab let's just display a message
-				Craft.cp.displayError(Craft.t('sproutForms','Please Save the form after you rename any tab.'));
+				Craft.cp.displayError(Craft.t('sproutforms','Please Save the form after you rename any tab.'));
 				//Save the form does not work because the field is not added to the tab.
 			}
 		},
