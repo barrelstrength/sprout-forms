@@ -6,13 +6,10 @@
 	{%- set required         = field.required is defined and field.required ? true : false %}
 	{%- set renderingOptions = attribute(renderingOptions.fields, name) is defined ? attribute(renderingOptions
 	.fields, name) : {} %}
-	{#%- set type             = field.type|lower %#}
-	{%- set type = "error on craft3" %}
 	{%- set id               = renderingOptions.id is defined ? renderingOptions.id : name %}
 	{%- set class            = renderingOptions.class is defined ? renderingOptions.class : name ~ '-field' %}
-	{{dump(element.getFieldValue(name))}}
-	{#%- set value            = element is not empty ? element.getFieldValue(name) : null %}
-	{#%- set errors           = element is not empty ? element.getErrors(name) : null %}
+	{%- set value            = element is not empty ? element.getFieldValue(name) : null %}
+	{%- set errors           = element is not empty ? element.getErrors(name) : null %}
 	{%- set errorClass       = renderingOptions.errorClass is defined ? renderingOptions.errorClass : 'errors' %}
 	{%- set input            = formField.getInputHtml(field, value, field.settings, renderingOptions) %}
 
@@ -25,7 +22,7 @@
 		{%- else %}
 
 			<div
-				{%- if id %} id="{{ id }}-field"{% endif %} class="field {{ type }}
+				{%- if id %} id="{{ id }}-field"{% endif %} class="field
 				{%- if class %} {{ class }}{% endif -%}
 				{%- if errors %} {{ errorClass }}{% endif -%}
 				{%- if required %} required{% endif -%}
@@ -56,4 +53,4 @@
 
 			</div>
 		{%- endif -%}
-	{%- endnamespace -%#}
+	{%- endnamespace -%}

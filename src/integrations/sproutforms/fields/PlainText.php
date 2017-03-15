@@ -3,6 +3,7 @@ namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
 
 use Craft;
 use craft\fields\PlainText as CraftPlainText;
+use craft\helpers\Template as TemplateHelper;
 
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 
@@ -33,9 +34,7 @@ class PlainText extends SproutFormsBaseField
 	{
 		$this->beginRendering();
 
-		$as = Craft::$app->getView()->getTemplatesPath();
-
-		$rendered = Craft::$app->getView()->render(
+		$rendered = Craft::$app->getView()->renderTemplate(
 			'plaintext/input',
 			array(
 				'name'             => $field->handle,
@@ -48,7 +47,7 @@ class PlainText extends SproutFormsBaseField
 
 		$this->endRendering();
 
-		return TemplateHelper::getRaw($rendered);
+		return TemplateHelper::raw($rendered);
 	}
 
 	/**
@@ -56,6 +55,6 @@ class PlainText extends SproutFormsBaseField
 	 */
 	public function getTemplatesPath()
 	{
-		return Craft::$app->path->getPluginsPath() . 'sproutforms/src/templates/_components/fields/';
+		return Craft::$app->path->getPluginsPath() . '/sproutforms/src/templates/_components/fields/';
 	}
 }

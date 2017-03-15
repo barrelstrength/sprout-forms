@@ -1,4 +1,3 @@
-{%- set type          = settings.multiline is empty ? field.type|lower : 'textarea' %}
 {%- set data          = renderingOptions.data is defined ? renderingOptions.data : null %}
 {%- set id            = renderingOptions.id is defined ? renderingOptions.id : name %}
 {%- set class         = renderingOptions.class is defined ? renderingOptions.class : name %}
@@ -6,7 +5,7 @@
 {%- set required      = field.required is defined and field.required ? " required" %}
 
 {%- set placeholder   = settings.placeholder is not empty ? settings.placeholder : null %}
-{%- set maxLength     = settings.maxLength is not empty ? settings.maxLength : null %}
+{%- set maxLength     = settings.charLimit is not empty ? settings.charLimit : null %}
 {%- set initialRows   = settings.initialRows is not empty ? settings.initialRows : 10 %}
 
 {%- set dataAttributes = null %}
