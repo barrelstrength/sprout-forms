@@ -64,6 +64,13 @@ class SproutForms_EntriesController extends BaseController
 
 		if (sproutForms()->entries->forwardEntry($entry))
 		{
+			// Adds support for notification
+			if (!craft()->request->isCpRequest() && $this->form->notificationEnabled)
+			{
+				$post = $_POST;
+				sproutForms()->forms->sendNotification($this->form, $entry, $post);
+			}
+
 			if ($this->form->savePayload)
 			{
 				if (!sproutForms()->entries->saveEntry($entry))
