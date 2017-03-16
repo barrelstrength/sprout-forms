@@ -244,7 +244,13 @@ class SproutForms_EntriesController extends BaseController
 			}
 		}
 
-		$entryId = craft()->request->getPost('entryId');
+		$sproutFormsSettings            = craft()->config->get('sproutForms');
+		$enableEditFormEntryViaFrontEnd = isset($sproutFormsSettings['enableEditFormEntryViaFrontEnd']) ? $sproutFormsSettings['enableEditFormEntryViaFrontEnd'] : false;
+
+		if (craft()->request->isCpRequest() || $enableEditFormEntryViaFrontEnd)
+		{
+			$entryId = craft()->request->getPost('entryId');
+		}
 
 		if ($entryId)
 		{
