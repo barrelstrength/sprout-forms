@@ -37,6 +37,8 @@ class EntryQuery extends ElementQuery
 
 	public $formName;
 
+	public $formGroupId;
+
 	/**
 	 * @inheritdoc
 	 */
@@ -110,6 +112,19 @@ class EntryQuery extends ElementQuery
 	{
 		$this->joinElementTable('sproutforms_entries');
 
+		// Figure out which content table to use
+		$this->contentTable = null;
+
+		if ($this->id && $this->formId)
+		{
+			$form = FormRecord::findOne($this->formId);
+
+			if ($form)
+			{
+				$this->contentTable = '{{%sproutformscontent_'.trim(strtolower($form->handle)).'}}';
+			}
+		}
+
 		$this->query->select([
 			'sproutforms_entries.statusId',
 			'sproutforms_entries.formId',
@@ -118,17 +133,15 @@ class EntryQuery extends ElementQuery
 			'sproutforms_entries.dateCreated',
 			'sproutforms_entries.dateUpdated',
 			'sproutforms_entries.uid',
-			'forms.id',
-			'forms.name',
-			'forms.groupId'
+			'forms.id as formId',
+			'forms.name as formName',
+			'forms.groupId as formGroupId'
 		]);
 
 		$this->query->innerJoin('{{%sproutforms_entrystatuses}} entrystatuses', '[[entrystatuses.id]] = [[sproutforms_entries.statusId]]');
 		$this->query->innerJoin('{{%sproutforms_forms}} forms', '[[forms.id]] = [[sproutforms_entries.formId]]');
 
 		$this->joinContentTableAndAddContentSelects($this);
-
-		$select = $this->query->createCommand();
 
 		if ($this->id) {
 			$this->subQuery->andWhere(Db::parseParam(

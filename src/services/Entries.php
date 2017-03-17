@@ -66,7 +66,7 @@ class Entries extends Component
 			->where(['id' => $entryStatusId])
 			->one();
 
-		return $entryStatus != null ? SproutForms_EntryStatusModel::populateModel($entryStatus) : null;
+		return $entryStatus != null ? $entryStatus : null;
 	}
 
 	/**

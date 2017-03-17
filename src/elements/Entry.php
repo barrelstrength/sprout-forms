@@ -27,6 +27,7 @@ class Entry extends Element
 	public $id;
 	public $formId;
 	public $statusId;
+	public $formGroupId;
 	public $formName;
 	public $ipAddress;
 	public $userAgent;
@@ -120,8 +121,10 @@ class Entry extends Element
 	/** @noinspection PhpInconsistentReturnPointsInspection */
 	public function __toString()
 	{
-		try {
-			return $this->getForm()->name;
+		try
+		{
+			// @todo - For some reason the Title returns null possible Craft3 bug
+			return $this->formName;
 		} catch (\Exception $e) {
 			ErrorHandler::convertExceptionToError($e);
 		}
@@ -134,6 +137,7 @@ class Entry extends Element
 	{
 		return $this->getForm()->getFieldLayout();
 	}
+
 
 	/**
 	 *
@@ -332,8 +336,9 @@ class Entry extends Element
 	protected static function defineSortOptions(): array
 	{
 		$attributes = [
+			'title' => SproutForms::t('Title'),
 			'sproutforms_entries.dateCreated' => SproutForms::t('Date Created'),
-			'name'                            => SproutForms::t('Form Name'),
+			'formName'                        => SproutForms::t('Form Name'),
 			'sproutforms_entries.dateUpdated' => SproutForms::t('Date Updated'),
 		];
 
@@ -422,16 +427,6 @@ class Entry extends Element
 		}
 
 		return $this->form;
-	}
-
-	/**
-	 * Returns the content title for this entry
-	 *
-	 * @return mixed|string
-	 */
-	public function getTitle()
-	{
-		return $this->getContent()->title;
 	}
 
 	/**
