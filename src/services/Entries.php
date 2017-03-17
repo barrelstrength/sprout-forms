@@ -3,12 +3,14 @@ namespace barrelstrength\sproutforms\services;
 
 use Craft;
 use yii\base\Component;
+use craft\events\ModelEvent;
 
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\records\Entry as EntryRecord;
 use barrelstrength\sproutforms\records\EntryStatus as EntryStatusRecord;
+use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 
 use Guzzle\Http\Client;
 
@@ -16,6 +18,7 @@ class Entries extends Component
 {
 	public $fakeIt = false;
 	protected $entryRecord;
+
 
 	/**
 	 * @param EntryRecord $entryRecord
@@ -75,6 +78,140 @@ class Entries extends Component
 			->all();
 
 		return $entryStatuses;
+	}
+
+	/**
+	 * Returns a form entry model if one is found in the database by id
+	 *
+	 * @param int $entryId
+	 *
+	 * @return null|EntryElement
+	 */
+	public function getEntryById($entryId)
+	{
+		return EntryRecord::findOne($entryId);
+	}
+
+	/**
+	 * @param EntryElement $entry
+	 *
+	 * @throws \Exception
+	 * @return bool
+	 */
+	public function saveEntry(EntryElement &$entry)
+	{
+		$isNewEntry = !$entry->id;
+
+		if ($entry->id)
+		{
+			$entryRecord = EntryRecord::findOne($entry->id);
+
+			if (!$entryRecord)
+			{
+				throw new Exception(SproutForms::t('No entry exists with id '.$entry->id));
+			}
+		}
+
+		$entry->statusId  = $entry->statusId != null ? $entry->statusId : $this->getDefaultEntryStatusId();
+
+		$entry->validate();
+
+		// EVENT_BEFORE_SAVE event moved to the element class https://github.com/craftcms/docs/blob/master/en/updating-plugins.md#events
+
+		$event = new OnBeforeSaveEntryEvent([
+			'entry' => $entry
+		]);
+
+		$this->trigger(EntryElement::EVENT_BEFORE_SAVE, $event);
+
+		if (!$entry->hasErrors())
+		{
+			try
+			{
+				$form = sproutForms()->forms->getFormById($entry->formId);
+
+				$entry->getContent()->title = craft()->templates->renderObjectTemplate($form->titleFormat, $entry);
+
+				$db          = Craft::$app->getDb();
+				$transaction = $db->getTransaction() === null ? $db->beginTransaction() : null;
+
+				if ($event->isValid)
+				{
+					$oldFieldContext = Craft::$app->content->fieldContext;
+					$oldContentTable = Craft::$app->content->contentTable;
+
+					Craft::$app->content->fieldContext = $entry->getFieldContext();
+					Craft::$app->content->contentTable = $entry->getContentTable();
+
+					SproutForms::log('Transaction: Event is Valid');
+
+					$success = Craft::$app->getElements()->saveElement($entry);
+
+					if ($success)
+					{
+						SproutForms::log('Element Saved: ' . (bool)$success);
+
+						if ($transaction !== null)
+						{
+							$transaction->commit();
+
+							SproutForms::log('Transaction committed');
+						}
+
+						// Reset our field context and content table to what they were previously
+						craft()->content->fieldContext = $oldFieldContext;
+						craft()->content->contentTable = $oldContentTable;
+
+						$event = new OnSaveEntryEvent([
+							'entry' => $entry,
+							'isNewEntry' => $isNewEntry,
+						]);
+
+						$this->trigger(EntryElement::EVENT_AFTER_SAVE, $event);
+
+						return true;
+					}
+					else
+					{
+						SproutForms::log("Couldn’t save Element on saveEntry service.", 'error');
+					}
+
+					craft()->content->fieldContext = $oldFieldContext;
+					craft()->content->contentTable = $oldContentTable;
+				}
+				else
+				{
+					SproutForms::log('OnBeforeSaveEntryEvent is not valid', 'error');
+
+					if ($event->fakeIt)
+					{
+						sproutForms()->entries->fakeIt = true;
+					}
+				}
+			}
+			catch (\Exception $e)
+			{
+				SproutForms::log('Failed to save element: '.$e->getMessage(), 'error');
+
+				return false;
+				throw $e;
+			}
+		}
+		else
+		{
+			SproutForms::log('Service returns false', 'error');
+
+			return false;
+		}
+	}
+
+	public function getDefaultEntryStatusId()
+	{
+		$entryStatus = EntryStatusRecord::find()
+			->orderBy(['isDefault' => SORT_DESC])
+			->one();
+
+		return $entryStatus != null ? $entryStatus->id : null;
 	}
 
 }

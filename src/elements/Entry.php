@@ -374,7 +374,7 @@ class Entry extends Element
 	 */
 	public function afterSave(bool $isNew)
 	{
-		// Get the form record
+		// Get the entry record
 		if (!$isNew)
 		{
 			$record = EntryRecord::findOne($this->id);

@@ -93,6 +93,9 @@ class SproutForms extends \craft\base\Plugin
 
 			'sprout-forms/forms/<groupId:\d+>'                        =>
 			'sprout-forms/forms',
+
+			'sproutForms/entries/saveEntry'                           =>
+			'sprout-forms/entries/save-entry',
 		];
 	}
 
