@@ -11,6 +11,7 @@ use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\records\Entry as EntryRecord;
 use barrelstrength\sproutforms\records\EntryStatus as EntryStatusRecord;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
+use barrelstrength\sproutforms\events\OnSaveEntryEvent;
 
 use Guzzle\Http\Client;
 
@@ -102,6 +103,8 @@ class Entries extends Component
 	{
 		$isNewEntry = !$entry->id;
 
+		$view = Craft::$app->getView();
+
 		if ($entry->id)
 		{
 			$entryRecord = EntryRecord::findOne($entry->id);
@@ -128,20 +131,21 @@ class Entries extends Component
 		{
 			try
 			{
-				$form = sproutForms()->forms->getFormById($entry->formId);
+				$form = SproutForms::$api->forms->getFormById($entry->formId);
 
-				$entry->getContent()->title = craft()->templates->renderObjectTemplate($form->titleFormat, $entry);
+				$entry->title = $view->renderObjectTemplate($form->titleFormat, $entry);
 
 				$db          = Craft::$app->getDb();
 				$transaction = $db->getTransaction() === null ? $db->beginTransaction() : null;
 
 				if ($event->isValid)
 				{
-					$oldFieldContext = Craft::$app->content->fieldContext;
-					$oldContentTable = Craft::$app->content->contentTable;
+					$content         = Craft::$app->getContent();
+					$oldFieldContext = $content->fieldContext;
+					$oldContentTable = $content->contentTable;
 
-					Craft::$app->content->fieldContext = $entry->getFieldContext();
-					Craft::$app->content->contentTable = $entry->getContentTable();
+					$content->fieldContext = $entry->getFieldContext();
+					$content->contentTable = $entry->getContentTable();
 
 					SproutForms::log('Transaction: Event is Valid');
 
@@ -159,8 +163,8 @@ class Entries extends Component
 						}
 
 						// Reset our field context and content table to what they were previously
-						craft()->content->fieldContext = $oldFieldContext;
-						craft()->content->contentTable = $oldContentTable;
+						$content->fieldContext = $oldFieldContext;
+						$content->contentTable = $oldContentTable;
 
 						$event = new OnSaveEntryEvent([
 							'entry' => $entry,
@@ -176,8 +180,8 @@ class Entries extends Component
 						SproutForms::log("Couldn’t save Element on saveEntry service.", 'error');
 					}
 
-					craft()->content->fieldContext = $oldFieldContext;
-					craft()->content->contentTable = $oldContentTable;
+					$content->fieldContext = $oldFieldContext;
+					$content->contentTable = $oldContentTable;
 				}
 				else
 				{
@@ -185,7 +189,7 @@ class Entries extends Component
 
 					if ($event->fakeIt)
 					{
-						sproutForms()->entries->fakeIt = true;
+						SproutForms::$api->entries->fakeIt = true;
 					}
 				}
 			}

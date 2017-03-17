@@ -38,14 +38,13 @@ class EntriesController extends BaseController
 
 		$request = Craft::$app->getRequest();
 		$view    = Craft::$app->getView();
-		$session = Craft::$app->getSession();
 
 		$formHandle = $request->getRequiredBodyParam('handle');
 		$this->form = SproutForms::$api->forms->getFormByHandle($formHandle);
 
 		if (!isset($this->form))
 		{
-			throw new Exception(SproutForms::t('No form exists with the handle '.$formHandle);
+			throw new Exception(SproutForms::t('No form exists with the handle '.$formHandle));
 		}
 
 		$entry = $this->_getEntryModel();
@@ -63,11 +62,14 @@ class EntriesController extends BaseController
 		$this->_populateEntryModel($entry);
 
 		// Swap out any dynamic variables for our notifications
-		$this->form->notificationRecipients   = $view->renderObjectTemplate($this->form->notificationRecipients, $entry);
-		$this->form->notificationSubject      = $view->renderObjectTemplate($this->form->notificationSubject, $entry);
-		$this->form->notificationSenderName   = $view->renderObjectTemplate($this->form->notificationSenderName, $entry);
-		$this->form->notificationSenderEmail  = $view->renderObjectTemplate($this->form->notificationSenderEmail, $entry);
-		$this->form->notificationReplyToEmail = $view->renderObjectTemplate($this->form->notificationReplyToEmail, $entry);
+		if ($this->form->notificationEnabled)
+		{
+			$this->form->notificationRecipients   = $view->renderObjectTemplate($this->form->notificationRecipients, $entry);
+			$this->form->notificationSubject      = $view->renderObjectTemplate($this->form->notificationSubject, $entry);
+			$this->form->notificationSenderName   = $view->renderObjectTemplate($this->form->notificationSenderName, $entry);
+			$this->form->notificationSenderEmail  = $view->renderObjectTemplate($this->form->notificationSenderEmail, $entry);
+			$this->form->notificationReplyToEmail = $view->renderObjectTemplate($this->form->notificationReplyToEmail, $entry);
+		}
 
 		if (SproutForms::$api->entries->saveEntry($entry))
 		{
@@ -96,10 +98,6 @@ class EntriesController extends BaseController
 		}
 		else
 		{
-			// Remove our multiStepForm reference.  It will be
-			// set by the template again if it needs to be.
-			$session->remove('multiStepForm');
-
 			return $this->_redirectOnError($entry);
 		}
 	}
@@ -124,7 +122,7 @@ class EntriesController extends BaseController
 		}
 		else
 		{
-			if (Craft::$app->request->isCpRequest())
+			if (Craft::$app->request->getIsCpRequest())
 			{
 				// make errors available to variable
 				Craft::$app->userSession->setError(SproutForms::t('Couldn’t save entry.'));
@@ -177,12 +175,12 @@ class EntriesController extends BaseController
 
 		// Our EntryElement requires that we assign it a FormElement id
 		$entry->formId    = $this->form->id;
-		$entry->ipAddress = $request->getUserHostAddress();
+		$entry->ipAddress = $request->getUserIP();
 		$entry->userAgent = $request->getUserAgent();
 
 		// Set the entry attributes, defaulting to the existing values for whatever is missing from the post data
 		$fieldsLocation = $request->getBodyParam('fieldsLocation', 'fields');
-		$entry->setFieldValuesFromPost($fieldsLocation);
+		$entry->setFieldValuesFromRequest($fieldsLocation);
 		$entry->setFieldParamNamespace($fieldsLocation);
 	}
 
@@ -206,7 +204,7 @@ class EntriesController extends BaseController
 		$sproutFormsSettings            = Craft::$app->getConfig()->get('sproutForms');
 		$enableEditFormEntryViaFrontEnd = isset($sproutFormsSettings['enableEditFormEntryViaFrontEnd']) ? $sproutFormsSettings['enableEditFormEntryViaFrontEnd'] : false;
 
-		if ($request->isCpRequest() || $enableEditFormEntryViaFrontEnd)
+		if ($request->getIsCpRequest() || $enableEditFormEntryViaFrontEnd)
 		{
 			$entryId = $request->getPost('entryId');
 		}
@@ -217,7 +215,7 @@ class EntriesController extends BaseController
 
 			if (!$entry)
 			{
-				throw new Exception(SproutForms::t('No entry exists with the ID '.$entryId);
+				throw new Exception(SproutForms::t('No entry exists with the ID '.$entryId));
 			}
 		}
 		else
