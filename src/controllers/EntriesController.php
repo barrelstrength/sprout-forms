@@ -3,6 +3,7 @@ namespace barrelstrength\sproutforms\controllers;
 
 use Craft;
 use craft\web\Controller as BaseController;
+use yii\web\NotFoundHttpException;
 
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Form as FormElement;
@@ -49,6 +50,8 @@ class EntriesController extends BaseController
 
 		$entry = $this->_getEntryModel();
 
+		Craft::$app->getContent()->populateElementContent($entry);
+
 		// Removed onBeforePopulateEntry event because not needed anymore
 
 		$statusId = $request->getBodyParam('statusId');
@@ -83,7 +86,7 @@ class EntriesController extends BaseController
 
 			// Removed multi-step form code on Craft3 Let's keep it clean
 
-			if ($request->getIsAjax())
+			if ($request->getAcceptsJson())
 			{
 				$return['success'] = true;
 
@@ -103,16 +106,80 @@ class EntriesController extends BaseController
 	}
 
 	/**
+	 * Route Controller for Edit Entry Template
+	 *
+	 * @param int|null  $entryId The entry's ID, if editing an existing entry.
+	 * @param EntryElement|null  $entry The entry send back by setRouteParams if any errors on saveEntry
+	 *
+	 * @throws HttpException
+	 * @throws Exception
+	 */
+	public function actionEditEntry(int $entryId = null, EntryElement $entry = null)
+	{
+		if (SproutForms::$api->forms->activeCpEntry)
+		{
+			$entry = SproutForms::$api->forms->activeCpEntry;
+		}
+		else
+		{
+			if ($entry === null)
+			{
+				$entry = SproutForms::$api->entries->getEntryById($entryId);
+			}
+
+			if (!$entry)
+			{
+				throw new NotFoundHttpException(SproutForms::t('Entry not found'));
+			}
+			
+			Craft::$app->getContent()->populateElementContent($entry);
+		}
+
+		$form          = SproutForms::$api->forms->getFormById($entry->formId);
+		$entryStatus   = SproutForms::$api->entries->getEntryStatusById($entry->statusId);
+		$statuses      = SproutForms::$api->entries->getAllEntryStatuses();
+		$entryStatuses = array();
+
+		foreach ($statuses as $key => $status)
+		{
+			$entryStatuses[$status->id] = $status->name;
+		}
+
+		$variables['form']        = $form;
+		$variables['entryId']     = $entryId;
+		$variables['entryStatus'] = $entryStatus;
+		$variables['statuses']    = $entryStatuses;
+
+		// This is our element, so we know where to get the field values
+		$variables['entry'] = $entry;
+
+		// Get the fields for this entry
+		$fieldLayoutTabs = $entry->getFieldLayout()->getTabs();
+
+		foreach ($fieldLayoutTabs as $tab)
+		{
+			$tabs[$tab->id]['label'] = $tab->name;
+			$tabs[$tab->id]['url']   = '#tab' . $tab->sortOrder;
+		}
+
+		$variables['tabs']            = $tabs;
+		$variables['fieldLayoutTabs'] = $fieldLayoutTabs;
+
+		return $this->renderTemplate('sproutforms/entries/_edit', $variables);
+	}
+
+	/**
 	 * Verifies scenarios for error redirect
 	 *
 	 * @param EntryElement $entry
 	 */
 	private function _redirectOnError(EntryElement $entry)
 	{
-		$errors = json_encode($entry->getErrors());
+		$errors  = json_encode($entry->getErrors());
+		$request = Craft::$app->getRequest();
 		SproutForms::log("Couldn’t save form entry. Errors: ".$errors, 'error');
 
-		if (Craft::$app->request->isAjaxRequest())
+		if ($request->getAcceptsJson())
 		{
 			return $this->asJson(
 				[
@@ -122,17 +189,17 @@ class EntriesController extends BaseController
 		}
 		else
 		{
-			if (Craft::$app->request->getIsCpRequest())
+			if ($request->getIsCpRequest())
 			{
 				// make errors available to variable
-				Craft::$app->userSession->setError(SproutForms::t('Couldn’t save entry.'));
+				Craft::$app->getSession()->setError(SproutForms::t('Couldn’t save entry.'));
 
 				// Store this Entry Model in a variable in our Service layer
 				// so that we can access the error object from our actionEditEntryTemplate() method
 				SproutForms::$api->forms->activeCpEntry = $entry;
 
 				// Return the form as an 'entry' variable if in the cp
-				return Craft::$app->getUrlManager()->setRouteVariables(
+				return Craft::$app->getUrlManager()->setRouteParams(
 					[
 						'entry' => $entry
 					]
@@ -149,10 +216,10 @@ class EntriesController extends BaseController
 					Craft::$app->getSession()->setError(SproutForms::t('Couldn’t save entry.'));
 					// Store this Entry Model in a variable in our Service layer
 					// so that we can access the error object from our displayForm() variable
-					SproutForms::$apo->forms->activeEntries[$this->form->handle] = $entry;
+					SproutForms::$api->forms->activeEntries[$this->form->handle] = $entry;
 
 					// Return the form using it's name as a variable on the front-end
-					return Craft::$app->getUrlManager()->setRouteVariables(
+					return Craft::$app->getUrlManager()->setRouteParams(
 						[
 							$this->form->handle => $entry
 						]
@@ -200,13 +267,17 @@ class EntriesController extends BaseController
 		$session = Craft::$app->getSession();
 
 		// Removed multi-step form code on Craft3 Let's keep it clean
+		$enableEditFormEntryViaFrontEnd = false;
 
-		$sproutFormsSettings            = Craft::$app->getConfig()->get('sproutForms');
-		$enableEditFormEntryViaFrontEnd = isset($sproutFormsSettings['enableEditFormEntryViaFrontEnd']) ? $sproutFormsSettings['enableEditFormEntryViaFrontEnd'] : false;
+		if (isset(Craft::$app->getConfig()->getGeneral()->sproutForms))
+		{
+			$sproutFormsSettings  = Craft::$app->getConfig()->getGeneral()->sproutForms;
+			$enableEditFormEntryViaFrontEnd = isset($sproutFormsSettings['enableEditFormEntryViaFrontEnd']) ? $sproutFormsSettings['enableEditFormEntryViaFrontEnd'] : false;
+		}
 
 		if ($request->getIsCpRequest() || $enableEditFormEntryViaFrontEnd)
 		{
-			$entryId = $request->getPost('entryId');
+			$entryId = $request->getBodyParam('entryId');
 		}
 
 		if ($entryId)

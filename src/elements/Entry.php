@@ -5,13 +5,10 @@ use Craft;
 use craft\base\Element;
 use craft\elements\db\ElementQueryInterface;
 use yii\base\ErrorHandler;
-use craft\db\Query;
 use craft\helpers\UrlHelper;
-use yii\base\InvalidConfigException;
 use craft\elements\actions\Delete;
 
 use barrelstrength\sproutforms\elements\db\EntryQuery;
-use barrelstrength\sproutforms\records\Form as FormRecord;
 use barrelstrength\sproutforms\records\Entry as EntryRecord;
 use barrelstrength\sproutforms\SproutForms;
 
@@ -124,7 +121,10 @@ class Entry extends Element
 		try
 		{
 			// @todo - For some reason the Title returns null possible Craft3 bug
-			return $this->formName;
+			// @todo - Research why we need call populateElementContent
+			Craft::$app->getContent()->populateElementContent($this);
+
+			return $this->title;
 		} catch (\Exception $e) {
 			ErrorHandler::convertExceptionToError($e);
 		}
@@ -434,7 +434,6 @@ class Entry extends Element
 	 */
 	public function rules()
 	{
-		return [
-			[['formId'], 'required']];
+		return [[['formId'], 'required']];
 	}
 }

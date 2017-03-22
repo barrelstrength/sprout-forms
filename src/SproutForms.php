@@ -77,7 +77,7 @@ class SproutForms extends \craft\base\Plugin
 			'sprout-forms/forms/edit-form-template',
 
 			'sprout-forms/entries/edit/<entryId:\d+>'                 =>
-			'sprout-forms/entries/edit-entry-template',
+			'sprout-forms/entries/edit-entry',
 
 			'sprout-forms/settings/(general|advanced)'                =>
 			'sprout-forms/settings/settings-index-template',

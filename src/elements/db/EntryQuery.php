@@ -117,11 +117,11 @@ class EntryQuery extends ElementQuery
 
 		if ($this->id && $this->formId)
 		{
-			$form = FormRecord::findOne($this->formId);
+			$form = SprotForms::$api->forms->getFormById($this->formId);
 
 			if ($form)
 			{
-				$this->contentTable = '{{%sproutformscontent_'.trim(strtolower($form->handle)).'}}';
+				$this->contentTable = $form->getContentTable();
 			}
 		}
 

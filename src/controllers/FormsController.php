@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\controllers;
 use Craft;
 use craft\web\Controller as BaseController;
 use craft\helpers\UrlHelper;
+use yii\web\NotFoundHttpException;
 
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\assetbundles\FormAsset;
@@ -11,16 +12,6 @@ use barrelstrength\sproutforms\elements\Form as FormElement;
 
 class FormsController extends BaseController
 {
-	/**
-	 * Displays the form index page.
-	 *
-	 * @return string The rendering result
-	 */
-	public function actionIndex(): string
-	{
-		return $this->renderTemplate('sproutforms/forms/index');
-	}
-
 	/**
 	 * Save a form
 	 */
@@ -200,7 +191,7 @@ class FormsController extends BaseController
 
 					if (!$form)
 					{
-						throw new HttpException(404);
+						throw new NotFoundHttpException(SproutForms::t('Form not found'));
 					}
 				}
 			}

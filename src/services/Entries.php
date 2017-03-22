@@ -88,9 +88,15 @@ class Entries extends Component
 	 *
 	 * @return null|EntryElement
 	 */
-	public function getEntryById($entryId)
+	public function getEntryById($entryId, int $siteId = null)
 	{
-		return EntryRecord::findOne($entryId);
+		$query = EntryElement::find();
+		$query->id($entryId);
+		$query->siteId($siteId);
+		// @todo - research next function
+		#$query->enabledForSite(false);
+
+		return $query->one();
 	}
 
 	/**
