@@ -135,6 +135,7 @@ class EntryQuery extends ElementQuery
 			'sproutforms_entries.uid',
 			'forms.id as formId',
 			'forms.name as formName',
+			'forms.handle as formHandle',
 			'forms.groupId as formGroupId'
 		]);
 
@@ -151,7 +152,7 @@ class EntryQuery extends ElementQuery
 
 		if ($this->formId) {
 			$this->subQuery->andWhere(Db::parseParam(
-				'sproutforms_entries.formId', $this->formId)
+				'formId', $this->formId)
 			);
 		}
 
@@ -163,7 +164,7 @@ class EntryQuery extends ElementQuery
 
 		if ($this->formHandle) {
 			$this->subQuery->andWhere(Db::parseParam(
-				'forms.handle', $this->formHandle)
+				'formHandle', $this->formHandle)
 			);
 		}
 
@@ -232,6 +233,8 @@ class EntryQuery extends ElementQuery
 					$form->getContentTable() . ' as ' . $form->handle,
 					'[['.$form->handle . '.elementId]] = [[subquery.elementsId]]'
 				);
+
+				$entryQuery->query->select = $select;
 			}
 		}
 	}

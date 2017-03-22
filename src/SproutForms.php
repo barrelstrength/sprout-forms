@@ -16,7 +16,7 @@ use barrelstrength\sproutforms\services\Fields;
 class SproutForms extends \craft\base\Plugin
 {
 	/**
-	 * Enable use of SproutForms::$plugin-> in place of Craft::$app->
+	 * Enable use of SproutForms::$app-> in place of Craft::$app->
 	 *
 	 * @var [type]
 	 */

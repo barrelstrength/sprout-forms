@@ -23,6 +23,7 @@ class Entry extends Element
 
 	public $id;
 	public $formId;
+	public $formHandle;
 	public $statusId;
 	public $formGroupId;
 	public $formName;
@@ -336,9 +337,9 @@ class Entry extends Element
 	protected static function defineSortOptions(): array
 	{
 		$attributes = [
-			'title' => SproutForms::t('Title'),
 			'sproutforms_entries.dateCreated' => SproutForms::t('Date Created'),
-			'formName'                        => SproutForms::t('Form Name'),
+			// @todo - fix error where formName is not a column on subquery
+			//'formName'               => SproutForms::t('Form Name'),
 			'sproutforms_entries.dateUpdated' => SproutForms::t('Date Updated'),
 		];
 
