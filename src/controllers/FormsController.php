@@ -25,7 +25,7 @@ class FormsController extends BaseController
 		if ($request->getBodyParam('saveAsNew'))
 		{
 			$form->saveAsNew = true;
-			$duplicateForm = SproutForms::$api()->forms->createNewForm(
+			$duplicateForm = SproutForms::$app()->forms->createNewForm(
 				$request->getBodyParam('name'),
 				$request->getBodyParam('handle')
 			);
@@ -71,7 +71,7 @@ class FormsController extends BaseController
 
 		if ($form->saveAsNew)
 		{
-			$fieldLayout = SproutForms::$api->fields->getDuplicateLayout($duplicateForm, $fieldLayout);
+			$fieldLayout = SproutForms::$app->fields->getDuplicateLayout($duplicateForm, $fieldLayout);
 		}
 
 		$fieldLayout->type = Form::class;
@@ -95,7 +95,7 @@ class FormsController extends BaseController
 			foreach ($deletedFields as $fieldId)
 			{
 				// Each field deleted will be update the titleFormat
-				$currentTitleFormat = SproutForms::$api->forms->cleanTitleFormat($fieldId);
+				$currentTitleFormat = SproutForms::$app->forms->cleanTitleFormat($fieldId);
 				Craft::$app->fields->deleteFieldById($fieldId);
 			}
 
@@ -111,7 +111,7 @@ class FormsController extends BaseController
 		}
 
 		// Save it
-		if (!SproutForms::$api->forms->saveForm($form))
+		if (!SproutForms::$app->forms->saveForm($form))
 		{
 			Craft::$app->getSession()->setError(SproutForms::t('Couldn’t save form.'));
 
@@ -163,7 +163,7 @@ class FormsController extends BaseController
 		// Immediately create a new Form
 		if (Craft::$app->request->getSegment(3) == "new")
 		{
-			$form = SproutForms::$api->forms->createNewForm();
+			$form = SproutForms::$app->forms->createNewForm();
 
 			if ($form)
 			{
@@ -183,11 +183,11 @@ class FormsController extends BaseController
 				{
 					$variables['brandNewForm'] = false;
 
-					$variables['groups']  = SproutForms::$api->groups->getAllFormGroups();
+					$variables['groups']  = SproutForms::$app->groups->getAllFormGroups();
 					$variables['groupId'] = "";
 
 					// Get the Form
-					$form = SproutForms::$api->forms->getFormById($formId);
+					$form = SproutForms::$app->forms->getFormById($formId);
 
 					if (!$form)
 					{
@@ -222,10 +222,10 @@ class FormsController extends BaseController
 
 		// Get the Form these fields are related to
 		$formId = $request->getRequiredBodyParam('id');
-		$form   = SproutForms::$api->forms->getFormById($formId);
+		$form   = SproutForms::$app->forms->getFormById($formId);
 
 		// @TODO - handle errors
-		$success = SproutForms::$api->forms->deleteForm($form);
+		$success = SproutForms::$app->forms->deleteForm($form);
 
 		return $this->redirectToPostedUrl($form);
 	}

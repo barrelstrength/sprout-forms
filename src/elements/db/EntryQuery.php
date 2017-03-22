@@ -193,13 +193,13 @@ class EntryQuery extends ElementQuery
 
 			if ($entryQuery->formId)
 			{
-				$form = SproutForms::$api->forms->getFormById($entryQuery->formId);
+				$form = SproutForms::$app->forms->getFormById($entryQuery->formId);
 			}
 			else
 			{
 				if ($entryQuery->formHandle)
 				{
-					$form = SproutForms::$api->forms->getFormByHandle($entryQuery->formHandle);
+					$form = SproutForms::$app->forms->getFormByHandle($entryQuery->formHandle);
 				}
 			}
 

@@ -93,7 +93,7 @@ class Form extends Element
 	 */
 	public function getContentTable(): string
 	{
-		return SproutForms::$api->forms->getContentTableName($this);
+		return SproutForms::$app->forms->getContentTableName($this);
 	}
 
 	/**
@@ -194,7 +194,7 @@ class Form extends Element
 			]
 		];
 
-		$groups = SproutForms::$api->groups->getAllFormGroups();
+		$groups = SproutForms::$app->groups->getAllFormGroups();
 
 		foreach ($groups as $group)
 		{

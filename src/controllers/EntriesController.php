@@ -41,7 +41,7 @@ class EntriesController extends BaseController
 		$view    = Craft::$app->getView();
 
 		$formHandle = $request->getRequiredBodyParam('handle');
-		$this->form = SproutForms::$api->forms->getFormByHandle($formHandle);
+		$this->form = SproutForms::$app->forms->getFormByHandle($formHandle);
 
 		if (!isset($this->form))
 		{
@@ -74,14 +74,14 @@ class EntriesController extends BaseController
 			$this->form->notificationReplyToEmail = $view->renderObjectTemplate($this->form->notificationReplyToEmail, $entry);
 		}
 
-		if (SproutForms::$api->entries->saveEntry($entry))
+		if (SproutForms::$app->entries->saveEntry($entry))
 		{
 			// Only send notification email for front-end submissions if they are enabled
 			if (!$request->getIsCpRequest() && $this->form->notificationEnabled)
 			{
 				$post = $_POST;
 				// @todo
-				//SproutForms::$api->forms->sendNotification($this->form, $entry, $post);
+				//SproutForms::$app->forms->sendNotification($this->form, $entry, $post);
 			}
 
 			// Removed multi-step form code on Craft3 Let's keep it clean
@@ -116,28 +116,28 @@ class EntriesController extends BaseController
 	 */
 	public function actionEditEntry(int $entryId = null, EntryElement $entry = null)
 	{
-		if (SproutForms::$api->forms->activeCpEntry)
+		if (SproutForms::$app->forms->activeCpEntry)
 		{
-			$entry = SproutForms::$api->forms->activeCpEntry;
+			$entry = SproutForms::$app->forms->activeCpEntry;
 		}
 		else
 		{
 			if ($entry === null)
 			{
-				$entry = SproutForms::$api->entries->getEntryById($entryId);
+				$entry = SproutForms::$app->entries->getEntryById($entryId);
 			}
 
 			if (!$entry)
 			{
 				throw new NotFoundHttpException(SproutForms::t('Entry not found'));
 			}
-			
+
 			Craft::$app->getContent()->populateElementContent($entry);
 		}
 
-		$form          = SproutForms::$api->forms->getFormById($entry->formId);
-		$entryStatus   = SproutForms::$api->entries->getEntryStatusById($entry->statusId);
-		$statuses      = SproutForms::$api->entries->getAllEntryStatuses();
+		$form          = SproutForms::$app->forms->getFormById($entry->formId);
+		$entryStatus   = SproutForms::$app->entries->getEntryStatusById($entry->statusId);
+		$statuses      = SproutForms::$app->entries->getAllEntryStatuses();
 		$entryStatuses = array();
 
 		foreach ($statuses as $key => $status)
@@ -196,7 +196,7 @@ class EntriesController extends BaseController
 
 				// Store this Entry Model in a variable in our Service layer
 				// so that we can access the error object from our actionEditEntryTemplate() method
-				SproutForms::$api->forms->activeCpEntry = $entry;
+				SproutForms::$app->forms->activeCpEntry = $entry;
 
 				// Return the form as an 'entry' variable if in the cp
 				return Craft::$app->getUrlManager()->setRouteParams(
@@ -207,7 +207,7 @@ class EntriesController extends BaseController
 			}
 			else
 			{
-				if (SproutForms::$api->entries->fakeIt)
+				if (SproutForms::$app->entries->fakeIt)
 				{
 					return $this->redirectToPostedUrl($entry);
 				}
@@ -216,7 +216,7 @@ class EntriesController extends BaseController
 					Craft::$app->getSession()->setError(SproutForms::t('Couldn’t save entry.'));
 					// Store this Entry Model in a variable in our Service layer
 					// so that we can access the error object from our displayForm() variable
-					SproutForms::$api->forms->activeEntries[$this->form->handle] = $entry;
+					SproutForms::$app->forms->activeEntries[$this->form->handle] = $entry;
 
 					// Return the form using it's name as a variable on the front-end
 					return Craft::$app->getUrlManager()->setRouteParams(
@@ -282,7 +282,7 @@ class EntriesController extends BaseController
 
 		if ($entryId)
 		{
-			$entry = SproutForms::$api->entries->getEntryById($entryId);
+			$entry = SproutForms::$app->entries->getEntryById($entryId);
 
 			if (!$entry)
 			{

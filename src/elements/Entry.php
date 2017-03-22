@@ -47,7 +47,7 @@ class Entry extends Element
 	 */
 	public function getContentTable(): string
 	{
-		return SproutForms::$api->forms->getContentTableName($this->getForm());
+		return SproutForms::$app->forms->getContentTableName($this->getForm());
 	}
 
 	/**
@@ -147,7 +147,7 @@ class Entry extends Element
 	{
 		$statusId = $this->statusId;
 
-		$status = SproutForms::$api->entries->getEntryStatusById($statusId);
+		$status = SproutForms::$app->entries->getEntryStatusById($statusId);
 
 		return $status->color;
 	}
@@ -159,7 +159,7 @@ class Entry extends Element
 	 */
 	public static function statuses(): array
 	{
-		$statuses    = SproutForms::$api->entries->getAllEntryStatuses();
+		$statuses    = SproutForms::$app->entries->getAllEntryStatuses();
 		$statusArray = [];
 
 		foreach ($statuses as $status)
@@ -229,8 +229,8 @@ class Entry extends Element
 		];
 
 		// Prepare the data for our sources sidebar
-		$groups = SproutForms::$api->groups->getAllFormGroups('id');
-		$forms  = SproutForms::$api->forms->getAllForms();
+		$groups = SproutForms::$app->groups->getAllFormGroups('id');
+		$forms  = SproutForms::$app->forms->getAllForms();
 
 		$noSources   = [];
 		$prepSources = [];
@@ -423,7 +423,7 @@ class Entry extends Element
 	{
 		if (!isset($this->form))
 		{
-			$this->form = SproutForms::$api->forms->getFormById($this->formId);
+			$this->form = SproutForms::$app->forms->getFormById($this->formId);
 		}
 
 		return $this->form;

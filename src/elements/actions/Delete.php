@@ -60,7 +60,7 @@ class Delete extends ElementAction
 		$response = false;
 		$message  = null;
 
-		$response = SproutForms::$api->forms->deleteForms($query->All());
+		$response = SproutForms::$app->forms->deleteForms($query->All());
 
 		if ($response)
 		{

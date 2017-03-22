@@ -20,9 +20,9 @@ class FieldsController extends BaseController
 	{
 		$this->requireAcceptsJson();
 		$formId = Craft::$app->getRequest()->getBodyParam('formId');
-		$form   = SproutForms::$api->forms->getFormById($formId);
+		$form   = SproutForms::$app->forms->getFormById($formId);
 
-		return $this->asJson(SproutForms::$api->fields->getModalFieldTemplate($form));
+		return $this->asJson(SproutForms::$app->fields->getModalFieldTemplate($form));
 	}
 
 	/**
@@ -39,7 +39,7 @@ class FieldsController extends BaseController
 
 		// Get the Form these fields are related to
 		$formId = $request->getRequiredBodyParam('formId');
-		$form   = SproutForms::$api->forms->getFormById($formId);
+		$form   = SproutForms::$app->forms->getFormById($formId);
 
 		$type = $request->getRequiredBodyParam('type');
 
@@ -87,7 +87,7 @@ class FieldsController extends BaseController
 			// Let's update the title format
 			if ($oldHandle != $field->handle && strpos($form->titleFormat, $oldHandle) !== false)
 			{
-				$newTitleFormat    = SproutForms::$api->forms->updateTitleFormat($oldHandle, $field->handle, $form->titleFormat);
+				$newTitleFormat    = SproutForms::$app->forms->updateTitleFormat($oldHandle, $field->handle, $form->titleFormat);
 				$form->titleFormat = $newTitleFormat;
 			}
 		}
@@ -107,11 +107,11 @@ class FieldsController extends BaseController
 
 			if ($isNewField)
 			{
-				$response = SproutForms::$api->fields->addFieldToLayout($field, $form, $tabId);
+				$response = SproutForms::$app->fields->addFieldToLayout($field, $form, $tabId);
 			}
 			else
 			{
-				$response = SproutForms::$api->fields->updateFieldToLayout($field, $form, $tabId);
+				$response = SproutForms::$app->fields->updateFieldToLayout($field, $form, $tabId);
 			}
 		}
 
@@ -146,7 +146,7 @@ class FieldsController extends BaseController
 		$id     = $request->getBodyParam('fieldId');
 		$formId = $request->getBodyParam('formId');
 		$field  = Craft::$app->fields->getFieldById($id);
-		$form   = SproutForms::$api->forms->getFormById($formId);
+		$form   = SproutForms::$app->forms->getFormById($formId);
 
 		if ($field)
 		{
@@ -170,7 +170,7 @@ class FieldsController extends BaseController
 						'name' => $group->name,
 					],
 				],
-				'template' => SproutForms::$api->fields->getModalFieldTemplate($form, $field, $group->id),
+				'template' => SproutForms::$app->fields->getModalFieldTemplate($form, $field, $group->id),
 			]);
 		}
 		else
@@ -197,7 +197,7 @@ class FieldsController extends BaseController
 		$this->requireAjaxRequest();
 
 		$fieldIds = JsonHelper::decode(Craft::$app->request->getRequiredBodyParam('ids'));
-		SproutForms::$api->fields->reorderFields($fieldIds);
+		SproutForms::$app->fields->reorderFields($fieldIds);
 
 		return $this->asJson([
 			'success' => true
@@ -218,7 +218,7 @@ class FieldsController extends BaseController
 					'name' => $tabName,
 				],
 			],
-			'template' => $success ? false : SproutForms::$api->fields->getModalFieldTemplate($form, $field),
+			'template' => $success ? false : SproutForms::$app->fields->getModalFieldTemplate($form, $field),
 		]);
 	}
 }

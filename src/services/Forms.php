@@ -607,11 +607,11 @@ class Forms extends Component
 	{
 		foreach ($formElements as $key => $formElement)
 		{
-			$form = SproutForms::$api->forms->getFormById($formElement->id);
+			$form = SproutForms::$app->forms->getFormById($formElement->id);
 
 			if ($form)
 			{
-				SproutForms::$api->forms->deleteForm($form);
+				SproutForms::$app->forms->deleteForm($form);
 			}
 			else
 			{
@@ -643,7 +643,7 @@ class Forms extends Component
 		$form->handle = $this->getFieldAsNew('handle', $handle);
 		// Set default tab
 		$field = null;
-		$form  = SproutForms::$api->fields->addDefaultTab($form, $field);
+		$form  = SproutForms::$app->fields->addDefaultTab($form, $field);
 
 		if ($this->saveForm($form))
 		{

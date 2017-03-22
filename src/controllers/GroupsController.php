@@ -26,7 +26,7 @@ class GroupsController extends BaseController
 
 		$isNewGroup = empty($group->id);
 
-		if (SproutForms::$api->groups->saveGroup($group))
+		if (SproutForms::$app->groups->saveGroup($group))
 		{
 			if ($isNewGroup)
 			{
@@ -57,7 +57,7 @@ class GroupsController extends BaseController
 		$request = Craft::$app->getRequest();
 
 		$groupId = $request->getRequiredBodyParam('id');
-		$success = SproutForms::$api->groups->deleteGroupById($groupId);
+		$success = SproutForms::$app->groups->deleteGroupById($groupId);
 
 		Craft::$app->getSession()->setNotice(SproutForms::t('Group deleted.'));
 

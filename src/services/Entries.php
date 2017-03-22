@@ -43,9 +43,9 @@ class Entries extends Component
 	 */
 	public function getEntry(FormElement $form)
 	{
-		if (isset(SproutForms::$api->forms->activeEntries[$form->handle]))
+		if (isset(SproutForms::$app->forms->activeEntries[$form->handle]))
 		{
-			return SproutForms::$api->forms->activeEntries[$form->handle];
+			return SproutForms::$app->forms->activeEntries[$form->handle];
 		}
 
 		$entry = new EntryElement;
@@ -137,7 +137,7 @@ class Entries extends Component
 		{
 			try
 			{
-				$form = SproutForms::$api->forms->getFormById($entry->formId);
+				$form = SproutForms::$app->forms->getFormById($entry->formId);
 
 				$entry->title = $view->renderObjectTemplate($form->titleFormat, $entry);
 
@@ -195,7 +195,7 @@ class Entries extends Component
 
 					if ($event->fakeIt)
 					{
-						SproutForms::$api->entries->fakeIt = true;
+						SproutForms::$app->entries->fakeIt = true;
 					}
 				}
 			}

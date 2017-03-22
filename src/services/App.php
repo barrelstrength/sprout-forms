@@ -5,7 +5,7 @@ use Craft;
 use craft\base\Component;
 use barrelstrength\sproutforms\SproutForms;
 
-class Api extends Component
+class App extends Component
 {
 	public $groups;
 	public $forms;
