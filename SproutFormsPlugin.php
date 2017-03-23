@@ -40,7 +40,7 @@ class SproutFormsPlugin extends BasePlugin
 	 */
 	public function getSchemaVersion()
 	{
-		return '2.3.0';
+		return '2.3.3';
 	}
 
 	/**
@@ -132,6 +132,8 @@ class SproutFormsPlugin extends BasePlugin
 			'templateFolderOverride'              => AttributeType::String,
 			'enablePerFormTemplateFolderOverride' => AttributeType::Bool,
 			'enablePayloadForwarding'             => AttributeType::Bool,
+			'enableSaveData'                      => AttributeType::Bool,
+			'enableSaveDataPerFormBasis'          => AttributeType::Bool,
 		);
 	}
 

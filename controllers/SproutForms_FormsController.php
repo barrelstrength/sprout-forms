@@ -44,7 +44,7 @@ class SproutForms_FormsController extends BaseController
 		$form->displaySectionTitles = craft()->request->getPost('displaySectionTitles');
 		$form->redirectUri          = craft()->request->getPost('redirectUri');
 		$form->submitAction         = craft()->request->getPost('submitAction');
-		$form->savePayload          = craft()->request->getPost('savePayload', 0);
+		$form->saveData             = craft()->request->getPost('saveData', 0);
 		$form->submitButtonText     = craft()->request->getPost('submitButtonText');
 
 		$form->notificationEnabled      = craft()->request->getPost('notificationEnabled');

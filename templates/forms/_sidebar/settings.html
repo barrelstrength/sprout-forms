@@ -123,29 +123,31 @@
 
 		{% if settings.enablePayloadForwarding or form.submitAction %}
 
-		<div class="field field-heading">Payload Forwarding</div>
-
-		{{ forms.textField({
-			label: "Submit URL <span class='info'>Submit your form data to this URL, instead of directly to Sprout
-			Forms.</span>"|t,
-			name: 'submitAction',
-			placeholder: 'http://example.com/somewhere-else',
-			value: (form is defined ? form.submitAction : null),
-			errors: (form is defined ? form.getErrors('submitAction') : null)
-		}) }}
-
-		{{ forms.lightswitchField({
-			label: "Save Copy <span class='info'>Save the submitted payload data as a Form Entry in Craft. By default, when Payload Forwarding is enabled, all submitted data is forwarded to your Submit URL location and no data is saved in Craft.</span>"|t,
-			id: 'savePayload',
-			name: 'savePayload',
-			instructions: '',
-			value: form.savePayload,
-			on: (form.savePayload is defined) ? form.savePayload : ""
-		}) }}
+			<div class="field field-heading">{{"Payload Forwarding"|t}}</div>
+			{{ forms.textField({
+				label: "Submit URL <span class='info'>Submit your form data to this URL, instead of directly to Sprout
+				Forms.</span>"|t,
+				name: 'submitAction',
+				placeholder: 'http://example.com/somewhere-else',
+				value: (form is defined ? form.submitAction : null),
+				errors: (form is defined ? form.getErrors('submitAction') : null)
+			}) }}
 
 		{% endif %}
 
-	</div>
+		{% if settings.enableSaveDataPerFormBasis or form.submitAction %}
+			<div class="field field-heading">{{"Data Storage"|t}}</div>
+			{{ forms.lightswitchField({
+				label: "Save Data <span class='info'>Sprout Forms will save your form submissions to the Craft database</span>"|t,
+				id: 'saveData',
+				name: 'saveData',
+				instructions: '',
+				value: form.saveData,
+				on: (form.saveData is defined) ? form.saveData : ""
+			}) }}
+
+		{% endif %}
+		</div>
 </div>
 
 {% if not form.enableTemplateOverrides %}

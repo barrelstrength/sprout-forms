@@ -52,7 +52,7 @@ class SproutForms_FormRecord extends BaseRecord
 			'redirectUri'              => AttributeType::String,
 			'submitAction'             => AttributeType::String,
 			'submitButtonText'         => AttributeType::String,
-			'savePayload'              => array(AttributeType::Bool, 'default' => false),
+			'saveData'                 => array(AttributeType::Bool, 'default' => false),
 			'notificationEnabled'      => array(AttributeType::Bool, 'default' => false),
 			'notificationRecipients'   => AttributeType::String,
 			'notificationSubject'      => AttributeType::String,

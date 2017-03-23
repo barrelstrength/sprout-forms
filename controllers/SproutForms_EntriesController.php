@@ -71,7 +71,7 @@ class SproutForms_EntriesController extends BaseController
 				sproutForms()->forms->sendNotification($this->form, $entry, $post);
 			}
 
-			if ($this->form->savePayload)
+			if ($this->form->saveData)
 			{
 				if (!sproutForms()->entries->saveEntry($entry))
 				{
@@ -110,6 +110,7 @@ class SproutForms_EntriesController extends BaseController
 
 		$formHandle = craft()->request->getRequiredPost('handle');
 		$this->form = sproutForms()->forms->getFormByHandle($formHandle);
+		$settings = craft()->plugins->getPlugin('sproutforms')->getSettings();
 
 		if (!isset($this->form))
 		{
@@ -148,27 +149,32 @@ class SproutForms_EntriesController extends BaseController
 		$this->form->notificationSenderEmail  = craft()->templates->renderObjectTemplate($this->form->notificationSenderEmail, $entry);
 		$this->form->notificationReplyToEmail = craft()->templates->renderObjectTemplate($this->form->notificationReplyToEmail, $entry);
 
-		if (sproutForms()->entries->saveEntry($entry))
+		$result   = true;
+		$saveData = $settings['enableSaveData'];
+
+		if ($settings['enableSaveDataPerFormBasis'] || $this->form->submitAction)
+		{
+			$saveData = $this->form->saveData;
+		}
+
+		if ($saveData)
+		{
+			$result = sproutForms()->entries->saveEntry($entry);
+		}
+		else
+		{
+			// call our save-entry event
+			$isNewEntry = !$entry->id;
+			sproutForms()->entries->callOnSaveEntryEvent($entry, $isNewEntry);
+		}
+
+		if ($result)
 		{
 			// Only send notification email for front-end submissions if they are enabled
 			if (!craft()->request->isCpRequest() && $this->form->notificationEnabled)
 			{
 				$post = $_POST;
 				sproutForms()->forms->sendNotification($this->form, $entry, $post);
-			}
-
-			// Only handle multi-page forms on the front-end
-			if (!craft()->request->isCpRequest())
-			{
-				// Store our Entry ID for a multi-step form
-				craft()->httpSession->add('multiStepFormEntryId', $entry->id);
-
-				// Remove our multiStepForm reference. It will be
-				// set by the template again if it needs to be.
-				craft()->httpSession->remove('multiStepForm');
-
-				// Store our new entry so we can recreate the Entry object on our thank you page
-				craft()->httpSession->add('lastEntryId', $entry->id);
 			}
 
 			if (craft()->request->isAjaxRequest())
