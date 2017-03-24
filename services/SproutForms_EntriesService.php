@@ -581,6 +581,20 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 		return $entryStatus != null ? $entryStatus->id : null;
 	}
 
+	public function isDataSaved($form)
+	{
+		$settings = craft()->plugins->getPlugin('sproutforms')->getSettings();
+
+		$saveData = $settings['enableSaveData'];
+
+		if ($settings['enableSaveDataPerFormBasis'] || $form->submitAction)
+		{
+			$saveData = $form->saveData;
+		}
+
+		return $saveData;
+	}
+
 	/**
 	 * Gets an Entry Status's record.
 	 *

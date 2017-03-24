@@ -110,7 +110,6 @@ class SproutForms_EntriesController extends BaseController
 
 		$formHandle = craft()->request->getRequiredPost('handle');
 		$this->form = sproutForms()->forms->getFormByHandle($formHandle);
-		$settings = craft()->plugins->getPlugin('sproutforms')->getSettings();
 
 		if (!isset($this->form))
 		{
@@ -150,12 +149,7 @@ class SproutForms_EntriesController extends BaseController
 		$this->form->notificationReplyToEmail = craft()->templates->renderObjectTemplate($this->form->notificationReplyToEmail, $entry);
 
 		$result   = true;
-		$saveData = $settings['enableSaveData'];
-
-		if ($settings['enableSaveDataPerFormBasis'] || $this->form->submitAction)
-		{
-			$saveData = $this->form->saveData;
-		}
+		$saveData = sproutForms()->entries->isDataSaved($this->form);
 
 		if ($saveData)
 		{
@@ -328,6 +322,13 @@ class SproutForms_EntriesController extends BaseController
 		}
 
 		$form          = sproutForms()->forms->getFormById($entry->formId);
+		$saveData      = sproutForms()->entries->isDataSaved($form);
+
+		if (!$saveData)
+		{
+			throw new Exception(Craft::t("This entry can't be edited, please check the 'save data' option in your form settings"));
+		}
+
 		$entryStatus   = sproutForms()->entries->getEntryStatusById($entry->statusId);
 		$statuses      = sproutForms()->entries->getAllEntryStatuses();
 		$entryStatuses = array();

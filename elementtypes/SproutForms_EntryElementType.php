@@ -101,26 +101,31 @@ class SproutForms_EntryElementType extends BaseElementType
 
 		foreach ($forms as $form)
 		{
-			if ($form->groupId)
-			{
-				if (!isset($prepSources[$form->groupId]['heading']) && isset($groups[$form->groupId]))
-				{
-					$prepSources[$form->groupId]['heading'] = $groups[$form->groupId]->name;
-				}
+			$saveData = sproutForms()->entries->isDataSaved($form);
 
-				$prepSources[$form->groupId]['forms'][$form->id] = array(
-					'label'    => $form->name,
-					'data'     => array('formId' => $form->id),
-					'criteria' => array('formId' => $form->id)
-				);
-			}
-			else
+			if ($saveData)
 			{
-				$noSources[$form->id] = array(
-					'label'    => $form->name,
-					'data'     => array('formId' => $form->id),
-					'criteria' => array('formId' => $form->id)
-				);
+				if ($form->groupId)
+				{
+					if (!isset($prepSources[$form->groupId]['heading']) && isset($groups[$form->groupId]))
+					{
+						$prepSources[$form->groupId]['heading'] = $groups[$form->groupId]->name;
+					}
+
+					$prepSources[$form->groupId]['forms'][$form->id] = array(
+						'label'    => $form->name,
+						'data'     => array('formId' => $form->id),
+						'criteria' => array('formId' => $form->id)
+					);
+				}
+				else
+				{
+					$noSources[$form->id] = array(
+						'label'    => $form->name,
+						'data'     => array('formId' => $form->id),
+						'criteria' => array('formId' => $form->id)
+					);
+				}
 			}
 		}
 
