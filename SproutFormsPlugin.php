@@ -255,6 +255,7 @@ class SproutFormsPlugin extends BasePlugin
 	public function onAfterInstall()
 	{
 		sproutForms()->entries->installDefaultEntryStatuses();
+		sproutForms()->forms->installDefaultSettings();
 		craft()->request->redirect(UrlHelper::getCpUrl() . '/sproutforms/settings/examples');
 	}
 

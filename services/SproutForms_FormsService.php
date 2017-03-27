@@ -654,4 +654,16 @@ class SproutForms_FormsService extends BaseApplicationComponent
 
 		return false;
 	}
+
+	public function installDefaultSettings()
+	{
+		$defaultSettings = '{"pluginNameOverride":null,"templateFolderOverride":"","enablePerFormTemplateFolderOverride":"","enablePayloadForwarding":"","enableSaveData":"1","enableSaveDataPerFormBasis":""}';
+
+		craft()->db->createCommand()->update('plugins',
+				array('settings' => $defaultSettings),
+				array('class' => 'SproutForms')
+			);
+
+		return true;
+	}
 }
