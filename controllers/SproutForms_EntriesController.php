@@ -326,7 +326,9 @@ class SproutForms_EntriesController extends BaseController
 
 		if (!$saveData)
 		{
-			throw new Exception(Craft::t("This entry can't be edited, please check the 'save data' option in your form settings"));
+			craft()->userSession->setError(Craft::t("This entry can't be edited, please check the 'save data' option in your form settings"));
+
+			$this->renderTemplate('sproutforms/entries');
 		}
 
 		$entryStatus   = sproutForms()->entries->getEntryStatusById($entry->statusId);

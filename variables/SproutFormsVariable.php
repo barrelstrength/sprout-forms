@@ -459,4 +459,14 @@ class SproutFormsVariable
 	{
 		return sproutForms()->entries->getAllEntryStatuses();
 	}
+
+	/**
+	 * @return bool
+	 */
+	public function getSettings()
+	{
+		$settings = craft()->plugins->getPlugin('sproutforms')->getSettings();
+
+		return $settings;
+	}
 }
