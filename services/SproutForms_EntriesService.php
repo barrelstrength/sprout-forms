@@ -587,7 +587,7 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 
 		$saveData = $settings['enableSaveData'];
 
-		if ($settings['enableSaveDataPerFormBasis'] || $form->submitAction)
+		if (($settings['enableSaveDataPerFormBasis'] && $saveData) || $form->submitAction)
 		{
 			$saveData = $form->saveData;
 		}

@@ -134,6 +134,7 @@ class SproutFormsPlugin extends BasePlugin
 			'enablePayloadForwarding'             => AttributeType::Bool,
 			'enableSaveData'                      => AttributeType::Bool,
 			'enableSaveDataPerFormBasis'          => AttributeType::Bool,
+			'saveDataByDefault'                   => AttributeType::Bool,
 		);
 	}
 

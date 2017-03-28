@@ -631,9 +631,18 @@ class SproutForms_FormsService extends BaseApplicationComponent
 
 	public function createNewForm($name = null, $handle = null)
 	{
-		$form   = new SproutForms_FormModel();
-		$name   = empty($name) ? 'Form' : $name ;
-		$handle = empty($handle) ? 'form' : $handle;
+		$form     = new SproutForms_FormModel();
+		$name     = empty($name) ? 'Form' : $name ;
+		$handle   = empty($handle) ? 'form' : $handle;
+		$settings = craft()->plugins->getPlugin('sproutforms')->getSettings();
+
+		if ($settings['enableSaveData'])
+		{
+			if ($settings['enableSaveDataPerFormBasis'])
+			{
+				$form->saveData = $settings['saveDataByDefault'];
+			}
+		}
 
 		$form->name   = sproutForms()->forms->getFieldAsNew('name', $name);
 		$form->handle = sproutForms()->forms->getFieldAsNew('handle', $handle);
@@ -657,7 +666,7 @@ class SproutForms_FormsService extends BaseApplicationComponent
 
 	public function installDefaultSettings()
 	{
-		$defaultSettings = '{"pluginNameOverride":null,"templateFolderOverride":"","enablePerFormTemplateFolderOverride":"","enablePayloadForwarding":"","enableSaveData":"1","enableSaveDataPerFormBasis":""}';
+		$defaultSettings = '{"pluginNameOverride":null,"templateFolderOverride":"","enablePerFormTemplateFolderOverride":"","enablePayloadForwarding":"","enableSaveData":"1","enableSaveDataPerFormBasis":"", "saveDataByDefault":"1"}';
 
 		craft()->db->createCommand()->update('plugins',
 				array('settings' => $defaultSettings),

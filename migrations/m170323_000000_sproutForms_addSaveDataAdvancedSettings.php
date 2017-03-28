@@ -28,6 +28,7 @@ class m170323_000000_sproutForms_addSaveDataAdvancedSettings extends BaseMigrati
 
 			$settings['enableSaveData'] = "1";
 			$settings['enableSaveDataPerFormBasis'] = "0";
+			$settings['saveDataByDefault'] = "1";
 
 			$settings = JsonHelper::encode($settings);
 
@@ -36,7 +37,7 @@ class m170323_000000_sproutForms_addSaveDataAdvancedSettings extends BaseMigrati
 				array('class' => 'SproutForms')
 			);
 
-			SproutFormsPlugin::log("Added new options: enableSaveData and enableSaveDataPerFormBasis to Advance settings", LogLevel::Info, true);
+			SproutFormsPlugin::log("Added new options: enableSaveData, saveDataByDefault and enableSaveDataPerFormBasis to Advance settings", LogLevel::Info, true);
 		}
 
 		$formTable = 'sproutforms_forms';

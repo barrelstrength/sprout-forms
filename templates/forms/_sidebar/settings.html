@@ -121,7 +121,7 @@
 
 		{% endif %}
 
-		{% if settings.enableSaveDataPerFormBasis or form.submitAction %}
+		{% if (settings.enableSaveDataPerFormBasis and settings.enableSaveData) or form.submitAction %}
 
 			<div class="field field-heading">{{"Data Storage"|t}}</div>
 			{{ forms.lightswitchField({

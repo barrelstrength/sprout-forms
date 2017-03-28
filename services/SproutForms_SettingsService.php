@@ -43,6 +43,11 @@ class SproutForms_SettingsService extends BaseApplicationComponent
 			$settings['enableSaveDataPerFormBasis'] = $postSettings['enableSaveDataPerFormBasis'];
 		}
 
+		if (isset($postSettings['saveDataByDefault']))
+		{
+			$settings['saveDataByDefault'] = $postSettings['saveDataByDefault'];
+		}
+
 		$settings = JsonHelper::encode($settings);
 
 		$affectedRows = craft()->db->createCommand()->update('plugins', array(

@@ -67,7 +67,7 @@
 				onLabel: "Enable"|t,
 			}) }}
 
-			<div id="settings-savedatadetails" class="{{ (settings.templateFolderOverride is empty ? "hidden") }}">
+			<div id="settings-savedatadetails" class="{{ (settings.enableSaveData is empty ? "hidden") }}">
 
 				{{ forms.lightswitchField({
 					label: "Enable Save Data control on a per-form basis"|t,
@@ -79,14 +79,14 @@
 					onLabel: "Enable"|t,
 				}) }}
 
-				<div id="settings-savedatadefault" class="{{ (settings.templateFolderOverride is empty ? "hidden") }}">
+				<div id="settings-savedatadefault" class="{{ (settings.enableSaveDataPerFormBasis is empty ? "hidden") }}">
 
 				{{ forms.lightswitchField({
 					label: "Default Save Data value"|t,
 					instructions: "Select the default Save Data value of on the Advanced tab of your form settings"|t,
 					id: 'saveDataByDefault',
 					name: 'saveDataByDefault',
-					on: settings.enableSaveDataPerFormBasis,
+					on: settings.saveDataByDefault,
 					onLabel: "Enable"|t,
 				}) }}
 

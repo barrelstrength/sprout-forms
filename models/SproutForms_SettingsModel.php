@@ -12,6 +12,7 @@ class SproutForms_SettingsModel extends BaseModel
 			'enablePayloadForwarding'             => AttributeType::Bool,
 			'enableSaveData'                      => AttributeType::Bool,
 			'enableSaveDataPerFormBasis'          => AttributeType::Bool,
+			'saveDataByDefault'                   => AttributeType::Bool,
 		);
 	}
 }
