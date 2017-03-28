@@ -32,7 +32,7 @@ class SproutFormsPlugin extends BasePlugin
 	 */
 	public function getVersion()
 	{
-		return '2.3.5';
+		return '2.4.0';
 	}
 
 	/**
@@ -40,7 +40,7 @@ class SproutFormsPlugin extends BasePlugin
 	 */
 	public function getSchemaVersion()
 	{
-		return '2.3.3';
+		return '2.4.0';
 	}
 
 	/**
