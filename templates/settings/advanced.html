@@ -59,21 +59,40 @@
 
 			{{ forms.lightswitchField({
 				label: "Save data from form submissions in the Craft database"|t,
-				instructions: "By default, Sprout Forms will save your form submissions to the Craft database. Disable this setting if you wish to stop Sprout Forms from saving data to the Craft database. This setting will be the default Save Data setting when saving data is managed on a per-form basis."|t,
+				instructions: "By default, Sprout Forms will save your form submissions to the Craft database. Disable this setting if you wish to stop Sprout Forms from saving data to the Craft database."|t,
 				id: 'enableSaveData',
 				name: 'enableSaveData',
+				toggle: 'settings-savedatadetails',
 				on: settings.enableSaveData,
 				onLabel: "Enable"|t,
 			}) }}
 
-			{{ forms.lightswitchField({
-				label: "Enable Save Data control on a per-form basis"|t,
-				instructions: "If you wish to have some of your forms save data to the Craft database and ensure others do not save any data, enable this setting and a new setting will appear on the Advanced tab of your Form Edit page to control whether a particular Form will save data to the database."|t,
-				id: 'enableSaveDataPerFormBasis',
-				name: 'enableSaveDataPerFormBasis',
-				on: settings.enableSaveDataPerFormBasis,
-				onLabel: "Enable"|t,
-			}) }}
+			<div id="settings-savedatadetails" class="{{ (settings.templateFolderOverride is empty ? "hidden") }}">
+
+				{{ forms.lightswitchField({
+					label: "Enable Save Data control on a per-form basis"|t,
+					instructions: "If you wish to have some of your forms save data to the Craft database and ensure others do not save any data, enable this setting and a new setting will appear on the Advanced tab of your Form Edit page to control whether a particular Form will save data to the database."|t,
+					id: 'enableSaveDataPerFormBasis',
+					name: 'enableSaveDataPerFormBasis',
+					toggle: 'settings-savedatadefault',
+					on: settings.enableSaveDataPerFormBasis,
+					onLabel: "Enable"|t,
+				}) }}
+
+				<div id="settings-savedatadefault" class="{{ (settings.templateFolderOverride is empty ? "hidden") }}">
+
+				{{ forms.lightswitchField({
+					label: "Default Save Data value"|t,
+					instructions: "Select the default Save Data value of on the Advanced tab of your form settings"|t,
+					id: 'saveDataByDefault',
+					name: 'saveDataByDefault',
+					on: settings.enableSaveDataPerFormBasis,
+					onLabel: "Enable"|t,
+				}) }}
+
+				</div>
+
+			</div>
 
 			<hr>
 
