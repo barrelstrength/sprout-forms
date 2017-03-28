@@ -1,4 +1,5 @@
 <?php
+
 namespace Craft;
 
 class SproutForms_EntriesController extends BaseController
@@ -131,7 +132,7 @@ class SproutForms_EntriesController extends BaseController
 
 		// Our SproutForms_EntryModel requires that we assign it a SproutForms_FormModel
 		$entry->formId = $this->form->id;
-		$statusId = craft()->request->getParam('statusId');
+		$statusId      = craft()->request->getParam('statusId');
 
 		if (isset($statusId))
 		{
@@ -321,12 +322,12 @@ class SproutForms_EntriesController extends BaseController
 			}
 		}
 
-		$form          = sproutForms()->forms->getFormById($entry->formId);
-		$saveData      = sproutForms()->entries->isDataSaved($form);
+		$form     = sproutForms()->forms->getFormById($entry->formId);
+		$saveData = sproutForms()->entries->isDataSaved($form);
 
 		if (!$saveData)
 		{
-			craft()->userSession->setError(Craft::t("This entry can't be edited, please check the 'save data' option in your form settings"));
+			craft()->userSession->setError(Craft::t("Unable to edit entry. Enable the 'Save Data' setting to view content."));
 
 			$this->renderTemplate('sproutforms/entries');
 		}
@@ -371,7 +372,7 @@ class SproutForms_EntriesController extends BaseController
 	private function _redirectOnError(SproutForms_EntryModel $entry)
 	{
 		$errors = json_encode($entry->getErrors());
-		SproutFormsPlugin::log("Couldn’t save form entry. Errors: ".$errors, LogLevel::Error, true);
+		SproutFormsPlugin::log("Couldn’t save form entry. Errors: " . $errors, LogLevel::Error, true);
 
 		if (craft()->request->isAjaxRequest())
 		{

@@ -55,18 +55,11 @@
 				onLabel: "Enable"|t,
 			}) }}
 
-			{{ forms.lightswitchField({
-				label: "Enable payload forwarding"|t,
-				instructions: "Payload Forwarding enables your forms with advanced settings that allow you to submit a form to a third-party endpoint."|t,
-				id: 'enablePayloadForwarding',
-				name: 'enablePayloadForwarding',
-				on: settings.enablePayloadForwarding,
-				onLabel: "Enable"|t,
-			}) }}
+			<hr>
 
 			{{ forms.lightswitchField({
 				label: "Save data from form submissions in the Craft database"|t,
-				instructions: "By default, Sprout Forms will save your form submissions to the Craft database. Disable this setting if you wish to stop Sprout Forms from saving data to the Craft database."|t,
+				instructions: "By default, Sprout Forms will save your form submissions to the Craft database. Disable this setting if you wish to stop Sprout Forms from saving data to the Craft database. This setting will be the default Save Data setting when saving data is managed on a per-form basis."|t,
 				id: 'enableSaveData',
 				name: 'enableSaveData',
 				on: settings.enableSaveData,
@@ -79,6 +72,17 @@
 				id: 'enableSaveDataPerFormBasis',
 				name: 'enableSaveDataPerFormBasis',
 				on: settings.enableSaveDataPerFormBasis,
+				onLabel: "Enable"|t,
+			}) }}
+
+			<hr>
+
+			{{ forms.lightswitchField({
+				label: "Enable payload forwarding"|t,
+				instructions: "Payload Forwarding enables your forms with advanced settings that allow you to submit a form to a third-party endpoint."|t,
+				id: 'enablePayloadForwarding',
+				name: 'enablePayloadForwarding',
+				on: settings.enablePayloadForwarding,
 				onLabel: "Enable"|t,
 			}) }}
 

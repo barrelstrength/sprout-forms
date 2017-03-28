@@ -121,6 +121,20 @@
 
 		{% endif %}
 
+		{% if settings.enableSaveDataPerFormBasis or form.submitAction %}
+
+			<div class="field field-heading">{{"Data Storage"|t}}</div>
+			{{ forms.lightswitchField({
+				label: "Save Data <span class='info'>Save Data submitted to this form to the Craft database</span>"|t,
+				id: 'saveData',
+				name: 'saveData',
+				instructions: '',
+				value: form.saveData,
+				on: (form.saveData is defined) ? form.saveData : ""
+			}) }}
+
+		{% endif %}
+
 		{% if settings.enablePayloadForwarding or form.submitAction %}
 
 			<div class="field field-heading">{{"Payload Forwarding"|t}}</div>
@@ -135,18 +149,6 @@
 
 		{% endif %}
 
-		{% if settings.enableSaveDataPerFormBasis or form.submitAction %}
-			<div class="field field-heading">{{"Data Storage"|t}}</div>
-			{{ forms.lightswitchField({
-				label: "Save Data <span class='info'>Sprout Forms will save your form submissions to the Craft database</span>"|t,
-				id: 'saveData',
-				name: 'saveData',
-				instructions: '',
-				value: form.saveData,
-				on: (form.saveData is defined) ? form.saveData : ""
-			}) }}
-
-		{% endif %}
 		</div>
 </div>
 
