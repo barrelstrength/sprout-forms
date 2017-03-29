@@ -11,12 +11,14 @@ class App extends Component
 	public $forms;
 	public $fields;
 	public $entries;
+	public $frontEndFields;
 
 	public function init()
 	{
-		$this->groups  = new Groups();
-		$this->forms   = new Forms();
-		$this->fields  = new Fields();
-		$this->entries = new Entries();
+		$this->groups         = new Groups();
+		$this->forms          = new Forms();
+		$this->fields         = new Fields();
+		$this->entries        = new Entries();
+		$this->frontEndFields = new FrontEndFields();
 	}
 }

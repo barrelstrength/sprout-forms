@@ -1,19 +1,25 @@
 <?php
-namespace Craft;
+namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
+
+use Craft;
+use craft\fields\Categories as CraftCategories;
+use craft\helpers\Template as TemplateHelper;
+
+use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 
 /**
  * Class SproutFormsCategoriesField
  *
  * @package Craft
  */
-class SproutFormsCategoriesField extends SproutFormsBaseField
+class Categories extends SproutFormsBaseField
 {
 	/**
 	 * @return string
 	 */
 	public function getType()
 	{
-		return 'Categories';
+		return CraftCategories::class;
 	}
 
 	/**
@@ -30,16 +36,16 @@ class SproutFormsCategoriesField extends SproutFormsBaseField
 
 		$categories = sproutForms()->frontEndFields->getFrontEndCategories($settings);
 
-		$rendered = craft()->templates->render(
+		$rendered = Craft::$app->getView()->renderTemplate(
 			'categories/input',
-			array(
+			[
 				'name'             => $field->handle,
 				'value'            => $value,
 				'field'            => $field,
 				'settings'         => $settings,
 				'renderingOptions' => $renderingOptions,
 				'categories'       => $categories,
-			)
+			]
 		);
 
 		$this->endRendering();

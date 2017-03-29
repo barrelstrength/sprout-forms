@@ -1,19 +1,25 @@
 <?php
-namespace Craft;
+namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
+
+use Craft;
+use craft\fields\Dropdown as CraftDropdown;
+use craft\helpers\Template as TemplateHelper;
+
+use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 
 /**
- * Class SproutFormsMultiSelectField
+ * Class SproutFormsDropdownField
  *
  * @package Craft
  */
-class SproutFormsMultiSelectField extends SproutFormsBaseField
+class Dropdown extends SproutFormsBaseField
 {
 	/**
 	 * @return string
 	 */
 	public function getType()
 	{
-		return 'MultiSelect';
+		return CraftDropdown::class;
 	}
 
 	/**
@@ -28,27 +34,19 @@ class SproutFormsMultiSelectField extends SproutFormsBaseField
 	{
 		$this->beginRendering();
 
-		$rendered = craft()->templates->render(
-			'multiselect/input',
-			array(
+		$rendered = Craft::$app->getView()->renderTemplate(
+			'dropdown/input',
+			[
 				'name'             => $field->handle,
 				'value'            => $value,
 				'field'            => $field,
 				'settings'         => $settings,
 				'renderingOptions' => $renderingOptions
-			)
+			]
 		);
 
 		$this->endRendering();
 
-		return TemplateHelper::getRaw($rendered);
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getTemplatesPath()
-	{
-		return craft()->path->getPluginsPath() . 'sproutforms/templates/_components/fields/';
+		return TemplateHelper::raw($rendered);
 	}
 }

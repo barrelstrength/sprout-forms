@@ -1,8 +1,9 @@
 <?php
 
 namespace barrelstrength\sproutforms\models;
+use craft\base\Model;
 
-class Settings extends \craft\base\Model
+class Settings extends Model
 {
 	public $pluginNameOverride                  = '';
 	public $templateFolderOverride              = '';

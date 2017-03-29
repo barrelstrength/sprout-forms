@@ -1,27 +1,25 @@
 <?php
-namespace Craft;
+namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
+
+use Craft;
+use craft\fields\MultiSelect as CraftMultiSelect;
+use craft\helpers\Template as TemplateHelper;
+
+use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 
 /**
- * Class SproutFormsCheckboxesField
+ * Class SproutFormsMultiSelectField
  *
  * @package Craft
  */
-class SproutFormsCheckboxesField extends SproutFormsBaseField
+class MultiSelect extends SproutFormsBaseField
 {
 	/**
 	 * @return string
 	 */
 	public function getType()
 	{
-		return 'Checkboxes';
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function hasMultipleLabels()
-	{
-		return true;
+		return CraftMultiSelect::class;
 	}
 
 	/**
@@ -36,27 +34,19 @@ class SproutFormsCheckboxesField extends SproutFormsBaseField
 	{
 		$this->beginRendering();
 
-		$rendered = craft()->templates->render(
-			'checkboxes/input',
-			array(
+		$rendered = Craft::$app->getView()->renderTemplate(
+			'multiselect/input',
+			[
 				'name'             => $field->handle,
 				'value'            => $value,
 				'field'            => $field,
 				'settings'         => $settings,
 				'renderingOptions' => $renderingOptions
-			)
+			]
 		);
 
 		$this->endRendering();
 
-		return TemplateHelper::getRaw($rendered);
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getTemplatesPath()
-	{
-		return craft()->path->getPluginsPath() . 'sproutforms/templates/_components/fields/';
+		return TemplateHelper::raw($rendered);
 	}
 }

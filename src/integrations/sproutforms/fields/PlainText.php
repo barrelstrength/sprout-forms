@@ -36,25 +36,17 @@ class PlainText extends SproutFormsBaseField
 
 		$rendered = Craft::$app->getView()->renderTemplate(
 			'plaintext/input',
-			array(
+			[
 				'name'             => $field->handle,
 				'value'            => $value,
 				'field'            => $field,
 				'settings'         => $settings,
 				'renderingOptions' => $renderingOptions
-			)
+			]
 		);
 
 		$this->endRendering();
 
 		return TemplateHelper::raw($rendered);
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getTemplatesPath()
-	{
-		return Craft::$app->path->getPluginsPath() . '/sproutforms/src/templates/_components/fields/';
 	}
 }

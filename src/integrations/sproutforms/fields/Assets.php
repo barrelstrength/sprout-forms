@@ -1,19 +1,25 @@
 <?php
-namespace Craft;
+namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
+
+use Craft;
+use craft\fields\Assets as CraftAssets;
+use craft\helpers\Template as TemplateHelper;
+
+use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 
 /**
- * Class SproutFormsDropdownField
+ * Class SproutFormsAssetsField
  *
  * @package Craft
  */
-class SproutFormsDropdownField extends SproutFormsBaseField
+class Assets extends SproutFormsBaseField
 {
 	/**
 	 * @return string
 	 */
 	public function getType()
 	{
-		return 'Dropdown';
+		return CraftAssets::class;
 	}
 
 	/**
@@ -28,27 +34,19 @@ class SproutFormsDropdownField extends SproutFormsBaseField
 	{
 		$this->beginRendering();
 
-		$rendered = craft()->templates->render(
-			'dropdown/input',
-			array(
+		$rendered = Craft::$app->getView()->renderTemplate(
+			'assets/input',
+			[
 				'name'             => $field->handle,
 				'value'            => $value,
 				'field'            => $field,
 				'settings'         => $settings,
 				'renderingOptions' => $renderingOptions
-			)
+			]
 		);
 
 		$this->endRendering();
 
-		return TemplateHelper::getRaw($rendered);
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getTemplatesPath()
-	{
-		return craft()->path->getPluginsPath() . 'sproutforms/templates/_components/fields/';
+		return TemplateHelper::raw($rendered);
 	}
 }

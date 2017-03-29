@@ -13,7 +13,7 @@
     "handle": "sproutForms",
     "version": "3.0.0",
     "schemaVersion": "3.0.0",
-    "hasSettings": true,
+    "hasCpSettings": true,
     "developer": "Barrel Strength",
     "class": "barrelstrength\\sproutforms\\SproutForms",
     "components": {

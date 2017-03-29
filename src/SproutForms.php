@@ -11,6 +11,11 @@ use barrelstrength\sproutforms\services\Groups;
 use barrelstrength\sproutforms\variables\SproutFormsVariable;
 use barrelstrength\sproutforms\events\RegisterFieldsEvent;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\PlainText;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\Number;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\Dropdown;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\Checkboxes;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\MultiSelect;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\Assets;
 use barrelstrength\sproutforms\services\Fields;
 
 class SproutForms extends \craft\base\Plugin
@@ -23,6 +28,7 @@ class SproutForms extends \craft\base\Plugin
 	public static $app;
 
 	public $hasCpSection = true;
+	public $hasCpSettings = true;
 
 	public function init()
 	{
@@ -37,6 +43,12 @@ class SproutForms extends \craft\base\Plugin
 
 		Event::on(Fields::class, Fields::EVENT_REGISTER_FIELDS, function(RegisterFieldsEvent $event) {
 				$event->fields[] = new PlainText();
+				$event->fields[] = new Number();
+				$event->fields[] = new Dropdown();
+				$event->fields[] = new Checkboxes();
+				$event->fields[] = new MultiSelect();
+				//@todo - assets are uploaded but not displayed in "edit entry".
+				$event->fields[] = new Assets();
 			}
 		);
 	}
