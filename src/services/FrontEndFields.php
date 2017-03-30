@@ -3,6 +3,10 @@ namespace barrelstrength\sproutforms\services;
 
 use Craft;
 use yii\base\Component;
+use craft\elements\Category;
+use craft\elements\Entry;
+use craft\elements\Tag;
+use craft\models\Section;
 
 use barrelstrength\sproutforms\SproutForms;
 
@@ -15,9 +19,8 @@ class FrontEndFields extends Component
 	 */
 	public function getFrontEndEntries($settings)
 	{
-		$entries  = array();
-
-		$criteria = craft()->elements->getCriteria(ElementType::Entry);
+		$entries         = [];
+		$sectionsService = Craft::$app->getSections();
 
 		if (is_array($settings['sources']))
 		{
@@ -28,10 +31,9 @@ class FrontEndFields extends Component
 
 				if (count($section) == 2)
 				{
-					$sectionById = craft()->sections->getSectionById($section[1]);
+					$sectionById = $sectionsService->getSectionById($section[1]);
 
-					$criteria->sectionId = $section[1];
-					$entries[$pos]['entries'] = $criteria->find();
+					$entries[$pos]['entries'] = Entry::find()->sectionId($section[1])->all();
 					$entries[$pos]['section'] = $sectionById;
 				}
 				else
@@ -50,18 +52,17 @@ class FrontEndFields extends Component
 		{
 			if ($settings['sources'] == '*')
 			{
-				$sections = craft()->sections->getAllSections();
+				$sections = $sectionsService->getAllSections();
 
 				foreach ($sections as $section)
 				{
 					$pos = count($entries) + 1;
 
-					if ($section->type != SectionType::Single)
+					if ($section->type != Section::TYPE_SINGLE)
 					{
-						$sectionById = craft()->sections->getSectionById($section->id);
+						$sectionById = $sectionsService->getSectionById($section->id);
 
-						$criteria->sectionId = $section->id;
-						$entries[$pos]['entries'] = $criteria->find();
+						$entries[$pos]['entries'] = Entry::find()->sectionId($section->id)->all();
 						$entries[$pos]['section'] = $sectionById;
 					}
 				}
@@ -83,9 +84,7 @@ class FrontEndFields extends Component
 	 */
 	public function getFrontEndCategories($settings)
 	{
-		$categories  = array();
-
-		$criteria = craft()->elements->getCriteria(ElementType::Category);
+		$categories = [];
 
 		if (isset($settings['source']))
 		{
@@ -94,10 +93,9 @@ class FrontEndFields extends Component
 
 			if (count($group) == 2)
 			{
-				$groupById = craft()->categories->getGroupById($group[1]);
+				$groupById = Craft::$app->getCategories()->getGroupById($group[1]);
 
-				$criteria->groupId = $group[1];
-				$categories[$pos]['categories'] = $criteria->find();
+				$categories[$pos]['categories'] = Category::find()->groupId($group[1])->all();
 				$categories[$pos]['group'] = $groupById;
 			}
 		}
@@ -112,9 +110,7 @@ class FrontEndFields extends Component
 	 */
 	public function getFrontEndTags($settings)
 	{
-		$tags  = array();
-
-		$criteria = craft()->elements->getCriteria(ElementType::Tag);
+		$tags = [];
 
 		if (isset($settings['source']))
 		{
@@ -123,10 +119,9 @@ class FrontEndFields extends Component
 
 			if (count($group) == 2)
 			{
-				$groupById = craft()->tags->getTagGroupById($group[1]);
+				$groupById = Craft::$app->getTags()->getTagGroupById($group[1]);
 
-				$criteria->groupId = $group[1];
-				$tags[$pos]['tags'] = $criteria->find();
+				$tags[$pos]['tags']  = Tag::find()->groupId($group[1])->all();
 				$tags[$pos]['group'] = $groupById;
 			}
 		}
@@ -136,14 +131,12 @@ class FrontEndFields extends Component
 
 	private function _getSinglesEntries()
 	{
-		$criteria = craft()->elements->getCriteria(ElementType::Entry);
-		$sections = craft()->sections->getSectionsByType(SectionType::Single);
-		$singles  = array();
+		$sections = Craft::$app->getSections()->getSectionsByType(Section::TYPE_SINGLE);
+		$singles  = [];
 
 		foreach ($sections as $key => $section)
 		{
-			$criteria->sectionId = $section->id;
-			$results = $criteria->find();
+			$results   = Entry::find()->sectionId($section->id)->all();
 			$singles[] = $results[0];
 		}
 

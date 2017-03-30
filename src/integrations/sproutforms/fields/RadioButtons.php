@@ -1,19 +1,25 @@
 <?php
-namespace Craft;
+namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
+
+use Craft;
+use craft\fields\RadioButtons as CraftRadioButtons;
+use craft\helpers\Template as TemplateHelper;
+
+use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 
 /**
  * Class SproutFormsRadioButtonsField
  *
  * @package Craft
  */
-class SproutFormsRadioButtonsField extends SproutFormsBaseField
+class RadioButtons extends SproutFormsBaseField
 {
 	/**
 	 * @return string
 	 */
 	public function getType()
 	{
-		return 'RadioButtons';
+		return CraftRadioButtons::class;
 	}
 
 	/**
@@ -36,27 +42,19 @@ class SproutFormsRadioButtonsField extends SproutFormsBaseField
 	{
 		$this->beginRendering();
 
-		$rendered = craft()->templates->render(
+		$rendered = Craft::$app->getView()->renderTemplate(
 			'radiobuttons/input',
-			array(
+			[
 				'name'             => $field->handle,
 				'value'            => $value,
 				'field'            => $field,
 				'settings'         => $settings,
 				'renderingOptions' => $renderingOptions
-			)
+			]
 		);
 
 		$this->endRendering();
 
-		return TemplateHelper::getRaw($rendered);
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getTemplatesPath()
-	{
-		return craft()->path->getPluginsPath() . 'sproutforms/templates/_components/fields/';
+		return TemplateHelper::raw($rendered);
 	}
 }

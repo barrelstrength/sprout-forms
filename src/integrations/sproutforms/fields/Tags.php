@@ -1,19 +1,26 @@
 <?php
-namespace Craft;
+namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
+
+use Craft;
+use craft\fields\Tags as CraftTags;
+use craft\helpers\Template as TemplateHelper;
+
+use barrelstrength\sproutforms\SproutForms;
+use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 
 /**
  * Class SproutFormsTagsField
  *
  * @package Craft
  */
-class SproutFormsTagsField extends SproutFormsBaseField
+class Tags extends SproutFormsBaseField
 {
 	/**
 	 * @return string
 	 */
 	public function getType()
 	{
-		return 'Tags';
+		return CraftTags::class;
 	}
 
 	/**
@@ -28,30 +35,22 @@ class SproutFormsTagsField extends SproutFormsBaseField
 	{
 		$this->beginRendering();
 
-		$tags = sproutForms()->frontEndFields->getFrontEndTags($settings);
+		$tags = SproutForms::$app->frontEndFields->getFrontEndTags($settings);
 
-		$rendered = craft()->templates->render(
+		$rendered = Craft::$app->getView()->renderTemplate(
 			'tags/input',
-			array(
+			[
 				'name'             => $field->handle,
 				'value'            => $value,
 				'field'            => $field,
 				'settings'         => $settings,
 				'renderingOptions' => $renderingOptions,
-				'tags'       => $tags,
-			)
+				'tags'             => $tags,
+			]
 		);
 
 		$this->endRendering();
 
-		return TemplateHelper::getRaw($rendered);
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getTemplatesPath()
-	{
-		return craft()->path->getPluginsPath() . 'sproutforms/templates/_components/fields/';
+		return TemplateHelper::raw($rendered);
 	}
 }

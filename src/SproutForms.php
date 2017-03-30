@@ -13,9 +13,13 @@ use barrelstrength\sproutforms\events\RegisterFieldsEvent;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\PlainText;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Number;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Dropdown;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\RadioButtons;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Checkboxes;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\MultiSelect;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Assets;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\Categories;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\Entries;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\Tags;
 use barrelstrength\sproutforms\services\Fields;
 
 class SproutForms extends \craft\base\Plugin
@@ -49,6 +53,10 @@ class SproutForms extends \craft\base\Plugin
 				$event->fields[] = new MultiSelect();
 				//@todo - assets are uploaded but not displayed in "edit entry".
 				$event->fields[] = new Assets();
+				$event->fields[] = new Categories();
+				$event->fields[] = new Entries();
+				$event->fields[] = new Tags();
+				$event->fields[] = new RadioButtons();
 			}
 		);
 	}
