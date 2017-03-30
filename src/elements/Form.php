@@ -394,6 +394,21 @@ class Form extends Element
 	}
 
 	/**
+	 * @param string $handle
+	 *
+	 * @return null|FieldModel
+	 */
+	public function getField($handle)
+	{
+		$fields = $this->getFields();
+
+		if (is_string($handle) && !empty($handle))
+		{
+			return isset($fields[$handle]) ? $fields[$handle] : null;
+		}
+	}
+
+	/**
 	 * @inheritdoc
 	 */
 	public function rules()

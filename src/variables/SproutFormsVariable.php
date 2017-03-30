@@ -5,6 +5,7 @@ namespace barrelstrength\sproutforms\variables;
 use Craft;
 
 use craft\helpers\Template as TemplateHelper;
+use craft\helpers\ElementHelper;
 
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\models\FieldGroup;
@@ -69,7 +70,7 @@ class SproutFormsVariable
 		$view->setTemplatesPath($templatePaths['tab']);
 
 		$bodyHtml = $view->renderTemplate(
-			'tab', array(
+			'tab', [
 				'form'                 => $form,
 				'tabs'                 => $form->getFieldLayout()->getTabs(),
 				'entry'                => $entry,
@@ -77,7 +78,7 @@ class SproutFormsVariable
 				'thirdPartySubmission' => !!$form->submitAction,
 				'displaySectionTitles' => $form->displaySectionTitles,
 				'renderingOptions'     => $renderingOptions
-			)
+			]
 		);
 
 		// Check if we need to update our Front-end Form Template Path
@@ -85,13 +86,13 @@ class SproutFormsVariable
 
 		// Build our complete form
 		$formHtml = $view->renderTemplate(
-			'form', array(
+			'form', [
 				'form'             => $form,
 				'entry'            => $entry,
 				'body'             => $bodyHtml,
 				'errors'           => $entry->getErrors(),
 				'renderingOptions' => $renderingOptions
-			)
+			]
 		);
 
 		$view->setTemplatesPath(Craft::$app->path->getSiteTemplatesPath());
@@ -115,12 +116,14 @@ class SproutFormsVariable
 		}
 
 		$form          = SproutForms::$app->forms->getFormByHandle($formHandle);
-		$entry         = SproutForms::$app->entries->getEntryModel($form);
+		$entry         = SproutForms::$app->entries->getEntry($form);
 		$fields        = SproutForms::$app->fields->getRegisteredFields();
 		$templatePaths = SproutForms::$app->fields->getSproutFormsTemplates($form);
 
+		$view = Craft::$app->getView();
+
 		// Set Tab template path
-		Craft::$app->templates->setTemplatesPath($templatePaths['tab']);
+		$view->setTemplatesPath($templatePaths['tab']);
 
 		$tabIndex = null;
 
@@ -143,21 +146,21 @@ class SproutFormsVariable
 		$layoutTab  = isset($layoutTabs[$tabIndex]) ? $layoutTabs[$tabIndex] : null;
 
 		// Build the HTML for our form tabs and fields
-		$tabHtml = Craft::$app->templates->render(
+		$tabHtml = $view->renderTemplate(
 			'tab',
-			array(
+			[
 				'form'                 => $form,
-				'tabs'                 => array($layoutTab),
+				'tabs'                 => [$layoutTab],
 				'entry'                => $entry,
 				'formFields'           => $fields,
 				'displaySectionTitles' => $form->displaySectionTitles,
 				'thirdPartySubmission' => !!$form->submitAction,
 				'displaySectionTitles' => $form->displaySectionTitles,
 				'renderingOptions'     => $renderingOptions
-			)
+			]
 		);
 
-		Craft::$app->templates->setTemplatesPath(Craft::$app->path->getSiteTemplatesPath());
+		$view->setTemplatesPath(Craft::$app->path->getSiteTemplatesPath());
 
 		return TemplateHelper::raw($tabHtml);
 	}
@@ -191,7 +194,9 @@ class SproutFormsVariable
 		}
 
 		$form  = SproutForms::$app->forms->getFormByHandle($formHandle);
-		$entry = SproutForms::$app->entries->getEntryModel($form);
+		$entry = SproutForms::$app->entries->getEntry($form);
+
+		$view = Craft::$app->getView();
 
 		// Determine where our form and field template should come from
 		$templatePaths = SproutForms::$app->fields->getSproutFormsTemplates($form);
@@ -200,24 +205,23 @@ class SproutFormsVariable
 
 		if ($field)
 		{
-			$fieldTypeClass  = get_class($field->getFieldType());
-			$fieldTypeString = str_replace('Craft\\', '', str_replace('FieldType', '', $fieldTypeClass));
+			$fieldTypeString = get_class($field);
 			$formField       = SproutForms::$app->fields->getRegisteredField($fieldTypeString);
 
 			if ($formField)
 			{
-				$value = Craft::$app->request->getPost($field->handle);
+				$value = Craft::$app->request->getBodyParam($field->handle);
 
-				Craft::$app->templates->setTemplatesPath($formField->getTemplatesPath());
+				$view->setTemplatesPath($formField->getTemplatesPath());
 
-				$formField->getInputHtml($field, $value, $field->getFieldType()->getSettings(), $renderingOptions);
+				$formField->getInputHtml($field, $value, $field->getSettings(), $renderingOptions);
 
 				// Set Tab template path
-				Craft::$app->templates->setTemplatesPath($templatePaths['field']);
+				$view->setTemplatesPath($templatePaths['field']);
 
 				// Build the HTML for our form field
-				$fieldHtml = Craft::$app->templates->render(
-					'field', array(
+				$fieldHtml = $view->renderTemplate(
+					'field', [
 						'form'                 => $form,
 						'value'                => $value,
 						'field'                => $field,
@@ -226,10 +230,10 @@ class SproutFormsVariable
 						'formField'            => $formField,
 						'renderingOptions'     => $renderingOptions,
 						'thirdPartySubmission' => !!$form->submitAction,
-					)
+					]
 				);
 
-				Craft::$app->templates->setTemplatesPath(Craft::$app->path->getSiteTemplatesPath());
+				$view->setTemplatesPath(Craft::$app->path->getSiteTemplatesPath());
 
 				return TemplateHelper::raw($fieldHtml);
 			}
