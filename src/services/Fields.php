@@ -6,12 +6,10 @@ use yii\base\Component;
 use craft\base\Field;
 use craft\records\Field as FieldRecord;
 use craft\fields\PlainText;
-use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
 use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
 
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Form as FormElement;
-use barrelstrength\sproutforms\records\Form as FormRecord;
 use barrelstrength\sproutforms\events\RegisterFieldsEvent;
 
 class Fields extends Component

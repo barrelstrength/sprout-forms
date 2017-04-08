@@ -3,7 +3,6 @@
 namespace barrelstrength\sproutforms\variables;
 
 use Craft;
-
 use craft\helpers\Template as TemplateHelper;
 use craft\helpers\ElementHelper;
 
@@ -205,7 +204,7 @@ class SproutFormsVariable
 
 		if ($field)
 		{
-			$fieldTypeString = get_class($field);
+			$fieldTypeString = $this->getFieldClass($field);
 			$formField       = SproutForms::$app->fields->getRegisteredField($fieldTypeString);
 
 			if ($formField)

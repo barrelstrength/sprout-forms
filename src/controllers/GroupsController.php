@@ -3,7 +3,6 @@ namespace barrelstrength\sproutforms\controllers;
 
 use Craft;
 use craft\web\Controller as BaseController;
-use craft\helpers\UrlHelper;
 
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\models\FormGroup as FormGroupModel;

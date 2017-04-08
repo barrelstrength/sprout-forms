@@ -1,7 +1,6 @@
 <?php
 namespace barrelstrength\sproutforms\validators;
 
-use Craft;
 use yii\validators\Validator;
 use barrelstrength\sproutforms\SproutForms;
 

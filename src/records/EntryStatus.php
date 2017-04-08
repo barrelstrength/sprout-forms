@@ -1,9 +1,7 @@
 <?php
 namespace barrelstrength\sproutforms\records;
 
-use Craft;
 use craft\db\ActiveRecord;
-use yii\db\ActiveQueryInterface;
 
 /**
  * Class EntryStatus record.

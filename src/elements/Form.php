@@ -7,10 +7,8 @@ use craft\elements\db\ElementQueryInterface;
 use yii\base\ErrorHandler;
 use craft\db\Query;
 use craft\helpers\UrlHelper;
-use yii\base\InvalidConfigException;
 use craft\validators\HandleValidator;
 use craft\validators\UniqueValidator;
-
 use craft\behaviors\FieldLayoutBehavior;
 use craft\behaviors\FieldLayoutTrait;
 

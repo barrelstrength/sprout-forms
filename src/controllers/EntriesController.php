@@ -80,8 +80,7 @@ class EntriesController extends BaseController
 			if (!$request->getIsCpRequest() && $this->form->notificationEnabled)
 			{
 				$post = $_POST;
-				// @todo
-				//SproutForms::$app->forms->sendNotification($this->form, $entry, $post);
+				SproutForms::$app->forms->sendNotification($this->form, $entry, $post);
 			}
 
 			// Removed multi-step form code on Craft3 Let's keep it clean
@@ -138,7 +137,7 @@ class EntriesController extends BaseController
 		$form          = SproutForms::$app->forms->getFormById($entry->formId);
 		$entryStatus   = SproutForms::$app->entries->getEntryStatusById($entry->statusId);
 		$statuses      = SproutForms::$app->entries->getAllEntryStatuses();
-		$entryStatuses = array();
+		$entryStatuses = [];
 
 		foreach ($statuses as $key => $status)
 		{

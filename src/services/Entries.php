@@ -3,7 +3,6 @@ namespace barrelstrength\sproutforms\services;
 
 use Craft;
 use yii\base\Component;
-use craft\events\ModelEvent;
 
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Form as FormElement;

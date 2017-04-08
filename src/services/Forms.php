@@ -1,18 +1,18 @@
 <?php
 namespace barrelstrength\sproutforms\services;
 
+use barrelstrength\sproutforms\SproutForms;
+use barrelstrength\sproutforms\elements\Form as FormElement;
+use barrelstrength\sproutforms\elements\Entry as EntryElement;
+use barrelstrength\sproutforms\records\Form as FormRecord;
+use barrelstrength\sproutforms\migrations\CreateFormContentTable;
 use Craft;
 use yii\base\Component;
 use craft\helpers\StringHelper;
 use craft\helpers\MigrationHelper;
-use craft\validators\HandleValidator;
-use craft\validators\UniqueValidator;
+use craft\helpers\ArrayHelper;
+use craft\mail\Message;
 
-
-use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutforms\elements\Form as FormElement;
-use barrelstrength\sproutforms\records\Form as FormRecord;
-use barrelstrength\sproutforms\migrations\CreateFormContentTable;
 
 class Forms extends Component
 {
@@ -86,17 +86,7 @@ class Forms extends Component
 			}
 		}
 
-		// Create our new Form Record
-
 		$form->titleFormat = ($form->titleFormat ? $form->titleFormat : "{dateCreated|date('D, d M Y H:i:s')}");
-
-		// @todo - Why do we need these now?
-		// Things were working fine without these and now 2.5 is throwing errors unless we set them explicitly
-		if ($isNewForm)
-		{
-			$form->dateCreated = date('Y-m-d h:m:s');
-			$form->dateUpdated = date('Y-m-d h:m:s');
-		}
 
 		$form->validate();
 
@@ -458,38 +448,41 @@ class Forms extends Component
 	/**
 	 * Sprout Forms Send Notification service.
 	 *
-	 * @param SproutForms_FormModel  $form
-	 * @param SproutForms_EntryModel $entry
+	 * @param FormElement  $form
+	 * @param EntryElement $entry
 	 * @param array $post
 	 *
 	 * @return boolean
 	 */
-	public function sendNotification(SproutForms_FormModel $form, SproutForms_EntryModel $entry, $post = null)
+	public function sendNotification(FormElement $form, EntryElement $entry, $post = null)
 	{
 		// Get our recipients
-		$recipients = ArrayHelper::stringToArray($form->notificationRecipients);
+		$recipients = ArrayHelper::toArray($form->notificationRecipients);
 		$recipients = array_unique($recipients);
 		$response   = false;
+		$view       = Craft::$app->getView();
 
 		if (count($recipients))
 		{
-			$email         = new EmailModel();
+			$message         = new Message();
 			$tabs          = $form->getFieldLayout()->getTabs();
-			$templatePaths = sproutForms()->fields->getSproutFormsTemplates($form);
+			$templatePaths = SproutForms::$app->fields->getSproutFormsTemplates($form);
 			$emailTemplate = $templatePaths['email'];
 
 			// Set our Sprout Forms Email Template path
-			Craft::$app->templates->setTemplatesPath($emailTemplate);
+			$view->setTemplatesPath($emailTemplate);
 
-			$email->htmlBody = Craft::$app->templates->render(
-				'email', array(
+			$htmlBodyTemplate = $view->renderTemplate(
+				'email', [
 					'formName' => $form->name,
 					'tabs'     => $tabs,
 					'element'  => $entry
-				)
+				]
 			);
 
-			Craft::$app->templates->setTemplatesPath(Craft::$app->path->getCpTemplatesPath());
+			$message->setHtmlBody($htmlBodyTemplate);
+
+			$view->setTemplatesPath(Craft::$app->path->getCpTemplatesPath());
 
 			if (is_null($post))
 			{
@@ -498,43 +491,52 @@ class Forms extends Component
 
 			$post = (object) $post;
 
-			$email->fromEmail = $form->notificationSenderEmail;
-			$email->fromName  = $form->notificationSenderName;
-			$email->subject   = $form->notificationSubject;
+			$message->setFrom($form->notificationSenderEmail);
+			// @todo - how set from name on craft3?
+			#$message->setFrom  = $form->notificationSenderName;
+			$message->setSubject($form->notificationSubject);
+
+			$mailer = Craft::$app->getMailer();
 
 			try
 			{
+				$subject = null;
 				// Has a custom subject been set for this form?
 				if ($form->notificationSubject)
 				{
-					$email->subject = Craft::$app->templates->renderObjectTemplate($form->notificationSubject, $post, true);
+					$subject = $view->renderObjectTemplate($form->notificationSubject, $post, true);
 				}
 
-				$email->subject = sproutForms()->encodeSubjectLine($email->subject);
+				$message->setSubject(SproutForms::$app->encodeSubjectLine($subject));
 
 				// custom replyTo has been set for this form
 				if ($form->notificationReplyToEmail)
 				{
-					$email->replyTo = Craft::$app->templates->renderObjectTemplate($form->notificationReplyToEmail, $post, true);
+					$repleyTo = $view->renderObjectTemplate($form->notificationReplyToEmail, $post, true);
 
-					if (!filter_var($email->replyTo, FILTER_VALIDATE_EMAIL))
+					$message->setReplyTo($repleyTo);
+
+					if (!filter_var($repleyTo, FILTER_VALIDATE_EMAIL))
 					{
-						$email->replyTo = null;
+						$message->setReplyTo(null);
 					}
 				}
 
 				foreach ($recipients as $emailAddress)
 				{
-					$email->toEmail = Craft::$app->templates->renderObjectTemplate($emailAddress, $post, true);
+					$toEmail = $view->renderObjectTemplate($emailAddress, $post, true);
+					$message->setTo($toEmail);
 
-					if (filter_var($email->toEmail, FILTER_VALIDATE_EMAIL))
+					if (filter_var($toEmail, FILTER_VALIDATE_EMAIL))
 					{
-						$options =
+						// @todo - add to the event
+						/*$options =
 							array(
 								'sproutFormsEntry'      => $entry,
 								'enableFileAttachments' => $form->enableFileAttachments,
-							);
-						Craft::$app->email->sendEmail($email, $options);
+							);*/
+
+						$mailer->send($message);
 					}
 				}
 
@@ -543,7 +545,7 @@ class Forms extends Component
 			catch (\Exception $e)
 			{
 				$response = false;
-				SproutForms::log($e->getMessage(), LogLevel::Error);
+				SproutForms::log($e->getMessage(), 'error');
 			}
 		}
 
@@ -563,6 +565,7 @@ class Forms extends Component
 		$data          = array();
 		$data['tabId'] = null;
 		$data['field'] = new FieldModel();
+		$view          = Craft::$app->getView();
 
 		if ($field)
 		{
@@ -583,9 +586,9 @@ class Forms extends Component
 		$data['sections'] = $form->getFieldLayout()->getTabs();
 		$data['formId']   = $form->id;
 
-		$html = Craft::$app->templates->render('sproutforms/forms/_editFieldModal', $data);
-		$js   = Craft::$app->templates->getFootHtml();
-		$css  = Craft::$app->templates->getHeadHtml();
+		$html = $view->renderTemplate('sproutforms/forms/_editFieldModal', $data);
+		$js   = $view->getFootHtml();
+		$css  = $view->getHeadHtml();
 
 		return array(
 			'html' => $html,

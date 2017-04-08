@@ -98,7 +98,7 @@
 	</div>
 {% endfor %}
 
-{% if field is not defined or not field.handle %}
+{% if field is empty or field.handle is empty %}
 	{% js %}
 		new Craft.HandleGenerator('#field-name', '#field-handle');
 	{% endjs %}

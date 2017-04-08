@@ -1,9 +1,7 @@
 <?php
 namespace barrelstrength\sproutforms\services;
 
-use Craft;
 use craft\base\Component;
-use barrelstrength\sproutforms\SproutForms;
 
 class App extends Component
 {
@@ -20,5 +18,15 @@ class App extends Component
 		$this->fields         = new Fields();
 		$this->entries        = new Entries();
 		$this->frontEndFields = new FrontEndFields();
+	}
+
+	/**
+	 * @param $subject
+	 *
+	 * @return string
+	 */
+	public function encodeSubjectLine($subject)
+	{
+		return '=?UTF-8?B?' . base64_encode($subject) . '?=';
 	}
 }

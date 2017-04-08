@@ -1,11 +1,7 @@
 <?php
 namespace barrelstrength\sproutforms\migrations;
 
-use Craft;
-use craft\db\Connection;
 use craft\db\Migration;
-use craft\elements\User;
-use craft\helpers\StringHelper;
 
 /**
  * Installation Migration

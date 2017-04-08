@@ -74,14 +74,6 @@ class EntryStatus extends Model
 	/**
 	 * @return string
 	 */
-	public function __toString()
-	{
-		return (string)$this->name;
-	}
-
-	/**
-	 * @return string
-	 */
 	public function htmlLabel()
 	{
 		return sprintf('<span class="sproutFormsStatusLabel"><span class="status %s"></span> %s</span>',

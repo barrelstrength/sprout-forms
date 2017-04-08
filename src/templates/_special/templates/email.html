@@ -39,7 +39,6 @@
 
                                     {% for field in fields %}
 
-                                      {% set field = field.getField() %}
                                       {% set value = attribute(element, field.handle) %}
 
                                       {% if loop.first and tabs|length > 1 %}

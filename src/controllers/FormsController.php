@@ -7,7 +7,6 @@ use craft\helpers\UrlHelper;
 use yii\web\NotFoundHttpException;
 
 use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutforms\assetbundles\FormAsset;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 
 class FormsController extends BaseController

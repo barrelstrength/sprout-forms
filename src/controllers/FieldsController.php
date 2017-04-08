@@ -3,7 +3,6 @@ namespace barrelstrength\sproutforms\controllers;
 
 use Craft;
 use craft\web\Controller as BaseController;
-use craft\helpers\UrlHelper;
 use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
 use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
 use craft\base\Field;

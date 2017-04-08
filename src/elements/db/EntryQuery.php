@@ -2,12 +2,9 @@
 namespace barrelstrength\sproutforms\elements\db;
 
 use Craft;
-use craft\db\Query;
 use craft\elements\db\ElementQuery;
 use craft\helpers\Db;
-use yii\db\Connection;
 
-use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\SproutForms;
 
 class EntryQuery extends ElementQuery

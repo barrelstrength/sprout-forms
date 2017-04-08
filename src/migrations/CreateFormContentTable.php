@@ -1,9 +1,7 @@
 <?php
 namespace barrelstrength\sproutforms\migrations;
 
-use Craft;
 use craft\db\Migration;
-
 
 class CreateFormContentTable extends Migration
 {

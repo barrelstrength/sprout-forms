@@ -1,7 +1,6 @@
 <?php
 namespace barrelstrength\sproutforms\events;
 
-use Craft;
 use yii\base\Event;
 
 /**
