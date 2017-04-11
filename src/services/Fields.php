@@ -545,10 +545,11 @@ class Fields extends Component
 
 		$data['sections'] = $form->getFieldLayout()->getTabs();
 		$data['formId']   = $form->id;
+		$view = Craft::$app->getView();
 
-		$html = Craft::$app->getView()->renderTemplate('sproutforms/forms/_editFieldModal', $data);
-		$js   = Craft::$app->getView()->getHeadHtml();
-		$css  = Craft::$app->getView()->getBodyHtml();
+		$html = $view->renderTemplate('sproutforms/forms/_editFieldModal', $data);
+		$js  = $view->getBodyHtml();
+		$css = $view->getHeadHtml();
 
 		return [
 			'html' => $html,
