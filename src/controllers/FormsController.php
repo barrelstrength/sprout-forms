@@ -178,6 +178,8 @@ class FormsController extends BaseController
 		{
 			if ($formId !== null)
 			{
+				$variables['formId'] = $formId;
+
 				if ($form === null)
 				{
 					$variables['brandNewForm'] = false;

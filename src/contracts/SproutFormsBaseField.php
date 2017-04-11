@@ -35,6 +35,8 @@ abstract class SproutFormsBaseField
 	 */
 	abstract public function getInputHtml($field, $value, $settings, array $renderingOptions = null);
 
+	abstract public function getSettingsHtml($field);
+
 	final public function beginRendering()
 	{
 		$this->originalTemplatesPath = Craft::$app->getView()->getTemplatesPath();

@@ -15,6 +15,26 @@ use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 class PlainText extends SproutFormsBaseField
 {
 	/**
+	 * @var string|null The input’s placeholder text
+	 */
+	public $placeholder;
+
+	/**
+	 * @var bool|null Whether the input should allow line breaks
+	 */
+	public $multiline;
+
+	/**
+	 * @var int The minimum number of rows the input should have, if multi-line
+	 */
+	public $initialRows = 4;
+
+	/**
+	 * @var int|null The maximum number of characters allowed in the field
+	 */
+	public $charLimit;
+
+	/**
 	 * @return string
 	 */
 	public function getType()
@@ -48,5 +68,26 @@ class PlainText extends SproutFormsBaseField
 		$this->endRendering();
 
 		return TemplateHelper::raw($rendered);
+	}
+
+	/**
+	 * @param FieldModel $field
+	 *
+	 * @return \Twig_Markup
+	 */
+	public function getSettingsHtml($field)
+	{
+		$this->beginRendering();
+
+		$rendered = Craft::$app->getView()->renderTemplate(
+			'plaintext/settings',
+			[
+				'field' => $field,
+			]
+		);
+
+		$this->endRendering();
+
+		return $rendered;
 	}
 }

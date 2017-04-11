@@ -44,6 +44,19 @@
 {% endblock %}
 
 {% block main %}
+<style type="text/css">
+	.sproutfield{
+		background:#e3e5e8;
+		width: 70%;
+		height: 150px;
+	}
+	.sproutfield ul li{
+		float:right;
+		display: inline-block;
+		padding: 5px;
+		margin: 10px;
+	}
+</style>
 <div class="grid first" data-max-cols="3">
 	<div class="item" data-position="left" data-colspan="2">
 		<div id="fields" class="pane">
@@ -53,7 +66,40 @@
 			{% endif %}
 
 			<div id="formfields" class="hidden">
-				{% include 'sproutforms/forms/_tabs/fieldlayoutdesigner' %}
+				{#% include 'sproutforms/forms/_tabs/fieldlayoutdesigner' %#}
+				<div class="sproutfield">
+					<ul>
+						<li>move</li>
+						<li><a href="#">settings</a></li>
+						<li><a href="#">delete</a></li>
+					</ul>
+					<div id="fields-fullName-field" class="field plaintext fullName-field" style="width: 40%;">
+						<div class="heading">
+							<label for="fields-fullName">Full Name</label>
+						</div>
+						<div class="input">
+							<input type="text" id="fields-fullName" class="fullName" name="fields[fullName]" required="">
+						</div>
+					</div>
+				</div>
+				<br>
+				<div class="sproutfield">
+					<ul>
+						<li>move</li>
+						<li><a href="#">settings</a></li>
+						<li><a href="#">delete</a></li>
+					</ul>
+					<div id="fields-fullName-field" class="field plaintext fullName-field" style="width: 40%;">
+						<div class="heading">
+							<label for="fields-fullName">Email</label>
+						</div>
+						<div class="input">
+							<input type="text" id="fields-fullName" class="fullName" name="fields[fullName]" required="">
+						</div>
+					</div>
+				</div>
+
+				<br><br>
 			</div>
 
 			<div id="notification" class="hidden">
@@ -61,9 +107,7 @@
 			</div>
 
 		</div>
-
 		{% if formId is defined %}
-
 
 		<div class="grid pane formcontrol">
 
