@@ -81,6 +81,14 @@
 							<input type="text" id="fields-fullName" class="fullName" name="fields[fullName]" required="">
 						</div>
 					</div>
+					<br>
+					{# The hardcode begins #}
+					{% set fieldLayout = form.getFieldLayout() %}
+					{% set tabs        = fieldLayout.getTabs() %}
+					{% set fields      = tabs[0].getFields() %}
+					{% set fieldLayout = form.getFieldLayout() %}
+					{% set _field = craft.sproutforms.getField("barrelstrength\\sproutforms\\integrations\\sproutforms\\fields\\PlainText") %}
+					{{ _field.getSettingsHtml(fields[0])|raw }}
 				</div>
 				<br>
 				<div class="sproutfield">

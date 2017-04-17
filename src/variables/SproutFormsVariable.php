@@ -487,5 +487,15 @@ class SproutFormsVariable
 	{
 		return SproutForms::$app->entries->getAllEntryStatuses();
 	}
+
+	/**
+	 * @return bool
+	 */
+	public function getField($class)
+	{
+		$field = new $class();
+
+		return $field;
+	}
 }
 

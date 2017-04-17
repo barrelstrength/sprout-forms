@@ -77,16 +77,12 @@ class PlainText extends SproutFormsBaseField
 	 */
 	public function getSettingsHtml($field)
 	{
-		$this->beginRendering();
-
 		$rendered = Craft::$app->getView()->renderTemplate(
-			'plaintext/settings',
+			'sproutforms/_components/fields/plaintext/settings',
 			[
 				'field' => $field,
 			]
 		);
-
-		$this->endRendering();
 
 		return $rendered;
 	}

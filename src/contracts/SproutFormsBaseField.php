@@ -61,7 +61,6 @@ abstract class SproutFormsBaseField
 
 	public static function addFieldVariables(array $variables)
 	{
-		$var = "S";
 		static::$fieldVariables = array_merge(static::$fieldVariables, $variables);
 	}
 
@@ -76,6 +75,14 @@ abstract class SproutFormsBaseField
 	public function getNamespace()
 	{
 		return 'fields';
+	}
+
+	/**
+	 * @return string
+	 */
+	public static function displayName(): string
+	{
+		return '';
 	}
 
 	/**
@@ -108,5 +115,13 @@ abstract class SproutFormsBaseField
 	public function hasMultipleLabels()
 	{
 		return false;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function getTableAttributeHtml($value, ElementInterface $element): string
+	{
+		return $value;
 	}
 }
