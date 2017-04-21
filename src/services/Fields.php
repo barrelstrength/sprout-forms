@@ -548,8 +548,8 @@ class Fields extends Component
 		$view = Craft::$app->getView();
 
 		$html = $view->renderTemplate('sproutforms/forms/_editFieldModal', $data);
-		$js  = $view->getBodyHtml();
-		$css = $view->getHeadHtml();
+		$js   = $view->getBodyHtml();
+		$css  = $view->getHeadHtml();
 
 		return [
 			'html' => $html,

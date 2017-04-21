@@ -553,51 +553,6 @@ class Forms extends Component
 	}
 
 	/**
-	 * Loads the sprout modal field via ajax.
-	 *
-	 * @param FormRecord $form
-	 * @param FieldModel|null        $field
-	 *
-	 * @return array
-	 */
-	public function getModalFieldTemplate($form, FieldModel $field = null)
-	{
-		$data          = array();
-		$data['tabId'] = null;
-		$data['field'] = new FieldModel();
-		$view          = Craft::$app->getView();
-
-		if ($field)
-		{
-			$data['field'] = $field;
-			$tabId         = Craft::$app->request->getPost('tabId');
-
-			if (isset($tabId))
-			{
-				$data['tabId'] = Craft::$app->request->getPost('tabId');
-			}
-
-			if ($field->id != null)
-			{
-				$data['fieldId'] = $field->id;
-			}
-		}
-
-		$data['sections'] = $form->getFieldLayout()->getTabs();
-		$data['formId']   = $form->id;
-
-		$html = $view->renderTemplate('sproutforms/forms/_editFieldModal', $data);
-		$js   = $view->getFootHtml();
-		$css  = $view->getHeadHtml();
-
-		return array(
-			'html' => $html,
-			'js'   => $js,
-			'css'  => $css
-		);
-	}
-
-	/**
 	 * Removes forms and related records from the database given the ids
 	 *
 	 * @param mixed ids

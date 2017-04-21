@@ -88,8 +88,6 @@ class SproutForms extends \craft\base\Plugin
 	private function getCpUrlRules()
 	{
 		return [
-			'sproutforms/forms'                                      =>
-			'sprout-forms/forms/index',
 			'sproutforms/forms/new'                                  =>
 			'sprout-forms/forms/edit-form-template',
 
