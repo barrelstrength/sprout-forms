@@ -86,8 +86,8 @@
 
 			this.$deleteSpinner = $('<div class="spinner hidden">').appendTo(this.$leftButtons);
 
-			this.$cancelBtn = $('<div class="btn" role="button">').text(Craft.t('sproutforms','Cancel')).appendTo(this.$rightButtons);
-			this.$saveBtn = $('<div class="btn submit" role="button">').text(Craft.t('sproutforms','Save')).appendTo(this.$rightButtons);
+			this.$cancelBtn = $('<div class="btn disabled" role="button">').text(Craft.t('sproutforms','Cancel')).appendTo(this.$rightButtons);
+			this.$saveBtn = $('<div class="btn submit disabled" role="button">').text(Craft.t('sproutforms','Save')).appendTo(this.$rightButtons);
 			this.$saveSpinner = $('<div class="spinner hidden">').appendTo(this.$rightButtons);
 
 			this.setContainer($container);
@@ -127,7 +127,6 @@
 
 				this.templateLoaded = true;
 				this.initListeners();
-
 				if (this.visible)
 				{
 					this.initSettings();
@@ -185,7 +184,6 @@
 			{
 				var $this = $(this);
 				var src = $this.prop('src');
-
 				if (!that.executedJs.hasOwnProperty(src))
 				{
 					jsFiles.push(src);
@@ -196,7 +194,6 @@
 			var callback = function()
 			{
 				that.off('runExternalScripts', callback);
-
 				that.trigger('parseTemplate', {
 					target: this,
 					$html: $html,
@@ -204,9 +201,9 @@
 					$css: $cssInline
 				});
 			};
-
-			that.on('runExternalScripts', callback);
-			this.runExternalScripts(jsFiles);
+			// Fixes bug on Craft3 - Updates way to callback function
+			$.when(this.runExternalScripts(jsFiles)).then(callback());
+			//this.runExternalScripts(jsFiles);
 		},
 
 		/**
@@ -223,25 +220,29 @@
 				for (var i = 0; i < files.length; i++)
 				{
 					var src = files[i];
-
-					$.getScript(src, $.proxy(function(data, status)
+					// Fixes Double-instantiating bug
+					if ((src.indexOf('MatrixConfigurator')  >= 0 ) ||
+						(src.indexOf('TableFieldSettings.min.js')  >= 0 ))
 					{
-						if (status === 'success')
+						$.getScript(src, $.proxy(function(data, status)
 						{
-							filesCount--;
-
-							if (filesCount === 0)
+							if (status === 'success')
 							{
-								this.trigger('runExternalScripts', {
-									target: this
-								});
+								filesCount--;
+
+								if (filesCount === 0)
+								{
+									this.trigger('runExternalScripts', {
+										target: this
+									});
+								}
 							}
-						}
-						else
-						{
-							Craft.displayError(Craft.t('sproutforms','Could not load all resources.'));
-						}
-					}, this));
+							else
+							{
+								Craft.displayError(Craft.t('sproutforms','Could not load all resources.'));
+							}
+						}, this));
+					}
 				}
 			}
 			else
@@ -328,9 +329,9 @@
 					that.observer.disconnect();
 				}, 1);
 			};
-
-			that.on('runExternalScripts', callback);
-			that.runExternalScripts(Object.keys(that.executedJs));
+			$.when(that.runExternalScripts(Object.keys(that.executedJs))).then(callback());
+			//that.on('runExternalScripts', callback);
+			//that.runExternalScripts(Object.keys(that.executedJs));
 		},
 
 		/**
@@ -379,7 +380,7 @@
 			var inputId = this.$container.find('input[name="fieldId"]');
 			var id = inputId.length ? inputId.val() : false;
 
-			Craft.postActionRequest('sprout-forms/fields/save-field', data, $.proxy(function(response, textStatus)
+			Craft.postActionRequest('sproutForms/fields/saveField', data, $.proxy(function(response, textStatus)
 			{
 				this.$saveSpinner.addClass('hidden');
 
