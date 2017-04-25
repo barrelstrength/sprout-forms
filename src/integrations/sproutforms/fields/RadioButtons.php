@@ -57,4 +57,21 @@ class RadioButtons extends SproutFormsBaseField
 
 		return TemplateHelper::raw($rendered);
 	}
+
+	/**
+	 * @param FieldModel $field
+	 *
+	 * @return \Twig_Markup
+	 */
+	public function getSettingsHtml($field)
+	{
+		$rendered = Craft::$app->getView()->renderTemplate(
+			'sproutforms/_components/fields/plaintext/settings',
+			[
+				'field' => $field,
+			]
+		);
+
+		return $rendered;
+	}
 }

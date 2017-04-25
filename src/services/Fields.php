@@ -5,7 +5,7 @@ use Craft;
 use yii\base\Component;
 use craft\base\Field;
 use craft\records\Field as FieldRecord;
-use craft\fields\PlainText;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\PlainText;
 use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
 
 use barrelstrength\sproutforms\SproutForms;
@@ -202,31 +202,14 @@ class Fields extends Component
 	public function prepareFieldTypeSelection()
 	{
 		$fields         = $this->getRegisteredFields();
-		$fieldTypes     = Craft::$app->fields->getAllFieldTypes();
 		$standardFields = [];
-		$customFields   = [];
 
 		if (count($fields))
 		{
 			// Loop through registered fields and add them to the standard group
 			foreach ($fields as $class => $field)
 			{
-				$type = $field->getType();
-
-				if (in_array($type, $fieldTypes))
-				{
-					/**
-					 * @var BaseFieldType $fieldType
-					 */
-
-					$standardFields[$type] = $type::displayName();
-
-					// Remove the field type associate with the current field from the group
-					// The remaining field types will be added to the custom group
-					if(($key = array_search($type, $fieldTypes)) !== false) {
-						unset($fieldTypes[$key]);
-					}
-				}
+				$standardFields[$class] = $field::displayName();
 			}
 
 			// Sort fields alphabetically by name
@@ -236,29 +219,7 @@ class Fields extends Component
 			$standardFields = $this->prependKeyValue($standardFields, 'standardFieldGroup', array('optgroup' => SproutForms::t('Standard Fields')));
 		}
 
-		if (count($fieldTypes))
-		{
-			// Loop through remaining field types and add them to the custom group
-
-			foreach ($fieldTypes as $class)
-			{
-				if ($class::isSelectable())
-				{
-					$customFields[] = [
-						'value' => $class,
-						'label' => $class::displayName()
-					];
-				}
-			}
-
-			// Sort fields alphabetically
-			ksort($customFields);
-
-			// Add the group label to the beginning of the custom group
-			$customFields = $this->prependKeyValue($customFields, 'customFieldGroup', ['optgroup' => SproutForms::t('Custom Fields')]);
-		}
-
-		return array_merge($standardFields, $customFields);
+		return $standardFields;
 	}
 
 	/**

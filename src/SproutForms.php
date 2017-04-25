@@ -47,7 +47,7 @@ class SproutForms extends \craft\base\Plugin
 
 		Event::on(Fields::class, Fields::EVENT_REGISTER_FIELDS, function(RegisterFieldsEvent $event) {
 				$event->fields[] = new PlainText();
-				$event->fields[] = new Number();
+				/*$event->fields[] = new Number();
 				$event->fields[] = new Dropdown();
 				$event->fields[] = new Checkboxes();
 				$event->fields[] = new MultiSelect();
@@ -56,7 +56,7 @@ class SproutForms extends \craft\base\Plugin
 				$event->fields[] = new Categories();
 				$event->fields[] = new Entries();
 				$event->fields[] = new Tags();
-				$event->fields[] = new RadioButtons();
+				$event->fields[] = new RadioButtons();*/
 			}
 		);
 	}

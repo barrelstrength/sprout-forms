@@ -4,16 +4,21 @@ namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
 use Craft;
 use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Template as TemplateHelper;
+use yii\db\Schema;
 
+use barrelstrength\sproutforms\contracts\base\PreviewableFieldInterface;
+use barrelstrength\sproutforms\contracts\base\Field;
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
+use barrelstrength\sproutforms\SproutForms;
 
 /**
  * Class PlainText
  *
  * @package Craft
  */
-class PlainText extends SproutFormsBaseField
+class PlainText extends Field implements PreviewableFieldInterface
 {
+	public $boostrapClass;
 	/**
 	 * @var string|null The input’s placeholder text
 	 */
@@ -35,11 +40,16 @@ class PlainText extends SproutFormsBaseField
 	public $charLimit;
 
 	/**
-	 * @return string
+	 * @var string The type of database column the field should have in the content table
 	 */
-	public function getType()
+	public $columnType = Schema::TYPE_TEXT;
+
+	/**
+	 * @inheritdoc
+	 */
+	public static function displayName(): string
 	{
-		return CraftPlainText::class;
+		return SproutForms::t('Plain Text');
 	}
 
 	/**
@@ -50,7 +60,7 @@ class PlainText extends SproutFormsBaseField
 	 *
 	 * @return \Twig_Markup
 	 */
-	public function getInputHtml($field, $value, $settings, array $renderingOptions = null)
+	public function getInputHtml($field, $value, $settings, array $renderingOptions = null): string
 	{
 		$this->beginRendering();
 
@@ -75,12 +85,12 @@ class PlainText extends SproutFormsBaseField
 	 *
 	 * @return \Twig_Markup
 	 */
-	public function getSettingsHtml($field)
+	public function getSettingsHtml()
 	{
 		$rendered = Craft::$app->getView()->renderTemplate(
 			'sproutforms/_components/fields/plaintext/settings',
 			[
-				'field' => $field,
+				'field' => $this,
 			]
 		);
 

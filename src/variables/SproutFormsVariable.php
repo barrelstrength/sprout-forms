@@ -489,13 +489,27 @@ class SproutFormsVariable
 	}
 
 	/**
+	 * @param FieldModel
 	 * @return bool
 	 */
-	public function getField($class)
+	public function getRegisteredFieldByModel($field)
 	{
-		$field = new $class();
+		$registeredFields = SproutForms::$app->fields->getRegisteredFields();
 
-		return $field;
+		foreach ($registeredFields as $sproutFormfield)
+		{
+			if ($sproutFormfield->getType() == get_class($field) && get_class($field)== 'craft\fields\PlainText')
+			{
+				return $sproutFormfield;
+			}
+		}
+
+		return null;
+	}
+
+	public function getRegisteredFields()
+	{
+		return SproutForms::$app->fields->getRegisteredFields();
 	}
 }
 

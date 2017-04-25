@@ -19,21 +19,11 @@
 		 *
 		 * @param fld - An instance of Craft.FieldLayoutDesigner
 		 */
-		init: function(fld)
+		init: function()
 		{
-			if (!(fld instanceof Craft.FieldLayoutDesigner))
-			{
-				return;
-			}
+			this.$fieldButton = $('#field-1');
 
-			this.fld = fld;
-			this.fld.$container.addClass('sprout-field');
-
-			this.$container = $('<div class="newfieldbtn-container">').insertAfter($(".fld-tabs"));
-
-			this.$fieldButton = $('<div id="sproutField" class="btn add icon" tabindex="0">').text(Craft.t('sproutforms','New Field')).appendTo($(".buttons"));
-
-			this.initButtons();
+			//this.initButtons();
 			this.modal = SproutField.FieldModal.getInstance();
 
 			this.addListener(this.$fieldButton, 'activate', 'newField');

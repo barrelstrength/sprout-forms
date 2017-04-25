@@ -70,7 +70,7 @@
 				<div class="sproutfield">
 					<ul>
 						<li>move</li>
-						<li><a href="#">settings</a></li>
+						<li><a id="field-1" href="#">settings</a></li>
 						<li><a href="#">delete</a></li>
 					</ul>
 					<div id="fields-fullName-field" class="field plaintext fullName-field" style="width: 40%;">
@@ -82,13 +82,6 @@
 						</div>
 					</div>
 					<br>
-					{# The hardcode begins #}
-					{% set fieldLayout = form.getFieldLayout() %}
-					{% set tabs        = fieldLayout.getTabs() %}
-					{% set fields      = tabs[0].getFields() %}
-					{% set fieldLayout = form.getFieldLayout() %}
-					{% set _field = craft.sproutforms.getField("barrelstrength\\sproutforms\\integrations\\sproutforms\\fields\\PlainText") %}
-					{{ _field.getSettingsHtml(fields[0])|raw }}
 				</div>
 				<br>
 				<div class="sproutfield">
@@ -238,5 +231,8 @@
 		$("input#display-form-code")
 		.focus(function() { $(this).select(); } )
 		.mouseup(function (e) {e.preventDefault(); });
+
+	new SproutField();
+
 	});
 {% endjs %}

@@ -1,11 +1,19 @@
 {% import "_includes/forms" as forms %}
-
+<h1>Sprout Forms Custom Settings</h1>
 {{ forms.textField({
 	label: "Placeholder Text"|t,
 	instructions: "The text that will be shown if the field doesn’t have a value."|t,
 	id: 'placeholder',
 	name: 'placeholder',
 	value: field.placeholder
+}) }}
+
+{{ forms.textField({
+    label: "Boostrap Class"|t,
+    instructions: "To handle a boostrap class in the front-end."|t,
+    id: 'boostrapClass',
+    name: 'boostrapClass',
+    value: field.boostrapClass
 }) }}
 
 {{ forms.textField({
