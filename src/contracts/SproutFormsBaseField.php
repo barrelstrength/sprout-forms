@@ -2,13 +2,14 @@
 namespace barrelstrength\sproutforms\contracts;
 
 use Craft;
-
+use craft\base\Field;
+use craft\base\ElementInterface;
 /**
  * Class SproutFormsBaseField
  *
  * @package Craft
  */
-abstract class SproutFormsBaseField
+abstract class SproutFormsBaseField extends Field
 {
 	/**
 	 * @var array
@@ -21,11 +22,6 @@ abstract class SproutFormsBaseField
 	protected $originalTemplatesPath;
 
 	/**
-	 * @return string
-	 */
-	abstract public function getType();
-
-	/**
 	 * @param FieldModel $field
 	 * @param mixed      $value
 	 * @param mixed      $settings
@@ -33,9 +29,7 @@ abstract class SproutFormsBaseField
 	 *
 	 * @return \Twig_Markup
 	 */
-	abstract public function getInputHtml($field, $value, $settings, array $renderingOptions = null);
-
-	abstract public function getSettingsHtml($field);
+	abstract public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null);
 
 	final public function beginRendering()
 	{

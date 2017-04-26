@@ -6,8 +6,6 @@ use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Template as TemplateHelper;
 use yii\db\Schema;
 
-use barrelstrength\sproutforms\contracts\base\PreviewableFieldInterface;
-use barrelstrength\sproutforms\contracts\base\Field;
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 use barrelstrength\sproutforms\SproutForms;
 
@@ -16,9 +14,13 @@ use barrelstrength\sproutforms\SproutForms;
  *
  * @package Craft
  */
-class PlainText extends Field implements PreviewableFieldInterface
+class PlainText extends SproutFormsBaseField
 {
+	/**
+	 * @var string|null The input’s placeholder text
+	 */
 	public $boostrapClass;
+
 	/**
 	 * @var string|null The input’s placeholder text
 	 */
@@ -60,7 +62,7 @@ class PlainText extends Field implements PreviewableFieldInterface
 	 *
 	 * @return \Twig_Markup
 	 */
-	public function getInputHtml($field, $value, $settings, array $renderingOptions = null): string
+	public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
 	{
 		$this->beginRendering();
 

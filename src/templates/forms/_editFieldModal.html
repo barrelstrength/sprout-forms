@@ -87,8 +87,8 @@
 	toggle: true
 }) }}
 
-{% for type in fieldTypes %}
-	{% set isCurrent = (type == className(field)) %}
+{% for type,fieldObject in fieldTypes %}
+	{% set isCurrent = type == className(field) %}
 	<div id="{{ type|id }}"{% if not isCurrent %} class="hidden"{% endif %}>
 		{% namespace 'types['~type~']' %}
 			{% set _field = isCurrent ? field : craft.app.fields.createField(type) %}
