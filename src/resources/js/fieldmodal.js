@@ -380,7 +380,7 @@
 			var inputId = this.$container.find('input[name="fieldId"]');
 			var id = inputId.length ? inputId.val() : false;
 
-			Craft.postActionRequest('sproutForms/fields/saveField', data, $.proxy(function(response, textStatus)
+			Craft.postActionRequest('sprout-forms/fields/save-field', data, $.proxy(function(response, textStatus)
 			{
 				this.$saveSpinner.addClass('hidden');
 

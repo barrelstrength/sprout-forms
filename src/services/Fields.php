@@ -482,7 +482,7 @@ class Fields extends Component
 
 		$data          = [];
 		$data['tabId'] = null;
-		$data['field'] = PlainText::class;
+		$data['field'] = $fieldsService->createField(PlainText::class);
 
 		if ($field)
 		{
