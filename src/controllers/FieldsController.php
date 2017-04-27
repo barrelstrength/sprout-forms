@@ -72,7 +72,6 @@ class FieldsController extends BaseController
 		if (!$fieldsService->saveField($field))
 		{
 			// Does not validate
-			$errros = $field->getErrors();
 			SproutForms::log("Field does not validate.");
 			$variables['tabId'] = $tabId;
 			$variables['field'] = $field;
