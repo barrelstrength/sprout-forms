@@ -57,7 +57,7 @@
 		margin: 10px;
 	}
 </style>
-<div class="grid first" data-max-cols="3">
+<div class="grid first" data-max-cols="3" id ="maindiv">
 	<div class="item" data-position="left" data-colspan="2">
 		<div id="fields" class="pane">
 
@@ -109,7 +109,6 @@
 
 		</div>
 		{% if formId is defined %}
-
 		<div class="grid pane formcontrol">
 
 			<div class="item oneline" data-max-colspan="1">
@@ -228,6 +227,7 @@
 	});
 
 	$(document).ready(function() {
+		$("#maindiv").css("height","600px");
 		$("input#display-form-code")
 		.focus(function() { $(this).select(); } )
 		.mouseup(function (e) {e.preventDefault(); });
