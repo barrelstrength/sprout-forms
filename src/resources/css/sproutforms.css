@@ -113,3 +113,71 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 	top: 0;
 	margin: 0;
 }
+
+/* DRAGULA*/
+
+/* dragula-specific example page styles */
+.sprout-wrapper {
+  display: table;
+  width: 100%;
+}
+.sprout-container {
+  display: table-cell;
+  background-color: rgba(255, 255, 255, 0.2);
+  width: 50%;
+}
+.sprout-container:nth-child(odd) {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+/*
+ * note that styling gu-mirror directly is a bad practice because it's too generic.
+ * you're better off giving the draggable elements a unique class and styling that directly!
+ */
+.sprout-container > div,
+.gu-mirror {
+  margin: 10px;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.2);
+  transition: opacity 0.4s ease-in-out;
+}
+.sprout-container > div {
+  cursor: move;
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+.gu-mirror {
+  cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
+}
+.sprout-container .ex-moved {
+  background-color: #e74c3c;
+}
+.sprout-container.ex-over {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+#left-lovehandles > div,
+#right-lovehandles > div {
+  cursor: initial;
+}
+.handle {
+  padding: 0 5px;
+  margin-right: 5px;
+  background-color: rgba(0, 0, 0, 0.4);
+  cursor: move;
+}
+.image-thing {
+  margin: 20px 0;
+  display: block;
+  text-align: center;
+}
+.slack-join {
+  position: absolute;
+  font-weight: normal;
+  font-size: 14px;
+  right: 10px;
+  top: 50%;
+  margin-top: -8px;
+  line-height: 16px;
+}

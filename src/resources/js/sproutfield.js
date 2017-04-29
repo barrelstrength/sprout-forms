@@ -13,6 +13,8 @@
 
 		fld: null,
 		modal: null,
+		formLayout: null,
+		fieldsLayout: null,
 
 		/**
 		 * The constructor.
@@ -21,6 +23,37 @@
 		 */
 		init: function()
 		{
+			var that = this;
+			this.formLayout  = this.getId('left-copy');
+			this.fieldsLayout = this.getId('right-copy');
+			// Drag from right to left
+			dragula([this.formLayout, this.fieldsLayout], {
+				copy: function (el, source) {
+					return source === document.getElementById('right-copy');
+				},
+				accepts: function (el, target) {
+					return target !== document.getElementById('right-copy')
+				},
+			})
+			.on('drop', function (el,target, source) {
+				if (target && source === that.fieldsLayout)
+				{
+					var id = 1;
+					$(el).attr('data-id', id);
+					var $field = $([
+						'<div class="fld-field" data-id="', id, '">',
+						'<span>', name, '</span>',
+						'<input class="id-input" type="hidden" name="fieldLayout[defaultTab][]" value="', id, '">',
+						'<a class="settings icon" title="Edit"></a>',
+						'</div>'
+					].join('')).appendTo($(el));
+
+					that.addFieldListener($field);
+
+					console.log($(el).data("type"));
+				}
+			});
+
 			this.$fieldButton = $('#field-1');
 
 			//this.initButtons();
@@ -41,6 +74,11 @@
 				var group = field.group;
 				this.resetField(field.id, group.name, field.name);
 			}, this));
+		},
+
+		getId: function(id)
+		{
+			return document.getElementById(id);
 		},
 
 		/**
@@ -68,8 +106,8 @@
 		onFieldOptionSelect: function(option)
 		{
 			var $option = $(option),
-			    $field  = $option.data('menu').$anchor.parent(),
-			    action  = $option.data('action');
+					$field  = $option.data('menu').$anchor.parent(),
+					action  = $option.data('action');
 
 			switch (action)
 			{

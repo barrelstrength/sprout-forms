@@ -32,7 +32,43 @@
 <div>
 	<div class="{{ tab != 1 ? 'hidden' : '' }} meta" id="tab-sproutforms-fields">
 
-		<h1>Fields</h1>
+			<div class='parent'>
+				<div class='sprout-wrapper'>
+					<div id='right-copy' class='sprout-container'>
+						<div class="sproutfield" data-type="Plaintext">
+							<ul>
+								<li>move</li>
+								<li><a id="field-1" href="#">settings</a></li>
+								<li><a href="#">delete</a></li>
+							</ul>
+							<div id="fields-fullName-field" class="field plaintext fullName-field" style="width: 40%;">
+								<div class="heading">
+									<label for="fields-fullName">Text Field</label>
+								</div>
+								<div class="input">
+									<input type="text" id="fields-fullName" class="fullName" name="fields[fullName]" required="">
+								</div>
+							</div>
+						</div>
+						{# sec #}
+						<div class="sproutfield" data-type="Dropdown">
+							<ul>
+								<li>move</li>
+								<li><a id="field-2" href="#">settings</a></li>
+								<li><a href="#">delete</a></li>
+							</ul>
+							<div id="fields-fullName-field" class="field plaintext fullName-field" style="width: 40%;">
+								<div class="heading">
+									<label for="fields-fullName">Full Name</label>
+								</div>
+								<div class="input">
+									<input type="text" id="fields-fullName" class="fullName" name="fields[fullName]" required="">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 	</div><!-- fields div -->
 
 	<div class="{{ tab != 2 ? 'hidden' : '' }} meta" id="tab-sproutforms-notification">
@@ -172,9 +208,7 @@
 </div>
 
 {% if not form.enableTemplateOverrides %}
-	{% set overridesJs %}
+	{% js %}
 		$('#templateOverridesFolder-field').toggleClass('hidden');
-	{% endset %}
-
-	{% includeJs overridesJs %}
+	{% endjs %}
 {% endif %}
