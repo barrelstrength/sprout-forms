@@ -519,6 +519,42 @@ class Fields extends Component
 		];
 	}
 
+	public function createDefaultField($type, $form, $tabName)
+	{
+		$intanceField = new $type;
+		// get the field name and remove spaces
+		$fieldName = preg_replace('/\s+/','',$intanceField->displayName);
+		$handle = $this->getHandleAsNew($fieldName);
+
+		$field = $fieldsService->createField([
+			'type' => $type,
+			'name' => $fieldName,
+			'handle' => $request->getBodyParam('handle'),
+			'instructions' => $request->getBodyParam('instructions'),
+			// @todo - add locales
+			'translationMethod' =>Field::TRANSLATION_METHOD_NONE,
+		]);
+
+		Craft::$app->content->fieldContext = $form->getFieldContext();
+		Craft::$app->fields->saveField($field);
+
+		$requiredFields    = array();
+		$postedFieldLayout = array();
+
+		// Add our new field
+		if (isset($field) && $field->id != null)
+		{
+			$postedFieldLayout[$tabName][] = $field->id;
+		}
+
+		// Set the field layout
+		$fieldLayout = Craft::$app->fields->assembleLayout($postedFieldLayout, $requiredFields);
+
+		$fieldLayout->type = FormElement::class;
+		// Set the tab to the form
+		$form->setFieldLayout($fieldLayout);
+	}
+
 	/**
 	 * Prepends a key/value pair to an array
 	 *
@@ -537,6 +573,4 @@ class Fields extends Component
 
 		return array_reverse($haystack, true);
 	}
-
-
 }

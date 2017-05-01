@@ -24,35 +24,7 @@
 		init: function()
 		{
 			var that = this;
-			this.formLayout  = this.getId('left-copy');
-			this.fieldsLayout = this.getId('right-copy');
-			// Drag from right to left
-			dragula([this.formLayout, this.fieldsLayout], {
-				copy: function (el, source) {
-					return source === document.getElementById('right-copy');
-				},
-				accepts: function (el, target) {
-					return target !== document.getElementById('right-copy')
-				},
-			})
-			.on('drop', function (el,target, source) {
-				if (target && source === that.fieldsLayout)
-				{
-					var id = 1;
-					$(el).attr('data-id', id);
-					var $field = $([
-						'<div class="fld-field" data-id="', id, '">',
-						'<span>', name, '</span>',
-						'<input class="id-input" type="hidden" name="fieldLayout[defaultTab][]" value="', id, '">',
-						'<a class="settings icon" title="Edit"></a>',
-						'</div>'
-					].join('')).appendTo($(el));
 
-					that.addFieldListener($field);
-
-					console.log($(el).data("type"));
-				}
-			});
 
 			this.$fieldButton = $('#field-1');
 
@@ -73,6 +45,70 @@
 				var field = e.field;
 				var group = field.group;
 				this.resetField(field.id, group.name, field.name);
+			}, this));
+
+			// DRAGULA
+			this.formLayout  = this.getId('left-copy');
+			this.fieldsLayout = this.getId('right-copy');
+			// Drag from right to left
+			dragula([this.formLayout, this.fieldsLayout], {
+				copy: function (el, source) {
+					return source === that.fieldsLayout;
+				},
+				accepts: function (el, target) {
+					return target !== that.fieldsLayout
+				},
+			})
+			.on('drop', function (el,target, source) {
+				if (target && source === that.fieldsLayout)
+				{
+					// New fields
+					var id = 1;
+					$(el).attr('data-id', id);
+
+					// get the tab name by the first div fields
+					var tab = $(el).closest("#sproutforms-fields");
+					var tabName = tab.data('data-tabname');
+					var tabId = tab.data('data-tabid');
+
+					var $field = $([
+						'<div class="fld-field" data-id="">',
+						'<span>', name, '</span>',
+						'<input class="id-input" type="hidden" name="fieldLayout[defaultTab][]" value="', id, '">',
+						'<a class="settings icon" title="Edit"></a>',
+						'</div>'
+					].join('')).appendTo($(el));
+
+					that.addFieldListener($field);
+
+					console.log($(el).data("type"));
+				}
+			});
+		},
+
+		createDefaultField: function(type, tabName, tabId)
+		{
+			var defaultField = null;
+
+			var formId = $("#formId").val();
+			var data = {
+				'type': type,
+				'formId': formId,
+				'tabName': tabName
+			};
+
+
+			Craft.postActionRequest('sprout-forms/fields/create-field', data, $.proxy(function(response, textStatus)
+			{
+				if (textStatus === 'success')
+				{
+					this.$loadSpinner.addClass('hidden');
+					this.initTemplate(response);
+				}
+				else
+				{
+					this.destroy();
+				}
 			}, this));
 		},
 

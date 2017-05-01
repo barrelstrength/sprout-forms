@@ -25,6 +25,27 @@ class FieldsController extends BaseController
 	}
 
 	/**
+	 * This action allows create a default field given a type.
+	 *
+	 */
+	public function actionCreateField()
+	{
+		$this->requireAcceptsJson();
+		$type    = Craft::$app->getRequest()->getBodyParam('type');
+		$tabName = Craft::$app->getRequest()->getBodyParam('tabName');
+		$formId  = $request->getBodyParam('formId');
+		$form    = SproutForms::$app->forms->getFormById($formId);
+
+		if ($type && $form)
+		{
+			SproutForms::$app->fields->createDefaultField($type, $form, $tabName);
+
+		}
+
+		return $this->asJson(SproutForms::$app->fields->getModalFieldTemplate($form));
+	}
+
+	/**
 	 * Save a field.
 	 */
 	public function actionSaveField()
