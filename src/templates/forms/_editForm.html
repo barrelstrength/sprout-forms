@@ -29,6 +29,42 @@
 
 {% block saveButton %}
 
+{% macro tab(tabName, tabFields) %}
+	<div id="sproutfield" data-type="barrelstrength\sproutforms\integrations\sproutforms\fields\PlainText" class="" data-id="150">
+		<div id="fields-fullName-field" class="field plaintext fullName-field" style="width: 40%;">
+				<div class="heading">
+					<img width="30" height="30" src="http://craft3.dev/site/images/input.svg">
+					<label for="fields-fullName">Plain Text</label>
+				</div>
+			</div>
+		<input class="id-input" type="hidden" name="fieldLayout[{{tabName}}][]" value="150">
+		<ul class="settings">
+			<li><a id="field-150" data-fieldid="150" href="#" tabindex="0">edit</a></li>
+			<li><a href="#">delete</a></li>
+			</ul>
+	</div>
+	<div class="fld-tab">
+		<div class="tabs">
+			<div class="tab sel{% if customizableTabs %} draggable{% endif %}">
+				<span>{{ tabName }}</span>
+				{% if customizableTabs %}
+					<a class="settings icon" title="{{ 'Edit'|t }}"></a>
+				{% endif %}
+			</div>
+		</div>
+		<div class="fld-tabcontent">
+			{% for field in tabFields %}
+				<div class="fld-field{% if field.required %} fld-required{% endif %}" data-id="{{ field.id }}">
+					<a class="settings icon" title="{{ 'Edit'|t }}"></a>
+					<span>{{ field.name }}</span>
+					<input class="id-input" type="hidden" name="fieldLayout[{{ tabName|e('url') }}][]" value="{{ field.id }}">
+					{% if field.required %}<input class="required-input" type="hidden" name="requiredFields[]" value="{{ field.id }}">{% endif %}
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+{% endmacro %}
+
 <input type="hidden" name="action" value="sprout-forms/forms/save-form">
 {{ redirectInput('sprout-forms/forms') }}
 <input type="hidden" id="formId" name="id" value="{{ form.id is defined ? form.id : '' }}">
@@ -78,9 +114,14 @@
 						<h1>Drag and drop here</h1>
 						<div class='sprout-wrapper'>
 							<div id='left-copy' class='sprout-container'>
-							{# here will be the fields #}
-							<br>
-							<br>
+								{# here will be the fields #}
+								{#% set fieldLayout = form.getFieldLayout() %}
+								{% if fieldLayout %}
+									{% for tab in fieldLayout.getTabs() %}
+										{{ macros.tab(tab.name, tab.getFields()) }}
+									{% endfor %}
+								{% endif %#}
+								<br><br><br>
 							</div>
 						</div>
 					</div>

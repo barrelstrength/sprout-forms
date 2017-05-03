@@ -25,12 +25,8 @@
 		{
 			var that = this;
 
-			this.$fieldButton = $('#field-1');
-
 			//this.initButtons();
 			this.modal = SproutField.FieldModal.getInstance();
-
-			this.addListener(this.$fieldButton, 'activate', 'newField');
 
 			this.modal.on('newField', $.proxy(function(e)
 			{
@@ -43,7 +39,10 @@
 			{
 				var field = e.field;
 				var group = field.group;
-				this.resetField(field.id, group.name, field.name);
+				// @todo - we need update the icon or div if the
+				// field type is changed after saved, not just the name
+				// think the how we handle the tabs
+				//this.resetField(field.id, group.name, field.name);
 			}, this));
 
 			// DRAGULA
@@ -61,9 +60,6 @@
 			.on('drop', function (el,target, source) {
 				if (target && source === that.fieldsLayout)
 				{
-					// New fields
-					var id = 1;
-
 					// get the tab name by the first div fields
 					var tab       = $(el).closest("#sproutforms-tab");
 					var tabName   = tab.data('tabname');
@@ -105,12 +101,12 @@
 					'<ul class="settings">',
 					'<span>', name, '</span>',
 					'<input class="id-input" type="hidden" name="fieldLayout[',tabName,'][]" value="', defaultField.id, '">',
-					'<li><a id="field-',defaultField.id,'" href="#">settings</a></li>',
+					'<li><a id="field-',defaultField.id,'" data-fieldid="',defaultField.id,'" href="#">edit</a></li>',
 					'<li><a href="#">delete</a></li>',
 					'</ul>'
 				].join('')).appendTo($(el));
 
-				this.addFieldListener($field);
+				this.addListener($("#field-"+defaultField.id), 'activate', 'editField');
 
 				console.log($(el).data("type"));
 			}
@@ -151,7 +147,6 @@
 
 		onFieldOptionSelect: function(option)
 		{
-			console.log(option);
 			var $option = $(option),
 					$field  = $option.data('menu').$anchor.parent(),
 					action  = $option.data('action');
@@ -185,14 +180,14 @@
 			this.modal.show();
 		},
 
-		editField: function($field)
+		editField: function(option)
 		{
-			// Make our field available to our parent function
-			this.$field = $field;
-			this.base($field);
+			var option = option.currentTarget;
 
-			// Grab the fieldId in this context so we know what to delete
-			var fieldId = this.$field.attr('data-id');
+			var fieldId = $(option).data('fieldid');
+			// Make our field available to our parent function
+			this.$field = $(option);
+			this.base($(option));
 
 			this.modal.editField(fieldId);
 		},
