@@ -13,17 +13,12 @@
 		</li>
 		<li>
 			<a class="tab {{ tab == 2 ? ' sel' : '' }} {{ tab2 ? 'error' : '' }}" href="#tab-sproutforms-notification">
-				{{ "Notifications"|t('sproutforms') }}
+                {{ "Notifications"|t('sproutforms') }}
 			</a>
 		</li>
 		<li>
 			<a class="tab {{ tab == 3 ? ' sel' : '' }}" href="#tab-sproutforms-settings">
-				{{ "Settings"|t('sproutforms') }}
-			</a>
-		</li>
-		<li>
-			<a class="tab {{ tab == 4 ? ' sel' : '' }} {{ tab4 ? 'error' : '' }}" href="#tab-sproutforms-advanced">
-				{{ "Advanced"|t('sproutforms') }}
+                {{ "Settings"|t('sproutforms') }}
 			</a>
 		</li>
 	</ul>
@@ -53,7 +48,8 @@
 
 	<div class="{{ tab != 2 ? 'hidden' : '' }} meta" id="tab-sproutforms-notification">
 
-		<h1>Notifications</h1>
+		{% include 'sproutforms/forms/_tabs/notifications' %}
+
 	</div><!-- notifications div -->
 
 	<div class="{{ tab != 3 ? 'hidden' : '' }} meta" id="tab-sproutforms-settings">
@@ -116,9 +112,11 @@
 			required: false,
 			errors: (form is defined ? form.getErrors('submitButtonText') : null)
 		}) }}
-	</div><!-- settings div -->
 
-	<div id="tab-sproutforms-advanced" class="{{ tab != 4 ? 'hidden' : '' }} meta">
+		<hr>
+
+		{# @todo - make work, clean up unnecessary classes #}
+		<a class="fieldtoggle" data-target="types-barrelstrength-sproutforms-integrations-sproutforms-fields-PlainText-advanced">Advanced</a>
 
 		{{ forms.textField({
 			label: "Title Format <span class='info'>Entry Titles are auto-generated based on the Title Format you enter here. All information contained in the Title will also be searchable. You may use the same syntax here as you would with Dynamic Titles in your Sections. (i.e. {dateCreated|date('Ymd')} {fullName})</span>"|t('sproutforms'),

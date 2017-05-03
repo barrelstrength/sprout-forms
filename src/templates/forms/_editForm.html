@@ -11,11 +11,6 @@
 		label: pages[0].name,
 		url: '#sproutforms-tab',
 	},
-	notifications:  {
-		label: "Notifications"|t,
-		url: '#notification',
-		class: (notificationErrors is defined ? notificationErrors : null)
-	},
 	Add:  {
 		label: "+ Add"|t,
 		url: '#add-field',
@@ -121,44 +116,41 @@
 										{{ macros.tab(tab.name, tab.getFields()) }}
 									{% endfor %}
 								{% endif %#}
-								<br><br><br>
 							</div>
 						</div>
 					</div>
 				<br>
 			</div>
 
-			<div id="notification" class="hidden">
-				{% include 'sproutforms/forms/_tabs/notifications' %}
-			</div>
-
 		</div>
+
 		{% if formId is defined %}
-		<div class="grid pane formcontrol">
+		<div class="pane">
+			<div class="grid formcontrol">
 
-			<div class="item oneline" data-max-colspan="1">
+				<div class="item oneline" data-max-colspan="1">
 
-				<p><strong>{{ "One line of code"|t }}</strong></p>
+					<p><strong>{{ "One line of code"|t }}</strong></p>
 
-				{% if craft.request.getSegment(3) == 'new' %}
+					{% if craft.request.getSegment(3) == 'new' %}
 
-				<input class="text nicetext fullwidth" type="text" id="display-form-code" value="{% verbatim %}{{ craft.sproutForms.displayForm('yourFormHandle') }}{% endverbatim %}">
+					<input class="text nicetext fullwidth" type="text" id="display-form-code" value="{% verbatim %}{{ craft.sproutForms.displayForm('yourFormHandle') }}{% endverbatim %}">
 
-				{% else %}
+					{% else %}
 
-				<input class="text nicetext fullwidth" type="text" id="display-form-code" value="{% verbatim %}{{ craft.sproutForms.displayForm('{% endverbatim %}{{ form.handle }}{% verbatim %}') }}{% endverbatim %}">
+					<input class="text nicetext fullwidth" type="text" id="display-form-code" value="{% verbatim %}{{ craft.sproutForms.displayForm('{% endverbatim %}{{ form.handle }}{% verbatim %}') }}{% endverbatim %}">
 
-				{% endif %}
+					{% endif %}
+
+				</div>
+
+				<div class="item totalcontrol" data-max-colspan="1">
+					<p><strong>{{ "100% Control"|t }}</strong></p>
+					<p>{{ 'Customize your form using <a href="http://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/customization/template-overrides" target="_blank">Template Overrides</a>, <a href="http://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/customization/rendering-options" target="_blank">Rendering Options</a>, additional <a href="http://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/customization/rendering-options" target="_blank">Fields</a>, Notifications, or <a href="http://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/examples/custom-html" target="_blank">Custom HTML</a>.'|t|raw }}</p>
+				</div>
 
 			</div>
-
-			<div class="item totalcontrol" data-max-colspan="1">
-				<p><strong>{{ "100% Control"|t }}</strong></p>
-				<p>{{ 'Customize your form using <a href="http://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/customization/template-overrides" target="_blank">Template Overrides</a>, <a href="http://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/customization/rendering-options" target="_blank">Rendering Options</a>, additional <a href="http://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/customization/rendering-options" target="_blank">Fields</a>, Notifications, or <a href="http://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/examples/custom-html" target="_blank">Custom HTML</a>.'|t|raw }}</p>
-			</div>
-
 		</div>
-
 		{% endif %}
 
 	</div>
