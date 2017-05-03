@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\contracts;
 use Craft;
 use craft\base\Field;
 use craft\base\ElementInterface;
+use craft\helpers\FileHelper;
 /**
  * Class SproutFormsBaseField
  *
@@ -74,9 +75,24 @@ abstract class SproutFormsBaseField extends Field
 	/**
 	 * @return string
 	 */
+	public function getIconPath()
+	{
+		return '';
+	}
+
+	/*
+	 * Svg icon
+	*/
 	public function getIcon()
 	{
-		return $this->getTemplatesPath() . 'default.svg';
+		$iconPath = $this->getIconPath();
+
+		if (!is_file($iconPath) || FileHelper::getMimeType($iconPath) !== 'image/svg+xml')
+		{
+			$iconPath = Craft::$app->path->getPluginsPath() . '/sproutforms/src/templates/_components/fields/default.svg';
+		}
+
+		return file_get_contents($iconPath);
 	}
 
 	/**

@@ -182,3 +182,8 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
   margin-top: -8px;
   line-height: 16px;
 }
+
+.sproutforms-icon svg{
+	height: 25px;
+	width: 25px;
+}

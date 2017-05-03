@@ -102,7 +102,7 @@ class PlainText extends SproutFormsBaseField
 	/**
 	 * @return string
 	 */
-	public function getIcon()
+	public function getIconPath()
 	{
 		return $this->getTemplatesPath().'plaintext/input.svg';
 	}

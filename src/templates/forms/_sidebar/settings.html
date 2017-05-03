@@ -34,9 +34,10 @@
 							<div id="sproutfield" data-type="{{type}}">
 								<div id="fields-fullName-field" class="field plaintext fullName-field" style="width: 40%;">
 									<div class="heading">
-										<img width="30" height="30" src="http://craft3.dev/site/images/input.svg">
+										<div class="sproutforms-icon">
+											{{ fieldObject.getIcon()|raw }}
+										</div>
 										<label for="fields-fullName">{{fieldObject.displayName()}}</label>
-										{#{{fieldObject.getIcon()}}#}
 									</div>
 								</div>
 							</div>
