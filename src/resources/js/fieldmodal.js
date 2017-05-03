@@ -239,7 +239,7 @@
 							}
 							else
 							{
-								Craft.displayError(Craft.t('sproutforms','Could not load all resources.'));
+								Craft.cp.displayError(Craft.t('sproutforms','Could not load all resources.'));
 							}
 						}, this));
 					}

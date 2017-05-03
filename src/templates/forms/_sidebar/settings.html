@@ -30,41 +30,22 @@
 </nav>
 
 <div>
+	{% set fieldTypes = craft.sproutforms.getRegisteredFields() %}
 	<div class="{{ tab != 1 ? 'hidden' : '' }} meta" id="tab-sproutforms-fields">
 			<div class='parent'>
 				<div class='sprout-wrapper'>
 					<div id='right-copy' class='sprout-container'>
-						<div class="sproutfield" data-type="Plaintext">
-							<ul>
-								<li>move</li>
-								<li><a id="field-1" href="#">settings</a></li>
-								<li><a href="#">delete</a></li>
-							</ul>
-							<div id="fields-fullName-field" class="field plaintext fullName-field" style="width: 40%;">
-								<div class="heading">
-									<label for="fields-fullName">Text Field</label>
-								</div>
-								<div class="input">
-									<input type="text" id="fields-fullName" class="fullName" name="fields[fullName]" required="">
+						{% for type,fieldObject in fieldTypes %}
+							<div id="sproutfield" data-type="{{type}}">
+								<div id="fields-fullName-field" class="field plaintext fullName-field" style="width: 40%;">
+									<div class="heading">
+										<img width="30" height="30" src="http://craft3.dev/site/images/input.svg">
+										<label for="fields-fullName">{{fieldObject.displayName()}}</label>
+										{#{{fieldObject.getIcon()}}#}
+									</div>
 								</div>
 							</div>
-						</div>
-						{# sec #}
-						<div class="sproutfield" data-type="Dropdown">
-							<ul>
-								<li>move</li>
-								<li><a id="field-2" href="#">settings</a></li>
-								<li><a href="#">delete</a></li>
-							</ul>
-							<div id="fields-fullName-field" class="field plaintext fullName-field" style="width: 40%;">
-								<div class="heading">
-									<label for="fields-fullName">Full Name</label>
-								</div>
-								<div class="input">
-									<input type="text" id="fields-fullName" class="fullName" name="fields[fullName]" required="">
-								</div>
-							</div>
-						</div>
+						{% endfor %}
 					</div>
 				</div>
 			</div>

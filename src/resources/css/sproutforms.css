@@ -137,7 +137,7 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 .gu-mirror {
   margin: 10px;
   padding: 10px;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: #e3e5e8;;
   transition: opacity 0.4s ease-in-out;
 }
 .sprout-container > div {

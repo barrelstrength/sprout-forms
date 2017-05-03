@@ -74,6 +74,14 @@ abstract class SproutFormsBaseField extends Field
 	/**
 	 * @return string
 	 */
+	public function getIcon()
+	{
+		return $this->getTemplatesPath() . 'default.svg';
+	}
+
+	/**
+	 * @return string
+	 */
 	public static function displayName(): string
 	{
 		return '';

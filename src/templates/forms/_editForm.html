@@ -9,7 +9,7 @@
 {% set tabs = {
 	formfields:  {
 		label: pages[0].name,
-		url: '#sproutforms-fields',
+		url: '#sproutforms-tab',
 	},
 	notifications:  {
 		label: "Notifications"|t,
@@ -71,7 +71,7 @@
 			{% include "_includes/tabs" %}
 			{% endif %}
 
-			<div id="sproutforms-fields" data-tabname="{{pages[0].name}}" data-tabid="{{pages[0].id}}" class="hidden">
+			<div id="sproutforms-tab" data-tabname="{{pages[0].name}}" data-tabid="{{pages[0].id}}" class="hidden">
 				{#% include 'sproutforms/forms/_tabs/fieldlayoutdesigner' %#}
 				<br>
 					<div class='parent'>

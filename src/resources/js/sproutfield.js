@@ -25,7 +25,6 @@
 		{
 			var that = this;
 
-
 			this.$fieldButton = $('#field-1');
 
 			//this.initButtons();
@@ -64,29 +63,19 @@
 				{
 					// New fields
 					var id = 1;
-					$(el).attr('data-id', id);
 
 					// get the tab name by the first div fields
-					var tab = $(el).closest("#sproutforms-fields");
-					var tabName = tab.data('data-tabname');
-					var tabId = tab.data('data-tabid');
+					var tab       = $(el).closest("#sproutforms-tab");
+					var tabName   = tab.data('tabname');
+					var tabId     = tab.data('tabid');
+					var fieldType = $(el).data("type");
 
-					var $field = $([
-						'<div class="fld-field" data-id="">',
-						'<span>', name, '</span>',
-						'<input class="id-input" type="hidden" name="fieldLayout[defaultTab][]" value="', id, '">',
-						'<a class="settings icon" title="Edit"></a>',
-						'</div>'
-					].join('')).appendTo($(el));
-
-					that.addFieldListener($field);
-
-					console.log($(el).data("type"));
+					that.createDefaultField(fieldType, tabId, tabName, el);
 				}
 			});
 		},
 
-		createDefaultField: function(type, tabName, tabId)
+		createDefaultField: function(type, tabId, tabName, el)
 		{
 			var defaultField = null;
 
@@ -94,22 +83,43 @@
 			var data = {
 				'type': type,
 				'formId': formId,
-				'tabName': tabName
+				'tabId': tabId
 			};
-
 
 			Craft.postActionRequest('sprout-forms/fields/create-field', data, $.proxy(function(response, textStatus)
 			{
 				if (textStatus === 'success')
 				{
-					this.$loadSpinner.addClass('hidden');
-					this.initTemplate(response);
-				}
-				else
-				{
-					this.destroy();
+					this.initFieldOnDrop(response.field, tabName, el);
 				}
 			}, this));
+		},
+
+		initFieldOnDrop: function(defaultField, tabName, el)
+		{
+			if(defaultField != null && defaultField.hasOwnProperty("id"))
+			{
+				$(el).attr('data-id', defaultField.id);
+				// let's update the dragula fields divs
+				var $field = $([
+					'<ul class="settings">',
+					'<span>', name, '</span>',
+					'<input class="id-input" type="hidden" name="fieldLayout[',tabName,'][]" value="', defaultField.id, '">',
+					'<li><a id="field-',defaultField.id,'" href="#">settings</a></li>',
+					'<li><a href="#">delete</a></li>',
+					'</ul>'
+				].join('')).appendTo($(el));
+
+				this.addFieldListener($field);
+
+				console.log($(el).data("type"));
+			}
+			else
+			{
+				Craft.cp.displayError(Craft.t('sproutforms','Something went wrong when creating the field :('));
+
+				$(el).remove();
+			}
 		},
 
 		getId: function(id)
@@ -141,6 +151,7 @@
 
 		onFieldOptionSelect: function(option)
 		{
+			console.log(option);
 			var $option = $(option),
 					$field  = $option.data('menu').$anchor.parent(),
 					action  = $option.data('action');

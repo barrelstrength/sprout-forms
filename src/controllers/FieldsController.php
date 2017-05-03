@@ -31,18 +31,36 @@ class FieldsController extends BaseController
 	public function actionCreateField()
 	{
 		$this->requireAcceptsJson();
-		$type    = Craft::$app->getRequest()->getBodyParam('type');
-		$tabName = Craft::$app->getRequest()->getBodyParam('tabName');
+		$request = Craft::$app->getRequest();
+		$type    = $request->getBodyParam('type');
+		$tabId   = $request->getBodyParam('tabId');
+		$tab     = FieldLayoutTabRecord::findOne($tabId);
 		$formId  = $request->getBodyParam('formId');
 		$form    = SproutForms::$app->forms->getFormById($formId);
 
-		if ($type && $form)
+		if ($type && $form && $tab)
 		{
-			SproutForms::$app->fields->createDefaultField($type, $form, $tabName);
+			$field = SproutForms::$app->fields->createDefaultField($type, $form);
+
+			if ($field)
+			{
+				// Set the field layout
+				$oldFieldLayout = $form->getFieldLayout();
+				$oldTabs        = $oldFieldLayout->getTabs();
+				$response       = false;
+
+				if ($oldTabs)
+				{
+					// it's a new field
+					$response = SproutForms::$app->fields->addFieldToLayout($field, $form, $tabId);
+
+					return $this->_returnJson($response, $field, $form, $tab->name, $tabId);
+				}
+			}
 
 		}
-
-		return $this->asJson(SproutForms::$app->fields->getModalFieldTemplate($form));
+		// @todo - how add error messages?
+		return $this->_returnJson(false, $field, $form, null, $tabId);
 	}
 
 	/**
@@ -223,7 +241,7 @@ class FieldsController extends BaseController
 		]);
 	}
 
-	private function _returnJson($success, $field, $form, $tabName = null)
+	private function _returnJson($success, $field, $form, $tabName = null, $tabId = null)
 	{
 		return $this->asJson([
 			'success'  => $success,
@@ -235,6 +253,7 @@ class FieldsController extends BaseController
 				'instructions' => $field->instructions,
 				'group'        => [
 					'name' => $tabName,
+					'id'   => $tabId
 				],
 			],
 			'template' => $success ? false : SproutForms::$app->fields->getModalFieldTemplate($form, $field),
