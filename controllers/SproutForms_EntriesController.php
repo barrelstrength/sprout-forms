@@ -327,7 +327,7 @@ class SproutForms_EntriesController extends BaseController
 
 		if (!$saveData)
 		{
-			craft()->userSession->setError(Craft::t("Unable to edit entry. Enable the 'Save Data' setting to view content."));
+			craft()->userSession->setError(Craft::t("Unable to edit entry. Enable the 'Save Data' for this form to view, edit, or delete content."));
 
 			$this->renderTemplate('sproutforms/entries');
 		}
@@ -372,7 +372,7 @@ class SproutForms_EntriesController extends BaseController
 	private function _redirectOnError(SproutForms_EntryModel $entry)
 	{
 		$errors = json_encode($entry->getErrors());
-		SproutFormsPlugin::log("Couldn’t save form entry. Errors: " . $errors, LogLevel::Error, true);
+		SproutFormsPlugin::log('Unable to save form entry. Errors: ' . $errors, LogLevel::Error, true);
 
 		if (craft()->request->isAjaxRequest())
 		{
@@ -387,7 +387,7 @@ class SproutForms_EntriesController extends BaseController
 			if (craft()->request->isCpRequest())
 			{
 				// make errors available to variable
-				craft()->userSession->setError(Craft::t('Couldn’t save entry.'));
+				craft()->userSession->setError(Craft::t('Unable to save entry.'));
 
 				// Store this Entry Model in a variable in our Service layer
 				// so that we can access the error object from our actionEditEntryTemplate() method
@@ -408,7 +408,7 @@ class SproutForms_EntriesController extends BaseController
 				}
 				else
 				{
-					craft()->userSession->setError(Craft::t('Couldn’t save entry.'));
+					craft()->userSession->setError(Craft::t('Unable to save entry.'));
 					// Store this Entry Model in a variable in our Service layer
 					// so that we can access the error object from our displayForm() variable
 					sproutForms()->forms->activeEntries[$this->form->handle] = $entry;
