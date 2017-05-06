@@ -60,7 +60,7 @@ class FieldsController extends BaseController
 
 		}
 		// @todo - how add error messages?
-		return $this->_returnJson(false, $field, $form, null, $tabId);
+		return $this->_returnJson(false, null, $form, null, $tabId);
 	}
 
 	/**
@@ -250,6 +250,7 @@ class FieldsController extends BaseController
 				'id'           => $field->id,
 				'name'         => $field->name,
 				'handle'       => $field->handle,
+				'icon'         => $field->getIcon(),
 				'instructions' => $field->instructions,
 				'group'        => [
 					'name' => $tabName,

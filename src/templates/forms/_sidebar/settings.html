@@ -32,14 +32,10 @@
 					<div id='right-copy' class='sprout-container'>
 						{% for type,fieldObject in fieldTypes %}
 							<div id="sproutfield" data-type="{{type}}">
-								<div id="fields-fullName-field" class="field plaintext fullName-field" style="width: 40%;">
-									<div class="heading">
-										<div class="sproutforms-icon">
-											{{ fieldObject.getIcon()|raw }}
-										</div>
-										<label for="fields-fullName">{{fieldObject.displayName()}}</label>
-									</div>
+								<div class="sproutforms-icon">
+									{{ fieldObject.getIcon()|raw }}
 								</div>
+								<label >{{fieldObject.displayName()}}</label>
 							</div>
 						{% endfor %}
 					</div>

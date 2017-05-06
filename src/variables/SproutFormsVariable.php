@@ -511,5 +511,10 @@ class SproutFormsVariable
 	{
 		return SproutForms::$app->fields->getRegisteredFields();
 	}
+
+	public function getFieldClassName($field)
+	{
+		return get_class($field);
+	}
 }
 

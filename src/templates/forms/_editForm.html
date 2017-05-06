@@ -5,39 +5,59 @@
 	{ label: "Forms"|t, url: url('sprout-forms/forms') }
 ] %}
 
-{% set pages = form.getFieldLayout().getTabs() %}
-{% set tabs = {
-	formfields:  {
-		label: pages[0].name,
-		url: '#sproutforms-tab',
-	},
-	Add:  {
+{% set fieldLayout = form.getFieldLayout() %}
+{% set formFields = {} %}
+
+{% set tabs = {} %}
+{% for tab in fieldLayout.getTabs() %}
+	{% set tabs = tabs|merge({(tab.name) : {
+		label: tab.name,
+		url: '#sproutforms-tab-'~tab.id}
+		})
+	%}
+{% endfor %}
+{% set tabs =  tabs|merge({('Add') :  {
 		label: "+ Add"|t,
-		url: '#add-field',
-	},
-} %}
+		url: '#add-field'}
+	})
+%}
 
 {% set title = form.name %}
 {% set saveShortcutRedirect = continueEditingUrl %}
 {% set fullPageForm = true %}
-{% set selectedTab = '{{pages[0].name}}' %}
+{% set selectedTab = '{{fieldLayout.getTabs()[0].name}}' %}
 
 {% block saveButton %}
 
-{% macro tab(tabName, tabFields) %}
-	<div id="sproutfield" data-type="barrelstrength\sproutforms\integrations\sproutforms\fields\PlainText" class="" data-id="150">
-		<div id="fields-fullName-field" class="field plaintext fullName-field" style="width: 40%;">
-				<div class="heading">
-					<img width="30" height="30" src="http://craft3.dev/site/images/input.svg">
-					<label for="fields-fullName">Plain Text</label>
+{% macro tab(tab, tabFields) %}
+	<div id="sproutforms-tab-{{tab.id}}" data-tabname="{{tab.name}}" data-tabid="{{tab.id}}" class="hidden sproutforms-tab-fields">
+		{#% include 'sproutforms/forms/_tabs/fieldlayoutdesigner' %#}
+		<div class='parent'>
+			<h1>Drag and drop here</h1>
+			<div class='sprout-wrapper'>
+				{# @todo - this is the important div the others two does not matter #}
+				<div id='sproutforms-tab-container-{{tab.id}}' class='sprout-container'>
+					{# here will be the fields #}
+					{% for field in tabFields %}
+						<div id="sproutfield" data-type="{{craft.sproutforms.getFieldClassName(field)}}">
+							<div class="sproutforms-icon">
+								{{ field.getIcon()|raw }}
+							</div>
+							<label for="fields-{{field.name}}">{{field.name}}</label>
+							<ul class="settings">
+								<li><a id="sproutform-field-{{field.id}}" data-fieldid="{{field.id}}" href="#" tabindex="0" >edit</a></li>
+								<li><a href="#">delete</a></li>
+							</ul>
+							{# todo - why the tabName and not the tabId? #}
+							<input class="id-input" type="hidden" name="fieldLayout[{{tab.name}}][]" value="{{field.id}}">
+						</div>
+					{% endfor %}
 				</div>
 			</div>
-		<input class="id-input" type="hidden" name="fieldLayout[{{tabName}}][]" value="150">
-		<ul class="settings">
-			<li><a id="field-150" data-fieldid="150" href="#" tabindex="0">edit</a></li>
-			<li><a href="#">delete</a></li>
-			</ul>
+		</div>
 	</div>
+
+	{# just for reference to check how are initialize the edit buttons in the js
 	<div class="fld-tab">
 		<div class="tabs">
 			<div class="tab sel{% if customizableTabs %} draggable{% endif %}">
@@ -57,7 +77,7 @@
 				</div>
 			{% endfor %}
 		</div>
-	</div>
+	</div>#}
 {% endmacro %}
 
 <input type="hidden" name="action" value="sprout-forms/forms/save-form">
@@ -102,13 +122,20 @@
 			{% include "_includes/tabs" %}
 			{% endif %}
 
-			<div id="sproutforms-tab" data-tabname="{{pages[0].name}}" data-tabid="{{pages[0].id}}" class="hidden">
-				{#% include 'sproutforms/forms/_tabs/fieldlayoutdesigner' %#}
-				<br>
-					<div class='parent'>
+			{# let's add the tabs and fields to the dropped divs #}
+			{% if fieldLayout %}
+				{% import _self as macros %}
+				{% for tab in fieldLayout.getTabs() %}
+					{{ macros.tab(tab, tab.getFields(), formFields) }}
+				{% endfor %}
+			{% endif %}
+
+
+			<div id="add-field" class="hidden sproutforms-tab-fields" data-tabname="{{fieldLayout.getTabs()[0].name}}" data-tabid="{{fieldLayout.getTabs()[0].id}}">
+				<div class='parent'>
 						<h1>Drag and drop here</h1>
 						<div class='sprout-wrapper'>
-							<div id='left-copy' class='sprout-container'>
+							<div id='left-copy-2' class='sprout-container'>
 								{# here will be the fields #}
 								{#% set fieldLayout = form.getFieldLayout() %}
 								{% if fieldLayout %}
@@ -119,7 +146,6 @@
 							</div>
 						</div>
 					</div>
-				<br>
 			</div>
 
 		</div>
@@ -252,7 +278,9 @@
 		.focus(function() { $(this).select(); } )
 		.mouseup(function (e) {e.preventDefault(); });
 
-		new SproutField();
+		var tabs = {{ fieldLayout.getTabs()|json_encode()|raw }};
+
+		new SproutField(tabs);
 
 	});
 {% endjs %}

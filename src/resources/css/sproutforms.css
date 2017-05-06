@@ -187,3 +187,7 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 	height: 25px;
 	width: 25px;
 }
+
+.sproutfield{
+	width: 40%;
+}

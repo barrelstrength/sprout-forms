@@ -2,7 +2,7 @@
 {
 	/**
 	 * SproutField class
-	 * Handles the buttons for creating new groups and fields inside a FieldLayoutDesigner
+	 * Handles the buttons for creating new groups and fields inside a the drag and drop UI
 	 */
 	var SproutField = Garnish.Base.extend({
 
@@ -15,17 +15,17 @@
 		modal: null,
 		formLayout: null,
 		fieldsLayout: null,
+		drake: null,
 
 		/**
 		 * The constructor.
-		 *
-		 * @param fld - An instance of Craft.FieldLayoutDesigner
+		 * @param - All the tabs of the form fieldLayout.
 		 */
-		init: function()
+		init: function(tabs)
 		{
 			var that = this;
 
-			//this.initButtons();
+			this.initButtons();
 			this.modal = SproutField.FieldModal.getInstance();
 
 			this.modal.on('newField', $.proxy(function(e)
@@ -49,7 +49,7 @@
 			this.formLayout  = this.getId('left-copy');
 			this.fieldsLayout = this.getId('right-copy');
 			// Drag from right to left
-			dragula([this.formLayout, this.fieldsLayout], {
+			this.drake = dragula([this.formLayout, this.fieldsLayout], {
 				copy: function (el, source) {
 					return source === that.fieldsLayout;
 				},
@@ -61,7 +61,7 @@
 				if (target && source === that.fieldsLayout)
 				{
 					// get the tab name by the first div fields
-					var tab       = $(el).closest("#sproutforms-tab");
+					var tab       = $(el).closest(".sproutforms-tab-fields");
 					var tabName   = tab.data('tabname');
 					var tabId     = tab.data('tabid');
 					var fieldType = $(el).data("type");
@@ -69,6 +69,14 @@
 					that.createDefaultField(fieldType, tabId, tabName, el);
 				}
 			});
+
+			// Add the drop containers for each tab
+			for (var i = 0; i < tabs.length; i++)
+			{
+				this.drake.containers.push(this.getId('sproutforms-tab-container-'+tabs[i].id));
+			}
+			// manually - remove when add tabs dynamically
+			this.drake.containers.push(this.getId('left-copy-2'));
 		},
 
 		createDefaultField: function(type, tabId, tabName, el)
@@ -96,17 +104,20 @@
 			if(defaultField != null && defaultField.hasOwnProperty("id"))
 			{
 				$(el).attr('data-id', defaultField.id);
-				// let's update the dragula fields divs
+				// Lets update the the name and icon
+				$(el).find('.sproutforms-icon').html(defaultField.icon);
+				$(el).find('label').html(defaultField.name);
+				// let's add the settings urls
 				var $field = $([
 					'<ul class="settings">',
 					'<span>', name, '</span>',
 					'<input class="id-input" type="hidden" name="fieldLayout[',tabName,'][]" value="', defaultField.id, '">',
-					'<li><a id="field-',defaultField.id,'" data-fieldid="',defaultField.id,'" href="#">edit</a></li>',
+					'<li><a id="sproutform-field-',defaultField.id,'" data-fieldid="',defaultField.id,'" href="#">edit</a></li>',
 					'<li><a href="#">delete</a></li>',
 					'</ul>'
 				].join('')).appendTo($(el));
 
-				this.addListener($("#field-"+defaultField.id), 'activate', 'editField');
+				this.addListener($("#sproutform-field-"+defaultField.id), 'activate', 'editField');
 
 				console.log($(el).data("type"));
 			}
@@ -128,20 +139,16 @@
 		 */
 		initButtons: function()
 		{
+			// @todo - add the delete actions
 			var that = this;
+			// get all the links stars with sproutform-field-
+			$("a[id^='sproutform-field-']").each(function (i, el) {
+				var fieldId = $(el).data('fieldid');
 
-			var $fields = this.fld.$container.find('.fld-field');
-
-			$fields.each(function()
-			{
-				var $field = $(this);
-
-				var $editBtn = $field.find('.settings');
-
-				new Garnish.MenuBtn($editBtn, {
-					onOptionSelect: $.proxy(that, 'onFieldOptionSelect')
-				});
-
+				if(fieldId)
+				{
+					that.addListener($("#sproutform-field-"+fieldId), 'activate', 'editField');
+				}
 			});
 		},
 
