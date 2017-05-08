@@ -12,7 +12,6 @@
 {%- for key, dataValue in data %}
 	{%- set dataAttributes = dataAttributes ~ ' data-'~key~'="'~dataValue~'"' %}
 {% endfor -%}
-
 {%- if settings.multiline -%}
 	<textarea
 		{%- if id %} id="{{ id }}"{% endif %}

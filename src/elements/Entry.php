@@ -125,7 +125,8 @@ class Entry extends Element
 			// @todo - Research why we need call populateElementContent
 			Craft::$app->getContent()->populateElementContent($this);
 
-			return $this->title;
+			return $this->title ?: ((string)$this->id ?: static::class);
+			
 		} catch (\Exception $e) {
 			ErrorHandler::convertExceptionToError($e);
 		}

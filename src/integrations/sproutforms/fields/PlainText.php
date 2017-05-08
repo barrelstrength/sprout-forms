@@ -5,6 +5,7 @@ use Craft;
 use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Template as TemplateHelper;
 use yii\db\Schema;
+use craft\base\ElementInterface;
 
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 use barrelstrength\sproutforms\SproutForms;
@@ -24,7 +25,7 @@ class PlainText extends SproutFormsBaseField
 	/**
 	 * @var string|null The input’s placeholder text
 	 */
-	public $placeholder;
+	public $placeholder = '';
 
 	/**
 	 * @var bool|null Whether the input should allow line breaks
@@ -80,6 +81,21 @@ class PlainText extends SproutFormsBaseField
 		$this->endRendering();
 
 		return TemplateHelper::raw($rendered);
+	}
+
+	/**
+	 * Adds support for edit field in the Entries section of SproutForms (Control
+	 * panel html)
+	 * @inheritdoc
+	 */
+	public function getInputHtml($value, ElementInterface $element = null): string
+	{
+		return Craft::$app->getView()->renderTemplate('_components/fieldtypes/PlainText/input',
+			[
+				'name' => $this->handle,
+				'value' => $value,
+				'field' => $this,
+			]);
 	}
 
 	/**

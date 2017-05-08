@@ -11,11 +11,10 @@
 	{%- set value            = element is not empty ? element.getFieldValue(name) : null %}
 	{%- set errors           = element is not empty ? element.getErrors(name) : null %}
 	{%- set errorClass       = renderingOptions.errorClass is defined ? renderingOptions.errorClass : 'errors' %}
-	{%- set input            = formField.getInputHtml(field, value, field.settings, renderingOptions) %}
+	{%- set input            = field.getFormInputHtml(field, value, field.settings, renderingOptions) %}
 
-	{%- namespace formField.getNamespace() -%}
-
-		{%- if formField.isPlainInput() -%}
+	{%- namespace field.getNamespace() -%}
+		{%- if field.isPlainInput() -%}
 
 			{{ input }}
 
@@ -30,24 +29,24 @@
 				{% if label or instructions -%}
 					<div class="heading">
 					{% if label -%}
-						{%- if formField.hasMultipleLabels() -%}
-							{{- label|raw|t -}}
+						{%- if field.hasMultipleLabels() -%}
+							{{- label|raw|t('sproutforms') -}}
 						{%- else -%}
 							<label{% if name %} for="{{ name }}"{% endif %}>
-								{{- label|raw|t -}}
+								{{- label|raw|t('sproutforms') -}}
 							</label>
 						{%- endif -%}
 					{%- endif -%}
 					{% if instructions %}
 
-					<p class="instructions">{{ instructions|raw|t }}</p>
+					<p class="instructions">{{ instructions|raw|t('sproutforms') }}</p>
 					{%- endif %}
 
 				</div>
 				{% endif -%}
 
 				<div class="input">
-					{{ input }}
+					{{ input|raw }}
 				</div>
 				{% include "errors" with { errors: errors } %}
 

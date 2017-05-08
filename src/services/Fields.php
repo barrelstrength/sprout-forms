@@ -536,7 +536,9 @@ class Fields extends Component
 			'translationMethod' =>Field::TRANSLATION_METHOD_NONE,
 		]);
 
+		// Set our field context
 		Craft::$app->content->fieldContext = $form->getFieldContext();
+		Craft::$app->content->contentTable = $form->getContentTable();
 
 		$fieldsService->saveField($field);
 

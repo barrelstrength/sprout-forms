@@ -10,20 +10,14 @@
 
 			{% for layoutField in layoutFields -%}
 				{%- set field = layoutField -%}
-				{%- set type  = craft.sproutforms.getFieldClass(field) %}
-				{%- set formField = craft.sproutforms.getRegisteredField(type) -%}
-
-				{%- if formField -%}
 					{% include "field" with {
 						form:                 form,
 						field:                field,
 						element:              entry,
 						required:             field.required,
-						formField:            formField,
 						renderingOptions:     renderingOptions,
 						thirdPartySubmission: thirdPartySubmission,
 					} only %}
-				{%- endif %}
 			{%- endfor %}
 
 		</div>
