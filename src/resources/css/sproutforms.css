@@ -191,3 +191,14 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 .sproutfield{
 	width: 40%;
 }
+
+.sproutfield-required:after
+{
+	color: red;
+	content: '*';
+}
+
+.sproutfield-title
+{
+	font-size: 14px;
+}

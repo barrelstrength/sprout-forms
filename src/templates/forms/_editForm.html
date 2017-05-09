@@ -43,10 +43,15 @@
 							<div class="sproutforms-icon">
 								{{ field.getIcon()|raw }}
 							</div>
-							<label for="fields-{{field.name}}">{{field.name}}</label>
+							<label for="fields-{{field.name}}">{{field.name}}
+							</label>
+							<span id="toggle-required" class="{% if field.required %}sproutfield-required{% endif %}">
+								{% if field.required %}<input class="required-input" type="hidden" name="requiredFields[]" value="{{field.id}}">{% endif %}
+							</span>
 							<ul class="settings">
 								<li><a id="sproutform-field-{{field.id}}" data-fieldid="{{field.id}}" href="#" tabindex="0" >edit</a></li>
-								<li><a href="#">delete</a></li>
+								<li><a id="sproutform-remove-{{field.id}}" data-fieldid="{{field.id}}" href="#">remove</a></li>
+								<li><a id="sproutform-required-{{field.id}}" data-fieldid="{{field.id}}" href="#">{% if field.required %}Make not required {% else %}Make required{% endif %}</a></li>
 							</ul>
 							{# todo - why the tabName and not the tabId? #}
 							<input class="id-input" type="hidden" name="fieldLayout[{{tab.name}}][]" value="{{field.id}}">
@@ -146,6 +151,9 @@
 							</div>
 						</div>
 					</div>
+			</div>
+
+			<div id="deletedFieldsContainer" class="hidden">
 			</div>
 
 		</div>

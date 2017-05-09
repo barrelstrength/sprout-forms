@@ -117,15 +117,19 @@
 				$(el).find('label').html(defaultField.name);
 				// let's add the settings urls
 				var $field = $([
+					'<span id="toggle-required"> </span>',
 					'<ul class="settings">',
 					'<span>', name, '</span>',
 					'<li><a id="sproutform-field-',defaultField.id,'" data-fieldid="',defaultField.id,'" href="#">edit</a></li>',
-					'<li><a href="#">delete</a></li>',
+					'<li><a id="sproutform-remove-',defaultField.id,'" data-fieldid="',defaultField.id,'" href="#">remove</a></li>',
+					'<li><a id="sproutform-required-',defaultField.id,'" data-fieldid="',defaultField.id,'" href="#">Make required</a></li>',
 					'</ul>',
 					'<input class="id-input" type="hidden" name="fieldLayout[',tabName,'][]" value="', defaultField.id, '">'
 				].join('')).appendTo($(el));
 
 				this.addListener($("#sproutform-field-"+defaultField.id), 'activate', 'editField');
+				this.addListener($("#sproutform-remove-"+defaultField.id), 'activate', 'removeField');
+				this.addListener($("#sproutform-required-"+defaultField.id), 'activate', 'toggleRequiredField');
 
 				console.log($(el).data("type"));
 			}
@@ -156,34 +160,10 @@
 				if(fieldId)
 				{
 					that.addListener($("#sproutform-field-"+fieldId), 'activate', 'editField');
+					that.addListener($("#sproutform-remove-"+fieldId), 'activate', 'removeField');
+					that.addListener($("#sproutform-required-"+fieldId), 'activate', 'toggleRequiredField');
 				}
 			});
-		},
-
-		onFieldOptionSelect: function(option)
-		{
-			var $option = $(option),
-					$field  = $option.data('menu').$anchor.parent(),
-					action  = $option.data('action');
-
-			switch (action)
-			{
-				case 'toggle-required':
-				{
-					this.fld.toggleRequiredField($field, $option);
-					break;
-				}
-				case 'remove':
-				{
-					this.fld.removeField($field);
-					break;
-				}
-				case 'edit':
-				{
-					this.editField($field);
-					break;
-				}
-			}
 		},
 
 		/**
@@ -204,8 +184,53 @@
 			this.$field = $(option);
 			this.base($(option));
 
+
 			this.modal.editField(fieldId);
 		},
+
+		removeField: function(option)
+		{
+			var option = option.currentTarget;
+
+			var fieldId = $(option).data('fieldid');
+
+			//Remove the div of the field
+			$("#sproutfield-"+fieldId).slideUp(500, function() { $(this).remove(); });
+
+			// Added behavior, store an array of deleted field IDs
+			// that will be processed by the sproutForms/forms/saveForm method
+			$deletedFieldsContainer = $('#deletedFieldsContainer');
+			$('<input type="hidden" name="deletedFields[]" value="' + fieldId + '">').appendTo($deletedFieldsContainer);
+		},
+
+		toggleRequiredField: function(option)
+		{
+			var option      = option.currentTarget;
+			var fieldId     = $(option).data('fieldid');
+			var $divField   = $("#sproutfield-"+fieldId);
+			var $toggleLink = $("#sproutform-required-"+fieldId);
+
+			var $field = $divField.find("#toggle-required");
+			if ($field.hasClass('sproutfield-required'))
+			{
+				$field.removeClass('sproutfield-required');
+				$field.find('.required-input').remove();
+
+				setTimeout(function() {
+					$toggleLink.text(Craft.t('sproutforms', 'Make required'));
+				}, 500);
+			}
+			else
+			{
+				$field.addClass('sproutfield-required');
+				$('<input class="required-input" type="hidden" name="requiredFields[]" value="' + fieldId + '">').appendTo($field);
+
+				setTimeout(function() {
+					$toggleLink.text(Craft.t('sproutforms', 'Make not required'));
+				}, 500);
+			}
+		},
+
 
 		/**
 		 * Adds a new unused (dashed border) field to the field layout designer.
