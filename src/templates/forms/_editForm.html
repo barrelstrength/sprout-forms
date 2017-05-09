@@ -39,7 +39,7 @@
 				<div id='sproutforms-tab-container-{{tab.id}}' class='sprout-container'>
 					{# here will be the fields #}
 					{% for field in tabFields %}
-						<div id="sproutfield" data-type="{{craft.sproutforms.getFieldClassName(field)}}">
+						<div id="sproutfield-{{field.id}}" data-type="{{craft.sproutforms.getFieldClassName(field)}}">
 							<div class="sproutforms-icon">
 								{{ field.getIcon()|raw }}
 							</div>

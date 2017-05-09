@@ -15,6 +15,7 @@
 		modal: null,
 		formLayout: null,
 		fieldsLayout: null,
+		// The dragula instance
 		drake: null,
 
 		/**
@@ -42,7 +43,7 @@
 				// @todo - we need update the icon or div if the
 				// field type is changed after saved, not just the name
 				// think the how we handle the tabs
-				//this.resetField(field.id, group.name, field.name);
+				this.resetField(field, group);
 			}, this));
 
 			// DRAGULA
@@ -58,6 +59,13 @@
 				},
 			})
 			.on('drop', function (el,target, source) {
+				// Reorder fields
+				if ($(target).attr("id") == $(source).attr("id"))
+				{
+					// just if we need check when the field is reorder
+					// not needed because the order is saved from the hidden field
+					// when the form is saved
+				}
 				if (target && source === that.fieldsLayout)
 				{
 					// get the tab name by the first div fields
@@ -103,7 +111,7 @@
 		{
 			if(defaultField != null && defaultField.hasOwnProperty("id"))
 			{
-				$(el).attr('data-id', defaultField.id);
+				$(el).attr('id', 'sproutfield-'+defaultField.id);
 				// Lets update the the name and icon
 				$(el).find('.sproutforms-icon').html(defaultField.icon);
 				$(el).find('label').html(defaultField.name);
@@ -111,10 +119,10 @@
 				var $field = $([
 					'<ul class="settings">',
 					'<span>', name, '</span>',
-					'<input class="id-input" type="hidden" name="fieldLayout[',tabName,'][]" value="', defaultField.id, '">',
 					'<li><a id="sproutform-field-',defaultField.id,'" data-fieldid="',defaultField.id,'" href="#">edit</a></li>',
 					'<li><a href="#">delete</a></li>',
-					'</ul>'
+					'</ul>',
+					'<input class="id-input" type="hidden" name="fieldLayout[',tabName,'][]" value="', defaultField.id, '">'
 				].join('')).appendTo($(el));
 
 				this.addListener($("#sproutform-field-"+defaultField.id), 'activate', 'editField');
@@ -256,29 +264,37 @@
 		},
 
 		/**
-		 * Renames and regroups an existing field on the field layout designer.
+		 * Renames | update icon | move field to another tab
+		 * of an existing field after edit it
 		 *
-		 * @param id
-		 * @param groupName
-		 * @param name
+		 * @param field
+		 * @param group
 		 */
-		resetField: function(id, groupName, name)
+		resetField: function(field, group)
 		{
-			var fld = this.fld;
-			var grid = fld.tabGrid;
-			var $container = fld.$container;
-			var $group = this._getGroupByName(groupName);
-			var $content = $group.children('.fld-tabcontent');
-			var $field = $container.find('.fld-field[data-id="' + id + '"]');
-			var $currentGroup = $field.closest('.fld-tab');
-			var $span = $field.children('span');
+			var el = $("#sproutfield-"+field.id);
+			// Lets update the the name and icon
+			$(el).find('.sproutforms-icon').html(field.icon);
+			$(el).find('label').html(field.name);
+			// Check if we need move the field to another tab
+			var tab       = $(el).closest(".sproutforms-tab-fields");
+			var tabName   = tab.data('tabname');
+			var tabId     = tab.data('tabid');
 
-			$span.text(name);
-
-			if ($currentGroup[0] !== $group[0])
+			if (tabName != group.name)
 			{
-				$content.append($field);
-				grid.refreshCols(true);
+				// let's remove the hidden field just if the user change the tab
+				$(el).find('.id-input').remove();
+				// create the new hidden field and add it to the field div
+				var $field = $([
+					'<input class="id-input" type="hidden" name="fieldLayout[',group.name,'][]" value="', field.id, '">'
+				].join('')).appendTo($(el));
+				// move the field to another tab
+				var newTab = $("#sproutforms-tab-container-"+group.id);
+				// we need this?
+				var copyEl = el;
+				$(el).remove();
+				$(copyEl).appendTo($(newTab));
 			}
 		},
 
