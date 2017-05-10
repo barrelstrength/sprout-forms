@@ -16,11 +16,6 @@
 		})
 	%}
 {% endfor %}
-{% set tabs =  tabs|merge({('Add') :  {
-		label: "+ Add"|t,
-		url: '#add-field'}
-	})
-%}
 
 {% set title = form.name %}
 {% set saveShortcutRedirect = continueEditingUrl %}
@@ -124,7 +119,7 @@
 		<div id="fields" class="pane">
 
 			{% if tabs is defined and tabs %}
-			{% include "_includes/tabs" %}
+			{% include "sproutforms/_includes/tabs" %}
 			{% endif %}
 
 			{# let's add the tabs and fields to the dropped divs #}
@@ -135,23 +130,6 @@
 				{% endfor %}
 			{% endif %}
 
-
-			<div id="add-field" class="hidden sproutforms-tab-fields" data-tabname="{{fieldLayout.getTabs()[0].name}}" data-tabid="{{fieldLayout.getTabs()[0].id}}">
-				<div class='parent'>
-						<h1>Drag and drop here</h1>
-						<div class='sprout-wrapper'>
-							<div id='left-copy-2' class='sprout-container'>
-								{# here will be the fields #}
-								{#% set fieldLayout = form.getFieldLayout() %}
-								{% if fieldLayout %}
-									{% for tab in fieldLayout.getTabs() %}
-										{{ macros.tab(tab.name, tab.getFields()) }}
-									{% endfor %}
-								{% endif %#}
-							</div>
-						</div>
-					</div>
-			</div>
 
 			<div id="deletedFieldsContainer" class="hidden">
 			</div>

@@ -83,8 +83,6 @@
 			{
 				this.drake.containers.push(this.getId('sproutforms-tab-container-'+tabs[i].id));
 			}
-			// manually - remove when add tabs dynamically
-			this.drake.containers.push(this.getId('left-copy-2'));
 		},
 
 		createDefaultField: function(type, tabId, tabName, el)
@@ -164,6 +162,70 @@
 					that.addListener($("#sproutform-required-"+fieldId), 'activate', 'toggleRequiredField');
 				}
 			});
+
+			// listener to the new tab button
+			this.addListener($("#sproutforms-add-tab"), 'activate', 'addTab');
+		},
+
+		addTab: function()
+		{
+			event.preventDefault();
+			var newName = this.promptForGroupName('');
+			var response = true;
+			var $tabs = $("[id^='sproutforms-tab-']");
+
+			// validate with current names and set the sortOrder
+			$tabs.each(function (i, el) {
+				var tabname = $(el).data('tabname');
+				var formId  = $("#formId").val();
+
+				if(tabname == newName)
+				{
+					response = false;
+					return false;
+				}
+			});
+
+			if (response && newName && formId)
+			{
+				var data = {
+					name: name,
+					// Minus the add tab button
+					sortOrder: $tabs.length - 1,
+					formId : formId
+				};
+
+				Craft.postActionRequest('sprout-forms/fields/add-tab', data, $.proxy(function(response)
+				{
+					if (response.success)
+					{
+						var tab = response.tab;
+						Craft.cp.displayNotice(Craft.t('sproutforms','Tab: '+name+' created'));
+						//first insert the new tab
+						var $newTabHead = $(['<li><a id="tab-'+tab.id+'" class="tab" href="#sproutforms-tab-'+tab.id+'">'+tab.name+'</a></li>']);
+						$("#sproutforms-add-tab").before($newTabHead);
+						// now add the div for drag and drog.
+						//var $newTabDrop = $(
+						//	['<li><a id="tab-'+tab.id+'" class="tab" href="#sproutforms-tab-'+tab.id+'">'+tab.name+'</a></li>']);
+					}
+					else
+					{
+						console.log(response.errors);
+						Craft.cp.displayError(Craft.t('sproutforms','Unable to create a new Tab'));
+					}
+
+				}, this));
+			}
+			else
+			{
+				Craft.cp.displayError(Craft.t('sproutforms','Wrong Tab Name - Please try again'));
+			}
+
+		},
+
+		promptForGroupName: function(oldName)
+		{
+			return prompt(Craft.t('sproutforms','What do you want to name your new Tab?'), oldName);
 		},
 
 		/**

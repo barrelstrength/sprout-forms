@@ -64,6 +64,41 @@ class FieldsController extends BaseController
 	}
 
 	/**
+	 * This action allows a new Tab to current layout
+	 *
+	 */
+	public function actionAddTab()
+	{
+		$this->requireAcceptsJson();
+		$request   = Craft::$app->getRequest();
+		$name      = $request->getBodyParam('name');
+		$sortOrder = $request->getBodyParam('sortOrder');
+		$formId    = $request->getBodyParam('formId');
+		$form      = SproutForms::$app->forms->getFormById($formId);
+
+		if ($name && $form && $sortOrder)
+		{
+			$tab = SproutForms::$app->fields->createNewTab($name, $sortOrder, $form);
+
+			if ($tab->id)
+			{
+				return $this->asJson([
+					'success'  => true,
+					'tab'    => [
+						'id'   => $tab->id,
+						'name' => $tab->name
+					]
+				]);
+			}
+		}
+		// @todo - how add error messages?
+		return $this->asJson([
+			'success'  => false,
+			'errors'   => $tab->getErrors()
+		]);
+	}
+
+	/**
 	 * Save a field.
 	 */
 	public function actionSaveField()

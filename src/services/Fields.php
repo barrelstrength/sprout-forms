@@ -7,6 +7,7 @@ use craft\base\Field;
 use craft\records\Field as FieldRecord;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\PlainText;
 use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
+use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
 
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Form as FormElement;
@@ -543,6 +544,20 @@ class Fields extends Component
 		$fieldsService->saveField($field);
 
 		return $field;
+	}
+
+	public function createNewTab($name, $sortOrder, FormElement $form)
+	{
+		$fieldLayout = $form->getFieldLayout();
+
+		$tabRecord = new FieldLayoutTabRecord();
+		$tabRecord->name = $name;
+		$tabRecord->sortOrder = $sortOrder;
+		$tabRecord->layoutId = $fieldLayout->id;
+
+		$tabRecord->save();
+
+		return $tabRecord;
 	}
 
 	/**
