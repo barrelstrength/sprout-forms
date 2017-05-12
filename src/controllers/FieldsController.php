@@ -64,7 +64,7 @@ class FieldsController extends BaseController
 	}
 
 	/**
-	 * This action allows a new Tab to current layout
+	 * This action allows create a new Tab to current layout
 	 *
 	 */
 	public function actionAddTab()
@@ -150,7 +150,7 @@ class FieldsController extends BaseController
 			$variables['tabId'] = $tabId;
 			$variables['field'] = $field;
 
-			return $this->_returnJson(false, $field, $form);
+			return $this->_returnJson(false, $field, $form, null, $tabId);
 		}
 
 		// Check if the handle is updated to also update the titleFormat
@@ -193,7 +193,7 @@ class FieldsController extends BaseController
 		{
 			SproutForms::log('Field Saved');
 
-			return $this->_returnJson(true, $field, $form, $tabName);
+			return $this->_returnJson(true, $field, $form, $tabName, $tabId);
 		}
 		else
 		{

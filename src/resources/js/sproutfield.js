@@ -22,9 +22,11 @@
 		 * The constructor.
 		 * @param - All the tabs of the form fieldLayout.
 		 */
-		init: function(tabs)
+		init: function(currentTabs)
 		{
 			var that = this;
+
+			this.tabs = {};
 
 			this.initButtons();
 			this.modal = SproutField.FieldModal.getInstance();
@@ -79,9 +81,9 @@
 			});
 
 			// Add the drop containers for each tab
-			for (var i = 0; i < tabs.length; i++)
+			for (var i = 0; i < currentTabs.length; i++)
 			{
-				this.drake.containers.push(this.getId('sproutforms-tab-container-'+tabs[i].id));
+				this.drake.containers.push(this.getId('sproutforms-tab-container-'+currentTabs[i].id));
 			}
 		},
 
@@ -164,20 +166,18 @@
 			});
 
 			// listener to the new tab button
-			this.addListener($("#sproutforms-add-tab"), 'activate', 'addTab');
+			this.addListener($("#sproutforms-add-tab"), 'activate', 'addNewTab');
 		},
 
-		addTab: function()
+		addNewTab: function()
 		{
-			event.preventDefault();
 			var newName = this.promptForGroupName('');
 			var response = true;
 			var $tabs = $("[id^='sproutforms-tab-']");
-
+			var formId = $("#formId").val();
 			// validate with current names and set the sortOrder
 			$tabs.each(function (i, el) {
 				var tabname = $(el).data('tabname');
-				var formId  = $("#formId").val();
 
 				if(tabname == newName)
 				{
@@ -189,32 +189,53 @@
 			if (response && newName && formId)
 			{
 				var data = {
-					name: name,
+					name: newName,
 					// Minus the add tab button
-					sortOrder: $tabs.length - 1,
+					sortOrder: $tabs.length,
 					formId : formId
 				};
 
-				Craft.postActionRequest('sprout-forms/fields/add-tab', data, $.proxy(function(response)
+				Craft.postActionRequest('sprout-forms/fields/add-tab', data, $.proxy(function(response, textStatus)
 				{
 					if (response.success)
 					{
 						var tab = response.tab;
-						Craft.cp.displayNotice(Craft.t('sproutforms','Tab: '+name+' created'));
-						//first insert the new tab
-						var $newTabHead = $(['<li><a id="tab-'+tab.id+'" class="tab" href="#sproutforms-tab-'+tab.id+'">'+tab.name+'</a></li>']);
-						$("#sproutforms-add-tab").before($newTabHead);
-						// now add the div for drag and drog.
-						//var $newTabDrop = $(
-						//	['<li><a id="tab-'+tab.id+'" class="tab" href="#sproutforms-tab-'+tab.id+'">'+tab.name+'</a></li>']);
+						Craft.cp.displayNotice(Craft.t('sproutforms','Tab: '+tab.name+' created'));
+						// first insert the new tab before the add tab button
+
+						$('<li><a id="tab-'+tab.id+'" class="tab" href="#sproutforms-tab-'+tab.id+'" tabindex="0">'+tab.name+'</a></li>').insertBefore("#sproutforms-add-tab");
+						var $newDivTab = $('#tab-'+tab.id);
+						// @todo - need to add the hidden class
+						var $dropDiv = $([
+							'<div id="sproutforms-tab-'+tab.id+'" data-tabname="'+tab.name+'" data-tabid="'+tab.id+'" class=" sproutforms-tab-fields">',
+							'<div class="parent">',
+							'<h1>Drag and drop here ('+tab.name+')</h1>',
+							'<div class="sprout-wrapper">',
+							'<div id="sproutforms-tab-container-'+tab.id+'" class="sprout-container">',
+							'</div>',
+							'</div>',
+							'</div>',
+							'</div>'
+						].join('')).appendTo($("#sproutforms-main-container"));
+						// Convert our new tab into dragula vampire :)
+						this.drake.containers.push(this.getId('sproutforms-tab-container-'+tab.id));
+
+						// @todo - extend Craft.pane class to update the tab listeners
+						/*this.tabs[href] = {
+								$tab: $newDivTab,
+								$target: $(href)
+						};
+
+						this.addListener($newDivTab, 'activate', 'selectTab');
+						*/
 					}
 					else
 					{
 						console.log(response.errors);
 						Craft.cp.displayError(Craft.t('sproutforms','Unable to create a new Tab'));
 					}
-
 				}, this));
+
 			}
 			else
 			{
@@ -222,6 +243,7 @@
 			}
 
 		},
+
 
 		promptForGroupName: function(oldName)
 		{
@@ -378,10 +400,8 @@
 				].join('')).appendTo($(el));
 				// move the field to another tab
 				var newTab = $("#sproutforms-tab-container-"+group.id);
-				// we need this?
-				var copyEl = el;
-				$(el).remove();
-				$(copyEl).appendTo($(newTab));
+				// move element to new div - like ctrl+x
+				$(el).detach().appendTo($(newTab));
 			}
 		},
 
