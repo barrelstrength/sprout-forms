@@ -172,6 +172,12 @@ class SproutForms_EntriesController extends BaseController
 				sproutForms()->forms->sendNotification($this->form, $entry, $post);
 			}
 
+			if (!craft()->request->isCpRequest())
+			{
+				// Store our new entry so we can recreate the Entry object on our thank you page
+				craft()->httpSession->add('lastEntryId', $entry->id);
+			}
+
 			if (craft()->request->isAjaxRequest())
 			{
 				$return['success'] = true;
