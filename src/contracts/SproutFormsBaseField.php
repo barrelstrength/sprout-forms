@@ -89,7 +89,7 @@ abstract class SproutFormsBaseField extends Field
 
 		if (!is_file($iconPath) || FileHelper::getMimeType($iconPath) !== 'image/svg+xml')
 		{
-			$iconPath = Craft::$app->path->getPluginsPath() . '/sproutforms/src/templates/_components/fields/default.svg';
+			$iconPath = Craft::getAlias('@barrelstrength/sproutforms/templates/_components/fields/default.svg');
 		}
 
 		return file_get_contents($iconPath);
