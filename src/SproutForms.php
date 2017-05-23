@@ -77,9 +77,27 @@ class SproutForms extends \craft\base\Plugin
 		return Craft::t('sproutforms', $message, $params);
 	}
 
+	/*
+	 * @todo - remove this function and calls in the code
+	*/
 	public static function log($message, $type = 'info')
 	{
 		Craft::$type(self::t($message), __METHOD__);
+	}
+
+	public static function error($message)
+	{
+		Craft::error($message, __METHOD__);
+	}
+
+	public static function info($message)
+	{
+		Craft::info($message, __METHOD__);
+	}
+
+	public static function warning($message)
+	{
+		Craft::warning($message, __METHOD__);
 	}
 
 	/**

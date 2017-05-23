@@ -124,6 +124,12 @@ class Entries extends Component
 
 		$entry->validate();
 
+		if ($entry->hasErrors())
+		{
+			SproutForms::error('Entry has errors');
+
+			return false;
+		}
 		// EVENT_BEFORE_SAVE event moved to the element class https://github.com/craftcms/docs/blob/master/en/updating-plugins.md#events
 
 		$event = new OnBeforeSaveEntryEvent([
@@ -132,86 +138,70 @@ class Entries extends Component
 
 		$this->trigger(EntryElement::EVENT_BEFORE_SAVE, $event);
 
-		if (!$entry->hasErrors())
+		$db          = Craft::$app->getDb();
+		$transaction = $db->beginTransaction();
+
+		try
 		{
-			try
+			$form         = SproutForms::$app->forms->getFormById($entry->formId);
+			$entry->title = $view->renderObjectTemplate($form->titleFormat, $entry);
+
+			if (!$event->isValid)
 			{
-				$form = SproutForms::$app->forms->getFormById($entry->formId);
+				SproutForms::error('OnBeforeSaveEntryEvent is not valid');
 
-				$entry->title = $view->renderObjectTemplate($form->titleFormat, $entry);
-
-				$db          = Craft::$app->getDb();
-				$transaction = $db->getTransaction() === null ? $db->beginTransaction() : null;
-
-				if ($event->isValid)
+				if ($event->fakeIt)
 				{
-					$content         = Craft::$app->getContent();
-					$oldFieldContext = $content->fieldContext;
-					$oldContentTable = $content->contentTable;
-
-					$content->fieldContext = $entry->getFieldContext();
-					$content->contentTable = $entry->getContentTable();
-
-					SproutForms::log('Transaction: Event is Valid');
-
-					$success = Craft::$app->getElements()->saveElement($entry);
-
-					if ($success)
-					{
-						SproutForms::log('Element Saved: ' . (bool)$success);
-
-						if ($transaction !== null)
-						{
-							$transaction->commit();
-
-							SproutForms::log('Transaction committed');
-						}
-
-						// Reset our field context and content table to what they were previously
-						$content->fieldContext = $oldFieldContext;
-						$content->contentTable = $oldContentTable;
-
-						$event = new OnSaveEntryEvent([
-							'entry' => $entry,
-							'isNewEntry' => $isNewEntry,
-						]);
-
-						$this->trigger(EntryElement::EVENT_AFTER_SAVE, $event);
-
-						return true;
-					}
-					else
-					{
-						SproutForms::log("Couldn’t save Element on saveEntry service.", 'error');
-					}
-
-					$content->fieldContext = $oldFieldContext;
-					$content->contentTable = $oldContentTable;
+					SproutForms::$app->entries->fakeIt = true;
 				}
-				else
-				{
-					SproutForms::log('OnBeforeSaveEntryEvent is not valid', 'error');
-
-					if ($event->fakeIt)
-					{
-						SproutForms::$app->entries->fakeIt = true;
-					}
-				}
-			}
-			catch (\Exception $e)
-			{
-				SproutForms::log('Failed to save element: '.$e->getMessage(), 'error');
 
 				return false;
-				throw $e;
 			}
-		}
-		else
-		{
-			SproutForms::log('Service returns false', 'error');
 
-			return false;
+			$content         = Craft::$app->getContent();
+			$oldFieldContext = $content->fieldContext;
+			$oldContentTable = $content->contentTable;
+
+			$content->fieldContext = $entry->getFieldContext();
+			$content->contentTable = $entry->getContentTable();
+
+			SproutForms::info('Transaction: Event is Valid');
+
+			$success = Craft::$app->getElements()->saveElement($entry);
+
+			// Reset our field context and content table to what they were previously
+			$content->fieldContext = $oldFieldContext;
+			$content->contentTable = $oldContentTable;
+
+			if (!$success)
+			{
+				SproutForms::error("Couldn’t save Element on saveEntry service.");
+
+				return false;
+			}
+
+			SproutForms::info('Element Saved!');
+
+			$transaction->commit();
+
+			SproutForms::info('Transaction committed');
+
+			$event = new OnSaveEntryEvent([
+				'entry' => $entry,
+				'isNewEntry' => $isNewEntry,
+			]);
+
+			$this->trigger(EntryElement::EVENT_AFTER_SAVE, $event);
 		}
+		catch (\Exception $e)
+		{
+			SproutForms::error('Failed to save element: '.$e->getMessage());
+			$transaction->rollBack();
+
+			throw $e;
+		}
+
+		return true;
 	}
 
 	public function getDefaultEntryStatusId()

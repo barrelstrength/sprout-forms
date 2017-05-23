@@ -90,94 +90,100 @@ class Forms extends Component
 
 		$form->validate();
 
-		if (!$form->hasErrors())
+		if ($form->hasErrors())
 		{
-			$transaction = Craft::$app->db->getTransaction() === null ? Craft::$app->db->beginTransaction() : null;
-			try
-			{
-				// Set the field context
-				Craft::$app->content->fieldContext = $form->getFieldContext();
-				Craft::$app->content->contentTable = $form->getContentTable();
+			SproutForms::error('Form has errors');
 
-				if ($isNewForm)
+			return false;
+		}
+
+		$transaction = Craft::$app->db->beginTransaction();
+
+		try
+		{
+			// Set the field context
+			Craft::$app->content->fieldContext = $form->getFieldContext();
+			Craft::$app->content->contentTable = $form->getContentTable();
+
+			if ($isNewForm)
+			{
+				$fieldLayout = $form->getFieldLayout();
+
+				// Save the field layout
+				Craft::$app->getFields()->saveLayout($fieldLayout);
+
+				// Assign our new layout id info to our form model and records
+				$form->fieldLayoutId = $fieldLayout->id;
+				$form->setFieldLayout($fieldLayout);
+				$form->fieldLayoutId = $fieldLayout->id;
+			}
+			else
+			{
+				// If we have a layout use it, otherwise
+				// since this is an existing form, grab the oldForm layout
+				if ($hasLayout)
 				{
+					// Delete our previous record
+					Craft::$app->getFields()->deleteLayoutById($oldForm->fieldLayoutId);
+
 					$fieldLayout = $form->getFieldLayout();
 
 					// Save the field layout
 					Craft::$app->getFields()->saveLayout($fieldLayout);
 
-					// Assign our new layout id info to our form model and records
+					// Assign our new layout id info to our
+					// form model and records
 					$form->fieldLayoutId = $fieldLayout->id;
 					$form->setFieldLayout($fieldLayout);
 					$form->fieldLayoutId = $fieldLayout->id;
 				}
 				else
 				{
-					// If we have a layout use it, otherwise
-					// since this is an existing form, grab the oldForm layout
-					if ($hasLayout)
-					{
-						// Delete our previous record
-						Craft::$app->getFields()->deleteLayoutById($oldForm->fieldLayoutId);
-
-						$fieldLayout = $form->getFieldLayout();
-
-						// Save the field layout
-						Craft::$app->getFields()->saveLayout($fieldLayout);
-
-						// Assign our new layout id info to our
-						// form model and records
-						$form->fieldLayoutId = $fieldLayout->id;
-						$form->setFieldLayout($fieldLayout);
-						$form->fieldLayoutId = $fieldLayout->id;
-					}
-					else
-					{
-						// We don't have a field layout right now
-						$form->fieldLayoutId = null;
-					}
-				}
-
-				// Create the content table first since the form will need it
-				$oldContentTable = $this->getContentTableName($form, true);
-				$newContentTable = $this->getContentTableName($form);
-
-				// Do we need to create/rename the content table?
-				if (!Craft::$app->db->tableExists($newContentTable) && !$form->saveAsNew)
-				{
-					if ($oldContentTable && Craft::$app->db->tableExists($oldContentTable))
-					{
-						MigrationHelper::renameTable($oldContentTable, $newContentTable);
-					}
-					else
-					{
-						$this->_createContentTable($newContentTable);
-					}
-				}
-
-				if (Craft::$app->elements->saveElement($form, false))
-				{
-					// Save our Form Settings - Craft3 afterSave form element
-					//$form->save(false);
-
-					if ($transaction !== null)
-					{
-						$transaction->commit();
-					}
-
-					return true;
+					// We don't have a field layout right now
+					$form->fieldLayoutId = null;
 				}
 			}
-			catch (\Exception $e)
+
+			// Create the content table first since the form will need it
+			$oldContentTable = $this->getContentTableName($form, true);
+			$newContentTable = $this->getContentTableName($form);
+
+			// Do we need to create/rename the content table?
+			if (!Craft::$app->db->tableExists($newContentTable) && !$form->saveAsNew)
 			{
-				if ($transaction !== null)
+				if ($oldContentTable && Craft::$app->db->tableExists($oldContentTable))
 				{
-					$transaction->rollback();
+					MigrationHelper::renameTable($oldContentTable, $newContentTable);
 				}
-
-				throw $e;
+				else
+				{
+					$this->_createContentTable($newContentTable);
+				}
 			}
+
+			$success = Craft::$app->elements->saveElement($form, false);
+
+			if (!$success)
+			{
+				SproutForms::error("Couldn’t save Element on saveForm service.");
+
+				return false;
+			}
+
+			// FormRecord saved on afterSave form element
+			$transaction->commit();
+
+			SproutForms::info('Form Saved!');
 		}
+		catch (\Exception $e)
+		{
+			SproutForms::error('Failed to save form: '.$e->getMessage());
+			$transaction->rollback();
+
+			throw $e;
+		}
+
+		return true;
 	}
 
 	/**
@@ -191,7 +197,8 @@ class Forms extends Component
 	 */
 	public function deleteForm(FormElement $form)
 	{
-		$transaction = Craft::$app->db->getTransaction() === null ? Craft::$app->db->beginTransaction() : null;
+		$transaction = Craft::$app->db->beginTransaction();
+
 		try
 		{
 			$originalContentTable          = Craft::$app->content->contentTable;
@@ -215,24 +222,25 @@ class Forms extends Component
 			Craft::$app->content->contentTable = $originalContentTable;
 
 			// Delete the Element and Form
-			Craft::$app->elements->deleteElementById($form->id);
+			$success = Craft::$app->elements->deleteElementById($form->id);
 
-			if ($transaction !== null)
+			if (!$success)
 			{
-				$transaction->commit();
+				SproutForms::error("Couldn’t delete Form on deleteForm service.");
+
+				return false;
 			}
 
-			return true;
+			$transaction->commit();
 		}
 		catch (\Exception $e)
 		{
-			if ($transaction !== null)
-			{
-				$transaction->rollback();
-			}
+			$transaction->rollback();
 
 			throw $e;
 		}
+
+		return true;
 	}
 
 	/**
@@ -545,7 +553,7 @@ class Forms extends Component
 			catch (\Exception $e)
 			{
 				$response = false;
-				SproutForms::log($e->getMessage(), 'error');
+				SproutForms::error($e->getMessage());
 			}
 		}
 
@@ -573,7 +581,7 @@ class Forms extends Component
 			}
 			else
 			{
-				SproutForms::log("Can't delete the form with id: ".$id);
+				SproutForms::error("Can't delete the form with id: {$id}");
 			}
 		}
 
