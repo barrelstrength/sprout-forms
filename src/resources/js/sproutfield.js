@@ -10,6 +10,7 @@
 		$groupButton: null,
 		$fieldButton: null,
 		$settings: null,
+		$pane: null,
 
 		fld: null,
 		modal: null,
@@ -26,7 +27,7 @@
 		{
 			var that = this;
 
-			this.tabs = {};
+			this.$pane = new Craft.Pane($(".pane"));
 
 			this.initButtons();
 			this.modal = SproutField.FieldModal.getInstance();
@@ -202,14 +203,14 @@
 						var tab = response.tab;
 						Craft.cp.displayNotice(Craft.t('sproutforms','Tab: '+tab.name+' created'));
 						// first insert the new tab before the add tab button
-
-						$('<li><a id="tab-'+tab.id+'" class="tab" href="#sproutforms-tab-'+tab.id+'" tabindex="0">'+tab.name+'</a></li>').insertBefore("#sproutforms-add-tab");
+						var href = '#sproutforms-tab-'+tab.id;
+						$('<li><a id="tab-'+tab.id+'" class="tab" href="'+href+'" tabindex="0">'+tab.name+'</a></li>').insertBefore("#sproutforms-add-tab");
 						var $newDivTab = $('#tab-'+tab.id);
 						// @todo - need to add the hidden class
 						var $dropDiv = $([
-							'<div id="sproutforms-tab-'+tab.id+'" data-tabname="'+tab.name+'" data-tabid="'+tab.id+'" class=" sproutforms-tab-fields">',
+							'<div id="sproutforms-tab-'+tab.id+'" data-tabname="'+tab.name+'" data-tabid="'+tab.id+'" class="hidden sproutforms-tab-fields">',
 							'<div class="parent">',
-							'<h1>Drag and drop here ('+tab.name+')</h1>',
+							'<h1>Drag and drop here</h1>',
 							'<div class="sprout-wrapper">',
 							'<div id="sproutforms-tab-container-'+tab.id+'" class="sprout-container">',
 							'</div>',
@@ -220,14 +221,12 @@
 						// Convert our new tab into dragula vampire :)
 						this.drake.containers.push(this.getId('sproutforms-tab-container-'+tab.id));
 
-						// @todo - extend Craft.pane class to update the tab listeners
-						/*this.tabs[href] = {
+						this.$pane.tabs[href] = {
 								$tab: $newDivTab,
 								$target: $(href)
 						};
 
-						this.addListener($newDivTab, 'activate', 'selectTab');
-						*/
+						this.$pane.addListener($newDivTab, 'activate', 'selectTab');
 					}
 					else
 					{
