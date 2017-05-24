@@ -2,10 +2,10 @@
 namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
 
 use Craft;
-use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Template as TemplateHelper;
 use yii\db\Schema;
 use craft\base\ElementInterface;
+use craft\base\PreviewableFieldInterface;
 
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 use barrelstrength\sproutforms\SproutForms;
@@ -15,7 +15,7 @@ use barrelstrength\sproutforms\SproutForms;
  *
  * @package Craft
  */
-class PlainText extends SproutFormsBaseField
+class PlainText extends SproutFormsBaseField implements PreviewableFieldInterface
 {
 	/**
 	 * @var string|null The input’s placeholder text

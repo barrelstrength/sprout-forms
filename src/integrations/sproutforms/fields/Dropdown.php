@@ -2,24 +2,28 @@
 namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
 
 use Craft;
-use craft\fields\Dropdown as CraftDropdown;
 use craft\helpers\Template as TemplateHelper;
+use craft\base\ElementInterface;
 
-use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
+use barrelstrength\sproutforms\SproutForms;
 
 /**
  * Class SproutFormsDropdownField
  *
- * @package Craft
  */
-class Dropdown extends SproutFormsBaseField
+class Dropdown extends BaseOptionsField
 {
 	/**
-	 * @return string
+	 * @var string|null The input’s boostrap class
 	 */
-	public function getType()
+	public $boostrapClass;
+
+	/**
+	 * @inheritdoc
+	 */
+	public static function displayName(): string
 	{
-		return CraftDropdown::class;
+		return SproutForms::t('Dropdown');
 	}
 
 	/**
@@ -30,7 +34,7 @@ class Dropdown extends SproutFormsBaseField
 	 *
 	 * @return \Twig_Markup
 	 */
-	public function getInputHtml($field, $value, $settings, array $renderingOptions = null)
+	public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
 	{
 		$this->beginRendering();
 
@@ -51,19 +55,61 @@ class Dropdown extends SproutFormsBaseField
 	}
 
 	/**
-	 * @param FieldModel $field
-	 *
-	 * @return \Twig_Markup
+	 * Adds support for edit field in the Entries section of SproutForms (Control
+	 * panel html)
+	 * @inheritdoc
 	 */
-	public function getSettingsHtml($field)
+	public function getInputHtml($value, ElementInterface $element = null): string
 	{
-		$rendered = Craft::$app->getView()->renderTemplate(
-			'sproutforms/_components/fields/plaintext/settings',
+		$options = $this->translatedOptions();
+
+		// If this is a new entry, look for a default option
+		if ($this->isFresh($element)) {
+				$value = $this->defaultValue();
+		}
+
+		return Craft::$app->getView()->renderTemplate('_includes/forms/select',
 			[
-				'field' => $field,
+				'name' => $this->handle,
+				'value' => $value,
+				'options' => $options
+			]
+		);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	protected function optionsSettingLabel(): string
+	{
+		return SproutForms::t('Dropdown Options');
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getIconPath()
+	{
+		return $this->getTemplatesPath().'dropdown/select.svg';
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function getSettingsHtml()
+	{
+		$parentRendered = parent::getSettingsHtml();
+
+		$rendered = Craft::$app->getView()->renderTemplate(
+			'sproutforms/_components/fields/dropdown/settings',
+			[
+				'field' => $this,
 			]
 		);
 
-		return $rendered;
+		$customRendered = $rendered.$parentRendered;
+
+		return $customRendered;
 	}
+
 }

@@ -47,8 +47,8 @@ class SproutForms extends \craft\base\Plugin
 
 		Event::on(Fields::class, Fields::EVENT_REGISTER_FIELDS, function(RegisterFieldsEvent $event) {
 				$event->fields[] = new PlainText();
-				/*$event->fields[] = new Number();
 				$event->fields[] = new Dropdown();
+				/*$event->fields[] = new Number();
 				$event->fields[] = new Checkboxes();
 				$event->fields[] = new MultiSelect();
 				//@todo - assets are uploaded but not displayed in "edit entry".
