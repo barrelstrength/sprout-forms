@@ -2,8 +2,10 @@
 	<ul>
 		{% for tabId, tab in tabs %}
 			{% if tab %}
+				{# let's get the tab id from the url #}
+				{% set tabIdKey = tab.url|split('-') %}
 				{% set tabIsSelected = ((selectedTab is not defined and loop.first) or (selectedTab is defined and selectedTab == tabId)) -%}
-				<li><a id="tab-{{ tabId }}" class="tab{% if tabIsSelected %} sel{% endif %}{% if tab.class is defined %} {{ tab.class }}{% endif %}" href="{{ tab.url }}">{{ tab.label }}</a></li>
+				<li><a id="tab-{% if tabIdKey[2] is defined %}{{ tabIdKey[2] }}{%endif%}" class="tab{% if tabIsSelected %} sel{% endif %}{% if tab.class is defined %} {{ tab.class }}{% endif %}" href="{{ tab.url }}">{{ tab.label }}</a></li>
 			{% endif %}
 		{% endfor %}
 		<li id="sproutforms-add-tab"> <a href="">+Add</a></li>

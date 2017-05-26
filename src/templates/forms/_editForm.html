@@ -29,6 +29,7 @@
 		{#% include 'sproutforms/forms/_tabs/fieldlayoutdesigner' %#}
 		<div class='parent'>
 			<h1>Drag and drop here</h1>
+			<a id="delete-tab-{{tab.id}}" data-tabid="{{tab.id}}">Delete tab</a>
 			<div class='sprout-wrapper'>
 				{# @todo - this is the important div the others two does not matter #}
 				<div id='sproutforms-tab-container-{{tab.id}}' class='sprout-container'>
@@ -56,28 +57,6 @@
 			</div>
 		</div>
 	</div>
-
-	{# just for reference to check how are initialize the edit buttons in the js
-	<div class="fld-tab">
-		<div class="tabs">
-			<div class="tab sel{% if customizableTabs %} draggable{% endif %}">
-				<span>{{ tabName }}</span>
-				{% if customizableTabs %}
-					<a class="settings icon" title="{{ 'Edit'|t }}"></a>
-				{% endif %}
-			</div>
-		</div>
-		<div class="fld-tabcontent">
-			{% for field in tabFields %}
-				<div class="fld-field{% if field.required %} fld-required{% endif %}" data-id="{{ field.id }}">
-					<a class="settings icon" title="{{ 'Edit'|t }}"></a>
-					<span>{{ field.name }}</span>
-					<input class="id-input" type="hidden" name="fieldLayout[{{ tabName|e('url') }}][]" value="{{ field.id }}">
-					{% if field.required %}<input class="required-input" type="hidden" name="requiredFields[]" value="{{ field.id }}">{% endif %}
-				</div>
-			{% endfor %}
-		</div>
-	</div>#}
 {% endmacro %}
 
 <input type="hidden" name="action" value="sprout-forms/forms/save-form">

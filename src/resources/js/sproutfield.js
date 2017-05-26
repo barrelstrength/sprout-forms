@@ -166,8 +166,31 @@
 				}
 			});
 
+			// get all the delete buttons
+			$("a[id^='delete-tab-']").each(function (i, el) {
+				var tabId = $(el).data('tabid');
+
+				if(tabId)
+				{
+					that.addListener($("#delete-tab-"+tabId), 'activate', 'deleteTab');
+				}
+			});
+
 			// listener to the new tab button
 			this.addListener($("#sproutforms-add-tab"), 'activate', 'addNewTab');
+		},
+
+		deleteTab: function(option)
+		{
+			var option = option.currentTarget;
+			var tabId  = $(option).data('tabid');
+			var userResponse = this.confirmDeleteTab();
+
+			if (userResponse)
+			{
+				$("#sproutforms-tab-"+tabId).slideUp(500, function() { $(this).remove(); });
+				$("#tab-"+tabId).closest( "li" ).slideUp(500, function() { $(this).remove(); });
+			}
 		},
 
 		addNewTab: function()
@@ -206,11 +229,12 @@
 						var href = '#sproutforms-tab-'+tab.id;
 						$('<li><a id="tab-'+tab.id+'" class="tab" href="'+href+'" tabindex="0">'+tab.name+'</a></li>').insertBefore("#sproutforms-add-tab");
 						var $newDivTab = $('#tab-'+tab.id);
-						// @todo - need to add the hidden class
+
 						var $dropDiv = $([
 							'<div id="sproutforms-tab-'+tab.id+'" data-tabname="'+tab.name+'" data-tabid="'+tab.id+'" class="hidden sproutforms-tab-fields">',
 							'<div class="parent">',
 							'<h1>Drag and drop here</h1>',
+							'<a id="delete-tab-'+tab.id+'" data-tabid="'+tab.id+'">Delete tab</a>',
 							'<div class="sprout-wrapper">',
 							'<div id="sproutforms-tab-container-'+tab.id+'" class="sprout-container">',
 							'</div>',
@@ -227,6 +251,7 @@
 						};
 
 						this.$pane.addListener($newDivTab, 'activate', 'selectTab');
+						this.addListener($("#delete-tab-"+tab.id), 'activate', 'deleteTab');
 					}
 					else
 					{
@@ -243,10 +268,14 @@
 
 		},
 
-
 		promptForGroupName: function(oldName)
 		{
 			return prompt(Craft.t('sproutforms','What do you want to name your new Tab?'), oldName);
+		},
+
+		confirmDeleteTab: function()
+		{
+			return confirm("Are you sure you want to delete this tab, all of it's fields, and all of it's data?");
 		},
 
 		/**
