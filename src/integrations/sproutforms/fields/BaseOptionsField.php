@@ -1,5 +1,4 @@
 <?php
-
 namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
 
 use Craft;
@@ -49,16 +48,20 @@ abstract class BaseOptionsField extends SproutFormsBaseField implements Previewa
 		// Normalize the options
 		$options = [];
 
-		if (is_array($this->options)) {
-			foreach ($this->options as $key => $option) {
+		if (is_array($this->options))
+		{
+			foreach ($this->options as $key => $option)
+			{
 				// Old school?
-				if (!is_array($option)) {
+				if (!is_array($option))
+				{
 					$options[] = [
 						'label' => $option,
 						'value' => $key,
 						'default' => ''
 					];
-				} else {
+				} else
+				{
 					$options[] = $option;
 				}
 			}
@@ -87,8 +90,10 @@ abstract class BaseOptionsField extends SproutFormsBaseField implements Previewa
 			// See how much data we could possibly be saving if everything was selected.
 			$length = 0;
 
-			foreach ($this->options as $option) {
-				if (!empty($option['value'])) {
+			foreach ($this->options as $option)
+			{
+				if (!empty($option['value']))
+				{
 					// +3 because it will be json encoded. Includes the surrounding quotes and comma.
 					$length += strlen($option['value']) + 3;
 				}
@@ -149,26 +154,32 @@ abstract class BaseOptionsField extends SproutFormsBaseField implements Previewa
 	 */
 	public function normalizeValue($value, ElementInterface $element = null)
 	{
-		if (is_string($value)) {
+		if (is_string($value))
+		{
 			$value = Json::decodeIfJson($value);
 		}
 
 		$selectedValues = ArrayHelper::toArray($value);
 
-		if ($this->multi) {
-			if (is_array($value)) {
+		if ($this->multi)
+		{
+			if (is_array($value))
+			{
 				// Convert all the values to OptionData objects
-				foreach ($value as &$val) {
+				foreach ($value as &$val)
+				{
 					$label = $this->optionLabel($val);
 					$val = new OptionData($label, $val, true);
 				}
 				unset($val);
-			} else {
+			} else
+			{
 				$value = [];
 			}
 
 			$value = new MultiOptionsFieldData($value);
-		} else {
+		} else
+		{
 			// Convert the value to a SingleOptionFieldData object
 			$label = $this->optionLabel($value);
 			$value = new SingleOptionFieldData($label, $value, true);
@@ -176,7 +187,8 @@ abstract class BaseOptionsField extends SproutFormsBaseField implements Previewa
 
 		$options = [];
 
-		foreach ($this->options as $option) {
+		foreach ($this->options as $option)
+		{
 			$selected = in_array($option['value'], $selectedValues, true);
 			$options[] = new OptionData($option['label'], $option['value'], $selected);
 		}
@@ -194,7 +206,8 @@ abstract class BaseOptionsField extends SproutFormsBaseField implements Previewa
 		// Get all of the acceptable values
 		$range = [];
 
-		foreach ($this->options as $option) {
+		foreach ($this->options as $option)
+		{
 			$range[] = $option['value'];
 		}
 
@@ -209,7 +222,8 @@ abstract class BaseOptionsField extends SproutFormsBaseField implements Previewa
 	public function isEmpty($value): bool
 	{
 		/** @var MultiOptionsFieldData|SingleOptionFieldData $value */
-		if ($value instanceof SingleOptionFieldData) {
+		if ($value instanceof SingleOptionFieldData)
+		{
 			return $value->value === null || $value->value === '';
 		}
 
@@ -221,11 +235,13 @@ abstract class BaseOptionsField extends SproutFormsBaseField implements Previewa
 	 */
 	public function getTableAttributeHtml($value, ElementInterface $element): string
 	{
-		if ($this->multi) {
+		if ($this->multi)
+		{
 			/** @var MultiOptionsFieldData $value */
 			$labels = [];
 
-			foreach ($value as $option) {
+			foreach ($value as $option)
+			{
 				$labels[] = $option->label;
 			}
 
@@ -253,7 +269,8 @@ abstract class BaseOptionsField extends SproutFormsBaseField implements Previewa
 	{
 		$translatedOptions = [];
 
-		foreach ($this->options as $option) {
+		foreach ($this->options as $option)
+		{
 			$translatedOptions[] = [
 				'label' => SproutForms::t( $option['label']),
 				'value' => $option['value']
@@ -273,7 +290,8 @@ abstract class BaseOptionsField extends SproutFormsBaseField implements Previewa
 	protected function optionLabel(string $value = null)
 	{
 		foreach ($this->options as $option) {
-			if ($option['value'] == $value) {
+			if ($option['value'] == $value)
+			{
 				return $option['label'];
 			}
 		}
@@ -291,7 +309,8 @@ abstract class BaseOptionsField extends SproutFormsBaseField implements Previewa
 		if ($this->multi) {
 			$defaultValues = [];
 
-			foreach ($this->options as $option) {
+			foreach ($this->options as $option)
+			{
 				if (!empty($option['default'])) {
 					$defaultValues[] = $option['value'];
 				}
@@ -300,8 +319,10 @@ abstract class BaseOptionsField extends SproutFormsBaseField implements Previewa
 			return $defaultValues;
 		}
 
-		foreach ($this->options as $option) {
-			if (!empty($option['default'])) {
+		foreach ($this->options as $option)
+		{
+			if (!empty($option['default']))
+			{
 				return $option['value'];
 			}
 		}
