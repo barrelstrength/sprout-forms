@@ -22,8 +22,6 @@
 {% set fullPageForm = true %}
 {% set selectedTab = '{{fieldLayout.getTabs()[0].name}}' %}
 
-{% block saveButton %}
-
 {% macro tab(tab, tabFields) %}
 	<div id="sproutforms-tab-{{tab.id}}" data-tabname="{{tab.name}}" data-tabid="{{tab.id}}" class="hidden sproutforms-tab-fields">
 		{#% include 'sproutforms/forms/_tabs/fieldlayoutdesigner' %#}
@@ -58,7 +56,7 @@
 		</div>
 	</div>
 {% endmacro %}
-
+{% block saveButton %}
 <input type="hidden" name="action" value="sprout-forms/forms/save-form">
 {{ redirectInput('sprout-forms/forms') }}
 <input type="hidden" id="formId" name="id" value="{{ form.id is defined ? form.id : '' }}">

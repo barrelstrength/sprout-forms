@@ -88,9 +88,9 @@ class Dropdown extends BaseOptionsField
 	/**
 	 * @return string
 	 */
-	public function getIconPath()
+	public function getIconClass()
 	{
-		return $this->getTemplatesPath().'dropdown/select.svg';
+		return 'fa fa-chevron-circle-down';
 	}
 
 	/**

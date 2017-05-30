@@ -73,26 +73,30 @@ abstract class SproutFormsBaseField extends Field
 	}
 
 	/**
-	 * @return string
+	 * @return string font awesome class
 	 */
-	public function getIconPath()
+	public function getIconClass()
 	{
 		return '';
 	}
 
-	/*
-	 * Svg icon
+	/**
+	 * @param string the size of the icon
+	 * @return string font awesome class
 	*/
-	public function getIcon()
+	public function getIcon($size = "fa-2x")
 	{
-		$iconPath = $this->getIconPath();
+		$iconClass = $this->getIconClass();
 
-		if (!is_file($iconPath) || FileHelper::getMimeType($iconPath) !== 'image/svg+xml')
+		if (!$iconClass)
 		{
-			$iconPath = Craft::getAlias('@barrelstrength/sproutforms/templates/_components/fields/default.svg');
+			// set a default icon
+			$iconClass = 'fa fa-font';
 		}
 
-		return file_get_contents($iconPath);
+		$icon = "<i class='{$iconClass} {$size}' aria-hidden='true'></i>";
+
+		return $icon;
 	}
 
 	/**
@@ -108,7 +112,7 @@ abstract class SproutFormsBaseField extends Field
 	 */
 	public function getTemplatesPath()
 	{
-		return Craft::$app->path->getPluginsPath() . '/sproutforms/src/templates/_components/fields/';
+		return Craft::getAlias('@barrelstrength/sproutforms/templates/_components/fields/');
 	}
 
 	/**

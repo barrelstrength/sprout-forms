@@ -42,16 +42,6 @@
 		    value: field.boostrapClass
 		}) }}
 
-		{{ forms.checkboxField({
-			label: "Restrict uploads to a single folder?"|t('app'),
-			id: 'useSingleFolder-toggle',
-			name: 'useSingleFolder',
-			class: 'use-single-folder-cb',
-			value: 1,
-			checked: field.useSingleFolder,
-			toggle: 'single-folder-settings',
-			reverseToggle: 'multi-folder-settings'
-		}) }}
 
 		{% set uploadLocationNote = "Note that the subfolder path can contain variables like <code>{slug}</code> or <code>{author.username}</code>."|t('app') %}
 		{% if isMatrix %}
@@ -105,7 +95,6 @@
 	{% endblock %}
 
 	{{ block('limitField') }}
-	{{ block('viewModeField') }}
 	{{ block('selectionLabelField') }}
 	{{ block('advancedSettings') }}
 {% endblock %}

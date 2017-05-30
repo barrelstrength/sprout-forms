@@ -43,9 +43,7 @@
 			{
 				var field = e.field;
 				var group = field.group;
-				// @todo - we need update the icon or div if the
-				// field type is changed after saved, not just the name
-				// think the how we handle the tabs
+				// Let's update the name and the icon if the field is updated
 				this.resetField(field, group);
 			}, this));
 

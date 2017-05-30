@@ -23,6 +23,10 @@ class FormAsset extends AssetBundle
 			'js/fieldmodal.js',
 		];
 
+		$this->css = [
+			'css/fonts/css/font-awesome.min.css'
+		];
+
 		parent::init();
 	}
 }

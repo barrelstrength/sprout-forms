@@ -8,6 +8,7 @@ use craft\records\Field as FieldRecord;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\PlainText;
 use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
 use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
+use craft\helpers\FileHelper;
 
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Form as FormElement;
@@ -100,7 +101,7 @@ class Fields extends Component
 			$templateFolderOverride = $form->templateOverridesFolder;
 		}
 
-		$defaultTemplate = Craft::$app->path->getPluginsPath() . '/sproutforms/src/templates/_special/templates/';
+		$defaultTemplate = Craft::getAlias('@barrelstrength/sproutforms/templates/_special/templates/');
 
 		// Set our defaults
 		$templates['form']  = $defaultTemplate;
