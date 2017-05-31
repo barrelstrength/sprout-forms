@@ -71,7 +71,7 @@ class Form extends ActiveRecord
 	/**
 	 * Store the old handle.
 	 */
-	public function storeOldHandle()
+	public function afterFind()
 	{
 		$this->_oldHandle = $this->handle;
 		$this->oldRecord  = clone $this;
