@@ -2,26 +2,49 @@
 namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
 
 use Craft;
-use craft\fields\Entries as CraftEntries;
 use craft\helpers\Template as TemplateHelper;
+use craft\base\ElementInterface;
+use craft\elements\Entry;
 
 use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 
 /**
  * Class SproutFormsEntriesField
  *
- * @package Craft
  */
-class Entries extends SproutFormsBaseField
+class Entries extends BaseRelationField
 {
 	/**
-	 * @return string
+	 * @inheritdoc
 	 */
-	public function getType()
+	public static function displayName(): string
 	{
-		return CraftEntries::class;
+		return SproutForms::t('Entries');
 	}
+
+	/**
+	 * @inheritdoc
+	 */
+	protected static function elementType(): string
+	{
+		return Entry::class;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public static function defaultSelectionLabel(): string
+	{
+		return SproutForms::t('Add an Entry');
+	}
+
+	// Properties
+	// =====================================================================
+
+	/**
+	 * @var string|null The input’s boostrap class
+	 */
+	public $boostrapClass;
 
 	/**
 	 * @param FieldModel $field
@@ -31,7 +54,7 @@ class Entries extends SproutFormsBaseField
 	 *
 	 * @return \Twig_Markup
 	 */
-	public function getInputHtml($field, $value, $settings, array $renderingOptions = null)
+	public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
 	{
 		$this->beginRendering();
 
@@ -55,19 +78,29 @@ class Entries extends SproutFormsBaseField
 	}
 
 	/**
-	 * @param FieldModel $field
-	 *
-	 * @return \Twig_Markup
+	 * @inheritdoc
 	 */
-	public function getSettingsHtml($field)
+	public function getSettingsHtml()
 	{
+		$parentRendered = parent::getSettingsHtml();
+
 		$rendered = Craft::$app->getView()->renderTemplate(
-			'sproutforms/_components/fields/plaintext/settings',
+			'sproutforms/_components/fields/entries/settings',
 			[
-				'field' => $field,
+				'field' => $this,
 			]
 		);
 
-		return $rendered;
+		$customRendered = $rendered.$parentRendered;
+
+		return $customRendered;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getIconClass()
+	{
+		return 'fa fa-newspaper-o';
 	}
 }

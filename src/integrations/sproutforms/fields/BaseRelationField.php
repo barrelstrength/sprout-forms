@@ -124,7 +124,7 @@ abstract class BaseRelationField extends SproutFormsBaseField implements Preview
 	/**
 	 * @var string Temlpate to use for settings rendering
 	 */
-	protected $settingsTemplate = 'sproutforms/templates/_components/fieldtypes/elementfieldsettings';
+	protected $settingsTemplate = 'sproutforms/_components/fields/elementfieldsettings';
 
 	/**
 	 * @var string Template to use for field rendering

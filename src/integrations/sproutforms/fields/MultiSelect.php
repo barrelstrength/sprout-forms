@@ -2,24 +2,40 @@
 namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
 
 use Craft;
-use craft\fields\MultiSelect as CraftMultiSelect;
 use craft\helpers\Template as TemplateHelper;
+use craft\base\ElementInterface;
 
-use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
+use barrelstrength\sproutforms\SproutForms;
 
 /**
  * Class SproutFormsMultiSelectField
  *
- * @package Craft
  */
-class MultiSelect extends SproutFormsBaseField
+class MultiSelect extends BaseOptionsField
 {
 	/**
-	 * @return string
+	 * @inheritdoc
 	 */
-	public function getType()
+	public static function displayName(): string
 	{
-		return CraftMultiSelect::class;
+		return SproutForms::t('Multi Select');
+	}
+
+	// Properties
+	// =====================================================================
+
+	/**
+	 * @var string|null The input’s boostrap class
+	 */
+	public $boostrapClass;
+
+	/**
+	 * @inheritdoc
+	 */
+	public function init()
+	{
+		parent::init();
+		$this->multi = true;
 	}
 
 	/**
@@ -30,7 +46,7 @@ class MultiSelect extends SproutFormsBaseField
 	 *
 	 * @return \Twig_Markup
 	 */
-	public function getInputHtml($field, $value, $settings, array $renderingOptions = null)
+	public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
 	{
 		$this->beginRendering();
 
@@ -51,19 +67,57 @@ class MultiSelect extends SproutFormsBaseField
 	}
 
 	/**
-	 * @param FieldModel $field
-	 *
-	 * @return \Twig_Markup
+	 * @inheritdoc
 	 */
-	public function getSettingsHtml($field)
+	public function getInputHtml($value, ElementInterface $element = null): string
 	{
-		$rendered = Craft::$app->getView()->renderTemplate(
-			'sproutforms/_components/fields/plaintext/settings',
+		$options = $this->translatedOptions();
+
+		// If this is a new entry, look for any default options
+		if ($this->isFresh($element)) {
+			$value = $this->defaultValue();
+		}
+
+		return Craft::$app->getView()->renderTemplate('_includes/forms/multiselect',
 			[
-				'field' => $field,
+				'name' => $this->handle,
+				'values' => $value,
+				'options' => $options
+			]);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	protected function optionsSettingLabel(): string
+	{
+		return SproutForms::t('Multi-select Options');
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getIconClass()
+	{
+		return 'fa fa-bars';
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function getSettingsHtml()
+	{
+		$parentRendered = parent::getSettingsHtml();
+
+		$rendered = Craft::$app->getView()->renderTemplate(
+			'sproutforms/_components/fields/multiselect/settings',
+			[
+				'field' => $this,
 			]
 		);
 
-		return $rendered;
+		$customRendered = $rendered.$parentRendered;
+
+		return $customRendered;
 	}
 }

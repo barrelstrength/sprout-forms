@@ -41,7 +41,6 @@ class FieldsController extends BaseController
 		if ($type && $form && $tab)
 		{
 			$field = SproutForms::$app->fields->createDefaultField($type, $form);
-
 			if ($field)
 			{
 				// Set the field layout
