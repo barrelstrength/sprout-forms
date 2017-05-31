@@ -1,0 +1,9 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.textField({
+    label: "Boostrap Class"|t,
+    instructions: "To handle a boostrap class in the front-end."|t,
+    id: 'boostrapClass',
+    name: 'boostrapClass',
+    value: field.boostrapClass
+}) }}
