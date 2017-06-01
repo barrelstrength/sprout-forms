@@ -449,6 +449,42 @@ abstract class BaseRelationField extends SproutFormsBaseField implements Preview
 	// -------------------------------------------------------------------------
 
 	/**
+	 * @inheritdoc
+	 */
+	public function afterSave(bool $isNew)
+	{
+		if ($this->_makeExistingRelationsTranslatable) {
+			Craft::$app->getTasks()->queueTask([
+				'type' => LocalizeRelations::class,
+				'fieldId' => $this->id,
+			]);
+		}
+
+		parent::afterSave($isNew);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function afterElementSave(ElementInterface $element, bool $isNew)
+
+		/** @var ElementQuery $value */    {
+		$value = $element->getFieldValue($this->handle);
+
+		// $id will be set if we're saving new relations
+		if ($value->id !== null) {
+			$targetIds = $value->id ?: [];
+		} else {
+			$targetIds = $value->ids();
+		}
+
+		/** @var int|int[]|false|null $targetIds */
+		Craft::$app->getRelations()->saveRelations($this, $element, $targetIds);
+
+		parent::afterElementSave($element, $isNew);
+	}
+
+	/**
 	 * Normalizes the available sources into select input options.
 	 *
 	 * @return array
