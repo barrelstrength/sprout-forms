@@ -451,6 +451,28 @@ abstract class BaseRelationField extends SproutFormsBaseField implements Preview
 	/**
 	 * @inheritdoc
 	 */
+	public function beforeSave(bool $isNew): bool
+	{
+		$this->_makeExistingRelationsTranslatable = false;
+
+		if ($this->id && $this->localizeRelations)
+		{
+			/** @var Field $existingField */
+			$existingField = Craft::$app->getFields()->getFieldById($this->id);
+
+			if ($existingField && $existingField instanceof BaseRelationField && !$existingField->localizeRelations)
+			{
+				$this->_makeExistingRelationsTranslatable = true;
+			}
+		}
+
+		return parent::beforeSave($isNew);
+	}
+
+
+	/**
+	 * @inheritdoc
+	 */
 	public function afterSave(bool $isNew)
 	{
 		if ($this->_makeExistingRelationsTranslatable) {
@@ -470,7 +492,7 @@ abstract class BaseRelationField extends SproutFormsBaseField implements Preview
 
 		/** @var ElementQuery $value */    {
 		$value = $element->getFieldValue($this->handle);
-
+		$ids = $value->getBehaviors() ;
 		// $id will be set if we're saving new relations
 		if ($value->id !== null) {
 			$targetIds = $value->id ?: [];
@@ -479,7 +501,7 @@ abstract class BaseRelationField extends SproutFormsBaseField implements Preview
 		}
 
 		/** @var int|int[]|false|null $targetIds */
-		Craft::$app->getRelations()->saveRelations($this, $element, $targetIds);
+		SproutForms::$app->entries->saveRelations($this, $element, $targetIds);
 
 		parent::afterElementSave($element, $isNew);
 	}

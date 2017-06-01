@@ -265,6 +265,200 @@ class Assets extends BaseRelationField
 	/**
 	 * @inheritdoc
 	 */
+	public function beforeElementSave(ElementInterface $element, bool $isNew): bool
+	{
+		/** @var Element $element */
+		$incomingFiles = [];
+
+		/** @var AssetQuery $newValue */
+		$query = $element->getFieldValue($this->handle);
+		$value = !empty($query->id) ? $query->id : [];
+
+		// Grab data strings
+		if (isset($value['data']) && is_array($value['data'])) {
+			foreach ($value['data'] as $index => $dataString) {
+				if (preg_match('/^data:(?<type>[a-z0-9]+\/[a-z0-9]+);base64,(?<data>.+)/i',
+					$dataString, $matches)) {
+					$type = $matches['type'];
+					$data = base64_decode($matches['data']);
+
+					if (!$data) {
+						continue;
+					}
+
+					if (!empty($value['filenames'][$index])) {
+						$filename = $value['filenames'][$index];
+					} else {
+						$extensions = FileHelper::getExtensionsByMimeType($type);
+
+						if (empty($extensions)) {
+							continue;
+						}
+
+						$filename = 'Uploaded_file.'.reset($extensions);
+					}
+
+					$incomingFiles[] = [
+						'filename' => $filename,
+						'data' => $data,
+						'type' => 'data'
+					];
+				}
+			}
+		}
+
+		// Remove these so they don't interfere.
+		if (isset($value['data']) || isset($value['filenames'])) {
+			unset($value['data'], $value['filenames']);
+		}
+
+		// See if we have uploaded file(s).
+		$paramName = $this->requestParamName($element);
+
+		if ($paramName !== null) {
+			$files = UploadedFile::getInstancesByName($paramName);
+
+			foreach ($files as $file) {
+				$incomingFiles[] = [
+					'filename' => $file->name,
+					'location' => $file->tempName,
+					'type' => 'upload'
+				];
+			}
+		}
+
+		if (!empty($incomingFiles)) {
+			$this->_validateIncomingFiles($incomingFiles);
+		}
+
+		if (!empty($this->_failedFiles)) {
+			return parent::beforeElementSave($element, $isNew);
+		}
+
+		// If we got here either there are no restrictions or all files are valid so let's turn them into Assets
+		if (!empty($incomingFiles)) {
+			$assetIds = [];
+			$targetFolderId = $this->_determineUploadFolderId($element);
+
+			if (!empty($targetFolderId)) {
+				foreach ($incomingFiles as $file) {
+					$tempPath = AssetsHelper::tempFilePath($file['filename']);
+					if ($file['type'] === 'upload') {
+						move_uploaded_file($file['location'], $tempPath);
+					}
+					if ($file['type'] === 'data') {
+						FileHelper::writeToFile($tempPath, $file['data']);
+					}
+
+					$folder = Craft::$app->getAssets()->getFolderById($targetFolderId);
+					$asset = new Asset();
+					$asset->tempFilePath = $tempPath;
+					$asset->filename = $file['filename'];
+					$asset->newFolderId = $targetFolderId;
+					$asset->volumeId = $folder->volumeId;
+					$asset->setScenario(Asset::SCENARIO_CREATE);
+					Craft::$app->getElements()->saveElement($asset);
+
+					$assetIds[] = $asset->id;
+				}
+
+				$assetIds = array_unique(array_merge($value, $assetIds));
+
+				/** @var AssetQuery $newValue */
+				$newValue = $this->normalizeValue($assetIds, $element);
+				$element->setFieldValue($this->handle, $newValue);
+			}
+		}
+
+		return parent::beforeElementSave($element, $isNew);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function normalizeValue($value, ElementInterface $element = null)
+	{
+		// If data strings are passed along, make sure the array keys are retained.
+		if (isset($value['data']) && !empty($value['data'])) {
+			/** @var Asset $class */
+			$class = static::elementType();
+			/** @var ElementQuery $query */
+			$query = $class::find()
+				->siteId($this->targetSiteId($element));
+
+			// $value might be an array of element IDs
+			if (is_array($value)) {
+				$query
+					->id(array_filter($value))
+					->fixedOrder();
+
+				if ($this->allowLimit === true && $this->limit) {
+					$query->limit($this->limit);
+				} else {
+					$query->limit(null);
+				}
+
+				return $query;
+			}
+		}
+
+		return parent::normalizeValue($value, $element);
+	}
+
+	public function afterElementSave(ElementInterface $element, bool $isNew)
+	{
+		$value = $element->getFieldValue($this->handle);
+
+		if ($value instanceof AssetQuery) {
+			$value = $value->all();
+		}
+
+		if (is_array($value) && !empty($value)) {
+			$assetsToMove = [];
+			$targetFolderId = $this->_determineUploadFolderId($element);
+
+			if ($this->useSingleFolder) {
+				// Move only those Assets that have had their folder changed.
+				foreach ($value as $asset) {
+					if ($targetFolderId != $asset->folderId) {
+						$assetsToMove[] = $asset;
+					}
+				}
+			} else {
+				$assetIds = [];
+
+				foreach ($value as $elementFile) {
+					$assetIds[] = $elementFile->id;
+				}
+
+				// Find the files with temp sources and just move those.
+				$query = Asset::find();
+				Craft::configure($query, [
+					'id' => $assetIds,
+					'volumeId' => ':empty:'
+				]);
+				$assetsToMove = $query->all();
+			}
+
+			if (!empty($assetsToMove) && !empty($targetFolderId)) {
+
+				$assetService = Craft::$app->getAssets();
+				$folder = $assetService->getFolderById($targetFolderId);
+
+				// Resolve all conflicts by keeping both
+				foreach ($assetsToMove as $asset) {
+					$asset->avoidFilenameConflicts = true;
+					$assetService->moveAsset($asset, $folder);
+				}
+			}
+		}
+
+		parent::afterElementSave($element, $isNew);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
 	protected function inputSources(ElementInterface $element = null)
 	{
 		$folderId = $this->_determineUploadFolderId($element, false);
