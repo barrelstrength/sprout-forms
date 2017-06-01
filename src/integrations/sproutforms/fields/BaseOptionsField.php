@@ -17,10 +17,10 @@ use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 use barrelstrength\sproutforms\SproutForms;
 
 /**
- * BaseOptionsField is the base class for classes representing an options field.
+ * SproutBaseOptionsField is the base class for classes representing an options field.
  *
  */
-abstract class BaseOptionsField extends SproutFormsBaseField implements PreviewableFieldInterface
+abstract class SproutBaseOptionsField extends SproutFormsBaseField implements PreviewableFieldInterface
 {
 	// Properties
 	// =========================================================================

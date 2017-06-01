@@ -20,10 +20,10 @@ use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 use barrelstrength\sproutforms\SproutForms;
 
 /**
- * BaseRelationField is the base class for classes representing a relational field.
+ * SproutBaseRelationField is the base class for classes representing a relational field.
  *
  */
-abstract class BaseRelationField extends SproutFormsBaseField implements PreviewableFieldInterface, EagerLoadingFieldInterface
+abstract class SproutBaseRelationField extends SproutFormsBaseField implements PreviewableFieldInterface, EagerLoadingFieldInterface
 {
 	// Static
 	// =========================================================================
@@ -460,7 +460,7 @@ abstract class BaseRelationField extends SproutFormsBaseField implements Preview
 			/** @var Field $existingField */
 			$existingField = Craft::$app->getFields()->getFieldById($this->id);
 
-			if ($existingField && $existingField instanceof BaseRelationField && !$existingField->localizeRelations)
+			if ($existingField && $existingField instanceof SproutBaseRelationField && !$existingField->localizeRelations)
 			{
 				$this->_makeExistingRelationsTranslatable = true;
 			}

@@ -11,7 +11,7 @@ use barrelstrength\sproutforms\SproutForms;
  * Class SproutFormsMultiSelectField
  *
  */
-class MultiSelect extends BaseOptionsField
+class MultiSelect extends SproutBaseOptionsField
 {
 	/**
 	 * @inheritdoc

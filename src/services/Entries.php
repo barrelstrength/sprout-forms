@@ -11,7 +11,7 @@ use barrelstrength\sproutforms\records\Entry as EntryRecord;
 use barrelstrength\sproutforms\records\EntryStatus as EntryStatusRecord;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use barrelstrength\sproutforms\events\OnSaveEntryEvent;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\BaseRelationField;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\SproutBaseRelationField;
 use craft\base\ElementInterface;
 
 use Guzzle\Http\Client;
@@ -218,14 +218,14 @@ class Entries extends Component
 	/**
 	 * Saves some relations for a field.
 	 *
-	 * @param BaseRelationField $field
+	 * @param SproutBaseRelationField $field
 	 * @param ElementInterface  $source
 	 * @param array             $targetIds
 	 *
 	 * @throws \Exception
 	 * @return void
 	 */
-	public function saveRelations(BaseRelationField $field, ElementInterface $source, array $targetIds)
+	public function saveRelations(SproutBaseRelationField $field, ElementInterface $source, array $targetIds)
 	{
 		/** @var Element $source */
 		if (!is_array($targetIds)) {

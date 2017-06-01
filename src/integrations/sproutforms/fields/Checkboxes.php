@@ -11,7 +11,7 @@ use barrelstrength\sproutforms\SproutForms;
  * Class SproutFormsCheckboxesField
  *
  */
-class Checkboxes extends BaseOptionsField
+class Checkboxes extends SproutBaseOptionsField
 {
 	/**
 	 * @var string|null The input’s boostrap class

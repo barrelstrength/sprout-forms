@@ -11,7 +11,7 @@ use barrelstrength\sproutforms\SproutForms;
  * Class SproutFormsRadioButtonsField
  *
  */
-class RadioButtons extends BaseOptionsField
+class RadioButtons extends SproutBaseOptionsField
 {
 	/**
 	 * @var string|null The input’s boostrap class

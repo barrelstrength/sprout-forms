@@ -24,7 +24,7 @@ use barrelstrength\sproutforms\SproutForms;
  *
  * @package Craft
  */
-class Assets extends BaseRelationField
+class Assets extends SproutBaseRelationField
 {
 	/**
 	 * @inheritdoc

@@ -11,7 +11,7 @@ use barrelstrength\sproutforms\SproutForms;
  * Class SproutFormsDropdownField
  *
  */
-class Dropdown extends BaseOptionsField
+class Dropdown extends SproutBaseOptionsField
 {
 	/**
 	 * @var string|null The input’s boostrap class

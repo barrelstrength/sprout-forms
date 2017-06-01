@@ -14,7 +14,7 @@ use barrelstrength\sproutforms\SproutForms;
  * Class SproutFormsTagsField
  *
  */
-class Tags extends BaseRelationField
+class Tags extends SproutBaseRelationField
 {
 	/**
 	 * @inheritdoc

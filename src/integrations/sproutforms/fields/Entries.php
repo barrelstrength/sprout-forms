@@ -12,7 +12,7 @@ use barrelstrength\sproutforms\SproutForms;
  * Class SproutFormsEntriesField
  *
  */
-class Entries extends BaseRelationField
+class Entries extends SproutBaseRelationField
 {
 	/**
 	 * @inheritdoc
