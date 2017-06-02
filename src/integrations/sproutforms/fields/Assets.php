@@ -244,6 +244,38 @@ class Assets extends SproutBaseRelationField
 		}
 	}
 
+	/**
+	 * @inheritdoc
+	 */
+	public function normalizeValue($value, ElementInterface $element = null)
+	{
+		// If data strings are passed along, make sure the array keys are retained.
+		if (isset($value['data']) && !empty($value['data'])) {
+			/** @var Asset $class */
+			$class = static::elementType();
+			/** @var ElementQuery $query */
+			$query = $class::find()
+				->siteId($this->targetSiteId($element));
+
+			// $value might be an array of element IDs
+			if (is_array($value)) {
+				$query
+					->id(array_filter($value))
+					->fixedOrder();
+
+				if ($this->allowLimit === true && $this->limit) {
+					$query->limit($this->limit);
+				} else {
+					$query->limit(null);
+				}
+
+				return $query;
+			}
+		}
+
+		return parent::normalizeValue($value, $element);
+	}
+
 
 	/**
 	 * Resolve source path for uploading for this field.
@@ -335,13 +367,17 @@ class Assets extends SproutBaseRelationField
 			return parent::beforeElementSave($element, $isNew);
 		}
 
+//		@todo - this only gets run on the front-end...
+		//
 		// If we got here either there are no restrictions or all files are valid so let's turn them into Assets
 		if (!empty($incomingFiles)) {
 			$assetIds = [];
 			$targetFolderId = $this->_determineUploadFolderId($element);
 
 			if (!empty($targetFolderId)) {
+
 				foreach ($incomingFiles as $file) {
+
 					$tempPath = AssetsHelper::tempFilePath($file['filename']);
 					if ($file['type'] === 'upload') {
 						move_uploaded_file($file['location'], $tempPath);
@@ -359,6 +395,11 @@ class Assets extends SproutBaseRelationField
 					$asset->setScenario(Asset::SCENARIO_CREATE);
 					Craft::$app->getElements()->saveElement($asset);
 
+					// @todo - if we upload a file with a duplicate file name this
+					// also has an error $asset->getErrors() but never gets thrown in a way we know about it
+
+					// @todo - $asset->id returns nothing for duplicate files. And it returns an ID for new files...
+					// but somewhere that ID gets stripped away and no file is ever related from the front-end
 					$assetIds[] = $asset->id;
 				}
 
@@ -366,43 +407,12 @@ class Assets extends SproutBaseRelationField
 
 				/** @var AssetQuery $newValue */
 				$newValue = $this->normalizeValue($assetIds, $element);
+
 				$element->setFieldValue($this->handle, $newValue);
 			}
 		}
 
 		return parent::beforeElementSave($element, $isNew);
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function normalizeValue($value, ElementInterface $element = null)
-	{
-		// If data strings are passed along, make sure the array keys are retained.
-		if (isset($value['data']) && !empty($value['data'])) {
-			/** @var Asset $class */
-			$class = static::elementType();
-			/** @var ElementQuery $query */
-			$query = $class::find()
-				->siteId($this->targetSiteId($element));
-
-			// $value might be an array of element IDs
-			if (is_array($value)) {
-				$query
-					->id(array_filter($value))
-					->fixedOrder();
-
-				if ($this->allowLimit === true && $this->limit) {
-					$query->limit($this->limit);
-				} else {
-					$query->limit(null);
-				}
-
-				return $query;
-			}
-		}
-
-		return parent::normalizeValue($value, $element);
 	}
 
 	public function afterElementSave(ElementInterface $element, bool $isNew)
