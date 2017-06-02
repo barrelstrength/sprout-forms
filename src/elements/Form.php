@@ -65,12 +65,12 @@ class Form extends Element
 	 */
 	public function behaviors()
 	{
-		return [
+		return array_merge(parent::behaviors(),[
 			'fieldLayout' => [
 				'class' => FieldLayoutBehavior::class,
 				'elementType' => self::class
 			],
-		];
+		]);
 	}
 
 	/**

@@ -86,6 +86,20 @@ class EntryQuery extends ElementQuery
 	}
 
 	/**
+	 * Sets the [[formHandle]] property.
+	 *
+	 * @param int
+	 *
+	 * @return static self reference
+	 */
+	public function formHandle($value)
+	{
+		$this->formHandle = $value;
+
+		return $this;
+	}
+
+	/**
 	 * Sets the [[formName]] property.
 	 *
 	 * @param int
@@ -183,6 +197,7 @@ class EntryQuery extends ElementQuery
 		EntryQuery $entryQuery
 	)
 	{
+		$test ="sas";
 		// Do we have a source selected in the sidebar?
 		// If so, we have a form id and we can use that to fetch the content table
 		if ($entryQuery->formId || $entryQuery->formHandle)

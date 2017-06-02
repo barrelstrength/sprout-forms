@@ -7,6 +7,7 @@ use craft\helpers\Template as TemplateHelper;
 use craft\helpers\ElementHelper;
 
 use barrelstrength\sproutforms\SproutForms;
+use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\models\FieldGroup;
 use barrelstrength\sproutforms\models\FieldLayout;
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
@@ -19,13 +20,14 @@ class SproutFormsVariable
 {
 	/**
 	 * @var ElementCriteriaModel
-
+	*/
 	public $entries;
 
 	public function __construct()
 	{
-		$this->entries = Craft::$app->elements->getCriteria('SproutForms_Entry');
-	}*/
+		//$this->entries = Craft::$app->elements->getCriteria('SproutForms_Entry');
+		$this->entries = EntryElement::find();
+	}
 
 	/**
 	 * @return string
