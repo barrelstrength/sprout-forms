@@ -160,23 +160,25 @@ class Entries extends Component
 				return false;
 			}
 
-			$content         = Craft::$app->getContent();
-			$oldFieldContext = $content->fieldContext;
-			$oldContentTable = $content->contentTable;
+			/* @todo - delete the context code after confirm that is not needed anymore on Craft3 behavior*/
+			//$content         = Craft::$app->getContent();
+			//$oldFieldContext = $content->fieldContext;
+			//$oldContentTable = $content->contentTable;
 
-			$content->fieldContext = $entry->getFieldContext();
-			$content->contentTable = $entry->getContentTable();
+			//$content->fieldContext = $entry->getFieldContext();
+			//$content->contentTable = $entry->getContentTable();
 
 			SproutForms::info('Transaction: Event is Valid');
 
 			$success = Craft::$app->getElements()->saveElement($entry);
 
 			// Reset our field context and content table to what they were previously
-			$content->fieldContext = $oldFieldContext;
-			$content->contentTable = $oldContentTable;
+			//$content->fieldContext = $oldFieldContext;
+			//$content->contentTable = $oldContentTable;
 
 			if (!$success)
 			{
+				$transaction->rollBack();
 				SproutForms::error("Couldn’t save Element on saveEntry service.");
 
 				return false;
