@@ -60,6 +60,28 @@ class SproutForms extends \craft\base\Plugin
 		);
 	}
 
+	public function getCpNavItem()
+	{
+		$parent = parent::getCpNavItem();
+		$parent['url'] = 'sproutforms';
+		return array_merge($parent,[
+			'subnav' => [
+				'entries' => [
+					"label" => SproutForms::t("Entries"),
+					"url"   => 'sproutforms/entries'
+				],
+				'forms' =>[
+					"label" => SproutForms::t("Forms"),
+					"url" => 'sproutforms/forms'
+				],
+				'settings' =>[
+					"label" => SproutForms::t("Settings"),
+					"url" => 'sproutforms/settings'
+				]
+			]
+		]);
+	}
+
 	protected function createSettingsModel()
 	{
 		return new Settings();

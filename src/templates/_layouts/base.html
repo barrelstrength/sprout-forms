@@ -2,26 +2,6 @@
 
 {% set bodyClass = craft.app.request.getSegments()|slice(0, 3)|join(' ') %}
 
-{% set subnav = {
-	entries: {
-		label: "Entries"|t,
-		url: url('sprout-forms/entries')
-	},
-	forms: {
-		label: "Forms"|t,
-		url: url('sprout-forms/forms')
-	}
-} %}
-
-{% if currentUser.can('editSproutFormsSettings') %}
-	{% set subnav = subnav|merge({
-		settings: {
-			label: "Settings"|t,
-			url: url('sprout-forms/settings')
-		}
-	}) %}
-{% endif %}
-
 {% set selectedSubnavItem = craft.request.segment(2) %}
 
 {% block content %}
