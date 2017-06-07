@@ -398,7 +398,7 @@ class SproutFormsVariable
 			]
 		);
 
-		SproutForms::log($message);
+		SproutForms::error($message);
 
 		if (isset(Craft::$app->getConfig()->getGeneral()->devMode) && Craft::$app->getConfig()->getGeneral()->devMode)
 		{

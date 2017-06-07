@@ -145,7 +145,7 @@ class FieldsController extends BaseController
 		if (!$fieldsService->saveField($field))
 		{
 			// Does not validate
-			SproutForms::log("Field does not validate.");
+			SproutForms::error("Field does not validate.");
 			$variables['tabId'] = $tabId;
 			$variables['field'] = $field;
 
@@ -190,7 +190,7 @@ class FieldsController extends BaseController
 		// field layout of our Form Element
 		if ($response)
 		{
-			SproutForms::log('Field Saved');
+			SproutForms::info('Field Saved');
 
 			return $this->_returnJson(true, $field, $form, $tabName, $tabId);
 		}
@@ -198,7 +198,7 @@ class FieldsController extends BaseController
 		{
 			$variables['tabId'] = $tabId;
 			$variables['field'] = $field;
-			SproutForms::log("Couldn't save field.");
+			SproutForms::error("Couldn't save field.");
 			Craft::$app->getSession()->setError(SproutForms::t('Couldn’t save field.'));
 
 			return $this->_returnJson(false, $field, $form);
@@ -247,7 +247,7 @@ class FieldsController extends BaseController
 		else
 		{
 			$message = SproutForms::t("The field requested to edit no longer exists.");
-			SproutForms::log($message);
+			SproutForms::error($message);
 
 			return $this->asJson([
 				'success' => false,

@@ -98,14 +98,6 @@ class SproutForms extends \craft\base\Plugin
 		return Craft::t('sproutforms', $message, $params);
 	}
 
-	/*
-	 * @todo - remove this function and calls in the code
-	*/
-	public static function log($message, $type = 'info')
-	{
-		Craft::$type(self::t($message), __METHOD__);
-	}
-
 	public static function error($message)
 	{
 		Craft::error($message, __METHOD__);
@@ -151,6 +143,21 @@ class SproutForms extends \craft\base\Plugin
 			'sproutforms/forms/<groupId:\d+>'                        =>
 			'sprout-forms/forms',
 		];
+	}
+
+	/**
+	 * @throws \Exception
+	 */
+	public function beforeUninstall(): bool
+	{
+		$forms = SproutForms::$app->forms->getAllForms();
+
+		foreach ($forms as $form)
+		{
+			SproutForms::$app->forms->deleteForm($form);
+		}
+
+		return true;
 	}
 
 	/**

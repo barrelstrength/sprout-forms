@@ -226,6 +226,7 @@ class Forms extends Component
 
 			if (!$success)
 			{
+				$transaction->rollback();
 				SproutForms::error("Couldn’t delete Form on deleteForm service.");
 
 				return false;

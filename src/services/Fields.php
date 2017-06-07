@@ -453,7 +453,7 @@ class Fields extends Component
 			}
 			else
 			{
-				SproutForms::log("Unable to find the FieldLayoutFieldRecord");
+				SproutForms::error("Unable to find the FieldLayoutFieldRecord");
 			}
 		}
 
