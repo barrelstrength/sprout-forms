@@ -2,7 +2,6 @@
 {% set tab  = 1 %}
 {% set tab2 = false %}
 {% set tab3 = false %}
-{% set tab4 = false %}
 
 <nav id="tabs" class="tabs" style= "margin: 0 0 0 0;">
 	<ul>
@@ -31,7 +30,7 @@
 				<div class='sprout-wrapper'>
 					<div id='right-copy' class='sprout-container'>
 						{% for type,fieldObject in fieldTypes %}
-							<div id="sproutfield" data-type="{{type}}">
+							<div id="sproutfield" class="source-fields" data-type="{{type}}">
 								<div class="sproutforms-icon">
 									{{ fieldObject.getIcon('fa-lg')|raw }}
 								</div>

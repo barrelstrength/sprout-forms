@@ -141,6 +141,13 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
   background-color: #e3e5e8;;
   transition: opacity 0.4s ease-in-out;
 }
+
+.sprout-container .source-fields {
+	display: inline-block;
+  width: 40%;
+  margin: 5px;
+}
+
 .sprout-container > div {
   cursor: move;
   cursor: grab;

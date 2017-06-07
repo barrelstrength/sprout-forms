@@ -48,10 +48,10 @@
 			}, this));
 
 			// DRAGULA
-			this.formLayout  = this.getId('left-copy');
 			this.fieldsLayout = this.getId('right-copy');
+			console.log(this.fieldsLayout);
 			// Drag from right to left
-			this.drake = dragula([this.formLayout, this.fieldsLayout], {
+			this.drake = dragula([null, this.fieldsLayout], {
 				copy: function (el, source) {
 					return source === that.fieldsLayout;
 				},
@@ -129,8 +129,6 @@
 				this.addListener($("#sproutform-field-"+defaultField.id), 'activate', 'editField');
 				this.addListener($("#sproutform-remove-"+defaultField.id), 'activate', 'removeField');
 				this.addListener($("#sproutform-required-"+defaultField.id), 'activate', 'toggleRequiredField');
-
-				console.log($(el).data("type"));
 			}
 			else
 			{
@@ -150,7 +148,6 @@
 		 */
 		initButtons: function()
 		{
-			// @todo - add the delete actions
 			var that = this;
 			// get all the links stars with sproutform-field-
 			$("a[id^='sproutform-field-']").each(function (i, el) {
@@ -341,63 +338,6 @@
 			}
 		},
 
-
-		/**
-		 * Adds a new unused (dashed border) field to the field layout designer.
-		 *
-		 * @param id
-		 * @param name
-		 * @param groupName
-		 */
-		addField: function(id, name, groupName)
-		{
-			var fld    = this.fld;
-			var grid   = fld.tabGrid;
-			var drag   = fld.fieldDrag;
-			var fields = fld.$allFields;
-			var $group = this._getGroupByName(groupName);
-
-			if ($group)
-			{
-				var $groupContent   = $group.children('.fld-tabcontent');
-				var encodeGroupName = encodeURIComponent(groupName);
-				var $field = $([
-					'<div class="fld-field" data-id="', id, '">',
-					'<span>', name, '</span>',
-					'<input class="id-input" type="hidden" name="fieldLayout[', encodeGroupName, '][]" value="', id, '">',
-					'<a class="settings icon" title="Edit"></a>',
-					'</div>'
-				].join('')).appendTo($groupContent);
-
-				fld.initField($field);
-
-				this.addFieldListener($field);
-
-				fld.$allFields = fields.add($field);
-
-				$group.removeClass('hidden');
-				drag.addItems($field);
-				grid.refreshCols(true);
-
-				Craft.cp.displayNotice(Craft.t('sproutforms','New field created.'));
-			}
-			else
-			{
-				// New field without tab or new field with renamed unsaved tab let's just display a message
-				Craft.cp.displayError(Craft.t('sproutforms','Please Save the form after you rename any tab.'));
-				//Save the form does not work because the field is not added to the tab.
-			}
-		},
-
-		addFieldListener: function($field)
-		{
-			var $editBtn = $field.find('.settings');
-
-			new Garnish.MenuBtn($editBtn, {
-				onOptionSelect: $.proxy(this, 'onFieldOptionSelect')
-			});
-		},
-
 		/**
 		 * Renames | update icon | move field to another tab
 		 * of an existing field after edit it
@@ -431,33 +371,6 @@
 			}
 		},
 
-		/**
-		 * Finds the group tab element from it's name.
-		 *
-		 * @param name
-		 * @returns {*}
-		 * @private
-		 */
-		_getGroupByName: function(name)
-		{
-			var $container = this.fld.$tabContainer;
-			var $groups = $container.children('.fld-tab');
-			var $group = null;
-
-			$groups.each(function()
-			{
-				var $this = $(this);
-				var $tab = $this.children('.tabs').children('.tab.sel');
-				var $span = $tab.children('span');
-				if ($span.text() === name)
-				{
-					$group = $this;
-					return false;
-				}
-			});
-
-			return $group;
-		}
 	});
 
 	window.SproutField = SproutField;

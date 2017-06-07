@@ -57,7 +57,7 @@
 	</div>
 {% endmacro %}
 {% block saveButton %}
-<input type="hidden" name="action" value="sproutforms/forms/save-form">
+<input type="hidden" name="action" value="sprout-forms/forms/save-form">
 {{ redirectInput('sproutforms/forms') }}
 <input type="hidden" id="formId" name="id" value="{{ form.id is defined ? form.id : '' }}">
 
@@ -121,7 +121,7 @@
 
 					<p><strong>{{ "One line of code"|t }}</strong></p>
 
-					<input class="text nicetext fullwidth" type="text" id="display-form-code" value="{% verbatim %}{{ craft.sproutForms.displayForm('{% endverbatim %}{{ form.handle }}{% verbatim %}') }}{% endverbatim %}">
+					<input class="text nicetext fullwidth" type="text" id="display-form-code" value="{% verbatim %}{{ craft.sproutforms.displayForm('{% endverbatim %}{{ form.handle }}{% verbatim %}') }}{% endverbatim %}">
 
 				</div>
 
