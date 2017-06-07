@@ -230,44 +230,41 @@ class Fields extends Component
 	 * @param string $field
 	 * @param string $value
 	 *
-	 * @return SproutForms_FormRecord
+	 * @return FieldRecord
 	 */
-	public function getFieldHandle($value)
+	public function getFieldValue($field, $value)
 	{
-		$result = FieldRecord::find()
-			->where(['handle' => $value])
-			->one();
+		$result = FieldRecord::findOne([$field => $value]);
 
 		return $result;
 	}
 
 	/**
-	 * Create a secuencial string for "handle" if it's already taken
+	 * Create a secuencial string for the "name" and "handle" fields if they are already taken
 	 *
 	 * @param string
 	 * @param string
 	 * return string
 	 */
-	public function getHandleAsNew($value)
+	public function getFieldAsNew($field, $value)
 	{
-		$newHandle = null;
-		$aux       = true;
-		$i         = 1;
+		$newField = null;
+		$i        = 1;
+		$band     = true;
 		do
 		{
-			$newHandle = $value . $i;
-			$field     = $this->getFieldHandle($newHandle);
-
-			if (is_null($field))
+			$newField = $field == "handle" ? $value . $i : $value . " " . $i;
+			$form     = $this->getFieldValue($field, $newField);
+			if (is_null($form))
 			{
-				$aux = false;
+				$band = false;
 			}
 
 			$i++;
 		}
-		while ($aux);
+		while ($band);
 
-		return $newHandle;
+		return $newField;
 	}
 
 	/**
@@ -284,7 +281,7 @@ class Fields extends Component
 			if (is_null($field))
 			{
 				$fieldsService = Craft::$app->getFields();
-				$handle = $this->getHandleAsNew("defaultField");
+				$handle = $this->getFieldAsNew('handle', 'defaultField');
 
 				$field = $fieldsService->createField([
 					'type' => PlainText::class,
@@ -526,12 +523,15 @@ class Fields extends Component
 		$intanceField  = new $type;
 		$fieldsService = Craft::$app->getFields();
 		// get the field name and remove spaces
-		$fieldName = preg_replace('/\s+/','',$intanceField->displayName());
-		$handle = $this->getHandleAsNew($fieldName);
+		$fieldName  = preg_replace('/\s+/','',$intanceField->displayName());
+		$handleName = lcfirst($fieldName);
+
+		$name   = $this->getFieldAsNew('name',$fieldName);
+		$handle = $this->getFieldAsNew('handle',$handleName);
 
 		$field = $fieldsService->createField([
 			'type' => $type,
-			'name' => $intanceField->displayName(),
+			'name' => $name,
 			'handle' => $handle,
 			'instructions' => '',
 			// @todo - add locales

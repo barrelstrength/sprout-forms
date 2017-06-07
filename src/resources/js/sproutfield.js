@@ -49,7 +49,6 @@
 
 			// DRAGULA
 			this.fieldsLayout = this.getId('right-copy');
-			console.log(this.fieldsLayout);
 			// Drag from right to left
 			this.drake = dragula([null, this.fieldsLayout], {
 				copy: function (el, source) {
@@ -111,6 +110,7 @@
 			if(defaultField != null && defaultField.hasOwnProperty("id"))
 			{
 				$(el).attr('id', 'sproutfield-'+defaultField.id);
+				$(el).removeClass('source-fields');
 				// Lets update the the name and icon
 				$(el).find('.sproutforms-icon').html(defaultField.icon);
 				$(el).find('label').html(defaultField.name);
