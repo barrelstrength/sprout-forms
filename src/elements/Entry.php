@@ -107,7 +107,7 @@ class Entry extends Element
 	public function getCpEditUrl()
 	{
 		return UrlHelper::cpUrl(
-			'sprout-forms/entries/edit/'.$this->id
+			'sproutforms/entries/edit/'.$this->id
 		);
 	}
 

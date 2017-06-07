@@ -1,7 +1,7 @@
 
 <!-- Custom form created using the Sprout Forms form builder plugin - https://sprout.barrelstrengthdesign.com/craft-plugins/forms -->
 
-{% set action = form.submitAction is empty ? 'sprout-forms/entries/save-entry' : 'sprout-forms/entries/forward-entry' %}
+{% set action = form.submitAction is empty ? 'sproutforms/entries/save-entry' : 'sproutforms/entries/forward-entry' %}
 {%- set renderingOptions = renderingOptions is defined and renderingOptions is not empty ? renderingOptions : {} %}
 {%- set errors      = entry.getErrors()|length ? entry.getErrors() : false %}
 {%- set errorClass  = renderingOptions.errorClass is defined ? renderingOptions.errorClass : 'errors' %}

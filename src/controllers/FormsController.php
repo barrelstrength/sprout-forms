@@ -166,7 +166,7 @@ class FormsController extends BaseController
 
 			if ($form)
 			{
-				$url = UrlHelper::cpUrl('sprout-forms/forms/edit/' . $form->id);
+				$url = UrlHelper::cpUrl('sproutforms/forms/edit/' . $form->id);
 				return $this->redirect($url);
 			}
 			else
@@ -203,7 +203,7 @@ class FormsController extends BaseController
 		}
 
 		// Set the "Continue Editing" URL
-		$variables['continueEditingUrl'] = 'sprout-forms/forms/edit/{id}';
+		$variables['continueEditingUrl'] = 'sproutforms/forms/edit/{id}';
 
 		$variables['settings'] = Craft::$app->plugins->getPlugin('sproutforms')->getSettings();
 

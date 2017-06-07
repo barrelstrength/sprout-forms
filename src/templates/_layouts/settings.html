@@ -6,11 +6,11 @@
 {% set subnav = {
   entries: {
     label: "Entries"|t,
-    url: url('sprout-forms/entries')
+    url: url('sproutforms/entries')
   },
   forms: {
     label: "Forms"|t,
-    url: url('sprout-forms/forms')
+    url: url('sproutforms/forms')
   }
 } %}
 
@@ -18,7 +18,7 @@
 	{% set subnav = subnav|merge({
 		settings: {
 			label: "Settings"|t,
-			url: url('sprout-forms/settings/general')
+			url: url('sproutforms/settings/general')
 		}
 	}) %}
 {% endif %}

@@ -68,7 +68,7 @@ class EntryStatus extends Model
 	 */
 	public function getCpEditUrl()
 	{
-		return UrlHelper::cpUrl('sprout-Forms/settings/orders-tatuses/' . $this->id);
+		return UrlHelper::cpUrl('sproutforms/settings/orders-tatuses/' . $this->id);
 	}
 
 	/**

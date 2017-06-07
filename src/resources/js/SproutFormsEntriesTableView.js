@@ -159,7 +159,7 @@ Craft.SproutForms.EntriesTableView = Craft.TableElementIndexView.extend({
 		this.$error.addClass('hidden');
 		this.$chart.removeClass('error');
 
-		Craft.postActionRequest('sprout-forms/charts/get-entries-data', requestData, $.proxy(function(response, textStatus)
+		Craft.postActionRequest('sproutforms/charts/get-entries-data', requestData, $.proxy(function(response, textStatus)
 		{
 			this.$spinner.addClass('hidden');
 

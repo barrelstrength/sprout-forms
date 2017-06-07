@@ -308,7 +308,7 @@
 			$("#sproutfield-"+fieldId).slideUp(500, function() { $(this).remove(); });
 
 			// Added behavior, store an array of deleted field IDs
-			// that will be processed by the sproutForms/forms/saveForm method
+			// that will be processed by the sprout-Forms/forms/saveForm method
 			$deletedFieldsContainer = $('#deletedFieldsContainer');
 			$('<input type="hidden" name="deletedFields[]" value="' + fieldId + '">').appendTo($deletedFieldsContainer);
 		},

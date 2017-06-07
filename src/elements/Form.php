@@ -140,7 +140,7 @@ class Form extends Element
 	public function getCpEditUrl()
 	{
 		return UrlHelper::cpUrl(
-			'sprout-forms/forms/edit/'.$this->id
+			'sproutforms/forms/edit/'.$this->id
 		);
 	}
 
