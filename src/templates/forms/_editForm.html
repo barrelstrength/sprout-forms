@@ -121,15 +121,7 @@
 
 					<p><strong>{{ "One line of code"|t }}</strong></p>
 
-					{% if craft.request.getSegment(3) == 'new' %}
-
-					<input class="text nicetext fullwidth" type="text" id="display-form-code" value="{% verbatim %}{{ craft.sproutForms.displayForm('yourFormHandle') }}{% endverbatim %}">
-
-					{% else %}
-
 					<input class="text nicetext fullwidth" type="text" id="display-form-code" value="{% verbatim %}{{ craft.sproutForms.displayForm('{% endverbatim %}{{ form.handle }}{% verbatim %}') }}{% endverbatim %}">
-
-					{% endif %}
 
 				</div>
 

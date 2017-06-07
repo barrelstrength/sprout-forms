@@ -7,7 +7,7 @@
 <nav id="tabs" class="tabs" style= "margin: 0 0 0 0;">
 	<ul>
 		<li>
-			<a class="tab {{ tab == 1 ? ' sel' : '' }}" href="#tab-sproutforms-fields">
+			<a class="tab {{ tab == 1 ? ' sel' : '' }}" href="#sproutforms-source-fields">
 				{{ "Fields"|t('sproutforms') }}
 			</a>
 		</li>
@@ -26,7 +26,7 @@
 
 <div>
 	{% set fieldTypes = craft.sproutforms.getRegisteredFields() %}
-	<div class="{{ tab != 1 ? 'hidden' : '' }} meta" id="tab-sproutforms-fields">
+	<div class="{{ tab != 1 ? 'hidden' : '' }} meta" id="sproutforms-source-fields">
 			<div class='parent'>
 				<div class='sprout-wrapper'>
 					<div id='right-copy' class='sprout-container'>
