@@ -21,6 +21,7 @@ use barrelstrength\sproutforms\integrations\sproutforms\fields\Categories;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Entries;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Tags;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Email;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\EmailSelect;
 use barrelstrength\sproutforms\services\Fields;
 
 class SproutForms extends \craft\base\Plugin
@@ -58,6 +59,7 @@ class SproutForms extends \craft\base\Plugin
 				$event->fields[] = new Entries();
 				$event->fields[] = new Tags();
 				$event->fields[] = new Email();
+				$event->fields[] = new EmailSelect();
 			}
 		);
 	}

@@ -13,6 +13,7 @@ class App extends Component
 	//Fields
 	public $email;
 	public $utilities;
+	public $emailSelect;
 
 	public function init()
 	{
@@ -23,6 +24,7 @@ class App extends Component
 		$this->email          = new Email();
 		$this->utilities      = new Utilities();
 		$this->frontEndFields = new FrontEndFields();
+		$this->emailSelect    = new EmailSelect();
 	}
 
 	/**

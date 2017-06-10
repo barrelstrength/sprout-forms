@@ -7,6 +7,7 @@ use yii\base\Component;
 use craft\db\Query;
 
 use barrelstrength\sproutforms\SproutForms;
+
 /**
  * Class EmailService
  *
