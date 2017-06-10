@@ -128,7 +128,7 @@ class EntryQuery extends ElementQuery
 
 		if ($this->id && $this->formId)
 		{
-			$form = SprotForms::$api->forms->getFormById($this->formId);
+			$form = SprotForms::$app->forms->getFormById($this->formId);
 
 			if ($form)
 			{

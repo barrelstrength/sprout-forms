@@ -436,6 +436,9 @@ class Entry extends Element
 	 */
 	public function rules()
 	{
-		return [[['formId'], 'required']];
+		$rules   = parent::rules();
+		$rules[] = [['formId'], 'required'];
+
+		return $rules;
 	}
 }

@@ -10,6 +10,9 @@ class App extends Component
 	public $fields;
 	public $entries;
 	public $frontEndFields;
+	//Fields
+	public $email;
+	public $utilities;
 
 	public function init()
 	{
@@ -17,6 +20,8 @@ class App extends Component
 		$this->forms          = new Forms();
 		$this->fields         = new Fields();
 		$this->entries        = new Entries();
+		$this->email          = new Email();
+		$this->utilities      = new Utilities();
 		$this->frontEndFields = new FrontEndFields();
 	}
 

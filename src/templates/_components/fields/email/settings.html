@@ -1,0 +1,43 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.textField({
+	label: "Placeholder Text"|t('sproutforms'),
+	instructions: "The text that will be shown if the field doesn’t have a value."|t('sproutforms'),
+	id: 'placeholder',
+	name: 'placeholder',
+	value: field.placeholder
+}) }}
+
+{{ forms.checkboxField({
+	label: "Email Addresses for this field have their own validation pattern"|t('sproutforms'),
+	name: 'customPatternToggle',
+	checked: field.customPatternToggle,
+	toggle: 'sproutemailfield-custom-validation-pattern'
+}) }}
+
+<div id="sproutemailfield-custom-validation-pattern" {% if not field.customPatternToggle %}class="hidden"{% endif %}>
+	{{ forms.textField({
+		label: 'Validation Pattern'|t('sproutforms'),
+		instructions: 'Validate email addresses using this regular expression.'|t('sproutforms'),
+		name: 'customPattern',
+		placeholder: '(.*)@example.com$',
+		value: field.customPattern
+	}) }}
+
+	{{ forms.textField({
+		label: 'Error Message'|t('sproutforms'),
+		instructions: 'Display this error message when an email address is invalid.'|t('sproutforms'),
+		name: 'customPatternErrorMessage',
+		placeholder: 'Must be a valid email address from example.com',
+		value: field.customPatternErrorMessage
+	}) }}
+</div>
+
+<hr>
+
+{{ forms.lightswitchField ({
+	label: "Require email address to be unique"|t('sproutforms'),
+	instructions: "Duplicate email addresses saved to this field will not be allowed."|t('sproutforms'),
+	name: 'uniqueEmail',
+	on: field.uniqueEmail,
+}) }}

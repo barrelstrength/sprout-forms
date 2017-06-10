@@ -1,0 +1,23 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.text({
+	id: name,
+  name: name,
+  value: (value is defined) ? value : '',
+  placeholder: placeholder is not empty ? placeholder : null,
+
+}) }}
+
+<span class="sprout-email-button {{ id }}"></span>
+
+{% js %}
+
+(function() {
+	checkSproutEmailField("{{ id }}", "{{ elementId }}", "{{ name }}", "{{ fieldContext }}");
+})();
+
+$('input#{{ id }}').on('input', function() {
+	checkSproutEmailField("{{ id }}", "{{ elementId }}", "{{ name }}", "{{ fieldContext }}");
+});
+
+{% endjs %}

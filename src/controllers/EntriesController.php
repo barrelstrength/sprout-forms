@@ -176,7 +176,7 @@ class EntriesController extends BaseController
 	{
 		$errors  = json_encode($entry->getErrors());
 		$request = Craft::$app->getRequest();
-		SproutForms::error("Couldn’t save form entry. Errors: ".$errors;
+		SproutForms::error("Couldn’t save form entry. Errors: ".$errors);
 
 		if ($request->getAcceptsJson())
 		{
