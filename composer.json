@@ -8,6 +8,9 @@
       "barrelstrength\\sproutforms\\": "src/"
     }
   },
+  "require": {
+    "barrelstrength/sproutcore": "^1.0.0"
+  },
   "extra": {
     "name": "Sprout Forms",
     "handle": "sproutforms",

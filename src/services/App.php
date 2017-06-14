@@ -2,6 +2,9 @@
 namespace barrelstrength\sproutforms\services;
 
 use craft\base\Component;
+use barrelstrength\sproutcore\services\sproutfields\Email;
+use barrelstrength\sproutcore\services\sproutfields\EmailSelect;
+use barrelstrength\sproutcore\services\sproutfields\Utilities;
 
 class App extends Component
 {
