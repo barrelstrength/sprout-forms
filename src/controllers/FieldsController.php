@@ -279,7 +279,7 @@ class FieldsController extends BaseController
 	{
 		return $this->asJson([
 			'success'  => $success,
-			'errors'   => $field->getErrors(),
+			'errors'   => $field ? $field->getErrors() : null,
 			'field'    => [
 				'id'           => $field->id,
 				'name'         => $field->name,

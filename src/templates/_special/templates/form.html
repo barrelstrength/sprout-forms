@@ -21,7 +21,7 @@
 			{%- set redirectUri = craft.request.getUrl()~redirectUri %}
 		{% endif %}
 
-		<input type="hidden" name="redirect" value="{{ redirectUri }}">
+		<input type="hidden" name="redirect" value="{{ redirectUri|hash }}">
 	{% endif %}
 
 	<div class="fields">

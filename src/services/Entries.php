@@ -122,7 +122,9 @@ class Entries extends Component
 			}
 		}
 
-		$entry->statusId  = $entry->statusId != null ? $entry->statusId : $this->getDefaultEntryStatusId();
+		$form            = SproutForms::$app->forms->getFormById($entry->formId);
+		$entry->statusId = $entry->statusId != null ? $entry->statusId : $this->getDefaultEntryStatusId();
+		$entry->title    = $view->renderObjectTemplate($form->titleFormat, $entry);
 
 		$entry->validate();
 
@@ -145,9 +147,6 @@ class Entries extends Component
 
 		try
 		{
-			$form         = SproutForms::$app->forms->getFormById($entry->formId);
-			$entry->title = $view->renderObjectTemplate($form->titleFormat, $entry);
-
 			if (!$event->isValid)
 			{
 				SproutForms::error('OnBeforeSaveEntryEvent is not valid');
