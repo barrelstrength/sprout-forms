@@ -89,7 +89,7 @@ class Email extends SproutFormsBaseField implements PreviewableFieldInterface
 
 		$template = $this->getTemplatesPath();
 
-		$rendered = $view->renderTemplate('sprout-core/_integrations/sproutfields/fields/email/input',
+		$rendered = $view->renderTemplate('sprout-core/sproutfields/fields/email/input',
 			[
 				'id'           => $namespaceInputId,
 				'name'         => $name,
