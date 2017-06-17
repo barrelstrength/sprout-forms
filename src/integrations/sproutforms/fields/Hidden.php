@@ -98,7 +98,6 @@ class Hidden extends SproutFormsBaseField implements PreviewableFieldInterface
 		return TemplateHelper::raw($rendered);
 	}
 
-
 	/**
 	 * @inheritdoc
 	 */

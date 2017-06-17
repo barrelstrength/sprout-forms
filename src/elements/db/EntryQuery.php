@@ -45,19 +45,6 @@ class EntryQuery extends ElementQuery
 	}
 
 	/**
-	 * @inheritdoc
-	 */
-	public function __construct($elementType, array $config = [])
-	{
-		// Default orderBy
-		if (!isset($config['orderBy'])) {
-			$config['orderBy'] = 'sproutforms_entries.dateCreated';
-		}
-
-		parent::__construct($elementType, $config);
-	}
-
-	/**
 	 * Sets the [[statusId]] property.
 	 *
 	 * @param int
@@ -185,6 +172,11 @@ class EntryQuery extends ElementQuery
 			);
 		}
 
+		if (!$this->orderBy)
+		{
+			$this->orderBy = 'sproutforms_entries.dateCreated desc';
+		}
+
 		return parent::beforePrepare();
 	}
 
@@ -197,7 +189,6 @@ class EntryQuery extends ElementQuery
 		EntryQuery $entryQuery
 	)
 	{
-		$test ="sas";
 		// Do we have a source selected in the sidebar?
 		// If so, we have a form id and we can use that to fetch the content table
 		if ($entryQuery->formId || $entryQuery->formHandle)
