@@ -25,6 +25,7 @@ use barrelstrength\sproutforms\integrations\sproutforms\fields\Email;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\EmailSelect;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Hidden;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Invisible;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\Link;
 use barrelstrength\sproutforms\services\Fields;
 
 class SproutForms extends \craft\base\Plugin
@@ -66,6 +67,7 @@ class SproutForms extends \craft\base\Plugin
 				$event->fields[] = new EmailSelect();
 				$event->fields[] = new Hidden();
 				$event->fields[] = new Invisible();
+				$event->fields[] = new Link();
 			}
 		);
 	}

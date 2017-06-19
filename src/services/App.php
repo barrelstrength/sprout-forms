@@ -5,6 +5,7 @@ use craft\base\Component;
 use barrelstrength\sproutcore\services\sproutfields\Email;
 use barrelstrength\sproutcore\services\sproutfields\EmailSelect;
 use barrelstrength\sproutcore\services\sproutfields\Utilities;
+use barrelstrength\sproutcore\services\sproutfields\Link;
 
 class App extends Component
 {
@@ -17,6 +18,7 @@ class App extends Component
 	public $email;
 	public $utilities;
 	public $emailSelect;
+	public $link;
 
 	public function init()
 	{
@@ -28,6 +30,7 @@ class App extends Component
 		$this->utilities      = new Utilities();
 		$this->frontEndFields = new FrontEndFields();
 		$this->emailSelect    = new EmailSelect();
+		$this->link           = new Link();
 	}
 
 	/**
