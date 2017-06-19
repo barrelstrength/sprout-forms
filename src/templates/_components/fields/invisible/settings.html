@@ -1,0 +1,23 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.textField({
+	label: 'Invisible Field Value'|t('sproutforms'),
+	name: 'value',
+	instructions: 'Value to set when the field is saved/sent. Twig syntax is supported.'|t('sproutforms'),
+	placeholder: '{{ entry.id is defined ? entry.id : null }}',
+	value: field.value
+}) }}
+
+{{ forms.lightswitchField ({
+	label: "Allow edits"|t('sproutforms'),
+	instructions: "Allow admin users to edit the submitted field value."|t('sproutforms'),
+	name: 'allowEdits',
+	on: field.allowEdits,
+}) }}
+
+{{ forms.lightswitchField ({
+	label: "Hide submitted value"|t('sproutforms'),
+	instructions: "Don't display the submitted field value."|t('sproutforms'),
+	name: 'hideValue',
+	on: field.hideValue,
+}) }}

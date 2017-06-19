@@ -1,0 +1,18 @@
+{% import "_includes/forms" as forms %}
+
+{% set isSproutFormsSettingsPage = (craft.app.request.getSegment(1) == 'sproutforms') ? true : false %}
+
+{{ forms.textField({
+	label: 'Hidden Field Value'|t('sproutforms'),
+	name: 'value',
+	instructions: 'Value to set when the field is displayed. Twig syntax is supported.'|t('sproutforms'),
+	placeholder: '{{ craft.request.path }}',
+	value: field.value
+}) }}
+
+{{ forms.lightswitchField ({
+	label: "Allow edits"|t('sproutforms'),
+	instructions: "Allow admin users to edit the submitted field value."|t('sproutforms'),
+	name: 'allowEdits',
+	on: field.allowEdits,
+}) }}

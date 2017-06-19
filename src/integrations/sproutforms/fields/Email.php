@@ -9,7 +9,7 @@ use craft\helpers\Template as TemplateHelper;
 
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
-use barrelstrength\sproutforms\assetbundles\emailfield\EmailFieldAsset;
+use barrelstrength\sproutcore\web\sproutfields\emailfield\EmailFieldAsset;
 
 class Email extends SproutFormsBaseField implements PreviewableFieldInterface
 {
@@ -89,7 +89,7 @@ class Email extends SproutFormsBaseField implements PreviewableFieldInterface
 
 		$template = $this->getTemplatesPath();
 
-		$rendered = $view->renderTemplate('sproutforms/_components/fields/email/input',
+		$rendered = $view->renderTemplate('sprout-core/sproutfields/fields/email/input',
 			[
 				'id'           => $namespaceInputId,
 				'name'         => $name,

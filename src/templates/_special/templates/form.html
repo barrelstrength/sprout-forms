@@ -13,7 +13,7 @@
 	{%- if id %} id="{{ id }}"{% endif -%}
 	{%- if class %} class="{{ class -}}{%- if errors %} {{ errorClass }}{% endif -%}"{% endif -%}
 	>
-	{{ getCsrfInput() }}
+	{{ csrfInput() }}
 	<input type="hidden" name="action" value="{{ action }}">
 	<input type="hidden" name="handle" value="{{ form.handle }}">
 	{% if redirectUri is not empty -%}
@@ -21,7 +21,7 @@
 			{%- set redirectUri = craft.request.getUrl()~redirectUri %}
 		{% endif %}
 
-		<input type="hidden" name="redirect" value="{{ redirectUri }}">
+		<input type="hidden" name="redirect" value="{{ redirectUri|hash }}">
 	{% endif %}
 
 	<div class="fields">

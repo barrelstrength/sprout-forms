@@ -1,0 +1,19 @@
+{%- set data     = renderingOptions.data is defined ? renderingOptions.data : null %}
+{%- set id       = renderingOptions.id is defined ? renderingOptions.id : name %}
+{%- set class    = renderingOptions.class is defined ? renderingOptions.class : name %}
+{%- set value    = value is defined ? value : null %}
+{%- set required = field.required is defined and field.required ? " required" %}
+
+{%- set dataAttributes = null %}
+{%- for key, dataValue in data %}
+	{%- set dataAttributes = dataAttributes ~ ' data-'~key~'='~dataValue %}
+{% endfor -%}
+
+<input type="hidden"
+	{%- if id %} id="{{ id }}"{% endif -%}
+	{%- if class %} class="{{ class }}"{% endif -%}
+	{%- if name %} name="{{ name }}"{% endif -%}
+	{%- if value %} value="{{ value }}"{% endif -%}
+	{{- required -}}
+	{{- dataAttributes -}}
+	>

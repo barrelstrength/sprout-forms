@@ -16,7 +16,7 @@
 	{%- namespace field.getNamespace() -%}
 		{%- if field.isPlainInput() -%}
 
-			{{ input }}
+			{{ input|raw }}
 
 		{%- else %}
 
