@@ -1,0 +1,111 @@
+{% import "_includes/forms" as forms %}
+
+{% set selectId = id ~ "-output" %}
+{% set selectTextarea = id ~ "-textarea" %}
+
+{{ forms.selectField({
+	id: name ~ "-output",
+	name: 'output',
+	label: 'Output As',
+	options: options.output,
+	value: field.output
+}) }}
+
+{{ forms.textareaField({
+	id:   name ~ "-textarea",
+	label: 'Notes'|t,
+	instructions: 'Add your field notes below. Note: The name of your Notes field above will be used as the first line of
+	your notes.'|t,
+	name: 'instructions',
+	class: 'sproutnotes',
+	value: field.instructions
+}) }}
+
+{{ forms.selectField({
+	id: 'style',
+	name: 'style',
+	label: 'Select Style',
+	instructions: 'Select the style you wish your info field to be.  Create your own styles in the <a href="/admin/settings/plugins/sproutfields">plugin settings</a>.',
+	options: options.style,
+	value: field.style
+}) }}
+
+{{ forms.lightswitchField ({
+	label: "Hide Field Label"|t,
+	instructions: ""|t,
+	name: 'hideLabel',
+	on: field.hideLabel,
+}) }}
+
+<section class="buttons">
+	<div class="btngroup submit">
+		<input type="submit" class="btn submit" value="{{ 'Save'|t }}">
+
+		<div class="btn submit menubtn"></div>
+		<div class="menu">
+			<ul>
+				<li>
+					<a class="formsubmit" data-redirect="settings/fields/edit/{id}">{{ "Save and continue editing"|t }}
+						<span class="shortcut">⌘S</span></a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</section>
+
+<style type="text/css">
+textarea.sproutnotes {
+	min-height: 125px;
+}
+</style>
+
+{% js %}
+
+$(document).ready(function() {
+
+	var initSelectValue = $("{{ '#' ~ selectId }}").val();
+	var textareaInput = $("#{{ selectTextarea }}");
+
+	if (initSelectValue == "richText") {
+		textareaInput.redactor({
+			buttons: ['bold', 'italic', '|', 'unorderedlist', 'orderedlist'],
+			toolbar: true
+		});
+
+		textareaInput.toggleClass('redactor');
+	}
+
+	$("{{ '#' ~ selectId }}").on('change', function() {
+
+		var textareaType = $(this).val();
+		var textareaValue = $("#{{ selectTextarea }}").val();
+
+		if (textareaType == "richText") {
+
+			textareaInput.redactor({
+				buttons: ['bold', 'italic', '|', 'unorderedlist', 'orderedlist'],
+				toolbar: true
+			});
+
+			textareaInput.toggleClass('redactor');
+		}
+		else if (textareaType == "html")
+		{
+			if (textareaInput.hasClass('redactor'))
+			{
+				textareaInput.redactor('core.destroy').removeClass('redactor');
+			}
+		}
+		else
+		{
+			if (textareaInput.hasClass('redactor'))
+			{
+				textareaInput.redactor('core.destroy').removeClass('redactor');
+			}
+
+			textareaInput.val(textareaInput.text());
+		}
+	});
+});
+
+{% endjs %}
