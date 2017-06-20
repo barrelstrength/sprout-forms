@@ -27,6 +27,7 @@ use barrelstrength\sproutforms\integrations\sproutforms\fields\Hidden;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Invisible;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Link;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Notes;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\Phone;
 use barrelstrength\sproutforms\services\Fields;
 
 class SproutForms extends \craft\base\Plugin
@@ -70,6 +71,7 @@ class SproutForms extends \craft\base\Plugin
 				$event->fields[] = new Invisible();
 				$event->fields[] = new Link();
 				$event->fields[] = new Notes();
+				$event->fields[] = new Phone();
 			}
 		);
 	}
