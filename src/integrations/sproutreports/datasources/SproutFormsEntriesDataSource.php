@@ -12,7 +12,7 @@ use craft\helpers\DateTimeHelper;
 /**
  * Class SproutFormsEntriesDataSource
  *
- * @package Craft
+ * @package barrelstrength\sproutforms\integrations\sproutreports\datasources
  */
 class SproutFormsEntriesDataSource extends BaseDataSource
 {
@@ -31,8 +31,8 @@ class SproutFormsEntriesDataSource extends BaseDataSource
 
 	public function getResults(Report &$report, $options = array())
 	{
-		$startDate = DateTimeHelper::toDateTime($report->getOption('startDate'));
-		$endDate   = DateTimeHelper::toDateTime($report->getOption('endDate'));
+		$startDate = DateTimeHelper::toDateTime($report->getOption('startDate')->date);
+		$endDate   = DateTimeHelper::toDateTime($report->getOption('endDate')->date);
 
 		if (count($options))
 		{
@@ -80,7 +80,9 @@ class SproutFormsEntriesDataSource extends BaseDataSource
 	 */
 	public function getOptionsHtml(array $options = array())
 	{
-		$forms = Form::find()->limit(null)->orderBy('name');
+		$forms = Form::find()->limit(null)->orderBy('name')->all();
+
+		$formOptions = array();
 
 		foreach ($forms as $form)
 		{
@@ -98,26 +100,25 @@ class SproutFormsEntriesDataSource extends BaseDataSource
 		{
 			if (isset($options['startDate']))
 			{
-				$options['startDate'] = DateTime::createFromString($options['startDate'], craft()->timezone);
+				$options['startDate'] = DateTimeHelper::toDateTime($options['startDate']);
 			}
 
 			if (isset($options['endDate']))
 			{
-				$options['endDate'] = DateTime::createFromString($options['endDate'], craft()->timezone);
+				$options['endDate'] = DateTimeHelper::toDateTime($options['endDate']);
 			}
+
 		}
 		else
 		{
-			$options = $this->report->getOptions();
-
-			$options['startDate'] = DateTime::createFromString($this->report->getOption('startDate'), craft()->timezone);
-			$options['endDate']   = DateTime::createFromString($this->report->getOption('endDate'), craft()->timezone);
+			$options['startDate'] = DateTimeHelper::toDateTime($this->report->getOption('startDate')->date);
+			$options['endDate']   = DateTimeHelper::toDateTime($this->report->getOption('endDate')->date);
 		}
 
-		return craft()->templates->render('sproutforms/_reports/options/entries', array(
+		return Craft::$app->getView()->renderTemplate('sproutforms/_reports/options/entries', array(
 			'formOptions'      => $formOptions,
-			'defaultStartDate' => new DateTime($defaultStartDate),
-			'defaultEndDate'   => new DateTime($defaultEndDate),
+			'defaultStartDate' => new \DateTime($defaultStartDate),
+			'defaultEndDate'   => new \DateTime($defaultEndDate),
 			'options'          => $options
 		));
 	}

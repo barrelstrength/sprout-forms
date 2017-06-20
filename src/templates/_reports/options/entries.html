@@ -1,0 +1,24 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.selectField({
+	label: "Forms"|t,
+	instructions: 'Select which forms to search',
+	name: 'options[formId]',
+	options: formOptions,
+	value: (options.formId is defined ? options.formId : '*'),
+	first: true
+}) }}
+
+{{ forms.dateTimeField({
+	label: "Start Date"|t,
+	id: 'startDate',
+	name: 'options[startDate]',
+	value: (options.startDate is defined ? options.startDate : defaultStartDate)
+}) }}
+
+{{ forms.dateTimeField({
+	label: "End Date"|t,
+	id: 'endDate',
+	name: 'options[endDate]',
+	value: (options.endDate is defined ? options.endDate : defaultEndDate)
+}) }}
