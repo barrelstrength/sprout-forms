@@ -19,7 +19,8 @@ class DragulaAsset extends AssetBundle
 		// define the relative path to CSS/JS files that should be registered with the page
 		// when this asset bundle is registered
 		$this->js = [
-			'dragula/dragula.min.js'
+			'dragula/dragula.min.js',
+			'dragula/dom-autoscroller.min.js'
 		];
 
 		$this->css = [

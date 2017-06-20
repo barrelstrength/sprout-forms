@@ -78,6 +78,22 @@
 				}
 			});
 
+			// Adds auto-scroll to main container when dragging
+			var scroll = autoScroll(
+				[
+					document.querySelector('#container')
+				],
+				{
+					margin: 20,
+					maxSpeed: 10,
+					scrollWhenOutside: true,
+					autoScroll: function(){
+						//Only scroll when the pointer is down, and there is a child being dragged.
+						return this.down && that.drake.dragging;
+					}
+				}
+			);
+
 			// Add the drop containers for each tab
 			for (var i = 0; i < currentTabs.length; i++)
 			{
