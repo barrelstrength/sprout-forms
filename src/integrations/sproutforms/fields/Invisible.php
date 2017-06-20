@@ -113,6 +113,7 @@ class Invisible extends SproutFormsBaseField implements PreviewableFieldInterfac
 	public function normalizeValue($value, ElementInterface $element = null)
 	{
 		$value = Craft::$app->getSession()->get($this->handle);
+		$value = $value ? $value : '';
 		$value = Craft::$app->view->renderObjectTemplate($value, parent::getFieldVariables());
 
 		return parent::normalizeValue($value, $element);
