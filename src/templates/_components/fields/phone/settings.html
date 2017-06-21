@@ -1,0 +1,47 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.textField({
+	label: "Placeholder Text"|t('sproutFields'),
+	instructions: "The text that will be shown if the field doesn’t have a value."|t('sproutFields'),
+	id: 'placeholder',
+	name: 'placeholder',
+	value: field.placeholder
+}) }}
+
+{{ forms.checkboxField({
+	label: "Phone Numbers for this field have their own  validation pattern"|t('sproutFields'),
+	name: 'customPatternToggle',
+	checked: field.customPatternToggle,
+	toggle: 'sproutlinkfield-custom-validation-pattern'
+}) }}
+
+<div id="sproutlinkfield-custom-validation-pattern" {% if not field.customPatternToggle %}class="hidden"{% endif %}>
+	{{ forms.textField({
+		label: 'Validation Pattern'|t('sproutFields'),
+		instructions: 'Validate phone numbers using this pattern of numbers.'|t('sproutFields'),
+		required: true,
+		name: 'mask',
+		placeholder: '###-###-####',
+		value: field.mask ? field.mask : '###-###-####'
+	}) }}
+
+	{{ forms.textField({
+		label: 'Error Message'|t('sproutFields'),
+		instructions: 'Display this error message when a phone number is invalid.'|t('sproutFields'),
+		name: 'customPatternErrorMessage',
+		placeholder: 'Phone number must match the format: ###-###-####',
+		value: field.customPatternErrorMessage
+	}) }}
+</div>
+
+
+{% if craft.request.getSegment(1) != 'sproutforms' %}
+	{{ forms.lightswitchField({
+		label: "Display Pattern Mask?"|t('sproutFields'),
+		instructions: 'Display a mask of your chosen pattern as the user types.'|t('sproutFields'),
+		warning: '',
+		id: 'inputMask',
+		name: 'inputMask',
+		on: field.inputMask,
+	}) }}
+{% endif %}
