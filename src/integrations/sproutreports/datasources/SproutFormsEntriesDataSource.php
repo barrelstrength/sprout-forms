@@ -111,8 +111,18 @@ class SproutFormsEntriesDataSource extends BaseDataSource
 		}
 		else
 		{
-			$options['startDate'] = DateTimeHelper::toDateTime($this->report->getOption('startDate')->date);
-			$options['endDate']   = DateTimeHelper::toDateTime($this->report->getOption('endDate')->date);
+			$options['startDate'] = null;
+			$options['endDate']   = null;
+
+			if ($this->report->getOption('startDate'))
+			{
+				$options['startDate'] = DateTimeHelper::toDateTime($this->report->getOption('startDate')->date);
+			}
+
+			if ($this->report->getOption('endDate'))
+			{
+				$options['endDate'] = DateTimeHelper::toDateTime($this->report->getOption('endDate')->date);
+			}
 		}
 
 		return Craft::$app->getView()->renderTemplate('sproutforms/_reports/options/entries', array(

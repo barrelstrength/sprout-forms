@@ -1,7 +1,9 @@
 <?php
 namespace barrelstrength\sproutforms;
 
+use barrelstrength\sproutcore\services\sproutreports\DataSourcesCore;
 use Craft;
+use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\web\UrlManager;
 use yii\base\Event;
@@ -30,6 +32,7 @@ use barrelstrength\sproutforms\integrations\sproutforms\fields\Notes;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Phone;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\RegularExpression;
 use barrelstrength\sproutforms\services\Fields;
+use barrelstrength\sproutforms\integrations\sproutreports\datasources\SproutFormsEntriesDataSource;
 
 class SproutForms extends \craft\base\Plugin
 {
@@ -76,6 +79,12 @@ class SproutForms extends \craft\base\Plugin
 				$event->fields[] = new RegularExpression();
 			}
 		);
+
+		// Register DataSources for sproutReports plugin integration
+		Event::on(DataSourcesCore::class, DataSourcesCore::EVENT_REGISTER_DATA_SOURCES, function(RegisterComponentTypesEvent
+		                                                                                 $event) {
+			$event->types[] = new SproutFormsEntriesDataSource();
+		});
 	}
 
 	public function getCpNavItem()
