@@ -101,6 +101,10 @@ class SproutForms extends \craft\base\Plugin
 					"label" => SproutForms::t("Forms"),
 					"url" => 'sproutforms/forms'
 				],
+				'reports' =>[
+					"label" => SproutForms::t("Reports"),
+					"url" => 'sproutforms/reports/sproutforms.sproutformsentriesdatasource'
+				],
 				'settings' =>[
 					"label" => SproutForms::t("Settings"),
 					"url" => 'sproutforms/settings'
@@ -169,6 +173,8 @@ class SproutForms extends \craft\base\Plugin
 
 			'sproutforms/forms/<groupId:\d+>'                        =>
 			'sprout-forms/forms',
+
+			'sproutforms/reports/<dataSourceId>' => 'sprout-core/reports/results-index'
 		];
 	}
 

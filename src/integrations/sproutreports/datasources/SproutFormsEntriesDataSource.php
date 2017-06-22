@@ -31,8 +31,36 @@ class SproutFormsEntriesDataSource extends BaseDataSource
 
 	public function getResults(Report &$report, $options = array())
 	{
-		$startDate = DateTimeHelper::toDateTime($report->getOption('startDate')->date);
-		$endDate   = DateTimeHelper::toDateTime($report->getOption('endDate')->date);
+		$results = array();
+
+		$startDate = null;
+		$endDate   = null;
+		$formId    = null;
+
+		if (!empty($report->getOption('startDate')))
+		{
+			$startDateValue = $report->getOption('startDate');
+			$startDateValue = (array) $startDateValue;
+
+			$startDate = DateTimeHelper::toIso8601($startDateValue);
+
+			$startDate = DateTimeHelper::toDateTime($startDate);
+		}
+
+		if (!empty($report->getOption('endDate')))
+		{
+			$endDateValue = $report->getOption('endDate');
+			$endDateValue = (array) $endDateValue;
+
+			$endDate = DateTimeHelper::toIso8601($endDateValue);
+
+			$endDate = DateTimeHelper::toDateTime($endDate);
+		}
+
+		if (!empty($report->getOption('formId')))
+		{
+			$formId = $report->getOption('formId');
+		}
 
 		if (count($options))
 		{
@@ -45,32 +73,37 @@ class SproutFormsEntriesDataSource extends BaseDataSource
 			{
 				$endDate = DateTimeHelper::toDateTime($options['endDate']);
 			}
+
+			$formId = $options['formId'];
 		}
 
-		$formId = $report->getOption('formId');
-
-		$form = SproutForms::$app->forms->getFormById($formId);
-
-		if (!$form)
+		if ($formId)
 		{
-			return null;
+			$form = SproutForms::$app->forms->getFormById($formId);
+
+			if (!$form)
+			{
+				return null;
+			}
+
+			$contentTable = $form->contentTable;
+
+			$query = new Query();
+
+			$formQuery = $query
+				->select('*')
+				->from($contentTable . ' AS entries');
+
+			if ($startDate && $endDate)
+			{
+				$formQuery->where('entries.dateCreated > :startDate', array(':startDate' => $startDate->format('Y-m-d H:i:s')));
+				$formQuery->andWhere('entries.dateCreated < :endDate', array(':endDate' => $endDate->format('Y-m-d H:i:s')));
+			}
+
+			$results = $formQuery->all();
 		}
 
-		$contentTable = $form->contentTable;
-
-		$query = new Query();
-
-		$formQuery = $query
-			->select('*')
-			->from($contentTable . ' AS entries');
-
-		if ($startDate && $endDate)
-		{
-			$formQuery->where('entries.dateCreated > :startDate', array(':startDate' => $startDate->format('Y-m-d H:i:s')));
-			$formQuery->andWhere('entries.dateCreated < :endDate', array(':endDate' => $endDate->format('Y-m-d H:i:s')));
-		}
-
-		return $formQuery->all();
+		return $results;
 	}
 
 	/**
@@ -116,12 +149,22 @@ class SproutFormsEntriesDataSource extends BaseDataSource
 
 			if ($this->report->getOption('startDate'))
 			{
-				$options['startDate'] = DateTimeHelper::toDateTime($this->report->getOption('startDate')->date);
+				$startDateValue = $this->report->getOption('startDate');
+				$startDateValue = (array) $startDateValue;
+
+				$startDate = DateTimeHelper::toIso8601($startDateValue);
+
+				$options['startDate'] = DateTimeHelper::toDateTime($startDate);
 			}
 
 			if ($this->report->getOption('endDate'))
 			{
-				$options['endDate'] = DateTimeHelper::toDateTime($this->report->getOption('endDate')->date);
+				$endDateValue = $this->report->getOption('endDate');
+				$endDateValue = (array) $endDateValue;
+
+				$endDate = DateTimeHelper::toIso8601($endDateValue);
+
+				$options['endDate'] = DateTimeHelper::toDateTime($endDate);
 			}
 		}
 
