@@ -3,7 +3,7 @@ namespace barrelstrength\sproutforms\integrations\sproutreports\datasources;
 
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutreports\models\Report;
+use barrelstrength\sproutcore\integrations\sproutreports\models\Report;
 use Craft;
 use barrelstrength\sproutcore\integrations\sproutreports\contracts\BaseDataSource;
 use craft\db\Query;
