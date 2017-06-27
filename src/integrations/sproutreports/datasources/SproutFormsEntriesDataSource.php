@@ -1,11 +1,12 @@
 <?php
 namespace barrelstrength\sproutforms\integrations\sproutreports\datasources;
 
+use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutcore\integrations\sproutreports\models\Report;
+use barrelstrength\sproutcore\models\sproutreports\Report;
 use Craft;
-use barrelstrength\sproutcore\integrations\sproutreports\contracts\BaseDataSource;
+use barrelstrength\sproutcore\contracts\sproutreports\BaseDataSource;
 use craft\db\Query;
 use craft\helpers\DateTimeHelper;
 
@@ -77,6 +78,8 @@ class SproutFormsEntriesDataSource extends BaseDataSource
 			$formId = $options['formId'];
 		}
 
+		$results = array();
+
 		if ($formId)
 		{
 			$form = SproutForms::$app->forms->getFormById($formId);
@@ -91,12 +94,12 @@ class SproutFormsEntriesDataSource extends BaseDataSource
 			$query = new Query();
 
 			$formQuery = $query
-				->select('*')
+				->select("*")
 				->from($contentTable . ' AS entries');
 
 			if ($startDate && $endDate)
 			{
-				$formQuery->where('entries.dateCreated > :startDate', array(':startDate' => $startDate->format('Y-m-d H:i:s')));
+				$formQuery->where("entries.dateCreated > :startDate", array(':startDate' => $startDate->format('Y-m-d H:i:s')));
 				$formQuery->andWhere('entries.dateCreated < :endDate', array(':endDate' => $endDate->format('Y-m-d H:i:s')));
 			}
 
@@ -104,6 +107,11 @@ class SproutFormsEntriesDataSource extends BaseDataSource
 		}
 
 		return $results;
+	}
+
+	public function getDefaultLabels(Report &$report, $options = array())
+	{
+		return array('id', 'formId', 'dateCreated');
 	}
 
 	/**
