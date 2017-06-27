@@ -109,11 +109,6 @@ class SproutFormsEntriesDataSource extends BaseDataSource
 		return $results;
 	}
 
-	public function getDefaultLabels(Report &$report, $options = array())
-	{
-		return array('id', 'formId', 'dateCreated');
-	}
-
 	/**
 	 * @param array $options
 	 *
