@@ -10,6 +10,7 @@ use craft\helpers\Db;
 use yii\db\Schema;
 
 use barrelstrength\sproutforms\SproutForms;
+use barrelstrength\sproutcore\SproutCore;
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 use barrelstrength\sproutcore\web\sproutfields\phonefield\PhoneFieldAsset;
 
@@ -115,12 +116,12 @@ class Phone extends SproutFormsBaseField implements PreviewableFieldInterface
 		$mask = preg_quote($settings['mask']);
 		// Do no escape "-" html5 does not treat it as special chars
 		$mask = str_replace("\\-", '-', $mask);
-		$pattern = SproutForms::$app->phone->convertMaskToRegEx($mask);
+		$pattern = SproutCore::$app->phone->convertMaskToRegEx($mask);
 
 		$pattern = trim($pattern, '/');
 
 		$attributes   = $field->getAttributes();
-		$errorMessage = SproutForms::$app->phone->getErrorMessage($field);
+		$errorMessage = SproutCore::$app->phone->getErrorMessage($field);
 
 		$rendered = Craft::$app->getView()->renderTemplate(
 			'phone/forminput',
@@ -170,14 +171,14 @@ class Phone extends SproutFormsBaseField implements PreviewableFieldInterface
 
 		if ($this->mask == "")
 		{
-			$this->mask = SproutForms::$app->phone->getDefaultMask();
+			$this->mask = SproutCore::$app->phone->getDefaultMask();
 		}
 
-		if (!SproutForms::$app->phone->validate($value, $this->mask))
+		if (!SproutCore::$app->phone->validate($value, $this->mask))
 		{
 			$element->addError(
 				$this->handle,
-				SproutForms::$app->phone->getErrorMessage($this)
+				SproutCore::$app->phone->getErrorMessage($this)
 			);
 		}
 	}

@@ -2,12 +2,6 @@
 namespace barrelstrength\sproutforms\services;
 
 use craft\base\Component;
-use barrelstrength\sproutcore\services\sproutfields\Email;
-use barrelstrength\sproutcore\services\sproutfields\EmailSelect;
-use barrelstrength\sproutcore\services\sproutfields\Utilities;
-use barrelstrength\sproutcore\services\sproutfields\Link;
-use barrelstrength\sproutcore\services\sproutfields\Phone;
-use barrelstrength\sproutcore\services\sproutfields\RegularExpression;
 
 class App extends Component
 {
@@ -16,13 +10,6 @@ class App extends Component
 	public $fields;
 	public $entries;
 	public $frontEndFields;
-	//Fields
-	public $email;
-	public $utilities;
-	public $emailSelect;
-	public $link;
-	public $phone;
-	public $regularExpression;
 
 	public function init()
 	{
@@ -30,13 +17,7 @@ class App extends Component
 		$this->forms             = new Forms();
 		$this->fields            = new Fields();
 		$this->entries           = new Entries();
-		$this->email             = new Email();
-		$this->utilities         = new Utilities();
 		$this->frontEndFields    = new FrontEndFields();
-		$this->emailSelect       = new EmailSelect();
-		$this->link              = new Link();
-		$this->phone             = new Phone();
-		$this->regularExpression = new RegularExpression();
 	}
 
 	/**
