@@ -10,6 +10,7 @@ use yii\db\Schema;
 use craft\helpers\ArrayHelper;
 
 use barrelstrength\sproutforms\SproutForms;
+use barrelstrength\sproutcore\SproutCore;
 
 class EmailSelect extends SproutBaseOptionsField
 {
@@ -92,7 +93,7 @@ class EmailSelect extends SproutBaseOptionsField
 	public function getInputHtml($value, ElementInterface $element = null): string
 	{
 		$valueOptions = $value->getOptions();
-		$anySelected  = SproutForms::$app->utilities->isAnyOptionsSelected(
+		$anySelected  = SproutCore::$app->utilities->isAnyOptionsSelected(
 			$valueOptions,
 			$value->value
 		);
@@ -131,7 +132,7 @@ class EmailSelect extends SproutBaseOptionsField
 		$selectedValue = isset($value->value) ? $value->value : null;
 
 		$options = $settings['options'];
-		$options = SproutForms::$app->emailSelect->obfuscateEmailAddresses($options, $selectedValue);
+		$options = SproutCore::$app->emailSelect->obfuscateEmailAddresses($options, $selectedValue);
 
 		$rendered = Craft::$app->getView()->renderTemplate(
 			'emailselect/forminput',
