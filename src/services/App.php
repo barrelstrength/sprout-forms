@@ -1,6 +1,7 @@
 <?php
 namespace barrelstrength\sproutforms\services;
 
+use barrelstrength\sproutcore\services\sproutreports\Migration;
 use craft\base\Component;
 
 class App extends Component
@@ -11,6 +12,11 @@ class App extends Component
 	public $entries;
 	public $frontEndFields;
 
+	/**
+	 * @var Migration
+	 */
+	public $sproutReportMigration;
+
 	public function init()
 	{
 		$this->groups            = new Groups();
@@ -18,6 +24,7 @@ class App extends Component
 		$this->fields            = new Fields();
 		$this->entries           = new Entries();
 		$this->frontEndFields    = new FrontEndFields();
+		$this->sproutReportMigration = new Migration();
 	}
 
 	/**

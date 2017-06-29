@@ -2,6 +2,7 @@
 namespace barrelstrength\sproutforms;
 
 use barrelstrength\sproutcore\services\sproutreports\DataSourcesCore;
+use barrelstrength\sproutforms\services\App;
 use Craft;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
@@ -39,7 +40,7 @@ class SproutForms extends \craft\base\Plugin
 	/**
 	 * Enable use of SproutForms::$app-> in place of Craft::$app->
 	 *
-	 * @var [type]
+	 * @var App
 	 */
 	public static $app;
 
