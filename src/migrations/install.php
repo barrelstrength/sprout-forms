@@ -1,6 +1,7 @@
 <?php
 namespace barrelstrength\sproutforms\migrations;
 
+use barrelstrength\sproutcore\SproutCore;
 use barrelstrength\sproutforms\SproutForms;
 use craft\db\Migration;
 
@@ -14,7 +15,8 @@ class Install extends Migration
 	 */
 	public function safeUp()
 	{
-		SproutForms::$app->sproutReportMigration->createTables();
+		// Generate sprout reports table if it exists.
+		SproutCore::$app->reportsMigration->createTables();
 
 		$this->createTables();
 		$this->createIndexes();

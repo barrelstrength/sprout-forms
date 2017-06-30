@@ -9,6 +9,7 @@ use Craft;
 use barrelstrength\sproutcore\contracts\sproutreports\BaseDataSource;
 use craft\db\Query;
 use craft\helpers\DateTimeHelper;
+use craft\helpers\UrlHelper;
 
 /**
  * Class SproutFormsEntriesDataSource
@@ -32,8 +33,6 @@ class SproutFormsEntriesDataSource extends BaseDataSource
 
 	public function getResults(Report &$report, $options = array())
 	{
-		$results = array();
-
 		$startDate = null;
 		$endDate   = null;
 		$formId    = null;

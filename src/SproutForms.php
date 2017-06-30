@@ -1,7 +1,7 @@
 <?php
 namespace barrelstrength\sproutforms;
 
-use barrelstrength\sproutcore\services\sproutreports\DataSourcesCore;
+use barrelstrength\sproutcore\services\sproutreports\DataSources;
 use barrelstrength\sproutforms\services\App;
 use Craft;
 use craft\events\RegisterComponentTypesEvent;
@@ -11,7 +11,6 @@ use yii\base\Event;
 
 use barrelstrength\sproutcore\SproutCoreHelper;
 use barrelstrength\sproutforms\models\Settings;
-use barrelstrength\sproutforms\services\Groups;
 use barrelstrength\sproutforms\variables\SproutFormsVariable;
 use barrelstrength\sproutforms\events\RegisterFieldsEvent;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\PlainText;
@@ -82,7 +81,7 @@ class SproutForms extends \craft\base\Plugin
 		);
 
 		// Register DataSources for sproutReports plugin integration
-		Event::on(DataSourcesCore::class, DataSourcesCore::EVENT_REGISTER_DATA_SOURCES, function(RegisterComponentTypesEvent
+		Event::on(DataSources::class, DataSources::EVENT_REGISTER_DATA_SOURCES, function(RegisterComponentTypesEvent
 		                                                                                 $event) {
 			$event->types[] = new SproutFormsEntriesDataSource();
 		});
@@ -175,7 +174,8 @@ class SproutForms extends \craft\base\Plugin
 			'sproutforms/forms/<groupId:\d+>'                        =>
 			'sprout-forms/forms',
 
-			'sproutforms/reports/<dataSourceId>' => 'sprout-core/reports/results-index'
+			'sproutforms/reports/<dataSourceId>' => 'sprout-core/reports/index',
+			'sproutforms/reports/<pluginId>/<dataSourceKey:{handle}>/new' => 'sprout-core/reports/edit-report'
 		];
 	}
 
