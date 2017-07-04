@@ -175,7 +175,10 @@ class SproutForms extends \craft\base\Plugin
 			'sprout-forms/forms',
 
 			'sproutforms/reports/<dataSourceId>' => 'sprout-core/reports/index',
-			'sproutforms/reports/<pluginId>/<dataSourceKey:{handle}>/new' => 'sprout-core/reports/edit-report'
+
+			'sproutforms/reports/<dataSourceKey>/new' => 'sprout-core/reports/edit-report',
+			'sproutforms/reports/<dataSourceKey>/edit/<reportId:\d+>' => 'sprout-core/reports/edit-report',
+			'sproutforms/reports/view/<reportId:\d+>' => 'sprout-core/reports/results-index'
 		];
 	}
 
