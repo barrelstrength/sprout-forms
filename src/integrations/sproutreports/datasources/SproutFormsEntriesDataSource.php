@@ -24,11 +24,9 @@ class SproutFormsEntriesDataSource extends BaseDataSource
 	/**
 	 * @return string
 	 */
-	public function getPluginName()
+	public function getPluginHandle()
 	{
-		$plugin = Craft::$app->getPlugins()->getPlugin('sproutForms');
-
-		return $plugin->name;
+		return 'sproutForms';
 	}
 
 	/**
@@ -125,6 +123,11 @@ class SproutFormsEntriesDataSource extends BaseDataSource
 	{
 		$forms = Form::find()->limit(null)->orderBy('name')->all();
 
+		if (empty($options))
+		{
+			$options = (array) $this->report->getOptions();
+		}
+
 		$formOptions = array();
 
 		foreach ($forms as $form)
@@ -143,38 +146,16 @@ class SproutFormsEntriesDataSource extends BaseDataSource
 		{
 			if (isset($options['startDate']))
 			{
-				$options['startDate'] = DateTimeHelper::toDateTime($options['startDate']);
+				$startDateValue = (array) $options['startDate'];
+
+				$options['startDate'] = DateTimeHelper::toDateTime($startDateValue);
 			}
 
 			if (isset($options['endDate']))
 			{
-				$options['endDate'] = DateTimeHelper::toDateTime($options['endDate']);
-			}
+				$endDateValue = (array) $options['endDate'];
 
-		}
-		else
-		{
-			$options['startDate'] = null;
-			$options['endDate']   = null;
-
-			if ($this->report->getOption('startDate'))
-			{
-				$startDateValue = $this->report->getOption('startDate');
-				$startDateValue = (array) $startDateValue;
-
-				$startDate = DateTimeHelper::toIso8601($startDateValue);
-
-				$options['startDate'] = DateTimeHelper::toDateTime($startDate);
-			}
-
-			if ($this->report->getOption('endDate'))
-			{
-				$endDateValue = $this->report->getOption('endDate');
-				$endDateValue = (array) $endDateValue;
-
-				$endDate = DateTimeHelper::toIso8601($endDateValue);
-
-				$options['endDate'] = DateTimeHelper::toDateTime($endDate);
+				$options['endDate'] = DateTimeHelper::toDateTime($endDateValue);
 			}
 		}
 

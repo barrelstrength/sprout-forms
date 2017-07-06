@@ -29,6 +29,8 @@ class Install extends Migration
 	 */
 	public function safeDown()
 	{
+		SproutCore::$app->reportsMigration->dropTablesByDataSourceId('sproutforms.sproutformsentriesdatasource');
+
 		$this->dropTable('{{%sproutforms_entries}}');
 		$this->dropTable('{{%sproutforms_forms}}');
 		$this->dropTable('{{%sproutforms_formgroups}}');
