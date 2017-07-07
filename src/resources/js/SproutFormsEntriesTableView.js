@@ -51,7 +51,7 @@ Craft.SproutForms.EntriesTableView = Craft.TableElementIndexView.extend({
 		    $to = $('<span class="to light">to</span>').appendTo($dateRange),
 		    $endDateContainer = $('<div class="datewrapper"></div>').appendTo($dateRange),
 		    $total = $('<div class="total"></div>').appendTo($chartHeader),
-		    $totalLabel = $('<div class="total-label light">'+Craft.t('sproutforms','Total Submissions')+'</div>').appendTo($total),
+		    $totalLabel = $('<div class="total-label light">'+Craft.t('sprout-forms','Total Submissions')+'</div>').appendTo($total),
 		    $totalValueWrapper = $('<div class="total-value-wrapper"></div>').appendTo($total);
 		$totalValue = $('<span class="total-value">&nbsp;</span>').appendTo($totalValueWrapper);
 
@@ -185,7 +185,7 @@ Craft.SproutForms.EntriesTableView = Craft.TableElementIndexView.extend({
 			}
 			else
 			{
-				var msg = Craft.t('sproutforms','An unknown error occurred.');
+				var msg = Craft.t('sprout-forms','An unknown error occurred.');
 
 				if(typeof(response) != 'undefined' && response && typeof(response.error) != 'undefined')
 				{

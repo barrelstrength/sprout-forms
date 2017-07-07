@@ -86,8 +86,8 @@
 
 			this.$deleteSpinner = $('<div class="spinner hidden">').appendTo(this.$leftButtons);
 
-			this.$cancelBtn = $('<div class="btn disabled" role="button">').text(Craft.t('sproutforms','Cancel')).appendTo(this.$rightButtons);
-			this.$saveBtn = $('<div class="btn submit disabled" role="button">').text(Craft.t('sproutforms','Save')).appendTo(this.$rightButtons);
+			this.$cancelBtn = $('<div class="btn disabled" role="button">').text(Craft.t('sprout-forms','Cancel')).appendTo(this.$rightButtons);
+			this.$saveBtn = $('<div class="btn submit disabled" role="button">').text(Craft.t('sprout-forms','Save')).appendTo(this.$rightButtons);
 			this.$saveSpinner = $('<div class="spinner hidden">').appendTo(this.$rightButtons);
 
 			this.setContainer($container);
@@ -239,7 +239,7 @@
 							}
 							else
 							{
-								Craft.cp.displayError(Craft.t('sproutforms','Could not load all resources.'));
+								Craft.cp.displayError(Craft.t('sprout-forms','Could not load all resources.'));
 							}
 						}, this));
 					}
@@ -404,7 +404,7 @@
 							field: response.field
 						});
 
-						Craft.cp.displayNotice(Craft.t('sproutforms','\'{name}\' field saved.', { name: response.field.name }));
+						Craft.cp.displayNotice(Craft.t('sprout-forms','\'{name}\' field saved.', { name: response.field.name }));
 					}
 
 					this.hide();
@@ -435,7 +435,7 @@
 				{
 					this.initListeners();
 
-					Craft.cp.displayError(Craft.t('sproutforms','An unknown error occurred.'));
+					Craft.cp.displayError(Craft.t('sprout-forms','An unknown error occurred.'));
 				}
 			}, this));
 		},
@@ -481,7 +481,7 @@
 				}
 				else
 				{
-					Craft.cp.displayError(Craft.t('sproutforms','An unknown error occurred. '));
+					Craft.cp.displayError(Craft.t('sprout-forms','An unknown error occurred. '));
 
 					this.hide();
 				}

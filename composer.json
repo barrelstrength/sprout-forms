@@ -13,7 +13,7 @@
   },
   "extra": {
     "name": "Sprout Forms",
-    "handle": "sproutForms",
+    "handle": "sprout-forms",
     "version": "3.0.0",
     "schemaVersion": "3.0.0",
     "hasCpSettings": true,

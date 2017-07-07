@@ -148,7 +148,7 @@
 			}
 			else
 			{
-				Craft.cp.displayError(Craft.t('sproutforms','Something went wrong when creating the field :('));
+				Craft.cp.displayError(Craft.t('sprout-forms','Something went wrong when creating the field :('));
 
 				$(el).remove();
 			}
@@ -235,7 +235,7 @@
 					if (response.success)
 					{
 						var tab = response.tab;
-						Craft.cp.displayNotice(Craft.t('sproutforms','Tab: '+tab.name+' created'));
+						Craft.cp.displayNotice(Craft.t('sprout-forms','Tab: '+tab.name+' created'));
 						// first insert the new tab before the add tab button
 						var href = '#sproutforms-tab-'+tab.id;
 						$('<li><a id="tab-'+tab.id+'" class="tab" href="'+href+'" tabindex="0">'+tab.name+'</a></li>').insertBefore("#sproutforms-add-tab");
@@ -267,21 +267,21 @@
 					else
 					{
 						console.log(response.errors);
-						Craft.cp.displayError(Craft.t('sproutforms','Unable to create a new Tab'));
+						Craft.cp.displayError(Craft.t('sprout-forms','Unable to create a new Tab'));
 					}
 				}, this));
 
 			}
 			else
 			{
-				Craft.cp.displayError(Craft.t('sproutforms','Wrong Tab Name - Please try again'));
+				Craft.cp.displayError(Craft.t('sprout-forms','Wrong Tab Name - Please try again'));
 			}
 
 		},
 
 		promptForGroupName: function(oldName)
 		{
-			return prompt(Craft.t('sproutforms','What do you want to name your new Tab?'), oldName);
+			return prompt(Craft.t('sprout-forms','What do you want to name your new Tab?'), oldName);
 		},
 
 		confirmDeleteTab: function()
@@ -340,7 +340,7 @@
 				$field.find('.required-input').remove();
 
 				setTimeout(function() {
-					$toggleLink.text(Craft.t('sproutforms', 'Make required'));
+					$toggleLink.text(Craft.t('sprout-forms', 'Make required'));
 				}, 500);
 			}
 			else
@@ -349,7 +349,7 @@
 				$('<input class="required-input" type="hidden" name="requiredFields[]" value="' + fieldId + '">').appendTo($field);
 
 				setTimeout(function() {
-					$toggleLink.text(Craft.t('sproutforms', 'Make not required'));
+					$toggleLink.text(Craft.t('sprout-forms', 'Make not required'));
 				}, 500);
 			}
 		},
