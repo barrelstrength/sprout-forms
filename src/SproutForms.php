@@ -174,8 +174,10 @@ class SproutForms extends \craft\base\Plugin
 			'sproutforms/forms/<groupId:\d+>'                        =>
 			'sprout-forms/forms',
 
-			'sproutforms/reports/<dataSourceId>' => 'sprout-core/reports/index',
-			'sproutforms/reports/<pluginId>/<dataSourceKey:{handle}>/new' => 'sprout-core/reports/edit-report'
+			'sproutforms/reports/<dataSourceId>/new' => 'sprout-core/reports/edit-report',
+			'sproutforms/reports/<dataSourceId>/edit/<reportId>' => 'sprout-core/reports/edit-report',
+			'sproutforms/reports/view/<reportId>' => 'sprout-core/reports/results-index',
+			'sproutforms/reports/<dataSourceId>' => 'sprout-core/reports/index'
 		];
 	}
 
