@@ -58,7 +58,7 @@ class RegularExpression extends SproutFormsBaseField implements PreviewableField
 	public function getSettingsHtml()
 	{
 		return Craft::$app->getView()->renderTemplate(
-			'sproutforms/_components/fields/regularexpression/settings',
+			'sprout-forms/_components/fields/regularexpression/settings',
 			[
 				'field' => $this,
 			]

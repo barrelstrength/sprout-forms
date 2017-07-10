@@ -27,8 +27,8 @@
 	{{ forms.selectField({
 		first: true,
 		required: true,
-		label: "Tab"|t('sproutforms'),
-		instructions: "Which section should this field be displayed in?"|t('sproutforms'),
+		label: "Tab"|t('sprout-forms'),
+		instructions: "Which section should this field be displayed in?"|t('sprout-forms'),
 		id: 'tabId',
 		name: 'tabId',
 		options: sectionOptions,
@@ -38,8 +38,8 @@
 {% endif %}
 
 {{ forms.textField({
-	label: "Name"|t('sproutforms'),
-	instructions: "The user-friendly name of your field."|t('sproutforms'),
+	label: "Name"|t('sprout-forms'),
+	instructions: "The user-friendly name of your field."|t('sprout-forms'),
 	id: 'field-name',
 	name: 'name',
 	value: (field is defined ? field.name : null),
@@ -51,8 +51,8 @@
 }) }}
 
 {{ forms.textField({
-	label: "Handle"|t('sproutforms'),
-	instructions: "How you’ll refer to this field in the templates."|t('sproutforms'),
+	label: "Handle"|t('sprout-forms'),
+	instructions: "How you’ll refer to this field in the templates."|t('sprout-forms'),
 	id: 'field-handle',
 	class: 'code',
 	name: 'handle',
@@ -63,8 +63,8 @@
 }) }}
 
 {{ forms.textareaField({
-	label: "Instructions"|t('sproutforms'),
-	instructions: "Helper text to guide the author."|t('sproutforms'),
+	label: "Instructions"|t('sprout-forms'),
+	instructions: "Helper text to guide the author."|t('sprout-forms'),
 	id: 'instructions',
 	class: 'nicetext',
 	name: 'instructions',
@@ -76,8 +76,8 @@
 <hr>
 
 {{ forms.selectField({
-	label: "Field Type"|t('sproutforms'),
-	instructions: "What type of field is this?"|t('sproutforms') ~ (fieldId is defined ? '<br><span class="error">'~"Careful—changing this may result in data loss."|t('sproutforms')~'</span>' : ''),
+	label: "Field Type"|t('sprout-forms'),
+	instructions: "What type of field is this?"|t('sprout-forms') ~ (fieldId is defined ? '<br><span class="error">'~"Careful—changing this may result in data loss."|t('sprout-forms')~'</span>' : ''),
 	id: 'type',
 	name: 'type',
 	hasOptgroups: true,

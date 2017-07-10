@@ -108,7 +108,7 @@ class EmailSelect extends SproutBaseOptionsField
 
 		$options = $this->options;
 
-		return Craft::$app->getView()->renderTemplate('sproutforms/_components/fields/emailselect/input',
+		return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/emailselect/input',
 			[
 				'name'    => $name,
 				'value'   => $value,

@@ -1,9 +1,9 @@
-{% extends "sproutforms/_layout" %}
+{% extends "sprout-forms/_layout" %}
 
 {% block content %}
-	
+
 	<h1>Output your form tab by tab.</h1>
-	
+
 	<p>Take a look at the code of this template to see an example with comments.</p>
 
 	<hr>
@@ -15,11 +15,11 @@
 		<p>Thank you for your message. We'll be in touch soon!</p>
 
 	{% else %}
-	  
+
 	  {# Retrieve your Form Model from the database #}
 	  {% set form = craft.sproutForms.form('basic') %}
 
-	  {# If you want more fine-grained control over your fields, you will have to build the 
+	  {# If you want more fine-grained control over your fields, you will have to build the
 	     Form youself, and then you can control the specific fields more directly. #}
 	  <form method="post" accept-charset="UTF-8">
 	  	{{ getCsrfInput() }}
@@ -30,7 +30,7 @@
 				 settings in the Control Panel later. #}
 			<input type="hidden" name="handle" value="{{ form.handle }}">
 			<input type="hidden" name="redirect" value="{{ form.redirectUri }}">
-	  	
+
 	  	<div class="fields">
 
 	  		{# To output a specific field, use the syntax: formHandle.tabHandle

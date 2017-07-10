@@ -186,7 +186,7 @@ class Number extends SproutFormsBaseField implements PreviewableFieldInterface
 	public function getSettingsHtml()
 	{
 		$rendered = Craft::$app->getView()->renderTemplate(
-			'sproutforms/_components/fields/number/settings',
+			'sprout-forms/_components/fields/number/settings',
 			[
 				'field' => $this,
 			]

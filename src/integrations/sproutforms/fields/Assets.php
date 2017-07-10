@@ -107,7 +107,7 @@ class Assets extends SproutBaseRelationField
 	{
 		parent::init();
 		$this->allowLargeThumbsView = true;
-		$this->settingsTemplate     = 'sproutforms/_components/fields/assets/settings';
+		$this->settingsTemplate     = 'sprout-forms/_components/fields/assets/settings';
 		$this->inputTemplate        = '_components/fieldtypes/Assets/input';
 		$this->inputJsClass         = 'Craft.AssetSelectInput';
 	}

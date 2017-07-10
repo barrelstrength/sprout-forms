@@ -164,7 +164,7 @@ class EntriesController extends BaseController
 		$variables['tabs']            = $tabs;
 		$variables['fieldLayoutTabs'] = $fieldLayoutTabs;
 
-		return $this->renderTemplate('sproutforms/entries/_edit', $variables);
+		return $this->renderTemplate('sprout-forms/entries/_edit', $variables);
 	}
 
 	/**

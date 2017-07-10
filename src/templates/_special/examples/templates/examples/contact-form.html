@@ -1,9 +1,9 @@
-{% extends "sproutforms/_layout" %}
+{% extends "sprout-forms/_layout" %}
 
 {% block content %}
-	
+
 	<h1>Output your form using a single tag.</h1>
-	
+
 	<p>Take a look at the code of this template to see an example with comments.</p>
 
 	<hr>
@@ -15,7 +15,7 @@
 		<p>Thank you for your message. We'll be in touch soon!</p>
 
 	{% else %}
-	  
+
 	  {# Display our Contact Form #}
 	  {{ craft.sproutForms.displayForm('contact') }}
 

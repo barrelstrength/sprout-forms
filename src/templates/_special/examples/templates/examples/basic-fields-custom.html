@@ -1,4 +1,4 @@
-{% extends "sproutforms/_layout" %}
+{% extends "sprout-forms/_layout" %}
 
 {% block content %}
 
@@ -6,11 +6,11 @@
 
 <p>Take a look at the code of this template to see an example with comments.</p>
 
-<hr> 
+<hr>
 
 {# Prepare our error macro #}
 {% macro errorList(errors) %}
-	{# To display errors, you want to make sure errors exist, 
+	{# To display errors, you want to make sure errors exist,
 		 and then you can loop through and display them #}
 	{% if errors %}
 			<ul class="errors">
@@ -34,13 +34,13 @@
 	<input type="hidden" name="action" value="sproutForms/entries/saveEntry">
 	<input type="hidden" name="handle" value="{{ form.handle }}">
 	<input type="hidden" name="redirect" value="{{ form.redirectUri }}">
-	
+
 	<div class="fields">
 
 		{% set textField = form.getField('plainText') %}
 
 		{% if textField is defined %}
-		
+
 			<div class="field" id="fields-{{ textField.handle }}-field">
 				<div class="heading">
 					<label class="required" for="fields-{{ textField.handle }}">
@@ -62,7 +62,7 @@
 
 		{% set dropdownField = form.getField('dropdown') %}
 
-		{# We use the Twig attribute tag to dynamically access our 
+		{# We use the Twig attribute tag to dynamically access our
 			 field value on the submitted Form Entry #}
 		{% set submittedDropdownValue = attribute(submittedEntry, dropdownField.handle) %}
 
@@ -170,13 +170,13 @@
 					</label>
 				</div>
 				<div class="input">
-					
+
 					{% for key, option in checkboxesField.settings.options %}
 
 						{% set defaultValue = (option.default and not submittedEntry.getErrors()|length) ? option.value : null %}
 						{% set submittedCheckbox = submittedCheckboxValues.options[key] %}
 						{% set selectedCheckboxValue = submittedCheckbox.selected ? submittedCheckbox.value : defaultValue %}
-						
+
 						<div>
 							<label><input type="checkbox" value="{{ option.value }}" class="checkbox" name="fields[{{ checkboxesField.handle }}][]" {%- if selectedCheckboxValue == option.value %} checked="checked"{% endif -%}>&nbsp;{{ option.label }}</label>
 						</div>
@@ -189,7 +189,7 @@
 				</div>
 				{% endif %}
 			</div>
-		
+
 		{% endif %}
 
 
@@ -212,7 +212,7 @@
 							{% set defaultValue = (option.default and not submittedEntry.getErrors()|length) ? option.value : null %}
 							{% set submittedMultiSelect = multiSelectValues.options[key] %}
 							{% set selectedultiSelectValue = submittedMultiSelect.selected ? submittedMultiSelect.value : defaultValue %}
-							
+
 							<option value="{{ option.value }}" {%- if selectedultiSelectValue == option.value %} selected="selected"{% endif -%}>{{ option.label }}</option>
 
 						{% endfor %}
@@ -258,7 +258,7 @@
 	<div class="submit">
 		<input type="submit" value="Submit">
 	</div>
-	
+
 </form>
 
 {% endblock %}

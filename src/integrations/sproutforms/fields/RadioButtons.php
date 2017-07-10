@@ -98,7 +98,7 @@ class RadioButtons extends SproutBaseOptionsField
 		$parentRendered = parent::getSettingsHtml();
 
 		$rendered = Craft::$app->getView()->renderTemplate(
-			'sproutforms/_components/fields/radiobuttons/settings',
+			'sprout-forms/_components/fields/radiobuttons/settings',
 			[
 				'field' => $this,
 			]

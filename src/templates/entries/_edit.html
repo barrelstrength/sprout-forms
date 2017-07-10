@@ -1,14 +1,14 @@
-{% extends "sproutforms/_layouts/base" %}
+{% extends "sprout-forms/_layouts/base" %}
 {% import "_includes/forms" as forms %}
 
 {% set crumbs = [
-	{ label: "Entries"|t, url: url('sproutforms/entries') }
+	{ label: "Entries"|t, url: cpUrl('sprout-forms/entries') }
 ] %}
 
 {% set title = 'Edit Entry' %}
 
 {% set fullPageForm = true %}
-{% set saveShortcutRedirect = 'sproutforms/entries' %}
+{% set saveShortcutRedirect = 'sprout-forms/entries' %}
 
 {% set saveButton %}
 	<div class="btngroup submit first">

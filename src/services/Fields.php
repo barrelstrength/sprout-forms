@@ -93,7 +93,7 @@ class Fields extends Component
 	public function getSproutFormsTemplates(FormElement $form = null)
 	{
 		$templates              = array();
-		$settings               = Craft::$app->plugins->getPlugin('sproutforms')->getSettings();
+		$settings               = Craft::$app->plugins->getPlugin('sprout-forms')->getSettings();
 		$templateFolderOverride = $settings->templateFolderOverride;
 
 		if ($form->enableTemplateOverrides)
@@ -507,7 +507,7 @@ class Fields extends Component
 		$data['formId']   = $form->id;
 		$view = Craft::$app->getView();
 
-		$html = $view->renderTemplate('sproutforms/forms/_editFieldModal', $data);
+		$html = $view->renderTemplate('sprout-forms/forms/_editFieldModal', $data);
 		$js   = $view->getBodyHtml();
 		$css  = $view->getHeadHtml();
 

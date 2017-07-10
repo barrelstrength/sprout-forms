@@ -45,7 +45,7 @@ class Hidden extends SproutFormsBaseField implements PreviewableFieldInterface
 	 */
 	public function getSettingsHtml()
 	{
-		return Craft::$app->getView()->renderTemplate('sproutforms/_components/fields/hidden/settings',
+		return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/hidden/settings',
 			[
 				'field' => $this,
 			]);

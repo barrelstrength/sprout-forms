@@ -57,7 +57,7 @@
 				endDate: Craft.SproutForms.RecentEntriesChartWidget.getDateValue(this.endDate)
 			};
 
-			Craft.postActionRequest('sproutForms/charts/getEntriesData', requestData, $.proxy(function(response, textStatus)
+			Craft.postActionRequest('sprout-forms/charts/getEntriesData', requestData, $.proxy(function(response, textStatus)
 			{
 				if (textStatus == 'success' && typeof(response.error) == 'undefined')
 				{

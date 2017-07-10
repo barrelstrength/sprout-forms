@@ -10,7 +10,6 @@ use craft\helpers\UrlHelper;
 use craft\validators\HandleValidator;
 use craft\validators\UniqueValidator;
 use craft\behaviors\FieldLayoutBehavior;
-use craft\behaviors\FieldLayoutTrait;
 
 use barrelstrength\sproutforms\elements\db\FormQuery;
 use barrelstrength\sproutforms\records\Form as FormRecord;
@@ -24,8 +23,6 @@ use barrelstrength\sproutforms\validators\EnabledNotificationValidator;
  */
 class Form extends Element
 {
-	use FieldLayoutTrait;
-
 	// Properties
 	// =========================================================================
 	private $_fields;
@@ -140,7 +137,7 @@ class Form extends Element
 	public function getCpEditUrl()
 	{
 		return UrlHelper::cpUrl(
-			'sproutforms/forms/edit/'.$this->id
+			'sprout-forms/forms/edit/'.$this->id
 		);
 	}
 
