@@ -126,7 +126,7 @@ class SproutForms extends \craft\base\Plugin
 	 */
 	public static function t($message, array $params = [])
 	{
-		return Craft::t('sproutforms', $message, $params);
+		return Craft::t('sprout-forms', $message, $params);
 	}
 
 	public static function error($message)

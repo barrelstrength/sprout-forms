@@ -61,18 +61,18 @@
 					$menu    = $('<div class="menu" data-align="center"/>').insertAfter($editBtn),
 					$ul      = $('<ul/>').appendTo($menu);
 
-			$('<li><a data-action="edit">' + Craft.t('sproutforms','Edit') + '</a></li>').appendTo($ul);
+			$('<li><a data-action="edit">' + Craft.t('sprout-forms','Edit') + '</a></li>').appendTo($ul);
 
 			if ($field.hasClass('fld-required'))
 			{
-				$('<li><a data-action="toggle-required">' + Craft.t('sproutforms','Make not required') + '</a></li>').appendTo($ul);
+				$('<li><a data-action="toggle-required">' + Craft.t('sprout-forms','Make not required') + '</a></li>').appendTo($ul);
 			}
 			else
 			{
-				$('<li><a data-action="toggle-required">' + Craft.t('sproutforms','Make required') + '</a></li>').appendTo($ul);
+				$('<li><a data-action="toggle-required">' + Craft.t('sprout-forms','Make required') + '</a></li>').appendTo($ul);
 			}
 
-			$('<li><a data-action="remove">' + Craft.t('sproutforms','Remove') + '</a></li>').appendTo($ul);
+			$('<li><a data-action="remove">' + Craft.t('sprout-forms','Remove') + '</a></li>').appendTo($ul);
 		},
 
 		removeField: function($field)
@@ -123,7 +123,7 @@
 		{
 			$("#sproutField").addClass("disabled");
 			$("#sproutforms-tabupdatemessage").removeClass('hidden');
-			Craft.cp.displayNotice(Craft.t('sproutforms','Please save the form to add a new field.'));
+			Craft.cp.displayNotice(Craft.t('sprout-forms','Please save the form to add a new field.'));
 		},
 
 	});
