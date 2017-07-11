@@ -110,7 +110,7 @@ class MultiSelect extends SproutBaseOptionsField
 		$parentRendered = parent::getSettingsHtml();
 
 		$rendered = Craft::$app->getView()->renderTemplate(
-			'sproutforms/_components/fields/multiselect/settings',
+			'sprout-forms/_components/fields/multiselect/settings',
 			[
 				'field' => $this,
 			]

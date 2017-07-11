@@ -34,7 +34,7 @@ class SproutFormsVariable
 	 */
 	public function getName()
 	{
-		$plugin = Craft::$app->plugins->getPlugin('sproutforms');
+		$plugin = Craft::$app->plugins->getPlugin('sprout-forms');
 
 		return $plugin->getName();
 	}
@@ -44,7 +44,7 @@ class SproutFormsVariable
 	 */
 	public function getVersion()
 	{
-		$plugin = Craft::$app->plugins->getPlugin('sproutforms');
+		$plugin = Craft::$app->plugins->getPlugin('sprout-forms');
 
 		return $plugin->getVersion();
 	}

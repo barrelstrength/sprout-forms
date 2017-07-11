@@ -1,15 +1,15 @@
 {% import "_includes/forms" as forms %}
 
 {{ forms.textField({
-	label: "Placeholder Text"|t('sproutforms'),
-	instructions: "The text that will be shown if the field doesn’t have a value."|t('sproutforms'),
+	label: "Placeholder Text"|t('sprout-forms'),
+	instructions: "The text that will be shown if the field doesn’t have a value."|t('sprout-forms'),
 	id: 'placeholder',
 	name: 'placeholder',
 	value: field.placeholder
 }) }}
 
 {{ forms.checkboxField({
-	label: "Email Addresses for this field have their own validation pattern"|t('sproutforms'),
+	label: "Email Addresses for this field have their own validation pattern"|t('sprout-forms'),
 	name: 'customPatternToggle',
 	checked: field.customPatternToggle,
 	toggle: 'sproutemailfield-custom-validation-pattern'
@@ -17,16 +17,16 @@
 
 <div id="sproutemailfield-custom-validation-pattern" {% if not field.customPatternToggle %}class="hidden"{% endif %}>
 	{{ forms.textField({
-		label: 'Validation Pattern'|t('sproutforms'),
-		instructions: 'Validate email addresses using this regular expression.'|t('sproutforms'),
+		label: 'Validation Pattern'|t('sprout-forms'),
+		instructions: 'Validate email addresses using this regular expression.'|t('sprout-forms'),
 		name: 'customPattern',
 		placeholder: '(.*)@example.com$',
 		value: field.customPattern
 	}) }}
 
 	{{ forms.textField({
-		label: 'Error Message'|t('sproutforms'),
-		instructions: 'Display this error message when an email address is invalid.'|t('sproutforms'),
+		label: 'Error Message'|t('sprout-forms'),
+		instructions: 'Display this error message when an email address is invalid.'|t('sprout-forms'),
 		name: 'customPatternErrorMessage',
 		placeholder: 'Must be a valid email address from example.com',
 		value: field.customPatternErrorMessage
@@ -36,8 +36,8 @@
 <hr>
 
 {{ forms.lightswitchField ({
-	label: "Require email address to be unique"|t('sproutforms'),
-	instructions: "Duplicate email addresses saved to this field will not be allowed."|t('sproutforms'),
+	label: "Require email address to be unique"|t('sprout-forms'),
+	instructions: "Duplicate email addresses saved to this field will not be allowed."|t('sprout-forms'),
 	name: 'uniqueEmail',
 	on: field.uniqueEmail,
 }) }}

@@ -8,6 +8,8 @@ use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\web\UrlManager;
 use yii\base\Event;
+use craft\events\DefineComponentsEvent;
+use craft\web\twig\variables\CraftVariable;
 
 use barrelstrength\sproutcore\SproutCoreHelper;
 use barrelstrength\sproutforms\models\Settings;
@@ -85,29 +87,37 @@ class SproutForms extends \craft\base\Plugin
 		                                                                                 $event) {
 			$event->types[] = new SproutFormsEntriesDataSource();
 		});
+
+		Event::on(
+			CraftVariable::class,
+			CraftVariable::EVENT_DEFINE_COMPONENTS,
+			function (DefineComponentsEvent $event) {
+					$event->components['sproutforms'] = SproutFormsVariable::class;
+			}
+		);
 	}
 
 	public function getCpNavItem()
 	{
 		$parent = parent::getCpNavItem();
-		$parent['url'] = 'sproutforms';
+		$parent['url'] = 'sprout-forms';
 		return array_merge($parent,[
 			'subnav' => [
 				'entries' => [
 					"label" => SproutForms::t("Entries"),
-					"url"   => 'sproutforms/entries'
+					"url"   => 'sprout-forms/entries'
 				],
 				'forms' =>[
 					"label" => SproutForms::t("Forms"),
-					"url" => 'sproutforms/forms'
+					"url" => 'sprout-forms/forms'
 				],
 				'reports' =>[
 					"label" => SproutForms::t("Reports"),
-					"url" => 'sproutforms/reports/sproutforms.sproutformsentriesdatasource'
+					"url" => 'sprout-forms/reports/sproutforms.sproutformsentriesdatasource'
 				],
 				'settings' =>[
 					"label" => SproutForms::t("Settings"),
-					"url" => 'sproutforms/settings'
+					"url" => 'sprout-forms/settings'
 				]
 			]
 		]);
@@ -150,34 +160,34 @@ class SproutForms extends \craft\base\Plugin
 	private function getCpUrlRules()
 	{
 		return [
-			'sproutforms/forms/new'                                  =>
+			'sprout-forms/forms/new'                                  =>
 			'sprout-forms/forms/edit-form-template',
 
-			'sproutforms/forms/edit/<formId:\d+>'                    =>
+			'sprout-forms/forms/edit/<formId:\d+>'                    =>
 			'sprout-forms/forms/edit-form-template',
 
-			'sproutforms/entries/edit/<entryId:\d+>'                 =>
+			'sprout-forms/entries/edit/<entryId:\d+>'                 =>
 			'sprout-forms/entries/edit-entry',
 
-			'sproutforms/settings/(general|advanced)'                =>
+			'sprout-forms/settings/(general|advanced)'                =>
 			'sprout-forms/settings/settings-index-template',
 
-			'sproutforms/settings/entrystatuses'                     =>
+			'sprout-forms/settings/entrystatuses'                     =>
 			'sprout-forms/entry-statuses/index',
 
-			'sproutforms/settings/entrystatuses/new'                 =>
+			'sprout-forms/settings/entrystatuses/new'                 =>
 			'sprout-forms/entry-statuses/edit',
 
-			'sproutforms/settings/entrystatuses/<entryStatusId:\d+>' =>
+			'sprout-forms/settings/entrystatuses/<entryStatusId:\d+>' =>
 			'sprout-forms/entry-statuses/edit',
 
-			'sproutforms/forms/<groupId:\d+>'                        =>
+			'sprout-forms/forms/<groupId:\d+>'                        =>
 			'sprout-forms/forms',
 
-			'sproutforms/reports/<dataSourceId>/new' => 'sprout-core/reports/edit-report',
-			'sproutforms/reports/<dataSourceId>/edit/<reportId>' => 'sprout-core/reports/edit-report',
-			'sproutforms/reports/view/<reportId>' => 'sprout-core/reports/results-index',
-			'sproutforms/reports/<dataSourceId>' => 'sprout-core/reports/index'
+			'sprout-forms/reports/<dataSourceId>/new' => 'sprout-core/reports/edit-report',
+			'sprout-forms/reports/<dataSourceId>/edit/<reportId>' => 'sprout-core/reports/edit-report',
+			'sprout-forms/reports/view/<reportId>' => 'sprout-core/reports/results-index',
+			'sprout-forms/reports/<dataSourceId>' => 'sprout-core/reports/index'
 		];
 	}
 
@@ -194,14 +204,6 @@ class SproutForms extends \craft\base\Plugin
 		}
 
 		return true;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function defineTemplateComponent()
-	{
-		return SproutFormsVariable::class;
 	}
 }
 

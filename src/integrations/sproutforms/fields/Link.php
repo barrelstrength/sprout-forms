@@ -63,7 +63,7 @@ class Link extends SproutFormsBaseField implements PreviewableFieldInterface
 	public function getSettingsHtml()
 	{
 		return Craft::$app->getView()->renderTemplate(
-			'sproutforms/_components/fields/link/settings',
+			'sprout-forms/_components/fields/link/settings',
 			[
 				'field' => $this,
 			]

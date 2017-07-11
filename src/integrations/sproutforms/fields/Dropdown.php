@@ -101,7 +101,7 @@ class Dropdown extends SproutBaseOptionsField
 		$parentRendered = parent::getSettingsHtml();
 
 		$rendered = Craft::$app->getView()->renderTemplate(
-			'sproutforms/_components/fields/dropdown/settings',
+			'sprout-forms/_components/fields/dropdown/settings',
 			[
 				'field' => $this,
 			]

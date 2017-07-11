@@ -1,12 +1,12 @@
-{% extends "sproutforms/_layout" %}
+{% extends "sprout-forms/_layout" %}
 
-{% block content %}	
+{% block content %}
 
 <h1>Example Forms</h1>
 
 <p>The example templates below illustrate several different ways you can output your forms in your templates.  The <code>displayForm</code>, <code>displayField</code>, and <code>displayTab</code> tags all support retaining submitted values if a form fails submission and displaying field-specific errors.</p>
 
-<hr> 
+<hr>
 
 <ul class="examples">
 	<li>
@@ -17,7 +17,7 @@
 		<a href="/sproutforms/examples/contact-form-fields">Contact Form (Field by Field)</a><br/>
 		<code>craft.sproutForms.displayField('formHandle.fieldHandle')</code>
 	</li>
-	<li> 
+	<li>
 		<a href="/sproutforms/examples/basic-fields-tabs">Basic Fields Form (Tabs by Tab)</a><br/>
 		<code>craft.sproutForms.displayTab('formHandle.tabHandle')</code>
 	</li>
@@ -28,7 +28,7 @@
 
 <p>The example form below has been created as a template for all of the different types of fields you may wish to submit from the front end.  Sprout Forms can accept data for all of field types that Craft supports.</p>
 
-<hr> 
+<hr>
 
 <ul class="examples">
 	<li>
@@ -48,5 +48,5 @@
 		Several of the fields in this form are hard-coded and provided as examples of what the HTML structure needs to be to submit those form fields from the front-end of your website.  In practice, you will likely need to add custom javascript and styling to make many of these fields work as desired.
 	</li> #}
 </ul>
-		
+
 {% endblock %}

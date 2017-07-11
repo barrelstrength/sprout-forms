@@ -1,8 +1,8 @@
-{% extends "sproutforms/_layouts/base" %}
+{% extends "sprout-forms/_layouts/base" %}
 {% import "_includes/forms" as forms %}
 
 {% set crumbs = [
-	{ label: "Forms"|t, url: url('sproutforms/forms') }
+	{ label: "Forms"|t, url: cpUrl('sprout-forms/forms') }
 ] %}
 
 {% set fieldLayout = form.getFieldLayout() %}
@@ -24,7 +24,7 @@
 
 {% macro tab(tab, tabFields) %}
 	<div id="sproutforms-tab-{{tab.id}}" data-tabname="{{tab.name}}" data-tabid="{{tab.id}}" class="hidden sproutforms-tab-fields">
-		{#% include 'sproutforms/forms/_tabs/fieldlayoutdesigner' %#}
+		{#% include 'sprout-forms/forms/_tabs/fieldlayoutdesigner' %#}
 		<div class='parent'>
 			<h1>Drag and drop here</h1>
 			<a id="delete-tab-{{tab.id}}" data-tabid="{{tab.id}}">Delete tab</a>
@@ -58,17 +58,17 @@
 {% endmacro %}
 {% block saveButton %}
 <input type="hidden" name="action" value="sprout-forms/forms/save-form">
-{{ redirectInput('sproutforms/forms') }}
+{{ redirectInput('sprout-forms/forms') }}
 <input type="hidden" id="formId" name="id" value="{{ form.id is defined ? form.id : '' }}">
 
 <div class="btngroup submit first">
-	<input type="submit" class="btn submit" value="{{ 'Save'|t('sproutforms') }}">
+	<input type="submit" class="btn submit" value="{{ 'Save'|t('sprout-forms') }}">
 	{% if form.id != null %}
 	<div class="btn submit menubtn"></div>
 	<div class="menu">
 		<ul>
-			<li><a class="formsubmit" data-redirect="{{('sproutforms/forms/edit/'~form.id)|hash}}">{{ "Save and continue editing"|t }} <span class="shortcut">⌘S</span></a></li>
-			<li><a class="formsubmit" data-redirect="{{'sproutforms/forms/edit/'~form.id|hash}}" data-param='saveAsNew' data-value="true">{{ "Save as a new form"|t }}</a></li>
+			<li><a class="formsubmit" data-redirect="{{('sprout-forms/forms/edit/'~form.id)|hash}}">{{ "Save and continue editing"|t }} <span class="shortcut">⌘S</span></a></li>
+			<li><a class="formsubmit" data-redirect="{{'sprout-forms/forms/edit/'~form.id|hash}}" data-param='saveAsNew' data-value="true">{{ "Save as a new form"|t }}</a></li>
 		</ul>
 	</div>
 	{% endif %}
@@ -96,7 +96,7 @@
 		<div id="sproutforms-main-container" class="pane">
 
 			{% if tabs is defined and tabs %}
-			{% include "sproutforms/_includes/tabs" %}
+			{% include "sprout-forms/_includes/tabs" %}
 			{% endif %}
 
 			{# let's add the tabs and fields to the dropped divs #}
@@ -138,13 +138,13 @@
 
 	<div class="editform-sidebar item" data-position="right">
 		<div class="pane meta">
-			{% include 'sproutforms/forms/_sidebar/settings' %}
+			{% include 'sprout-forms/forms/_sidebar/settings' %}
 
 			<div class="deleteform field">
 				<div class="heading"></div>
 				<div class="input">
 					<div class="right">
-						<input type="button" class="btn small formsubmit" value="Delete" data-action="sprout-forms/forms/delete-form" data-confirm="Are you sure you want to delete this form, all of it's fields, and all of it's data?" data-redirect="{{('sproutforms/forms')|hash}}">
+						<input type="button" class="btn small formsubmit" value="Delete" data-action="sprout-forms/forms/delete-form" data-confirm="Are you sure you want to delete this form, all of it's fields, and all of it's data?" data-redirect="{{('sprout-forms/forms')|hash}}">
 					</div>
 				</div>
 			</div>
@@ -221,8 +221,8 @@
 		tableSelector: '#formFields',
 		noObjectsSelector: '#noFormfields',
 		sortable: true,
-		reorderAction: 'sproutForms/fields/reorderFields',
-		deleteAction: 'sproutForms/fields/deleteField'
+		reorderAction: 'sprout-forms/fields/reorderFields',
+		deleteAction: 'sprout-forms/fields/deleteField'
 	});
 
 	$(document).ready(function() {

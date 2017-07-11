@@ -115,7 +115,7 @@ class Checkboxes extends SproutBaseOptionsField
 		$parentRendered = parent::getSettingsHtml();
 
 		$rendered = Craft::$app->getView()->renderTemplate(
-			'sproutforms/_components/fields/checkboxes/settings',
+			'sprout-forms/_components/fields/checkboxes/settings',
 			[
 				'field' => $this,
 			]

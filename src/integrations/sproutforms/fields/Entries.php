@@ -85,7 +85,7 @@ class Entries extends SproutBaseRelationField
 		$parentRendered = parent::getSettingsHtml();
 
 		$rendered = Craft::$app->getView()->renderTemplate(
-			'sproutforms/_components/fields/entries/settings',
+			'sprout-forms/_components/fields/entries/settings',
 			[
 				'field' => $this,
 			]

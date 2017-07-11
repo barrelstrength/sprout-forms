@@ -106,7 +106,7 @@ class PlainText extends SproutFormsBaseField implements PreviewableFieldInterfac
 	public function getSettingsHtml()
 	{
 		$rendered = Craft::$app->getView()->renderTemplate(
-			'sproutforms/_components/fields/plaintext/settings',
+			'sprout-forms/_components/fields/plaintext/settings',
 			[
 				'field' => $this,
 			]

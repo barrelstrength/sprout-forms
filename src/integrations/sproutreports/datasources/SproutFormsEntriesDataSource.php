@@ -170,7 +170,7 @@ class SproutFormsEntriesDataSource extends BaseDataSource
 			}
 		}
 
-		return Craft::$app->getView()->renderTemplate('sproutforms/_reports/options/entries', array(
+		return Craft::$app->getView()->renderTemplate('sprout-forms/_reports/options/entries', array(
 			'formOptions'      => $formOptions,
 			'defaultStartDate' => new \DateTime($defaultStartDate),
 			'defaultEndDate'   => new \DateTime($defaultEndDate),

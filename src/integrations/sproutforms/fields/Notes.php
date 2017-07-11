@@ -73,7 +73,7 @@ class Notes extends SproutFormsBaseField
 		$view->registerAssetBundle(RichTextAsset::class);
 
 		return Craft::$app->getView()->renderTemplate(
-			'sproutforms/_components/fields/notes/settings',
+			'sprout-forms/_components/fields/notes/settings',
 			[
 				'options'  => $this->getOptions(),
 				'id'       => $namespaceInputId,
@@ -92,9 +92,9 @@ class Notes extends SproutFormsBaseField
 		$inputId          = Craft::$app->getView()->formatInputId($name);
 		$namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
 		$selectedStyle    = $this->style;
-		$pluginSettings   = Craft::$app->plugins->
-												getPlugin('sproutfields')->
-												getSettings()->getAttributes();
+		$pluginSettings   = Craft::$app->plugins->getPlugin('sprout-fields')
+		->getSettings()
+		->getAttributes();
 		$selectedStyleCss = "";
 
 		if (isset($pluginSettings[$selectedStyle]))
@@ -133,7 +133,7 @@ class Notes extends SproutFormsBaseField
 		$namespaceInputId = $this->getNamespace() . '-' . $name;
 
 		$selectedStyle    = $settings['style'];
-		$pluginSettings   = Craft::$app->plugins->getPlugin('sproutforms')->getSettings()->getAttributes();
+		$pluginSettings   = Craft::$app->plugins->getPlugin('sprout-forms')->getSettings()->getAttributes();
 
 		$selectedStyleCss = "";
 

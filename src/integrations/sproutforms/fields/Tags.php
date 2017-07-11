@@ -134,7 +134,7 @@ class Tags extends SproutBaseRelationField
 		$parentRendered = parent::getSettingsHtml();
 
 		$rendered = Craft::$app->getView()->renderTemplate(
-			'sproutforms/_components/fields/tags/settings',
+			'sprout-forms/_components/fields/tags/settings',
 			[
 				'field' => $this,
 			]
