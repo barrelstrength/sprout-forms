@@ -35,7 +35,7 @@
 </div>
 
 
-{% if craft.request.getSegment(1) != 'sproutforms' %}
+{% if craft.app.request.getSegment(1) != 'sproutforms' %}
 	{{ forms.lightswitchField({
 		label: "Display Pattern Mask?"|t('sproutFields'),
 		instructions: 'Display a mask of your chosen pattern as the user types.'|t('sproutFields'),

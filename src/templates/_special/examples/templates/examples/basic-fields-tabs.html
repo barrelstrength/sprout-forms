@@ -22,7 +22,7 @@
 	  {# If you want more fine-grained control over your fields, you will have to build the
 	     Form youself, and then you can control the specific fields more directly. #}
 	  <form method="post" accept-charset="UTF-8">
-	  	{{ getCsrfInput() }}
+	  	{{ csrfInput() }}
 			<input type="hidden" name="action" value="sproutForms/entries/saveEntry">
 
 			{# Set your handle and redirect values from your database.

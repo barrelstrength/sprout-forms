@@ -23,8 +23,8 @@
 	}) %}
 {% endif %}
 
-{% set selectedSubnavItem = craft.request.getSegment(2) %}
-{% set selectedSidebarItem = craft.request.getSegment(3) %}
+{% set selectedSubnavItem = craft.app.request.getSegment(2) %}
+{% set selectedSidebarItem = craft.app.request.getSegment(3) %}
 
 {% set sidebar %}
 

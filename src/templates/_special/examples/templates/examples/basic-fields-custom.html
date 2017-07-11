@@ -30,7 +30,7 @@
 {% set submittedEntry = craft.sproutForms.getEntry(form) %}
 
 <form method="post" accept-charset="UTF-8">
-	{{ getCsrfInput() }}
+	{{ csrfInput() }}
 	<input type="hidden" name="action" value="sproutForms/entries/saveEntry">
 	<input type="hidden" name="handle" value="{{ form.handle }}">
 	<input type="hidden" name="redirect" value="{{ form.redirectUri }}">

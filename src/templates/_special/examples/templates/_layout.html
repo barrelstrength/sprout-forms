@@ -8,15 +8,15 @@
 		html {
 			overflow-y:scroll;
 		}
-		body { 
-			background: #fff; 
+		body {
+			background: #fff;
 			color: #333;
 			font-family: sans-serif;
 			line-height: 1.5;
-			margin: 50px; 
+			margin: 50px;
 		}
-		#container { 
-			background: #fdfdfd; 
+		#container {
+			background: #fdfdfd;
 			margin: 0 auto;
 			padding: 30px;
 			width: 700px;
@@ -83,7 +83,7 @@
 <body>
 	<div id="container">
 
-		{% if craft.request.getSegment(2) %}
+		{% if craft.app.request.getSegment(2) %}
 		<p class="back">
 			<a href="/sproutforms">&larr; Return to examples</a>
 		</p>

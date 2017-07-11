@@ -26,7 +26,7 @@
 		   target fields input field.  In our example the attribute `data-animal-type="bird"
 		   gets added to the fullName input field #}
 		{% set options = {
-			"id": "contactform-" ~ craft.request.getSegment(3),
+			"id": "contactform-" ~ craft.app.request.getSegment(3),
 			"class": "form-class form-class-customized",
 			"errorClass": "form-has-errors",
 			"fields": {
