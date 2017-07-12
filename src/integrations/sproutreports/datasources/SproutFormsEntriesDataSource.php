@@ -26,7 +26,7 @@ class SproutFormsEntriesDataSource extends BaseDataSource
 	 */
 	public function getPluginHandle()
 	{
-		return 'sproutForms';
+		return 'sprout-forms';
 	}
 
 	/**
