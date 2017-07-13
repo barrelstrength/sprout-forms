@@ -89,16 +89,6 @@ class SproutFormsEntriesDataSource extends BaseDataSource
 		{
 			$form = SproutForms::$app->forms->getFormById($formId);
 
-			$prefix = $form->getFieldColumnPrefix();
-
-			$fieldKeys = array_keys($form->getFields());
-
-			$columns = array_map(function($value) use ($prefix) {
-				return '(' . $prefix . $value . ') AS ' . $value;
-			}, $fieldKeys);
-
-			$columnSql = (!empty($columns))? implode(',', $columns) : '';
-
 			if (!$form)
 			{
 				return null;
@@ -109,8 +99,7 @@ class SproutFormsEntriesDataSource extends BaseDataSource
 			$query = new Query();
 
 			$formQuery = $query
-				->select("entries.id as ID, entries.title as Title, 
-				(entries.dateCreated) AS 'Date Created', (entries.dateUpdated) AS 'Date Updated', $columnSql")
+				->select("*")
 				->from($contentTable . ' AS entries');
 
 			if ($startDate && $endDate)
@@ -120,6 +109,18 @@ class SproutFormsEntriesDataSource extends BaseDataSource
 			}
 
 			$results = $formQuery->all();
+
+			if ($results)
+			{
+				foreach ($results as $key => $result)
+				{
+					unset($result['elementId']);
+					unset($result['siteId']);
+					unset($result['uid']);
+
+					$results[$key] = $result;
+				}
+			}
 		}
 
 		return $results;
