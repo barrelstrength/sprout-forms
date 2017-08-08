@@ -276,8 +276,8 @@ class SproutForms_EntryElementType extends BaseElementType
 	{
 		return array(
 			'formName'    => Craft::t('Form Name'),
-			'dateCreated' => Craft::t('Date Created'),
-			'dateUpdated' => Craft::t('Date Updated'),
+			'elements.dateCreated' => Craft::t('Date Created'),
+			'elements.dateUpdated' => Craft::t('Date Updated'),
 		);
 	}
 
@@ -291,7 +291,7 @@ class SproutForms_EntryElementType extends BaseElementType
 	 */
 	public function getContentTableForElementsQuery(ElementCriteriaModel $criteria)
 	{
-		if ($criteria->id && $criteria->formId)
+		if ($criteria->formId)
 		{
 			$form = SproutForms_FormRecord::model()->findById($criteria->formId);
 
@@ -364,8 +364,6 @@ class SproutForms_EntryElementType extends BaseElementType
 			entries.ipAddress,
 			entries.userAgent,
 			entries.statusId,
-			entries.dateCreated,
-			entries.dateUpdated,
 			entries.uid,
 			forms.id as formId,
 			forms.name as formName,
@@ -375,7 +373,7 @@ class SproutForms_EntryElementType extends BaseElementType
 		$query->join('sproutforms_entrystatuses entrystatuses', 'entrystatuses.id = entries.statusId');
 		$query->join('sproutforms_forms forms', 'forms.id = entries.formId');
 
-		$this->joinContentTableAndAddContentSelects($query, $criteria, $select);
+		#$this->joinContentTableAndAddContentSelects($query, $criteria, $select);
 		$query->addSelect($select);
 
 		if ($criteria->id)
@@ -396,13 +394,6 @@ class SproutForms_EntryElementType extends BaseElementType
 		}
 		if ($criteria->order)
 		{
-			// Trying to order by date creates ambiguity errors
-			// Let's make sure mysql knows what we want to sort by
-			if (stripos($criteria->order, 'elements.') === false)
-			{
-				$criteria->order = str_replace('dateCreated', 'entries.dateCreated', $criteria->order);
-				$criteria->order = str_replace('dateUpdated', 'entries.dateUpdated', $criteria->order);
-			}
 
 			// If we are sorting by title and do not have a source
 			// We won't be able to sort, so bail on it
@@ -411,6 +402,43 @@ class SproutForms_EntryElementType extends BaseElementType
 				$criteria->order = null;
 			}
 		}
+	}
+
+	/**
+	 * @inheritDoc IElementType::getFieldsForElementsQuery()
+	 *
+	 * @param ElementCriteriaModel $criteria
+	 *
+	 * @return FieldModel[]
+	 */
+	public function getFieldsForElementsQuery(ElementCriteriaModel $criteria)
+	{
+		// Now assemble the actual fields list
+		$fields = array();
+
+		if ($criteria->formId || $criteria->formHandle)
+		{
+			$form = null;
+
+			if ($criteria->formId)
+			{
+				$form = sproutForms()->forms->getFormById($criteria->formId);
+			}
+			else
+			{
+				if ($criteria->formHandle)
+				{
+					$form = sproutForms()->forms->getFormByHandle($criteria->formHandle);
+				}
+			}
+
+			if ($form)
+			{
+				$fields = $form->getFields();
+			}
+		}
+
+		return $fields;
 	}
 
 	/**
