@@ -310,13 +310,14 @@ class SproutForms_EntryElementType extends BaseElementType
 	public function defineCriteriaAttributes()
 	{
 		return array(
-			'order'       => array(AttributeType::String, 'default' => 'dateCreated desc'),
-			'title'       => AttributeType::String,
-			'entryStatus' => AttributeType::Number,
-			'statusId'    => AttributeType::Number,
-			'formId'      => AttributeType::Number,
-			'formHandle'  => AttributeType::String,
-			'formGroupId' => AttributeType::Number,
+			'order'        => array(AttributeType::String, 'default' => 'dateCreated desc'),
+			'title'        => AttributeType::String,
+			'entryStatus'  => AttributeType::Number,
+			'statusId'     => AttributeType::Number,
+			'formId'       => AttributeType::Number,
+			'statusHandle' => AttributeType::String,
+			'formHandle'   => AttributeType::String,
+			'formGroupId'  => AttributeType::Number,
 		);
 	}
 
@@ -367,7 +368,8 @@ class SproutForms_EntryElementType extends BaseElementType
 			entries.uid,
 			forms.id as formId,
 			forms.name as formName,
-			forms.groupId as formGroupId';
+			forms.groupId as formGroupId,
+			entrystatuses.handle';
 
 		$query->join('sproutforms_entries entries', 'entries.id = elements.id');
 		$query->join('sproutforms_entrystatuses entrystatuses', 'entrystatuses.id = entries.statusId');
@@ -387,6 +389,10 @@ class SproutForms_EntryElementType extends BaseElementType
 		if ($criteria->statusId)
 		{
 			$query->andWhere(DbHelper::parseParam('entries.statusId', $criteria->statusId, $query->params));
+		}
+		if ($criteria->statusHandle)
+		{
+			$query->andWhere(DbHelper::parseParam('entrystatuses.handle', $criteria->statusHandle, $query->params));
 		}
 		if ($criteria->formHandle)
 		{
