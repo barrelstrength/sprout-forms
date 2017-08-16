@@ -19,7 +19,7 @@
 		{%- if id %} id="{{ id }}"{% endif %}
 		{%- if class %} class="{{ class }}"{% endif %}
 		{%- if name %} name="{{ name }}"{% endif %}
-		{%- if placeholder is not null %} placeholder="{{ placeholder }}"{% endif %}
+		{%- if placeholder is not null %} placeholder="{{ placeholder|t }}"{% endif %}
 		{%- if maxLength is not null %} maxlength="{{ maxLength }}"{% endif %}
 		{%- if initialRows is not empty %} rows="{{ initialRows }}"{% endif %}
 		{{- required -}}
@@ -31,7 +31,7 @@
 		{%- if class is not empty %} class="{{ class }}"{% endif %}
 		{%- if name is not empty %} name="{{ name }}"{% endif %}
 		{%- if value is not empty %} value="{{ value }}"{% endif %}
-		{%- if placeholder is not null %} placeholder="{{ placeholder }}"{% endif %}
+		{%- if placeholder is not null %} placeholder="{{ placeholder|t }}"{% endif %}
 		{%- if maxLength is not null %} maxlength="{{ maxLength }}"{% endif %}
 		{{- required -}}
 		{{- dataAttributes|raw -}}
