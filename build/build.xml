@@ -4,7 +4,7 @@
 
     <property name="pluginFileName" value="SproutForms" />
     <property name="pluginName" value="sproutforms" />
-    <property name="pluginVersion" value="2.4.8" />
+    <property name="pluginVersion" value="2.4.9" />
 
     <target name="release">
         <echo msg="Preparing release distro..." />
