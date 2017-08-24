@@ -79,8 +79,7 @@ class SproutForms_FormRecord extends BaseRecord
 			),
 			array(
 				'name,handle',
-				'unique',
-				'on' => 'insert'
+				'unique'
 			),
 			array(
 				'notificationRecipients, notificationSenderEmail, notificationReplyToEmail',
