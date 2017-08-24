@@ -4,15 +4,17 @@
 
 {% set formSettings = craft.sproutForms.getSettings() %}
 
-{% if formSettings.enableSaveData or formSettings.enableSaveDataPerFormBasis %}
+{% if currentUser.can('editSproutFormsEntries') %}
+	{% if formSettings.enableSaveData or formSettings.enableSaveDataPerFormBasis %}
 
-	{% set subnav = {
-		entries: {
-			label: "Entries"|t,
-			url: url('sproutforms/entries')
-		}
-	} %}
+		{% set subnav = {
+			entries: {
+				label: "Entries"|t,
+				url: url('sproutforms/entries')
+			}
+		} %}
 
+	{% endif %}
 {% endif %}
 
 {% set subnav = subnav|merge({

@@ -596,6 +596,17 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 	}
 
 	/**
+	 *@return null|HttpException
+	*/
+	public function userCanEditEntries()
+	{
+		if (!craft()->userSession->checkPermission('editSproutFormsEntries'))
+		{
+			throw new HttpException(401, Craft::t("Not authorized to edit Form Entries."));
+		}
+	}
+
+	/**
 	 * Gets an Entry Status's record.
 	 *
 	 * @param int $sourceId

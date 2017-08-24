@@ -469,4 +469,12 @@ class SproutFormsVariable
 
 		return $settings;
 	}
+
+	/**
+	 * @return null|HttpException
+	 */
+	public function userCanEditEntries()
+	{
+		sproutForms()->entries->userCanEditEntries();
+	}
 }

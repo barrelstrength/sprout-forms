@@ -1,1 +1,5 @@
-{% redirect 'sproutforms/entries' %}
+{% if currentUser.can('editSproutFormsEntries') %}
+	{% redirect 'sproutforms/entries' %}
+{% else %}
+	{% redirect 'sproutforms/forms' %}
+{% endif %}

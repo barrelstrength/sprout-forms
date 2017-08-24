@@ -209,6 +209,7 @@ class SproutForms_EntriesController extends BaseController
 	public function actionDeleteEntry()
 	{
 		$this->requirePostRequest();
+		sproutForms()->entries->userCanEditEntries();
 
 		// Get the Entry
 		$entryId = craft()->request->getRequiredPost('entryId');
@@ -312,6 +313,7 @@ class SproutForms_EntriesController extends BaseController
 	 */
 	public function actionEditEntryTemplate(array $variables = array())
 	{
+		sproutForms()->entries->userCanEditEntries();
 		$entryId = craft()->request->getSegment(4);
 
 		if (sproutForms()->forms->activeCpEntry)

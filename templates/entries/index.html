@@ -1,4 +1,5 @@
 {% extends "sproutforms/_layouts/elementindex" %}
+{% set editEntries = craft.sproutForms.userCanEditEntries() %}
 {% set title = "Entries"|t %}
 {% set elementType = 'SproutForms_Entry' %}
 
