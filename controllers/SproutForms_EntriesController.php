@@ -109,6 +109,11 @@ class SproutForms_EntriesController extends BaseController
 	{
 		$this->requirePostRequest();
 
+		if (craft()->request->isCpRequest())
+		{
+			sproutForms()->entries->userCanEditEntries();
+		}
+
 		$formHandle = craft()->request->getRequiredPost('handle');
 		$this->form = sproutForms()->forms->getFormByHandle($formHandle);
 
@@ -313,7 +318,7 @@ class SproutForms_EntriesController extends BaseController
 	 */
 	public function actionEditEntryTemplate(array $variables = array())
 	{
-		sproutForms()->entries->userCanEditEntries();
+		sproutForms()->entries->userCanViewEntries();
 		$entryId = craft()->request->getSegment(4);
 
 		if (sproutForms()->forms->activeCpEntry)

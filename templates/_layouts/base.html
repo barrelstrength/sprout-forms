@@ -4,7 +4,7 @@
 {% set subnav = {} %}
 
 {% set formSettings = craft.sproutForms.getSettings() %}
-{% if currentUser.can('editSproutFormsEntries') %}
+{% if currentUser.can('viewSproutFormsEntries') %}
 	{% if formSettings.enableSaveData or formSettings.enableSaveDataPerFormBasis %}
 
 		{% set subnav = {

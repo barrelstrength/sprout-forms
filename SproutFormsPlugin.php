@@ -181,7 +181,10 @@ class SproutFormsPlugin extends BasePlugin
 			),
 			'editSproutFormsEntries' => array(
 				'label' => Craft::t('Edit Form Entries')
-			)
+			),
+			'viewSproutFormsEntries' => array(
+				'label' => Craft::t('View Form Entries')
+			),
 		);
 	}
 

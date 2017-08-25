@@ -1,4 +1,4 @@
-{% if currentUser.can('editSproutFormsEntries') %}
+{% if currentUser.can('viewSproutFormsEntries') %}
 	{% redirect 'sproutforms/entries' %}
 {% else %}
 	{% redirect 'sproutforms/forms' %}

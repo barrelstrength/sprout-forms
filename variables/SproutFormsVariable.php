@@ -473,8 +473,8 @@ class SproutFormsVariable
 	/**
 	 * @return null|HttpException
 	 */
-	public function userCanEditEntries()
+	public function userCanViewEntries()
 	{
-		sproutForms()->entries->userCanEditEntries();
+		sproutForms()->entries->userCanViewEntries();
 	}
 }
