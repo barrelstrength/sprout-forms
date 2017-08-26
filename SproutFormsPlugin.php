@@ -176,15 +176,18 @@ class SproutFormsPlugin extends BasePlugin
 	public function registerUserPermissions()
 	{
 		return array(
+			'viewSproutFormsEntries' =>
+				array(
+					'label'  => Craft::t('View Form Entries'),
+					'nested' => array(
+						'editSproutFormsEntries' => array(
+							'label' => Craft::t('Edit Form Entries')
+						)
+					)
+				),
 			'editSproutFormsSettings' => array(
 				'label' => Craft::t('Edit Form Settings')
-			),
-			'editSproutFormsEntries' => array(
-				'label' => Craft::t('Edit Form Entries')
-			),
-			'viewSproutFormsEntries' => array(
-				'label' => Craft::t('View Form Entries')
-			),
+			)
 		);
 	}
 
