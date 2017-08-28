@@ -13,6 +13,11 @@ class SproutForms_FormsController extends BaseController
 	{
 		$this->requirePostRequest();
 
+		if (craft()->request->isCpRequest())
+		{
+			sproutForms()->forms->userCanEditForms();
+		}
+
 		$form = new SproutForms_FormModel();
 
 		if (craft()->request->getPost('saveAsNew'))
@@ -150,6 +155,10 @@ class SproutForms_FormsController extends BaseController
 	 */
 	public function actionEditFormTemplate(array $variables = array())
 	{
+		if (craft()->request->isCpRequest())
+		{
+			sproutForms()->forms->userCanEditForms();
+		}
 		// Immediately create a new Form
 		if (craft()->request->getSegment(3) == "new")
 		{
@@ -204,6 +213,11 @@ class SproutForms_FormsController extends BaseController
 	public function actionDeleteForm()
 	{
 		$this->requirePostRequest();
+
+		if (craft()->request->isCpRequest())
+		{
+			sproutForms()->forms->userCanEditForms();
+		}
 
 		// Get the Form these fields are related to
 		$formId = craft()->request->getRequiredPost('id');

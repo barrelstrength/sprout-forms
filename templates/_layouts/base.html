@@ -17,12 +17,14 @@
 	{% endif %}
 {% endif %}
 
-{% set subnav = subnav|merge({
-	forms: {
-		label: "Forms"|t,
-		url: url('sproutforms/forms')
-	}
-}) %}
+{% if currentUser.can('editSproutFormsForms') %}
+	{% set subnav = subnav|merge({
+		forms: {
+			label: "Forms"|t,
+			url: url('sproutforms/forms')
+		}
+	}) %}
+{% endif %}
 
 {% if currentUser.can('editSproutFormsSettings') %}
 	{% set subnav = subnav|merge({

@@ -185,6 +185,9 @@ class SproutFormsPlugin extends BasePlugin
 						)
 					)
 				),
+			'editSproutFormsForms' => array(
+				'label' => Craft::t('Edit Forms')
+			),
 			'editSproutFormsSettings' => array(
 				'label' => Craft::t('Edit Form Settings')
 			)
