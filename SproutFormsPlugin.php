@@ -80,7 +80,12 @@ class SproutFormsPlugin extends BasePlugin
 	 */
 	public function hasCpSection()
 	{
-		return true;
+		if (craft()->userSession->checkPermission('manageSproutFormsForms') ||
+				craft()->userSession->checkPermission('viewSproutFormsEntries') ||
+			  craft()->userSession->checkPermission('editSproutFormsSettings'))
+		{
+			return true;
+		}
 	}
 
 	/**
