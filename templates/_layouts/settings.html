@@ -20,7 +20,7 @@
 	{% endif %}
 {% endif %}
 
-{% if currentUser.can('editSproutFormsForms') %}
+{% if currentUser.can('manageSproutFormsForms') %}
 	{% set subnav = subnav|merge({
 	  forms: {
 	    label: "Forms"|t,

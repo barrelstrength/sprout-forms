@@ -681,7 +681,7 @@ class SproutForms_FormsService extends BaseApplicationComponent
 	*/
 	public function userCanEditForms()
 	{
-		if (!craft()->userSession->checkPermission('editSproutFormsForms'))
+		if (!craft()->userSession->checkPermission('manageSproutFormsForms'))
 		{
 			throw new HttpException(401, Craft::t("Not authorized to edit Forms."));
 		}
