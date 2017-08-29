@@ -16,6 +16,14 @@
 	</div>
 {% endblock %}
 
+{% if not currentUser.can('editSproutFormsEntries') %}
+	{% set extraPageHeaderHtml %}
+		<div class="buttons secondary-buttons">
+			<div class="btn submit">{{ "View Only"|t }}</div>
+		</div>
+	{% endset %}
+{% endif %}
+
 {% block main %}
 
 	<input type="hidden" name="action" value="sproutForms/entries/saveEntry">
