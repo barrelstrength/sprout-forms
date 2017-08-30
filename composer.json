@@ -11,6 +11,16 @@
   "require": {
     "barrelstrength/sproutcore": "^1.0.0"
   },
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../SPROUT-PLUGINS/sproutcore"
+    },
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  ],
   "extra": {
     "name": "Sprout Forms",
     "handle": "sprout-forms",
