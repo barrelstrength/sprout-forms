@@ -181,16 +181,22 @@ class SproutForms_EntryElementType extends BaseElementType
 	 */
 	public function getAvailableActions($source = null)
 	{
-		$deleteAction = craft()->elements->getAction('Delete');
+		$deleteAction    = array();
+		$setStatusAction = array();
 
-		$deleteAction->setParams(
-			array(
-				'confirmationMessage' => Craft::t('Are you sure you want to delete the selected entries?'),
-				'successMessage'      => Craft::t('Entries deleted.'),
-			)
-		);
+		if (craft()->userSession->checkPermission('editSproutFormsEntries'))
+		{
+			$deleteAction = craft()->elements->getAction('Delete');
 
-		$setStatusAction = craft()->elements->getAction('SproutForms_SetStatus');
+			$deleteAction->setParams(
+				array(
+					'confirmationMessage' => Craft::t('Are you sure you want to delete the selected entries?'),
+					'successMessage'      => Craft::t('Entries deleted.'),
+				)
+			);
+
+			$setStatusAction = craft()->elements->getAction('SproutForms_SetStatus');
+		}
 
 		return array($deleteAction, $setStatusAction);
 	}
