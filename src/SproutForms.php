@@ -6,7 +6,9 @@ use barrelstrength\sproutforms\services\App;
 use Craft;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
+use craft\events\RegisterUserPermissionsEvent;
 use craft\web\UrlManager;
+use craft\services\UserPermissions;
 use yii\base\Event;
 use craft\events\DefineComponentsEvent;
 use craft\web\twig\variables\CraftVariable;
@@ -83,8 +85,7 @@ class SproutForms extends \craft\base\Plugin
 		);
 
 		// Register DataSources for sproutReports plugin integration
-		Event::on(DataSources::class, DataSources::EVENT_REGISTER_DATA_SOURCES, function(RegisterComponentTypesEvent
-		                                                                                 $event) {
+		Event::on(DataSources::class, DataSources::EVENT_REGISTER_DATA_SOURCES, function(RegisterComponentTypesEvent $event) {
 			$event->types[] = new SproutFormsEntriesDataSource();
 		});
 
@@ -93,6 +94,11 @@ class SproutForms extends \craft\base\Plugin
 			CraftVariable::EVENT_DEFINE_COMPONENTS,
 			function (DefineComponentsEvent $event) {
 					$event->components['sproutforms'] = SproutFormsVariable::class;
+			}
+		);
+
+		Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
+				$event->permissions['Sprout Forms'] = $this->getUserPermissions();
 			}
 		);
 	}
@@ -188,6 +194,29 @@ class SproutForms extends \craft\base\Plugin
 			'sprout-forms/reports/<dataSourceId>/edit/<reportId>' => 'sprout-core/reports/edit-report',
 			'sprout-forms/reports/view/<reportId>' => 'sprout-core/reports/results-index',
 			'sprout-forms/reports/<dataSourceId>' => 'sprout-core/reports/index'
+		];
+	}
+
+	/**
+	 * @return []
+	 */
+	public function getUserPermissions()
+	{
+		return [
+			'manageSproutFormsForms' => [
+				'label' => self::t('Manage Forms')
+			],
+			'viewSproutFormsEntries' => [
+				'label'  => self::t('View Form Entries'),
+				'nested' => [
+					'editSproutFormsEntries' => [
+						'label' => self::t('Edit Form Entries')
+					]
+				]
+			],
+			'editSproutFormsSettings' => [
+				'label' => self::t('Edit Settings')
+			]
 		];
 	}
 
