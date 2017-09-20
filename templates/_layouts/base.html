@@ -4,24 +4,27 @@
 {% set subnav = {} %}
 
 {% set formSettings = craft.sproutForms.getSettings() %}
+{% if currentUser.can('viewSproutFormsEntries') %}
+	{% if formSettings.enableSaveData or formSettings.enableSaveDataPerFormBasis %}
 
-{% if formSettings.enableSaveData or formSettings.enableSaveDataPerFormBasis %}
+		{% set subnav = {
+			entries: {
+				label: "Entries"|t,
+				url: url('sproutforms/entries')
+			}
+		} %}
 
-	{% set subnav = {
-		entries: {
-			label: "Entries"|t,
-			url: url('sproutforms/entries')
-		}
-	} %}
-
+	{% endif %}
 {% endif %}
 
-{% set subnav = subnav|merge({
-	forms: {
-		label: "Forms"|t,
-		url: url('sproutforms/forms')
-	}
-}) %}
+{% if currentUser.can('manageSproutFormsForms') %}
+	{% set subnav = subnav|merge({
+		forms: {
+			label: "Forms"|t,
+			url: url('sproutforms/forms')
+		}
+	}) %}
+{% endif %}
 
 {% if currentUser.can('editSproutFormsSettings') %}
 	{% set subnav = subnav|merge({

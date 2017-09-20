@@ -32,7 +32,7 @@ class SproutFormsPlugin extends BasePlugin
 	 */
 	public function getVersion()
 	{
-		return '2.4.2';
+		return '2.5.0';
 	}
 
 	/**
@@ -80,7 +80,12 @@ class SproutFormsPlugin extends BasePlugin
 	 */
 	public function hasCpSection()
 	{
-		return true;
+		if (craft()->userSession->checkPermission('manageSproutFormsForms') ||
+				craft()->userSession->checkPermission('viewSproutFormsEntries') ||
+			  craft()->userSession->checkPermission('editSproutFormsSettings'))
+		{
+			return true;
+		}
 	}
 
 	/**
@@ -176,8 +181,19 @@ class SproutFormsPlugin extends BasePlugin
 	public function registerUserPermissions()
 	{
 		return array(
+			'manageSproutFormsForms' => array(
+				'label' => Craft::t('Manage Forms')
+			),
+			'viewSproutFormsEntries' => array(
+				'label'  => Craft::t('View Form Entries'),
+				'nested' => array(
+					'editSproutFormsEntries' => array(
+						'label' => Craft::t('Edit Form Entries')
+					)
+				)
+			),
 			'editSproutFormsSettings' => array(
-				'label' => Craft::t('Edit Form Settings')
+				'label' => Craft::t('Edit Settings')
 			)
 		);
 	}

@@ -181,16 +181,22 @@ class SproutForms_EntryElementType extends BaseElementType
 	 */
 	public function getAvailableActions($source = null)
 	{
-		$deleteAction = craft()->elements->getAction('Delete');
+		$deleteAction    = array();
+		$setStatusAction = array();
 
-		$deleteAction->setParams(
-			array(
-				'confirmationMessage' => Craft::t('Are you sure you want to delete the selected entries?'),
-				'successMessage'      => Craft::t('Entries deleted.'),
-			)
-		);
+		if (craft()->userSession->checkPermission('editSproutFormsEntries'))
+		{
+			$deleteAction = craft()->elements->getAction('Delete');
 
-		$setStatusAction = craft()->elements->getAction('SproutForms_SetStatus');
+			$deleteAction->setParams(
+				array(
+					'confirmationMessage' => Craft::t('Are you sure you want to delete the selected entries?'),
+					'successMessage'      => Craft::t('Entries deleted.'),
+				)
+			);
+
+			$setStatusAction = craft()->elements->getAction('SproutForms_SetStatus');
+		}
 
 		return array($deleteAction, $setStatusAction);
 	}
@@ -375,7 +381,6 @@ class SproutForms_EntryElementType extends BaseElementType
 		$query->join('sproutforms_entrystatuses entrystatuses', 'entrystatuses.id = entries.statusId');
 		$query->join('sproutforms_forms forms', 'forms.id = entries.formId');
 
-		#$this->joinContentTableAndAddContentSelects($query, $criteria, $select);
 		$query->addSelect($select);
 
 		if ($criteria->id)
@@ -445,64 +450,6 @@ class SproutForms_EntryElementType extends BaseElementType
 		}
 
 		return $fields;
-	}
-
-	/**
-	 * Updates the query command, criteria, and select fields when a source is available
-	 *
-	 * @param DbCommand            $query
-	 * @param ElementCriteriaModel $criteria
-	 * @param string               $select
-	 */
-	protected function joinContentTableAndAddContentSelects(
-		DbCommand &$query,
-		ElementCriteriaModel &$criteria,
-		&$select
-	)
-	{
-		// Do we have a source selected in the sidebar?
-		// If so, we have a form id and we can use that to fetch the content table
-		if ($criteria->formId || $criteria->formHandle)
-		{
-			$form = null;
-
-			if ($criteria->formId)
-			{
-				$form = sproutForms()->forms->getFormById($criteria->formId);
-			}
-			else
-			{
-				if ($criteria->formHandle)
-				{
-					$form = sproutForms()->forms->getFormByHandle($criteria->formHandle);
-				}
-			}
-
-			if ($form)
-			{
-				$fields             = $form->getFields();
-				$fieldPrefix        = craft()->content->fieldColumnPrefix;
-				$selectContentTable = "{$form->handle}.title";
-
-				// Added support for filtering any sproutform content table
-				foreach ($fields as $key => $field)
-				{
-					if ($field->hasContentColumn())
-					{
-						$selectContentTable .= ",{$form->handle}.{$fieldPrefix}{$field->handle} as {$field->handle}";
-						$handle = $field->handle;
-
-						if (isset($criteria->$handle))
-						{
-							$query->andWhere(DbHelper::parseParam($form->handle . "." . $fieldPrefix . $field->handle, $criteria->$handle, $query->params));
-						}
-					}
-				}
-
-				$select = empty($select) ? $selectContentTable : $select . ', ' . $selectContentTable;
-				$query->join($form->getContentTable() . ' as ' . $form->handle, $form->handle . '.elementId = elements.id');
-			}
-		}
 	}
 
 	/**

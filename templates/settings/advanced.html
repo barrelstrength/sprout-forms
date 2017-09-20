@@ -13,8 +13,7 @@
 {% endset %}
 
 {% set content %}
-
-{% if currentUser.can('editFormSettings') %}
+{% if currentUser.can('editSproutFormsSettings') %}
 
 	<input type="hidden" name="action" value="sproutForms/settings/saveSettings">
 
