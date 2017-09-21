@@ -65,7 +65,49 @@ class SproutFormsEntriesDataSource extends SproutReportsBaseDataSource
 			$query->andWhere('entries.dateCreated < :endDate', array(':endDate' => $endDate->mySqlDateTime()));
 		}
 
-		return $query->queryAll();
+		$entries = $query->queryAll();
+
+		/**
+		 * Get the asset filename related to the form entries
+		 */
+		if (!empty($entries))
+		{
+			foreach ($entries as $key => $entry)
+			{
+				$id = $entry['elementId'];
+
+				$element = craft()->elements->getElementById($id);
+
+				$fields = $element->getFieldLayout()->getFields();
+
+				if ($fields)
+				{
+					foreach ($fields as $field)
+					{
+						$fieldModel = $field->getField();
+						if ($fieldModel->getFieldType() instanceof AssetsFieldType)
+						{
+							$handle = $fieldModel->handle;
+							$name   = $fieldModel->name;
+
+							$asset = $element->$handle->first();
+
+							if ($asset)
+							{
+								$entries[$key][$name] = $asset->filename;
+							}
+							else
+							{
+								$entries[$key][$name] = '';
+							}
+						}
+					}
+				}
+				unset($entries[$key]['uid']);
+			}
+		}
+
+		return $entries;
 	}
 
 	/**
