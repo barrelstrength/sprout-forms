@@ -135,6 +135,11 @@ class SproutForms_EntriesController extends BaseController
 
 		craft()->sproutForms->onBeforePopulateEntry($event);
 
+		if (isset($event->params['entry']))
+		{
+			$entry = $event->params['entry'];
+		}
+
 		// Our SproutForms_EntryModel requires that we assign it a SproutForms_FormModel
 		$entry->formId = $this->form->id;
 		$statusId      = craft()->request->getParam('statusId');
