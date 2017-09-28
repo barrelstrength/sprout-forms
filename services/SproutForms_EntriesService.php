@@ -304,7 +304,14 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 	 */
 	public function getEntryById($entryId)
 	{
-		return $this->getCriteria(array('limit' => 1, 'id' => $entryId))->first();
+		$entry = null;
+
+		if ($entryId)
+		{
+			$entry = $this->getCriteria(array('limit' => 1, 'id' => $entryId))->first();
+		}
+
+		return $entry;
 	}
 
 	/**
