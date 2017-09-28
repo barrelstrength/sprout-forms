@@ -88,6 +88,7 @@ class SproutFormsService extends BaseApplicationComponent
 	{
 		$variables             = $event->params['variables'];
 		$enableFileAttachments = isset($variables['enableFileAttachments']) ? $variables['enableFileAttachments'] : null;
+		$variables['externalPaths'] = array();
 
 		// We only act if...
 		// 1. This is a side effect of submitting a form
@@ -114,7 +115,8 @@ class SproutFormsService extends BaseApplicationComponent
 					{
 						$assets = $criteria->find();
 
-						$this->attachAssetFilesToEmailModel($event->params['emailModel'], $assets);
+						$this->attachAssetFilesToEmailModel($event->params['emailModel'], $assets, $variables);
+						$event->params['variables'] = $variables;
 					}
 				}
 			}
@@ -123,6 +125,27 @@ class SproutFormsService extends BaseApplicationComponent
 		if (isset($variables['sproutFormsEntry']) && !$enableFileAttachments)
 		{
 			$this->log('File attachments are currently not enabled for Sprout Forms.');
+		}
+	}
+
+	/**
+	 * Delete any files created with Externals Assets Sources
+	 *
+	 * @param Event $event
+	 */
+	public function handleOnSendEmail(Event $event)
+	{
+		$variables = $event->params['variables'];
+
+		if (isset($variables['externalPaths']))
+		{
+			foreach ($variables['externalPaths'] as $path)
+			{
+				if (file_exists($path))
+				{
+					unlink($path);
+				}
+			}
 		}
 	}
 
@@ -147,8 +170,9 @@ class SproutFormsService extends BaseApplicationComponent
 	/**
 	 * @param EmailModel       $email
 	 * @param AssetFileModel[] $assets
+	 * @param array $variables from event
 	 */
-	protected function attachAssetFilesToEmailModel(EmailModel $email, array $assets)
+	protected function attachAssetFilesToEmailModel(EmailModel $email, array $assets, &$variables = null)
 	{
 		foreach ($assets as $asset)
 		{
@@ -156,14 +180,22 @@ class SproutFormsService extends BaseApplicationComponent
 			$type = $asset->getSource()->getSourceType();
 			$path = null;
 
-			// Adds support for S3
-			if (get_class($type) === 'Craft\\S3AssetSourceType')
+			if ($type->isSourceLocal())
 			{
-				$path = $type->getImageSourcePath($asset);
+				$path = $this->getAssetFilePath($asset);
 			}
 			else
 			{
-				$path = $this->getAssetFilePath($asset);
+				// External Asset sources
+				switch (get_class($type))
+				{
+					// Adds support for S3
+					case 'Craft\\S3AssetSourceType':
+						$path = $type->getLocalCopy($asset);
+						// Let's add the path to the event for delete onSendEmail hook
+						array_push($variables['externalPaths'], $path);
+						break;
+				}
 			}
 
 			$email->addAttachment($path, $name);
