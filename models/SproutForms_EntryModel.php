@@ -44,8 +44,6 @@ class SproutForms_EntryModel extends BaseElementModel
 		);
 	}
 
-
-
 	/**
 	 * Returns the field layout used by this element
 	 *

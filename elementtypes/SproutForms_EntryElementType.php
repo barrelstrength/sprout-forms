@@ -297,9 +297,18 @@ class SproutForms_EntryElementType extends BaseElementType
 	 */
 	public function getContentTableForElementsQuery(ElementCriteriaModel $criteria)
 	{
-		if ($criteria->formId)
+		if ($criteria->formId || $criteria->formHandle)
 		{
-			$form = SproutForms_FormRecord::model()->findById($criteria->formId);
+			$form = null;
+
+			if ($criteria->formId)
+			{
+				$form = sproutForms()->forms->getFormById($criteria->formId);
+			}
+			else if ($criteria->formHandle)
+			{
+				$form = sproutForms()->forms->getFormByHandle($criteria->formHandle);
+			}
 
 			if ($form)
 			{

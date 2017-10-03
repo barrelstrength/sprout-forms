@@ -108,6 +108,7 @@ class SproutFormsPlugin extends BasePlugin
 		Craft::import('plugins.sproutforms.integrations.sproutimport.SproutForms_EntrySproutImportFieldImporter');
 
 		craft()->on('email.onBeforeSendEmail', array(sproutForms(), 'handleOnBeforeSendEmail'));
+		craft()->on('email.onSendEmail', array(sproutForms(), 'handleOnSendEmail'));
 
 		if (craft()->request->isCpRequest() && craft()->request->getSegment(1) == 'sproutforms')
 		{

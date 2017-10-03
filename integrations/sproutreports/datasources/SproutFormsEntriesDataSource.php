@@ -85,20 +85,18 @@ class SproutFormsEntriesDataSource extends SproutReportsBaseDataSource
 					foreach ($fields as $field)
 					{
 						$fieldModel = $field->getField();
+
 						if ($fieldModel->getFieldType() instanceof AssetsFieldType)
 						{
 							$handle = $fieldModel->handle;
 							$name   = $fieldModel->name;
 
 							$asset = $element->$handle->first();
+							$entries[$key][$handle] = '';
 
 							if ($asset)
 							{
-								$entries[$key][$name] = $asset->filename;
-							}
-							else
-							{
-								$entries[$key][$name] = '';
+								$entries[$key][$handle] = $asset->filename;
 							}
 						}
 					}
