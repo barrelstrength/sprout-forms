@@ -101,7 +101,17 @@ class SproutFormsEntriesDataSource extends SproutReportsBaseDataSource
 						}
 					}
 				}
+
+				$created = $entries[$key]['dateCreated'];
+
+				$updated = $entries[$key]['dateUpdated'];
+
+				unset($entries[$key]['dateCreated']);
+				unset($entries[$key]['dateUpdated']);
 				unset($entries[$key]['uid']);
+
+				$entries[$key]['dateCreated'] = $created;
+				$entries[$key]['dateUpdated'] = $updated;
 			}
 		}
 
