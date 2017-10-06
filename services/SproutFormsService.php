@@ -187,15 +187,9 @@ class SproutFormsService extends BaseApplicationComponent
 			else
 			{
 				// External Asset sources
-				switch (get_class($type))
-				{
-					// Adds support for S3
-					case 'Craft\\S3AssetSourceType':
-						$path = $type->getLocalCopy($asset);
-						// Let's add the path to the event for delete onSendEmail hook
-						array_push($variables['externalPaths'], $path);
-						break;
-				}
+				$path = $type->getLocalCopy($asset);
+				// let's save the path to delete it after sent
+				array_push($variables['externalPaths'], $path);
 			}
 
 			$email->addAttachment($path, $name);
