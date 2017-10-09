@@ -32,6 +32,8 @@ class SproutForms_FieldsController extends BaseController
 
 		$field = new FieldModel();
 
+		$reservedWords = array('formName', 'form', 'formId', 'statusId', 'ipAddress', 'userAgent');
+
 		$field->id           = craft()->request->getPost('fieldId');
 		$field->name         = craft()->request->getRequiredPost('name');
 		$field->handle       = craft()->request->getRequiredPost('handle');
@@ -46,6 +48,15 @@ class SproutForms_FieldsController extends BaseController
 		if (isset($typeSettings[$field->type]))
 		{
 			$field->settings = $typeSettings[$field->type];
+		}
+
+		if (in_array($field->handle, $reservedWords))
+		{
+			$field->addError('handle', '“'.$field->handle.'” is a reserved word.');
+			$variables['tabId'] = $tabId;
+			$variables['field'] = $field;
+
+			$this->_returnJson(false, $field, $form);
 		}
 
 		// Set our field context
