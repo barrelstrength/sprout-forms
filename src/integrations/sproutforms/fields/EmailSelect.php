@@ -135,7 +135,7 @@ class EmailSelect extends SproutBaseOptionsField
 		$options = SproutCore::$app->emailSelect->obfuscateEmailAddresses($options, $selectedValue);
 
 		$rendered = Craft::$app->getView()->renderTemplate(
-			'emailselect/forminput',
+			'emailselect/input',
 			[
 				'name'     => $field->handle,
 				'value'    => $value,

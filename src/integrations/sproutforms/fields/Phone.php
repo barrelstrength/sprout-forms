@@ -122,7 +122,7 @@ class Phone extends SproutFormsBaseField implements PreviewableFieldInterface
 		$errorMessage = SproutCore::$app->phone->getErrorMessage($field);
 
 		$rendered = Craft::$app->getView()->renderTemplate(
-			'phone/forminput',
+			'phone/input',
 			[
 				'name'             => $name,
 				'value'            => $value,

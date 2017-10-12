@@ -110,7 +110,7 @@ class RegularExpression extends SproutFormsBaseField implements PreviewableField
 		$pattern = str_replace("\\-", '-', $pattern);
 
 		$rendered = Craft::$app->getView()->renderTemplate(
-			'regularexpression/forminput',
+			'regularexpression/input',
 			[
 				'name'             => $field->handle,
 				'value'            => $value,

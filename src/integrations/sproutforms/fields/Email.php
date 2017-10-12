@@ -117,7 +117,7 @@ class Email extends SproutFormsBaseField implements PreviewableFieldInterface
 		$placeholder = (isset($settings['placeholder'])) ? $settings['placeholder'] : '';
 
 		$rendered = Craft::$app->getView()->renderTemplate(
-			'email/forminput',
+			'email/input',
 			[
 				'name' => $field->handle,
 				'value' => $value,

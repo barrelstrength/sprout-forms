@@ -143,7 +143,7 @@ class Notes extends SproutFormsBaseField
 		}
 
 		$rendered = Craft::$app->getView()->renderTemplate(
-			'notes/forminput',
+			'notes/input',
 			[
 				'id'               => $namespaceInputId,
 				'settings'         => $settings,

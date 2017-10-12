@@ -98,7 +98,7 @@ class Hidden extends SproutFormsBaseField implements PreviewableFieldInterface
 		}
 
 		$rendered = Craft::$app->getView()->renderTemplate(
-			'hidden/forminput',
+			'hidden/input',
 			[
 				'name'             => $field->handle,
 				'value'            => $value,
