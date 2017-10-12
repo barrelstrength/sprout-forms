@@ -4,15 +4,13 @@ namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
 use Craft;
 use craft\base\ElementInterface;
 use craft\helpers\Template as TemplateHelper;
-use craft\base\Field;
 use craft\base\PreviewableFieldInterface;
-use craft\helpers\Db;
 use yii\db\Schema;
 
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutcore\SproutCore;
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
-use barrelstrength\sproutcore\web\sproutfields\phonefield\PhoneFieldAsset;
+use barrelstrength\sproutcore\web\assets\sproutfields\phone\PhoneFieldAsset;
 
 class Phone extends SproutFormsBaseField implements PreviewableFieldInterface
 {
@@ -87,7 +85,7 @@ class Phone extends SproutFormsBaseField implements PreviewableFieldInterface
 		$namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
 
 		return Craft::$app->getView()->renderTemplate(
-			'sprout-core/sproutfields/fields/phone/input',
+			'sprout-core/sproutfields/_includes/forms/phone/input',
 			[
 				'id'    => $namespaceInputId,
 				'name'  => $this->handle,

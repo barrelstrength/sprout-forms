@@ -87,7 +87,7 @@ class Email extends SproutFormsBaseField implements PreviewableFieldInterface
 		// Set this to false for Quick Entry Dashboard Widget
 		$elementId = ($element != null) ? $element->id : false;
 
-		$rendered = $view->renderTemplate('sprout-core/sproutfields/fields/email/input',
+		$rendered = $view->renderTemplate('sprout-core/sproutfields/_includes/forms/email/input',
 			[
 				'namespaceInputId' => $namespaceInputId,
 				'id' => $inputId,

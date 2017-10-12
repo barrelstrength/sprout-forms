@@ -12,7 +12,7 @@ use yii\db\Schema;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutcore\SproutCore;
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
-use barrelstrength\sproutcore\web\sproutfields\linkfield\LinkFieldAsset;
+use barrelstrength\sproutcore\web\assets\sproutfields\link\LinkFieldAsset;
 
 class Link extends SproutFormsBaseField implements PreviewableFieldInterface
 {
@@ -85,7 +85,7 @@ class Link extends SproutFormsBaseField implements PreviewableFieldInterface
 
 		$fieldContext = SproutCore::$app->utilities->getFieldContext($this, $element);
 
-		return Craft::$app->getView()->renderTemplate('sprout-core/sproutfields/fields/link/input', [
+		return Craft::$app->getView()->renderTemplate('sprout-core/sproutfields/_includes/forms/link/input', [
 				'namespaceInputId' => $namespaceInputId,
 				'id' => $inputId,
 				'name' => $name,
