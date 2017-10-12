@@ -76,8 +76,6 @@ class Email extends SproutFormsBaseField implements PreviewableFieldInterface
 	 */
 	public function getInputHtml($value, ElementInterface $element = null): string
 	{
-		$view = Craft::$app->getView();
-
 		$name = $this->handle;
 		$inputId = Craft::$app->getView()->formatInputId($name);
 		$namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
@@ -87,7 +85,8 @@ class Email extends SproutFormsBaseField implements PreviewableFieldInterface
 		// Set this to false for Quick Entry Dashboard Widget
 		$elementId = ($element != null) ? $element->id : false;
 
-		$rendered = $view->renderTemplate('sprout-core/sproutfields/_includes/forms/email/input',
+		$rendered = Craft::$app->getView()->renderTemplate(
+			'sprout-core/sproutfields/_includes/forms/email/input',
 			[
 				'namespaceInputId' => $namespaceInputId,
 				'id' => $inputId,
@@ -102,12 +101,12 @@ class Email extends SproutFormsBaseField implements PreviewableFieldInterface
 	}
 
 	/**
-	 * @param FieldModel $field
-	 * @param mixed      $value
-	 * @param array      $settings
-	 * @param array      $renderingOptions
+	 * @param \barrelstrength\sproutforms\contracts\FieldModel $field
+	 * @param mixed                                            $value
+	 * @param mixed                                            $settings
+	 * @param array|null                                       $renderingOptions
 	 *
-	 * @return \Twig_Markup
+	 * @return string
 	 */
 	public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
 	{

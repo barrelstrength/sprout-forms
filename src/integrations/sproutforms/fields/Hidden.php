@@ -60,6 +60,20 @@ class Hidden extends SproutFormsBaseField implements PreviewableFieldInterface
 	}
 
 	/**
+	 * @inheritdoc
+	 */
+	public function getInputHtml($value, ElementInterface $element = null): string
+	{
+		return Craft::$app->getView()->renderTemplate('sprout-core/sproutfields/_includes/forms/hidden/input',
+			[
+				'id'    => $this->handle,
+				'name'  => $this->handle,
+				'value' => $value,
+				'field' => $this
+			]);
+	}
+
+	/**
 	 * @param FieldModel $field
 	 * @param mixed      $value
 	 * @param array      $settings
@@ -96,19 +110,5 @@ class Hidden extends SproutFormsBaseField implements PreviewableFieldInterface
 		$this->endRendering();
 
 		return TemplateHelper::raw($rendered);
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function getInputHtml($value, ElementInterface $element = null): string
-	{
-		return Craft::$app->getView()->renderTemplate('sprout-core/sproutfields/_includes/forms/hidden/input',
-			[
-				'id'    => $this->handle,
-				'name'  => $this->handle,
-				'value' => $value,
-				'field' => $this
-			]);
 	}
 }

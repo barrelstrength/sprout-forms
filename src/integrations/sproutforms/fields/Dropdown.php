@@ -27,12 +27,35 @@ class Dropdown extends SproutBaseOptionsField
 	}
 
 	/**
-	 * @param FieldModel $field
-	 * @param mixed      $value
-	 * @param array      $settings
-	 * @param array      $renderingOptions
+	 * Adds support for edit field in the Entries section of SproutForms (Control
+	 * panel html)
+	 * @inheritdoc
+	 */
+	public function getInputHtml($value, ElementInterface $element = null): string
+	{
+		$options = $this->translatedOptions();
+
+		// If this is a new entry, look for a default option
+		if ($this->isFresh($element)) {
+			$value = $this->defaultValue();
+		}
+
+		return Craft::$app->getView()->renderTemplate('_includes/forms/select',
+			[
+				'name' => $this->handle,
+				'value' => $value,
+				'options' => $options
+			]
+		);
+	}
+
+	/**
+	 * @param \barrelstrength\sproutforms\contracts\FieldModel $field
+	 * @param mixed                                            $value
+	 * @param mixed                                            $settings
+	 * @param array|null                                       $renderingOptions
 	 *
-	 * @return \Twig_Markup
+	 * @return string
 	 */
 	public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
 	{
@@ -52,29 +75,6 @@ class Dropdown extends SproutBaseOptionsField
 		$this->endRendering();
 
 		return TemplateHelper::raw($rendered);
-	}
-
-	/**
-	 * Adds support for edit field in the Entries section of SproutForms (Control
-	 * panel html)
-	 * @inheritdoc
-	 */
-	public function getInputHtml($value, ElementInterface $element = null): string
-	{
-		$options = $this->translatedOptions();
-
-		// If this is a new entry, look for a default option
-		if ($this->isFresh($element)) {
-				$value = $this->defaultValue();
-		}
-
-		return Craft::$app->getView()->renderTemplate('_includes/forms/select',
-			[
-				'name' => $this->handle,
-				'value' => $value,
-				'options' => $options
-			]
-		);
 	}
 
 	/**

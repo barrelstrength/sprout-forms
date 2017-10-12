@@ -1,13 +1,14 @@
 <?php
+
 namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
 
 use Craft;
 use craft\base\ElementInterface;
 use craft\helpers\Template as TemplateHelper;
-use craft\base\Field;
 use craft\base\PreviewableFieldInterface;
 use yii\db\Schema;
 
+use barrelstrength\sproutforms\contracts\FieldModel;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 
@@ -71,12 +72,32 @@ class Invisible extends SproutFormsBaseField implements PreviewableFieldInterfac
 	}
 
 	/**
+	 * @inheritdoc
+	 */
+	public function getInputHtml($value, ElementInterface $element = null): string
+	{
+		$name = $this->handle;
+		$inputId = Craft::$app->getView()->formatInputId($name);
+		$namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
+
+		return Craft::$app->getView()->renderTemplate(
+			'sprout-core/sproutfields/_includes/forms/invisible/input',
+			[
+				'id' => $namespaceInputId,
+				'name' => $name,
+				'value' => $value,
+				'field' => $this
+			]
+		);
+	}
+
+	/**
 	 * @param FieldModel $field
 	 * @param mixed      $value
-	 * @param array      $settings
-	 * @param array      $renderingOptions
+	 * @param mixed      $settings
+	 * @param array|null $renderingOptions
 	 *
-	 * @return \Twig_Markup
+	 * @return string
 	 */
 	public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
 	{
@@ -84,28 +105,6 @@ class Invisible extends SproutFormsBaseField implements PreviewableFieldInterfac
 
 		return TemplateHelper::raw(sprintf('<input type="hidden" name="%s" />', $field->handle));
 	}
-
-
-	/**
-	 * @inheritdoc
-	 */
-	public function getInputHtml($value, ElementInterface $element = null): string
-	{
-		$name             = $this->handle;
-		$inputId          = Craft::$app->getView()->formatInputId($name);
-		$namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
-
-		return Craft::$app->getView()->renderTemplate(
-			'sprout-core/sproutfields/_includes/forms/invisible/input',
-			[
-				'id'           => $namespaceInputId,
-				'name'         => $name,
-				'value'        => $value,
-				'field'     => $this
-			]
-		);
-	}
-
 
 	/**
 	 * @inheritdoc

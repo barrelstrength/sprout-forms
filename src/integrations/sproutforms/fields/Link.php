@@ -5,7 +5,6 @@ namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
 use Craft;
 use craft\base\ElementInterface;
 use craft\helpers\Template as TemplateHelper;
-use craft\base\Field;
 use craft\base\PreviewableFieldInterface;
 use yii\db\Schema;
 

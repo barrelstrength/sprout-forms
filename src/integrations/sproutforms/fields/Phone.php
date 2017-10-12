@@ -96,12 +96,12 @@ class Phone extends SproutFormsBaseField implements PreviewableFieldInterface
 	}
 
 	/**
-	 * @param FieldModel $field
-	 * @param mixed      $value
-	 * @param array      $settings
-	 * @param array      $renderingOptions
+	 * @param \barrelstrength\sproutforms\contracts\FieldModel $field
+	 * @param mixed                                            $value
+	 * @param mixed                                            $settings
+	 * @param array|null                                       $renderingOptions
 	 *
-	 * @return \Twig_Markup
+	 * @return string
 	 */
 	public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
 	{

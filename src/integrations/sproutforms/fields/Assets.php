@@ -147,6 +147,32 @@ class Assets extends SproutBaseRelationField
 		return $fileKindOptions;
 	}
 
+	/**
+	 * Adds support for edit field in the Entries section of SproutForms (Control
+	 * panel html)
+	 * @inheritdoc
+	 */
+	public function getInputHtml($value, ElementInterface $element = null): string
+	{
+		try
+		{
+			return parent::getInputHtml($value, $element);
+		} catch (InvalidSubpathException $e)
+		{
+			return '<p class="warning">'.
+				'<span data-icon="alert"></span> '.
+				Craft::t('app', 'This field’s target subfolder path is invalid: {path}', [
+					'path' => '<code>'.$this->singleUploadLocationSubpath.'</code>'
+				]).
+				'</p>';
+		} catch (InvalidVolumeException $e)
+		{
+			return '<p class="warning">'.
+				'<span data-icon="alert"></span> '.
+				$e->getMessage().
+				'</p>';
+		}
+	}
 
 	/**
 	 * @param FieldModel $field
@@ -174,33 +200,6 @@ class Assets extends SproutBaseRelationField
 		$this->endRendering();
 
 		return TemplateHelper::raw($rendered);
-	}
-
-	/**
-	 * Adds support for edit field in the Entries section of SproutForms (Control
-	 * panel html)
-	 * @inheritdoc
-	 */
-	public function getInputHtml($value, ElementInterface $element = null): string
-	{
-		try
-		{
-			return parent::getInputHtml($value, $element);
-		} catch (InvalidSubpathException $e)
-		{
-			return '<p class="warning">'.
-				'<span data-icon="alert"></span> '.
-				Craft::t('app', 'This field’s target subfolder path is invalid: {path}', [
-					'path' => '<code>'.$this->singleUploadLocationSubpath.'</code>'
-				]).
-				'</p>';
-		} catch (InvalidVolumeException $e)
-		{
-			return '<p class="warning">'.
-				'<span data-icon="alert"></span> '.
-				$e->getMessage().
-				'</p>';
-		}
 	}
 
 	/**

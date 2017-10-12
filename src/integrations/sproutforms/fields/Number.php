@@ -123,12 +123,32 @@ class Number extends SproutFormsBaseField implements PreviewableFieldInterface
 	}
 
 	/**
-	 * @param FieldModel $field
-	 * @param mixed      $value
-	 * @param array      $settings
-	 * @param array      $renderingOptions
+	 * @inheritdoc
+	 */
+	public function getInputHtml($value, ElementInterface $element = null): string
+	{
+		$decimals = $this->decimals;
+
+		// If decimals is 0 (or null, empty for whatever reason), don't run this
+		if ($decimals) {
+			$decimalSeparator = Craft::$app->getLocale()->getNumberSymbol(Locale::SYMBOL_DECIMAL_SEPARATOR);
+			$value = number_format($value, $decimals, $decimalSeparator, '');
+		}
+
+		return Craft::$app->getView()->renderTemplate('_includes/forms/text', [
+			'name' => $this->handle,
+			'value' => $value,
+			'size' => $this->size
+		]);
+	}
+
+	/**
+	 * @param \barrelstrength\sproutforms\contracts\FieldModel $field
+	 * @param mixed                                            $value
+	 * @param mixed                                            $settings
+	 * @param array|null                                       $renderingOptions
 	 *
-	 * @return \Twig_Markup
+	 * @return string
 	 */
 	public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
 	{
@@ -148,26 +168,6 @@ class Number extends SproutFormsBaseField implements PreviewableFieldInterface
 		$this->endRendering();
 
 		return TemplateHelper::raw($rendered);
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function getInputHtml($value, ElementInterface $element = null): string
-	{
-		$decimals = $this->decimals;
-
-		// If decimals is 0 (or null, empty for whatever reason), don't run this
-		if ($decimals) {
-			$decimalSeparator = Craft::$app->getLocale()->getNumberSymbol(Locale::SYMBOL_DECIMAL_SEPARATOR);
-			$value = number_format($value, $decimals, $decimalSeparator, '');
-		}
-
-		return Craft::$app->getView()->renderTemplate('_includes/forms/text', [
-			'name' => $this->handle,
-			'value' => $value,
-			'size' => $this->size
-		]);
 	}
 
 	/**

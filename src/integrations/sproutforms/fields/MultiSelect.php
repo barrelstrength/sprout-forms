@@ -39,6 +39,26 @@ class MultiSelect extends SproutBaseOptionsField
 	}
 
 	/**
+	 * @inheritdoc
+	 */
+	public function getInputHtml($value, ElementInterface $element = null): string
+	{
+		$options = $this->translatedOptions();
+
+		// If this is a new entry, look for any default options
+		if ($this->isFresh($element)) {
+			$value = $this->defaultValue();
+		}
+
+		return Craft::$app->getView()->renderTemplate('_includes/forms/multiselect',
+			[
+				'name' => $this->handle,
+				'values' => $value,
+				'options' => $options
+			]);
+	}
+
+	/**
 	 * @param FieldModel $field
 	 * @param mixed      $value
 	 * @param array      $settings
@@ -64,26 +84,6 @@ class MultiSelect extends SproutBaseOptionsField
 		$this->endRendering();
 
 		return TemplateHelper::raw($rendered);
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function getInputHtml($value, ElementInterface $element = null): string
-	{
-		$options = $this->translatedOptions();
-
-		// If this is a new entry, look for any default options
-		if ($this->isFresh($element)) {
-			$value = $this->defaultValue();
-		}
-
-		return Craft::$app->getView()->renderTemplate('_includes/forms/multiselect',
-			[
-				'name' => $this->handle,
-				'values' => $value,
-				'options' => $options
-			]);
 	}
 
 	/**

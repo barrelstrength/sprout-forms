@@ -96,6 +96,23 @@ class Categories extends SproutBaseRelationField
 	}
 
 	/**
+	 * @inheritdoc
+	 */
+	public function getInputHtml($value, ElementInterface $element = null): string
+	{
+		// Make sure the field is set to a valid category group
+		if ($this->source) {
+			$source = ElementHelper::findSource(static::elementType(), $this->source, 'field');
+		}
+
+		if (empty($source)) {
+			return '<p class="error">'.SproutForms::t('This field is not set to a valid category group.').'</p>';
+		}
+
+		return parent::getInputHtml($value, $element);
+	}
+
+	/**
 	 * @param FieldModel $field
 	 * @param mixed      $value
 	 * @param array      $settings
@@ -124,23 +141,6 @@ class Categories extends SproutBaseRelationField
 		$this->endRendering();
 
 		return TemplateHelper::raw($rendered);
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function getInputHtml($value, ElementInterface $element = null): string
-	{
-		// Make sure the field is set to a valid category group
-		if ($this->source) {
-			$source = ElementHelper::findSource(static::elementType(), $this->source, 'field');
-		}
-
-		if (empty($source)) {
-			return '<p class="error">'.SproutForms::t('This field is not set to a valid category group.').'</p>';
-		}
-
-		return parent::getInputHtml($value, $element);
 	}
 
 	/**

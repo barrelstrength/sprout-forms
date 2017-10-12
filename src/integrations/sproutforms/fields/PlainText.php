@@ -56,6 +56,21 @@ class PlainText extends SproutFormsBaseField implements PreviewableFieldInterfac
 	}
 
 	/**
+	 * Adds support for edit field in the Entries section of SproutForms (Control
+	 * panel html)
+	 * @inheritdoc
+	 */
+	public function getInputHtml($value, ElementInterface $element = null): string
+	{
+		return Craft::$app->getView()->renderTemplate('_components/fieldtypes/PlainText/input',
+			[
+				'name' => $this->handle,
+				'value' => $value,
+				'field' => $this,
+			]);
+	}
+
+	/**
 	 * @param FieldModel $field
 	 * @param mixed      $value
 	 * @param array      $settings
@@ -81,21 +96,6 @@ class PlainText extends SproutFormsBaseField implements PreviewableFieldInterfac
 		$this->endRendering();
 
 		return TemplateHelper::raw($rendered);
-	}
-
-	/**
-	 * Adds support for edit field in the Entries section of SproutForms (Control
-	 * panel html)
-	 * @inheritdoc
-	 */
-	public function getInputHtml($value, ElementInterface $element = null): string
-	{
-		return Craft::$app->getView()->renderTemplate('_components/fieldtypes/PlainText/input',
-			[
-				'name' => $this->handle,
-				'value' => $value,
-				'field' => $this,
-			]);
 	}
 
 	/**
