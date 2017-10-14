@@ -25,10 +25,8 @@
 {% macro tab(tab, tabFields) %}
 	<div id="sproutforms-tab-{{tab.id}}" data-tabname="{{tab.name}}" data-tabid="{{tab.id}}" class="hidden sproutforms-tab-fields">
 		<div class='parent'>
-			<h1>Drag and drop here</h1>
-			<a id="delete-tab-{{tab.id}}" data-tabid="{{tab.id}}">Delete tab</a>
 			<div class='sprout-wrapper'>
-				{# @todo - this is the important div the others two does not matter #}
+				{# @todo - this is the important div the other two do not matter #}
 				<div id='sproutforms-tab-container-{{tab.id}}' class='sprout-container'>
 					{# here will be the fields #}
 					{% for field in tabFields %}
@@ -52,6 +50,8 @@
 					{% endfor %}
 				</div>
 			</div>
+
+			<p><a id="delete-tab-{{tab.id}}" data-tabid="{{tab.id}}">Delete tab</a></p>
 		</div>
 	</div>
 {% endmacro %}
