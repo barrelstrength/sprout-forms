@@ -15,7 +15,7 @@ use craft\web\twig\variables\CraftVariable;
 
 use barrelstrength\sproutcore\SproutCoreHelper;
 use barrelstrength\sproutforms\models\Settings;
-use barrelstrength\sproutforms\variables\SproutFormsVariable;
+use barrelstrength\sproutforms\web\twig\variables\SproutFormsVariable;
 use barrelstrength\sproutforms\events\RegisterFieldsEvent;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\PlainText;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Number;
