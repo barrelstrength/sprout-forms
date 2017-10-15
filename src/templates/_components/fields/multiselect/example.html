@@ -1,0 +1,9 @@
+<select multiple readonly disabled>
+    {%- for key, option in field.options %}
+
+        {%- set optionLabel = (option.label is defined ? option.label : null) %}
+
+        <option {% if option.default == 1 %} selected{% endif %}>{{ optionLabel }}</option>
+
+    {%- endfor %}
+</select>

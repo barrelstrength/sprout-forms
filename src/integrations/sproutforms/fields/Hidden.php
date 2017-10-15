@@ -62,6 +62,18 @@ class Hidden extends SproutFormsBaseField implements PreviewableFieldInterface
 	/**
 	 * @inheritdoc
 	 */
+	public function getExampleInputHtml()
+	{
+		return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/hidden/example',
+			[
+				'field' => $this
+			]
+		);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
 	public function getInputHtml($value, ElementInterface $element = null): string
 	{
 		return Craft::$app->getView()->renderTemplate('sprout-core/sproutfields/_includes/forms/hidden/input',

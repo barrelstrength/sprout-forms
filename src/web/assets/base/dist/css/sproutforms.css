@@ -136,16 +136,73 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
  */
 .sprout-container > div,
 .gu-mirror {
-  margin: 10px;
+  margin: -10px -10px 30px;
   padding: 10px;
   background-color: #e3e5e8;;
   transition: opacity 0.4s ease-in-out;
 }
 
 .sprout-container .source-fields {
-	display: inline-block;
-  width: 40%;
-  margin: 5px;
+    display: inline-block;
+    width: 40%;
+    margin: 5px;
+}
+.sprout-container .source-fields .sproutforms-icon {
+    float: left;
+    padding-right: .8em;
+}
+.sprout-container .source-fields label {
+    font-weight: bold;
+}
+.sprout-container .selected-form-field {
+    padding: 20px;
+    position: relative;
+}
+.sprout-container .selected-form-field ul.settings {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+.sprout-container .selected-form-field ul.settings li {
+    float: left;
+    color: #888;
+    font-size: 8px;
+    padding-left: 8px;
+}
+.sprout-container .selected-form-field ul.settings li i {
+    color: #888;
+}
+.sprout-container .selected-form-field h2 {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+}
+.sprout-container .selected-form-field h2 a {
+    color: #aaa;
+    display: inline-block;
+    font-size: 8px;
+    margin-left: 5px;
+    margin-top: -2px;
+    vertical-align: top;
+}
+.sprout-container .selected-form-field p {
+    color: #aaa;
+    margin: -7px 0 10px 0;
+}
+.sprout-container .selected-form-field .body input[type="text"],
+.sprout-container .selected-form-field .body textarea,
+.sprout-container .selected-form-field .body input[type="email"],
+.sprout-container .selected-form-field .body input[type="phone"],
+.sprout-container .selected-form-field .body input[type="url"],
+.sprout-container .selected-form-field .body input[type="number"] {
+    font-size: 14px;
+    padding: 5px;
+    border-top: 1px solid #888;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ddd;
+    box-shadow: inset 1px 1px 2px 0 #707070;
+    width: 50%;
 }
 
 .sprout-container > div {

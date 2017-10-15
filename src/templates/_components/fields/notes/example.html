@@ -1,0 +1,7 @@
+{# @todo - we should simplify what is output here so it doesn't look like crap on the back end.
+   @todo - fix bug, now that attributes are on field model, the instructions attribute conflicts with Craft's instructions attribute#}
+{% if field.output == "html" or field.output == "richText" %}
+    {{ field.instructions  | raw }}
+{% else %}
+    {{ field.instructions | markdown }}
+{% endif %}

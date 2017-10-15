@@ -1,0 +1,10 @@
+<ul>
+    {% for option in field.options %}
+        <li>
+            <label>
+                {% set checkedStatus = option.default ? 'checked' : null %}
+                <input type="checkbox" name="checkboxesexample[]" {{ checkedStatus }} readonly disabled> {{ option.label }}
+            </label>
+        </li>
+    {% endfor %}
+</ul>

@@ -46,6 +46,18 @@ class Checkboxes extends SproutBaseOptionsField
 	/**
 	 * @inheritdoc
 	 */
+	public function getExampleInputHtml()
+	{
+		return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/checkboxes/example',
+			[
+				'field' => $this
+			]
+		);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
 	public function getInputHtml($value, ElementInterface $element = null): string
 	{
 		$options = $this->translatedOptions();

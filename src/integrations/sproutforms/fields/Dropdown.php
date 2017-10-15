@@ -27,6 +27,18 @@ class Dropdown extends SproutBaseOptionsField
 	}
 
 	/**
+	 * @inheritdoc
+	 */
+	public function getExampleInputHtml()
+	{
+		return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/dropdown/example',
+			[
+				'field' => $this
+			]
+		);
+	}
+
+	/**
 	 * Adds support for edit field in the Entries section of SproutForms (Control
 	 * panel html)
 	 * @inheritdoc

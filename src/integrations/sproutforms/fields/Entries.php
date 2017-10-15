@@ -47,6 +47,18 @@ class Entries extends SproutBaseRelationField
 	public $boostrapClass;
 
 	/**
+	 * @inheritdoc
+	 */
+	public function getExampleInputHtml()
+	{
+		return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/entries/example',
+			[
+				'field' => $this
+			]
+		);
+	}
+
+	/**
 	 * @param FieldModel $field
 	 * @param mixed      $value
 	 * @param array      $settings

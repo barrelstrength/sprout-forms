@@ -98,6 +98,18 @@ class Categories extends SproutBaseRelationField
 	/**
 	 * @inheritdoc
 	 */
+	public function getExampleInputHtml()
+	{
+		return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/categories/example',
+			[
+				'field' => $this
+			]
+		);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
 	public function getInputHtml($value, ElementInterface $element = null): string
 	{
 		// Make sure the field is set to a valid category group

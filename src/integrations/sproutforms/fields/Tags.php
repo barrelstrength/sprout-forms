@@ -66,6 +66,18 @@ class Tags extends SproutBaseRelationField
 	/**
 	 * @inheritdoc
 	 */
+	public function getExampleInputHtml()
+	{
+		return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/tags/example',
+			[
+				'field' => $this
+			]
+		);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
 	public function getInputHtml($value, ElementInterface $element = null): string
 	{
 		/** @var Element|null $element */

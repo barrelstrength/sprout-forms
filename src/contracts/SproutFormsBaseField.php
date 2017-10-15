@@ -32,6 +32,13 @@ abstract class SproutFormsBaseField extends Field
 	 */
 	abstract public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null);
 
+	/**
+	 * The example HTML input field that displays in the UI when a field is dragged to the form layout editor
+	 *
+	 * @return string
+	 */
+	abstract public function getExampleInputHtml();
+
 	final public function beginRendering()
 	{
 		$this->originalTemplatesPath = Craft::$app->getView()->getTemplatesPath();

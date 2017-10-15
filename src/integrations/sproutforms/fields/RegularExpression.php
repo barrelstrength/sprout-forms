@@ -53,6 +53,18 @@ class RegularExpression extends SproutFormsBaseField implements PreviewableField
 	/**
 	 * @inheritdoc
 	 */
+	public function getExampleInputHtml()
+	{
+		return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/regularexpression/example',
+			[
+				'field' => $this
+			]
+		);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
 	public function getSettingsHtml()
 	{
 		return Craft::$app->getView()->renderTemplate(

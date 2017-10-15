@@ -37,6 +37,18 @@ class RadioButtons extends SproutBaseOptionsField
 	/**
 	 * @inheritdoc
 	 */
+	public function getExampleInputHtml()
+	{
+		return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/radiobuttons/example',
+			[
+				'field' => $this
+			]
+		);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
 	public function getInputHtml($value, ElementInterface $element = null): string
 	{
 		$options = $this->translatedOptions();

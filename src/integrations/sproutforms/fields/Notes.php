@@ -61,6 +61,18 @@ class Notes extends SproutFormsBaseField
 	/**
 	 * @inheritdoc
 	 */
+	public function getExampleInputHtml()
+	{
+		return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/notes/example',
+			[
+				'field' => $this
+			]
+		);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
 	public function getSettingsHtml()
 	{
 		$name             = $this->displayName();

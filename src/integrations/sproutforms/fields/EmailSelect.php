@@ -46,6 +46,18 @@ class EmailSelect extends SproutBaseOptionsField
 	/**
 	 * @inheritdoc
 	 */
+	public function getExampleInputHtml()
+	{
+		return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/emailselect/example',
+			[
+				'field' => $this
+			]
+		);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
 	public function getSettingsHtml()
 	{
 		$options = $this->options;

@@ -1,0 +1,12 @@
+<ul
+    {%- for key, option in field.options %}
+
+        {%- set label = (option.label is defined ? option.label : option) %}
+
+        {%- set checked = (option.default == 1) ? 'checked' : null %}
+
+        <li>
+            <input type="radio" {{ checked }} readonly disabled> {% if label is defined %}{{ label|raw }}{% endif %}
+        </li>
+    {% endfor %}
+</ul>
