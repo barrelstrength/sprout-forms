@@ -28,16 +28,14 @@
 
 <div>
 	{% set fieldTypes = craft.sproutforms.getRegisteredFields() %}
-	<div class="meta" id="sproutforms-source-fields">
-			<div class='parent'>
-				<div class='sprout-wrapper'>
-					<div id='right-copy'>
-						{% for type, field in fieldTypes %}
-							{{ sproutForms.field(field, 'source') }}
-						{% endfor %}
-					</div>
-				</div>
+	<div id="sproutforms-source-fields" class="meta">
+		<div class='parent'>
+			<div id='right-copy'>
+				{% for type, field in fieldTypes %}
+					{{ sproutForms.field(field, 'source') }}
+				{% endfor %}
 			</div>
+		</div>
 	</div><!-- fields div -->
 
 	<div class="hidden meta" id="tab-sproutforms-notification">

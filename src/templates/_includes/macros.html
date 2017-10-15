@@ -1,18 +1,14 @@
 {% macro tab(tab, tabFields) %}
     {% import _self as macros %}
 
-    <div id="sproutforms-tab-{{tab.id}}" data-tabname="{{tab.name}}" data-tabid="{{tab.id}}" class="hidden sproutforms-tab-fields">
+    <div id="sproutforms-tab-{{tab.id}}" data-tabname="{{tab.name}}" data-tabid="{{tab.id}}" class="sproutforms-tab-fields hidden">
         <div class="parent">
-            <div class="sprout-wrapper">
-                {# @todo - this is the important div the other two do not matter #}
-                <div id="sproutforms-tab-container-{{tab.id}}">
-                    {# here will be the fields #}
-                    {% for field in tabFields %}
-                        {{ macros.field(field, 'active', tab) }}
-                    {% endfor %}
-                </div>
+            <div id="sproutforms-tab-container-{{tab.id}}">
+                {# here will be the fields #}
+                {% for field in tabFields %}
+                    {{ macros.field(field, 'active', tab) }}
+                {% endfor %}
             </div>
-
             <p><a id="delete-tab-{{tab.id}}" data-tabid="{{tab.id}}">{{ "Delete tab"|t }}</a></p>
         </div>
     </div>
@@ -27,19 +23,16 @@
     <div
         {% if instance == 'active' %}id="sproutfield-{{ field.id }}"{% endif %}
         class="
-            {%- if instance == 'active' %}selected-form-field {% endif -%}
+            {%- if instance == 'active' %}target-field {% endif -%}
             {%- if instance == 'source' %}source-field {% endif -%}
-            {%- if field.required %}required{% endif -%}
         "
         data-type="{{ craft.sproutforms.getFieldClassName(field) }}"
+        data-defaultname="{{ field.displayName }}"
         >
 
         {% if instance == 'source' %}
-            <div class="source-field-header">
-                <div class="sproutforms-icon">
-                    {{ field.getIcon('fa-lg')|raw }}
-                </div>
-                <h3>{{ field.displayName() }}</h3>
+            <div class="source-field-header{% if field.required %} required{% endif %}">
+                <h3><span class="sproutforms-icon">{{ field.getIcon('fa-lg')|raw }}</span> {{ field.displayName() }}</h3>
             </div>
         {% endif %}
 

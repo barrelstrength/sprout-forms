@@ -39,15 +39,15 @@ if (typeof Craft.SproutForms === typeof undefined) {
 			var that = this;
 
 			// Check to see if our main Form container already is registered as a pane
-			if (!$("div#sproutforms-main-container.pane").data('pane'))
+			if (!$("div#sproutforms-fieldlayout-container.pane").data('pane'))
 			{
 				// Create a pane object if it is note
-                this.$pane = new Craft.Pane($("div#sproutforms-main-container.pane"));
+                this.$pane = new Craft.Pane($("div#sproutforms-fieldlayout-container.pane"));
 			}
 			else
 			{
 				// Use the existing pane object if it exists
-				this.$pane = $("div#sproutforms-main-container.pane").data('pane');
+				this.$pane = $("div#sproutforms-fieldlayout-container.pane").data('pane');
 			}
 
 			this.initButtons();
@@ -141,7 +141,19 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
 		createDefaultField: function(type, tabId, tabName, el)
 		{
-			var defaultField = null;
+            $(el).removeClass('source-field');
+            $(el).addClass('target-field');
+            $(el).find('.source-field-header').remove();
+            $(el).find('.body').removeClass('hidden');
+
+            var defaultName = $(el).data('defaultname') ? $(el).data('defaultname') : 'Untitled'|t;
+
+            // Add the Field Header
+            $(el).prepend($([
+                '<div class="active-field-header">',
+                '<h2>', defaultName, '</h2>',
+                '</div>'
+            ].join('')));
 
 			var formId = $("#formId").val();
 			var data = {
@@ -163,22 +175,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
 		{
 			if(defaultField != null && defaultField.hasOwnProperty("id"))
 			{
-				$(el).attr('id', 'sproutfield-'+defaultField.id);
-                $(el).removeClass('source-field');
-                $(el).addClass('selected-form-field');
-                $(el).find('.source-field-header').remove();
-                $(el).find('.body').removeClass('hidden');
-
-				// Add the Field Header
-                $(el).prepend($([
-                    '<div class="active-field-header">',
-                    '<h2>', defaultField.name,
-					' <a id="sproutform-required-', defaultField.id, '" data-fieldid="',defaultField.id, '" href="#">',
-					'<i class="fa fa-asterisk fa-2x" title="Make required"></i>',
-					'</a>',
-					'</h2>',
-					'</div>'
-                ].join('')));
+                $(el).attr('id', 'sproutfield-'+defaultField.id);
 
                 // Add the Settings buttons
                 $(el).prepend($([
@@ -240,7 +237,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
 			});
 
 			// listener to the new tab button
-			this.addListener($("#sproutforms-add-tab"), 'activate', 'addNewTab');
+			this.addListener($("#sproutforms-fieldlayout-addtab"), 'activate', 'addNewTab');
 		},
 
 		deleteTab: function(option)
@@ -293,17 +290,15 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
 						// Insert the new tab before the Add Tab button
 						var href = '#sproutforms-tab-'+tab.id;
-						$('<li><a id="tab-'+tab.id+'" class="tab" href="'+href+'" tabindex="0">'+tab.name+'</a></li>').insertBefore("#sproutforms-add-tab");
+						$('<li><a id="tab-'+tab.id+'" class="tab" href="'+href+'" tabindex="0">'+tab.name+'</a></li>').insertBefore("#sproutforms-fieldlayout-addtab");
 
 						var $newDivTab = $('#tab-'+tab.id);
 
 						// Create the area to Drag/Drop fields on the new tab
-                        $("#sproutforms-main-container").append($([
-                            '<div id="sproutforms-tab-'+tab.id+'" data-tabname="'+tab.name+'" data-tabid="'+tab.id+'" class="hidden sproutforms-tab-fields">',
+                        $("#sproutforms-fieldlayout-container").append($([
+                            '<div id="sproutforms-tab-'+tab.id+'" data-tabname="'+tab.name+'" data-tabid="'+tab.id+'" class="sproutforms-tab-fields hidden">',
                             '<div class="parent">',
-                            '<div class="sprout-wrapper">',
                             '<div id="sproutforms-tab-container-'+tab.id+'">',
-                            '</div>',
                             '</div>',
                             '<p><a id="delete-tab-'+tab.id+'" data-tabid="'+tab.id+'">'+Craft.t('sprout-forms','Delete Tab')+'</a></p>',
                             '</div>',

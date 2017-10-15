@@ -117,113 +117,64 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 /* DRAGULA
 ------------------------------------------------------------ */
 
-.sprout-wrapper {
-    width: 100%;
-}
 .sproutforms-tab-fields,
 #sproutforms-source-fields {
     padding: 10px;
 }
-.sproutforms-tab-fields .selected-form-field,
-#sproutforms-source-fields .source-field {
-    cursor: move;
-    cursor: grab;
-    cursor: -moz-grab;
-    cursor: -webkit-grab;
+#sproutforms-source-fields {
+    margin-top: 20px;
+    text-align: center;
 }
-.gu-mirror {
-    cursor: grabbing;
-    cursor: -moz-grabbing;
-    cursor: -webkit-grabbing;
+.sproutforms-icon svg{
+    height: 25px;
+    width: 25px;
 }
-
-.sproutforms-tab-fields .selected-form-field {
-  transition: opacity 0.4s ease-in-out;
+.target-field,
+.source-field {
+    background-color: rgba(0,0,0,.05);
+    border-radius: 3px;
 }
 
 /* Field Layout - Target */
 
-/* Field Instances - Source */
-
-div.source-field {
-    cursor: grabbing;
-    width: 40%;
-    margin: 5px;
-    padding: 10px;
-    user-select: none;
-}
-div.source-field-header:after {
-    content: "";
-    display: table;
-    clear: both;
-}
-div.source-field .sproutforms-icon {
-    float: left;
-    padding-right: .8em;
-}
-div.source-field h3 {
-    float: left;
-    margin: 0;
-    padding-top: 2px;
-}
-
-.source-field.drag-active {
-    background-color: dodgerblue;
-    font-size: 14px;
-    opacity: 1;
-    padding: 10px 10px 0;
-    transition: opacity 0.4s ease-in-out;
-}
-
-.sproutforms-tab-fields .source-field.drag-active,
-.sproutforms-tab-fields .selected-form-field.drag-active {
-    background-color: transparent;
-    border: 2px dashed dodgerblue;
-    box-sizing: border-box;
-    height: 120px;
-    margin: 0 0 20px;
-    opacity: .2;
-    padding: 20px;
-    width: 100%;
-}
-
-#sproutforms-main-container .selected-form-field {
-    background-color: rgba(0,0,0,.05);
-}
-#sproutforms-source-fields .source-field {
-    background-color: rgba(0,0,0,.05);
+#sproutforms-fieldlayout-addtab {
     display: inline-block;
+    padding: 10px 24px;
+    color: #777;
+    white-space: nowrap;
+    cursor: default !important;
 }
 
-#sproutforms-source-fields {
-    margin-top: 20px;
-}
-
-.selected-form-field {
+.target-field {
     margin-bottom: 20px;
     padding: 20px 20px 30px;
     position: relative;
 }
-.selected-form-field ul.settings {
+.target-field:hover {
+    background-color: rgba(0,0,0,.08);
+    transition: all 0.2s ease-in-out;
+}
+
+.target-field ul.settings {
     position: absolute;
     top: 20px;
     right: 20px;
 }
-.selected-form-field ul.settings li {
+.target-field ul.settings li {
     float: left;
     color: #888;
     font-size: 8px;
     padding-left: 8px;
 }
-.selected-form-field ul.settings li i {
+.target-field ul.settings li i {
     color: #888;
 }
-.selected-form-field h2 {
+.target-field h2 {
     font-size: 14px;
     font-weight: bold;
     margin: 0 0 10px 0;
 }
-.selected-form-field h2 a {
+.target-field h2 a {
     color: #aaa;
     display: inline-block;
     font-size: 8px;
@@ -231,19 +182,43 @@ div.source-field h3 {
     margin-top: -2px;
     vertical-align: top;
 }
-.selected-form-field p {
+.target-field p {
     color: #aaa;
     margin: -7px 0 10px 0;
 }
-.selected-form-field .body {
+.target-field .body {
     margin-top: 10px;
 }
-.selected-form-field .body textarea,
-.selected-form-field .body input[type="text"],
-.selected-form-field .body input[type="email"],
-.selected-form-field .body input[type="phone"],
-.selected-form-field .body input[type="url"],
-.selected-form-field .body input[type="number"] {
+
+/* Field Instances - Source */
+
+.source-field {
+    display: inline-block;
+    text-align: left;
+    box-sizing: border-box;
+    border: 2px solid transparent;
+    width: 45%;
+    margin: 5px;
+    padding: 8px;
+}
+.source-field:hover {
+    background-color: rgb(13, 120, 242);
+    color: #fff;
+}
+
+.source-field h3 .sproutforms-icon {
+    display: inline-block;
+    margin-right: .5em;
+}
+
+/* Default Example Form Styles */
+
+.target-field .body textarea,
+.target-field .body input[type="text"],
+.target-field .body input[type="email"],
+.target-field .body input[type="phone"],
+.target-field .body input[type="url"],
+.target-field .body input[type="number"] {
     font-size: 14px;
     padding: 5px;
     border-top: 1px solid #888;
@@ -254,21 +229,52 @@ div.source-field h3 {
     width: 50%;
 }
 
-.sproutforms-icon svg{
-	height: 25px;
-	width: 25px;
+
+/* Drag Behavior */
+
+.sproutforms-tab-fields .target-field,
+#sproutforms-source-fields .source-field {
+    cursor: move;
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+    user-select: none;
+}
+.target-field.drag-active,
+.source-field.drag-active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+.sproutforms-tab-fields .target-field {
+  transition: opacity 0.4s ease-in-out;
 }
 
-.sproutfield{
-	width: 40%;
+.source-field.drag-active {
+    background-color: rgb(13, 120, 242);
+    color: #fff;
+    font-size: 14px;
+    opacity: 1;
+    box-sizing: border-box;
+    transition: opacity 0.4s ease-in-out;
+}
+#sproutforms-source-fields .source-field.drag-active {
+    background-color: rgba(0,0,0,.025);
+    border: 2px dashed rgba(0,0,0,.1);
+    color: rgb(41, 50, 61);
+    opacity: .2;
+}
+
+.sproutforms-tab-fields .source-field.drag-active,
+.sproutforms-tab-fields .target-field.drag-active {
+    background-color: transparent;
+    border: 2px dashed dodgerblue;
+    box-sizing: border-box;
+    height: 100px;
+    margin: 0 0 20px;
+    opacity: .2;
+    padding: 20px;
+    width: 100%;
 }
 
 
-
-#sproutforms-add-tab{
-	display: inline-block;
-	padding: 10px 24px;
-	color: #777;
-	white-space: nowrap;
-	cursor: default !important;
-}
