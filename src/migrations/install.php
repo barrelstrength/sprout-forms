@@ -2,7 +2,7 @@
 namespace barrelstrength\sproutforms\migrations;
 
 use barrelstrength\sproutcore\SproutCore;
-use barrelstrength\sproutforms\SproutForms;
+use barrelstrength\sproutcore\migrations\sproutreports\Install as SproutCoreReportsInstall;
 use craft\db\Migration;
 
 /**
@@ -15,9 +15,10 @@ class Install extends Migration
 	 */
 	public function safeUp()
 	{
-		// Generate sprout reports table if it exists.
-		SproutCore::$app->reportsMigration->createTables();
+		// Make sure Sprout Reports is also configured
+		$this->installSproutReports();
 
+		// Install Sprout Forms
 		$this->createTables();
 		$this->createIndexes();
 		$this->addForeignKeys();
@@ -212,5 +213,14 @@ class Install extends Migration
 				'isDefault' => $entryStatus['isDefault']
 			])->execute();
 		}
+	}
+
+	public function installSproutReports()
+	{
+		$migration = new SproutCoreReportsInstall();
+
+		ob_start();
+		$migration->safeUp();
+		ob_end_clean();
 	}
 }
