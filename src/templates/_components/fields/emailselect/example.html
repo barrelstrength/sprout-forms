@@ -1,5 +1,13 @@
+{% set options = field.options %}
+
+{% if not options|length %}
+    {% set options = [
+    { label : "Select..."|t, default: 1 }
+    ] %}
+{% endif %}
+
 <select readonly disabled>
-    {%- for key, option in field.options -%}
+    {%- for key, option in options -%}
 
         {%- set optionLabel = (option.label is defined ? option.label : null) -%}
 

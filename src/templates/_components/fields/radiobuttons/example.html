@@ -1,5 +1,15 @@
+{% set options = field.options %}
+
+{% if not field.options|length %}
+    {% set options = [
+        { label : "Option One", default: 1 },
+        { label : "Option Two", default: 0 },
+        { label : "Option Three", default: 0 }
+    ] %}
+{% endif %}
+
 <ul
-    {%- for key, option in field.options %}
+    {%- for key, option in options %}
 
         {%- set label = (option.label is defined ? option.label : option) %}
 

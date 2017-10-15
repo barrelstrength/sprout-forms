@@ -1,5 +1,6 @@
 {% extends "sprout-forms/_layouts/base" %}
 {% import "_includes/forms" as forms %}
+{% import "sprout-forms/_includes/macros" as sproutForms %}
 
 {% set crumbs = [
 	{ label: "Forms"|t, url: cpUrl('sprout-forms/forms') }
@@ -21,41 +22,6 @@
 {% set saveShortcutRedirect = continueEditingUrl %}
 {% set fullPageForm = true %}
 {% set selectedTab = '{{fieldLayout.getTabs()[0].name}}' %}
-
-{% macro tab(tab, tabFields) %}
-	<div id="sproutforms-tab-{{tab.id}}" data-tabname="{{tab.name}}" data-tabid="{{tab.id}}" class="hidden sproutforms-tab-fields">
-		<div class='parent'>
-			<div class='sprout-wrapper'>
-				{# @todo - this is the important div the other two do not matter #}
-				<div id='sproutforms-tab-container-{{tab.id}}' class='sprout-container'>
-					{# here will be the fields #}
-					{% for field in tabFields %}
-						<div id="sproutfield-{{field.id}}" class="selected-form-field" data-type="{{craft.sproutforms.getFieldClassName(field)}}">
-							<ul class="settings">
-								<li><a id="sproutform-field-{{field.id}}" data-fieldid="{{field.id}}" href="#" tabindex="0" ><i class="fa fa-pencil fa-2x" title="Edit"></i></a></li>
-								<li><a id="sproutform-remove-{{field.id}}" data-fieldid="{{field.id}}" href="#"><i class="fa fa-trash fa-2x" title="Remove"></i></a></li>
-							</ul>
-							<h2 for="fields-{{field.name}}">{{field.name}} <a id="sproutform-required-{{field.id}}" data-fieldid="{{field.id}}" href="#" {% if field.required %}style="color:red;"{% endif %}>{% if field.required %}<i class="fa fa-asterisk fa-2x" title="Make not required" class="formfield-required"></i>{% else %}<i class="fa fa-asterisk fa-2x" title="Make required" class="formfield-not-required"></i>{% endif %}</a></h2>
-							{% if field.instructions %}
-								<p>{{ field.instructions }}</p>
-                            {% endif %}
-							<div class="body">
-                                {{ field.getExampleInputHtml()|raw }}
-							</div>
-							<span id="toggle-required">
-								{% if field.required %}<input class="required-input" type="hidden" name="requiredFields[]" value="{{field.id}}">{% endif %}
-							</span>
-							{# todo - why the tabName and not the tabId? #}
-							<input class="id-input" type="hidden" name="fieldLayout[{{tab.name}}][]" value="{{field.id}}">
-						</div>
-					{% endfor %}
-				</div>
-			</div>
-
-			<p><a id="delete-tab-{{tab.id}}" data-tabid="{{tab.id}}">Delete tab</a></p>
-		</div>
-	</div>
-{% endmacro %}
 
 {% block saveButton %}
 	<input type="hidden" name="action" value="sprout-forms/forms/save-form">
@@ -101,15 +67,12 @@
 
 				{# let's add the tabs and fields to the dropped divs #}
 				{% if fieldLayout %}
-					{% import _self as macros %}
 					{% for tab in fieldLayout.getTabs() %}
-						{{ macros.tab(tab, tab.getFields(), formFields) }}
+                        {{ sproutForms.tab(tab, tab.getFields(), formFields) }}
 					{% endfor %}
 				{% endif %}
 
-
-				<div id="deletedFieldsContainer" class="hidden">
-				</div>
+				<div id="deletedFieldsContainer" class="hidden"></div>
 
 			</div>
 

@@ -31,6 +31,7 @@ class FieldsController extends BaseController
 	public function actionCreateField()
 	{
 		$this->requireAcceptsJson();
+
 		$request = Craft::$app->getRequest();
 		$type    = $request->getBodyParam('type');
 		$tabId   = $request->getBodyParam('tabId');
@@ -41,6 +42,7 @@ class FieldsController extends BaseController
 		if ($type && $form && $tab)
 		{
 			$field = SproutForms::$app->fields->createDefaultField($type, $form);
+
 			if ($field)
 			{
 				// Set the field layout
@@ -69,6 +71,7 @@ class FieldsController extends BaseController
 	public function actionAddTab()
 	{
 		$this->requireAcceptsJson();
+
 		$request   = Craft::$app->getRequest();
 		$name      = $request->getBodyParam('name');
 		$sortOrder = $request->getBodyParam('sortOrder');
@@ -103,6 +106,7 @@ class FieldsController extends BaseController
 	public function actionSaveField()
 	{
 		$this->requirePostRequest();
+
 		$request       = Craft::$app->getRequest();
 		$fieldsService = Craft::$app->getFields();
 		// Make sure our field has a section

@@ -1,4 +1,5 @@
 <?php
+
 namespace barrelstrength\sproutforms\services;
 
 use Craft;
@@ -41,7 +42,7 @@ class Fields extends Component
 		{
 			foreach ($fieldIds as $fieldOrder => $fieldId)
 			{
-				$fieldLayoutFieldRecord            = $this->_getFieldLayoutFieldRecordByFieldId($fieldId);
+				$fieldLayoutFieldRecord = $this->_getFieldLayoutFieldRecordByFieldId($fieldId);
 				$fieldLayoutFieldRecord->sortOrder = $fieldOrder + 1;
 				$fieldLayoutFieldRecord->save();
 			}
@@ -50,8 +51,7 @@ class Fields extends Component
 			{
 				$transaction->commit();
 			}
-		}
-		catch (\Exception $e)
+		} catch (\Exception $e)
 		{
 
 			if ($transaction !== null)
@@ -75,14 +75,13 @@ class Fields extends Component
 	{
 		if ($fieldId)
 		{
-			$record = FieldLayoutFieldRecord::find('fieldId=:fieldId', array(':fieldId' => $fieldId));
+			$record = FieldLayoutFieldRecord::find('fieldId=:fieldId', [':fieldId' => $fieldId]);
 
 			if (!$record)
 			{
-				throw new Exception(SproutForms::t('No field exists with the ID “{id}”', array('id' => $fieldId)));
+				throw new Exception(SproutForms::t('No field exists with the ID “{id}”', ['id' => $fieldId]));
 			}
-		}
-		else
+		} else
 		{
 			$record = new FieldLayoutFieldRecord();
 		}
@@ -92,8 +91,8 @@ class Fields extends Component
 
 	public function getSproutFormsTemplates(FormElement $form = null)
 	{
-		$templates              = array();
-		$settings               = Craft::$app->plugins->getPlugin('sprout-forms')->getSettings();
+		$templates = [];
+		$settings = Craft::$app->plugins->getPlugin('sprout-forms')->getSettings();
 		$templateFolderOverride = $settings->templateFolderOverride;
 
 		if ($form->enableTemplateOverrides)
@@ -104,39 +103,39 @@ class Fields extends Component
 		$defaultTemplate = Craft::getAlias('@barrelstrength/sproutforms/templates/_special/templates/');
 
 		// Set our defaults
-		$templates['form']  = $defaultTemplate;
-		$templates['tab']   = $defaultTemplate;
+		$templates['form'] = $defaultTemplate;
+		$templates['tab'] = $defaultTemplate;
 		$templates['field'] = $defaultTemplate;
 		$templates['email'] = $defaultTemplate;
 
 		// See if we should override our defaults
 		if ($templateFolderOverride)
 		{
-			$formTemplate  = Craft::$app->path->getSiteTemplatesPath() . $templateFolderOverride . '/form';
-			$tabTemplate   = Craft::$app->path->getSiteTemplatesPath() . $templateFolderOverride . '/tab';
-			$fieldTemplate = Craft::$app->path->getSiteTemplatesPath() . $templateFolderOverride . '/field';
-			$emailTemplate = Craft::$app->path->getSiteTemplatesPath() . $templateFolderOverride . '/email';
+			$formTemplate = Craft::$app->path->getSiteTemplatesPath().$templateFolderOverride.'/form';
+			$tabTemplate = Craft::$app->path->getSiteTemplatesPath().$templateFolderOverride.'/tab';
+			$fieldTemplate = Craft::$app->path->getSiteTemplatesPath().$templateFolderOverride.'/field';
+			$emailTemplate = Craft::$app->path->getSiteTemplatesPath().$templateFolderOverride.'/email';
 
 			foreach (Craft::$app->config->get('defaultTemplateExtensions') as $extension)
 			{
-				if (IOHelper::fileExists($formTemplate . '.' . $extension))
+				if (IOHelper::fileExists($formTemplate.'.'.$extension))
 				{
-					$templates['form'] = Craft::$app->path->getSiteTemplatesPath() . $templateFolderOverride . '/';
+					$templates['form'] = Craft::$app->path->getSiteTemplatesPath().$templateFolderOverride.'/';
 				}
 
-				if (IOHelper::fileExists($tabTemplate . '.' . $extension))
+				if (IOHelper::fileExists($tabTemplate.'.'.$extension))
 				{
-					$templates['tab'] = Craft::$app->path->getSiteTemplatesPath() . $templateFolderOverride . '/';
+					$templates['tab'] = Craft::$app->path->getSiteTemplatesPath().$templateFolderOverride.'/';
 				}
 
-				if (IOHelper::fileExists($fieldTemplate . '.' . $extension))
+				if (IOHelper::fileExists($fieldTemplate.'.'.$extension))
 				{
-					$templates['field'] = Craft::$app->path->getSiteTemplatesPath() . $templateFolderOverride . '/';
+					$templates['field'] = Craft::$app->path->getSiteTemplatesPath().$templateFolderOverride.'/';
 				}
 
-				if (IOHelper::fileExists($emailTemplate . '.' . $extension))
+				if (IOHelper::fileExists($emailTemplate.'.'.$extension))
 				{
-					$templates['email'] = Craft::$app->path->getSiteTemplatesPath() . $templateFolderOverride . '/';
+					$templates['email'] = Craft::$app->path->getSiteTemplatesPath().$templateFolderOverride.'/';
 				}
 			}
 		}
@@ -164,7 +163,7 @@ class Fields extends Component
 
 			/**
 			 * @var SproutFormsBaseField $instance
-			*/
+			 */
 			foreach ($fields as $instance)
 			{
 				$this->registeredFields[get_class($instance)] = $instance;
@@ -203,7 +202,7 @@ class Fields extends Component
 	 */
 	public function prepareFieldTypeSelection()
 	{
-		$fields         = $this->getRegisteredFields();
+		$fields = $this->getRegisteredFields();
 		$standardFields = [];
 
 		if (count($fields))
@@ -218,7 +217,7 @@ class Fields extends Component
 			asort($standardFields);
 
 			// Add the group label to the beginning of the standard group
-			$standardFields = $this->prependKeyValue($standardFields, 'standardFieldGroup', array('optgroup' => SproutForms::t('Standard Fields')));
+			$standardFields = $this->prependKeyValue($standardFields, 'standardFieldGroup', ['optgroup' => SproutForms::t('Standard Fields')]);
 		}
 
 		return $standardFields;
@@ -249,20 +248,32 @@ class Fields extends Component
 	public function getFieldAsNew($field, $value)
 	{
 		$newField = null;
-		$i        = 1;
-		$band     = true;
+		$i = 1;
+		$band = true;
+
 		do
 		{
-			$newField = $field == "handle" ? $value . $i : $value . " " . $i;
-			$form     = $this->getFieldValue($field, $newField);
-			if (is_null($form))
+			if ($field == "handle")
 			{
+				// Append a number to our handle to ensure it is unique
+				$newField = $value.$i;
+
+				$form = $this->getFieldValue($field, $newField);
+
+				if (is_null($form))
+				{
+					$band = false;
+				}
+			} else
+			{
+				// Add spaces before any capital letters in our name
+				$newField = preg_replace('/([a-z])([A-Z])/', '$1 $2', $value);
 				$band = false;
 			}
 
 			$i++;
-		}
-		while ($band);
+
+		} while ($band);
 
 		return $newField;
 	}
@@ -296,9 +307,9 @@ class Fields extends Component
 			}
 
 			// Create a tab
-			$tabName           = $this->getDefaultTabName();
-			$requiredFields    = array();
-			$postedFieldLayout = array();
+			$tabName = $this->getDefaultTabName();
+			$requiredFields = [];
+			$postedFieldLayout = [];
 
 			// Add our new field
 			if (isset($field) && $field->id != null)
@@ -330,26 +341,26 @@ class Fields extends Component
 	{
 		if ($form && $postFieldLayout)
 		{
-			$postedFieldLayout = array();
-			$requiredFields    = array();
-			$tabs              = $postFieldLayout->getTabs();
+			$postedFieldLayout = [];
+			$requiredFields = [];
+			$tabs = $postFieldLayout->getTabs();
 
 			foreach ($tabs as $tab)
 			{
-				$fields = array();
+				$fields = [];
 				$fieldLayoutFields = $tab->getFields();
 
 				foreach ($fieldLayoutFields as $fieldLayoutField)
 				{
 					$originalField = $fieldLayoutField->getField();
 
-					$field               = new FieldModel();
-					$field->name         = $originalField->name;
-					$field->handle       = $originalField->handle;
+					$field = new FieldModel();
+					$field->name = $originalField->name;
+					$field->handle = $originalField->handle;
 					$field->instructions = $originalField->instructions;
-					$field->required     = $fieldLayoutField->required;
+					$field->required = $fieldLayoutField->required;
 					$field->translatable = $originalField->translatable;
-					$field->type         = $originalField->type;
+					$field->type = $originalField->type;
 
 					if (isset($originalField->settings))
 					{
@@ -412,11 +423,11 @@ class Fields extends Component
 
 			$sortOrder = count($fieldLayoutFields) + 1;
 
-			$fieldRecord            = new FieldLayoutFieldRecord();
-			$fieldRecord->layoutId  = $form->fieldLayoutId;
-			$fieldRecord->tabId     = $tabId;
-			$fieldRecord->fieldId   = $field->id;
-			$fieldRecord->required  = 0;
+			$fieldRecord = new FieldLayoutFieldRecord();
+			$fieldRecord->layoutId = $form->fieldLayoutId;
+			$fieldRecord->tabId = $tabId;
+			$fieldRecord->fieldId = $field->id;
+			$fieldRecord->required = 0;
 			$fieldRecord->sortOrder = $sortOrder;
 
 			$response = $fieldRecord->save(false);
@@ -428,9 +439,9 @@ class Fields extends Component
 	/**
 	 * This service allows update a field to a current FieldLayoutFieldRecord
 	 *
-	 * @param FieldInterface        $field
-	 * @param FormElement $form
-	 * @param int                   $tabId
+	 * @param FieldInterface $field
+	 * @param FormElement    $form
+	 * @param int            $tabId
 	 *
 	 * @return boolean
 	 */
@@ -440,7 +451,7 @@ class Fields extends Component
 
 		if (isset($field) && isset($form))
 		{
-			$fieldRecord  = FieldLayoutFieldRecord::findOne([
+			$fieldRecord = FieldLayoutFieldRecord::findOne([
 				'fieldId' => $field->id,
 				'layoutId' => $form->fieldLayoutId
 			]);
@@ -450,8 +461,7 @@ class Fields extends Component
 				$fieldRecord->tabId = $tabId;
 
 				$response = $fieldRecord->save(false);
-			}
-			else
+			} else
 			{
 				SproutForms::error("Unable to find the FieldLayoutFieldRecord");
 			}
@@ -468,31 +478,30 @@ class Fields extends Component
 	/**
 	 * Loads the sprout modal field via ajax.
 	 *
-	 * @param FormElement $form
-	 * @param FieldModel|null        $field
-	 * @param int|null               $tabId
+	 * @param FormElement     $form
+	 * @param FieldModel|null $field
+	 * @param int|null        $tabId
 	 *
 	 * @return array
 	 */
 	public function getModalFieldTemplate($form, $field = null, $tabId = null)
 	{
 		$fieldsService = Craft::$app->getFields();
-		$request       = Craft::$app->getRequest();
+		$request = Craft::$app->getRequest();
 
-		$data          = [];
+		$data = [];
 		$data['tabId'] = null;
 		$data['field'] = $fieldsService->createField(PlainText::class);
 
 		if ($field)
 		{
 			$data['field'] = $field;
-			$tabIdByPost   = $request->getBodyParam('tabId');
+			$tabIdByPost = $request->getBodyParam('tabId');
 
 			if (isset($tabIdByPost))
 			{
 				$data['tabId'] = $tabIdByPost;
-			}
-			else if($tabId != null) //edit field
+			} else if ($tabId != null) //edit field
 			{
 				$data['tabId'] = $tabId;
 			}
@@ -504,30 +513,30 @@ class Fields extends Component
 		}
 
 		$data['sections'] = $form->getFieldLayout()->getTabs();
-		$data['formId']   = $form->id;
+		$data['formId'] = $form->id;
 		$view = Craft::$app->getView();
 
 		$html = $view->renderTemplate('sprout-forms/forms/_editFieldModal', $data);
-		$js   = $view->getBodyHtml();
-		$css  = $view->getHeadHtml();
+		$js = $view->getBodyHtml();
+		$css = $view->getHeadHtml();
 
 		return [
 			'html' => $html,
-			'js'   => $js,
-			'css'  => $css
+			'js' => $js,
+			'css' => $css
 		];
 	}
 
 	public function createDefaultField($type, $form)
 	{
-		$intanceField  = new $type;
+		$intanceField = new $type;
 		$fieldsService = Craft::$app->getFields();
 		// get the field name and remove spaces
-		$fieldName  = preg_replace('/\s+/','',$intanceField->displayName());
+		$fieldName = preg_replace('/\s+/', '', $intanceField->displayName());
 		$handleName = lcfirst($fieldName);
 
-		$name   = $this->getFieldAsNew('name',$fieldName);
-		$handle = $this->getFieldAsNew('handle',$handleName);
+		$name = $this->getFieldAsNew('name', $fieldName);
+		$handle = $this->getFieldAsNew('handle', $handleName);
 
 		$field = $fieldsService->createField([
 			'type' => $type,
@@ -535,7 +544,7 @@ class Fields extends Component
 			'handle' => $handle,
 			'instructions' => '',
 			// @todo - add locales
-			'translationMethod' =>Field::TRANSLATION_METHOD_NONE,
+			'translationMethod' => Field::TRANSLATION_METHOD_NONE,
 		]);
 
 		// Set our field context
@@ -574,7 +583,7 @@ class Fields extends Component
 	 */
 	protected function prependKeyValue(array $haystack, $key, $value)
 	{
-		$haystack       = array_reverse($haystack, true);
+		$haystack = array_reverse($haystack, true);
 		$haystack[$key] = $value;
 
 		return array_reverse($haystack, true);

@@ -118,17 +118,10 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 
 /* dragula-specific example page styles */
 .sprout-wrapper {
-  display: table;
-  width: 100%;
+    width: 100%;
 }
 .sprout-container {
-  display: table-cell;
-  background-color: rgba(255, 255, 255, 0.2);
-  padding: 10px;
-  width: 50%;
-}
-.sprout-container:nth-child(odd) {
-  background-color: rgba(0, 0, 0, 0.2);
+    padding: 10px;
 }
 /*
  * note that styling gu-mirror directly is a bad practice because it's too generic.
@@ -136,48 +129,88 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
  */
 .sprout-container > div,
 .gu-mirror {
-  margin: -10px -10px 30px;
-  padding: 10px;
-  background-color: #e3e5e8;;
   transition: opacity 0.4s ease-in-out;
 }
 
-.sprout-container .source-fields {
-    display: inline-block;
+div.source-field {
+    cursor: grabbing;
     width: 40%;
     margin: 5px;
+    padding: 10px;
+    user-select: none;
 }
-.sprout-container .source-fields .sproutforms-icon {
+div.source-field-header:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+div.source-field .sproutforms-icon {
     float: left;
     padding-right: .8em;
 }
-.sprout-container .source-fields label {
-    font-weight: bold;
+div.source-field h3 {
+    float: left;
+    margin: 0;
+    padding-top: 2px;
 }
-.sprout-container .selected-form-field {
+
+.source-field.drag-active {
+    background-color: dodgerblue;
+    font-size: 14px;
+    opacity: 1;
+    padding: 10px 10px 0;
+    transition: opacity 0.4s ease-in-out;
+}
+
+.sproutforms-tab-fields .source-field.drag-active,
+.sproutforms-tab-fields .selected-form-field.drag-active {
+    background-color: transparent;
+    border: 2px dashed dodgerblue;
+    box-sizing: border-box;
+    height: 100px;
+    margin: 0 0 20px;
+    opacity: .2;
     padding: 20px;
+    width: 100%;
+}
+
+#sproutforms-main-container .selected-form-field {
+    background-color: rgba(0,0,0,.05);
+}
+#sproutforms-source-fields .source-field {
+    background-color: rgba(0,0,0,.05);
+    display: inline-block;
+}
+
+#sproutforms-source-fields {
+    margin-top: 20px;
+}
+
+.selected-form-field {
+    margin-bottom: 20px;
+    padding: 20px 20px 30px;
     position: relative;
 }
-.sprout-container .selected-form-field ul.settings {
+.selected-form-field ul.settings {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 20px;
+    right: 20px;
 }
-.sprout-container .selected-form-field ul.settings li {
+.selected-form-field ul.settings li {
     float: left;
     color: #888;
     font-size: 8px;
     padding-left: 8px;
 }
-.sprout-container .selected-form-field ul.settings li i {
+.selected-form-field ul.settings li i {
     color: #888;
 }
-.sprout-container .selected-form-field h2 {
+.selected-form-field h2 {
     font-size: 14px;
     font-weight: bold;
     margin: 0 0 10px 0;
 }
-.sprout-container .selected-form-field h2 a {
+.selected-form-field h2 a {
     color: #aaa;
     display: inline-block;
     font-size: 8px;
@@ -185,16 +218,19 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
     margin-top: -2px;
     vertical-align: top;
 }
-.sprout-container .selected-form-field p {
+.selected-form-field p {
     color: #aaa;
     margin: -7px 0 10px 0;
 }
-.sprout-container .selected-form-field .body input[type="text"],
-.sprout-container .selected-form-field .body textarea,
-.sprout-container .selected-form-field .body input[type="email"],
-.sprout-container .selected-form-field .body input[type="phone"],
-.sprout-container .selected-form-field .body input[type="url"],
-.sprout-container .selected-form-field .body input[type="number"] {
+.selected-form-field .body {
+    margin-top: 10px;
+}
+.selected-form-field .body textarea,
+.selected-form-field .body input[type="text"],
+.selected-form-field .body input[type="email"],
+.selected-form-field .body input[type="phone"],
+.selected-form-field .body input[type="url"],
+.selected-form-field .body input[type="number"] {
     font-size: 14px;
     padding: 5px;
     border-top: 1px solid #888;
@@ -222,30 +258,8 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 .sprout-container.ex-over {
   background-color: rgba(255, 255, 255, 0.3);
 }
-#left-lovehandles > div,
-#right-lovehandles > div {
-  cursor: initial;
-}
-.handle {
-  padding: 0 5px;
-  margin-right: 5px;
-  background-color: rgba(0, 0, 0, 0.4);
-  cursor: move;
-}
-.image-thing {
-  margin: 20px 0;
-  display: block;
-  text-align: center;
-}
-.slack-join {
-  position: absolute;
-  font-weight: normal;
-  font-size: 14px;
-  right: 10px;
-  top: 50%;
-  margin-top: -8px;
-  line-height: 16px;
-}
+
+
 
 .sproutforms-icon svg{
 	height: 25px;
@@ -256,10 +270,9 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 	width: 40%;
 }
 
-.sproutfield-required:after
+.sproutforms-required
 {
-	color: red;
-	content: '*';
+    color: red;
 }
 
 .sproutfield-title

@@ -47,7 +47,7 @@ class RegularExpression extends SproutFormsBaseField implements PreviewableField
 	 */
 	public function getIconClass()
 	{
-		return 'fa fa-asterisk';
+		return 'fa fa-puzzle-piece';
 	}
 
 	/**

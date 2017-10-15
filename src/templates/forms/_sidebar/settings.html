@@ -1,4 +1,5 @@
 {% import "_includes/forms" as forms %}
+{% import "sprout-forms/_includes/macros" as sproutForms %}
 
 <style>
 	.editform-sidebar .tabs {
@@ -31,13 +32,8 @@
 			<div class='parent'>
 				<div class='sprout-wrapper'>
 					<div id='right-copy' class='sprout-container'>
-						{% for type,fieldObject in fieldTypes %}
-							<div class="source-fields" data-type="{{type}}">
-								<div class="sproutforms-icon">
-									{{ fieldObject.getIcon('fa-lg')|raw }}
-								</div>
-								<label >{{fieldObject.displayName()}}</label>
-							</div>
+						{% for type, field in fieldTypes %}
+							{{ sproutForms.field(field, 'source') }}
 						{% endfor %}
 					</div>
 				</div>

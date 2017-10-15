@@ -3,5 +3,7 @@
 {% if field.output == "html" or field.output == "richText" %}
     {{ field.instructions  | raw }}
 {% else %}
-    {{ field.instructions | markdown }}
+    {% if field.instructions %}
+        {{ field.instructions | markdown }}
+    {% endif %}
 {% endif %}
