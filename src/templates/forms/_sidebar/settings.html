@@ -1,36 +1,38 @@
 {% import "_includes/forms" as forms %}
-{% set tab  = 1 %}
-{% set tab2 = false %}
-{% set tab3 = false %}
 
-<nav id="tabs" class="tabs" style= "margin: 0 0 0 0;">
-	<ul>
-		<li>
-			<a class="tab {{ tab == 1 ? ' sel' : '' }}" href="#sproutforms-source-fields">
-				{{ "Fields"|t('sprout-forms') }}
-			</a>
-		</li>
-		<li>
-			<a class="tab {{ tab == 2 ? ' sel' : '' }} {{ tab2 ? 'error' : '' }}" href="#tab-sproutforms-notification">
-                {{ "Notifications"|t('sprout-forms') }}
-			</a>
-		</li>
-		<li>
-			<a class="tab {{ tab == 3 ? ' sel' : '' }}" href="#tab-sproutforms-settings">
-                {{ "Settings"|t('sprout-forms') }}
-			</a>
-		</li>
-	</ul>
-</nav>
+<style>
+	.editform-sidebar .tabs {
+		margin: 0;
+	}
+</style>
+
+{% set sidebarTabs = {
+	fields : {
+		"label" : "Fields"|t('sprout-forms'),
+		"url" : "#sproutforms-source-fields",
+	},
+	notifications : {
+		"label" : "Notifications"|t('sprout-forms'),
+		"url" : "#tab-sproutforms-notification",
+	},
+	settings : {
+		"label" : "Settings"|t('sprout-forms'),
+		"url" : "#tab-sproutforms-settings",
+	}
+} %}
+
+{% include "_includes/tabs" with {
+	tabs : sidebarTabs
+} %}
 
 <div>
 	{% set fieldTypes = craft.sproutforms.getRegisteredFields() %}
-	<div class="{{ tab != 1 ? 'hidden' : '' }} meta" id="sproutforms-source-fields">
+	<div class="meta" id="sproutforms-source-fields">
 			<div class='parent'>
 				<div class='sprout-wrapper'>
 					<div id='right-copy' class='sprout-container'>
 						{% for type,fieldObject in fieldTypes %}
-							<div id="sproutfield" class="source-fields" data-type="{{type}}">
+							<div class="source-fields" data-type="{{type}}">
 								<div class="sproutforms-icon">
 									{{ fieldObject.getIcon('fa-lg')|raw }}
 								</div>
@@ -42,13 +44,13 @@
 			</div>
 	</div><!-- fields div -->
 
-	<div class="{{ tab != 2 ? 'hidden' : '' }} meta" id="tab-sproutforms-notification">
+	<div class="hidden meta" id="tab-sproutforms-notification">
 
 		{% include 'sprout-forms/forms/_tabs/notifications' %}
 
 	</div><!-- notifications div -->
 
-	<div class="{{ tab != 3 ? 'hidden' : '' }} meta" id="tab-sproutforms-settings">
+	<div class="hidden meta" id="tab-sproutforms-settings">
 
 		{% if groups is defined and groups|length %}
 

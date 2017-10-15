@@ -234,7 +234,7 @@
 
 		var tabs = {{ fieldLayout.getTabs()|json_encode()|raw }};
 
-		new SproutField(tabs);
+		new Craft.SproutForms.FieldLayoutEditor(tabs);
 
 	});
 {% endjs %}

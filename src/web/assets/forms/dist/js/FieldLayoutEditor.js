@@ -1,10 +1,20 @@
+/*
+ * @link      https://sprout.barrelstrengthdesign.com/
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   http://sprout.barrelstrengthdesign.com/license
+ */
+
+if (typeof Craft.SproutForms === typeof undefined) {
+    Craft.SproutForms = {};
+}
+
 (function($)
 {
 	/**
-	 * SproutField class
+	 * Craft.SproutForms.FieldLayoutEditor class
 	 * Handles the buttons for creating new groups and fields inside a the drag and drop UI
 	 */
-	var SproutField = Garnish.Base.extend({
+	Craft.SproutForms.FieldLayoutEditor = Garnish.Base.extend({
 
 		$container: null,
 		$groupButton: null,
@@ -16,7 +26,8 @@
 		modal: null,
 		formLayout: null,
 		fieldsLayout: null,
-		// The dragula instance
+
+		// The Dragula instance
 		drake: null,
 
 		/**
@@ -27,10 +38,21 @@
 		{
 			var that = this;
 
-			this.$pane = new Craft.Pane($(".pane"));
+			// Check to see if our main Form container already is registered as a pane
+			if (!$("div#sproutforms-main-container.pane").data('pane'))
+			{
+				// Create a pane object if it is note
+                this.$pane = new Craft.Pane($("div#sproutforms-main-container.pane"));
+			}
+			else
+			{
+				// Use the existing pane object if it exists
+				this.$pane = $("div#sproutforms-main-container.pane").data('pane');
+			}
 
 			this.initButtons();
-			this.modal = SproutField.FieldModal.getInstance();
+
+			this.modal = Craft.SproutForms.FieldModal.getInstance();
 
 			this.modal.on('newField', $.proxy(function(e)
 			{
@@ -49,6 +71,7 @@
 
 			// DRAGULA
 			this.fieldsLayout = this.getId('right-copy');
+
 			// Drag from right to left
 			this.drake = dragula([null, this.fieldsLayout], {
 				copy: function (el, source) {
@@ -210,6 +233,7 @@
 			var response = true;
 			var $tabs = $("[id^='sproutforms-tab-']");
 			var formId = $("#formId").val();
+
 			// validate with current names and set the sortOrder
 			$tabs.each(function (i, el) {
 				var tabname = $(el).data('tabname');
@@ -235,30 +259,34 @@
 					if (response.success)
 					{
 						var tab = response.tab;
+
 						Craft.cp.displayNotice(Craft.t('sprout-forms','Tab: '+tab.name+' created'));
-						// first insert the new tab before the add tab button
+
+						// Insert the new tab before the Add Tab button
 						var href = '#sproutforms-tab-'+tab.id;
 						$('<li><a id="tab-'+tab.id+'" class="tab" href="'+href+'" tabindex="0">'+tab.name+'</a></li>').insertBefore("#sproutforms-add-tab");
+
 						var $newDivTab = $('#tab-'+tab.id);
 
-						var $dropDiv = $([
-							'<div id="sproutforms-tab-'+tab.id+'" data-tabname="'+tab.name+'" data-tabid="'+tab.id+'" class="hidden sproutforms-tab-fields">',
-							'<div class="parent">',
-							'<h1>Drag and drop here</h1>',
-							'<a id="delete-tab-'+tab.id+'" data-tabid="'+tab.id+'">Delete tab</a>',
-							'<div class="sprout-wrapper">',
-							'<div id="sproutforms-tab-container-'+tab.id+'" class="sprout-container">',
-							'</div>',
-							'</div>',
-							'</div>',
-							'</div>'
-						].join('')).appendTo($("#sproutforms-main-container"));
-						// Convert our new tab into dragula vampire :)
+						// Create the area to Drag/Drop fields on the new tab
+                        $("#sproutforms-main-container").append($([
+                            '<div id="sproutforms-tab-'+tab.id+'" data-tabname="'+tab.name+'" data-tabid="'+tab.id+'" class="hidden sproutforms-tab-fields">',
+                            '<div class="parent">',
+                            '<div class="sprout-wrapper">',
+                            '<div id="sproutforms-tab-container-'+tab.id+'" class="sprout-container">',
+                            '</div>',
+                            '</div>',
+                            '<p><a id="delete-tab-'+tab.id+'" data-tabid="'+tab.id+'">'+Craft.t('sprout-forms','Delete Tab')+'</a></p>',
+                            '</div>',
+                            '</div>'
+                        ].join('')));
+
+						// Convert our new tab into Dragula vampire :)
 						this.drake.containers.push(this.getId('sproutforms-tab-container-'+tab.id));
 
 						this.$pane.tabs[href] = {
-								$tab: $newDivTab,
-								$target: $(href)
+							$tab: $newDivTab,
+							$target: $(href)
 						};
 
 						this.$pane.addListener($newDivTab, 'activate', 'selectTab');
@@ -388,7 +416,5 @@
 		},
 
 	});
-
-	window.SproutField = SproutField;
 
 })(jQuery);

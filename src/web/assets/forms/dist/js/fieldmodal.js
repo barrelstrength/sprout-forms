@@ -1,3 +1,13 @@
+/*
+ * @link      https://sprout.barrelstrengthdesign.com/
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   http://sprout.barrelstrengthdesign.com/license
+ */
+
+if (typeof Craft.SproutForms === typeof undefined) {
+    Craft.SproutForms = {};
+}
+
 (function($)
 {
 	var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
@@ -15,10 +25,10 @@
 	}
 
 	/**
-	 * FieldModal class
+	 * SproutForms.FieldModal class
 	 * Handles the modal window for creating new fields.
 	 */
-	var FieldModal = Garnish.Modal.extend({
+	Craft.SproutForms.FieldModal = Garnish.Modal.extend({
 
 		$body: null,
 		$content: null,
@@ -526,13 +536,11 @@
 		{
 			if (!this._instance)
 			{
-				this._instance = new FieldModal();
+				this._instance = new Craft.SproutForms.FieldModal();
 			}
 
 			return this._instance;
 		}
 	});
-
-	window.SproutField.FieldModal = FieldModal;
 
 })(jQuery);
