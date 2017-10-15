@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms;
 use barrelstrength\sproutcore\services\sproutreports\DataSources;
 use barrelstrength\sproutforms\services\App;
 use Craft;
+use craft\base\Plugin;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
@@ -38,7 +39,7 @@ use barrelstrength\sproutforms\integrations\sproutforms\fields\RegularExpression
 use barrelstrength\sproutforms\services\Fields;
 use barrelstrength\sproutforms\integrations\sproutreports\datasources\SproutFormsEntriesDataSource;
 
-class SproutForms extends \craft\base\Plugin
+class SproutForms extends Plugin
 {
 	/**
 	 * Enable use of SproutForms::$app-> in place of Craft::$app->
