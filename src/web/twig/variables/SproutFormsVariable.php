@@ -61,6 +61,14 @@ class SproutFormsVariable
 	public function displayForm($formHandle, array $renderingOptions = null)
 	{
 		$form          = SproutForms::$app->forms->getFormByHandle($formHandle);
+
+		if (!$form)
+		{
+			throw new \Exception(SproutForms::t('Unable to find form with the handle `{handle}`', [
+				'handle' => $formHandle
+			]));
+		}
+		
 		$entry         = SproutForms::$app->entries->getEntry($form);
 		$fields        = SproutForms::$app->fields->getRegisteredFields();
 		$templatePaths = SproutForms::$app->fields->getSproutFormsTemplates($form);
