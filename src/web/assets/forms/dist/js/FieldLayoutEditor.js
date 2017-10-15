@@ -183,8 +183,9 @@ if (typeof Craft.SproutForms === typeof undefined) {
                 // Add the Settings buttons
                 $(el).prepend($([
                     '<ul class="settings">',
-                    '<li><a id="sproutform-field-',defaultField.id,'" data-fieldid="',defaultField.id,'" href="#" tabindex="0" ><i class="fa fa-pencil fa-2x" title="Edit"></i></a></li>',
-                    '<li><a id="sproutform-remove-',defaultField.id,'" data-fieldid="',defaultField.id,'" href="#"><i class="fa fa-trash fa-2x" title="Remove"></i></a></li>',
+                    '<li><a id="sproutform-required-',defaultField.id,'" data-fieldid="',defaultField.id,'" href="#" tabindex="0" ><i class="fa fa-asterisk fa-2x" title="',Craft.t('sprout-forms', 'Make required'),'"></i></a></li>',
+                    '<li><a id="sproutform-field-',defaultField.id,'" data-fieldid="',defaultField.id,'" href="#" tabindex="0" ><i class="fa fa-pencil fa-2x" title="',Craft.t('sprout-forms', 'Edit'),'"></i></a></li>',
+                    '<li><a id="sproutform-remove-',defaultField.id,'" data-fieldid="',defaultField.id,'" href="#"><i class="fa fa-trash fa-2x" title="',Craft.t('sprout-forms', 'Remove'),'"></i></a></li>',
                     '</ul>'
                 ].join('')));
 
@@ -193,9 +194,9 @@ if (typeof Craft.SproutForms === typeof undefined) {
                     '<input type="hidden" name="fieldLayout[',tabName,'][]" value="',defaultField.id,'" class="id-input">'
             	].join('')));
 
+                this.addListener($("#sproutform-required-"+defaultField.id), 'activate', 'toggleRequiredField');
 				this.addListener($("#sproutform-field-"+defaultField.id), 'activate', 'editField');
 				this.addListener($("#sproutform-remove-"+defaultField.id), 'activate', 'removeField');
-				this.addListener($("#sproutform-required-"+defaultField.id), 'activate', 'toggleRequiredField');
 			}
 			else
 			{
@@ -222,9 +223,9 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
 				if(fieldId)
 				{
+                    that.addListener($("#sproutform-required-"+fieldId), 'activate', 'toggleRequiredField');
 					that.addListener($("#sproutform-field-"+fieldId), 'activate', 'editField');
 					that.addListener($("#sproutform-remove-"+fieldId), 'activate', 'removeField');
-					that.addListener($("#sproutform-required-"+fieldId), 'activate', 'toggleRequiredField');
 				}
 			});
 
@@ -301,7 +302,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
                             '<div id="sproutforms-tab-'+tab.id+'" data-tabname="'+tab.name+'" data-tabid="'+tab.id+'" class="hidden sproutforms-tab-fields">',
                             '<div class="parent">',
                             '<div class="sprout-wrapper">',
-                            '<div id="sproutforms-tab-container-'+tab.id+'" class="sprout-container">',
+                            '<div id="sproutforms-tab-container-'+tab.id+'">',
                             '</div>',
                             '</div>',
                             '<p><a id="delete-tab-'+tab.id+'" data-tabid="'+tab.id+'">'+Craft.t('sprout-forms','Delete Tab')+'</a></p>',
@@ -383,7 +384,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
 			// Added behavior, store an array of deleted field IDs
 			// that will be processed by the sprout-Forms/forms/saveForm method
 			$deletedFieldsContainer = $('#deletedFieldsContainer');
-			$('<input type="hidden" name="deletedFields[]" value="' + fieldId + '">').appendTo($deletedFieldsContainer);
+			$($deletedFieldsContainer).append('<input type="hidden" name="deletedFields[]" value="' + fieldId + '">');
 		},
 
 		toggleRequiredField: function(option)
@@ -392,14 +393,12 @@ if (typeof Craft.SproutForms === typeof undefined) {
 			var fieldId     = $(option).data('fieldid');
 			var $divField   = $("#sproutfield-"+fieldId);
 			var $toggleLink = $("#sproutform-required-"+fieldId);
-			var $requiredInput
 
-			// var $field = $divField.find(".toggle-required");
-
-			if ($divField.hasClass('sproutfield-required'))
+			if ($divField.find('.sproutforms-required-input').val())
 			{
-                $divField.removeClass('sproutfield-required');
-                $divField.find('.required-input').remove();
+                console.log('woo');
+                $divField.find('h2').removeClass('required');
+                $divField.find('.sproutforms-required-input').remove();
 
 				setTimeout(function() {
 					$toggleLink.html('<i class="fa fa-asterisk fa-2x" title="'+Craft.t('sprout-forms', 'Make required')+'"></i>');
@@ -407,12 +406,13 @@ if (typeof Craft.SproutForms === typeof undefined) {
 			}
 			else
 			{
-                $divField.addClass('sproutfield-required');
+			    console.log('waa');
+                $divField.find('h2').addClass('required');
 
-                ('<input class="required-input" type="hidden" name="requiredFields[]" value="' + fieldId + '">');
+                $($divField).append('<input type="hidden" name="requiredFields[]" value="' + fieldId + '" class="sproutforms-required-input">');
 
 				setTimeout(function() {
-					$toggleLink.html('<i class="fa fa-asterisk fa-2x sproutforms-required" title="'+Craft.t('sprout-forms', 'Make not required')+'"></i>');
+					$toggleLink.html('<i class="fa fa-asterisk fa-2x" title="'+Craft.t('sprout-forms', 'Make not required')+'"></i>');
 				}, 500);
 			}
 		},

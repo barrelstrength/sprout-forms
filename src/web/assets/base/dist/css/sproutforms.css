@@ -114,23 +114,36 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 	margin: 0;
 }
 
-/* DRAGULA*/
+/* DRAGULA
+------------------------------------------------------------ */
 
-/* dragula-specific example page styles */
 .sprout-wrapper {
     width: 100%;
 }
-.sprout-container {
+.sproutforms-tab-fields,
+#sproutforms-source-fields {
     padding: 10px;
 }
-/*
- * note that styling gu-mirror directly is a bad practice because it's too generic.
- * you're better off giving the draggable elements a unique class and styling that directly!
- */
-.sprout-container > div,
+.sproutforms-tab-fields .selected-form-field,
+#sproutforms-source-fields .source-field {
+    cursor: move;
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+}
 .gu-mirror {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+.sproutforms-tab-fields .selected-form-field {
   transition: opacity 0.4s ease-in-out;
 }
+
+/* Field Layout - Target */
+
+/* Field Instances - Source */
 
 div.source-field {
     cursor: grabbing;
@@ -167,7 +180,7 @@ div.source-field h3 {
     background-color: transparent;
     border: 2px dashed dodgerblue;
     box-sizing: border-box;
-    height: 100px;
+    height: 120px;
     margin: 0 0 20px;
     opacity: .2;
     padding: 20px;
@@ -241,26 +254,6 @@ div.source-field h3 {
     width: 50%;
 }
 
-.sprout-container > div {
-  cursor: move;
-  cursor: grab;
-  cursor: -moz-grab;
-  cursor: -webkit-grab;
-}
-.gu-mirror {
-  cursor: grabbing;
-  cursor: -moz-grabbing;
-  cursor: -webkit-grabbing;
-}
-.sprout-container .ex-moved {
-  background-color: #e74c3c;
-}
-.sprout-container.ex-over {
-  background-color: rgba(255, 255, 255, 0.3);
-}
-
-
-
 .sproutforms-icon svg{
 	height: 25px;
 	width: 25px;
@@ -270,15 +263,7 @@ div.source-field h3 {
 	width: 40%;
 }
 
-.sproutforms-required
-{
-    color: red;
-}
 
-.sproutfield-title
-{
-	font-size: 14px;
-}
 
 #sproutforms-add-tab{
 	display: inline-block;
