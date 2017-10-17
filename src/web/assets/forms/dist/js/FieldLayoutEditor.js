@@ -38,17 +38,8 @@ if (typeof Craft.SproutForms === typeof undefined) {
 		{
 			var that = this;
 
-			// Check to see if our main Form container already is registered as a pane
-			if (!$("div#sproutforms-fieldlayout-container.pane").data('pane'))
-			{
-				// Create a pane object if it is note
-                this.$pane = new Craft.Pane($("div#sproutforms-fieldlayout-container.pane"));
-			}
-			else
-			{
-				// Use the existing pane object if it exists
-				this.$pane = $("div#sproutforms-fieldlayout-container.pane").data('pane');
-			}
+			// Capture the already-initialized Craft.Pane to access later
+            this.$pane = $("div#sproutforms-fieldlayout-container.pane").data('pane');
 
 			this.initButtons();
 
