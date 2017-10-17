@@ -7,17 +7,21 @@
 	}
 </style>
 
+{# @todo - Remove Notifications in favor of Sprout Email integration
+	Maybe list/link to related Notifications on the Form Settings tab.
+	notifications : {
+		"label" : "Notifications"|t('sprout-forms'),
+		"url" : "#tab-sproutforms-notification",
+	},
+#}
+
 {% set sidebarTabs = {
 	fields : {
 		"label" : "Fields"|t('sprout-forms'),
 		"url" : "#sproutforms-source-fields",
 	},
-	notifications : {
-		"label" : "Notifications"|t('sprout-forms'),
-		"url" : "#tab-sproutforms-notification",
-	},
 	settings : {
-		"label" : "Settings"|t('sprout-forms'),
+		"label" : "Form Settings"|t('sprout-forms'),
 		"url" : "#tab-sproutforms-settings",
 	}
 } %}

@@ -310,21 +310,21 @@ if (typeof Craft.SproutForms === typeof undefined) {
 					else
 					{
 						console.log(response.errors);
-						Craft.cp.displayError(Craft.t('sprout-forms','Unable to create a new Tab'));
+						Craft.cp.displayError(Craft.t('sprout-forms','Unable to create a new tab'));
 					}
 				}, this));
 
 			}
 			else
 			{
-				Craft.cp.displayError(Craft.t('sprout-forms','Wrong Tab Name - Please try again'));
+				Craft.cp.displayError(Craft.t('sprout-forms','Invalid tab name'));
 			}
 
 		},
 
 		promptForGroupName: function(oldName)
 		{
-			return prompt(Craft.t('sprout-forms','What do you want to name your new Tab?'), oldName);
+			return prompt(Craft.t('sprout-forms','What do you want to name your new tab?'), oldName);
 		},
 
 		confirmDeleteTab: function()

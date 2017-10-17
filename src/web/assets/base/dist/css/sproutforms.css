@@ -205,7 +205,10 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
     background-color: rgb(13, 120, 242);
     color: #fff;
 }
-
+.source-field h3 {
+    white-space: nowrap;
+    overflow: hidden;
+}
 .source-field h3 .sproutforms-icon {
     display: inline-block;
     margin-right: .5em;
