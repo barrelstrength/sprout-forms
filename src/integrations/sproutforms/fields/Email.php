@@ -41,7 +41,7 @@ class Email extends SproutFormsBaseField implements PreviewableFieldInterface
 
 	public static function displayName(): string
 	{
-		return SproutForms::t('Email Address');
+		return SproutForms::t('Email');
 	}
 
 	/**

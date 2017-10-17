@@ -41,7 +41,7 @@ class Phone extends SproutFormsBaseField implements PreviewableFieldInterface
 
 	public static function displayName(): string
 	{
-		return SproutForms::t('Phone Number');
+		return SproutForms::t('Phone');
 	}
 
 	/**
