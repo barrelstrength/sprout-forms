@@ -119,6 +119,26 @@ class SproutFormsEntriesDataSource extends SproutReportsBaseDataSource
 	}
 
 	/**
+	 * @inheritdoc
+	 */
+	public function prepOptions($options)
+	{
+		foreach ($options as $key => $option)
+		{
+			switch ($key)
+			{
+				case 'startDate':
+				case 'endDate':
+
+					$options[$key] = DateTime::createFromString($option);
+					break;
+			}
+		}
+
+		return $options;
+	}
+
+	/**
 	 * @param array $options
 	 *
 	 * @return string
