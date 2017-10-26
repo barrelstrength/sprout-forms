@@ -39,6 +39,7 @@ use barrelstrength\sproutforms\integrations\sproutforms\fields\Phone;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\RegularExpression;
 use barrelstrength\sproutforms\services\Fields;
 use barrelstrength\sproutforms\integrations\sproutreports\datasources\SproutFormsEntriesDataSource;
+use barrelstrength\sproutforms\contracts\SproutFormsFieldMessageSource;
 
 class SproutForms extends Plugin
 {
@@ -112,6 +113,26 @@ class SproutForms extends Plugin
 				$event->permissions['Sprout Forms'] = $this->getUserPermissions();
 			}
 		);
+
+		// Translation category
+		$i18n = Craft::$app->getI18n();
+		$sproutFormsFieldsCategory = $this->t9nCategory.'-fields';
+
+		/** @noinspection UnSafeIsSetOverArrayInspection */
+		if (!isset($i18n->translations[$sproutFormsFieldsCategory]) && !isset($i18n->translations[$this->t9nCategory.'*'])) {
+			$i18n->translations[$sproutFormsFieldsCategory] = [
+				'class' => SproutFormsFieldMessageSource::class,
+				'sourceLanguage' => $this->sourceLanguage,
+				'basePath' => $this->getBasePath().DIRECTORY_SEPARATOR.'translations',
+				'forceTranslation' => true,
+				'allowOverrides' => true,
+			];
+		}
+
+//		$var = Craft::t('sprout-forms-fields', 'Wut wut');
+
+//		Craft::dd($i18n->translations[$sproutFormsFieldsCategory]);
+
 	}
 
 	public function getCpNavItem()

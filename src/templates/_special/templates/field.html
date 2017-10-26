@@ -20,6 +20,8 @@
 
 		{%- else %}
 
+			{#{{ 'Plain Text'|t('sprout-forms-fields') }}#}
+
 			<div
 				{%- if id %} id="{{ id }}-field"{% endif %} class="field
 				{%- if class %} {{ class }}{% endif -%}
@@ -30,16 +32,16 @@
 					<div class="heading">
 					{% if label -%}
 						{%- if field.hasMultipleLabels() -%}
-							{{- label|raw|t('sprout-forms') -}}
+							{{- label|raw|t('sprout-forms-fields') -}}
 						{%- else -%}
 							<label{% if name %} for="{{ name }}"{% endif %}>
-								{{- label|raw|t('sprout-forms') -}}
+								{{- label|raw|t('sprout-forms-fields') -}}
 							</label>
 						{%- endif -%}
 					{%- endif -%}
 					{% if instructions %}
 
-					<p class="instructions">{{ instructions|raw|t('sprout-forms') }}</p>
+					<p class="instructions">{{ instructions|raw|t('sprout-forms-fields') }}</p>
 					{%- endif %}
 
 				</div>
