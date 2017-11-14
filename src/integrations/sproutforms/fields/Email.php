@@ -9,7 +9,7 @@ use yii\db\Schema;
 use craft\helpers\Template as TemplateHelper;
 
 use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutcore\SproutCore;
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 
 class Email extends SproutFormsBaseField implements PreviewableFieldInterface
@@ -92,13 +92,13 @@ class Email extends SproutFormsBaseField implements PreviewableFieldInterface
 		$inputId = Craft::$app->getView()->formatInputId($name);
 		$namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
 
-		$fieldContext = SproutCore::$app->utilities->getFieldContext($this, $element);
+		$fieldContext = SproutBase::$app->utilities->getFieldContext($this, $element);
 
 		// Set this to false for Quick Entry Dashboard Widget
 		$elementId = ($element != null) ? $element->id : false;
 
 		$rendered = Craft::$app->getView()->renderTemplate(
-			'sprout-core/sproutfields/_includes/forms/email/input',
+			'sprout-base/sproutfields/_includes/forms/email/input',
 			[
 				'namespaceInputId' => $namespaceInputId,
 				'id' => $inputId,
@@ -125,7 +125,7 @@ class Email extends SproutFormsBaseField implements PreviewableFieldInterface
 		$this->beginRendering();
 
 		$attributes = $field->getAttributes();
-		$errorMessage = SproutCore::$app->email->getErrorMessage($attributes['name'], $settings);
+		$errorMessage = SproutBase::$app->email->getErrorMessage($attributes['name'], $settings);
 		$placeholder = (isset($settings['placeholder'])) ? $settings['placeholder'] : '';
 
 		$rendered = Craft::$app->getView()->renderTemplate(
@@ -173,17 +173,17 @@ class Email extends SproutFormsBaseField implements PreviewableFieldInterface
 		$customPattern = $this->customPattern;
 		$checkPattern = $this->customPatternToggle;
 
-		if (!SproutCore::$app->email->validateEmailAddress($value, $customPattern, $checkPattern))
+		if (!SproutBase::$app->email->validateEmailAddress($value, $customPattern, $checkPattern))
 		{
 			$element->addError($this->handle,
-				SproutCore::$app->email->getErrorMessage(
+				SproutBase::$app->email->getErrorMessage(
 					$this->name, $this)
 			);
 		}
 
 		$uniqueEmail = $this->uniqueEmail;
 
-		if ($uniqueEmail && !SproutCore::$app->email->validateUniqueEmailAddress($value, $element, $this))
+		if ($uniqueEmail && !SproutBase::$app->email->validateUniqueEmailAddress($value, $element, $this))
 		{
 			$element->addError($this->handle,
 				SproutForms::t($this->name.' must be a unique email.')

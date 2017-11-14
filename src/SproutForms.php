@@ -1,8 +1,8 @@
 <?php
 namespace barrelstrength\sproutforms;
 
-use barrelstrength\sproutcore\base\BaseSproutTrait;
-use barrelstrength\sproutcore\services\sproutreports\DataSources;
+use barrelstrength\sproutbase\base\BaseSproutTrait;
+use barrelstrength\sproutbase\services\sproutreports\DataSources;
 use barrelstrength\sproutforms\services\App;
 use Craft;
 use craft\base\Plugin;
@@ -15,7 +15,7 @@ use yii\base\Event;
 use craft\events\DefineComponentsEvent;
 use craft\web\twig\variables\CraftVariable;
 
-use barrelstrength\sproutcore\SproutCoreHelper;
+use barrelstrength\sproutbase\SproutBaseHelper;
 use barrelstrength\sproutforms\models\Settings;
 use barrelstrength\sproutforms\web\twig\variables\SproutFormsVariable;
 use barrelstrength\sproutforms\events\RegisterFieldsEvent;
@@ -66,7 +66,7 @@ class SproutForms extends Plugin
 		parent::init();
 
 		self::$app = $this->get('app');
-		SproutCoreHelper::registerModule();
+		SproutBaseHelper::registerModule();
 
 		Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $event) {
 				$event->rules = array_merge($event->rules, $this->getCpUrlRules());
@@ -181,13 +181,13 @@ class SproutForms extends Plugin
 			'sprout-forms/forms/<groupId:\d+>'                        =>
 			'sprout-forms/forms',
 
-			'sprout-forms/reports/<dataSourceId>/new' => 'sprout-core/reports/edit-report',
-			'sprout-forms/reports/<dataSourceId>/edit/<reportId>' => 'sprout-core/reports/edit-report',
-			'sprout-forms/reports/view/<reportId>' => 'sprout-core/reports/results-index',
-			'sprout-forms/reports/<dataSourceId>' => 'sprout-core/reports/index',
+			'sprout-forms/reports/<dataSourceId>/new' => 'sprout-base/reports/edit-report',
+			'sprout-forms/reports/<dataSourceId>/edit/<reportId>' => 'sprout-base/reports/edit-report',
+			'sprout-forms/reports/view/<reportId>' => 'sprout-base/reports/results-index',
+			'sprout-forms/reports/<dataSourceId>' => 'sprout-base/reports/index',
 
-			'sprout-forms/settings' => 'sprout-core/settings/edit-settings',
-		  'sprout-forms/settings/<settingsSectionHandle:.*>' => 'sprout-core/settings/edit-settings'
+			'sprout-forms/settings' => 'sprout-base/settings/edit-settings',
+		  'sprout-forms/settings/<settingsSectionHandle:.*>' => 'sprout-base/settings/edit-settings'
 		];
 	}
 

@@ -9,9 +9,9 @@ use craft\base\PreviewableFieldInterface;
 use yii\db\Schema;
 
 use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutcore\SproutCore;
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
-use barrelstrength\sproutcore\web\assets\sproutfields\link\LinkFieldAsset;
+use barrelstrength\sproutbase\web\assets\sproutfields\link\LinkFieldAsset;
 
 class Link extends SproutFormsBaseField implements PreviewableFieldInterface
 {
@@ -94,9 +94,9 @@ class Link extends SproutFormsBaseField implements PreviewableFieldInterface
 		$inputId = Craft::$app->getView()->formatInputId($name);
 		$namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
 
-		$fieldContext = SproutCore::$app->utilities->getFieldContext($this, $element);
+		$fieldContext = SproutBase::$app->utilities->getFieldContext($this, $element);
 
-		return Craft::$app->getView()->renderTemplate('sprout-core/sproutfields/_includes/forms/link/input', [
+		return Craft::$app->getView()->renderTemplate('sprout-base/sproutfields/_includes/forms/link/input', [
 				'namespaceInputId' => $namespaceInputId,
 				'id' => $inputId,
 				'name' => $name,
@@ -120,7 +120,7 @@ class Link extends SproutFormsBaseField implements PreviewableFieldInterface
 		$this->beginRendering();
 
 		$attributes = $field->getAttributes();
-		$errorMessage = SproutCore::$app->link->getErrorMessage($attributes['name'], $settings);
+		$errorMessage = SproutBase::$app->link->getErrorMessage($attributes['name'], $settings);
 		$placeholder = (isset($settings['placeholder'])) ? $settings['placeholder'] : '';
 
 		$rendered = Craft::$app->getView()->renderTemplate(
@@ -168,11 +168,11 @@ class Link extends SproutFormsBaseField implements PreviewableFieldInterface
 		$handle = $this->handle;
 		$name = $this->name;
 
-		if (!SproutCore::$app->link->validate($value, $this))
+		if (!SproutBase::$app->link->validate($value, $this))
 		{
 			$element->addError(
 				$this->handle,
-				SproutCore::$app->link->getErrorMessage($this->name, $this)
+				SproutBase::$app->link->getErrorMessage($this->name, $this)
 			);
 		}
 	}

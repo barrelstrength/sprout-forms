@@ -1,5 +1,5 @@
 {
-  "name": "barrelstrength/sproutforms",
+  "name": "barrelstrength/sprout-forms",
   "description": "Simple, beautiful forms. 100% control.",
   "version": "3.0.0",
   "type": "craft-plugin",
@@ -9,12 +9,12 @@
     }
   },
   "require": {
-    "barrelstrength/sproutcore": "^1.0.0"
+    "barrelstrength/sproutbase": "^1.0.0"
   },
   "repositories": [
     {
       "type": "path",
-      "url": "../SPROUT-PLUGINS/sproutcore"
+      "url": "../SPROUT-PLUGINS/sprout-base"
     },
     {
       "type": "composer",
