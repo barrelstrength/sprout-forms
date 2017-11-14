@@ -68,7 +68,7 @@
 				{# let's add the tabs and fields to the dropped divs #}
 				{% if fieldLayout %}
 					{% for tab in fieldLayout.getTabs() %}
-                        {{ sproutForms.tab(tab, tab.getFields(), formFields) }}
+						{{ sproutForms.tab(tab, tab.getFields(), formFields) }}
 					{% endfor %}
 				{% endif %}
 
