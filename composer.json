@@ -9,7 +9,7 @@
     }
   },
   "require": {
-    "barrelstrength/sproutbase": "^1.0.0"
+    "barrelstrength/sprout-base": "^1.0.0"
   },
   "repositories": [
     {
