@@ -235,6 +235,9 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 
 /* Drag Behavior */
 
+.sprout-tab-container {
+    padding-bottom: 20px;
+}
 .sproutforms-tab-fields .target-field,
 #sproutforms-source-fields .source-field {
     cursor: move;

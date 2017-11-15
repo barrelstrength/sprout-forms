@@ -3,7 +3,7 @@
 
     <div id="sproutforms-tab-{{tab.id}}" data-tabname="{{tab.name}}" data-tabid="{{tab.id}}" class="sproutforms-tab-fields hidden">
         <div class="parent">
-            <div id="sproutforms-tab-container-{{tab.id}}">
+            <div id="sproutforms-tab-container-{{tab.id}}" class="sprout-tab-container">
                 {# here will be the fields #}
                 {% for field in tabFields %}
                     {{ macros.field(field, 'active', tab) }}
