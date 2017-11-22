@@ -412,8 +412,9 @@ if (typeof Craft.SproutForms === typeof undefined) {
     {
       var el = $("#sproutfield-"+field.id);
       // Lets update the the name and icon
-      $(el).find('.sproutforms-icon').html(field.icon);
-      $(el).find('label').html(field.name);
+      $(el).find('.body').html(field.htmlExample);
+      $(el).find('.active-field-header h2').html(field.name);
+      $(el).find('.active-field-header p').html(field.instructions);
       // Check if we need move the field to another tab
       var tab       = $(el).closest(".sproutforms-tab-fields");
       var tabName   = tab.data('tabname');
