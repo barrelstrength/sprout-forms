@@ -76,6 +76,19 @@ class FormsController extends BaseController
 		$fieldLayout->type = Form::class;
 		$form->setFieldLayout($fieldLayout);
 
+		if (count($fieldLayout->getFields()) == 0)
+		{
+			Craft::$app->getSession()->setError(SproutForms::t('The form needs at least have one field'));
+
+			Craft::$app->getUrlManager()->setRouteParams([
+					'form'               => $form,
+					'notificationErrors' => $notificationErrors
+				]
+			);
+
+			return null;
+		}
+
 		// Delete any fields removed from the layout
 		$deletedFields = $request->getBodyParam('deletedFields');
 

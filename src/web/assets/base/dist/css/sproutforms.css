@@ -138,9 +138,6 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 /* Field Layout - Target */
 
 #sproutforms-fieldlayout-addtab {
-    display: inline-block;
-    padding: 10px 24px;
-    color: #777;
     white-space: nowrap;
     cursor: default !important;
 }
@@ -283,4 +280,16 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
     width: 100%;
 }
 
+
+.sproutfield{
+  background:#e3e5e8;
+  width: 70%;
+  height: 150px;
+}
+.sproutfield ul li{
+  float:right;
+  display: inline-block;
+  padding: 5px;
+  margin: 10px;
+}
 

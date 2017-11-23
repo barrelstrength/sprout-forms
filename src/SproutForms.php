@@ -89,7 +89,8 @@ class SproutForms extends Plugin
 				$event->fields[] = new Hidden();
 				$event->fields[] = new Invisible();
 				$event->fields[] = new Link();
-				$event->fields[] = new Notes();
+				//@todo - rich text moved to plugin
+				//$event->fields[] = new Notes();
 				$event->fields[] = new Phone();
 				$event->fields[] = new RegularExpression();
 			}

@@ -9,6 +9,7 @@
     }
   },
   "require": {
+    "craftcms/cms": "^3.0.0-RC1",
     "barrelstrength/sprout-base": "^1.0.0"
   },
   "repositories": [

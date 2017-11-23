@@ -110,7 +110,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
       // Adds auto-scroll to main container when dragging
       var scroll = autoScroll(
         [
-          document.querySelector('#container')
+          document.querySelector('#content-container')
         ],
         {
           margin: 20,
