@@ -1,13 +1,13 @@
-<nav id="tabs" class="tabs">
+<nav id="sprout-forms-tabs" class="tabs">
 	<ul>
-		{% for tabId, tab in formTabs %}
-			{% if tab %}
-				{# let's get the tab id from the url #}
-				{% set tabIdKey = tab.url|split('-') %}
-				{% set tabIsSelected = ((loop.first) or (selectedTab is defined and selectedTab == tabId)) -%}
-				<li><a id="tab-{% if tabIdKey[2] is defined %}{{ tabIdKey[2] }}{%endif%}" class="tab{% if tabIsSelected %} sel{% endif %}{% if tab.class is defined %} {{ tab.class }}{% endif %}" href="{{ tab.url }}">{{ tab.label }}</a></li>
-			{% endif %}
-		{% endfor %}
+			{% for tabId, tab in formTabs %}
+				{% if tab %}
+					{# let's get the tab id from the url #}
+					{% set tabIdKey = tab.url|split('-') %}
+					{% set tabIsSelected = ((loop.first) or (selectedTab is defined and selectedTab == tabId)) -%}
+					<li><a id="tab-{% if tabIdKey[2] is defined %}{{ tabIdKey[2] }}{%endif%}" class="tab{% if tabIsSelected %} sel{% endif %}{% if tab.class is defined %} {{ tab.class }}{% endif %}" href="{{ tab.url }}">{{ tab.label }}</a></li>
+				{% endif %}
+			{% endfor %}
 		<li id="sproutforms-fieldlayout-addtab"> <a class="tab" href=""><i class="fa fa-plus" aria-hidden="true"></i></a></li>
 	</ul>
 </nav>

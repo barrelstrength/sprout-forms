@@ -29,6 +29,9 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
     // The Dragula instance
     drake: null,
+    // The dragula instance for tabs
+    drakeTabs: null,
+    tabsLayout: null,
 
     /**
      * The constructor.
@@ -59,6 +62,10 @@ if (typeof Craft.SproutForms === typeof undefined) {
         // Let's update the name and the icon if the field is updated
         this.resetField(field, group);
       }, this));
+
+      // DRAGULA FOR TABS
+      this.tabsLayout = this.getId('sprout-forms-tabs');
+      this.drakeTabs = dragula([this.tabsLayout]);
 
       // DRAGULA
       this.fieldsLayout = this.getId('right-copy');
@@ -128,6 +135,18 @@ if (typeof Craft.SproutForms === typeof undefined) {
       {
         this.drake.containers.push(this.getId('sproutforms-tab-container-'+currentTabs[i].id));
       }
+    },
+
+    clickHandler: function (e) {
+      var target = e.target;
+      if (target === this.tabsLayout) {
+        return;
+      }
+      target.innerHTML += ' [click!]';
+
+      setTimeout(function () {
+        target.innerHTML = target.innerHTML.replace(/ \[click!\]/g, '');
+      }, 500);
     },
 
     createDefaultField: function(type, tabId, tabName, el)

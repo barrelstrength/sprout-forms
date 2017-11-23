@@ -38,7 +38,7 @@ tab      = tab or null
     {# This is built dynamically in js when creating new field from source #}
     {% if instance == 'active' %}
     <div class="active-field-header">
-      <h2>{{ field.name }}</h2>
+      <h2 class="{% if field.required %} required {% endif %}" >{{ field.name }}</h2>
       {% if field.instructions %}
         <p>{{ field.instructions }}</p>
       {% endif %}
