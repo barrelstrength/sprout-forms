@@ -10,11 +10,11 @@
 	{% endif %}
 {% endif %}
 
-{% set extraPageHeaderHtml %}
+{% block actionButton  %}
 	<div class="buttons">
 		<a class="btn submit add icon" href="{{ url('sprout-forms/forms/new') }}">{{ "New Form"|t('sprout-forms') }}</a>
 	</div>
-{% endset %}
+{% endblock %}
 
 {% block sidebar %}
 

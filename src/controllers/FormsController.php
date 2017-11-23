@@ -17,7 +17,6 @@ class FormsController extends BaseController
 	public function actionSaveForm()
 	{
 		$this->requirePostRequest();
-
 		$request = Craft::$app->getRequest();
 		$form    = new FormElement();
 
@@ -74,21 +73,22 @@ class FormsController extends BaseController
 		}
 
 		$fieldLayout->type = Form::class;
-		$form->setFieldLayout($fieldLayout);
 
 		if (count($fieldLayout->getFields()) == 0)
 		{
 			Craft::$app->getSession()->setError(SproutForms::t('The form needs at least have one field'));
 
+			$form = SproutForms::$app->forms->getFormById($form->id);
+
 			Craft::$app->getUrlManager()->setRouteParams([
-					'form'               => $form,
-					'notificationErrors' => $notificationErrors
+					'form'               => $form
 				]
 			);
 
 			return null;
 		}
 
+		$form->setFieldLayout($fieldLayout);
 		// Delete any fields removed from the layout
 		$deletedFields = $request->getBodyParam('deletedFields');
 
