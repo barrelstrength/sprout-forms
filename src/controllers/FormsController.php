@@ -81,7 +81,7 @@ class FormsController extends BaseController
 			$form = SproutForms::$app->forms->getFormById($form->id);
 
 			Craft::$app->getUrlManager()->setRouteParams([
-					'form'               => $form
+					'form' => $form
 				]
 			);
 
