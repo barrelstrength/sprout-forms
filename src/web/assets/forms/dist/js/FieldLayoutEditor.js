@@ -42,6 +42,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
       var that = this;
 
       // Capture the already-initialized Craft.Pane to access later
+      // @todo - update this for RC1 (news tabs are not working when added)
       this.$pane = $("div#sproutforms-fieldlayout-container.pane").data('pane');
 
       this.initButtons();
@@ -65,7 +66,32 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
       // DRAGULA FOR TABS
       this.tabsLayout = this.getId('sprout-forms-tabs');
-      this.drakeTabs = dragula([this.tabsLayout]);
+      this.drakeTabs = dragula([this.tabsLayout], {
+        accepts: function (el, target, source, sibling) {
+          // let's try to not allows reorder the PLUS icon
+          return sibling === null || $(el).is('.drag-tab');
+        },
+      })
+      .on('drop', function (el,target, source) {
+        // Reorder fields
+        if ($(target).attr("id") == $(source).attr("id"))
+        {
+          // lets update the hidden tab field to reorder the tabs
+          $("#sprout-forms-tabs li.drag-tab a").each(function(i) {
+            var tabId = $(this).attr('id');
+            var mainDiv = $("#sproutforms-fieldlayout-container");
+
+            if (tabId)
+            {
+              var currentTab = $("#sproutforms-"+tabId);
+              if (currentTab)
+              {
+                mainDiv.append(currentTab);
+              }
+            }
+          });
+        }
+      });
 
       // DRAGULA
       this.fieldsLayout = this.getId('right-copy');
