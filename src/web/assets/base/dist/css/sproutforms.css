@@ -293,6 +293,13 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
   margin: 10px;
 }
 
-#sprout-forms-tabs li {
+
+#sprout-forms-tabs ul li {
   display: inline;
+}
+
+.drag-tab-active{
+  list-style: none;
+  background-color: #e4e6e8;
+  text-align: center;
 }

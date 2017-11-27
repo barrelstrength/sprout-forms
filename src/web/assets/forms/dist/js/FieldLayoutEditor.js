@@ -72,7 +72,13 @@ if (typeof Craft.SproutForms === typeof undefined) {
           return sibling === null || $(el).is('.drag-tab');
         },
       })
+      .on('drag', function (el) {
+        $(el).addClass('drag-tab-active');
+      })
       .on('drop', function (el,target, source) {
+        $(el).removeClass('drag-tab-active');
+        $(target).find('.drag-tab-active').removeClass('drag-tab-active');
+        $(source).find('.drag-tab-active').removeClass('drag-tab-active');
         // Reorder fields
         if ($(target).attr("id") == $(source).attr("id"))
         {

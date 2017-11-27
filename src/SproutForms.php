@@ -89,10 +89,14 @@ class SproutForms extends Plugin
 				$event->fields[] = new Hidden();
 				$event->fields[] = new Invisible();
 				$event->fields[] = new Link();
-				//@todo - rich text moved to plugin
-				//$event->fields[] = new Notes();
 				$event->fields[] = new Phone();
 				$event->fields[] = new RegularExpression();
+
+				$redactor = Craft::$app->plugins->getPlugin('redactor');
+				if ($redactor)
+				{
+					$event->fields[] = new Notes();
+				}
 			}
 		);
 
