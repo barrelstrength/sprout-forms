@@ -41,10 +41,14 @@
     {% endif %}
   </div>
 {% endblock %}
-{% block content %}
+
+{% block tabs %}
   {% if formTabs is defined and formTabs %}
     {% include "sprout-forms/_includes/tabs" %}
   {% endif %}
+{% endblock %}
+
+{% block content %}
   {# When we add tabs we need add a for loop here #}
   <div id="sproutforms-fieldlayout-container">
 
