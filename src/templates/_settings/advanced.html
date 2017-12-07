@@ -1,0 +1,113 @@
+{% requirePermission "editSproutFormsSettings" %}
+
+{% extends "sproutforms/_layouts/settings" %}
+{% import "_includes/forms" as forms %}
+
+{% set fullPageForm = true %}
+{% set saveShortcutRedirect = 'sproutforms/settings/advanced' %}
+
+{% set saveButton %}
+	<div class="buttons">
+		<input class="btn submit" type="submit" value="{{ 'Save'|t }}">
+	</div>
+{% endset %}
+
+{% set content %}
+{% if currentUser.can('editSproutFormsSettings') %}
+
+	<input type="hidden" name="action" value="sproutForms/settings/saveSettings">
+
+	<div id="settings-cp">
+
+		{% namespace 'settings' %}
+
+			{{ forms.lightswitchField({
+				label: "Enable custom form templates globally"|t,
+				instructions: "Enable this setting if you wish to override the default form templates globally and provide your own custom templates. Sprout Forms will display your dynamic forms using the form templates it finds with the following priority: 1) individual custom form template folder, 2) global custom form templates folder, and 3) Sprout Forms default form templates."|t,
+				name: 'toggleTemplateFolderOverride',
+				toggle: 'settings-defaulttemplateoverride',
+				on: (settings.templateFolderOverride is empty ? false : true),
+				onLabel: "Enable"|t,
+			}) }}
+
+			<div id="settings-defaulttemplateoverride" class="{{ (settings.templateFolderOverride is empty ? "hidden") }}">
+
+				{{ forms.textField({
+					label: "Global custom form templates folder"|t,
+					id: 'templateFolderOverride',
+					name: 'templateFolderOverride',
+					instructions: "The template folder for your custom form templates."|t,
+					value: settings.templateFolderOverride,
+					placeholder: "_forms",
+					first: true,
+					errors: ''
+				}) }}
+
+			</div>
+
+			{{ forms.lightswitchField({
+				label: "Enable custom form templates on a per-form basis"|t,
+				instructions: "Allow admins to (optionally) add custom form templates for each form created. Enabling this setting will display additional fields to manage your custom form settings on every Form Element."|t,
+				id: 'enablePerFormTemplateFolderOverride',
+				name: 'enablePerFormTemplateFolderOverride',
+				on: settings.enablePerFormTemplateFolderOverride,
+				onLabel: "Enable"|t,
+			}) }}
+
+			<hr>
+
+			{{ forms.lightswitchField({
+				label: "Save data from form submissions in the Craft database"|t,
+				instructions: "By default, Sprout Forms will save your form submissions to the Craft database. Disable this setting if you wish to stop Sprout Forms from saving data to the Craft database."|t,
+				id: 'enableSaveData',
+				name: 'enableSaveData',
+				toggle: 'settings-savedatadetails',
+				on: settings.enableSaveData,
+				onLabel: "Enable"|t,
+			}) }}
+
+			<div id="settings-savedatadetails" class="{{ (settings.enableSaveData is empty ? "hidden") }}">
+
+				{{ forms.lightswitchField({
+					label: "Enable Save Data control on a per-form basis"|t,
+					instructions: "If you wish to have some of your forms save data to the Craft database and ensure others do not save any data, enable this setting and a new setting will appear on the Advanced tab of your Form Edit page to control whether a particular Form will save data to the database."|t,
+					id: 'enableSaveDataPerFormBasis',
+					name: 'enableSaveDataPerFormBasis',
+					toggle: 'settings-savedatadefault',
+					on: settings.enableSaveDataPerFormBasis,
+					onLabel: "Enable"|t,
+				}) }}
+
+				<div id="settings-savedatadefault" class="{{ (settings.enableSaveDataPerFormBasis is empty ? "hidden") }}">
+
+				{{ forms.lightswitchField({
+					label: "Default Save Data value"|t,
+					instructions: "The default value a new Form's Save Data setting will use on the Advanced tab of your form settings: Enabled or Disabled"|t,
+					id: 'saveDataByDefault',
+					name: 'saveDataByDefault',
+					on: settings.saveDataByDefault,
+					onLabel: "Enable"|t,
+				}) }}
+
+				</div>
+
+			</div>
+
+			<hr>
+
+			{{ forms.lightswitchField({
+				label: "Enable payload forwarding"|t,
+				instructions: "Payload Forwarding enables your forms with advanced settings that allow you to submit a form to a third-party endpoint."|t,
+				id: 'enablePayloadForwarding',
+				name: 'enablePayloadForwarding',
+				on: settings.enablePayloadForwarding,
+				onLabel: "Enable"|t,
+			}) }}
+
+		{% endnamespace %}
+
+	</div>
+
+{% endif %}
+
+{% endset %}

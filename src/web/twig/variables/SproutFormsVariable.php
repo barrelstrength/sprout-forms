@@ -68,7 +68,7 @@ class SproutFormsVariable
 				'handle' => $formHandle
 			]));
 		}
-		
+
 		$entry         = SproutForms::$app->entries->getEntry($form);
 		$fields        = SproutForms::$app->fields->getRegisteredFields();
 		$templatePaths = SproutForms::$app->fields->getSproutFormsTemplates($form);
