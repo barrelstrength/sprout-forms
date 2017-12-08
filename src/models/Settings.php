@@ -38,7 +38,7 @@ class Settings extends Model
 				'label' => SproutForms::t('Advanced'),
 				'url' => 'sprout-forms/settings/advanced',
 				'selected' => 'advanced',
-				'template' => 'sprout-forms/_settings/general'
+				'template' => 'sprout-forms/_settings/advanced'
 			],
 			'settingsHeading' => [
 				'heading' => SproutForms::t('Examples'),

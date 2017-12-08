@@ -1,21 +1,10 @@
 {% requirePermission "editSproutFormsSettings" %}
 
-{% extends "sproutforms/_layouts/settings" %}
 {% import "_includes/forms" as forms %}
 
-{% set fullPageForm = true %}
 {% set saveShortcutRedirect = 'sproutforms/settings/advanced' %}
 
-{% set saveButton %}
-	<div class="buttons">
-		<input class="btn submit" type="submit" value="{{ 'Save'|t }}">
-	</div>
-{% endset %}
-
-{% set content %}
 {% if currentUser.can('editSproutFormsSettings') %}
-
-	<input type="hidden" name="action" value="sproutForms/settings/saveSettings">
 
 	<div id="settings-cp">
 
@@ -109,5 +98,3 @@
 	</div>
 
 {% endif %}
-
-{% endset %}
