@@ -38,7 +38,7 @@ class App extends Component
 	 */
 	public function hasExamples()
 	{
-		$path = Craft::$app->path->getSiteTemplatesPath() . 'sproutforms';
+		$path = Craft::$app->path->getSiteTemplatesPath() .DIRECTORY_SEPARATOR. 'sproutforms';
 
 		if (file_exists($path))
 		{

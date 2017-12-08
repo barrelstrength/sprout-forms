@@ -5,7 +5,7 @@
 {% if craft.sproutforms.hasExamples() %}
 	<div class="pane first field">
 		<span class="warning">
-			{{ "Example templates and forms may already be installed."|t }}
+			{{ "Example templates and forms may already be installed."|t('sprout-forms') }}
 		</span>
 	</div>
 {% endif %}
@@ -16,7 +16,7 @@
 
 		<p class="field">
 			<span class="warning">
-				{{ "Your templates directory does not have the correct permissions:"|t }}
+				{{ "Your templates directory does not have the correct permissions:"|t('sprout-forms') }}
 			</span>
 		</p>
 
@@ -26,19 +26,9 @@
 
 {% endif %}
 
-<form method="post" action="" accept-charset="utf-8">
-	{{ getCsrfInput() }}
-	<input type="hidden" name="action" value="sprout-forms/examples/install">
+<p>{{ "Install <strong>example forms</strong> with <strong>commented templates</strong> and <strong>example data</strong>. The example templates will be created
+and placed in the `<code>craft/templates/sproutforms</code>` folder."|t('sprout-forms') | raw }}</p>
 
-	<p>{{ "Install <strong>example forms</strong> with <strong>commented templates</strong> and <strong>example data</strong>. The example templates will be created
-	and placed in the `<code>craft/templates/sproutforms</code>` folder."|t | raw }}</p>
-
-	<p>{{ "Example forms include a Contact Form and Basic Fields Form and illustrate how to output your forms
-	with one line of code or customize them with 100% control."|t | raw
-		}}</p>
-
-	<div class="buttons">
-		<input class="btn submit" type="submit" value="{{ 'Install Example Forms'|t }}" />
-	</div>
-
-</form>
+<p>{{ "Example forms include a Contact Form and Basic Fields Form and illustrate how to output your forms
+with one line of code or customize them with 100% control."|t('sprout-forms') | raw
+	}}</p>

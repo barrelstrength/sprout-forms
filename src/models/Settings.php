@@ -16,6 +16,10 @@ class Settings extends Model
 
 	public function getSettingsNavItems()
 	{
+		// Added new items override if needed
+		// 'fullPageForm' => true,
+	  // 'actionTemplate' => 'sprout-base/sproutbase/_includes/actionButton'
+	  // 'actionUrl' => 'sprout-base/settings/save-settings'
 		return [
 			'general' => [
 				'label' => SproutForms::t('General'),
@@ -27,7 +31,8 @@ class Settings extends Model
 				'label' => SproutForms::t('Entry Statuses'),
 				'url' => 'sprout-forms/settings/entry-statuses',
 				'selected' => 'entry-statuses',
-				'template' => 'sprout-forms/_settings/entrystatuses'
+				'template' => 'sprout-forms/_settings/entrystatuses',
+				'actionTemplate' => 'sprout-forms/_includes/actionStatusButton'
 			],
 			'advanced' => [
 				'label' => SproutForms::t('Advanced'),
@@ -38,11 +43,14 @@ class Settings extends Model
 			'settingsHeading' => [
 				'heading' => SproutForms::t('Examples'),
 			],
-			'form-templates' => [
+			'examples' => [
 				'label' => SproutForms::t('Form Templates'),
-				'url' => 'sprout-forms/settings/form-templates',
-				'selected' => 'form-templates',
-				'template' => 'sprout-forms/_settings/examples'
+				'url' => 'sprout-forms/settings/examples',
+				'actionUrl' => 'sprout-forms/examples/install',
+				'selected' => 'examples',
+				'template' => 'sprout-forms/_settings/examples',
+				'fullPageForm' => true,
+				'actionTemplate' => 'sprout-forms/_includes/actionExampleButton'
 			],
 		];
 	}
