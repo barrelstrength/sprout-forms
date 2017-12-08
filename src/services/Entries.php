@@ -2,19 +2,18 @@
 namespace barrelstrength\sproutforms\services;
 
 use Craft;
-use yii\base\Component;
-
+use Guzzle\Http\Client;
 use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
-use barrelstrength\sproutforms\records\Entry as EntryRecord;
-use barrelstrength\sproutforms\records\EntryStatus as EntryStatusRecord;
+use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use barrelstrength\sproutforms\events\OnSaveEntryEvent;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\SproutBaseRelationField;
+use barrelstrength\sproutforms\models\EntryStatus;
+use barrelstrength\sproutforms\records\Entry as EntryRecord;
+use barrelstrength\sproutforms\records\EntryStatus as EntryStatusRecord;
 use craft\base\ElementInterface;
-
-use Guzzle\Http\Client;
+use yii\base\Component;
 
 class Entries extends Component
 {
@@ -68,6 +67,132 @@ class Entries extends Component
 			->one();
 
 		return $entryStatus != null ? $entryStatus : null;
+	}
+
+	/**
+	 * @param EntryStatus $entryStatus
+	 *
+	 * @return bool
+	 * @throws Exception
+	 * @throws \CDbException
+	 * @throws \Exception
+	 */
+	public function saveEntryStatus(EntryStatus $entryStatus): bool
+	{
+		$record = new SproutForms_EntryStatusRecord;
+
+		if ($entryStatus->id)
+		{
+			$record = EntryStatusRecord::findOne($entryStatus->id);
+
+			if (!$record)
+			{
+				throw new \Exception(SproutForms::t('No Entry Status exists with the id of “{id}”', array('id' => $entryStatus->id)));
+			}
+		}
+
+		$record->setAttributes($entryStatus->getAttributes(), false);
+
+		$record->sortOrder = $entryStatus->sortOrder ? $entryStatus->sortOrder : 999;
+
+		$record->validate();
+
+		$entryStatus->addErrors($record->getErrors());
+
+		if (!$entryStatus->hasErrors())
+		{
+			$transaction = Craft::$app->db->beginTransaction();
+
+			try
+			{
+				if ($record->isDefault)
+				{
+					EntryStatusRecord::updateAll(['isDefault' => 0]);
+				}
+
+				$record->save(false);
+
+				if (!$entryStatus->id)
+				{
+					$entryStatus->id = $record->id;
+				}
+
+				$transaction->commit();
+			}
+			catch (\Exception $e)
+			{
+				$transaction->rollback();
+
+				throw $e;
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * @param int
+	 *
+	 * @return bool
+	 */
+	public function deleteEntryStatusById($id)
+	{
+		$statuses = $this->getAllEntryStatuses();
+
+		$entry = EntryElement::find()->where(['statusId'=>$id])->one();
+
+		if ($entry)
+		{
+			return false;
+		}
+
+		if (count($statuses) >= 2)
+		{
+			$entryStatus = EntryStatusRecord::findOne($id);
+
+			if ($entryStatus)
+			{
+				$entryStatus->delete();
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Reorders Entry Statuses
+	 *
+	 * @param array $entryStatusIds
+	 *
+	 * @throws \Exception
+	 * @return bool
+	 */
+	public function reorderEntryStatuses($entryStatusIds)
+	{
+		$transaction = Craft::$app->db->beginTransaction();
+
+		try
+		{
+			foreach ($entryStatusIds as $entryStatus => $entryStatusId)
+			{
+				$entryStatusRecord            = $this->_getEntryStatusRecordById($entryStatusId);
+				$entryStatusRecord->sortOrder = $entryStatus + 1;
+				$entryStatusRecord->save();
+			}
+
+			$transaction->commit();
+		}
+		catch (\Exception $e)
+		{
+			$transaction->rollback();
+
+			throw $e;
+		}
+
+		return true;
 	}
 
 	/**
@@ -298,6 +423,36 @@ class Entries extends Component
 
 			throw $e;
 		}
+	}
+
+	/**
+	 * Gets an Entry Status's record.
+	 *
+	 * @param int $sourceId
+	 *
+	 * @throws Exception
+	 * @return EntryStatusRecord
+	 */
+	private function _getEntryStatusRecordById($entryStatusId = null)
+	{
+		if ($entryStatusId)
+		{
+			$entryStatusRecord = EntryStatusRecord::findOne($entryStatusId);
+
+			if (!$entryStatusRecord)
+			{
+				throw new Exception(SproutForms::t('No Entry Status exists with the ID “{id}”.',
+						['id' => $entryStatusId]
+					)
+				);
+			}
+		}
+		else
+		{
+			$entryStatusRecord = new EntryStatusRecord();
+		}
+
+		return $entryStatusRecord;
 	}
 
 }

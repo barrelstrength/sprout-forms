@@ -37,6 +37,7 @@ class Settings extends Model
 			'advanced' => [
 				'label' => SproutForms::t('Advanced'),
 				'url' => 'sprout-forms/settings/advanced',
+				'actionUrl' => 'sprout-forms/settings/entry-statuses/new',
 				'selected' => 'advanced',
 				'template' => 'sprout-forms/_settings/advanced'
 			],
