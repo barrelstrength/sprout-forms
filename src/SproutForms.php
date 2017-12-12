@@ -174,13 +174,10 @@ class SproutForms extends Plugin
 			'sprout-forms/settings/(general|advanced)'                =>
 			'sprout-forms/settings/settings-index-template',
 
-			'sprout-forms/settings/entrystatuses'                     =>
-			'sprout-forms/entry-statuses/index',
-
-			'sprout-forms/settings/entrystatuses/new'                 =>
+			'sprout-forms/settings/entry-statuses/new'                 =>
 			'sprout-forms/entry-statuses/edit',
 
-			'sprout-forms/settings/entrystatuses/<entryStatusId:\d+>' =>
+			'sprout-forms/settings/entry-statuses/<entryStatusId:\d+>' =>
 			'sprout-forms/entry-statuses/edit',
 
 			'sprout-forms/forms/<groupId:\d+>'                        =>

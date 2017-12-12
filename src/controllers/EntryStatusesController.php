@@ -11,34 +11,20 @@ class EntryStatusesController extends BaseController
 {
 	/**
 	 * @param array $variables
-	 * @throws HttpException
-	 */
-	public function actionIndex(array $variables = array())
-	{
-		$variables['entryStatuses'] = SproutForms::$app->entries->getAllEntryStatuses();
-
-		return $this->renderTemplate('sprout-Forms/settings/entrystatuses/index', $variables);
-	}
-
-	/**
-	 * @param array $variables
 	 *
 	 * @throws HttpException
 	 */
-	public function actionEdit(array $variables = array())
+	public function actionEdit(int $entryStatusId = null, EntryStatus $entryStatus = null)
 	{
-		$entryStatus   = $variables['entryStatus'] ?? $variables['entryStatus'];
-		$entryStatusId = $variables['entryStatusId'] ?? $variables['entryStatusId'];
-
 		if (!$entryStatus)
 		{
 			if ($entryStatusId)
 			{
 				$entryStatus = SproutForms::$app->entries->getEntryStatusById($entryStatusId);
 
-				if (!$entryStatus)
+				if (!$entryStatus->id)
 				{
-					throw new NotFoundHttpException(SproutForms::t('Status not found'));
+					throw new NotFoundHttpException(SproutForms::t('Entry Status not found'));
 				}
 			}
 			else
@@ -47,7 +33,7 @@ class EntryStatusesController extends BaseController
 			}
 		}
 
-		return $this->renderTemplate('sprout-forms/settings/entrystatuses/_edit', array(
+		return $this->renderTemplate('sprout-forms/_settings/entrystatuses/_edit', array(
 			'entryStatus'      => $entryStatus,
 			'entryStatusId'    => $entryStatusId
 		));
@@ -65,11 +51,6 @@ class EntryStatusesController extends BaseController
 		$id = Craft::$app->request->getBodyParam('entryStatusId');
 		$entryStatus = SproutForms::$app->entries->getEntryStatusById($id);
 
-		if (!$entryStatus)
-		{
-			$entryStatus = new EntryStatus();
-		}
-
 		$entryStatus->name    = Craft::$app->request->getBodyParam('name');
 		$entryStatus->handle  = Craft::$app->request->getBodyParam('handle');
 		$entryStatus->color   = Craft::$app->request->getBodyParam('color');
@@ -77,9 +58,9 @@ class EntryStatusesController extends BaseController
 
 		if (!SproutForms::$app->entries->saveEntryStatus($entryStatus))
 		{
-			Craft::$app->userSession->setError(SproutForms::t('Could not save Entry Status.'));
+			Craft::$app->session->setError(SproutForms::t('Could not save Entry Status.'));
 
-			Craft::$app->urlManager->setRouteVariables(array(
+			Craft::$app->getUrlManager()->setRouteParams(array(
 				'entryStatus' => $entryStatus
 			));
 
@@ -98,9 +79,8 @@ class EntryStatusesController extends BaseController
 	public function actionReorder()
 	{
 		$this->requirePostRequest();
-		$this->getAcceptsJson();
 
-		$ids = JsonHelper::decode(Craft::$app->request->getRequiredBodyParam('ids'));
+		$ids = json_decode(Craft::$app->request->getRequiredBodyParam('ids'), true);
 
 		if ($success = SproutForms::$app->entries->reorderEntryStatuses($ids))
 		{
@@ -115,7 +95,7 @@ class EntryStatusesController extends BaseController
 	 */
 	public function actionDelete()
 	{
-		$this->getAcceptsJson();
+		$this->requirePostRequest();
 
 		$entryStatusId = Craft::$app->request->getRequiredBodyParam('id');
 

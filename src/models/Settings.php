@@ -20,6 +20,8 @@ class Settings extends Model
 		// 'fullPageForm' => true,
 	  // 'actionTemplate' => 'sprout-base/sproutbase/_includes/actionButton'
 	  // 'actionUrl' => 'sprout-base/settings/save-settings'
+	  $variables['entryStatuses'] = SproutForms::$app->entries->getAllEntryStatuses();
+
 		return [
 			'general' => [
 				'label' => SproutForms::t('General'),
@@ -32,12 +34,12 @@ class Settings extends Model
 				'url' => 'sprout-forms/settings/entry-statuses',
 				'selected' => 'entry-statuses',
 				'template' => 'sprout-forms/_settings/entrystatuses',
-				'actionTemplate' => 'sprout-forms/_includes/actionStatusButton'
+				'actionTemplate' => 'sprout-forms/_includes/actionStatusButton',
+				'variables' => $variables
 			],
 			'advanced' => [
 				'label' => SproutForms::t('Advanced'),
 				'url' => 'sprout-forms/settings/advanced',
-				'actionUrl' => 'sprout-forms/settings/entry-statuses/new',
 				'selected' => 'advanced',
 				'template' => 'sprout-forms/_settings/advanced'
 			],

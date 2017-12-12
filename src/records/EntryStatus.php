@@ -21,4 +21,21 @@ class EntryStatus extends ActiveRecord
 		return '{{%sproutforms_entrystatuses}}';
 	}
 
+	/**
+	 * @return string
+	 */
+	public function getCpEditUrl()
+	{
+		return UrlHelper::cpUrl('sprout-forms/settings/orders-tatuses/' . $this->id);
+	}
+
+	/**
+	 * @return string
+	 */
+	public function htmlLabel()
+	{
+		return sprintf('<span class="sproutFormsStatusLabel"><span class="status %s"></span> %s</span>',
+			$this->color, $this->name);
+	}
+
 }

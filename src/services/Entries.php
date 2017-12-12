@@ -58,7 +58,7 @@ class Entries extends Component
 	/**
 	 * @param $entryStatusId
 	 *
-	 * @return BaseModel
+	 * @return EntryStatus
 	 */
 	public function getEntryStatusById($entryStatusId)
 	{
@@ -66,7 +66,14 @@ class Entries extends Component
 			->where(['id' => $entryStatusId])
 			->one();
 
-		return $entryStatus != null ? $entryStatus : null;
+		$entryStatusesModel = new EntryStatus;
+
+		if ($entryStatus)
+		{
+			$entryStatusesModel->setAttributes($entryStatus->getAttributes(), false);
+		}
+
+		return $entryStatusesModel;
 	}
 
 	/**
@@ -79,7 +86,7 @@ class Entries extends Component
 	 */
 	public function saveEntryStatus(EntryStatus $entryStatus): bool
 	{
-		$record = new SproutForms_EntryStatusRecord;
+		$record = new EntryStatusRecord;
 
 		if ($entryStatus->id)
 		{
@@ -95,9 +102,7 @@ class Entries extends Component
 
 		$record->sortOrder = $entryStatus->sortOrder ? $entryStatus->sortOrder : 999;
 
-		$record->validate();
-
-		$entryStatus->addErrors($record->getErrors());
+		$entryStatus->validate();
 
 		if (!$entryStatus->hasErrors())
 		{

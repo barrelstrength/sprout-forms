@@ -23,6 +23,8 @@ class Install extends Migration
 		$this->createIndexes();
 		$this->addForeignKeys();
 		$this->insertDefaultData();
+
+		return true;
 	}
 
 	/**
@@ -36,6 +38,8 @@ class Install extends Migration
 		$this->dropTable('{{%sproutforms_forms}}');
 		$this->dropTable('{{%sproutforms_formgroups}}');
 		$this->dropTable('{{%sproutforms_entrystatuses}}');
+
+		return true;
 	}
 
 	/**
