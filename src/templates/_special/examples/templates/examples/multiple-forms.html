@@ -1,4 +1,4 @@
-{% extends "sprout-forms/_layout" %}
+{% extends "sproutforms/_layout" %}
 
 {% block content %}
 
@@ -12,12 +12,12 @@
 
 	{# Output as many forms as you want on a page.
 		 Some can be Custom HTML.  Some can use the displayForm() tag.  #}
-	{{ craft.sproutForms.displayForm('contact') }}
+	{{ craft.sproutforms.displayForm('contact') }}
 
 	<hr>
 
 	<h2>Basic Fields Form</h2>
 
-	{{ craft.sproutForms.displayForm('basic') }}
+	{{ craft.sproutforms.displayForm('basic') }}
 
 {% endblock %}

@@ -1,4 +1,4 @@
-{% extends "sprout-forms/_layout" %}
+{% extends "sproutforms/_layout" %}
 
 {% block content %}
 
@@ -17,7 +17,7 @@
 	{% else %}
 
 	  {# Retrieve your Form Model from the database #}
-	  {% set form = craft.sproutForms.form('contact') %}
+	  {% set form = craft.sproutforms.form('contact') %}
 
 	  {# If you want more fine-grained control over your fields, you will have to build the
 	     Form youself, and then you can control the specific fields more directly. #}
@@ -34,11 +34,11 @@
 	  	<div class="fields">
 
 	  		{# To output a specific field, use the syntax: formHandle.fieldHandle #}
-	  		{{ craft.sproutForms.displayField('contact.fullName') }}
+	  		{{ craft.sproutforms.displayField('contact.fullName') }}
 
-	  		{{ craft.sproutForms.displayField('contact.email') }}
+	  		{{ craft.sproutforms.displayField('contact.email') }}
 
-	  		{{ craft.sproutForms.displayField('contact.message') }}
+	  		{{ craft.sproutforms.displayField('contact.message') }}
 
 	  	</div>
 
