@@ -10,6 +10,11 @@
 		-webkit-box-shadow: 0 0 0 1px #e3e5e8;
 		box-shadow: 0 0 0 1px #e3e5e8;
 	}
+	.sprout-field-heading
+	{
+		background-color: #fff;
+		padding: 10px 10px 10px 10px;
+	}
 </style>
 
 {# @todo - Remove Notifications in favor of Sprout Email integration
@@ -132,7 +137,7 @@
 			errors: form.getErrors('titleFormat')
 		}) }}
 
-		<div class="field field-heading">Template Customization</div>
+		<div class="field sprout-field-heading">Template Customization</div>
 
 		{{ forms.lightswitchField({
 			label: "Tab Titles <span class='info'>Display Tab Titles on Forms</span>"|t('sprout-forms'),
@@ -166,7 +171,7 @@
 
 		{% if settings.enablePayloadForwarding or form.submitAction %}
 
-		<div class="field field-heading">Payload Forwarding</div>
+		<div class="field sprout-field-heading">Payload Forwarding</div>
 
 		{{ forms.textField({
 			label: "Submit URL <span class='info'>Submit your form data to this URL, instead of directly to Sprout
