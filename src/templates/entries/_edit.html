@@ -10,13 +10,13 @@
 {% set fullPageForm = true %}
 {% set saveShortcutRedirect = 'sprout-forms/entries' %}
 
-{% set saveButton %}
+{% block actionButton %}
 	<div class="btngroup submit first">
 		<input type="submit" class="btn submit" value="{{ 'Save'|t }}">
 	</div>
-{% endset %}
+{% endblock %}
 
-{% block main %}
+{% block content %}
 
 	<input type="hidden" name="action" value="sprout-forms/entries/save-entry">
 	<input type="hidden" name="handle" value="{{ form.handle }}">
@@ -24,73 +24,68 @@
 
 	{% if namespace is not defined %}{% set namespace = 'fields' %}{% endif %}
 
-	<div class="grid first" data-max-cols="3">
-		<div class="item" data-position="left" data-min-colspan="2" data-max-colspan="3">
-			<div id="fields" class="pane">
+		<div id="fields">
 
-				{% include "_includes/tabs" %}
+			{% for tab in fieldLayoutTabs %}
 
-				{% for tab in fieldLayoutTabs %}
+				{% set fields = tab.getFields() %}
 
-					{% set fields = tab.getFields() %}
+				<div id="tab{{ loop.index }}" {% if not loop.first %}class="hidden"{% endif %}>
 
-					<div id="tab{{ loop.index }}" {% if not loop.first %}class="hidden"{% endif %}>
+					{% namespace namespace %}
 
-						{% namespace namespace %}
+					{% for field in fields %}
+						{% include "_includes/field" with {
+						field:    field,
+						required: field.required,
+						element:  entry,
+						static: null
+						} only %}
+					{% endfor %}
 
-						{% for field in fields %}
-							{% include "_includes/field" with {
-							field:    field,
-							required: field.required,
-							element:  entry,
-							static: null
-							} only %}
-						{% endfor %}
+					{% endnamespace %}
 
-						{% endnamespace %}
-
-					</div>
-
-				{% endfor %}
-
-			</div>
-		</div>
-		<div class="item" data-position="right" data-colspan="1">
-			<div class="pane meta">
-
-				{% set formName = "<h6>" ~ form.name ~ "</h6>" %}
-
-				{{ forms.field({
-					label: "Form Name"|t,
-				}, formName) }}
-
-				{% set dateSubmitted = entry.dateCreated|date('F j, Y') %}
-
-				{{ forms.field({
-					label: "Submitted"|t,
-				}, dateSubmitted) }}
-
-				{{ forms.selectField({
-					label: "Entry Status"|t,
-					id: 'statusId',
-					name: 'statusId',
-					value: entry.statusId,
-					options: statuses,
-					errors: entry.getErrors('statusId')
-				}) }}
-
-				<div class="field" id="enabled-field">
-					<div class="heading"></div>
-					<div class="input">
-						<div class="right">
-							<input type="button" class="btn small formsubmit" value="Delete" data-action="sproutforms/entries/delete-entry" data-confirm="Are you sure you want to delete this entry and all of it's data?" data-redirect="sproutforms/entries">
-						</div>
-					</div>
 				</div>
 
+			{% endfor %}
+
+		</div>
+
+{% endblock %}
+
+{% block details %}
+	<div class="meta">
+
+		{% set formName = "<h6>" ~ form.name ~ "</h6>" %}
+
+		{{ forms.field({
+			label: "Form Name"|t,
+		}, formName) }}
+
+		{% set dateSubmitted = entry.dateCreated|date('F j, Y') %}
+
+		{{ forms.field({
+			label: "Submitted"|t,
+		}, dateSubmitted) }}
+
+		{{ forms.selectField({
+			label: "Entry Status"|t,
+			id: 'statusId',
+			name: 'statusId',
+			value: entry.statusId,
+			options: statuses,
+			errors: entry.getErrors('statusId')
+		}) }}
+
+		<div class="field" id="enabled-field">
+			<div class="heading"></div>
+			<div class="input">
+				<div class="right">
+					<input type="button" class="btn small formsubmit" value="Delete" data-action="sproutforms/entries/delete-entry" data-confirm="Are you sure you want to delete this entry and all of it's data?" data-redirect="sproutforms/entries">
+				</div>
 			</div>
 		</div>
-	</div>
 
+	</div>
 {% endblock %}
 

@@ -8,9 +8,9 @@ use craft\base\PreviewableFieldInterface;
 use yii\db\Schema;
 
 use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutcore\SproutCore;
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
-use barrelstrength\sproutcore\web\assets\sproutfields\phone\PhoneFieldAsset;
+use barrelstrength\sproutbase\web\assets\sproutfields\phone\PhoneFieldAsset;
 
 class Phone extends SproutFormsBaseField implements PreviewableFieldInterface
 {
@@ -97,7 +97,7 @@ class Phone extends SproutFormsBaseField implements PreviewableFieldInterface
 		$namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
 
 		return Craft::$app->getView()->renderTemplate(
-			'sprout-core/sproutfields/_includes/forms/phone/input',
+			'sprout-base/sproutfields/_includes/forms/phone/input',
 			[
 				'id'    => $namespaceInputId,
 				'name'  => $this->handle,
@@ -126,12 +126,12 @@ class Phone extends SproutFormsBaseField implements PreviewableFieldInterface
 		$mask = preg_quote($settings['mask']);
 		// Do no escape "-" html5 does not treat it as special chars
 		$mask = str_replace("\\-", '-', $mask);
-		$pattern = SproutCore::$app->phone->convertMaskToRegEx($mask);
+		$pattern = SproutBase::$app->phone->convertMaskToRegEx($mask);
 
 		$pattern = trim($pattern, '/');
 
 		$attributes   = $field->getAttributes();
-		$errorMessage = SproutCore::$app->phone->getErrorMessage($field);
+		$errorMessage = SproutBase::$app->phone->getErrorMessage($field);
 
 		$rendered = Craft::$app->getView()->renderTemplate(
 			'phone/input',
@@ -181,14 +181,14 @@ class Phone extends SproutFormsBaseField implements PreviewableFieldInterface
 
 		if ($this->mask == "")
 		{
-			$this->mask = SproutCore::$app->phone->getDefaultMask();
+			$this->mask = SproutBase::$app->phone->getDefaultMask();
 		}
 
-		if (!SproutCore::$app->phone->validate($value, $this->mask))
+		if (!SproutBase::$app->phone->validate($value, $this->mask))
 		{
 			$element->addError(
 				$this->handle,
-				SproutCore::$app->phone->getErrorMessage($this)
+				SproutBase::$app->phone->getErrorMessage($this)
 			);
 		}
 	}

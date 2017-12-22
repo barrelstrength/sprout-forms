@@ -1,0 +1,45 @@
+{% set title = "Entry Statuses"|t('sprout-forms') %}
+{% if entryStatuses|length %}
+	<table id="entryStatuses" class="data fullwidth collapsible">
+		<thead>
+			<tr>
+				<th scope="col">{{ "Name"|t('sprout-forms') }}</th>
+				<th scope="col">{{ "Handle"|t('sprout-forms') }}</th>
+				<th scope="col">{{ "Default Status"|t('sprout-forms') }}
+				<td class="thin"></td>
+				<td class="thin"></td>
+			</tr>
+		</thead>
+		<tbody>
+			{% for entryStatus in entryStatuses %}
+				<tr data-id="{{ entryStatus.id }}" data-name="{{ entryStatus.name|t('sprout-forms') }}">
+					<th scope="row" data-title="{{ 'Name'|t('sprout-forms') }}"><a href="{{ url('sprout-forms/settings/entry-statuses/' ~ entryStatus.id) }}">{{ entryStatus.htmlLabel|raw }}</a></th>
+					<td data-title="{{ 'Handle'|t('sprout-forms') }}" class="code">{{ entryStatus.handle }}</td>
+					<td>{% if entryStatus.isDefault %}<span data-icon="check" title="{{ 'Yes'|t('sprout-forms') }}"></span>{% endif %}</td>
+					<td><td class="thin"><a class="move icon" title="{{ 'Reorder'|t('sprout-forms') }}" role="button"></a></td>
+					<td class="thin">
+						{% if entryStatus.id not in [1,2] %}
+							<a class="delete icon" title="{{ 'Delete'|t('sprout-forms') }}" role="button"></a>
+						{% endif %}
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endif %}
+
+{% js %}
+	new Craft.AdminTable({
+			tableSelector: '#settings-entryStatuses',
+			newObjectBtnSelector: '#newentrystatus',
+			deleteAction: 'sprout-forms/entry-statuses/delete',
+			minObjects: 1,
+			sortable: true,
+			reorderAction: 'sprout-forms/entry-statuses/reorder',
+			reorderSuccessMessage: Craft.t('Entry statuses reordered.'),
+			reorderFailMessage:    Craft.t('Couldn’t reorder statuses..'),
+			confirmDeleteMessage: '{{ "Are you sure you want to delete the Entry Status “{name}”?"|t('sprout-forms') }}',
+			deleteFailMessage: '{{ "Unable to delete status. Please remove this status from all Form Entries first."|t('sprout-forms') }}'
+	});
+{% endjs %}
+

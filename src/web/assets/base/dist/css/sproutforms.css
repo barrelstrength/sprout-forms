@@ -138,9 +138,6 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 /* Field Layout - Target */
 
 #sproutforms-fieldlayout-addtab {
-    display: inline-block;
-    padding: 10px 24px;
-    color: #777;
     white-space: nowrap;
     cursor: default !important;
 }
@@ -235,6 +232,9 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 
 /* Drag Behavior */
 
+.sprout-tab-container {
+    padding-bottom: 20px;
+}
 .sproutforms-tab-fields .target-field,
 #sproutforms-source-fields .source-field {
     cursor: move;
@@ -281,3 +281,25 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 }
 
 
+.sproutfield{
+  background:#e3e5e8;
+  width: 70%;
+  height: 150px;
+}
+.sproutfield ul li{
+  float:right;
+  display: inline-block;
+  padding: 5px;
+  margin: 10px;
+}
+
+
+#sprout-forms-tabs ul li {
+  display: inline;
+}
+
+.drag-tab-active{
+  list-style: none;
+  background-color: #e4e6e8;
+  text-align: center;
+}

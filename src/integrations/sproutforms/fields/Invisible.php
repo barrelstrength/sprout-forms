@@ -93,7 +93,7 @@ class Invisible extends SproutFormsBaseField implements PreviewableFieldInterfac
 		$namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
 
 		return Craft::$app->getView()->renderTemplate(
-			'sprout-core/sproutfields/_includes/forms/invisible/input',
+			'sprout-base/sproutfields/_includes/forms/invisible/input',
 			[
 				'id' => $namespaceInputId,
 				'name' => $name,

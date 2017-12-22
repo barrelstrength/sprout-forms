@@ -289,6 +289,7 @@ class FieldsController extends BaseController
 				'name'         => $field->name,
 				'handle'       => $field->handle,
 				'icon'         => $field->getIcon(),
+				'htmlExample'  => $field->getExampleInputHtml(),
 				'instructions' => $field->instructions,
 				'group'        => [
 					'name' => $tabName,

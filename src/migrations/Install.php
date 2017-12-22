@@ -1,8 +1,8 @@
 <?php
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutcore\SproutCore;
-use barrelstrength\sproutcore\migrations\sproutreports\Install as SproutCoreReportsInstall;
+use barrelstrength\sproutbase\SproutBase;
+use barrelstrength\sproutbase\migrations\sproutreports\Install as SproutBaseReportsInstall;
 use craft\db\Migration;
 
 /**
@@ -23,6 +23,8 @@ class Install extends Migration
 		$this->createIndexes();
 		$this->addForeignKeys();
 		$this->insertDefaultData();
+
+		return true;
 	}
 
 	/**
@@ -30,12 +32,14 @@ class Install extends Migration
 	 */
 	public function safeDown()
 	{
-		SproutCore::$app->reportsMigration->dropTablesByDataSourceId('sproutforms.sproutformsentriesdatasource');
+		SproutBase::$app->dataSources->deleteReportsByDataSourceId('sproutforms.sproutformsentriesdatasource');
 
 		$this->dropTable('{{%sproutforms_entries}}');
 		$this->dropTable('{{%sproutforms_forms}}');
 		$this->dropTable('{{%sproutforms_formgroups}}');
 		$this->dropTable('{{%sproutforms_entrystatuses}}');
+
+		return true;
 	}
 
 	/**
@@ -217,7 +221,7 @@ class Install extends Migration
 
 	public function installSproutReports()
 	{
-		$migration = new SproutCoreReportsInstall();
+		$migration = new SproutBaseReportsInstall();
 
 		ob_start();
 		$migration->safeUp();

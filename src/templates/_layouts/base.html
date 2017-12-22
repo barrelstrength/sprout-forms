@@ -4,12 +4,4 @@
 
 {% set selectedSubnavItem = craft.request.segment(2) %}
 
-{% block content %}
-
-  {% if body is defined %}
-  	{{ body }}
-  {% endif %}
-
-{% endblock %}
-
 {% do view.registerAssetBundle("barrelstrength\\sproutforms\\web\\assets\\base\\SproutFormsBaseAsset") %}

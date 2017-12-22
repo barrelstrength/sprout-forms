@@ -5,6 +5,16 @@
 	.editform-sidebar .tabs {
 		margin: 0;
 	}
+	#form-settings-tabs li a.sel{
+		background: #fff;
+		-webkit-box-shadow: 0 0 0 1px #e3e5e8;
+		box-shadow: 0 0 0 1px #e3e5e8;
+	}
+	.sprout-field-heading
+	{
+		background-color: #fff;
+		padding: 10px 10px 10px 10px;
+	}
 </style>
 
 {# @todo - Remove Notifications in favor of Sprout Email integration
@@ -15,20 +25,23 @@
 	},
 #}
 
-{% set sidebarTabs = {
-	fields : {
-		"label" : "Fields"|t('sprout-forms'),
-		"url" : "#sproutforms-source-fields",
-	},
-	settings : {
-		"label" : "Form Settings"|t('sprout-forms'),
-		"url" : "#tab-sproutforms-settings",
-	}
-} %}
+{% set tab  = 1 %}
+{% set tab2 = false %}
 
-{% include "_includes/tabs" with {
-	tabs : sidebarTabs
-} %}
+<nav id="form-settings-tabs" class="tabs">
+	<ul>
+		<li>
+			<a class="tab {{ tab == 1 ? ' sel' : '' }}" href="#sproutforms-source-fields">
+				{{ "Fields"|t('sprout-forms') }}
+			</a>
+		</li>
+		<li>
+			<a class="tab {{ tab == 2 ? ' sel' : '' }} {{ tab2 ? 'error' : '' }}" href="#tab-sproutforms-settings">
+				{{ "Form Settings"|t('sprout-forms') }}
+			</a>
+		</li>
+	</ul>
+</nav>
 
 <div>
 	{% set fieldTypes = craft.sproutforms.getRegisteredFields() %}
@@ -42,13 +55,15 @@
 		</div>
 	</div><!-- fields div -->
 
+	{#
 	<div class="hidden meta" id="tab-sproutforms-notification">
 
 		{% include 'sprout-forms/forms/_tabs/notifications' %}
 
 	</div><!-- notifications div -->
+	#}
 
-	<div class="hidden meta" id="tab-sproutforms-settings">
+	<div class="{{ tab != 2 ? 'hidden' : '' }} meta" id="tab-sproutforms-settings">
 
 		{% if groups is defined and groups|length %}
 
@@ -122,7 +137,7 @@
 			errors: form.getErrors('titleFormat')
 		}) }}
 
-		<div class="field field-heading">Template Customization</div>
+		<div class="field sprout-field-heading">Template Customization</div>
 
 		{{ forms.lightswitchField({
 			label: "Tab Titles <span class='info'>Display Tab Titles on Forms</span>"|t('sprout-forms'),
@@ -156,7 +171,7 @@
 
 		{% if settings.enablePayloadForwarding or form.submitAction %}
 
-		<div class="field field-heading">Payload Forwarding</div>
+		<div class="field sprout-field-heading">Payload Forwarding</div>
 
 		{{ forms.textField({
 			label: "Submit URL <span class='info'>Submit your form data to this URL, instead of directly to Sprout
@@ -186,3 +201,21 @@
 		$('#templateOverridesFolder-field').toggleClass('hidden');
 	{% endjs %}
 {% endif %}
+
+{% js %}
+	$(document).ready(function()
+	{
+		$("#form-settings-tabs a").click(function(ev){
+			console.log("AS");
+			ev.preventDefault();
+			var $currentUrl = $("#form-settings-tabs .sel");
+			var currentId = $currentUrl.attr('href');
+			$currentUrl.removeClass('sel');
+			$(currentId).addClass('hidden');
+			var newShow = $(this).attr('href');
+			$(newShow).removeClass('hidden');
+			console.log(newShow);
+			$(this).addClass('sel');
+		});
+	});
+{% endjs %}

@@ -26,7 +26,7 @@ class EntryStatus extends Model
 	/**
 	 * @var string
 	 */
-	public $color;
+	public $color = 'blue';
 
 	/**
 	 * @var int
@@ -64,19 +64,13 @@ class EntryStatus extends Model
 	}
 
 	/**
-	 * @return string
+	 * @inheritdoc
 	 */
-	public function getCpEditUrl()
+	public function rules()
 	{
-		return UrlHelper::cpUrl('sprout-forms/settings/orders-tatuses/' . $this->id);
-	}
-
-	/**
-	 * @return string
-	 */
-	public function htmlLabel()
-	{
-		return sprintf('<span class="sproutFormsStatusLabel"><span class="status %s"></span> %s</span>',
-			$this->color, $this->name);
+		return [
+			[['name', 'handle'], 'required'],
+			[['name', 'handle'], 'string', 'max' => 255]
+		];
 	}
 }
