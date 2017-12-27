@@ -13,7 +13,6 @@ use craft\web\UrlManager;
 use craft\services\UserPermissions;
 use yii\base\Event;
 use craft\web\twig\variables\CraftVariable;
-
 use barrelstrength\sproutbase\SproutBaseHelper;
 use barrelstrength\sproutforms\models\Settings;
 use barrelstrength\sproutforms\web\twig\variables\SproutFormsVariable;
@@ -147,6 +146,10 @@ class SproutForms extends Plugin
 					'label' => SproutForms::t('Reports'),
 					'url' => 'sprout-forms/reports/sproutforms.sproutformsentriesdatasource'
 				],
+				'notifications' =>[
+					'label' => SproutForms::t('Notifications'),
+					'url' => 'sprout-forms/notifications'
+				],
 				'settings' =>[
 					'label' => SproutForms::t('Settings'),
 					'url' => 'sprout-forms/settings'
@@ -191,6 +194,8 @@ class SproutForms extends Plugin
 			'sprout-forms/reports/<dataSourceId>/edit/<reportId>' => 'sprout-base/reports/edit-report',
 			'sprout-forms/reports/view/<reportId>' => 'sprout-base/reports/results-index',
 			'sprout-forms/reports/<dataSourceId>' => 'sprout-base/reports/index',
+
+			'sprout-forms/notifications' => 'sprout-base/notifications/index',
 
 			'sprout-forms/settings' => 'sprout-base/settings/edit-settings',
 		  'sprout-forms/settings/<settingsSectionHandle:.*>' => 'sprout-base/settings/edit-settings'
