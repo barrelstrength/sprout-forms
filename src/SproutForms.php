@@ -12,7 +12,6 @@ use craft\events\RegisterUserPermissionsEvent;
 use craft\web\UrlManager;
 use craft\services\UserPermissions;
 use yii\base\Event;
-use craft\events\DefineComponentsEvent;
 use craft\web\twig\variables\CraftVariable;
 
 use barrelstrength\sproutbase\SproutBaseHelper;
@@ -105,11 +104,16 @@ class SproutForms extends Plugin
 			$event->types[] = new SproutFormsEntriesDataSource();
 		});
 
+		$this->setComponents([
+			'sproutforms' => SproutFormsVariable::class
+		]);
+
 		Event::on(
 			CraftVariable::class,
-			CraftVariable::EVENT_DEFINE_COMPONENTS,
-			function (DefineComponentsEvent $event) {
-					$event->components['sproutforms'] = SproutFormsVariable::class;
+			CraftVariable::EVENT_INIT,
+			function (Event $event) {
+				$variable = $event->sender;
+				$variable->set('sproutforms', SproutFormsVariable::class);
 			}
 		);
 
