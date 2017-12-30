@@ -12,22 +12,22 @@ use craft\web\assets\cp\CpAsset;
 
 class SproutFormsBaseAsset extends AssetBundle
 {
-	public function init()
-	{
-		// define the path that your publishable resources live
-		$this->sourcePath = '@barrelstrength/sproutforms/web/assets/base/dist';
+    public function init()
+    {
+        // define the path that your publishable resources live
+        $this->sourcePath = '@barrelstrength/sproutforms/web/assets/base/dist';
 
-		// define the dependencies
-		$this->depends = [
-			CpAsset::class,
-		];
+        // define the dependencies
+        $this->depends = [
+            CpAsset::class,
+        ];
 
-		// define the relative path to CSS/JS files that should be registered with the page
-		// when this asset bundle is registered
-		$this->css = [
-			'css/sproutforms.css'
-		];
+        // define the relative path to CSS/JS files that should be registered with the page
+        // when this asset bundle is registered
+        $this->css = [
+            'css/sproutforms.css'
+        ];
 
-		parent::init();
-	}
+        parent::init();
+    }
 }

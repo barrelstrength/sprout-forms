@@ -1,4 +1,5 @@
 <?php
+
 namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
 
 use Craft;
@@ -17,121 +18,122 @@ use barrelstrength\sproutforms\SproutForms;
  */
 class PlainText extends SproutFormsBaseField implements PreviewableFieldInterface
 {
-	/**
-	 * @var string|null The input’s placeholder text
-	 */
-	public $boostrapClass;
+    /**
+     * @var string|null The input’s placeholder text
+     */
+    public $boostrapClass;
 
-	/**
-	 * @var string|null The input’s placeholder text
-	 */
-	public $placeholder = '';
+    /**
+     * @var string|null The input’s placeholder text
+     */
+    public $placeholder = '';
 
-	/**
-	 * @var bool|null Whether the input should allow line breaks
-	 */
-	public $multiline;
+    /**
+     * @var bool|null Whether the input should allow line breaks
+     */
+    public $multiline;
 
-	/**
-	 * @var int The minimum number of rows the input should have, if multi-line
-	 */
-	public $initialRows = 4;
+    /**
+     * @var int The minimum number of rows the input should have, if multi-line
+     */
+    public $initialRows = 4;
 
-	/**
-	 * @var int|null The maximum number of characters allowed in the field
-	 */
-	public $charLimit;
+    /**
+     * @var int|null The maximum number of characters allowed in the field
+     */
+    public $charLimit;
 
-	/**
-	 * @var string The type of database column the field should have in the content table
-	 */
-	public $columnType = Schema::TYPE_TEXT;
+    /**
+     * @var string The type of database column the field should have in the content table
+     */
+    public $columnType = Schema::TYPE_TEXT;
 
-	/**
-	 * @inheritdoc
-	 */
-	public static function displayName(): string
-	{
-		return SproutForms::t('Plain Text');
-	}
+    /**
+     * @inheritdoc
+     */
+    public static function displayName(): string
+    {
+        return SproutForms::t('Plain Text');
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function getExampleInputHtml()
-	{
-		return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/plaintext/example',
-			[
-				'field' => $this
-			]
-		);
-	}
+    /**
+     * @inheritdoc
+     */
+    public function getExampleInputHtml()
+    {
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/plaintext/example',
+            [
+                'field' => $this
+            ]
+        );
+    }
 
-	/**
-	 * Adds support for edit field in the Entries section of SproutForms (Control
-	 * panel html)
-	 * @inheritdoc
-	 */
-	public function getInputHtml($value, ElementInterface $element = null): string
-	{
-		return Craft::$app->getView()->renderTemplate('_components/fieldtypes/PlainText/input',
-			[
-				'name' => $this->handle,
-				'value' => $value,
-				'field' => $this,
-			]);
-	}
+    /**
+     * Adds support for edit field in the Entries section of SproutForms (Control
+     * panel html)
+     *
+     * @inheritdoc
+     */
+    public function getInputHtml($value, ElementInterface $element = null): string
+    {
+        return Craft::$app->getView()->renderTemplate('_components/fieldtypes/PlainText/input',
+            [
+                'name' => $this->handle,
+                'value' => $value,
+                'field' => $this,
+            ]);
+    }
 
-	/**
-	 * @param FieldModel $field
-	 * @param mixed      $value
-	 * @param array      $settings
-	 * @param array      $renderingOptions
-	 *
-	 * @return \Twig_Markup
-	 */
-	public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
-	{
-		$this->beginRendering();
+    /**
+     * @param FieldModel $field
+     * @param mixed      $value
+     * @param array      $settings
+     * @param array      $renderingOptions
+     *
+     * @return \Twig_Markup
+     */
+    public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
+    {
+        $this->beginRendering();
 
-		$rendered = Craft::$app->getView()->renderTemplate(
-			'plaintext/input',
-			[
-				'name'             => $field->handle,
-				'value'            => $value,
-				'field'            => $field,
-				'settings'         => $settings,
-				'renderingOptions' => $renderingOptions
-			]
-		);
+        $rendered = Craft::$app->getView()->renderTemplate(
+            'plaintext/input',
+            [
+                'name' => $field->handle,
+                'value' => $value,
+                'field' => $field,
+                'settings' => $settings,
+                'renderingOptions' => $renderingOptions
+            ]
+        );
 
-		$this->endRendering();
+        $this->endRendering();
 
-		return TemplateHelper::raw($rendered);
-	}
+        return TemplateHelper::raw($rendered);
+    }
 
-	/**
-	 * @param FieldModel $field
-	 *
-	 * @return \Twig_Markup
-	 */
-	public function getSettingsHtml()
-	{
-		$rendered = Craft::$app->getView()->renderTemplate(
-			'sprout-forms/_components/fields/plaintext/settings',
-			[
-				'field' => $this,
-			]
-		);
+    /**
+     * @param FieldModel $field
+     *
+     * @return \Twig_Markup
+     */
+    public function getSettingsHtml()
+    {
+        $rendered = Craft::$app->getView()->renderTemplate(
+            'sprout-forms/_components/fields/plaintext/settings',
+            [
+                'field' => $this,
+            ]
+        );
 
-		return $rendered;
-	}
+        return $rendered;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getIconClass()
-	{
-		return 'fa fa-font';
-	}
+    /**
+     * @return string
+     */
+    public function getIconClass()
+    {
+        return 'fa fa-font';
+    }
 }

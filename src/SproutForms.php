@@ -1,4 +1,5 @@
 <?php
+
 namespace barrelstrength\sproutforms;
 
 use barrelstrength\sproutbase\base\BaseSproutTrait;
@@ -41,198 +42,195 @@ use barrelstrength\sproutforms\integrations\sproutreports\datasources\SproutForm
 
 class SproutForms extends Plugin
 {
-	use BaseSproutTrait;
+    use BaseSproutTrait;
 
-	/**
-	 * Enable use of SproutForms::$app-> in place of Craft::$app->
-	 *
-	 * @var App
-	 */
-	public static $app;
+    /**
+     * Enable use of SproutForms::$app-> in place of Craft::$app->
+     *
+     * @var App
+     */
+    public static $app;
 
-	/**
-	 * Identify our plugin for BaseSproutTrait
-	 *
-	 * @var string
-	 */
-	public static $pluginId = 'sprout-forms';
+    /**
+     * Identify our plugin for BaseSproutTrait
+     *
+     * @var string
+     */
+    public static $pluginId = 'sprout-forms';
 
-	public $hasCpSection = true;
-	public $hasCpSettings = true;
+    public $hasCpSection = true;
+    public $hasCpSettings = true;
 
-	public function init()
-	{
-		parent::init();
+    public function init()
+    {
+        parent::init();
 
-		self::$app = $this->get('app');
-		SproutBaseHelper::registerModule();
+        self::$app = $this->get('app');
+        SproutBaseHelper::registerModule();
 
-		Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $event) {
-				$event->rules = array_merge($event->rules, $this->getCpUrlRules());
-			}
-		);
+        Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $event) {
+            $event->rules = array_merge($event->rules, $this->getCpUrlRules());
+        }
+        );
 
-		Event::on(Fields::class, Fields::EVENT_REGISTER_FIELDS, function(RegisterFieldsEvent $event) {
-				$event->fields[] = new PlainText();
-				$event->fields[] = new Number();
-				$event->fields[] = new Dropdown();
-				$event->fields[] = new Checkboxes();
-				$event->fields[] = new RadioButtons();
-				$event->fields[] = new MultiSelect();
-				$event->fields[] = new Assets();
-				$event->fields[] = new Categories();
-				$event->fields[] = new Entries();
-				$event->fields[] = new Tags();
-				$event->fields[] = new Email();
-				$event->fields[] = new EmailSelect();
-				$event->fields[] = new Hidden();
-				$event->fields[] = new Invisible();
-				$event->fields[] = new Link();
-				$event->fields[] = new Phone();
-				$event->fields[] = new RegularExpression();
+        Event::on(Fields::class, Fields::EVENT_REGISTER_FIELDS, function(RegisterFieldsEvent $event) {
+            $event->fields[] = new PlainText();
+            $event->fields[] = new Number();
+            $event->fields[] = new Dropdown();
+            $event->fields[] = new Checkboxes();
+            $event->fields[] = new RadioButtons();
+            $event->fields[] = new MultiSelect();
+            $event->fields[] = new Assets();
+            $event->fields[] = new Categories();
+            $event->fields[] = new Entries();
+            $event->fields[] = new Tags();
+            $event->fields[] = new Email();
+            $event->fields[] = new EmailSelect();
+            $event->fields[] = new Hidden();
+            $event->fields[] = new Invisible();
+            $event->fields[] = new Link();
+            $event->fields[] = new Phone();
+            $event->fields[] = new RegularExpression();
 
-				$redactor = Craft::$app->plugins->getPlugin('redactor');
-				if ($redactor)
-				{
-					$event->fields[] = new Notes();
-				}
-			}
-		);
+            $redactor = Craft::$app->plugins->getPlugin('redactor');
+            if ($redactor) {
+                $event->fields[] = new Notes();
+            }
+        }
+        );
 
-		// Register DataSources for sproutReports plugin integration
-		Event::on(DataSources::class, DataSources::EVENT_REGISTER_DATA_SOURCES, function(RegisterComponentTypesEvent $event) {
-			$event->types[] = new SproutFormsEntriesDataSource();
-		});
+        // Register DataSources for sproutReports plugin integration
+        Event::on(DataSources::class, DataSources::EVENT_REGISTER_DATA_SOURCES, function(RegisterComponentTypesEvent $event) {
+            $event->types[] = new SproutFormsEntriesDataSource();
+        });
 
-		$this->setComponents([
-			'sproutforms' => SproutFormsVariable::class
-		]);
+        $this->setComponents([
+            'sproutforms' => SproutFormsVariable::class
+        ]);
 
-		Event::on(
-			CraftVariable::class,
-			CraftVariable::EVENT_INIT,
-			function (Event $event) {
-				$variable = $event->sender;
-				$variable->set('sproutforms', SproutFormsVariable::class);
-			}
-		);
+        Event::on(
+            CraftVariable::class,
+            CraftVariable::EVENT_INIT,
+            function(Event $event) {
+                $variable = $event->sender;
+                $variable->set('sproutforms', SproutFormsVariable::class);
+            }
+        );
 
-		Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
-				$event->permissions['Sprout Forms'] = $this->getUserPermissions();
-			}
-		);
-	}
+        Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
+            $event->permissions['Sprout Forms'] = $this->getUserPermissions();
+        }
+        );
+    }
 
-	public function getCpNavItem()
-	{
-		$parent = parent::getCpNavItem();
+    public function getCpNavItem()
+    {
+        $parent = parent::getCpNavItem();
 
-		// Allow user to override plugin name in sidebar
-		if ($this->getSettings()->pluginNameOverride)
-		{
-			$parent['label'] = $this->getSettings()->pluginNameOverride;
-		}
+        // Allow user to override plugin name in sidebar
+        if ($this->getSettings()->pluginNameOverride) {
+            $parent['label'] = $this->getSettings()->pluginNameOverride;
+        }
 
-		return array_merge($parent,[
-			'subnav' => [
-				'entries' => [
-					'label' => SproutForms::t('Entries'),
-					'url'   => 'sprout-forms/entries'
-				],
-				'forms' =>[
-					'label' => SproutForms::t('Forms'),
-					'url' => 'sprout-forms/forms'
-				],
-				'reports' =>[
-					'label' => SproutForms::t('Reports'),
-					'url' => 'sprout-forms/reports/sproutforms.sproutformsentriesdatasource'
-				],
-				'settings' =>[
-					'label' => SproutForms::t('Settings'),
-					'url' => 'sprout-forms/settings'
-				]
-			]
-		]);
-	}
+        return array_merge($parent, [
+            'subnav' => [
+                'entries' => [
+                    'label' => SproutForms::t('Entries'),
+                    'url' => 'sprout-forms/entries'
+                ],
+                'forms' => [
+                    'label' => SproutForms::t('Forms'),
+                    'url' => 'sprout-forms/forms'
+                ],
+                'reports' => [
+                    'label' => SproutForms::t('Reports'),
+                    'url' => 'sprout-forms/reports/sproutforms.sproutformsentriesdatasource'
+                ],
+                'settings' => [
+                    'label' => SproutForms::t('Settings'),
+                    'url' => 'sprout-forms/settings'
+                ]
+            ]
+        ]);
+    }
 
-	protected function createSettingsModel()
-	{
-		return new Settings();
-	}
+    protected function createSettingsModel()
+    {
+        return new Settings();
+    }
 
-	/**
-	 * @return array
-	 */
-	private function getCpUrlRules()
-	{
-		return [
-			'sprout-forms/forms/new'                                  =>
-			'sprout-forms/forms/edit-form-template',
+    /**
+     * @return array
+     */
+    private function getCpUrlRules()
+    {
+        return [
+            'sprout-forms/forms/new' =>
+                'sprout-forms/forms/edit-form-template',
 
-			'sprout-forms/forms/edit/<formId:\d+>'                    =>
-			'sprout-forms/forms/edit-form-template',
+            'sprout-forms/forms/edit/<formId:\d+>' =>
+                'sprout-forms/forms/edit-form-template',
 
-			'sprout-forms/entries/edit/<entryId:\d+>'                 =>
-			'sprout-forms/entries/edit-entry',
+            'sprout-forms/entries/edit/<entryId:\d+>' =>
+                'sprout-forms/entries/edit-entry',
 
-			'sprout-forms/settings/(general|advanced)'                =>
-			'sprout-forms/settings/settings-index-template',
+            'sprout-forms/settings/(general|advanced)' =>
+                'sprout-forms/settings/settings-index-template',
 
-			'sprout-forms/settings/entry-statuses/new'                 =>
-			'sprout-forms/entry-statuses/edit',
+            'sprout-forms/settings/entry-statuses/new' =>
+                'sprout-forms/entry-statuses/edit',
 
-			'sprout-forms/settings/entry-statuses/<entryStatusId:\d+>' =>
-			'sprout-forms/entry-statuses/edit',
+            'sprout-forms/settings/entry-statuses/<entryStatusId:\d+>' =>
+                'sprout-forms/entry-statuses/edit',
 
-			'sprout-forms/forms/<groupId:\d+>'                        =>
-			'sprout-forms/forms',
+            'sprout-forms/forms/<groupId:\d+>' =>
+                'sprout-forms/forms',
 
-			'sprout-forms/reports/<dataSourceId>/new' => 'sprout-base/reports/edit-report',
-			'sprout-forms/reports/<dataSourceId>/edit/<reportId>' => 'sprout-base/reports/edit-report',
-			'sprout-forms/reports/view/<reportId>' => 'sprout-base/reports/results-index',
-			'sprout-forms/reports/<dataSourceId>' => 'sprout-base/reports/index',
+            'sprout-forms/reports/<dataSourceId>/new' => 'sprout-base/reports/edit-report',
+            'sprout-forms/reports/<dataSourceId>/edit/<reportId>' => 'sprout-base/reports/edit-report',
+            'sprout-forms/reports/view/<reportId>' => 'sprout-base/reports/results-index',
+            'sprout-forms/reports/<dataSourceId>' => 'sprout-base/reports/index',
 
-			'sprout-forms/settings' => 'sprout-base/settings/edit-settings',
-		  'sprout-forms/settings/<settingsSectionHandle:.*>' => 'sprout-base/settings/edit-settings'
-		];
-	}
+            'sprout-forms/settings' => 'sprout-base/settings/edit-settings',
+            'sprout-forms/settings/<settingsSectionHandle:.*>' => 'sprout-base/settings/edit-settings'
+        ];
+    }
 
-	/**
-	 * @return []
-	 */
-	public function getUserPermissions()
-	{
-		return [
-			'manageSproutFormsForms' => [
-				'label' => self::t('Manage Forms')
-			],
-			'viewSproutFormsEntries' => [
-				'label'  => self::t('View Form Entries'),
-				'nested' => [
-					'editSproutFormsEntries' => [
-						'label' => self::t('Edit Form Entries')
-					]
-				]
-			],
-			'editSproutFormsSettings' => [
-				'label' => self::t('Edit Settings')
-			]
-		];
-	}
+    /**
+     * @return []
+     */
+    public function getUserPermissions()
+    {
+        return [
+            'manageSproutFormsForms' => [
+                'label' => self::t('Manage Forms')
+            ],
+            'viewSproutFormsEntries' => [
+                'label' => self::t('View Form Entries'),
+                'nested' => [
+                    'editSproutFormsEntries' => [
+                        'label' => self::t('Edit Form Entries')
+                    ]
+                ]
+            ],
+            'editSproutFormsSettings' => [
+                'label' => self::t('Edit Settings')
+            ]
+        ];
+    }
 
-	/**
-	 * @throws \Exception
-	 */
-	public function beforeUninstall(): bool
-	{
-		$forms = SproutForms::$app->forms->getAllForms();
+    /**
+     * @throws \Exception
+     */
+    public function beforeUninstall(): bool
+    {
+        $forms = SproutForms::$app->forms->getAllForms();
 
-		foreach ($forms as $form)
-		{
-			SproutForms::$app->forms->deleteForm($form);
-		}
+        foreach ($forms as $form) {
+            SproutForms::$app->forms->deleteForm($form);
+        }
 
-		return true;
-	}
+        return true;
+    }
 }
 

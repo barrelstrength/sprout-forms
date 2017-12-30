@@ -1,4 +1,5 @@
 <?php
+
 namespace barrelstrength\sproutforms\events;
 
 use yii\base\Event;
@@ -8,11 +9,11 @@ use yii\base\Event;
  */
 class RegisterFieldsEvent extends Event
 {
-	// Properties
-	// =========================================================================
+    // Properties
+    // =========================================================================
 
-	/**
-	 * @var array The registered Fields.
-	 */
-	public $fields = [];
+    /**
+     * @var array The registered Fields.
+     */
+    public $fields = [];
 }

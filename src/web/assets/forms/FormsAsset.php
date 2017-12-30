@@ -13,24 +13,24 @@ use craft\web\assets\cp\CpAsset;
 
 class FormsAsset extends AssetBundle
 {
-	public function init()
-	{
-		// define the path that your publishable resources live
-		$this->sourcePath = '@barrelstrength/sproutforms/web/assets/forms/dist';
+    public function init()
+    {
+        // define the path that your publishable resources live
+        $this->sourcePath = '@barrelstrength/sproutforms/web/assets/forms/dist';
 
-		// define the dependencies
-		$this->depends = [
-			CpAsset::class,
-			FontAwesomeAsset::class
-		];
+        // define the dependencies
+        $this->depends = [
+            CpAsset::class,
+            FontAwesomeAsset::class
+        ];
 
-		// define the relative path to CSS/JS files that should be registered with the page
-		// when this asset bundle is registered
-		$this->js = [
-			'js/FieldLayoutEditor.js',
-			'js/FieldModal.js',
-		];
+        // define the relative path to CSS/JS files that should be registered with the page
+        // when this asset bundle is registered
+        $this->js = [
+            'js/FieldLayoutEditor.js',
+            'js/FieldModal.js',
+        ];
 
-		parent::init();
-	}
+        parent::init();
+    }
 }

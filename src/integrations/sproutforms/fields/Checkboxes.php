@@ -1,4 +1,5 @@
 <?php
+
 namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
 
 use Craft;
@@ -13,128 +14,128 @@ use barrelstrength\sproutforms\SproutForms;
  */
 class Checkboxes extends SproutBaseOptionsField
 {
-	/**
-	 * @var string|null The input’s boostrap class
-	 */
-	public $boostrapClass;
+    /**
+     * @var string|null The input’s boostrap class
+     */
+    public $boostrapClass;
 
-	/**
-	 * @inheritdoc
-	 */
-	public static function displayName(): string
-	{
-		return SproutForms::t('Checkboxes');
-	}
+    /**
+     * @inheritdoc
+     */
+    public static function displayName(): string
+    {
+        return SproutForms::t('Checkboxes');
+    }
 
-	/**
-	 * @return bool
-	 */
-	public function hasMultipleLabels()
-	{
-		return true;
-	}
+    /**
+     * @return bool
+     */
+    public function hasMultipleLabels()
+    {
+        return true;
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function init()
-	{
-		parent::init();
-		$this->multi = true;
-	}
+    /**
+     * @inheritdoc
+     */
+    public function init()
+    {
+        parent::init();
+        $this->multi = true;
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function getExampleInputHtml()
-	{
-		return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/checkboxes/example',
-			[
-				'field' => $this
-			]
-		);
-	}
+    /**
+     * @inheritdoc
+     */
+    public function getExampleInputHtml()
+    {
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/checkboxes/example',
+            [
+                'field' => $this
+            ]
+        );
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function getInputHtml($value, ElementInterface $element = null): string
-	{
-		$options = $this->translatedOptions();
+    /**
+     * @inheritdoc
+     */
+    public function getInputHtml($value, ElementInterface $element = null): string
+    {
+        $options = $this->translatedOptions();
 
-		// If this is a new entry, look for any default options
-		if ($this->isFresh($element)) {
-			$value = $this->defaultValue();
-		}
+        // If this is a new entry, look for any default options
+        if ($this->isFresh($element)) {
+            $value = $this->defaultValue();
+        }
 
-		return Craft::$app->getView()->renderTemplate('_includes/forms/checkboxGroup',
-			[
-				'name' => $this->handle,
-				'values' => $value,
-				'options' => $options
-			]);
-	}
+        return Craft::$app->getView()->renderTemplate('_includes/forms/checkboxGroup',
+            [
+                'name' => $this->handle,
+                'values' => $value,
+                'options' => $options
+            ]);
+    }
 
-	/**
-	 * @param FieldModel $field
-	 * @param mixed      $value
-	 * @param array      $settings
-	 * @param array      $renderingOptions
-	 *
-	 * @return \Twig_Markup
-	 */
-	public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
-	{
-		$this->beginRendering();
+    /**
+     * @param FieldModel $field
+     * @param mixed      $value
+     * @param array      $settings
+     * @param array      $renderingOptions
+     *
+     * @return \Twig_Markup
+     */
+    public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
+    {
+        $this->beginRendering();
 
-		$rendered = Craft::$app->getView()->renderTemplate(
-			'checkboxes/input',
-			[
-				'name'             => $field->handle,
-				'value'            => $value,
-				'field'            => $field,
-				'settings'         => $settings,
-				'renderingOptions' => $renderingOptions
-			]
-		);
+        $rendered = Craft::$app->getView()->renderTemplate(
+            'checkboxes/input',
+            [
+                'name' => $field->handle,
+                'value' => $value,
+                'field' => $field,
+                'settings' => $settings,
+                'renderingOptions' => $renderingOptions
+            ]
+        );
 
-		$this->endRendering();
+        $this->endRendering();
 
-		return TemplateHelper::raw($rendered);
-	}
+        return TemplateHelper::raw($rendered);
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	protected function optionsSettingLabel(): string
-	{
-		return SproutForms::t('Checkbox Options');
-	}
+    /**
+     * @inheritdoc
+     */
+    protected function optionsSettingLabel(): string
+    {
+        return SproutForms::t('Checkbox Options');
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getIconClass()
-	{
-		return 'fa fa-check-square';
-	}
+    /**
+     * @return string
+     */
+    public function getIconClass()
+    {
+        return 'fa fa-check-square';
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function getSettingsHtml()
-	{
-		$parentRendered = parent::getSettingsHtml();
+    /**
+     * @inheritdoc
+     */
+    public function getSettingsHtml()
+    {
+        $parentRendered = parent::getSettingsHtml();
 
-		$rendered = Craft::$app->getView()->renderTemplate(
-			'sprout-forms/_components/fields/checkboxes/settings',
-			[
-				'field' => $this,
-			]
-		);
+        $rendered = Craft::$app->getView()->renderTemplate(
+            'sprout-forms/_components/fields/checkboxes/settings',
+            [
+                'field' => $this,
+            ]
+        );
 
-		$customRendered = $rendered.$parentRendered;
+        $customRendered = $rendered.$parentRendered;
 
-		return $customRendered;
-	}
+        return $customRendered;
+    }
 }
