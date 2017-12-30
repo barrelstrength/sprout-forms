@@ -3,32 +3,46 @@
   "description": "Simple, beautiful forms. 100% control.",
   "version": "3.0.0",
   "type": "craft-plugin",
-  "autoload": {
-    "psr-4": {
-      "barrelstrength\\sproutforms\\": "src/"
+  "keywords": [
+    "craft",
+    "cms",
+    "craftcms",
+    "craft-plugin",
+    "sprout forms"
+  ],
+  "license": "Barrel Strength Design LLC",
+  "authors": [
+    {
+      "name": "Barrel Strength",
+      "homepage": "https://www.barrelstrengthdesign.com/"
     }
+  ],
+  "support": {
+    "email": "sprout@barrelstrengthdesign.com",
+    "issues": "https://github.com/barrelstrength/sprout-forms/issues?state=open",
+    "source": "https://github.com/barrelstrength/sprout-forms",
+    "docs": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs",
+    "rss": "https://github.com/barrelstrength/sprout-forms/commits/v2.atom"
   },
   "require": {
     "craftcms/cms": "^3.0.0-RC1",
     "barrelstrength/sprout-base": "^1.0.0"
   },
-  "repositories": [
-    {
-      "type": "path",
-      "url": "../SPROUT-PLUGINS/sprout-base"
-    },
-    {
-      "type": "composer",
-      "url": "https://asset-packagist.org"
+  "autoload": {
+    "psr-4": {
+      "barrelstrength\\sproutforms\\": "src/"
     }
-  ],
+  },
   "extra": {
     "name": "Sprout Forms",
     "handle": "sprout-forms",
-    "version": "3.0.0",
     "schemaVersion": "3.0.0",
-    "hasCpSettings": true,
+    "hasCpSettings": false,
     "developer": "Barrel Strength",
+    "developerUrl": "https://barrelstrengthdesign.com",
+    "documentationUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms",
+    "changelogUrl": "https://raw.githubusercontent.com/BarrelStrength/sprout-forms/master/CHANGELOG.md",
+    "downloadUrl": "https://github.com/BarrelStrength/sprout-forms/archive/master.zip",
     "class": "barrelstrength\\sproutforms\\SproutForms",
     "components": {
       "app": "barrelstrength\\sproutforms\\services\\App"
