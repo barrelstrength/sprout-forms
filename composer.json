@@ -37,7 +37,6 @@
     "name": "Sprout Forms",
     "handle": "sprout-forms",
     "schemaVersion": "3.0.0",
-    "hasCpSettings": false,
     "developer": "Barrel Strength",
     "developerUrl": "https://barrelstrengthdesign.com",
     "documentationUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms",
