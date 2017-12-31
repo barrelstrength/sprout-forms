@@ -38,7 +38,7 @@ use barrelstrength\sproutforms\integrations\sproutforms\fields\Notes;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Phone;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\RegularExpression;
 use barrelstrength\sproutforms\services\Fields;
-use barrelstrength\sproutforms\integrations\sproutreports\datasources\SproutFormsEntriesDataSource;
+use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesDataSource;
 
 class SproutForms extends Plugin
 {
@@ -101,7 +101,7 @@ class SproutForms extends Plugin
 
         // Register DataSources for sproutReports plugin integration
         Event::on(DataSources::class, DataSources::EVENT_REGISTER_DATA_SOURCES, function(RegisterComponentTypesEvent $event) {
-            $event->types[] = new SproutFormsEntriesDataSource();
+            $event->types[] = new EntriesDataSource();
         });
 
         $this->setComponents([
@@ -144,7 +144,7 @@ class SproutForms extends Plugin
                 ],
                 'reports' => [
                     'label' => SproutForms::t('Reports'),
-                    'url' => 'sprout-forms/reports/sproutforms.sproutformsentriesdatasource'
+                    'url' => 'sprout-forms/reports/sproutforms.entriesdatasource'
                 ],
                 'settings' => [
                     'label' => SproutForms::t('Settings'),

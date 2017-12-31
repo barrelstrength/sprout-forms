@@ -11,11 +11,11 @@ use craft\db\Query;
 use craft\helpers\DateTimeHelper;
 
 /**
- * Class SproutFormsEntriesDataSource
+ * Class EntriesDataSource
  *
  * @package barrelstrength\sproutforms\integrations\sproutreports\datasources
  */
-class SproutFormsEntriesDataSource extends BaseDataSource
+class EntriesDataSource extends BaseDataSource
 {
     public function getName()
     {

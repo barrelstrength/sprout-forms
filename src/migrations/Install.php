@@ -33,7 +33,7 @@ class Install extends Migration
      */
     public function safeDown()
     {
-        SproutBase::$app->dataSources->deleteReportsByDataSourceId('sproutforms.sproutformsentriesdatasource');
+        SproutBase::$app->dataSources->deleteReportsByDataSourceId('sproutforms.entriesdatasource');
 
         $this->dropTable('{{%sproutforms_entries}}');
         $this->dropTable('{{%sproutforms_forms}}');
