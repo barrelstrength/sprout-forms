@@ -12,11 +12,14 @@ class GroupsController extends BaseController
 {
     /**
      * Save a group.
+     *
+     * @return \yii\web\Response
+     * @throws \barrelstrength\sproutforms\services\Exception
+     * @throws \yii\web\BadRequestHttpException
      */
     public function actionSaveGroup()
     {
         $this->requirePostRequest();
-        $this->requireAcceptsJson();
 
         $request = Craft::$app->getRequest();
 
@@ -24,11 +27,11 @@ class GroupsController extends BaseController
         $group->id = $request->getBodyParam('id');
         $group->name = $request->getRequiredBodyParam('name');
 
-        $isNewGroup = empty($group->id);
+        $isNewGroup = (null === $group->id);
 
         if (SproutForms::$app->groups->saveGroup($group)) {
             if ($isNewGroup) {
-                Craft::$app->getSession()->setInfo(SproutForms::t('Group added.'));
+                Craft::$app->getSession()->setNotice(SproutForms::t('Group added.'));
             }
 
             return $this->asJson([
@@ -36,6 +39,7 @@ class GroupsController extends BaseController
                 'group' => $group->getAttributes(),
             ]);
         } else {
+
             return $this->asJson([
                 'errors' => $group->getErrors(),
             ]);
@@ -44,6 +48,10 @@ class GroupsController extends BaseController
 
     /**
      * Deletes a group.
+     *
+     * @return \yii\web\Response
+     * @throws \yii\db\Exception
+     * @throws \yii\web\BadRequestHttpException
      */
     public function actionDeleteGroup()
     {

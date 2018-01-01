@@ -21,6 +21,7 @@ class Groups extends Component
      * @param FormGroupModel $group
      *
      * @return bool
+     * @throws Exception
      */
     public function saveGroup(FormGroupModel $group): bool
     {
@@ -46,9 +47,10 @@ class Groups extends Component
     /**
      * Deletes a group
      *
-     * @param int $groupId
+     * @param $groupId
      *
      * @return bool
+     * @throws \yii\db\Exception
      */
     public function deleteGroupById($groupId)
     {
