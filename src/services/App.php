@@ -7,10 +7,29 @@ use Craft;
 
 class App extends Component
 {
+    /**
+     * @var Groups
+     */
     public $groups;
+
+    /**
+     * @var Forms
+     */
     public $forms;
+
+    /**
+     * @var Fields
+     */
     public $fields;
+
+    /**
+     * @var Entries
+     */
     public $entries;
+
+    /**
+     * @var FrontEndFields
+     */
     public $frontEndFields;
 
     public function init()
@@ -33,9 +52,10 @@ class App extends Component
     }
 
     /**
-     * Return wether or not the example template already exist
+     * Return whether or not the example template already exists
      *
      * @return bool
+     * @throws \yii\base\Exception
      */
     public function hasExamples()
     {
@@ -52,6 +72,7 @@ class App extends Component
      * Returns whether or not the templates directory is writable
      *
      * @return bool
+     * @throws \yii\base\Exception
      */
     public function canCreateExamples()
     {
