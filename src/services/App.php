@@ -7,6 +7,10 @@ use Craft;
 class App extends Component
 {
 	public $groups;
+
+	/**
+	 * @var Forms
+	 */
 	public $forms;
 	public $fields;
 	public $entries;

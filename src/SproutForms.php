@@ -2,7 +2,10 @@
 namespace barrelstrength\sproutforms;
 
 use barrelstrength\sproutbase\base\BaseSproutTrait;
+use barrelstrength\sproutbase\services\sproutemail\NotificationEmails;
 use barrelstrength\sproutbase\services\sproutreports\DataSources;
+use barrelstrength\sproutemail\events\RegisterNotificationEvent;
+use barrelstrength\sproutforms\integrations\sproutemail\events\SaveEntryEvent;
 use barrelstrength\sproutforms\services\App;
 use Craft;
 use craft\base\Plugin;
@@ -120,6 +123,11 @@ class SproutForms extends Plugin
 				$event->permissions['Sprout Forms'] = $this->getUserPermissions();
 			}
 		);
+
+		Event::on(NotificationEmails::class, NotificationEmails::EVENT_REGISTER_EMAIL_EVENTS,
+			function(RegisterNotificationEvent $event) {
+			$event->availableEvents[] = new SaveEntryEvent();
+		});
 	}
 
 	public function getCpNavItem()
@@ -195,7 +203,9 @@ class SproutForms extends Plugin
 			'sprout-forms/reports/view/<reportId>' => 'sprout-base/reports/results-index',
 			'sprout-forms/reports/<dataSourceId>' => 'sprout-base/reports/index',
 
-			'sprout-forms/notifications' => 'sprout-base/notifications/index',
+			'sprout-forms/notifications' => 'sprout-forms/notifications/index',
+			'sprout-forms/settings/notifications/edit/<emailId:\d+|new>' => 'sprout-base/notifications/edit-notification-email-settings-template',
+			'sprout-forms/notifications/edit/<emailId:\d+|new>' => 'sprout-base/notifications/edit-notification-email-template',
 
 			'sprout-forms/settings' => 'sprout-base/settings/edit-settings',
 		  'sprout-forms/settings/<settingsSectionHandle:.*>' => 'sprout-base/settings/edit-settings'
