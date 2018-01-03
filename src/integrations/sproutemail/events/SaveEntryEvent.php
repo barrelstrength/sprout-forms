@@ -1,5 +1,5 @@
 <?php
-namespace barrelstrength\sproutforms\integrations\sproutemail\events;;
+namespace barrelstrength\sproutforms\integrations\sproutemail\events;
 
 use barrelstrength\sproutbase\contracts\sproutemail\BaseEvent;
 use barrelstrength\sproutforms\elements\Entry;

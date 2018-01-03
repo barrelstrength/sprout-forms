@@ -10,7 +10,7 @@ class NotificationsController extends BaseController
 	public function actionIndex()
 	{
 		$notifications = NotificationEmail::find()
-			->where(['eventId' => 'barrelstrength\sproutemail\integrations\sproutemail\events\UsersSave'])
+			->where(['eventId' => 'barrelstrength\sproutforms\integrations\sproutemail\events\SaveEntry'])
 			->all();
 
 		return $this->renderTemplate('sprout-base/sproutemail/notifications/index', [
