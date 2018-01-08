@@ -20,4 +20,4 @@ Craft.SproutForms.EntriesIndex = Craft.BaseElementIndex.extend({
 });
 
 // Register the SproutForms EntriesIndex class
-Craft.registerElementIndexClass('SproutForms_Entry', Craft.SproutForms.EntriesIndex);
+Craft.registerElementIndexClass('barrelstrength\\sproutforms\\elements\\Entry', Craft.SproutForms.EntriesIndex);
