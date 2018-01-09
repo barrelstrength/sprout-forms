@@ -1,4 +1,5 @@
 <?php
+
 namespace barrelstrength\sproutforms\controllers;
 
 use Craft;
@@ -17,68 +18,67 @@ use yii\base\Response;
  */
 class ChartsController extends ElementIndexesController
 {
-	/**
-	 * Returns the data needed to display a Submissions chart.
-	 *
-	 * @return void
-	 */
-	public function actionGetEntriesData(): Response
-	{
-		// Required for Dashboard widget, unnecessary for Entries Index view
-		$formId = Craft::$app->request->getBodyParam('formId');
+    /**
+     * Returns the data needed to display a Submissions chart.
+     *
+     * @return void
+     */
+    public function actionGetEntriesData(): Response
+    {
 
-		$startDateParam = Craft::$app->request->getRequiredBodyParam('startDate');
-		$endDateParam = Craft::$app->request->getRequiredBodyParam('endDate');
+        // Required for Dashboard widget, unnecessary for Entries Index view
+        $formId = Craft::$app->request->getBodyParam('formId');
 
-		$startDate = DateTimeHelper::toDateTime($startDateParam);
-		$endDate = DateTimeHelper::toDateTime($endDateParam);
-		$endDate->modify('+1 day');
+        $startDateParam = Craft::$app->request->getRequiredBodyParam('startDate');
+        $endDateParam = Craft::$app->request->getRequiredBodyParam('endDate');
 
-		$intervalUnit = ChartHelper::getRunChartIntervalUnit($startDate, $endDate);
+        $startDate = DateTimeHelper::toDateTime($startDateParam);
+        $endDate = DateTimeHelper::toDateTime($endDateParam);
+        $endDate->modify('+1 day');
 
-		// Prep the query
-		$query =  $this->getElementQuery();
-		$query->limit = null;
+        $intervalUnit = ChartHelper::getRunChartIntervalUnit($startDate, $endDate);
 
-		// Don't use the search
-		#$query->search = null;
+        // Prep the query
+        $query = $this->getElementQuery();
+        $query->limit = null;
 
-		$query->select(['COUNT(*) as [[value]]']);
+        // Don't use the search
+        #$query->search = null;
 
-		if ($formId != 0)
-		{
-			$query->andWhere('forms.id = :formId',
-				[':formId' => $formId]
-			);
-		}
+        $query->select(['COUNT(*) as [[value]]']);
 
-		// Get the chart data table
-		$dataTable = ChartHelper::getRunChartDataFromQuery($query, $startDate, $endDate,
-			'sproutforms_entries.dateCreated',
-			[
-				'intervalUnit' => $intervalUnit,
-				'valueLabel' => SproutForms::t('Submissions'),
-				'valueType' => 'number',
-			]
-		);
+        if ($formId != 0) {
+            $query->andWhere('forms.id = :formId',
+                [':formId' => $formId]
+            );
+        }
 
-		// Get the total submissions
-		$total = 0;
+        // Get the chart data table
+        $dataTable = ChartHelper::getRunChartDataFromQuery($query, $startDate, $endDate,
+            'sproutforms_entries.dateCreated',
+            [
+                'intervalUnit' => $intervalUnit,
+                'valueLabel' => SproutForms::t('Submissions'),
+                'valueType' => 'number',
+            ]
+        );
 
-		foreach($dataTable['rows'] as $row)
-		{
-			$total = $total + $row[1];
-		}
+        // Get the total submissions
+        $total = 0;
 
-		return $this->asJson([
-			'dataTable' => $dataTable,
-			'total' => $total,
-			'totalHtml' => $total,
+        foreach ($dataTable['rows'] as $row) {
+            $total = $total + $row[1];
+        }
 
-			'formats' => ChartHelper::formats(),
-			'orientation' => Craft::$app->locale->getOrientation(),
-			'scale' => $intervalUnit,
-			'localeDefinition' => [],
-		]);
-	}
+        return $this->asJson([
+            'dataTable' => $dataTable,
+            'total' => $total,
+            'totalHtml' => $total,
+
+            'formats' => ChartHelper::formats(),
+            'orientation' => Craft::$app->locale->getOrientation(),
+            'scale' => $intervalUnit,
+            'localeDefinition' => [],
+        ]);
+    }
 }
