@@ -10,6 +10,7 @@ use craft\base\Plugin;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
+use craft\helpers\UrlHelper;
 use craft\web\UrlManager;
 use craft\services\UserPermissions;
 use yii\base\Event;
@@ -157,6 +158,18 @@ class SproutForms extends Plugin
     protected function createSettingsModel()
     {
         return new Settings();
+    }
+
+    /**
+     * Redirect to Sprout Forms settings
+     *
+     * @return $this|mixed|\yii\web\Response
+     */
+    public function getSettingsResponse()
+    {
+        $url = UrlHelper::cpUrl('sprout-forms/settings');
+
+        return Craft::$app->getResponse()->redirect($url);
     }
 
     /**
