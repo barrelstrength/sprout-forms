@@ -117,7 +117,9 @@
 
     var tabs = {{ fieldLayout.getTabs()|json_encode()|raw }};
 
-    new Craft.SproutForms.FieldLayoutEditor(tabs);
+    var continueEditing = "{{ ('sprout-forms/forms/edit/'~form.id)|hash }}";
+
+    new Craft.SproutForms.FieldLayoutEditor(tabs, continueEditing);
 
   });
 {% endjs %}

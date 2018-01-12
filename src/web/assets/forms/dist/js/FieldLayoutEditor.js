@@ -26,6 +26,8 @@ if (typeof Craft.SproutForms === typeof undefined) {
     modal: null,
     formLayout: null,
     fieldsLayout: null,
+    wheelHtml: null,
+    continueEditing : null,
 
     // The Dragula instance
     drake: null,
@@ -37,9 +39,10 @@ if (typeof Craft.SproutForms === typeof undefined) {
      * The constructor.
      * @param - All the tabs of the form fieldLayout.
      */
-    init: function(currentTabs)
+    init: function(currentTabs, continueEditing)
     {
       var that = this;
+      this.continueEditing = continueEditing;
 
       // Capture the already-initialized Craft.Pane to access later
       // @todo - update this for RC1 (news tabs are not working when added)
@@ -48,6 +51,8 @@ if (typeof Craft.SproutForms === typeof undefined) {
       this.initButtons();
 
       this.initTabSettings();
+
+      this.wheelHtml = ' <span class="settings icon"></span>';
 
       this.modal = Craft.SproutForms.FieldModal.getInstance();
 
@@ -349,8 +354,18 @@ if (typeof Craft.SproutForms === typeof undefined) {
             newName = prompt(Craft.t('app', 'Give your tab a name.'), oldName);
 
         if (newName && newName !== oldName) {
-            $labelSpan.text(newName);
-            $tab.find('.id-input').attr('name', this.getFieldInputName(newName));
+            $labelSpan.html(newName+this.wheelHtml);
+            //$tab.find('.id-input').attr('name', this.getFieldInputName(newName));
+            //add Continue editing and force save form
+            $('#main-form input[name="redirect"]').remove();
+            //@todo stay on same page is not working
+            $( "#main-form" ).append("<input type='hidden' name='redirect' value ="+this.continueEditing+"/>");
+
+            var $fields = $("input[name^='fieldLayout["+oldName+"][]']");
+            $fields.each(function (i, el) {
+                $(el).attr('name', 'fieldLayout['+newName+'][]');
+            });
+            $( "#main-form" ).submit();
         }
     },
 
