@@ -20,7 +20,6 @@ if (typeof Craft.SproutForms === typeof undefined) {
     $groupButton: null,
     $fieldButton: null,
     $settings: null,
-    $pane: null,
 
     fld: null,
     modal: null,
@@ -43,10 +42,6 @@ if (typeof Craft.SproutForms === typeof undefined) {
     {
       var that = this;
       this.continueEditing = continueEditing;
-
-      // Capture the already-initialized Craft.Pane to access later
-      // @todo - update this for RC1 (news tabs are not working when added)
-      this.$pane = $("div#sproutforms-fieldlayout-container.pane").data('pane');
 
       this.initButtons();
 
@@ -274,17 +269,24 @@ if (typeof Craft.SproutForms === typeof undefined) {
           // #delete-tab-"+tab.id
             var tabId = $(el).find('a').attr('id');
 
-            var $editBtn = $(el).find('.settings'),
-                $menu = $('<div class="menu" data-align="center"/>').insertAfter($editBtn),
-                $ul = $('<ul/>').appendTo($menu);
-
-            $('<li><a data-action="rename" data-tab-id="'+tabId+'">' + Craft.t('app', 'Rename') + '</a></li>').appendTo($ul);
-            $('<li><a id ="#delete-'+tabId+'" data-action="delete" data-tab-id="'+tabId+'">' + Craft.t('app', 'Delete') + '</a></li>').appendTo($ul);
-
-            new Garnish.MenuBtn($editBtn, {
-                onOptionSelect: $.proxy(that, 'onTabOptionSelect')
-            });
+            var $editBtn = $(el).find('.settings');
+            that.initializeWheel($editBtn, tabId);
         });
+    },
+
+    initializeWheel: function($editBtn, tabId)
+    {
+      var that = this;
+      var  $menu = $('<div class="menu" data-align="center"/>').insertAfter($editBtn),
+          $ul = $('<ul/>').appendTo($menu);
+
+      $('<li><a data-action="add" data-tab-id="'+tabId+'">' + Craft.t('app', 'Add Tab') + '</a></li>').appendTo($ul);
+      $('<li><a data-action="rename" data-tab-id="'+tabId+'">' + Craft.t('app', 'Rename') + '</a></li>').appendTo($ul);
+      $('<li><a id ="#delete-'+tabId+'" data-action="delete" data-tab-id="'+tabId+'">' + Craft.t('app', 'Delete') + '</a></li>').appendTo($ul);
+
+      new Garnish.MenuBtn($editBtn, {
+          onOptionSelect: $.proxy(that, 'onTabOptionSelect')
+      });
     },
 
     onTabOptionSelect: function(option) {
@@ -293,6 +295,10 @@ if (typeof Craft.SproutForms === typeof undefined) {
             action = $option.data('action');
 
         switch (action) {
+            case 'add': {
+                this.addNewTab();
+                break;
+            }
             case 'rename': {
                 this.renameTab(tabId);
                 break;
@@ -331,9 +337,6 @@ if (typeof Craft.SproutForms === typeof undefined) {
           that.addListener($("#delete-tab-"+tabId), 'activate', 'deleteTab');
         }
       });
-
-      // listener to the new tab button
-      this.addListener($("#sproutforms-fieldlayout-addtab"), 'activate', 'addNewTab');
     },
 
     deleteTab: function(tabId)
@@ -355,7 +358,6 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
         if (newName && newName !== oldName) {
             $labelSpan.html(newName+this.wheelHtml);
-            //$tab.find('.id-input').attr('name', this.getFieldInputName(newName));
             //add Continue editing and force save form
             $('#main-form input[name="redirect"]').remove();
             //@todo stay on same page is not working
@@ -407,9 +409,10 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
             // Insert the new tab before the Add Tab button
             var href = '#sproutforms-tab-'+tab.id;
-            $('<li><a id="tab-'+tab.id+'" class="tab" href="'+href+'" tabindex="0">'+tab.name+'</a></li>').insertBefore("#sproutforms-fieldlayout-addtab");
-
-            var $newDivTab = $('#tab-'+tab.id);
+            $("#sprout-forms-tabs").append('<li><a id="tab-'+tab.id+'" class="tab" href="'+href+'" tabindex="0">'+tab.name+' '+this.wheelHtml+'</a></li>');
+            var $editBtn = $("#tab-"+tab.id).find('.settings');
+            // add listener to the wheel
+            that.initializeWheel($editBtn, 'tab-'+tab.id);
 
             // Create the area to Drag/Drop fields on the new tab
             $("#sproutforms-fieldlayout-container").append($([
@@ -424,14 +427,8 @@ if (typeof Craft.SproutForms === typeof undefined) {
             // Convert our new tab into Dragula vampire :)
             this.drake.containers.push(this.getId('sproutforms-tab-container-'+tab.id));
 
-            that.$pane.tabs[href] = {
-              $tab: $newDivTab,
-              $target: $(href)
-            };
-
-            this.$pane.addListener($newDivTab, 'activate', 'selectTab');
-            // @todo remove this and add new delete listner
-            //this.addListener($("#delete-tab-"+tab.id), 'activate', 'deleteTab');
+            // Reinitialize tabs
+            Craft.cp.initTabs();
           }
           else
           {
