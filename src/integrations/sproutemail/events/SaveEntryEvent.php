@@ -10,9 +10,9 @@ use Craft;
 use yii\base\Event;
 
 /**
- * Class SproutForms_SaveEntryEvent
+ * Class SaveEntryEvent
  *
- * @package Craft
+ * @package barrelstrength\sproutforms\integrations\sproutemail\events
  */
 class SaveEntryEvent extends BaseEvent
 {
@@ -71,6 +71,7 @@ class SaveEntryEvent extends BaseEvent
 	public function validateOptions($options, $entry, array $params = array())
 	{
 		$isNewEntry = isset($params['isNewEntry']) && $params['isNewEntry'];
+
 		$whenNew    = isset($options['sproutForms']['saveEntry']['whenNew']) &&
 			$options['sproutForms']['saveEntry']['whenNew'];
 
