@@ -318,3 +318,8 @@ body.rtl #form-settings-tabs ul li { border-left: 1px solid rgba(0, 0, 20, 0.1);
 #form-settings-tabs ul li a:not(.sel):hover { color: #0d78f2; }
 #form-settings-tabs ul li a.sel { color: #29323d; background: #fff; padding-bottom: 10px; cursor: default; }
 
+/* Wheel tab
+#icon-wheel {
+    //display: none;
+}
+*/

@@ -95,6 +95,36 @@ class FieldsController extends BaseController
         ]);
     }
 
+	/**
+	 * This action allows rename a current Tab
+	 *
+	 */
+	public function actionRenameTab()
+	{
+		$this->requireAcceptsJson();
+
+		$request = Craft::$app->getRequest();
+		$name = $request->getBodyParam('name');
+		$oldName = $request->getBodyParam('oldName');
+		$formId = $request->getBodyParam('formId');
+		$form = SproutForms::$app->forms->getFormById($formId);
+
+		if ($name && $form) {
+			$result = SproutForms::$app->fields->renameTab($name, $oldName, $form);
+
+			if ($result) {
+				return $this->asJson([
+					'success' => true
+				]);
+			}
+		}
+		// @todo - how add error messages?
+		return $this->asJson([
+			'success' => false,
+			'errors' => SproutForms::t('Unable to rename tab')
+		]);
+	}
+
     /**
      * Save a field.
      */

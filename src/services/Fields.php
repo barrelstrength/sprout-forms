@@ -528,6 +528,33 @@ class Fields extends Component
     }
 
     /**
+     * Renames tab of form layout
+     * @param string $name
+     * @param string $oldName
+     * @param FormElement $form
+     * @return boolean
+    */
+		public function renameTab($name, $oldName, FormElement $form)
+		{
+			$fieldLayout = $form->getFieldLayout();
+			$tabs = $fieldLayout->getTabs();
+			$response = false;
+
+			foreach ($tabs as $tab) {
+				if ($tab->name == $oldName) {
+					$tabRecord = FieldLayoutTabRecord::findOne($tab->id);
+
+					if ($tabRecord){
+						$tabRecord->name = $name;
+						$response = $tabRecord->save(false);
+					}
+				}
+			}
+
+			return $response;
+		}
+
+    /**
      * Prepends a key/value pair to an array
      *
      * @see array_unshift()

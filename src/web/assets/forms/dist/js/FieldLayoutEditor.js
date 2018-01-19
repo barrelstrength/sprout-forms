@@ -47,7 +47,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
       this.initTabSettings();
 
-      this.wheelHtml = ' <span class="settings icon"></span>';
+      this.wheelHtml = ' <span class="settings icon icon-wheel"></span>';
 
       this.modal = Craft.SproutForms.FieldModal.getInstance();
 
@@ -76,7 +76,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
         invalid: function (el, handle) {
             // do not move any item with donotdrag class.
             return el.classList.contains('donotdrag');
-        },
+        }
       })
       .on('drag', function (el) {
         $(el).addClass('drag-tab-active');
@@ -105,6 +105,11 @@ if (typeof Craft.SproutForms === typeof undefined) {
         }
       });
 
+      // Show the wheel on hover
+      /*$('#sprout-forms-tabs').find('a').hover( function() {
+          $(this).find('#icon-wheel').toggle();
+      } );
+      */
       // DRAGULA
       this.fieldsLayout = this.getId('right-copy');
 
@@ -352,22 +357,56 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
     renameTab: function(tabId)
     {
-        var $labelSpan = $('#'+tabId),
+        var $labelSpan = $('#'+tabId+' .tab-label'),
             oldName = $labelSpan.text().trim(),
             newName = prompt(Craft.t('app', 'Give your tab a name.'), oldName);
+        var response = true;
+        var $tabs    = $(".drag-tab");
+        var formId   = $("#formId").val();
+        var that     = this;
 
         if (newName && newName !== oldName) {
-            $labelSpan.html(newName+this.wheelHtml);
-            //add Continue editing and force save form
-            $('#main-form input[name="redirect"]').remove();
-            //@todo stay on same page is not working
-            $( "#main-form" ).append("<input type='hidden' name='redirect' value ="+this.continueEditing+"/>");
+            // validate with current names and set the sortOrder
+            $tabs.each(function(i, el) {
+                var tabname = $(el).find('.tab-label').text();
 
-            var $fields = $("input[name^='fieldLayout["+oldName+"][]']");
-            $fields.each(function (i, el) {
-                $(el).attr('name', 'fieldLayout['+newName+'][]');
+                if (tabname == newName) {
+                    response = false;
+                    return false;
+                }
             });
-            $( "#main-form" ).submit();
+
+            if (response && newName && formId) {
+                var data = {
+                    name: newName,
+                    oldName: oldName,
+                    formId: formId
+                };
+
+                Craft.postActionRequest('sprout-forms/fields/rename-tab', data, $.proxy(function(response, textStatus) {
+                    if (response.success) {
+                        Craft.cp.displayNotice(Craft.t('sprout-forms', 'Tab renamed'));
+
+                        // Rename all the field names
+                        var $fields = $("[name^='fieldLayout["+oldName+"]']");
+
+                        $fields.each(function(i, el) {
+                            var fieldName = $(el).attr('name');
+                            var newFieldName = fieldName.replace(oldName, newName);
+                            $(el).attr('name', newFieldName);
+                            $labelSpan.text(newName);
+                        });
+                        $("#sproutforms-"+tabId).attr('data-tabname', newName);
+                    }
+                    else {
+                        Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to rename tab'));
+                    }
+                }, this));
+
+            }
+            else {
+                Craft.cp.displayError(Craft.t('sprout-forms', 'Invalid tab name'));
+            }
         }
     },
 
@@ -375,18 +414,22 @@ if (typeof Craft.SproutForms === typeof undefined) {
     {
       var newName  = this.promptForGroupName('');
       var response = true;
-      var $tabs    = $("[id^='sproutforms-tab-']");
+      var $tabs    = $(".drag-tab");
       var formId   = $("#formId").val();
       var that     = this;
-
       // validate with current names and set the sortOrder
       $tabs.each(function (i, el) {
-        var tabname = $(el).data('tabname');
+        var tabname = $(el).find('.tab-label').text();
 
-        if(tabname == newName)
+        if (tabname)
         {
-          response = false;
-          return false;
+          console.log(tabname);
+
+          if(tabname == newName)
+          {
+              response = false;
+              return false;
+          }
         }
       });
 
@@ -409,7 +452,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
             // Insert the new tab before the Add Tab button
             var href = '#sproutforms-tab-'+tab.id;
-            $("#sprout-forms-tabs").append('<li><a id="tab-'+tab.id+'" class="tab" href="'+href+'" tabindex="0">'+tab.name+' '+this.wheelHtml+'</a></li>');
+            $("#sprout-forms-tabs").append('<li><a id="tab-'+tab.id+'" class="tab" href="'+href+'" tabindex="0"><span class="tab-label">'+tab.name+'</span>&nbsp;'+this.wheelHtml+'</a></li>');
             var $editBtn = $("#tab-"+tab.id).find('.settings');
             // add listener to the wheel
             that.initializeWheel($editBtn, 'tab-'+tab.id);
