@@ -417,8 +417,6 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
         if (tabname)
         {
-          console.log(tabname);
-
           if(tabname == newName)
           {
               response = false;
