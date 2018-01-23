@@ -20,24 +20,6 @@ use barrelstrength\sproutbase\SproutBaseHelper;
 use barrelstrength\sproutforms\models\Settings;
 use barrelstrength\sproutforms\web\twig\variables\SproutFormsVariable;
 use barrelstrength\sproutforms\events\RegisterFieldsEvent;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\PlainText;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Number;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Dropdown;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\RadioButtons;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Checkboxes;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\MultiSelect;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Assets;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Categories;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Entries;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Tags;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Email;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\EmailSelect;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Hidden;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Invisible;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Link;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Notes;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Phone;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\RegularExpression;
 use barrelstrength\sproutforms\services\Fields;
 use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesDataSource;
 
@@ -75,28 +57,13 @@ class SproutForms extends Plugin
         );
 
         Event::on(Fields::class, Fields::EVENT_REGISTER_FIELDS, function(RegisterFieldsEvent $event) {
-            $event->fields[] = new PlainText();
-            $event->fields[] = new Number();
-            $event->fields[] = new Dropdown();
-            $event->fields[] = new Checkboxes();
-            $event->fields[] = new RadioButtons();
-            $event->fields[] = new MultiSelect();
-            $event->fields[] = new Assets();
-            $event->fields[] = new Categories();
-            $event->fields[] = new Entries();
-            $event->fields[] = new Tags();
-            $event->fields[] = new Email();
-            $event->fields[] = new EmailSelect();
-            $event->fields[] = new Hidden();
-            $event->fields[] = new Invisible();
-            $event->fields[] = new Link();
-            $event->fields[] = new Phone();
-            $event->fields[] = new RegularExpression();
+            $fieldsByGroup = SproutForms::$app->fields->getRegisteredFieldsByGroup();
 
-            $redactor = Craft::$app->plugins->getPlugin('redactor');
-            if ($redactor) {
-                $event->fields[] = new Notes();
-            }
+	          foreach ($fieldsByGroup as $group) {
+		          foreach ($group as $field) {
+			          $event->fields[] = new $field;
+		          }
+	          }
         }
         );
 

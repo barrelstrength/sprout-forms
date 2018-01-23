@@ -31,14 +31,23 @@
 <div class="editform-sidebar-body">
 
 	{% set fieldTypes = craft.sproutforms.getRegisteredFields() %}
+    {% set fieldTypesByGroup = craft.sproutforms.getRegisteredFieldsByGroup() %}
+	{% set customFields =  craft.sproutforms.getCustomFields(fieldTypes, fieldTypesByGroup) %}
 	<div id="sproutforms-source-fields" class="meta">
 		<div class='parent'>
-			<h2 class="left">{{ "Standard Fields"|t('sprout-forms') }}</h2>
 			<div class="clear"></div>
 			<div id='right-copy'>
-				{% for type, field in fieldTypes %}
-					{{ sproutForms.field(field, 'source') }}
+				{% for name,group in fieldTypesByGroup %}
+					<h2 class="tab-title donotdrag">{{ name }}</h2>
+                	{% for type in group %}
+						{% set field = fieldTypes[type] %}
+						{{ sproutForms.field(field, 'source') }}
+                    {% endfor %}
 				{% endfor %}
+
+				{% if customFields %}
+					<h2 class="tab-title donotdrag">{{ 'Custom Fields'|t('sprout-forms') }}</h2>
+				{% endif  %}
 			</div>
 		</div>
 	</div><!-- fields div -->

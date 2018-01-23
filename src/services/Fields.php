@@ -2,6 +2,22 @@
 
 namespace barrelstrength\sproutforms\services;
 
+use barrelstrength\sproutforms\integrations\sproutforms\fields\Assets;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\Categories;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\Checkboxes;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\Dropdown;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\Email;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\EmailSelect;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\Hidden;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\Invisible;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\MultiSelect;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\Number;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\Phone;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\RadioButtons;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\RegularExpression;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\Notes;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\Entries;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\Tags;
 use Craft;
 use yii\base\Component;
 use craft\base\Field;
@@ -9,7 +25,6 @@ use craft\records\Field as FieldRecord;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\PlainText;
 use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
 use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
-use craft\helpers\FileHelper;
 
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Form as FormElement;
@@ -155,6 +170,40 @@ class Fields extends Component
 
         return $this->registeredFields;
     }
+
+	/**
+	 * @return array
+	 */
+	public function getRegisteredFieldsByGroup()
+	{
+		$standarLabel = SproutForms::t("Standar Fields");
+		$advancedLabel = SproutForms::t("Advanced Fields");
+		// standard
+		$gruoupedFields[$standarLabel][] = PlainText::className();
+		$gruoupedFields[$standarLabel][] = Number::className();
+		$gruoupedFields[$standarLabel][] = Dropdown::className();
+		$gruoupedFields[$standarLabel][] = Checkboxes::className();
+		$gruoupedFields[$standarLabel][] = RadioButtons::className();
+		$gruoupedFields[$standarLabel][] = MultiSelect::className();
+		$gruoupedFields[$standarLabel][] = Assets::className();
+		// advanced
+		$gruoupedFields[$advancedLabel][] = Categories::className();
+		$gruoupedFields[$advancedLabel][] = Entries::className();
+		$gruoupedFields[$advancedLabel][] = Tags::className();
+		$gruoupedFields[$advancedLabel][] = Email::className();
+		$gruoupedFields[$advancedLabel][] = EmailSelect::className();
+		$gruoupedFields[$advancedLabel][] = Hidden::className();
+		$gruoupedFields[$advancedLabel][] = Invisible::className();
+		$gruoupedFields[$advancedLabel][] = Phone::className();
+		$gruoupedFields[$advancedLabel][] = RegularExpression::className();
+
+		$redactor = Craft::$app->plugins->getPlugin('redactor');
+		if ($redactor) {
+			$gruoupedFields[$advancedLabel][] = Notes::className();
+		}
+
+		return $gruoupedFields;
+	}
 
     /**
      * @param $type
