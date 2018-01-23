@@ -233,9 +233,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
         // Add the Settings buttons
         $(el).prepend($([
           '<ul class="settings">',
-          '<li><a id="sproutform-required-',defaultField.id,'" data-fieldid="',defaultField.id,'" href="#" tabindex="0" ><i class="fa fa-asterisk fa-2x" title="',Craft.t('sprout-forms', 'Make required'),'"></i></a></li>',
           '<li><a id="sproutform-field-',defaultField.id,'" data-fieldid="',defaultField.id,'" href="#" tabindex="0" ><i class="fa fa-pencil fa-2x" title="',Craft.t('sprout-forms', 'Edit'),'"></i></a></li>',
-          '<li><a id="sproutform-remove-',defaultField.id,'" data-fieldid="',defaultField.id,'" href="#"><i class="fa fa-trash fa-2x" title="',Craft.t('sprout-forms', 'Remove'),'"></i></a></li>',
           '</ul>'
         ].join('')));
 
@@ -245,9 +243,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
           ].join('')
         ));
 
-        this.addListener($("#sproutform-required-"+defaultField.id), 'activate', 'toggleRequiredField');
         this.addListener($("#sproutform-field-"+defaultField.id), 'activate', 'editField');
-        this.addListener($("#sproutform-remove-"+defaultField.id), 'activate', 'removeField');
       }
       else
       {
@@ -327,9 +323,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
         if(fieldId)
         {
-          that.addListener($("#sproutform-required-"+fieldId), 'activate', 'toggleRequiredField');
           that.addListener($("#sproutform-field-"+fieldId), 'activate', 'editField');
-          that.addListener($("#sproutform-remove-"+fieldId), 'activate', 'removeField');
         }
       });
 
@@ -517,53 +511,6 @@ if (typeof Craft.SproutForms === typeof undefined) {
       this.base($(option));
 
       this.modal.editField(fieldId);
-    },
-
-    removeField: function(option)
-    {
-      var option = option.currentTarget;
-
-      var fieldId = $(option).data('fieldid');
-
-      // Remove the div of the field
-      $("#sproutfield-"+fieldId).fadeOut(120, function() {
-        $(this).css({"visibility":"hidden",display:'block'}).slideUp(300, function() {
-          $(this).remove();
-        });
-      });
-
-      // Added behavior, store an array of deleted field IDs
-      // that will be processed by the sprout-Forms/forms/saveForm method
-      $deletedFieldsContainer = $('#deletedFieldsContainer');
-      $($deletedFieldsContainer).append('<input type="hidden" name="deletedFields[]" value="' + fieldId + '">');
-    },
-
-    toggleRequiredField: function(option)
-    {
-      var option      = option.currentTarget;
-      var fieldId     = $(option).data('fieldid');
-      var $divField   = $("#sproutfield-"+fieldId);
-      var $toggleLink = $("#sproutform-required-"+fieldId);
-
-      if ($divField.find('.sproutforms-required-input').val())
-      {
-        $divField.find('h2').removeClass('required');
-        $divField.find('.sproutforms-required-input').remove();
-
-        setTimeout(function() {
-          $toggleLink.html('<i class="fa fa-asterisk fa-2x" title="'+Craft.t('sprout-forms', 'Make required')+'"></i>');
-        }, 500);
-      }
-      else
-      {
-        $divField.find('h2').addClass('required');
-
-        $($divField).append('<input type="hidden" name="requiredFields[]" value="' + fieldId + '" class="sproutforms-required-input">');
-
-        setTimeout(function() {
-          $toggleLink.html('<i class="fa fa-asterisk fa-2x" title="'+Craft.t('sprout-forms', 'Make not required')+'"></i>');
-        }, 500);
-      }
     },
 
     /**

@@ -49,17 +49,7 @@ tab      = tab or null
     {# This is built dynamically in js when creating new field from source #}
     {% if instance == 'active' %}
       <ul class="settings">
-        <li>
-          <a id="sproutform-required-{{ field.id }}" data-fieldid="{{ field.id }}" href="#">
-            {% if field.required %}
-                <i class="fa fa-asterisk fa-2x" title="{{ 'Make not required'|t }}"></i>
-            {% else %}
-                <i class="fa fa-asterisk fa-2x" title="{{ 'Make required'|t }}"></i>
-            {% endif %}
-          </a>
-        </li>
         <li><a id="sproutform-field-{{ field.id }}" data-fieldid="{{ field.id }}" href="#" tabindex="0" ><i class="fa fa-pencil fa-2x" title="Edit"></i></a></li>
-        <li><a id="sproutform-remove-{{ field.id }}" data-fieldid="{{ field.id }}" href="#"><i class="fa fa-trash fa-2x" title="Remove"></i></a></li>
       </ul>
     {% endif %}
 
