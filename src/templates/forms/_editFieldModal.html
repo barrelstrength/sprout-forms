@@ -12,8 +12,8 @@
 
 <input type="hidden" name="formId" value="{{ formId }}">
 
-{% if fieldId is defined %}
-	<input type="hidden" name="fieldId" value="{{ fieldId }}">
+{% if field.id %}
+	<input type="hidden" name="fieldId" value="{{ field.id }}">
 {% endif %}
 
 {{ forms.lightswitchField({

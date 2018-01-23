@@ -521,8 +521,15 @@ if (typeof Craft.SproutForms === typeof undefined) {
     resetField: function(field, group)
     {
       var el = $("#sproutfield-"+field.id);
-      // Lets update the the name and icon
+      // Lets update the the name and icon - (new) update if required
       $(el).find('.body').html(field.htmlExample);
+      if (field.required)
+      {
+        $(el).find('.active-field-header h2').addClass('required');
+      }
+      else{
+          $(el).find('.active-field-header h2').removeClass('required');
+      }
       $(el).find('.active-field-header h2').html(field.name);
       $(el).find('.active-field-header p').html(field.instructions);
       // Check if we need move the field to another tab

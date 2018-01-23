@@ -142,11 +142,12 @@ class FieldsController extends BaseController
         $formId = $request->getRequiredBodyParam('formId');
         $form = SproutForms::$app->forms->getFormById($formId);
 
-        $type = $request->getRequiredBodyParam('type');
+        $type    = $request->getRequiredBodyParam('type');
+	      $fieldId = $request->getBodyParam('fieldId');
 
         $field = $fieldsService->createField([
             'type' => $type,
-            'id' => $request->getBodyParam('fieldId'),
+            'id' => $fieldId,
             'name' => $request->getBodyParam('name'),
             'handle' => $request->getBodyParam('handle'),
             'instructions' => $request->getBodyParam('instructions'),
@@ -154,6 +155,22 @@ class FieldsController extends BaseController
             'translationMethod' => Field::TRANSLATION_METHOD_NONE,
             'settings' => $request->getBodyParam('types.'.$type),
         ]);
+
+	      // required field validation
+	      $fieldLayout = $form->getFieldLayout();
+	      $fieldLayoutField = FieldLayoutFieldRecord::findOne([
+	      		'layoutId' => $fieldLayout->id,
+			      'tabId' => $tabId,
+			      'fieldId' => $fieldId
+		      ]
+	      );
+
+	      if ($fieldLayoutField)
+	      {
+		      $fieldLayoutField->required = $request->getBodyParam('required');
+		      $fieldLayoutField->save(false);
+		      $field->required = $fieldLayoutField->required;
+	      }
 
         // Set our field context
         Craft::$app->content->fieldContext = $form->getFieldContext();
@@ -241,6 +258,8 @@ class FieldsController extends BaseController
                 'layoutId' => $form->fieldLayoutId
             ]);
 
+            $field->required = $fieldLayoutField->required;
+
             $group = FieldLayoutTabRecord::findOne($fieldLayoutField->tabId);
 
             return $this->asJson([
@@ -251,6 +270,7 @@ class FieldsController extends BaseController
                     'name' => $field->name,
                     'handle' => $field->handle,
                     'instructions' => $field->instructions,
+                    'required' => $field->required,
                     //'translatable' => $field->translatable,
                     'group' => [
                         'name' => $group->name,
@@ -299,6 +319,7 @@ class FieldsController extends BaseController
                 'handle' => $field->handle,
                 'icon' => $field->getIcon(),
                 'htmlExample' => $field->getExampleInputHtml(),
+                'required' => $field->required,
                 'instructions' => $field->instructions,
                 'group' => [
                     'name' => $tabName,
