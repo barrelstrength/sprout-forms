@@ -503,6 +503,22 @@ class SproutFormsVariable
         return SproutForms::$app->fields->getRegisteredFields();
     }
 
+		public function getRegisteredFieldsByGroup()
+		{
+			return SproutForms::$app->fields->getRegisteredFieldsByGroup();
+		}
+
+	public function getCustomFields($registeredFields, $sproutFormsFields)
+	{
+		foreach ($sproutFormsFields as $group) {
+			foreach ($group as $field) {
+				unset($registeredFields[$field]);
+			}
+		}
+
+		return $registeredFields;
+	}
+
     public function getFieldClassName($field)
     {
         return get_class($field);

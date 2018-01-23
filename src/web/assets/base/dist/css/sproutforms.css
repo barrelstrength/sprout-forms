@@ -424,6 +424,11 @@ body.rtl #form-settings-tabs ul li {
     cursor: default;
 }
 
+.tab-title{
+    width: 100%;
+    text-align: left;
+}
+
 /* Wheel tab
 #icon-wheel {
     //display: none;

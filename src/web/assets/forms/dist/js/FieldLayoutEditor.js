@@ -121,6 +121,10 @@ if (typeof Craft.SproutForms === typeof undefined) {
         accepts: function (el, target) {
           return target !== that.fieldsLayout
         },
+        invalid: function (el, handle) {
+            // do not move any item with donotdrag class.
+            return el.classList.contains('donotdrag');
+        }
       })
       .on('drag', function (el) {
         $(el).addClass('drag-active');
