@@ -1,7 +1,7 @@
 {% import "_includes/forms" as forms %}
 
 {% if field is not defined and fieldId is defined %}
-    {% set field = craft.fields.getFieldById(fieldId) %}
+    {% set field = craft.app.fields.getFieldById(fieldId) %}
     {% if not field %}
         {% exit 404 %}
     {% endif %}
