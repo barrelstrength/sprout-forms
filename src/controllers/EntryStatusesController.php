@@ -22,7 +22,7 @@ class EntryStatusesController extends BaseController
                 $entryStatus = SproutForms::$app->entries->getEntryStatusById($entryStatusId);
 
                 if (!$entryStatus->id) {
-                    throw new NotFoundHttpException(SproutForms::t('Entry Status not found'));
+                    throw new NotFoundHttpException(Craft::t('sprout-forms','Entry Status not found'));
                 }
             } else {
                 $entryStatus = new EntryStatus();
@@ -53,7 +53,7 @@ class EntryStatusesController extends BaseController
         $entryStatus->isDefault = Craft::$app->request->getBodyParam('isDefault');
 
         if (!SproutForms::$app->entries->saveEntryStatus($entryStatus)) {
-            Craft::$app->session->setError(SproutForms::t('Could not save Entry Status.'));
+            Craft::$app->session->setError(Craft::t('sprout-forms','Could not save Entry Status.'));
 
             Craft::$app->getUrlManager()->setRouteParams([
                 'entryStatus' => $entryStatus
@@ -62,7 +62,7 @@ class EntryStatusesController extends BaseController
             return null;
         }
 
-        Craft::$app->session->setNotice(SproutForms::t('Entry Status saved.'));
+        Craft::$app->session->setNotice(Craft::t('sprout-forms','Entry Status saved.'));
 
         return $this->redirectToPostedUrl();
     }
@@ -81,7 +81,7 @@ class EntryStatusesController extends BaseController
             return $this->asJson(['success' => $success]);
         }
 
-        return $this->asJson(['error' => SproutForms::t("Couldn't reorder Order Statuses.")]);
+        return $this->asJson(['error' => Craft::t('sprout-forms',"Couldn't reorder Order Statuses.")]);
     }
 
     /**

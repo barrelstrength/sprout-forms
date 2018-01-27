@@ -38,7 +38,7 @@ class Link extends SproutFormsBaseField implements PreviewableFieldInterface
 
     public static function displayName(): string
     {
-        return SproutForms::t('Link');
+        return Craft::t('sprout-forms','Link');
     }
 
     /**

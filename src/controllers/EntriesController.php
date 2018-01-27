@@ -45,7 +45,7 @@ class EntriesController extends BaseController
         $this->form = SproutForms::$app->forms->getFormByHandle($formHandle);
 
         if (!isset($this->form)) {
-            throw new Exception(SproutForms::t('No form exists with the handle '.$formHandle));
+            throw new Exception(Craft::t('sprout-forms','No form exists with the handle '.$formHandle));
         }
 
         $entry = $this->_getEntryModel();
@@ -86,7 +86,7 @@ class EntriesController extends BaseController
 
                 return $this->asJson($return);
             } else {
-                Craft::$app->getSession()->setNotice(SproutForms::t('Entry saved.'));
+                Craft::$app->getSession()->setNotice(Craft::t('sprout-forms','Entry saved.'));
 
                 return $this->redirectToPostedUrl($entry);
             }
@@ -114,7 +114,7 @@ class EntriesController extends BaseController
             }
 
             if (!$entry) {
-                throw new NotFoundHttpException(SproutForms::t('Entry not found'));
+                throw new NotFoundHttpException(Craft::t('sprout-forms','Entry not found'));
             }
 
             Craft::$app->getContent()->populateElementContent($entry);
@@ -171,7 +171,7 @@ class EntriesController extends BaseController
         } else {
             if ($request->getIsCpRequest()) {
                 // make errors available to variable
-                Craft::$app->getSession()->setError(SproutForms::t('Couldn’t save entry.'));
+                Craft::$app->getSession()->setError(Craft::t('sprout-forms','Couldn’t save entry.'));
 
                 // Store this Entry Model in a variable in our Service layer
                 // so that we can access the error object from our actionEditEntryTemplate() method
@@ -187,7 +187,7 @@ class EntriesController extends BaseController
                 if (SproutForms::$app->entries->fakeIt) {
                     return $this->redirectToPostedUrl($entry);
                 } else {
-                    Craft::$app->getSession()->setError(SproutForms::t('Couldn’t save entry.'));
+                    Craft::$app->getSession()->setError(Craft::t('sprout-forms','Couldn’t save entry.'));
                     // Store this Entry Model in a variable in our Service layer
                     // so that we can access the error object from our displayForm() variable
                     SproutForms::$app->forms->activeEntries[$this->form->handle] = $entry;
@@ -255,7 +255,7 @@ class EntriesController extends BaseController
             $entry = SproutForms::$app->entries->getEntryById($entryId);
 
             if (!$entry) {
-                throw new Exception(SproutForms::t('No entry exists with the ID '.$entryId));
+                throw new Exception(Craft::t('sprout-forms','No entry exists with the ID '.$entryId));
             }
         } else {
             $entry = new EntryElement();

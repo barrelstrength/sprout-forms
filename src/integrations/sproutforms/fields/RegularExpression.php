@@ -32,7 +32,7 @@ class RegularExpression extends SproutFormsBaseField implements PreviewableField
 
     public static function displayName(): string
     {
-        return SproutForms::t('Regex');
+        return Craft::t('sprout-forms','Regex');
     }
 
     /**

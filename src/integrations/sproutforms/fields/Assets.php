@@ -32,7 +32,7 @@ class Assets extends SproutBaseRelationField
      */
     public static function displayName(): string
     {
-        return SproutForms::t('Assets');
+        return Craft::t('sprout-forms','Assets');
     }
 
     /**
@@ -48,7 +48,7 @@ class Assets extends SproutBaseRelationField
      */
     public static function defaultSelectionLabel(): string
     {
-        return SproutForms::t('Add an asset');
+        return Craft::t('sprout-forms','Add an asset');
     }
 
     // Properties

@@ -50,7 +50,7 @@ class Delete extends ElementAction
      */
     public function getConfirmationMessage()
     {
-        return SproutForms::t('Are you sure you want to delete the selected forms?');
+        return Craft::t('sprout-forms','Are you sure you want to delete the selected forms?');
     }
 
     /**
@@ -64,9 +64,9 @@ class Delete extends ElementAction
         $response = SproutForms::$app->forms->deleteForms($query->All());
 
         if ($response) {
-            $message = SproutForms::t('Forms Deleted.');
+            $message = Craft::t('sprout-forms','Forms Deleted.');
         } else {
-            $message = SproutForms::t('Failed to delete forms.');
+            $message = Craft::t('sprout-forms','Failed to delete forms.');
         }
 
         $this->setMessage($message);

@@ -41,7 +41,7 @@ class Email extends SproutFormsBaseField implements PreviewableFieldInterface
 
     public static function displayName(): string
     {
-        return SproutForms::t('Email');
+        return Craft::t('sprout-forms','Email');
     }
 
     /**
@@ -184,7 +184,7 @@ class Email extends SproutFormsBaseField implements PreviewableFieldInterface
 
         if ($uniqueEmail && !SproutBase::$app->email->validateUniqueEmailAddress($value, $element, $this)) {
             $element->addError($this->handle,
-                SproutForms::t($this->name.' must be a unique email.')
+                Craft::t('sprout-forms',$this->name.' must be a unique email.')
             );
         }
     }

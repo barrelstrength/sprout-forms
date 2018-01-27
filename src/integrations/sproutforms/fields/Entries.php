@@ -20,7 +20,7 @@ class Entries extends SproutBaseRelationField
      */
     public static function displayName(): string
     {
-        return SproutForms::t('Entries');
+        return Craft::t('sprout-forms','Entries');
     }
 
     /**
@@ -36,7 +36,7 @@ class Entries extends SproutBaseRelationField
      */
     public static function defaultSelectionLabel(): string
     {
-        return SproutForms::t('Add an Entry');
+        return Craft::t('sprout-forms','Add an Entry');
     }
 
     // Properties

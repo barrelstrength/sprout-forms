@@ -19,7 +19,7 @@ class EntriesDataSource extends BaseDataSource
 {
     public function getName()
     {
-        return SproutForms::t('Sprout Forms Entries');
+        return Craft::t('sprout-forms','Sprout Forms Entries');
     }
 
     /**
@@ -35,7 +35,7 @@ class EntriesDataSource extends BaseDataSource
      */
     public function getDescription()
     {
-        return SproutForms::t('Query form entries');
+        return Craft::t('sprout-forms','Query form entries');
     }
 
     public function getResults(Report &$report, $options = [])

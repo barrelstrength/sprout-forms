@@ -24,7 +24,7 @@ class Dropdown extends SproutBaseOptionsField
      */
     public static function displayName(): string
     {
-        return SproutForms::t('Dropdown');
+        return Craft::t('sprout-forms','Dropdown');
     }
 
     /**
@@ -96,7 +96,7 @@ class Dropdown extends SproutBaseOptionsField
      */
     protected function optionsSettingLabel(): string
     {
-        return SproutForms::t('Dropdown Options');
+        return Craft::t('sprout-forms','Dropdown Options');
     }
 
     /**

@@ -61,7 +61,7 @@ class EntryStatus extends Model
      */
     function __toString()
     {
-        return SproutForms::t($this->name);
+        return Craft::t('sprout-forms',$this->name);
     }
 
     /**

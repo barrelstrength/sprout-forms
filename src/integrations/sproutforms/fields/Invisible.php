@@ -31,7 +31,7 @@ class Invisible extends SproutFormsBaseField implements PreviewableFieldInterfac
 
     public static function displayName(): string
     {
-        return SproutForms::t('Invisible');
+        return Craft::t('sprout-forms','Invisible');
     }
 
     /**

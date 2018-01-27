@@ -58,7 +58,7 @@ class ChartsController extends ElementIndexesController
             'sproutforms_entries.dateCreated',
             [
                 'intervalUnit' => $intervalUnit,
-                'valueLabel' => SproutForms::t('Submissions'),
+                'valueLabel' => Craft::t('sprout-forms','Submissions'),
                 'valueType' => 'number',
             ]
         );

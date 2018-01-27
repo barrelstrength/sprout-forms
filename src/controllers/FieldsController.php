@@ -121,7 +121,7 @@ class FieldsController extends BaseController
 		// @todo - how add error messages?
 		return $this->asJson([
 			'success' => false,
-			'errors' => SproutForms::t('Unable to rename tab')
+			'errors' => Craft::t('sprout-forms','Unable to rename tab')
 		]);
 	}
 
@@ -232,7 +232,7 @@ class FieldsController extends BaseController
             $variables['tabId'] = $tabId;
             $variables['field'] = $field;
             SproutForms::error("Couldn't save field.");
-            Craft::$app->getSession()->setError(SproutForms::t('Couldn’t save field.'));
+            Craft::$app->getSession()->setError(Craft::t('sprout-forms','Couldn’t save field.'));
 
             return $this->_returnJson(false, $field, $form);
         }
@@ -279,7 +279,7 @@ class FieldsController extends BaseController
                 'template' => SproutForms::$app->fields->getModalFieldTemplate($form, $field, $group->id),
             ]);
         } else {
-            $message = SproutForms::t("The field requested to edit no longer exists.");
+            $message = Craft::t('sprout-forms',"The field requested to edit no longer exists.");
             SproutForms::error($message);
 
             return $this->asJson([

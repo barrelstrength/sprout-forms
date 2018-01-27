@@ -30,7 +30,7 @@ class ExamplesController extends BaseController
         $this->_installExampleTemplates();
         $this->_installExampleData();
 
-        Craft::$app->session->setNotice(SproutForms::t('Examples successfully installed.'));
+        Craft::$app->session->setNotice(Craft::t('sprout-forms','Examples successfully installed.'));
         $this->redirect(UrlHelper::cpUrl('sprout-forms'));
     }
 
@@ -51,7 +51,7 @@ class ExamplesController extends BaseController
         } catch (\Exception $e) {
             SproutForms::log($e->getMessage());
 
-            Craft::$app->session->setError(SproutForms::t('Unable to install the examples.'));
+            Craft::$app->session->setError(Craft::t('sprout-forms','Unable to install the examples.'));
 
             return $this->redirect('sprout-forms/settings/examples');
         }
@@ -332,7 +332,7 @@ class ExamplesController extends BaseController
         } catch (\Exception $e) {
             SproutForms::error($e->getMessage());
 
-            Craft::$app->session->setError(SproutForms::t('Unable to install the examples.'));
+            Craft::$app->session->setError(Craft::t('sprout-forms','Unable to install the examples.'));
 
             return $this->redirect('sproutforms/settings/examples');
         }

@@ -64,7 +64,7 @@ class Forms extends Component
             $formRecord = FormRecord::findOne($form->id);
 
             if (!$formRecord) {
-                throw new Exception(SproutForms::t('No form exists with the ID “{id}”', ['id' => $form->id]));
+                throw new Exception(Craft::t('sprout-forms','No form exists with the ID “{id}”', ['id' => $form->id]));
             }
 
             $oldForm = $formRecord;

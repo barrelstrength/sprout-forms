@@ -69,7 +69,7 @@ class FormsController extends BaseController
         $fieldLayout->type = Form::class;
 
         if (count($fieldLayout->getFields()) == 0) {
-            Craft::$app->getSession()->setError(SproutForms::t('The form needs at least have one field'));
+            Craft::$app->getSession()->setError(Craft::t('sprout-forms','The form needs at least have one field'));
 
             $form = SproutForms::$app->forms->getFormById($form->id);
 
@@ -114,7 +114,7 @@ class FormsController extends BaseController
 
         // Save it
         if (!SproutForms::$app->forms->saveForm($form)) {
-            Craft::$app->getSession()->setError(SproutForms::t('Couldn’t save form.'));
+            Craft::$app->getSession()->setError(Craft::t('sprout-forms','Couldn’t save form.'));
 
             $notificationFields = [
                 'notificationRecipients',
@@ -141,7 +141,7 @@ class FormsController extends BaseController
             return null;
         }
 
-        Craft::$app->getSession()->setNotice(SproutForms::t('Form saved.'));
+        Craft::$app->getSession()->setNotice(Craft::t('sprout-forms','Form saved.'));
 
         #$_POST['redirect'] = str_replace('{id}', $form->id, $_POST['redirect']);
 
@@ -183,7 +183,7 @@ class FormsController extends BaseController
                     $form = SproutForms::$app->forms->getFormById($formId);
 
                     if (!$form) {
-                        throw new NotFoundHttpException(SproutForms::t('Form not found'));
+                        throw new NotFoundHttpException(Craft::t('sprout-forms','Form not found'));
                     }
                 }
             }

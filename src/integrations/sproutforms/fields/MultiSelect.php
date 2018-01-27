@@ -19,7 +19,7 @@ class MultiSelect extends SproutBaseOptionsField
      */
     public static function displayName(): string
     {
-        return SproutForms::t('Multi Select');
+        return Craft::t('sprout-forms','Multi Select');
     }
 
     // Properties
@@ -104,7 +104,7 @@ class MultiSelect extends SproutBaseOptionsField
      */
     protected function optionsSettingLabel(): string
     {
-        return SproutForms::t('Multi-select Options');
+        return Craft::t('sprout-forms','Multi-select Options');
     }
 
     /**

@@ -59,7 +59,7 @@ class Entry extends Element
      */
     public static function displayName(): string
     {
-        return SproutForms::t('Sprout Forms Entries');
+        return Craft::t('sprout-forms','Sprout Forms Entries');
     }
 
     /**
@@ -218,12 +218,12 @@ class Entry extends Element
         $sources = [
             [
                 'key' => '*',
-                'label' => SproutForms::t('All Entries'),
+                'label' => Craft::t('sprout-forms','All Entries'),
             ]
         ];
 
         $sources[] = [
-            'heading' => SproutForms::t("Forms")
+            'heading' => Craft::t('sprout-forms',"Forms")
         ];
 
         // Prepare the data for our sources sidebar
@@ -304,8 +304,8 @@ class Entry extends Element
         // Delete
         $actions[] = Craft::$app->getElements()->createAction([
             'type' => Delete::class,
-            'confirmationMessage' => SproutForms::t('Are you sure you want to delete the selected entries?'),
-            'successMessage' => SproutForms::t('Entries deleted.'),
+            'confirmationMessage' => Craft::t('sprout-forms','Are you sure you want to delete the selected entries?'),
+            'successMessage' => Craft::t('sprout-forms','Entries deleted.'),
         ]);
 
         return $actions;
@@ -325,10 +325,10 @@ class Entry extends Element
     protected static function defineSortOptions(): array
     {
         $attributes = [
-            'sproutforms_entries.dateCreated' => SproutForms::t('Date Created'),
+            'sproutforms_entries.dateCreated' => Craft::t('sprout-forms','Date Created'),
             // @todo - fix error where formName is not a column on subquery
-            //'formName'               => SproutForms::t('Form Name'),
-            'sproutforms_entries.dateUpdated' => SproutForms::t('Date Updated'),
+            //'formName'               => Craft::t('sprout-forms','Form Name'),
+            'sproutforms_entries.dateUpdated' => Craft::t('sprout-forms','Date Updated'),
         ];
 
         return $attributes;
@@ -339,10 +339,10 @@ class Entry extends Element
      */
     protected static function defineTableAttributes(): array
     {
-        $attributes['title'] = ['label' => SproutForms::t('Title')];
-        $attributes['formName'] = ['label' => SproutForms::t('Form Name')];
-        $attributes['dateCreated'] = ['label' => SproutForms::t('Date Created')];
-        $attributes['dateUpdated'] = ['label' => SproutForms::t('Date Updated')];
+        $attributes['title'] = ['label' => Craft::t('sprout-forms','Title')];
+        $attributes['formName'] = ['label' => Craft::t('sprout-forms','Form Name')];
+        $attributes['dateCreated'] = ['label' => Craft::t('sprout-forms','Date Created')];
+        $attributes['dateUpdated'] = ['label' => Craft::t('sprout-forms','Date Updated')];
 
         return $attributes;
     }

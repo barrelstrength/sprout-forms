@@ -63,7 +63,7 @@ class SproutFormsVariable
         $form = SproutForms::$app->forms->getFormByHandle($formHandle);
 
         if (!$form) {
-            throw new \Exception(SproutForms::t('Unable to find form with the handle `{handle}`', [
+            throw new \Exception(Craft::t('sprout-forms','Unable to find form with the handle `{handle}`', [
                 'handle' => $formHandle
             ]));
         }
@@ -387,7 +387,7 @@ class SproutFormsVariable
             }
         }
 
-        $message = SproutForms::t('{type} field does not support front-end display using Sprout Forms.', [
+        $message = Craft::t('sprout-forms','{type} field does not support front-end display using Sprout Forms.', [
                 'type' => $type
             ]
         );

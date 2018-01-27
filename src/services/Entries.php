@@ -90,7 +90,7 @@ class Entries extends Component
             $record = EntryStatusRecord::findOne($entryStatus->id);
 
             if (!$record) {
-                throw new \Exception(SproutForms::t('No Entry Status exists with the id of “{id}”', ['id' => $entryStatus->id]));
+                throw new \Exception(Craft::t('sprout-forms','No Entry Status exists with the id of “{id}”', ['id' => $entryStatus->id]));
             }
         }
 
@@ -229,7 +229,7 @@ class Entries extends Component
             $entryRecord = EntryRecord::findOne($entry->id);
 
             if (!$entryRecord) {
-                throw new Exception(SproutForms::t('No entry exists with id '.$entry->id));
+                throw new Exception(Craft::t('sprout-forms','No entry exists with id '.$entry->id));
             }
         }
 
@@ -418,7 +418,7 @@ class Entries extends Component
             $entryStatusRecord = EntryStatusRecord::findOne($entryStatusId);
 
             if (!$entryStatusRecord) {
-                throw new Exception(SproutForms::t('No Entry Status exists with the ID “{id}”.',
+                throw new Exception(Craft::t('sprout-forms','No Entry Status exists with the ID “{id}”.',
                     ['id' => $entryStatusId]
                 )
                 );

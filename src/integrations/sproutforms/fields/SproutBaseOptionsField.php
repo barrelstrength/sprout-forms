@@ -115,23 +115,23 @@ abstract class SproutBaseOptionsField extends SproutFormsBaseField implements Pr
             [
                 [
                     'label' => $this->optionsSettingLabel(),
-                    'instructions' => SproutForms::t('Define the available options.'),
+                    'instructions' => Craft::t('sprout-forms','Define the available options.'),
                     'id' => 'options',
                     'name' => 'options',
-                    'addRowLabel' => SproutForms::t('Add an option'),
+                    'addRowLabel' => Craft::t('sprout-forms','Add an option'),
                     'cols' => [
                         'label' => [
-                            'heading' => SproutForms::t('Option Label'),
+                            'heading' => Craft::t('sprout-forms','Option Label'),
                             'type' => 'singleline',
                             'autopopulate' => 'value'
                         ],
                         'value' => [
-                            'heading' => SproutForms::t('Value'),
+                            'heading' => Craft::t('sprout-forms','Value'),
                             'type' => 'singleline',
                             'class' => 'code'
                         ],
                         'default' => [
-                            'heading' => SproutForms::t('Default?'),
+                            'heading' => Craft::t('sprout-forms','Default?'),
                             'type' => 'checkbox',
                             'radioMode' => !$this->multi,
                             'class' => 'thin'
@@ -247,7 +247,7 @@ abstract class SproutBaseOptionsField extends SproutFormsBaseField implements Pr
     abstract protected function optionsSettingLabel(): string;
 
     /**
-     * Returns the field options, with labels run through SproutForms::t(     * @return array
+     * Returns the field options, with labels run through Craft::t('sprout-forms',     * @return array
      */
     protected function translatedOptions(): array
     {
@@ -255,7 +255,7 @@ abstract class SproutBaseOptionsField extends SproutFormsBaseField implements Pr
 
         foreach ($this->options as $option) {
             $translatedOptions[] = [
-                'label' => SproutForms::t($option['label']),
+                'label' => Craft::t('sprout-forms',$option['label']),
                 'value' => $option['value']
             ];
         }

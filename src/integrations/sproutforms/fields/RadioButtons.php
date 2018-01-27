@@ -24,7 +24,7 @@ class RadioButtons extends SproutBaseOptionsField
      */
     public static function displayName(): string
     {
-        return SproutForms::t('Radio Buttons');
+        return Craft::t('sprout-forms','Radio Buttons');
     }
 
     /**
@@ -32,7 +32,7 @@ class RadioButtons extends SproutBaseOptionsField
      */
     protected function optionsSettingLabel(): string
     {
-        return SproutForms::t('Radio Button Options');
+        return Craft::t('sprout-forms','Radio Button Options');
     }
 
     /**

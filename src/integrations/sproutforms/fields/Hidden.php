@@ -30,7 +30,7 @@ class Hidden extends SproutFormsBaseField implements PreviewableFieldInterface
 
     public static function displayName(): string
     {
-        return SproutForms::t('Hidden');
+        return Craft::t('sprout-forms','Hidden');
     }
 
     /**

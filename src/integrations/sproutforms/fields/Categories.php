@@ -22,7 +22,7 @@ class Categories extends SproutBaseRelationField
      */
     public static function displayName(): string
     {
-        return SproutForms::t('Categories');
+        return Craft::t('sprout-forms','Categories');
     }
 
     /**
@@ -38,7 +38,7 @@ class Categories extends SproutBaseRelationField
      */
     public static function defaultSelectionLabel(): string
     {
-        return SproutForms::t('Add a category');
+        return Craft::t('sprout-forms','Add a category');
     }
 
     // Properties
@@ -119,7 +119,7 @@ class Categories extends SproutBaseRelationField
         }
 
         if (empty($source)) {
-            return '<p class="error">'.SproutForms::t('This field is not set to a valid category group.').'</p>';
+            return '<p class="error">'.Craft::t('sprout-forms','This field is not set to a valid category group.').'</p>';
         }
 
         return parent::getInputHtml($value, $element);

@@ -97,7 +97,7 @@ class Form extends Element
      */
     public static function displayName(): string
     {
-        return SproutForms::t('Sprout Forms');
+        return Craft::t('sprout-forms','Sprout Forms');
     }
 
     /**
@@ -186,7 +186,7 @@ class Form extends Element
         $sources = [
             [
                 'key' => '*',
-                'label' => SproutForms::t('All Forms'),
+                'label' => Craft::t('sprout-forms','All Forms'),
             ]
         ];
 
@@ -197,7 +197,7 @@ class Form extends Element
 
             $sources[] = [
                 'key' => $key,
-                'label' => SproutForms::t($group->name),
+                'label' => Craft::t('sprout-forms',$group->name),
                 'data' => ['id' => $group->id],
                 'criteria' => ['groupId' => $group->id]
             ];
@@ -235,9 +235,9 @@ class Form extends Element
     protected static function defineSortOptions(): array
     {
         $attributes = [
-            'name' => SproutForms::t('Form Name'),
-            'elements.dateCreated' => SproutForms::t('Date Created'),
-            'elements.dateUpdated' => SproutForms::t('Date Updated'),
+            'name' => Craft::t('sprout-forms','Form Name'),
+            'elements.dateCreated' => Craft::t('sprout-forms','Date Created'),
+            'elements.dateUpdated' => Craft::t('sprout-forms','Date Updated'),
         ];
 
         return $attributes;
@@ -248,10 +248,10 @@ class Form extends Element
      */
     protected static function defineTableAttributes(): array
     {
-        $attributes['name'] = ['label' => SproutForms::t('Name')];
-        $attributes['handle'] = ['label' => SproutForms::t('Handle')];
-        $attributes['numberOfFields'] = ['label' => SproutForms::t('Number of Fields')];
-        $attributes['totalEntries'] = ['label' => SproutForms::t('Total Entries')];
+        $attributes['name'] = ['label' => Craft::t('sprout-forms','Name')];
+        $attributes['handle'] = ['label' => Craft::t('sprout-forms','Handle')];
+        $attributes['numberOfFields'] = ['label' => Craft::t('sprout-forms','Number of Fields')];
+        $attributes['totalEntries'] = ['label' => Craft::t('sprout-forms','Total Entries')];
 
         return $attributes;
     }

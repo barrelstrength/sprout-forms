@@ -24,7 +24,7 @@ class Checkboxes extends SproutBaseOptionsField
      */
     public static function displayName(): string
     {
-        return SproutForms::t('Checkboxes');
+        return Craft::t('sprout-forms','Checkboxes');
     }
 
     /**
@@ -109,7 +109,7 @@ class Checkboxes extends SproutBaseOptionsField
      */
     protected function optionsSettingLabel(): string
     {
-        return SproutForms::t('Checkbox Options');
+        return Craft::t('sprout-forms','Checkbox Options');
     }
 
     /**

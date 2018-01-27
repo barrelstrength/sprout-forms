@@ -20,7 +20,7 @@ class EnabledNotificationValidator extends Validator
         $value = $object->$attribute;
 
         if ($object->notificationEnabled && ($value == "")) {
-            $this->addError($object, $attribute, SproutForms::t('All notification fields are required when notifications are enabled.'));
+            $this->addError($object, $attribute, Craft::t('sprout-forms','All notification fields are required when notifications are enabled.'));
         }
     }
 }

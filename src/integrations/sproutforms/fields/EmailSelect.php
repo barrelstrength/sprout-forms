@@ -17,7 +17,7 @@ class EmailSelect extends SproutBaseOptionsField
 {
     public static function displayName(): string
     {
-        return SproutForms::t('Email Select');
+        return Craft::t('sprout-forms','Email Select');
     }
 
     /**
@@ -33,7 +33,7 @@ class EmailSelect extends SproutBaseOptionsField
      */
     protected function optionsSettingLabel(): string
     {
-        return SproutForms::t('Dropdown Options');
+        return Craft::t('sprout-forms','Dropdown Options');
     }
 
     /**
@@ -72,23 +72,23 @@ class EmailSelect extends SproutBaseOptionsField
             [
                 [
                     'label' => $this->optionsSettingLabel(),
-                    'instructions' => SproutForms::t('Define the available options.'),
+                    'instructions' => Craft::t('sprout-forms','Define the available options.'),
                     'id' => 'options',
                     'name' => 'options',
-                    'addRowLabel' => SproutForms::t('Add an option'),
+                    'addRowLabel' => Craft::t('sprout-forms','Add an option'),
                     'cols' => [
                         'label' => [
-                            'heading' => SproutForms::t('Name'),
+                            'heading' => Craft::t('sprout-forms','Name'),
                             'type' => 'singleline',
                             'autopopulate' => 'value'
                         ],
                         'value' => [
-                            'heading' => SproutForms::t('Email'),
+                            'heading' => Craft::t('sprout-forms','Email'),
                             'type' => 'singleline',
                             'class' => 'code'
                         ],
                         'default' => [
-                            'heading' => SproutForms::t('Default?'),
+                            'heading' => Craft::t('sprout-forms','Default?'),
                             'type' => 'checkbox',
                             'class' => 'thin'
                         ],
@@ -193,7 +193,7 @@ class EmailSelect extends SproutBaseOptionsField
             $invalidEmails = [];
             foreach ($emailAddresses as $emailAddress) {
                 if (!filter_var($emailAddress, FILTER_VALIDATE_EMAIL)) {
-                    $invalidEmails[] = SproutForms::t(
+                    $invalidEmails[] = Craft::t('sprout-forms',
                         'sproutFields',
                         $emailAddress." email does not validate"
                     );

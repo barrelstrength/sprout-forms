@@ -40,7 +40,7 @@ class RecipientsValidator extends Validator
         }
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $this->addError($object, $attribute, SproutForms::t('Please make sure all emails are valid.'));
+            $this->addError($object, $attribute, Craft::t('sprout-forms','Please make sure all emails are valid.'));
 
             return false;
         }

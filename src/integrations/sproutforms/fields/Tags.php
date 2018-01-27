@@ -22,7 +22,7 @@ class Tags extends SproutBaseRelationField
      */
     public static function displayName(): string
     {
-        return SproutForms::t('Tags');
+        return Craft::t('sprout-forms','Tags');
     }
 
     /**
@@ -38,7 +38,7 @@ class Tags extends SproutBaseRelationField
      */
     public static function defaultSelectionLabel(): string
     {
-        return SproutForms::t('Add a Tag');
+        return Craft::t('sprout-forms','Add a Tag');
     }
 
     // Properties

@@ -87,7 +87,7 @@ class Fields extends Component
             $record = FieldLayoutFieldRecord::find('fieldId=:fieldId', [':fieldId' => $fieldId]);
 
             if (!$record) {
-                throw new Exception(SproutForms::t('No field exists with the ID “{id}”', ['id' => $fieldId]));
+                throw new Exception(Craft::t('sprout-forms','No field exists with the ID “{id}”', ['id' => $fieldId]));
             }
         } else {
             $record = new FieldLayoutFieldRecord();
@@ -176,8 +176,8 @@ class Fields extends Component
 	 */
 	public function getRegisteredFieldsByGroup()
 	{
-		$standarLabel = SproutForms::t("Standar Fields");
-		$advancedLabel = SproutForms::t("Advanced Fields");
+		$standarLabel = Craft::t('sprout-forms',"Standar Fields");
+		$advancedLabel = Craft::t('sprout-forms',"Advanced Fields");
 		// standard
 		$gruoupedFields[$standarLabel][] = PlainText::className();
 		$gruoupedFields[$standarLabel][] = Number::className();
@@ -245,7 +245,7 @@ class Fields extends Component
             asort($standardFields);
 
             // Add the group label to the beginning of the standard group
-            $standardFields = $this->prependKeyValue($standardFields, 'standardFieldGroup', ['optgroup' => SproutForms::t('Standard Fields')]);
+            $standardFields = $this->prependKeyValue($standardFields, 'standardFieldGroup', ['optgroup' => Craft::t('sprout-forms','Standard Fields')]);
         }
 
         return $standardFields;
@@ -317,7 +317,7 @@ class Fields extends Component
 
                 $field = $fieldsService->createField([
                     'type' => PlainText::class,
-                    'name' => SproutForms::t('Default Field'),
+                    'name' => Craft::t('sprout-forms','Default Field'),
                     'handle' => $handle,
                     'instructions' => '',
                     'translationMethod' => Field::TRANSLATION_METHOD_NONE,
@@ -481,7 +481,7 @@ class Fields extends Component
 
     public function getDefaultTabName()
     {
-        return SproutForms::t('Tab 1');
+        return Craft::t('sprout-forms','Tab 1');
     }
 
     /**

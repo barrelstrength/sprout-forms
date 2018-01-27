@@ -49,7 +49,7 @@ class Number extends SproutFormsBaseField implements PreviewableFieldInterface
      */
     public static function displayName(): string
     {
-        return SproutForms::t('Number');
+        return Craft::t('sprout-forms','Number');
     }
 
     /**

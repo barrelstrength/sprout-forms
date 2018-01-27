@@ -53,7 +53,7 @@ class PlainText extends SproutFormsBaseField implements PreviewableFieldInterfac
      */
     public static function displayName(): string
     {
-        return SproutForms::t('Plain Text');
+        return Craft::t('sprout-forms','Plain Text');
     }
 
     /**

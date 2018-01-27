@@ -146,7 +146,7 @@ class Groups extends Component
 
             if (!$groupRecord) {
                 throw new Exception(
-                    SproutForms::t(
+                    Craft::t('sprout-forms',
                         'No field group exists with the ID '.$group->id
                     )
                 );
