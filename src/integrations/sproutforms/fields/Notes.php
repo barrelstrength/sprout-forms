@@ -38,7 +38,7 @@ class Notes extends SproutFormsBaseField
 
     public static function displayName(): string
     {
-        return SproutForms::t('Notes');
+        return Craft::t('sprout-forms','Notes');
     }
 
     /**
