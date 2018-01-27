@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\models;
 
 use barrelstrength\sproutforms\SproutForms;
 use craft\base\Model;
+use Craft;
 
 class Settings extends Model
 {
