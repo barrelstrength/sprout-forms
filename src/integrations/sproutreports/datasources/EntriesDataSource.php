@@ -38,7 +38,7 @@ class EntriesDataSource extends BaseDataSource
         return Craft::t('sprout-forms','Query form entries');
     }
 
-    public function getResults(Report &$report, array $options = [])
+    public function getResults(Report $report, array $options = [])
     {
         $startDate = null;
         $endDate = null;
