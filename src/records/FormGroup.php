@@ -1,4 +1,5 @@
 <?php
+
 namespace barrelstrength\sproutforms\records;
 
 use craft\db\ActiveRecord;
@@ -11,14 +12,14 @@ use craft\db\ActiveRecord;
  */
 class FormGroup extends ActiveRecord
 {
-	/**
-	 * @inheritdoc
-	 *
-	 * @return string
-	 */
-	public static function tableName(): string
-	{
-		return '{{%sproutforms_formgroups}}';
-	}
+    /**
+     * @inheritdoc
+     *
+     * @return string
+     */
+    public static function tableName(): string
+    {
+        return '{{%sproutforms_formgroups}}';
+    }
 
 }

@@ -1,117 +1,116 @@
-.sproutforms.forms div.formcontrol {
-	margin: 0;
+.sprout-forms.forms div.formcontrol {
+    margin: 0;
 }
 
-.sproutforms.forms div.oneline {
-	padding: 3% 3% 0;
+.sprout-forms.forms div.oneline {
+    padding: 3% 3% 0;
 }
 
-.sproutforms.forms div.totalcontrol {
-	padding: 3% 3% 0;
+.sprout-forms.forms div.totalcontrol {
+    padding: 3% 3% 0;
 }
 
-.sproutforms.forms div.deleteform {
-	border-top: 1px solid #e3e5e8;
+.sprout-forms.forms div.deleteform.field {
+    border-top: 1px solid #e3e5e8;
+    padding: 16px 24px;
 }
 
-.sproutforms.forms div.editform-sidebar .pane > .tabs {
-	border-radius: 4px 4px 0 0;
-	margin: 0;
+.sprout-forms.forms div.editform-sidebar .pane > .tabs {
+    border-radius: 4px 4px 0 0;
+    margin: 0;
+}
+.editform-sidebar-body {
+    background-color: #fff;
+    border-left: 1px solid #c0c2c8;
 }
 
-.sproutforms.forms .field.field-heading {
-	background-color: rgb(244, 245, 246);
-	color: rgb(85, 85, 85);
-	font-size: .8em;
-	min-height: auto;
-	padding: 8px auto;
-	text-transform: uppercase;
+.sprout-forms.forms .field.field-heading {
+    background-color: rgb(244, 245, 246);
+    color: rgb(85, 85, 85);
+    font-size: .8em;
+    min-height: auto;
+    padding: 8px auto;
+    text-transform: uppercase;
 }
 
-.sproutforms.examples .field > .warning {
-	font-size: 1em;
+.sprout-forms.examples .field > .warning {
+    font-size: 1em;
 }
 
 /* SPROUT FIELD MODAL CSS */
 
 .fieldlayoutform.sprout-field .newfieldbtn-container {
-	clear: both;
-	margin-bottom: 30px;
+    clear: both;
+    margin-bottom: 30px;
 }
 
 .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
-	border: 1px dashed #2f1fb5;
-	padding: 2px 10px 0;
-	line-height: 27px;
-	color: #2f1fb5;
-	background: transparent;
-	-webkit-box-shadow: none;
-	-moz-box-shadow: none;
-	box-shadow: none;
+    border: 1px dashed #2f1fb5;
+    padding: 2px 10px 0;
+    line-height: 27px;
+    color: #2f1fb5;
+    background: transparent;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
 }
 
 body.ltr .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
-	margin-right: 20px;
+    margin-right: 20px;
 }
 
 body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
-	margin-left: 20px;
+    margin-left: 20px;
 }
 
 .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add:before {
-	margin-top: -2px;
+    margin-top: -2px;
 }
 
 .sprout-field-modal {
-	padding-bottom: 58px;
+    padding-bottom: 58px;
 }
 
 .sprout-field-modal > .spinner {
-	position: absolute;
-	top: calc(50% - 29px - 24px);
-	left: calc(50% - 24px);
+    position: absolute;
+    top: calc(50% - 29px - 24px);
+    left: calc(50% - 24px);
 }
 
 .sprout-field-modal .main {
-	margin: -24px;
-	padding: 24px;
-	height: calc(100% - 48px);
-	overflow: auto;
-	position: relative;
+    margin: -24px;
+    padding: 24px;
+    height: calc(100% - 48px);
+    overflow: auto;
+    position: relative;
 }
 
 .sprout-field-modal .body {
-	position: relative;
-	height: 100%;
+    position: relative;
+    height: 100%;
 }
 
 .sprout-field-modal .body .content {
-	height: calc(100% + 48px);
+    height: calc(100% + 48px);
 }
 
 .sprout-field-modal .footer {
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	width: 100%;
-	margin: 0;
-}
-
-.sprout-field-modal .footer .delete {
-	display: block;
-	line-height: 30px;
-	margin: 5px 5px 0 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    margin: 0;
 }
 
 .sprout-field-modal .footer .buttons.left {
-	position: relative;
+    position: relative;
 }
 
 .sprout-field-modal .footer .buttons.left .spinner {
-	position: absolute;
-	right: 100%;
-	top: 0;
-	margin: 0;
+    position: absolute;
+    right: 100%;
+    top: 0;
+    margin: 0;
 }
 
 /* DRAGULA
@@ -121,18 +120,27 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 #sproutforms-source-fields {
     padding: 10px;
 }
-#sproutforms-source-fields {
-    margin-top: 20px;
+
+#main-container #main #main-content #details {
+    background-color: #fff;
+}
+#main-container #main #main-content #details #sproutforms-source-fields.meta {
+    padding-top: 20px;
     text-align: center;
 }
-.sproutforms-icon svg{
+.sproutforms-sidebar-callout {
+    padding: 16px 24px;
+}
+
+.sproutforms-icon svg {
     height: 25px;
     width: 25px;
 }
-.target-field,
+
 .source-field {
-    background-color: rgba(0,0,0,.05);
+    background-color: rgba(0, 0, 0, .06);
     border-radius: 3px;
+    box-shadow: inset 0 0 0 1px transparent, 0 0 0 1px rgba(0, 0, 0, 0.025), 0 1px 1px rgba(0, 0, 0, 0.1);
 }
 
 /* Field Layout - Target */
@@ -143,34 +151,46 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 }
 
 .target-field {
-    margin-bottom: 20px;
-    padding: 20px 20px 30px;
+    margin-bottom: 2px;
+    padding: 10px 20px 20px;
     position: relative;
+    border: 2px solid transparent;
 }
+
 .target-field:hover {
-    background-color: rgba(0,0,0,.08);
+    /*background-color: rgba(0, 0, 0, .08);*/
+    border: 2px dashed lightblue;
     transition: all 0.2s ease-in-out;
+}
+.target-field:hover ul.settings {
+    opacity: 1;
+    transition: opacity 0.4s ease-in-out;
 }
 
 .target-field ul.settings {
+    opacity: 0;
     position: absolute;
     top: 20px;
     right: 20px;
 }
+
 .target-field ul.settings li {
     float: left;
     color: #888;
     font-size: 8px;
     padding-left: 8px;
 }
+
 .target-field ul.settings li i {
     color: #888;
 }
+
 .target-field h2 {
     font-size: 14px;
     font-weight: bold;
     margin: 0 0 10px 0;
 }
+
 .target-field h2 a {
     color: #aaa;
     display: inline-block;
@@ -179,10 +199,12 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
     margin-top: -2px;
     vertical-align: top;
 }
+
 .target-field p {
     color: #aaa;
     margin: -7px 0 10px 0;
 }
+
 .target-field .body {
     margin-top: 10px;
 }
@@ -198,14 +220,17 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
     margin: 5px;
     padding: 8px;
 }
+
 .source-field:hover {
     background-color: rgb(13, 120, 242);
     color: #fff;
 }
+
 .source-field h3 {
     white-space: nowrap;
     overflow: hidden;
 }
+
 .source-field h3 .sproutforms-icon {
     display: inline-block;
     margin-right: .5em;
@@ -229,12 +254,12 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
     width: 50%;
 }
 
-
 /* Drag Behavior */
 
 .sprout-tab-container {
     padding-bottom: 20px;
 }
+
 .sproutforms-tab-fields .target-field,
 #sproutforms-source-fields .source-field {
     cursor: move;
@@ -243,14 +268,12 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
     cursor: -webkit-grab;
     user-select: none;
 }
+
 .target-field.drag-active,
 .source-field.drag-active {
     cursor: grabbing;
     cursor: -moz-grabbing;
     cursor: -webkit-grabbing;
-}
-.sproutforms-tab-fields .target-field {
-  transition: opacity 0.4s ease-in-out;
 }
 
 .source-field.drag-active {
@@ -261,45 +284,153 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
     box-sizing: border-box;
     transition: opacity 0.4s ease-in-out;
 }
+
 #sproutforms-source-fields .source-field.drag-active {
-    background-color: rgba(0,0,0,.025);
-    border: 2px dashed rgba(0,0,0,.1);
+    background-color: rgba(0, 0, 0, .025);
+    border: 2px dashed rgba(0, 0, 0, .1);
     color: rgb(41, 50, 61);
     opacity: .2;
+}
+
+.target-field.drag-active.gu-mirror {
+    border: 2px solid transparent;
+}
+.target-field.drag-active.gu-mirror ul.settings {
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
 }
 
 .sproutforms-tab-fields .source-field.drag-active,
 .sproutforms-tab-fields .target-field.drag-active {
     background-color: transparent;
-    border: 2px dashed dodgerblue;
+    border: 2px dashed #0d78f2;
     box-sizing: border-box;
-    height: 100px;
-    margin: 0 0 20px;
     opacity: .2;
-    padding: 20px;
+    margin-bottom: 2px;
+    padding: 10px 20px 20px;
+    opacity: .2;
+
+    min-height: 80px;
     width: 100%;
 }
 
-
-.sproutfield{
-  background:#e3e5e8;
-  width: 70%;
-  height: 150px;
-}
-.sproutfield ul li{
-  float:right;
-  display: inline-block;
-  padding: 5px;
-  margin: 10px;
+.sproutfield {
+    background: #e3e5e8;
+    width: 70%;
+    height: 150px;
 }
 
+.sproutfield ul li {
+    float: right;
+    display: inline-block;
+    padding: 5px;
+    margin: 10px;
+}
 
 #sprout-forms-tabs ul li {
-  display: inline;
+    display: inline;
 }
 
-.drag-tab-active{
-  list-style: none;
-  background-color: #e4e6e8;
-  text-align: center;
+#sprout-forms-tabs .tab .settings {
+    opacity: .2;
+    padding-left: 1px;
+    transition: opacity 0.2s ease-in-out;
 }
+#sprout-forms-tabs .tab.sel .settings {
+    opacity: .8;
+    transition: opacity 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.drag-tab-active {
+    list-style: none;
+    background-color: #e4e6e8;
+    text-align: center;
+}
+
+/*Sidebar settings*/
+
+#form-settings-tabs {
+    background-color: rgb(235, 237, 239);
+    position: relative;
+    z-index: 1;
+    -webkit-box-shadow: inset 0 -1px 0 #e3e5e8;
+    box-shadow: inset 0 -1px 0 #e3e5e8;
+    min-height: 40px;
+    overflow: hidden;
+}
+#form-settings-tabs ul li:first-child {
+    border-left: 1px solid #c0c2c8;
+}
+
+#form-settings-tabs ul {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    width: calc(100% + 1px);
+}
+
+#form-settings-tabs ul li {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body.ltr #form-settings-tabs ul li {
+    border-right: 1px solid rgba(0, 0, 20, 0.1);
+}
+
+body.rtl #form-settings-tabs ul li {
+    border-left: 1px solid rgba(0, 0, 20, 0.1);
+}
+
+#form-settings-tabs ul li a {
+    position: relative;
+    display: block;
+    padding: 10px 24px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+#form-settings-tabs ul li a:after {
+    content: '.';
+    font-size: 0;
+    display: block;
+    position: absolute;
+    top: 0;
+    width: 24px;
+    height: calc(100% - 1px);
+}
+
+#form-settings-tabs ul li a:hover {
+    text-decoration: none;
+}
+
+#form-settings-tabs ul li a:not(.sel) {
+    color: #576575;
+}
+
+#form-settings-tabs ul li a:not(.sel):hover {
+    color: #0d78f2;
+}
+
+#form-settings-tabs ul li a.sel {
+    color: #29323d;
+    background: #fff;
+    padding-bottom: 10px;
+    cursor: default;
+}
+
+.tab-title{
+    width: 100%;
+    text-align: left;
+}
+
+/* Wheel tab
+#icon-wheel {
+    //display: none;
+}
+*/

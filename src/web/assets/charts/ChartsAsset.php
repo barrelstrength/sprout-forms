@@ -12,20 +12,20 @@ use craft\web\assets\cp\CpAsset;
 
 class ChartsAsset extends AssetBundle
 {
-	public function init()
-	{
-		// define the path that your publishable resources live
-		$this->sourcePath = '@barrelstrength/sproutforms/web/assets/charts/dist';
+    public function init()
+    {
+        // define the path that your publishable resources live
+        $this->sourcePath = '@barrelstrength/sproutforms/web/assets/charts/dist';
 
-		// define the dependencies
-		$this->depends = [
-			CpAsset::class,
-		];
+        // define the dependencies
+        $this->depends = [
+            CpAsset::class,
+        ];
 
-		$this->css = [
-			'css/charts-explorer.css'
-		];
+        $this->css = [
+            'css/charts-explorer.css'
+        ];
 
-		parent::init();
-	}
+        parent::init();
+    }
 }

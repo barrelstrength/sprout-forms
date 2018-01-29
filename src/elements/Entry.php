@@ -1,4 +1,5 @@
 <?php
+
 namespace barrelstrength\sproutforms\elements;
 
 use Craft;
@@ -17,428 +18,410 @@ use barrelstrength\sproutforms\SproutForms;
  */
 class Entry extends Element
 {
-	// Properties
-	// =========================================================================
-	private $form;
+    // Properties
+    // =========================================================================
+    private $form;
 
-	public $id;
-	public $formId;
-	public $formHandle;
-	public $statusId;
-	public $formGroupId;
-	public $formName;
-	public $ipAddress;
-	public $userAgent;
+    public $id;
+    public $formId;
+    public $formHandle;
+    public $statusId;
+    public $formGroupId;
+    public $formName;
+    public $ipAddress;
+    public $userAgent;
 
-	/**
-	 * Returns the field context this element's content uses.
-	 *
-	 * @access protected
-	 * @return string
-	 */
-	public function getFieldContext(): string
-	{
-		return 'sproutForms:' . $this->formId;
-	}
+    /**
+     * Returns the field context this element's content uses.
+     *
+     * @access protected
+     * @return string
+     */
+    public function getFieldContext(): string
+    {
+        return 'sproutForms:'.$this->formId;
+    }
 
-	/**
-	 * Returns the name of the table this element's content is stored in.
-	 *
-	 * @return string
-	 */
-	public function getContentTable(): string
-	{
-		return SproutForms::$app->forms->getContentTableName($this->getForm());
-	}
+    /**
+     * Returns the name of the table this element's content is stored in.
+     *
+     * @return string
+     */
+    public function getContentTable(): string
+    {
+        return SproutForms::$app->forms->getContentTableName($this->getForm());
+    }
 
-	/**
-	 * Returns the element type name.
-	 *
-	 * @return string
-	 */
-	public static function displayName(): string
-	{
-		return SproutForms::t('Sprout Forms Entries');
-	}
+    /**
+     * Returns the element type name.
+     *
+     * @return string
+     */
+    public static function displayName(): string
+    {
+        return Craft::t('sprout-forms','Sprout Forms Entries');
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public static function refHandle()
-	{
-		return 'entries';
-	}
+    /**
+     * @inheritdoc
+     */
+    public static function refHandle()
+    {
+        return 'entries';
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public static function hasContent(): bool
-	{
-		return true;
-	}
+    /**
+     * @inheritdoc
+     */
+    public static function hasContent(): bool
+    {
+        return true;
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public static function hasTitles(): bool
-	{
-		return true;
-	}
+    /**
+     * @inheritdoc
+     */
+    public static function hasTitles(): bool
+    {
+        return true;
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public static function isLocalized(): bool
-	{
-		return false;
-	}
+    /**
+     * @inheritdoc
+     */
+    public static function isLocalized(): bool
+    {
+        return false;
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public static function hasStatuses(): bool
-	{
-		return true;
-	}
+    /**
+     * @inheritdoc
+     */
+    public static function hasStatuses(): bool
+    {
+        return true;
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function getCpEditUrl()
-	{
-		return UrlHelper::cpUrl(
-			'sprout-forms/entries/edit/'.$this->id
-		);
-	}
+    /**
+     * @inheritdoc
+     */
+    public function getCpEditUrl()
+    {
+        return UrlHelper::cpUrl(
+            'sprout-forms/entries/edit/'.$this->id
+        );
+    }
 
-	/**
-	 * Use the name as the string representation.
-	 *
-	 * @return string
-	 */
-	/** @noinspection PhpInconsistentReturnPointsInspection */
-	public function __toString()
-	{
-		try
-		{
-			// @todo - For some reason the Title returns null possible Craft3 bug
-			// @todo - Research why we need call populateElementContent
-			Craft::$app->getContent()->populateElementContent($this);
+    /**
+     * Use the name as the string representation.
+     *
+     * @return string
+     */
+    /** @noinspection PhpInconsistentReturnPointsInspection */
+    public function __toString()
+    {
+        try {
+            // @todo - For some reason the Title returns null possible Craft3 bug
+            // @todo - Research why we need call populateElementContent
+            Craft::$app->getContent()->populateElementContent($this);
 
-			return $this->title ?: ((string)$this->id ?: static::class);
+            return $this->title ?: ((string)$this->id ?: static::class);
+        } catch (\Exception $e) {
+            ErrorHandler::convertExceptionToError($e);
+        }
+    }
 
-		} catch (\Exception $e) {
-			ErrorHandler::convertExceptionToError($e);
-		}
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function getFieldLayout()
-	{
-		return $this->getForm()->getFieldLayout();
-	}
+    /**
+     * @inheritdoc
+     */
+    public function getFieldLayout()
+    {
+        return $this->getForm()->getFieldLayout();
+    }
 
 
-	/**
-	 *
-	 * @return string|null
-	 */
-	public function getStatus()
-	{
-		$statusId = $this->statusId;
+    /**
+     *
+     * @return string|null
+     */
+    public function getStatus()
+    {
+        $statusId = $this->statusId;
 
-		$status = SproutForms::$app->entries->getEntryStatusById($statusId);
+        $status = SproutForms::$app->entries->getEntryStatusById($statusId);
 
-		return $status->color;
-	}
+        return $status->color;
+    }
 
-	/**
-	 * Returns a list of statuses for this element type
-	 *
-	 * @return array
-	 */
-	public static function statuses(): array
-	{
-		$statuses    = SproutForms::$app->entries->getAllEntryStatuses();
-		$statusArray = [];
+    /**
+     * Returns a list of statuses for this element type
+     *
+     * @return array
+     */
+    public static function statuses(): array
+    {
+        $statuses = SproutForms::$app->entries->getAllEntryStatuses();
+        $statusArray = [];
 
-		foreach ($statuses as $status)
-		{
-			$key = $status['handle'] . ' ' . $status['color'];
-			$statusArray[$key] = $status['name'];
-		}
+        foreach ($statuses as $status) {
+            $key = $status['handle'].' '.$status['color'];
+            $statusArray[$key] = $status['name'];
+        }
 
-		return $statusArray;
-	}
+        return $statusArray;
+    }
 
-	/**
-	 * Returns an array of key/value pairs to send along in payload forwarding requests
-	 *
-	 * @return array
-	 */
-	public function getPayloadFields()
-	{
-		$fields = array();
-		$ignore = array(
-			'id',
-			'slug',
-			'title',
-			'handle',
-			'locale',
-			'element',
-			'elementId',
-		);
+    /**
+     * Returns an array of key/value pairs to send along in payload forwarding requests
+     *
+     * @return array
+     */
+    public function getPayloadFields()
+    {
+        $fields = [];
+        $ignore = [
+            'id',
+            'slug',
+            'title',
+            'handle',
+            'locale',
+            'element',
+            'elementId',
+        ];
 
-		$content = $this->getContent()->getAttributes();
+        $content = $this->getContent()->getAttributes();
 
-		foreach ($content as $field => $value)
-		{
-			if (!in_array($field, $ignore))
-			{
-				$fields[$field] = $value;
-			}
-		}
+        foreach ($content as $field => $value) {
+            if (!in_array($field, $ignore)) {
+                $fields[$field] = $value;
+            }
+        }
 
-		return $fields;
-	}
+        return $fields;
+    }
 
-	/**
-	 * @inheritdoc
-	 *
-	 * @return FormQuery The newly created [[FormQuery]] instance.
-	 */
-	public static function find(): ElementQueryInterface
-	{
-		return new EntryQuery(get_called_class());
-	}
+    /**
+     * @inheritdoc
+     *
+     * @return FormQuery The newly created [[FormQuery]] instance.
+     */
+    public static function find(): ElementQueryInterface
+    {
+        return new EntryQuery(get_called_class());
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	protected static function defineSources(string $context = null): array
-	{
-		$sources = [
-			[
-			'key'   => '*',
-			'label' => SproutForms::t('All Entries'),
-			]
-		];
+    /**
+     * @inheritdoc
+     */
+    protected static function defineSources(string $context = null): array
+    {
+        $sources = [
+            [
+                'key' => '*',
+                'label' => Craft::t('sprout-forms','All Entries'),
+            ]
+        ];
 
-		$sources[] = [
-			'heading' => SproutForms::t("Forms")
-		];
+        $sources[] = [
+            'heading' => Craft::t('sprout-forms',"Forms")
+        ];
 
-		// Prepare the data for our sources sidebar
-		$groups = SproutForms::$app->groups->getAllFormGroups('id');
-		$forms  = SproutForms::$app->forms->getAllForms();
+        // Prepare the data for our sources sidebar
+        $groups = SproutForms::$app->groups->getAllFormGroups('id');
+        $forms = SproutForms::$app->forms->getAllForms();
 
-		$noSources   = [];
-		$prepSources = [];
+        $noSources = [];
+        $prepSources = [];
 
-		foreach ($forms as $form)
-		{
-			if ($form->groupId)
-			{
-				if (!isset($prepSources[$form->groupId]['heading']) && isset($groups[$form->groupId]))
-				{
-					$prepSources[$form->groupId]['heading'] = $groups[$form->groupId]->name;
-				}
+        foreach ($forms as $form) {
+            if ($form->groupId) {
+                if (!isset($prepSources[$form->groupId]['heading']) && isset($groups[$form->groupId])) {
+                    $prepSources[$form->groupId]['heading'] = $groups[$form->groupId]->name;
+                }
 
-				$prepSources[$form->groupId]['forms'][$form->id] = [
-					'label'    => $form->name,
-					'data'     => ['formId' => $form->id],
-					'criteria' => ['formId' => $form->id]
-				];
-			}
-			else
-			{
-				$noSources[$form->id] = [
-					'label'    => $form->name,
-					'data'     => ['formId' => $form->id],
-					'criteria' => ['formId' => $form->id]
-				];
-			}
-		}
+                $prepSources[$form->groupId]['forms'][$form->id] = [
+                    'label' => $form->name,
+                    'data' => ['formId' => $form->id],
+                    'criteria' => ['formId' => $form->id]
+                ];
+            } else {
+                $noSources[$form->id] = [
+                    'label' => $form->name,
+                    'data' => ['formId' => $form->id],
+                    'criteria' => ['formId' => $form->id]
+                ];
+            }
+        }
 
-		// Build our sources for forms with no group
-		foreach ($noSources as $form)
-		{
-			$key           = "form:" . $form['data']['formId'];
-			$sources[] = [
-				'key'      => $key,
-				'label'    => $form['label'],
-				'data'     => [
-					'formId' => $form['data']['formId'],
-				],
-				'criteria' => [
-					'formId' => $form['criteria']['formId'],
-				]
-			];
-		}
+        // Build our sources for forms with no group
+        foreach ($noSources as $form) {
+            $key = "form:".$form['data']['formId'];
+            $sources[] = [
+                'key' => $key,
+                'label' => $form['label'],
+                'data' => [
+                    'formId' => $form['data']['formId'],
+                ],
+                'criteria' => [
+                    'formId' => $form['criteria']['formId'],
+                ]
+            ];
+        }
 
-		// Build our sources sidebar for forms in groups
-		foreach ($prepSources as $source)
-		{
-			if (isset($source['heading']))
-			{
-				$sources[] = [
-					'heading' => $source['heading']
-				];
-			}
+        // Build our sources sidebar for forms in groups
+        foreach ($prepSources as $source) {
+            if (isset($source['heading'])) {
+                $sources[] = [
+                    'heading' => $source['heading']
+                ];
+            }
 
-			foreach ($source['forms'] as $form)
-			{
-				$key           = "form:" . $form['data']['formId'];
-				$sources[] = [
-					'key'      => $key,
-					'label'    => $form['label'],
-					'data'     => [
-						'formId' => $form['data']['formId'],
-					],
-					'criteria' => [
-						'formId' => $form['criteria']['formId'],
-					]
-				];
-			}
-		}
+            foreach ($source['forms'] as $form) {
+                $key = "form:".$form['data']['formId'];
+                $sources[] = [
+                    'key' => $key,
+                    'label' => $form['label'],
+                    'data' => [
+                        'formId' => $form['data']['formId'],
+                    ],
+                    'criteria' => [
+                        'formId' => $form['criteria']['formId'],
+                    ]
+                ];
+            }
+        }
 
-		return $sources;
-	}
+        return $sources;
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	protected static function defineActions(string $source = null): array
-	{
-		$actions = [];
+    /**
+     * @inheritdoc
+     */
+    protected static function defineActions(string $source = null): array
+    {
+        $actions = [];
 
-		// Delete
-		$actions[] = Craft::$app->getElements()->createAction([
-			'type' => Delete::class,
-			'confirmationMessage' => SproutForms::t('Are you sure you want to delete the selected entries?'),
-			'successMessage' => SproutForms::t('Entries deleted.'),
-		]);
+        // Delete
+        $actions[] = Craft::$app->getElements()->createAction([
+            'type' => Delete::class,
+            'confirmationMessage' => Craft::t('sprout-forms','Are you sure you want to delete the selected entries?'),
+            'successMessage' => Craft::t('sprout-forms','Entries deleted.'),
+        ]);
 
-		return $actions;
-	}
+        return $actions;
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	protected static function defineSearchableAttributes(): array
-	{
-		return ['id', 'title', 'formName'];
-	}
+    /**
+     * @inheritdoc
+     */
+    protected static function defineSearchableAttributes(): array
+    {
+        return ['id', 'title', 'formName'];
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	protected static function defineSortOptions(): array
-	{
-		$attributes = [
-			'sproutforms_entries.dateCreated' => SproutForms::t('Date Created'),
-			// @todo - fix error where formName is not a column on subquery
-			//'formName'               => SproutForms::t('Form Name'),
-			'sproutforms_entries.dateUpdated' => SproutForms::t('Date Updated'),
-		];
+    /**
+     * @inheritdoc
+     */
+    protected static function defineSortOptions(): array
+    {
+        $attributes = [
+            'sproutforms_entries.dateCreated' => Craft::t('sprout-forms','Date Created'),
+            // @todo - fix error where formName is not a column on subquery
+            //'formName'               => Craft::t('sprout-forms','Form Name'),
+            'sproutforms_entries.dateUpdated' => Craft::t('sprout-forms','Date Updated'),
+        ];
 
-		return $attributes;
-	}
+        return $attributes;
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	protected static function defineTableAttributes(): array
-	{
-		$attributes['title']       = ['label' => SproutForms::t('Title')];
-		$attributes['formName']    = ['label' => SproutForms::t('Form Name')];
-		$attributes['dateCreated'] = ['label' => SproutForms::t('Date Created')];
-		$attributes['dateUpdated'] = ['label' => SproutForms::t('Date Updated')];
+    /**
+     * @inheritdoc
+     */
+    protected static function defineTableAttributes(): array
+    {
+        $attributes['title'] = ['label' => Craft::t('sprout-forms','Title')];
+        $attributes['formName'] = ['label' => Craft::t('sprout-forms','Form Name')];
+        $attributes['dateCreated'] = ['label' => Craft::t('sprout-forms','Date Created')];
+        $attributes['dateUpdated'] = ['label' => Craft::t('sprout-forms','Date Updated')];
 
-		return $attributes;
-	}
+        return $attributes;
+    }
 
-	protected static function defineDefaultTableAttributes(string $source): array
-	{
-		$attributes = ['title', 'formName', 'dateCreated', 'dateUpdated'];
+    protected static function defineDefaultTableAttributes(string $source): array
+    {
+        $attributes = ['title', 'formName', 'dateCreated', 'dateUpdated'];
 
-		return $attributes;
-	}
+        return $attributes;
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	protected function tableAttributeHtml(string $attribute): string
-	{
-		return parent::tableAttributeHtml($attribute);
-	}
+    /**
+     * @inheritdoc
+     */
+    protected function tableAttributeHtml(string $attribute): string
+    {
+        return parent::tableAttributeHtml($attribute);
+    }
 
-	/**
-	 * @inheritdoc
-	 * @throws Exception if reasons
-	 */
-	public function afterSave(bool $isNew)
-	{
-		// Get the entry record
-		if (!$isNew)
-		{
-			$record = EntryRecord::findOne($this->id);
+    /**
+     * @inheritdoc
+     * @throws Exception if reasons
+     */
+    public function afterSave(bool $isNew)
+    {
+        // Get the entry record
+        if (!$isNew) {
+            $record = EntryRecord::findOne($this->id);
 
-			if (!$record)
-			{
-				throw new Exception('Invalid Entry ID: '.$this->id);
-			}
-		} else
-		{
-			$record = new EntryRecord();
-			$record->id = $this->id;
-		}
+            if (!$record) {
+                throw new Exception('Invalid Entry ID: '.$this->id);
+            }
+        } else {
+            $record = new EntryRecord();
+            $record->id = $this->id;
+        }
 
-		$record->ipAddress = $this->ipAddress;
-		$record->formId    = $this->formId;
-		$record->statusId  = $this->statusId;
-		$record->userAgent = $this->userAgent;
+        $record->ipAddress = $this->ipAddress;
+        $record->formId = $this->formId;
+        $record->statusId = $this->statusId;
+        $record->userAgent = $this->userAgent;
 
-		$record->save(false);
+        $record->save(false);
 
-		parent::afterSave($isNew);
-	}
+        parent::afterSave($isNew);
+    }
 
-	/**
-	 * Returns the fields associated with this form.
-	 *
-	 * @return array
-	 */
-	public function getFields()
-	{
-		return $this->getForm()->getFields();
-	}
+    /**
+     * Returns the fields associated with this form.
+     *
+     * @return array
+     */
+    public function getFields()
+    {
+        return $this->getForm()->getFields();
+    }
 
-	/**
-	 * Returns the form element associated with this entry
-	 *
-	 * @return FormElement
-	 */
-	public function getForm()
-	{
-		if (!isset($this->form))
-		{
-			$this->form = SproutForms::$app->forms->getFormById($this->formId);
-		}
+    /**
+     * Returns the form element associated with this entry
+     *
+     * @return FormElement
+     */
+    public function getForm()
+    {
+        if (!isset($this->form)) {
+            $this->form = SproutForms::$app->forms->getFormById($this->formId);
+        }
 
-		return $this->form;
-	}
+        return $this->form;
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function rules()
-	{
-		$rules   = parent::rules();
-		$rules[] = [['formId'], 'required'];
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        $rules = parent::rules();
+        $rules[] = [['formId'], 'required'];
 
-		return $rules;
-	}
+        return $rules;
+    }
 }

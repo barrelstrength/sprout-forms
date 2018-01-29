@@ -96,6 +96,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
 			this.$deleteSpinner = $('<div class="spinner hidden">').appendTo(this.$leftButtons);
 
+            this.$deleteBtn = $('<div class="btn delete" role="button">').text(Craft.t('sprout-forms','Delete')).appendTo(this.$leftButtons);
 			this.$cancelBtn = $('<div class="btn disabled" role="button">').text(Craft.t('sprout-forms','Cancel')).appendTo(this.$rightButtons);
 			this.$saveBtn = $('<div class="btn submit disabled" role="button">').text(Craft.t('sprout-forms','Save')).appendTo(this.$rightButtons);
 			this.$saveSpinner = $('<div class="spinner hidden">').appendTo(this.$rightButtons);

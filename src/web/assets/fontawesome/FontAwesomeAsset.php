@@ -12,20 +12,20 @@ use craft\web\assets\cp\CpAsset;
 
 class FontAwesomeAsset extends AssetBundle
 {
-	public function init()
-	{
-		// define the path that your publishable resources live
-		$this->sourcePath = '@barrelstrength/sproutforms/web/assets/fontawesome/dist';
+    public function init()
+    {
+        // define the path that your publishable resources live
+        $this->sourcePath = '@barrelstrength/sproutforms/web/assets/fontawesome/dist';
 
-		// define the dependencies
-		$this->depends = [
-			CpAsset::class,
-		];
+        // define the dependencies
+        $this->depends = [
+            CpAsset::class,
+        ];
 
-		$this->css = [
-			'css/font-awesome.min.css'
-		];
+        $this->css = [
+            'css/font-awesome.min.css'
+        ];
 
-		parent::init();
-	}
+        parent::init();
+    }
 }

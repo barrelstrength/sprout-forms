@@ -20,12 +20,13 @@ if (typeof Craft.SproutForms === typeof undefined) {
     $groupButton: null,
     $fieldButton: null,
     $settings: null,
-    $pane: null,
 
     fld: null,
     modal: null,
     formLayout: null,
     fieldsLayout: null,
+    wheelHtml: null,
+    continueEditing : null,
 
     // The Dragula instance
     drake: null,
@@ -37,15 +38,16 @@ if (typeof Craft.SproutForms === typeof undefined) {
      * The constructor.
      * @param - All the tabs of the form fieldLayout.
      */
-    init: function(currentTabs)
+    init: function(currentTabs, continueEditing)
     {
       var that = this;
-
-      // Capture the already-initialized Craft.Pane to access later
-      // @todo - update this for RC1 (news tabs are not working when added)
-      this.$pane = $("div#sproutforms-fieldlayout-container.pane").data('pane');
+      this.continueEditing = continueEditing;
 
       this.initButtons();
+
+      this.initTabSettings();
+
+      this.wheelHtml = ' <span class="settings icon icon-wheel"></span>';
 
       this.modal = Craft.SproutForms.FieldModal.getInstance();
 
@@ -71,6 +73,10 @@ if (typeof Craft.SproutForms === typeof undefined) {
           // let's try to not allows reorder the PLUS icon
           return sibling === null || $(el).is('.drag-tab');
         },
+        invalid: function (el, handle) {
+            // do not move any item with donotdrag class.
+            return el.classList.contains('donotdrag');
+        }
       })
       .on('drag', function (el) {
         $(el).addClass('drag-tab-active');
@@ -99,6 +105,11 @@ if (typeof Craft.SproutForms === typeof undefined) {
         }
       });
 
+      // Show the wheel on hover
+      /*$('#sprout-forms-tabs').find('a').hover( function() {
+          $(this).find('#icon-wheel').toggle();
+      } );
+      */
       // DRAGULA
       this.fieldsLayout = this.getId('right-copy');
 
@@ -110,6 +121,10 @@ if (typeof Craft.SproutForms === typeof undefined) {
         accepts: function (el, target) {
           return target !== that.fieldsLayout
         },
+        invalid: function (el, handle) {
+            // do not move any item with donotdrag class.
+            return el.classList.contains('donotdrag');
+        }
       })
       .on('drag', function (el) {
         $(el).addClass('drag-active');
@@ -222,9 +237,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
         // Add the Settings buttons
         $(el).prepend($([
           '<ul class="settings">',
-          '<li><a id="sproutform-required-',defaultField.id,'" data-fieldid="',defaultField.id,'" href="#" tabindex="0" ><i class="fa fa-asterisk fa-2x" title="',Craft.t('sprout-forms', 'Make required'),'"></i></a></li>',
           '<li><a id="sproutform-field-',defaultField.id,'" data-fieldid="',defaultField.id,'" href="#" tabindex="0" ><i class="fa fa-pencil fa-2x" title="',Craft.t('sprout-forms', 'Edit'),'"></i></a></li>',
-          '<li><a id="sproutform-remove-',defaultField.id,'" data-fieldid="',defaultField.id,'" href="#"><i class="fa fa-trash fa-2x" title="',Craft.t('sprout-forms', 'Remove'),'"></i></a></li>',
           '</ul>'
         ].join('')));
 
@@ -234,9 +247,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
           ].join('')
         ));
 
-        this.addListener($("#sproutform-required-"+defaultField.id), 'activate', 'toggleRequiredField');
         this.addListener($("#sproutform-field-"+defaultField.id), 'activate', 'editField');
-        this.addListener($("#sproutform-remove-"+defaultField.id), 'activate', 'removeField');
       }
       else
       {
@@ -254,6 +265,59 @@ if (typeof Craft.SproutForms === typeof undefined) {
     /**
      * Adds edit buttons to existing fields.
      */
+    initTabSettings: function()
+    {
+        var that = this;
+        // get all the links stars with sproutform-field-
+        $("#sprout-forms-tabs li").each(function (i, el) {
+
+          // #delete-tab-"+tab.id
+            var tabId = $(el).find('a').attr('id');
+
+            var $editBtn = $(el).find('.settings');
+            that.initializeWheel($editBtn, tabId);
+        });
+    },
+
+    initializeWheel: function($editBtn, tabId)
+    {
+      var that = this;
+      var  $menu = $('<div class="menu" data-align="center"/>').insertAfter($editBtn),
+          $ul = $('<ul/>').appendTo($menu);
+
+      $('<li><a data-action="add" data-tab-id="'+tabId+'">' + Craft.t('app', 'Add Tab') + '</a></li>').appendTo($ul);
+      $('<li><a data-action="rename" data-tab-id="'+tabId+'">' + Craft.t('app', 'Rename') + '</a></li>').appendTo($ul);
+      $('<li><a id ="#delete-'+tabId+'" data-action="delete" data-tab-id="'+tabId+'">' + Craft.t('app', 'Delete') + '</a></li>').appendTo($ul);
+
+      new Garnish.MenuBtn($editBtn, {
+          onOptionSelect: $.proxy(that, 'onTabOptionSelect')
+      });
+    },
+
+    onTabOptionSelect: function(option) {
+        var $option = $(option),
+            tabId= $option.data('tab-id'),
+            action = $option.data('action');
+
+        switch (action) {
+            case 'add': {
+                this.addNewTab();
+                break;
+            }
+            case 'rename': {
+                this.renameTab(tabId);
+                break;
+            }
+            case 'delete': {
+                this.deleteTab(tabId);
+                break;
+            }
+        }
+    },
+
+    /**
+     * Adds edit buttons to existing fields.
+     */
     initButtons: function()
     {
       var that = this;
@@ -263,9 +327,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
         if(fieldId)
         {
-          that.addListener($("#sproutform-required-"+fieldId), 'activate', 'toggleRequiredField');
           that.addListener($("#sproutform-field-"+fieldId), 'activate', 'editField');
-          that.addListener($("#sproutform-remove-"+fieldId), 'activate', 'removeField');
         }
       });
 
@@ -278,39 +340,92 @@ if (typeof Craft.SproutForms === typeof undefined) {
           that.addListener($("#delete-tab-"+tabId), 'activate', 'deleteTab');
         }
       });
-
-      // listener to the new tab button
-      this.addListener($("#sproutforms-fieldlayout-addtab"), 'activate', 'addNewTab');
     },
 
-    deleteTab: function(option)
+    deleteTab: function(tabId)
     {
-      var option = option.currentTarget;
-      var tabId  = $(option).data('tabid');
       var userResponse = this.confirmDeleteTab();
 
       if (userResponse)
       {
-        $("#sproutforms-tab-"+tabId).slideUp(500, function() { $(this).remove(); });
-        $("#tab-"+tabId).closest( "li" ).slideUp(500, function() { $(this).remove(); });
+        $("#sproutforms-"+tabId).slideUp(500, function() { $(this).remove(); });
+        $("#"+tabId).closest( "li" ).slideUp(500, function() { $(this).remove(); });
       }
+    },
+
+    renameTab: function(tabId)
+    {
+        var $labelSpan = $('#'+tabId+' .tab-label'),
+            oldName = $labelSpan.text().trim(),
+            newName = prompt(Craft.t('app', 'Give your tab a name.'), oldName);
+        var response = true;
+        var $tabs    = $(".drag-tab");
+        var formId   = $("#formId").val();
+        var that     = this;
+
+        if (newName && newName !== oldName) {
+            // validate with current names and set the sortOrder
+            $tabs.each(function(i, el) {
+                var tabname = $(el).find('.tab-label').text();
+
+                if (tabname == newName) {
+                    response = false;
+                    return false;
+                }
+            });
+
+            if (response && newName && formId) {
+                var data = {
+                    name: newName,
+                    oldName: oldName,
+                    formId: formId
+                };
+
+                Craft.postActionRequest('sprout-forms/fields/rename-tab', data, $.proxy(function(response, textStatus) {
+                    if (response.success) {
+                        Craft.cp.displayNotice(Craft.t('sprout-forms', 'Tab renamed'));
+
+                        // Rename all the field names
+                        var $fields = $("[name^='fieldLayout["+oldName+"]']");
+
+                        $fields.each(function(i, el) {
+                            var fieldName = $(el).attr('name');
+                            var newFieldName = fieldName.replace(oldName, newName);
+                            $(el).attr('name', newFieldName);
+                            $labelSpan.text(newName);
+                        });
+                        $("#sproutforms-"+tabId).attr('data-tabname', newName);
+                    }
+                    else {
+                        Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to rename tab'));
+                    }
+                }, this));
+
+            }
+            else {
+                Craft.cp.displayError(Craft.t('sprout-forms', 'Invalid tab name'));
+            }
+        }
     },
 
     addNewTab: function()
     {
       var newName  = this.promptForGroupName('');
       var response = true;
-      var $tabs    = $("[id^='sproutforms-tab-']");
+      var $tabs    = $(".drag-tab");
       var formId   = $("#formId").val();
-
+      var that     = this;
       // validate with current names and set the sortOrder
       $tabs.each(function (i, el) {
-        var tabname = $(el).data('tabname');
+        var tabname = $(el).find('.tab-label').text();
 
-        if(tabname == newName)
+        if (tabname)
         {
-          response = false;
-          return false;
+          if(tabname == newName)
+          {
+              response = false;
+              return false;
+          }
         }
       });
 
@@ -333,9 +448,10 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
             // Insert the new tab before the Add Tab button
             var href = '#sproutforms-tab-'+tab.id;
-            $('<li><a id="tab-'+tab.id+'" class="tab" href="'+href+'" tabindex="0">'+tab.name+'</a></li>').insertBefore("#sproutforms-fieldlayout-addtab");
-
-            var $newDivTab = $('#tab-'+tab.id);
+            $("#sprout-forms-tabs").append('<li><a id="tab-'+tab.id+'" class="tab" href="'+href+'" tabindex="0"><span class="tab-label">'+tab.name+'</span>&nbsp;'+this.wheelHtml+'</a></li>');
+            var $editBtn = $("#tab-"+tab.id).find('.settings');
+            // add listener to the wheel
+            that.initializeWheel($editBtn, 'tab-'+tab.id);
 
             // Create the area to Drag/Drop fields on the new tab
             $("#sproutforms-fieldlayout-container").append($([
@@ -343,7 +459,6 @@ if (typeof Craft.SproutForms === typeof undefined) {
               '<div class="parent">',
               '<div id="sproutforms-tab-container-'+tab.id+'" class="sprout-tab-container">',
               '</div>',
-              '<div class="right"><a class="btn small" id="delete-tab-'+tab.id+'" data-tabid="'+tab.id+'">'+Craft.t('sprout-forms','Delete Tab')+'</a></p>',
               '</div>',
               '</div>'
             ].join('')));
@@ -351,13 +466,8 @@ if (typeof Craft.SproutForms === typeof undefined) {
             // Convert our new tab into Dragula vampire :)
             this.drake.containers.push(this.getId('sproutforms-tab-container-'+tab.id));
 
-            this.$pane.tabs[href] = {
-              $tab: $newDivTab,
-              $target: $(href)
-            };
-
-            this.$pane.addListener($newDivTab, 'activate', 'selectTab');
-            this.addListener($("#delete-tab-"+tab.id), 'activate', 'deleteTab');
+            // Reinitialize tabs
+            Craft.cp.initTabs();
           }
           else
           {
@@ -405,53 +515,6 @@ if (typeof Craft.SproutForms === typeof undefined) {
       this.modal.editField(fieldId);
     },
 
-    removeField: function(option)
-    {
-      var option = option.currentTarget;
-
-      var fieldId = $(option).data('fieldid');
-
-      // Remove the div of the field
-      $("#sproutfield-"+fieldId).fadeOut(120, function() {
-        $(this).css({"visibility":"hidden",display:'block'}).slideUp(300, function() {
-          $(this).remove();
-        });
-      });
-
-      // Added behavior, store an array of deleted field IDs
-      // that will be processed by the sprout-Forms/forms/saveForm method
-      $deletedFieldsContainer = $('#deletedFieldsContainer');
-      $($deletedFieldsContainer).append('<input type="hidden" name="deletedFields[]" value="' + fieldId + '">');
-    },
-
-    toggleRequiredField: function(option)
-    {
-      var option      = option.currentTarget;
-      var fieldId     = $(option).data('fieldid');
-      var $divField   = $("#sproutfield-"+fieldId);
-      var $toggleLink = $("#sproutform-required-"+fieldId);
-
-      if ($divField.find('.sproutforms-required-input').val())
-      {
-        $divField.find('h2').removeClass('required');
-        $divField.find('.sproutforms-required-input').remove();
-
-        setTimeout(function() {
-          $toggleLink.html('<i class="fa fa-asterisk fa-2x" title="'+Craft.t('sprout-forms', 'Make required')+'"></i>');
-        }, 500);
-      }
-      else
-      {
-        $divField.find('h2').addClass('required');
-
-        $($divField).append('<input type="hidden" name="requiredFields[]" value="' + fieldId + '" class="sproutforms-required-input">');
-
-        setTimeout(function() {
-          $toggleLink.html('<i class="fa fa-asterisk fa-2x" title="'+Craft.t('sprout-forms', 'Make not required')+'"></i>');
-        }, 500);
-      }
-    },
-
     /**
      * Renames | update icon | move field to another tab
      * of an existing field after edit it
@@ -462,8 +525,15 @@ if (typeof Craft.SproutForms === typeof undefined) {
     resetField: function(field, group)
     {
       var el = $("#sproutfield-"+field.id);
-      // Lets update the the name and icon
+      // Lets update the the name and icon - (new) update if required
       $(el).find('.body').html(field.htmlExample);
+      if (field.required)
+      {
+        $(el).find('.active-field-header h2').addClass('required');
+      }
+      else{
+          $(el).find('.active-field-header h2').removeClass('required');
+      }
       $(el).find('.active-field-header h2').html(field.name);
       $(el).find('.active-field-header p').html(field.instructions);
       // Check if we need move the field to another tab

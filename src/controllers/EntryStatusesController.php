@@ -1,4 +1,5 @@
 <?php
+
 namespace barrelstrength\sproutforms\controllers;
 
 use Craft;
@@ -9,102 +10,94 @@ use yii\web\NotFoundHttpException;
 
 class EntryStatusesController extends BaseController
 {
-	/**
-	 * @param array $variables
-	 *
-	 * @throws HttpException
-	 */
-	public function actionEdit(int $entryStatusId = null, EntryStatus $entryStatus = null)
-	{
-		if (!$entryStatus)
-		{
-			if ($entryStatusId)
-			{
-				$entryStatus = SproutForms::$app->entries->getEntryStatusById($entryStatusId);
+    /**
+     * @param array $variables
+     *
+     * @throws HttpException
+     */
+    public function actionEdit(int $entryStatusId = null, EntryStatus $entryStatus = null)
+    {
+        if (!$entryStatus) {
+            if ($entryStatusId) {
+                $entryStatus = SproutForms::$app->entries->getEntryStatusById($entryStatusId);
 
-				if (!$entryStatus->id)
-				{
-					throw new NotFoundHttpException(SproutForms::t('Entry Status not found'));
-				}
-			}
-			else
-			{
-				$entryStatus = new EntryStatus();
-			}
-		}
+                if (!$entryStatus->id) {
+                    throw new NotFoundHttpException(Craft::t('sprout-forms','Entry Status not found'));
+                }
+            } else {
+                $entryStatus = new EntryStatus();
+            }
+        }
 
-		return $this->renderTemplate('sprout-forms/_settings/entrystatuses/_edit', array(
-			'entryStatus'      => $entryStatus,
-			'entryStatusId'    => $entryStatusId
-		));
-	}
+        return $this->renderTemplate('sprout-forms/_settings/entrystatuses/_edit', [
+            'entryStatus' => $entryStatus,
+            'entryStatusId' => $entryStatusId
+        ]);
+    }
 
-	/**
-	 * @throws Exception
-	 * @throws HttpException
-	 * @throws \Exception
-	 */
-	public function actionSave()
-	{
-		$this->requirePostRequest();
+    /**
+     * @throws Exception
+     * @throws HttpException
+     * @throws \Exception
+     */
+    public function actionSave()
+    {
+        $this->requirePostRequest();
 
-		$id = Craft::$app->request->getBodyParam('entryStatusId');
-		$entryStatus = SproutForms::$app->entries->getEntryStatusById($id);
+        $id = Craft::$app->request->getBodyParam('entryStatusId');
+        $entryStatus = SproutForms::$app->entries->getEntryStatusById($id);
 
-		$entryStatus->name    = Craft::$app->request->getBodyParam('name');
-		$entryStatus->handle  = Craft::$app->request->getBodyParam('handle');
-		$entryStatus->color   = Craft::$app->request->getBodyParam('color');
-		$entryStatus->isDefault = Craft::$app->request->getBodyParam('isDefault');
+        $entryStatus->name = Craft::$app->request->getBodyParam('name');
+        $entryStatus->handle = Craft::$app->request->getBodyParam('handle');
+        $entryStatus->color = Craft::$app->request->getBodyParam('color');
+        $entryStatus->isDefault = Craft::$app->request->getBodyParam('isDefault');
 
-		if (!SproutForms::$app->entries->saveEntryStatus($entryStatus))
-		{
-			Craft::$app->session->setError(SproutForms::t('Could not save Entry Status.'));
+        if (!SproutForms::$app->entries->saveEntryStatus($entryStatus)) {
+            Craft::$app->session->setError(Craft::t('sprout-forms','Could not save Entry Status.'));
 
-			Craft::$app->getUrlManager()->setRouteParams(array(
-				'entryStatus' => $entryStatus
-			));
+            Craft::$app->getUrlManager()->setRouteParams([
+                'entryStatus' => $entryStatus
+            ]);
 
-			return null;
-		}
+            return null;
+        }
 
-		Craft::$app->session->setNotice(SproutForms::t('Entry Status saved.'));
+        Craft::$app->session->setNotice(Craft::t('sprout-forms','Entry Status saved.'));
 
-		return $this->redirectToPostedUrl();
-	}
+        return $this->redirectToPostedUrl();
+    }
 
-	/**
-	 * @return \HttpResponse
-	 * @throws HttpException
-	 */
-	public function actionReorder()
-	{
-		$this->requirePostRequest();
+    /**
+     * @return \HttpResponse
+     * @throws HttpException
+     */
+    public function actionReorder()
+    {
+        $this->requirePostRequest();
 
-		$ids = json_decode(Craft::$app->request->getRequiredBodyParam('ids'), true);
+        $ids = json_decode(Craft::$app->request->getRequiredBodyParam('ids'), true);
 
-		if ($success = SproutForms::$app->entries->reorderEntryStatuses($ids))
-		{
-			return $this->asJson(['success' => $success]);
-		}
+        if ($success = SproutForms::$app->entries->reorderEntryStatuses($ids)) {
+            return $this->asJson(['success' => $success]);
+        }
 
-		return $this->asJson(['error' => SproutForms::t("Couldn't reorder Order Statuses.")]);
-	}
+        return $this->asJson(['error' => Craft::t('sprout-forms',"Couldn't reorder Order Statuses.")]);
+    }
 
-	/**
-	 * @throws HttpException
-	 */
-	public function actionDelete()
-	{
-		$this->requirePostRequest();
+    /**
+     * @throws HttpException
+     */
+    public function actionDelete()
+    {
+        $this->requirePostRequest();
 
-		$entryStatusId = Craft::$app->request->getRequiredBodyParam('id');
+        $entryStatusId = Craft::$app->request->getRequiredBodyParam('id');
 
-		if (!SproutForms::$app->entries->deleteEntryStatusById($entryStatusId))
-		{
-			$this->asJson(['success' => false]);
-		}
+        if (!SproutForms::$app->entries->deleteEntryStatusById($entryStatusId)) {
+            $this->asJson(['success' => false]);
+        }
 
-		return $this->asJson(['success' => true]);
-	}
+        return $this->asJson(['success' => true]);
+    }
 
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
 
 use Craft;
@@ -22,311 +23,289 @@ use barrelstrength\sproutforms\SproutForms;
  */
 abstract class SproutBaseOptionsField extends SproutFormsBaseField implements PreviewableFieldInterface
 {
-	// Properties
-	// =========================================================================
+    // Properties
+    // =========================================================================
 
-	/**
-	 * @var array|null The available options
-	 */
-	public $options;
+    /**
+     * @var array|null The available options
+     */
+    public $options;
 
-	/**
-	 * @var bool Whether the field should support multiple selections
-	 */
-	protected $multi = false;
+    /**
+     * @var bool Whether the field should support multiple selections
+     */
+    protected $multi = false;
 
-	// Public Methods
-	// =========================================================================
+    // Public Methods
+    // =========================================================================
 
-	/**
-	 * @inheritdoc
-	 */
-	public function init()
-	{
-		parent::init();
+    /**
+     * @inheritdoc
+     */
+    public function init()
+    {
+        parent::init();
 
-		// Normalize the options
-		$options = [];
+        // Normalize the options
+        $options = [];
 
-		if (is_array($this->options))
-		{
-			foreach ($this->options as $key => $option)
-			{
-				// Old school?
-				if (!is_array($option))
-				{
-					$options[] = [
-						'label' => $option,
-						'value' => $key,
-						'default' => ''
-					];
-				} else
-				{
-					$options[] = $option;
-				}
-			}
-		}
+        if (is_array($this->options)) {
+            foreach ($this->options as $key => $option) {
+                // Old school?
+                if (!is_array($option)) {
+                    $options[] = [
+                        'label' => $option,
+                        'value' => $key,
+                        'default' => ''
+                    ];
+                } else {
+                    $options[] = $option;
+                }
+            }
+        }
 
-		$this->options = $options;
-	}
+        $this->options = $options;
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function settingsAttributes(): array
-	{
-		$attributes = parent::settingsAttributes();
-		$attributes[] = 'options';
+    /**
+     * @inheritdoc
+     */
+    public function settingsAttributes(): array
+    {
+        $attributes = parent::settingsAttributes();
+        $attributes[] = 'options';
 
-		return $attributes;
-	}
+        return $attributes;
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function getContentColumnType(): string
-	{
-		if ($this->multi) {
-			// See how much data we could possibly be saving if everything was selected.
-			$length = 0;
+    /**
+     * @inheritdoc
+     */
+    public function getContentColumnType(): string
+    {
+        if ($this->multi) {
+            // See how much data we could possibly be saving if everything was selected.
+            $length = 0;
 
-			foreach ($this->options as $option)
-			{
-				if (!empty($option['value']))
-				{
-					// +3 because it will be json encoded. Includes the surrounding quotes and comma.
-					$length += strlen($option['value']) + 3;
-				}
-			}
+            foreach ($this->options as $option) {
+                if (!empty($option['value'])) {
+                    // +3 because it will be json encoded. Includes the surrounding quotes and comma.
+                    $length += strlen($option['value']) + 3;
+                }
+            }
 
-			// Add +2 for the outer brackets and -1 for the last comma.
-			return Db::getTextualColumnTypeByContentLength($length + 1);
-		}
+            // Add +2 for the outer brackets and -1 for the last comma.
+            return Db::getTextualColumnTypeByContentLength($length + 1);
+        }
 
-		return Schema::TYPE_STRING;
-	}
+        return Schema::TYPE_STRING;
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function getSettingsHtml()
-	{
-		if (empty($this->options)) {
-			// Give it a default row
-			$this->options = [['label' => '', 'value' => '']];
-		}
+    /**
+     * @inheritdoc
+     */
+    public function getSettingsHtml()
+    {
+        if (empty($this->options)) {
+            // Give it a default row
+            $this->options = [['label' => '', 'value' => '']];
+        }
 
-		$rendered = Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'editableTableField',
-			[
-				[
-					'label' => $this->optionsSettingLabel(),
-					'instructions' => SproutForms::t('Define the available options.'),
-					'id' => 'options',
-					'name' => 'options',
-					'addRowLabel' => SproutForms::t('Add an option'),
-					'cols' => [
-						'label' => [
-							'heading' => SproutForms::t('Option Label'),
-							'type' => 'singleline',
-							'autopopulate' => 'value'
-						],
-						'value' => [
-							'heading' => SproutForms::t('Value'),
-							'type' => 'singleline',
-							'class' => 'code'
-						],
-						'default' => [
-							'heading' => SproutForms::t('Default?'),
-							'type' => 'checkbox',
-							'radioMode' => !$this->multi,
-							'class' => 'thin'
-						],
-					],
-					'rows' => $this->options
-				]
-			]);
+        $rendered = Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'editableTableField',
+            [
+                [
+                    'label' => $this->optionsSettingLabel(),
+                    'instructions' => Craft::t('sprout-forms','Define the available options.'),
+                    'id' => 'options',
+                    'name' => 'options',
+                    'addRowLabel' => Craft::t('sprout-forms','Add an option'),
+                    'cols' => [
+                        'label' => [
+                            'heading' => Craft::t('sprout-forms','Option Label'),
+                            'type' => 'singleline',
+                            'autopopulate' => 'value'
+                        ],
+                        'value' => [
+                            'heading' => Craft::t('sprout-forms','Value'),
+                            'type' => 'singleline',
+                            'class' => 'code'
+                        ],
+                        'default' => [
+                            'heading' => Craft::t('sprout-forms','Default?'),
+                            'type' => 'checkbox',
+                            'radioMode' => !$this->multi,
+                            'class' => 'thin'
+                        ],
+                    ],
+                    'rows' => $this->options
+                ]
+            ]);
 
-		return $rendered;
-	}
+        return $rendered;
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function normalizeValue($value, ElementInterface $element = null)
-	{
-		if (is_string($value))
-		{
-			$value = Json::decodeIfJson($value);
-		}
+    /**
+     * @inheritdoc
+     */
+    public function normalizeValue($value, ElementInterface $element = null)
+    {
+        if (is_string($value)) {
+            $value = Json::decodeIfJson($value);
+        }
 
-		$selectedValues = ArrayHelper::toArray($value);
+        $selectedValues = ArrayHelper::toArray($value);
 
-		if ($this->multi)
-		{
-			if (is_array($value))
-			{
-				// Convert all the values to OptionData objects
-				foreach ($value as &$val)
-				{
-					$label = $this->optionLabel($val);
-					$val = new OptionData($label, $val, true);
-				}
-				unset($val);
-			} else
-			{
-				$value = [];
-			}
+        if ($this->multi) {
+            if (is_array($value)) {
+                // Convert all the values to OptionData objects
+                foreach ($value as &$val) {
+                    $label = $this->optionLabel($val);
+                    $val = new OptionData($label, $val, true);
+                }
+                unset($val);
+            } else {
+                $value = [];
+            }
 
-			$value = new MultiOptionsFieldData($value);
-		} else
-		{
-			// Convert the value to a SingleOptionFieldData object
-			$label = $this->optionLabel($value);
-			$value = new SingleOptionFieldData($label, $value, true);
-		}
+            $value = new MultiOptionsFieldData($value);
+        } else {
+            // Convert the value to a SingleOptionFieldData object
+            $label = $this->optionLabel($value);
+            $value = new SingleOptionFieldData($label, $value, true);
+        }
 
-		$options = [];
+        $options = [];
 
-		foreach ($this->options as $option)
-		{
-			$selected = in_array($option['value'], $selectedValues, true);
-			$options[] = new OptionData($option['label'], $option['value'], $selected);
-		}
+        foreach ($this->options as $option) {
+            $selected = in_array($option['value'], $selectedValues, true);
+            $options[] = new OptionData($option['label'], $option['value'], $selected);
+        }
 
-		$value->setOptions($options);
+        $value->setOptions($options);
 
-		return $value;
-	}
+        return $value;
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function getElementValidationRules(): array
-	{
-		// Get all of the acceptable values
-		$range = [];
+    /**
+     * @inheritdoc
+     */
+    public function getElementValidationRules(): array
+    {
+        // Get all of the acceptable values
+        $range = [];
 
-		foreach ($this->options as $option)
-		{
-			$range[] = $option['value'];
-		}
+        foreach ($this->options as $option) {
+            $range[] = $option['value'];
+        }
 
-		return [
-			['in', 'range' => $range, 'allowArray' => $this->multi],
-		];
-	}
+        return [
+            ['in', 'range' => $range, 'allowArray' => $this->multi],
+        ];
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function isEmpty($value): bool
-	{
-		/** @var MultiOptionsFieldData|SingleOptionFieldData $value */
-		if ($value instanceof SingleOptionFieldData)
-		{
-			return $value->value === null || $value->value === '';
-		}
+    /**
+     * @inheritdoc
+     */
+    public function isEmpty($value): bool
+    {
+        /** @var MultiOptionsFieldData|SingleOptionFieldData $value */
+        if ($value instanceof SingleOptionFieldData) {
+            return $value->value === null || $value->value === '';
+        }
 
-		return count($value) === 0;
-	}
+        return count($value) === 0;
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function getTableAttributeHtml($value, ElementInterface $element): string
-	{
-		if ($this->multi)
-		{
-			/** @var MultiOptionsFieldData $value */
-			$labels = [];
+    /**
+     * @inheritdoc
+     */
+    public function getTableAttributeHtml($value, ElementInterface $element): string
+    {
+        if ($this->multi) {
+            /** @var MultiOptionsFieldData $value */
+            $labels = [];
 
-			foreach ($value as $option)
-			{
-				$labels[] = $option->label;
-			}
+            foreach ($value as $option) {
+                $labels[] = $option->label;
+            }
 
-			return implode(', ', $labels);
-		}
+            return implode(', ', $labels);
+        }
 
-		/** @var SingleOptionFieldData $value */
-		return (string)$value->value;
-	}
+        /** @var SingleOptionFieldData $value */
+        return (string)$value->value;
+    }
 
-	// Protected Methods
-	// =========================================================================
+    // Protected Methods
+    // =========================================================================
 
-	/**
-	 * Returns the label for the Options setting.
-	 *
-	 * @return string
-	 */
-	abstract protected function optionsSettingLabel(): string;
+    /**
+     * Returns the label for the Options setting.
+     *
+     * @return string
+     */
+    abstract protected function optionsSettingLabel(): string;
 
-	/**
-	 * Returns the field options, with labels run through SproutForms::t(	 * @return array
-	 */
-	protected function translatedOptions(): array
-	{
-		$translatedOptions = [];
+    /**
+     * Returns the field options, with labels run through Craft::t('sprout-forms',     * @return array
+     */
+    protected function translatedOptions(): array
+    {
+        $translatedOptions = [];
 
-		foreach ($this->options as $option)
-		{
-			$translatedOptions[] = [
-				'label' => SproutForms::t( $option['label']),
-				'value' => $option['value']
-			];
-		}
+        foreach ($this->options as $option) {
+            $translatedOptions[] = [
+                'label' => Craft::t('sprout-forms',$option['label']),
+                'value' => $option['value']
+            ];
+        }
 
-		return $translatedOptions;
-	}
+        return $translatedOptions;
+    }
 
-	/**
-	 * Returns an option's label by its value.
-	 *
-	 * @param string|null $value
-	 *
-	 * @return string|null
-	 */
-	protected function optionLabel(string $value = null)
-	{
-		foreach ($this->options as $option) {
-			if ($option['value'] == $value)
-			{
-				return $option['label'];
-			}
-		}
+    /**
+     * Returns an option's label by its value.
+     *
+     * @param string|null $value
+     *
+     * @return string|null
+     */
+    protected function optionLabel(string $value = null)
+    {
+        foreach ($this->options as $option) {
+            if ($option['value'] == $value) {
+                return $option['label'];
+            }
+        }
 
-		return $value;
-	}
+        return $value;
+    }
 
-	/**
-	 * Returns the default field value.
-	 *
-	 * @return string[]|string|null
-	 */
-	protected function defaultValue()
-	{
-		if ($this->multi) {
-			$defaultValues = [];
+    /**
+     * Returns the default field value.
+     *
+     * @return string[]|string|null
+     */
+    protected function defaultValue()
+    {
+        if ($this->multi) {
+            $defaultValues = [];
 
-			foreach ($this->options as $option)
-			{
-				if (!empty($option['default'])) {
-					$defaultValues[] = $option['value'];
-				}
-			}
+            foreach ($this->options as $option) {
+                if (!empty($option['default'])) {
+                    $defaultValues[] = $option['value'];
+                }
+            }
 
-			return $defaultValues;
-		}
+            return $defaultValues;
+        }
 
-		foreach ($this->options as $option)
-		{
-			if (!empty($option['default']))
-			{
-				return $option['value'];
-			}
-		}
+        foreach ($this->options as $option) {
+            if (!empty($option['default'])) {
+                return $option['value'];
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 }

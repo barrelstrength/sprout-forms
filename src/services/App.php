@@ -1,4 +1,5 @@
 <?php
+
 namespace barrelstrength\sproutforms\services;
 
 use craft\base\Component;
@@ -6,55 +7,75 @@ use Craft;
 
 class App extends Component
 {
-	public $groups;
-	public $forms;
-	public $fields;
-	public $entries;
-	public $frontEndFields;
+    /**
+     * @var Groups
+     */
+    public $groups;
 
-	public function init()
-	{
-		$this->groups            = new Groups();
-		$this->forms             = new Forms();
-		$this->fields            = new Fields();
-		$this->entries           = new Entries();
-		$this->frontEndFields    = new FrontEndFields();
-	}
+    /**
+     * @var Forms
+     */
+    public $forms;
 
-	/**
-	 * @param $subject
-	 *
-	 * @return string
-	 */
-	public function encodeSubjectLine($subject)
-	{
-		return '=?UTF-8?B?' . base64_encode($subject) . '?=';
-	}
+    /**
+     * @var Fields
+     */
+    public $fields;
 
-	/**
-	 * Return wether or not the example template already exist
-	 *
-	 * @return bool
-	 */
-	public function hasExamples()
-	{
-		$path = Craft::$app->path->getSiteTemplatesPath() .DIRECTORY_SEPARATOR. 'sproutforms';
+    /**
+     * @var Entries
+     */
+    public $entries;
 
-		if (file_exists($path))
-		{
-			return true;
-		}
+    /**
+     * @var FrontEndFields
+     */
+    public $frontEndFields;
 
-		return false;
-	}
+    public function init()
+    {
+        $this->groups = new Groups();
+        $this->forms = new Forms();
+        $this->fields = new Fields();
+        $this->entries = new Entries();
+        $this->frontEndFields = new FrontEndFields();
+    }
 
-	/**
-	 * Returns whether or not the templates directory is writable
-	 *
-	 * @return bool
-	 */
-	public function canCreateExamples()
-	{
-		return is_writable(Craft::$app->path->getSiteTemplatesPath());
-	}
+    /**
+     * @param $subject
+     *
+     * @return string
+     */
+    public function encodeSubjectLine($subject)
+    {
+        return '=?UTF-8?B?'.base64_encode($subject).'?=';
+    }
+
+    /**
+     * Return whether or not the example template already exists
+     *
+     * @return bool
+     * @throws \yii\base\Exception
+     */
+    public function hasExamples()
+    {
+        $path = Craft::$app->path->getSiteTemplatesPath().DIRECTORY_SEPARATOR.'sproutforms';
+
+        if (file_exists($path)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns whether or not the templates directory is writable
+     *
+     * @return bool
+     * @throws \yii\base\Exception
+     */
+    public function canCreateExamples()
+    {
+        return is_writable(Craft::$app->path->getSiteTemplatesPath());
+    }
 }

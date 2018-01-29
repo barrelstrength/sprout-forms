@@ -1,21 +1,6 @@
 {% import "_includes/forms" as forms %}
 {% import "sprout-forms/_includes/macros" as sproutForms %}
 
-<style>
-	.editform-sidebar .tabs {
-		margin: 0;
-	}
-	#form-settings-tabs li a.sel{
-		background: #fff;
-		-webkit-box-shadow: 0 0 0 1px #e3e5e8;
-		box-shadow: 0 0 0 1px #e3e5e8;
-	}
-	.sprout-field-heading
-	{
-		background-color: #fff;
-		padding: 10px 10px 10px 10px;
-	}
-</style>
 
 {# @todo - Remove Notifications in favor of Sprout Email integration
 	Maybe list/link to related Notifications on the Form Settings tab.
@@ -43,26 +28,29 @@
 	</ul>
 </nav>
 
-<div>
+<div class="editform-sidebar-body">
+
 	{% set fieldTypes = craft.sproutforms.getRegisteredFields() %}
+    {% set fieldTypesByGroup = craft.sproutforms.getRegisteredFieldsByGroup() %}
+	{% set customFields =  craft.sproutforms.getCustomFields(fieldTypes, fieldTypesByGroup) %}
 	<div id="sproutforms-source-fields" class="meta">
 		<div class='parent'>
+			<div class="clear"></div>
 			<div id='right-copy'>
-				{% for type, field in fieldTypes %}
-					{{ sproutForms.field(field, 'source') }}
+				{% for name,group in fieldTypesByGroup %}
+					<h2 class="tab-title donotdrag">{{ name }}</h2>
+                	{% for type in group %}
+						{% set field = fieldTypes[type] %}
+						{{ sproutForms.field(field, 'source') }}
+                    {% endfor %}
 				{% endfor %}
+
+				{% if customFields %}
+					<h2 class="tab-title donotdrag">{{ 'Custom Fields'|t('sprout-forms') }}</h2>
+				{% endif  %}
 			</div>
 		</div>
 	</div><!-- fields div -->
-
-	{#
-	<div class="hidden meta" id="tab-sproutforms-notification">
-
-		{% include 'sprout-forms/forms/_tabs/notifications' %}
-
-	</div><!-- notifications div -->
-	#}
-
 	<div class="{{ tab != 2 ? 'hidden' : '' }} meta" id="tab-sproutforms-settings">
 
 		{% if groups is defined and groups|length %}
@@ -93,11 +81,10 @@
 			value: form.name,
 			errors: form.getErrors('name'),
 			autofocus: true,
-			required: true,
-			translatable: true
+			required: true
 		}) }}
 
-		{{ forms.textField({
+        {{ forms.textField({
 			label: "Handle <span class='info'>How you’ll refer to this form in the templates.</span>"|t('sprout-forms'),
 			id: 'handle',
 			class: 'code',
@@ -106,6 +93,14 @@
 			errors: form.getErrors('handle'),
 			required: true
 		}) }}
+
+        {{ forms.textField({
+            label: "Title Format <span class='info'>Entry Titles are auto-generated based on the Title Format you enter here. All information contained in the Title will also be searchable. You may use the same syntax here as you would with Dynamic Titles in your Sections. (i.e. {dateCreated|date('Ymd')} {fullName})</span>"|t('sprout-forms'),
+            id: 'titleFormat',
+            name: 'titleFormat',
+            value: form.titleFormat,
+            errors: form.getErrors('titleFormat')
+        }) }}
 
 		{{ forms.textField({
 			label: "Redirect <span class='info'>Where should the user be redirected upon form submission? Leaving blank will redirect user back to the form.</span>"|t('sprout-forms'),
@@ -124,23 +119,8 @@
 			errors: (form is defined ? form.getErrors('submitButtonText') : null)
 		}) }}
 
-		<hr>
-
-		{# @todo - make work, clean up unnecessary classes #}
-		<a class="fieldtoggle" data-target="types-barrelstrength-sproutforms-integrations-sproutforms-fields-PlainText-advanced">Advanced</a>
-
-		{{ forms.textField({
-			label: "Title Format <span class='info'>Entry Titles are auto-generated based on the Title Format you enter here. All information contained in the Title will also be searchable. You may use the same syntax here as you would with Dynamic Titles in your Sections. (i.e. {dateCreated|date('Ymd')} {fullName})</span>"|t('sprout-forms'),
-			id: 'titleFormat',
-			name: 'titleFormat',
-			value: form.titleFormat,
-			errors: form.getErrors('titleFormat')
-		}) }}
-
-		<div class="field sprout-field-heading">Template Customization</div>
-
 		{{ forms.lightswitchField({
-			label: "Tab Titles <span class='info'>Display Tab Titles on Forms</span>"|t('sprout-forms'),
+			label: "Section Titles <span class='info'>Display Section Titles on Forms</span>"|t('sprout-forms'),
 			id: 'displaySectionTitles',
 			name: 'displaySectionTitles',
 			on: form.displaySectionTitles,
@@ -150,48 +130,48 @@
 
 		{% if settings.enablePerFormTemplateFolderOverride or form.enableTemplateOverrides %}
 
-		{{ forms.lightswitchField({
-			label: "Custom Templates <span class='info'>Enable Custom Template Overrides Folder</span>"|t('sprout-forms'),
-			name: 'enableTemplateOverrides',
-			toggle: 'templateOverridesFolder-field',
-			on: form.enableTemplateOverrides,
-			onLabel: "Enable"|t('sprout-forms'),
-		}) }}
+            {{ forms.lightswitchField({
+				label: "Custom Templates <span class='info'>Enable Custom Template Overrides Folder</span>"|t('sprout-forms'),
+				name: 'enableTemplateOverrides',
+				toggle: 'templateOverridesFolder-field',
+				on: form.enableTemplateOverrides,
+				onLabel: "Enable"|t('sprout-forms'),
+			}) }}
 
-		{{ forms.textField({
-			label: "Templates Folder <span class='info'>The template folder to use for overrides</span>"|t('sprout-forms'),
-			name: 'templateOverridesFolder',
-			placeholder: '_forms/formHandle',
-			id: 'templateOverridesFolder',
-			on: form.templateOverridesFolder,
-			value: (form is defined ? form.templateOverridesFolder : null),
-		}) }}
+			{{ forms.textField({
+				label: "Templates Folder <span class='info'>The template folder to use for overrides</span>"|t('sprout-forms'),
+				name: 'templateOverridesFolder',
+				placeholder: '_forms/formHandle',
+				id: 'templateOverridesFolder',
+				on: form.templateOverridesFolder,
+				value: (form is defined ? form.templateOverridesFolder : null),
+			}) }}
 
 		{% endif %}
 
 		{% if settings.enablePayloadForwarding or form.submitAction %}
 
-		<div class="field sprout-field-heading">Payload Forwarding</div>
+			{{ forms.textField({
+				label: "Submit URL <span class='info'>Submit your form data to this URL, instead of directly to Sprout
+				Forms.</span>"|t('sprout-forms'),
+				name: 'submitAction',
+				placeholder: 'http://example.com/somewhere-else',
+				value: (form is defined ? form.submitAction : null),
+				errors: (form is defined ? form.getErrors('submitAction') : null)
+			}) }}
 
-		{{ forms.textField({
-			label: "Submit URL <span class='info'>Submit your form data to this URL, instead of directly to Sprout
-			Forms.</span>"|t('sprout-forms'),
-			name: 'submitAction',
-			placeholder: 'http://example.com/somewhere-else',
-			value: (form is defined ? form.submitAction : null),
-			errors: (form is defined ? form.getErrors('submitAction') : null)
-		}) }}
-
-		{{ forms.lightswitchField({
-			label: "Save Copy <span class='info'>Save the submitted payload data as a Form Entry in Craft. By default, when Payload Forwarding is enabled, all submitted data is forwarded to your Submit URL location and no data is saved in Craft.</span>"|t('sprout-forms'),
-			id: 'savePayload',
-			name: 'savePayload',
-			instructions: '',
-			value: form.savePayload,
-			on: (form.savePayload is defined) ? form.savePayload : ""
-		}) }}
+			{{ forms.lightswitchField({
+				label: "Save Copy <span class='info'>Save the submitted payload data as a Form Entry in Craft. By default, when Payload Forwarding is enabled, all submitted data is forwarded to your Submit URL location and no data is saved in Craft.</span>"|t('sprout-forms'),
+				id: 'savePayload',
+				name: 'savePayload',
+				instructions: '',
+				value: form.savePayload,
+				on: (form.savePayload is defined) ? form.savePayload : ""
+			}) }}
 
 		{% endif %}
+
+
 
 	</div>
 </div>

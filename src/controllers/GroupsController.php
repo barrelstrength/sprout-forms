@@ -1,4 +1,5 @@
 <?php
+
 namespace barrelstrength\sproutforms\controllers;
 
 use Craft;
@@ -9,59 +10,63 @@ use barrelstrength\sproutforms\models\FormGroup as FormGroupModel;
 
 class GroupsController extends BaseController
 {
-	/**
-	 * Save a group.
-	 */
-	public function actionSaveGroup()
-	{
-		$this->requirePostRequest();
-		$this->requireAcceptsJson();
+    /**
+     * Save a group.
+     *
+     * @return \yii\web\Response
+     * @throws \barrelstrength\sproutforms\services\Exception
+     * @throws \yii\web\BadRequestHttpException
+     */
+    public function actionSaveGroup()
+    {
+        $this->requirePostRequest();
 
-		$request = Craft::$app->getRequest();
+        $request = Craft::$app->getRequest();
 
-		$group       = new FormGroupModel();
-		$group->id   = $request->getBodyParam('id');
-		$group->name = $request->getRequiredBodyParam('name');
+        $group = new FormGroupModel();
+        $group->id = $request->getBodyParam('id');
+        $group->name = $request->getRequiredBodyParam('name');
 
-		$isNewGroup = empty($group->id);
+        $isNewGroup = (null === $group->id);
 
-		if (SproutForms::$app->groups->saveGroup($group))
-		{
-			if ($isNewGroup)
-			{
-				Craft::$app->getSession()->setInfo(SproutForms::t('Group added.'));
-			}
+        if (SproutForms::$app->groups->saveGroup($group)) {
+            if ($isNewGroup) {
+                Craft::$app->getSession()->setNotice(Craft::t('sprout-forms','Group added.'));
+            }
 
-			return $this->asJson([
-				'success' => true,
-				'group'   => $group->getAttributes(),
-			]);
-		}
-		else
-		{
-			return $this->asJson([
-				'errors' => $group->getErrors(),
-			]);
-		}
-	}
+            return $this->asJson([
+                'success' => true,
+                'group' => $group->getAttributes(),
+            ]);
+        } else {
 
-	/**
-	 * Deletes a group.
-	 */
-	public function actionDeleteGroup()
-	{
-		$this->requirePostRequest();
-		$this->requireAcceptsJson();
+            return $this->asJson([
+                'errors' => $group->getErrors(),
+            ]);
+        }
+    }
 
-		$request = Craft::$app->getRequest();
+    /**
+     * Deletes a group.
+     *
+     * @return \yii\web\Response
+     * @throws \yii\db\Exception
+     * @throws \yii\web\BadRequestHttpException
+     */
+    public function actionDeleteGroup()
+    {
+        $this->requirePostRequest();
+        $this->requireAcceptsJson();
 
-		$groupId = $request->getRequiredBodyParam('id');
-		$success = SproutForms::$app->groups->deleteGroupById($groupId);
+        $request = Craft::$app->getRequest();
 
-		Craft::$app->getSession()->setNotice(SproutForms::t('Group deleted.'));
+        $groupId = $request->getRequiredBodyParam('id');
+        $success = SproutForms::$app->groups->deleteGroupById($groupId);
 
-		return $this->asJson([
-			'success' => $success,
-		]);
-	}
+        Craft::$app->getSession()->setNotice(Craft::t('sprout-forms','Group deleted.'));
+
+        return $this->asJson([
+            'success' => $success,
+        ]);
+    }
 }
