@@ -2,110 +2,112 @@
 
 {% set selectId = id ~ "-output" %}
 {% set selectTextarea = id ~ "-textarea" %}
+{% set quillEditor = id ~ "-quill" %}
+{% set quillWrapper = id ~ "-quill-wrapper" %}
+{% set textareaWrapper = id ~ "-textarea-wrapper" %}
+{% set notesIntructions = 'Add your field notes below. Note: The name of your Notes field above will be used as the first line of your notes.'|t('sprout-base') %}
 
 {{ forms.selectField({
-	id: name ~ "-output",
-	name: 'output',
-	label: 'Output As',
-	options: options.output,
-	value: field.output
+    id: name ~ "-output",
+    name: 'output',
+    label: 'Output As',
+    options: options.output,
+    value: field.output
 }) }}
 
-{{ forms.textareaField({
-	id:   name ~ "-textarea",
-	label: 'Notes'|t,
-	instructions: 'Add your field notes below. Note: The name of your Notes field above will be used as the first line of
-	your notes.'|t,
-	name: 'instructions',
-	class: 'sproutnotes',
-	value: field.instructions
-}) }}
+<div id="{{ name ~ '-quill-wrapper' }}" class="hidden">
+	<div class="field">
+		<div class="heading">
+			<label for="{{ name ~ '-quill' }}">Notes</label>
+			<div class="instructions">
+				<p>{{ notesIntructions }}</p>
+			</div>
+		</div>
+		<div class="text sproutnotes fullwidth quill-editor" id="{{ name ~ '-quill' }}">{{ field.notes|raw }}</div>
+	</div>
+</div>
+
+<div id="{{ name ~ '-textarea-wrapper' }}" class="hidden">
+    {{ forms.textareaField({
+        id:   name ~ "-textarea",
+        label: 'Notes'|t,
+        instructions: notesIntructions,
+        name: 'notes',
+        class: 'sproutnotes',
+        value: field.notes
+    }) }}
+</div>
 
 {{ forms.selectField({
-	id: 'style',
-	name: 'style',
-	label: 'Select Style',
-	instructions: 'Select the style you wish your info field to be.  Create your own styles in the <a href="/admin/settings/plugins/sproutfields">plugin settings</a>.',
-	options: options.style,
-	value: field.style
+    id: 'style',
+    name: 'style',
+    label: 'Select Style',
+    instructions: 'Select the style you wish your info field to be.  Create your own styles in the <a href="/admin/settings/plugins/sproutfields">plugin settings</a>.',
+    options: options.style,
+    value: field.style
 }) }}
 
 {{ forms.lightswitchField ({
-	label: "Hide Field Label"|t,
-	instructions: ""|t,
-	name: 'hideLabel',
-	on: field.hideLabel,
+    label: "Hide Field Label"|t,
+    instructions: ""|t,
+    name: 'hideLabel',
+    on: field.hideLabel,
 }) }}
 
-<section class="buttons">
-	<div class="btngroup submit">
-		<input type="submit" class="btn submit" value="{{ 'Save'|t }}">
-
-		<div class="btn submit menubtn"></div>
-		<div class="menu">
-			<ul>
-				<li>
-					<a class="formsubmit" data-redirect="settings/fields/edit/{id}">{{ "Save and continue editing"|t }}
-						<span class="shortcut">⌘S</span></a>
-				</li>
-			</ul>
-		</div>
-	</div>
-</section>
-
 <style type="text/css">
-textarea.sproutnotes {
-	min-height: 125px;
-}
+	textarea.sproutnotes {
+		min-height: 125px;
+	}
+	.quill-editor {
+		height: 120px;
+	}
 </style>
 
 {% js %}
 
-$(document).ready(function() {
+	$(document).ready(function() {
 
 	var initSelectValue = $("{{ '#' ~ selectId }}").val();
 	var textareaInput = $("#{{ selectTextarea }}");
+	var $textareaWrapper = $("#{{ textareaWrapper }}");
+	var $quillWrapper = $("#{{ quillWrapper }}");
+
+	var quill = new Quill('#{{ quillEditor }}', {
+	theme: 'snow'
+	});
+
+	quill.on('text-change', function(delta) {
+	textareaInput.val(quill.root.innerHTML);
+	});
 
 	if (initSelectValue == "richText") {
-		textareaInput.redactor({
-			buttons: ['bold', 'italic', '|', 'unorderedlist', 'orderedlist'],
-			toolbar: true
-		});
-
-		textareaInput.toggleClass('redactor');
+	$quillWrapper.removeClass('hidden');
+	}
+	else{
+	$textareaWrapper.removeClass('hidden');
 	}
 
 	$("{{ '#' ~ selectId }}").on('change', function() {
 
-		var textareaType = $(this).val();
-		var textareaValue = $("#{{ selectTextarea }}").val();
+	var textareaType = $(this).val();
+	var textareaValue = $("#{{ selectTextarea }}").val();
 
-		if (textareaType == "richText") {
+	if (textareaType == "richText") {
+	$textareaWrapper.addClass('hidden');
+	$quillWrapper.removeClass('hidden');
+	}
+	else
+	{
+	if (!$quillWrapper.hasClass('hidden'))
+	{
+	$quillWrapper.addClass('hidden');
+	}
 
-			textareaInput.redactor({
-				buttons: ['bold', 'italic', '|', 'unorderedlist', 'orderedlist'],
-				toolbar: true
-			});
-
-			textareaInput.toggleClass('redactor');
-		}
-		else if (textareaType == "html")
-		{
-			if (textareaInput.hasClass('redactor'))
-			{
-				textareaInput.redactor('core.destroy').removeClass('redactor');
-			}
-		}
-		else
-		{
-			if (textareaInput.hasClass('redactor'))
-			{
-				textareaInput.redactor('core.destroy').removeClass('redactor');
-			}
-
-			textareaInput.val(textareaInput.text());
-		}
+	$textareaWrapper.removeClass('hidden');
+	// copy from rich text
+	//textareaInput.val(textareaInput.text());
+	}
 	});
-});
+	});
 
 {% endjs %}

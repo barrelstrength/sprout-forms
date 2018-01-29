@@ -87,7 +87,7 @@ class Fields extends Component
             $record = FieldLayoutFieldRecord::find('fieldId=:fieldId', [':fieldId' => $fieldId]);
 
             if (!$record) {
-                throw new Exception(Craft::t('sprout-forms','No field exists with the ID “{id}”', ['id' => $fieldId]));
+                throw new Exception(Craft::t('sprout-forms', 'No field exists with the ID “{id}”', ['id' => $fieldId]));
             }
         } else {
             $record = new FieldLayoutFieldRecord();
@@ -171,39 +171,35 @@ class Fields extends Component
         return $this->registeredFields;
     }
 
-	/**
-	 * @return array
-	 */
-	public function getRegisteredFieldsByGroup()
-	{
-		$standarLabel = Craft::t('sprout-forms',"Standar Fields");
-		$advancedLabel = Craft::t('sprout-forms',"Advanced Fields");
-		// standard
-		$gruoupedFields[$standarLabel][] = PlainText::className();
-		$gruoupedFields[$standarLabel][] = Number::className();
-		$gruoupedFields[$standarLabel][] = Dropdown::className();
-		$gruoupedFields[$standarLabel][] = Checkboxes::className();
-		$gruoupedFields[$standarLabel][] = RadioButtons::className();
-		$gruoupedFields[$standarLabel][] = MultiSelect::className();
-		$gruoupedFields[$standarLabel][] = Assets::className();
-		// advanced
-		$gruoupedFields[$advancedLabel][] = Categories::className();
-		$gruoupedFields[$advancedLabel][] = Entries::className();
-		$gruoupedFields[$advancedLabel][] = Tags::className();
-		$gruoupedFields[$advancedLabel][] = Email::className();
-		$gruoupedFields[$advancedLabel][] = EmailSelect::className();
-		$gruoupedFields[$advancedLabel][] = Hidden::className();
-		$gruoupedFields[$advancedLabel][] = Invisible::className();
-		$gruoupedFields[$advancedLabel][] = Phone::className();
-		$gruoupedFields[$advancedLabel][] = RegularExpression::className();
+    /**
+     * @return array
+     */
+    public function getRegisteredFieldsByGroup()
+    {
+        $standarLabel = Craft::t('sprout-forms', "Standar Fields");
+        $advancedLabel = Craft::t('sprout-forms', "Advanced Fields");
+        // standard
+        $gruoupedFields[$standarLabel][] = PlainText::className();
+        $gruoupedFields[$standarLabel][] = Dropdown::className();
+        $gruoupedFields[$standarLabel][] = Checkboxes::className();
+        $gruoupedFields[$standarLabel][] = RadioButtons::className();
+        $gruoupedFields[$standarLabel][] = MultiSelect::className();
+        $gruoupedFields[$standarLabel][] = Assets::className();
+        // advanced
+        $gruoupedFields[$advancedLabel][] = Number::className();
+        $gruoupedFields[$advancedLabel][] = Categories::className();
+        $gruoupedFields[$advancedLabel][] = Entries::className();
+        $gruoupedFields[$advancedLabel][] = Tags::className();
+        $gruoupedFields[$advancedLabel][] = Email::className();
+        $gruoupedFields[$advancedLabel][] = EmailSelect::className();
+        $gruoupedFields[$advancedLabel][] = Hidden::className();
+        $gruoupedFields[$advancedLabel][] = Invisible::className();
+        $gruoupedFields[$advancedLabel][] = Phone::className();
+        $gruoupedFields[$advancedLabel][] = RegularExpression::className();
+        $gruoupedFields[$advancedLabel][] = Notes::className();
 
-		$redactor = Craft::$app->plugins->getPlugin('redactor');
-		if ($redactor) {
-			$gruoupedFields[$advancedLabel][] = Notes::className();
-		}
-
-		return $gruoupedFields;
-	}
+        return $gruoupedFields;
+    }
 
     /**
      * @param $type
@@ -245,7 +241,7 @@ class Fields extends Component
             asort($standardFields);
 
             // Add the group label to the beginning of the standard group
-            $standardFields = $this->prependKeyValue($standardFields, 'standardFieldGroup', ['optgroup' => Craft::t('sprout-forms','Standard Fields')]);
+            $standardFields = $this->prependKeyValue($standardFields, 'standardFieldGroup', ['optgroup' => Craft::t('sprout-forms', 'Standard Fields')]);
         }
 
         return $standardFields;
@@ -317,7 +313,7 @@ class Fields extends Component
 
                 $field = $fieldsService->createField([
                     'type' => PlainText::class,
-                    'name' => Craft::t('sprout-forms','Default Field'),
+                    'name' => Craft::t('sprout-forms', 'Default Field'),
                     'handle' => $handle,
                     'instructions' => '',
                     'translationMethod' => Field::TRANSLATION_METHOD_NONE,
@@ -481,7 +477,7 @@ class Fields extends Component
 
     public function getDefaultTabName()
     {
-        return Craft::t('sprout-forms','Tab 1');
+        return Craft::t('sprout-forms', 'Tab 1');
     }
 
     /**
@@ -578,30 +574,32 @@ class Fields extends Component
 
     /**
      * Renames tab of form layout
-     * @param string $name
-     * @param string $oldName
+     *
+     * @param string      $name
+     * @param string      $oldName
      * @param FormElement $form
+     *
      * @return boolean
-    */
-		public function renameTab($name, $oldName, FormElement $form)
-		{
-			$fieldLayout = $form->getFieldLayout();
-			$tabs = $fieldLayout->getTabs();
-			$response = false;
+     */
+    public function renameTab($name, $oldName, FormElement $form)
+    {
+        $fieldLayout = $form->getFieldLayout();
+        $tabs = $fieldLayout->getTabs();
+        $response = false;
 
-			foreach ($tabs as $tab) {
-				if ($tab->name == $oldName) {
-					$tabRecord = FieldLayoutTabRecord::findOne($tab->id);
+        foreach ($tabs as $tab) {
+            if ($tab->name == $oldName) {
+                $tabRecord = FieldLayoutTabRecord::findOne($tab->id);
 
-					if ($tabRecord){
-						$tabRecord->name = $name;
-						$response = $tabRecord->save(false);
-					}
-				}
-			}
+                if ($tabRecord) {
+                    $tabRecord->name = $name;
+                    $response = $tabRecord->save(false);
+                }
+            }
+        }
 
-			return $response;
-		}
+        return $response;
+    }
 
     /**
      * Prepends a key/value pair to an array

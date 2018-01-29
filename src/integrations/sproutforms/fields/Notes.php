@@ -5,21 +5,17 @@ namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
 use Craft;
 use craft\base\ElementInterface;
 use craft\helpers\Template as TemplateHelper;
-use craft\base\Field;
-use craft\base\PreviewableFieldInterface;
 use yii\db\Schema;
-use craft\web\assets\redactor\RedactorAsset;
-use craft\web\assets\richtext\RichTextAsset;
 
-use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
+use barrelstrength\sproutbase\web\assets\sproutfields\notes\QuillAsset;
 
 class Notes extends SproutFormsBaseField
 {
     /**
      * @var text
      */
-    public $instructions;
+    public $notes;
 
     /**
      * @var text
@@ -79,13 +75,12 @@ class Notes extends SproutFormsBaseField
         $name = $this->displayName();
 
         $inputId = Craft::$app->getView()->formatInputId($name);
-        $namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
-
         $view = Craft::$app->getView();
-        $view->registerAssetBundle(RedactorAsset::class);
-        $view->registerAssetBundle(RichTextAsset::class);
+        $namespaceInputId = $view->namespaceInputId($inputId);
 
-        return Craft::$app->getView()->renderTemplate(
+        $view->registerAssetBundle(QuillAsset::class);
+
+        return $view->renderTemplate(
             'sprout-forms/_components/fields/notes/settings',
             [
                 'options' => $this->getOptions(),
@@ -179,8 +174,8 @@ class Notes extends SproutFormsBaseField
                 'highlightDocumentation' => 'Highlight'
             ],
             'output' => [
-                'markdown' => 'Markdown',
                 'richText' => 'Rich Text',
+                'markdown' => 'Markdown',
                 'html' => 'HTML'
             ]
         ];
