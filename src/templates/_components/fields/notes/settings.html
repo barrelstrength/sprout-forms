@@ -38,15 +38,6 @@
     }) }}
 </div>
 
-{{ forms.selectField({
-    id: 'style',
-    name: 'style',
-    label: 'Select Style',
-    instructions: 'Select the style you wish your info field to be.  Create your own styles in the <a href="/admin/settings/plugins/sproutfields">plugin settings</a>.',
-    options: options.style,
-    value: field.style
-}) }}
-
 {{ forms.lightswitchField ({
     label: "Hide Field Label"|t,
     instructions: ""|t,
