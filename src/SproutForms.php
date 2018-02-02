@@ -59,11 +59,11 @@ class SproutForms extends Plugin
         Event::on(Fields::class, Fields::EVENT_REGISTER_FIELDS, function(RegisterFieldsEvent $event) {
             $fieldsByGroup = SproutForms::$app->fields->getRegisteredFieldsByGroup();
 
-	          foreach ($fieldsByGroup as $group) {
-		          foreach ($group as $field) {
-			          $event->fields[] = new $field;
-		          }
-	          }
+            foreach ($fieldsByGroup as $group) {
+                foreach ($group as $field) {
+                    $event->fields[] = new $field;
+                }
+            }
         }
         );
 
@@ -103,19 +103,19 @@ class SproutForms extends Plugin
         return array_merge($parent, [
             'subnav' => [
                 'entries' => [
-                    'label' => Craft::t('sprout-forms','Entries'),
+                    'label' => Craft::t('sprout-forms', 'Entries'),
                     'url' => 'sprout-forms/entries'
                 ],
                 'forms' => [
-                    'label' => Craft::t('sprout-forms','Forms'),
+                    'label' => Craft::t('sprout-forms', 'Forms'),
                     'url' => 'sprout-forms/forms'
                 ],
                 'reports' => [
-                    'label' => Craft::t('sprout-forms','Reports'),
+                    'label' => Craft::t('sprout-forms', 'Reports'),
                     'url' => 'sprout-forms/reports/sproutforms.entriesdatasource'
                 ],
                 'settings' => [
-                    'label' => Craft::t('sprout-forms','Settings'),
+                    'label' => Craft::t('sprout-forms', 'Settings'),
                     'url' => 'sprout-forms/settings'
                 ]
             ]

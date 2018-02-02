@@ -27,6 +27,13 @@ class EntriesController extends BaseController
      */
     public $form;
 
+    public function init()
+    {
+        $response = Craft::$app->getResponse();
+        $headers = $response->getHeaders();
+        $headers->set('Cache-Control', 'private');
+    }
+
     /**
      * Processes form submissions
      *

@@ -7,7 +7,7 @@ use barrelstrength\sproutforms\integrations\sproutforms\fields\Categories;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Checkboxes;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Dropdown;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Email;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\EmailSelect;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\EmailDropdown;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Hidden;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Invisible;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\MultiSelect;
@@ -191,7 +191,7 @@ class Fields extends Component
         $gruoupedFields[$advancedLabel][] = Entries::className();
         $gruoupedFields[$advancedLabel][] = Tags::className();
         $gruoupedFields[$advancedLabel][] = Email::className();
-        $gruoupedFields[$advancedLabel][] = EmailSelect::className();
+        $gruoupedFields[$advancedLabel][] = EmailDropdown::className();
         $gruoupedFields[$advancedLabel][] = Hidden::className();
         $gruoupedFields[$advancedLabel][] = Invisible::className();
         $gruoupedFields[$advancedLabel][] = Phone::className();

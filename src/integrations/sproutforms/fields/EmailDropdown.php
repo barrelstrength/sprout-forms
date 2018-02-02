@@ -5,19 +5,16 @@ namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
 use Craft;
 use craft\base\ElementInterface;
 use craft\helpers\Template as TemplateHelper;
-use craft\base\Field;
-use craft\base\PreviewableFieldInterface;
 use yii\db\Schema;
 use craft\helpers\ArrayHelper;
 
-use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutbase\SproutBase;
 
-class EmailSelect extends SproutBaseOptionsField
+class EmailDropdown extends SproutBaseOptionsField
 {
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms','Email Select');
+        return Craft::t('sprout-forms','Email Dropdown');
     }
 
     /**
@@ -143,7 +140,7 @@ class EmailSelect extends SproutBaseOptionsField
         $selectedValue = isset($value->value) ? $value->value : null;
 
         $options = $settings['options'];
-        $options = SproutBase::$app->emailSelect->obfuscateEmailAddresses($options, $selectedValue);
+        $options = SproutBase::$app->emailDropdown->obfuscateEmailAddresses($options, $selectedValue);
 
         $rendered = Craft::$app->getView()->renderTemplate(
             'emailselect/input',
