@@ -22,6 +22,8 @@ use barrelstrength\sproutforms\web\twig\variables\SproutFormsVariable;
 use barrelstrength\sproutforms\events\RegisterFieldsEvent;
 use barrelstrength\sproutforms\services\Fields;
 use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesDataSource;
+use barrelstrength\sproutforms\events\OnBeforePopulateEntryEvent;
+use barrelstrength\sproutforms\controllers\EntriesController;
 
 class SproutForms extends Plugin
 {
@@ -86,8 +88,13 @@ class SproutForms extends Plugin
         );
 
         Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
-            $event->permissions['Sprout Forms'] = $this->getUserPermissions();
-        }
+                $event->permissions['Sprout Forms'] = $this->getUserPermissions();
+            }
+        );
+
+        Event::on(EntriesController::class, EntriesController::EVENT_BEFORE_POPULATE, function(OnBeforePopulateEntryEvent $event) {
+                self::$app->entries->handleUnobfuscateEmailAddresses($event->form);
+            }
         );
     }
 

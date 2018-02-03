@@ -12,6 +12,8 @@ use barrelstrength\sproutforms\events\OnSaveEntryEvent;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\SproutBaseRelationField;
 use barrelstrength\sproutforms\models\EntryStatus;
 use barrelstrength\sproutforms\records\Entry as EntryRecord;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\EmailDropdown as EmailDropdownField;
+use craft\db\Query;
 use barrelstrength\sproutforms\records\EntryStatus as EntryStatusRecord;
 use craft\base\ElementInterface;
 use yii\base\Component;
@@ -402,6 +404,69 @@ class Entries extends Component
 
             throw $e;
         }
+    }
+
+    /**
+     * @param       $formId
+     * @param array $submittedFields
+     *
+     * @return bool
+     */
+    public function unobfuscateEmailAddresses($formId, $submittedFields = [])
+    {
+        if (!is_numeric($formId)) {
+            return false;
+        }
+
+        $fieldContext = 'sproutForms:'.$formId;
+
+        // Get all Email Select Fields for this form
+        $emailSelectFieldHandles = (new Query())
+            ->select('handle')
+            ->from('{{%fields}}')
+            ->where(['context' => $fieldContext, 'type' => EmailDropdownField::class])
+            ->all();
+
+        $oldContext = Craft::$app->content->fieldContext;
+
+        Craft::$app->content->fieldContext = $fieldContext;
+
+        foreach ($emailSelectFieldHandles as $key => $handle) {
+            if (isset($submittedFields[$handle['handle']])) {
+                // Get our field settings, which include the map of
+                // email addresses to their indexes
+                $field = Craft::$app->fields->getFieldByHandle($handle['handle']);
+                $options = $field->settings['options'];
+
+                // Get the obfuscated email index from our post request
+                $index = $submittedFields[$handle['handle']];
+                $emailValue = $options[$index]['value'];
+
+                // Update the Email Select value in our post request from
+                // the Email Index value to the Email Address
+                $_POST['fields'][$handle['handle']] = $emailValue;
+            }
+        }
+
+        Craft::$app->content->fieldContext = $oldContext;
+    }
+
+    /**
+     * Handles event to unobfuscate email addresses in a Sprout Forms submission
+     *
+     * @param Event $event
+     */
+    public function handleUnobfuscateEmailAddresses($form)
+    {
+        if (Craft::$app->request->getIsCpRequest()) {
+            return;
+        }
+
+        $formId = $form->id;
+        $submittedFields = Craft::$app->request->getBodyParam('fields');
+
+        // Unobfuscate email address in $_POST request
+        $this->unobfuscateEmailAddresses($formId, $submittedFields);
     }
 
     /**

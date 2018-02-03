@@ -116,7 +116,7 @@ class EmailDropdown extends SproutBaseOptionsField
 
         $options = $this->options;
 
-        return Craft::$app->getView()->renderTemplate('sprout-base/sproutfields/_includes/forms/emailselect/input',
+        return Craft::$app->getView()->renderTemplate('sprout-base/sproutfields/_includes/forms/emaildropdown/input',
             [
                 'name' => $name,
                 'value' => $value,
@@ -164,7 +164,7 @@ class EmailDropdown extends SproutBaseOptionsField
     public function getElementValidationRules(): array
     {
         $rules = parent::getElementValidationRules();
-        $rules[] = 'validateEmailSelect';
+        $rules[] = 'validateEmailDropdown';
 
         return $rules;
     }
@@ -178,7 +178,7 @@ class EmailDropdown extends SproutBaseOptionsField
      *
      * @return void
      */
-    public function validateEmailSelect(ElementInterface $element)
+    public function validateEmailDropdown(ElementInterface $element)
     {
         $value = $element->getFieldValue($this->handle)->value;
 
@@ -191,7 +191,6 @@ class EmailDropdown extends SproutBaseOptionsField
             foreach ($emailAddresses as $emailAddress) {
                 if (!filter_var($emailAddress, FILTER_VALIDATE_EMAIL)) {
                     $invalidEmails[] = Craft::t('sprout-forms',
-                        'sproutFields',
                         $emailAddress." email does not validate"
                     );
                 }
@@ -204,6 +203,25 @@ class EmailDropdown extends SproutBaseOptionsField
             }
         }
     }
+
+    /**
+     * @inheritdoc
+
+    public function normalizeValue($value, ElementInterface $element = null)
+    {
+        #$value = parent::normalizeValue($value, $element);
+        Craft::dd($value);
+
+        if (isset($value->value))
+        {
+            $val = $value->value;
+            $options = $value->getOptions();
+            $value->value = $options[$val]->value;
+            $value->label = $options[$val]->label;
+        }
+
+        return $value;
+    } */
 
     /**
      * @inheritdoc

@@ -9,9 +9,12 @@ use yii\web\NotFoundHttpException;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
+use barrelstrength\sproutforms\events\OnBeforePopulateEntryEvent;
 
 class EntriesController extends BaseController
 {
+    const EVENT_BEFORE_POPULATE = 'beforePopulate';
+
     /**
      * Allows anonymous execution
      *
@@ -55,11 +58,15 @@ class EntriesController extends BaseController
             throw new Exception(Craft::t('sprout-forms','No form exists with the handle '.$formHandle));
         }
 
+        $event = new OnBeforePopulateEntryEvent([
+            'form' => $this->form
+        ]);
+
+        $this->trigger(self::EVENT_BEFORE_POPULATE, $event);
+
         $entry = $this->_getEntryModel();
 
         Craft::$app->getContent()->populateElementContent($entry);
-
-        // Removed onBeforePopulateEntry event because not needed anymore
 
         $statusId = $request->getBodyParam('statusId');
 
