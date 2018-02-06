@@ -64,7 +64,15 @@
 	var $quillWrapper = $("#{{ quillWrapper }}");
 
 	var quill = new Quill('#{{ quillEditor }}', {
-	theme: 'snow'
+		bounds: ".quill-editor",
+			modules: {
+			toolbar: [
+				[{ header: [1, 2, false] }],
+				['bold', 'italic', 'underline', 'link'],
+				[{ 'list': 'ordered'}, { 'list': 'bullet' }]
+			]
+		},
+		theme: 'snow'
 	});
 
 	quill.on('text-change', function(delta) {
