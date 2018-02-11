@@ -9,16 +9,16 @@
 }) }}
 
 {{ forms.checkboxField({
-	label: "Links for this field have their own validation pattern"|t,
+	label: "URLs for this field have their own validation pattern"|t,
 	name: 'customPatternToggle',
 	checked: field.customPatternToggle,
-	toggle: 'sproutlinkfield-custom-validation-pattern'
+	toggle: 'sprouturlfield-custom-validation-pattern'
 }) }}
 
-<div id="sproutlinkfield-custom-validation-pattern" {% if not field.customPatternToggle %}class="hidden"{% endif %}>
+<div id="sprouturlfield-custom-validation-pattern" {% if not field.customPatternToggle %}class="hidden"{% endif %}>
 	{{ forms.textField({
 		label: 'Validation Pattern'|t,
-		instructions: 'Validate links using this regular expression.'|t,
+		instructions: 'Validate URLs using this regular expression.'|t,
 		name: 'customPattern',
 		placeholder: '^https://twitter.com/(.*)',
 		value: field.customPattern
@@ -26,9 +26,9 @@
 
 	{{ forms.textField({
 		label: 'Error Message'|t,
-		instructions: 'Display this error message when a link is invalid.'|t,
+		instructions: 'Display this error message when a URL is invalid.'|t,
 		name: 'customPatternErrorMessage',
-		placeholder: 'Must be a valid profile link from twitter.com',
+		placeholder: 'Must be a valid profile URL from twitter.com',
 		value: field.customPatternErrorMessage
 	}) }}
 </div>
