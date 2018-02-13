@@ -12,10 +12,10 @@
 	label: "Phone Numbers for this field have their own  validation pattern"|t('sproutFields'),
 	name: 'customPatternToggle',
 	checked: field.customPatternToggle,
-	toggle: 'sproutlinkfield-custom-validation-pattern'
+	toggle: 'sprouturlfield-custom-validation-pattern'
 }) }}
 
-<div id="sproutlinkfield-custom-validation-pattern" {% if not field.customPatternToggle %}class="hidden"{% endif %}>
+<div id="sprouturlfield-custom-validation-pattern" {% if not field.customPatternToggle %}class="hidden"{% endif %}>
 	{{ forms.textField({
 		label: 'Validation Pattern'|t('sproutFields'),
 		instructions: 'Validate phone numbers using this pattern of numbers.'|t('sproutFields'),
