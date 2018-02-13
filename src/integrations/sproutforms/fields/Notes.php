@@ -99,19 +99,8 @@ class Notes extends SproutFormsBaseField
         $name = $this->displayName();
         $inputId = Craft::$app->getView()->formatInputId($name);
         $namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
-        $selectedStyle = $this->style;
-        $pluginSettings = Craft::$app->plugins->getPlugin('sprout-fields')
-            ->getSettings()
-            ->getAttributes();
+        // @todo - what to do with the styles?
         $selectedStyleCss = "";
-
-        if (isset($pluginSettings[$selectedStyle])) {
-            $selectedStyleCss = str_replace(
-                "{{ name }}",
-                $name,
-                $pluginSettings[$selectedStyle]
-            );
-        }
 
         return Craft::$app->getView()->renderTemplate(
             'sprout-base/sproutfields/_includes/forms/notes/input',
