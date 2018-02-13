@@ -102,6 +102,10 @@ class Notes extends SproutFormsBaseField
         // @todo - what to do with the styles?
         $selectedStyleCss = "";
 
+        if (is_null($this->notes)){
+            $this->notes = '';
+        }
+
         return Craft::$app->getView()->renderTemplate(
             'sprout-base/sproutfields/_includes/forms/notes/input',
             [
