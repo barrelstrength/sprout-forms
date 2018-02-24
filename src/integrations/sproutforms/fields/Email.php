@@ -98,7 +98,7 @@ class Email extends SproutFormsBaseField implements PreviewableFieldInterface
         $elementId = ($element != null) ? $element->id : false;
 
         $rendered = Craft::$app->getView()->renderTemplate(
-            'sprout-base/sproutfields/_includes/forms/email/input',
+            'sprout-base/sproutfields/_fields/email/input',
             [
                 'namespaceInputId' => $namespaceInputId,
                 'id' => $inputId,
