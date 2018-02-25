@@ -92,7 +92,7 @@ class Tags extends SproutBaseRelationField
         $tagGroup = $this->_getTagGroup();
 
         if ($tagGroup) {
-            return Craft::$app->getView()->renderTemplate('_components/fieldtypes/Tags/input',
+            return Craft::$app->getView()->renderTemplate('_components/fields/tags/input',
                 [
                     'elementType' => static::elementType(),
                     'id' => Craft::$app->getView()->formatInputId($this->handle),

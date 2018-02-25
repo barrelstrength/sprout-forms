@@ -521,7 +521,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
                         Craft.cp.displayNotice(Craft.t('sprout-forms','Field deleted.'));
 
                         $('#sproutfield-'+fieldId).remove();
-                        
+
                         this.initListeners();
                         this.hide();
                     }

@@ -96,8 +96,7 @@ class Phone extends SproutFormsBaseField implements PreviewableFieldInterface
         $inputId = Craft::$app->getView()->formatInputId($name);
         $namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
 
-        return Craft::$app->getView()->renderTemplate(
-            'sprout-base/sproutfields/_fields/phone/input',
+        return Craft::$app->getView()->renderTemplate('sprout-base/sproutfields/_fields/phone/input',
             [
                 'id' => $namespaceInputId,
                 'name' => $this->handle,
