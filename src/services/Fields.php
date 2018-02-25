@@ -189,25 +189,28 @@ class Fields extends Component
         $advancedLabel = Craft::t('sprout-forms', 'Advanced Fields');
 
         // Standard
-        $gruoupedFields[$standardLabel][] = PlainText::className();
+        $gruoupedFields[$standardLabel][] = SingleLine::className();
+        $gruoupedFields[$standardLabel][] = Paragraph::className();
+        $gruoupedFields[$standardLabel][] = MultipleChoice::className();
         $gruoupedFields[$standardLabel][] = Dropdown::className();
         $gruoupedFields[$standardLabel][] = Checkboxes::className();
-        $gruoupedFields[$standardLabel][] = RadioButtons::className();
-        $gruoupedFields[$standardLabel][] = MultiSelect::className();
-        $gruoupedFields[$standardLabel][] = Assets::className();
+        $gruoupedFields[$standardLabel][] = Number::className();
+        $gruoupedFields[$standardLabel][] = FileUpload::className();
+        $gruoupedFields[$standardLabel][] = SectionBreak::className();
 
         // Advanced
-        $gruoupedFields[$advancedLabel][] = Number::className();
         $gruoupedFields[$advancedLabel][] = Categories::className();
         $gruoupedFields[$advancedLabel][] = Entries::className();
-        $gruoupedFields[$advancedLabel][] = Tags::className();
         $gruoupedFields[$advancedLabel][] = Email::className();
         $gruoupedFields[$advancedLabel][] = EmailDropdown::className();
         $gruoupedFields[$advancedLabel][] = Hidden::className();
         $gruoupedFields[$advancedLabel][] = Invisible::className();
+        $gruoupedFields[$advancedLabel][] = MultiSelect::className();
+        $gruoupedFields[$advancedLabel][] = Notes::className();
         $gruoupedFields[$advancedLabel][] = Phone::className();
         $gruoupedFields[$advancedLabel][] = RegularExpression::className();
-        $gruoupedFields[$advancedLabel][] = Notes::className();
+        $gruoupedFields[$advancedLabel][] = Tags::className();
+        $gruoupedFields[$advancedLabel][] = Url::className();
 
         return $gruoupedFields;
     }
