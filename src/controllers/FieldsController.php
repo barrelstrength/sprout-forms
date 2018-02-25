@@ -95,35 +95,35 @@ class FieldsController extends BaseController
         ]);
     }
 
-	/**
-	 * This action allows rename a current Tab
-	 *
-	 */
-	public function actionRenameTab()
-	{
-		$this->requireAcceptsJson();
+    /**
+     * This action allows rename a current Tab
+     *
+     */
+    public function actionRenameTab()
+    {
+        $this->requireAcceptsJson();
 
-		$request = Craft::$app->getRequest();
-		$name = $request->getBodyParam('name');
-		$oldName = $request->getBodyParam('oldName');
-		$formId = $request->getBodyParam('formId');
-		$form = SproutForms::$app->forms->getFormById($formId);
+        $request = Craft::$app->getRequest();
+        $name = $request->getBodyParam('name');
+        $oldName = $request->getBodyParam('oldName');
+        $formId = $request->getBodyParam('formId');
+        $form = SproutForms::$app->forms->getFormById($formId);
 
-		if ($name && $form) {
-			$result = SproutForms::$app->fields->renameTab($name, $oldName, $form);
+        if ($name && $form) {
+            $result = SproutForms::$app->fields->renameTab($name, $oldName, $form);
 
-			if ($result) {
-				return $this->asJson([
-					'success' => true
-				]);
-			}
-		}
-		// @todo - how add error messages?
-		return $this->asJson([
-			'success' => false,
-			'errors' => Craft::t('sprout-forms','Unable to rename tab')
-		]);
-	}
+            if ($result) {
+                return $this->asJson([
+                    'success' => true
+                ]);
+            }
+        }
+        // @todo - how add error messages?
+        return $this->asJson([
+            'success' => false,
+            'errors' => Craft::t('sprout-forms','Unable to rename tab')
+        ]);
+    }
 
     /**
      * Save a field.
@@ -143,7 +143,7 @@ class FieldsController extends BaseController
         $form = SproutForms::$app->forms->getFormById($formId);
 
         $type    = $request->getRequiredBodyParam('type');
-	      $fieldId = $request->getBodyParam('fieldId');
+        $fieldId = $request->getBodyParam('fieldId');
 
         $field = $fieldsService->createField([
             'type' => $type,
@@ -156,21 +156,22 @@ class FieldsController extends BaseController
             'settings' => $request->getBodyParam('types.'.$type),
         ]);
 
-	      // required field validation
-	      $fieldLayout = $form->getFieldLayout();
-	      $fieldLayoutField = FieldLayoutFieldRecord::findOne([
-	      		'layoutId' => $fieldLayout->id,
-			      'tabId' => $tabId,
-			      'fieldId' => $fieldId
-		      ]
-	      );
+        // required field validation
+        $fieldLayout = $form->getFieldLayout();
+        $fieldLayoutField = FieldLayoutFieldRecord::findOne([
+            'layoutId' => $fieldLayout->id,
+              'tabId' => $tabId,
+              'fieldId' => $fieldId
+          ]
+        );
 
-	      if ($fieldLayoutField)
-	      {
-		      $fieldLayoutField->required = $request->getBodyParam('required');
-		      $fieldLayoutField->save(false);
-		      $field->required = $fieldLayoutField->required;
-	      }
+        if ($fieldLayoutField)
+        {
+            $required = $request->getBodyParam('required');
+            $fieldLayoutField->required = $required !== '' ? true : false;
+            $fieldLayoutField->save(false);
+            $field->required = $fieldLayoutField->required;
+        }
 
         // Set our field context
         Craft::$app->content->fieldContext = $form->getFieldContext();
@@ -187,7 +188,8 @@ class FieldsController extends BaseController
         // Save our field
         if (!$fieldsService->saveField($field)) {
             // Does not validate
-            SproutForms::error("Field does not validate.");
+            SproutForms::error('Field does not validate.');
+
             $variables['tabId'] = $tabId;
             $variables['field'] = $field;
 
@@ -292,7 +294,10 @@ class FieldsController extends BaseController
     /**
      * Reorder a field
      *
-     * @return json
+     * @return \yii\web\Response
+     * @throws \CDbException
+     * @throws \Exception
+     * @throws \yii\web\BadRequestHttpException
      */
     public function actionReorderFields()
     {
