@@ -6,8 +6,6 @@ use Craft;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\ElementInterface;
 
-use barrelstrength\sproutforms\SproutForms;
-
 /**
  * Class SproutFormsRadioButtonsField
  *
@@ -24,7 +22,7 @@ class RadioButtons extends SproutBaseOptionsField
      */
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms','Radio Buttons');
+        return Craft::t('sprout-forms', 'Radio Buttons');
     }
 
     /**
@@ -32,7 +30,7 @@ class RadioButtons extends SproutBaseOptionsField
      */
     protected function optionsSettingLabel(): string
     {
-        return Craft::t('sprout-forms','Radio Button Options');
+        return Craft::t('sprout-forms', 'Radio Button Options');
     }
 
     /**
@@ -74,6 +72,8 @@ class RadioButtons extends SproutBaseOptionsField
      * @param array|null                                       $renderingOptions
      *
      * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
     {

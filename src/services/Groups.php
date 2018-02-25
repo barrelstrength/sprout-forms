@@ -5,7 +5,6 @@ namespace barrelstrength\sproutforms\services;
 use Craft;
 use yii\base\Component;
 
-use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\models\FormGroup as FormGroupModel;
 use barrelstrength\sproutforms\records\FormGroup as FormGroupRecord;

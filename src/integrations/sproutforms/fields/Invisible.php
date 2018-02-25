@@ -9,7 +9,6 @@ use craft\base\PreviewableFieldInterface;
 use yii\db\Schema;
 
 use barrelstrength\sproutforms\contracts\FieldModel;
-use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 
 class Invisible extends SproutFormsBaseField implements PreviewableFieldInterface
@@ -31,7 +30,7 @@ class Invisible extends SproutFormsBaseField implements PreviewableFieldInterfac
 
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms','Invisible');
+        return Craft::t('sprout-forms', 'Invisible');
     }
 
     /**
@@ -123,9 +122,9 @@ class Invisible extends SproutFormsBaseField implements PreviewableFieldInterfac
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
-        $value = Craft::$app->getSession()->get($this->handle);
-        $value = $value ? $value : '';
-        $value = Craft::$app->view->renderObjectTemplate($value, parent::getFieldVariables());
+        $session = Craft::$app->getSession()->get($this->handle);
+        $sessionValue = $session ? $session : '';
+        $value = Craft::$app->view->renderObjectTemplate($sessionValue, parent::getFieldVariables());
 
         return parent::normalizeValue($value, $element);
     }
@@ -135,10 +134,10 @@ class Invisible extends SproutFormsBaseField implements PreviewableFieldInterfac
      */
     public function getTableAttributeHtml($value, ElementInterface $element): string
     {
-        $hiddenValue = "";
+        $hiddenValue = '';
 
-        if ($value != "") {
-            $hiddenValue = $this->hideValue ? "&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" : $value;
+        if ($value != '') {
+            $hiddenValue = $this->hideValue ? '&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;' : $value;
         }
 
         return $hiddenValue;

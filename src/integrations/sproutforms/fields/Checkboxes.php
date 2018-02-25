@@ -6,8 +6,6 @@ use Craft;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\ElementInterface;
 
-use barrelstrength\sproutforms\SproutForms;
-
 /**
  * Class SproutFormsCheckboxesField
  *
@@ -24,7 +22,7 @@ class Checkboxes extends SproutBaseOptionsField
      */
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms','Checkboxes');
+        return Craft::t('sprout-forms', 'Checkboxes');
     }
 
     /**
@@ -77,12 +75,14 @@ class Checkboxes extends SproutBaseOptionsField
     }
 
     /**
-     * @param FieldModel $field
-     * @param mixed      $value
-     * @param array      $settings
-     * @param array      $renderingOptions
+     * @param \barrelstrength\sproutforms\contracts\FieldModel $field
+     * @param mixed                                            $value
+     * @param mixed                                            $settings
+     * @param array|null                                       $renderingOptions
      *
-     * @return \Twig_Markup
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
     {
@@ -109,7 +109,7 @@ class Checkboxes extends SproutBaseOptionsField
      */
     protected function optionsSettingLabel(): string
     {
-        return Craft::t('sprout-forms','Checkbox Options');
+        return Craft::t('sprout-forms', 'Checkbox Options');
     }
 
     /**

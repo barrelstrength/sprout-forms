@@ -112,23 +112,23 @@ abstract class SproutBaseOptionsField extends SproutFormsBaseField implements Pr
             [
                 [
                     'label' => $this->optionsSettingLabel(),
-                    'instructions' => Craft::t('sprout-forms','Define the available options.'),
+                    'instructions' => Craft::t('sprout-forms', 'Define the available options.'),
                     'id' => 'options',
                     'name' => 'options',
-                    'addRowLabel' => Craft::t('sprout-forms','Add an option'),
+                    'addRowLabel' => Craft::t('sprout-forms', 'Add an option'),
                     'cols' => [
                         'label' => [
-                            'heading' => Craft::t('sprout-forms','Option Label'),
+                            'heading' => Craft::t('sprout-forms', 'Option Label'),
                             'type' => 'singleline',
                             'autopopulate' => 'value'
                         ],
                         'value' => [
-                            'heading' => Craft::t('sprout-forms','Value'),
+                            'heading' => Craft::t('sprout-forms', 'Value'),
                             'type' => 'singleline',
                             'class' => 'code'
                         ],
                         'default' => [
-                            'heading' => Craft::t('sprout-forms','Default?'),
+                            'heading' => Craft::t('sprout-forms', 'Default?'),
                             'type' => 'checkbox',
                             'radioMode' => !$this->multi,
                             'class' => 'thin'

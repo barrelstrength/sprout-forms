@@ -43,7 +43,14 @@ class SproutForms extends Plugin
      */
     public static $pluginId = 'sprout-forms';
 
+    /**
+     * @var bool
+     */
     public $hasCpSection = true;
+
+    /**
+     * @var bool
+     */
     public $hasCpSettings = true;
 
     public function init()
@@ -55,8 +62,7 @@ class SproutForms extends Plugin
 
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $event) {
             $event->rules = array_merge($event->rules, $this->getCpUrlRules());
-        }
-        );
+        });
 
         Event::on(Fields::class, Fields::EVENT_REGISTER_FIELDS, function(RegisterFieldsEvent $event) {
             $fieldsByGroup = SproutForms::$app->fields->getRegisteredFieldsByGroup();
@@ -66,8 +72,7 @@ class SproutForms extends Plugin
                     $event->fields[] = new $field;
                 }
             }
-        }
-        );
+        });
 
         // Register DataSources for sproutReports plugin integration
         Event::on(DataSources::class, DataSources::EVENT_REGISTER_DATA_SOURCES, function(RegisterComponentTypesEvent $event) {
@@ -78,26 +83,23 @@ class SproutForms extends Plugin
             'sproutforms' => SproutFormsVariable::class
         ]);
 
-        Event::on(
-            CraftVariable::class,
-            CraftVariable::EVENT_INIT,
-            function(Event $event) {
-                $variable = $event->sender;
-                $variable->set('sproutforms', SproutFormsVariable::class);
-            }
-        );
+        Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function(Event $event) {
+            $variable = $event->sender;
+            $variable->set('sproutforms', SproutFormsVariable::class);
+        });
 
         Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
-                $event->permissions['Sprout Forms'] = $this->getUserPermissions();
-            }
-        );
+            $event->permissions['Sprout Forms'] = $this->getUserPermissions();
+        });
 
         Event::on(EntriesController::class, EntriesController::EVENT_BEFORE_POPULATE, function(OnBeforePopulateEntryEvent $event) {
-                self::$app->entries->handleUnobfuscateEmailAddresses($event->form);
-            }
-        );
+            self::$app->entries->handleUnobfuscateEmailAddresses($event->form);
+        });
     }
 
+    /**
+     * @return array|null
+     */
     public function getCpNavItem()
     {
         $parent = parent::getCpNavItem();
@@ -129,6 +131,9 @@ class SproutForms extends Plugin
         ]);
     }
 
+    /**
+     * @return Settings|\craft\base\Model|null
+     */
     protected function createSettingsModel()
     {
         return new Settings();
@@ -184,7 +189,7 @@ class SproutForms extends Plugin
     }
 
     /**
-     * @return []
+     * @return array
      */
     public function getUserPermissions()
     {
@@ -207,7 +212,9 @@ class SproutForms extends Plugin
     }
 
     /**
+     * @return bool
      * @throws \Exception
+     * @throws \Throwable
      */
     public function beforeUninstall(): bool
     {

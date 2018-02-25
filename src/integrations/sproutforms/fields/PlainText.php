@@ -9,7 +9,6 @@ use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
 
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
-use barrelstrength\sproutforms\SproutForms;
 
 /**
  * Class PlainText
@@ -53,7 +52,7 @@ class PlainText extends SproutFormsBaseField implements PreviewableFieldInterfac
      */
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms','Plain Text');
+        return Craft::t('sprout-forms', 'Plain Text');
     }
 
     /**
@@ -85,12 +84,14 @@ class PlainText extends SproutFormsBaseField implements PreviewableFieldInterfac
     }
 
     /**
-     * @param FieldModel $field
-     * @param mixed      $value
-     * @param array      $settings
-     * @param array      $renderingOptions
+     * @param \barrelstrength\sproutforms\contracts\FieldModel $field
+     * @param mixed                                            $value
+     * @param mixed                                            $settings
+     * @param array|null                                       $renderingOptions
      *
-     * @return \Twig_Markup
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
     {
@@ -113,9 +114,9 @@ class PlainText extends SproutFormsBaseField implements PreviewableFieldInterfac
     }
 
     /**
-     * @param FieldModel $field
-     *
-     * @return \Twig_Markup
+     * @return null|string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {

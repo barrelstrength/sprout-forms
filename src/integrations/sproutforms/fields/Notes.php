@@ -13,12 +13,12 @@ use barrelstrength\sproutbase\web\assets\sproutfields\notes\QuillAsset;
 class Notes extends SproutFormsBaseField
 {
     /**
-     * @var text
+     * @var string
      */
     public $notes;
 
     /**
-     * @var text
+     * @var string
      */
     public $style;
 
@@ -28,13 +28,13 @@ class Notes extends SproutFormsBaseField
     public $hideLabel;
 
     /**
-     * @var text
+     * @var string
      */
     public $output;
 
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms','Notes');
+        return Craft::t('sprout-forms', 'Notes');
     }
 
     /**
@@ -72,7 +72,7 @@ class Notes extends SproutFormsBaseField
      */
     public function getSettingsHtml()
     {
-        $name = $this->displayName();
+        $name = static::displayName();
 
         $inputId = Craft::$app->getView()->formatInputId($name);
         $view = Craft::$app->getView();
@@ -96,13 +96,13 @@ class Notes extends SproutFormsBaseField
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        $name = $this->displayName();
+        $name = static::displayName();
         $inputId = Craft::$app->getView()->formatInputId($name);
         $namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
         // @todo - what to do with the styles?
         $selectedStyleCss = "";
 
-        if (is_null($this->notes)){
+        if (is_null($this->notes)) {
             $this->notes = '';
         }
 
@@ -124,6 +124,8 @@ class Notes extends SproutFormsBaseField
      * @param array|null                                       $renderingOptions
      *
      * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
     {
@@ -138,11 +140,10 @@ class Notes extends SproutFormsBaseField
         $selectedStyleCss = "";
 
         if (isset($pluginSettings[$selectedStyle])) {
-            $selectedStyleCss = str_replace("{{ name }}", $name, $pluginSettings[$selectedStyle]);
+            $selectedStyleCss = str_replace('{{ name }}', $name, $pluginSettings[$selectedStyle]);
         }
 
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'notes/input',
+        $rendered = Craft::$app->getView()->renderTemplate('notes/input',
             [
                 'id' => $namespaceInputId,
                 'settings' => $settings,
@@ -155,6 +156,10 @@ class Notes extends SproutFormsBaseField
         return TemplateHelper::raw($rendered);
     }
 
+    /**
+     * @todo - Remove?
+     * @return array
+     */
     private function getOptions()
     {
         $options = [

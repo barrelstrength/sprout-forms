@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\web\twig\variables;
 
+use barrelstrength\sproutforms\elements\Form;
 use Craft;
 use craft\helpers\Template as TemplateHelper;
 use craft\helpers\ElementHelper;
@@ -19,10 +20,13 @@ use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 class SproutFormsVariable
 {
     /**
-     * @var ElementCriteriaModel
+     * @var \barrelstrength\sproutforms\elements\FormQuery|\craft\elements\db\ElementQueryInterface
      */
     public $entries;
 
+    /**
+     * SproutFormsVariable constructor.
+     */
     public function __construct()
     {
         //$this->entries = Craft::$app->elements->getCriteria('SproutForms_Entry');
@@ -52,18 +56,20 @@ class SproutFormsVariable
     /**
      * Returns a complete form for display in template
      *
-     * @param string     $formHandle
+     * @param            $formHandle
      * @param array|null $renderingOptions
      *
-     * @return string
-     * @internal param string $form_handle
+     * @return \Twig_Markup
+     * @throws \Exception
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function displayForm($formHandle, array $renderingOptions = null)
     {
         $form = SproutForms::$app->forms->getFormByHandle($formHandle);
 
         if (!$form) {
-            throw new \Exception(Craft::t('sprout-forms','Unable to find form with the handle `{handle}`', [
+            throw new \Exception(Craft::t('sprout-forms', 'Unable to find form with the handle `{handle}`', [
                 'handle' => $formHandle
             ]));
         }
@@ -83,7 +89,7 @@ class SproutFormsVariable
                 'tabs' => $form->getFieldLayout()->getTabs(),
                 'entry' => $entry,
                 'formFields' => $fields,
-                'thirdPartySubmission' => !!$form->submitAction,
+                'thirdPartySubmission' => (bool) $form->submitAction,
                 'displaySectionTitles' => $form->displaySectionTitles,
                 'renderingOptions' => $renderingOptions
             ]
@@ -108,11 +114,24 @@ class SproutFormsVariable
         return TemplateHelper::raw($formHtml);
     }
 
+    /**
+     * @param $field
+     *
+     * @return string
+     */
     public function getFieldClass($field): string
     {
         return get_class($field);
     }
 
+    /**
+     * @param            $formTabHandle
+     * @param array|null $renderingOptions
+     *
+     * @return bool|string|\Twig_Markup
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
+     */
     public function displayTab($formTabHandle, array $renderingOptions = null)
     {
         list($formHandle, $tabHandle) = explode('.', $formTabHandle);
@@ -150,21 +169,21 @@ class SproutFormsVariable
         $layoutTab = isset($layoutTabs[$tabIndex]) ? $layoutTabs[$tabIndex] : null;
 
         // Build the HTML for our form tabs and fields
-        $tabHtml = $view->renderTemplate(
-            'tab',
+        $tabHtml = $view->renderTemplate('tab',
             [
                 'form' => $form,
                 'tabs' => [$layoutTab],
                 'entry' => $entry,
                 'formFields' => $fields,
                 'displaySectionTitles' => $form->displaySectionTitles,
-                'thirdPartySubmission' => !!$form->submitAction,
-                'displaySectionTitles' => $form->displaySectionTitles,
+                'thirdPartySubmission' => (bool) $form->submitAction,
                 'renderingOptions' => $renderingOptions
             ]
         );
 
-        $view->setTemplatesPath(Craft::$app->path->getSiteTemplatesPath());
+        $siteTemplatesPath = Craft::$app->path->getSiteTemplatesPath();
+
+        $view->setTemplatesPath($siteTemplatesPath);
 
         return TemplateHelper::raw($tabHtml);
     }
@@ -172,12 +191,12 @@ class SproutFormsVariable
     /**
      * Returns a complete field for display in template
      *
-     * @param       $handle
-     * @param array $renderingOptions
+     * @param            $handle
+     * @param array|null $renderingOptions
      *
-     * @return string
-     * @internal param string $form_handle
-     *
+     * @return bool|\Twig_Markup
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function displayField($handle, array $renderingOptions = null)
     {
@@ -229,7 +248,7 @@ class SproutFormsVariable
                         'element' => $entry,
                         'formField' => $formField,
                         'renderingOptions' => $renderingOptions,
-                        'thirdPartySubmission' => !!$form->submitAction,
+                        'thirdPartySubmission' => (bool) $form->submitAction,
                     ]
                 );
 
@@ -277,9 +296,9 @@ class SproutFormsVariable
     /**
      * Gets entry by ID
      *
-     * @param int $id
+     * @param $id
      *
-     * @return  SproutForms_EntryModel
+     * @return EntryElement|null
      */
     public function getEntryById($id)
     {
@@ -289,11 +308,11 @@ class SproutFormsVariable
     /**
      * Returns an active or new entry model
      *
-     * @param SproutForms_FormModel $form
+     * @param Form $form
      *
      * @return mixed
      */
-    public function getEntry(SproutForms_FormModel $form)
+    public function getEntry(Form $form)
     {
         return SproutForms::$app->entries->getEntryModel($form);
     }
@@ -301,7 +320,7 @@ class SproutFormsVariable
     /**
      * Gets last entry submitted
      *
-     * @return SproutForms_EntryModel
+     * @return EntryElement|null
      */
     public function getLastEntry()
     {
@@ -312,7 +331,7 @@ class SproutFormsVariable
             Craft::$app->getSession()->destroy('lastEntryId');
         }
 
-        return (isset($entry)) ? $entry : null;
+        return isset($entry) ? $entry : null;
     }
 
     /**
@@ -330,9 +349,9 @@ class SproutFormsVariable
     /**
      * Gets all forms in a specific group by ID
      *
-     * @param  int $id Group ID
+     * @param $id
      *
-     * @return SproutForms_FormModel
+     * @return Form
      */
     public function getFormsByGroupId($id)
     {
@@ -349,6 +368,9 @@ class SproutFormsVariable
         return SproutForms::$app->fields->prepareFieldTypeSelection();
     }
 
+    /**
+     * @param $settings
+     */
     public function multiStepForm($settings)
     {
         $currentStep = isset($settings['currentStep']) ? $settings['currentStep'] : null;
@@ -374,8 +396,8 @@ class SproutFormsVariable
     /**
      * @param $type
      *
-     * @throws Exception
-     * @return null|SproutFormsBaseField
+     * @return mixed
+     * @throws \Exception
      */
     public function getRegisteredField($type)
     {
@@ -387,7 +409,7 @@ class SproutFormsVariable
             }
         }
 
-        $message = Craft::t('sprout-forms','{type} field does not support front-end display using Sprout Forms.', [
+        $message = Craft::t('sprout-forms', '{type} field does not support front-end display using Sprout Forms.', [
                 'type' => $type
             ]
         );
@@ -399,6 +421,9 @@ class SproutFormsVariable
         }
     }
 
+    /**
+     * @return mixed
+     */
     public function getTemplatesPath()
     {
         return Craft::$app->path->getTemplatesPath();
@@ -414,6 +439,7 @@ class SproutFormsVariable
 
     /**
      * @return bool
+     * @throws \yii\base\Exception
      */
     public function canCreateExamples()
     {
@@ -422,6 +448,7 @@ class SproutFormsVariable
 
     /**
      * @return bool
+     * @throws \yii\base\Exception
      */
     public function hasExamples()
     {
@@ -438,14 +465,6 @@ class SproutFormsVariable
         $plugins = Craft::$app->plugins->getAllPlugins();
 
         if (array_key_exists($plugin, $plugins)) {
-            $invisibleCaptcha = $plugins[$plugin];
-
-            /* @todo the isInstalled variable was removed on craft3
-             * if ($invisibleCaptcha->isInstalled)
-             * {
-             * return true;
-             * }
-             */
             return true;
         }
 
@@ -460,7 +479,7 @@ class SproutFormsVariable
         $plugins = Craft::$app->plugins->getPlugins(false);
 
         if (array_key_exists('sproutinvisiblecaptcha', $plugins)) {
-            $invisibleCaptcha = $plugins["sproutinvisiblecaptcha"];
+            $invisibleCaptcha = $plugins['sproutinvisiblecaptcha'];
 
             if ($invisibleCaptcha->getSettings()->sproutFormsDisplayFormTagOutput
                 and $invisibleCaptcha->isInstalled
@@ -473,7 +492,7 @@ class SproutFormsVariable
     }
 
     /**
-     * @return bool
+     * @return array
      */
     public function getEntryStatuses()
     {
@@ -481,9 +500,9 @@ class SproutFormsVariable
     }
 
     /**
-     * @param FieldModel
+     * @param $field
      *
-     * @return bool
+     * @return null
      */
     public function getRegisteredFieldByModel($field)
     {
@@ -498,27 +517,44 @@ class SproutFormsVariable
         return null;
     }
 
+    /**
+     * @return array|\barrelstrength\sproutforms\services\SproutFormsBaseField[]
+     */
     public function getRegisteredFields()
     {
         return SproutForms::$app->fields->getRegisteredFields();
     }
 
-		public function getRegisteredFieldsByGroup()
-		{
-			return SproutForms::$app->fields->getRegisteredFieldsByGroup();
-		}
+    /**
+     * @return array
+     */
+    public function getRegisteredFieldsByGroup()
+    {
+        return SproutForms::$app->fields->getRegisteredFieldsByGroup();
+    }
 
-	public function getCustomFields($registeredFields, $sproutFormsFields)
-	{
-		foreach ($sproutFormsFields as $group) {
-			foreach ($group as $field) {
-				unset($registeredFields[$field]);
-			}
-		}
+    /**
+     * @param $registeredFields
+     * @param $sproutFormsFields
+     *
+     * @return mixed
+     */
+    public function getCustomFields($registeredFields, $sproutFormsFields)
+    {
+        foreach ($sproutFormsFields as $group) {
+            foreach ($group as $field) {
+                unset($registeredFields[$field]);
+            }
+        }
 
-		return $registeredFields;
-	}
+        return $registeredFields;
+    }
 
+    /**
+     * @param $field
+     *
+     * @return string
+     */
     public function getFieldClassName($field)
     {
         return get_class($field);

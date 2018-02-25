@@ -5,7 +5,6 @@ namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
 use Craft;
 use craft\base\ElementInterface;
 use craft\helpers\Template as TemplateHelper;
-use craft\base\Field;
 use craft\base\PreviewableFieldInterface;
 use yii\db\Schema;
 use barrelstrength\sproutforms\SproutForms;
@@ -30,7 +29,7 @@ class Hidden extends SproutFormsBaseField implements PreviewableFieldInterface
 
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms','Hidden');
+        return Craft::t('sprout-forms', 'Hidden');
     }
 
     /**
@@ -87,12 +86,14 @@ class Hidden extends SproutFormsBaseField implements PreviewableFieldInterface
     }
 
     /**
-     * @param FieldModel $field
-     * @param mixed      $value
-     * @param array      $settings
-     * @param array      $renderingOptions
+     * @param \barrelstrength\sproutforms\contracts\FieldModel $field
+     * @param mixed                                            $value
+     * @param mixed                                            $settings
+     * @param array|null                                       $renderingOptions
      *
-     * @return \Twig_Markup
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
     {

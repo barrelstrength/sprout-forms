@@ -3,9 +3,6 @@
 namespace barrelstrength\sproutforms\models;
 
 use craft\base\Model;
-use craft\helpers\UrlHelper;
-
-use barrelstrength\sproutforms\SproutForms;
 
 class EntryStatus extends Model
 {
@@ -61,7 +58,7 @@ class EntryStatus extends Model
      */
     function __toString()
     {
-        return Craft::t('sprout-forms',$this->name);
+        return Craft::t('sprout-forms', $this->name);
     }
 
     /**

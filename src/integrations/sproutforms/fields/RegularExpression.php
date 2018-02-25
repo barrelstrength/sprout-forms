@@ -8,7 +8,6 @@ use craft\helpers\Template as TemplateHelper;
 use craft\base\PreviewableFieldInterface;
 use yii\db\Schema;
 
-use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 use barrelstrength\sproutbase\web\assets\sproutfields\regularexpression\RegularExpressionFieldAsset;
@@ -32,7 +31,7 @@ class RegularExpression extends SproutFormsBaseField implements PreviewableField
 
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms','Regex');
+        return Craft::t('sprout-forms', 'Regex');
     }
 
     /**
@@ -104,18 +103,20 @@ class RegularExpression extends SproutFormsBaseField implements PreviewableField
     }
 
     /**
-     * @param FieldModel $field
-     * @param mixed      $value
-     * @param array      $settings
-     * @param array      $renderingOptions
+     * @param \barrelstrength\sproutforms\contracts\FieldModel $field
+     * @param mixed                                            $value
+     * @param mixed                                            $settings
+     * @param array|null                                       $renderingOptions
      *
-     * @return \Twig_Markup
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
     {
         $this->beginRendering();
 
-        $placeholder = (isset($settings['placeholder'])) ? $settings['placeholder'] : '';
+        $placeholder = isset($settings['placeholder']) ? $settings['placeholder'] : '';
 
         $pattern = $settings['customPattern'];
 
@@ -163,9 +164,6 @@ class RegularExpression extends SproutFormsBaseField implements PreviewableField
     public function validateRegularExpression(ElementInterface $element)
     {
         $value = $element->getFieldValue($this->handle);
-
-        $handle = $this->handle;
-        $name = $this->name;
 
         if (!SproutBase::$app->regularExpression->validate($value, $this)) {
             $element->addError(

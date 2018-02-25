@@ -59,7 +59,7 @@ class Entry extends Element
      */
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms','Sprout Forms Entries');
+        return Craft::t('sprout-forms', 'Sprout Forms Entries');
     }
 
     /**
@@ -139,7 +139,6 @@ class Entry extends Element
         return $this->getForm()->getFieldLayout();
     }
 
-
     /**
      *
      * @return string|null
@@ -218,12 +217,12 @@ class Entry extends Element
         $sources = [
             [
                 'key' => '*',
-                'label' => Craft::t('sprout-forms','All Entries'),
+                'label' => Craft::t('sprout-forms', 'All Entries'),
             ]
         ];
 
         $sources[] = [
-            'heading' => Craft::t('sprout-forms',"Forms")
+            'heading' => Craft::t('sprout-forms', 'Forms')
         ];
 
         // Prepare the data for our sources sidebar
@@ -255,7 +254,7 @@ class Entry extends Element
 
         // Build our sources for forms with no group
         foreach ($noSources as $form) {
-            $key = "form:".$form['data']['formId'];
+            $key = 'form:'.$form['data']['formId'];
             $sources[] = [
                 'key' => $key,
                 'label' => $form['label'],
@@ -277,7 +276,7 @@ class Entry extends Element
             }
 
             foreach ($source['forms'] as $form) {
-                $key = "form:".$form['data']['formId'];
+                $key = 'form:'.$form['data']['formId'];
                 $sources[] = [
                     'key' => $key,
                     'label' => $form['label'],
@@ -304,8 +303,8 @@ class Entry extends Element
         // Delete
         $actions[] = Craft::$app->getElements()->createAction([
             'type' => Delete::class,
-            'confirmationMessage' => Craft::t('sprout-forms','Are you sure you want to delete the selected entries?'),
-            'successMessage' => Craft::t('sprout-forms','Entries deleted.'),
+            'confirmationMessage' => Craft::t('sprout-forms', 'Are you sure you want to delete the selected entries?'),
+            'successMessage' => Craft::t('sprout-forms', 'Entries deleted.'),
         ]);
 
         return $actions;
@@ -325,10 +324,10 @@ class Entry extends Element
     protected static function defineSortOptions(): array
     {
         $attributes = [
-            'sproutforms_entries.dateCreated' => Craft::t('sprout-forms','Date Created'),
+            'sproutforms_entries.dateCreated' => Craft::t('sprout-forms', 'Date Created'),
             // @todo - fix error where formName is not a column on subquery
             //'formName'               => Craft::t('sprout-forms','Form Name'),
-            'sproutforms_entries.dateUpdated' => Craft::t('sprout-forms','Date Updated'),
+            'sproutforms_entries.dateUpdated' => Craft::t('sprout-forms', 'Date Updated'),
         ];
 
         return $attributes;
@@ -339,14 +338,19 @@ class Entry extends Element
      */
     protected static function defineTableAttributes(): array
     {
-        $attributes['title'] = ['label' => Craft::t('sprout-forms','Title')];
-        $attributes['formName'] = ['label' => Craft::t('sprout-forms','Form Name')];
-        $attributes['dateCreated'] = ['label' => Craft::t('sprout-forms','Date Created')];
-        $attributes['dateUpdated'] = ['label' => Craft::t('sprout-forms','Date Updated')];
+        $attributes['title'] = ['label' => Craft::t('sprout-forms', 'Title')];
+        $attributes['formName'] = ['label' => Craft::t('sprout-forms', 'Form Name')];
+        $attributes['dateCreated'] = ['label' => Craft::t('sprout-forms', 'Date Created')];
+        $attributes['dateUpdated'] = ['label' => Craft::t('sprout-forms', 'Date Updated')];
 
         return $attributes;
     }
 
+    /**
+     * @param string $source
+     *
+     * @return array
+     */
     protected static function defineDefaultTableAttributes(string $source): array
     {
         $attributes = ['title', 'formName', 'dateCreated', 'dateUpdated'];
@@ -363,8 +367,7 @@ class Entry extends Element
     }
 
     /**
-     * @inheritdoc
-     * @throws Exception if reasons
+     * @param bool $isNew
      */
     public function afterSave(bool $isNew)
     {
@@ -403,7 +406,7 @@ class Entry extends Element
     /**
      * Returns the form element associated with this entry
      *
-     * @return FormElement
+     * @return Form|null
      */
     public function getForm()
     {

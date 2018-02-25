@@ -5,7 +5,6 @@ namespace barrelstrength\sproutforms\contracts;
 use Craft;
 use craft\base\Field;
 use craft\base\ElementInterface;
-use craft\helpers\FileHelper;
 
 /**
  * Class SproutFormsBaseField

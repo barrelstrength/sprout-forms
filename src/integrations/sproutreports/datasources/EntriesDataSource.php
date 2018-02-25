@@ -19,7 +19,7 @@ class EntriesDataSource extends BaseDataSource
 {
     public function getName()
     {
-        return Craft::t('sprout-forms','Sprout Forms Entries');
+        return Craft::t('sprout-forms', 'Sprout Forms Entries');
     }
 
     /**
@@ -35,7 +35,7 @@ class EntriesDataSource extends BaseDataSource
      */
     public function getDescription()
     {
-        return Craft::t('sprout-forms','Query form entries');
+        return Craft::t('sprout-forms', 'Query form entries');
     }
 
     public function getResults(Report $report, array $options = [])
@@ -92,11 +92,11 @@ class EntriesDataSource extends BaseDataSource
             $query = new Query();
 
             $formQuery = $query
-                ->select("*")
+                ->select('*')
                 ->from($contentTable.' AS entries');
 
             if ($startDate && $endDate) {
-                $formQuery->where("entries.dateCreated > :startDate", [':startDate' => $startDate->format('Y-m-d H:i:s')]);
+                $formQuery->where('entries.dateCreated > :startDate', [':startDate' => $startDate->format('Y-m-d H:i:s')]);
                 $formQuery->andWhere('entries.dateCreated < :endDate', [':endDate' => $endDate->format('Y-m-d H:i:s')]);
             }
 
@@ -119,7 +119,9 @@ class EntriesDataSource extends BaseDataSource
     /**
      * @param array $options
      *
-     * @return string
+     * @return null|string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getOptionsHtml(array $options = [])
     {

@@ -11,9 +11,11 @@ use yii\web\NotFoundHttpException;
 class EntryStatusesController extends BaseController
 {
     /**
-     * @param array $variables
+     * @param int|null         $entryStatusId
+     * @param EntryStatus|null $entryStatus
      *
-     * @throws HttpException
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException
      */
     public function actionEdit(int $entryStatusId = null, EntryStatus $entryStatus = null)
     {
@@ -22,7 +24,7 @@ class EntryStatusesController extends BaseController
                 $entryStatus = SproutForms::$app->entries->getEntryStatusById($entryStatusId);
 
                 if (!$entryStatus->id) {
-                    throw new NotFoundHttpException(Craft::t('sprout-forms','Entry Status not found'));
+                    throw new NotFoundHttpException(Craft::t('sprout-forms', 'Entry Status not found'));
                 }
             } else {
                 $entryStatus = new EntryStatus();
@@ -36,9 +38,11 @@ class EntryStatusesController extends BaseController
     }
 
     /**
-     * @throws Exception
-     * @throws HttpException
+     * @return null|\yii\web\Response
+     * @throws \CDbException
      * @throws \Exception
+     * @throws \barrelstrength\sproutforms\services\Exception
+     * @throws \yii\web\BadRequestHttpException
      */
     public function actionSave()
     {
@@ -53,7 +57,7 @@ class EntryStatusesController extends BaseController
         $entryStatus->isDefault = Craft::$app->request->getBodyParam('isDefault');
 
         if (!SproutForms::$app->entries->saveEntryStatus($entryStatus)) {
-            Craft::$app->session->setError(Craft::t('sprout-forms','Could not save Entry Status.'));
+            Craft::$app->session->setError(Craft::t('sprout-forms', 'Could not save Entry Status.'));
 
             Craft::$app->getUrlManager()->setRouteParams([
                 'entryStatus' => $entryStatus
@@ -62,14 +66,15 @@ class EntryStatusesController extends BaseController
             return null;
         }
 
-        Craft::$app->session->setNotice(Craft::t('sprout-forms','Entry Status saved.'));
+        Craft::$app->session->setNotice(Craft::t('sprout-forms', 'Entry Status saved.'));
 
         return $this->redirectToPostedUrl();
     }
 
     /**
-     * @return \HttpResponse
-     * @throws HttpException
+     * @return \yii\web\Response
+     * @throws \Exception
+     * @throws \yii\web\BadRequestHttpException
      */
     public function actionReorder()
     {
@@ -81,11 +86,12 @@ class EntryStatusesController extends BaseController
             return $this->asJson(['success' => $success]);
         }
 
-        return $this->asJson(['error' => Craft::t('sprout-forms',"Couldn't reorder Order Statuses.")]);
+        return $this->asJson(['error' => Craft::t('sprout-forms', "Couldn't reorder Order Statuses.")]);
     }
 
     /**
-     * @throws HttpException
+     * @return \yii\web\Response
+     * @throws \yii\web\BadRequestHttpException
      */
     public function actionDelete()
     {

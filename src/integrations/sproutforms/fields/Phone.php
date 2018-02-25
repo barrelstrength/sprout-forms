@@ -8,7 +8,6 @@ use craft\helpers\Template as TemplateHelper;
 use craft\base\PreviewableFieldInterface;
 use yii\db\Schema;
 
-use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 use barrelstrength\sproutbase\web\assets\sproutfields\phone\PhoneFieldAsset;
@@ -42,7 +41,7 @@ class Phone extends SproutFormsBaseField implements PreviewableFieldInterface
 
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms','Phone');
+        return Craft::t('sprout-forms', 'Phone');
     }
 
     /**
@@ -115,6 +114,8 @@ class Phone extends SproutFormsBaseField implements PreviewableFieldInterface
      * @param array|null                                       $renderingOptions
      *
      * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
     {
@@ -131,11 +132,9 @@ class Phone extends SproutFormsBaseField implements PreviewableFieldInterface
 
         $pattern = trim($pattern, '/');
 
-        $attributes = $field->getAttributes();
         $errorMessage = SproutBase::$app->phone->getErrorMessage($field);
 
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'phone/input',
+        $rendered = Craft::$app->getView()->renderTemplate('phone/input',
             [
                 'name' => $name,
                 'value' => $value,

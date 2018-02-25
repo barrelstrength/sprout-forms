@@ -17,9 +17,19 @@ use craft\mail\Message;
 
 class Forms extends Component
 {
+    /**
+     * @var
+     */
     public $activeEntries;
+
+    /**
+     * @var
+     */
     public $activeCpEntry;
 
+    /**
+     * @var FormRecord
+     */
     protected $formRecord;
 
     /**
@@ -41,8 +51,7 @@ class Forms extends Component
      *
      * @param array $attributes
      *
-     * @return ElementCriteriaModel
-     * @throws Exception
+     * @return mixed
      */
     public function getCriteria(array $attributes = [])
     {
@@ -52,19 +61,19 @@ class Forms extends Component
     /**
      * @param FormElement $form
      *
-     * @throws \Exception
      * @return bool
+     * @throws \Exception
+     * @throws \Throwable
      */
     public function saveForm(FormElement $form)
     {
-        $formRecord = new FormRecord();
         $isNewForm = true;
 
         if ($form->id) {
             $formRecord = FormRecord::findOne($form->id);
 
             if (!$formRecord) {
-                throw new Exception(Craft::t('sprout-forms','No form exists with the ID “{id}”', ['id' => $form->id]));
+                throw new Exception(Craft::t('sprout-forms', 'No form exists with the ID “{id}”', ['id' => $form->id]));
             }
 
             $oldForm = $formRecord;
@@ -149,7 +158,7 @@ class Forms extends Component
             $success = Craft::$app->elements->saveElement($form, false);
 
             if (!$success) {
-                SproutForms::error("Couldn’t save Element on saveForm service.");
+                SproutForms::error('Couldn’t save Element on saveForm service.');
 
                 return false;
             }
@@ -173,9 +182,9 @@ class Forms extends Component
      *
      * @param FormElement $form
      *
-     * @throws \CDbException
+     * @return bool
      * @throws \Exception
-     * @return boolean
+     * @throws \Throwable
      */
     public function deleteForm(FormElement $form)
     {
@@ -206,7 +215,7 @@ class Forms extends Component
 
             if (!$success) {
                 $transaction->rollback();
-                SproutForms::error("Couldn’t delete Form on deleteForm service.");
+                SproutForms::error('Couldn’t delete Form on deleteForm service.');
 
                 return false;
             }
@@ -261,10 +270,10 @@ class Forms extends Component
     /**
      * Returns a form model if one is found in the database by handle
      *
-     * @param string $handle
-     * @param int    $siteId
+     * @param string   $handle
+     * @param int|null $siteId
      *
-     * @return false|SproutForms_FormModel
+     * @return array|\craft\base\ElementInterface|null
      */
     public function getFormByHandle(string $handle, int $siteId = null)
     {
@@ -321,9 +330,9 @@ class Forms extends Component
     /**
      * Creates the content table for a Form.
      *
-     * @access private
+     * @param $name
      *
-     * @param string $name
+     * @throws \Throwable
      */
     private function _createContentTable($name)
     {
@@ -339,10 +348,10 @@ class Forms extends Component
     /**
      * Returns the value of a given field
      *
-     * @param string $field
-     * @param string $value
+     * @param $field
+     * @param $value
      *
-     * @return $form
+     * @return null|static
      */
     public function getFieldValue($field, $value)
     {
@@ -363,7 +372,7 @@ class Forms extends Component
         $field = Craft::$app->getFields()->getFieldById($fieldId);
 
         if ($field) {
-            $context = explode(":", $field->context);
+            $context = explode(':', $field->context);
             $formId = $context[1];
             $formRecord = FormRecord::find($formId)->one();
 
@@ -401,9 +410,10 @@ class Forms extends Component
     /**
      * Create a secuencial string for the "name" and "handle" fields if they are already taken
      *
-     * @param string
-     * @param string
-     * return string
+     * @param $field
+     * @param $value
+     *
+     * @return null|string
      */
     public function getFieldAsNew($field, $value)
     {
@@ -411,7 +421,7 @@ class Forms extends Component
         $i = 1;
         $band = true;
         do {
-            $newField = $field == "handle" ? $value.$i : $value." ".$i;
+            $newField = $field == 'handle' ? $value.$i : $value.' '.$i;
             $form = $this->getFieldValue($field, $newField);
             if (is_null($form)) {
                 $band = false;
@@ -428,9 +438,11 @@ class Forms extends Component
      *
      * @param FormElement  $form
      * @param EntryElement $entry
-     * @param array        $post
+     * @param null         $post
      *
-     * @return boolean
+     * @return bool
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function sendNotification(FormElement $form, EntryElement $entry, $post = null)
     {
@@ -523,11 +535,11 @@ class Forms extends Component
     /**
      * Removes forms and related records from the database given the ids
      *
-     * @param mixed ids
+     * @param $formElements
      *
-     * @throws \CDbException
+     * @return bool
      * @throws \Exception
-     * @return boolean
+     * @throws \Throwable
      */
     public function deleteForms($formElements)
     {
@@ -547,14 +559,13 @@ class Forms extends Component
     /**
      * Creates a form with a empty default tab
      *
-     * @param string $name
-     * @param string $handle
+     * @param null $name
+     * @param null $handle
      *
-     * @throws \CDbException
+     * @return FormElement|bool|null
      * @throws \Exception
-     * @return boolean
+     * @throws \Throwable
      */
-
     public function createNewForm($name = null, $handle = null)
     {
         $form = new FormElement();
@@ -578,5 +589,4 @@ class Forms extends Component
 
         return false;
     }
-
 }
