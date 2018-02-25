@@ -322,7 +322,7 @@ class FieldsController extends BaseController
                 'id' => $field->id,
                 'name' => $field->name,
                 'handle' => $field->handle,
-                'icon' => $field->getIcon(),
+                'icon' => $field->getSvgIconPath(),
                 'htmlExample' => $field->getExampleInputHtml(),
                 'required' => $field->required,
                 'instructions' => $field->instructions,

@@ -78,9 +78,9 @@ class Email extends SproutFormsBaseField implements PreviewableFieldInterface
     /**
      * @return string
      */
-    public function getIconClass()
+    public function getSvgIconPath()
     {
-        return 'fa fa-envelope';
+        return '@sproutbaseicons/envelope.svg';
     }
 
     /**

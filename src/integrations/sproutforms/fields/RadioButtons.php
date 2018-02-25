@@ -98,9 +98,9 @@ class RadioButtons extends SproutBaseOptionsField
     /**
      * @return string
      */
-    public function getIconClass()
+    public function getSvgIconPath()
     {
-        return 'fa fa-dot-circle-o';
+        return '@sproutbaseicons/dot-circle-o.svg';
     }
 
     /**

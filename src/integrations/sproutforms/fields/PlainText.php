@@ -132,8 +132,8 @@ class PlainText extends SproutFormsBaseField implements PreviewableFieldInterfac
     /**
      * @return string
      */
-    public function getIconClass()
+    public function getSvgIconPath()
     {
-        return 'fa fa-font';
+        return '@sproutbaseicons/font.svg';
     }
 }

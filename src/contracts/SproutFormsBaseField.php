@@ -82,30 +82,11 @@ abstract class SproutFormsBaseField extends Field
     }
 
     /**
-     * @return string font awesome class
+     * @return string
      */
-    public function getIconClass()
+    public function getSvgIconPath()
     {
         return '';
-    }
-
-    /**
-     * @param string the size of the icon
-     *
-     * @return string font awesome class
-     */
-    public function getIcon($size = "fa-2x")
-    {
-        $iconClass = $this->getIconClass();
-
-        if (!$iconClass) {
-            // set a default icon
-            $iconClass = 'fa fa-font';
-        }
-
-        $icon = "<i class='{$iconClass} {$size}' aria-hidden='true'></i>";
-
-        return $icon;
     }
 
     /**

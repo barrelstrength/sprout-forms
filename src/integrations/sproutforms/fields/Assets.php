@@ -791,12 +791,11 @@ class Assets extends SproutBaseRelationField
         return Craft::$app->getVolumes()->getVolumeById($volumeId);
     }
 
-
     /**
      * @return string
      */
-    public function getIconClass()
+    public function getSvgIconPath()
     {
-        return 'fa fa-cloud-upload';
+        return '@sproutbaseicons/cloud-upload.svg';
     }
 }

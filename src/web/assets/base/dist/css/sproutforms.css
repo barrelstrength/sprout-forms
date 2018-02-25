@@ -133,8 +133,12 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 }
 
 .sproutforms-icon svg {
-    height: 25px;
-    width: 25px;
+    height: 16px;
+    width: 16px;
+    vertical-align: middle;
+}
+.sproutforms-sourcefield-name {
+    vertical-align: middle;
 }
 
 .source-field {
@@ -221,9 +225,11 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
     padding: 8px;
 }
 
-.source-field:hover {
+.source-field:hover,
+.source-field:hover svg {
     background-color: rgb(13, 120, 242);
     color: #fff;
+    fill: #fff;
 }
 
 .source-field h3 {

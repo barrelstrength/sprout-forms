@@ -56,9 +56,9 @@ class Phone extends SproutFormsBaseField implements PreviewableFieldInterface
     /**
      * @return string
      */
-    public function getIconClass()
+    public function getSvgIconPath()
     {
-        return 'fa fa-phone';
+        return '@sproutbaseicons/phone.svg';
     }
 
     /**

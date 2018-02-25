@@ -110,9 +110,9 @@ class MultiSelect extends SproutBaseOptionsField
     /**
      * @return string
      */
-    public function getIconClass()
+    public function getSvgIconPath()
     {
-        return 'fa fa-bars';
+        return '@sproutbaseicons/bars.svg';
     }
 
     /**

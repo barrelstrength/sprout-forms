@@ -170,8 +170,8 @@ class Categories extends SproutBaseRelationField
     /**
      * @return string
      */
-    public function getIconClass()
+    public function getSvgIconPath()
     {
-        return 'fa fa-folder-open';
+        return '@sproutbaseicons/folder-open.svg';
     }
 }

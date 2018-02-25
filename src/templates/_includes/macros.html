@@ -28,7 +28,10 @@ tab      = tab or null
 
     {% if instance == 'source' %}
       <div class="source-field-header{% if field.required %} required{% endif %}">
-        <h3><span class="sproutforms-icon">{{ field.getIcon('fa-lg')|raw }}</span> {{ field.displayName() }}</h3>
+        <h3>
+          <span class="sproutforms-icon">{{ svg(field.getSvgIconPath()) }}</span>
+          <span class="sproutforms-sourcefield-name">{{ field.displayName() }}</span>
+        </h3>
       </div>
     {% endif %}
 

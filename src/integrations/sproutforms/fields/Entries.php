@@ -112,8 +112,8 @@ class Entries extends SproutBaseRelationField
     /**
      * @return string
      */
-    public function getIconClass()
+    public function getSvgIconPath()
     {
-        return 'fa fa-newspaper-o';
+        return '@sproutbaseicons/newspaper-o.svg';
     }
 }
