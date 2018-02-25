@@ -50,9 +50,9 @@ class Notes extends SproutFormsBaseField
     /**
      * @return string
      */
-    public function getIconClass()
+    public function getSvgIconPath()
     {
-        return 'fa fa-sticky-note';
+        return '@sproutbaseicons/sticky-note.svg';
     }
 
     /**

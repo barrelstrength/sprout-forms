@@ -51,9 +51,9 @@ class Url extends SproutFormsBaseField implements PreviewableFieldInterface
     /**
      * @return string
      */
-    public function getIconClass()
+    public function getSvgIconPath()
     {
-        return 'fa fa-link';
+        return '@sproutbaseicons/link.svg';
     }
 
     /**

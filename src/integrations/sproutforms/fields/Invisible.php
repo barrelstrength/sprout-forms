@@ -66,9 +66,9 @@ class Invisible extends SproutFormsBaseField implements PreviewableFieldInterfac
     /**
      * @return string
      */
-    public function getIconClass()
+    public function getSvgIconPath()
     {
-        return 'fa fa-eye-slash';
+        return '@sproutbaseicons/eye-slash.svg';
     }
 
     /**

@@ -36,9 +36,9 @@ class EmailDropdown extends SproutBaseOptionsField
     /**
      * @return string
      */
-    public function getIconClass()
+    public function getSvgIconPath()
     {
-        return 'fa fa-share';
+        return '@sproutbaseicons/share.svg';
     }
 
     /**

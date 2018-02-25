@@ -55,9 +55,9 @@ class Hidden extends SproutFormsBaseField implements PreviewableFieldInterface
     /**
      * @return string
      */
-    public function getIconClass()
+    public function getSvgIconPath()
     {
-        return 'fa fa-user-secret';
+        return '@sproutbaseicons/user-secret.svg';
     }
 
     /**

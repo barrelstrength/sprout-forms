@@ -161,9 +161,9 @@ class Tags extends SproutBaseRelationField
     /**
      * @return string
      */
-    public function getIconClass()
+    public function getSvgIconPath()
     {
-        return 'fa fa-tags';
+        return '@sproutbaseicons/tags.svg';
     }
 
     // Private Methods

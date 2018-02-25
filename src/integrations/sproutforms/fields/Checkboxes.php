@@ -115,9 +115,9 @@ class Checkboxes extends SproutBaseOptionsField
     /**
      * @return string
      */
-    public function getIconClass()
+    public function getSvgIconPath()
     {
-        return 'fa fa-check-square';
+        return '@sproutbaseicons/check-square.svg';
     }
 
     /**

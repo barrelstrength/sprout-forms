@@ -102,9 +102,9 @@ class Dropdown extends SproutBaseOptionsField
     /**
      * @return string
      */
-    public function getIconClass()
+    public function getSvgIconPath()
     {
-        return 'fa fa-chevron-circle-down';
+        return '@sproutbaseicons/chevron-circle-down.svg';
     }
 
     /**
