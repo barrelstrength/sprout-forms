@@ -35,14 +35,16 @@
 	autofocus: true
 }) }}
 
-{{ forms.textareaField({
-    label: "Instructions <span class='info'>Instructions to guide your users when filling out this field.</span>"|t('sprout-forms'),
-    id: 'instructions',
-    class: 'nicetext',
-    name: 'instructions',
-    value: (field is defined ? field.instructions : null),
-	errors: (field is defined ? field.getErrors('instructions') : null)
-}) }}
+{% if field.displayInstructionsField %}
+    {{ forms.textareaField({
+        label: "Instructions <span class='info'>Instructions to guide your users when filling out this field.</span>"|t('sprout-forms'),
+        id: 'instructions',
+        class: 'nicetext',
+        name: 'instructions',
+        value: (field is defined ? field.instructions : null),
+        errors: (field is defined ? field.getErrors('instructions') : null)
+    }) }}
+{% endif %}
 
 {% for type,fieldObject in fieldTypes %}
 	{% set isCurrent = type == className(field) %}

@@ -115,6 +115,17 @@ abstract class SproutFormsBaseField extends Field
     }
 
     /**
+     * Display or suppress instructions field. Useful for some field types like Notes where
+     * another textarea field may be the primary to use for output.
+     *
+     * @return bool
+     */
+    public function displayInstructionsField()
+    {
+        return true;
+    }
+
+    /**
      * Tells Sprout Forms NOT to add a (for) attribute to your field's top leve label
      *
      * @note
