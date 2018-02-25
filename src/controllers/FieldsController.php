@@ -293,6 +293,29 @@ class FieldsController extends BaseController
         }
     }
 
+    public function actionDeleteField()
+    {
+        $this->requirePostRequest();
+        $this->requireAcceptsJson();
+
+        $fieldId = Craft::$app->request->getRequiredBodyParam('fieldId');
+
+        if ($response = Craft::$app->fields->deleteFieldById($fieldId))
+        {
+            return $this->asJson([
+                'success' => true
+            ]);
+        }
+        else
+        {
+            return $this->asJson([
+                'success' => false
+            ]);
+        }
+
+
+    }
+
     /**
      * Reorder a field
      *
