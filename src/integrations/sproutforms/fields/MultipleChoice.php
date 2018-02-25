@@ -4,55 +4,33 @@ namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
 
 use Craft;
 use craft\helpers\Template as TemplateHelper;
-use yii\db\Schema;
 use craft\base\ElementInterface;
-use craft\base\PreviewableFieldInterface;
-
-use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 
 /**
- * Class PlainText
+ * Class SproutFormsRadioButtonsField
  *
- * @package Craft
  */
-class PlainText extends SproutFormsBaseField implements PreviewableFieldInterface
+class MultipleChoice extends SproutBaseOptionsField
 {
     /**
-     * @var string|null The input’s placeholder text
+     * @var string|null The input’s boostrap class
      */
     public $boostrapClass;
-
-    /**
-     * @var string|null The input’s placeholder text
-     */
-    public $placeholder = '';
-
-    /**
-     * @var bool|null Whether the input should allow line breaks
-     */
-    public $multiline;
-
-    /**
-     * @var int The minimum number of rows the input should have, if multi-line
-     */
-    public $initialRows = 4;
-
-    /**
-     * @var int|null The maximum number of characters allowed in the field
-     */
-    public $charLimit;
-
-    /**
-     * @var string The type of database column the field should have in the content table
-     */
-    public $columnType = Schema::TYPE_TEXT;
 
     /**
      * @inheritdoc
      */
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms', 'Plain Text');
+        return Craft::t('sprout-forms', 'Multiple Choice');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function optionsSettingLabel(): string
+    {
+        return Craft::t('sprout-forms', 'Radio Button Options');
     }
 
     /**
@@ -60,7 +38,7 @@ class PlainText extends SproutFormsBaseField implements PreviewableFieldInterfac
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/plaintext/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/radiobuttons/example',
             [
                 'field' => $this
             ]
@@ -68,18 +46,22 @@ class PlainText extends SproutFormsBaseField implements PreviewableFieldInterfac
     }
 
     /**
-     * Adds support for edit field in the Entries section of SproutForms (Control
-     * panel html)
-     *
      * @inheritdoc
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        return Craft::$app->getView()->renderTemplate('_components/fieldtypes/PlainText/input',
+        $options = $this->translatedOptions();
+
+        // If this is a new entry, look for a default option
+        if ($this->isFresh($element)) {
+            $value = $this->defaultValue();
+        }
+
+        return Craft::$app->getView()->renderTemplate('_includes/forms/radioGroup',
             [
                 'name' => $this->handle,
                 'value' => $value,
-                'field' => $this,
+                'options' => $options
             ]);
     }
 
@@ -98,7 +80,7 @@ class PlainText extends SproutFormsBaseField implements PreviewableFieldInterfac
         $this->beginRendering();
 
         $rendered = Craft::$app->getView()->renderTemplate(
-            'plaintext/input',
+            'radiobuttons/input',
             [
                 'name' => $field->handle,
                 'value' => $value,
@@ -114,27 +96,29 @@ class PlainText extends SproutFormsBaseField implements PreviewableFieldInterfac
     }
 
     /**
-     * @return null|string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @return string
+     */
+    public function getSvgIconPath()
+    {
+        return '@sproutbaseicons/dot-circle-o.svg';
+    }
+
+    /**
+     * @inheritdoc
      */
     public function getSettingsHtml()
     {
+        $parentRendered = parent::getSettingsHtml();
+
         $rendered = Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/plaintext/settings',
+            'sprout-forms/_components/fields/radiobuttons/settings',
             [
                 'field' => $this,
             ]
         );
 
-        return $rendered;
-    }
+        $customRendered = $rendered.$parentRendered;
 
-    /**
-     * @return string
-     */
-    public function getSvgIconPath()
-    {
-        return '@sproutbaseicons/font.svg';
+        return $customRendered;
     }
 }

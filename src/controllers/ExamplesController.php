@@ -9,8 +9,8 @@ use barrelstrength\sproutforms\integrations\sproutforms\fields\Checkboxes;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Dropdown;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\MultiSelect;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Number;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\PlainText;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\RadioButtons;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\SingleLine;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\MultipleChoice;
 use craft\base\Field;
 use craft\helpers\FileHelper;
 use craft\helpers\UrlHelper;
@@ -96,7 +96,7 @@ class ExamplesController extends BaseController
                         [
                             'name' => 'Full Name',
                             'handle' => 'fullName',
-                            'type' => PlainText::class,
+                            'type' => SingleLine::class,
                             'required' => 1,
                             'settings' => [
                                 'placeholder' => '',
@@ -108,7 +108,7 @@ class ExamplesController extends BaseController
                         [
                             'name' => 'Email',
                             'handle' => 'email',
-                            'type' => PlainText::class,
+                            'type' => SingleLine::class,
                             'required' => 1,
                             'settings' => [
                                 'placeholder' => '',
@@ -120,7 +120,7 @@ class ExamplesController extends BaseController
                         [
                             'name' => 'Message',
                             'handle' => 'message',
-                            'type' => PlainText::class,
+                            'type' => SingleLine::class,
                             'required' => 1,
                             'settings' => [
                                 'placeholder' => '',
@@ -136,7 +136,7 @@ class ExamplesController extends BaseController
                         [
                             'name' => 'Plain Text Field',
                             'handle' => 'plaintext',
-                            'type' => PlainText::class,
+                            'type' => SingleLine::class,
                             'required' => 1,
                             'settings' => [
                                 'placeholder' => '',
@@ -186,7 +186,7 @@ class ExamplesController extends BaseController
                         [
                             'name' => 'Radio Buttons Field',
                             'handle' => 'radioButtons',
-                            'type' => RadioButtons::class,
+                            'type' => MultipleChoice::class,
                             'required' => 0,
                             'settings' => [
                                 'options' => [
@@ -261,7 +261,7 @@ class ExamplesController extends BaseController
                         [
                             'name' => 'Textarea Field',
                             'handle' => 'textarea',
-                            'type' => PlainText::class,
+                            'type' => SingleLine::class,
                             'required' => 0,
                             'settings' => [
                                 'placeholder' => '',

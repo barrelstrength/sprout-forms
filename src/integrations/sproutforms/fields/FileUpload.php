@@ -23,14 +23,14 @@ use craft\web\UploadedFile;
  *
  * @package Craft
  */
-class Assets extends SproutBaseRelationField
+class FileUpload extends SproutBaseRelationField
 {
     /**
      * @inheritdoc
      */
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms', 'Assets');
+        return Craft::t('sprout-forms', 'File Upload');
     }
 
     /**
@@ -46,7 +46,7 @@ class Assets extends SproutBaseRelationField
      */
     public static function defaultSelectionLabel(): string
     {
-        return Craft::t('sprout-forms', 'Add an asset');
+        return Craft::t('sprout-forms', 'Add a file');
     }
 
     // Properties
@@ -107,7 +107,7 @@ class Assets extends SproutBaseRelationField
         parent::init();
         $this->allowLargeThumbsView = true;
         $this->settingsTemplate = 'sprout-forms/_components/fields/assets/settings';
-        $this->inputTemplate = '_components/fieldtypes/Assets/input';
+        $this->inputTemplate = '_components/fields/assets/input';
         $this->inputJsClass = 'Craft.AssetSelectInput';
     }
 

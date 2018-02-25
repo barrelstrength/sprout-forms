@@ -12,26 +12,14 @@
 {%- for key, dataValue in data %}
 	{%- set dataAttributes = dataAttributes ~ ' data-'~key~'="'~dataValue~'"' %}
 {% endfor -%}
-{%- if settings.multiline -%}
-	<textarea
-		{%- if id %} id="{{ id }}"{% endif %}
-		{%- if class %} class="{{ class }}"{% endif %}
-		{%- if name %} name="{{ name }}"{% endif %}
-		{%- if placeholder is not null %} placeholder="{{ placeholder }}"{% endif %}
-		{%- if maxLength is not null %} maxlength="{{ maxLength }}"{% endif %}
-		{%- if initialRows is not empty %} rows="{{ initialRows }}"{% endif %}
-		{{- required -}}
-		{{- dataAttributes|raw -}}
-		>{{ value }}</textarea>
-{%- else -%}
-	<input type="text"
-		{%- if id is not empty %} id="{{ id }}"{% endif %}
-		{%- if class is not empty %} class="{{ class }}"{% endif %}
-		{%- if name is not empty %} name="{{ name }}"{% endif %}
-		{%- if value is not empty %} value="{{ value }}"{% endif %}
-		{%- if placeholder is not null %} placeholder="{{ placeholder }}"{% endif %}
-		{%- if maxLength is not null %} maxlength="{{ maxLength }}"{% endif %}
-		{{- required -}}
-		{{- dataAttributes|raw -}}
-		/>
-{%- endif -%}
+
+<input type="text"
+	{%- if id is not empty %} id="{{ id }}"{% endif %}
+	{%- if class is not empty %} class="{{ class }}"{% endif %}
+	{%- if name is not empty %} name="{{ name }}"{% endif %}
+	{%- if value is not empty %} value="{{ value }}"{% endif %}
+	{%- if placeholder is not null %} placeholder="{{ placeholder }}"{% endif %}
+	{%- if maxLength is not null %} maxlength="{{ maxLength }}"{% endif %}
+	{{- required -}}
+	{{- dataAttributes|raw -}}
+	/>

@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutforms\services;
 
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Assets;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\FileUpload;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Categories;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Checkboxes;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Dropdown;
@@ -12,17 +12,20 @@ use barrelstrength\sproutforms\integrations\sproutforms\fields\Hidden;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Invisible;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\MultiSelect;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Number;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\Paragraph;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Phone;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\RadioButtons;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\MultipleChoice;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\RegularExpression;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Notes;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Entries;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\SectionBreak;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Tags;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\Url;
 use Craft;
 use yii\base\Component;
 use craft\base\Field;
 use craft\records\Field as FieldRecord;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\PlainText;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\SingleLine;
 use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
 use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
 
@@ -323,7 +326,7 @@ class Fields extends Component
                 $handle = $this->getFieldAsNew('handle', 'defaultField');
 
                 $field = $fieldsService->createField([
-                    'type' => PlainText::class,
+                    'type' => SingleLine::class,
                     'name' => Craft::t('sprout-forms', 'Default Field'),
                     'handle' => $handle,
                     'instructions' => '',
@@ -510,7 +513,7 @@ class Fields extends Component
 
         $data = [];
         $data['tabId'] = null;
-        $data['field'] = $fieldsService->createField(PlainText::class);
+        $data['field'] = $fieldsService->createField(SingleLine::class);
 
         if ($field) {
             $data['field'] = $field;
