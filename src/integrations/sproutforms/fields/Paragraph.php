@@ -65,7 +65,7 @@ class Paragraph extends SproutFormsBaseField implements PreviewableFieldInterfac
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        return Craft::$app->getView()->renderTemplate('_components/fields/paragraph/input',
+        return Craft::$app->getView()->renderTemplate('sprout-base/sproutfields/_fields/paragraph/input',
             [
                 'name' => $this->handle,
                 'value' => $value,

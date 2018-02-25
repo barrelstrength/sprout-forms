@@ -74,20 +74,11 @@ class PrivateNotes extends SproutFormsBaseField
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        $name = static::displayName();
-        $inputId = Craft::$app->getView()->formatInputId($name);
-        $namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
-
-        if ($this->notes === null) {
-            $this->notes = '';
-        }
-
-        return Craft::$app->getView()->renderTemplate(
-            'sprout-base/sproutfields/_fields/privatenotes/input',
+        return Craft::$app->getView()->renderTemplate('sprout-base/sproutfields/_fields/privatenotes/input',
             [
-                'id' => $namespaceInputId,
-                'name' => $name,
-                'field' => $this
+                'name' => $this->handle,
+                'value' => $value,
+                'field' => $this,
             ]
         );
     }

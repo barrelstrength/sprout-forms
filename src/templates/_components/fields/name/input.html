@@ -1,5 +1,3 @@
-
-Name Input
 {#{%- set data     = renderingOptions.data is defined ? renderingOptions.data : null %}#}
 {#{%- set id       = renderingOptions.id is defined ? renderingOptions.id : name %}#}
 {#{%- set class    = renderingOptions.class is defined ? renderingOptions.class : name %}#}
@@ -18,7 +16,6 @@ Name Input
 {#{%- if class %} class="{{ class }}"{% endif -%}#}
 {#{%- if name %} name=""{% endif -%}#}
 {#{%- if value %} value="{{ value }}"{% endif -%}#}
-\
 {#>#}
 
 <div
@@ -27,36 +24,31 @@ Name Input
     {% if field.displayPrefix %}
         <div class="sproutaddressfield-input sproutaddressfield-input-prefix">
             <label>{{ "Prefix"|t('sprout-fields') }}</label>
-            <input type="text"
-                   name="{{ name ~ '[address][prefix]' }}">
+            <input type="text" name="{{ name ~ '[address][prefix]' }}">
         </div>
     {% endif %}
 
     <div class="sproutaddressfield-input sproutaddressfield-input-firstname">
         <label>{{ "First"|t('sprout-fields') }}</label>
-        <input type="text"
-               name="{{ name ~ '[address][firstName]' }}">
+        <input type="text" name="{{ name ~ '[address][firstName]' }}">
     </div>
 
     {% if field.displayMiddleName %}
         <div class="sproutaddressfield-input sproutaddressfield-input-middlename">
             <label>{{ "Middle"|t('sprout-fields') }}</label>
-            <input type="text"
-                   name="{{ name ~ '[address][middleName]' }}">
+            <input type="text" name="{{ name ~ '[address][middleName]' }}">
         </div>
     {% endif %}
 
     <div class="sproutaddressfield-input sproutaddressfield-input-lastname">
         <label>{{ "Last"|t('sprout-fields') }}</label>
-        <input type="text"
-               name="{{ name ~ '[address][lastName]' }}">
+        <input type="text" name="{{ name ~ '[address][lastName]' }}">
     </div>
 
     {% if field.displaySuffix %}
         <div class="sproutaddressfield-input sproutaddressfield-input-suffix">
             <label>{{ "Suffix"|t('sprout-fields') }}</label>
-            <input type="text"
-                   name="{{ name ~ '[address][suffix]' }}">
+            <input type="text" name="{{ name ~ '[address][suffix]' }}">
         </div>
     {% endif %}
 </div>

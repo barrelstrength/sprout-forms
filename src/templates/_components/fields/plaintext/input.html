@@ -4,8 +4,8 @@
 {%- set value         = value is not empty ? value : null %}
 {%- set required      = field.required is defined and field.required ? " required" %}
 
-{%- set placeholder   = settings.placeholder is not empty ? settings.placeholder : null %}
-{%- set maxLength     = settings.charLimit is not empty ? settings.charLimit : null %}
+{%- set placeholder   = field.placeholder is not empty ? field.placeholder : null %}
+{%- set maxLength     = field.charLimit is not empty ? field.charLimit : null %}
 
 {%- set dataAttributes = null %}
 {%- for key, dataValue in data %}

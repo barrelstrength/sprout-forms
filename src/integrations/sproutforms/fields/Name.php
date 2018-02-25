@@ -91,16 +91,17 @@ class Name extends SproutFormsBaseField implements PreviewableFieldInterface
         // Set this to false for Quick Entry Dashboard Widget
         $elementId = ($element != null) ? $element->id : false;
 
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'sprout-base/sproutfields/_fields/name/input',
+        $value = json_decode($value, true);
+
+        $rendered = Craft::$app->getView()->renderTemplate('sprout-base/sproutfields/_fields/name/input',
             [
                 'namespaceInputId' => $namespaceInputId,
                 'id' => $inputId,
                 'name' => $name,
-                'value' => $value,
+                'field' => $this,
+                'value' => $value['address'] ?? null,
                 'elementId' => $elementId,
-                'fieldContext' => $fieldContext,
-                'placeholder' => $this->placeholder
+                'fieldContext' => $fieldContext
             ]);
 
         return TemplateHelper::raw($rendered);
@@ -113,6 +114,8 @@ class Name extends SproutFormsBaseField implements PreviewableFieldInterface
      * @param array|null                                       $renderingOptions
      *
      * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
     {
@@ -120,7 +123,6 @@ class Name extends SproutFormsBaseField implements PreviewableFieldInterface
 
         $attributes = $field->getAttributes();
         $errorMessage = SproutBase::$app->email->getErrorMessage($attributes['name'], $settings);
-//        $placeholder = (isset($settings['placeholder'])) ? $settings['placeholder'] : '';
 
         $rendered = Craft::$app->getView()->renderTemplate(
             'name/input',
@@ -129,8 +131,7 @@ class Name extends SproutFormsBaseField implements PreviewableFieldInterface
                 'value' => $value,
                 'field' => $field,
                 'errorMessage' => $errorMessage,
-                'renderingOptions' => $renderingOptions,
-//                'placeholder' => $placeholder
+                'renderingOptions' => $renderingOptions
             ]
         );
 //
