@@ -10,26 +10,37 @@ use yii\db\Schema;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 
-class Hidden extends SproutFormsBaseField implements PreviewableFieldInterface
+class CustomHtml extends SproutFormsBaseField implements PreviewableFieldInterface
 {
+    /**
+     * @var string
+     */
+    public $customHtml;
+
     /**
      * @var bool
      */
-    public $allowEdits = false;
+    public $hideLabel;
 
     /**
-     * @var string|null The maximum allowed number
+     * @inheritdoc
      */
-    public $value = '';
-
     public function isPlainInput()
     {
         return true;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function displayInstructionsField()
+    {
+        return false;
+    }
+
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms', 'Hidden');
+        return Craft::t('sprout-forms', 'Custom HTML');
     }
 
     /**
@@ -37,18 +48,7 @@ class Hidden extends SproutFormsBaseField implements PreviewableFieldInterface
      */
     public function getContentColumnType(): string
     {
-        return Schema::TYPE_STRING;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getSettingsHtml()
-    {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/hidden/settings',
-            [
-                'field' => $this,
-            ]);
+        return Schema::TYPE_TEXT;
     }
 
     /**
@@ -56,7 +56,7 @@ class Hidden extends SproutFormsBaseField implements PreviewableFieldInterface
      */
     public function getSvgIconPath()
     {
-        return '@sproutbaseicons/user-secret.svg';
+        return '@sproutbaseicons/code.svg';
     }
 
     /**
@@ -64,7 +64,19 @@ class Hidden extends SproutFormsBaseField implements PreviewableFieldInterface
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/hidden/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/customhtml/example',
+            [
+                'field' => $this
+            ]
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSettingsHtml()
+    {
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/customhtml/settings',
             [
                 'field' => $this
             ]
@@ -76,7 +88,7 @@ class Hidden extends SproutFormsBaseField implements PreviewableFieldInterface
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        return Craft::$app->getView()->renderTemplate('sprout-base/sproutfields/_fields/hidden/input',
+        return Craft::$app->getView()->renderTemplate('sprout-base/sproutfields/_fields/customhtml/input',
             [
                 'id' => $this->handle,
                 'name' => $this->handle,
@@ -99,16 +111,7 @@ class Hidden extends SproutFormsBaseField implements PreviewableFieldInterface
     {
         $this->beginRendering();
 
-        if ($settings['value']) {
-            try {
-                $value = Craft::$app->view->renderObjectTemplate($settings['value'], parent::getFieldVariables());
-            } catch (\Exception $e) {
-                SproutForms::error($e->getMessage());
-            }
-        }
-
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'hidden/input',
+        $rendered = Craft::$app->getView()->renderTemplate('customhtml/input',
             [
                 'name' => $field->handle,
                 'value' => $value,

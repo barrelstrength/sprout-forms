@@ -9,34 +9,18 @@ use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
 
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
-use barrelstrength\sproutforms\SproutForms;
 
 /**
  * Class PlainText
  *
  * @package Craft
  */
-class PlainText extends SproutFormsBaseField implements PreviewableFieldInterface
+class SingleLine extends SproutFormsBaseField implements PreviewableFieldInterface
 {
     /**
      * @var string|null The input’s placeholder text
      */
-    public $boostrapClass;
-
-    /**
-     * @var string|null The input’s placeholder text
-     */
     public $placeholder = '';
-
-    /**
-     * @var bool|null Whether the input should allow line breaks
-     */
-    public $multiline;
-
-    /**
-     * @var int The minimum number of rows the input should have, if multi-line
-     */
-    public $initialRows = 4;
 
     /**
      * @var int|null The maximum number of characters allowed in the field
@@ -53,7 +37,7 @@ class PlainText extends SproutFormsBaseField implements PreviewableFieldInterfac
      */
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms','Plain Text');
+        return Craft::t('sprout-forms', 'Single Line');
     }
 
     /**
@@ -76,7 +60,7 @@ class PlainText extends SproutFormsBaseField implements PreviewableFieldInterfac
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        return Craft::$app->getView()->renderTemplate('_components/fieldtypes/PlainText/input',
+        return Craft::$app->getView()->renderTemplate('_components/fields/plaintext/input',
             [
                 'name' => $this->handle,
                 'value' => $value,
@@ -85,12 +69,14 @@ class PlainText extends SproutFormsBaseField implements PreviewableFieldInterfac
     }
 
     /**
-     * @param FieldModel $field
-     * @param mixed      $value
-     * @param array      $settings
-     * @param array      $renderingOptions
+     * @param \barrelstrength\sproutforms\contracts\FieldModel $field
+     * @param mixed                                            $value
+     * @param mixed                                            $settings
+     * @param array|null                                       $renderingOptions
      *
-     * @return \Twig_Markup
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
     {
@@ -113,9 +99,9 @@ class PlainText extends SproutFormsBaseField implements PreviewableFieldInterfac
     }
 
     /**
-     * @param FieldModel $field
-     *
-     * @return \Twig_Markup
+     * @return null|string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {

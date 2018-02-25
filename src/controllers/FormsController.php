@@ -69,7 +69,7 @@ class FormsController extends BaseController
         $fieldLayout->type = Form::class;
 
         if (count($fieldLayout->getFields()) == 0) {
-            Craft::$app->getSession()->setError(Craft::t('sprout-forms','The form needs at least have one field'));
+            Craft::$app->getSession()->setError(Craft::t('sprout-forms', 'The form needs at least have one field'));
 
             $form = SproutForms::$app->forms->getFormById($form->id);
 
@@ -82,6 +82,7 @@ class FormsController extends BaseController
         }
 
         $form->setFieldLayout($fieldLayout);
+
         // Delete any fields removed from the layout
         $deletedFields = $request->getBodyParam('deletedFields');
 
@@ -114,7 +115,8 @@ class FormsController extends BaseController
 
         // Save it
         if (!SproutForms::$app->forms->saveForm($form)) {
-            Craft::$app->getSession()->setError(Craft::t('sprout-forms','Couldn’t save form.'));
+
+            Craft::$app->getSession()->setError(Craft::t('sprout-forms', 'Couldn’t save form.'));
 
             $notificationFields = [
                 'notificationRecipients',
@@ -141,9 +143,7 @@ class FormsController extends BaseController
             return null;
         }
 
-        Craft::$app->getSession()->setNotice(Craft::t('sprout-forms','Form saved.'));
-
-        #$_POST['redirect'] = str_replace('{id}', $form->id, $_POST['redirect']);
+        Craft::$app->getSession()->setNotice(Craft::t('sprout-forms', 'Form saved.'));
 
         return $this->redirectToPostedUrl($form);
     }
@@ -151,16 +151,18 @@ class FormsController extends BaseController
     /**
      * Edit a form.
      *
-     * @param int|null         $formId The form's ID, if editing an existing form.
-     * @param FormElement|null $form   The form send back by setRouteParams if any errors on saveForm
+     * @param int|null         $formId
+     * @param FormElement|null $form
      *
-     * @throws HttpException
-     * @throws Exception
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException
+     * @throws \Exception
+     * @throws \Throwable
      */
     public function actionEditFormTemplate(int $formId = null, FormElement $form = null)
     {
         // Immediately create a new Form
-        if (Craft::$app->request->getSegment(3) == "new") {
+        if (Craft::$app->request->getSegment(3) == 'new') {
             $form = SproutForms::$app->forms->createNewForm();
 
             if ($form) {
@@ -183,7 +185,7 @@ class FormsController extends BaseController
                     $form = SproutForms::$app->forms->getFormById($formId);
 
                     if (!$form) {
-                        throw new NotFoundHttpException(Craft::t('sprout-forms','Form not found'));
+                        throw new NotFoundHttpException(Craft::t('sprout-forms', 'Form not found'));
                     }
                 }
             }
@@ -202,9 +204,12 @@ class FormsController extends BaseController
     }
 
     /**
-     * Delete a form.
+     * Delete a Form
      *
-     * @return void
+     * @return \yii\web\Response
+     * @throws \Exception
+     * @throws \Throwable
+     * @throws \yii\web\BadRequestHttpException
      */
     public function actionDeleteForm()
     {
@@ -216,8 +221,8 @@ class FormsController extends BaseController
         $formId = $request->getRequiredBodyParam('id');
         $form = SproutForms::$app->forms->getFormById($formId);
 
-        // @TODO - handle errors
-        $success = SproutForms::$app->forms->deleteForm($form);
+        // @todo - handle errors
+        SproutForms::$app->forms->deleteForm($form);
 
         return $this->redirectToPostedUrl($form);
     }

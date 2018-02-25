@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutforms\services;
 
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Assets;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\FileUpload;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Categories;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Checkboxes;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Dropdown;
@@ -13,17 +13,21 @@ use barrelstrength\sproutforms\integrations\sproutforms\fields\Invisible;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\MultiSelect;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Name;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Number;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\Paragraph;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Phone;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\RadioButtons;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\MultipleChoice;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\RegularExpression;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Notes;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\PrivateNotes;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Entries;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\CustomHtml;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\SectionHeading;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Tags;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\Url;
 use Craft;
 use yii\base\Component;
 use craft\base\Field;
 use craft\records\Field as FieldRecord;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\PlainText;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\SingleLine;
 use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
 use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
 
@@ -44,11 +48,11 @@ class Fields extends Component
     const EVENT_REGISTER_FIELDS = 'registerFieldsEvent';
 
     /**
-     * @param array $fieldIds
+     * @param $fieldIds
      *
-     * @throws \CDbException
-     * @throws \Exception
      * @return bool
+     * @throws Exception
+     * @throws \Exception
      */
     public function reorderFields($fieldIds)
     {
@@ -97,6 +101,12 @@ class Fields extends Component
         return $record;
     }
 
+    /**
+     * @param FormElement|null $form
+     *
+     * @return array
+     * @throws \yii\base\Exception
+     */
     public function getSproutFormsTemplates(FormElement $form = null)
     {
         $templates = [];
@@ -178,27 +188,31 @@ class Fields extends Component
     public function getRegisteredFieldsByGroup()
     {
         $standardLabel = Craft::t('sprout-forms', 'Standard Fields');
-        $advancedLabel = Craft::t('sprout-forms', 'Advanced Fields');
+        $advancedLabel = Craft::t('sprout-forms', 'Special Fields');
 
         // Standard
-        $gruoupedFields[$standardLabel][] = PlainText::className();
+        $gruoupedFields[$standardLabel][] = SingleLine::className();
+        $gruoupedFields[$standardLabel][] = Paragraph::className();
+        $gruoupedFields[$standardLabel][] = MultipleChoice::className();
         $gruoupedFields[$standardLabel][] = Dropdown::className();
         $gruoupedFields[$standardLabel][] = Checkboxes::className();
-        $gruoupedFields[$standardLabel][] = RadioButtons::className();
-        $gruoupedFields[$standardLabel][] = MultiSelect::className();
-        $gruoupedFields[$standardLabel][] = Assets::className();
+        $gruoupedFields[$standardLabel][] = Number::className();
+        $gruoupedFields[$standardLabel][] = FileUpload::className();
+        $gruoupedFields[$standardLabel][] = SectionHeading::className();
 
         // Advanced
-        $gruoupedFields[$advancedLabel][] = Categories::className();
-        $gruoupedFields[$advancedLabel][] = Entries::className();
+        $gruoupedFields[$advancedLabel][] = Name::class;
         $gruoupedFields[$advancedLabel][] = Email::className();
         $gruoupedFields[$advancedLabel][] = EmailDropdown::className();
+        $gruoupedFields[$advancedLabel][] = Phone::className();
+        $gruoupedFields[$advancedLabel][] = Url::className();
+        $gruoupedFields[$advancedLabel][] = CustomHtml::className();
+        $gruoupedFields[$advancedLabel][] = PrivateNotes::className();
+        $gruoupedFields[$advancedLabel][] = Categories::className();
+        $gruoupedFields[$advancedLabel][] = Entries::className();
         $gruoupedFields[$advancedLabel][] = Hidden::className();
         $gruoupedFields[$advancedLabel][] = Invisible::className();
-        $gruoupedFields[$advancedLabel][] = Name::class;
-        $gruoupedFields[$advancedLabel][] = Notes::className();
-        $gruoupedFields[$advancedLabel][] = Number::className();
-        $gruoupedFields[$advancedLabel][] = Phone::className();
+        $gruoupedFields[$advancedLabel][] = MultiSelect::className();
         $gruoupedFields[$advancedLabel][] = RegularExpression::className();
         $gruoupedFields[$advancedLabel][] = Tags::className();
 
@@ -208,7 +222,7 @@ class Fields extends Component
     /**
      * @param $type
      *
-     * @return null|SproutFormsBaseField
+     * @return SproutFormsBaseField|mixed
      */
     public function getRegisteredField($type)
     {
@@ -269,9 +283,10 @@ class Fields extends Component
     /**
      * Create a secuencial string for the "name" and "handle" fields if they are already taken
      *
-     * @param string
-     * @param string
-     * return string
+     * @param $field
+     * @param $value
+     *
+     * @return null|string|string[]
      */
     public function getFieldAsNew($field, $value)
     {
@@ -280,7 +295,7 @@ class Fields extends Component
         $band = true;
 
         do {
-            if ($field == "handle") {
+            if ($field == 'handle') {
                 // Append a number to our handle to ensure it is unique
                 $newField = $value.$i;
 
@@ -304,9 +319,11 @@ class Fields extends Component
     /**
      * This service allows create a default tab given a form
      *
-     * @param FormElement $form
+     * @param      $form
+     * @param null $field
      *
-     * @return SproutForms_FormModel | null
+     * @return null
+     * @throws \Throwable
      */
     public function addDefaultTab($form, &$field = null)
     {
@@ -316,7 +333,7 @@ class Fields extends Component
                 $handle = $this->getFieldAsNew('handle', 'defaultField');
 
                 $field = $fieldsService->createField([
-                    'type' => PlainText::class,
+                    'type' => SingleLine::class,
                     'name' => Craft::t('sprout-forms', 'Default Field'),
                     'handle' => $handle,
                     'instructions' => '',
@@ -353,9 +370,11 @@ class Fields extends Component
     /**
      * This service allows duplicate fields from Layout
      *
-     * @param SproutForms_FormModel $form
+     * @param $form
+     * @param $postFieldLayout
      *
-     * @return SproutForms_FormModel | null
+     * @return \craft\models\FieldLayout|null
+     * @throws \Throwable
      */
     public function getDuplicateLayout($form, $postFieldLayout)
     {
@@ -427,7 +446,6 @@ class Fields extends Component
         $response = false;
 
         if (isset($field) && isset($form)) {
-            $sortOrder = 0;
 
             $fieldLayoutFields = FieldLayoutFieldRecord::findAll([
                 'tabId' => $tabId, 'layoutId' => $form->fieldLayoutId
@@ -472,7 +490,7 @@ class Fields extends Component
 
                 $response = $fieldRecord->save(false);
             } else {
-                SproutForms::error("Unable to find the FieldLayoutFieldRecord");
+                SproutForms::error('Unable to find the FieldLayoutFieldRecord');
             }
         }
 
@@ -487,11 +505,13 @@ class Fields extends Component
     /**
      * Loads the sprout modal field via ajax.
      *
-     * @param FormElement     $form
-     * @param FieldModel|null $field
-     * @param int|null        $tabId
+     * @param      $form
+     * @param null $field
+     * @param null $tabId
      *
      * @return array
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getModalFieldTemplate($form, $field = null, $tabId = null)
     {
@@ -500,7 +520,7 @@ class Fields extends Component
 
         $data = [];
         $data['tabId'] = null;
-        $data['field'] = $fieldsService->createField(PlainText::class);
+        $data['field'] = $fieldsService->createField(SingleLine::class);
 
         if ($field) {
             $data['field'] = $field;
@@ -533,6 +553,13 @@ class Fields extends Component
         ];
     }
 
+    /**
+     * @param $type
+     * @param $form
+     *
+     * @return \craft\base\FieldInterface
+     * @throws \Throwable
+     */
     public function createDefaultField($type, $form)
     {
         $intanceField = new $type;
@@ -562,6 +589,13 @@ class Fields extends Component
         return $field;
     }
 
+    /**
+     * @param             $name
+     * @param             $sortOrder
+     * @param FormElement $form
+     *
+     * @return FieldLayoutTabRecord
+     */
     public function createNewTab($name, $sortOrder, FormElement $form)
     {
         $fieldLayout = $form->getFieldLayout();

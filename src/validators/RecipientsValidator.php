@@ -3,12 +3,12 @@
 namespace barrelstrength\sproutforms\validators;
 
 use yii\validators\Validator;
-use barrelstrength\sproutforms\SproutForms;
 
 class RecipientsValidator extends Validator
 {
     /**
-     * @inheritdoc
+     * @param \yii\base\Model $object
+     * @param string          $attribute
      */
     public function validateAttribute($object, $attribute)
     {
@@ -26,9 +26,11 @@ class RecipientsValidator extends Validator
     /**
      * Custom validator for email distribution list
      *
-     * @param string $attribute
+     * @param $object
+     * @param $attribute
+     * @param $email
      *
-     * @return boolean
+     * @return bool
      */
     private function validateRecipient($object, $attribute, $email): bool
     {
@@ -40,7 +42,7 @@ class RecipientsValidator extends Validator
         }
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $this->addError($object, $attribute, Craft::t('sprout-forms','Please make sure all emails are valid.'));
+            $this->addError($object, $attribute, Craft::t('sprout-forms', 'Please make sure all emails are valid.'));
 
             return false;
         }

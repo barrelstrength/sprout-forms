@@ -23,7 +23,7 @@ class FrontEndFields extends Component
 
         if (is_array($settings['sources'])) {
             foreach ($settings['sources'] as $source) {
-                $section = explode(":", $source);
+                $section = explode(':', $source);
                 $pos = count($entries) + 1;
 
                 if (count($section) == 2) {
@@ -75,7 +75,7 @@ class FrontEndFields extends Component
         $categories = [];
 
         if (isset($settings['source'])) {
-            $group = explode(":", $settings['source']);
+            $group = explode(':', $settings['source']);
             $pos = count($categories) + 1;
 
             if (count($group) == 2) {
@@ -99,7 +99,7 @@ class FrontEndFields extends Component
         $tags = [];
 
         if (isset($settings['source'])) {
-            $group = explode(":", $settings['source']);
+            $group = explode(':', $settings['source']);
             $pos = count($tags) + 1;
 
             if (count($group) == 2) {

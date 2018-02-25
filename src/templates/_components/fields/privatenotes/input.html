@@ -1,0 +1,13 @@
+{% if field.output == "html" or field.output == "richText" %}
+    {{ field.notes  | raw }}
+{% else %}
+    {{ field.notes | markdown }}
+{% endif %}
+
+{% js %}
+    {% if (field.hideLabel)  %}
+        var sproutField = document.getElementById('{{ id }}-field').getElementsByClassName('heading')[0];
+
+        sproutField.style.display = 'none';
+    {% endif %}
+{% endjs %}

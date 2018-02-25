@@ -22,7 +22,7 @@ class Tags extends SproutBaseRelationField
      */
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms','Tags');
+        return Craft::t('sprout-forms', 'Tags');
     }
 
     /**
@@ -38,7 +38,7 @@ class Tags extends SproutBaseRelationField
      */
     public static function defaultSelectionLabel(): string
     {
-        return Craft::t('sprout-forms','Add a Tag');
+        return Craft::t('sprout-forms', 'Add a Tag');
     }
 
     // Properties
@@ -92,7 +92,7 @@ class Tags extends SproutBaseRelationField
         $tagGroup = $this->_getTagGroup();
 
         if ($tagGroup) {
-            return Craft::$app->getView()->renderTemplate('_components/fieldtypes/Tags/input',
+            return Craft::$app->getView()->renderTemplate('_components/fields/tags/input',
                 [
                     'elementType' => static::elementType(),
                     'id' => Craft::$app->getView()->formatInputId($this->handle),
@@ -109,12 +109,14 @@ class Tags extends SproutBaseRelationField
     }
 
     /**
-     * @param FieldModel $field
-     * @param mixed      $value
-     * @param array      $settings
-     * @param array      $renderingOptions
+     * @param \barrelstrength\sproutforms\contracts\FieldModel $field
+     * @param mixed                                            $value
+     * @param mixed                                            $settings
+     * @param array|null                                       $renderingOptions
      *
-     * @return \Twig_Markup
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
     {

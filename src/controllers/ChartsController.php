@@ -3,14 +3,9 @@
 namespace barrelstrength\sproutforms\controllers;
 
 use Craft;
-use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutforms\elements\Entry as EntryElement;
-use barrelstrength\sproutforms\elements\Form as FormElement;
 use craft\controllers\ElementIndexesController;
-use craft\db\Query;
 use craft\helpers\ChartHelper;
 use craft\helpers\DateTimeHelper;
-use yii\web\NotFoundHttpException;
 use yii\base\Response;
 
 /**
@@ -21,11 +16,12 @@ class ChartsController extends ElementIndexesController
     /**
      * Returns the data needed to display a Submissions chart.
      *
-     * @return void
+     * @return Response
+     * @throws \yii\base\Exception
+     * @throws \yii\web\BadRequestHttpException
      */
     public function actionGetEntriesData(): Response
     {
-
         // Required for Dashboard widget, unnecessary for Entries Index view
         $formId = Craft::$app->request->getBodyParam('formId');
 
@@ -58,7 +54,7 @@ class ChartsController extends ElementIndexesController
             'sproutforms_entries.dateCreated',
             [
                 'intervalUnit' => $intervalUnit,
-                'valueLabel' => Craft::t('sprout-forms','Submissions'),
+                'valueLabel' => Craft::t('sprout-forms', 'Submissions'),
                 'valueType' => 'number',
             ]
         );

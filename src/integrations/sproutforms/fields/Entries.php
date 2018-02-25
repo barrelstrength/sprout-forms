@@ -4,7 +4,6 @@ namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
 
 use Craft;
 use craft\helpers\Template as TemplateHelper;
-use craft\base\ElementInterface;
 use craft\elements\Entry;
 
 use barrelstrength\sproutforms\SproutForms;
@@ -20,7 +19,7 @@ class Entries extends SproutBaseRelationField
      */
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms','Entries');
+        return Craft::t('sprout-forms', 'Entries');
     }
 
     /**
@@ -36,7 +35,7 @@ class Entries extends SproutBaseRelationField
      */
     public static function defaultSelectionLabel(): string
     {
-        return Craft::t('sprout-forms','Add an Entry');
+        return Craft::t('sprout-forms', 'Add an Entry');
     }
 
     // Properties
@@ -60,12 +59,14 @@ class Entries extends SproutBaseRelationField
     }
 
     /**
-     * @param FieldModel $field
-     * @param mixed      $value
-     * @param array      $settings
-     * @param array      $renderingOptions
+     * @param \barrelstrength\sproutforms\contracts\FieldModel $field
+     * @param mixed                                            $value
+     * @param mixed                                            $settings
+     * @param array|null                                       $renderingOptions
      *
-     * @return \Twig_Markup
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
     {

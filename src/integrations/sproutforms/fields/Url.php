@@ -37,7 +37,7 @@ class Url extends SproutFormsBaseField implements PreviewableFieldInterface
 
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms','URL');
+        return Craft::t('sprout-forms', 'URL');
     }
 
     /**
@@ -53,7 +53,7 @@ class Url extends SproutFormsBaseField implements PreviewableFieldInterface
      */
     public function getSvgIconPath()
     {
-        return '@sproutbaseicons/link.svg';
+        return '@sproutbaseicons/chain.svg';
     }
 
     /**
@@ -122,7 +122,7 @@ class Url extends SproutFormsBaseField implements PreviewableFieldInterface
 
         $attributes = $field->getAttributes();
         $errorMessage = SproutBase::$app->url->getErrorMessage($attributes['name'], $settings);
-        $placeholder = (isset($settings['placeholder'])) ? $settings['placeholder'] : '';
+        $placeholder = isset($settings['placeholder']) ? $settings['placeholder'] : '';
 
         $rendered = Craft::$app->getView()->renderTemplate(
             'url/input',

@@ -66,7 +66,7 @@ abstract class SproutBaseRelationField extends SproutFormsBaseField implements P
      */
     public static function defaultSelectionLabel(): string
     {
-        return Craft::t('sprout-forms','Choose');
+        return Craft::t('sprout-forms', 'Choose');
     }
 
     // Properties
@@ -215,7 +215,7 @@ abstract class SproutBaseRelationField extends SproutFormsBaseField implements P
             [
                 ArrayValidator::class,
                 'max' => $this->allowLimit && $this->limit ? $this->limit : null,
-                'tooMany' => Craft::t('sprout-forms','{attribute} should contain at most {max, number} {max, plural, one{selection} other{selections}}.'),
+                'tooMany' => Craft::t('sprout-forms', '{attribute} should contain at most {max, number} {max, plural, one{selection} other{selections}}.'),
             ],
         ];
     }
@@ -377,7 +377,7 @@ abstract class SproutBaseRelationField extends SproutFormsBaseField implements P
             return $html;
         }
 
-        return '<p class="light">'.Craft::t('sprout-forms','Nothing selected.').'</p>';
+        return '<p class="light">'.Craft::t('sprout-forms', 'Nothing selected.').'</p>';
     }
 
     /**
@@ -535,7 +535,9 @@ abstract class SproutBaseRelationField extends SproutFormsBaseField implements P
     /**
      * Returns the HTML for the Target Site setting.
      *
-     * @return string|null
+     * @return null|string
+     * @throws NotSupportedException
+     * @throws \yii\base\Exception
      */
     public function getTargetSiteFieldHtml()
     {
@@ -552,7 +554,7 @@ abstract class SproutBaseRelationField extends SproutFormsBaseField implements P
         $html = Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'checkboxField',
                 [
                     [
-                        'label' => Craft::t('sprout-forms','Relate {type} from a specific site?', ['type' => $type]),
+                        'label' => Craft::t('sprout-forms', 'Relate {type} from a specific site?', ['type' => $type]),
                         'name' => 'useTargetSite',
                         'checked' => $showTargetSite,
                         'toggle' => 'target-site-container'
@@ -564,7 +566,7 @@ abstract class SproutBaseRelationField extends SproutFormsBaseField implements P
 
         foreach (Craft::$app->getSites()->getAllSites() as $site) {
             $siteOptions[] = [
-                'label' => Craft::t('sprout-forms',$site->name),
+                'label' => Craft::t('sprout-forms', $site->name),
                 'value' => $site->id
             ];
         }
@@ -572,7 +574,7 @@ abstract class SproutBaseRelationField extends SproutFormsBaseField implements P
         $html .= Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'selectField',
             [
                 [
-                    'label' => Craft::t('sprout-forms','Which site should {type} be related from?', ['type' => $type]),
+                    'label' => Craft::t('sprout-forms', 'Which site should {type} be related from?', ['type' => $type]),
                     'id' => 'targetSiteId',
                     'name' => 'targetSiteId',
                     'options' => $siteOptions,
@@ -588,7 +590,8 @@ abstract class SproutBaseRelationField extends SproutFormsBaseField implements P
     /**
      * Returns the HTML for the View Mode setting.
      *
-     * @return string|null
+     * @return null|string
+     * @throws \yii\base\Exception
      */
     public function getViewModeFieldHtml()
     {
@@ -606,8 +609,8 @@ abstract class SproutBaseRelationField extends SproutFormsBaseField implements P
 
         return Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'selectField', [
             [
-                'label' => Craft::t('sprout-forms','View Mode'),
-                'instructions' => Craft::t('sprout-forms','Choose how the field should look for authors.'),
+                'label' => Craft::t('sprout-forms', 'View Mode'),
+                'instructions' => Craft::t('sprout-forms', 'Choose how the field should look for authors.'),
                 'id' => 'viewMode',
                 'name' => 'viewMode',
                 'options' => $viewModeOptions,
@@ -622,10 +625,11 @@ abstract class SproutBaseRelationField extends SproutFormsBaseField implements P
     /**
      * Returns an array of variables that should be passed to the input template.
      *
-     * @param ElementQueryInterface|array|null $value
-     * @param ElementInterface|null            $element
+     * @param null                  $value
+     * @param ElementInterface|null $element
      *
      * @return array
+     * @throws NotSupportedException
      */
     protected function inputTemplateVariables($value = null, ElementInterface $element = null): array
     {
@@ -657,7 +661,7 @@ abstract class SproutBaseRelationField extends SproutFormsBaseField implements P
             'sourceElementId' => !empty($element->id) ? $element->id : null,
             'limit' => $this->allowLimit ? $this->limit : null,
             'viewMode' => $this->viewMode(),
-            'selectionLabel' => $this->selectionLabel ? Craft::t('sprout-forms',$this->selectionLabel) : static::defaultSelectionLabel(),
+            'selectionLabel' => $this->selectionLabel ? Craft::t('sprout-forms', $this->selectionLabel) : static::defaultSelectionLabel(),
         ];
     }
 
@@ -720,11 +724,11 @@ abstract class SproutBaseRelationField extends SproutFormsBaseField implements P
     protected function supportedViewModes(): array
     {
         $viewModes = [
-            'list' => Craft::t('sprout-forms','List'),
+            'list' => Craft::t('sprout-forms', 'List'),
         ];
 
         if ($this->allowLargeThumbsView) {
-            $viewModes['large'] = Craft::t('sprout-forms','Large Thumbnails');
+            $viewModes['large'] = Craft::t('sprout-forms', 'Large Thumbnails');
         }
 
         return $viewModes;
@@ -751,6 +755,7 @@ abstract class SproutBaseRelationField extends SproutFormsBaseField implements P
      * Returns the sources that should be available to choose from within the field's settings
      *
      * @return array
+     * @throws NotSupportedException
      */
     protected function availableSources(): array
     {

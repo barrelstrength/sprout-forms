@@ -9,8 +9,8 @@ use barrelstrength\sproutforms\integrations\sproutforms\fields\Checkboxes;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Dropdown;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\MultiSelect;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Number;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\PlainText;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\RadioButtons;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\SingleLine;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\MultipleChoice;
 use craft\base\Field;
 use craft\helpers\FileHelper;
 use craft\helpers\UrlHelper;
@@ -18,32 +18,31 @@ use craft\web\Controller as BaseController;
 
 class ExamplesController extends BaseController
 {
-    private $_formId;
-
     /**
      * Install examples
      *
-     * @return void
+     * @throws \Throwable
      */
     public function actionInstall()
     {
         $this->_installExampleTemplates();
         $this->_installExampleData();
 
-        Craft::$app->session->setNotice(Craft::t('sprout-forms','Examples successfully installed.'));
+        Craft::$app->session->setNotice(Craft::t('sprout-forms', 'Examples successfully installed.'));
         $this->redirect(UrlHelper::cpUrl('sprout-forms'));
     }
 
     /**
      * Install templates
      *
-     * @return void
+     * @return \yii\web\Response
      */
     private function _installExampleTemplates()
     {
         try {
             $sproutFormsFolder = Craft::$app->path->getSiteTemplatesPath().DIRECTORY_SEPARATOR.'sproutforms';
 
+            /** @noinspection MkdirRaceConditionInspection */
             @mkdir($sproutFormsFolder);
             $sproutFormsPath = Craft::getAlias('@barrelstrength/sproutforms/templates/_special/examples/templates');
 
@@ -51,7 +50,7 @@ class ExamplesController extends BaseController
         } catch (\Exception $e) {
             SproutForms::log($e->getMessage());
 
-            Craft::$app->session->setError(Craft::t('sprout-forms','Unable to install the examples.'));
+            Craft::$app->session->setError(Craft::t('sprout-forms', 'Unable to install the examples.'));
 
             return $this->redirect('sprout-forms/settings/examples');
         }
@@ -60,7 +59,8 @@ class ExamplesController extends BaseController
     /**
      * Install example data
      *
-     * @return void
+     * @return \yii\web\Response
+     * @throws \Throwable
      */
     private function _installExampleData()
     {
@@ -79,7 +79,7 @@ class ExamplesController extends BaseController
                 [
                     'name' => 'Basic Fields Form',
                     'handle' => 'basic',
-                    'titleFormat' => "{plainText} – {dropdown}{% if object.textarea %} – {{ object.textarea|slice(0,15) }}{% endif %}",
+                    'titleFormat' => '{plainText} – {dropdown}{% if object.textarea %} – {{ object.textarea|slice(0,15) }}{% endif %}',
                     'redirectUri' => 'sproutforms/examples/basic-fields?message=thank-you',
                     'displaySectionTitles' => true
                 ],
@@ -96,7 +96,7 @@ class ExamplesController extends BaseController
                         [
                             'name' => 'Full Name',
                             'handle' => 'fullName',
-                            'type' => PlainText::class,
+                            'type' => SingleLine::class,
                             'required' => 1,
                             'settings' => [
                                 'placeholder' => '',
@@ -108,7 +108,7 @@ class ExamplesController extends BaseController
                         [
                             'name' => 'Email',
                             'handle' => 'email',
-                            'type' => PlainText::class,
+                            'type' => SingleLine::class,
                             'required' => 1,
                             'settings' => [
                                 'placeholder' => '',
@@ -120,7 +120,7 @@ class ExamplesController extends BaseController
                         [
                             'name' => 'Message',
                             'handle' => 'message',
-                            'type' => PlainText::class,
+                            'type' => SingleLine::class,
                             'required' => 1,
                             'settings' => [
                                 'placeholder' => '',
@@ -136,7 +136,7 @@ class ExamplesController extends BaseController
                         [
                             'name' => 'Plain Text Field',
                             'handle' => 'plaintext',
-                            'type' => PlainText::class,
+                            'type' => SingleLine::class,
                             'required' => 1,
                             'settings' => [
                                 'placeholder' => '',
@@ -186,7 +186,7 @@ class ExamplesController extends BaseController
                         [
                             'name' => 'Radio Buttons Field',
                             'handle' => 'radioButtons',
-                            'type' => RadioButtons::class,
+                            'type' => MultipleChoice::class,
                             'required' => 0,
                             'settings' => [
                                 'options' => [
@@ -261,7 +261,7 @@ class ExamplesController extends BaseController
                         [
                             'name' => 'Textarea Field',
                             'handle' => 'textarea',
-                            'type' => PlainText::class,
+                            'type' => SingleLine::class,
                             'required' => 0,
                             'settings' => [
                                 'placeholder' => '',
@@ -323,7 +323,7 @@ class ExamplesController extends BaseController
                 // Set the field layout
                 $fieldLayout = Craft::$app->fields->assembleLayout($fieldLayout, $requiredFields);
 
-                $fieldLayout->type = FormElement::class;;
+                $fieldLayout->type = FormElement::class;
                 $form->setFieldLayout($fieldLayout);
 
                 // Save our form again with a layouts
@@ -332,7 +332,7 @@ class ExamplesController extends BaseController
         } catch (\Exception $e) {
             SproutForms::error($e->getMessage());
 
-            Craft::$app->session->setError(Craft::t('sprout-forms','Unable to install the examples.'));
+            Craft::$app->session->setError(Craft::t('sprout-forms', 'Unable to install the examples.'));
 
             return $this->redirect('sproutforms/settings/examples');
         }

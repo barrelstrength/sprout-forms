@@ -5,7 +5,6 @@ namespace barrelstrength\sproutforms\contracts;
 use Craft;
 use craft\base\Field;
 use craft\base\ElementInterface;
-use craft\helpers\FileHelper;
 
 /**
  * Class SproutFormsBaseField
@@ -113,6 +112,17 @@ abstract class SproutFormsBaseField extends Field
     public function isPlainInput()
     {
         return false;
+    }
+
+    /**
+     * Display or suppress instructions field. Useful for some field types like Notes where
+     * another textarea field may be the primary to use for output.
+     *
+     * @return bool
+     */
+    public function displayInstructionsField()
+    {
+        return true;
     }
 
     /**

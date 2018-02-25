@@ -33,16 +33,17 @@
 	{% set fieldTypes = craft.sproutforms.getRegisteredFields() %}
     {% set fieldTypesByGroup = craft.sproutforms.getRegisteredFieldsByGroup() %}
 	{% set customFields =  craft.sproutforms.getCustomFields(fieldTypes, fieldTypesByGroup) %}
+
 	<div id="sproutforms-source-fields" class="meta">
 		<div class='parent'>
 			<div class="clear"></div>
 			<div id='right-copy'>
 				{% for name,group in fieldTypesByGroup %}
-					<h2 class="tab-title donotdrag">{{ name }}</h2>
-                	{% for type in group %}
+					<h6 class="tab-title donotdrag">{{ name }}</h6>
+					{% for type in group %}
 						{% set field = fieldTypes[type] %}
 						{{ sproutForms.field(field, 'source') }}
-                    {% endfor %}
+					{% endfor %}
 				{% endfor %}
 
 				{% if customFields %}
@@ -53,25 +54,7 @@
 	</div><!-- fields div -->
 	<div class="{{ tab != 2 ? 'hidden' : '' }} meta" id="tab-sproutforms-settings">
 
-		{% if groups is defined and groups|length %}
-
-			{% set groupOptions = [
-				{ label: 'All Forms'|t('sprout-forms') , value: '*' }
-			] %}
-			{% for group in groups %}
-				{% set groupOptions = groupOptions|merge([{ label: group.name, value: group.id }]) %}
-			{% endfor %}
-
-			{{ forms.selectField({
-				first: true,
-				label: "Group <span class='info'>Which group should this form be displayed in?</span>"|t('sprout-forms'),
-				id: 'groupId',
-				name: 'groupId',
-				options: groupOptions,
-				value: groupId
-			}) }}
-
-		{% endif %}
+		<h6>{{ 'General'|t('sprout-forms') }}</h6>
 
 		{{ forms.textField({
 			first: (groups is defined and groups|length ? false : true),
@@ -81,16 +64,6 @@
 			value: form.name,
 			errors: form.getErrors('name'),
 			autofocus: true,
-			required: true
-		}) }}
-
-        {{ forms.textField({
-			label: "Handle <span class='info'>How you’ll refer to this form in the templates.</span>"|t('sprout-forms'),
-			id: 'handle',
-			class: 'code',
-			name: 'handle',
-			value: form.handle,
-			errors: form.getErrors('handle'),
 			required: true
 		}) }}
 
@@ -119,8 +92,40 @@
 			errors: (form is defined ? form.getErrors('submitButtonText') : null)
 		}) }}
 
+		<h6>{{ 'Advanced'|t('sprout-forms') }}</h6>
+
+        {% if groups is defined and groups|length %}
+
+            {% set groupOptions = [
+                { label: 'All Forms'|t('sprout-forms') , value: '*' }
+            ] %}
+            {% for group in groups %}
+                {% set groupOptions = groupOptions|merge([{ label: group.name, value: group.id }]) %}
+            {% endfor %}
+
+            {{ forms.selectField({
+                first: true,
+                label: "Group <span class='info'>Which group should this form be displayed in?</span>"|t('sprout-forms'),
+                id: 'groupId',
+                name: 'groupId',
+                options: groupOptions,
+                value: groupId
+            }) }}
+
+        {% endif %}
+
+        {{ forms.textField({
+            label: "Handle <span class='info'>How you’ll refer to this form in the templates.</span>"|t('sprout-forms'),
+            id: 'handle',
+            class: 'code',
+            name: 'handle',
+            value: form.handle,
+            errors: form.getErrors('handle'),
+            required: true
+        }) }}
+
 		{{ forms.lightswitchField({
-			label: "Section Titles <span class='info'>Display Section Titles on Forms</span>"|t('sprout-forms'),
+			label: "Page Titles <span class='info'>Display Page Titles on Forms</span>"|t('sprout-forms'),
 			id: 'displaySectionTitles',
 			name: 'displaySectionTitles',
 			on: form.displaySectionTitles,

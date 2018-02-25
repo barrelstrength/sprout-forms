@@ -7,22 +7,11 @@ use craft\helpers\Template as TemplateHelper;
 use craft\base\ElementInterface;
 
 /**
- * Class SproutFormsMultiSelectField
+ * Class SproutFormsRadioButtonsField
  *
  */
-class MultiSelect extends SproutBaseOptionsField
+class MultipleChoice extends SproutBaseOptionsField
 {
-    /**
-     * @inheritdoc
-     */
-    public static function displayName(): string
-    {
-        return Craft::t('sprout-forms', 'Multi Select');
-    }
-
-    // Properties
-    // =====================================================================
-
     /**
      * @var string|null The input’s boostrap class
      */
@@ -31,10 +20,17 @@ class MultiSelect extends SproutBaseOptionsField
     /**
      * @inheritdoc
      */
-    public function init()
+    public static function displayName(): string
     {
-        parent::init();
-        $this->multi = true;
+        return Craft::t('sprout-forms', 'Multiple Choice');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function optionsSettingLabel(): string
+    {
+        return Craft::t('sprout-forms', 'Radio Button Options');
     }
 
     /**
@@ -42,7 +38,7 @@ class MultiSelect extends SproutBaseOptionsField
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/multiselect/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/radiobuttons/example',
             [
                 'field' => $this
             ]
@@ -56,15 +52,15 @@ class MultiSelect extends SproutBaseOptionsField
     {
         $options = $this->translatedOptions();
 
-        // If this is a new entry, look for any default options
+        // If this is a new entry, look for a default option
         if ($this->isFresh($element)) {
             $value = $this->defaultValue();
         }
 
-        return Craft::$app->getView()->renderTemplate('_includes/forms/multiselect',
+        return Craft::$app->getView()->renderTemplate('_includes/forms/radioGroup',
             [
                 'name' => $this->handle,
-                'values' => $value,
+                'value' => $value,
                 'options' => $options
             ]);
     }
@@ -84,7 +80,7 @@ class MultiSelect extends SproutBaseOptionsField
         $this->beginRendering();
 
         $rendered = Craft::$app->getView()->renderTemplate(
-            'multiselect/input',
+            'radiobuttons/input',
             [
                 'name' => $field->handle,
                 'value' => $value,
@@ -100,19 +96,11 @@ class MultiSelect extends SproutBaseOptionsField
     }
 
     /**
-     * @inheritdoc
-     */
-    protected function optionsSettingLabel(): string
-    {
-        return Craft::t('sprout-forms', 'Multi-select Options');
-    }
-
-    /**
      * @return string
      */
     public function getSvgIconPath()
     {
-        return '@sproutbaseicons/bars.svg';
+        return '@sproutbaseicons/dot-circle-o.svg';
     }
 
     /**
@@ -123,7 +111,7 @@ class MultiSelect extends SproutBaseOptionsField
         $parentRendered = parent::getSettingsHtml();
 
         $rendered = Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/multiselect/settings',
+            'sprout-forms/_components/fields/radiobuttons/settings',
             [
                 'field' => $this,
             ]

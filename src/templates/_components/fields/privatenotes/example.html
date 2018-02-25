@@ -1,18 +1,18 @@
-<div id="sproutform-exampleinput-invisible">
+<div id="sproutform-exampleinput-privatenotes">
 
-    <input type="text" readonly disabled>
+    <textarea rows="4" readonly disabled></textarea>
 
     <p><i class="fa fa-eye-slash fa-lg"></i> {{ "This field will not be visible in your form or your source code."|t }}</p>
 
 </div>
 
 {% css %}
-    #sproutform-exampleinput-invisible input[type="text"] {
+    #sproutform-exampleinput-privatenotes textarea {
         border: 2px dashed #ccc;
         box-shadow: none;
         padding: 4px;
     }
-    #sproutform-exampleinput-invisible p {
+    #sproutform-exampleinput-privatenotes p {
         font-style: italic;
         margin: 5px 0 10px;
     }

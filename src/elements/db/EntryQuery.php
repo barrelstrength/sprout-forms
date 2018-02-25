@@ -181,7 +181,7 @@ class EntryQuery extends ElementQuery
     /**
      * Updates the query command, criteria, and select fields when a source is available
      *
-     * @param EntryQuery $query
+     * @param EntryQuery $entryQuery
      */
     protected function joinContentTableAndAddContentSelects(
         EntryQuery $entryQuery
@@ -213,7 +213,7 @@ class EntryQuery extends ElementQuery
 
                         if (isset($entryQuery->$handle)) {
                             $entryQuery->subQuery->andWhere(Db::parseParam(
-                                $form->handle.".".$fieldPrefix.$field->handle,
+                                $form->handle.'.'.$fieldPrefix.$field->handle,
                                 $entryQuery->$handle)
                             );
                         }

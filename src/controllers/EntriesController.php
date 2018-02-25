@@ -40,9 +40,12 @@ class EntriesController extends BaseController
     /**
      * Processes form submissions
      *
+     * @return void|\yii\web\Response
      * @throws Exception
-     * @throws HttpException
-     * @return void
+     * @throws \Exception
+     * @throws \Throwable
+     * @throws \yii\base\Exception
+     * @throws \yii\web\BadRequestHttpException
      */
     public function actionSaveEntry()
     {
@@ -55,7 +58,7 @@ class EntriesController extends BaseController
         $this->form = SproutForms::$app->forms->getFormByHandle($formHandle);
 
         if (!isset($this->form)) {
-            throw new Exception(Craft::t('sprout-forms','No form exists with the handle '.$formHandle));
+            throw new Exception(Craft::t('sprout-forms', 'No form exists with the handle '.$formHandle));
         }
 
         $event = new OnBeforePopulateEntryEvent([
@@ -100,7 +103,7 @@ class EntriesController extends BaseController
 
                 return $this->asJson($return);
             } else {
-                Craft::$app->getSession()->setNotice(Craft::t('sprout-forms','Entry saved.'));
+                Craft::$app->getSession()->setNotice(Craft::t('sprout-forms', 'Entry saved.'));
 
                 return $this->redirectToPostedUrl($entry);
             }
@@ -112,11 +115,11 @@ class EntriesController extends BaseController
     /**
      * Route Controller for Edit Entry Template
      *
-     * @param int|null          $entryId The entry's ID, if editing an existing entry.
-     * @param EntryElement|null $entry   The entry send back by setRouteParams if any errors on saveEntry
+     * @param int|null          $entryId
+     * @param EntryElement|null $entry
      *
-     * @throws HttpException
-     * @throws Exception
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException
      */
     public function actionEditEntry(int $entryId = null, EntryElement $entry = null)
     {
@@ -128,7 +131,7 @@ class EntriesController extends BaseController
             }
 
             if (!$entry) {
-                throw new NotFoundHttpException(Craft::t('sprout-forms','Entry not found'));
+                throw new NotFoundHttpException(Craft::t('sprout-forms', 'Entry not found'));
             }
 
             Craft::$app->getContent()->populateElementContent($entry);
@@ -169,12 +172,15 @@ class EntriesController extends BaseController
      * Verifies scenarios for error redirect
      *
      * @param EntryElement $entry
+     *
+     * @return void|\yii\web\Response
+     * @throws \yii\web\BadRequestHttpException
      */
     private function _redirectOnError(EntryElement $entry)
     {
         $errors = json_encode($entry->getErrors());
         $request = Craft::$app->getRequest();
-        SproutForms::error("Couldn’t save form entry. Errors: ".$errors);
+        SproutForms::error('Couldn’t save form entry. Errors: '.$errors);
 
         if ($request->getAcceptsJson()) {
             return $this->asJson(
@@ -185,7 +191,7 @@ class EntriesController extends BaseController
         } else {
             if ($request->getIsCpRequest()) {
                 // make errors available to variable
-                Craft::$app->getSession()->setError(Craft::t('sprout-forms','Couldn’t save entry.'));
+                Craft::$app->getSession()->setError(Craft::t('sprout-forms', 'Couldn’t save entry.'));
 
                 // Store this Entry Model in a variable in our Service layer
                 // so that we can access the error object from our actionEditEntryTemplate() method
@@ -201,7 +207,7 @@ class EntriesController extends BaseController
                 if (SproutForms::$app->entries->fakeIt) {
                     return $this->redirectToPostedUrl($entry);
                 } else {
-                    Craft::$app->getSession()->setError(Craft::t('sprout-forms','Couldn’t save entry.'));
+                    Craft::$app->getSession()->setError(Craft::t('sprout-forms', 'Couldn’t save entry.'));
                     // Store this Entry Model in a variable in our Service layer
                     // so that we can access the error object from our displayForm() variable
                     SproutForms::$app->forms->activeEntries[$this->form->handle] = $entry;
@@ -239,7 +245,6 @@ class EntriesController extends BaseController
         $entry->setFieldParamNamespace($fieldsLocation);
     }
 
-
     /**
      * Fetch or create a EntryElement class
      *
@@ -251,7 +256,6 @@ class EntriesController extends BaseController
     {
         $entryId = null;
         $request = Craft::$app->getRequest();
-        $session = Craft::$app->getSession();
 
         // Removed multi-step form code on Craft3 Let's keep it clean
         $enableEditFormEntryViaFrontEnd = false;
@@ -269,7 +273,7 @@ class EntriesController extends BaseController
             $entry = SproutForms::$app->entries->getEntryById($entryId);
 
             if (!$entry) {
-                throw new Exception(Craft::t('sprout-forms','No entry exists with the ID '.$entryId));
+                throw new Exception(Craft::t('sprout-forms', 'No entry exists with the ID '.$entryId));
             }
         } else {
             $entry = new EntryElement();
@@ -277,8 +281,4 @@ class EntriesController extends BaseController
 
         return $entry;
     }
-
 }
-
-
-?>

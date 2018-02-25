@@ -26,13 +26,13 @@ class Settings extends Model
 
         return [
             'general' => [
-                'label' => Craft::t('sprout-forms','General'),
+                'label' => Craft::t('sprout-forms', 'General'),
                 'url' => 'sprout-forms/settings/general',
                 'selected' => 'general',
                 'template' => 'sprout-forms/_settings/general'
             ],
             'entry-statuses' => [
-                'label' => Craft::t('sprout-forms','Entry Statuses'),
+                'label' => Craft::t('sprout-forms', 'Entry Statuses'),
                 'url' => 'sprout-forms/settings/entry-statuses',
                 'selected' => 'entry-statuses',
                 'template' => 'sprout-forms/_settings/entrystatuses',
@@ -40,16 +40,16 @@ class Settings extends Model
                 'variables' => $variables
             ],
             'advanced' => [
-                'label' => Craft::t('sprout-forms','Advanced'),
+                'label' => Craft::t('sprout-forms', 'Advanced'),
                 'url' => 'sprout-forms/settings/advanced',
                 'selected' => 'advanced',
                 'template' => 'sprout-forms/_settings/advanced'
             ],
             'settingsHeading' => [
-                'heading' => Craft::t('sprout-forms','Examples'),
+                'heading' => Craft::t('sprout-forms', 'Examples'),
             ],
             'examples' => [
-                'label' => Craft::t('sprout-forms','Form Templates'),
+                'label' => Craft::t('sprout-forms', 'Form Templates'),
                 'url' => 'sprout-forms/settings/examples',
                 'actionUrl' => 'sprout-forms/examples/install',
                 'selected' => 'examples',
