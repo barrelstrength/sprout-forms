@@ -11,6 +11,7 @@ use barrelstrength\sproutforms\integrations\sproutforms\fields\EmailDropdown;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Hidden;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Invisible;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\MultiSelect;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\Name;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Number;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Phone;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\RadioButtons;
@@ -176,27 +177,30 @@ class Fields extends Component
      */
     public function getRegisteredFieldsByGroup()
     {
-        $standarLabel = Craft::t('sprout-forms', "Standar Fields");
-        $advancedLabel = Craft::t('sprout-forms', "Advanced Fields");
-        // standard
-        $gruoupedFields[$standarLabel][] = PlainText::className();
-        $gruoupedFields[$standarLabel][] = Dropdown::className();
-        $gruoupedFields[$standarLabel][] = Checkboxes::className();
-        $gruoupedFields[$standarLabel][] = RadioButtons::className();
-        $gruoupedFields[$standarLabel][] = MultiSelect::className();
-        $gruoupedFields[$standarLabel][] = Assets::className();
-        // advanced
-        $gruoupedFields[$advancedLabel][] = Number::className();
+        $standardLabel = Craft::t('sprout-forms', 'Standard Fields');
+        $advancedLabel = Craft::t('sprout-forms', 'Advanced Fields');
+
+        // Standard
+        $gruoupedFields[$standardLabel][] = PlainText::className();
+        $gruoupedFields[$standardLabel][] = Dropdown::className();
+        $gruoupedFields[$standardLabel][] = Checkboxes::className();
+        $gruoupedFields[$standardLabel][] = RadioButtons::className();
+        $gruoupedFields[$standardLabel][] = MultiSelect::className();
+        $gruoupedFields[$standardLabel][] = Assets::className();
+
+        // Advanced
         $gruoupedFields[$advancedLabel][] = Categories::className();
         $gruoupedFields[$advancedLabel][] = Entries::className();
-        $gruoupedFields[$advancedLabel][] = Tags::className();
         $gruoupedFields[$advancedLabel][] = Email::className();
         $gruoupedFields[$advancedLabel][] = EmailDropdown::className();
         $gruoupedFields[$advancedLabel][] = Hidden::className();
         $gruoupedFields[$advancedLabel][] = Invisible::className();
+        $gruoupedFields[$advancedLabel][] = Name::class;
+        $gruoupedFields[$advancedLabel][] = Notes::className();
+        $gruoupedFields[$advancedLabel][] = Number::className();
         $gruoupedFields[$advancedLabel][] = Phone::className();
         $gruoupedFields[$advancedLabel][] = RegularExpression::className();
-        $gruoupedFields[$advancedLabel][] = Notes::className();
+        $gruoupedFields[$advancedLabel][] = Tags::className();
 
         return $gruoupedFields;
     }
