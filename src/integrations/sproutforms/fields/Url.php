@@ -53,7 +53,7 @@ class Url extends SproutFormsBaseField implements PreviewableFieldInterface
      */
     public function getSvgIconPath()
     {
-        return '@sproutbaseicons/link.svg';
+        return '@sproutbaseicons/chain.svg';
     }
 
     /**
