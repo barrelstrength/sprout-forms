@@ -195,18 +195,18 @@ class SproutForms extends Plugin
     {
         return [
             'manageSproutFormsForms' => [
-                'label' => self::t('Manage Forms')
+                'label' => Craft::t('sprout-forms','Manage Forms')
             ],
             'viewSproutFormsEntries' => [
-                'label' => self::t('View Form Entries'),
+                'label' => Craft::t('sprout-forms','View Form Entries'),
                 'nested' => [
                     'editSproutFormsEntries' => [
-                        'label' => self::t('Edit Form Entries')
+                        'label' => Craft::t('sprout-forms','Edit Form Entries')
                     ]
                 ]
             ],
             'editSproutFormsSettings' => [
-                'label' => self::t('Edit Settings')
+                'label' => Craft::t('sprout-forms','Edit Settings')
             ]
         ];
     }

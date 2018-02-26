@@ -6,7 +6,7 @@ use Craft;
 use craft\base\ElementInterface;
 use craft\helpers\Template as TemplateHelper;
 use yii\db\Schema;
-use craft\helpers\ArrayHelper;
+use craft\helpers\StringHelper;
 
 use barrelstrength\sproutbase\SproutBase;
 
@@ -183,7 +183,7 @@ class EmailDropdown extends SproutBaseOptionsField
     {
         $value = $element->getFieldValue($this->handle)->value;
 
-        $emailAddresses = ArrayHelper::toArray($value);
+        $emailAddresses = StringHelper::split($value);
 
         $emailAddresses = array_unique($emailAddresses);
 
