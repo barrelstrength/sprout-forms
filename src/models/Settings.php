@@ -15,6 +15,18 @@ class Settings extends Model
     public $enableSaveDataPerFormBasis = 0;
     public $saveDataByDefault = 1;
     public $enablePerFormTemplateFolderOverride = 0;
+    public $enableCaptchas = 1;
+    public $enableInvisibleCaptcha = 1;
+    public $enableGoogleRecaptcha = 0;
+    /**
+     * @var string
+     */
+    public $googleRecaptchaSiteKey = '';
+
+    /**
+     * @var string
+     */
+    public $googleRecaptchaSecretKey = '';
 
     public function getSettingsNavItems()
     {
