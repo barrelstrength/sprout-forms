@@ -121,16 +121,12 @@ class Name extends SproutFormsBaseField implements PreviewableFieldInterface
     {
         $this->beginRendering();
 
-        $attributes = $field->getAttributes();
-        $errorMessage = SproutBase::$app->email->getErrorMessage($attributes['name'], $settings);
-
         $rendered = Craft::$app->getView()->renderTemplate(
             'name/input',
             [
                 'name' => $field->handle,
                 'value' => $value,
                 'field' => $field,
-                'errorMessage' => $errorMessage,
                 'renderingOptions' => $renderingOptions
             ]
         );
@@ -138,49 +134,5 @@ class Name extends SproutFormsBaseField implements PreviewableFieldInterface
         $this->endRendering();
 //
         return TemplateHelper::raw($rendered);
-    }
-
-    /**
-     * @inheritdoc
-     */
-//    public function getElementValidationRules(): array
-//    {
-//        $rules = parent::getElementValidationRules();
-//        $rules[] = 'validateEmail';
-//
-//        return $rules;
-//    }
-
-    /**
-     * Validates our fields submitted value beyond the checks
-     * that were assumed based on the content attribute.
-     *
-     *
-     * @param ElementInterface $element
-     *
-     * @return void
-     */
-    public function validateEmail(ElementInterface $element)
-    {
-//        $value = $element->getFieldValue($this->handle);
-//
-//        $customPattern = $this->customPattern;
-//        $checkPattern = $this->customPatternToggle;
-//
-//        if (!SproutBase::$app->email->validateEmailAddress($value, $customPattern, $checkPattern)) {
-//            $element->addError($this->handle,
-//                SproutBase::$app->email->getErrorMessage(
-//                    $this->name, $this)
-//            );
-//        }
-//
-//        $uniqueEmail = $this->uniqueEmail;
-//
-//        if ($uniqueEmail && !SproutBase::$app->email->validateUniqueEmailAddress($value, $element, $this)) {
-//            $element->addError($this->handle,
-//                Craft::t('sprout-forms',$this->name.' must be a unique email.')
-//            );
-//        }
-        return true;
     }
 }
