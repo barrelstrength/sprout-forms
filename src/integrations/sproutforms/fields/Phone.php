@@ -122,16 +122,18 @@ class Phone extends SproutFormsBaseField implements PreviewableFieldInterface
 
         $name = $field->handle;
         $namespaceInputId = $this->getNamespace().'-'.$name;
-        $mask = $settings['mask'];
+//        $mask = $settings['mask'];
 
-        $mask = preg_quote($settings['mask']);
+//        $mask = preg_quote($settings['mask']);
         // Do no escape "-" html5 does not treat it as special chars
-        $mask = str_replace("\\-", '-', $mask);
-        $pattern = SproutBase::$app->phone->convertMaskToRegEx($mask);
+//        $mask = str_replace("\\-", '-', $mask);
+//        $pattern = SproutBase::$app->phone->convertMaskToRegEx($mask);
+        $mask = '';
+        $pattern = '';
+//        $pattern = trim($pattern, '/');
 
-        $pattern = trim($pattern, '/');
-
-        $errorMessage = SproutBase::$app->phone->getErrorMessage($field);
+//        $errorMessage = SproutBase::$app->phone->getErrorMessage($field);
+        $errorMessage = '';
 
         $rendered = Craft::$app->getView()->renderTemplate('phone/input',
             [
