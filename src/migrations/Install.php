@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\migrations;
 
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutbase\migrations\sproutreports\Install as SproutBaseReportsInstall;
+use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesDataSource;
 use craft\db\Migration;
 
 /**
@@ -33,7 +34,7 @@ class Install extends Migration
      */
     public function safeDown()
     {
-        SproutBase::$app->dataSources->deleteReportsByDataSourceId('sproutforms.entriesdatasource');
+        SproutBase::$app->dataSources->deleteReportsByType(EntriesDataSource::class);
 
         $this->dropTable('{{%sproutforms_entries}}');
         $this->dropTable('{{%sproutforms_forms}}');

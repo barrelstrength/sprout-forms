@@ -76,7 +76,7 @@ class SproutForms extends Plugin
 
         // Register DataSources for sproutReports plugin integration
         Event::on(DataSources::class, DataSources::EVENT_REGISTER_DATA_SOURCES, function(RegisterComponentTypesEvent $event) {
-            $event->types[] = new EntriesDataSource();
+            $event->types[] = EntriesDataSource::class;
         });
 
         $this->setComponents([
