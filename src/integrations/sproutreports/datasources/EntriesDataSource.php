@@ -17,6 +17,9 @@ use craft\helpers\DateTimeHelper;
  */
 class EntriesDataSource extends BaseDataSource
 {
+    /**
+     * @return string
+     */
     public function getName()
     {
         return Craft::t('sprout-forms', 'Sprout Forms Entries');
@@ -38,14 +41,14 @@ class EntriesDataSource extends BaseDataSource
         return Craft::t('sprout-forms', 'Query form entries');
     }
 
-    public function getResults(Report $report, array $options = [])
+    public function getResults(Report $report, array $settings = [])
     {
         $startDate = null;
         $endDate = null;
         $formId = null;
 
-        if (!empty($report->getOption('startDate'))) {
-            $startDateValue = $report->getOption('startDate');
+        if (!empty($report->getSetting('startDate'))) {
+            $startDateValue = $report->getSetting('startDate');
             $startDateValue = (array)$startDateValue;
 
             $startDate = DateTimeHelper::toIso8601($startDateValue);
@@ -53,8 +56,8 @@ class EntriesDataSource extends BaseDataSource
             $startDate = DateTimeHelper::toDateTime($startDate);
         }
 
-        if (!empty($report->getOption('endDate'))) {
-            $endDateValue = $report->getOption('endDate');
+        if (!empty($report->getSetting('endDate'))) {
+            $endDateValue = $report->getSetting('endDate');
             $endDateValue = (array)$endDateValue;
 
             $endDate = DateTimeHelper::toIso8601($endDateValue);
@@ -62,20 +65,20 @@ class EntriesDataSource extends BaseDataSource
             $endDate = DateTimeHelper::toDateTime($endDate);
         }
 
-        if (!empty($report->getOption('formId'))) {
-            $formId = $report->getOption('formId');
+        if (!empty($report->getSetting('formId'))) {
+            $formId = $report->getSetting('formId');
         }
 
-        if (count($options)) {
-            if (isset($options['startDate'])) {
-                $startDate = DateTimeHelper::toDateTime($options['startDate']);
+        if (count($settings)) {
+            if (isset($settings['startDate'])) {
+                $startDate = DateTimeHelper::toDateTime($settings['startDate']);
             }
 
-            if (isset($options['endDate'])) {
-                $endDate = DateTimeHelper::toDateTime($options['endDate']);
+            if (isset($settings['endDate'])) {
+                $endDate = DateTimeHelper::toDateTime($settings['endDate']);
             }
 
-            $formId = $options['formId'];
+            $formId = $settings['formId'];
         }
 
         $results = [];
@@ -117,18 +120,18 @@ class EntriesDataSource extends BaseDataSource
     }
 
     /**
-     * @param array $options
+     * @param array $settings
      *
      * @return null|string
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getOptionsHtml(array $options = [])
+    public function getSettingsHtml(array $settings = [])
     {
         $forms = Form::find()->limit(null)->orderBy('name')->all();
 
-        if (empty($options)) {
-            $options = (array)$this->report->getOptions();
+        if (empty($settings)) {
+            $settings = (array)$this->report->getSettings();
         }
 
         $formOptions = [];
@@ -144,17 +147,17 @@ class EntriesDataSource extends BaseDataSource
         $defaultStartDate = null;
         $defaultEndDate = null;
 
-        if (count($options)) {
-            if (isset($options['startDate'])) {
-                $startDateValue = (array)$options['startDate'];
+        if (count($settings)) {
+            if (isset($settings['startDate'])) {
+                $startDateValue = (array)$settings['startDate'];
 
-                $options['startDate'] = DateTimeHelper::toDateTime($startDateValue);
+                $settings['startDate'] = DateTimeHelper::toDateTime($startDateValue);
             }
 
-            if (isset($options['endDate'])) {
-                $endDateValue = (array)$options['endDate'];
+            if (isset($settings['endDate'])) {
+                $endDateValue = (array)$settings['endDate'];
 
-                $options['endDate'] = DateTimeHelper::toDateTime($endDateValue);
+                $settings['endDate'] = DateTimeHelper::toDateTime($endDateValue);
             }
         }
 
@@ -162,7 +165,7 @@ class EntriesDataSource extends BaseDataSource
             'formOptions' => $formOptions,
             'defaultStartDate' => new \DateTime($defaultStartDate),
             'defaultEndDate' => new \DateTime($defaultEndDate),
-            'options' => $options
+            'options' => $settings
         ]);
     }
 }
