@@ -43,23 +43,23 @@
 
 {% js %}
 	new Craft.SproutBase.GroupsAdmin({
-	groupsSelector: '#sidebar nav ul',
-	newGroupButtonSelector: '#newgroupbtn',
-	groupSettingsSelector: '#groupsettingsbtn',
+		groupsSelector: '#sidebar nav ul',
+		newGroupButtonSelector: '#newgroupbtn',
+		groupSettingsSelector: '#groupsettingsbtn',
 
-	newGroupAction: 'sprout-forms/groups/save-group',
-	newGroupOnSuccessUrlBase: 'sprout-forms/forms',
-	newGroupOnErrorMessage: Craft.t('sprout-forms', 'Could not create the group:'),
+		newGroupAction: 'sprout-forms/groups/save-group',
+		newGroupOnSuccessUrlBase: 'sprout-forms/forms',
+		newGroupOnErrorMessage: Craft.t('sprout-forms', 'Could not create the group:'),
 
-	renameGroupAction: 'sprout-forms/groups/save-group',
-	renameGroupOnSuccessMessage: Craft.t('sprout-forms', 'Group renamed.'),
-	renameGroupOnErrorMessage: Craft.t('sprout-forms', 'Could not rename the group:'),
+		renameGroupAction: 'sprout-forms/groups/save-group',
+		renameGroupOnSuccessMessage: Craft.t('sprout-forms', 'Group renamed.'),
+		renameGroupOnErrorMessage: Craft.t('sprout-forms', 'Could not rename the group:'),
 
-	promptForGroupNameMessage: Craft.t('sprout-forms', 'What do you want to name your group?'),
+		promptForGroupNameMessage: Craft.t('sprout-forms', 'What do you want to name your group?'),
 
-	deleteGroupAction: 'sprout-forms/groups/delete-group',
-	deleteGroupOnSuccessUrl: 'sprout-forms/forms',
-	deleteGroupConfirmMessage: Craft.t('sprout-forms', 'Are you sure you want to delete this group and all its forms?'),
-	deleteGroupOnErrorMessage: Craft.t('sprout-forms', 'Could not delete the group.'),
+		deleteGroupAction: 'sprout-forms/groups/delete-group',
+		deleteGroupOnSuccessUrl: 'sprout-forms/forms',
+		deleteGroupConfirmMessage: Craft.t('sprout-forms', 'Are you sure you want to delete this group and all its forms?'),
+		deleteGroupOnErrorMessage: Craft.t('sprout-forms', 'Could not delete the group.'),
 	});
 {% endjs %}
