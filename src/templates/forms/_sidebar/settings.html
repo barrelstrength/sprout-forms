@@ -30,9 +30,9 @@
 
 <div class="editform-sidebar-body">
 
-	{% set fieldTypes = craft.sproutforms.getRegisteredFields() %}
-    {% set fieldTypesByGroup = craft.sproutforms.getRegisteredFieldsByGroup() %}
-	{% set customFields =  craft.sproutforms.getCustomFields(fieldTypes, fieldTypesByGroup) %}
+	{% set fieldTypes = craft.sproutForms.getRegisteredFields() %}
+    {% set fieldTypesByGroup = craft.sproutForms.getRegisteredFieldsByGroup() %}
+	{% set customFields =  craft.sproutForms.getCustomFields(fieldTypes, fieldTypesByGroup) %}
 
 	<div id="sproutforms-source-fields" class="meta">
 		<div class='parent'>

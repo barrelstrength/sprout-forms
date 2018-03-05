@@ -7,8 +7,8 @@
     {% endif %}
 {% endif %}
 
-{% set fieldTypes = craft.sproutforms.getRegisteredFields() %}
-{% set fieldTypeGroups = craft.sproutforms.prepareFieldTypeSelection() %}
+{% set fieldTypes = craft.sproutForms.getRegisteredFields() %}
+{% set fieldTypeGroups = craft.sproutForms.prepareFieldTypeSelection() %}
 
 <input type="hidden" name="formId" value="{{ formId }}">
 

@@ -22,7 +22,7 @@ tab      = tab or null
   <div
     {% if instance == 'active' %}id="sproutfield-{{ field.id }}"{% endif %}
     class="{%- if instance == 'active' %}target-field {% endif -%}{%- if instance == 'source' %}source-field {% endif -%}"
-    data-type="{{ craft.sproutforms.getFieldClassName(field) }}"
+    data-type="{{ craft.sproutForms.getFieldClassName(field) }}"
     data-defaultname="{{ field.displayName }}"
     >
 

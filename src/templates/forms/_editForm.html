@@ -81,7 +81,7 @@
     {% if formId is defined %}
       <h3>{{ "One line of code"|t }}</h3>
 
-      <p><input class="text nicetext fullwidth" type="text" id="display-form-code" value="{% verbatim %}{{ craft.sproutforms.displayForm('{% endverbatim %}{{ form.handle }}{% verbatim %}') }}{% endverbatim %}"></p>
+      <p><input class="text nicetext fullwidth" type="text" id="display-form-code" value="{% verbatim %}{{ craft.sproutForms.displayForm('{% endverbatim %}{{ form.handle }}{% verbatim %}') }}{% endverbatim %}"></p>
       <hr>
       <h3>{{ "100% Control"|t }}</h3>
       <p>{{ 'Customize your form using <a href="http://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/customization/template-overrides" target="_blank">Template Overrides</a>, <a href="http://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/customization/rendering-options" target="_blank">Rendering Options</a>, additional <a href="http://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/customization/rendering-options" target="_blank">Fields</a>, Notifications, or <a href="http://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/examples/custom-html" target="_blank">Custom HTML</a>.'|t|raw }}</p>

@@ -14,7 +14,7 @@ use barrelstrength\sproutforms\models\FieldLayout;
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 
 /**
- * SproutForms provides an API for accessing information about forms. It is accessible from templates via `craft.sproutforms`.
+ * SproutForms provides an API for accessing information about forms. It is accessible from templates via `craft.sproutForms`.
  *
  */
 class SproutFormsVariable
