@@ -85,7 +85,7 @@ class SproutForms extends Plugin
 
         Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function(Event $event) {
             $variable = $event->sender;
-            $variable->set('sproutforms', SproutFormsVariable::class);
+            $variable->set('sproutForms', SproutFormsVariable::class);
         });
 
         Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
