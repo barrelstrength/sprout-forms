@@ -559,5 +559,10 @@ class SproutFormsVariable
     {
         return get_class($field);
     }
+
+    public function getAllCaptchas()
+    {
+        return SproutForms::$app->forms->getAllCaptchas();
+    }
 }
 

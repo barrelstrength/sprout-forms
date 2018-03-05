@@ -51,6 +51,12 @@ class Settings extends Model
                 'actionTemplate' => 'sprout-forms/_includes/actionStatusButton',
                 'variables' => $variables
             ],
+            'spam-protection' => [
+                'label' => Craft::t('sprout-forms', 'Spam Protection'),
+                'url' => 'sprout-forms/settings/spam-protection',
+                'selected' => 'spam-protection',
+                'template' => 'sprout-forms/_settings/spamprotection'
+            ],
             'advanced' => [
                 'label' => Craft::t('sprout-forms', 'Advanced'),
                 'url' => 'sprout-forms/settings/advanced',
