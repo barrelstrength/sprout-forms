@@ -3,7 +3,7 @@
 {{ forms.selectField({
 	label: "Forms"|t,
 	instructions: 'Select which forms to search',
-	name: 'options[formId]',
+	name: 'settings[formId]',
 	options: formOptions,
 	value: (options.formId is defined ? options.formId : '*'),
 	first: true
@@ -12,13 +12,13 @@
 {{ forms.dateTimeField({
 	label: "Start Date"|t,
 	id: 'startDate',
-	name: 'options[startDate]',
+	name: 'settings[startDate]',
 	value: (options.startDate is defined ? options.startDate : defaultStartDate)
 }) }}
 
 {{ forms.dateTimeField({
 	label: "End Date"|t,
 	id: 'endDate',
-	name: 'options[endDate]',
+	name: 'settings[endDate]',
 	value: (options.endDate is defined ? options.endDate : defaultEndDate)
 }) }}
