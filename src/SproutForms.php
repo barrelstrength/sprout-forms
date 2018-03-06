@@ -97,6 +97,13 @@ class SproutForms extends Plugin
         Event::on(EntriesController::class, EntriesController::EVENT_BEFORE_POPULATE, function(OnBeforePopulateEntryEvent $event) {
             self::$app->entries->handleUnobfuscateEmailAddresses($event->form);
         });
+
+        Event::on(NotificationEmails::class, NotificationEmails::EVENT_REGISTER_EMAIL_EVENTS, function(RegisterNotificationEvent $event) {
+            $formEvent =  new SaveEntryEvent();
+            $formEvent->setPluginId(static::$pluginId);
+
+            $event->availableEvents[] = $formEvent;
+        });
     }
 
     /**
@@ -124,6 +131,10 @@ class SproutForms extends Plugin
                 'reports' => [
                     'label' => Craft::t('sprout-forms', 'Reports'),
                     'url' => 'sprout-forms/reports/sproutforms.entriesdatasource'
+                ],
+                'notifications' =>[
+                    'label' => Craft::t('sprout-forms', 'Notifications'),
+                    'url' => 'sprout-forms/notifications'
                 ],
                 'settings' => [
                     'label' => Craft::t('sprout-forms', 'Settings'),
@@ -184,6 +195,10 @@ class SproutForms extends Plugin
             'sprout-forms/reports/<dataSourceId>/edit/<reportId>' => 'sprout-base/reports/edit-report',
             'sprout-forms/reports/view/<reportId>' => 'sprout-base/reports/results-index',
             'sprout-forms/reports/<dataSourceId>' => 'sprout-base/reports/index',
+
+            'sprout-forms/notifications' => 'sprout-forms/notifications/index',
+            'sprout-forms/settings/notifications/edit/<emailId:\d+|new>' => 'sprout-base/notifications/edit-notification-email-settings-template',
+            'sprout-forms/notifications/edit/<emailId:\d+|new>' => 'sprout-base/notifications/edit-notification-email-template',
 
             'sprout-forms/settings' => 'sprout-base/settings/edit-settings',
             'sprout-forms/settings/<settingsSectionHandle:.*>' => 'sprout-base/settings/edit-settings'
