@@ -3,7 +3,10 @@
 namespace barrelstrength\sproutforms;
 
 use barrelstrength\sproutbase\base\BaseSproutTrait;
+use barrelstrength\sproutbase\services\sproutemail\NotificationEmails;
 use barrelstrength\sproutbase\services\sproutreports\DataSources;
+use barrelstrength\sproutbase\events\RegisterNotificationEvent;
+use barrelstrength\sproutforms\integrations\sproutemail\events\SaveEntryEvent;
 use barrelstrength\sproutforms\services\App;
 use Craft;
 use craft\base\Plugin;
@@ -15,7 +18,6 @@ use craft\web\UrlManager;
 use craft\services\UserPermissions;
 use yii\base\Event;
 use craft\web\twig\variables\CraftVariable;
-
 use barrelstrength\sproutbase\SproutBaseHelper;
 use barrelstrength\sproutforms\models\Settings;
 use barrelstrength\sproutforms\web\twig\variables\SproutFormsVariable;
