@@ -8,17 +8,16 @@
 
     {{ forms.lightswitchField({
         label: captcha.getName(),
-        instructions: "By default, Sprout Forms will have a basic spam protection"|t,
-        id: 'enableCaptchas',
-        name: 'enableCaptchas',
+        name: 'enable-' ~ captcha.captchaId,
         toggle: 'settings-' ~ captcha.captchaId,
-        on: settings.enableCaptchas,
+        on: settings['enable-' ~ captcha.captchaId] ?? null,
         onLabel: "Enable"|t,
     }) }}
 
     {% if captcha.getCaptchaSettingsHtml()|length %}
-    <div id="settings-{{ captcha.captchaId }}">
-        {{ captcha.getCaptchaSettingsHtml()|raw }}<br>
-    </div>
+        <div id="settings-{{ captcha.captchaId }}">
+            {{ captcha.getCaptchaSettingsHtml()|raw }}
+        </div>
     {% endif %}
+
 {% endfor %}
