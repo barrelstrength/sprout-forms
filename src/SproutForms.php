@@ -8,7 +8,7 @@ use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use barrelstrength\sproutforms\services\App;
 use barrelstrength\sproutforms\services\Entries;
 use barrelstrength\sproutforms\services\Forms;
-use barrelstrength\sproutinvisiblecaptcha\integrations\sproutforms\InvisibleCaptcha;
+use barrelstrength\sproutinvisiblecaptcha\integrations\sproutforms\JavascriptCaptcha;
 use Craft;
 use craft\base\Plugin;
 use craft\events\RegisterComponentTypesEvent;
