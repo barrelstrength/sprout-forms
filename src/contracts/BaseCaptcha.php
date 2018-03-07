@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\contracts;
 
+use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use Craft;
 
 /**
@@ -51,5 +52,15 @@ abstract class BaseCaptcha
     public function getCaptchaSettingsHtml()
     {
         return '';
+    }
+
+    /**
+     * @param OnBeforeSaveEntryEvent $event
+     *
+     * @return bool
+     */
+    public function verifySubmission(OnBeforeSaveEntryEvent $event): bool
+    {
+        return true;
     }
 }

@@ -104,17 +104,11 @@ class SproutForms extends Plugin
 
 
         Event::on(Entries::class, EntryElement::EVENT_BEFORE_SAVE, function(OnBeforeSaveEntryEvent $event) {
+            $captchas = SproutForms::$app->forms->getAllCaptchas();
 
-            $event->isValid = false;
-
-            $event->errors['key-name'] = 'Meep meep';
-            $event->errors['key-name-two'] = 'Meep meep meep';
-
-//            $captchas = SproutForms::$app->forms->getAllCaptchas();
-//
-//            foreach ($captchas as $captcha) {
-//                $captcha->verifySubmission($event->entry);
-//            }
+            foreach ($captchas as $captcha) {
+                $captcha->verifySubmission($event);
+            }
         });
 
         Craft::$app->view->hook('sproutForms.modifyForm', function(&$context) {
@@ -131,19 +125,6 @@ class SproutForms extends Plugin
             }
 
             return $captchaHtml;
-
-//            $catchaIntegrations = getAll();
-//
-//            $html = '';
-//
-//            foreach ($catchaIntegrations as $captchaOutput) {
-//
-//                $html .= $catchaIntegrations->getCaptchaHtml();
-//
-//            }
-//
-//
-//            return '';
         });
     }
 

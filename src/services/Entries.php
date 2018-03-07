@@ -265,11 +265,9 @@ class Entries extends Component
         try {
             if (!$event->isValid) {
 
-                foreach ($event->errors as $key => $error)
-                {
+                foreach ($event->errors as $key => $error){
                     $entry->addError($key, $error);
                 }
-
 
                 SproutForms::error('OnBeforeSaveEntryEvent is not valid');
 
