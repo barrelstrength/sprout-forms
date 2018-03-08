@@ -623,4 +623,23 @@ class Forms extends Component
 
         return $captchas;
     }
+
+    /**
+     * @return array
+     */
+    public function getAllEnabledCaptchas()
+    {
+        $sproutFormsSettings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
+        $captchaTypes = $this->getAllCaptchas();
+        $captchas = [];
+
+        foreach ($captchaTypes as $captchaType) {
+            $isEnabled = $sproutFormsSettings->captchaSettings[$captchaType->getCaptchaId()] ?? false;
+            if ($isEnabled){
+                $captchas[get_class($captchaType)] = $captchaType;
+            }
+        }
+
+        return $captchas;
+    }
 }

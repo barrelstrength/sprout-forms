@@ -102,9 +102,8 @@ class SproutForms extends Plugin
             self::$app->entries->handleUnobfuscateEmailAddresses($event->form);
         });
 
-
         Event::on(Entries::class, EntryElement::EVENT_BEFORE_SAVE, function(OnBeforeSaveEntryEvent $event) {
-            $captchas = SproutForms::$app->forms->getAllCaptchas();
+            $captchas = SproutForms::$app->forms->getAllEnabledCaptchas();
 
             foreach ($captchas as $captcha) {
                 $captcha->verifySubmission($event);
@@ -112,14 +111,11 @@ class SproutForms extends Plugin
         });
 
         Craft::$app->view->hook('sproutForms.modifyForm', function(&$context) {
-            $captchas = SproutForms::$app->forms->getAllCaptchas();
+            $captchas = SproutForms::$app->forms->getAllEnabledCaptchas();
             $captchaHtml = '';
 
             foreach ($captchas as $captcha) {
-                $isEnabled = $this->getSettings()->captchaSettings[$captcha->getCaptchaId()] ?? false;
-                if ($isEnabled){
-                    $captchaHtml .= $captcha->getCaptchaHtml();
-                }
+                $captchaHtml .= $captcha->getCaptchaHtml();
             }
 
             return $captchaHtml;
