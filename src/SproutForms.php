@@ -6,6 +6,7 @@ use barrelstrength\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbase\services\sproutemail\NotificationEmails;
 use barrelstrength\sproutbase\services\sproutreports\DataSources;
 use barrelstrength\sproutbase\events\RegisterNotificationEvent;
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\integrations\sproutemail\events\SaveEntryEvent;
 use barrelstrength\sproutforms\services\App;
 use Craft;
@@ -118,6 +119,8 @@ class SproutForms extends Plugin
             $parent['label'] = $this->getSettings()->pluginNameOverride;
         }
 
+        $entriesDataSource = SproutBase::$app->dataSources->getDataSourceByType(EntriesDataSource::class);
+
         return array_merge($parent, [
             'subnav' => [
                 'entries' => [
@@ -128,13 +131,13 @@ class SproutForms extends Plugin
                     'label' => Craft::t('sprout-forms', 'Forms'),
                     'url' => 'sprout-forms/forms'
                 ],
-                'reports' => [
-                    'label' => Craft::t('sprout-forms', 'Reports'),
-                    'url' => 'sprout-forms/reports/sproutforms.entriesdatasource'
-                ],
                 'notifications' =>[
                     'label' => Craft::t('sprout-forms', 'Notifications'),
                     'url' => 'sprout-forms/notifications'
+                ],
+                'reports' => [
+                    'label' => Craft::t('sprout-forms', 'Reports'),
+                    'url' => 'sprout-forms/reports/' . $entriesDataSource->dataSourceId . '-sproutforms-entriesdatasource'
                 ],
                 'settings' => [
                     'label' => Craft::t('sprout-forms', 'Settings'),
@@ -191,10 +194,10 @@ class SproutForms extends Plugin
             'sprout-forms/forms/<groupId:\d+>' =>
                 'sprout-forms/forms',
 
-            'sprout-forms/reports/<dataSourceId>/new' => 'sprout-base/reports/edit-report',
-            'sprout-forms/reports/<dataSourceId>/edit/<reportId>' => 'sprout-base/reports/edit-report',
+            'sprout-forms/reports/<dataSourceId>-<dataSourceSlug>/new' => 'sprout-base/reports/edit-report',
+            'sprout-forms/reports/<dataSourceId>-<dataSourceSlug>/edit/<reportId>' => 'sprout-base/reports/edit-report',
             'sprout-forms/reports/view/<reportId>' => 'sprout-base/reports/results-index',
-            'sprout-forms/reports/<dataSourceId>' => 'sprout-base/reports/index',
+            'sprout-forms/reports/<dataSourceId>-<dataSourceSlug>' => 'sprout-base/reports/index',
 
             'sprout-forms/notifications' => 'sprout-forms/notifications/index',
             'sprout-forms/settings/notifications/edit/<emailId:\d+|new>' => 'sprout-base/notifications/edit-notification-email-settings-template',
