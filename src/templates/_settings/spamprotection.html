@@ -3,19 +3,20 @@
 {% import "_includes/forms" as forms %}
 
 {% set captchas = craft.sproutForms.getAllCaptchas() %}
-
 {% for captcha in captchas %}
 
+    {% set isEnabled = settings['captchaSettings'][captcha.getCaptchaId()] ?? false %}
+    
     {{ forms.lightswitchField({
         label: captcha.getName(),
-        name: 'enable-' ~ captcha.captchaId,
-        toggle: 'settings-' ~ captcha.captchaId,
-        on: settings['enable-' ~ captcha.captchaId] ?? null,
+        name: 'captchaSettings[' ~ captcha.getCaptchaId() ~ ']',
+        toggle: captcha.getCaptchaId(),
+        on: isEnabled,
         onLabel: "Enable"|t,
     }) }}
 
     {% if captcha.getCaptchaSettingsHtml()|length %}
-        <div id="settings-{{ captcha.captchaId }}">
+        <div id="{{ captcha.getCaptchaId() }}" class="{{ not isEnabled ? "hidden" : '' }}">
             {{ captcha.getCaptchaSettingsHtml()|raw }}
         </div>
     {% endif %}

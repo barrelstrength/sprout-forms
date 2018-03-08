@@ -615,11 +615,10 @@ class Forms extends Component
     public function getAllCaptchas()
     {
         $captchaTypes = $this->getAllCaptchaTypes();
-
         $captchas = [];
 
         foreach ($captchaTypes as $captchaType) {
-            $captchas[$captchaType] = new $captchaType;
+            $captchas[$captchaType] = new $captchaType();
         }
 
         return $captchas;

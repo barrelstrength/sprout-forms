@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\contracts;
 
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use Craft;
+use yii\base\Model;
 
 /**
  * Class BaseCaptcha
@@ -19,7 +20,10 @@ abstract class BaseCaptcha
 {
     public $captchaId;
 
-    public function __construct()
+    /**
+     * @return string
+     */
+    public function getCaptchaId()
     {
         $pluginHandle = Craft::$app->getPlugins()->getPluginHandleByClass(get_class($this));
 
@@ -31,6 +35,8 @@ abstract class BaseCaptcha
         $captchaId = $pluginHandleWithoutSpaces.'-'.$captchaClass;
 
         $this->captchaId = strtolower($captchaId);
+
+        return $this->captchaId;
     }
 
     /**
