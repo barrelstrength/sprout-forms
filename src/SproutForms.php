@@ -199,7 +199,12 @@ class SproutForms extends Plugin
             'sprout-forms/reports/view/<reportId>' => 'sprout-base/reports/results-index',
             'sprout-forms/reports/<dataSourceId>-<dataSourceSlug>' => 'sprout-base/reports/index',
 
-            'sprout-forms/notifications' => 'sprout-forms/notifications/index',
+            'sprout-forms/notifications' => [
+                'template' => 'sprout-base/sproutemail/notifications/index',
+                'params' => [
+                    'hideSidebar' => true
+                ]
+            ],
             'sprout-forms/settings/notifications/edit/<emailId:\d+|new>' => 'sprout-base/notifications/edit-notification-email-settings-template',
             'sprout-forms/notifications/edit/<emailId:\d+|new>' => 'sprout-base/notifications/edit-notification-email-template',
 
