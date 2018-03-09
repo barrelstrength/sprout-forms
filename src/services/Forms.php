@@ -634,7 +634,7 @@ class Forms extends Component
         $captchas = [];
 
         foreach ($captchaTypes as $captchaType) {
-            $isEnabled = $sproutFormsSettings->captchaSettings[$captchaType->getCaptchaId()] ?? false;
+            $isEnabled = $sproutFormsSettings->captchaSettings[$captchaType->getCaptchaId()]['enabled'] ?? false;
             if ($isEnabled){
                 $captchas[get_class($captchaType)] = $captchaType;
             }

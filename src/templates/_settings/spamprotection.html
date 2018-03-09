@@ -5,11 +5,10 @@
 {% set captchas = craft.sproutForms.getAllCaptchas() %}
 {% for captcha in captchas %}
 
-    {% set isEnabled = settings['captchaSettings'][captcha.getCaptchaId()] ?? false %}
-
+    {% set isEnabled = settings['captchaSettings'][captcha.getCaptchaId()]['enabled'] ?? false %}
     {{ forms.lightswitchField({
         label: captcha.getName(),
-        name: 'captchaSettings[' ~ captcha.getCaptchaId() ~ ']',
+        name: 'captchaSettings[' ~ captcha.getCaptchaId() ~ '][enabled]',
         toggle: captcha.getCaptchaId(),
         on: isEnabled,
         onLabel: "Enable"|t,

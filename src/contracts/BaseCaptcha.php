@@ -40,6 +40,16 @@ abstract class BaseCaptcha
     }
 
     /**
+     * @return null|array
+     */
+    public function getSettings()
+    {
+        $sproutFormsSettings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
+
+        return $sproutFormsSettings->captchaSettings[$this->getCaptchaId()] ?? null;
+    }
+
+    /**
      * @return mixed
      */
     abstract public function getName();
