@@ -55,6 +55,11 @@ abstract class BaseCaptcha
     abstract public function getName();
 
     /**
+     * @return mixed
+     */
+    abstract public function getDescription();
+
+    /**
      * Return whatever is needed to your form template for your captcha
      */
     public function getCaptchaHtml()

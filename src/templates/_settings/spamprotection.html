@@ -8,6 +8,7 @@
     {% set isEnabled = settings['captchaSettings'][captcha.getCaptchaId()]['enabled'] ?? false %}
     {{ forms.lightswitchField({
         label: captcha.getName(),
+        instructions: captcha.getDescription(),
         name: 'captchaSettings[' ~ captcha.getCaptchaId() ~ '][enabled]',
         toggle: captcha.getCaptchaId(),
         on: isEnabled,
@@ -19,5 +20,5 @@
             {{ captcha.getCaptchaSettingsHtml()|raw }}
         </div>
     {% endif %}
-
+    <hr>
 {% endfor %}
