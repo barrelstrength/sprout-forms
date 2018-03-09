@@ -264,7 +264,6 @@ class Entries extends Component
 
         try {
             if (!$event->isValid) {
-
                 foreach ($event->errors as $key => $error){
                     $entry->addError($key, $error);
                 }
