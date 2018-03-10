@@ -88,61 +88,6 @@
             <hr>
 
             {{ forms.lightswitchField({
-                label: "Captchas"|t,
-                instructions: "By default, Sprout Forms will have a basic spam protection"|t,
-                id: 'enableCaptchas',
-                name: 'enableCaptchas',
-                toggle: 'settings-savecaptchas',
-                on: settings.enableCaptchas,
-                onLabel: "Enable"|t,
-            }) }}
-
-            <div id="settings-savecaptchas"
-                 class="{{ not settings.enableSaveData ? "hidden" : '' }}">
-                {{ forms.lightswitchField({
-                    label: "Invisible Captcha"|t,
-                    instructions: "Basic spam protection"|t,
-                    id: 'enableInvisibleCaptcha',
-                    name: 'enableInvisibleCaptcha',
-                    on: settings.enableInvisibleCaptcha,
-                    onLabel: "Enable"|t,
-                }) }}
-
-                {{ forms.lightswitchField({
-                    label: "Google Recaptcha"|t,
-                    instructions: "Google Recaptcha spam protection"|t,
-                    id: 'enableGoogleRecaptcha',
-                    name: 'enableGoogleRecaptcha',
-                    toggle: 'settings-savegooglerecaptcha',
-                    on: settings.enableGoogleRecaptcha,
-                    onLabel: "Enable"|t,
-                }) }}
-                <div id="settings-savegooglerecaptcha" class="{{  not settings.enableGoogleRecaptcha ? "hidden" : ''  }}">
-                    {{ forms.textField({
-                        label: 'Site Key',
-                        instructions: 'Get the site key on your dashboard',
-                        id: 'googleRecaptchaSiteKey',
-                        name: 'googleRecaptchaSiteKey',
-                        required: true,
-                        errors: null,
-                        value: settings.googleRecaptchaSiteKey})
-                    }}
-
-                    {{ forms.textField({
-                        label: 'Secret key',
-                        instructions: 'Get the secret key on your dashboard',
-                        id: 'googleRecaptchaSecretKey',
-                        name: 'googleRecaptchaSecretKey',
-                        type: 'password',
-                        required: true,
-                        value: settings.googleRecaptchaSecretKey })
-                    }}
-
-                </div>
-
-            </div>
-            <hr>
-            {{ forms.lightswitchField({
                 label: "Enable payload forwarding"|t,
                 instructions: "Payload Forwarding enables your forms with advanced settings that allow you to submit a form to a third-party endpoint."|t,
                 id: 'enablePayloadForwarding',

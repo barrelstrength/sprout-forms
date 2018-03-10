@@ -172,7 +172,7 @@ class EntryQuery extends ElementQuery
         }
 
         if (!$this->orderBy) {
-            $this->orderBy = 'sproutforms_entries.dateCreated desc';
+            $this->orderBy = ['sproutforms_entries.dateCreated' => SORT_DESC];
         }
 
         return parent::beforePrepare();

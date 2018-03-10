@@ -15,18 +15,7 @@ class Settings extends Model
     public $enableSaveDataPerFormBasis = 0;
     public $saveDataByDefault = 1;
     public $enablePerFormTemplateFolderOverride = 0;
-    public $enableCaptchas = 1;
-    public $enableInvisibleCaptcha = 1;
-    public $enableGoogleRecaptcha = 0;
-    /**
-     * @var string
-     */
-    public $googleRecaptchaSiteKey = '';
-
-    /**
-     * @var string
-     */
-    public $googleRecaptchaSecretKey = '';
+    public $captchaSettings = [];
 
     public function getSettingsNavItems()
     {
@@ -50,6 +39,12 @@ class Settings extends Model
                 'template' => 'sprout-forms/_settings/entrystatuses',
                 'actionTemplate' => 'sprout-forms/_includes/actionStatusButton',
                 'variables' => $variables
+            ],
+            'spam-protection' => [
+                'label' => Craft::t('sprout-forms', 'Spam Protection'),
+                'url' => 'sprout-forms/settings/spam-protection',
+                'selected' => 'spam-protection',
+                'template' => 'sprout-forms/_settings/spamprotection'
             ],
             'advanced' => [
                 'label' => Craft::t('sprout-forms', 'Advanced'),

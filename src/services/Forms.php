@@ -8,6 +8,7 @@ use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\records\Form as FormRecord;
 use barrelstrength\sproutforms\migrations\CreateFormContentTable;
 use Craft;
+use craft\events\RegisterComponentTypesEvent;
 use yii\base\Component;
 use craft\helpers\StringHelper;
 use craft\helpers\MigrationHelper;
@@ -17,6 +18,8 @@ use craft\mail\Message;
 
 class Forms extends Component
 {
+    const EVENT_REGISTER_CAPTCHAS = 'registerSproutFormsCaptchas';
+
     /**
      * @var
      */
@@ -588,5 +591,55 @@ class Forms extends Component
         }
 
         return false;
+    }
+
+    /**
+     * Returns all available Captcha classes
+     *
+     * @return string[]
+     */
+    public function getAllCaptchaTypes()
+    {
+        $event = new RegisterComponentTypesEvent([
+            'types' => []
+        ]);
+
+        $this->trigger(self::EVENT_REGISTER_CAPTCHAS, $event);
+
+        return $event->types;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllCaptchas()
+    {
+        $captchaTypes = $this->getAllCaptchaTypes();
+        $captchas = [];
+
+        foreach ($captchaTypes as $captchaType) {
+            $captchas[$captchaType] = new $captchaType();
+        }
+
+        return $captchas;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllEnabledCaptchas()
+    {
+        $sproutFormsSettings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
+        $captchaTypes = $this->getAllCaptchas();
+        $captchas = [];
+
+        foreach ($captchaTypes as $captchaType) {
+            $isEnabled = $sproutFormsSettings->captchaSettings[$captchaType->getCaptchaId()]['enabled'] ?? false;
+            if ($isEnabled){
+                $captchas[get_class($captchaType)] = $captchaType;
+            }
+        }
+
+        return $captchas;
     }
 }

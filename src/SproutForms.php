@@ -8,7 +8,9 @@ use barrelstrength\sproutbase\services\sproutreports\DataSources;
 use barrelstrength\sproutbase\events\RegisterNotificationEvent;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\integrations\sproutemail\events\SaveEntryEvent;
+use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use barrelstrength\sproutforms\services\App;
+use barrelstrength\sproutforms\services\Entries;
 use Craft;
 use craft\base\Plugin;
 use craft\events\RegisterComponentTypesEvent;
@@ -27,6 +29,7 @@ use barrelstrength\sproutforms\services\Fields;
 use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesDataSource;
 use barrelstrength\sproutforms\events\OnBeforePopulateEntryEvent;
 use barrelstrength\sproutforms\controllers\EntriesController;
+use barrelstrength\sproutforms\elements\Entry as EntryElement;
 
 class SproutForms extends Plugin
 {
@@ -61,6 +64,7 @@ class SproutForms extends Plugin
         parent::init();
 
         self::$app = $this->get('app');
+
         SproutBaseHelper::registerModule();
 
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $event) {
@@ -105,6 +109,45 @@ class SproutForms extends Plugin
 
             $event->availableEvents[] = $formEvent;
         });
+
+        Event::on(Entries::class, EntryElement::EVENT_BEFORE_SAVE, function(OnBeforeSaveEntryEvent $event) {
+            $captchas = SproutForms::$app->forms->getAllEnabledCaptchas();
+
+            foreach ($captchas as $captcha) {
+                $captcha->verifySubmission($event);
+            }
+        });
+
+        Craft::$app->view->hook('sproutForms.modifyForm', function(&$context) {
+            $captchas = SproutForms::$app->forms->getAllEnabledCaptchas();
+            $captchaHtml = '';
+
+            foreach ($captchas as $captcha) {
+                $captchaHtml .= $captcha->getCaptchaHtml();
+            }
+
+            return $captchaHtml;
+        });
+    }
+
+    /**
+     * @return Settings|\craft\base\Model|null
+     */
+    protected function createSettingsModel()
+    {
+        return new Settings();
+    }
+
+    /**
+     * Redirect to Sprout Forms settings
+     *
+     * @return $this|mixed|\yii\web\Response
+     */
+    public function getSettingsResponse()
+    {
+        $url = UrlHelper::cpUrl('sprout-forms/settings');
+
+        return Craft::$app->getResponse()->redirect($url);
     }
 
     /**
@@ -145,26 +188,6 @@ class SproutForms extends Plugin
                 ]
             ]
         ]);
-    }
-
-    /**
-     * @return Settings|\craft\base\Model|null
-     */
-    protected function createSettingsModel()
-    {
-        return new Settings();
-    }
-
-    /**
-     * Redirect to Sprout Forms settings
-     *
-     * @return $this|mixed|\yii\web\Response
-     */
-    public function getSettingsResponse()
-    {
-        $url = UrlHelper::cpUrl('sprout-forms/settings');
-
-        return Craft::$app->getResponse()->redirect($url);
     }
 
     /**
