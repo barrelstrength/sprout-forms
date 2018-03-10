@@ -8,20 +8,17 @@ use yii\base\Model;
 
 /**
  * Class BaseCaptcha
- *
- * @author    Barrel Strength Design LLC <sprout@barrelstrengthdesign.com>
- * @copyright Copyright (c) $today.year, Barrel Strength Design LLC
- * @license   http://sprout.barrelstrengthdesign.com/license
- * @see       http://sprout.barrelstrengthdesign.com
- * @package   craft.plugins.basecaptcha
- * @since     2.0
  */
 abstract class BaseCaptcha
 {
+    /**
+     * @var string
+     */
     public $captchaId;
 
     /**
      * @return string
+     * @throws \ReflectionException
      */
     public function getCaptchaId()
     {
@@ -40,7 +37,18 @@ abstract class BaseCaptcha
     }
 
     /**
-     * @return null|array
+     * @return string
+     */
+    abstract public function getName();
+
+    /**
+     * @return string
+     */
+    abstract public function getDescription();
+
+    /**
+     * @return null
+     * @throws \ReflectionException
      */
     public function getSettings()
     {
@@ -50,17 +58,13 @@ abstract class BaseCaptcha
     }
 
     /**
-     * @return mixed
-     */
-    abstract public function getName();
-
-    /**
-     * @return mixed
-     */
-    abstract public function getDescription();
-
-    /**
-     * Return whatever is needed to your form template for your captcha
+     * Return whatever is needed to get your captcha working in the form template
+     *
+     * Sprout Forms will loop through all enabled Captcha integrations and output
+     * getCaptchaHtml when the template hook `sproutForms.modifyForm` in form.html
+     * is triggered.
+     *
+     * @return string
      */
     public function getCaptchaHtml()
     {
@@ -68,7 +72,14 @@ abstract class BaseCaptcha
     }
 
     /**
-     * Return any settings your Captcha has and we'll display them in the Sprout Forms Captcha settings area
+     * Return any settings for your Captcha
+     *
+     * Sprout Forms will display all captcha settings on the Settings->Spam Prevention tab.
+     * An option will be displayed to enable/disable each captcha. If your captcha's
+     * settings are enabled, Sprout Forms will output getCaptchaSettingsHtml for users to
+     * customize any additional settings your provide.
+     *
+     * @return string
      */
     public function getCaptchaSettingsHtml()
     {
@@ -76,6 +87,8 @@ abstract class BaseCaptcha
     }
 
     /**
+     * Return if a form submission passes or fails your captcha.
+     *
      * @param OnBeforeSaveEntryEvent $event
      *
      * @return bool
