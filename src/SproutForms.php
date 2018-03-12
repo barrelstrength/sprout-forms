@@ -151,6 +151,18 @@ class SproutForms extends Plugin
     }
 
     /**
+     * @throws \yii\db\Exception
+     */
+    protected function afterInstall()
+    {
+        $dataSourceClasses = [
+            EntriesDataSource::class
+        ];
+
+        SproutBase::$app->dataSources->installDataSources($dataSourceClasses);
+    }
+
+    /**
      * @return array|null
      */
     public function getCpNavItem()
