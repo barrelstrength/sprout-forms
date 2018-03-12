@@ -42,6 +42,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
         $saveSpinner: null,
         $deleteSpinner: null,
         $loadSpinner: null,
+        addedDelete: false,
 
         $html: null,
         $js: null,
@@ -276,7 +277,10 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
             this.addListener(this.$cancelBtn, 'activate', 'closeModal');
             this.addListener(this.$saveBtn, 'activate', 'saveField');
-            this.addListener(this.$deleteBtn, 'activate', 'deleteField');
+            if (!this.addedDelete){
+                this.addListener(this.$deleteBtn, 'click', 'deleteField');
+                this.addedDelete = true;
+            }
 
             this.on('show', this.initSettings);
             this.on('fadeOut', this.destroySettings);
@@ -505,14 +509,16 @@ if (typeof Craft.SproutForms === typeof undefined) {
         deleteField: function(e)
         {
             e.preventDefault();
+            var userResponse = this.confirmDeleteField();
 
-            this.destroyListeners();
+            if (userResponse){
+                this.destroyListeners();
 
-            var data = this.$container.serialize();
+                var data = this.$container.serialize();
 
-            var fieldId = $(this.$container).find('input[name="fieldId"]').val();
+                var fieldId = $(this.$container).find('input[name="fieldId"]').val();
 
-            Craft.postActionRequest('sprout-forms/fields/delete-field', data, $.proxy(function(response, textStatus)
+                Craft.postActionRequest('sprout-forms/fields/delete-field', data, $.proxy(function(response, textStatus)
                 {
                     var statusSuccess = (textStatus === 'success');
 
@@ -532,9 +538,12 @@ if (typeof Craft.SproutForms === typeof undefined) {
                         this.hide();
                     }
                 }, this));
+            }
+        },
 
-            // console.log(data);
-            console.log('delete');
+        confirmDeleteField: function()
+        {
+            return confirm("Are you sure you want to delete this field and all of it's data?");
         },
 
         /**
