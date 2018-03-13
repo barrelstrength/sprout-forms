@@ -15,6 +15,7 @@ class Settings extends Model
     public $enableSaveDataPerFormBasis = 0;
     public $saveDataByDefault = 1;
     public $enablePerFormTemplateFolderOverride = 0;
+    public $captchaSettings = [];
 
     public function getSettingsNavItems()
     {
@@ -26,30 +27,36 @@ class Settings extends Model
 
         return [
             'general' => [
-                'label' => Craft::t('sprout-forms','General'),
+                'label' => Craft::t('sprout-forms', 'General'),
                 'url' => 'sprout-forms/settings/general',
                 'selected' => 'general',
                 'template' => 'sprout-forms/_settings/general'
             ],
             'entry-statuses' => [
-                'label' => Craft::t('sprout-forms','Entry Statuses'),
+                'label' => Craft::t('sprout-forms', 'Entry Statuses'),
                 'url' => 'sprout-forms/settings/entry-statuses',
                 'selected' => 'entry-statuses',
                 'template' => 'sprout-forms/_settings/entrystatuses',
                 'actionTemplate' => 'sprout-forms/_includes/actionStatusButton',
                 'variables' => $variables
             ],
+            'spam-protection' => [
+                'label' => Craft::t('sprout-forms', 'Spam Protection'),
+                'url' => 'sprout-forms/settings/spam-protection',
+                'selected' => 'spam-protection',
+                'template' => 'sprout-forms/_settings/spamprotection'
+            ],
             'advanced' => [
-                'label' => Craft::t('sprout-forms','Advanced'),
+                'label' => Craft::t('sprout-forms', 'Advanced'),
                 'url' => 'sprout-forms/settings/advanced',
                 'selected' => 'advanced',
                 'template' => 'sprout-forms/_settings/advanced'
             ],
             'settingsHeading' => [
-                'heading' => Craft::t('sprout-forms','Examples'),
+                'heading' => Craft::t('sprout-forms', 'Examples'),
             ],
             'examples' => [
-                'label' => Craft::t('sprout-forms','Form Templates'),
+                'label' => Craft::t('sprout-forms', 'Form Templates'),
                 'url' => 'sprout-forms/settings/examples',
                 'actionUrl' => 'sprout-forms/examples/install',
                 'selected' => 'examples',

@@ -47,7 +47,6 @@ class FieldsController extends BaseController
                 // Set the field layout
                 $oldFieldLayout = $form->getFieldLayout();
                 $oldTabs = $oldFieldLayout->getTabs();
-                $response = false;
 
                 if ($oldTabs) {
                     // it's a new field
@@ -95,35 +94,35 @@ class FieldsController extends BaseController
         ]);
     }
 
-	/**
-	 * This action allows rename a current Tab
-	 *
-	 */
-	public function actionRenameTab()
-	{
-		$this->requireAcceptsJson();
+    /**
+     * This action allows rename a current Tab
+     *
+     */
+    public function actionRenameTab()
+    {
+        $this->requireAcceptsJson();
 
-		$request = Craft::$app->getRequest();
-		$name = $request->getBodyParam('name');
-		$oldName = $request->getBodyParam('oldName');
-		$formId = $request->getBodyParam('formId');
-		$form = SproutForms::$app->forms->getFormById($formId);
+        $request = Craft::$app->getRequest();
+        $name = $request->getBodyParam('name');
+        $oldName = $request->getBodyParam('oldName');
+        $formId = $request->getBodyParam('formId');
+        $form = SproutForms::$app->forms->getFormById($formId);
 
-		if ($name && $form) {
-			$result = SproutForms::$app->fields->renameTab($name, $oldName, $form);
+        if ($name && $form) {
+            $result = SproutForms::$app->fields->renameTab($name, $oldName, $form);
 
-			if ($result) {
-				return $this->asJson([
-					'success' => true
-				]);
-			}
-		}
-		// @todo - how add error messages?
-		return $this->asJson([
-			'success' => false,
-			'errors' => Craft::t('sprout-forms','Unable to rename tab')
-		]);
-	}
+            if ($result) {
+                return $this->asJson([
+                    'success' => true
+                ]);
+            }
+        }
+        // @todo - how add error messages?
+        return $this->asJson([
+            'success' => false,
+            'errors' => Craft::t('sprout-forms', 'Unable to rename tab')
+        ]);
+    }
 
     /**
      * Save a field.
@@ -142,8 +141,8 @@ class FieldsController extends BaseController
         $formId = $request->getRequiredBodyParam('formId');
         $form = SproutForms::$app->forms->getFormById($formId);
 
-        $type    = $request->getRequiredBodyParam('type');
-	      $fieldId = $request->getBodyParam('fieldId');
+        $type = $request->getRequiredBodyParam('type');
+        $fieldId = $request->getBodyParam('fieldId');
 
         $field = $fieldsService->createField([
             'type' => $type,
@@ -156,21 +155,21 @@ class FieldsController extends BaseController
             'settings' => $request->getBodyParam('types.'.$type),
         ]);
 
-	      // required field validation
-	      $fieldLayout = $form->getFieldLayout();
-	      $fieldLayoutField = FieldLayoutFieldRecord::findOne([
-	      		'layoutId' => $fieldLayout->id,
-			      'tabId' => $tabId,
-			      'fieldId' => $fieldId
-		      ]
-	      );
+        // required field validation
+        $fieldLayout = $form->getFieldLayout();
+        $fieldLayoutField = FieldLayoutFieldRecord::findOne([
+                'layoutId' => $fieldLayout->id,
+                'tabId' => $tabId,
+                'fieldId' => $fieldId
+            ]
+        );
 
-	      if ($fieldLayoutField)
-	      {
-		      $fieldLayoutField->required = $request->getBodyParam('required');
-		      $fieldLayoutField->save(false);
-		      $field->required = $fieldLayoutField->required;
-	      }
+        if ($fieldLayoutField) {
+            $required = $request->getBodyParam('required');
+            $fieldLayoutField->required = $required !== '' ? true : false;
+            $fieldLayoutField->save(false);
+            $field->required = $fieldLayoutField->required;
+        }
 
         // Set our field context
         Craft::$app->content->fieldContext = $form->getFieldContext();
@@ -187,7 +186,8 @@ class FieldsController extends BaseController
         // Save our field
         if (!$fieldsService->saveField($field)) {
             // Does not validate
-            SproutForms::error("Field does not validate.");
+            SproutForms::error('Field does not validate.');
+
             $variables['tabId'] = $tabId;
             $variables['field'] = $field;
 
@@ -232,7 +232,7 @@ class FieldsController extends BaseController
             $variables['tabId'] = $tabId;
             $variables['field'] = $field;
             SproutForms::error("Couldn't save field.");
-            Craft::$app->getSession()->setError(Craft::t('sprout-forms','Couldn’t save field.'));
+            Craft::$app->getSession()->setError(Craft::t('sprout-forms', 'Couldn’t save field.'));
 
             return $this->_returnJson(false, $field, $form);
         }
@@ -241,6 +241,10 @@ class FieldsController extends BaseController
     /**
      * Edits an existing field.
      *
+     * @return \yii\web\Response
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
+     * @throws \yii\web\BadRequestHttpException
      */
     public function actionEditField()
     {
@@ -279,7 +283,7 @@ class FieldsController extends BaseController
                 'template' => SproutForms::$app->fields->getModalFieldTemplate($form, $field, $group->id),
             ]);
         } else {
-            $message = Craft::t('sprout-forms',"The field requested to edit no longer exists.");
+            $message = Craft::t('sprout-forms', 'The field requested to edit no longer exists.');
             SproutForms::error($message);
 
             return $this->asJson([
@@ -289,10 +293,36 @@ class FieldsController extends BaseController
         }
     }
 
+    public function actionDeleteField()
+    {
+        $this->requirePostRequest();
+        $this->requireAcceptsJson();
+
+        $fieldId = Craft::$app->request->getRequiredBodyParam('fieldId');
+
+        if ($response = Craft::$app->fields->deleteFieldById($fieldId))
+        {
+            return $this->asJson([
+                'success' => true
+            ]);
+        }
+        else
+        {
+            return $this->asJson([
+                'success' => false
+            ]);
+        }
+
+
+    }
+
     /**
      * Reorder a field
      *
-     * @return json
+     * @return \yii\web\Response
+     * @throws \Exception
+     * @throws \barrelstrength\sproutforms\services\Exception
+     * @throws \yii\web\BadRequestHttpException
      */
     public function actionReorderFields()
     {
@@ -317,7 +347,7 @@ class FieldsController extends BaseController
                 'id' => $field->id,
                 'name' => $field->name,
                 'handle' => $field->handle,
-                'icon' => $field->getIcon(),
+                'icon' => $field->getSvgIconPath(),
                 'htmlExample' => $field->getExampleInputHtml(),
                 'required' => $field->required,
                 'instructions' => $field->instructions,

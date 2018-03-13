@@ -4,8 +4,6 @@ namespace barrelstrength\sproutforms\models;
 
 use craft\base\Model;
 
-use barrelstrength\sproutforms\SproutForms;
-
 class FormGroup extends Model
 {
     /**
@@ -40,6 +38,6 @@ class FormGroup extends Model
      */
     function __toString()
     {
-        return Craft::t('sprout-forms',$this->name);
+        return Craft::t('sprout-forms', $this->name);
     }
 }

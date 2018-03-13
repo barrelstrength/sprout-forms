@@ -6,8 +6,6 @@ use Craft;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\ElementInterface;
 
-use barrelstrength\sproutforms\SproutForms;
-
 /**
  * Class SproutFormsDropdownField
  *
@@ -24,7 +22,7 @@ class Dropdown extends SproutBaseOptionsField
      */
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms','Dropdown');
+        return Craft::t('sprout-forms', 'Dropdown');
     }
 
     /**
@@ -70,6 +68,8 @@ class Dropdown extends SproutBaseOptionsField
      * @param array|null                                       $renderingOptions
      *
      * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
     {
@@ -96,15 +96,15 @@ class Dropdown extends SproutBaseOptionsField
      */
     protected function optionsSettingLabel(): string
     {
-        return Craft::t('sprout-forms','Dropdown Options');
+        return Craft::t('sprout-forms', 'Dropdown Options');
     }
 
     /**
      * @return string
      */
-    public function getIconClass()
+    public function getSvgIconPath()
     {
-        return 'fa fa-chevron-circle-down';
+        return '@sproutbaseicons/chevron-circle-down.svg';
     }
 
     /**

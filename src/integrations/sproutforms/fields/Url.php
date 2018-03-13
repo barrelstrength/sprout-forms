@@ -8,12 +8,11 @@ use craft\helpers\Template as TemplateHelper;
 use craft\base\PreviewableFieldInterface;
 use yii\db\Schema;
 
-use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
-use barrelstrength\sproutbase\web\assets\sproutfields\link\LinkFieldAsset;
+use barrelstrength\sproutbase\web\assets\sproutfields\url\UrlFieldAsset;
 
-class Link extends SproutFormsBaseField implements PreviewableFieldInterface
+class Url extends SproutFormsBaseField implements PreviewableFieldInterface
 {
 
     /**
@@ -38,7 +37,7 @@ class Link extends SproutFormsBaseField implements PreviewableFieldInterface
 
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms','Link');
+        return Craft::t('sprout-forms', 'URL');
     }
 
     /**
@@ -52,9 +51,9 @@ class Link extends SproutFormsBaseField implements PreviewableFieldInterface
     /**
      * @return string
      */
-    public function getIconClass()
+    public function getSvgIconPath()
     {
-        return 'fa fa-link';
+        return '@sproutbaseicons/chain.svg';
     }
 
     /**
@@ -63,7 +62,7 @@ class Link extends SproutFormsBaseField implements PreviewableFieldInterface
     public function getSettingsHtml()
     {
         return Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/link/settings',
+            'sprout-forms/_components/fields/url/settings',
             [
                 'field' => $this,
             ]
@@ -75,7 +74,7 @@ class Link extends SproutFormsBaseField implements PreviewableFieldInterface
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/link/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/url/example',
             [
                 'field' => $this
             ]
@@ -88,7 +87,7 @@ class Link extends SproutFormsBaseField implements PreviewableFieldInterface
     public function getInputHtml($value, ElementInterface $element = null): string
     {
         $view = Craft::$app->getView();
-        $view->registerAssetBundle(LinkFieldAsset::class);
+        $view->registerAssetBundle(UrlFieldAsset::class);
 
         $name = $this->handle;
         $inputId = Craft::$app->getView()->formatInputId($name);
@@ -96,7 +95,7 @@ class Link extends SproutFormsBaseField implements PreviewableFieldInterface
 
         $fieldContext = SproutBase::$app->utilities->getFieldContext($this, $element);
 
-        return Craft::$app->getView()->renderTemplate('sprout-base/sproutfields/_includes/forms/link/input', [
+        return Craft::$app->getView()->renderTemplate('sprout-base/sproutfields/_fields/url/input', [
                 'namespaceInputId' => $namespaceInputId,
                 'id' => $inputId,
                 'name' => $name,
@@ -108,23 +107,25 @@ class Link extends SproutFormsBaseField implements PreviewableFieldInterface
     }
 
     /**
-     * @param FieldModel $field
-     * @param mixed      $value
-     * @param array      $settings
-     * @param array      $renderingOptions
+     * @param \barrelstrength\sproutforms\contracts\FieldModel $field
+     * @param mixed                                            $value
+     * @param mixed                                            $settings
+     * @param array|null                                       $renderingOptions
      *
-     * @return \Twig_Markup
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
     {
         $this->beginRendering();
 
         $attributes = $field->getAttributes();
-        $errorMessage = SproutBase::$app->link->getErrorMessage($attributes['name'], $settings);
-        $placeholder = (isset($settings['placeholder'])) ? $settings['placeholder'] : '';
+        $errorMessage = SproutBase::$app->url->getErrorMessage($attributes['name'], $settings);
+        $placeholder = isset($settings['placeholder']) ? $settings['placeholder'] : '';
 
         $rendered = Craft::$app->getView()->renderTemplate(
-            'link/input',
+            'url/input',
             [
                 'name' => $field->handle,
                 'value' => $value,
@@ -147,7 +148,7 @@ class Link extends SproutFormsBaseField implements PreviewableFieldInterface
     public function getElementValidationRules(): array
     {
         $rules = parent::getElementValidationRules();
-        $rules[] = 'validateLink';
+        $rules[] = 'validateUrl';
 
         return $rules;
     }
@@ -161,17 +162,14 @@ class Link extends SproutFormsBaseField implements PreviewableFieldInterface
      *
      * @return void
      */
-    public function validateLink(ElementInterface $element)
+    public function validateUrl(ElementInterface $element)
     {
         $value = $element->getFieldValue($this->handle);
 
-        $handle = $this->handle;
-        $name = $this->name;
-
-        if (!SproutBase::$app->link->validate($value, $this)) {
+        if (!SproutBase::$app->url->validate($value, $this)) {
             $element->addError(
                 $this->handle,
-                SproutBase::$app->link->getErrorMessage($this->name, $this)
+                SproutBase::$app->url->getErrorMessage($this->name, $this)
             );
         }
     }

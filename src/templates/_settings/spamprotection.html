@@ -1,0 +1,24 @@
+{% requirePermission "editSproutFormsSettings" %}
+
+{% import "_includes/forms" as forms %}
+
+{% set captchas = craft.sproutForms.getAllCaptchas() %}
+{% for captcha in captchas %}
+
+    {% set isEnabled = settings['captchaSettings'][captcha.getCaptchaId()]['enabled'] ?? false %}
+    {{ forms.lightswitchField({
+        label: captcha.getName(),
+        instructions: captcha.getDescription(),
+        name: 'captchaSettings[' ~ captcha.getCaptchaId() ~ '][enabled]',
+        toggle: captcha.getCaptchaId(),
+        on: isEnabled,
+        onLabel: "Enable"|t,
+    }) }}
+
+    {% if captcha.getCaptchaSettingsHtml()|length %}
+        <div id="{{ captcha.getCaptchaId() }}" class="{{ not isEnabled ? "hidden" : '' }}">
+            {{ captcha.getCaptchaSettingsHtml()|raw }}
+        </div>
+    {% endif %}
+    <hr>
+{% endfor %}

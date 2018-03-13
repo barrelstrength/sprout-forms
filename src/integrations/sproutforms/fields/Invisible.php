@@ -9,7 +9,6 @@ use craft\base\PreviewableFieldInterface;
 use yii\db\Schema;
 
 use barrelstrength\sproutforms\contracts\FieldModel;
-use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 
 class Invisible extends SproutFormsBaseField implements PreviewableFieldInterface
@@ -31,7 +30,7 @@ class Invisible extends SproutFormsBaseField implements PreviewableFieldInterfac
 
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms','Invisible');
+        return Craft::t('sprout-forms', 'Invisible');
     }
 
     /**
@@ -66,9 +65,9 @@ class Invisible extends SproutFormsBaseField implements PreviewableFieldInterfac
     /**
      * @return string
      */
-    public function getIconClass()
+    public function getSvgIconPath()
     {
-        return 'fa fa-eye-slash';
+        return '@sproutbaseicons/eye-slash.svg';
     }
 
     /**
@@ -92,8 +91,7 @@ class Invisible extends SproutFormsBaseField implements PreviewableFieldInterfac
         $inputId = Craft::$app->getView()->formatInputId($name);
         $namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
 
-        return Craft::$app->getView()->renderTemplate(
-            'sprout-base/sproutfields/_includes/forms/invisible/input',
+        return Craft::$app->getView()->renderTemplate('sprout-base/sproutfields/_fields/invisible/input',
             [
                 'id' => $namespaceInputId,
                 'name' => $name,
@@ -123,9 +121,9 @@ class Invisible extends SproutFormsBaseField implements PreviewableFieldInterfac
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
-        $value = Craft::$app->getSession()->get($this->handle);
-        $value = $value ? $value : '';
-        $value = Craft::$app->view->renderObjectTemplate($value, parent::getFieldVariables());
+        $session = Craft::$app->getSession()->get($this->handle);
+        $sessionValue = $session ? $session : '';
+        $value = Craft::$app->view->renderObjectTemplate($sessionValue, parent::getFieldVariables());
 
         return parent::normalizeValue($value, $element);
     }
@@ -135,10 +133,10 @@ class Invisible extends SproutFormsBaseField implements PreviewableFieldInterfac
      */
     public function getTableAttributeHtml($value, ElementInterface $element): string
     {
-        $hiddenValue = "";
+        $hiddenValue = '';
 
-        if ($value != "") {
-            $hiddenValue = $this->hideValue ? "&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" : $value;
+        if ($value != '') {
+            $hiddenValue = $this->hideValue ? '&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;' : $value;
         }
 
         return $hiddenValue;

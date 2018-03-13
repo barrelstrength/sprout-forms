@@ -4,18 +4,15 @@ namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
 
 use Craft;
 use craft\base\ElementInterface;
-use craft\base\Field;
 use craft\base\PreviewableFieldInterface;
 use craft\fields\data\MultiOptionsFieldData;
 use craft\fields\data\OptionData;
 use craft\fields\data\SingleOptionFieldData;
-use craft\helpers\ArrayHelper;
 use craft\helpers\Db;
 use craft\helpers\Json;
 use yii\db\Schema;
 
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
-use barrelstrength\sproutforms\SproutForms;
 
 /**
  * SproutBaseOptionsField is the base class for classes representing an options field.
@@ -115,23 +112,23 @@ abstract class SproutBaseOptionsField extends SproutFormsBaseField implements Pr
             [
                 [
                     'label' => $this->optionsSettingLabel(),
-                    'instructions' => Craft::t('sprout-forms','Define the available options.'),
+                    'instructions' => Craft::t('sprout-forms', 'Define the available options.'),
                     'id' => 'options',
                     'name' => 'options',
-                    'addRowLabel' => Craft::t('sprout-forms','Add an option'),
+                    'addRowLabel' => Craft::t('sprout-forms', 'Add an option'),
                     'cols' => [
                         'label' => [
-                            'heading' => Craft::t('sprout-forms','Option Label'),
+                            'heading' => Craft::t('sprout-forms', 'Option Label'),
                             'type' => 'singleline',
                             'autopopulate' => 'value'
                         ],
                         'value' => [
-                            'heading' => Craft::t('sprout-forms','Value'),
+                            'heading' => Craft::t('sprout-forms', 'Value'),
                             'type' => 'singleline',
                             'class' => 'code'
                         ],
                         'default' => [
-                            'heading' => Craft::t('sprout-forms','Default?'),
+                            'heading' => Craft::t('sprout-forms', 'Default?'),
                             'type' => 'checkbox',
                             'radioMode' => !$this->multi,
                             'class' => 'thin'
@@ -149,36 +146,42 @@ abstract class SproutBaseOptionsField extends SproutFormsBaseField implements Pr
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
-        if (is_string($value)) {
-            $value = Json::decodeIfJson($value);
+        // @todo - for some reason the value of EmailDropdown comes as interger - handleUnobfuscateEmailAddresses is no having effect
+        if ($value instanceof MultiOptionsFieldData || $value instanceof SingleOptionFieldData) {
+            return $value;
         }
 
-        $selectedValues = ArrayHelper::toArray($value);
+        if (is_string($value)) {
+            $value = Json::decodeIfJson($value);
+        } else if ($value === null && $this->isFresh($element)) {
+            $value = $this->defaultValue();
+        }
+
+        // Normalize to an array
+        $selectedValues = (array)$value;
 
         if ($this->multi) {
-            if (is_array($value)) {
-                // Convert all the values to OptionData objects
-                foreach ($value as &$val) {
-                    $label = $this->optionLabel($val);
-                    $val = new OptionData($label, $val, true);
-                }
-                unset($val);
-            } else {
-                $value = [];
+            // Convert the value to a MultiOptionsFieldData object
+            $options = [];
+            foreach ($selectedValues as $val) {
+                $label = $this->optionLabel($val);
+                $options[] = new OptionData($label, $val, true);
             }
-
-            $value = new MultiOptionsFieldData($value);
+            $value = new MultiOptionsFieldData($options);
         } else {
             // Convert the value to a SingleOptionFieldData object
+            $value = reset($selectedValues) ?: null;
             $label = $this->optionLabel($value);
             $value = new SingleOptionFieldData($label, $value, true);
         }
 
         $options = [];
 
-        foreach ($this->options as $option) {
-            $selected = in_array($option['value'], $selectedValues, true);
-            $options[] = new OptionData($option['label'], $option['value'], $selected);
+        if ($this->options) {
+            foreach ($this->options as $option) {
+                $selected = in_array($option['value'], $selectedValues, true);
+                $options[] = new OptionData($option['label'], $option['value'], $selected);
+            }
         }
 
         $value->setOptions($options);
@@ -236,6 +239,17 @@ abstract class SproutBaseOptionsField extends SproutFormsBaseField implements Pr
         return (string)$value->value;
     }
 
+    /**
+     * Returns whether the field type supports storing multiple selected options.
+     *
+     * @return bool
+     * @see multi
+     */
+    public function getIsMultiOptionsField(): bool
+    {
+        return $this->multi;
+    }
+
     // Protected Methods
     // =========================================================================
 
@@ -253,11 +267,13 @@ abstract class SproutBaseOptionsField extends SproutFormsBaseField implements Pr
     {
         $translatedOptions = [];
 
-        foreach ($this->options as $option) {
-            $translatedOptions[] = [
-                'label' => Craft::t('sprout-forms',$option['label']),
-                'value' => $option['value']
-            ];
+        if ($this->options) {
+            foreach ($this->options as $option) {
+                $translatedOptions[] = [
+                    'label' => Craft::t('site', $option['label']),
+                    'value' => $option['value']
+                ];
+            }
         }
 
         return $translatedOptions;
@@ -291,18 +307,22 @@ abstract class SproutBaseOptionsField extends SproutFormsBaseField implements Pr
         if ($this->multi) {
             $defaultValues = [];
 
-            foreach ($this->options as $option) {
-                if (!empty($option['default'])) {
-                    $defaultValues[] = $option['value'];
+            if ($this->options) {
+                foreach ($this->options as $option) {
+                    if (!empty($option['default'])) {
+                        $defaultValues[] = $option['value'];
+                    }
                 }
             }
 
             return $defaultValues;
         }
 
-        foreach ($this->options as $option) {
-            if (!empty($option['default'])) {
-                return $option['value'];
+        if ($this->options) {
+            foreach ($this->options as $option) {
+                if (!empty($option['default'])) {
+                    return $option['value'];
+                }
             }
         }
 

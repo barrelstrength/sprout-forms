@@ -6,8 +6,6 @@ use Craft;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\ElementInterface;
 
-use barrelstrength\sproutforms\SproutForms;
-
 /**
  * Class SproutFormsMultiSelectField
  *
@@ -19,7 +17,7 @@ class MultiSelect extends SproutBaseOptionsField
      */
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms','Multi Select');
+        return Craft::t('sprout-forms', 'Multi Select');
     }
 
     // Properties
@@ -72,12 +70,14 @@ class MultiSelect extends SproutBaseOptionsField
     }
 
     /**
-     * @param FieldModel $field
-     * @param mixed      $value
-     * @param array      $settings
-     * @param array      $renderingOptions
+     * @param \barrelstrength\sproutforms\contracts\FieldModel $field
+     * @param mixed                                            $value
+     * @param mixed                                            $settings
+     * @param array|null                                       $renderingOptions
      *
-     * @return \Twig_Markup
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
     {
@@ -104,15 +104,15 @@ class MultiSelect extends SproutBaseOptionsField
      */
     protected function optionsSettingLabel(): string
     {
-        return Craft::t('sprout-forms','Multi-select Options');
+        return Craft::t('sprout-forms', 'Multi-select Options');
     }
 
     /**
      * @return string
      */
-    public function getIconClass()
+    public function getSvgIconPath()
     {
-        return 'fa fa-bars';
+        return '@sproutbaseicons/bars.svg';
     }
 
     /**

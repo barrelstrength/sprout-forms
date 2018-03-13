@@ -17,7 +17,7 @@
 	{% else %}
 
 	  {# Retrieve your Form Model from the database #}
-	  {% set form = craft.sproutforms.form('basic') %}
+	  {% set form = craft.sproutForms.form('basic') %}
 
 	  {# If you want more fine-grained control over your fields, you will have to build the
 	     Form youself, and then you can control the specific fields more directly. #}
@@ -35,9 +35,9 @@
 
 	  		{# To output a specific field, use the syntax: formHandle.tabHandle
 	  			 A tabHandle is the lowercase Tab name with all spaces removed #}
-	  		{{ craft.sproutforms.displayTab('basic.sectionone') }}
+	  		{{ craft.sproutForms.displayTab('basic.sectionone') }}
 
-	  		{{ craft.sproutforms.displayTab('basic.sectiontwo') }}
+	  		{{ craft.sproutForms.displayTab('basic.sectiontwo') }}
 
 	  	</div>
 

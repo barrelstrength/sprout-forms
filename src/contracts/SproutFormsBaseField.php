@@ -5,7 +5,6 @@ namespace barrelstrength\sproutforms\contracts;
 use Craft;
 use craft\base\Field;
 use craft\base\ElementInterface;
-use craft\helpers\FileHelper;
 
 /**
  * Class SproutFormsBaseField
@@ -82,30 +81,11 @@ abstract class SproutFormsBaseField extends Field
     }
 
     /**
-     * @return string font awesome class
+     * @return string
      */
-    public function getIconClass()
+    public function getSvgIconPath()
     {
         return '';
-    }
-
-    /**
-     * @param string the size of the icon
-     *
-     * @return string font awesome class
-     */
-    public function getIcon($size = "fa-2x")
-    {
-        $iconClass = $this->getIconClass();
-
-        if (!$iconClass) {
-            // set a default icon
-            $iconClass = 'fa fa-font';
-        }
-
-        $icon = "<i class='{$iconClass} {$size}' aria-hidden='true'></i>";
-
-        return $icon;
     }
 
     /**
@@ -132,6 +112,17 @@ abstract class SproutFormsBaseField extends Field
     public function isPlainInput()
     {
         return false;
+    }
+
+    /**
+     * Display or suppress instructions field. Useful for some field types like Notes where
+     * another textarea field may be the primary to use for output.
+     *
+     * @return bool
+     */
+    public function displayInstructionsField()
+    {
+        return true;
     }
 
     /**

@@ -133,8 +133,12 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 }
 
 .sproutforms-icon svg {
-    height: 25px;
-    width: 25px;
+    height: 14px;
+    width: 14px;
+    vertical-align: middle;
+}
+.sproutforms-sourcefield-name {
+    vertical-align: middle;
 }
 
 .source-field {
@@ -211,24 +215,41 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 
 /* Field Instances - Source */
 
+#sproutforms-source-fields #right-copy {
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+#sproutforms-source-fields #right-copy h6 {
+    flex-grow: 1;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
 .source-field {
-    display: inline-block;
+    flex-grow: 1;
+    /*display: inline-block;*/
     text-align: left;
     box-sizing: border-box;
     border: 2px solid transparent;
-    width: 45%;
-    margin: 5px;
+    width: 48%;
+    margin-right: 2%;
+    margin-bottom: 10px;
     padding: 8px;
 }
 
-.source-field:hover {
+.source-field:hover,
+.source-field:hover svg {
     background-color: rgb(13, 120, 242);
     color: #fff;
+    fill: #fff;
 }
 
 .source-field h3 {
     white-space: nowrap;
     overflow: hidden;
+    font-size: 12px;
 }
 
 .source-field h3 .sproutforms-icon {

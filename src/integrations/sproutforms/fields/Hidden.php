@@ -5,7 +5,6 @@ namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
 use Craft;
 use craft\base\ElementInterface;
 use craft\helpers\Template as TemplateHelper;
-use craft\base\Field;
 use craft\base\PreviewableFieldInterface;
 use yii\db\Schema;
 use barrelstrength\sproutforms\SproutForms;
@@ -30,7 +29,7 @@ class Hidden extends SproutFormsBaseField implements PreviewableFieldInterface
 
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms','Hidden');
+        return Craft::t('sprout-forms', 'Hidden');
     }
 
     /**
@@ -55,9 +54,9 @@ class Hidden extends SproutFormsBaseField implements PreviewableFieldInterface
     /**
      * @return string
      */
-    public function getIconClass()
+    public function getSvgIconPath()
     {
-        return 'fa fa-user-secret';
+        return '@sproutbaseicons/user-secret.svg';
     }
 
     /**
@@ -77,7 +76,7 @@ class Hidden extends SproutFormsBaseField implements PreviewableFieldInterface
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        return Craft::$app->getView()->renderTemplate('sprout-base/sproutfields/_includes/forms/hidden/input',
+        return Craft::$app->getView()->renderTemplate('sprout-base/sproutfields/_fields/hidden/input',
             [
                 'id' => $this->handle,
                 'name' => $this->handle,
@@ -87,12 +86,14 @@ class Hidden extends SproutFormsBaseField implements PreviewableFieldInterface
     }
 
     /**
-     * @param FieldModel $field
-     * @param mixed      $value
-     * @param array      $settings
-     * @param array      $renderingOptions
+     * @param \barrelstrength\sproutforms\contracts\FieldModel $field
+     * @param mixed                                            $value
+     * @param mixed                                            $settings
+     * @param array|null                                       $renderingOptions
      *
-     * @return \Twig_Markup
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
     {

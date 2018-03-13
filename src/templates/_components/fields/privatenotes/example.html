@@ -1,0 +1,19 @@
+<div id="sproutform-exampleinput-privatenotes">
+
+    <textarea rows="4" readonly disabled></textarea>
+
+    <p><i class="fa fa-eye-slash fa-lg"></i> {{ "This field will not be visible in your form or your source code."|t }}</p>
+
+</div>
+
+{% css %}
+    #sproutform-exampleinput-privatenotes textarea {
+        border: 2px dashed #ccc;
+        box-shadow: none;
+        padding: 4px;
+    }
+    #sproutform-exampleinput-privatenotes p {
+        font-style: italic;
+        margin: 5px 0 10px;
+    }
+{% endcss %}

@@ -18,21 +18,19 @@ use craft\helpers\StringHelper;
 use craft\models\VolumeFolder;
 use craft\web\UploadedFile;
 
-use barrelstrength\sproutforms\SproutForms;
-
 /**
  * Class SproutFormsAssetsField
  *
  * @package Craft
  */
-class Assets extends SproutBaseRelationField
+class FileUpload extends SproutBaseRelationField
 {
     /**
      * @inheritdoc
      */
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms','Assets');
+        return Craft::t('sprout-forms', 'File Upload');
     }
 
     /**
@@ -48,7 +46,7 @@ class Assets extends SproutBaseRelationField
      */
     public static function defaultSelectionLabel(): string
     {
-        return Craft::t('sprout-forms','Add an asset');
+        return Craft::t('sprout-forms', 'Add a file');
     }
 
     // Properties
@@ -109,7 +107,7 @@ class Assets extends SproutBaseRelationField
         parent::init();
         $this->allowLargeThumbsView = true;
         $this->settingsTemplate = 'sprout-forms/_components/fields/assets/settings';
-        $this->inputTemplate = '_components/fieldtypes/Assets/input';
+        $this->inputTemplate = '_components/fields/assets/input';
         $this->inputJsClass = 'Craft.AssetSelectInput';
     }
 
@@ -186,12 +184,14 @@ class Assets extends SproutBaseRelationField
     }
 
     /**
-     * @param FieldModel $field
-     * @param mixed      $value
-     * @param array      $settings
-     * @param array      $renderingOptions
+     * @param \barrelstrength\sproutforms\contracts\FieldModel $field
+     * @param mixed                                            $value
+     * @param mixed                                            $settings
+     * @param array|null                                       $renderingOptions
      *
-     * @return \Twig_Markup
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
     {
@@ -286,13 +286,14 @@ class Assets extends SproutBaseRelationField
         return parent::normalizeValue($value, $element);
     }
 
-
     /**
      * Resolve source path for uploading for this field.
      *
      * @param ElementInterface|null $element
      *
      * @return int
+     * @throws InvalidSubpathException
+     * @throws InvalidVolumeException
      */
     public function resolveDynamicPathToFolderId(ElementInterface $element = null): int
     {
@@ -425,6 +426,14 @@ class Assets extends SproutBaseRelationField
         return parent::beforeElementSave($element, $isNew);
     }
 
+    /**
+     * @param ElementInterface $element
+     * @param bool             $isNew
+     *
+     * @throws InvalidSubpathException
+     * @throws InvalidVolumeException
+     * @throws \craft\errors\AssetLogicException
+     */
     public function afterElementSave(ElementInterface $element, bool $isNew)
     {
         $value = $element->getFieldValue($this->handle);
@@ -527,7 +536,6 @@ class Assets extends SproutBaseRelationField
 
         return $variables;
     }
-
 
     /**
      * @inheritdoc
@@ -639,7 +647,9 @@ class Assets extends SproutBaseRelationField
      * @param VolumeFolder $currentFolder
      * @param string       $folderName
      *
-     * @return VolumeFolder The new subfolder
+     * @return VolumeFolder
+     * @throws \craft\errors\AssetConflictException
+     * @throws \craft\errors\VolumeObjectExistsException
      */
     private function _createSubfolder(VolumeFolder $currentFolder, string $folderName): VolumeFolder
     {
@@ -791,12 +801,11 @@ class Assets extends SproutBaseRelationField
         return Craft::$app->getVolumes()->getVolumeById($volumeId);
     }
 
-
     /**
      * @return string
      */
-    public function getIconClass()
+    public function getSvgIconPath()
     {
-        return 'fa fa-cloud-upload';
+        return '@sproutbaseicons/cloud-upload.svg';
     }
 }

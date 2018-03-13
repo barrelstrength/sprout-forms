@@ -268,7 +268,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
     initTabSettings: function()
     {
         var that = this;
-        // get all the links stars with sproutform-field-
+
         $("#sprout-forms-tabs li").each(function (i, el) {
 
           // #delete-tab-"+tab.id
@@ -321,7 +321,8 @@ if (typeof Craft.SproutForms === typeof undefined) {
     initButtons: function()
     {
       var that = this;
-      // get all the links stars with sproutform-field-
+
+      // Add listeners to all the items that start with sproutform-field-
       $("a[id^='sproutform-field-']").each(function (i, el) {
         var fieldId = $(el).data('fieldid');
 

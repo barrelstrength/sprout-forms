@@ -28,7 +28,7 @@
 {% if craft.request.getParam('message') == 'thank-you' %}
 
 	{# Check for the last entry submitted #}
-	{% set lastEntry = craft.sproutforms.lastEntry() %}
+	{% set lastEntry = craft.sproutForms.lastEntry() %}
 
 	{% if lastEntry %}
 
@@ -47,10 +47,10 @@
 {% else %}
 
 	{# Retrieve our Form from the database #}
-	{% set form = craft.sproutforms.form('contact') %}
+	{% set form = craft.sproutForms.form('contact') %}
 
 	{# Retrieve our Form Entry with any errors if we have a failed submission #}
-	{% set submittedEntry = craft.sproutforms.getEntry(form) %}
+	{% set submittedEntry = craft.sproutForms.getEntry(form) %}
 
 	<form method="post" accept-charset="utf-8">
 		{{ csrfInput() }}

@@ -4,35 +4,40 @@ namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
 
 use Craft;
 use craft\helpers\Template as TemplateHelper;
+use yii\db\Schema;
 use craft\base\ElementInterface;
+use craft\base\PreviewableFieldInterface;
 
-use barrelstrength\sproutforms\SproutForms;
+use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 
 /**
- * Class SproutFormsRadioButtonsField
+ * Class PlainText
  *
+ * @package Craft
  */
-class RadioButtons extends SproutBaseOptionsField
+class SingleLine extends SproutFormsBaseField implements PreviewableFieldInterface
 {
     /**
-     * @var string|null The input’s boostrap class
+     * @var string|null The input’s placeholder text
      */
-    public $boostrapClass;
+    public $placeholder = '';
+
+    /**
+     * @var int|null The maximum number of characters allowed in the field
+     */
+    public $charLimit;
+
+    /**
+     * @var string The type of database column the field should have in the content table
+     */
+    public $columnType = Schema::TYPE_TEXT;
 
     /**
      * @inheritdoc
      */
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms','Radio Buttons');
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function optionsSettingLabel(): string
-    {
-        return Craft::t('sprout-forms','Radio Button Options');
+        return Craft::t('sprout-forms', 'Single Line');
     }
 
     /**
@@ -40,7 +45,7 @@ class RadioButtons extends SproutBaseOptionsField
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/radiobuttons/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/plaintext/example',
             [
                 'field' => $this
             ]
@@ -48,22 +53,18 @@ class RadioButtons extends SproutBaseOptionsField
     }
 
     /**
+     * Adds support for edit field in the Entries section of SproutForms (Control
+     * panel html)
+     *
      * @inheritdoc
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        $options = $this->translatedOptions();
-
-        // If this is a new entry, look for a default option
-        if ($this->isFresh($element)) {
-            $value = $this->defaultValue();
-        }
-
-        return Craft::$app->getView()->renderTemplate('_includes/forms/radioGroup',
+        return Craft::$app->getView()->renderTemplate('sprout-base/sproutfields/_fields/singleline/input',
             [
                 'name' => $this->handle,
                 'value' => $value,
-                'options' => $options
+                'field' => $this,
             ]);
     }
 
@@ -74,13 +75,15 @@ class RadioButtons extends SproutBaseOptionsField
      * @param array|null                                       $renderingOptions
      *
      * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
     {
         $this->beginRendering();
 
         $rendered = Craft::$app->getView()->renderTemplate(
-            'radiobuttons/input',
+            'plaintext/input',
             [
                 'name' => $field->handle,
                 'value' => $value,
@@ -96,29 +99,27 @@ class RadioButtons extends SproutBaseOptionsField
     }
 
     /**
-     * @return string
-     */
-    public function getIconClass()
-    {
-        return 'fa fa-dot-circle-o';
-    }
-
-    /**
-     * @inheritdoc
+     * @return null|string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {
-        $parentRendered = parent::getSettingsHtml();
-
         $rendered = Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/radiobuttons/settings',
+            'sprout-forms/_components/fields/plaintext/settings',
             [
                 'field' => $this,
             ]
         );
 
-        $customRendered = $rendered.$parentRendered;
+        return $rendered;
+    }
 
-        return $customRendered;
+    /**
+     * @return string
+     */
+    public function getSvgIconPath()
+    {
+        return '@sproutbaseicons/font.svg';
     }
 }

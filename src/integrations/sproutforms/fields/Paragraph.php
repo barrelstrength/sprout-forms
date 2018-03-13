@@ -9,29 +9,18 @@ use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
 
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
-use barrelstrength\sproutforms\SproutForms;
 
 /**
  * Class PlainText
  *
  * @package Craft
  */
-class PlainText extends SproutFormsBaseField implements PreviewableFieldInterface
+class Paragraph extends SproutFormsBaseField implements PreviewableFieldInterface
 {
     /**
      * @var string|null The input’s placeholder text
      */
-    public $boostrapClass;
-
-    /**
-     * @var string|null The input’s placeholder text
-     */
     public $placeholder = '';
-
-    /**
-     * @var bool|null Whether the input should allow line breaks
-     */
-    public $multiline;
 
     /**
      * @var int The minimum number of rows the input should have, if multi-line
@@ -53,7 +42,7 @@ class PlainText extends SproutFormsBaseField implements PreviewableFieldInterfac
      */
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms','Plain Text');
+        return Craft::t('sprout-forms', 'Paragraph');
     }
 
     /**
@@ -61,7 +50,7 @@ class PlainText extends SproutFormsBaseField implements PreviewableFieldInterfac
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/plaintext/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/paragraph/example',
             [
                 'field' => $this
             ]
@@ -76,7 +65,7 @@ class PlainText extends SproutFormsBaseField implements PreviewableFieldInterfac
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        return Craft::$app->getView()->renderTemplate('_components/fieldtypes/PlainText/input',
+        return Craft::$app->getView()->renderTemplate('sprout-base/sproutfields/_fields/paragraph/input',
             [
                 'name' => $this->handle,
                 'value' => $value,
@@ -85,19 +74,21 @@ class PlainText extends SproutFormsBaseField implements PreviewableFieldInterfac
     }
 
     /**
-     * @param FieldModel $field
-     * @param mixed      $value
-     * @param array      $settings
-     * @param array      $renderingOptions
+     * @param \barrelstrength\sproutforms\contracts\FieldModel $field
+     * @param mixed                                            $value
+     * @param mixed                                            $settings
+     * @param array|null                                       $renderingOptions
      *
-     * @return \Twig_Markup
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
     {
         $this->beginRendering();
 
         $rendered = Craft::$app->getView()->renderTemplate(
-            'plaintext/input',
+            'paragraph/input',
             [
                 'name' => $field->handle,
                 'value' => $value,
@@ -113,14 +104,14 @@ class PlainText extends SproutFormsBaseField implements PreviewableFieldInterfac
     }
 
     /**
-     * @param FieldModel $field
-     *
-     * @return \Twig_Markup
+     * @return null|string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {
         $rendered = Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/plaintext/settings',
+            'sprout-forms/_components/fields/paragraph/settings',
             [
                 'field' => $this,
             ]
@@ -132,8 +123,8 @@ class PlainText extends SproutFormsBaseField implements PreviewableFieldInterfac
     /**
      * @return string
      */
-    public function getIconClass()
+    public function getSvgIconPath()
     {
-        return 'fa fa-font';
+        return '@sproutbaseicons/paragraph.svg';
     }
 }

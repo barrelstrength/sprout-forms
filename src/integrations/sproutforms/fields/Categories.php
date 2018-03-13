@@ -22,7 +22,7 @@ class Categories extends SproutBaseRelationField
      */
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms','Categories');
+        return Craft::t('sprout-forms', 'Categories');
     }
 
     /**
@@ -38,7 +38,7 @@ class Categories extends SproutBaseRelationField
      */
     public static function defaultSelectionLabel(): string
     {
-        return Craft::t('sprout-forms','Add a category');
+        return Craft::t('sprout-forms', 'Add a category');
     }
 
     // Properties
@@ -63,7 +63,7 @@ class Categories extends SproutBaseRelationField
         $this->allowLimit = false;
         $this->allowMultipleSources = false;
         $this->settingsTemplate = 'sprout-forms/_components/fields/categories/settings';
-        $this->inputTemplate = '_components/fieldtypes/Categories/input';
+        $this->inputTemplate = '_components/fields/categories/input';
         $this->inputJsClass = 'Craft.CategorySelectInput';
         $this->sortable = false;
     }
@@ -119,19 +119,21 @@ class Categories extends SproutBaseRelationField
         }
 
         if (empty($source)) {
-            return '<p class="error">'.Craft::t('sprout-forms','This field is not set to a valid category group.').'</p>';
+            return '<p class="error">'.Craft::t('sprout-forms', 'This field is not set to a valid category group.').'</p>';
         }
 
         return parent::getInputHtml($value, $element);
     }
 
     /**
-     * @param FieldModel $field
-     * @param mixed      $value
-     * @param array      $settings
-     * @param array      $renderingOptions
+     * @param \barrelstrength\sproutforms\contracts\FieldModel $field
+     * @param mixed                                            $value
+     * @param mixed                                            $settings
+     * @param array|null                                       $renderingOptions
      *
-     * @return \Twig_Markup
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
     {
@@ -170,8 +172,8 @@ class Categories extends SproutBaseRelationField
     /**
      * @return string
      */
-    public function getIconClass()
+    public function getSvgIconPath()
     {
-        return 'fa fa-folder-open';
+        return '@sproutbaseicons/folder-open.svg';
     }
 }

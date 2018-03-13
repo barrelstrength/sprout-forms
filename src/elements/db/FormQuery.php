@@ -31,6 +31,9 @@ class FormQuery extends ElementQuery
      */
     public $handle;
 
+    /**
+     * @var string
+     */
     public $oldHandle;
 
     /**

@@ -1,8 +1,1 @@
-{% if field.multiline %}
-    <textarea
-        placeholder="{{ field.placeholder }}"
-        rows="{{ field.initialRows }}"
-    readonly disabled></textarea>
-{% else %}
-    <input type="text" placeholder="{{ field.placeholder }}" readonly disabled>
-{% endif %}
+<input type="text" placeholder="{{ field.placeholder }}" readonly disabled>

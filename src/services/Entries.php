@@ -12,6 +12,8 @@ use barrelstrength\sproutforms\events\OnSaveEntryEvent;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\SproutBaseRelationField;
 use barrelstrength\sproutforms\models\EntryStatus;
 use barrelstrength\sproutforms\records\Entry as EntryRecord;
+use barrelstrength\sproutforms\integrations\sproutforms\fields\EmailDropdown as EmailDropdownField;
+use craft\db\Query;
 use barrelstrength\sproutforms\records\EntryStatus as EntryStatusRecord;
 use craft\base\ElementInterface;
 use yii\base\Component;
@@ -37,7 +39,7 @@ class Entries extends Component
     /**
      * Returns an active or new entry element
      *
-     * @param SproutForms_FormModel $form
+     * @param FormElement $form
      *
      * @return EntryElement
      */
@@ -90,7 +92,7 @@ class Entries extends Component
             $record = EntryStatusRecord::findOne($entryStatus->id);
 
             if (!$record) {
-                throw new \Exception(Craft::t('sprout-forms','No Entry Status exists with the id of “{id}”', ['id' => $entryStatus->id]));
+                throw new \Exception(Craft::t('sprout-forms', 'No Entry Status exists with the id of “{id}”', ['id' => $entryStatus->id]));
             }
         }
 
@@ -128,9 +130,12 @@ class Entries extends Component
     }
 
     /**
-     * @param int
+     * @param $id
      *
      * @return bool
+     * @throws \Exception
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function deleteEntryStatusById($id)
     {
@@ -216,8 +221,10 @@ class Entries extends Component
     /**
      * @param EntryElement $entry
      *
-     * @throws \Exception
      * @return bool
+     * @throws \Exception
+     * @throws \Throwable
+     * @throws \yii\base\Exception
      */
     public function saveEntry(EntryElement &$entry)
     {
@@ -229,7 +236,7 @@ class Entries extends Component
             $entryRecord = EntryRecord::findOne($entry->id);
 
             if (!$entryRecord) {
-                throw new Exception(Craft::t('sprout-forms','No entry exists with id '.$entry->id));
+                throw new Exception(Craft::t('sprout-forms', 'No entry exists with id '.$entry->id));
             }
         }
 
@@ -257,6 +264,10 @@ class Entries extends Component
 
         try {
             if (!$event->isValid) {
+                foreach ($event->errors as $key => $error){
+                    $entry->addError($key, $error);
+                }
+
                 SproutForms::error('OnBeforeSaveEntryEvent is not valid');
 
                 if ($event->fakeIt) {
@@ -266,25 +277,13 @@ class Entries extends Component
                 return false;
             }
 
-            /* @todo - delete the context code after confirm that is not needed anymore on Craft3 behavior */
-            //$content         = Craft::$app->getContent();
-            //$oldFieldContext = $content->fieldContext;
-            //$oldContentTable = $content->contentTable;
-
-            //$content->fieldContext = $entry->getFieldContext();
-            //$content->contentTable = $entry->getContentTable();
-
             SproutForms::info('Transaction: Event is Valid');
 
             $success = Craft::$app->getElements()->saveElement($entry);
 
-            // Reset our field context and content table to what they were previously
-            //$content->fieldContext = $oldFieldContext;
-            //$content->contentTable = $oldContentTable;
-
             if (!$success) {
                 $transaction->rollBack();
-                SproutForms::error("Couldn’t save Element on saveEntry service.");
+                SproutForms::error('Couldn’t save Element on saveEntry service.');
 
                 return false;
             }
@@ -405,12 +404,74 @@ class Entries extends Component
     }
 
     /**
+     * @param       $formId
+     * @param array $submittedFields
+     *
+     * @return bool
+     */
+    public function unobfuscateEmailAddresses($formId, $submittedFields = [])
+    {
+        if (!is_numeric($formId)) {
+            return false;
+        }
+
+        $fieldContext = 'sproutForms:'.$formId;
+
+        // Get all Email Select Fields for this form
+        $emailSelectFieldHandles = (new Query())
+            ->select('handle')
+            ->from('{{%fields}}')
+            ->where(['context' => $fieldContext, 'type' => EmailDropdownField::class])
+            ->all();
+
+        $oldContext = Craft::$app->content->fieldContext;
+
+        Craft::$app->content->fieldContext = $fieldContext;
+
+        foreach ($emailSelectFieldHandles as $key => $handle) {
+            if (isset($submittedFields[$handle['handle']])) {
+                // Get our field settings, which include the map of
+                // email addresses to their indexes
+                $field = Craft::$app->fields->getFieldByHandle($handle['handle']);
+                $options = $field->settings['options'];
+
+                // Get the obfuscated email index from our post request
+                $index = $submittedFields[$handle['handle']];
+                $emailValue = $options[$index]['value'];
+
+                // Update the Email Select value in our post request from
+                // the Email Index value to the Email Address
+                $_POST['fields'][$handle['handle']] = $emailValue;
+            }
+        }
+
+        Craft::$app->content->fieldContext = $oldContext;
+    }
+
+    /**
+     * Handles event to unobfuscate email addresses in a Sprout Forms submission
+     *
+     * @param $form
+     */
+    public function handleUnobfuscateEmailAddresses($form)
+    {
+        if (Craft::$app->request->getIsCpRequest()) {
+            return;
+        }
+
+        $formId = $form->id;
+        $submittedFields = Craft::$app->request->getBodyParam('fields');
+
+        // Unobfuscate email address in $_POST request
+        $this->unobfuscateEmailAddresses($formId, $submittedFields);
+    }
+
+    /**
      * Gets an Entry Status's record.
      *
-     * @param int $sourceId
+     * @param null $entryStatusId
      *
-     * @throws Exception
-     * @return EntryStatusRecord
+     * @return EntryStatusRecord|null|static
      */
     private function _getEntryStatusRecordById($entryStatusId = null)
     {
@@ -418,7 +479,7 @@ class Entries extends Component
             $entryStatusRecord = EntryStatusRecord::findOne($entryStatusId);
 
             if (!$entryStatusRecord) {
-                throw new Exception(Craft::t('sprout-forms','No Entry Status exists with the ID “{id}”.',
+                throw new Exception(Craft::t('sprout-forms', 'No Entry Status exists with the ID “{id}”.',
                     ['id' => $entryStatusId]
                 )
                 );

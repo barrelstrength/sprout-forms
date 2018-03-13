@@ -8,7 +8,6 @@ use craft\base\PreviewableFieldInterface;
 use yii\db\Schema;
 use craft\helpers\Template as TemplateHelper;
 
-use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 
@@ -41,7 +40,7 @@ class Email extends SproutFormsBaseField implements PreviewableFieldInterface
 
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms','Email');
+        return Craft::t('sprout-forms', 'Email');
     }
 
     /**
@@ -78,9 +77,9 @@ class Email extends SproutFormsBaseField implements PreviewableFieldInterface
     /**
      * @return string
      */
-    public function getIconClass()
+    public function getSvgIconPath()
     {
-        return 'fa fa-envelope';
+        return '@sproutbaseicons/envelope.svg';
     }
 
     /**
@@ -98,7 +97,7 @@ class Email extends SproutFormsBaseField implements PreviewableFieldInterface
         $elementId = ($element != null) ? $element->id : false;
 
         $rendered = Craft::$app->getView()->renderTemplate(
-            'sprout-base/sproutfields/_includes/forms/email/input',
+            'sprout-base/sproutfields/_fields/email/input',
             [
                 'namespaceInputId' => $namespaceInputId,
                 'id' => $inputId,
@@ -119,6 +118,8 @@ class Email extends SproutFormsBaseField implements PreviewableFieldInterface
      * @param array|null                                       $renderingOptions
      *
      * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
     {
@@ -126,7 +127,7 @@ class Email extends SproutFormsBaseField implements PreviewableFieldInterface
 
         $attributes = $field->getAttributes();
         $errorMessage = SproutBase::$app->email->getErrorMessage($attributes['name'], $settings);
-        $placeholder = (isset($settings['placeholder'])) ? $settings['placeholder'] : '';
+        $placeholder = isset($settings['placeholder']) ? $settings['placeholder'] : '';
 
         $rendered = Craft::$app->getView()->renderTemplate(
             'email/input',
@@ -184,7 +185,7 @@ class Email extends SproutFormsBaseField implements PreviewableFieldInterface
 
         if ($uniqueEmail && !SproutBase::$app->email->validateUniqueEmailAddress($value, $element, $this)) {
             $element->addError($this->handle,
-                Craft::t('sprout-forms',$this->name.' must be a unique email.')
+                Craft::t('sprout-forms', $this->name.' must be a unique email.')
             );
         }
     }

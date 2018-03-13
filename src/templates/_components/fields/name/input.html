@@ -1,0 +1,54 @@
+{#{%- set data     = renderingOptions.data is defined ? renderingOptions.data : null %}#}
+{#{%- set id       = renderingOptions.id is defined ? renderingOptions.id : name %}#}
+{#{%- set class    = renderingOptions.class is defined ? renderingOptions.class : name %}#}
+{#{%- set value    = value is defined ? value : null %}#}
+{#{%- set placeholder   = placeholder is not empty ? placeholder : null %}#}
+{#{%- set required = field.required is defined and field.required ? " required" %}#}
+{#{%- set pattern  = pattern is defined and pattern ? pattern : null %}#}
+
+{#{%- set dataAttributes = null %}#}
+{#{%- for key, dataValue in data %}#}
+{#{%- set dataAttributes = dataAttributes ~ ' data-'~key~'='~dataValue %}#}
+{#{% endfor -%}#}
+
+{#<input type="email"#}
+{#{%- if id %} id="{{ id }}"{% endif -%}#}
+{#{%- if class %} class="{{ class }}"{% endif -%}#}
+{#{%- if name %} name=""{% endif -%}#}
+{#{%- if value %} value="{{ value }}"{% endif -%}#}
+{#>#}
+
+<div
+    class="{{ name }}-wrapper">
+
+    {% if field.displayPrefix %}
+        <div class="sproutaddressfield-input sproutaddressfield-input-prefix">
+            <label>{{ "Prefix"|t('sprout-fields') }}</label>
+            <input type="text" name="{{ name ~ '[address][prefix]' }}">
+        </div>
+    {% endif %}
+
+    <div class="sproutaddressfield-input sproutaddressfield-input-firstname">
+        <label>{{ "First"|t('sprout-fields') }}</label>
+        <input type="text" name="{{ name ~ '[address][firstName]' }}">
+    </div>
+
+    {% if field.displayMiddleName %}
+        <div class="sproutaddressfield-input sproutaddressfield-input-middlename">
+            <label>{{ "Middle"|t('sprout-fields') }}</label>
+            <input type="text" name="{{ name ~ '[address][middleName]' }}">
+        </div>
+    {% endif %}
+
+    <div class="sproutaddressfield-input sproutaddressfield-input-lastname">
+        <label>{{ "Last"|t('sprout-fields') }}</label>
+        <input type="text" name="{{ name ~ '[address][lastName]' }}">
+    </div>
+
+    {% if field.displaySuffix %}
+        <div class="sproutaddressfield-input sproutaddressfield-input-suffix">
+            <label>{{ "Suffix"|t('sprout-fields') }}</label>
+            <input type="text" name="{{ name ~ '[address][suffix]' }}">
+        </div>
+    {% endif %}
+</div>

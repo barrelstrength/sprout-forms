@@ -2,7 +2,7 @@
 
 {% import "_includes/forms" as forms %}
 
-{% if craft.sproutforms.hasExamples() %}
+{% if craft.sproutForms.hasExamples() %}
 	<div class="pane first field">
 		<span class="warning">
 			{{ "Example templates and forms may already be installed."|t('sprout-forms') }}
@@ -10,7 +10,7 @@
 	</div>
 {% endif %}
 
-{% if not craft.sproutforms.canCreateExamples() %}
+{% if not craft.sproutForms.canCreateExamples() %}
 
 	<div class="pane first">
 

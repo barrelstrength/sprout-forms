@@ -11,7 +11,6 @@ use craft\helpers\Localization;
 use craft\i18n\Locale;
 
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
-use barrelstrength\sproutforms\SproutForms;
 
 /**
  * Class SproutFormsNumberField
@@ -49,7 +48,7 @@ class Number extends SproutFormsBaseField implements PreviewableFieldInterface
      */
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms','Number');
+        return Craft::t('sprout-forms', 'Number');
     }
 
     /**
@@ -162,6 +161,8 @@ class Number extends SproutFormsBaseField implements PreviewableFieldInterface
      * @param array|null                                       $renderingOptions
      *
      * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
     {
@@ -186,15 +187,15 @@ class Number extends SproutFormsBaseField implements PreviewableFieldInterface
     /**
      * @return string
      */
-    public function getIconClass()
+    public function getSvgIconPath()
     {
-        return 'fa fa-hashtag';
+        return '@sproutbaseicons/hashtag.svg';
     }
 
     /**
-     * @param FieldModel $field
-     *
-     * @return \Twig_Markup
+     * @return null|string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {

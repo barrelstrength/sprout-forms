@@ -1,4 +1,3 @@
-
 <!-- Custom form created using the Sprout Forms form builder plugin - https://sprout.barrelstrengthdesign.com/craft-plugins/forms -->
 
 {% set action = form.submitAction is empty ? 'sprout-forms/entries/save-entry' : 'sprout-forms/entries/forward-entry' %}
@@ -10,46 +9,46 @@
 {%- set redirectUri = form.redirectUri -%}
 
 <form method="post" accept-charset="utf-8" enctype="multipart/form-data"
-	{%- if id %} id="{{ id }}"{% endif -%}
-	{%- if class %} class="{{ class -}}{%- if errors %} {{ errorClass }}{% endif -%}"{% endif -%}
-	>
-	{{ csrfInput() }}
-	<input type="hidden" name="action" value="{{ action }}">
-	<input type="hidden" name="handle" value="{{ form.handle }}">
-	{% if redirectUri is not empty -%}
-		{% if redirectUri|slice(0, 1)|lower == '?' %}
-			{%- set redirectUri = craft.request.getUrl()~redirectUri %}
-		{% endif %}
+    {%- if id %} id="{{ id }}"{% endif -%}
+    {%- if class %} class="{{ class -}}{%- if errors %} {{ errorClass }}{% endif -%}"{% endif -%}
+    >
+    {{ csrfInput() }}
+    <input type="hidden" name="action" value="{{ action }}">
+    <input type="hidden" name="handle" value="{{ form.handle }}">
+    {% if redirectUri is not empty -%}
+        {% if redirectUri|slice(0, 1)|lower == '?' %}
+            {%- set redirectUri = craft.request.getUrl()~redirectUri %}
+        {% endif %}
 
-		<input type="hidden" name="redirect" value="{{ redirectUri|hash }}">
-	{% endif %}
+        <input type="hidden" name="redirect" value="{{ redirectUri|hash }}">
+    {% endif %}
 
-	<div class="fields">
-		{{ body | raw }}
-	</div>
+    <div class="fields">
+        {{ body | raw }}
+    </div>
 
-	{% hook 'sproutForms.modifyForm' %}
+    {% hook 'sproutForms.modifyForm' %}
 
-	<div class="submit">
-		<input type="submit" value="{{ form.submitButtonText is not empty ? form.submitButtonText : 'Submit' }}">
-	</div>
+    <div class="submit">
+        <input type="submit"
+               value="{{ form.submitButtonText is not empty ? form.submitButtonText : 'Submit' }}">
+    </div>
 </form>
 
 {# Add focus to the first field which has an error #}
 {% if errors -%}
-	{%- for labelId, error in errors %}
-		{%- if loop.first %}
-		<script>
-			(function() {
-				var field = document.getElementById('fields-'+'{{ labelId }}');
-				if(field)
-				{
-					field.focus();
-				}
-			})();
-		</script>
-		{%- endif %}
-	{%- endfor %}
+    {%- for labelId, error in errors %}
+        {%- if loop.first %}
+            <script>
+                (function() {
+                    var field = document.getElementById('fields-' + '{{ labelId }}');
+                    if (field) {
+                        field.focus();
+                    }
+                })();
+            </script>
+        {%- endif %}
+    {%- endfor %}
 {%- endif %}
 
 <!-- / Sprout Forms Craft CMS form builder plugin -->
