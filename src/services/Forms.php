@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\services;
 
+use barrelstrength\sproutforms\integrations\sproutforms\templates\SproutForms3;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
@@ -19,6 +20,8 @@ use craft\mail\Message;
 class Forms extends Component
 {
     const EVENT_REGISTER_CAPTCHAS = 'registerSproutFormsCaptchas';
+
+    const EVENT_REGISTER_GLOBAL_TEMPLATES = 'registerFormTemplatesEvent';
 
     /**
      * @var
@@ -552,7 +555,7 @@ class Forms extends Component
             if ($form) {
                 SproutForms::$app->forms->deleteForm($form);
             } else {
-                SproutForms::error("Can't delete the form with id: {$id}");
+                SproutForms::error("Can't delete the form with id: {$formElement->id}");
             }
         }
 
@@ -610,6 +613,39 @@ class Forms extends Component
     }
 
     /**
+     * Returns all available Global Form Templates
+     *
+     * @return string[]
+     */
+    public function getAllGlobalTemplateTypes()
+    {
+        $event = new RegisterComponentTypesEvent([
+            'types' => []
+        ]);
+
+        $this->trigger(self::EVENT_REGISTER_GLOBAL_TEMPLATES, $event);
+
+        return $event->types;
+    }
+
+    /**
+     * Returns all available Global Form Templates
+     *
+     * @return string[]
+     */
+    public function getAllGlobalTemplates()
+    {
+        $templateTypes = $this->getAllGlobalTemplateTypes();
+        $templates = [];
+
+        foreach ($templateTypes as $templateType) {
+            $templates[$templateType] = new $templateType();
+        }
+
+        return $templates;
+    }
+
+    /**
      * @return array
      */
     public function getAllCaptchas()
@@ -641,5 +677,98 @@ class Forms extends Component
         }
 
         return $captchas;
+    }
+
+    /**
+     * @param FormElement|null $form
+     *
+     * @return array
+     * @throws \yii\base\Exception
+     */
+    public function getSproutFormsTemplates(FormElement $form = null)
+    {
+        $templates = [];
+        $settings = Craft::$app->plugins->getPlugin('sprout-forms')->getSettings();
+        $templateFolderOverride = '';
+        $defaultVersion = new SproutForms3();
+        $defaultTemplate = $defaultVersion->getPath();
+
+        if ($settings->toggleTemplateFolderOverride && $settings->templateFolderOverride){
+            $templatePath = $this->getTemplatePathById($settings->templateFolderOverride);
+            if ($templatePath){
+                // custom path by template API
+                $templateFolderOverride = $templatePath;
+            }else{
+                // custom folder on site path
+                $templateFolderOverride = $this->getSitePath($settings->templateFolderOverride);
+            }
+        }
+
+        if ($form->enableTemplateOverrides) {
+            $templateFolderOverride = $this->getSitePath($form->templateOverridesFolder);
+        }
+
+        // Set our defaults
+        $templates['form'] = $defaultTemplate;
+        $templates['tab'] = $defaultTemplate;
+        $templates['field'] = $defaultTemplate;
+        $templates['email'] = $defaultTemplate;
+
+        // See if we should override our defaults
+        if ($templateFolderOverride) {
+            $formTemplate = $templateFolderOverride.DIRECTORY_SEPARATOR.'form';
+            $tabTemplate = $templateFolderOverride.DIRECTORY_SEPARATOR.'tab';
+            $fieldTemplate = $templateFolderOverride.DIRECTORY_SEPARATOR.'field';
+            $emailTemplate = $templateFolderOverride.DIRECTORY_SEPARATOR.'email';
+            $basePath = $templateFolderOverride.DIRECTORY_SEPARATOR;
+
+            foreach (Craft::$app->getConfig()->getGeneral()->defaultTemplateExtensions as $extension) {
+
+                if (file_exists($formTemplate.'.'.$extension)) {
+                    $templates['form'] = $basePath;
+                }
+
+                if (file_exists($tabTemplate.'.'.$extension)) {
+                    $templates['tab'] = $basePath;
+                }
+
+                if (file_exists($fieldTemplate.'.'.$extension)) {
+                    $templates['field'] = $basePath;
+                }
+
+                if (file_exists($emailTemplate.'.'.$extension)) {
+                    $templates['email'] = $basePath;
+                }
+            }
+        }
+
+        return $templates;
+    }
+
+    /**
+     * @param $path
+     *
+     * @return string
+     * @throws \yii\base\Exception
+     */
+    private function getSitePath($path)
+    {
+        return Craft::$app->path->getSiteTemplatesPath().DIRECTORY_SEPARATOR.$path;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTemplatePathById($templateId)
+    {
+        $templates = SproutForms::$app->forms->getAllGlobalTemplates();
+
+        foreach ($templates as $template) {
+            if ($template->getTemplateId() == $templateId){
+                return $template->getPath();
+            }
+        }
+
+        return null;
     }
 }

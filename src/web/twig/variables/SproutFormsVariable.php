@@ -12,7 +12,6 @@ use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\models\FieldGroup;
 use barrelstrength\sproutforms\models\FieldLayout;
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
-use barrelstrength\sproutforms\services\Fields;
 
 /**
  * SproutForms provides an API for accessing information about forms. It is accessible from templates via `craft.sproutForms`.
@@ -77,7 +76,7 @@ class SproutFormsVariable
 
         $entry = SproutForms::$app->entries->getEntry($form);
         $fields = SproutForms::$app->fields->getRegisteredFields();
-        $templatePaths = SproutForms::$app->fields->getSproutFormsTemplates($form);
+        $templatePaths = SproutForms::$app->forms->getSproutFormsTemplates($form);
 
         $view = Craft::$app->getView();
 
@@ -145,7 +144,7 @@ class SproutFormsVariable
         $form = SproutForms::$app->forms->getFormByHandle($formHandle);
         $entry = SproutForms::$app->entries->getEntry($form);
         $fields = SproutForms::$app->fields->getRegisteredFields();
-        $templatePaths = SproutForms::$app->fields->getSproutFormsTemplates($form);
+        $templatePaths = SproutForms::$appforms->getSproutFormsTemplates($form);
 
         $view = Craft::$app->getView();
 
@@ -221,7 +220,7 @@ class SproutFormsVariable
         $view = Craft::$app->getView();
 
         // Determine where our form and field template should come from
-        $templatePaths = SproutForms::$app->fields->getSproutFormsTemplates($form);
+        $templatePaths = SproutForms::$app->forms->getSproutFormsTemplates($form);
 
         $field = $form->getField($fieldHandle);
 
@@ -574,20 +573,22 @@ class SproutFormsVariable
      */
     public function getTemplateOptions()
     {
+        $templates = SproutForms::$app->forms->getAllGlobalTemplates();
+        $templateIds = [];
         $options = [
             [
                 'label' => Craft::t('sprout-forms','Select...'),
                 'value' => ''
-            ],
-            [
-                'label' => Craft::t('sprout-forms','Sprout Forms 3.x'),
-                'value' => Fields::VERSION3
-            ],
-            [
-                'label' => Craft::t('sprout-forms','Sprout Forms 2.x'),
-                'value' => Fields::VERSION2,
             ]
         ];
+
+        foreach ($templates as $template) {
+            $options[] = [
+                'label' => $template->getName(),
+                'value' => $template->getTemplateId()
+            ];
+            $templateIds[] = $template->getTemplateId();
+        }
 
         $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
         $settings = $plugin->getSettings();
@@ -595,7 +596,7 @@ class SproutFormsVariable
 
         array_push($options, ['optgroup' => Craft::t('sprout-seo','Custom')]);
 
-        if (!array_key_exists($templateFolder, [Fields::VERSION3 => 0, Fields::VERSION2 => 1]) && $templateFolder != '') {
+        if (!array_key_exists($templateFolder, $templateIds) && $templateFolder != '') {
             array_push($options, ['label' => $templateFolder, 'value' => $templateFolder]);
         }
 

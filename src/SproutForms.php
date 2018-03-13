@@ -9,8 +9,11 @@ use barrelstrength\sproutbase\events\RegisterNotificationEvent;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\integrations\sproutemail\events\SaveEntryEvent;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
+use barrelstrength\sproutforms\integrations\sproutforms\templates\SproutForms2;
+use barrelstrength\sproutforms\integrations\sproutforms\templates\SproutForms3;
 use barrelstrength\sproutforms\services\App;
 use barrelstrength\sproutforms\services\Entries;
+use barrelstrength\sproutforms\services\Forms;
 use Craft;
 use craft\base\Plugin;
 use craft\events\RegisterComponentTypesEvent;
@@ -117,6 +120,11 @@ class SproutForms extends Plugin
             foreach ($captchas as $captcha) {
                 $captcha->verifySubmission($event);
             }
+        });
+
+        Event::on(Forms::class, Forms::EVENT_REGISTER_GLOBAL_TEMPLATES, function(Event $event) {
+            $event->types[] = SproutForms2::class;
+            $event->types[] = SproutForms3::class;
         });
 
         Craft::$app->view->hook('sproutForms.modifyForm', function(&$context) {
