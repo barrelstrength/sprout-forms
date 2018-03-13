@@ -9,6 +9,8 @@ use barrelstrength\sproutbase\events\RegisterNotificationEvent;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\integrations\sproutemail\events\SaveEntryEvent;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
+use barrelstrength\sproutforms\integrations\sproutforms\captchas\invisiblecaptcha\HoneypotCaptcha;
+use barrelstrength\sproutforms\integrations\sproutforms\captchas\invisiblecaptcha\JavascriptCaptcha;
 use barrelstrength\sproutforms\integrations\sproutforms\templates\SproutForms2;
 use barrelstrength\sproutforms\integrations\sproutforms\templates\SproutForms3;
 use barrelstrength\sproutforms\services\App;
@@ -112,6 +114,11 @@ class SproutForms extends Plugin
             #$formEvent->setPluginId(static::$pluginId);
 
             #$event->availableEvents[] = $formEvent;
+        });
+
+        Event::on(Forms::class, Forms::EVENT_REGISTER_CAPTCHAS, function(Event $event) {
+            $event->types[] = JavascriptCaptcha::class;
+            $event->types[] = HoneypotCaptcha::class;
         });
 
         Event::on(Entries::class, EntryElement::EVENT_BEFORE_SAVE, function(OnBeforeSaveEntryEvent $event) {

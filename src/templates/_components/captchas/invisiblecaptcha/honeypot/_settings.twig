@@ -1,0 +1,20 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.textField({
+    label: 'Name of your honeypot field',
+    instructions: 'All lowercase, no spaces.',
+    id: 'honeypotFieldName',
+    name: 'captchaSettings['~captchaId~'][honeypotFieldName]',
+    required: true,
+    errors: null,
+    value: settings['honeypotFieldName'] ?? 'beesknees'
+}) }}
+
+{{ forms.textField({
+    label: 'Hidden honeypot message for screen readers',
+    instructions: 'This is displayed to screen readers so users will know not to fill in this field.',
+    id: 'honeypotScreenReaderMessage',
+    name: 'captchaSettings['~captchaId~'][honeypotScreenReaderMessage]',
+    required: true,
+    value: settings['honeypotScreenReaderMessage'] ?? 'Leave this field blank'
+}) }}
