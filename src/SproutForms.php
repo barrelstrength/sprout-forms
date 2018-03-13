@@ -104,10 +104,11 @@ class SproutForms extends Plugin
         });
 
         Event::on(NotificationEmails::class, NotificationEmails::EVENT_REGISTER_EMAIL_EVENTS, function(RegisterNotificationEvent $event) {
-            $formEvent =  new SaveEntryEvent();
-            $formEvent->setPluginId(static::$pluginId);
+            //  @todo - improve email behavior
+            #$formEvent =  new SaveEntryEvent();
+            #$formEvent->setPluginId(static::$pluginId);
 
-            $event->availableEvents[] = $formEvent;
+            #$event->availableEvents[] = $formEvent;
         });
 
         Event::on(Entries::class, EntryElement::EVENT_BEFORE_SAVE, function(OnBeforeSaveEntryEvent $event) {

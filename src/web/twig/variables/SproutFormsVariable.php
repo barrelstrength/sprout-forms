@@ -12,6 +12,7 @@ use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\models\FieldGroup;
 use barrelstrength\sproutforms\models\FieldLayout;
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
+use barrelstrength\sproutforms\services\Fields;
 
 /**
  * SproutForms provides an API for accessing information about forms. It is accessible from templates via `craft.sproutForms`.
@@ -560,9 +561,47 @@ class SproutFormsVariable
         return get_class($field);
     }
 
+    /**
+     * @return array
+     */
     public function getAllCaptchas()
     {
         return SproutForms::$app->forms->getAllCaptchas();
+    }
+
+    /**
+     * @return array
+     */
+    public function getTemplateOptions()
+    {
+        $options = [
+            [
+                'label' => Craft::t('sprout-forms','Select...'),
+                'value' => ''
+            ],
+            [
+                'label' => Craft::t('sprout-forms','Sprout Forms 3.x'),
+                'value' => Fields::VERSION3
+            ],
+            [
+                'label' => Craft::t('sprout-forms','Sprout Forms 2.x'),
+                'value' => Fields::VERSION2,
+            ]
+        ];
+
+        $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
+        $settings = $plugin->getSettings();
+        $templateFolder = $settings->templateFolderOverride;
+
+        array_push($options, ['optgroup' => Craft::t('sprout-seo','Custom')]);
+
+        if (!array_key_exists($templateFolder, [Fields::VERSION3 => 0, Fields::VERSION2 => 1]) && $templateFolder != '') {
+            array_push($options, ['label' => $templateFolder, 'value' => $templateFolder]);
+        }
+
+        array_push($options, ['label' => Craft::t('sprout-forms','Add Custom'), 'value' => 'custom']);
+
+        return $options;
     }
 }
 

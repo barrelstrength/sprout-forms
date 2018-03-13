@@ -48,6 +48,16 @@ class Fields extends Component
     const EVENT_REGISTER_FIELDS = 'registerFieldsEvent';
 
     /**
+     * @event Templates for version 2.x
+     */
+    const VERSION2 = 'sprout-forms-2-x';
+
+    /**
+     * @event Templates for version 3.x
+     */
+    const VERSION3 = 'sprout-forms-3-x';
+
+    /**
      * @param $fieldIds
      *
      * @return bool
@@ -111,13 +121,23 @@ class Fields extends Component
     {
         $templates = [];
         $settings = Craft::$app->plugins->getPlugin('sprout-forms')->getSettings();
-        $templateFolderOverride = $settings->templateFolderOverride;
+        $templateFolderOverride = '';
+        $defaultVersion = self::VERSION3;
+
+        if ($settings->toggleTemplateFolderOverride){
+            if (array_key_exists($settings->templateFolderOverride, [self::VERSION3 => 0, self::VERSION2 => 1])){
+                $defaultVersion = $settings->templateFolderOverride;
+            }else{
+                // Site templates
+                $templateFolderOverride = $settings->templateFolderOverride;
+            }
+        }
 
         if ($form->enableTemplateOverrides) {
             $templateFolderOverride = $form->templateOverridesFolder;
         }
 
-        $defaultTemplate = Craft::getAlias('@barrelstrength/sproutforms/templates/_special/templates/');
+        $defaultTemplate = Craft::getAlias('@barrelstrength/sproutforms/templates/_special/templates/'.$defaultVersion);
 
         // Set our defaults
         $templates['form'] = $defaultTemplate;
