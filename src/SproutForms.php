@@ -7,7 +7,8 @@ use barrelstrength\sproutbase\services\sproutemail\NotificationEmails;
 use barrelstrength\sproutbase\services\sproutreports\DataSources;
 use barrelstrength\sproutbase\events\RegisterNotificationEvent;
 use barrelstrength\sproutbase\SproutBase;
-use barrelstrength\sproutforms\integrations\sproutemail\events\SaveEntryEvent;
+use barrelstrength\sproutforms\fields\Forms as FormsField;
+use barrelstrength\sproutforms\fields\Entries as FormEntriesField;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use barrelstrength\sproutforms\integrations\sproutforms\captchas\invisiblecaptcha\HoneypotCaptcha;
 use barrelstrength\sproutforms\integrations\sproutforms\captchas\invisiblecaptcha\JavascriptCaptcha;
@@ -22,6 +23,7 @@ use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
 use craft\helpers\UrlHelper;
+use craft\services\Fields;
 use craft\web\UrlManager;
 use craft\services\UserPermissions;
 use yii\base\Event;
@@ -30,7 +32,7 @@ use barrelstrength\sproutbase\SproutBaseHelper;
 use barrelstrength\sproutforms\models\Settings;
 use barrelstrength\sproutforms\web\twig\variables\SproutFormsVariable;
 use barrelstrength\sproutforms\events\RegisterFieldsEvent;
-use barrelstrength\sproutforms\services\Fields;
+use barrelstrength\sproutforms\services\Fields as SproutFormsFields;
 use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesDataSource;
 use barrelstrength\sproutforms\events\OnBeforePopulateEntryEvent;
 use barrelstrength\sproutforms\controllers\EntriesController;
@@ -76,7 +78,7 @@ class SproutForms extends Plugin
             $event->rules = array_merge($event->rules, $this->getCpUrlRules());
         });
 
-        Event::on(Fields::class, Fields::EVENT_REGISTER_FIELDS, function(RegisterFieldsEvent $event) {
+        Event::on(SproutFormsFields::class, SproutFormsFields::EVENT_REGISTER_FIELDS, function(RegisterFieldsEvent $event) {
             $fieldsByGroup = SproutForms::$app->fields->getRegisteredFieldsByGroup();
 
             foreach ($fieldsByGroup as $group) {
@@ -98,6 +100,11 @@ class SproutForms extends Plugin
         Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function(Event $event) {
             $variable = $event->sender;
             $variable->set('sproutForms', SproutFormsVariable::class);
+        });
+
+        Event::on(Fields::class, Fields::EVENT_REGISTER_FIELD_TYPES, function(RegisterComponentTypesEvent $event) {
+            $event->types[] = FormsField::class;
+            $event->types[] = FormEntriesField::class;
         });
 
         Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
