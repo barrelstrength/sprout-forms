@@ -25,11 +25,11 @@ class m180314_161527_sproutforms_number_fields extends Migration
             ->all();
 
         foreach ($numberFields as $numberField) {
-        		$settings = json_decode($numberField['settings'], true);
-        		$settings['size'] = '';
-        		$settingsAsJson = json_encode($settings);
+            $settings = json_decode($numberField['settings'], true);
+            $settings['size'] = '';
+            $settingsAsJson = json_encode($settings);
 
-            $this->update('{{%fields}}', ['type' => Number::class, 'settings' => $settingsAsJson]], ['id' => $numberField['id']], [], false);
+            $this->update('{{%fields}}', ['type' => Number::class, 'settings' => $settingsAsJson], ['id' => $numberField['id']], [], false);
         }
 
         return true;
