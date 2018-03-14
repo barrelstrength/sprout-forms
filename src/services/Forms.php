@@ -15,6 +15,7 @@ use craft\helpers\StringHelper;
 use craft\helpers\MigrationHelper;
 use craft\helpers\ArrayHelper;
 use craft\mail\Message;
+use yii\base\Exception;
 
 
 class Forms extends Component
@@ -47,7 +48,7 @@ class Forms extends Component
     {
         $this->formRecord = $formRecord;
 
-        if (is_null($this->formRecord)) {
+        if ($this->formRecord === null) {
             $this->formRecord = new FormRecord();
         }
     }
@@ -239,9 +240,9 @@ class Forms extends Component
     /**
      * Returns an array of models for forms found in the database
      *
-     * @param int $siteId
+     * @param int|null $siteId
      *
-     * @return SproutForms_FormModel|array|null
+     * @return array|FormElement|null
      */
     public function getAllForms(int $siteId = null)
     {
@@ -357,13 +358,13 @@ class Forms extends Component
      * @param $field
      * @param $value
      *
-     * @return null|static
+     * @return null|FormRecord
      */
     public function getFieldValue($field, $value)
     {
-        $result = FormRecord::findOne([$field => $value]);
-
-        return $result;
+        return FormRecord::findOne([
+            $field => $value
+        ]);
     }
 
     /**
@@ -397,7 +398,7 @@ class Forms extends Component
     }
 
     /**
-     * Update a field handle from title format
+     * Update a field handle with an new title format
      *
      * @param string $oldHandle
      * @param string $newHandle
@@ -407,10 +408,7 @@ class Forms extends Component
      */
     public function updateTitleFormat($oldHandle, $newHandle, $titleFormat)
     {
-        // Let's replace the field from the titleFormat
-        $newTitleFormat = str_replace($oldHandle, $newHandle, $titleFormat);
-
-        return $newTitleFormat;
+        return str_replace($oldHandle, $newHandle, $titleFormat);
     }
 
     /**
@@ -429,7 +427,7 @@ class Forms extends Component
         do {
             $newField = $field == 'handle' ? $value.$i : $value.' '.$i;
             $form = $this->getFieldValue($field, $newField);
-            if (is_null($form)) {
+            if ($form === null) {
                 $band = false;
             }
 
@@ -479,7 +477,7 @@ class Forms extends Component
 
             $view->setTemplatesPath(Craft::$app->path->getCpTemplatesPath());
 
-            if (is_null($post)) {
+            if ($post === null) {
                 $post = $_POST;
             }
 
