@@ -2,6 +2,10 @@
 
 namespace barrelstrength\sproutforms;
 
+use barrelstrength\sproutforms\integrations\sproutimport\elements\Form as FormElementImporter;
+use barrelstrength\sproutforms\integrations\sproutimport\elements\Entry as EntryElementImporter;
+use barrelstrength\sproutforms\integrations\sproutimport\fields\Forms as FormsFieldImporter;
+use barrelstrength\sproutforms\integrations\sproutimport\fields\Entries as EntriesFieldImporter;
 use barrelstrength\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbase\services\sproutemail\NotificationEmails;
 use barrelstrength\sproutbase\services\sproutreports\DataSources;
@@ -17,6 +21,7 @@ use barrelstrength\sproutforms\integrations\sproutforms\templates\SproutForms3;
 use barrelstrength\sproutforms\services\App;
 use barrelstrength\sproutforms\services\Entries;
 use barrelstrength\sproutforms\services\Forms;
+use barrelstrength\sproutimport\services\Importers;
 use Craft;
 use craft\base\Plugin;
 use craft\events\RegisterComponentTypesEvent;
@@ -150,6 +155,13 @@ class SproutForms extends Plugin
             }
 
             return $captchaHtml;
+        });
+
+        Event::on(Importers::class, Importers::EVENT_REGISTER_IMPORTER, function(RegisterComponentTypesEvent $event) {
+            $event->types[] = FormElementImporter::class;
+            $event->types[] = EntryElementImporter::class;
+//            $event->types[] = FormsFieldImporter::class;
+//            $event->types[] = EntriesFieldImporter::class;
         });
     }
 
