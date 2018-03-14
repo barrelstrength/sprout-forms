@@ -2,12 +2,17 @@
 
 namespace barrelstrength\sproutforms;
 
+use barrelstrength\sproutforms\integrations\sproutimport\elements\Form as FormElementImporter;
+use barrelstrength\sproutforms\integrations\sproutimport\elements\Entry as EntryElementImporter;
+use barrelstrength\sproutforms\integrations\sproutimport\fields\Forms as FormsFieldImporter;
+use barrelstrength\sproutforms\integrations\sproutimport\fields\Entries as EntriesFieldImporter;
 use barrelstrength\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbase\services\sproutemail\NotificationEmails;
 use barrelstrength\sproutbase\services\sproutreports\DataSources;
 use barrelstrength\sproutbase\events\RegisterNotificationEvent;
 use barrelstrength\sproutbase\SproutBase;
-use barrelstrength\sproutforms\integrations\sproutemail\events\SaveEntryEvent;
+use barrelstrength\sproutforms\fields\Forms as FormsField;
+use barrelstrength\sproutforms\fields\Entries as FormEntriesField;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use barrelstrength\sproutforms\integrations\sproutforms\captchas\invisiblecaptcha\HoneypotCaptcha;
 use barrelstrength\sproutforms\integrations\sproutforms\captchas\invisiblecaptcha\JavascriptCaptcha;
@@ -16,12 +21,14 @@ use barrelstrength\sproutforms\integrations\sproutforms\templates\SproutForms3;
 use barrelstrength\sproutforms\services\App;
 use barrelstrength\sproutforms\services\Entries;
 use barrelstrength\sproutforms\services\Forms;
+use barrelstrength\sproutimport\services\Importers;
 use Craft;
 use craft\base\Plugin;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
 use craft\helpers\UrlHelper;
+use craft\services\Fields;
 use craft\web\UrlManager;
 use craft\services\UserPermissions;
 use yii\base\Event;
@@ -30,7 +37,7 @@ use barrelstrength\sproutbase\SproutBaseHelper;
 use barrelstrength\sproutforms\models\Settings;
 use barrelstrength\sproutforms\web\twig\variables\SproutFormsVariable;
 use barrelstrength\sproutforms\events\RegisterFieldsEvent;
-use barrelstrength\sproutforms\services\Fields;
+use barrelstrength\sproutforms\services\Fields as SproutFormsFields;
 use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesDataSource;
 use barrelstrength\sproutforms\events\OnBeforePopulateEntryEvent;
 use barrelstrength\sproutforms\controllers\EntriesController;
@@ -76,7 +83,7 @@ class SproutForms extends Plugin
             $event->rules = array_merge($event->rules, $this->getCpUrlRules());
         });
 
-        Event::on(Fields::class, Fields::EVENT_REGISTER_FIELDS, function(RegisterFieldsEvent $event) {
+        Event::on(SproutFormsFields::class, SproutFormsFields::EVENT_REGISTER_FIELDS, function(RegisterFieldsEvent $event) {
             $fieldsByGroup = SproutForms::$app->fields->getRegisteredFieldsByGroup();
 
             foreach ($fieldsByGroup as $group) {
@@ -98,6 +105,11 @@ class SproutForms extends Plugin
         Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function(Event $event) {
             $variable = $event->sender;
             $variable->set('sproutForms', SproutFormsVariable::class);
+        });
+
+        Event::on(Fields::class, Fields::EVENT_REGISTER_FIELD_TYPES, function(RegisterComponentTypesEvent $event) {
+            $event->types[] = FormsField::class;
+            $event->types[] = FormEntriesField::class;
         });
 
         Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
@@ -144,6 +156,13 @@ class SproutForms extends Plugin
 
             return $captchaHtml;
         });
+
+        Event::on(Importers::class, Importers::EVENT_REGISTER_IMPORTER, function(RegisterComponentTypesEvent $event) {
+            $event->types[] = FormElementImporter::class;
+            $event->types[] = EntryElementImporter::class;
+//            $event->types[] = FormsFieldImporter::class;
+//            $event->types[] = EntriesFieldImporter::class;
+        });
     }
 
     /**
@@ -167,18 +186,6 @@ class SproutForms extends Plugin
     }
 
     /**
-     * @throws \yii\db\Exception
-     */
-    protected function afterInstall()
-    {
-        $dataSourceClasses = [
-            EntriesDataSource::class
-        ];
-
-        SproutBase::$app->dataSources->installDataSources($dataSourceClasses);
-    }
-
-    /**
      * @return array|null
      */
     public function getCpNavItem()
@@ -194,13 +201,13 @@ class SproutForms extends Plugin
 
         return array_merge($parent, [
             'subnav' => [
-                'entries' => [
-                    'label' => Craft::t('sprout-forms', 'Entries'),
-                    'url' => 'sprout-forms/entries'
-                ],
                 'forms' => [
                     'label' => Craft::t('sprout-forms', 'Forms'),
                     'url' => 'sprout-forms/forms'
+                ],
+                'entries' => [
+                    'label' => Craft::t('sprout-forms', 'Entries'),
+                    'url' => 'sprout-forms/entries'
                 ],
                 'notifications' =>[
                     'label' => Craft::t('sprout-forms', 'Notifications'),
@@ -285,6 +292,18 @@ class SproutForms extends Plugin
                 'label' => Craft::t('sprout-forms','Edit Settings')
             ]
         ];
+    }
+
+    /**
+     * @throws \yii\db\Exception
+     */
+    protected function afterInstall()
+    {
+        $dataSourceClasses = [
+            EntriesDataSource::class
+        ];
+
+        SproutBase::$app->dataSources->installDataSources($dataSourceClasses);
     }
 
     /**

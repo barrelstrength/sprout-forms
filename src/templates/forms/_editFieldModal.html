@@ -1,4 +1,5 @@
 {% import "_includes/forms" as forms %}
+{% import "sprout-base/sproutfields/forms" as sproutFields %}
 
 {% if field is not defined and fieldId is defined %}
     {% set field = craft.app.fields.getFieldById(fieldId) %}
@@ -13,7 +14,7 @@
 <input type="hidden" name="formId" value="{{ formId }}">
 
 {% if field.id %}
-	<input type="hidden" name="fieldId" value="{{ field.id }}">
+    <input type="hidden" name="fieldId" value="{{ field.id }}">
 {% endif %}
 
 {{ forms.lightswitchField({
@@ -30,9 +31,9 @@
     id: 'field-name',
     name: 'name',
     value: (field is defined ? field.name : null),
-	errors: (field is defined ? field.getErrors('name') : null),
-	required: true,
-	autofocus: true
+    errors: (field is defined ? field.getErrors('name') : null),
+    required: true,
+    autofocus: true
 }) }}
 
 {% if field.displayInstructionsField %}
@@ -47,15 +48,42 @@
 {% endif %}
 
 {% for type,fieldObject in fieldTypes %}
-	{% set isCurrent = type == className(field) %}
-	<div id="{{ type|id }}"{% if not isCurrent %} class="hidden"{% endif %}>
-		{% namespace 'types['~type~']' %}
-			{% set _field = isCurrent ? field : craft.app.fields.createField(type) %}
-			{{ _field.getSettingsHtml()|raw }}
-		{% endnamespace %}
-	</div>
+    {% set isCurrent = type == className(field) %}
+    <div id="{{ type|id }}"{% if not isCurrent %} class="hidden"{% endif %}>
+        {% namespace 'types['~type~']' %}
+            {% set _field = isCurrent ? field : craft.app.fields.createField(type) %}
+            {{ _field.getSettingsHtml()|raw }}
+        {% endnamespace %}
+    </div>
 {% endfor %}
 
+<hr>
+
+{#{{ forms.field({#}
+    {#label: "CSS Classes"|t('sprout-forms'),#}
+    {#instructions: "The CSS class names to output in your field's HTML."|t,#}
+{#}, sproutFields.selectOther({#}
+    {#name: 'templateFolderOverride',#}
+    {#options: {#}
+        {#0: {#}
+            {#"label": "Left (left)"|t('sprout-forms'),#}
+            {#"value": 'left'#}
+        {#},#}
+        {#1: {#}
+            {#"label": "Right (right)"|t('sprout-forms'),#}
+            {#"value": 'right'#}
+        {#},#}
+        {#2: {#}
+            {#"optgroup": "Custom"|t('sprout-forms')#}
+        {#},#}
+        {#3: {#}
+            {#"label": "Add custom CSS classes"|t('sprout-forms'),#}
+            {#"value": 'custom'#}
+        {#}#}
+    {#},#}
+    {#value: '' ?? null,#}
+    {#otherPlaceholderText: 'Custom CSS Classes'|t('sprout-seo')#}
+{#})) }}#}
 
 <hr>
 
@@ -70,7 +98,7 @@
     {{ forms.selectField({
         first: true,
         required: true,
-        label: "Tab <span class='info'>Which section should this field be displayed in?</span>"|t('sprout-forms'),
+        label: "Section <span class='info'>Which section should this field be displayed on?</span>"|t('sprout-forms'),
         id: 'tabId',
         name: 'tabId',
         options: sectionOptions,
@@ -87,8 +115,8 @@
     name: 'handle',
     maxlength: 64,
     value: (field is defined ? field.handle : null),
-	errors: (field is defined ? field.getErrors('handle') : null),
-	required: true
+    errors: (field is defined ? field.getErrors('handle') : null),
+    required: true
 }) }}
 
 {{ forms.selectField({
@@ -112,6 +140,8 @@
 
 {% if field is empty or field.handle is empty %}
     {% js %}
-		new Craft.HandleGenerator('#field-name', '#field-handle');
+        new Craft.HandleGenerator('#field-name', '#field-handle');
+
+        Craft.SproutFields.initFields($(".content"));
     {% endjs %}
 {% endif %}
