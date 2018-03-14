@@ -194,13 +194,13 @@ class SproutForms extends Plugin
 
         return array_merge($parent, [
             'subnav' => [
-                'entries' => [
-                    'label' => Craft::t('sprout-forms', 'Entries'),
-                    'url' => 'sprout-forms/entries'
-                ],
                 'forms' => [
                     'label' => Craft::t('sprout-forms', 'Forms'),
                     'url' => 'sprout-forms/forms'
+                ],
+                'entries' => [
+                    'label' => Craft::t('sprout-forms', 'Entries'),
+                    'url' => 'sprout-forms/entries'
                 ],
                 'notifications' =>[
                     'label' => Craft::t('sprout-forms', 'Notifications'),
