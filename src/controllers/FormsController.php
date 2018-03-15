@@ -44,7 +44,7 @@ class FormsController extends BaseController
         $form->displaySectionTitles = $request->getBodyParam('displaySectionTitles');
         $form->redirectUri = $request->getBodyParam('redirectUri');
         $form->submitAction = $request->getBodyParam('submitAction');
-        $form->savePayload = $request->getBodyParam('savePayload', 0);
+        $form->saveData = $request->getBodyParam('saveData', 0);
         $form->submitButtonText = $request->getBodyParam('submitButtonText');
 
         $form->notificationEnabled = $request->getBodyParam('notificationEnabled');

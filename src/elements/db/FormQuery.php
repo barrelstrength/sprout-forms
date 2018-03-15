@@ -64,7 +64,7 @@ class FormQuery extends ElementQuery
     /**
      * @var bool
      */
-    public $savePayload;
+    public $saveData;
 
     /**
      * @var bool
@@ -220,7 +220,7 @@ class FormQuery extends ElementQuery
             'sproutforms_forms.displaySectionTitles',
             'sproutforms_forms.redirectUri',
             'sproutforms_forms.submitAction',
-            'sproutforms_forms.savePayload',
+            'sproutforms_forms.saveData',
             'sproutforms_forms.submitButtonText',
             'sproutforms_forms.notificationEnabled',
             'sproutforms_forms.notificationRecipients',

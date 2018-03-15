@@ -46,7 +46,7 @@ class Form extends Element
     public $redirectUri;
     public $submitAction;
     public $submitButtonText;
-    public $savePayload;
+    public $saveData;
     public $notificationEnabled;
     public $notificationRecipients;
     public $notificationSubject;
@@ -345,7 +345,7 @@ class Form extends Element
         $record->groupId = $this->groupId;
         $record->redirectUri = $this->redirectUri;
         $record->submitAction = $this->submitAction;
-        $record->savePayload = $this->savePayload;
+        $record->saveData = $this->saveData;
         $record->submitButtonText = $this->submitButtonText;
         $record->notificationEnabled = $this->notificationEnabled;
         $record->notificationRecipients = $this->notificationRecipients;

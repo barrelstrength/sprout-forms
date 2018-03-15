@@ -22,7 +22,7 @@ use craft\records\Element;
  * @property string      $redirectUri
  * @property string      $submitAction
  * @property string      $submitButtonText
- * @property bool        $savePayload
+ * @property bool        $saveData
  * @property bool        $notificationEnabled
  * @property string      $notificationRecipients
  * @property string      $notificationSubject

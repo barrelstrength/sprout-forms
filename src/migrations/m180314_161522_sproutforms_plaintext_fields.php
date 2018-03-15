@@ -3,7 +3,6 @@
 namespace barrelstrength\sproutforms\migrations;
 
 use craft\db\Migration;
-use barrelstrength\sproutfields\fields\Notes;
 use craft\db\Query;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\SingleLine;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Paragraph;
@@ -27,23 +26,23 @@ class m180314_161522_sproutforms_plaintext_fields extends Migration
             ->andWhere('context LIKE "%sproutForms:%"')
             ->all();
 
-        $newSettigns = [
-            'placeholder' => '',
-            'charLimit'=> null,
-            'columnType' => 'string'
-        ];
-
         foreach ($plainTextFields as $plainTextField) {
+            $newSettings = [
+                'placeholder' => '',
+                'charLimit'=> null,
+                'columnType' => 'string'
+            ];
+
             $settings = json_decode($plainTextField['settings'], true);
             $newType = SingleLine::class;
 
             if ($settings['multiline']){
                 $newType = Paragraph::class;
-                $newSettigns['columnType'] = 'text';
-                $newSettigns['initialRows'] = $settings['initialRows'];
+                $newSettings['columnType'] = 'text';
+                $newSettings['initialRows'] = $settings['initialRows'];
             }
 
-            $settingsAsJson = json_encode($newSettigns);
+            $settingsAsJson = json_encode($newSettings);
 
             $this->update('{{%fields}}', ['type' => $newType, 'settings' => $settingsAsJson], ['id' => $plainTextField['id']], [], false);
         }

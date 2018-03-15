@@ -62,7 +62,7 @@ class Install extends Migration
             'redirectUri' => $this->string(),
             'submitAction' => $this->string(),
             'submitButtonText' => $this->string(),
-            'savePayload' => $this->boolean()->defaultValue(false),
+            'saveData' => $this->boolean()->defaultValue(false),
             'notificationEnabled' => $this->boolean()->defaultValue(false),
             'notificationRecipients' => $this->string(),
             'notificationSubject' => $this->string(),

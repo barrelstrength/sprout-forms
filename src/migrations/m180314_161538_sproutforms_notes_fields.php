@@ -27,6 +27,7 @@ class m180314_161538_sproutforms_notes_fields extends Migration
             $settings = json_decode($field['settings'], true);
             $settings['notes'] = $settings['instructions'] ?? '';
             unset($settings['instructions']);
+            unset($settings['style']);
             $settingsAsJson = json_encode($settings);
 
             $this->update('{{%fields}}', ['type' => SectionHeading::class, 'settings' => $settingsAsJson], ['id' => $field['id']], [], false);
