@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms;
 
+use barrelstrength\sproutforms\integrations\sproutemail\events\SaveEntryEvent;
 use barrelstrength\sproutforms\integrations\sproutimport\elements\Form as FormElementImporter;
 use barrelstrength\sproutforms\integrations\sproutimport\elements\Entry as EntryElementImporter;
 use barrelstrength\sproutforms\integrations\sproutimport\fields\Forms as FormsFieldImporter;
@@ -18,10 +19,12 @@ use barrelstrength\sproutforms\integrations\sproutforms\captchas\invisiblecaptch
 use barrelstrength\sproutforms\integrations\sproutforms\captchas\invisiblecaptcha\JavascriptCaptcha;
 use barrelstrength\sproutforms\integrations\sproutforms\templates\SproutForms2;
 use barrelstrength\sproutforms\integrations\sproutforms\templates\SproutForms3;
+use barrelstrength\sproutforms\integrations\sproutimport\themes\BasicFieldsTheme;
 use barrelstrength\sproutforms\services\App;
 use barrelstrength\sproutforms\services\Entries;
 use barrelstrength\sproutforms\services\Forms;
 use barrelstrength\sproutimport\services\Importers;
+use barrelstrength\sproutimport\services\Themes;
 use Craft;
 use craft\base\Plugin;
 use craft\events\RegisterComponentTypesEvent;
@@ -121,11 +124,7 @@ class SproutForms extends Plugin
         });
 
         Event::on(NotificationEmails::class, NotificationEmails::EVENT_REGISTER_EMAIL_EVENTS, function(RegisterNotificationEvent $event) {
-            //  @todo - improve email behavior
-            #$formEvent =  new SaveEntryEvent();
-            #$formEvent->setPluginId(static::$pluginId);
-
-            #$event->availableEvents[] = $formEvent;
+            $event->availableEvents[] = new SaveEntryEvent;
         });
 
         Event::on(Forms::class, Forms::EVENT_REGISTER_CAPTCHAS, function(Event $event) {
@@ -162,6 +161,10 @@ class SproutForms extends Plugin
             $event->types[] = EntryElementImporter::class;
 //            $event->types[] = FormsFieldImporter::class;
 //            $event->types[] = EntriesFieldImporter::class;
+        });
+
+        Event::on(Themes::class, Themes::EVENT_REGISTER_THEMES, function(RegisterComponentTypesEvent $event) {
+            $event->types[] = BasicFieldsTheme::class;
         });
     }
 

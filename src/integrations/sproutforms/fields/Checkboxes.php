@@ -13,11 +13,6 @@ use craft\base\ElementInterface;
 class Checkboxes extends SproutBaseOptionsField
 {
     /**
-     * @var string|null The input’s boostrap class
-     */
-    public $boostrapClass;
-
-    /**
      * @inheritdoc
      */
     public static function displayName(): string
@@ -118,24 +113,5 @@ class Checkboxes extends SproutBaseOptionsField
     public function getSvgIconPath()
     {
         return '@sproutbaseicons/check-square.svg';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getSettingsHtml()
-    {
-        $parentRendered = parent::getSettingsHtml();
-
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/checkboxes/settings',
-            [
-                'field' => $this,
-            ]
-        );
-
-        $customRendered = $rendered.$parentRendered;
-
-        return $customRendered;
     }
 }
