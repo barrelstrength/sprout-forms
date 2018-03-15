@@ -13,11 +13,6 @@ use craft\base\ElementInterface;
 class Dropdown extends SproutBaseOptionsField
 {
     /**
-     * @var string|null The input’s boostrap class
-     */
-    public $boostrapClass;
-
-    /**
      * @inheritdoc
      */
     public static function displayName(): string
@@ -106,24 +101,4 @@ class Dropdown extends SproutBaseOptionsField
     {
         return '@sproutbaseicons/chevron-circle-down.svg';
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function getSettingsHtml()
-    {
-        $parentRendered = parent::getSettingsHtml();
-
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/dropdown/settings',
-            [
-                'field' => $this,
-            ]
-        );
-
-        $customRendered = $rendered.$parentRendered;
-
-        return $customRendered;
-    }
-
 }

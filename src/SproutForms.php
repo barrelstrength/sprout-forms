@@ -18,10 +18,12 @@ use barrelstrength\sproutforms\integrations\sproutforms\captchas\invisiblecaptch
 use barrelstrength\sproutforms\integrations\sproutforms\captchas\invisiblecaptcha\JavascriptCaptcha;
 use barrelstrength\sproutforms\integrations\sproutforms\templates\SproutForms2;
 use barrelstrength\sproutforms\integrations\sproutforms\templates\SproutForms3;
+use barrelstrength\sproutforms\integrations\sproutimport\themes\BasicFieldsTheme;
 use barrelstrength\sproutforms\services\App;
 use barrelstrength\sproutforms\services\Entries;
 use barrelstrength\sproutforms\services\Forms;
 use barrelstrength\sproutimport\services\Importers;
+use barrelstrength\sproutimport\services\Themes;
 use Craft;
 use craft\base\Plugin;
 use craft\events\RegisterComponentTypesEvent;
@@ -162,6 +164,10 @@ class SproutForms extends Plugin
             $event->types[] = EntryElementImporter::class;
 //            $event->types[] = FormsFieldImporter::class;
 //            $event->types[] = EntriesFieldImporter::class;
+        });
+
+        Event::on(Themes::class, Themes::EVENT_REGISTER_THEMES, function(RegisterComponentTypesEvent $event) {
+            $event->types[] = BasicFieldsTheme::class;
         });
     }
 

@@ -19,11 +19,6 @@ use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 class Number extends SproutFormsBaseField implements PreviewableFieldInterface
 {
     /**
-     * @var string|null The input’s placeholder text
-     */
-    public $boostrapClass;
-
-    /**
      * @var int|float The minimum allowed number
      */
     public $min = 0;

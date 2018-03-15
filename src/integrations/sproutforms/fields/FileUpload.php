@@ -25,37 +25,8 @@ use craft\web\UploadedFile;
  */
 class FileUpload extends SproutBaseRelationField
 {
-    /**
-     * @inheritdoc
-     */
-    public static function displayName(): string
-    {
-        return Craft::t('sprout-forms', 'File Upload');
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected static function elementType(): string
-    {
-        return Asset::class;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function defaultSelectionLabel(): string
-    {
-        return Craft::t('sprout-forms', 'Add a file');
-    }
-
     // Properties
     // =========================================================================
-
-    /**
-     * @var string|null The input’s boostrap class
-     */
-    public $boostrapClass;
 
     /**
      * @var bool|null Whether related assets should be limited to a single folder
@@ -106,9 +77,33 @@ class FileUpload extends SproutBaseRelationField
     {
         parent::init();
         $this->allowLargeThumbsView = true;
-        $this->settingsTemplate = 'sprout-forms/_components/fields/assets/settings';
-        $this->inputTemplate = '_components/fields/assets/input';
+        $this->settingsTemplate = 'sprout-forms/_components/fields/fileupload/settings';
+        $this->inputTemplate = '_components/fieldtypes/Assets/input';
         $this->inputJsClass = 'Craft.AssetSelectInput';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function displayName(): string
+    {
+        return Craft::t('sprout-forms', 'File Upload');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected static function elementType(): string
+    {
+        return Asset::class;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function defaultSelectionLabel(): string
+    {
+        return Craft::t('sprout-forms', 'Add a file');
     }
 
     /**
@@ -151,7 +146,8 @@ class FileUpload extends SproutBaseRelationField
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/assets/example',
+        return Craft::$app->getView()->renderTemplate(
+            'sprout-forms/_components/fields/fileupload/example',
             [
                 'field' => $this
             ]
@@ -198,7 +194,7 @@ class FileUpload extends SproutBaseRelationField
         $this->beginRendering();
 
         $rendered = Craft::$app->getView()->renderTemplate(
-            'assets/input',
+            'fileupload/input',
             [
                 'name' => $field->handle,
                 'value' => $value,
