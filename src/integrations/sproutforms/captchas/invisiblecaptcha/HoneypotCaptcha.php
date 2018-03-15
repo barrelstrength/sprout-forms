@@ -120,7 +120,7 @@ class HoneypotCaptcha extends BaseCaptcha
 <div id="'.$uniqueId.'_wrapper" style="display:none;">
 <label for="'.$uniqueId.'">'.$this->honeypotScreenReaderMessage.'</label>
 <input type="text" id="'.$uniqueId.'" name="'.$uniqueId.'" value="" />
- </div>';
+</div>';
 
         return $honeypot;
     }
