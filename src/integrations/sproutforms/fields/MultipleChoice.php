@@ -13,11 +13,6 @@ use craft\base\ElementInterface;
 class MultipleChoice extends SproutBaseOptionsField
 {
     /**
-     * @var string|null The input’s boostrap class
-     */
-    public $boostrapClass;
-
-    /**
      * @inheritdoc
      */
     public static function displayName(): string
@@ -30,7 +25,7 @@ class MultipleChoice extends SproutBaseOptionsField
      */
     protected function optionsSettingLabel(): string
     {
-        return Craft::t('sprout-forms', 'Radio Button Options');
+        return Craft::t('sprout-forms', 'Multiple Choice Options');
     }
 
     /**
@@ -38,7 +33,8 @@ class MultipleChoice extends SproutBaseOptionsField
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/radiobuttons/example',
+        return Craft::$app->getView()->renderTemplate(
+            'sprout-forms/_components/fields/multiplechoice/example',
             [
                 'field' => $this
             ]
@@ -57,7 +53,8 @@ class MultipleChoice extends SproutBaseOptionsField
             $value = $this->defaultValue();
         }
 
-        return Craft::$app->getView()->renderTemplate('_includes/forms/radioGroup',
+        return Craft::$app->getView()->renderTemplate(
+            '_includes/forms/radioGroup',
             [
                 'name' => $this->handle,
                 'value' => $value,
@@ -80,7 +77,7 @@ class MultipleChoice extends SproutBaseOptionsField
         $this->beginRendering();
 
         $rendered = Craft::$app->getView()->renderTemplate(
-            'radiobuttons/input',
+            'multiplechoice/input',
             [
                 'name' => $field->handle,
                 'value' => $value,
@@ -101,24 +98,5 @@ class MultipleChoice extends SproutBaseOptionsField
     public function getSvgIconPath()
     {
         return '@sproutbaseicons/dot-circle-o.svg';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getSettingsHtml()
-    {
-        $parentRendered = parent::getSettingsHtml();
-
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/radiobuttons/settings',
-            [
-                'field' => $this,
-            ]
-        );
-
-        $customRendered = $rendered.$parentRendered;
-
-        return $customRendered;
     }
 }
