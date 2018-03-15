@@ -102,59 +102,6 @@ class Fields extends Component
     }
 
     /**
-     * @param FormElement|null $form
-     *
-     * @return array
-     * @throws \yii\base\Exception
-     */
-    public function getSproutFormsTemplates(FormElement $form = null)
-    {
-        $templates = [];
-        $settings = Craft::$app->plugins->getPlugin('sprout-forms')->getSettings();
-        $templateFolderOverride = $settings->templateFolderOverride;
-
-        if ($form->enableTemplateOverrides) {
-            $templateFolderOverride = $form->templateOverridesFolder;
-        }
-
-        $defaultTemplate = Craft::getAlias('@barrelstrength/sproutforms/templates/_special/templates/');
-
-        // Set our defaults
-        $templates['form'] = $defaultTemplate;
-        $templates['tab'] = $defaultTemplate;
-        $templates['field'] = $defaultTemplate;
-        $templates['email'] = $defaultTemplate;
-
-        // See if we should override our defaults
-        if ($templateFolderOverride) {
-            $formTemplate = Craft::$app->path->getSiteTemplatesPath().$templateFolderOverride.'/form';
-            $tabTemplate = Craft::$app->path->getSiteTemplatesPath().$templateFolderOverride.'/tab';
-            $fieldTemplate = Craft::$app->path->getSiteTemplatesPath().$templateFolderOverride.'/field';
-            $emailTemplate = Craft::$app->path->getSiteTemplatesPath().$templateFolderOverride.'/email';
-
-            foreach (Craft::$app->config->get('defaultTemplateExtensions') as $extension) {
-                if (IOHelper::fileExists($formTemplate.'.'.$extension)) {
-                    $templates['form'] = Craft::$app->path->getSiteTemplatesPath().$templateFolderOverride.'/';
-                }
-
-                if (IOHelper::fileExists($tabTemplate.'.'.$extension)) {
-                    $templates['tab'] = Craft::$app->path->getSiteTemplatesPath().$templateFolderOverride.'/';
-                }
-
-                if (IOHelper::fileExists($fieldTemplate.'.'.$extension)) {
-                    $templates['field'] = Craft::$app->path->getSiteTemplatesPath().$templateFolderOverride.'/';
-                }
-
-                if (IOHelper::fileExists($emailTemplate.'.'.$extension)) {
-                    $templates['email'] = Craft::$app->path->getSiteTemplatesPath().$templateFolderOverride.'/';
-                }
-            }
-        }
-
-        return $templates;
-    }
-
-    /**
      * @return array|SproutFormsBaseField[]
      */
     public function getRegisteredFields()
@@ -499,7 +446,7 @@ class Fields extends Component
 
     public function getDefaultTabName()
     {
-        return Craft::t('sprout-forms', 'Tab 1');
+        return Craft::t('sprout-forms', 'Section 1');
     }
 
     /**

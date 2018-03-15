@@ -4,7 +4,6 @@ namespace barrelstrength\sproutforms\contracts;
 
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use Craft;
-use yii\base\Model;
 
 /**
  * Class BaseCaptcha

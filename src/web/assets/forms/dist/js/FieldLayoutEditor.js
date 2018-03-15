@@ -472,7 +472,6 @@ if (typeof Craft.SproutForms === typeof undefined) {
           }
           else
           {
-            console.log(response.errors);
             Craft.cp.displayError(Craft.t('sprout-forms','Unable to create a new tab'));
           }
         }, this));

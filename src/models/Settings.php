@@ -9,6 +9,7 @@ use Craft;
 class Settings extends Model
 {
     public $pluginNameOverride = '';
+    public $toggleTemplateFolderOverride = 0;
     public $templateFolderOverride = '';
     public $enablePayloadForwarding = 0;
     public $enableSaveData = 1;

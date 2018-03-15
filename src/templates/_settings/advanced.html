@@ -1,6 +1,7 @@
 {% requirePermission "editSproutFormsSettings" %}
 
 {% import "_includes/forms" as forms %}
+{% import "sprout-base/sproutfields/forms" as sproutFields %}
 
 {% set saveShortcutRedirect = 'sproutforms/settings/advanced' %}
 
@@ -15,23 +16,25 @@
                 instructions: "Enable this setting if you wish to override the default form templates globally and provide your own custom templates. Sprout Forms will display your dynamic forms using the form templates it finds with the following priority: 1) individual custom form template folder, 2) global custom form templates folder, and 3) Sprout Forms default form templates."|t,
                 name: 'toggleTemplateFolderOverride',
                 toggle: 'settings-defaulttemplateoverride',
-                on: (settings.templateFolderOverride is empty ? false : true),
+                on: settings.toggleTemplateFolderOverride,
                 onLabel: "Enable"|t,
             }) }}
 
             <div id="settings-defaulttemplateoverride"
-                 class="{{ (settings.templateFolderOverride is empty ? "hidden") }}">
+                 class="{% if not settings.toggleTemplateFolderOverride %} hidden {% endif %}">
 
-                {{ forms.textField({
-                    label: "Global custom form templates folder"|t,
-                    id: 'templateFolderOverride',
-                    name: 'templateFolderOverride',
-                    instructions: "The template folder for your custom form templates."|t,
-                    value: settings.templateFolderOverride,
-                    placeholder: "_forms",
+                {% set templateOptions = craft.sproutForms.getTemplateOptions() %}
+
+                {{ forms.field({
+                    label: "Template"|t('sprout-seo'),
                     first: true,
-                    errors: ''
-                }) }}
+                    instructions: "The template folder for your custom form templates."|t,
+                }, sproutFields.selectOther({
+                    name: 'templateFolderOverride',
+                    options: templateOptions,
+                    value: settings.templateFolderOverride ?? null,
+                    otherPlaceholderText: 'Custom Template'|t('sprout-seo')
+                })) }}
 
             </div>
 
