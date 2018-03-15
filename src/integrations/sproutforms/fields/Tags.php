@@ -82,17 +82,23 @@ class Tags extends SproutBaseRelationField
     public function getInputHtml($value, ElementInterface $element = null): string
     {
         /** @var Element|null $element */
-        if (!($value instanceof ElementQueryInterface)) {
-            /** @var Element $class */
-            $class = static::elementType();
-            $value = $class::find()
-                ->id(false);
+        if ($element !== null && $element->hasEagerLoadedElements($this->handle)) {
+            $value = $element->getEagerLoadedElements($this->handle);
+        }
+
+        if ($value instanceof ElementQueryInterface) {
+            $value = $value
+                ->status(null)
+                ->enabledForSite(false)
+                ->all();
+        } else if (!is_array($value)) {
+            $value = [];
         }
 
         $tagGroup = $this->_getTagGroup();
 
         if ($tagGroup) {
-            return Craft::$app->getView()->renderTemplate('_components/fields/tags/input',
+            return Craft::$app->getView()->renderTemplate('_components/fieldtypes/Tags/input',
                 [
                     'elementType' => static::elementType(),
                     'id' => Craft::$app->getView()->formatInputId($this->handle),
@@ -103,9 +109,9 @@ class Tags extends SproutBaseRelationField
                     'sourceElementId' => $element !== null ? $element->id : null,
                     'selectionLabel' => $this->selectionLabel ? Craft::t('site', $this->selectionLabel) : static::defaultSelectionLabel(),
                 ]);
-        } else {
-            return '<p class="error">'.Craft::t('app', 'This field is not set to a valid source.').'</p>';
         }
+
+        return '<p class="error">'.Craft::t('app', 'This field is not set to a valid source.').'</p>';
     }
 
     /**

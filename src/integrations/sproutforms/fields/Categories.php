@@ -63,7 +63,7 @@ class Categories extends SproutBaseRelationField
         $this->allowLimit = false;
         $this->allowMultipleSources = false;
         $this->settingsTemplate = 'sprout-forms/_components/fields/categories/settings';
-        $this->inputTemplate = '_components/fields/categories/input';
+        $this->inputTemplate = '_components/fieldtypes/Categories/input';
         $this->inputJsClass = 'Craft.CategorySelectInput';
         $this->sortable = false;
     }

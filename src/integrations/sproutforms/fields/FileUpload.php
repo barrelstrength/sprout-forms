@@ -107,7 +107,7 @@ class FileUpload extends SproutBaseRelationField
         parent::init();
         $this->allowLargeThumbsView = true;
         $this->settingsTemplate = 'sprout-forms/_components/fields/assets/settings';
-        $this->inputTemplate = '_components/fields/assets/input';
+        $this->inputTemplate = '_components/fieldtypes/Assets/input';
         $this->inputJsClass = 'Craft.AssetSelectInput';
     }
 
