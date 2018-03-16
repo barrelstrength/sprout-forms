@@ -294,12 +294,7 @@ class Entries extends Component
 
             SproutForms::info('Transaction committed');
 
-            $event = new OnSaveEntryEvent([
-                'entry' => $entry,
-                'isNewEntry' => $isNewEntry,
-            ]);
-
-            $this->trigger(EntryElement::EVENT_AFTER_SAVE, $event);
+            $this->callOnSaveEntryEvent($entry, $isNewEntry);
         } catch (\Exception $e) {
             SproutForms::error('Failed to save element: '.$e->getMessage());
             $transaction->rollBack();
@@ -502,6 +497,20 @@ class Entries extends Component
         }
 
         return $saveData;
+    }
+
+    /**
+     * @param $entry
+     * @param $isNewEntry
+     */
+    public function callOnSaveEntryEvent($entry, $isNewEntry)
+    {
+        $event = new OnSaveEntryEvent([
+            'entry' => $entry,
+            'isNewEntry' => $isNewEntry,
+        ]);
+
+        $this->trigger(EntryElement::EVENT_AFTER_SAVE, $event);
     }
 
 }

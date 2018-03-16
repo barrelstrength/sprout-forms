@@ -89,7 +89,19 @@ class EntriesController extends BaseController
             $this->form->notificationReplyToEmail = $view->renderObjectTemplate($this->form->notificationReplyToEmail, $entry);
         }
 
-        if (SproutForms::$app->entries->saveEntry($entry)) {
+        $result   = true;
+        $saveData = SproutForms::$app->entries->isDataSaved($this->form);
+
+        if ($saveData){
+            $result = SproutForms::$app->entries->saveEntry($entry);
+        }
+        else{
+            // call our save-entry event
+            $isNewEntry = !$entry->id;
+            SproutForms::$app->entries->callOnSaveEntryEvent($entry, $isNewEntry);
+        }
+
+        if ($result) {
             // Only send notification email for front-end submissions if they are enabled
             if (!$request->getIsCpRequest() && $this->form->notificationEnabled) {
                 $post = $_POST;
