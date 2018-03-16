@@ -594,7 +594,7 @@ class SproutFormsVariable
         $settings = $plugin->getSettings();
         $templateFolder = $settings->templateFolderOverride;
 
-        array_push($options, ['optgroup' => Craft::t('sprout-seo','Custom')]);
+        array_push($options, ['optgroup' => Craft::t('sprout-forms','Custom')]);
 
         if (!array_key_exists($templateFolder, $templateIds) && $templateFolder != '') {
             array_push($options, ['label' => $templateFolder, 'value' => $templateFolder]);

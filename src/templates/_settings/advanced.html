@@ -26,14 +26,14 @@
                 {% set templateOptions = craft.sproutForms.getTemplateOptions() %}
 
                 {{ forms.field({
-                    label: "Template"|t('sprout-seo'),
+                    label: "Template"|t('sprout-forms'),
                     first: true,
                     instructions: "The template folder for your custom form templates."|t,
                 }, sproutFields.selectOther({
                     name: 'templateFolderOverride',
                     options: templateOptions,
                     value: settings.templateFolderOverride ?? null,
-                    otherPlaceholderText: 'Custom Template'|t('sprout-seo')
+                    otherPlaceholderText: 'Custom Template'|t('sprout-forms')
                 })) }}
 
             </div>
