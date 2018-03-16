@@ -51,6 +51,14 @@ class SectionHeading extends SproutFormsBaseField
     }
 
     /**
+     * @inheritdoc
+     */
+    public static function hasContentColumn(): bool
+    {
+        return false;
+    }
+
+    /**
      * @return string
      */
     public function getSvgIconPath()

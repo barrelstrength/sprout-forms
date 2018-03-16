@@ -44,6 +44,14 @@ class PrivateNotes extends SproutFormsBaseField
     /**
      * @inheritdoc
      */
+    public static function hasContentColumn(): bool
+    {
+        return false;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function isPlainInput()
     {
         return true;
