@@ -138,6 +138,15 @@ class EntriesController extends BaseController
         }
 
         $form = SproutForms::$app->forms->getFormById($entry->formId);
+
+        $saveData = SproutForms::$app->entries->isDataSaved($form);
+
+        if (!$saveData){
+            Craft::$app->getSession()->setError(Craft::t('sprout-forms', "Unable to edit entry. Enable the 'Save Data' for this form to view, edit, or delete content."));
+
+            return $this->renderTemplate('sprout-forms/entries');
+        }
+
         $entryStatus = SproutForms::$app->entries->getEntryStatusById($entry->statusId);
         $statuses = SproutForms::$app->entries->getAllEntryStatuses();
         $entryStatuses = [];

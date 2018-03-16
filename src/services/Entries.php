@@ -491,4 +491,17 @@ class Entries extends Component
         return $entryStatusRecord;
     }
 
+    public function isDataSaved($form)
+    {
+        $settings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
+
+        $saveData = $settings->enableSaveData;
+
+        if (($settings->enableSaveDataPerFormBasis && $saveData) || $form->submitAction){
+            $saveData = $form->saveData;
+        }
+
+        return $saveData;
+    }
+
 }
