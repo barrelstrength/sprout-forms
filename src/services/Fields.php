@@ -135,33 +135,36 @@ class Fields extends Component
     public function getRegisteredFieldsByGroup()
     {
         $standardLabel = Craft::t('sprout-forms', 'Standard Fields');
-        $advancedLabel = Craft::t('sprout-forms', 'Special Fields');
+        $specialLabel = Craft::t('sprout-forms', 'Special Fields');
+        $relationsLabel = Craft::t('sprout-forms', 'Relations Fields');
 
         // Standard
-        $groupedFields[$standardLabel][] = SingleLine::className();
-        $groupedFields[$standardLabel][] = Paragraph::className();
-        $groupedFields[$standardLabel][] = MultipleChoice::className();
-        $groupedFields[$standardLabel][] = Dropdown::className();
-        $groupedFields[$standardLabel][] = Checkboxes::className();
-        $groupedFields[$standardLabel][] = Number::className();
-        $groupedFields[$standardLabel][] = FileUpload::className();
-        $groupedFields[$standardLabel][] = SectionHeading::className();
+        $groupedFields[$standardLabel][] = SingleLine::class;
+        $groupedFields[$standardLabel][] = Paragraph::class;
+        $groupedFields[$standardLabel][] = MultipleChoice::class;
+        $groupedFields[$standardLabel][] = Dropdown::class;
+        $groupedFields[$standardLabel][] = Checkboxes::class;
+        $groupedFields[$standardLabel][] = Number::class;
+        $groupedFields[$standardLabel][] = FileUpload::class;
+        $groupedFields[$standardLabel][] = SectionHeading::class;
 
-        // Advanced
-        $groupedFields[$advancedLabel][] = Name::class;
-        $groupedFields[$advancedLabel][] = Email::className();
-        $groupedFields[$advancedLabel][] = EmailDropdown::className();
-        $groupedFields[$advancedLabel][] = Phone::className();
-        $groupedFields[$advancedLabel][] = Url::className();
-        $groupedFields[$advancedLabel][] = CustomHtml::className();
-        $groupedFields[$advancedLabel][] = PrivateNotes::className();
-        $groupedFields[$advancedLabel][] = Categories::className();
-        $groupedFields[$advancedLabel][] = Entries::className();
-        $groupedFields[$advancedLabel][] = Hidden::className();
-        $groupedFields[$advancedLabel][] = Invisible::className();
-        $groupedFields[$advancedLabel][] = MultiSelect::className();
-        $groupedFields[$advancedLabel][] = RegularExpression::className();
-        $groupedFields[$advancedLabel][] = Tags::className();
+        // Special
+        $groupedFields[$specialLabel][] = Name::class;
+        $groupedFields[$specialLabel][] = Email::class;
+        $groupedFields[$specialLabel][] = EmailDropdown::class;
+        $groupedFields[$specialLabel][] = Phone::class;
+        $groupedFields[$specialLabel][] = Url::class;
+        $groupedFields[$specialLabel][] = CustomHtml::class;
+        $groupedFields[$specialLabel][] = PrivateNotes::class;
+        $groupedFields[$specialLabel][] = MultiSelect::class;
+        $groupedFields[$specialLabel][] = Hidden::class;
+        $groupedFields[$specialLabel][] = Invisible::class;
+        $groupedFields[$specialLabel][] = RegularExpression::class;
+
+        // Relations
+        $groupedFields[$relationsLabel][] = Categories::class;
+        $groupedFields[$relationsLabel][] = Entries::class;
+        $groupedFields[$relationsLabel][] = Tags::class;
 
         return $groupedFields;
     }
