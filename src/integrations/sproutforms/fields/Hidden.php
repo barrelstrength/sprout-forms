@@ -86,22 +86,20 @@ class Hidden extends SproutFormsBaseField implements PreviewableFieldInterface
     }
 
     /**
-     * @param \barrelstrength\sproutforms\contracts\FieldModel $field
      * @param mixed                                            $value
-     * @param mixed                                            $settings
      * @param array|null                                       $renderingOptions
      *
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
+    public function getFormInputHtml($value, array $renderingOptions = null): string
     {
         $this->beginRendering();
 
-        if ($settings['value']) {
+        if ($this->value) {
             try {
-                $value = Craft::$app->view->renderObjectTemplate($settings['value'], parent::getFieldVariables());
+                $value = Craft::$app->view->renderObjectTemplate($this->value, parent::getFieldVariables());
             } catch (\Exception $e) {
                 SproutForms::error($e->getMessage());
             }
@@ -110,9 +108,9 @@ class Hidden extends SproutFormsBaseField implements PreviewableFieldInterface
         $rendered = Craft::$app->getView()->renderTemplate(
             'hidden/input',
             [
-                'name' => $field->handle,
+                'name' => $this->handle,
                 'value' => $value,
-                'field' => $field,
+                'field' => $this,
                 'renderingOptions' => $renderingOptions
             ]
         );

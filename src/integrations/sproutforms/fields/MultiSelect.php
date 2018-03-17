@@ -20,14 +20,6 @@ class MultiSelect extends SproutBaseOptionsField
         return Craft::t('sprout-forms', 'Multi Select');
     }
 
-    // Properties
-    // =====================================================================
-
-    /**
-     * @var string|null The input’s boostrap class
-     */
-    public $boostrapClass;
-
     /**
      * @inheritdoc
      */
@@ -70,26 +62,23 @@ class MultiSelect extends SproutBaseOptionsField
     }
 
     /**
-     * @param \barrelstrength\sproutforms\contracts\FieldModel $field
      * @param mixed                                            $value
-     * @param mixed                                            $settings
      * @param array|null                                       $renderingOptions
      *
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
+    public function getFormInputHtml($value, array $renderingOptions = null): string
     {
         $this->beginRendering();
 
         $rendered = Craft::$app->getView()->renderTemplate(
             'multiselect/input',
             [
-                'name' => $field->handle,
+                'name' => $this->handle,
                 'value' => $value,
-                'field' => $field,
-                'settings' => $settings,
+                'field' => $this,
                 'renderingOptions' => $renderingOptions
             ]
         );
@@ -113,24 +102,5 @@ class MultiSelect extends SproutBaseOptionsField
     public function getSvgIconPath()
     {
         return '@sproutbaseicons/bars.svg';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getSettingsHtml()
-    {
-        $parentRendered = parent::getSettingsHtml();
-
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/multiselect/settings',
-            [
-                'field' => $this,
-            ]
-        );
-
-        $customRendered = $rendered.$parentRendered;
-
-        return $customRendered;
     }
 }

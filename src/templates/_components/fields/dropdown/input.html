@@ -1,29 +1,35 @@
-{%- set data      = renderingOptions.data is defined ? renderingOptions.data : null %}
-{%- set id        = renderingOptions.id is defined ? renderingOptions.id : name %}
-{%- set class     = renderingOptions.class is defined ? renderingOptions.class : name %}
-{%- set value     = value is defined ? value : null %}
-{%- set required  = field.required is defined and field.required ? " required" %}
-{%- set options   = settings.options is defined ? settings.options : [] %}
+{%- set id = renderingOptions.id ?? name %}
+{%- set class = renderingOptions.class ?? name %}
+{%- set required = field.required ? true : false %}
+{%- set hasInstructions = field.instructions ? true : false %}
+{%- set value = value ? value : null %}
+
+{%- set options = field.options ? field.options : [] %}
 
 {%- set dataAttributes = null %}
+{%- set data = renderingOptions.data ?? null %}
 {%- for key, dataValue in data %}
-	{%- set dataAttributes = dataAttributes ~ ' data-'~key~'="'~dataValue~'"' %}
+    {%- set dataAttributes = dataAttributes ~ ' data-'~key~'="'~dataValue~'"' %}
 {%- endfor -%}
 
 {% spaceless %}
-<select
-	{%- if id %} id="{{ id }}"{% endif %}
-	{%- if class %} class="{{ class }}"{% endif %}
-	{%- if name %} name="{{ name }}"{% endif %}
-	{{- required -}}
-	{{- dataAttributes|raw -}}
-	>
-	{%- for key, option in options -%}
+    <select
+            {%- if name %} name="{{ name }}"{% endif %}
+            {%- if id %} id="{{ id }}"{% endif %}
+            {%- if class %} class="{{ class }}"{% endif %}
+            {%- if required %} required aria-required="true"{% endif %}
+            {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+            {{- dataAttributes|raw -}}
+    >
+        <optgroup>
+            {%- for key, option in options -%}
 
-		{%- set optionLabel = (option.label is defined ? option.label : null) -%}
-		{%- set optionValue = (option.value is defined ? option.value : key) -%}
+                {%- set optionLabel = (option.label is defined ? option.label : null) -%}
+                {%- set optionValue = (option.value is defined ? option.value : key) -%}
 
-		<option value="{{ optionValue }}" {% if optionValue == value %}selected{% endif %}>{{ optionLabel }}</option>
-	{% endfor %}
-</select>
+                <option value="{{ optionValue }}"
+                        {% if optionValue == value %}selected{% endif %}>{{ optionLabel }}</option>
+            {% endfor %}
+        </optgroup>
+    </select>
 {% endspaceless %}

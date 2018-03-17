@@ -233,7 +233,7 @@ class SproutFormsVariable
 
                 $view->setTemplatesPath($formField->getTemplatesPath());
 
-                $formField->getInputHtml($field, $value, $field->getSettings(), $renderingOptions);
+                $formField->getFormInputHtml($value, $renderingOptions);
 
                 // Set Tab template path
                 $view->setTemplatesPath($templatePaths['field']);

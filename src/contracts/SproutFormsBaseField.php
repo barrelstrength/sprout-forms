@@ -24,14 +24,12 @@ abstract class SproutFormsBaseField extends Field
     protected $originalTemplatesPath;
 
     /**
-     * @param FieldModel $field
      * @param mixed      $value
-     * @param mixed      $settings
      * @param array      $renderingOptions
      *
      * @return \Twig_Markup
      */
-    abstract public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null);
+    abstract public function getFormInputHtml($value, array $renderingOptions = null);
 
     /**
      * The example HTML input field that displays in the UI when a field is dragged to the form layout editor
@@ -59,7 +57,7 @@ abstract class SproutFormsBaseField extends Field
 
     final public function getValue($handle, $default = null)
     {
-        return craft()->httpSession->get($handle, $default);
+        return Craft::$app->httpSession->get($handle, $default);
     }
 
     public static function addFieldVariables(array $variables)

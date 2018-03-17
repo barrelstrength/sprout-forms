@@ -123,7 +123,7 @@ abstract class SproutBaseRelationField extends SproutFormsBaseField implements P
     protected $allowLargeThumbsView = false;
 
     /**
-     * @var string Temlpate to use for settings rendering
+     * @var string Template to use for settings rendering
      */
     protected $settingsTemplate = 'sprout-forms/_components/fields/elementfieldsettings';
 

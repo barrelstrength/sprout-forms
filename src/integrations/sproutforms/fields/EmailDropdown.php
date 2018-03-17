@@ -46,7 +46,7 @@ class EmailDropdown extends SproutBaseOptionsField
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/emailselect/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/emaildropdown/example',
             [
                 'field' => $this
             ]
@@ -126,32 +126,29 @@ class EmailDropdown extends SproutBaseOptionsField
     }
 
     /**
-     * @param \barrelstrength\sproutforms\contracts\FieldModel $field
      * @param mixed                                            $value
-     * @param mixed                                            $settings
      * @param array|null                                       $renderingOptions
      *
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
+    public function getFormInputHtml($value, array $renderingOptions = null): string
     {
         $this->beginRendering();
 
-        $selectedValue = isset($value->value) ? $value->value : null;
+        $selectedValue = $value->value ?? null;
 
-        $options = $settings['options'];
+        $options = $this->options;
         $options = SproutBase::$app->emailDropdown->obfuscateEmailAddresses($options, $selectedValue);
 
         $rendered = Craft::$app->getView()->renderTemplate(
-            'emailselect/input',
+            'emaildropdown/input',
             [
-                'name' => $field->handle,
+                'name' => $this->handle,
                 'value' => $value,
                 'options' => $options,
-                'settings' => $settings,
-                'field' => $field
+                'field' => $this
             ]
         );
 

@@ -1,13 +1,25 @@
-{% if field.output == "html" or field.output == "richText" %}
-    {{ field.notes  | raw }}
-{% else %}
-    {{ field.notes | markdown }}
-{% endif %}
+{%- set id = renderingOptions.id ?? field.handle %}
+{%- set class = renderingOptions.class ?? field.handle %}
 
-{% js %}
-    {% if (field.hideLabel)  %}
-        var sproutField = document.getElementById('{{ id }}-field').getElementsByClassName('heading')[0];
+{%- set notes = field.notes is not empty ? field.notes : null %}
 
-        sproutField.style.display = 'none';
+{%- set dataAttributes = null %}
+{%- set data = renderingOptions.data ?? null %}
+{%- for key, dataValue in data %}
+    {%- set dataAttributes = dataAttributes ~ ' data-'~key~'="'~dataValue~'"' %}
+{% endfor -%}
+
+<header {%- if id %} id="{{ id }}"{% endif %}
+        {%- if class %} class="{{ class }}"{% endif %}
+        {{- dataAttributes|raw }}>
+
+    {% if not field.hideLabel %}
+        <h3>{{ field.name }}</h3>
     {% endif %}
-{% endjs %}
+
+    {%- if field.output == "html" or field.output == "richText" %}
+        {{ notes|raw }}
+    {% else %}
+        {{ notes|markdown }}
+    {% endif %}
+</header>

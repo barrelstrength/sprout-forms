@@ -44,10 +44,6 @@ class Tags extends SproutBaseRelationField
     // Properties
     // =====================================================================
 
-    /**
-     * @var string|null The input’s boostrap class
-     */
-    public $boostrapClass;
 
     /**
      * @var
@@ -115,28 +111,25 @@ class Tags extends SproutBaseRelationField
     }
 
     /**
-     * @param \barrelstrength\sproutforms\contracts\FieldModel $field
      * @param mixed                                            $value
-     * @param mixed                                            $settings
      * @param array|null                                       $renderingOptions
      *
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
+    public function getFormInputHtml($value, array $renderingOptions = null): string
     {
         $this->beginRendering();
 
-        $tags = SproutForms::$app->frontEndFields->getFrontEndTags($settings);
+        $tags = SproutForms::$app->frontEndFields->getFrontEndTags($this->getSettings());
 
         $rendered = Craft::$app->getView()->renderTemplate(
             'tags/input',
             [
-                'name' => $field->handle,
+                'name' => $this->handle,
                 'value' => $value,
-                'field' => $field,
-                'settings' => $settings,
+                'field' => $this,
                 'renderingOptions' => $renderingOptions,
                 'tags' => $tags,
             ]
@@ -145,25 +138,6 @@ class Tags extends SproutBaseRelationField
         $this->endRendering();
 
         return TemplateHelper::raw($rendered);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getSettingsHtml()
-    {
-        $parentRendered = parent::getSettingsHtml();
-
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/tags/settings',
-            [
-                'field' => $this,
-            ]
-        );
-
-        $customRendered = $rendered.$parentRendered;
-
-        return $customRendered;
     }
 
     /**

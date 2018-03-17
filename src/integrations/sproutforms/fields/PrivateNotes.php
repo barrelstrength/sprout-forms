@@ -26,15 +26,16 @@ class PrivateNotes extends SproutFormsBaseField
      */
     public $output;
 
+    /**
+     * @inheritdoc
+     */
     public static function displayName(): string
     {
         return Craft::t('sprout-forms', 'Private Notes');
     }
 
     /**
-     * Define database column
-     *
-     * @return false
+     * @inheritdoc
      */
     public function defineContentAttribute()
     {
@@ -92,16 +93,12 @@ class PrivateNotes extends SproutFormsBaseField
     }
 
     /**
-     * @param \barrelstrength\sproutforms\contracts\FieldModel $field
      * @param mixed                                            $value
-     * @param mixed                                            $settings
      * @param array|null                                       $renderingOptions
      *
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
      */
-    public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
+    public function getFormInputHtml($value, array $renderingOptions = null): string
     {
         // Only visible and updated in the Control Panel
         return '';

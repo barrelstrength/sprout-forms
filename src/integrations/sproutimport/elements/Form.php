@@ -59,15 +59,15 @@ class Form extends BaseElementImporter
     /**
      * @inheritdoc
      */
-    public function resolveNestedSettings($model, $settings)
+    public function resolveNestedSettings($section, $settings)
     {
         // Check to see if we have any Entry Types we should also save
-        if (empty($settings['settings']['fieldLayout']) OR empty($model->id)) {
+        if (empty($settings['settings']['fieldLayout']) OR empty($section->id)) {
             return true;
         }
 
-        Craft::$app->content->fieldContext = $model->fieldContext;
-        Craft::$app->content->contentTable = $model->contentTable;
+        Craft::$app->content->fieldContext = $section->fieldContext;
+        Craft::$app->content->contentTable = $section->contentTable;
 
         //------------------------------------------------------------
 
@@ -118,11 +118,11 @@ class Form extends BaseElementImporter
         $fieldLayout = Craft::$app->fields->assembleLayout($postedFieldLayout, $requiredFields);
         $fieldLayout->type = FormElement::class;
 
-        $model->setFieldLayout($fieldLayout);
+        $section->setFieldLayout($fieldLayout);
 
-        if (!SproutForms::$app->forms->saveForm($model)) {
+        if (!SproutForms::$app->forms->saveForm($section)) {
 
-            SproutForms::error($model->getErrors());
+            SproutForms::error($section->getErrors());
 
             return false;
         }

@@ -4,8 +4,7 @@
 {%- set hasInstructions = field.instructions ? true : false %}
 {%- set value = value ? value : null %}
 
-{%- set multiple = field.limit == '' ? true : field.limit > 1 ? true : false %}
-{%- set selectionLabel = field.selectionLabel != '' ? field.selectionLabel : "Select a category..."|t('sprout-forms') -%}
+{%- set options = field.options is defined ? field.options : [] %}
 
 {%- set dataAttributes = null %}
 {%- set data = renderingOptions.data ?? null %}
@@ -14,27 +13,28 @@
 {%- endfor -%}
 
 {% spaceless %}
-    <select {%- if name %} name="{{ name }}[]"{% endif %}
+    <select
+            {%- if name %} name="{{ name }}"{% endif %}
             {%- if id %} id="{{ id }}"{% endif %}
             {%- if class %} class="{{ class }}"{% endif %}
             {%- if required %} required aria-required="true"{% endif %}
             {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
-            {%- if multiple %} multiple {% endif %}
             {{- dataAttributes|raw -}}
     >
         <optgroup>
-            {%- if not multiple -%}
-                <option value="" disabled selected>{{ selectionLabel }}</option>
-            {%- endif -%}
-            {%- for options in categories -%}
-                {%- for option in options.categories -%}
-                    {%- set optionLabel = option.title -%}
-                    {%- set optionValue = option.id -%}
+            {%- for key, option in options -%}
 
-                    <option value="{{ optionValue }}"
-                            {% if optionValue == value %}selected{% endif %}>{{ optionLabel }}</option>
+                {%- set optionLabel = (option.label is defined ? option.label : null) -%}
+                {%- set optionValue = (option.value is defined ? option.value : key) -%}
 
-                {% endfor %}
+                {% if value != "" %}
+                    {% set selected = (option.selected == 1) ? true : false %}
+                {% else %}
+                    {% set selected = (option.default == 1) ? true : false %}
+                {% endif %}
+
+                <option value="{{ optionValue }}"
+                        {% if selected %}selected{% endif %}>{{ optionLabel }}</option>
             {% endfor %}
         </optgroup>
     </select>

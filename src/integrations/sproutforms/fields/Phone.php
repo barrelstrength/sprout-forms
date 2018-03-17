@@ -107,20 +107,18 @@ class Phone extends SproutFormsBaseField implements PreviewableFieldInterface
     }
 
     /**
-     * @param \barrelstrength\sproutforms\contracts\FieldModel $field
      * @param mixed                                            $value
-     * @param mixed                                            $settings
      * @param array|null                                       $renderingOptions
      *
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
+    public function getFormInputHtml($value, array $renderingOptions = null): string
     {
         $this->beginRendering();
 
-        $name = $field->handle;
+        $name = $this->handle;
         $namespaceInputId = $this->getNamespace().'-'.$name;
 //        $mask = $settings['mask'];
 
@@ -139,8 +137,7 @@ class Phone extends SproutFormsBaseField implements PreviewableFieldInterface
             [
                 'name' => $name,
                 'value' => $value,
-                'settings' => $settings,
-                'field' => $field,
+                'field' => $this,
                 'pattern' => $pattern,
                 'errorMessage' => $errorMessage,
                 'namespaceInputId' => $namespaceInputId,

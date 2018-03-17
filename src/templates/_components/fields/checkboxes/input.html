@@ -1,39 +1,42 @@
-{%- set data     = renderingOptions.data is defined ? renderingOptions.data : null %}
-{%- set id       = renderingOptions.id is defined ? renderingOptions.id : name %}
-{%- set class    = renderingOptions.class is defined ? renderingOptions.class : name %}
-{%- set values   = value is defined ? value : [] %}
-{%- set options  = settings.options is defined ? settings.options : [] %}
+{%- set id = renderingOptions.id ?? name %}
+{%- set class = renderingOptions.class ?? name %}
+{%- set hasInstructions = field.instructions ? true : false %}
+{%- set values = value is defined ? value : [] %}
+
+{%- set options = field.options ? field.options : [] %}
 
 {%- set dataAttributes = null %}
+{%- set data = renderingOptions.data ?? null %}
 {%- for key, dataValue in data %}
-	{%- set dataAttributes = dataAttributes ~ ' data-'~key~'="'~dataValue~'"' %}
+    {%- set dataAttributes = dataAttributes ~ ' data-'~key~'="'~dataValue~'"' %}
 {% endfor -%}
 
 {% spaceless %}
-<div
-	{%- if id %} id="{{ id }}"{% endif %}
-	{%- if class %} class="{{ class }}"{% endif %}>
+    <div
+            {%- if id %} id="{{ id }}"{% endif %}
+            {%- if class %} class="{{ class }}"{% endif %}>
 
-	{% if name is defined and (name|length < 3 or name|slice(-2) != '[]') %}
-		<input type="hidden" name="{{ name }}" value="">
-	{% endif %}
+        {% if name is defined and (name|length < 3 or name|slice(-2) != '[]') %}
+            <input type="hidden" aria-hidden="true" name="{{ name }}" value="">
+        {% endif %}
 
-	{%- for key, option in options %}
+        {%- for key, option in options %}
 
-		{%- set label = (option.label is defined ? option.label : option) %}
-		{%- set value = (option.value is defined ? option.value : key) %}
+            {%- set label = (option.label is defined ? option.label : option) %}
+            {%- set value = (option.value is defined ? option.value : key) %}
 
-		<label {%- if id %} for="{{ id }}-{{ loop.index }}"{% endif %}>
-			<input type="checkbox"
-				{%- if id %} id="{{ id }}-{{ loop.index }}"{% endif %}
-				{%- if name %} name="{{ name }}[]"{% endif %}
-				{%- if value is not empty %} value="{{ value }}"{% endif %}
-				{%- if value in values %} checked{% endif %}
-				{{- dataAttributes|raw -}}
-				>
-			{%- if label is defined %}&nbsp;{{ label|raw }}{% endif -%}
-		</label>
+            <label {%- if id %} for="{{ id }}-{{ loop.index }}"{% endif %}>
+                <input type="checkbox"
+                        {%- if name %} name="{{ name }}"{% endif %}
+                        {%- if id %} id="{{ id }}-{{ loop.index }}"{% endif %}
+                        {%- if value %} value="{{ value }}"{% endif %}
+                        {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+                        {%- if value in values %} checked aria-checked="true"{% else %} aria-checked="false"{% endif %}
+                        {{- dataAttributes|raw -}}
+                >
+                {%- if label is defined %}&nbsp;{{ label|raw }}{% endif -%}
+            </label>
 
-	{% endfor %}
-</div>
+        {% endfor %}
+    </div>
 {% endspaceless %}

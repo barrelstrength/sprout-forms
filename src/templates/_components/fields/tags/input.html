@@ -1,31 +1,37 @@
-{%- set data      = renderingOptions.data is defined ? renderingOptions.data : null %}
-{%- set id        = renderingOptions.id is defined ? renderingOptions.id : name %}
-{%- set class     = renderingOptions.class is defined ? renderingOptions.class : name %}
-{%- set value     = value is defined ? value : null %}
-{%- set required  = field.required is defined and field.required ? " required" %}
+{%- set id = renderingOptions.id ?? name %}
+{%- set class = renderingOptions.class ?? name %}
+{%- set required = field.required ? true : false %}
+{%- set hasInstructions = field.instructions ? true : false %}
+{%- set value = value ? value : null %}
+
+{# @todo - Tag settings need revisiting #}
+{%- set selectionLabel = field.selectionLabel != '' ? field.selectionLabel : "Select a tag..."|t('sprout-forms') -%}
 
 {%- set dataAttributes = null %}
+{%- set data = renderingOptions.data ?? null %}
 {%- for key, dataValue in data %}
-	{%- set dataAttributes = dataAttributes ~ ' data-'~key~'="'~dataValue~'"' %}
+    {%- set dataAttributes = dataAttributes ~ ' data-'~key~'="'~dataValue~'"' %}
 {%- endfor -%}
 
-
 {% spaceless %}
-<select multiple
-	{%- if id %} id="{{ id }}"{% endif %}
-	{%- if class %} class="{{ class }}"{% endif %}
-	{%- if name %} name="{{ name }}[]"{% endif %}
-	{{- required -}}
-	{{- dataAttributes|raw -}}
-	>
-	{%- for options in tags -%}
-		{%- for option in options.tags -%}
-			{%- set optionLabel = option.title -%}
-			{%- set optionValue = option.id -%}
+    <select {%- if name %} name="{{ name }}[]"{% endif %}
+            {%- if id %} id="{{ id }}"{% endif %}
+            {%- if class %} class="{{ class }}"{% endif %}
+            {%- if required %} required aria-required="true"{% endif %}
+            {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+            {{- dataAttributes|raw -}}
+    >
+        <optgroup>
+            {%- for options in tags -%}
+                {%- for option in options.tags -%}
+                    {%- set optionLabel = option.title -%}
+                    {%- set optionValue = option.id -%}
 
-			<option value="{{ optionValue }}" {% if optionValue == value %}selected{% endif %}>{{ optionLabel }}</option>
+                    <option value="{{ optionValue }}"
+                            {% if optionValue == value %}selected{% endif %}>{{ optionLabel }}</option>
 
-		{% endfor %}
-	{% endfor %}
-</select>
+                {% endfor %}
+            {% endfor %}
+        </optgroup>
+    </select>
 {% endspaceless %}

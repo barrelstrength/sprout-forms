@@ -70,26 +70,23 @@ class Checkboxes extends SproutBaseOptionsField
     }
 
     /**
-     * @param \barrelstrength\sproutforms\contracts\FieldModel $field
      * @param mixed                                            $value
-     * @param mixed                                            $settings
      * @param array|null                                       $renderingOptions
      *
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
+    public function getFormInputHtml($value, array $renderingOptions = null): string
     {
         $this->beginRendering();
 
         $rendered = Craft::$app->getView()->renderTemplate(
             'checkboxes/input',
             [
-                'name' => $field->handle,
+                'name' => $this->handle,
                 'value' => $value,
-                'field' => $field,
-                'settings' => $settings,
+                'field' => $this,
                 'renderingOptions' => $renderingOptions
             ]
         );

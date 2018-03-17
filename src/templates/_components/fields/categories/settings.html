@@ -2,32 +2,23 @@
 
 {% import "_includes/forms" as forms %}
 
-
 {% block fieldSettings %}
-	{# Custom Sprout Forms settings #}
-	{{ forms.textField({
-		label: "Boostrap Class"|t,
-		instructions: "To handle a boostrap class in the front-end."|t,
-		id: 'boostrapClass',
-		name: 'boostrapClass',
-		value: field.boostrapClass
-	}) }}
 
-	{{ block('sourcesField') }}
+    {{ block('sourcesField') }}
 
-	{% block branchLimitField %}
-		{{ forms.textField({
-			label: "Branch Limit"|t('app'),
-			instructions: "Limit the number of selectable category branches."|t('app'),
-			id: 'branchLimit',
-			name: 'branchLimit',
-			value: field.branchLimit,
-			size: 2,
-			errors: field.getErrors('branchLimit')
-		}) }}
-	{% endblock %}
+    {% block branchLimitField %}
+        {{ forms.textField({
+            label: "Branch Limit"|t('app'),
+            instructions: "Limit the number of selectable category branches."|t('app'),
+            id: 'branchLimit',
+            name: 'branchLimit',
+            value: field.branchLimit,
+            size: 2,
+            errors: field.getErrors('branchLimit')
+        }) }}
+    {% endblock %}
 
-	{{ block('viewModeField') }}
-	{{ block('selectionLabelField') }}
-	{{ block('advancedSettings') }}
+    {{ block('viewModeField') }}
+    {{ block('selectionLabelField') }}
+    {{ block('advancedSettings') }}
 {% endblock %}

@@ -103,22 +103,20 @@ class RegularExpression extends SproutFormsBaseField implements PreviewableField
     }
 
     /**
-     * @param \barrelstrength\sproutforms\contracts\FieldModel $field
      * @param mixed                                            $value
-     * @param mixed                                            $settings
      * @param array|null                                       $renderingOptions
      *
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
+    public function getFormInputHtml($value, array $renderingOptions = null): string
     {
         $this->beginRendering();
 
-        $placeholder = isset($settings['placeholder']) ? $settings['placeholder'] : '';
+        $placeholder = $this->placeholder ?? '';
 
-        $pattern = $settings['customPattern'];
+        $pattern = $this->customPattern;
 
         // Do no escape "-" html5 does not treat it as special chars
         $pattern = str_replace("\\-", '-', $pattern);
@@ -126,11 +124,11 @@ class RegularExpression extends SproutFormsBaseField implements PreviewableField
         $rendered = Craft::$app->getView()->renderTemplate(
             'regularexpression/input',
             [
-                'name' => $field->handle,
+                'name' => $this->handle,
                 'value' => $value,
-                'field' => $field,
+                'field' => $this,
                 'pattern' => $pattern,
-                'errorMessage' => $settings['customPatternErrorMessage'],
+                'errorMessage' => $this->customPatternErrorMessage,
                 'renderingOptions' => $renderingOptions,
                 'placeholder' => $placeholder
             ]

@@ -9,6 +9,7 @@ use yii\db\Schema;
 use craft\helpers\Template as TemplateHelper;
 
 use barrelstrength\sproutbase\SproutBase;
+use barrelstrength\sproutbase\models\sproutfields\Name as NameModel;
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 
 class Name extends SproutFormsBaseField implements PreviewableFieldInterface
@@ -33,6 +34,14 @@ class Name extends SproutFormsBaseField implements PreviewableFieldInterface
      */
     public $displaySuffix;
 
+    /**
+     * @var string
+     */
+    private $hasMultipleLabels = false;
+
+    /**
+     * @inheritdoc
+     */
     public static function displayName(): string
     {
         return Craft::t('sprout-forms','Name');
@@ -41,9 +50,26 @@ class Name extends SproutFormsBaseField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
+    public function hasMultipleLabels()
+    {
+        return $this->hasMultipleLabels;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getContentColumnType(): string
     {
         return Schema::TYPE_STRING;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getSvgIconPath()
+    {
+        return '@sproutbaseicons/user.svg';
     }
 
     /**
@@ -63,18 +89,10 @@ class Name extends SproutFormsBaseField implements PreviewableFieldInterface
      */
     public function getSettingsHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/name/settings',
+        return Craft::$app->getView()->renderTemplate('sprout-base/sproutfields/_fields/name/settings',
             [
                 'field' => $this,
             ]);
-    }
-
-    /**
-     * @return string
-     */
-    public function getSvgIconPath()
-    {
-        return '@sproutbaseicons/user.svg';
     }
 
     /**
@@ -82,6 +100,7 @@ class Name extends SproutFormsBaseField implements PreviewableFieldInterface
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
+
         $name = $this->handle;
         $inputId = Craft::$app->getView()->formatInputId($name);
         $namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
@@ -91,15 +110,14 @@ class Name extends SproutFormsBaseField implements PreviewableFieldInterface
         // Set this to false for Quick Entry Dashboard Widget
         $elementId = ($element != null) ? $element->id : false;
 
-        $value = json_decode($value, true);
-
-        $rendered = Craft::$app->getView()->renderTemplate('sprout-base/sproutfields/_fields/name/input',
+        $rendered = Craft::$app->getView()->renderTemplate(
+            'sprout-base/sproutfields/_fields/name/input',
             [
                 'namespaceInputId' => $namespaceInputId,
                 'id' => $inputId,
                 'name' => $name,
                 'field' => $this,
-                'value' => $value['address'] ?? null,
+                'value' => $value,
                 'elementId' => $elementId,
                 'fieldContext' => $fieldContext
             ]);
@@ -108,31 +126,100 @@ class Name extends SproutFormsBaseField implements PreviewableFieldInterface
     }
 
     /**
-     * @param \barrelstrength\sproutforms\contracts\FieldModel $field
      * @param mixed                                            $value
-     * @param mixed                                            $settings
      * @param array|null                                       $renderingOptions
      *
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
+    public function getFormInputHtml($value, array $renderingOptions = null): string
     {
         $this->beginRendering();
+
+        if ($this->displayMultipleFields)
+        {
+            $this->hasMultipleLabels = true;
+        }
 
         $rendered = Craft::$app->getView()->renderTemplate(
             'name/input',
             [
-                'name' => $field->handle,
+                'name' => $this->handle,
                 'value' => $value,
-                'field' => $field,
+                'field' => $this,
                 'renderingOptions' => $renderingOptions
             ]
         );
-//
+
         $this->endRendering();
-//
+
         return TemplateHelper::raw($rendered);
+    }
+
+    /**
+     * Prepare our Name for use as an NameModel
+     *
+     * @todo - move to helper as we can use this on both Sprout Forms and Sprout Fields
+     *
+     * @param                       $value
+     * @param ElementInterface|null $element
+     *
+     * @return NameModel|mixed
+     */
+    public function normalizeValue($value, ElementInterface $element = null)
+    {
+        $nameModel = new NameModel();
+
+        // String value when retrieved from db
+        if (is_string($value)) {
+            $nameArray = json_decode($value, true);
+            $nameModel->setAttributes($nameArray, false);
+        }
+
+        // Array value from post data
+        if (is_array($value) && isset($value['address'])) {
+
+            $nameModel->setAttributes($value['address'], false);
+
+            if ($fullNameShort = $value['address']['fullNameShort'] ?? null)
+            {
+                $nameArray = explode(' ',trim($fullNameShort));
+
+                $nameModel->firstName = $nameArray[0] ?? $fullNameShort;
+                unset($nameArray[0]);
+
+                $nameModel->lastName = implode(' ', $nameArray);
+            }
+        }
+
+        return $nameModel;
+    }
+
+    /**
+     *
+     * Prepare the field value for the database.
+     *
+     * @todo - move to helper as we can use this on both Sprout Forms and Sprout Fields
+     *
+     * We store the Name as JSON in the content column.
+     *
+     * @param                       $value
+     * @param ElementInterface|null $element
+     *
+     * @return array|bool|mixed|null|string
+     */
+    public function serializeValue($value, ElementInterface $element = null)
+    {
+        if (empty($value)) {
+            return false;
+        }
+
+        // Submitting an Element to be saved
+        if (is_object($value) && get_class($value) == NameModel::class) {
+            return json_encode($value->getAttributes());
+        }
+
+        return $value;
     }
 }

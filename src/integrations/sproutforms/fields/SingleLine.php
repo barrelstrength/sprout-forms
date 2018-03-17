@@ -11,7 +11,7 @@ use craft\base\PreviewableFieldInterface;
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
 
 /**
- * Class PlainText
+ * Class SingleLine
  *
  * @package Craft
  */
@@ -45,7 +45,7 @@ class SingleLine extends SproutFormsBaseField implements PreviewableFieldInterfa
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/plaintext/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/singleline/example',
             [
                 'field' => $this
             ]
@@ -69,26 +69,23 @@ class SingleLine extends SproutFormsBaseField implements PreviewableFieldInterfa
     }
 
     /**
-     * @param \barrelstrength\sproutforms\contracts\FieldModel $field
      * @param mixed                                            $value
-     * @param mixed                                            $settings
      * @param array|null                                       $renderingOptions
      *
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getFormInputHtml($field, $value, $settings, array $renderingOptions = null): string
+    public function getFormInputHtml($value, array $renderingOptions = null): string
     {
         $this->beginRendering();
 
         $rendered = Craft::$app->getView()->renderTemplate(
-            'plaintext/input',
+            'singleline/input',
             [
-                'name' => $field->handle,
+                'name' => $this->handle,
                 'value' => $value,
-                'field' => $field,
-                'settings' => $settings,
+                'field' => $this,
                 'renderingOptions' => $renderingOptions
             ]
         );
@@ -106,7 +103,7 @@ class SingleLine extends SproutFormsBaseField implements PreviewableFieldInterfa
     public function getSettingsHtml()
     {
         $rendered = Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/plaintext/settings',
+            'sprout-forms/_components/fields/singleline/settings',
             [
                 'field' => $this,
             ]
