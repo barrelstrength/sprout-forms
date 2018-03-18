@@ -305,12 +305,15 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
     box-sizing: border-box;
     transition: opacity 0.4s ease-in-out;
 }
-
 #sproutforms-source-fields .source-field.drag-active {
     background-color: rgba(0, 0, 0, .025);
     border: 2px dashed rgba(0, 0, 0, .1);
     color: rgb(41, 50, 61);
     opacity: .2;
+}
+
+.source-field.drag-active.gu-transit .sproutforms-icon svg {
+    display: none;
 }
 
 .target-field.drag-active.gu-mirror {
