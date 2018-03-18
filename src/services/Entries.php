@@ -265,7 +265,7 @@ class Entries extends Component
 
         try {
             if (!$event->isValid) {
-                foreach ($event->errors as $key => $error){
+                foreach ($event->errors as $key => $error) {
                     $entry->addError($key, $error);
                 }
 
@@ -549,7 +549,7 @@ class Entries extends Component
 
         $saveData = $settings->enableSaveData;
 
-        if (($settings->enableSaveDataPerFormBasis && $saveData) || $form->submitAction){
+        if (($settings->enableSaveDataPerFormBasis && $saveData) || $form->submitAction) {
             $saveData = $form->saveData;
         }
 
