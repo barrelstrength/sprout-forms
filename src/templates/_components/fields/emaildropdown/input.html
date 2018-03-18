@@ -4,7 +4,7 @@
 {%- set hasInstructions = field.instructions ? true : false %}
 {%- set value = value ? value : null %}
 
-{%- set options = field.options is defined ? field.options : [] %}
+{%- set options = options ? options : [] %}
 
 {%- set dataAttributes = null %}
 {%- set data = renderingOptions.data ?? null %}
@@ -19,23 +19,21 @@
             {%- if class %} class="{{ class }}"{% endif %}
             {%- if required %} required aria-required="true"{% endif %}
             {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
-            {{- dataAttributes|raw -}}
-    >
-        <optgroup>
-            {%- for key, option in options -%}
+            {{- dataAttributes|raw -}}>
 
-                {%- set optionLabel = (option.label is defined ? option.label : null) -%}
-                {%- set optionValue = (option.value is defined ? option.value : key) -%}
+        {%- for key, option in options -%}
 
-                {% if value != "" %}
-                    {% set selected = (option.selected == 1) ? true : false %}
-                {% else %}
-                    {% set selected = (option.default == 1) ? true : false %}
-                {% endif %}
+            {%- set optionLabel = option.label is defined ? option.label : null -%}
+            {%- set optionValue = option.value is defined ? option.value : key -%}
 
-                <option value="{{ optionValue }}"
-                        {% if selected %}selected{% endif %}>{{ optionLabel }}</option>
-            {% endfor %}
-        </optgroup>
+            {% if value != "" %}
+                {% set selected = (option.selected == 1) ? true : false %}
+            {% else %}
+                {% set selected = (option.default == 1) ? true : false %}
+            {% endif %}
+
+            <option value="{{ optionValue }}"
+                    {% if selected %}selected{% endif %}>{{ optionLabel }}</option>
+        {% endfor %}
     </select>
 {% endspaceless %}

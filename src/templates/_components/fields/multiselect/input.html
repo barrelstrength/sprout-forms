@@ -2,7 +2,7 @@
 {%- set class = renderingOptions.class ?? name %}
 {%- set required = field.required ? true : false %}
 {%- set hasInstructions = field.instructions ? true : false %}
-{%- set value = value ? value : null %}
+{%- set values = value ? value : null %}
 
 {%- set options = field.options ? field.options : [] %}
 
@@ -20,15 +20,13 @@
             {%- if required %} required aria-required="true"{% endif %}
             {{- dataAttributes|raw -}}
     >
-        <optgroup>
-            {%- for key, option in options %}
+        {%- for key, option in options %}
 
-                {%- set optionLabel = (option.label is defined ? option.label : null) %}
-                {%- set optionValue = (option.value is defined ? option.value : key) -%}
+            {%- set optionLabel = (option.label is defined ? option.label : null) %}
+            {%- set optionValue = (option.value is defined ? option.value : key) -%}
 
-                <option value="{{ optionValue }}"{% if optionValue in values %} selected{% endif %}>{{ optionLabel }}</option>
+            <option value="{{ optionValue }}"{% if optionValue in values %} selected{% endif %}>{{ optionLabel }}</option>
 
-            {%- endfor %}
-        </optgroup>
+        {%- endfor %}
     </select>
 {% endspaceless %}
