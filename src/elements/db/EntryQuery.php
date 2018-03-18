@@ -115,7 +115,7 @@ class EntryQuery extends ElementQuery
         $this->contentTable = null;
 
         if ($this->id && $this->formId) {
-            $form = SprotForms::$app->forms->getFormById($this->formId);
+            $form = SproutForms::$app->forms->getFormById($this->formId);
 
             if ($form) {
                 $this->contentTable = $form->getContentTable();
@@ -202,6 +202,7 @@ class EntryQuery extends ElementQuery
             if ($form) {
                 $fields = $form->getFields();
                 $fieldPrefix = Craft::$app->content->fieldColumnPrefix;
+
                 $select = $entryQuery->query->select;
                 $select[] = "{$form->handle}.title";
 
