@@ -174,21 +174,21 @@ class Phone extends SproutFormsBaseField implements PreviewableFieldInterface
      */
     public function validatePhone(ElementInterface $element)
     {
-        $value = $element->getFieldValue($this->handle);
-
-        $handle = $this->handle;
-        $name = $this->name;
-
-        if ($this->mask == "") {
-            $this->mask = SproutBase::$app->phone->getDefaultMask();
-        }
-
-        if (!SproutBase::$app->phone->validate($value, $this->mask)) {
-            $element->addError(
-                $this->handle,
-                SproutBase::$app->phone->getErrorMessage($this)
-            );
-        }
+//        $value = $element->getFieldValue($this->handle);
+//
+//        $handle = $this->handle;
+//        $name = $this->name;
+//
+//        if ($this->mask == "") {
+//            $this->mask = SproutBase::$app->phone->getDefaultMask();
+//        }
+//
+//        if (!SproutBase::$app->phone->validate($value, $this->mask)) {
+//            $element->addError(
+//                $this->handle,
+//                SproutBase::$app->phone->getErrorMessage($this)
+//            );
+//        }
     }
 
     /**
