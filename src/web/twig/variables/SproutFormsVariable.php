@@ -240,8 +240,6 @@ class SproutFormsVariable
 
                 $view->setTemplatesPath($formField->getTemplatesPath());
 
-                $formField->getFormInputHtml($value, $renderingOptions);
-
                 // Set Tab template path
                 $view->setTemplatesPath($templatePaths['field']);
 
@@ -253,9 +251,8 @@ class SproutFormsVariable
                         'field' => $field,
                         'required' => $field->required,
                         'element' => $entry,
-                        'formField' => $formField,
                         'renderingOptions' => $renderingOptions,
-                        'thirdPartySubmission' => (bool) $form->submitAction,
+                        'thirdPartySubmission' => (bool) $form->submitAction
                     ]
                 );
 
