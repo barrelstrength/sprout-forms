@@ -508,15 +508,14 @@ class Entries extends Component
      */
     public function handleUnobfuscateEmailAddresses($form)
     {
-        if (Craft::$app->request->getIsCpRequest()) {
+        if (!Craft::$app->request->getIsSiteRequest()) {
             return;
         }
 
-        $formId = $form->id;
         $submittedFields = Craft::$app->request->getBodyParam('fields');
 
         // Unobfuscate email address in $_POST request
-        $this->unobfuscateEmailAddresses($formId, $submittedFields);
+        $this->unobfuscateEmailAddresses($form->id, $submittedFields);
     }
 
     /**
