@@ -18,6 +18,7 @@ use craft\db\Query;
 use barrelstrength\sproutforms\records\EntryStatus as EntryStatusRecord;
 use craft\base\ElementInterface;
 use yii\base\Component;
+use yii\base\Exception;
 
 class Entries extends Component
 {
@@ -248,11 +249,11 @@ class Entries extends Component
         $entry->validate();
 
         if ($entry->hasErrors()) {
-            SproutForms::error('Entry has errors');
+
+            SproutForms::error($entry->getErrors());
 
             return false;
         }
-        // EVENT_BEFORE_SAVE event moved to the element class https://github.com/craftcms/docs/blob/master/en/updating-plugins.md#events
 
         $event = new OnBeforeSaveEntryEvent([
             'entry' => $entry
@@ -278,22 +279,17 @@ class Entries extends Component
                 return false;
             }
 
-            SproutForms::info('Transaction: Event is Valid');
-
             $success = Craft::$app->getElements()->saveElement($entry);
 
             if (!$success) {
-                $transaction->rollBack();
                 SproutForms::error('Couldn’t save Element on saveEntry service.');
-
+                $transaction->rollBack();
                 return false;
             }
 
-            SproutForms::info('Element Saved!');
+            SproutForms::info('Form Entry Element Saved.');
 
             $transaction->commit();
-
-            SproutForms::info('Transaction committed');
 
             $this->callOnSaveEntryEvent($entry, $isNewEntry);
         } catch (\Exception $e) {
