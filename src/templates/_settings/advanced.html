@@ -12,44 +12,6 @@
         {% namespace 'settings' %}
 
             {{ forms.lightswitchField({
-                label: "Enable custom form templates globally"|t,
-                instructions: "Enable this setting if you wish to override the default form templates globally and provide your own custom templates. Sprout Forms will display your dynamic forms using the form templates it finds with the following priority: 1) individual custom form template folder, 2) global custom form templates folder, and 3) Sprout Forms default form templates."|t,
-                name: 'toggleTemplateFolderOverride',
-                toggle: 'settings-defaulttemplateoverride',
-                on: settings.toggleTemplateFolderOverride,
-                onLabel: "Enable"|t,
-            }) }}
-
-            <div id="settings-defaulttemplateoverride"
-                 class="{% if not settings.toggleTemplateFolderOverride %} hidden {% endif %}">
-
-                {% set templateOptions = craft.sproutForms.getTemplateOptions() %}
-
-                {{ forms.field({
-                    label: "Template"|t('sprout-forms'),
-                    first: true,
-                    instructions: "The template folder for your custom form templates."|t,
-                }, sproutFields.selectOther({
-                    name: 'templateFolderOverride',
-                    options: templateOptions,
-                    value: settings.templateFolderOverride ?? null,
-                    otherPlaceholderText: 'Custom Template'|t('sprout-forms')
-                })) }}
-
-            </div>
-
-            {{ forms.lightswitchField({
-                label: "Enable custom form templates on a per-form basis"|t,
-                instructions: "Allow admins to (optionally) add custom form templates for each form created. Enabling this setting will display additional fields to manage your custom form settings on every Form Element."|t,
-                id: 'enablePerFormTemplateFolderOverride',
-                name: 'enablePerFormTemplateFolderOverride',
-                on: settings.enablePerFormTemplateFolderOverride,
-                onLabel: "Enable"|t,
-            }) }}
-
-            <hr>
-
-            {{ forms.lightswitchField({
                 label: "Save data from form submissions in the Craft database"|t,
                 instructions: "By default, Sprout Forms will save your form submissions to the Craft database. Disable this setting if you wish to stop Sprout Forms from saving data to the Craft database."|t,
                 id: 'enableSaveData',

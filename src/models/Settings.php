@@ -9,7 +9,6 @@ use Craft;
 class Settings extends Model
 {
     public $pluginNameOverride = '';
-    public $toggleTemplateFolderOverride = 0;
     public $templateFolderOverride = '';
     public $enablePayloadForwarding = 0;
     public $enableSaveData = 1;
@@ -33,6 +32,12 @@ class Settings extends Model
                 'selected' => 'general',
                 'template' => 'sprout-forms/_settings/general'
             ],
+            'spam-protection' => [
+                'label' => Craft::t('sprout-forms', 'Spam Protection'),
+                'url' => 'sprout-forms/settings/spam-protection',
+                'selected' => 'spam-protection',
+                'template' => 'sprout-forms/_settings/spamprotection'
+            ],
             'entry-statuses' => [
                 'label' => Craft::t('sprout-forms', 'Entry Statuses'),
                 'url' => 'sprout-forms/settings/entry-statuses',
@@ -40,12 +45,6 @@ class Settings extends Model
                 'template' => 'sprout-forms/_settings/entrystatuses',
                 'actionTemplate' => 'sprout-forms/_includes/actionStatusButton',
                 'variables' => $variables
-            ],
-            'spam-protection' => [
-                'label' => Craft::t('sprout-forms', 'Spam Protection'),
-                'url' => 'sprout-forms/settings/spam-protection',
-                'selected' => 'spam-protection',
-                'template' => 'sprout-forms/_settings/spamprotection'
             ],
             'advanced' => [
                 'label' => Craft::t('sprout-forms', 'Advanced'),

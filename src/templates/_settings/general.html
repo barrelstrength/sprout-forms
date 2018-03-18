@@ -1,4 +1,7 @@
+{% requirePermission "editSproutFormsSettings" %}
+
 {% import "_includes/forms" as forms %}
+{% import "sprout-base/sproutfields/forms" as sproutFields %}
 
 {{ forms.textField({
     label: "Plugin Name"|t('sprout-forms'),
@@ -10,4 +13,26 @@
     autofocus: true,
     first: true,
     errors: ''
+}) }}
+
+{% set templateOptions = craft.sproutForms.getTemplateOptions() %}
+
+{{ forms.field({
+    label: "Template"|t('sprout-forms'),
+    first: true,
+    instructions: "The template folder for your custom form templates."|t,
+}, sproutFields.selectOther({
+    name: 'templateFolderOverride',
+    options: templateOptions,
+    value: settings.templateFolderOverride ?? null,
+    otherPlaceholderText: 'Custom Template'|t('sprout-forms')
+})) }}
+
+{{ forms.lightswitchField({
+    label: "Enable custom form templates on a per-form basis"|t,
+    instructions: "Allow admins to (optionally) add custom form templates for each form created. Enabling this setting will display additional fields to manage your custom form settings on every Form Element."|t,
+    id: 'enablePerFormTemplateFolderOverride',
+    name: 'enablePerFormTemplateFolderOverride',
+    on: settings.enablePerFormTemplateFolderOverride,
+    onLabel: "Enable"|t,
 }) }}

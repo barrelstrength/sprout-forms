@@ -691,7 +691,7 @@ class Forms extends Component
         $defaultVersion = new SproutForms3();
         $defaultTemplate = $defaultVersion->getPath();
 
-        if ($settings->toggleTemplateFolderOverride && $settings->templateFolderOverride){
+        if ($settings->templateFolderOverride){
             $templatePath = $this->getTemplatePathById($settings->templateFolderOverride);
             if ($templatePath){
                 // custom path by template API
