@@ -17,6 +17,28 @@ use barrelstrength\sproutforms\SproutForms;
  */
 class Categories extends SproutBaseRelationField
 {
+    // Properties
+    // =====================================================================
+
+    /**
+     * @var int|null Branch limit
+     */
+    public $branchLimit;
+
+    /**
+     * @inheritdoc
+     */
+    public function init()
+    {
+        parent::init();
+        $this->allowLimit = false;
+        $this->allowMultipleSources = false;
+        $this->settingsTemplate = 'sprout-forms/_components/fields/categories/settings';
+        $this->inputTemplate = '_components/fieldtypes/Categories/input';
+        $this->inputJsClass = 'Craft.CategorySelectInput';
+        $this->sortable = false;
+    }
+
     /**
      * @inheritdoc
      */
@@ -39,28 +61,6 @@ class Categories extends SproutBaseRelationField
     public static function defaultSelectionLabel(): string
     {
         return Craft::t('sprout-forms', 'Add a category');
-    }
-
-    // Properties
-    // =====================================================================
-
-    /**
-     * @var int|null Branch limit
-     */
-    public $branchLimit;
-
-    /**
-     * @inheritdoc
-     */
-    public function init()
-    {
-        parent::init();
-        $this->allowLimit = false;
-        $this->allowMultipleSources = false;
-        $this->settingsTemplate = 'sprout-forms/_components/fields/categories/settings';
-        $this->inputTemplate = '_components/fieldtypes/Categories/input';
-        $this->inputJsClass = 'Craft.CategorySelectInput';
-        $this->sortable = false;
     }
 
     /**

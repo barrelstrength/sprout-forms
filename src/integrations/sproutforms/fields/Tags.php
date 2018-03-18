@@ -17,6 +17,24 @@ use barrelstrength\sproutforms\SproutForms;
  */
 class Tags extends SproutBaseRelationField
 {
+    // Properties
+    // =====================================================================
+
+    /**
+     * @var
+     */
+    private $_tagGroupId;
+
+    /**
+     * @inheritdoc
+     */
+    public function init()
+    {
+        parent::init();
+        $this->allowMultipleSources = false;
+        $this->allowLimit = false;
+    }
+
     /**
      * @inheritdoc
      */
@@ -39,25 +57,6 @@ class Tags extends SproutBaseRelationField
     public static function defaultSelectionLabel(): string
     {
         return Craft::t('sprout-forms', 'Add a Tag');
-    }
-
-    // Properties
-    // =====================================================================
-
-
-    /**
-     * @var
-     */
-    private $_tagGroupId;
-
-    /**
-     * @inheritdoc
-     */
-    public function init()
-    {
-        parent::init();
-        $this->allowMultipleSources = false;
-        $this->allowLimit = false;
     }
 
     /**

@@ -46,10 +46,6 @@
         {% endif %}
     {% endblock %}
 
-    {% block viewModeField %}
-        {{ field.getViewModeFieldHtml()|raw }}
-    {% endblock %}
-
     {% block selectionLabelField %}
         {{ forms.textField({
             label: "Selection Label"|t('app'),
@@ -62,25 +58,10 @@
         }) }}
     {% endblock %}
 
-    {% block advancedSettings %}
-        {% if craft.app.getIsMultiSite() %}
-            <hr>
-            <a class="fieldtoggle"
-               data-target="advanced">{{ "Advanced"|t('app') }}</a>
-            <div id="advanced" class="hidden">
-                {% block targetSiteField %}
-                    {{ field.getTargetSiteFieldHtml()|raw }}
-                {% endblock %}
+    {% if craft.app.getIsMultiSite() %}
 
-                {% block localizeRelationsField %}
-                    {{ forms.checkboxField({
-                        label: "Manage relations on a per-site basis"|t('app'),
-                        id: 'localize-relations',
-                        name: 'localizeRelations',
-                        checked: field.localizeRelations
-                    }) }}
-                {% endblock %}
-            </div>
-        {% endif %}
-    {% endblock %}
+        {{ field.getTargetSiteFieldHtml()|raw }}
+
+    {% endif %}
+
 {% endblock %}
