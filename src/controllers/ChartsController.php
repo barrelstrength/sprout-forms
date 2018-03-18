@@ -48,16 +48,13 @@ class ChartsController extends ElementIndexesController
                 [':formId' => $formId]
             );
         }
-
+        
         // Get the chart data table
-        $dataTable = ChartHelper::getRunChartDataFromQuery($query, $startDate, $endDate,
-            'sproutforms_entries.dateCreated',
-            [
-                'intervalUnit' => $intervalUnit,
-                'valueLabel' => Craft::t('sprout-forms', 'Submissions'),
-                'valueType' => 'number',
-            ]
-        );
+        $dataTable = ChartHelper::getRunChartDataFromQuery($query, $startDate, $endDate, 'sproutforms_entries.dateCreated', 'count', '*', [
+            'intervalUnit' => $intervalUnit,
+            'valueLabel' => Craft::t('sprout-forms', 'Submissions'),
+            'valueType' => 'number',
+        ]);
 
         // Get the total submissions
         $total = 0;
