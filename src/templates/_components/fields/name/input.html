@@ -10,60 +10,77 @@
     {%- set dataAttributes = dataAttributes ~ ' data-'~key~'="'~dataValue~'"' %}
 {% endfor -%}
 
-<div class="{{ name }}-wrapper"
-        {%- if id %} id="{{ id }}"{% endif %}
-        {%- if class %} class="{{ class }}"{% endif %}
-        {{- dataAttributes|raw -}}>
+
 
     {% if field.displayMultipleFields %}
 
-        {% if field.displayPrefix %}
-            <div class="sproutaddressfield-input sproutaddressfield-input-prefix">
-                <label>{{ "Prefix"|t('sprout-fields') }}</label>
-                <input type="text"
-                       name="{{ name ~ '[address][prefix]' }}"
+        <div class="{{ name }}-wrapper"
+                {%- if id %} id="{{ id }}"{% endif %}
+                {%- if class %} class="{{ class }}"{% endif %}
+                {{- dataAttributes|raw -}}>
+
+            {% if field.displayPrefix %}
+                <div {%- if id %} id="{{ id }}-prefix"{% endif %}>
+                    <label>{{ "Prefix"|t('sprout-fields') }}</label>
+                    <input type="text"
+                            {%- if name %} name="{{ name ~ '[address][prefix]' }}"{% endif %}
+                            {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+                            {%- if value %} value="{{ value.prefix }}"{% endif %}
+                    >
+                </div>
+            {% endif %}
+
+            <div {%- if id %} id="{{ id }}-firstName"{% endif %}>
+                <label>{{ "First"|t('sprout-fields') }}</label>
+                <input type="text" autocomplete="given-name"
+                        {%- if name %} name="{{ name ~ '[address][firstName]' }}"{% endif %}
+                        {%- if required %} required aria-required="true"{% endif %}
+                        {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+                        {%- if value %} value="{{ value.firstName }}"{% endif %}
                 >
             </div>
-        {% endif %}
 
-        <div class="sproutaddressfield-input sproutaddressfield-input-firstname">
-            <label>{{ "First"|t('sprout-fields') }}</label>
-            <input type="text" autocomplete="given-name"
-                   name="{{ name ~ '[address][firstName]' }}"
-            >
+            {% if field.displayMiddleName %}
+                <div {%- if id %} id="{{ id }}-middleName"{% endif %}>
+                    <label>{{ "Middle"|t('sprout-fields') }}</label>
+                    <input type="text" autocomplete="additional-name"
+                            {%- if name %} name="{{ name ~ '[address][middleName]' }}"{% endif %}
+                            {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+                            {%- if value %} value="{{ value.middleName }}"{% endif %}
+                    >
+                </div>
+            {% endif %}
+
+            <div {%- if id %} id="{{ id }}-lastName"{% endif %}>
+                <label>{{ "Last"|t('sprout-fields') }}</label>
+                <input type="text" autocomplete="family-name"
+                        {%- if name %} name="{{ name ~ '[address][lastName]' }}"{% endif %}
+                        {%- if required %} required aria-required=" true"{% endif %}
+                        {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+                        {%- if value %} value="{{ value.lastName }}"{% endif %}
+                >
+            </div>
+
+            {% if field.displaySuffix %}
+                <div {%- if id %} id="{{ id }}-suffix"{% endif %}>
+                    <label>{{ "Suffix"|t('sprout-fields') }}</label>
+                    <input type="text"
+                            {%- if name %} name="{{ name ~ '[address][suffix]' }}"{% endif %}
+                            {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+                            {%- if value %} value="{{ value.suffix }}"{% endif %}
+                    >
+                </div>
+            {% endif %}
+
         </div>
-
-        {% if field.displayMiddleName %}
-            <div class="sproutaddressfield-input sproutaddressfield-input-middlename">
-                <label>{{ "Middle"|t('sprout-fields') }}</label>
-                <input type="text" autocomplete="additional-name"
-                       name="{{ name ~ '[address][middleName]' }}"
-                >
-            </div>
-        {% endif %}
-
-        <div class="sproutaddressfield-input sproutaddressfield-input-lastname">
-            <label>{{ "Last"|t('sprout-fields') }}</label>
-            <input type="text" autocomplete="family-name"
-                   name="{{ name ~ '[address][lastName]' }}"
-            >
-        </div>
-
-        {% if field.displaySuffix %}
-            <div class="sproutaddressfield-input sproutaddressfield-input-suffix">
-                <label>{{ "Suffix"|t('sprout-fields') }}</label>
-                <input type="text"
-                       name="{{ name ~ '[address][suffix]' }}"
-                >
-            </div>
-        {% endif %}
 
     {% else %}
 
         <input type="text" autocomplete="name"
-               name="{{ name ~ '[address][fullNameShort]' }}">
-
-        {#value.getFullName()#}
+                {%- if name %} name="{{ name ~ '[address][fullNameShort]' }}"{% endif %}
+                {%- if required %} required aria-required=" true"{% endif %}
+                {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+                {%- if value %} value="{{ value.getFullName() }}"{% endif %}
+        >
 
     {% endif %}
-</div>
