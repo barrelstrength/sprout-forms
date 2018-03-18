@@ -20,6 +20,7 @@ use barrelstrength\sproutforms\integrations\sproutforms\captchas\invisiblecaptch
 use barrelstrength\sproutforms\integrations\sproutforms\templates\SproutForms2;
 use barrelstrength\sproutforms\integrations\sproutforms\templates\SproutForms3;
 use barrelstrength\sproutforms\integrations\sproutimport\themes\BasicFieldsTheme;
+use barrelstrength\sproutforms\integrations\sproutimport\themes\SpecialFieldsTheme;
 use barrelstrength\sproutforms\services\App;
 use barrelstrength\sproutforms\services\Entries;
 use barrelstrength\sproutforms\services\Forms;
@@ -165,6 +166,7 @@ class SproutForms extends Plugin
 
         Event::on(Themes::class, Themes::EVENT_REGISTER_THEMES, function(RegisterComponentTypesEvent $event) {
             $event->types[] = BasicFieldsTheme::class;
+            $event->types[] = SpecialFieldsTheme::class;
         });
     }
 
