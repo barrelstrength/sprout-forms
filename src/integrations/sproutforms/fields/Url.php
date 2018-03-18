@@ -107,8 +107,8 @@ class Url extends SproutFormsBaseField implements PreviewableFieldInterface
     }
 
     /**
-     * @param mixed                                            $value
-     * @param array|null                                       $renderingOptions
+     * @param mixed      $value
+     * @param array|null $renderingOptions
      *
      * @return string
      * @throws \Twig_Error_Loader
@@ -177,12 +177,10 @@ class Url extends SproutFormsBaseField implements PreviewableFieldInterface
      */
     public function getTableAttributeHtml($value, ElementInterface $element): string
     {
-        $html = '';
-
         if ($value) {
-            $html = '<a href="'.$value.'" target="_blank">'.$value.'</a>';
+            return '<a href="'.$value.'" target="_blank">'.$value.'</a>';
         }
 
-        return $html;
+        return '';
     }
 }

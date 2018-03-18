@@ -136,8 +136,8 @@
             "name": "Regular Expression",
             "handle": "regularExpression",
             "instructions": "",
-            "placeholder": "My favorite place is (.*)",
-            "customPattern": null,
+            "placeholder": "My favorite place is ...",
+            "customPattern": "My favorite place is (.*)",
             "customPatternErrorMessage": "Value must begin with 'My favorite place is '"
           }
         ]

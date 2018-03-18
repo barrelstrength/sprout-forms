@@ -48,7 +48,7 @@ class ChartsController extends ElementIndexesController
                 [':formId' => $formId]
             );
         }
-        
+
         // Get the chart data table
         $dataTable = ChartHelper::getRunChartDataFromQuery($query, $startDate, $endDate, 'sproutforms_entries.dateCreated', 'count', '*', [
             'intervalUnit' => $intervalUnit,

@@ -71,9 +71,8 @@ class MultipleChoice extends SproutBaseOptionsField
     }
 
     /**
-     * @param \barrelstrength\sproutforms\contracts\FieldModel $field
-     * @param mixed                                            $value
-     * @param array|null                                       $renderingOptions
+     * @param mixed      $value
+     * @param array|null $renderingOptions
      *
      * @return string
      * @throws \Twig_Error_Loader
