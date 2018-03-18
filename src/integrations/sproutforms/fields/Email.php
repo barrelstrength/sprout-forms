@@ -119,7 +119,7 @@ class Email extends SproutFormsBaseField implements PreviewableFieldInterface
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getFormInputHtml($value, array $renderingOptions = null): string
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
         $this->beginRendering();
 

@@ -105,7 +105,7 @@ class CustomHtml extends SproutFormsBaseField implements PreviewableFieldInterfa
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getFormInputHtml($value, array $renderingOptions = null): string
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
         $this->beginRendering();
 

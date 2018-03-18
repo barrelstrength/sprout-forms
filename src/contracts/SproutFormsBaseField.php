@@ -135,7 +135,7 @@ abstract class SproutFormsBaseField extends Field
      *
      * @return \Twig_Markup
      */
-    abstract public function getFormInputHtml($value, array $renderingOptions = null);
+    abstract public function getFrontEndInputHtml($value, array $renderingOptions = null);
 
     /**
      * @inheritdoc

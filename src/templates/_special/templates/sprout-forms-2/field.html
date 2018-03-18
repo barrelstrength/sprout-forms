@@ -11,7 +11,7 @@
     {%- set value            = element is not empty ? element.getFieldValue(name) : null %}
     {%- set errors           = element is not empty ? element.getErrors(name) : null %}
     {%- set errorClass       = renderingOptions.errorClass is defined ? renderingOptions.errorClass : 'errors' %}
-    {%- set input            = field.getFormInputHtml(value, renderingOptions) %}
+    {%- set input            = field.getFrontEndInputHtml(value, renderingOptions) %}
 
     {%- namespace field.getNamespace() -%}
         {%- if field.isPlainInput() -%}

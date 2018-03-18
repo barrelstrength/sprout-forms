@@ -75,7 +75,7 @@ class PrivateNotes extends SproutFormsBaseField
      *
      * @return string
      */
-    public function getFormInputHtml($value, array $renderingOptions = null): string
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
         // Only visible and updated in the Control Panel
         return '';
