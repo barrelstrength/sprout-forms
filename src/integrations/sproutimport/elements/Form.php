@@ -74,7 +74,7 @@ class Form extends BaseElementImporter
         // POST DATA FORMAT
         //'id' => '711'
         //'fieldLayout' => [
-        //'Section 1' => [
+        //'Tab 1' => [
         //    0 => '539'
         //]
         //]

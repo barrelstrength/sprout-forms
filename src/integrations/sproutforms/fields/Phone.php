@@ -90,20 +90,22 @@ class Phone extends SproutFormsBaseField implements PreviewableFieldInterface
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        $view = Craft::$app->getView();
-        $view->registerAssetBundle(PhoneFieldAsset::class);
-        $name = $this->handle;
-        $inputId = Craft::$app->getView()->formatInputId($name);
-        $namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
+//        $view = Craft::$app->getView();
+//        $view->registerAssetBundle(PhoneFieldAsset::class);
+//        $name = $this->handle;
+//        $inputId = Craft::$app->getView()->formatInputId($name);
+//        $namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
+//
+//        return Craft::$app->getView()->renderTemplate('sprout-base/sproutfields/_fields/phone/input',
+//            [
+//                'id' => $namespaceInputId,
+//                'name' => $this->handle,
+//                'value' => $value,
+//                'field' => $this
+//            ]
+//        );
 
-        return Craft::$app->getView()->renderTemplate('sprout-base/sproutfields/_fields/phone/input',
-            [
-                'id' => $namespaceInputId,
-                'name' => $this->handle,
-                'value' => $value,
-                'field' => $this
-            ]
-        );
+        return '';
     }
 
     /**

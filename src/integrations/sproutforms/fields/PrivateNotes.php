@@ -12,21 +12,6 @@ use barrelstrength\sproutbase\web\assets\sproutfields\notes\QuillAsset;
 class PrivateNotes extends SproutFormsBaseField
 {
     /**
-     * @var string
-     */
-    public $notes;
-
-    /**
-     * @var bool
-     */
-    public $hideLabel;
-
-    /**
-     * @var string
-     */
-    public $output;
-
-    /**
      * @inheritdoc
      */
     public static function displayName(): string
@@ -40,14 +25,6 @@ class PrivateNotes extends SproutFormsBaseField
     public function defineContentAttribute()
     {
         return Schema::TYPE_TEXT;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function hasContentColumn(): bool
-    {
-        return false;
     }
 
     /**
@@ -93,8 +70,8 @@ class PrivateNotes extends SproutFormsBaseField
     }
 
     /**
-     * @param mixed                                            $value
-     * @param array|null                                       $renderingOptions
+     * @param mixed      $value
+     * @param array|null $renderingOptions
      *
      * @return string
      */

@@ -102,16 +102,15 @@ class Invisible extends SproutFormsBaseField implements PreviewableFieldInterfac
     }
 
     /**
-     * @param mixed      $value
-     * @param array|null $renderingOptions
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getFormInputHtml($value, array $renderingOptions = null): string
     {
         Craft::$app->getSession()->set($this->handle, $this->value);
 
-        return TemplateHelper::raw(sprintf('<input type="hidden" name="%s" />', $field->handle));
+        $html = '<input type="hidden" name="' . $this->handle . '">';
+
+        return TemplateHelper::raw($html);
     }
 
     /**

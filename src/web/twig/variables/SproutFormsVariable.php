@@ -12,6 +12,7 @@ use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\models\FieldGroup;
 use barrelstrength\sproutforms\models\FieldLayout;
 use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
+use yii\base\Exception;
 
 /**
  * SproutForms provides an API for accessing information about forms. It is accessible from templates via `craft.sproutForms`.
@@ -66,10 +67,13 @@ class SproutFormsVariable
      */
     public function displayForm($formHandle, array $renderingOptions = null)
     {
+        /**
+         * @var $form Form
+         */
         $form = SproutForms::$app->forms->getFormByHandle($formHandle);
 
         if (!$form) {
-            throw new \Exception(Craft::t('sprout-forms', 'Unable to find form with the handle `{handle}`', [
+            throw new Exception(Craft::t('sprout-forms', 'Unable to find form with the handle `{handle}`', [
                 'handle' => $formHandle
             ]));
         }
@@ -206,7 +210,7 @@ class SproutFormsVariable
             return false;
         }
 
-        if (!is_null($renderingOptions)) {
+        if ($renderingOptions !== null) {
             $renderingOptions = [
                 'fields' => [
                     $fieldHandle => $renderingOptions
@@ -214,6 +218,9 @@ class SproutFormsVariable
             ];
         }
 
+        /**
+         * @var $form Form
+         */
         $form = SproutForms::$app->forms->getFormByHandle($formHandle);
         $entry = SproutForms::$app->entries->getEntry($form);
 
@@ -594,13 +601,22 @@ class SproutFormsVariable
         $settings = $plugin->getSettings();
         $templateFolder = $settings->templateFolderOverride;
 
-        array_push($options, ['optgroup' => Craft::t('sprout-forms','Custom')]);
+        $options[] = [
+            'optgroup' => Craft::t('sprout-forms','Custom')
+        ];
+
 
         if (!array_key_exists($templateFolder, $templateIds) && $templateFolder != '') {
-            array_push($options, ['label' => $templateFolder, 'value' => $templateFolder]);
+            $options[] = [
+                'label' => $templateFolder,
+                'value' => $templateFolder
+            ];
         }
 
-        array_push($options, ['label' => Craft::t('sprout-forms','Add Custom'), 'value' => 'custom']);
+        $options[] = [
+            'label' => Craft::t('sprout-forms','Add Custom'),
+            'value' => 'custom'
+        ];
 
         return $options;
     }

@@ -22,11 +22,17 @@ class Hidden extends SproutFormsBaseField implements PreviewableFieldInterface
      */
     public $value = '';
 
+    /**
+     * @inheritdoc
+     */
     public function isPlainInput()
     {
         return true;
     }
 
+    /**
+     * @inheritdoc
+     */
     public static function displayName(): string
     {
         return Craft::t('sprout-forms', 'Hidden');
@@ -52,7 +58,7 @@ class Hidden extends SproutFormsBaseField implements PreviewableFieldInterface
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getSvgIconPath()
     {

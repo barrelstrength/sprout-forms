@@ -188,9 +188,7 @@ class EmailDropdown extends SproutBaseOptionsField
             $invalidEmails = [];
             foreach ($emailAddresses as $emailAddress) {
                 if (!filter_var($emailAddress, FILTER_VALIDATE_EMAIL)) {
-                    $invalidEmails[] = Craft::t('sprout-forms',
-                        $emailAddress.' email does not validate'
-                    );
+                    $invalidEmails[] = Craft::t('sprout-forms', 'Email does not validate: '. $emailAddress);
                 }
             }
         }
