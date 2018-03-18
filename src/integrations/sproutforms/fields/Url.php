@@ -145,16 +145,12 @@ class Url extends SproutFormsBaseField implements PreviewableFieldInterface
      */
     public function getElementValidationRules(): array
     {
-        $rules = parent::getElementValidationRules();
-        $rules[] = 'validateUrl';
-
-        return $rules;
+        return ['validateUrl'];
     }
 
     /**
      * Validates our fields submitted value beyond the checks
      * that were assumed based on the content attribute.
-     *
      *
      * @param ElementInterface $element
      *

@@ -157,10 +157,7 @@ class Phone extends SproutFormsBaseField implements PreviewableFieldInterface
      */
     public function getElementValidationRules(): array
     {
-        $rules = parent::getElementValidationRules();
-        $rules[] = 'validatePhone';
-
-        return $rules;
+        return ['validatePhone'];
     }
 
     /**

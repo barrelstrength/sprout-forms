@@ -162,10 +162,7 @@ class EmailDropdown extends SproutBaseOptionsField
      */
     public function getElementValidationRules(): array
     {
-        $rules = parent::getElementValidationRules();
-        $rules[] = 'validateEmailDropdown';
-
-        return $rules;
+        return ['validateEmailDropdown'];
     }
 
     /**
@@ -180,22 +177,25 @@ class EmailDropdown extends SproutBaseOptionsField
     {
         $value = $element->getFieldValue($this->handle)->value;
 
-        $emailAddresses = StringHelper::split($value);
+        $invalidEmails = [];
 
-        $emailAddresses = array_unique($emailAddresses);
+        $emailString = $this->options[$value]->value ?? null;
 
-        if (count($emailAddresses)) {
-            $invalidEmails = [];
+        if ($emailId) {
+
+            $emailAddresses = StringHelper::split($emailString);
+            $emailAddresses = array_unique($emailAddresses);
+
             foreach ($emailAddresses as $emailAddress) {
                 if (!filter_var($emailAddress, FILTER_VALIDATE_EMAIL)) {
-                    $invalidEmails[] = Craft::t('sprout-forms', 'Email does not validate: '. $emailAddress);
+                    $invalidEmails[] = Craft::t('sprout-forms', 'Email does not validate: '.$emailAddress);
                 }
             }
         }
 
         if (!empty($invalidEmails)) {
             foreach ($invalidEmails as $invalidEmail) {
-                $element->addError($this->handle, $invalidEmail, $this);
+                $element->addError($this->handle, $invalidEmail);
             }
         }
     }

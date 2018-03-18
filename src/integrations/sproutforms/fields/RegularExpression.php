@@ -144,16 +144,12 @@ class RegularExpression extends SproutFormsBaseField implements PreviewableField
      */
     public function getElementValidationRules(): array
     {
-        $rules = parent::getElementValidationRules();
-        $rules[] = 'validateRegularExpression';
-
-        return $rules;
+        return ['validateRegularExpression'];
     }
 
     /**
      * Validates our fields submitted value beyond the checks
      * that were assumed based on the content attribute.
-     *
      *
      * @param ElementInterface $element
      *
@@ -164,8 +160,7 @@ class RegularExpression extends SproutFormsBaseField implements PreviewableField
         $value = $element->getFieldValue($this->handle);
 
         if (!SproutBase::$app->regularExpression->validate($value, $this)) {
-            $element->addError(
-                $this->handle,
+            $element->addError($this->handle,
                 SproutBase::$app->regularExpression->getErrorMessage($this)
             );
         }

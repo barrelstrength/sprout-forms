@@ -149,10 +149,7 @@ class Email extends SproutFormsBaseField implements PreviewableFieldInterface
      */
     public function getElementValidationRules(): array
     {
-        $rules = parent::getElementValidationRules();
-        $rules[] = 'validateEmail';
-
-        return $rules;
+        return ['validateEmail'];
     }
 
     /**
