@@ -4,13 +4,13 @@
     "attributes": {
       "name": "Basic Fields Form",
       "handle": "basicFieldsForm",
-      "titleFormat": "{dateCreated|date('Y-m-d')} – {fullName} – {message|slice(0,22)}...",
+      "titleFormat": "{dateCreated|date('Y-m-d')} – {singleLine}",
       "redirectUri": "?message=thank-you",
       "displaySectionTitles": false
     },
     "settings": {
       "fieldLayout": {
-        "Section 1": [
+        "Tab 1": [
           {
             "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
             "type": "barrelstrength\\sproutforms\\integrations\\sproutforms\\fields\\SectionHeading",
