@@ -41,15 +41,28 @@ class SingleLine extends SproutFormsBaseField implements PreviewableFieldInterfa
     }
 
     /**
-     * @inheritdoc
+     * @return string
      */
-    public function getExampleInputHtml()
+    public function getSvgIconPath()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/singleline/example',
+        return '@sproutbaseicons/font.svg';
+    }
+
+    /**
+     * @return null|string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
+     */
+    public function getSettingsHtml()
+    {
+        $rendered = Craft::$app->getView()->renderTemplate(
+            'sprout-forms/_components/fields/singleline/settings',
             [
-                'field' => $this
+                'field' => $this,
             ]
         );
+
+        return $rendered;
     }
 
     /**
@@ -66,6 +79,18 @@ class SingleLine extends SproutFormsBaseField implements PreviewableFieldInterfa
                 'value' => $value,
                 'field' => $this,
             ]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExampleInputHtml()
+    {
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/singleline/example',
+            [
+                'field' => $this
+            ]
+        );
     }
 
     /**
@@ -93,30 +118,5 @@ class SingleLine extends SproutFormsBaseField implements PreviewableFieldInterfa
         $this->endRendering();
 
         return TemplateHelper::raw($rendered);
-    }
-
-    /**
-     * @return null|string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
-     */
-    public function getSettingsHtml()
-    {
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/singleline/settings',
-            [
-                'field' => $this,
-            ]
-        );
-
-        return $rendered;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSvgIconPath()
-    {
-        return '@sproutbaseicons/font.svg';
     }
 }

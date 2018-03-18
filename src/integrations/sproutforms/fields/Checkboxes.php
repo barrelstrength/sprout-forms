@@ -15,6 +15,15 @@ class Checkboxes extends SproutBaseOptionsField
     /**
      * @inheritdoc
      */
+    public function init()
+    {
+        parent::init();
+        $this->multi = true;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public static function displayName(): string
     {
         return Craft::t('sprout-forms', 'Checkboxes');
@@ -29,24 +38,19 @@ class Checkboxes extends SproutBaseOptionsField
     }
 
     /**
-     * @inheritdoc
+     * @return string
      */
-    public function init()
+    public function getSvgIconPath()
     {
-        parent::init();
-        $this->multi = true;
+        return '@sproutbaseicons/check-square.svg';
     }
 
     /**
      * @inheritdoc
      */
-    public function getExampleInputHtml()
+    protected function optionsSettingLabel(): string
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/checkboxes/example',
-            [
-                'field' => $this
-            ]
-        );
+        return Craft::t('sprout-forms', 'Checkbox Options');
     }
 
     /**
@@ -67,6 +71,18 @@ class Checkboxes extends SproutBaseOptionsField
                 'values' => $value,
                 'options' => $options
             ]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExampleInputHtml()
+    {
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/checkboxes/example',
+            [
+                'field' => $this
+            ]
+        );
     }
 
     /**
@@ -94,21 +110,5 @@ class Checkboxes extends SproutBaseOptionsField
         $this->endRendering();
 
         return TemplateHelper::raw($rendered);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function optionsSettingLabel(): string
-    {
-        return Craft::t('sprout-forms', 'Checkbox Options');
-    }
-
-    /**
-     * @return string
-     */
-    public function getSvgIconPath()
-    {
-        return '@sproutbaseicons/check-square.svg';
     }
 }

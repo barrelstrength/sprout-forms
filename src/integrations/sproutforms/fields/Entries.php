@@ -30,6 +30,15 @@ class Entries extends SproutBaseRelationField
         return Entry::class;
     }
 
+
+    /**
+     * @return string
+     */
+    public function getSvgIconPath()
+    {
+        return '@sproutbaseicons/newspaper-o.svg';
+    }
+
     /**
      * @inheritdoc
      */
@@ -37,9 +46,6 @@ class Entries extends SproutBaseRelationField
     {
         return Craft::t('sprout-forms', 'Add an Entry');
     }
-
-    // Properties
-    // =====================================================================
 
     /**
      * @inheritdoc
@@ -81,13 +87,5 @@ class Entries extends SproutBaseRelationField
         $this->endRendering();
 
         return TemplateHelper::raw($rendered);
-    }
-
-    /**
-     * @return string
-     */
-    public function getSvgIconPath()
-    {
-        return '@sproutbaseicons/newspaper-o.svg';
     }
 }

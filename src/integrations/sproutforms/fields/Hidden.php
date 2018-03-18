@@ -25,17 +25,17 @@ class Hidden extends SproutFormsBaseField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function isPlainInput()
+    public static function displayName(): string
     {
-        return true;
+        return Craft::t('sprout-forms', 'Hidden');
     }
 
     /**
      * @inheritdoc
      */
-    public static function displayName(): string
+    public function isPlainInput()
     {
-        return Craft::t('sprout-forms', 'Hidden');
+        return true;
     }
 
     /**
@@ -49,17 +49,6 @@ class Hidden extends SproutFormsBaseField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function getSettingsHtml()
-    {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/hidden/settings',
-            [
-                'field' => $this,
-            ]);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getSvgIconPath()
     {
         return '@sproutbaseicons/user-secret.svg';
@@ -68,13 +57,12 @@ class Hidden extends SproutFormsBaseField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function getExampleInputHtml()
+    public function getSettingsHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/hidden/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/hidden/settings',
             [
-                'field' => $this
-            ]
-        );
+                'field' => $this,
+            ]);
     }
 
     /**
@@ -92,8 +80,20 @@ class Hidden extends SproutFormsBaseField implements PreviewableFieldInterface
     }
 
     /**
-     * @param mixed                                            $value
-     * @param array|null                                       $renderingOptions
+     * @inheritdoc
+     */
+    public function getExampleInputHtml()
+    {
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/hidden/example',
+            [
+                'field' => $this
+            ]
+        );
+    }
+
+    /**
+     * @param mixed      $value
+     * @param array|null $renderingOptions
      *
      * @return string
      * @throws \Twig_Error_Loader

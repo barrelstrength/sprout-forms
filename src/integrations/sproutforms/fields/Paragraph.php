@@ -46,15 +46,28 @@ class Paragraph extends SproutFormsBaseField implements PreviewableFieldInterfac
     }
 
     /**
-     * @inheritdoc
+     * @return string
      */
-    public function getExampleInputHtml()
+    public function getSvgIconPath()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/paragraph/example',
+        return '@sproutbaseicons/paragraph.svg';
+    }
+
+    /**
+     * @return null|string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
+     */
+    public function getSettingsHtml()
+    {
+        $rendered = Craft::$app->getView()->renderTemplate(
+            'sprout-forms/_components/fields/paragraph/settings',
             [
-                'field' => $this
+                'field' => $this,
             ]
         );
+
+        return $rendered;
     }
 
     /**
@@ -71,6 +84,18 @@ class Paragraph extends SproutFormsBaseField implements PreviewableFieldInterfac
                 'value' => $value,
                 'field' => $this,
             ]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExampleInputHtml()
+    {
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/paragraph/example',
+            [
+                'field' => $this
+            ]
+        );
     }
 
     /**
@@ -98,30 +123,5 @@ class Paragraph extends SproutFormsBaseField implements PreviewableFieldInterfac
         $this->endRendering();
 
         return TemplateHelper::raw($rendered);
-    }
-
-    /**
-     * @return null|string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
-     */
-    public function getSettingsHtml()
-    {
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/paragraph/settings',
-            [
-                'field' => $this,
-            ]
-        );
-
-        return $rendered;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSvgIconPath()
-    {
-        return '@sproutbaseicons/paragraph.svg';
     }
 }

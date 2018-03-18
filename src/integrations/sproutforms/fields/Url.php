@@ -72,18 +72,6 @@ class Url extends SproutFormsBaseField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function getExampleInputHtml()
-    {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/url/example',
-            [
-                'field' => $this
-            ]
-        );
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
         $view = Craft::$app->getView();
@@ -102,6 +90,18 @@ class Url extends SproutFormsBaseField implements PreviewableFieldInterface
                 'value' => $value,
                 'fieldContext' => $fieldContext,
                 'placeholder' => $this->placeholder
+            ]
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExampleInputHtml()
+    {
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/url/example',
+            [
+                'field' => $this
             ]
         );
     }
@@ -143,6 +143,18 @@ class Url extends SproutFormsBaseField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
+    public function getTableAttributeHtml($value, ElementInterface $element): string
+    {
+        if ($value) {
+            return '<a href="'.$value.'" target="_blank">'.$value.'</a>';
+        }
+
+        return '';
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getElementValidationRules(): array
     {
         return ['validateUrl'];
@@ -166,17 +178,5 @@ class Url extends SproutFormsBaseField implements PreviewableFieldInterface
                 SproutBase::$app->url->getErrorMessage($this->name, $this)
             );
         }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getTableAttributeHtml($value, ElementInterface $element): string
-    {
-        if ($value) {
-            return '<a href="'.$value.'" target="_blank">'.$value.'</a>';
-        }
-
-        return '';
     }
 }

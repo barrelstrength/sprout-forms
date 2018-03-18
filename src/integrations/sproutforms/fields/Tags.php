@@ -52,23 +52,19 @@ class Tags extends SproutBaseRelationField
     }
 
     /**
-     * @inheritdoc
+     * @return string
      */
-    public static function defaultSelectionLabel(): string
+    public function getSvgIconPath()
     {
-        return Craft::t('sprout-forms', 'Add a Tag');
+        return '@sproutbaseicons/tags.svg';
     }
 
     /**
      * @inheritdoc
      */
-    public function getExampleInputHtml()
+    public static function defaultSelectionLabel(): string
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/tags/example',
-            [
-                'field' => $this
-            ]
-        );
+        return Craft::t('sprout-forms', 'Add a Tag');
     }
 
     /**
@@ -110,6 +106,18 @@ class Tags extends SproutBaseRelationField
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getExampleInputHtml()
+    {
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/tags/example',
+            [
+                'field' => $this
+            ]
+        );
+    }
+
+    /**
      * @param mixed                                            $value
      * @param array|null                                       $renderingOptions
      *
@@ -137,14 +145,6 @@ class Tags extends SproutBaseRelationField
         $this->endRendering();
 
         return TemplateHelper::raw($rendered);
-    }
-
-    /**
-     * @return string
-     */
-    public function getSvgIconPath()
-    {
-        return '@sproutbaseicons/tags.svg';
     }
 
     // Private Methods

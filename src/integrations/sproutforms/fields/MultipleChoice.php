@@ -28,25 +28,21 @@ class MultipleChoice extends SproutBaseOptionsField
         return true;
     }
 
+
+    /**
+     * @return string
+     */
+    public function getSvgIconPath()
+    {
+        return '@sproutbaseicons/dot-circle-o.svg';
+    }
+
     /**
      * @inheritdoc
      */
     protected function optionsSettingLabel(): string
     {
         return Craft::t('sprout-forms', 'Multiple Choice Options');
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getExampleInputHtml()
-    {
-        return Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/multiplechoice/example',
-            [
-                'field' => $this
-            ]
-        );
     }
 
     /**
@@ -68,6 +64,19 @@ class MultipleChoice extends SproutBaseOptionsField
                 'value' => $value,
                 'options' => $options
             ]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExampleInputHtml()
+    {
+        return Craft::$app->getView()->renderTemplate(
+            'sprout-forms/_components/fields/multiplechoice/example',
+            [
+                'field' => $this
+            ]
+        );
     }
 
     /**
@@ -95,13 +104,5 @@ class MultipleChoice extends SproutBaseOptionsField
         $this->endRendering();
 
         return TemplateHelper::raw($rendered);
-    }
-
-    /**
-     * @return string
-     */
-    public function getSvgIconPath()
-    {
-        return '@sproutbaseicons/dot-circle-o.svg';
     }
 }

@@ -62,18 +62,6 @@ class CustomHtml extends SproutFormsBaseField implements PreviewableFieldInterfa
     /**
      * @inheritdoc
      */
-    public function getExampleInputHtml()
-    {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/customhtml/example',
-            [
-                'field' => $this
-            ]
-        );
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getSettingsHtml()
     {
         return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/customhtml/settings',
@@ -95,6 +83,18 @@ class CustomHtml extends SproutFormsBaseField implements PreviewableFieldInterfa
                 'value' => $value,
                 'field' => $this
             ]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExampleInputHtml()
+    {
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/customhtml/example',
+            [
+                'field' => $this
+            ]
+        );
     }
 
     /**

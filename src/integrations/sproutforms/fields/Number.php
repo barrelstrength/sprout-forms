@@ -41,14 +41,6 @@ class Number extends SproutFormsBaseField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public static function displayName(): string
-    {
-        return Craft::t('sprout-forms', 'Number');
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function init()
     {
         parent::init();
@@ -72,23 +64,18 @@ class Number extends SproutFormsBaseField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function rules()
+    public static function displayName(): string
     {
-        $rules = parent::rules();
-        $rules[] = [['min', 'max'], 'number'];
-        $rules[] = [['decimals', 'size'], 'integer'];
-        $rules[] = [
-            ['max'],
-            'compare',
-            'compareAttribute' => 'min',
-            'operator' => '>='
-        ];
+        return Craft::t('sprout-forms', 'Number');
+    }
 
-        if (!$this->decimals) {
-            $rules[] = [['min', 'max'], 'integer'];
-        }
 
-        return $rules;
+    /**
+     * @return string
+     */
+    public function getSvgIconPath()
+    {
+        return '@sproutbaseicons/hashtag.svg';
     }
 
     /**
@@ -118,15 +105,20 @@ class Number extends SproutFormsBaseField implements PreviewableFieldInterface
     }
 
     /**
-     * @inheritdoc
+     * @return null|string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
-    public function getExampleInputHtml()
+    public function getSettingsHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/number/example',
+        $rendered = Craft::$app->getView()->renderTemplate(
+            'sprout-forms/_components/fields/number/settings',
             [
-                'field' => $this
+                'field' => $this,
             ]
         );
+
+        return $rendered;
     }
 
     /**
@@ -150,7 +142,18 @@ class Number extends SproutFormsBaseField implements PreviewableFieldInterface
     }
 
     /**
-     * @param \barrelstrength\sproutforms\contracts\FieldModel $field
+     * @inheritdoc
+     */
+    public function getExampleInputHtml()
+    {
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/number/example',
+            [
+                'field' => $this
+            ]
+        );
+    }
+
+    /**
      * @param mixed                                            $value
      * @param array|null                                       $renderingOptions
      *
@@ -178,27 +181,24 @@ class Number extends SproutFormsBaseField implements PreviewableFieldInterface
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
-    public function getSvgIconPath()
+    public function rules()
     {
-        return '@sproutbaseicons/hashtag.svg';
-    }
+        $rules = parent::rules();
+        $rules[] = [['min', 'max'], 'number'];
+        $rules[] = [['decimals', 'size'], 'integer'];
+        $rules[] = [
+            ['max'],
+            'compare',
+            'compareAttribute' => 'min',
+            'operator' => '>='
+        ];
 
-    /**
-     * @return null|string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
-     */
-    public function getSettingsHtml()
-    {
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/number/settings',
-            [
-                'field' => $this,
-            ]
-        );
+        if (!$this->decimals) {
+            $rules[] = [['min', 'max'], 'integer'];
+        }
 
-        return $rendered;
+        return $rules;
     }
 }

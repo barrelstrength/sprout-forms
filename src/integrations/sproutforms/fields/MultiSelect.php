@@ -15,14 +15,6 @@ class MultiSelect extends SproutBaseOptionsField
     /**
      * @inheritdoc
      */
-    public static function displayName(): string
-    {
-        return Craft::t('sprout-forms', 'Multi Select');
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function init()
     {
         parent::init();
@@ -32,13 +24,25 @@ class MultiSelect extends SproutBaseOptionsField
     /**
      * @inheritdoc
      */
-    public function getExampleInputHtml()
+    public static function displayName(): string
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/multiselect/example',
-            [
-                'field' => $this
-            ]
-        );
+        return Craft::t('sprout-forms', 'Multi Select');
+    }
+
+    /**
+     * @return string
+     */
+    public function getSvgIconPath()
+    {
+        return '@sproutbaseicons/bars.svg';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function optionsSettingLabel(): string
+    {
+        return Craft::t('sprout-forms', 'Multi-select Options');
     }
 
     /**
@@ -59,6 +63,18 @@ class MultiSelect extends SproutBaseOptionsField
                 'values' => $value,
                 'options' => $options
             ]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExampleInputHtml()
+    {
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/multiselect/example',
+            [
+                'field' => $this
+            ]
+        );
     }
 
     /**
@@ -86,21 +102,5 @@ class MultiSelect extends SproutBaseOptionsField
         $this->endRendering();
 
         return TemplateHelper::raw($rendered);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function optionsSettingLabel(): string
-    {
-        return Craft::t('sprout-forms', 'Multi-select Options');
-    }
-
-    /**
-     * @return string
-     */
-    public function getSvgIconPath()
-    {
-        return '@sproutbaseicons/bars.svg';
     }
 }

@@ -75,18 +75,6 @@ class Name extends SproutFormsBaseField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function getExampleInputHtml()
-    {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/name/example',
-            [
-                'field' => $this
-            ]
-        );
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getSettingsHtml()
     {
         return Craft::$app->getView()->renderTemplate('sprout-base/sproutfields/_fields/name/settings',
@@ -123,6 +111,18 @@ class Name extends SproutFormsBaseField implements PreviewableFieldInterface
             ]);
 
         return TemplateHelper::raw($rendered);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExampleInputHtml()
+    {
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/name/example',
+            [
+                'field' => $this
+            ]
+        );
     }
 
     /**

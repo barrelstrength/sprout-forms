@@ -21,15 +21,19 @@ class Dropdown extends SproutBaseOptionsField
     }
 
     /**
+     * @return string
+     */
+    public function getSvgIconPath()
+    {
+        return '@sproutbaseicons/chevron-circle-down.svg';
+    }
+
+    /**
      * @inheritdoc
      */
-    public function getExampleInputHtml()
+    protected function optionsSettingLabel(): string
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/dropdown/example',
-            [
-                'field' => $this
-            ]
-        );
+        return Craft::t('sprout-forms', 'Dropdown Options');
     }
 
     /**
@@ -52,6 +56,18 @@ class Dropdown extends SproutBaseOptionsField
                 'name' => $this->handle,
                 'value' => $value,
                 'options' => $options
+            ]
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExampleInputHtml()
+    {
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/dropdown/example',
+            [
+                'field' => $this
             ]
         );
     }
@@ -81,21 +97,5 @@ class Dropdown extends SproutBaseOptionsField
         $this->endRendering();
 
         return TemplateHelper::raw($rendered);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function optionsSettingLabel(): string
-    {
-        return Craft::t('sprout-forms', 'Dropdown Options');
-    }
-
-    /**
-     * @return string
-     */
-    public function getSvgIconPath()
-    {
-        return '@sproutbaseicons/chevron-circle-down.svg';
     }
 }

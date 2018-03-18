@@ -46,18 +46,6 @@ class PrivateNotes extends SproutFormsBaseField
     /**
      * @inheritdoc
      */
-    public function getExampleInputHtml()
-    {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/privatenotes/example',
-            [
-                'field' => $this
-            ]
-        );
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
         return Craft::$app->getView()->renderTemplate('sprout-base/sproutfields/_fields/privatenotes/input',
@@ -65,6 +53,18 @@ class PrivateNotes extends SproutFormsBaseField
                 'name' => $this->handle,
                 'value' => $value,
                 'field' => $this,
+            ]
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExampleInputHtml()
+    {
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/privatenotes/example',
+            [
+                'field' => $this
             ]
         );
     }

@@ -75,18 +75,6 @@ class SectionHeading extends SproutFormsBaseField
     /**
      * @inheritdoc
      */
-    public function getExampleInputHtml()
-    {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/sectionheading/example',
-            [
-                'field' => $this
-            ]
-        );
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getSettingsHtml()
     {
         $reflect = new \ReflectionClass($this);
@@ -133,6 +121,18 @@ class SectionHeading extends SproutFormsBaseField
             [
                 'id' => $namespaceInputId,
                 'name' => $name,
+                'field' => $this
+            ]
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExampleInputHtml()
+    {
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/sectionheading/example',
+            [
                 'field' => $this
             ]
         );

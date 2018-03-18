@@ -64,6 +64,14 @@ class Email extends SproutFormsBaseField implements PreviewableFieldInterface
     }
 
     /**
+     * @return string
+     */
+    public function getSvgIconPath()
+    {
+        return '@sproutbaseicons/envelope.svg';
+    }
+
+    /**
      * @inheritdoc
      */
     public function getSettingsHtml()
@@ -72,14 +80,6 @@ class Email extends SproutFormsBaseField implements PreviewableFieldInterface
             [
                 'field' => $this,
             ]);
-    }
-
-    /**
-     * @return string
-     */
-    public function getSvgIconPath()
-    {
-        return '@sproutbaseicons/envelope.svg';
     }
 
     /**

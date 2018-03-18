@@ -99,6 +99,14 @@ class FileUpload extends SproutBaseRelationField
     }
 
     /**
+     * @return string
+     */
+    public function getSvgIconPath()
+    {
+        return '@sproutbaseicons/cloud-upload.svg';
+    }
+
+    /**
      * @inheritdoc
      */
     public static function defaultSelectionLabel(): string
@@ -142,19 +150,6 @@ class FileUpload extends SproutBaseRelationField
     }
 
     /**
-     * @inheritdoc
-     */
-    public function getExampleInputHtml()
-    {
-        return Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/fileupload/example',
-            [
-                'field' => $this
-            ]
-        );
-    }
-
-    /**
      * Adds support for edit field in the Entries section of SproutForms (Control
      * panel html)
      *
@@ -177,6 +172,19 @@ class FileUpload extends SproutBaseRelationField
                 $e->getMessage().
                 '</p>';
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExampleInputHtml()
+    {
+        return Craft::$app->getView()->renderTemplate(
+            'sprout-forms/_components/fields/fileupload/example',
+            [
+                'field' => $this
+            ]
+        );
     }
 
     /**
@@ -792,13 +800,5 @@ class FileUpload extends SproutBaseRelationField
         }
 
         return Craft::$app->getVolumes()->getVolumeById($volumeId);
-    }
-
-    /**
-     * @return string
-     */
-    public function getSvgIconPath()
-    {
-        return '@sproutbaseicons/cloud-upload.svg';
     }
 }

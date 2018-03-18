@@ -56,51 +56,19 @@ class Categories extends SproutBaseRelationField
     }
 
     /**
+     * @return string
+     */
+    public function getSvgIconPath()
+    {
+        return '@sproutbaseicons/folder-open.svg';
+    }
+
+    /**
      * @inheritdoc
      */
     public static function defaultSelectionLabel(): string
     {
         return Craft::t('sprout-forms', 'Add a category');
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function normalizeValue($value, ElementInterface $element = null)
-    {
-        if (is_array($value)) {
-            /** @var Category[] $categories */
-            $categories = Category::find()
-                ->id($value)
-                ->status(null)
-                ->enabledForSite(false)
-                ->all();
-
-            // Fill in any gaps
-            $categoriesService = Craft::$app->getCategories();
-            $categoriesService->fillGapsInCategories($categories);
-
-            // Enforce the branch limit
-            if ($this->branchLimit) {
-                $categoriesService->applyBranchLimitToCategories($categories, $this->branchLimit);
-            }
-
-            $value = ArrayHelper::getColumn($categories, 'id');
-        }
-
-        return parent::normalizeValue($value, $element);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getExampleInputHtml()
-    {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/categories/example',
-            [
-                'field' => $this
-            ]
-        );
     }
 
     /**
@@ -118,6 +86,18 @@ class Categories extends SproutBaseRelationField
         }
 
         return parent::getInputHtml($value, $element);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExampleInputHtml()
+    {
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/categories/example',
+            [
+                'field' => $this
+            ]
+        );
     }
 
     /**
@@ -153,19 +133,38 @@ class Categories extends SproutBaseRelationField
     /**
      * @inheritdoc
      */
+    public function normalizeValue($value, ElementInterface $element = null)
+    {
+        if (is_array($value)) {
+            /** @var Category[] $categories */
+            $categories = Category::find()
+                ->id($value)
+                ->status(null)
+                ->enabledForSite(false)
+                ->all();
+
+            // Fill in any gaps
+            $categoriesService = Craft::$app->getCategories();
+            $categoriesService->fillGapsInCategories($categories);
+
+            // Enforce the branch limit
+            if ($this->branchLimit) {
+                $categoriesService->applyBranchLimitToCategories($categories, $this->branchLimit);
+            }
+
+            $value = ArrayHelper::getColumn($categories, 'id');
+        }
+
+        return parent::normalizeValue($value, $element);
+    }
+    /**
+     * @inheritdoc
+     */
     protected function inputTemplateVariables($value = null, ElementInterface $element = null): array
     {
         $variables = parent::inputTemplateVariables($value, $element);
         $variables['branchLimit'] = $this->branchLimit;
 
         return $variables;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSvgIconPath()
-    {
-        return '@sproutbaseicons/folder-open.svg';
     }
 }

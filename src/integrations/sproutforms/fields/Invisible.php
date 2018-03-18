@@ -50,19 +50,6 @@ class Invisible extends SproutFormsBaseField implements PreviewableFieldInterfac
     }
 
     /**
-     * @inheritdoc
-     */
-    public function getSettingsHtml()
-    {
-        return Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/invisible/settings',
-            [
-                'field' => $this,
-            ]
-        );
-    }
-
-    /**
      * @return string
      */
     public function getSvgIconPath()
@@ -73,11 +60,12 @@ class Invisible extends SproutFormsBaseField implements PreviewableFieldInterfac
     /**
      * @inheritdoc
      */
-    public function getExampleInputHtml()
+    public function getSettingsHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/invisible/example',
+        return Craft::$app->getView()->renderTemplate(
+            'sprout-forms/_components/fields/invisible/settings',
             [
-                'field' => $this
+                'field' => $this,
             ]
         );
     }
@@ -96,6 +84,18 @@ class Invisible extends SproutFormsBaseField implements PreviewableFieldInterfac
                 'id' => $namespaceInputId,
                 'name' => $name,
                 'value' => $value,
+                'field' => $this
+            ]
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExampleInputHtml()
+    {
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/invisible/example',
+            [
                 'field' => $this
             ]
         );

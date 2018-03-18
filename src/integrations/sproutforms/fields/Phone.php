@@ -76,18 +76,6 @@ class Phone extends SproutFormsBaseField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function getExampleInputHtml()
-    {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/phone/example',
-            [
-                'field' => $this
-            ]
-        );
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
 //        $view = Craft::$app->getView();
@@ -106,6 +94,18 @@ class Phone extends SproutFormsBaseField implements PreviewableFieldInterface
 //        );
 
         return '';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExampleInputHtml()
+    {
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/phone/example',
+            [
+                'field' => $this
+            ]
+        );
     }
 
     /**
@@ -155,6 +155,22 @@ class Phone extends SproutFormsBaseField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
+    public function getTableAttributeHtml($value, ElementInterface $element): string
+    {
+        $html = '';
+
+        if ($value) {
+            $formatter = Craft::$app->getFormatter();
+
+            $html = '<a href="tel:'.$value.'" target="_blank">'.$value.'</a>';
+        }
+
+        return $html;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getElementValidationRules(): array
     {
         return ['validatePhone'];
@@ -186,21 +202,5 @@ class Phone extends SproutFormsBaseField implements PreviewableFieldInterface
 //                SproutBase::$app->phone->getErrorMessage($this)
 //            );
 //        }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getTableAttributeHtml($value, ElementInterface $element): string
-    {
-        $html = '';
-
-        if ($value) {
-            $formatter = Craft::$app->getFormatter();
-
-            $html = '<a href="tel:'.$value.'" target="_blank">'.$value.'</a>';
-        }
-
-        return $html;
     }
 }

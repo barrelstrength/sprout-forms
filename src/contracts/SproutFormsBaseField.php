@@ -23,20 +23,25 @@ abstract class SproutFormsBaseField extends Field
      */
     protected $originalTemplatesPath;
 
-    /**
-     * @param mixed      $value
-     * @param array      $renderingOptions
-     *
-     * @return \Twig_Markup
-     */
-    abstract public function getFormInputHtml($value, array $renderingOptions = null);
+    public static function addFieldVariables(array $variables)
+    {
+        static::$fieldVariables = array_merge(static::$fieldVariables, $variables);
+    }
 
-    /**
-     * The example HTML input field that displays in the UI when a field is dragged to the form layout editor
-     *
-     * @return string
-     */
-    abstract public function getExampleInputHtml();
+    public static function getFieldVariables()
+    {
+        return static::$fieldVariables;
+    }
+
+    final public function setValue($handle, $value)
+    {
+        Craft::$app->httpSession->add($handle, $value);
+    }
+
+    final public function getValue($handle, $default = null)
+    {
+        return Craft::$app->httpSession->get($handle, $default);
+    }
 
     final public function beginRendering()
     {
@@ -50,42 +55,6 @@ abstract class SproutFormsBaseField extends Field
         Craft::$app->getView()->setTemplatesPath($this->originalTemplatesPath);
     }
 
-    final public function setValue($handle, $value)
-    {
-        Craft::$app->httpSession->add($handle, $value);
-    }
-
-    final public function getValue($handle, $default = null)
-    {
-        return Craft::$app->httpSession->get($handle, $default);
-    }
-
-    public static function addFieldVariables(array $variables)
-    {
-        static::$fieldVariables = array_merge(static::$fieldVariables, $variables);
-    }
-
-    public static function getFieldVariables()
-    {
-        return static::$fieldVariables;
-    }
-
-    /**
-     * @return string
-     */
-    public function getNamespace()
-    {
-        return 'fields';
-    }
-
-    /**
-     * @return string
-     */
-    public function getSvgIconPath()
-    {
-        return '';
-    }
-
     /**
      * @return string
      */
@@ -97,9 +66,9 @@ abstract class SproutFormsBaseField extends Field
     /**
      * @return string
      */
-    public function getTemplatesPath()
+    public function getSvgIconPath()
     {
-        return Craft::getAlias('@barrelstrength/sproutforms/templates/_components/fields/');
+        return '';
     }
 
     /**
@@ -108,6 +77,20 @@ abstract class SproutFormsBaseField extends Field
      * @return bool
      */
     public function isPlainInput()
+    {
+        return false;
+    }
+
+    /**
+     * Tells Sprout Forms NOT to add a (for) attribute to your field's top leve label
+     *
+     * @note
+     * Sprout Forms renders a label with a (for) attribute for all fields.
+     * If your field has multiple labels, like radio buttons do for example,
+     * it would make sense for your field no to have a (for) attribute at the top level
+     * but have them at the radio field level
+     */
+    public function hasMultipleLabels()
     {
         return false;
     }
@@ -124,18 +107,35 @@ abstract class SproutFormsBaseField extends Field
     }
 
     /**
-     * Tells Sprout Forms NOT to add a (for) attribute to your field's top leve label
-     *
-     * @note
-     * Sprout Forms renders a label with a (for) attribute for all fields.
-     * If your field has multiple labels, like radio buttons do for example,
-     * it would make sense for your field no to have a (for) attribute at the top level
-     * but have them at the radio field level
+     * @return string
      */
-    public function hasMultipleLabels()
+    public function getNamespace()
     {
-        return false;
+        return 'fields';
     }
+
+    /**
+     * @return string
+     */
+    public function getTemplatesPath()
+    {
+        return Craft::getAlias('@barrelstrength/sproutforms/templates/_components/fields/');
+    }
+
+    /**
+     * The example HTML input field that displays in the UI when a field is dragged to the form layout editor
+     *
+     * @return string
+     */
+    abstract public function getExampleInputHtml();
+
+    /**
+     * @param mixed      $value
+     * @param array      $renderingOptions
+     *
+     * @return \Twig_Markup
+     */
+    abstract public function getFormInputHtml($value, array $renderingOptions = null);
 
     /**
      * @inheritdoc

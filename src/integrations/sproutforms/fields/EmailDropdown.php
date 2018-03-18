@@ -44,18 +44,6 @@ class EmailDropdown extends SproutBaseOptionsField
     /**
      * @inheritdoc
      */
-    public function getExampleInputHtml()
-    {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/emaildropdown/example',
-            [
-                'field' => $this
-            ]
-        );
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getSettingsHtml()
     {
         $options = $this->options;
@@ -126,6 +114,18 @@ class EmailDropdown extends SproutBaseOptionsField
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getExampleInputHtml()
+    {
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/emaildropdown/example',
+            [
+                'field' => $this
+            ]
+        );
+    }
+
+    /**
      * @param mixed      $value
      * @param array|null $renderingOptions
      *
@@ -155,6 +155,39 @@ class EmailDropdown extends SproutBaseOptionsField
         $this->endRendering();
 
         return TemplateHelper::raw($rendered);
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * public function normalizeValue($value, ElementInterface $element = null)
+     * {
+     * #$value = parent::normalizeValue($value, $element);
+     * Craft::dd($value);
+     *
+     * if (isset($value->value))
+     * {
+     * $val = $value->value;
+     * $options = $value->getOptions();
+     * $value->value = $options[$val]->value;
+     * $value->label = $options[$val]->label;
+     * }
+     *
+     * return $value;
+     * } */
+
+    /**
+     * @inheritdoc
+     */
+    public function getTableAttributeHtml($value, ElementInterface $element): string
+    {
+        $html = '';
+
+        if ($value) {
+            $html = $value->label.': <a href="mailto:'.$value.'" target="_blank">'.$value.'</a>';
+        }
+
+        return $html;
     }
 
     /**
@@ -198,38 +231,5 @@ class EmailDropdown extends SproutBaseOptionsField
                 $element->addError($this->handle, $invalidEmail);
             }
         }
-    }
-
-    /**
-     * @inheritdoc
-
-    public function normalizeValue($value, ElementInterface $element = null)
-     * {
-     * #$value = parent::normalizeValue($value, $element);
-     * Craft::dd($value);
-     *
-     * if (isset($value->value))
-     * {
-     * $val = $value->value;
-     * $options = $value->getOptions();
-     * $value->value = $options[$val]->value;
-     * $value->label = $options[$val]->label;
-     * }
-     *
-     * return $value;
-     * } */
-
-    /**
-     * @inheritdoc
-     */
-    public function getTableAttributeHtml($value, ElementInterface $element): string
-    {
-        $html = '';
-
-        if ($value) {
-            $html = $value->label.': <a href="mailto:'.$value.'" target="_blank">'.$value.'</a>';
-        }
-
-        return $html;
     }
 }
