@@ -2,8 +2,9 @@
 
 namespace barrelstrength\sproutforms\services;
 
+use barrelstrength\sproutforms\elements\Entry;
 use Craft;
-use Guzzle\Http\Client;
+use GuzzleHttp\Client;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\elements\Form as FormElement;
@@ -226,7 +227,7 @@ class Entries extends Component
      * @throws \Throwable
      * @throws \yii\base\Exception
      */
-    public function saveEntry(EntryElement &$entry)
+    public function saveEntry(EntryElement $entry)
     {
         $isNewEntry = !$entry->id;
 
@@ -303,6 +304,63 @@ class Entries extends Component
         }
 
         return true;
+    }
+
+    public function forwardEntry(Entry $entry)
+    {
+        if (!$entry->validate()) {
+            SproutForms::error($entry->getErrors());
+            return false;
+        }
+
+        // Setting the title explicitly to perform field validation
+        $entry->getContent()->setAttribute('title', sha1(time()));
+
+        $fields = $entry->getPayloadFields();
+        $endpoint = $entry->getForm()->submitAction;
+
+        if (!filter_var($endpoint, FILTER_VALIDATE_URL)) {
+
+            SproutForms::error($entry->formName.' submit action is an invalid URL: '.$endpoint);
+
+            return false;
+        }
+
+        $client = new Client();
+
+        // Annoying context switching
+        $oldFieldContext = Craft::$app->getContent()->fieldContext;
+        $oldContentTable = Craft::$app->getContent()->contentTable;
+
+        Craft::$app->getContent()->fieldContext = $entry->getFieldContext();
+        Craft::$app->getContent()->contentTable = $entry->getContentTable();
+
+        $success = Craft::$app->getContent()->validateContent($entry);
+
+        Craft::$app->getContent()->fieldContext = $oldFieldContext;
+        Craft::$app->getContent()->contentTable = $oldContentTable;
+
+        if (!$success) {
+            $entry->addErrors($entry->getErrors());
+
+            SproutForms::error($entry->getErrors());
+
+            return false;
+        }
+
+        try {
+            SproutForms::info($fields);
+
+            $response = $client->post($endpoint, null, $fields)->send();
+
+            SproutForms::info($response->getBody());
+
+            return true;
+        } catch (\Exception $e) {
+            $entry->addError('general', $e->getMessage());
+
+            return false;
+        }
     }
 
     public function getDefaultEntryStatusId()

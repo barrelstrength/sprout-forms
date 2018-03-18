@@ -2,14 +2,18 @@
 
 namespace barrelstrength\sproutforms\controllers;
 
+use barrelstrength\sproutforms\elements\Entry;
 use Craft;
 use craft\web\Controller as BaseController;
+use yii\base\Exception;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\events\OnBeforePopulateEntryEvent;
+use yii\web\Response;
 
 class EntriesController extends BaseController
 {
@@ -21,14 +25,15 @@ class EntriesController extends BaseController
      * @var string[]
      */
     protected $allowAnonymous = [
-        'save-entry',
-        'forward-entry',
+        'save-entry'
     ];
 
     /**
      * @var FormElement
      */
     public $form;
+
+    protected $saveData;
 
     public function init()
     {
@@ -40,16 +45,24 @@ class EntriesController extends BaseController
     /**
      * Processes form submissions
      *
-     * @return void|\yii\web\Response
+     * @return null|Response
      * @throws Exception
+     * @throws ForbiddenHttpException
      * @throws \Exception
      * @throws \Throwable
-     * @throws \yii\base\Exception
+     * @throws \Twig_Error_Loader
      * @throws \yii\web\BadRequestHttpException
      */
     public function actionSaveEntry()
     {
         $this->requirePostRequest();
+
+        if (Craft::$app->getRequest()->getIsSiteRequest()) {
+            $currentUser = Craft::$app->getUser()->getIdentity();
+            if (!$currentUser->can('editSproutFormsEntries')) {
+                throw new ForbiddenHttpException(Craft::t('sprout-forms', "Your account doesn't have permission to edit Form Entries."));
+            }
+        }
 
         $request = Craft::$app->getRequest();
         $view = Craft::$app->getView();
@@ -57,7 +70,7 @@ class EntriesController extends BaseController
         $formHandle = $request->getRequiredBodyParam('handle');
         $this->form = SproutForms::$app->forms->getFormByHandle($formHandle);
 
-        if (!isset($this->form)) {
+        if ($this->form === null) {
             throw new Exception(Craft::t('sprout-forms', 'No form exists with the handle '.$formHandle));
         }
 
@@ -67,20 +80,21 @@ class EntriesController extends BaseController
 
         $this->trigger(self::EVENT_BEFORE_POPULATE, $event);
 
-        $entry = $this->_getEntryModel();
+        $entry = $this->getEntryModel();
 
         Craft::$app->getContent()->populateElementContent($entry);
 
         $statusId = $request->getBodyParam('statusId');
 
-        if (isset($statusId)) {
+        if ($statusId !== null) {
             $entry->statusId = $statusId;
         }
 
         // Populate the entry with post data
-        $this->_populateEntryModel($entry);
+        $this->populateEntryModel($entry);
 
         // Swap out any dynamic variables for our notifications
+        // @todo - revisit with Sprout Email
         if ($this->form->notificationEnabled) {
             $this->form->notificationRecipients = $view->renderObjectTemplate($this->form->notificationRecipients, $entry);
             $this->form->notificationSubject = $view->renderObjectTemplate($this->form->notificationSubject, $entry);
@@ -89,39 +103,108 @@ class EntriesController extends BaseController
             $this->form->notificationReplyToEmail = $view->renderObjectTemplate($this->form->notificationReplyToEmail, $entry);
         }
 
-        $result   = true;
-        $saveData = SproutForms::$app->entries->isDataSaved($this->form);
+        $this->saveData = SproutForms::$app->entries->isDataSaved($this->form);
 
-        if ($saveData){
-            $result = SproutForms::$app->entries->saveEntry($entry);
+        /**
+         * Route our request to Craft or a third-party endpoint
+         *
+         * Payload forwarding is only available on front-end requests. Any
+         * data saved to the database after a forwarded request is editable
+         * in Craft as normal, but will not trigger any further calls to
+         * the third-party endpoint.
+         */
+        if ($this->form->submitAction && !$request->getIsCpRequest()) {
+            return $this->forwardEntrySomewhereElse($entry);
+        } else {
+            return $this->saveEntryInCraft($entry);
         }
-        else{
-            // call our save-entry event
+    }
+
+    /**
+     * @param EntryElement $entry
+     *
+     * @return null|Response
+     * @throws Exception
+     * @throws \Exception
+     * @throws \Throwable
+     * @throws \Twig_Error_Loader
+     * @throws \yii\web\BadRequestHttpException
+     */
+    private function saveEntryInCraft(Entry $entry)
+    {
+        $success = false;
+
+        // Save Data and Trigger the onSaveEntryEvent
+        if ($this->saveData) {
+            $success = SproutForms::$app->entries->saveEntry($entry);
+        } else {
             $isNewEntry = !$entry->id;
+
             SproutForms::$app->entries->callOnSaveEntryEvent($entry, $isNewEntry);
         }
 
-        if ($result) {
-            // Only send notification email for front-end submissions if they are enabled
-            if (!$request->getIsCpRequest() && $this->form->notificationEnabled) {
-                $post = $_POST;
-                SproutForms::$app->forms->sendNotification($this->form, $entry, $post);
-            }
-
-            // Removed multi-step form code on Craft3 Let's keep it clean
-
-            if ($request->getAcceptsJson()) {
-                $return['success'] = true;
-
-                return $this->asJson($return);
-            } else {
-                Craft::$app->getSession()->setNotice(Craft::t('sprout-forms', 'Entry saved.'));
-
-                return $this->redirectToPostedUrl($entry);
-            }
-        } else {
-            return $this->_redirectOnError($entry);
+        if (!$success) {
+            return $this->redirectWithErrors($entry);
         }
+
+        // Send Notification Emails for front-end submissions
+        // @todo - Sprout Email integration
+        if (!Craft::$app->getRequest()->getIsCpRequest() && $this->form->notificationEnabled) {
+//            $post = $_POST;
+//            SproutForms::$app->forms->sendNotification($this->form, $entry, $post);
+        }
+
+        if (Craft::$app->getRequest()->getAcceptsJson()) {
+            return $this->asJson([
+                'success' => true
+            ]);
+        }
+
+        Craft::$app->getSession()->setNotice(Craft::t('sprout-forms', 'Entry saved.'));
+
+        return $this->redirectToPostedUrl($entry);
+    }
+
+    /**
+     * @param $entry
+     *
+     * @return null|Response
+     * @throws Exception
+     * @throws \Exception
+     * @throws \Throwable
+     * @throws \Twig_Error_Loader
+     * @throws \yii\web\BadRequestHttpException
+     */
+    private function forwardEntrySomewhereElse($entry)
+    {
+        if (!SproutForms::$app->entries->forwardEntry($entry)) {
+            return $this->redirectWithErrors($entry);
+        }
+
+        // Adds support for notification
+        // @todo - Sprout Email integration
+        if (!Craft::$app->getRequest()->getIsCpRequest() && $this->form->notificationEnabled) {
+//            $post = $_POST;
+//            SproutForms::$app->forms->sendNotification($this->form, $entry, $post);
+        }
+
+        if ($this->form->saveData) {
+            $success = SproutForms::$app->entries->saveEntry($entry);
+
+            if (!$success) {
+                SproutForms::error(Craft::t('sprout-forms', 'Unable to save Form Entry to Craft.'));
+            }
+        }
+
+        if (Craft::$app->getRequest()->getAcceptsJson()) {
+            return $this->asJson([
+                'success' => true
+            ]);
+        }
+
+        Craft::$app->getSession()->setNotice(Craft::t('sprout-forms', 'Entry saved.'));
+
+        return $this->redirectToPostedUrl($entry);
     }
 
     /**
@@ -153,7 +236,7 @@ class EntriesController extends BaseController
 
         $saveData = SproutForms::$app->entries->isDataSaved($form);
 
-        if (!$saveData){
+        if (!$saveData) {
             Craft::$app->getSession()->setError(Craft::t('sprout-forms', "Unable to edit entry. Enable the 'Save Data' for this form to view, edit, or delete content."));
 
             return $this->renderTemplate('sprout-forms/entries');
@@ -190,68 +273,13 @@ class EntriesController extends BaseController
     }
 
     /**
-     * Verifies scenarios for error redirect
-     *
-     * @param EntryElement $entry
-     *
-     * @return void|\yii\web\Response
-     * @throws \yii\web\BadRequestHttpException
-     */
-    private function _redirectOnError(EntryElement $entry)
-    {
-        $errors = json_encode($entry->getErrors());
-        $request = Craft::$app->getRequest();
-        SproutForms::error('Couldn’t save form entry. Errors: '.$errors);
-
-        if ($request->getAcceptsJson()) {
-            return $this->asJson(
-                [
-                    'errors' => $entry->getErrors(),
-                ]
-            );
-        } else {
-            if ($request->getIsCpRequest()) {
-                // make errors available to variable
-                Craft::$app->getSession()->setError(Craft::t('sprout-forms', 'Couldn’t save entry.'));
-
-                // Store this Entry Model in a variable in our Service layer
-                // so that we can access the error object from our actionEditEntryTemplate() method
-                SproutForms::$app->forms->activeCpEntry = $entry;
-
-                // Return the form as an 'entry' variable if in the cp
-                return Craft::$app->getUrlManager()->setRouteParams(
-                    [
-                        'entry' => $entry
-                    ]
-                );
-            } else {
-                if (SproutForms::$app->entries->fakeIt) {
-                    return $this->redirectToPostedUrl($entry);
-                } else {
-                    Craft::$app->getSession()->setError(Craft::t('sprout-forms', 'Couldn’t save entry.'));
-                    // Store this Entry Model in a variable in our Service layer
-                    // so that we can access the error object from our displayForm() variable
-                    SproutForms::$app->forms->activeEntries[$this->form->handle] = $entry;
-
-                    // Return the form using it's name as a variable on the front-end
-                    return Craft::$app->getUrlManager()->setRouteParams(
-                        [
-                            $this->form->handle => $entry
-                        ]
-                    );
-                }
-            }
-        }
-    }
-
-    /**
      * Populate a EntryElement with post data
      *
      * @access private
      *
      * @param EntryElement $entry
      */
-    private function _populateEntryModel(EntryElement $entry)
+    private function populateEntryModel(EntryElement $entry)
     {
         $request = Craft::$app->getRequest();
 
@@ -269,37 +297,88 @@ class EntriesController extends BaseController
     /**
      * Fetch or create a EntryElement class
      *
-     * @access private
+     * @return EntryElement|null
      * @throws Exception
-     * @return EntryElement
      */
-    private function _getEntryModel()
+    private function getEntryModel()
     {
         $entryId = null;
         $request = Craft::$app->getRequest();
 
-        // Removed multi-step form code on Craft3 Let's keep it clean
-        $enableEditFormEntryViaFrontEnd = false;
+        $configSettings = Craft::$app->getConfig()->getConfigFromFile('sprout-forms');
 
-        if (isset(Craft::$app->getConfig()->getGeneral()->sproutForms)) {
-            $sproutFormsSettings = Craft::$app->getConfig()->getGeneral()->sproutForms;
-            $enableEditFormEntryViaFrontEnd = isset($sproutFormsSettings['enableEditFormEntryViaFrontEnd']) ? $sproutFormsSettings['enableEditFormEntryViaFrontEnd'] : false;
-        }
+        $enableEditFormEntryViaFrontEnd = $configSettings['enableEditFormEntryViaFrontEnd'] ?? false;
 
         if ($request->getIsCpRequest() || $enableEditFormEntryViaFrontEnd) {
             $entryId = $request->getBodyParam('entryId');
         }
 
-        if ($entryId) {
-            $entry = SproutForms::$app->entries->getEntryById($entryId);
+        if (!$entryId) {
+            return new EntryElement();
+        }
 
-            if (!$entry) {
-                throw new Exception(Craft::t('sprout-forms', 'No entry exists with the ID '.$entryId));
-            }
-        } else {
-            $entry = new EntryElement();
+        $entry = SproutForms::$app->entries->getEntryById($entryId);
+
+        if (!$entry) {
+
+            $message = Craft::t('sprout-forms', 'No form entry exists with the given ID: '.$entryId);
+
+            throw new Exception($message);
         }
 
         return $entry;
+    }
+
+    /**
+     * @param EntryElement $entry
+     *
+     * @return null|Response
+     * @throws \yii\web\BadRequestHttpException
+     */
+    private function redirectWithErrors(Entry $entry)
+    {
+        SproutForms::error($entry->getErrors());
+
+        // Send spam to the thank you page
+        if (SproutForms::$app->entries->fakeIt) {
+            return $this->redirectToPostedUrl($entry);
+        }
+
+        // Handle CP requests in a CP-friendly way
+        if (Craft::$app->getRequest()->getIsCpRequest()) {
+
+            Craft::$app->getSession()->setError(Craft::t('sprout-forms', 'Couldn’t save entry.'));
+
+            // Store this Entry Model in a variable in our Service layer so that
+            // we can access the error object from our actionEditEntryTemplate() method
+            SproutForms::$app->forms->activeCpEntry = $entry;
+
+            Craft::$app->getUrlManager()->setRouteParams([
+                'entry' => $entry
+            ]);
+
+            return null;
+        }
+
+        // Respond to ajax requests with JSON
+        if (Craft::$app->getRequest()->getAcceptsJson()) {
+            return $this->asJson([
+                'success' => false,
+                'errors' => $entry->getErrors(),
+            ]);
+        }
+
+        // Front-end Requests need to be a bit more dynamic
+
+        // Store this Entry Model in a variable in our Service layer so that
+        // we can access the error object from our displayForm() variable
+        SproutForms::$app->forms->activeEntries[$this->form->handle] = $entry;
+
+        // Return the form using it's name as a variable on the front-end
+        Craft::$app->getUrlManager()->setRouteParams([
+            $this->form->handle => $entry
+        ]);
+
+        return null;
     }
 }
