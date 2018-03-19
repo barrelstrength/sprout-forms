@@ -2,90 +2,98 @@
 {% import "_includes/forms" as forms %}
 
 {% set crumbs = [
-	{ label: "Entries"|t, url: cpUrl('sprout-forms/entries') }
+    { label: "Entries"|t, url: cpUrl('sprout-forms/entries') }
 ] %}
 
 {% set title = 'Edit Entry' %}
 
 {% set fullPageForm = true %}
-{% set saveShortcutRedirect = 'sprout-forms/entries' %}
+{% set saveShortcutRedirect = 'sprout-forms/entries/edit/' ~ entryId %}
 
 {% block actionButton %}
-	<div class="btngroup submit first">
-		<input type="submit" class="btn submit" value="{{ 'Save'|t }}">
-	</div>
+    <div class="btngroup submit first">
+        <input type="submit" class="btn submit" value="{{ 'Save'|t }}">
+        {% if entryId != null %}
+            <div class="btn submit menubtn"></div>
+            <div class="menu">
+                <hr>
+                <ul>
+                    <li><a class="formsubmit error"
+                           data-action="sprout-forms/entries/delete-entry"
+                           data-confirm='{{ "Are you sure you want to delete this entry and all of it's data?"|t('sprout-forms') }}'
+                           data-redirect="{{ 'sprout-forms/entries'|hash }}">{{ "Delete"|t('sprout-forms') }}</a>
+                    </li>
+                </ul>
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}
 
 {% block content %}
 
-	<input type="hidden" name="action" value="sprout-forms/entries/save-entry">
-	<input type="hidden" name="handle" value="{{ form.handle }}">
-	<input type="hidden" name="entryId" value="{{ entryId }}">
+    <input type="hidden" name="action" value="sprout-forms/entries/save-entry">
+    <input type="hidden" name="handle" value="{{ form.handle }}">
+    <input type="hidden" name="entryId" value="{{ entryId }}">
 
-	{% if namespace is not defined %}{% set namespace = 'fields' %}{% endif %}
+    {% if namespace is not defined %}{% set namespace = 'fields' %}{% endif %}
 
-		<div id="fields">
+    <div id="fields">
 
-			{% for tab in fieldLayoutTabs %}
+        {% for tab in fieldLayoutTabs %}
 
-				{% set fields = tab.getFields() %}
+            {% set fields = tab.getFields() %}
 
-				<div id="tab{{ loop.index }}" {% if not loop.first %}class="hidden"{% endif %}>
+            <div id="tab{{ loop.index }}"
+                 {% if not loop.first %}class="hidden"{% endif %}>
 
-					{% namespace namespace %}
+                {% namespace namespace %}
 
-					{% for field in fields %}
-						{% include "_includes/field" with {
-						field:    field,
-						required: field.required,
-						element:  entry,
-						static: null
-						} only %}
-					{% endfor %}
+                    {% for field in fields %}
+                        {% include "_includes/field" with {
+                            field:    field,
+                            required: field.required,
+                            element:  entry,
+                            static: null
+                        } only %}
+                    {% endfor %}
 
-					{% endnamespace %}
+                {% endnamespace %}
 
-				</div>
+            </div>
 
-			{% endfor %}
+        {% endfor %}
 
-		</div>
+    </div>
 
 {% endblock %}
 
 {% block details %}
-	<div class="meta">
+    <div class="meta">
 
-		{% set formName = "<h6>" ~ form.name ~ "</h6>" %}
+        {% set formName = "<h6>" ~ form.name ~ "</h6>" %}
 
-		{{ forms.field({
-			label: "Form Name"|t,
-		}, formName) }}
+        {{ forms.field({
+            label: "Form Name"|t,
+        }, formName) }}
 
-		{% set dateSubmitted = entry.dateCreated|date('F j, Y') %}
+        {% set dateSubmitted = entry.dateCreated|date('F j, Y') %}
 
-		{{ forms.field({
-			label: "Submitted"|t,
-		}, dateSubmitted) }}
+        {{ forms.selectField({
+            label: "Entry Status"|t,
+            id: 'statusId',
+            name: 'statusId',
+            value: entry.statusId,
+            options: statuses,
+            errors: entry.getErrors('statusId')
+        }) }}
 
-		{{ forms.selectField({
-			label: "Entry Status"|t,
-			id: 'statusId',
-			name: 'statusId',
-			value: entry.statusId,
-			options: statuses,
-			errors: entry.getErrors('statusId')
-		}) }}
-
-		<div class="field" id="enabled-field">
-			<div class="heading"></div>
-			<div class="input">
-				<div class="right">
-					<input type="button" class="btn small formsubmit" value="Delete" data-action="sproutforms/entries/delete-entry" data-confirm="Are you sure you want to delete this entry and all of it's data?" data-redirect="sproutforms/entries">
-				</div>
-			</div>
-		</div>
-
-	</div>
+    </div>
+    <hr>
+    <div class="meta read-only">
+        <div class="data">
+            <h5 class="heading">{{ "Submitted"|t('sprout-forms') }}</h5>
+            <div class="value">{{ dateSubmitted }}</div>
+        </div>
+    </div>
 {% endblock %}
 
