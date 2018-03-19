@@ -54,8 +54,10 @@
             </div>
         </div>
     </div><!-- fields div -->
-    <div class="{{ tab != 2 ? 'hidden' : '' }} meta"
+    <div class="{{ tab != 2 ? 'hidden' : '' }}"
          id="tab-sproutforms-settings">
+
+        <div class="meta">
 
         <h6>{{ 'General'|t('sprout-forms') }}</h6>
 
@@ -94,6 +96,11 @@
             required: false,
             errors: (form is defined ? form.getErrors('submitButtonText') : null)
         }) }}
+
+        </div>
+        <hr>
+
+        <div class="meta">
 
         <h6>{{ 'Advanced'|t('sprout-forms') }}</h6>
 
@@ -157,34 +164,47 @@
 
         {% endif %}
 
+        </div>
+
         {% if (settings.enableSaveDataPerFormBasis and settings.enableSaveData) or form.submitAction %}
 
-            <h6>{{ 'Data Storage'|t('sprout-forms') }}</h6>
+            <hr>
+            <div class="meta">
 
-            {{ forms.lightswitchField({
-                label: "Save Data <span class='info'>Save Data submitted to this form to the Craft database</span>"|t('sprout-forms'),
-                id: 'saveData',
-                name: 'saveData',
-                on: form.saveData,
-                onLabel: "Show"|t('sprout-forms'),
-                offLabel: "Hide"|t('sprout-forms')
-            }) }}
+                <h6>{{ 'Data Storage'|t('sprout-forms') }}</h6>
+
+                {{ forms.lightswitchField({
+                    label: "Save Data <span class='info'>Save Data submitted to this form to the Craft database</span>"|t('sprout-forms'),
+                    id: 'saveData',
+                    name: 'saveData',
+                    on: form.saveData,
+                    onLabel: "Show"|t('sprout-forms'),
+                    offLabel: "Hide"|t('sprout-forms')
+                }) }}
+
+            </div>
 
         {% endif %}
 
         {% if settings.enablePayloadForwarding or form.submitAction %}
-            <h6>{{ 'Payload Forwarding'|t('sprout-forms') }}</h6>
-            {{ forms.textField({
-                label: "Submit URL <span class='info'>Submit your form data to this URL, instead of directly to Sprout
-                Forms.</span>"|t('sprout-forms'),
-                name: 'submitAction',
-                placeholder: 'http://example.com/somewhere-else',
-                value: (form is defined ? form.submitAction : null),
-                errors: (form is defined ? form.getErrors('submitAction') : null)
-            }) }}
+
+            <hr>
+            <div class="meta">
+
+                <h6>{{ 'Payload Forwarding'|t('sprout-forms') }}</h6>
+                {{ forms.textField({
+                    label: "Submit URL <span class='info'>Submit your form data to this URL, instead of directly to Sprout
+                    Forms.</span>"|t('sprout-forms'),
+                    name: 'submitAction',
+                    placeholder: 'http://example.com/somewhere-else',
+                    value: (form is defined ? form.submitAction : null),
+                    errors: (form is defined ? form.getErrors('submitAction') : null)
+                }) }}
+
+            </div>
 
         {% endif %}
-
+        </div>
     </div>
 </div>
 
