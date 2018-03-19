@@ -14,6 +14,12 @@ class FormsController extends BaseController
 {
     /**
      * Save a form
+     *
+     * @return null|\yii\web\Response
+     * @throws NotFoundHttpException
+     * @throws \Exception
+     * @throws \Throwable
+     * @throws \yii\web\BadRequestHttpException
      */
     public function actionSaveForm()
     {
@@ -31,10 +37,13 @@ class FormsController extends BaseController
             if ($duplicateForm) {
                 $form->id = $duplicateForm->id;
             } else {
-                throw new Exception(Craft::t('Error creating Form'));
+                throw new \Exception(Craft::t('Error creating Form'));
             }
         } else {
-            $form->id = $request->getBodyParam('id');
+            $form = SproutForms::$app->forms->getFormById($request->getBodyParam('id'));
+            if (!$form) {
+                throw new NotFoundHttpException(Craft::t('sprout-forms', 'Form not found'));
+            }
         }
 
         $form->groupId = $request->getBodyParam('groupId');
@@ -70,8 +79,6 @@ class FormsController extends BaseController
 
         if (count($fieldLayout->getFields()) == 0) {
             Craft::$app->getSession()->setError(Craft::t('sprout-forms', 'The form needs at least have one field'));
-
-            $form = SproutForms::$app->forms->getFormById($form->id);
 
             Craft::$app->getUrlManager()->setRouteParams([
                     'form' => $form

@@ -17,14 +17,18 @@
     <input type="hidden" name="fieldId" value="{{ field.id }}">
 {% endif %}
 
-{{ forms.lightswitchField({
-    label: "Required"|t('sprout-forms'),
-    name: 'required',
-    on: field.required,
-    onLabel: "Required"|t('sprout-forms'),
-    offLabel: "Optional"|t('sprout-forms'),
-    first: true
-}) }}
+{% if field.allowRequired %}
+    {{ forms.lightswitchField({
+        label: "Required"|t('sprout-forms'),
+        name: 'required',
+        on: field.required,
+        onLabel: "Required"|t('sprout-forms'),
+        offLabel: "Optional"|t('sprout-forms'),
+        first: true
+    }) }}
+{% else %}
+    <input type="hidden" name="required" value>
+{% endif %}
 
 {{ forms.textField({
     label: "Name <span class='info'>The field label displayed to your users.</span>"|t('sprout-forms'),

@@ -304,13 +304,13 @@ class Entries extends Component
 
     public function forwardEntry(Entry $entry)
     {
+        // Setting the title explicitly to perform field validation
+        $entry->title = sha1(time());
+
         if (!$entry->validate()) {
             SproutForms::error($entry->getErrors());
             return false;
         }
-
-        // Setting the title explicitly to perform field validation
-        $entry->getContent()->setAttribute('title', sha1(time()));
 
         $fields = $entry->getPayloadFields();
         $endpoint = $entry->getForm()->submitAction;
@@ -323,26 +323,6 @@ class Entries extends Component
         }
 
         $client = new Client();
-
-        // Annoying context switching
-        $oldFieldContext = Craft::$app->getContent()->fieldContext;
-        $oldContentTable = Craft::$app->getContent()->contentTable;
-
-        Craft::$app->getContent()->fieldContext = $entry->getFieldContext();
-        Craft::$app->getContent()->contentTable = $entry->getContentTable();
-
-        $success = Craft::$app->getContent()->validateContent($entry);
-
-        Craft::$app->getContent()->fieldContext = $oldFieldContext;
-        Craft::$app->getContent()->contentTable = $oldContentTable;
-
-        if (!$success) {
-            $entry->addErrors($entry->getErrors());
-
-            SproutForms::error($entry->getErrors());
-
-            return false;
-        }
 
         try {
             SproutForms::info($fields);

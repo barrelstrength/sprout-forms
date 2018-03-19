@@ -188,7 +188,7 @@ class Entry extends Element
             'elementId',
         ];
 
-        $content = $this->getContent()->getAttributes();
+        $content = $this->getAttributes();
 
         foreach ($content as $field => $value) {
             if (!in_array($field, $ignore)) {

@@ -115,9 +115,9 @@ class EntriesController extends BaseController
          */
         if ($this->form->submitAction && !$request->getIsCpRequest()) {
             return $this->forwardEntrySomewhereElse($entry);
-        } else {
-            return $this->saveEntryInCraft($entry);
         }
+
+        return $this->saveEntryInCraft($entry);
     }
 
     /**

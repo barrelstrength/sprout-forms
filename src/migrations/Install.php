@@ -5,6 +5,7 @@ namespace barrelstrength\sproutforms\migrations;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutbase\migrations\sproutreports\Install as SproutBaseReportsInstall;
 use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesDataSource;
+use barrelstrength\sproutforms\models\Settings;
 use craft\db\Migration;
 
 /**
@@ -219,6 +220,27 @@ class Install extends Migration
                 'isDefault' => $entryStatus['isDefault']
             ])->execute();
         }
+
+        $settings = new Settings();
+
+        $settings->captchaSettings = [
+            'sproutforms-javascriptcaptcha' => [
+                'enabled' => 1
+            ],
+            'sproutforms-honeypotcaptcha' => [
+                'enabled' => 1,
+                'honeypotFieldName' => null,
+                'honeypotScreenReaderMessage' => null
+            ],
+        ];
+
+        $newSettings = json_encode($settings->getAttributes());
+
+        $this->db->createCommand()->update('{{%plugins}}', [
+            'settings' => $newSettings
+        ], [
+            'handle' => strtolower('sprout-forms')
+        ])->execute();
     }
 
     public function installSproutReports()

@@ -13,6 +13,11 @@ use barrelstrength\sproutbase\web\assets\sproutfields\notes\QuillAsset;
 class SectionHeading extends SproutFormsBaseField
 {
     /**
+     * @var bool
+     */
+    public $allowRequired = false;
+
+    /**
      * @var string
      */
     public $notes;

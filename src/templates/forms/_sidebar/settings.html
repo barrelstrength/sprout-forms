@@ -49,7 +49,10 @@
                 {% endfor %}
 
                 {% if customFields %}
-                    <h2 class="tab-title donotdrag">{{ 'Custom Fields'|t('sprout-forms') }}</h2>
+                    <h6 class="tab-title donotdrag">{{ 'Custom Fields'|t('sprout-forms') }}</h6>
+                    {% for field in customFields %}
+                        {{ sproutForms.field(field, 'source') }}
+                    {% endfor %}
                 {% endif %}
             </div>
         </div>
