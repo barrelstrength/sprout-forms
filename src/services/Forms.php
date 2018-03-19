@@ -575,6 +575,15 @@ class Forms extends Component
         $form = new FormElement();
         $name = empty($name) ? 'Form' : $name;
         $handle = empty($handle) ? 'form' : $handle;
+        $settings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
+
+        if ($settings->enableSaveData)
+        {
+            if ($settings->enableSaveDataPerFormBasis)
+            {
+                $form->saveData = $settings->saveDataByDefault;
+            }
+        }
 
         $form->name = $this->getFieldAsNew('name', $name);
         $form->handle = $this->getFieldAsNew('handle', $handle);

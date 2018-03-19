@@ -16,7 +16,7 @@ class CustomHtml extends SproutFormsBaseField implements PreviewableFieldInterfa
      * @var bool
      */
     public $allowRequired = false;
-    
+
     /**
      * @var string
      */
