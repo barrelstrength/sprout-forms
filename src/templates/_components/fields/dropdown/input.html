@@ -21,15 +21,13 @@
             {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
             {{- dataAttributes|raw -}}
     >
-        <optgroup>
-            {%- for key, option in options -%}
+        {%- for key, option in options -%}
 
-                {%- set optionLabel = (option.label is defined ? option.label : null) -%}
-                {%- set optionValue = (option.value is defined ? option.value : key) -%}
+            {%- set optionLabel = (option.label is defined ? option.label : null) -%}
+            {%- set optionValue = (option.value is defined ? option.value : key) -%}
 
-                <option value="{{ optionValue }}"
-                        {% if optionValue == value %}selected{% endif %}>{{ optionLabel }}</option>
-            {% endfor %}
-        </optgroup>
+            <option value="{{ optionValue }}"
+                    {% if optionValue == value %}selected{% endif %}>{{ optionLabel }}</option>
+        {% endfor %}
     </select>
 {% endspaceless %}
