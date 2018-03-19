@@ -17,6 +17,7 @@ use barrelstrength\sproutforms\integrations\sproutforms\fields\EmailDropdown as 
 use craft\db\Query;
 use barrelstrength\sproutforms\records\EntryStatus as EntryStatusRecord;
 use craft\base\ElementInterface;
+use GuzzleHttp\Exception\RequestException;
 use yii\base\Component;
 use yii\base\Exception;
 
@@ -322,17 +323,17 @@ class Entries extends Component
             return false;
         }
 
-        $client = new Client();
+        $client = new Client(['verify' => false]);
 
         try {
             SproutForms::info($fields);
 
-            $response = $client->post($endpoint, null, $fields)->send();
+            $response = $client->post($endpoint, null, $fields);
 
-            SproutForms::info($response->getBody());
+            SproutForms::info($response->getBody()->getContents());
 
             return true;
-        } catch (\Exception $e) {
+        } catch (RequestException $e) {
             $entry->addError('general', $e->getMessage());
 
             return false;
