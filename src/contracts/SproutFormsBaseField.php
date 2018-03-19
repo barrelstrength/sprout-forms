@@ -19,6 +19,11 @@ abstract class SproutFormsBaseField extends Field
     protected static $fieldVariables = [];
 
     /**
+     * @var bool
+     */
+    public $allowRequired = true;
+
+    /**
      * @var string
      */
     protected $originalTemplatesPath;
