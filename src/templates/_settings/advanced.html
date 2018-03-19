@@ -35,7 +35,7 @@
                 }) }}
 
                 <div id="settings-savedatadefault"
-                     class="{{ (settings.enableSaveDataPerFormBasis is empty ? "hidden") }}">
+                     class="{{ not settings.enableSaveDataPerFormBasis ? "hidden" : '' }}">
 
                     {{ forms.lightswitchField({
                         label: "Default Save Data value"|t,
