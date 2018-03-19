@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\elements;
 
+use barrelstrength\sproutforms\elements\db\FormQuery;
 use Craft;
 use craft\base\Element;
 use craft\elements\db\ElementQueryInterface;
@@ -178,22 +179,11 @@ class Entry extends Element
     public function getPayloadFields()
     {
         $fields = [];
-        $ignore = [
-            'id',
-            'slug',
-            'title',
-            'handle',
-            'locale',
-            'element',
-            'elementId',
-        ];
 
         $content = $this->getAttributes();
 
         foreach ($content as $field => $value) {
-            if (!in_array($field, $ignore)) {
-                $fields[$field] = $value;
-            }
+            $fields[$field] = $value;
         }
 
         return $fields;
