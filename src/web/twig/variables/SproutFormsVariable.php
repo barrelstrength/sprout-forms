@@ -599,11 +599,10 @@ class SproutFormsVariable
         $templateFolder = $settings->templateFolderOverride;
 
         $options[] = [
-            'optgroup' => Craft::t('sprout-forms','Custom')
+            'optgroup' => Craft::t('sprout-forms','Custom Template Folder')
         ];
 
-
-        if (!array_key_exists($templateFolder, $templateIds) && $templateFolder != '') {
+        if (!in_array($templateFolder, $templateIds) && $templateFolder != '') {
             $options[] = [
                 'label' => $templateFolder,
                 'value' => $templateFolder
