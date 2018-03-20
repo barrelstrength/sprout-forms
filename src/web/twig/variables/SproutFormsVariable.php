@@ -476,26 +476,6 @@ class SproutFormsVariable
     }
 
     /**
-     * @return bool
-     */
-    public function isInvisibleCaptchaEnabled()
-    {
-        $plugins = Craft::$app->plugins->getPlugins(false);
-
-        if (array_key_exists('sproutinvisiblecaptcha', $plugins)) {
-            $invisibleCaptcha = $plugins['sproutinvisiblecaptcha'];
-
-            if ($invisibleCaptcha->getSettings()->sproutFormsDisplayFormTagOutput
-                and $invisibleCaptcha->isInstalled
-            ) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * @return array
      */
     public function getEntryStatuses()

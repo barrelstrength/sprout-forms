@@ -15,8 +15,9 @@ use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\fields\Forms as FormsField;
 use barrelstrength\sproutforms\fields\Entries as FormEntriesField;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
-use barrelstrength\sproutforms\integrations\sproutforms\captchas\invisiblecaptcha\HoneypotCaptcha;
-use barrelstrength\sproutforms\integrations\sproutforms\captchas\invisiblecaptcha\JavascriptCaptcha;
+use barrelstrength\sproutforms\integrations\sproutforms\captchas\DuplicateCaptcha;
+use barrelstrength\sproutforms\integrations\sproutforms\captchas\HoneypotCaptcha;
+use barrelstrength\sproutforms\integrations\sproutforms\captchas\JavascriptCaptcha;
 use barrelstrength\sproutforms\integrations\sproutforms\formtemplates\BasicTemplates;
 use barrelstrength\sproutforms\integrations\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\integrations\sproutimport\themes\BasicFieldsTheme;
@@ -129,21 +130,19 @@ class SproutForms extends Plugin
         });
 
         Event::on(Forms::class, Forms::EVENT_REGISTER_CAPTCHAS, function(Event $event) {
+            $event->types[] = DuplicateCaptcha::class;
             $event->types[] = JavascriptCaptcha::class;
             $event->types[] = HoneypotCaptcha::class;
         });
 
         Event::on(Entries::class, EntryElement::EVENT_BEFORE_SAVE, function(OnBeforeSaveEntryEvent $event) {
-            $captchas = SproutForms::$app->forms->getAllEnabledCaptchas();
+            if (Craft::$app->getRequest()->getIsSiteRequest()) {
+                $captchas = SproutForms::$app->forms->getAllEnabledCaptchas();
 
-            foreach ($captchas as $captcha) {
-                $captcha->verifySubmission($event);
+                foreach ($captchas as $captcha) {
+                    $captcha->verifySubmission($event);
+                }
             }
-        });
-
-        Event::on(Forms::class, Forms::EVENT_REGISTER_FORM_TEMPLATES, function(Event $event) {
-            $event->types[] = BasicTemplates::class;
-            $event->types[] = AccessibleTemplates::class;
         });
 
         Craft::$app->view->hook('sproutForms.modifyForm', function(&$context) {
@@ -155,6 +154,11 @@ class SproutForms extends Plugin
             }
 
             return $captchaHtml;
+        });
+
+        Event::on(Forms::class, Forms::EVENT_REGISTER_FORM_TEMPLATES, function(Event $event) {
+            $event->types[] = BasicTemplates::class;
+            $event->types[] = AccessibleTemplates::class;
         });
 
         Event::on(Importers::class, Importers::EVENT_REGISTER_IMPORTER, function(RegisterComponentTypesEvent $event) {

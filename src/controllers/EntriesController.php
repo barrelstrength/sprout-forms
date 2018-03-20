@@ -337,6 +337,11 @@ class EntriesController extends BaseController
      */
     private function redirectWithErrors(Entry $entry)
     {
+        // Allow override of redirect URL on failure
+        if (Craft::$app->getRequest()->getBodyParam('redirectOnFailure') !== '') {
+            $_POST['redirect'] = Craft::$app->getRequest()->getBodyParam('redirectOnFailure');
+        }
+
         SproutForms::error($entry->getErrors());
 
         // Send spam to the thank you page

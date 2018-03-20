@@ -57,20 +57,6 @@ abstract class BaseCaptcha
     }
 
     /**
-     * Return whatever is needed to get your captcha working in the form template
-     *
-     * Sprout Forms will loop through all enabled Captcha integrations and output
-     * getCaptchaHtml when the template hook `sproutForms.modifyForm` in form.html
-     * is triggered.
-     *
-     * @return string
-     */
-    public function getCaptchaHtml()
-    {
-        return '';
-    }
-
-    /**
      * Return any settings for your Captcha
      *
      * Sprout Forms will display all captcha settings on the Settings->Spam Prevention tab.
@@ -81,6 +67,20 @@ abstract class BaseCaptcha
      * @return string
      */
     public function getCaptchaSettingsHtml()
+    {
+        return '';
+    }
+
+    /**
+     * Return whatever is needed to get your captcha working in the form template
+     *
+     * Sprout Forms will loop through all enabled Captcha integrations and output
+     * getCaptchaHtml when the template hook `sproutForms.modifyForm` in form.html
+     * is triggered.
+     *
+     * @return string
+     */
+    public function getCaptchaHtml()
     {
         return '';
     }
