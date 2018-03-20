@@ -18,14 +18,14 @@
 {% set templateOptions = craft.sproutForms.getTemplateOptions() %}
 
 {{ forms.field({
-    label: "Template"|t('sprout-forms'),
+    label: "Default Form Templates"|t('sprout-forms'),
     first: true,
-    instructions: "The template folder for your custom form templates."|t,
+    instructions: "The templates that will be used to output your forms when using the displayForm tag. Add additional form templates via the Form Templates API or providing a custom template path."|t,
 }, sproutFields.selectOther({
     name: 'templateFolderOverride',
     options: templateOptions,
     value: settings.templateFolderOverride ?? null,
-    otherPlaceholderText: 'Custom Template'|t('sprout-forms')
+    otherPlaceholderText: '_forms/mycustomtemplates'|t('sprout-forms')
 })) }}
 
 {{ forms.lightswitchField({

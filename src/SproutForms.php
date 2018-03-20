@@ -17,8 +17,8 @@ use barrelstrength\sproutforms\fields\Entries as FormEntriesField;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use barrelstrength\sproutforms\integrations\sproutforms\captchas\invisiblecaptcha\HoneypotCaptcha;
 use barrelstrength\sproutforms\integrations\sproutforms\captchas\invisiblecaptcha\JavascriptCaptcha;
-use barrelstrength\sproutforms\integrations\sproutforms\templates\SproutForms2;
-use barrelstrength\sproutforms\integrations\sproutforms\templates\SproutForms3;
+use barrelstrength\sproutforms\integrations\sproutforms\formtemplates\BasicTemplates;
+use barrelstrength\sproutforms\integrations\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\integrations\sproutimport\themes\BasicFieldsTheme;
 use barrelstrength\sproutforms\integrations\sproutimport\themes\SpecialFieldsTheme;
 use barrelstrength\sproutforms\services\App;
@@ -141,9 +141,9 @@ class SproutForms extends Plugin
             }
         });
 
-        Event::on(Forms::class, Forms::EVENT_REGISTER_GLOBAL_TEMPLATES, function(Event $event) {
-            $event->types[] = SproutForms2::class;
-            $event->types[] = SproutForms3::class;
+        Event::on(Forms::class, Forms::EVENT_REGISTER_FORM_TEMPLATES, function(Event $event) {
+            $event->types[] = BasicTemplates::class;
+            $event->types[] = AccessibleTemplates::class;
         });
 
         Craft::$app->view->hook('sproutForms.modifyForm', function(&$context) {

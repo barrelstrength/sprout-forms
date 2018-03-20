@@ -4,9 +4,9 @@ namespace barrelstrength\sproutforms\contracts;
 use Craft;
 
 /**
- * Class BaseTemplate
+ * Class BaseFormTemplates
  */
-abstract class BaseTemplate
+abstract class BaseFormTemplates
 {
     /**
      * @var string

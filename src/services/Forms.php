@@ -2,7 +2,8 @@
 
 namespace barrelstrength\sproutforms\services;
 
-use barrelstrength\sproutforms\integrations\sproutforms\templates\SproutForms3;
+use barrelstrength\sproutforms\contracts\BaseFormTemplates;
+use barrelstrength\sproutforms\integrations\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
@@ -22,7 +23,7 @@ class Forms extends Component
 {
     const EVENT_REGISTER_CAPTCHAS = 'registerSproutFormsCaptchas';
 
-    const EVENT_REGISTER_GLOBAL_TEMPLATES = 'registerFormTemplatesEvent';
+    const EVENT_REGISTER_FORM_TEMPLATES = 'registerFormTemplatesEvent';
 
     /**
      * @var
@@ -630,7 +631,7 @@ class Forms extends Component
             'types' => []
         ]);
 
-        $this->trigger(self::EVENT_REGISTER_GLOBAL_TEMPLATES, $event);
+        $this->trigger(self::EVENT_REGISTER_FORM_TEMPLATES, $event);
 
         return $event->types;
     }
@@ -648,6 +649,14 @@ class Forms extends Component
         foreach ($templateTypes as $templateType) {
             $templates[$templateType] = new $templateType();
         }
+
+        uasort($templates, function($a, $b) {
+            /**
+             * @var $a BaseFormTemplates
+             * @var $b BaseFormTemplates
+             */
+            return $a->getName() <=> $b->getName();
+        });
 
         return $templates;
     }
@@ -697,7 +706,7 @@ class Forms extends Component
         $templates = [];
         $settings = Craft::$app->plugins->getPlugin('sprout-forms')->getSettings();
         $templateFolderOverride = '';
-        $defaultVersion = new SproutForms3();
+        $defaultVersion = new AccessibleTemplates();
         $defaultTemplate = $defaultVersion->getPath();
 
         if ($settings->templateFolderOverride){
