@@ -9,9 +9,9 @@ use craft\base\PreviewableFieldInterface;
 use yii\db\Schema;
 
 use barrelstrength\sproutforms\contracts\FieldModel;
-use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
+use barrelstrength\sproutforms\contracts\BaseFormField;
 
-class Invisible extends SproutFormsBaseField implements PreviewableFieldInterface
+class Invisible extends BaseFormField implements PreviewableFieldInterface
 {
     /**
      * @var basename(path)ool

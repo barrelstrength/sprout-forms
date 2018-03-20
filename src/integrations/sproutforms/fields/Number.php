@@ -10,13 +10,13 @@ use craft\helpers\Db;
 use craft\helpers\Localization;
 use craft\i18n\Locale;
 
-use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
+use barrelstrength\sproutforms\contracts\BaseFormField;
 
 /**
  * Class SproutFormsNumberField
  *
  */
-class Number extends SproutFormsBaseField implements PreviewableFieldInterface
+class Number extends BaseFormField implements PreviewableFieldInterface
 {
     /**
      * @var int|float The minimum allowed number

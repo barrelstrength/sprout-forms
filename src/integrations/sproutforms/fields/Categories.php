@@ -15,7 +15,7 @@ use barrelstrength\sproutforms\SproutForms;
  * Class SproutFormsCategoriesField
  *
  */
-class Categories extends SproutBaseRelationField
+class Categories extends BaseRelationFormField
 {
     // Properties
     // =====================================================================

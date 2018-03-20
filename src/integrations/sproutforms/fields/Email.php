@@ -9,9 +9,9 @@ use yii\db\Schema;
 use craft\helpers\Template as TemplateHelper;
 
 use barrelstrength\sproutbase\SproutBase;
-use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
+use barrelstrength\sproutforms\contracts\BaseFormField;
 
-class Email extends SproutFormsBaseField implements PreviewableFieldInterface
+class Email extends BaseFormField implements PreviewableFieldInterface
 {
     /**
      * @var string|null

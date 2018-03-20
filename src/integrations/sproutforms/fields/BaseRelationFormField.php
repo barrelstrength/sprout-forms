@@ -17,14 +17,14 @@ use craft\tasks\LocalizeRelations;
 use craft\validators\ArrayValidator;
 use yii\base\NotSupportedException;
 
-use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
+use barrelstrength\sproutforms\contracts\BaseFormField;
 use barrelstrength\sproutforms\SproutForms;
 
 /**
- * SproutBaseRelationField is the base class for classes representing a relational field.
+ * BaseRelationFormField is the base class for classes representing a relational field.
  *
  */
-abstract class SproutBaseRelationField extends SproutFormsBaseField implements PreviewableFieldInterface, EagerLoadingFieldInterface
+abstract class BaseRelationFormField extends BaseFormField implements PreviewableFieldInterface, EagerLoadingFieldInterface
 {
     // Static
     // =========================================================================
@@ -460,7 +460,7 @@ abstract class SproutBaseRelationField extends SproutFormsBaseField implements P
             /** @var Field $existingField */
             $existingField = Craft::$app->getFields()->getFieldById($this->id);
 
-            if ($existingField && $existingField instanceof SproutBaseRelationField && !$existingField->localizeRelations) {
+            if ($existingField && $existingField instanceof BaseRelationFormField && !$existingField->localizeRelations) {
                 $this->_makeExistingRelationsTranslatable = true;
             }
         }

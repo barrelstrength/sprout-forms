@@ -38,7 +38,7 @@ use barrelstrength\sproutforms\events\RegisterFieldsEvent;
 class Fields extends Component
 {
     /**
-     * @var SproutFormsBaseField[]
+     * @var BaseFormField[]
      */
     protected $registeredFields;
 
@@ -102,7 +102,7 @@ class Fields extends Component
     }
 
     /**
-     * @return array|SproutFormsBaseField[]
+     * @return array|BaseFormField[]
      */
     public function getRegisteredFields()
     {
@@ -119,7 +119,7 @@ class Fields extends Component
             $fields = $event->fields;
 
             /**
-             * @var SproutFormsBaseField $instance
+             * @var BaseFormField $instance
              */
             foreach ($fields as $instance) {
                 $this->registeredFields[get_class($instance)] = $instance;
@@ -172,7 +172,7 @@ class Fields extends Component
     /**
      * @param $type
      *
-     * @return SproutFormsBaseField|mixed
+     * @return BaseFormField|mixed
      */
     public function getRegisteredField($type)
     {

@@ -8,14 +8,14 @@ use yii\db\Schema;
 use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
 
-use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
+use barrelstrength\sproutforms\contracts\BaseFormField;
 
 /**
  * Class SingleLine
  *
  * @package Craft
  */
-class SingleLine extends SproutFormsBaseField implements PreviewableFieldInterface
+class SingleLine extends BaseFormField implements PreviewableFieldInterface
 {
     /**
      * @var string|null The input’s placeholder text

@@ -10,7 +10,7 @@ use craft\base\ElementInterface;
  * Class SproutFormsRadioButtonsField
  *
  */
-class MultipleChoice extends SproutBaseOptionsField
+class MultipleChoice extends BaseOptionsFormField
 {
     /**
      * @inheritdoc

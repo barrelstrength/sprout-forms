@@ -10,7 +10,7 @@ use craft\base\ElementInterface;
  * Class SproutFormsDropdownField
  *
  */
-class Dropdown extends SproutBaseOptionsField
+class Dropdown extends BaseOptionsFormField
 {
     /**
      * @inheritdoc

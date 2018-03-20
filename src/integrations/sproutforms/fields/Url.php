@@ -9,10 +9,10 @@ use craft\base\PreviewableFieldInterface;
 use yii\db\Schema;
 
 use barrelstrength\sproutbase\SproutBase;
-use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
+use barrelstrength\sproutforms\contracts\BaseFormField;
 use barrelstrength\sproutbase\web\assets\sproutfields\url\UrlFieldAsset;
 
-class Url extends SproutFormsBaseField implements PreviewableFieldInterface
+class Url extends BaseFormField implements PreviewableFieldInterface
 {
 
     /**

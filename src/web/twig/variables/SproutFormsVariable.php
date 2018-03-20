@@ -11,7 +11,7 @@ use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\models\FieldGroup;
 use barrelstrength\sproutforms\models\FieldLayout;
-use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
+use barrelstrength\sproutforms\contracts\BaseFormField;
 use yii\base\Exception;
 
 /**
@@ -438,7 +438,7 @@ class SproutFormsVariable
      */
     public function addFieldVariables(array $variables)
     {
-        SproutFormsBaseField::addFieldVariables($variables);
+        BaseFormField::addFieldVariables($variables);
     }
 
     /**
@@ -522,7 +522,7 @@ class SproutFormsVariable
     }
 
     /**
-     * @return array|\barrelstrength\sproutforms\services\SproutFormsBaseField[]
+     * @return array|\barrelstrength\sproutforms\services\BaseFormField[]
      */
     public function getRegisteredFields()
     {

@@ -10,7 +10,7 @@ use craft\base\ElementInterface;
  * Class SproutFormsMultiSelectField
  *
  */
-class MultiSelect extends SproutBaseOptionsField
+class MultiSelect extends BaseOptionsFormField
 {
     /**
      * @inheritdoc

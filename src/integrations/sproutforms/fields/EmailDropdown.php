@@ -10,7 +10,7 @@ use craft\helpers\StringHelper;
 
 use barrelstrength\sproutbase\SproutBase;
 
-class EmailDropdown extends SproutBaseOptionsField
+class EmailDropdown extends BaseOptionsFormField
 {
     public static function displayName(): string
     {

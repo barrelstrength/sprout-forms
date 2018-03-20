@@ -7,10 +7,10 @@ use craft\base\ElementInterface;
 use craft\helpers\Template as TemplateHelper;
 use yii\db\Schema;
 
-use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
+use barrelstrength\sproutforms\contracts\BaseFormField;
 use barrelstrength\sproutbase\web\assets\sproutfields\notes\QuillAsset;
 
-class SectionHeading extends SproutFormsBaseField
+class SectionHeading extends BaseFormField
 {
     /**
      * @var bool

@@ -8,9 +8,9 @@ use craft\helpers\Template as TemplateHelper;
 use craft\base\PreviewableFieldInterface;
 use yii\db\Schema;
 use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
+use barrelstrength\sproutforms\contracts\BaseFormField;
 
-class Hidden extends SproutFormsBaseField implements PreviewableFieldInterface
+class Hidden extends BaseFormField implements PreviewableFieldInterface
 {
     /**
      * @var bool

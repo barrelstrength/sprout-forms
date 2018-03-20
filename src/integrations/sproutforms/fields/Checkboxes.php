@@ -10,7 +10,7 @@ use craft\base\ElementInterface;
  * Class SproutFormsCheckboxesField
  *
  */
-class Checkboxes extends SproutBaseOptionsField
+class Checkboxes extends BaseOptionsFormField
 {
     /**
      * @inheritdoc

@@ -23,7 +23,7 @@ use craft\web\UploadedFile;
  *
  * @package Craft
  */
-class FileUpload extends SproutBaseRelationField
+class FileUpload extends BaseRelationFormField
 {
     // Properties
     // =========================================================================

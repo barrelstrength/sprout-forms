@@ -12,13 +12,13 @@ use craft\helpers\Db;
 use craft\helpers\Json;
 use yii\db\Schema;
 
-use barrelstrength\sproutforms\contracts\SproutFormsBaseField;
+use barrelstrength\sproutforms\contracts\BaseFormField;
 
 /**
- * SproutBaseOptionsField is the base class for classes representing an options field.
+ * BaseOptionsFormField is the base class for classes representing an options field.
  *
  */
-abstract class SproutBaseOptionsField extends SproutFormsBaseField implements PreviewableFieldInterface
+abstract class BaseOptionsFormField extends BaseFormField implements PreviewableFieldInterface
 {
     // Properties
     // =========================================================================

@@ -7,11 +7,11 @@ use craft\base\Field;
 use craft\base\ElementInterface;
 
 /**
- * Class SproutFormsBaseField
+ * Class BaseFormField
  *
  * @package Craft
  */
-abstract class SproutFormsBaseField extends Field
+abstract class BaseFormField extends Field
 {
     /**
      * @var array
