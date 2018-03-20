@@ -37,7 +37,8 @@
     value: (field is defined ? field.name : null),
     errors: (field is defined ? field.getErrors('name') : null),
     required: true,
-    autofocus: true
+    autofocus: true,
+    first: not field.allowRequired
 }) }}
 
 {% if field.displayInstructionsField %}
