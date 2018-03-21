@@ -82,8 +82,6 @@ class Dropdown extends BaseOptionsFormField
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-        $this->beginRendering();
-
         $rendered = Craft::$app->getView()->renderTemplate(
             'dropdown/input',
             [
@@ -93,8 +91,6 @@ class Dropdown extends BaseOptionsFormField
                 'renderingOptions' => $renderingOptions
             ]
         );
-
-        $this->endRendering();
 
         return TemplateHelper::raw($rendered);
     }

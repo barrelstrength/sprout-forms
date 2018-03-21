@@ -135,8 +135,6 @@ class Name extends BaseFormField implements PreviewableFieldInterface
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-        $this->beginRendering();
-
         if ($this->displayMultipleFields) {
             $this->hasMultipleLabels = true;
         }
@@ -150,8 +148,6 @@ class Name extends BaseFormField implements PreviewableFieldInterface
                 'renderingOptions' => $renderingOptions
             ]
         );
-
-        $this->endRendering();
 
         return TemplateHelper::raw($rendered);
     }

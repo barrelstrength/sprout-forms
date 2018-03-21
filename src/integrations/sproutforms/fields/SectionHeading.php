@@ -153,8 +153,6 @@ class SectionHeading extends BaseFormField
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-        $this->beginRendering();
-
         $name = $this->handle;
         $namespaceInputId = $this->getNamespace().'-'.$name;
 
@@ -168,8 +166,6 @@ class SectionHeading extends BaseFormField
                 'field' => $this
             ]
         );
-
-        $this->endRendering();
 
         return TemplateHelper::raw($rendered);
     }

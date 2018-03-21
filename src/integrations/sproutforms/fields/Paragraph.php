@@ -108,8 +108,6 @@ class Paragraph extends BaseFormField implements PreviewableFieldInterface
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-        $this->beginRendering();
-
         $rendered = Craft::$app->getView()->renderTemplate(
             'paragraph/input',
             [
@@ -119,8 +117,6 @@ class Paragraph extends BaseFormField implements PreviewableFieldInterface
                 'renderingOptions' => $renderingOptions
             ]
         );
-
-        $this->endRendering();
 
         return TemplateHelper::raw($rendered);
     }

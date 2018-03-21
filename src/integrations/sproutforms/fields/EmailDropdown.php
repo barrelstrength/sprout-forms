@@ -135,8 +135,6 @@ class EmailDropdown extends BaseOptionsFormField
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-        $this->beginRendering();
-
         $selectedValue = $value->value ?? null;
 
         $options = $this->options;
@@ -151,8 +149,6 @@ class EmailDropdown extends BaseOptionsFormField
                 'field' => $this
             ]
         );
-
-        $this->endRendering();
 
         return TemplateHelper::raw($rendered);
     }

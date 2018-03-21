@@ -726,13 +726,16 @@ class Forms extends Component
         $templates['form'] = $defaultTemplate;
         $templates['tab'] = $defaultTemplate;
         $templates['field'] = $defaultTemplate;
+        $templates['fields'] = $defaultTemplate;
         $templates['email'] = $defaultTemplate;
 
         // See if we should override our defaults
         if ($templateFolderOverride) {
+
             $formTemplate = $templateFolderOverride.DIRECTORY_SEPARATOR.'form';
             $tabTemplate = $templateFolderOverride.DIRECTORY_SEPARATOR.'tab';
             $fieldTemplate = $templateFolderOverride.DIRECTORY_SEPARATOR.'field';
+            $fieldsFolder = $templateFolderOverride.DIRECTORY_SEPARATOR.'fields';
             $emailTemplate = $templateFolderOverride.DIRECTORY_SEPARATOR.'email';
             $basePath = $templateFolderOverride.DIRECTORY_SEPARATOR;
 
@@ -748,6 +751,10 @@ class Forms extends Component
 
                 if (file_exists($fieldTemplate.'.'.$extension)) {
                     $templates['field'] = $basePath;
+                }
+
+                if (file_exists($fieldsFolder)) {
+                    $templates['fields'] = $basePath . 'fields';
                 }
 
                 if (file_exists($emailTemplate.'.'.$extension)) {

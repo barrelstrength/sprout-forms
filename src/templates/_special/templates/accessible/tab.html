@@ -4,20 +4,12 @@
 
     <section class="tab">
 
-        {% if displaySectionTitles -%}
+        {% if form.displaySectionTitles -%}
             <h3>{{ tab.name|t }}</h3>
         {%- endif %}
 
-        {% for layoutField in layoutFields -%}
-            {%- set field = layoutField -%}
-            {% include "field" with {
-                form:                 form,
-                field:                field,
-                element:              entry,
-                required:             field.required,
-                renderingOptions:     renderingOptions,
-                thirdPartySubmission: thirdPartySubmission,
-            } only %}
+        {% for field in layoutFields -%}
+            {{- craft.sproutForms.displayField(form, field, renderingOptions) }}
         {%- endfor %}
 
     </section>

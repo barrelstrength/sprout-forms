@@ -69,8 +69,6 @@ class Entries extends BaseRelationFormField
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-        $this->beginRendering();
-
         $entries = SproutForms::$app->frontEndFields->getFrontEndEntries($this->getSettings());
 
         $rendered = Craft::$app->getView()->renderTemplate(
@@ -83,8 +81,6 @@ class Entries extends BaseRelationFormField
                 'entries' => $entries,
             ]
         );
-
-        $this->endRendering();
 
         return TemplateHelper::raw($rendered);
     }

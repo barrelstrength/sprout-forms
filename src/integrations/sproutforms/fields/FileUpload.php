@@ -197,8 +197,6 @@ class FileUpload extends BaseRelationFormField
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-        $this->beginRendering();
-
         $rendered = Craft::$app->getView()->renderTemplate(
             'fileupload/input',
             [
@@ -208,8 +206,6 @@ class FileUpload extends BaseRelationFormField
                 'renderingOptions' => $renderingOptions
             ]
         );
-
-        $this->endRendering();
 
         return TemplateHelper::raw($rendered);
     }

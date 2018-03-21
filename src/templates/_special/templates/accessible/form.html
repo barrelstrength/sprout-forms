@@ -8,22 +8,27 @@
 {%- set redirectUri = form.redirectUri -%}
 
 <form method="post" accept-charset="utf-8" enctype="multipart/form-data"
-    {%- if id %} id="{{ id }}"{% endif -%}
-    {%- if class %} class="{{ class -}}{%- if errors %} {{ errorClass }}{% endif -%}"{% endif -%}
-    >
+        {%- if id %} id="{{ id }}"{% endif -%}
+        {%- if class %} class="{{ class -}}{%- if errors %} {{ errorClass }}{% endif -%}"{% endif -%}
+>
     {{ csrfInput() }}
-    <input type="hidden" aria-hidden="true" name="action" value="sprout-forms/entries/save-entry">
-    <input type="hidden" aria-hidden="true" name="handle" value="{{ form.handle }}">
-    {% if redirectUri is not empty -%}
+    <input type="hidden" aria-hidden="true" name="action"
+           value="sprout-forms/entries/save-entry">
+    <input type="hidden" aria-hidden="true" name="handle"
+           value="{{ form.handle }}">
+    {%- if redirectUri is not empty %}
         {% if redirectUri|slice(0, 1)|lower == '?' %}
             {%- set redirectUri = craft.request.getUrl()~redirectUri %}
         {% endif %}
 
-        <input type="hidden" aria-hidden="true" name="redirect" value="{{ redirectUri|hash }}">
+        <input type="hidden" aria-hidden="true" name="redirect"
+               value="{{ redirectUri|hash }}">
     {% endif %}
 
     <div class="fields">
-        {{ body | raw }}
+        {%- for tab in form.getFieldLayout().getTabs() %}
+            {{ craft.sproutForms.displayTab(form, tab.id, renderingOptions) }}
+        {% endfor -%}
     </div>
 
     {% hook 'sproutForms.modifyForm' %}
@@ -64,8 +69,7 @@
             form: null,
             checkableInputs: null,
 
-            init: function(id)
-            {
+            init: function(id) {
                 this.formId = id;
                 this.form = document.getElementById(this.formId);
                 this.checkableInputs = this.form.querySelectorAll('[type=checkbox], [type=radio]');
@@ -82,8 +86,7 @@
                 }
             },
 
-            addCheckableInputsEventListeners: function()
-            {
+            addCheckableInputsEventListeners: function() {
                 for (var i = 0; i < this.checkableInputs.length; i += 1) {
                     this.checkableInputs[i].addEventListener("click", function(event) {
                         this.onCheckableInputChange(event);

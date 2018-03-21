@@ -165,8 +165,6 @@ class Phone extends BaseFormField implements PreviewableFieldInterface
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-        $this->beginRendering();
-
         $name = $this->handle;
         $country = $value['country'] ?? $this->country;
         $val = $value['phone'] ?? null;
@@ -180,8 +178,6 @@ class Phone extends BaseFormField implements PreviewableFieldInterface
                 'renderingOptions' => $renderingOptions
             ]
         );
-
-        $this->endRendering();
 
         return TemplateHelper::raw($rendered);
     }

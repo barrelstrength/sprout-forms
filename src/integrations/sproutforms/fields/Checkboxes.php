@@ -86,17 +86,10 @@ class Checkboxes extends BaseOptionsFormField
     }
 
     /**
-     * @param mixed      $value
-     * @param array|null $renderingOptions
-     *
-     * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @inheritdoc
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-        $this->beginRendering();
-
         $rendered = Craft::$app->getView()->renderTemplate(
             'checkboxes/input',
             [
@@ -106,8 +99,6 @@ class Checkboxes extends BaseOptionsFormField
                 'renderingOptions' => $renderingOptions
             ]
         );
-
-        $this->endRendering();
 
         return TemplateHelper::raw($rendered);
     }

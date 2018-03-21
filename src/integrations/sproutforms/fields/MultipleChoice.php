@@ -83,8 +83,6 @@ class MultipleChoice extends BaseOptionsFormField
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-        $this->beginRendering();
-
         $rendered = Craft::$app->getView()->renderTemplate(
             'multiplechoice/input',
             [
@@ -94,8 +92,6 @@ class MultipleChoice extends BaseOptionsFormField
                 'renderingOptions' => $renderingOptions
             ]
         );
-
-        $this->endRendering();
 
         return TemplateHelper::raw($rendered);
     }

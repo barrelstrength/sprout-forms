@@ -87,8 +87,6 @@ class MultiSelect extends BaseOptionsFormField
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-        $this->beginRendering();
-
         $rendered = Craft::$app->getView()->renderTemplate(
             'multiselect/input',
             [
@@ -98,8 +96,6 @@ class MultiSelect extends BaseOptionsFormField
                 'renderingOptions' => $renderingOptions
             ]
         );
-
-        $this->endRendering();
 
         return TemplateHelper::raw($rendered);
     }

@@ -48,18 +48,6 @@ abstract class BaseFormField extends Field
         return Craft::$app->httpSession->get($handle, $default);
     }
 
-    final public function beginRendering()
-    {
-        $this->originalTemplatesPath = Craft::$app->getView()->getTemplatesPath();
-
-        Craft::$app->getView()->setTemplatesPath($this->getTemplatesPath());
-    }
-
-    final public function endRendering()
-    {
-        Craft::$app->getView()->setTemplatesPath($this->originalTemplatesPath);
-    }
-
     /**
      * @return string
      */
@@ -125,6 +113,18 @@ abstract class BaseFormField extends Field
     public function getTemplatesPath()
     {
         return Craft::getAlias('@barrelstrength/sproutforms/templates/_components/fields/');
+    }
+
+    /**
+     *
+     * @return string
+     * @throws \ReflectionException
+     */
+    public function getFieldInputFolder()
+    {
+        $fieldClassReflection = new \ReflectionClass($this);
+
+        return strtolower($fieldClassReflection->getShortName());
     }
 
     /**

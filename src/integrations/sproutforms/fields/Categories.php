@@ -110,8 +110,6 @@ class Categories extends BaseRelationFormField
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-        $this->beginRendering();
-
         $categories = SproutForms::$app->frontEndFields->getFrontEndCategories($this->getSettings());
 
         $rendered = Craft::$app->getView()->renderTemplate(
@@ -124,8 +122,6 @@ class Categories extends BaseRelationFormField
                 'categories' => $categories,
             ]
         );
-
-        $this->endRendering();
 
         return TemplateHelper::raw($rendered);
     }
