@@ -112,8 +112,8 @@ class Email extends BaseFormField implements PreviewableFieldInterface
     }
 
     /**
-     * @param mixed                                            $value
-     * @param array|null                                       $renderingOptions
+     * @param mixed      $value
+     * @param array|null $renderingOptions
      *
      * @return string
      * @throws \Twig_Error_Loader
@@ -121,8 +121,6 @@ class Email extends BaseFormField implements PreviewableFieldInterface
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-        $this->beginRendering();
-
         $attributes = $this->getAttributes();
         $errorMessage = SproutBase::$app->email->getErrorMessage($attributes['name'], $this);
         $placeholder = isset($this['placeholder']) ? $this['placeholder'] : '';
@@ -138,8 +136,6 @@ class Email extends BaseFormField implements PreviewableFieldInterface
                 'placeholder' => $placeholder
             ]
         );
-
-        $this->endRendering();
 
         return TemplateHelper::raw($rendered);
     }

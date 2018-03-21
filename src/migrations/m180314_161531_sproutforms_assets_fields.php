@@ -26,12 +26,12 @@ class m180314_161531_sproutforms_assets_fields extends Migration
 
         foreach ($fields as $field) {
             $settings = json_decode($field['settings'], true);
-            $settings['sources'] = "*";
+            $settings['sources'] = '*';
             $settings['sources'] = null;
             $settings['useSingleFolder'] = 1;
-            $settings['defaultUploadLocationSource'] = $settings['defaultUploadLocationSource'] ? "folder:".$settings['defaultUploadLocationSource'] : '';
-            $settings['singleUploadLocationSource'] = $settings['singleUploadLocationSource'] ? "folder:".$settings['singleUploadLocationSource'] : '';
-            $settings['viewMode'] = "large";
+            $settings['defaultUploadLocationSource'] = $settings['defaultUploadLocationSource'] ? 'folder:'.$settings['defaultUploadLocationSource'] : '';
+            $settings['singleUploadLocationSource'] = $settings['singleUploadLocationSource'] ? 'folder:'.$settings['singleUploadLocationSource'] : '';
+            $settings['viewMode'] = 'large';
             $settings['localizeRelations'] = false;
             $settingsAsJson = json_encode($settings);
 

@@ -84,6 +84,8 @@ class SproutForms extends Plugin
 
         SproutBaseHelper::registerModule();
 
+        Craft::setAlias('@sproutformslib', dirname(__DIR__, 2).'/sprout-forms/lib');
+
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $event) {
             $event->rules = array_merge($event->rules, $this->getCpUrlRules());
         });
@@ -218,13 +220,13 @@ class SproutForms extends Plugin
                     'label' => Craft::t('sprout-forms', 'Entries'),
                     'url' => 'sprout-forms/entries'
                 ],
-                'notifications' =>[
+                'notifications' => [
                     'label' => Craft::t('sprout-forms', 'Notifications'),
                     'url' => 'sprout-forms/notifications'
                 ],
                 'reports' => [
                     'label' => Craft::t('sprout-forms', 'Reports'),
-                    'url' => 'sprout-forms/reports/' . $entriesDataSource->dataSourceId . '-sproutforms-entriesdatasource'
+                    'url' => 'sprout-forms/reports/'.$entriesDataSource->dataSourceId.'-sproutforms-entriesdatasource'
                 ],
                 'settings' => [
                     'label' => Craft::t('sprout-forms', 'Settings'),
@@ -287,18 +289,18 @@ class SproutForms extends Plugin
     {
         return [
             'manageSproutFormsForms' => [
-                'label' => Craft::t('sprout-forms','Manage Forms')
+                'label' => Craft::t('sprout-forms', 'Manage Forms')
             ],
             'viewSproutFormsEntries' => [
-                'label' => Craft::t('sprout-forms','View Form Entries'),
+                'label' => Craft::t('sprout-forms', 'View Form Entries'),
                 'nested' => [
                     'editSproutFormsEntries' => [
-                        'label' => Craft::t('sprout-forms','Edit Form Entries')
+                        'label' => Craft::t('sprout-forms', 'Edit Form Entries')
                     ]
                 ]
             ],
             'editSproutFormsSettings' => [
-                'label' => Craft::t('sprout-forms','Edit Settings')
+                'label' => Craft::t('sprout-forms', 'Edit Settings')
             ]
         ];
     }

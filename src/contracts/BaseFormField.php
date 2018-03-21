@@ -26,6 +26,11 @@ abstract class BaseFormField extends Field
     /**
      * @var string
      */
+    public $cssClasses = '';
+
+    /**
+     * @var string
+     */
     protected $originalTemplatesPath;
 
     public static function addFieldVariables(array $variables)
@@ -46,18 +51,6 @@ abstract class BaseFormField extends Field
     final public function getValue($handle, $default = null)
     {
         return Craft::$app->httpSession->get($handle, $default);
-    }
-
-    final public function beginRendering()
-    {
-        $this->originalTemplatesPath = Craft::$app->getView()->getTemplatesPath();
-
-        Craft::$app->getView()->setTemplatesPath($this->getTemplatesPath());
-    }
-
-    final public function endRendering()
-    {
-        Craft::$app->getView()->setTemplatesPath($this->originalTemplatesPath);
     }
 
     /**
@@ -124,7 +117,19 @@ abstract class BaseFormField extends Field
      */
     public function getTemplatesPath()
     {
-        return Craft::getAlias('@barrelstrength/sproutforms/templates/_components/fields/');
+        return Craft::getAlias('@barrelstrength/sproutforms/templates/_formtemplates/fields/');
+    }
+
+    /**
+     *
+     * @return string
+     * @throws \ReflectionException
+     */
+    public function getFieldInputFolder()
+    {
+        $fieldClassReflection = new \ReflectionClass($this);
+
+        return strtolower($fieldClassReflection->getShortName());
     }
 
     /**
@@ -135,8 +140,8 @@ abstract class BaseFormField extends Field
     abstract public function getExampleInputHtml();
 
     /**
-     * @param mixed      $value
-     * @param array      $renderingOptions
+     * @param mixed $value
+     * @param array $renderingOptions
      *
      * @return \Twig_Markup
      */
@@ -148,5 +153,48 @@ abstract class BaseFormField extends Field
     public function getTableAttributeHtml($value, ElementInterface $element): string
     {
         return $value;
+    }
+
+    /**
+     * @return array
+     */
+    public function getClassesOptions()
+    {
+        $classesIds = [];
+        $options = [
+            [
+                'label' => Craft::t('sprout-forms','Select...'),
+                'value' => ''
+            ],
+            [
+                'label' => "Left (left)",
+                'value' => 'left'
+            ],
+            [
+                'label' => "Right (right)",
+                'value' => 'right'
+            ]
+        ];
+
+        $classesIds[] = 'left';
+        $classesIds[] = 'right';
+
+        $options[] = [
+            'optgroup' => Craft::t('sprout-forms','Custom CSS Classes')
+        ];
+
+        if (!in_array($this->cssClasses, $classesIds) && $this->cssClasses != '') {
+            $options[] = [
+                'label' => $this->cssClasses,
+                'value' => $this->cssClasses
+            ];
+        }
+
+        $options[] = [
+            'label' => Craft::t('sprout-forms','Add Custom'),
+            'value' => 'custom'
+        ];
+
+        return $options;
     }
 }

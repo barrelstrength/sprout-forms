@@ -103,8 +103,7 @@ class Form extends BaseElementImporter
 
                 $field = SproutImport::$app->settingsImporter->saveSetting($field, $importerClass);
 
-                if ($field->required)
-                {
+                if ($field->required) {
                     $requiredFields[] = $field->id;
                 }
 

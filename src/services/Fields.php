@@ -24,6 +24,7 @@ use barrelstrength\sproutforms\integrations\sproutforms\fields\SectionHeading;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Tags;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Url;
 use Craft;
+use craft\base\FieldInterface;
 use yii\base\Component;
 use craft\base\Field;
 use craft\records\Field as FieldRecord;
@@ -270,7 +271,7 @@ class Fields extends Component
      * This service allows create a default tab given a form
      *
      * @param      $form
-     * @param null $field
+     * @param FieldInterface|null $field
      *
      * @return null
      * @throws \Throwable
@@ -278,7 +279,7 @@ class Fields extends Component
     public function addDefaultTab($form, &$field = null)
     {
         if ($form) {
-            if (is_null($field)) {
+            if ($field === null) {
                 $fieldsService = Craft::$app->getFields();
                 $handle = $this->getFieldAsNew('handle', 'defaultField');
 

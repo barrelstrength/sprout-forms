@@ -1,6 +1,7 @@
 <?php
 
 namespace barrelstrength\sproutforms\contracts;
+
 use Craft;
 
 /**

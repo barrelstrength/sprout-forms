@@ -61,7 +61,7 @@ class Paragraph extends BaseFormField implements PreviewableFieldInterface
     public function getSettingsHtml()
     {
         $rendered = Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/paragraph/settings',
+            'sprout-forms/_formtemplates/fields/paragraph/settings',
             [
                 'field' => $this,
             ]
@@ -91,7 +91,7 @@ class Paragraph extends BaseFormField implements PreviewableFieldInterface
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/paragraph/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/paragraph/example',
             [
                 'field' => $this
             ]
@@ -99,8 +99,8 @@ class Paragraph extends BaseFormField implements PreviewableFieldInterface
     }
 
     /**
-     * @param mixed                                            $value
-     * @param array|null                                       $renderingOptions
+     * @param mixed      $value
+     * @param array|null $renderingOptions
      *
      * @return string
      * @throws \Twig_Error_Loader
@@ -108,8 +108,6 @@ class Paragraph extends BaseFormField implements PreviewableFieldInterface
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-        $this->beginRendering();
-
         $rendered = Craft::$app->getView()->renderTemplate(
             'paragraph/input',
             [
@@ -119,8 +117,6 @@ class Paragraph extends BaseFormField implements PreviewableFieldInterface
                 'renderingOptions' => $renderingOptions
             ]
         );
-
-        $this->endRendering();
 
         return TemplateHelper::raw($rendered);
     }

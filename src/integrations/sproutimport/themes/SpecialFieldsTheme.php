@@ -15,7 +15,7 @@ class SpecialFieldsTheme extends BaseTheme
     /**
      * @return string
      */
-    public function getName() : string
+    public function getName(): string
     {
         return Craft::t('sprout-import', 'Example Form - Special Fields');
     }
@@ -23,7 +23,7 @@ class SpecialFieldsTheme extends BaseTheme
     /**
      * @return string
      */
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return Craft::t('sprout-import', 'An example form with all special fields.');
     }
@@ -37,7 +37,7 @@ class SpecialFieldsTheme extends BaseTheme
      */
     public function getSchemaFolder()
     {
-        return $this->plugin->getBasePath() . DIRECTORY_SEPARATOR . 'themes/specialfields/schema';
+        return $this->plugin->getBasePath().DIRECTORY_SEPARATOR.'themes/specialfields/schema';
     }
 
     /**
@@ -49,7 +49,7 @@ class SpecialFieldsTheme extends BaseTheme
      */
     public function getSourceTemplateFolder()
     {
-        return $this->plugin->getBasePath() . DIRECTORY_SEPARATOR . 'themes/specialfields/templates';
+        return $this->plugin->getBasePath().DIRECTORY_SEPARATOR.'themes/specialfields/templates';
     }
 
 }

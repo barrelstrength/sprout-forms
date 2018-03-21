@@ -35,7 +35,7 @@ class HoneypotCaptcha extends BaseCaptcha
      */
     public function getDescription()
     {
-        return Craft::t('sprout-forms','Block form submissions by robots who auto-fill all of your form fields ');
+        return Craft::t('sprout-forms', 'Block form submissions by robots who auto-fill all of your form fields ');
     }
 
     /**
@@ -123,7 +123,7 @@ class HoneypotCaptcha extends BaseCaptcha
     {
         $settings = $this->getSettings();
 
-        return $settings['honeypotScreenReaderMessage'] ?? Craft::t('sprout-forms','Leave this field blank');
+        return $settings['honeypotScreenReaderMessage'] ?? Craft::t('sprout-forms', 'Leave this field blank');
     }
 }
 

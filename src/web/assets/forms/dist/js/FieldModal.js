@@ -236,7 +236,11 @@ if (typeof Craft.SproutForms === typeof undefined) {
                     // Fixes Double-instantiating bug
                     if ((src.indexOf('MatrixConfigurator')  >= 0 ) ||
                         (src.indexOf('TableFieldSettings.min.js')  >= 0 )||
-                        (src.indexOf('quill.min.js')  >= 0 ))
+                        (src.indexOf('quill.min.js')  >= 0 ) ||
+                        (src.indexOf('sproutfields.js')  >= 0 ) ||
+                        (src.indexOf('EditableTable.js')  >= 0 ) ||
+                        (src.indexOf('initialize.js')  >= 0 )
+                        )
                     {
                         $.getScript(src, $.proxy(function(data, status)
                         {

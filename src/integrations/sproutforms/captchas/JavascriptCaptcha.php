@@ -30,7 +30,7 @@ class JavascriptCaptcha extends BaseCaptcha
      */
     public function getDescription()
     {
-        return Craft::t('sprout-forms','Prevent a form from being submmitted if a user does not have JavaScript enabled');
+        return Craft::t('sprout-forms', 'Prevent a form from being submmitted if a user does not have JavaScript enabled');
     }
 
     /**

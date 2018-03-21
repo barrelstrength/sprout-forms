@@ -103,8 +103,8 @@ class RegularExpression extends BaseFormField implements PreviewableFieldInterfa
     }
 
     /**
-     * @param mixed                                            $value
-     * @param array|null                                       $renderingOptions
+     * @param mixed      $value
+     * @param array|null $renderingOptions
      *
      * @return string
      * @throws \Twig_Error_Loader
@@ -112,8 +112,6 @@ class RegularExpression extends BaseFormField implements PreviewableFieldInterfa
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-        $this->beginRendering();
-
         $placeholder = $this->placeholder ?? '';
 
         $pattern = $this->customPattern;
@@ -133,8 +131,6 @@ class RegularExpression extends BaseFormField implements PreviewableFieldInterfa
                 'placeholder' => $placeholder
             ]
         );
-
-        $this->endRendering();
 
         return TemplateHelper::raw($rendered);
     }

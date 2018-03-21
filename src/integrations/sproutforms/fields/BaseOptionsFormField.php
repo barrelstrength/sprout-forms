@@ -209,7 +209,7 @@ abstract class BaseOptionsFormField extends BaseFormField implements Previewable
     /**
      * @inheritdoc
      */
-    public function isEmpty($value): bool
+    public function isValueEmpty($value, ElementInterface $element): bool
     {
         /** @var MultiOptionsFieldData|SingleOptionFieldData $value */
         if ($value instanceof SingleOptionFieldData) {

@@ -564,24 +564,22 @@ class Forms extends Component
     /**
      * Creates a form with a empty default tab
      *
-     * @param null $name
-     * @param null $handle
+     * @param string|null $name
+     * @param string|null $handle
      *
-     * @return FormElement|bool|null
+     * @return FormElement|null
      * @throws \Exception
      * @throws \Throwable
      */
     public function createNewForm($name = null, $handle = null)
     {
         $form = new FormElement();
-        $name = empty($name) ? 'Form' : $name;
-        $handle = empty($handle) ? 'form' : $handle;
+        $name = $name ?? 'Form';
+        $handle = $handle ?? 'form';
         $settings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
 
-        if ($settings->enableSaveData)
-        {
-            if ($settings->enableSaveDataPerFormBasis)
-            {
+        if ($settings->enableSaveData) {
+            if ($settings->enableSaveDataPerFormBasis) {
                 $form->saveData = $settings->saveDataByDefault;
             }
         }
@@ -601,7 +599,7 @@ class Forms extends Component
             return $form;
         }
 
-        return false;
+        return null;
     }
 
     /**
@@ -687,7 +685,7 @@ class Forms extends Component
 
         foreach ($captchaTypes as $captchaType) {
             $isEnabled = $sproutFormsSettings->captchaSettings[$captchaType->getCaptchaId()]['enabled'] ?? false;
-            if ($isEnabled){
+            if ($isEnabled) {
                 $captchas[get_class($captchaType)] = $captchaType;
             }
         }
@@ -709,12 +707,12 @@ class Forms extends Component
         $defaultVersion = new AccessibleTemplates();
         $defaultTemplate = $defaultVersion->getPath();
 
-        if ($settings->templateFolderOverride){
+        if ($settings->templateFolderOverride) {
             $templatePath = $this->getTemplatePathById($settings->templateFolderOverride);
-            if ($templatePath){
+            if ($templatePath) {
                 // custom path by template API
                 $templateFolderOverride = $templatePath;
-            }else{
+            } else {
                 // custom folder on site path
                 $templateFolderOverride = $this->getSitePath($settings->templateFolderOverride);
             }
@@ -728,13 +726,16 @@ class Forms extends Component
         $templates['form'] = $defaultTemplate;
         $templates['tab'] = $defaultTemplate;
         $templates['field'] = $defaultTemplate;
+        $templates['fields'] = $defaultTemplate;
         $templates['email'] = $defaultTemplate;
 
         // See if we should override our defaults
         if ($templateFolderOverride) {
+
             $formTemplate = $templateFolderOverride.DIRECTORY_SEPARATOR.'form';
             $tabTemplate = $templateFolderOverride.DIRECTORY_SEPARATOR.'tab';
             $fieldTemplate = $templateFolderOverride.DIRECTORY_SEPARATOR.'field';
+            $fieldsFolder = $templateFolderOverride.DIRECTORY_SEPARATOR.'fields';
             $emailTemplate = $templateFolderOverride.DIRECTORY_SEPARATOR.'email';
             $basePath = $templateFolderOverride.DIRECTORY_SEPARATOR;
 
@@ -750,6 +751,10 @@ class Forms extends Component
 
                 if (file_exists($fieldTemplate.'.'.$extension)) {
                     $templates['field'] = $basePath;
+                }
+
+                if (file_exists($fieldsFolder)) {
+                    $templates['fields'] = $basePath . 'fields';
                 }
 
                 if (file_exists($emailTemplate.'.'.$extension)) {
@@ -773,14 +778,16 @@ class Forms extends Component
     }
 
     /**
-     * @return string|null
+     * @param $templateId
+     *
+     * @return null
      */
     public function getTemplatePathById($templateId)
     {
         $templates = SproutForms::$app->forms->getAllGlobalTemplates();
 
         foreach ($templates as $template) {
-            if ($template->getTemplateId() == $templateId){
+            if ($template->getTemplateId() == $templateId) {
                 return $template->getPath();
             }
         }

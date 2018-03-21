@@ -23,7 +23,7 @@ class BasicTemplates extends BaseFormTemplates
      */
     public function getPath()
     {
-        return Craft::getAlias('@barrelstrength/sproutforms/templates/_special/templates/basic');
+        return Craft::getAlias('@barrelstrength/sproutforms/templates/_formtemplates/templates/basic');
     }
 }
 

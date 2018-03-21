@@ -101,8 +101,8 @@ class Categories extends BaseRelationFormField
     }
 
     /**
-     * @param mixed                                            $value
-     * @param array|null                                       $renderingOptions
+     * @param mixed      $value
+     * @param array|null $renderingOptions
      *
      * @return string
      * @throws \Twig_Error_Loader
@@ -110,8 +110,6 @@ class Categories extends BaseRelationFormField
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-        $this->beginRendering();
-
         $categories = SproutForms::$app->frontEndFields->getFrontEndCategories($this->getSettings());
 
         $rendered = Craft::$app->getView()->renderTemplate(
@@ -124,8 +122,6 @@ class Categories extends BaseRelationFormField
                 'categories' => $categories,
             ]
         );
-
-        $this->endRendering();
 
         return TemplateHelper::raw($rendered);
     }
@@ -157,6 +153,7 @@ class Categories extends BaseRelationFormField
 
         return parent::normalizeValue($value, $element);
     }
+
     /**
      * @inheritdoc
      */

@@ -103,8 +103,8 @@ class CustomHtml extends BaseFormField implements PreviewableFieldInterface
     }
 
     /**
-     * @param mixed                                            $value
-     * @param array|null                                       $renderingOptions
+     * @param mixed      $value
+     * @param array|null $renderingOptions
      *
      * @return string
      * @throws \Twig_Error_Loader
@@ -112,8 +112,6 @@ class CustomHtml extends BaseFormField implements PreviewableFieldInterface
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-        $this->beginRendering();
-
         $rendered = Craft::$app->getView()->renderTemplate(
             'customhtml/input',
             [
@@ -123,8 +121,6 @@ class CustomHtml extends BaseFormField implements PreviewableFieldInterface
                 'renderingOptions' => $renderingOptions
             ]
         );
-
-        $this->endRendering();
 
         return TemplateHelper::raw($rendered);
     }

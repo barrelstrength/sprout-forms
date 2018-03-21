@@ -116,8 +116,6 @@ class Url extends BaseFormField implements PreviewableFieldInterface
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-        $this->beginRendering();
-
         $attributes = $this->getAttributes();
         $errorMessage = SproutBase::$app->url->getErrorMessage($attributes['name'], $this);
         $placeholder = $this->placeholder ?? '';
@@ -134,8 +132,6 @@ class Url extends BaseFormField implements PreviewableFieldInterface
                 'placeholder' => $placeholder
             ]
         );
-
-        $this->endRendering();
 
         return TemplateHelper::raw($rendered);
     }
