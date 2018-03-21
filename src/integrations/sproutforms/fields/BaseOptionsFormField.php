@@ -65,7 +65,7 @@ abstract class BaseOptionsFormField extends BaseFormField implements Previewable
     }
 
     /**
-     * @inheritdoc
+     * @return array
      */
     public function settingsAttributes(): array
     {

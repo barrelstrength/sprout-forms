@@ -87,7 +87,7 @@ abstract class BaseFormField extends Field
     }
 
     /**
-     * Tells Sprout Forms NOT to add a (for) attribute to your field's top leve label
+     * Tells Sprout Forms NOT to add a (for) attribute to your field's top level label
      *
      * @note
      * Sprout Forms renders a label with a (for) attribute for all fields.

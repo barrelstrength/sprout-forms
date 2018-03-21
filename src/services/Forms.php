@@ -605,22 +605,6 @@ class Forms extends Component
     }
 
     /**
-     * Returns all available Captcha classes
-     *
-     * @return string[]
-     */
-    public function getAllCaptchaTypes()
-    {
-        $event = new RegisterComponentTypesEvent([
-            'types' => []
-        ]);
-
-        $this->trigger(self::EVENT_REGISTER_CAPTCHAS, $event);
-
-        return $event->types;
-    }
-
-    /**
      * Returns all available Global Form Templates
      *
      * @return string[]
@@ -659,6 +643,22 @@ class Forms extends Component
         });
 
         return $templates;
+    }
+
+    /**
+     * Returns all available Captcha classes
+     *
+     * @return string[]
+     */
+    public function getAllCaptchaTypes()
+    {
+        $event = new RegisterComponentTypesEvent([
+            'types' => []
+        ]);
+
+        $this->trigger(self::EVENT_REGISTER_CAPTCHAS, $event);
+
+        return $event->types;
     }
 
     /**

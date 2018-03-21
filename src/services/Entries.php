@@ -225,9 +225,8 @@ class Entries extends Component
      * @param EntryElement $entry
      *
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      * @throws \Throwable
-     * @throws \yii\base\Exception
      */
     public function saveEntry(EntryElement $entry)
     {
@@ -501,6 +500,7 @@ class Entries extends Component
      * @param null $entryStatusId
      *
      * @return EntryStatusRecord|null|static
+     * @throws Exception
      */
     private function _getEntryStatusRecordById($entryStatusId = null)
     {

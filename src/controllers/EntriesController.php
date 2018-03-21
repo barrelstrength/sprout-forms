@@ -127,7 +127,6 @@ class EntriesController extends BaseController
      * @throws Exception
      * @throws \Exception
      * @throws \Throwable
-     * @throws \Twig_Error_Loader
      * @throws \yii\web\BadRequestHttpException
      */
     private function saveEntryInCraft(Entry $entry)

@@ -49,9 +49,7 @@ class SingleLine extends BaseFormField implements PreviewableFieldInterface
     }
 
     /**
-     * @return null|string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @inheritdoc
      */
     public function getSettingsHtml()
     {
@@ -66,9 +64,6 @@ class SingleLine extends BaseFormField implements PreviewableFieldInterface
     }
 
     /**
-     * Adds support for edit field in the Entries section of SproutForms (Control
-     * panel html)
-     *
      * @inheritdoc
      */
     public function getInputHtml($value, ElementInterface $element = null): string
@@ -94,12 +89,7 @@ class SingleLine extends BaseFormField implements PreviewableFieldInterface
     }
 
     /**
-     * @param mixed                                            $value
-     * @param array|null                                       $renderingOptions
-     *
-     * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @inheritdoc
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {

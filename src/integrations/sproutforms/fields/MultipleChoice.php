@@ -28,7 +28,6 @@ class MultipleChoice extends BaseOptionsFormField
         return true;
     }
 
-
     /**
      * @return string
      */
@@ -80,12 +79,7 @@ class MultipleChoice extends BaseOptionsFormField
     }
 
     /**
-     * @param mixed      $value
-     * @param array|null $renderingOptions
-     *
-     * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @inheritdoc
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {

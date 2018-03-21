@@ -509,6 +509,7 @@ abstract class BaseRelationFormField extends BaseFormField implements Previewabl
      * Normalizes the available sources into select input options.
      *
      * @return array
+     * @throws NotSupportedException
      */
     public function getSourceOptions(): array
     {
