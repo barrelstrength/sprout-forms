@@ -1,47 +1,32 @@
 {% import "_includes/forms" as forms %}
 
+{{ forms.selectField({
+    name: 'country',
+    instructions: "This country will display as selected when the field loads for the first time."|t('sprout-forms'),
+    label: 'Default Country'|t('sprout-forms'),
+    options: field.getCountries(),
+    value: field.country
+}) }}
+
+{{ forms.lightswitchField({
+    label: "Limit to single country"|t('sprout-forms'),
+    instructions: "Only accept numbers from your Default Country"|t('sprout-forms'),
+    name: 'limitToSingleCountry',
+    on: field.limitToSingleCountry
+}) }}
+
 {{ forms.textField({
-	label: "Placeholder Text"|t('sproutFields'),
-	instructions: "The text that will be shown if the field doesn’t have a value."|t('sproutFields'),
-	id: 'placeholder',
-	name: 'placeholder',
-	value: field.placeholder
+    label: "Placeholder Text"|t('sprout-forms'),
+    instructions: "The text that will be shown if the field doesn’t have a value."|t('sprout-forms'),
+    id: 'placeholder',
+    name: 'placeholder',
+    value: field.placeholder
 }) }}
 
-{{ forms.checkboxField({
-	label: "Phone Numbers for this field have their own  validation pattern"|t('sproutFields'),
-	name: 'customPatternToggle',
-	checked: field.customPatternToggle,
-	toggle: 'sprouturlfield-custom-validation-pattern'
+{{ forms.textField({
+    label: 'Error Message'|t('sprout-forms'),
+    instructions: 'Display this error message when a phone number is invalid.'|t('sprout-forms'),
+    name: 'customPatternErrorMessage',
+    placeholder: 'Phone number must match the format: ##########',
+    value: field.customPatternErrorMessage
 }) }}
-
-<div id="sprouturlfield-custom-validation-pattern" {% if not field.customPatternToggle %}class="hidden"{% endif %}>
-	{{ forms.textField({
-		label: 'Validation Pattern'|t('sproutFields'),
-		instructions: 'Validate phone numbers using this pattern of numbers.'|t('sproutFields'),
-		required: true,
-		name: 'mask',
-		placeholder: '###-###-####',
-		value: field.mask ? field.mask : '###-###-####'
-	}) }}
-
-	{{ forms.textField({
-		label: 'Error Message'|t('sproutFields'),
-		instructions: 'Display this error message when a phone number is invalid.'|t('sproutFields'),
-		name: 'customPatternErrorMessage',
-		placeholder: 'Phone number must match the format: ###-###-####',
-		value: field.customPatternErrorMessage
-	}) }}
-</div>
-
-
-{% if craft.app.request.getSegment(1) != 'sproutforms' %}
-	{{ forms.lightswitchField({
-		label: "Display Pattern Mask?"|t('sproutFields'),
-		instructions: 'Display a mask of your chosen pattern as the user types.'|t('sproutFields'),
-		warning: '',
-		id: 'inputMask',
-		name: 'inputMask',
-		on: field.inputMask,
-	}) }}
-{% endif %}
