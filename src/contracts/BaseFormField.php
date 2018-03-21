@@ -33,24 +33,26 @@ abstract class BaseFormField extends Field
      */
     protected $originalTemplatesPath;
 
+    /**
+     * Allows a user to add variables to an object that can be parsed by fields
+     *
+     * @example
+     * {% do craft.sproutForms.addFieldVariables({ entry: entry }) %}
+     * {{ craft.sproutForms.displayForm('contact') }}
+     *
+     * @param array $variables
+     */
     public static function addFieldVariables(array $variables)
     {
         static::$fieldVariables = array_merge(static::$fieldVariables, $variables);
     }
 
+    /**
+     * @return array
+     */
     public static function getFieldVariables()
     {
         return static::$fieldVariables;
-    }
-
-    final public function setValue($handle, $value)
-    {
-        Craft::$app->httpSession->add($handle, $value);
-    }
-
-    final public function getValue($handle, $default = null)
-    {
-        return Craft::$app->httpSession->get($handle, $default);
     }
 
     /**
