@@ -1,6 +1,7 @@
 {% import "_includes/forms" as forms %}
 {% import "sprout-base/sproutfields/forms" as sproutFields %}
 
+<div id="sprout-content">
 {% if field is not defined and fieldId is defined %}
     {% set field = craft.app.fields.getFieldById(fieldId) %}
     {% if not field %}
@@ -62,33 +63,18 @@
     </div>
 {% endfor %}
 
-{#<hr>#}
+<hr>
 
-{#{{ forms.field({#}
-    {#label: "CSS Classes"|t('sprout-forms'),#}
-    {#instructions: "The CSS class names to output in your field's HTML."|t,#}
-{#}, sproutFields.selectOther({#}
-    {#name: 'templateFolderOverride',#}
-    {#options: {#}
-        {#0: {#}
-            {#"label": "Left (left)"|t('sprout-forms'),#}
-            {#"value": 'left'#}
-        {#},#}
-        {#1: {#}
-            {#"label": "Right (right)"|t('sprout-forms'),#}
-            {#"value": 'right'#}
-        {#},#}
-        {#2: {#}
-            {#"optgroup": "Custom"|t('sprout-forms')#}
-        {#},#}
-        {#3: {#}
-            {#"label": "Add custom CSS classes"|t('sprout-forms'),#}
-            {#"value": 'custom'#}
-        {#}#}
-    {#},#}
-    {#value: '' ?? null,#}
-    {#otherPlaceholderText: 'Custom CSS Classes'|t('sprout-forms')#}
-{#})) }}#}
+{{ forms.field({
+    label: "CSS Classes"|t('sprout-forms'),
+    first: true,
+    instructions: "The CSS class names to output in your field's HTML."|t('sprout-forms'),
+}, sproutFields.selectOther({
+    name: 'cssClasses',
+    options: field.getClassesOptions(),
+    value: field.cssClasses ?? null,
+    otherPlaceholderText: 'Custom CSS Classes'|t('sprout-forms')
+})) }}
 
 <hr>
 
@@ -150,3 +136,4 @@
         Craft.SproutFields.initFields($(".content"));
     {% endjs %}
 {% endif %}
+</div>
