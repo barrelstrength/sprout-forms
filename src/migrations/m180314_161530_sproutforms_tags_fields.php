@@ -26,9 +26,9 @@ class m180314_161530_sproutforms_tags_fields extends Migration
 
         foreach ($tagFields as $tagField) {
             $settings = json_decode($tagField['settings'], true);
-            $settings['sources'] = "*";
+            $settings['sources'] = '*';
             $settings['targetSiteId'] = null;
-            $settings['viewMode'] = "large";
+            $settings['viewMode'] = 'large';
             $settings['limit'] = null;
             $settings['localizeRelations'] = false;
             $settingsAsJson = json_encode($settings);

@@ -718,11 +718,13 @@ class FileUpload extends BaseRelationFormField
      * Determine an upload folder id by looking at the settings and whether Element this field belongs to is new or not.
      *
      * @param ElementInterface|null $element
-     * @param bool                  $createDynamicFolders whether missing folders should be created in the process
+     * @param bool                  $createDynamicFolders
      *
-     * @return int if the folder subpath is not valid
-     * @throws InvalidSubpathException if the folder subpath is not valid
-     * @throws InvalidVolumeException if there's a problem with the field's volume configuration
+     * @return int
+     * @throws InvalidSubpathException
+     * @throws InvalidVolumeException
+     * @throws \craft\errors\AssetConflictException
+     * @throws \craft\errors\VolumeObjectExistsException
      */
     private function _determineUploadFolderId(ElementInterface $element = null, bool $createDynamicFolders = true): int
     {

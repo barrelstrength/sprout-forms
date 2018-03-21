@@ -169,9 +169,7 @@ class EntriesController extends BaseController
      *
      * @return null|Response
      * @throws Exception
-     * @throws \Exception
      * @throws \Throwable
-     * @throws \Twig_Error_Loader
      * @throws \yii\web\BadRequestHttpException
      */
     private function forwardEntrySomewhereElse($entry)

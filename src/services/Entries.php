@@ -208,9 +208,10 @@ class Entries extends Component
     /**
      * Returns a form entry model if one is found in the database by id
      *
-     * @param int $entryId
+     * @param          $entryId
+     * @param int|null $siteId
      *
-     * @return null|EntryElement
+     * @return array|ElementInterface|null
      */
     public function getEntryById($entryId, int $siteId = null)
     {

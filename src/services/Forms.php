@@ -564,18 +564,18 @@ class Forms extends Component
     /**
      * Creates a form with a empty default tab
      *
-     * @param null $name
-     * @param null $handle
+     * @param string|null $name
+     * @param string|null $handle
      *
-     * @return FormElement|bool|null
+     * @return FormElement|null
      * @throws \Exception
      * @throws \Throwable
      */
     public function createNewForm($name = null, $handle = null)
     {
         $form = new FormElement();
-        $name = empty($name) ? 'Form' : $name;
-        $handle = empty($handle) ? 'form' : $handle;
+        $name = $name ?? 'Form';
+        $handle = $handle ?? 'form';
         $settings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
 
         if ($settings->enableSaveData) {
@@ -599,7 +599,7 @@ class Forms extends Component
             return $form;
         }
 
-        return false;
+        return null;
     }
 
     /**
@@ -771,7 +771,9 @@ class Forms extends Component
     }
 
     /**
-     * @return string|null
+     * @param $templateId
+     *
+     * @return null
      */
     public function getTemplatePathById($templateId)
     {

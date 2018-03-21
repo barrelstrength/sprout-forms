@@ -223,7 +223,7 @@ abstract class BaseRelationFormField extends BaseFormField implements Previewabl
     /**
      * @inheritdoc
      */
-    public function isEmpty($value): bool
+    public function isValueEmpty($value, ElementInterface $element): bool
     {
         /** @var ElementQueryInterface $value */
         return $value->count() === 0;

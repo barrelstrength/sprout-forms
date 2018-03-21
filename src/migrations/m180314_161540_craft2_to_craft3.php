@@ -44,7 +44,7 @@ class m180314_161540_craft2_to_craft3 extends Migration
             ->all();
 
         foreach ($forms as $form) {
-            $table = "{{%sproutformscontent_".$form['handle']."}}";
+            $table = '{{%sproutformscontent_'.$form['handle'].'}}';
             // P&T already add a site column
             if ($this->db->columnExists($table, 'locale__siteId')) {
                 MigrationHelper::renameColumn($table, 'locale__siteId', 'siteId', $this);
