@@ -110,7 +110,7 @@ class Tags extends BaseRelationFormField
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/tags/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/tags/example',
             [
                 'field' => $this
             ]

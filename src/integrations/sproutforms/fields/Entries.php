@@ -52,7 +52,7 @@ class Entries extends BaseRelationFormField
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/entries/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/entries/example',
             [
                 'field' => $this
             ]

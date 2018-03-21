@@ -71,7 +71,7 @@ class MultipleChoice extends BaseOptionsFormField
     public function getExampleInputHtml()
     {
         return Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/multiplechoice/example',
+            'sprout-forms/_formtemplates/fields/multiplechoice/example',
             [
                 'field' => $this
             ]

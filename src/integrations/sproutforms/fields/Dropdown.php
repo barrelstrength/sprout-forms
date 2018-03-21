@@ -65,7 +65,7 @@ class Dropdown extends BaseOptionsFormField
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/dropdown/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/dropdown/example',
             [
                 'field' => $this
             ]

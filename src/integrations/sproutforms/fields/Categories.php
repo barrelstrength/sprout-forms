@@ -33,7 +33,7 @@ class Categories extends BaseRelationFormField
         parent::init();
         $this->allowLimit = false;
         $this->allowMultipleSources = false;
-        $this->settingsTemplate = 'sprout-forms/_components/fields/categories/settings';
+        $this->settingsTemplate = 'sprout-forms/_formtemplates/fields/categories/settings';
         $this->inputTemplate = '_components/fieldtypes/Categories/input';
         $this->inputJsClass = 'Craft.CategorySelectInput';
         $this->sortable = false;
@@ -93,7 +93,7 @@ class Categories extends BaseRelationFormField
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/categories/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/categories/example',
             [
                 'field' => $this
             ]

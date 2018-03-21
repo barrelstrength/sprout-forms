@@ -62,7 +62,7 @@ class Url extends BaseFormField implements PreviewableFieldInterface
     public function getSettingsHtml()
     {
         return Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/url/settings',
+            'sprout-forms/_formtemplates/fields/url/settings',
             [
                 'field' => $this,
             ]
@@ -99,7 +99,7 @@ class Url extends BaseFormField implements PreviewableFieldInterface
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/url/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/url/example',
             [
                 'field' => $this
             ]

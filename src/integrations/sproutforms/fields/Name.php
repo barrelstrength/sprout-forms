@@ -118,7 +118,7 @@ class Name extends BaseFormField implements PreviewableFieldInterface
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/name/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/name/example',
             [
                 'field' => $this
             ]

@@ -70,7 +70,7 @@ class MultiSelect extends BaseOptionsFormField
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/multiselect/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/multiselect/example',
             [
                 'field' => $this
             ]

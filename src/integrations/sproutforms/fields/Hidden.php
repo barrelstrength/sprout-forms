@@ -59,7 +59,7 @@ class Hidden extends BaseFormField implements PreviewableFieldInterface
      */
     public function getSettingsHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/hidden/settings',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/hidden/settings',
             [
                 'field' => $this,
             ]);
@@ -84,7 +84,7 @@ class Hidden extends BaseFormField implements PreviewableFieldInterface
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/hidden/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/hidden/example',
             [
                 'field' => $this
             ]

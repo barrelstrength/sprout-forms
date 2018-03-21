@@ -77,7 +77,7 @@ class FileUpload extends BaseRelationFormField
     {
         parent::init();
         $this->allowLargeThumbsView = true;
-        $this->settingsTemplate = 'sprout-forms/_components/fields/fileupload/settings';
+        $this->settingsTemplate = 'sprout-forms/_formtemplates/fields/fileupload/settings';
         $this->inputTemplate = '_components/fieldtypes/Assets/input';
         $this->inputJsClass = 'Craft.AssetSelectInput';
     }
@@ -180,7 +180,7 @@ class FileUpload extends BaseRelationFormField
     public function getExampleInputHtml()
     {
         return Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/fileupload/example',
+            'sprout-forms/_formtemplates/fields/fileupload/example',
             [
                 'field' => $this
             ]

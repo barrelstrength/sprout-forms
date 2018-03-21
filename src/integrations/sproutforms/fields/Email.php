@@ -56,7 +56,7 @@ class Email extends BaseFormField implements PreviewableFieldInterface
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/email/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/email/example',
             [
                 'field' => $this
             ]
@@ -76,7 +76,7 @@ class Email extends BaseFormField implements PreviewableFieldInterface
      */
     public function getSettingsHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/email/settings',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/email/settings',
             [
                 'field' => $this,
             ]);

@@ -69,7 +69,7 @@ class CustomHtml extends BaseFormField implements PreviewableFieldInterface
      */
     public function getSettingsHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/customhtml/settings',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/customhtml/settings',
             [
                 'field' => $this
             ]
@@ -95,7 +95,7 @@ class CustomHtml extends BaseFormField implements PreviewableFieldInterface
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/customhtml/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/customhtml/example',
             [
                 'field' => $this
             ]

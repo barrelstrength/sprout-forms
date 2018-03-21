@@ -54,7 +54,7 @@ class SingleLine extends BaseFormField implements PreviewableFieldInterface
     public function getSettingsHtml()
     {
         $rendered = Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/singleline/settings',
+            'sprout-forms/_formtemplates/fields/singleline/settings',
             [
                 'field' => $this,
             ]
@@ -81,7 +81,7 @@ class SingleLine extends BaseFormField implements PreviewableFieldInterface
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/singleline/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/singleline/example',
             [
                 'field' => $this
             ]
