@@ -15,7 +15,7 @@ class DragulaAsset extends AssetBundle
     public function init()
     {
         // define the path that your publishable resources live
-        $this->sourcePath = '@barrelstrength/sproutforms/web/assets/dragula/dist';
+        $this->sourcePath = '@sproutformslib/dragula';
 
         // define the dependencies
         $this->depends = [

@@ -84,6 +84,8 @@ class SproutForms extends Plugin
 
         SproutBaseHelper::registerModule();
 
+        Craft::setAlias('@sproutformslib', dirname(__DIR__, 2).'/sprout-forms/lib');
+
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $event) {
             $event->rules = array_merge($event->rules, $this->getCpUrlRules());
         });
