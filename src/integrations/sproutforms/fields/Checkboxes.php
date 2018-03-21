@@ -78,7 +78,7 @@ class Checkboxes extends BaseOptionsFormField
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/checkboxes/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/checkboxes/example',
             [
                 'field' => $this
             ]

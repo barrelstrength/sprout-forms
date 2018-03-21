@@ -63,7 +63,7 @@ class Invisible extends BaseFormField implements PreviewableFieldInterface
     public function getSettingsHtml()
     {
         return Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/invisible/settings',
+            'sprout-forms/_formtemplates/fields/invisible/settings',
             [
                 'field' => $this,
             ]
@@ -94,7 +94,7 @@ class Invisible extends BaseFormField implements PreviewableFieldInterface
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/invisible/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/invisible/example',
             [
                 'field' => $this
             ]

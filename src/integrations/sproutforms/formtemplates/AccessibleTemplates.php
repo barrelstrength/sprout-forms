@@ -23,7 +23,7 @@ class AccessibleTemplates extends BaseFormTemplates
      */
     public function getPath()
     {
-        return Craft::getAlias('@barrelstrength/sproutforms/templates/_special/templates/accessible');
+        return Craft::getAlias('@barrelstrength/sproutforms/templates/_formtemplates/templates/accessible');
     }
 
     public function getCssClassDefaults()

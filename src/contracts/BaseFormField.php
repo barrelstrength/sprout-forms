@@ -112,7 +112,7 @@ abstract class BaseFormField extends Field
      */
     public function getTemplatesPath()
     {
-        return Craft::getAlias('@barrelstrength/sproutforms/templates/_components/fields/');
+        return Craft::getAlias('@barrelstrength/sproutforms/templates/_formtemplates/fields/');
     }
 
     /**

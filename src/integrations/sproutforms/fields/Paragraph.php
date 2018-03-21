@@ -61,7 +61,7 @@ class Paragraph extends BaseFormField implements PreviewableFieldInterface
     public function getSettingsHtml()
     {
         $rendered = Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/paragraph/settings',
+            'sprout-forms/_formtemplates/fields/paragraph/settings',
             [
                 'field' => $this,
             ]
@@ -91,7 +91,7 @@ class Paragraph extends BaseFormField implements PreviewableFieldInterface
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/paragraph/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/paragraph/example',
             [
                 'field' => $this
             ]
