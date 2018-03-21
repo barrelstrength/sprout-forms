@@ -18,6 +18,7 @@
             {%- if id %} id="{{ name~'-country' }}"{% endif %}
             {%- if class %} class="{{ class }}"{% endif %}
             {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+            {%- if field.limitToSingleCountry %} disabled {% endif %}
             {{- dataAttributes|raw -}}
     >
         {%- for key, option in field.getCountries() -%}
