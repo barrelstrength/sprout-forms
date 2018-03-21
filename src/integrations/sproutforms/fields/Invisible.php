@@ -108,7 +108,7 @@ class Invisible extends BaseFormField implements PreviewableFieldInterface
     {
         Craft::$app->getSession()->set($this->handle, $this->value);
 
-        $html = '<input type="hidden" name="' . $this->handle . '">';
+        $html = '<input type="hidden" name="'.$this->handle.'">';
 
         return TemplateHelper::raw($html);
     }

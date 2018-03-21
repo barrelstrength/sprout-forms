@@ -44,7 +44,7 @@ class Name extends BaseFormField implements PreviewableFieldInterface
      */
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms','Name');
+        return Craft::t('sprout-forms', 'Name');
     }
 
     /**
@@ -126,8 +126,8 @@ class Name extends BaseFormField implements PreviewableFieldInterface
     }
 
     /**
-     * @param mixed                                            $value
-     * @param array|null                                       $renderingOptions
+     * @param mixed      $value
+     * @param array|null $renderingOptions
      *
      * @return string
      * @throws \Twig_Error_Loader
@@ -137,8 +137,7 @@ class Name extends BaseFormField implements PreviewableFieldInterface
     {
         $this->beginRendering();
 
-        if ($this->displayMultipleFields)
-        {
+        if ($this->displayMultipleFields) {
             $this->hasMultipleLabels = true;
         }
 
@@ -182,9 +181,8 @@ class Name extends BaseFormField implements PreviewableFieldInterface
 
             $nameModel->setAttributes($value['address'], false);
 
-            if ($fullNameShort = $value['address']['fullNameShort'] ?? null)
-            {
-                $nameArray = explode(' ',trim($fullNameShort));
+            if ($fullNameShort = $value['address']['fullNameShort'] ?? null) {
+                $nameArray = explode(' ', trim($fullNameShort));
 
                 $nameModel->firstName = $nameArray[0] ?? $fullNameShort;
                 unset($nameArray[0]);

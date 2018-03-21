@@ -578,10 +578,8 @@ class Forms extends Component
         $handle = empty($handle) ? 'form' : $handle;
         $settings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
 
-        if ($settings->enableSaveData)
-        {
-            if ($settings->enableSaveDataPerFormBasis)
-            {
+        if ($settings->enableSaveData) {
+            if ($settings->enableSaveDataPerFormBasis) {
                 $form->saveData = $settings->saveDataByDefault;
             }
         }
@@ -687,7 +685,7 @@ class Forms extends Component
 
         foreach ($captchaTypes as $captchaType) {
             $isEnabled = $sproutFormsSettings->captchaSettings[$captchaType->getCaptchaId()]['enabled'] ?? false;
-            if ($isEnabled){
+            if ($isEnabled) {
                 $captchas[get_class($captchaType)] = $captchaType;
             }
         }
@@ -709,12 +707,12 @@ class Forms extends Component
         $defaultVersion = new AccessibleTemplates();
         $defaultTemplate = $defaultVersion->getPath();
 
-        if ($settings->templateFolderOverride){
+        if ($settings->templateFolderOverride) {
             $templatePath = $this->getTemplatePathById($settings->templateFolderOverride);
-            if ($templatePath){
+            if ($templatePath) {
                 // custom path by template API
                 $templateFolderOverride = $templatePath;
-            }else{
+            } else {
                 // custom folder on site path
                 $templateFolderOverride = $this->getSitePath($settings->templateFolderOverride);
             }
@@ -780,7 +778,7 @@ class Forms extends Component
         $templates = SproutForms::$app->forms->getAllGlobalTemplates();
 
         foreach ($templates as $template) {
-            if ($template->getTemplateId() == $templateId){
+            if ($template->getTemplateId() == $templateId) {
                 return $template->getPath();
             }
         }

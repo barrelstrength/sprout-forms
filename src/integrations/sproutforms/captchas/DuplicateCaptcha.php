@@ -30,7 +30,7 @@ class DuplicateCaptcha extends BaseCaptcha
      */
     public function getDescription()
     {
-        return Craft::t('sprout-forms','Prevent duplicate submissions if a user hits submit more than once');
+        return Craft::t('sprout-forms', 'Prevent duplicate submissions if a user hits submit more than once');
     }
 
     /**
@@ -50,8 +50,7 @@ class DuplicateCaptcha extends BaseCaptcha
      */
     public function verifySubmission(OnBeforeSaveEntryEvent $event): bool
     {
-        if(Craft::$app->getSession()->get($this->duplicateId))
-        {
+        if (Craft::$app->getSession()->get($this->duplicateId)) {
             // If we have a duplicate, unset our test variable
             Craft::$app->getSession()->remove($this->duplicateId);
 

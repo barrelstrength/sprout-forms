@@ -135,8 +135,8 @@ abstract class BaseFormField extends Field
     abstract public function getExampleInputHtml();
 
     /**
-     * @param mixed      $value
-     * @param array      $renderingOptions
+     * @param mixed $value
+     * @param array $renderingOptions
      *
      * @return \Twig_Markup
      */

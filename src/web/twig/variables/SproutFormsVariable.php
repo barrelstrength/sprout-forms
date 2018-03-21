@@ -93,7 +93,7 @@ class SproutFormsVariable
                 'tabs' => $form->getFieldLayout()->getTabs(),
                 'entry' => $entry,
                 'formFields' => $fields,
-                'thirdPartySubmission' => (bool) $form->submitAction,
+                'thirdPartySubmission' => (bool)$form->submitAction,
                 'displaySectionTitles' => $form->displaySectionTitles,
                 'renderingOptions' => $renderingOptions
             ]
@@ -180,7 +180,7 @@ class SproutFormsVariable
                 'entry' => $entry,
                 'formFields' => $fields,
                 'displaySectionTitles' => $form->displaySectionTitles,
-                'thirdPartySubmission' => (bool) $form->submitAction,
+                'thirdPartySubmission' => (bool)$form->submitAction,
                 'renderingOptions' => $renderingOptions
             ]
         );
@@ -252,7 +252,7 @@ class SproutFormsVariable
                         'required' => $field->required,
                         'element' => $entry,
                         'renderingOptions' => $renderingOptions,
-                        'thirdPartySubmission' => (bool) $form->submitAction
+                        'thirdPartySubmission' => (bool)$form->submitAction
                     ]
                 );
 
@@ -421,7 +421,7 @@ class SproutFormsVariable
         SproutForms::error($message);
 
         if (isset(Craft::$app->getConfig()->getGeneral()->devMode) && Craft::$app->getConfig()->getGeneral()->devMode) {
-            throw new \Exception($message);
+            throw new Exception($message);
         }
     }
 
@@ -561,7 +561,7 @@ class SproutFormsVariable
         $templateIds = [];
         $options = [
             [
-                'label' => Craft::t('sprout-forms','Select...'),
+                'label' => Craft::t('sprout-forms', 'Select...'),
                 'value' => ''
             ]
         ];
@@ -579,7 +579,7 @@ class SproutFormsVariable
         $templateFolder = $settings->templateFolderOverride;
 
         $options[] = [
-            'optgroup' => Craft::t('sprout-forms','Custom Template Folder')
+            'optgroup' => Craft::t('sprout-forms', 'Custom Template Folder')
         ];
 
         if (!in_array($templateFolder, $templateIds) && $templateFolder != '') {
@@ -590,7 +590,7 @@ class SproutFormsVariable
         }
 
         $options[] = [
-            'label' => Craft::t('sprout-forms','Add Custom'),
+            'label' => Craft::t('sprout-forms', 'Add Custom'),
             'value' => 'custom'
         ];
 

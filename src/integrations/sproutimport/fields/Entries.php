@@ -21,18 +21,17 @@ class Entries extends BaseFieldImporter
      */
     public function getMockData()
     {
-        $settings   = $this->model->settings;
-        $limit      = SproutImport::$app->fieldImporter->getLimit($settings['limit'], 1);
-        $sources    = $settings['sources'];
+        $settings = $this->model->settings;
+        $limit = SproutImport::$app->fieldImporter->getLimit($settings['limit'], 1);
+        $sources = $settings['sources'];
         $attributes = [];
 
         $groupIds = SproutImport::$app->fieldImporter->getElementGroupIds($sources);
 
-        if (!empty($groupIds) && $groupIds != '*')
-        {
-            $attributes = array(
+        if (!empty($groupIds) && $groupIds != '*') {
+            $attributes = [
                 'formId' => $groupIds
-            );
+            ];
         }
 
         $element = new EntryElement();

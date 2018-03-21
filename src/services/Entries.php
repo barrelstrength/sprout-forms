@@ -95,7 +95,9 @@ class Entries extends Component
             $record = EntryStatusRecord::findOne($entryStatus->id);
 
             if (!$record) {
-                throw new \Exception(Craft::t('sprout-forms', 'No Entry Status exists with the id of “{id}”', ['id' => $entryStatus->id]));
+                throw new Exception(Craft::t('sprout-forms', 'No Entry Status exists with the id of “{id}”', [
+                    'id' => $entryStatus->id
+                ]));
             }
         }
 
