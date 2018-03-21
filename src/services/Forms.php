@@ -761,6 +761,10 @@ class Forms extends Component
                     $templates['email'] = $basePath;
                 }
             }
+
+            if (file_exists($fieldsFolder)) {
+                $templates['fields'] = $basePath . 'fields';
+            }
         }
 
         return $templates;
