@@ -1,24 +1,6 @@
-<div id="sproutform-exampleinput-customhtml">
+<div class="sproutform-exampleinput-customhtml">
 
     <div class="customhtml-icon">{{ svg('@sproutbaseicons/code.svg') }}</div>
     <p>{{ "This field will display your Custom HTML on your front-end form."|t('sprout-forms') }}</p>
 
 </div>
-
-{% css %}
-    #sproutform-exampleinput-customhtml {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-    }
-    #sproutform-exampleinput-customhtml .customhtml-icon svg {
-        height:48px;
-        width:48px;
-        fill: #ccc;
-    }
-    #sproutform-exampleinput-customhtml p {
-        flex-grow: 1;
-        margin-left: 20px;
-        font-style: italic;
-    }
-{% endcss %}

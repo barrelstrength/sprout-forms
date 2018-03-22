@@ -1,9 +1,18 @@
-{# @todo - we should simplify what is output here so it doesn't look like crap on the back end.
-   @todo - fix bug, now that attributes are on field reportModel, the instructions attribute conflicts with Craft's instructions attribute #}
-{% if field.output == "html" or field.output == "richText" %}
-    {{ field.notes  | raw }}
-{% else %}
-    {% if field.notes %}
-        {{ field.notes | markdown }}
-    {% endif %}
-{% endif %}
+{%- if field.output == "richText" %}
+    {{ field.notes|raw }}
+{% endif -%}
+
+{%- if field.output == 'markdown' and field.notes is not empty %}
+    {{ field.notes|markdown }}
+{% endif -%}
+
+{%- if field.output == "html" %}
+
+    <div class="sproutform-exampleinput-customhtml">
+        <div class="customhtml-icon">{{ svg('@sproutbaseicons/code.svg') }}</div>
+        <p>{{ "This field will display your Custom HTML on your front-end form."|t('sprout-forms') }}</p>
+    </div>
+
+{% endif -%}
+
+

@@ -22,20 +22,18 @@
             {%- if multiple %} multiple {% endif %}
             {{- dataAttributes|raw -}}
     >
-        <optgroup>
-            {%- if not multiple -%}
-                <option value="" disabled selected>{{ selectionLabel }}</option>
-            {%- endif -%}
-            {%- for options in categories -%}
-                {%- for option in options.categories -%}
-                    {%- set optionLabel = option.title -%}
-                    {%- set optionValue = option.id -%}
+        {%- if not multiple -%}
+            <option value="" disabled selected>{{ selectionLabel }}</option>
+        {%- endif -%}
+        {%- for options in categories -%}
+            {%- for option in options.categories -%}
+                {%- set optionLabel = option.title -%}
+                {%- set optionValue = option.id -%}
 
-                    <option value="{{ optionValue }}"
-                            {% if optionValue == value %}selected{% endif %}>{{ optionLabel }}</option>
+                <option value="{{ optionValue }}"
+                        {% if optionValue == value %}selected{% endif %}>{{ optionLabel }}</option>
 
-                {% endfor %}
             {% endfor %}
-        </optgroup>
+        {% endfor %}
     </select>
 {% endspaceless %}

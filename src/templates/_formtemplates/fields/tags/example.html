@@ -1,3 +1,15 @@
-<select readonly disabled>
-    <option>{{ "Select a tag..." }}</option>
-</select>
+{% import "_includes/forms" as forms %}
+
+{% set options = [
+    {
+        label: 'Select a tag...',
+        value: true
+    }
+] %}
+
+{{ forms.select({
+    options: options,
+    value: '',
+    readonly: true,
+    disabled: true
+}) }}

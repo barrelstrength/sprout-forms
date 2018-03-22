@@ -1,1 +1,16 @@
-<input type="phone" placeholder="{{ field.placeholder }}" readonly disabled>
+{% import "_includes/forms" as forms %}
+
+{% set options = field.getCountries() %}
+
+{{ forms.select({
+    options: options,
+    value: field.country,
+    readonly: true,
+    disabled: true
+}) }}
+
+{{ forms.text({
+    placeholder: field.placeholder,
+    readonly: true,
+    disabled: true
+}) }}

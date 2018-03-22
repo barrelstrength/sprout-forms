@@ -114,6 +114,18 @@ class Phone extends BaseFormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
+    public function getExampleInputHtml()
+    {
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/phone/example',
+            [
+                'field' => $this
+            ]
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
         $name = $this->handle;
@@ -139,18 +151,6 @@ class Phone extends BaseFormField implements PreviewableFieldInterface
                 'countries' => $countries,
                 'country' => $country,
                 'limitToSingleCountry' => $this->limitToSingleCountry
-            ]
-        );
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getExampleInputHtml()
-    {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/phone/example',
-            [
-                'field' => $this
             ]
         );
     }

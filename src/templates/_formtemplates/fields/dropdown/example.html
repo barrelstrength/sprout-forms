@@ -1,3 +1,5 @@
+{% import "_includes/forms" as forms %}
+
 {% set options = field.options %}
 
 {% if not options|length %}
@@ -6,11 +8,9 @@
         ] %}
 {% endif %}
 
-<select readonly disabled>
-    {%- for key, option in options -%}
-
-        {%- set optionLabel = option.label is defined ? option.label : null -%}
-
-        <option {% if option.default == 1 %}selected{% endif %}>{{ optionLabel }}</option>
-    {% endfor %}
-</select>
+{{ forms.select({
+    options: options,
+    value: '',
+    readonly: true,
+    disabled: true
+}) }}

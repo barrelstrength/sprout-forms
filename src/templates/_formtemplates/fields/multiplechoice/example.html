@@ -1,3 +1,5 @@
+{% import "_includes/forms" as forms %}
+
 {% set options = field.options %}
 
 {% if not field.options|length %}
@@ -8,15 +10,11 @@
     ] %}
 {% endif %}
 
-<ul
-    {%- for key, option in options %}
-
-        {%- set label = (option.label is defined ? option.label : option) %}
-
-        {%- set checked = (option.default == 1) ? 'checked' : null %}
-
-        <li>
-            <input type="radio" {{ checked }} readonly disabled> {% if label is defined %}{{ label|raw }}{% endif %}
-        </li>
-    {% endfor %}
-</ul>
+{{ forms.radioGroupField({
+    id: 'dateTime',
+    name: 'dateTime',
+    options: options,
+    value: '',
+    readonly: true,
+    disabled: true
+}) }}

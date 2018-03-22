@@ -1,1 +1,7 @@
-<input type="text" placeholder="{{ field.placeholder }}" readonly disabled>
+{% import "_includes/forms" as forms %}
+
+{{ forms.text({
+    placeholder: field.placeholder,
+    readonly: true,
+    disabled: true
+}) }}

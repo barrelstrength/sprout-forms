@@ -1,3 +1,5 @@
+{% import "_includes/forms" as forms %}
+
 {% set options = field.options %}
 
 {% if not field.options|length %}
@@ -8,12 +10,9 @@
     ] %}
 {% endif %}
 
-<select multiple readonly disabled>
-    {%- for key, option in options %}
-
-        {%- set optionLabel = (option.label is defined ? option.label : null) %}
-
-        <option {% if option.default == 1 %} selected{% endif %}>{{ optionLabel }}</option>
-
-    {%- endfor %}
-</select>
+{{ forms.multiselect({
+    options: options,
+    value: '',
+    readonly: true,
+    disabled: true
+}) }}
