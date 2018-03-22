@@ -210,7 +210,7 @@ class EmailDropdown extends BaseOptionsFormField
 
         $emailString = $this->options[$value]->value ?? null;
 
-        if ($emailId) {
+        if ($emailString) {
 
             $emailAddresses = StringHelper::split($emailString);
             $emailAddresses = array_unique($emailAddresses);
