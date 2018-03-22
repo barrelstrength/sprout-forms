@@ -6,17 +6,17 @@
 
     {{ block('sourcesField') }}
 
-    {% block branchLimitField %}
-        {{ forms.textField({
-            label: "Branch Limit"|t('app'),
-            instructions: "Limit the number of selectable category branches."|t('app'),
-            id: 'branchLimit',
-            name: 'branchLimit',
-            value: field.branchLimit,
-            size: 2,
-            errors: field.getErrors('branchLimit')
-        }) }}
-    {% endblock %}
+    {#{% block branchLimitField %}#}
+        {#{{ forms.textField({#}
+            {#label: "Branch Limit"|t('app'),#}
+            {#instructions: "Limit the number of selectable category branches."|t('app'),#}
+            {#id: 'branchLimit',#}
+            {#name: 'branchLimit',#}
+            {#value: field.branchLimit,#}
+            {#size: 2,#}
+            {#errors: field.getErrors('branchLimit')#}
+        {#}) }}#}
+    {#{% endblock %}#}
 
     {{ block('selectionLabelField') }}
 
