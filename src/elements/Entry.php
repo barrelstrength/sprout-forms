@@ -32,6 +32,12 @@ class Entry extends Element
     public $ipAddress;
     public $userAgent;
 
+    public function init()
+    {
+        parent::init();
+        $this->setScenario(self::SCENARIO_LIVE);
+    }
+
     /**
      * Returns the field context this element's content uses.
      *
