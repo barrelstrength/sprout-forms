@@ -490,7 +490,8 @@ class Fields extends Component
         }
 
         $data['sections'] = $form->getFieldLayout()->getTabs();
-        $data['formId'] = $form->id;
+        $data['form'] = $form;
+        $data['fieldClass'] = $data['field'] ? get_class($data['field']) : null;
         $view = Craft::$app->getView();
 
         $html = $view->renderTemplate('sprout-forms/forms/_editFieldModal', $data);

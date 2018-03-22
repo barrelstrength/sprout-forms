@@ -17,8 +17,10 @@ use barrelstrength\sproutforms\SproutForms;
  */
 class Tags extends BaseRelationFormField
 {
-    // Properties
-    // =====================================================================
+    /**
+     * @var string
+     */
+    public $cssClasses;
 
     /**
      * @var

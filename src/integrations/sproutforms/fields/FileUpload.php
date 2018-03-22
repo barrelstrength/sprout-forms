@@ -25,6 +25,11 @@ use craft\web\UploadedFile;
  */
 class FileUpload extends BaseRelationFormField
 {
+    /**
+     * @var string
+     */
+    public $cssClasses;
+
     // Properties
     // =========================================================================
 

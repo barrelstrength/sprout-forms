@@ -126,10 +126,10 @@ class SproutForms extends Plugin
         Event::on(EntriesController::class, EntriesController::EVENT_BEFORE_POPULATE, function(OnBeforePopulateEntryEvent $event) {
             self::$app->entries->handleUnobfuscateEmailAddresses($event->form);
         });
-
+        /*
         Event::on(NotificationEmails::class, NotificationEmails::EVENT_REGISTER_EMAIL_EVENTS, function(RegisterNotificationEvent $event) {
             $event->availableEvents[] = new SaveEntryEvent;
-        });
+        });*/
 
         Event::on(Forms::class, Forms::EVENT_REGISTER_CAPTCHAS, function(Event $event) {
             $event->types[] = DuplicateCaptcha::class;
@@ -162,7 +162,7 @@ class SproutForms extends Plugin
             $event->types[] = BasicTemplates::class;
             $event->types[] = AccessibleTemplates::class;
         });
-
+        /*
         Event::on(Importers::class, Importers::EVENT_REGISTER_IMPORTER, function(RegisterComponentTypesEvent $event) {
             $event->types[] = FormElementImporter::class;
             $event->types[] = EntryElementImporter::class;
@@ -174,6 +174,7 @@ class SproutForms extends Plugin
             $event->types[] = BasicFieldsTheme::class;
             $event->types[] = SpecialFieldsTheme::class;
         });
+        */
     }
 
     /**

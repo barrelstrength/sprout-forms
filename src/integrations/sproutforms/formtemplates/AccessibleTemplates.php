@@ -28,7 +28,10 @@ class AccessibleTemplates extends BaseFormTemplates
 
     public function getCssClassDefaults()
     {
-        return [];
+        return [
+            'left' => 'Left (left)',
+            'right' => 'Right (right)'
+        ];
     }
 }
 

@@ -15,6 +15,11 @@ use barrelstrength\sproutforms\contracts\BaseFormField;
 class Name extends BaseFormField implements PreviewableFieldInterface
 {
     /**
+     * @var string
+     */
+    public $cssClasses;
+
+    /**
      * @var bool
      */
     public $displayMultipleFields;

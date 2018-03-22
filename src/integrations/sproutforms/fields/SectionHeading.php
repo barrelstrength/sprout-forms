@@ -13,6 +13,11 @@ use barrelstrength\sproutbase\web\assets\sproutfields\notes\QuillAsset;
 class SectionHeading extends BaseFormField
 {
     /**
+     * @var string
+     */
+    public $cssClasses;
+
+    /**
      * @var bool
      */
     public $allowRequired = false;

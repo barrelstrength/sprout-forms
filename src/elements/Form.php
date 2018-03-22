@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\elements;
 
+use barrelstrength\sproutforms\integrations\sproutforms\formtemplates\AccessibleTemplates;
 use Craft;
 use craft\base\Element;
 use craft\elements\db\ElementQueryInterface;
@@ -53,7 +54,6 @@ class Form extends Element
     public $notificationSenderName;
     public $notificationSenderEmail;
     public $notificationReplyToEmail;
-    public $enableTemplateOverrides;
     public $templateOverridesFolder;
     public $enableFileAttachments;
 
@@ -353,7 +353,6 @@ class Form extends Element
         $record->notificationSenderName = $this->notificationSenderName;
         $record->notificationSenderEmail = $this->notificationSenderEmail;
         $record->notificationReplyToEmail = $this->notificationReplyToEmail;
-        $record->enableTemplateOverrides = $this->enableTemplateOverrides;
         $record->templateOverridesFolder = $this->templateOverridesFolder;
         $record->enableFileAttachments = $this->enableFileAttachments;
 
@@ -419,5 +418,110 @@ class Form extends Element
                 RecipientsValidator::class
             ]
         ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getTemplateOptions()
+    {
+        $templates = SproutForms::$app->forms->getAllGlobalTemplates();
+        $templateIds = [];
+        $options = [
+            [
+                'label' => Craft::t('sprout-forms', 'Select...'),
+                'value' => ''
+            ]
+        ];
+
+        foreach ($templates as $template) {
+            $options[] = [
+                'label' => $template->getName(),
+                'value' => $template->getTemplateId()
+            ];
+            $templateIds[] = $template->getTemplateId();
+        }
+
+        $templateFolder = $this->templateOverridesFolder;
+
+        $options[] = [
+            'optgroup' => Craft::t('sprout-forms', 'Custom Template Folder')
+        ];
+
+        if (!in_array($templateFolder, $templateIds) && $templateFolder != '') {
+            $options[] = [
+                'label' => $templateFolder,
+                'value' => $templateFolder
+            ];
+        }
+
+        $options[] = [
+            'label' => Craft::t('sprout-forms', 'Add Custom'),
+            'value' => 'custom'
+        ];
+
+        return $options;
+    }
+
+    /**
+     * @param null $cssClasses
+     *
+     * @return array
+     */
+    public function getClassesOptions($cssClasses = null)
+    {
+        $classesIds = [];
+        $apiOptions = $this->getFormTemplate()->getCssClassDefaults();
+        $options = [
+            [
+                'label' => Craft::t('sprout-forms','Select...'),
+                'value' => ''
+            ]
+        ];
+
+        foreach ($apiOptions as $key => $option) {
+            $options[] = [
+                'label' => $option,
+                'value' => $key
+            ];
+            $classesIds[] = $key;
+        }
+
+        $options[] = [
+            'optgroup' => Craft::t('sprout-forms','Custom CSS Classes')
+        ];
+
+        if (!in_array($cssClasses, $classesIds) && $cssClasses) {
+            $options[] = [
+                'label' => $cssClasses,
+                'value' => $cssClasses
+            ];
+        }
+
+        $options[] = [
+            'label' => Craft::t('sprout-forms','Add Custom'),
+            'value' => 'custom'
+        ];
+
+        return $options;
+    }
+
+    /**
+     * Get the global template used by Sprout Forms
+     *
+     * @return BaseFormTemplates
+     */
+    public function getFormTemplate()
+    {
+        $defaultVersion = new AccessibleTemplates();
+
+        if ($this->templateOverridesFolder) {
+            $templatePath = SproutForms::$app->forms->getTemplateById($this->templateOverridesFolder);
+            if ($templatePath) {
+                return $templatePath;
+            }
+        }
+
+        return $defaultVersion;
     }
 }

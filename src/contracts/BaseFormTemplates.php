@@ -35,6 +35,16 @@ abstract class BaseFormTemplates
     }
 
     /**
+     * Add initial options for css classes for each field on Sprout Forms
+     *
+     * @return array
+     */
+    public function getCssClassDefaults()
+    {
+        return [];
+    }
+
+    /**
      * @return string
      */
     abstract public function getName();

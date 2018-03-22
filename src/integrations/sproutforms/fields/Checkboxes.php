@@ -13,6 +13,11 @@ use craft\base\ElementInterface;
 class Checkboxes extends BaseOptionsFormField
 {
     /**
+     * @var string
+     */
+    public $cssClasses;
+
+    /**
      * @inheritdoc
      */
     public function init()
