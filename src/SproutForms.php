@@ -15,8 +15,9 @@ use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\fields\Forms as FormsField;
 use barrelstrength\sproutforms\fields\Entries as FormEntriesField;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
-use barrelstrength\sproutforms\integrations\sproutforms\captchas\invisiblecaptcha\HoneypotCaptcha;
-use barrelstrength\sproutforms\integrations\sproutforms\captchas\invisiblecaptcha\JavascriptCaptcha;
+use barrelstrength\sproutforms\integrations\sproutforms\captchas\DuplicateCaptcha;
+use barrelstrength\sproutforms\integrations\sproutforms\captchas\HoneypotCaptcha;
+use barrelstrength\sproutforms\integrations\sproutforms\captchas\JavascriptCaptcha;
 use barrelstrength\sproutforms\integrations\sproutforms\formtemplates\BasicTemplates;
 use barrelstrength\sproutforms\integrations\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\integrations\sproutimport\themes\BasicFieldsTheme;
@@ -83,6 +84,8 @@ class SproutForms extends Plugin
 
         SproutBaseHelper::registerModule();
 
+        Craft::setAlias('@sproutformslib', dirname(__DIR__, 2).'/sprout-forms/lib');
+
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $event) {
             $event->rules = array_merge($event->rules, $this->getCpUrlRules());
         });
@@ -129,21 +132,19 @@ class SproutForms extends Plugin
         });
 
         Event::on(Forms::class, Forms::EVENT_REGISTER_CAPTCHAS, function(Event $event) {
+            $event->types[] = DuplicateCaptcha::class;
             $event->types[] = JavascriptCaptcha::class;
             $event->types[] = HoneypotCaptcha::class;
         });
 
         Event::on(Entries::class, EntryElement::EVENT_BEFORE_SAVE, function(OnBeforeSaveEntryEvent $event) {
-            $captchas = SproutForms::$app->forms->getAllEnabledCaptchas();
+            if (Craft::$app->getRequest()->getIsSiteRequest()) {
+                $captchas = SproutForms::$app->forms->getAllEnabledCaptchas();
 
-            foreach ($captchas as $captcha) {
-                $captcha->verifySubmission($event);
+                foreach ($captchas as $captcha) {
+                    $captcha->verifySubmission($event);
+                }
             }
-        });
-
-        Event::on(Forms::class, Forms::EVENT_REGISTER_FORM_TEMPLATES, function(Event $event) {
-            $event->types[] = BasicTemplates::class;
-            $event->types[] = AccessibleTemplates::class;
         });
 
         Craft::$app->view->hook('sproutForms.modifyForm', function(&$context) {
@@ -155,6 +156,11 @@ class SproutForms extends Plugin
             }
 
             return $captchaHtml;
+        });
+
+        Event::on(Forms::class, Forms::EVENT_REGISTER_FORM_TEMPLATES, function(Event $event) {
+            $event->types[] = BasicTemplates::class;
+            $event->types[] = AccessibleTemplates::class;
         });
 
         Event::on(Importers::class, Importers::EVENT_REGISTER_IMPORTER, function(RegisterComponentTypesEvent $event) {
@@ -214,13 +220,13 @@ class SproutForms extends Plugin
                     'label' => Craft::t('sprout-forms', 'Entries'),
                     'url' => 'sprout-forms/entries'
                 ],
-                'notifications' =>[
+                'notifications' => [
                     'label' => Craft::t('sprout-forms', 'Notifications'),
                     'url' => 'sprout-forms/notifications'
                 ],
                 'reports' => [
                     'label' => Craft::t('sprout-forms', 'Reports'),
-                    'url' => 'sprout-forms/reports/' . $entriesDataSource->dataSourceId . '-sproutforms-entriesdatasource'
+                    'url' => 'sprout-forms/reports/'.$entriesDataSource->dataSourceId.'-sproutforms-entriesdatasource'
                 ],
                 'settings' => [
                     'label' => Craft::t('sprout-forms', 'Settings'),
@@ -283,18 +289,18 @@ class SproutForms extends Plugin
     {
         return [
             'manageSproutFormsForms' => [
-                'label' => Craft::t('sprout-forms','Manage Forms')
+                'label' => Craft::t('sprout-forms', 'Manage Forms')
             ],
             'viewSproutFormsEntries' => [
-                'label' => Craft::t('sprout-forms','View Form Entries'),
+                'label' => Craft::t('sprout-forms', 'View Form Entries'),
                 'nested' => [
                     'editSproutFormsEntries' => [
-                        'label' => Craft::t('sprout-forms','Edit Form Entries')
+                        'label' => Craft::t('sprout-forms', 'Edit Form Entries')
                     ]
                 ]
             ],
             'editSproutFormsSettings' => [
-                'label' => Craft::t('sprout-forms','Edit Settings')
+                'label' => Craft::t('sprout-forms', 'Edit Settings')
             ]
         ];
     }

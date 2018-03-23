@@ -56,7 +56,7 @@ class Email extends BaseFormField implements PreviewableFieldInterface
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/email/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/email/example',
             [
                 'field' => $this
             ]
@@ -76,7 +76,7 @@ class Email extends BaseFormField implements PreviewableFieldInterface
      */
     public function getSettingsHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/email/settings',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/email/settings',
             [
                 'field' => $this,
             ]);
@@ -112,8 +112,8 @@ class Email extends BaseFormField implements PreviewableFieldInterface
     }
 
     /**
-     * @param mixed                                            $value
-     * @param array|null                                       $renderingOptions
+     * @param mixed      $value
+     * @param array|null $renderingOptions
      *
      * @return string
      * @throws \Twig_Error_Loader
@@ -121,8 +121,6 @@ class Email extends BaseFormField implements PreviewableFieldInterface
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-        $this->beginRendering();
-
         $attributes = $this->getAttributes();
         $errorMessage = SproutBase::$app->email->getErrorMessage($attributes['name'], $this);
         $placeholder = isset($this['placeholder']) ? $this['placeholder'] : '';
@@ -138,8 +136,6 @@ class Email extends BaseFormField implements PreviewableFieldInterface
                 'placeholder' => $placeholder
             ]
         );
-
-        $this->endRendering();
 
         return TemplateHelper::raw($rendered);
     }

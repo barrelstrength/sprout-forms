@@ -70,7 +70,7 @@ class MultiSelect extends BaseOptionsFormField
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/multiselect/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/multiselect/example',
             [
                 'field' => $this
             ]
@@ -78,8 +78,8 @@ class MultiSelect extends BaseOptionsFormField
     }
 
     /**
-     * @param mixed                                            $value
-     * @param array|null                                       $renderingOptions
+     * @param mixed      $value
+     * @param array|null $renderingOptions
      *
      * @return string
      * @throws \Twig_Error_Loader
@@ -87,8 +87,6 @@ class MultiSelect extends BaseOptionsFormField
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-        $this->beginRendering();
-
         $rendered = Craft::$app->getView()->renderTemplate(
             'multiselect/input',
             [
@@ -98,8 +96,6 @@ class MultiSelect extends BaseOptionsFormField
                 'renderingOptions' => $renderingOptions
             ]
         );
-
-        $this->endRendering();
 
         return TemplateHelper::raw($rendered);
     }

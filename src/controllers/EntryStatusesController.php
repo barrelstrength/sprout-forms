@@ -91,6 +91,9 @@ class EntryStatusesController extends BaseController
 
     /**
      * @return \yii\web\Response
+     * @throws \Exception
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      * @throws \yii\web\BadRequestHttpException
      */
     public function actionDelete()

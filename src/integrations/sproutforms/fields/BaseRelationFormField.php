@@ -125,7 +125,7 @@ abstract class BaseRelationFormField extends BaseFormField implements Previewabl
     /**
      * @var string Template to use for settings rendering
      */
-    protected $settingsTemplate = 'sprout-forms/_components/fields/elementfieldsettings';
+    protected $settingsTemplate = 'sprout-forms/_formtemplates/fields/elementfieldsettings';
 
     /**
      * @var string Template to use for field rendering
@@ -223,7 +223,7 @@ abstract class BaseRelationFormField extends BaseFormField implements Previewabl
     /**
      * @inheritdoc
      */
-    public function isEmpty($value): bool
+    public function isValueEmpty($value, ElementInterface $element): bool
     {
         /** @var ElementQueryInterface $value */
         return $value->count() === 0;
@@ -509,6 +509,7 @@ abstract class BaseRelationFormField extends BaseFormField implements Previewabl
      * Normalizes the available sources into select input options.
      *
      * @return array
+     * @throws NotSupportedException
      */
     public function getSourceOptions(): array
     {

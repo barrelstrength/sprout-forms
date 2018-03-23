@@ -300,20 +300,15 @@ class FieldsController extends BaseController
 
         $fieldId = Craft::$app->request->getRequiredBodyParam('fieldId');
 
-        if ($response = Craft::$app->fields->deleteFieldById($fieldId))
-        {
+        if ($response = Craft::$app->fields->deleteFieldById($fieldId)) {
             return $this->asJson([
                 'success' => true
             ]);
-        }
-        else
-        {
+        } else {
             return $this->asJson([
                 'success' => false
             ]);
         }
-
-
     }
 
     /**

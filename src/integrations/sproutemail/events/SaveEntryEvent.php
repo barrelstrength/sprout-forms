@@ -1,4 +1,5 @@
 <?php
+
 namespace barrelstrength\sproutforms\integrations\sproutemail\events;
 
 use barrelstrength\sproutbase\contracts\sproutemail\BaseEvent;
@@ -16,166 +17,169 @@ use yii\base\Event;
  */
 class SaveEntryEvent extends BaseEvent
 {
-	public function getEventParams()
-	{
-		return [
-			'class'   => Elements::class,
-			'name'    => Elements::EVENT_AFTER_SAVE_ELEMENT,
-			'event'   => ElementEvent::class
-		];
-	}
-	public function getTitle()
-	{
-		return Craft::t('sprout-forms', 'When a Sprout Forms entry is saved');
-	}
+    public function getEventParams()
+    {
+        return [
+            'class' => Elements::class,
+            'name' => Elements::EVENT_AFTER_SAVE_ELEMENT,
+            'event' => ElementEvent::class
+        ];
+    }
 
-	public function getDescription()
-	{
-		return Craft::t('sprout-forms','Triggered when a form entry is saved.');
-	}
+    public function getTitle()
+    {
+        return Craft::t('sprout-forms', 'When a Sprout Forms entry is saved');
+    }
 
-	/**
-	 * @param array $context
-	 *
-	 * @return string
-	 * @throws \Twig_Error_Loader
-	 * @throws \yii\base\Exception
-	 */
-	public function getOptionsHtml($context = array())
-	{
-		if (!isset($context['availableForms']))
-		{
-			$context['availableForms'] = $this->getAllForms();
-		}
+    public function getDescription()
+    {
+        return Craft::t('sprout-forms', 'Triggered when a form entry is saved.');
+    }
 
-		return Craft::$app->getView()->renderTemplate('sprout-forms/_events/save-entry', $context);
-	}
+    /**
+     * @param array $context
+     *
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
+     */
+    public function getOptionsHtml($context = [])
+    {
+        if (!isset($context['availableForms'])) {
+            $context['availableForms'] = $this->getAllForms();
+        }
 
-	public function prepareOptions()
-	{
-		$rules = Craft::$app->getRequest()->getBodyParam('rules.sproutForms');
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_events/save-entry', $context);
+    }
 
-		return array(
-			'sproutForms' => $rules,
-		);
-	}
+    public function prepareOptions()
+    {
+        $rules = Craft::$app->getRequest()->getBodyParam('rules.sproutForms');
 
-	/**
-	 * Returns whether or not the entry meets the criteria necessary to trigger the event
-	 * @param mixed $options
-	 * @param Entry $entry
-	 * @param array $params
-	 *
-	 * @return bool
-	 */
-	public function validateOptions($options, $entry, array $params = array())
-	{
-		$isNewEntry = isset($params['isNewEntry']) && $params['isNewEntry'];
+        return [
+            'sproutForms' => $rules,
+        ];
+    }
 
-		$whenNew    = isset($options['sproutForms']['saveEntry']['whenNew']) &&
-			$options['sproutForms']['saveEntry']['whenNew'];
+    /**
+     * Returns whether or not the entry meets the criteria necessary to trigger the event
+     *
+     * @param mixed $options
+     * @param Entry $entry
+     * @param array $params
+     *
+     * @return bool
+     */
+    public function validateOptions($options, $entry, array $params = [])
+    {
+        $isNewEntry = isset($params['isNewEntry']) && $params['isNewEntry'];
 
-		// If any section ids were checked
-		// Make sure the entry belongs in one of them
-		if (!empty($options['sproutForms']['saveEntry']['formIds']) &&
-			count($options['sproutForms']['saveEntry']['formIds'])
-		)
-		{
-			if (!in_array($entry->getForm()->id, $options['sproutForms']['saveEntry']['formIds']))
-			{
-				return false;
-			}
-		}
+        $whenNew = isset($options['sproutForms']['saveEntry']['whenNew']) &&
+            $options['sproutForms']['saveEntry']['whenNew'];
 
-		// If only new entries was checked
-		// Make sure the entry is new
-		if (!$whenNew || ($whenNew && $isNewEntry))
-		{
-			return true;
-		}
+        // If any section ids were checked
+        // Make sure the entry belongs in one of them
+        if (!empty($options['sproutForms']['saveEntry']['formIds']) &&
+            count($options['sproutForms']['saveEntry']['formIds'])
+        ) {
+            if (!in_array($entry->getForm()->id, $options['sproutForms']['saveEntry']['formIds'])) {
+                return false;
+            }
+        }
+        
+        // If only new entries was checked
+        // Make sure the entry is new
+        if (!$whenNew || ($whenNew && $isNewEntry)) {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 * @param Event $event
-	 *
-	 * @return array|bool|mixed
-	 * @throws \craft\errors\SiteNotFoundException
-	 */
-	public function prepareParams(Event $event)
-	{
-		if ($this->_isElementEntry($event) == false) return false;
+    /**
+     * @param Event $event
+     *
+     * @return array|bool|mixed
+     * @throws \craft\errors\SiteNotFoundException
+     */
+    public function prepareParams(Event $event)
+    {
+        if ($this->_isElementEntry($event) == false) {
+            return false;
+        }
 
-		return array('value' => $event->element, 'isNewEntry' => $event->isNew);
-	}
-	/**
-	 * @param $event
-	 *
-	 * @return bool
-	 * @throws \craft\errors\SiteNotFoundException
-	 */
-	private function _isElementEntry($event)
-	{
-		$element = get_class($event->element);
+        return ['value' => $event->element, 'isNewEntry' => $event->isNew];
+    }
 
-		$primarySite = Craft::$app->getSites()->getPrimarySite();
+    /**
+     * @param $event
+     *
+     * @return bool
+     * @throws \craft\errors\SiteNotFoundException
+     */
+    private function _isElementEntry($event)
+    {
+        $element = get_class($event->element);
 
-		// Ensure that only User Element class get triggered.
-		if ($element != Entry::class) return false;
+        $primarySite = Craft::$app->getSites()->getPrimarySite();
 
-		// This will ensure that the event will trigger only once
-		if ($primarySite->id != $event->element->siteId) return false;
+        // Ensure that only User Element class get triggered.
+        if ($element != Entry::class) {
+            return false;
+        }
 
-		return true;
-	}
+        // This will ensure that the event will trigger only once
+        if ($primarySite->id != $event->element->siteId) {
+            return false;
+        }
+
+        return true;
+    }
 
 
-	public function prepareValue($value)
-	{
-		return $value;
-	}
+    public function prepareValue($value)
+    {
+        return $value;
+    }
 
-	/**
-	 * @return array|\craft\base\ElementInterface|null
-	 */
-	public function getMockedParams()
-	{
-		$criteria = Entry::find();
+    /**
+     * @return array|\craft\base\ElementInterface|null
+     */
+    public function getMockedParams()
+    {
+        $criteria = Entry::find();
 
-		$formIds = isset($this->options['sproutForms']['saveEntry']['formIds']) ?
-				$this->options['sproutForms']['saveEntry']['formIds'] : array();
+        $formIds = isset($this->options['sproutForms']['saveEntry']['formIds']) ?
+            $this->options['sproutForms']['saveEntry']['formIds'] : [];
 
-		if (is_array($formIds) && count($formIds))
-		{
-			$formId = array_shift($formIds);
+        if (is_array($formIds) && count($formIds)) {
+            $formId = array_shift($formIds);
 
-			$criteria->formId = $formId;
-		}
+            $criteria->formId = $formId;
+        }
 
-		return $criteria->one();
-	}
+        return $criteria->one();
+    }
 
-	/**
-	 * Returns an array of forms suitable for use in checkbox field
-	 *
-	 * @return array
-	 */
-	protected function getAllForms()
-	{
-		$result  = SproutForms::$app->forms->getAllForms();
-		$options = array();
+    /**
+     * Returns an array of forms suitable for use in checkbox field
+     *
+     * @return array
+     */
+    protected function getAllForms()
+    {
+        $result = SproutForms::$app->forms->getAllForms();
+        $options = [];
 
-		foreach ($result as $key => $forms)
-		{
-			array_push(
-				$options, array(
-					'label' => $forms->name,
-					'value' => $forms->id
-				)
-			);
-		}
+        foreach ($result as $key => $forms) {
+            array_push(
+                $options, [
+                    'label' => $forms->name,
+                    'value' => $forms->id
+                ]
+            );
+        }
 
-		return $options;
-	}
+        return $options;
+    }
 }

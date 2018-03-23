@@ -1,0 +1,20 @@
+{% import "_includes/forms" as forms %}
+
+{% set options = field.options %}
+
+{% if not field.options|length %}
+    {% set options = [
+        { label : "Option One", default: 1 },
+        { label : "Option Two", default: 0 },
+        { label : "Option Three", default: 0 }
+    ] %}
+{% endif %}
+
+{{ forms.radioGroupField({
+    id: 'dateTime',
+    name: 'dateTime',
+    options: options,
+    value: '',
+    readonly: true,
+    disabled: true
+}) }}

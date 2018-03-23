@@ -98,7 +98,7 @@ class SectionHeading extends BaseFormField
         ];
 
         return $view->renderTemplate(
-            'sprout-forms/_components/fields/sectionheading/settings',
+            'sprout-forms/_formtemplates/fields/sectionheading/settings',
             [
                 'id' => $namespaceInputId,
                 'name' => $name,
@@ -136,7 +136,7 @@ class SectionHeading extends BaseFormField
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/sectionheading/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/sectionheading/example',
             [
                 'field' => $this
             ]
@@ -144,8 +144,8 @@ class SectionHeading extends BaseFormField
     }
 
     /**
-     * @param mixed                                            $value
-     * @param array|null                                       $renderingOptions
+     * @param mixed      $value
+     * @param array|null $renderingOptions
      *
      * @return string
      * @throws \Twig_Error_Loader
@@ -153,8 +153,6 @@ class SectionHeading extends BaseFormField
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-        $this->beginRendering();
-
         $name = $this->handle;
         $namespaceInputId = $this->getNamespace().'-'.$name;
 
@@ -168,8 +166,6 @@ class SectionHeading extends BaseFormField
                 'field' => $this
             ]
         );
-
-        $this->endRendering();
 
         return TemplateHelper::raw($rendered);
     }

@@ -29,14 +29,14 @@ class m180314_161522_sproutforms_plaintext_fields extends Migration
         foreach ($plainTextFields as $plainTextField) {
             $newSettings = [
                 'placeholder' => '',
-                'charLimit'=> null,
+                'charLimit' => null,
                 'columnType' => 'string'
             ];
 
             $settings = json_decode($plainTextField['settings'], true);
             $newType = SingleLine::class;
 
-            if ($settings['multiline']){
+            if ($settings['multiline']) {
                 $newType = Paragraph::class;
                 $newSettings['columnType'] = 'text';
                 $newSettings['initialRows'] = $settings['initialRows'];

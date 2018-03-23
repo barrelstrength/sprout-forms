@@ -1,0 +1,17 @@
+{%- for tab in tabs -%}
+
+    {%- set layoutFields = tab.getFields() %}
+
+    <section class="tab">
+
+        {% if form.displaySectionTitles -%}
+            <h3>{{ tab.name|t }}</h3>
+        {%- endif %}
+
+        {% for field in layoutFields -%}
+            {{- craft.sproutForms.displayField(form, field, renderingOptions) }}
+        {%- endfor %}
+
+    </section>
+
+{%- endfor -%}

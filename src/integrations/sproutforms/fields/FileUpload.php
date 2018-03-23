@@ -77,7 +77,7 @@ class FileUpload extends BaseRelationFormField
     {
         parent::init();
         $this->allowLargeThumbsView = true;
-        $this->settingsTemplate = 'sprout-forms/_components/fields/fileupload/settings';
+        $this->settingsTemplate = 'sprout-forms/_formtemplates/fields/fileupload/settings';
         $this->inputTemplate = '_components/fieldtypes/Assets/input';
         $this->inputJsClass = 'Craft.AssetSelectInput';
     }
@@ -180,7 +180,7 @@ class FileUpload extends BaseRelationFormField
     public function getExampleInputHtml()
     {
         return Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/fileupload/example',
+            'sprout-forms/_formtemplates/fields/fileupload/example',
             [
                 'field' => $this
             ]
@@ -188,8 +188,8 @@ class FileUpload extends BaseRelationFormField
     }
 
     /**
-     * @param mixed                                            $value
-     * @param array|null                                       $renderingOptions
+     * @param mixed      $value
+     * @param array|null $renderingOptions
      *
      * @return string
      * @throws \Twig_Error_Loader
@@ -197,8 +197,6 @@ class FileUpload extends BaseRelationFormField
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-        $this->beginRendering();
-
         $rendered = Craft::$app->getView()->renderTemplate(
             'fileupload/input',
             [
@@ -208,8 +206,6 @@ class FileUpload extends BaseRelationFormField
                 'renderingOptions' => $renderingOptions
             ]
         );
-
-        $this->endRendering();
 
         return TemplateHelper::raw($rendered);
     }
@@ -559,9 +555,11 @@ class FileUpload extends BaseRelationFormField
      * @param ElementInterface|null $element
      * @param bool                  $createDynamicFolders whether missing folders should be created in the process
      *
-     * @throws InvalidVolumeException if the volume root folder doesn’t exist
-     * @throws InvalidSubpathException if the subpath cannot be parsed in full
      * @return int
+     * @throws InvalidSubpathException if the subpath cannot be parsed in full
+     * @throws InvalidVolumeException if the volume root folder doesn’t exist
+     * @throws \craft\errors\AssetConflictException
+     * @throws \craft\errors\VolumeObjectExistsException
      */
     private function _resolveVolumePathToFolderId(string $uploadSource, string $subpath, ElementInterface $element = null, bool $createDynamicFolders = true): int
     {
@@ -716,11 +714,13 @@ class FileUpload extends BaseRelationFormField
      * Determine an upload folder id by looking at the settings and whether Element this field belongs to is new or not.
      *
      * @param ElementInterface|null $element
-     * @param bool                  $createDynamicFolders whether missing folders should be created in the process
+     * @param bool                  $createDynamicFolders
      *
-     * @return int if the folder subpath is not valid
-     * @throws InvalidSubpathException if the folder subpath is not valid
-     * @throws InvalidVolumeException if there's a problem with the field's volume configuration
+     * @return int
+     * @throws InvalidSubpathException
+     * @throws InvalidVolumeException
+     * @throws \craft\errors\AssetConflictException
+     * @throws \craft\errors\VolumeObjectExistsException
      */
     private function _determineUploadFolderId(ElementInterface $element = null, bool $createDynamicFolders = true): int
     {

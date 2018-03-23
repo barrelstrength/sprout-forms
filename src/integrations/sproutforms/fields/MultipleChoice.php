@@ -28,7 +28,6 @@ class MultipleChoice extends BaseOptionsFormField
         return true;
     }
 
-
     /**
      * @return string
      */
@@ -72,7 +71,7 @@ class MultipleChoice extends BaseOptionsFormField
     public function getExampleInputHtml()
     {
         return Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/multiplechoice/example',
+            'sprout-forms/_formtemplates/fields/multiplechoice/example',
             [
                 'field' => $this
             ]
@@ -80,17 +79,10 @@ class MultipleChoice extends BaseOptionsFormField
     }
 
     /**
-     * @param mixed      $value
-     * @param array|null $renderingOptions
-     *
-     * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @inheritdoc
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-        $this->beginRendering();
-
         $rendered = Craft::$app->getView()->renderTemplate(
             'multiplechoice/input',
             [
@@ -100,8 +92,6 @@ class MultipleChoice extends BaseOptionsFormField
                 'renderingOptions' => $renderingOptions
             ]
         );
-
-        $this->endRendering();
 
         return TemplateHelper::raw($rendered);
     }

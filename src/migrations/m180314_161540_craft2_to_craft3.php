@@ -44,11 +44,11 @@ class m180314_161540_craft2_to_craft3 extends Migration
             ->all();
 
         foreach ($forms as $form) {
-            $table = "{{%sproutformscontent_".$form['handle']."}}";
+            $table = '{{%sproutformscontent_'.$form['handle'].'}}';
             // P&T already add a site column
             if ($this->db->columnExists($table, 'locale__siteId')) {
                 MigrationHelper::renameColumn($table, 'locale__siteId', 'siteId', $this);
-            }else{
+            } else {
                 // let's do it manually
                 $siteId = Craft::$app->getSites()->getPrimarySite()->id;
                 $isNew = false;
@@ -60,9 +60,9 @@ class m180314_161540_craft2_to_craft3 extends Migration
                 }
 
                 $rows = (new Query())
-                ->select(['id'])
-                ->from([$table])
-                ->all();
+                    ->select(['id'])
+                    ->from([$table])
+                    ->all();
 
                 foreach ($rows as $row) {
                     $this->update($table, ['siteId' => $siteId], ['id' => $row['id']], [], false);
@@ -73,14 +73,12 @@ class m180314_161540_craft2_to_craft3 extends Migration
 
                     $this->addForeignKey($this->db->getForeignKeyName($table, 'siteId'), $table, 'siteId', '{{%sites}}', 'id', 'CASCADE', 'CASCADE');
                 }
-
             }
 
             if ($this->db->columnExists($table, 'locale')) {
                 MigrationHelper::dropForeignKeyIfExists($table, ['locale'], $this);
                 $this->dropColumn($table, 'locale');
             }
-
         }
 
         return true;

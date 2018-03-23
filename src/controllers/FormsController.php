@@ -5,6 +5,7 @@ namespace barrelstrength\sproutforms\controllers;
 use Craft;
 use craft\web\Controller as BaseController;
 use craft\helpers\UrlHelper;
+use yii\base\Exception;
 use yii\web\NotFoundHttpException;
 
 use barrelstrength\sproutforms\SproutForms;
@@ -37,7 +38,7 @@ class FormsController extends BaseController
             if ($duplicateForm) {
                 $form->id = $duplicateForm->id;
             } else {
-                throw new \Exception(Craft::t('Error creating Form'));
+                throw new Exception(Craft::t('Error creating Form'));
             }
         } else {
             $form = SproutForms::$app->forms->getFormById($request->getBodyParam('id'));

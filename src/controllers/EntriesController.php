@@ -127,7 +127,6 @@ class EntriesController extends BaseController
      * @throws Exception
      * @throws \Exception
      * @throws \Throwable
-     * @throws \Twig_Error_Loader
      * @throws \yii\web\BadRequestHttpException
      */
     private function saveEntryInCraft(Entry $entry)
@@ -170,9 +169,7 @@ class EntriesController extends BaseController
      *
      * @return null|Response
      * @throws Exception
-     * @throws \Exception
      * @throws \Throwable
-     * @throws \Twig_Error_Loader
      * @throws \yii\web\BadRequestHttpException
      */
     private function forwardEntrySomewhereElse($entry)
@@ -337,6 +334,11 @@ class EntriesController extends BaseController
      */
     private function redirectWithErrors(Entry $entry)
     {
+        // Allow override of redirect URL on failure
+        if (Craft::$app->getRequest()->getBodyParam('redirectOnFailure') !== '') {
+            $_POST['redirect'] = Craft::$app->getRequest()->getBodyParam('redirectOnFailure');
+        }
+
         SproutForms::error($entry->getErrors());
 
         // Send spam to the thank you page

@@ -10,7 +10,7 @@ use yii\db\Schema;
 
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\contracts\BaseFormField;
-use barrelstrength\sproutbase\web\assets\sproutfields\phone\PhoneFieldAsset;
+use barrelstrength\sproutbase\models\sproutfields\Phone as PhoneModel;
 
 class Phone extends BaseFormField implements PreviewableFieldInterface
 {
@@ -22,17 +22,12 @@ class Phone extends BaseFormField implements PreviewableFieldInterface
     /**
      * @var bool|null
      */
-    public $customPatternToggle;
-
-    /**
-     * @var bool|null
-     */
-    public $inputMask;
+    public $limitToSingleCountry;
 
     /**
      * @var string|null
      */
-    public $mask;
+    public $country;
 
     /**
      * @var string|null
@@ -66,9 +61,64 @@ class Phone extends BaseFormField implements PreviewableFieldInterface
     public function getSettingsHtml()
     {
         return Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/phone/settings',
+            'sprout-forms/_formtemplates/fields/phone/settings',
             [
                 'field' => $this,
+            ]
+        );
+    }
+
+    /**
+     * @param mixed                 $value
+     * @param ElementInterface|null $element
+     *
+     * @return array|mixed|null|string
+     */
+    public function serializeValue($value, ElementInterface $element = null)
+    {
+        // Submitting an Element to be saved
+        if (is_object($value) && get_class($value) == PhoneModel::class) {
+            return $value->getAsJson();
+        }
+
+        // Save the phone as json with the number and country
+        return $value;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function normalizeValue($value, ElementInterface $element = null)
+    {
+        $phoneInfo = [];
+
+        if (is_array($value)){
+            $namespace = $element->getFieldParamNamespace();
+            $namespace = $namespace.'.'.$this->handle;
+            $phoneInfo = Craft::$app->getRequest()->getBodyParam($namespace);
+            // bad phone or empty phone
+        }
+
+        if (is_string($value)) {
+            $phoneInfo = json_decode($value, true);
+        }
+
+        if (!isset($phoneInfo['phone']) || !isset($phoneInfo['country'])){
+            return null;
+        }
+        // Always return array
+        $phoneModel = new PhoneModel($phoneInfo['phone'], $phoneInfo['country']);
+        return $phoneModel;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExampleInputHtml()
+    {
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/phone/example',
+            [
+                'field' => $this
             ]
         );
     }
@@ -78,39 +128,36 @@ class Phone extends BaseFormField implements PreviewableFieldInterface
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-//        $view = Craft::$app->getView();
-//        $view->registerAssetBundle(PhoneFieldAsset::class);
-//        $name = $this->handle;
-//        $inputId = Craft::$app->getView()->formatInputId($name);
-//        $namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
-//
-//        return Craft::$app->getView()->renderTemplate('sprout-base/sproutfields/_fields/phone/input',
-//            [
-//                'id' => $namespaceInputId,
-//                'name' => $this->handle,
-//                'value' => $value,
-//                'field' => $this
-//            ]
-//        );
+        $name = $this->handle;
+        $countryId = Craft::$app->getView()->formatInputId($name.'-country');
+        $inputId = Craft::$app->getView()->formatInputId($name);
+        $namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
+        $namespaceCountryId = Craft::$app->getView()->namespaceInputId($countryId);
+        $countries = $this->getCountries();
 
-        return '';
-    }
+        $country = $value['country'] ?? $this->country;
+        $val = $value['phone'] ?? null;
 
-    /**
-     * @inheritdoc
-     */
-    public function getExampleInputHtml()
-    {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/phone/example',
+        return Craft::$app->getView()->renderTemplate(
+            'sprout-base/sproutfields/_fields/phone/input',
             [
-                'field' => $this
+                'namespaceInputId' => $namespaceInputId,
+                'namespaceCountryId' => $namespaceCountryId,
+                'id' => $inputId,
+                'countryId' => $countryId,
+                'name' => $this->handle,
+                'value' => $val,
+                'placeholder' => $this->placeholder,
+                'countries' => $countries,
+                'country' => $country,
+                'limitToSingleCountry' => $this->limitToSingleCountry
             ]
         );
     }
 
     /**
-     * @param mixed                                            $value
-     * @param array|null                                       $renderingOptions
+     * @param mixed      $value
+     * @param array|null $renderingOptions
      *
      * @return string
      * @throws \Twig_Error_Loader
@@ -118,36 +165,19 @@ class Phone extends BaseFormField implements PreviewableFieldInterface
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-        $this->beginRendering();
-
         $name = $this->handle;
-        $namespaceInputId = $this->getNamespace().'-'.$name;
-//        $mask = $settings['mask'];
-
-//        $mask = preg_quote($settings['mask']);
-        // Do no escape "-" html5 does not treat it as special chars
-//        $mask = str_replace("\\-", '-', $mask);
-//        $pattern = SproutBase::$app->phone->convertMaskToRegEx($mask);
-        $mask = '';
-        $pattern = '';
-//        $pattern = trim($pattern, '/');
-
-//        $errorMessage = SproutBase::$app->phone->getErrorMessage($field);
-        $errorMessage = '';
+        $country = $value['country'] ?? $this->country;
+        $val = $value['phone'] ?? null;
 
         $rendered = Craft::$app->getView()->renderTemplate('phone/input',
             [
                 'name' => $name,
-                'value' => $value,
+                'value' => $val,
                 'field' => $this,
-                'pattern' => $pattern,
-                'errorMessage' => $errorMessage,
-                'namespaceInputId' => $namespaceInputId,
+                'country' => $country,
                 'renderingOptions' => $renderingOptions
             ]
         );
-
-        $this->endRendering();
 
         return TemplateHelper::raw($rendered);
     }
@@ -159,10 +189,9 @@ class Phone extends BaseFormField implements PreviewableFieldInterface
     {
         $html = '';
 
-        if ($value) {
-            $formatter = Craft::$app->getFormatter();
-
-            $html = '<a href="tel:'.$value.'" target="_blank">'.$value.'</a>';
+        if ($value->international) {
+            $fullNumber = $value->international;
+            $html = '<a href="tel:'.$fullNumber.'" target="_blank">'.$fullNumber.'</a>';
         }
 
         return $html;
@@ -180,27 +209,42 @@ class Phone extends BaseFormField implements PreviewableFieldInterface
      * Validates our fields submitted value beyond the checks
      * that were assumed based on the content attribute.
      *
-     *
      * @param ElementInterface $element
      *
      * @return void
      */
     public function validatePhone(ElementInterface $element)
     {
-//        $value = $element->getFieldValue($this->handle);
-//
-//        $handle = $this->handle;
-//        $name = $this->name;
-//
-//        if ($this->mask == "") {
-//            $this->mask = SproutBase::$app->phone->getDefaultMask();
-//        }
-//
-//        if (!SproutBase::$app->phone->validate($value, $this->mask)) {
-//            $element->addError(
-//                $this->handle,
-//                SproutBase::$app->phone->getErrorMessage($this)
-//            );
-//        }
+        $value = $element->getFieldValue($this->handle);
+
+        if ($this->required){
+            if (!$value->phone){
+                $element->addError(
+                    $this->handle,
+                    Craft::t('sprout-forms','{field} cannot be blank', [
+                        'field' => $this->name
+                    ])
+                );
+            }
+        }
+
+        if ($value->country && $value->phone) {
+            if (!SproutBase::$app->phone->validate($value->phone, $value->country)) {
+                $element->addError(
+                    $this->handle,
+                    SproutBase::$app->phone->getErrorMessage($this, $value->country)
+                );
+            }
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getCountries()
+    {
+        $countries = SproutBase::$app->phone->getCountries();
+
+        return $countries;
     }
 }

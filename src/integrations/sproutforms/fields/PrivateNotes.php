@@ -62,7 +62,7 @@ class PrivateNotes extends BaseFormField
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/privatenotes/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/privatenotes/example',
             [
                 'field' => $this
             ]

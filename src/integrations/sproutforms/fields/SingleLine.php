@@ -49,14 +49,12 @@ class SingleLine extends BaseFormField implements PreviewableFieldInterface
     }
 
     /**
-     * @return null|string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @inheritdoc
      */
     public function getSettingsHtml()
     {
         $rendered = Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/singleline/settings',
+            'sprout-forms/_formtemplates/fields/singleline/settings',
             [
                 'field' => $this,
             ]
@@ -66,9 +64,6 @@ class SingleLine extends BaseFormField implements PreviewableFieldInterface
     }
 
     /**
-     * Adds support for edit field in the Entries section of SproutForms (Control
-     * panel html)
-     *
      * @inheritdoc
      */
     public function getInputHtml($value, ElementInterface $element = null): string
@@ -86,7 +81,7 @@ class SingleLine extends BaseFormField implements PreviewableFieldInterface
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/singleline/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/singleline/example',
             [
                 'field' => $this
             ]
@@ -94,17 +89,10 @@ class SingleLine extends BaseFormField implements PreviewableFieldInterface
     }
 
     /**
-     * @param mixed                                            $value
-     * @param array|null                                       $renderingOptions
-     *
-     * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @inheritdoc
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-        $this->beginRendering();
-
         $rendered = Craft::$app->getView()->renderTemplate(
             'singleline/input',
             [
@@ -114,8 +102,6 @@ class SingleLine extends BaseFormField implements PreviewableFieldInterface
                 'renderingOptions' => $renderingOptions
             ]
         );
-
-        $this->endRendering();
 
         return TemplateHelper::raw($rendered);
     }

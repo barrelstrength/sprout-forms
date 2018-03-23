@@ -95,7 +95,9 @@ class Entries extends Component
             $record = EntryStatusRecord::findOne($entryStatus->id);
 
             if (!$record) {
-                throw new \Exception(Craft::t('sprout-forms', 'No Entry Status exists with the id of “{id}”', ['id' => $entryStatus->id]));
+                throw new Exception(Craft::t('sprout-forms', 'No Entry Status exists with the id of “{id}”', [
+                    'id' => $entryStatus->id
+                ]));
             }
         }
 
@@ -206,9 +208,10 @@ class Entries extends Component
     /**
      * Returns a form entry model if one is found in the database by id
      *
-     * @param int $entryId
+     * @param          $entryId
+     * @param int|null $siteId
      *
-     * @return null|EntryElement
+     * @return array|ElementInterface|null
      */
     public function getEntryById($entryId, int $siteId = null)
     {
@@ -225,9 +228,8 @@ class Entries extends Component
      * @param EntryElement $entry
      *
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      * @throws \Throwable
-     * @throws \yii\base\Exception
      */
     public function saveEntry(EntryElement $entry)
     {
@@ -501,6 +503,7 @@ class Entries extends Component
      * @param null $entryStatusId
      *
      * @return EntryStatusRecord|null|static
+     * @throws Exception
      */
     private function _getEntryStatusRecordById($entryStatusId = null)
     {

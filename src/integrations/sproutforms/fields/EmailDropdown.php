@@ -118,7 +118,7 @@ class EmailDropdown extends BaseOptionsFormField
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/emaildropdown/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/emaildropdown/example',
             [
                 'field' => $this
             ]
@@ -135,8 +135,6 @@ class EmailDropdown extends BaseOptionsFormField
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-        $this->beginRendering();
-
         $selectedValue = $value->value ?? null;
 
         $options = $this->options;
@@ -151,8 +149,6 @@ class EmailDropdown extends BaseOptionsFormField
                 'field' => $this
             ]
         );
-
-        $this->endRendering();
 
         return TemplateHelper::raw($rendered);
     }
@@ -214,7 +210,7 @@ class EmailDropdown extends BaseOptionsFormField
 
         $emailString = $this->options[$value]->value ?? null;
 
-        if ($emailId) {
+        if ($emailString) {
 
             $emailAddresses = StringHelper::split($emailString);
             $emailAddresses = array_unique($emailAddresses);

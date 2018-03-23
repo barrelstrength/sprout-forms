@@ -24,6 +24,10 @@ class FormsAsset extends AssetBundle
             FontAwesomeAsset::class
         ];
 
+        $this->css = [
+            'css/forms.css'
+        ];
+
         // define the relative path to CSS/JS files that should be registered with the page
         // when this asset bundle is registered
         $this->js = [

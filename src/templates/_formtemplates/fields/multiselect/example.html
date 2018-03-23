@@ -1,0 +1,18 @@
+{% import "_includes/forms" as forms %}
+
+{% set options = field.options %}
+
+{% if not field.options|length %}
+    {% set options = [
+    { label : "Option One", default: 1 },
+    { label : "Option Two", default: 0 },
+    { label : "Option Three", default: 0 }
+    ] %}
+{% endif %}
+
+{{ forms.multiselect({
+    options: options,
+    value: '',
+    readonly: true,
+    disabled: true
+}) }}

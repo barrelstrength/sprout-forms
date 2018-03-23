@@ -69,7 +69,7 @@ class CustomHtml extends BaseFormField implements PreviewableFieldInterface
      */
     public function getSettingsHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/customhtml/settings',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/customhtml/settings',
             [
                 'field' => $this
             ]
@@ -95,7 +95,7 @@ class CustomHtml extends BaseFormField implements PreviewableFieldInterface
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/customhtml/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/customhtml/example',
             [
                 'field' => $this
             ]
@@ -103,8 +103,8 @@ class CustomHtml extends BaseFormField implements PreviewableFieldInterface
     }
 
     /**
-     * @param mixed                                            $value
-     * @param array|null                                       $renderingOptions
+     * @param mixed      $value
+     * @param array|null $renderingOptions
      *
      * @return string
      * @throws \Twig_Error_Loader
@@ -112,8 +112,6 @@ class CustomHtml extends BaseFormField implements PreviewableFieldInterface
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-        $this->beginRendering();
-
         $rendered = Craft::$app->getView()->renderTemplate(
             'customhtml/input',
             [
@@ -123,8 +121,6 @@ class CustomHtml extends BaseFormField implements PreviewableFieldInterface
                 'renderingOptions' => $renderingOptions
             ]
         );
-
-        $this->endRendering();
 
         return TemplateHelper::raw($rendered);
     }

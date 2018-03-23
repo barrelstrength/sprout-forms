@@ -1,0 +1,16 @@
+{% import "_includes/forms" as forms %}
+
+{% set options = field.options %}
+
+{% if not options|length %}
+        {% set options = [
+                { label : "Select..."|t, default: 1 }
+        ] %}
+{% endif %}
+
+{{ forms.select({
+    options: options,
+    value: '',
+    readonly: true,
+    disabled: true
+}) }}

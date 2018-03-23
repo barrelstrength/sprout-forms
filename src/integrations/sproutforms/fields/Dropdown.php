@@ -65,7 +65,7 @@ class Dropdown extends BaseOptionsFormField
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/dropdown/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_formtemplates/fields/dropdown/example',
             [
                 'field' => $this
             ]
@@ -73,8 +73,8 @@ class Dropdown extends BaseOptionsFormField
     }
 
     /**
-     * @param mixed                                            $value
-     * @param array|null                                       $renderingOptions
+     * @param mixed      $value
+     * @param array|null $renderingOptions
      *
      * @return string
      * @throws \Twig_Error_Loader
@@ -82,8 +82,6 @@ class Dropdown extends BaseOptionsFormField
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-        $this->beginRendering();
-
         $rendered = Craft::$app->getView()->renderTemplate(
             'dropdown/input',
             [
@@ -93,8 +91,6 @@ class Dropdown extends BaseOptionsFormField
                 'renderingOptions' => $renderingOptions
             ]
         );
-
-        $this->endRendering();
 
         return TemplateHelper::raw($rendered);
     }

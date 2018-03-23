@@ -78,37 +78,18 @@ class SproutFormsVariable
             ]));
         }
 
-        $entry = SproutForms::$app->entries->getEntry($form);
-        $fields = SproutForms::$app->fields->getRegisteredFields();
-        $templatePaths = SproutForms::$app->forms->getSproutFormsTemplates($form);
-
         $view = Craft::$app->getView();
+        $entry = SproutForms::$app->entries->getEntry($form);
 
-        // Set Tab template path
-        $view->setTemplatesPath($templatePaths['tab']);
-
-        $bodyHtml = $view->renderTemplate(
-            'tab', [
-                'form' => $form,
-                'tabs' => $form->getFieldLayout()->getTabs(),
-                'entry' => $entry,
-                'formFields' => $fields,
-                'thirdPartySubmission' => (bool) $form->submitAction,
-                'displaySectionTitles' => $form->displaySectionTitles,
-                'renderingOptions' => $renderingOptions
-            ]
-        );
+        $templatePaths = SproutForms::$app->forms->getSproutFormsTemplates($form);
 
         // Check if we need to update our Front-end Form Template Path
         $view->setTemplatesPath($templatePaths['form']);
 
         // Build our complete form
-        $formHtml = $view->renderTemplate(
-            'form', [
+        $formHtml = $view->renderTemplate('form', [
                 'form' => $form,
                 'entry' => $entry,
-                'body' => $bodyHtml,
-                'errors' => $entry->getErrors(),
                 'renderingOptions' => $renderingOptions
             ]
         );
@@ -119,38 +100,28 @@ class SproutFormsVariable
     }
 
     /**
-     * @param $field
-     *
-     * @return string
-     */
-    public function getFieldClass($field): string
-    {
-        return get_class($field);
-    }
-
-    /**
-     * @param            $formTabHandle
+     * @param Form       $form
+     * @param int        $tabId
      * @param array|null $renderingOptions
      *
-     * @return bool|string|\Twig_Markup
+     * @return bool|\Twig_Markup
+     * @throws Exception
      * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
      */
-    public function displayTab($formTabHandle, array $renderingOptions = null)
+    public function displayTab(Form $form, int $tabId, array $renderingOptions = null)
     {
-        list($formHandle, $tabHandle) = explode('.', $formTabHandle);
-        $tabHandle = strtolower($tabHandle);
-
-        if (!$formHandle || !$tabHandle) {
-            return '';
+        if (!$form) {
+            throw new Exception(Craft::t('sprout-forms', 'The displayTab tag requires a Form model.'));
         }
 
-        $form = SproutForms::$app->forms->getFormByHandle($formHandle);
-        $entry = SproutForms::$app->entries->getEntry($form);
-        $fields = SproutForms::$app->fields->getRegisteredFields();
-        $templatePaths = SproutForms::$appforms->getSproutFormsTemplates($form);
+        if (!$tabId) {
+            throw new Exception(Craft::t('sprout-forms', 'The displayTab tag requires a Tab ID.'));
+        }
 
         $view = Craft::$app->getView();
+        $entry = SproutForms::$app->entries->getEntry($form);
+
+        $templatePaths = SproutForms::$app->forms->getSproutFormsTemplates($form);
 
         // Set Tab template path
         $view->setTemplatesPath($templatePaths['tab']);
@@ -158,32 +129,25 @@ class SproutFormsVariable
         $tabIndex = null;
 
         foreach ($form->getFieldLayout()->getTabs() as $key => $tabInfo) {
-            $currentTabHandle = str_replace('-', '', ElementHelper::createSlug($tabInfo->name));
-
-            if ($tabHandle == $currentTabHandle) {
+            if ($tabId == $tabInfo->id) {
                 $tabIndex = $key;
             }
         }
 
-        if (is_null($tabIndex)) {
+        if ($tabIndex === null) {
             return false;
         }
 
         $layoutTabs = $form->getFieldLayout()->getTabs();
-        $layoutTab = isset($layoutTabs[$tabIndex]) ? $layoutTabs[$tabIndex] : null;
+        $layoutTab = $layoutTabs[$tabIndex] ?? null;
 
         // Build the HTML for our form tabs and fields
-        $tabHtml = $view->renderTemplate('tab',
-            [
-                'form' => $form,
-                'tabs' => [$layoutTab],
-                'entry' => $entry,
-                'formFields' => $fields,
-                'displaySectionTitles' => $form->displaySectionTitles,
-                'thirdPartySubmission' => (bool) $form->submitAction,
-                'renderingOptions' => $renderingOptions
-            ]
-        );
+        $tabHtml = $view->renderTemplate('tab', [
+            'form' => $form,
+            'entry' => $entry,
+            'tabs' => [$layoutTab],
+            'renderingOptions' => $renderingOptions
+        ]);
 
         $siteTemplatesPath = Craft::$app->path->getSiteTemplatesPath();
 
@@ -195,72 +159,71 @@ class SproutFormsVariable
     /**
      * Returns a complete field for display in template
      *
-     * @param            $handle
-     * @param array|null $renderingOptions
+     * @param Form          $form
+     * @param BaseFormField $field
+     * @param array|null    $renderingOptions
      *
-     * @return bool|\Twig_Markup
+     * @return \Twig_Markup
+     * @throws Exception
+     * @throws \ReflectionException
      * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
      */
-    public function displayField($handle, array $renderingOptions = null)
+    public function displayField(Form $form, BaseFormField $field, array $renderingOptions = null)
     {
-        list($formHandle, $fieldHandle) = explode('.', $handle);
+        if (!$form) {
+            throw new Exception(Craft::t('sprout-forms', 'The displayField tag requires a Form model.'));
+        }
 
-        if (empty($formHandle) || empty($fieldHandle)) {
-            return false;
+        if (!$field) {
+            throw new Exception(Craft::t('sprout-forms', 'The displayField tag requires a Field model.'));
         }
 
         if ($renderingOptions !== null) {
             $renderingOptions = [
                 'fields' => [
-                    $fieldHandle => $renderingOptions
+                    $field->handle => $renderingOptions
                 ]
             ];
         }
 
-        /**
-         * @var $form Form
-         */
-        $form = SproutForms::$app->forms->getFormByHandle($formHandle);
+        $view = Craft::$app->getView();
         $entry = SproutForms::$app->entries->getEntry($form);
 
-        $view = Craft::$app->getView();
-
-        // Determine where our form and field template should come from
         $templatePaths = SproutForms::$app->forms->getSproutFormsTemplates($form);
 
-        $field = $form->getField($fieldHandle);
+        $view->setTemplatesPath($field->getTemplatesPath());
 
-        if ($field) {
-            $fieldTypeString = $this->getFieldClass($field);
-            $formField = SproutForms::$app->fields->getRegisteredField($fieldTypeString);
+        $inputFilePath = $templatePaths['fields'].DIRECTORY_SEPARATOR.$field->getFieldInputFolder().DIRECTORY_SEPARATOR.'input';
 
-            if ($formField) {
-                $value = Craft::$app->request->getBodyParam($field->handle);
+        // Allow input field templates to be overridden
+        foreach (Craft::$app->getConfig()->getGeneral()->defaultTemplateExtensions as $extension) {
+            if (file_exists($inputFilePath.'.'.$extension)) {
 
-                $view->setTemplatesPath($formField->getTemplatesPath());
-
-                // Set Tab template path
-                $view->setTemplatesPath($templatePaths['field']);
-
-                // Build the HTML for our form field
-                $fieldHtml = $view->renderTemplate(
-                    'field', [
-                        'form' => $form,
-                        'value' => $value,
-                        'field' => $field,
-                        'required' => $field->required,
-                        'element' => $entry,
-                        'renderingOptions' => $renderingOptions,
-                        'thirdPartySubmission' => (bool) $form->submitAction
-                    ]
-                );
-
-                $view->setTemplatesPath(Craft::$app->path->getSiteTemplatesPath());
-
-                return TemplateHelper::raw($fieldHtml);
+                // Override Field Input template path
+                $view->setTemplatesPath($templatePaths['fields']);
+                break;
             }
         }
+
+        $value = $entry->getFieldValue($field->handle);
+        $inputHtml = $field->getFrontEndInputHtml($value, $renderingOptions);
+
+        // Set Tab template path
+        $view->setTemplatesPath($templatePaths['field']);
+
+        // Build the HTML for our form field
+        $fieldHtml = $view->renderTemplate('field', [
+                'form' => $form,
+                'entry' => $entry,
+                'field' => $field,
+                'input' => $inputHtml,
+                'renderingOptions' => $renderingOptions
+            ]
+        );
+
+        $view->setTemplatesPath(Craft::$app->path->getSiteTemplatesPath());
+
+        return TemplateHelper::raw($fieldHtml);
     }
 
     /**
@@ -318,7 +281,7 @@ class SproutFormsVariable
      */
     public function getEntry(Form $form)
     {
-        return SproutForms::$app->entries->getEntryModel($form);
+        return SproutForms::$app->entries->getEntry($form);
     }
 
     /**
@@ -421,7 +384,7 @@ class SproutFormsVariable
         SproutForms::error($message);
 
         if (isset(Craft::$app->getConfig()->getGeneral()->devMode) && Craft::$app->getConfig()->getGeneral()->devMode) {
-            throw new \Exception($message);
+            throw new Exception($message);
         }
     }
 
@@ -470,26 +433,6 @@ class SproutFormsVariable
 
         if (array_key_exists($plugin, $plugins)) {
             return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isInvisibleCaptchaEnabled()
-    {
-        $plugins = Craft::$app->plugins->getPlugins(false);
-
-        if (array_key_exists('sproutinvisiblecaptcha', $plugins)) {
-            $invisibleCaptcha = $plugins['sproutinvisiblecaptcha'];
-
-            if ($invisibleCaptcha->getSettings()->sproutFormsDisplayFormTagOutput
-                and $invisibleCaptcha->isInstalled
-            ) {
-                return true;
-            }
         }
 
         return false;
@@ -581,7 +524,7 @@ class SproutFormsVariable
         $templateIds = [];
         $options = [
             [
-                'label' => Craft::t('sprout-forms','Select...'),
+                'label' => Craft::t('sprout-forms', 'Select...'),
                 'value' => ''
             ]
         ];
@@ -599,7 +542,7 @@ class SproutFormsVariable
         $templateFolder = $settings->templateFolderOverride;
 
         $options[] = [
-            'optgroup' => Craft::t('sprout-forms','Custom Template Folder')
+            'optgroup' => Craft::t('sprout-forms', 'Custom Template Folder')
         ];
 
         if (!in_array($templateFolder, $templateIds) && $templateFolder != '') {
@@ -610,7 +553,7 @@ class SproutFormsVariable
         }
 
         $options[] = [
-            'label' => Craft::t('sprout-forms','Add Custom'),
+            'label' => Craft::t('sprout-forms', 'Add Custom'),
             'value' => 'custom'
         ];
 

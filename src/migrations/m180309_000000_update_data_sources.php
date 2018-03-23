@@ -34,8 +34,7 @@ class m180309_000000_update_data_sources extends Migration
             ->where(['type' => $oldDataSourceId])
             ->one();
 
-        if ($dataSource === null)
-        {
+        if ($dataSource === null) {
             // If not, see if our new Data Source exists
             $dataSource = $query->select('*')
                 ->from(['{{%sproutreports_datasources}}'])
