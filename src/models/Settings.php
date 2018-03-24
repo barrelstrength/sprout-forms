@@ -66,4 +66,11 @@ class Settings extends Model
             ],
         ];
     }
+
+    public function rules()
+    {
+        return [
+          [['templateFolderOverride'], 'required', 'on' => 'general']
+        ];
+    }
 }

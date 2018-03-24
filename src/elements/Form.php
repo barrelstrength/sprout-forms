@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\elements;
 
 use barrelstrength\sproutforms\integrations\sproutforms\formtemplates\AccessibleTemplates;
+use barrelstrength\sproutforms\validators\TemplateOverridesValidator;
 use Craft;
 use craft\base\Element;
 use craft\elements\db\ElementQueryInterface;
@@ -407,6 +408,11 @@ class Form extends Element
                 ['handle'],
                 HandleValidator::class,
                 'reservedWords' => ['id', 'dateCreated', 'dateUpdated', 'uid', 'title']
+            ],
+
+            [
+                ['templateOverridesFolder'],
+                TemplateOverridesValidator::class
             ],
             [['name', 'handle'], UniqueValidator::class, 'targetClass' => FormRecord::class],
             [
