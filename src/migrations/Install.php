@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\migrations;
 
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutbase\migrations\sproutreports\Install as SproutBaseReportsInstall;
+use barrelstrength\sproutforms\integrations\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesDataSource;
 use barrelstrength\sproutforms\models\Settings;
 use craft\db\Migration;
@@ -221,6 +222,8 @@ class Install extends Migration
         }
 
         $settings = new Settings();
+        $accessible = new AccessibleTemplates();
+        $settings->templateFolderOverride = $accessible->getTemplateId();
 
         $settings->captchaSettings = [
             'sproutforms-duplicatecaptcha' => [

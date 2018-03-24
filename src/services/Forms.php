@@ -586,6 +586,8 @@ class Forms extends Component
 
         $form->name = $this->getFieldAsNew('name', $name);
         $form->handle = $this->getFieldAsNew('handle', $handle);
+        $accessible = new AccessibleTemplates();
+        $form->templateOverridesFolder = $accessible->getTemplateId();
         // Set default tab
         $field = null;
         $form = SproutForms::$app->fields->addDefaultTab($form, $field);
