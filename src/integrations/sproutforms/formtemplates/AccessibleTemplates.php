@@ -30,7 +30,8 @@ class AccessibleTemplates extends BaseFormTemplates
     {
         return [
             'left' => 'Left (left)',
-            'right' => 'Right (right)'
+            'right' => 'Right (right)',
+            'hide' => 'Hide (hide)'
         ];
     }
 }
