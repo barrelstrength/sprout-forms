@@ -70,7 +70,6 @@ class Install extends Migration
             'notificationSenderName' => $this->string(),
             'notificationSenderEmail' => $this->string(),
             'notificationReplyToEmail' => $this->string(),
-            'enableTemplateOverrides' => $this->boolean()->defaultValue(false),
             'templateOverridesFolder' => $this->string(),
             'enableFileAttachments' => $this->boolean()->defaultValue(false),
             'dateCreated' => $this->dateTime()->notNull(),

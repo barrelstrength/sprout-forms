@@ -14,6 +14,10 @@ use barrelstrength\sproutbase\web\assets\sproutfields\url\UrlFieldAsset;
 
 class Url extends BaseFormField implements PreviewableFieldInterface
 {
+    /**
+     * @var string
+     */
+    public $cssClasses;
 
     /**
      * @var string|null

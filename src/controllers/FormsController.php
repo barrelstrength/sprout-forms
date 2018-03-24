@@ -63,10 +63,7 @@ class FormsController extends BaseController
         $form->notificationSenderName = $request->getBodyParam('notificationSenderName');
         $form->notificationSenderEmail = $request->getBodyParam('notificationSenderEmail');
         $form->notificationReplyToEmail = $request->getBodyParam('notificationReplyToEmail');
-        $form->enableTemplateOverrides = $request->getBodyParam('enableTemplateOverrides', 0);
-        $form->templateOverridesFolder = $form->enableTemplateOverrides
-            ? $request->getBodyParam('templateOverridesFolder')
-            : null;
+        $form->templateOverridesFolder = $request->getBodyParam('templateOverridesFolder');
         $form->enableFileAttachments = $request->getBodyParam('enableFileAttachments');
 
         // Set the field layout

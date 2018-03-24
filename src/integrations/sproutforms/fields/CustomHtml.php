@@ -13,6 +13,11 @@ use barrelstrength\sproutforms\contracts\BaseFormField;
 class CustomHtml extends BaseFormField implements PreviewableFieldInterface
 {
     /**
+     * @var string
+     */
+    public $cssClasses;
+
+    /**
      * @var bool
      */
     public $allowRequired = false;

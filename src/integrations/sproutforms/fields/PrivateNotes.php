@@ -12,6 +12,11 @@ use barrelstrength\sproutbase\web\assets\sproutfields\notes\QuillAsset;
 class PrivateNotes extends BaseFormField
 {
     /**
+     * @var string
+     */
+    public $cssClasses;
+
+    /**
      * @inheritdoc
      */
     public static function displayName(): string

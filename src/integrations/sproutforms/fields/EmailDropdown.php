@@ -12,6 +12,11 @@ use barrelstrength\sproutbase\SproutBase;
 
 class EmailDropdown extends BaseOptionsFormField
 {
+    /**
+     * @var string
+     */
+    public $cssClasses;
+
     public static function displayName(): string
     {
         return Craft::t('sprout-forms', 'Email Dropdown');

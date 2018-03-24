@@ -34,6 +34,11 @@ class Email extends BaseFormField implements PreviewableFieldInterface
     public $uniqueEmail;
 
     /**
+     * @var string
+     */
+    public $cssClasses;
+
+    /**
      * @var string|null
      */
     public $placeholder;

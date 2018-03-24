@@ -79,6 +79,15 @@ class m180314_161540_craft2_to_craft3 extends Migration
                 MigrationHelper::dropForeignKeyIfExists($table, ['locale'], $this);
                 $this->dropColumn($table, 'locale');
             }
+
+            if ($this->db->columnExists($table, 'locale')) {
+                MigrationHelper::dropForeignKeyIfExists($table, ['locale'], $this);
+                $this->dropColumn($table, 'locale');
+            }
+        }
+
+        if ($this->db->columnExists("{{%sproutforms_forms}}", 'enableTemplateOverrides')) {
+            $this->dropColumn("{{%sproutforms_forms}}", 'enableTemplateOverrides');
         }
 
         return true;

@@ -15,6 +15,11 @@ use barrelstrength\sproutforms\SproutForms;
 class Entries extends BaseRelationFormField
 {
     /**
+     * @var string
+     */
+    public $cssClasses;
+
+    /**
      * @inheritdoc
      */
     public static function displayName(): string
