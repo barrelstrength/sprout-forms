@@ -64,7 +64,7 @@
 {% endfor %}
 
 
-{% if field.allowStyles and fieldClass %}
+{% if field.cssClasses is defined %}
     <hr>
     {% namespace 'types['~fieldClass~']' %}
         {% if form.getFormTemplate().getCssClassDefaults()|length %}

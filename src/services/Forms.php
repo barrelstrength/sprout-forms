@@ -725,7 +725,7 @@ class Forms extends Component
                 $templateFolderOverride = $formTemplatePath->getPath();
             } else {
                 // custom folder on site path
-                $templateFolderOverride = $this->getSitePath($formTemplatePath->templateOverridesFolder);
+                $templateFolderOverride = $this->getSitePath($form->templateOverridesFolder);
             }
         }
 

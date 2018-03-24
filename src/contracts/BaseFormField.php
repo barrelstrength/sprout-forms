@@ -24,11 +24,6 @@ abstract class BaseFormField extends Field
     public $allowRequired = true;
 
     /**
-     * @var bool
-     */
-    public $allowStyles  = true;
-
-    /**
      * @var string
      */
     protected $originalTemplatesPath;

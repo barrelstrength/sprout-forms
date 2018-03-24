@@ -11,6 +11,7 @@
 {%- set value            = entry is not empty ? entry.getFieldValue(name) : null %}
 {%- set errors           = entry is not empty ? entry.getErrors(name) : null %}
 {%- set errorClass       = renderingOptions.errorClass ?? 'errors' %}
+{%- set cssClasses       = field['cssClasses'] is defined and not null ? field.cssClasses : '' %}
 
 {%- namespace field.getNamespace() -%}
     {%- if field.isPlainInput() -%}
@@ -26,6 +27,7 @@
             {%- if class %} {{ class }}{% endif -%}
             {%- if errors %} {{ errorClass }}{% endif -%}
             {%- if required %} required{% endif -%}
+            {%- if cssClasses %} {{ cssClasses }}{% endif -%}
             ">
             {% if label or instructions -%}
                 <div class="heading">

@@ -15,11 +15,6 @@ class Hidden extends BaseFormField implements PreviewableFieldInterface
     /**
      * @var bool
      */
-    public $allowStyles = false;
-
-    /**
-     * @var bool
-     */
     public $allowEdits = false;
 
     /**
