@@ -98,7 +98,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
             this.$deleteSpinner = $('<div class="spinner hidden">').appendTo(this.$leftButtons);
 
-            this.$deleteBtn = $('<div class="btn delete" role="button">').text(Craft.t('sprout-forms','Delete')).appendTo(this.$leftButtons);
+            this.$deleteBtn = $('<div class="btn delete hidden" role="button">').text(Craft.t('sprout-forms','Delete')).appendTo(this.$leftButtons);
             this.$cancelBtn = $('<div class="btn disabled" role="button">').text(Craft.t('sprout-forms','Cancel')).appendTo(this.$rightButtons);
             this.$saveBtn = $('<div class="btn submit disabled" role="button">').text(Craft.t('sprout-forms','Save')).appendTo(this.$rightButtons);
             this.$saveSpinner = $('<div class="spinner hidden">').appendTo(this.$rightButtons);
@@ -217,6 +217,10 @@ if (typeof Craft.SproutForms === typeof undefined) {
             // Fixes bug on Craft3 - Updates way to callback function
             $.when(this.runExternalScripts(jsFiles)).then(callback());
             //this.runExternalScripts(jsFiles);
+
+            this.$deleteBtn.removeClass('hidden');
+            this.$saveBtn.removeClass('disabled');
+            this.$cancelBtn.removeClass('disabled');
         },
 
         /**
@@ -276,8 +280,9 @@ if (typeof Craft.SproutForms === typeof undefined) {
          */
         initListeners: function()
         {
-            this.$cancelBtn.removeClass('disabled');
-            this.$saveBtn.removeClass('disabled');
+            this.$deleteBtn.addClass('hidden');
+            this.$cancelBtn.addClass('disabled');
+            this.$saveBtn.addClass('disabled');
 
             this.addListener(this.$cancelBtn, 'activate', 'closeModal');
             this.addListener(this.$saveBtn, 'activate', 'saveField');
