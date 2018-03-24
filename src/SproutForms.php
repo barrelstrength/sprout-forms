@@ -174,7 +174,6 @@ class SproutForms extends Plugin
             $event->types[] = BasicFieldsTheme::class;
             $event->types[] = SpecialFieldsTheme::class;
         });
-        */
     }
 
     /**
