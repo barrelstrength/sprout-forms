@@ -191,6 +191,16 @@ if (typeof Craft.SproutForms === typeof undefined) {
             $(el).addClass('target-field');
             $(el).find('.source-field-header').remove();
             $(el).find('.body').removeClass('hidden');
+            // try to check position of the field
+            var nextDiv = $(el).next(".target-field");
+            var nextId = nextDiv.attr('id');
+            if (typeof nextId === 'undefined' || nextId === null) {
+                nextDiv = null;
+            }else{
+                // Last field
+                var nextDivId = nextId.split('-');
+                nextId = nextDivId[1];
+            }
 
             var defaultName = $(el).data('defaultname') ? $(el).data('defaultname') : 'Untitled' | t;
 
@@ -205,7 +215,8 @@ if (typeof Craft.SproutForms === typeof undefined) {
             var data = {
                 'type': type,
                 'formId': formId,
-                'tabId': tabId
+                'tabId': tabId,
+                'nextId': nextId
             };
 
             Craft.postActionRequest('sprout-forms/fields/create-field', data, $.proxy(function(response, textStatus) {
