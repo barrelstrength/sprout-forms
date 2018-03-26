@@ -38,6 +38,7 @@ class FieldsController extends BaseController
         $tabId = $request->getBodyParam('tabId');
         $tab = FieldLayoutTabRecord::findOne($tabId);
         $formId = $request->getBodyParam('formId');
+        $nextId = $request->getBodyParam('nextId');
         $form = SproutForms::$app->forms->getFormById($formId);
 
         if ($type && $form && $tab) {
@@ -50,7 +51,7 @@ class FieldsController extends BaseController
 
                 if ($oldTabs) {
                     // it's a new field
-                    $response = SproutForms::$app->fields->addFieldToLayout($field, $form, $tabId);
+                    $response = SproutForms::$app->fields->addFieldToLayout($field, $form, $tabId, $nextId);
 
                     return $this->_returnJson($response, $field, $form, $tab->name, $tabId);
                 }

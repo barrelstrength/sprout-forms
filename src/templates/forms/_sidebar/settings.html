@@ -1,5 +1,6 @@
 {% import "_includes/forms" as forms %}
 {% import "sprout-forms/_includes/macros" as sproutForms %}
+{% import "sprout-base/sproutfields/forms" as sproutFields %}
 
 
 {# @todo - Remove Notifications in favor of Sprout Email integration
@@ -146,24 +147,18 @@
             offLabel: "Hide"|t('sprout-forms')
         }) }}
 
-        {% if settings.enablePerFormTemplateFolderOverride or form.enableTemplateOverrides %}
+        {% if settings.enablePerFormTemplateFolderOverride %}
 
-            {{ forms.lightswitchField({
-                label: "Custom Templates <span class='info'>Enable Custom Template Overrides Folder</span>"|t('sprout-forms'),
-                name: 'enableTemplateOverrides',
-                toggle: 'templateOverridesFolder-field',
-                on: form.enableTemplateOverrides,
-                onLabel: "Enable"|t('sprout-forms'),
-            }) }}
-
-            {{ forms.textField({
-                label: "Templates Folder <span class='info'>The template folder to use for overrides</span>"|t('sprout-forms'),
+            {{ forms.field({
+                label: "Default Form Templates <span class='info'>The template that will be used to output your forms</span>"|t('sprout-forms'),
+                required: true,
+                errors: (form is defined ? form.getErrors('templateOverridesFolder') : null)
+            }, sproutFields.selectOther({
                 name: 'templateOverridesFolder',
-                placeholder: '_forms/formHandle',
-                id: 'templateOverridesFolder',
-                on: form.templateOverridesFolder,
-                value: (form is defined ? form.templateOverridesFolder : null),
-            }) }}
+                options: form.getTemplateOptions(),
+                value: form.templateOverridesFolder ?? null,
+                otherPlaceholderText: '_forms/formHandle'|t('sprout-forms'),
+            })) }}
 
         {% endif %}
 
@@ -210,12 +205,6 @@
         </div>
     </div>
 </div>
-
-{% if not form.enableTemplateOverrides %}
-    {% js %}
-        $('#templateOverridesFolder-field').toggleClass('hidden');
-    {% endjs %}
-{% endif %}
 
 {% js %}
     $(document).ready(function()

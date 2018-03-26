@@ -13,6 +13,11 @@ use craft\base\ElementInterface;
 class MultipleChoice extends BaseOptionsFormField
 {
     /**
+     * @var string
+     */
+    public $cssClasses;
+
+    /**
      * @inheritdoc
      */
     public static function displayName(): string

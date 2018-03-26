@@ -17,6 +17,11 @@ class RegularExpression extends BaseFormField implements PreviewableFieldInterfa
     /**
      * @var string
      */
+    public $cssClasses;
+
+    /**
+     * @var string
+     */
     public $customPatternErrorMessage;
 
     /**

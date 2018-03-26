@@ -26,11 +26,6 @@ abstract class BaseFormField extends Field
     /**
      * @var string
      */
-    public $cssClasses = '';
-
-    /**
-     * @var string
-     */
     protected $originalTemplatesPath;
 
     /**
@@ -157,46 +152,4 @@ abstract class BaseFormField extends Field
         return $value;
     }
 
-    /**
-     * @return array
-     */
-    public function getClassesOptions()
-    {
-        $classesIds = [];
-        $options = [
-            [
-                'label' => Craft::t('sprout-forms','Select...'),
-                'value' => ''
-            ],
-            [
-                'label' => "Left (left)",
-                'value' => 'left'
-            ],
-            [
-                'label' => "Right (right)",
-                'value' => 'right'
-            ]
-        ];
-
-        $classesIds[] = 'left';
-        $classesIds[] = 'right';
-
-        $options[] = [
-            'optgroup' => Craft::t('sprout-forms','Custom CSS Classes')
-        ];
-
-        if (!in_array($this->cssClasses, $classesIds) && $this->cssClasses != '') {
-            $options[] = [
-                'label' => $this->cssClasses,
-                'value' => $this->cssClasses
-            ];
-        }
-
-        $options[] = [
-            'label' => Craft::t('sprout-forms','Add Custom'),
-            'value' => 'custom'
-        ];
-
-        return $options;
-    }
 }

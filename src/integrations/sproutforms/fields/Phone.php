@@ -15,6 +15,11 @@ use barrelstrength\sproutbase\models\sproutfields\Phone as PhoneModel;
 class Phone extends BaseFormField implements PreviewableFieldInterface
 {
     /**
+     * @var string
+     */
+    public $cssClasses;
+
+    /**
      * @var string|null
      */
     public $customPatternErrorMessage;

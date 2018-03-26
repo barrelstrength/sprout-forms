@@ -12,7 +12,7 @@
 {% set fieldTypes = craft.sproutForms.getRegisteredFields() %}
 {% set fieldTypeGroups = craft.sproutForms.prepareFieldTypeSelection() %}
 
-<input type="hidden" name="formId" value="{{ formId }}">
+<input type="hidden" name="formId" value="{{ form.id }}">
 
 {% if field.id %}
     <input type="hidden" name="fieldId" value="{{ field.id }}">
@@ -63,19 +63,34 @@
     </div>
 {% endfor %}
 
-<hr>
 
-{{ forms.field({
-    label: "CSS Classes"|t('sprout-forms'),
-    first: true,
-    instructions: "The CSS class names to output in your field's HTML."|t('sprout-forms'),
-}, sproutFields.selectOther({
-    name: 'cssClasses',
-    options: field.getClassesOptions(),
-    value: field.cssClasses ?? null,
-    otherPlaceholderText: 'Custom CSS Classes'|t('sprout-forms')
-})) }}
-
+{% if field.cssClasses is defined %}
+    <hr>
+    {% namespace 'types['~fieldClass~']' %}
+        {% if form.getFormTemplate().getCssClassDefaults()|length %}
+            {% set cssOptions = form.getClassesOptions(field.cssClasses) %}
+            {{ forms.field({
+                label: "CSS Classes"|t('sprout-forms'),
+                first: true,
+                instructions: "The CSS class names to output in your field's HTML."|t('sprout-forms'),
+            }, sproutFields.selectOther({
+                name: 'cssClasses',
+                options: cssOptions,
+                value: field.cssClasses ?? null,
+                otherPlaceholderText: 'Custom CSS Classes'|t('sprout-forms')
+            })) }}
+       {% else %}
+            {{ forms.textField({
+                label: "CSS Classes"|t('sprout-forms'),
+                first: true,
+                instructions: "The CSS class names to output in your field's HTML."|t('sprout-forms'),
+                name: 'cssClasses',
+                value: field.cssClasses ?? null,
+                otherPlaceholderText: 'Custom CSS Classes'|t('sprout-forms')
+            }) }}
+        {% endif %}
+    {% endnamespace %}
+{% endif %}
 <hr>
 
 {% if sections is defined and sections|length %}

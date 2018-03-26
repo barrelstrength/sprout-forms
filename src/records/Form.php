@@ -29,7 +29,6 @@ use craft\records\Element;
  * @property string      $notificationSender
  * @property string      $notificationSenderEmail
  * @property string      $notificationReplyToEmail
- * @property bool        $enableTemplateOverrides
  * @property string      $templateOverridesFolder
  * @property bool        $enableFileAttachments
  * @property FieldLayout $fieldLayout

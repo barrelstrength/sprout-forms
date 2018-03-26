@@ -586,6 +586,8 @@ class Forms extends Component
 
         $form->name = $this->getFieldAsNew('name', $name);
         $form->handle = $this->getFieldAsNew('handle', $handle);
+        $accessible = new AccessibleTemplates();
+        $form->templateOverridesFolder = $accessible->getTemplateId();
         // Set default tab
         $field = null;
         $form = SproutForms::$app->fields->addDefaultTab($form, $field);
@@ -708,18 +710,25 @@ class Forms extends Component
         $defaultTemplate = $defaultVersion->getPath();
 
         if ($settings->templateFolderOverride) {
-            $templatePath = $this->getTemplatePathById($settings->templateFolderOverride);
+            $templatePath = $this->getTemplateById($settings->templateFolderOverride);
             if ($templatePath) {
                 // custom path by template API
-                $templateFolderOverride = $templatePath;
+                $templateFolderOverride = $templatePath->getPath();
             } else {
                 // custom folder on site path
                 $templateFolderOverride = $this->getSitePath($settings->templateFolderOverride);
             }
         }
 
-        if ($form->enableTemplateOverrides) {
-            $templateFolderOverride = $this->getSitePath($form->templateOverridesFolder);
+        if ($form->templateOverridesFolder) {
+            $formTemplatePath = $this->getTemplateById($form->templateOverridesFolder);
+            if ($formTemplatePath) {
+                // custom path by template API
+                $templateFolderOverride = $formTemplatePath->getPath();
+            } else {
+                // custom folder on site path
+                $templateFolderOverride = $this->getSitePath($form->templateOverridesFolder);
+            }
         }
 
         // Set our defaults
@@ -784,15 +793,15 @@ class Forms extends Component
     /**
      * @param $templateId
      *
-     * @return null
+     * @return null|BaseFormTemplates
      */
-    public function getTemplatePathById($templateId)
+    public function getTemplateById($templateId)
     {
         $templates = SproutForms::$app->forms->getAllGlobalTemplates();
 
         foreach ($templates as $template) {
             if ($template->getTemplateId() == $templateId) {
-                return $template->getPath();
+                return $template;
             }
         }
 

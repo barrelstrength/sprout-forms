@@ -18,26 +18,6 @@ class m180314_161540_craft2_to_craft3 extends Migration
      */
     public function safeUp()
     {
-        $newSettings = [
-            'placeholder' => '',
-            'multiline' => '',
-            'initialRows' => '4',
-            'charLimit' => '255',
-            'columnType' => 'string'
-        ];
-
-        $fields = (new Query())
-            ->select(['id', 'handle', 'settings'])
-            ->from(['{{%fields}}'])
-            ->where(['type' => 'SproutFields_Phone'])
-            ->andWhere('context LIKE "%sproutForms:%"')
-            ->all();
-
-        foreach ($fields as $field) {
-            $settingsAsJson = json_encode($newSettings);
-            $this->update('{{%fields}}', ['type' => SingleLine::class, 'settings' => $settingsAsJson], ['id' => $field['id']], [], false);
-        }
-
         $forms = (new Query())
             ->select(['id', 'handle'])
             ->from(['{{%sproutforms_forms}}'])
@@ -79,6 +59,15 @@ class m180314_161540_craft2_to_craft3 extends Migration
                 MigrationHelper::dropForeignKeyIfExists($table, ['locale'], $this);
                 $this->dropColumn($table, 'locale');
             }
+
+            if ($this->db->columnExists($table, 'locale')) {
+                MigrationHelper::dropForeignKeyIfExists($table, ['locale'], $this);
+                $this->dropColumn($table, 'locale');
+            }
+        }
+
+        if ($this->db->columnExists("{{%sproutforms_forms}}", 'enableTemplateOverrides')) {
+            $this->dropColumn("{{%sproutforms_forms}}", 'enableTemplateOverrides');
         }
 
         return true;

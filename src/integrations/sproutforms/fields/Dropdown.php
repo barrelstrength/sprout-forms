@@ -13,6 +13,11 @@ use craft\base\ElementInterface;
 class Dropdown extends BaseOptionsFormField
 {
     /**
+     * @var string
+     */
+    public $cssClasses;
+
+    /**
      * @inheritdoc
      */
     public static function displayName(): string

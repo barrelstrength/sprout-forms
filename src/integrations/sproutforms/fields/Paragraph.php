@@ -18,6 +18,11 @@ use barrelstrength\sproutforms\contracts\BaseFormField;
 class Paragraph extends BaseFormField implements PreviewableFieldInterface
 {
     /**
+     * @var string
+     */
+    public $cssClasses;
+
+    /**
      * @var string|null The input’s placeholder text
      */
     public $placeholder = '';

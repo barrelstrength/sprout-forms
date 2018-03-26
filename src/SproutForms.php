@@ -25,8 +25,8 @@ use barrelstrength\sproutforms\integrations\sproutimport\themes\SpecialFieldsThe
 use barrelstrength\sproutforms\services\App;
 use barrelstrength\sproutforms\services\Entries;
 use barrelstrength\sproutforms\services\Forms;
-use barrelstrength\sproutimport\services\Importers;
-use barrelstrength\sproutimport\services\Themes;
+use barrelstrength\sproutbase\services\sproutimport\Importers;
+use barrelstrength\sproutbase\services\sproutimport\Themes;
 use Craft;
 use craft\base\Plugin;
 use craft\events\RegisterComponentTypesEvent;
@@ -126,10 +126,10 @@ class SproutForms extends Plugin
         Event::on(EntriesController::class, EntriesController::EVENT_BEFORE_POPULATE, function(OnBeforePopulateEntryEvent $event) {
             self::$app->entries->handleUnobfuscateEmailAddresses($event->form);
         });
-
+        /*
         Event::on(NotificationEmails::class, NotificationEmails::EVENT_REGISTER_EMAIL_EVENTS, function(RegisterNotificationEvent $event) {
             $event->availableEvents[] = new SaveEntryEvent;
-        });
+        });*/
 
         Event::on(Forms::class, Forms::EVENT_REGISTER_CAPTCHAS, function(Event $event) {
             $event->types[] = DuplicateCaptcha::class;
@@ -163,14 +163,14 @@ class SproutForms extends Plugin
             $event->types[] = AccessibleTemplates::class;
         });
 
-        Event::on(Importers::class, Importers::EVENT_REGISTER_IMPORTER, function(RegisterComponentTypesEvent $event) {
+        Event::on(Importers::class, Importers::EVENT_REGISTER_IMPORTER_TYPES, function(RegisterComponentTypesEvent $event) {
             $event->types[] = FormElementImporter::class;
             $event->types[] = EntryElementImporter::class;
 //            $event->types[] = FormsFieldImporter::class;
 //            $event->types[] = EntriesFieldImporter::class;
         });
 
-        Event::on(Themes::class, Themes::EVENT_REGISTER_THEMES, function(RegisterComponentTypesEvent $event) {
+        Event::on(Themes::class, Themes::EVENT_REGISTER_THEME_TYPES, function(RegisterComponentTypesEvent $event) {
             $event->types[] = BasicFieldsTheme::class;
             $event->types[] = SpecialFieldsTheme::class;
         });

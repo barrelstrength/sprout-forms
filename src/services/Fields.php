@@ -389,20 +389,51 @@ class Fields extends Component
      * @param FieldModel            $field
      * @param SproutForms_FormModel $form
      * @param int                   $tabId
+     * @param int                   $nextId the next field Id
      *
      * @return boolean
      */
-    public function addFieldToLayout($field, $form, $tabId): bool
+    public function addFieldToLayout($field, $form, $tabId, $nextId = null): bool
     {
         $response = false;
+        $sortOrder = null;
 
         if (isset($field) && isset($form)) {
+            // Let's try to order the field where is droped
 
-            $fieldLayoutFields = FieldLayoutFieldRecord::findAll([
-                'tabId' => $tabId, 'layoutId' => $form->fieldLayoutId
-            ]);
+            if ($nextId){
+                $fieldLayoutFieldNext = FieldLayoutFieldRecord::findOne([
+                    'tabId' => $tabId, 'layoutId' => $form->fieldLayoutId, 'fieldId' => $nextId
+                ]);
 
-            $sortOrder = count($fieldLayoutFields) + 1;
+                if ($fieldLayoutFieldNext){
+                    $fieldLayoutFields = FieldLayoutFieldRecord::find()
+                        ->where([
+                            'tabId' => $tabId, 'layoutId' => $form->fieldLayoutId
+
+                        ])
+                        ->andWhere(['>=', 'sortOrder' , $fieldLayoutFieldNext->sortOrder])
+                        ->all();
+
+                        $sortOrder = $fieldLayoutFieldNext->sortOrder;
+
+                        foreach ($fieldLayoutFields as  $fieldLayoutFieldRecord) {
+                            $fieldLayoutFieldRecord->sortOrder += 1;
+                            $fieldLayoutFieldRecord->save();
+                        }
+                }
+
+
+            }
+
+            if (is_null($sortOrder))
+            {
+                $fieldLayoutFields = FieldLayoutFieldRecord::findAll([
+                    'tabId' => $tabId, 'layoutId' => $form->fieldLayoutId
+                ]);
+                // At last
+                $sortOrder = count($fieldLayoutFields) + 1;
+            }
 
             $fieldRecord = new FieldLayoutFieldRecord();
             $fieldRecord->layoutId = $form->fieldLayoutId;
@@ -490,7 +521,8 @@ class Fields extends Component
         }
 
         $data['sections'] = $form->getFieldLayout()->getTabs();
-        $data['formId'] = $form->id;
+        $data['form'] = $form;
+        $data['fieldClass'] = $data['field'] ? get_class($data['field']) : null;
         $view = Craft::$app->getView();
 
         $html = $view->renderTemplate('sprout-forms/forms/_editFieldModal', $data);

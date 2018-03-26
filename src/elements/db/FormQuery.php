@@ -96,10 +96,6 @@ class FormQuery extends ElementQuery
      */
     public $notificationReplyToEmail;
 
-    /**
-     * @var bool
-     */
-    public $enableTemplateOverrides;
 
     /**
      * @var string
@@ -228,7 +224,6 @@ class FormQuery extends ElementQuery
             'sproutforms_forms.notificationSenderName',
             'sproutforms_forms.notificationSenderEmail',
             'sproutforms_forms.notificationReplyToEmail',
-            'sproutforms_forms.enableTemplateOverrides',
             'sproutforms_forms.templateOverridesFolder',
             'sproutforms_forms.enableFileAttachments'
         ]);

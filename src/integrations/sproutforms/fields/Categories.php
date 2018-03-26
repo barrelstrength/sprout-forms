@@ -26,6 +26,11 @@ class Categories extends BaseRelationFormField
     public $branchLimit;
 
     /**
+     * @var string
+     */
+    public $cssClasses;
+
+    /**
      * @inheritdoc
      */
     public function init()
