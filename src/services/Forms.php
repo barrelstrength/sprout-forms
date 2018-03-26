@@ -177,7 +177,7 @@ class Forms extends Component
             SproutForms::info('Form Saved!');
         } catch (\Exception $e) {
             SproutForms::error('Failed to save form: '.$e->getMessage());
-            $transaction->rollback();
+            $transaction->rollBack();
 
             throw $e;
         }
