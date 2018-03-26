@@ -31,11 +31,6 @@ class SaveEntryEvent extends BaseEvent
         return Craft::t('sprout-forms', 'When a Sprout Forms entry is saved');
     }
 
-    public function getDescription()
-    {
-        return Craft::t('sprout-forms', 'Triggered when a form entry is saved.');
-    }
-
     /**
      * @param array $context
      *
@@ -43,7 +38,7 @@ class SaveEntryEvent extends BaseEvent
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getOptionsHtml($context = [])
+    public function getSettingsHtml($context = [])
     {
         if (!isset($context['availableForms'])) {
             $context['availableForms'] = $this->getAllForms();

@@ -126,10 +126,10 @@ class SproutForms extends Plugin
         Event::on(EntriesController::class, EntriesController::EVENT_BEFORE_POPULATE, function(OnBeforePopulateEntryEvent $event) {
             self::$app->entries->handleUnobfuscateEmailAddresses($event->form);
         });
-        /*
+
         Event::on(NotificationEmails::class, NotificationEmails::EVENT_REGISTER_EMAIL_EVENTS, function(RegisterNotificationEvent $event) {
             $event->availableEvents[] = new SaveEntryEvent;
-        });*/
+        });
 
         Event::on(Forms::class, Forms::EVENT_REGISTER_CAPTCHAS, function(Event $event) {
             $event->types[] = DuplicateCaptcha::class;
@@ -278,7 +278,8 @@ class SproutForms extends Plugin
             'sprout-forms/notifications/edit/<emailId:\d+|new>' => 'sprout-base/notifications/edit-notification-email-template',
 
             'sprout-forms/settings' => 'sprout-base/settings/edit-settings',
-            'sprout-forms/settings/<settingsSectionHandle:.*>' => 'sprout-base/settings/edit-settings'
+            'sprout-forms/settings/<settingsSectionHandle:.*>' => 'sprout-base/settings/edit-settings',
+            'sprout-forms/preview/notification/<emailId:\d+>' => ['template' => 'sprout-base/sproutemail/notifications/_special/preview']
         ];
     }
 
