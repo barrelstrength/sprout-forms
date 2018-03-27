@@ -51,19 +51,7 @@ class Settings extends Model
                 'url' => 'sprout-forms/settings/advanced',
                 'selected' => 'advanced',
                 'template' => 'sprout-forms/_settings/advanced'
-            ],
-            'settingsHeading' => [
-                'heading' => Craft::t('sprout-forms', 'Examples'),
-            ],
-            'examples' => [
-                'label' => Craft::t('sprout-forms', 'Form Templates'),
-                'url' => 'sprout-forms/settings/examples',
-                'actionUrl' => 'sprout-forms/examples/install',
-                'selected' => 'examples',
-                'template' => 'sprout-forms/_settings/examples',
-                'fullPageForm' => true,
-                'actionTemplate' => 'sprout-forms/_includes/actionExampleButton'
-            ],
+            ]
         ];
     }
 
