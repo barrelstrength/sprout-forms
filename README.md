@@ -1,29 +1,26 @@
-# Changelog
+# Sprout Forms
 
-## Craft 3 Release - Working Draft
+Simple, Beautiful Forms.
 
-### Added
+- **Drag & Drop UI** - Easy to use, Craft-friendly UI for Content Editors
+- **Fields, Fields!** - 22 default fields and, if that's not enough, a Custom Field API 
+- **Custom Form Templates** - Developers can customize every detail of Form HTML
+- **Accessible Forms** - Default Form Templates follow many WCAG 2.0 best practices
+- **Spam Protection** - Protect your forms from evil robots
+- **Notifications** - Coming soon
+- **Reports** - Coming soon
 
-- Added new user interface with Drag & Drop Form Builder
-- Added Front-end Field API
-- Added Form Template API to allow users to select their global template from the defaults we provide or another custom plugin or local override
-- Added Captcha API and integrated Invisible Captcha (Also see Google ReCaptcha for Sprout Forms)
-- Added improved support for accessibility support, following the WCAG 2.0 guidelines 
-- Added autocomplete support for Name, Email, and Phone fields
-- Added Section Heading, Private Notes, and Custom HTML Fields
-- Added International Name Field with single input and multi-input options and autocomplete support
-- Added support for Reordering Tabs and moving fields between tabs.
-- Added International Phone Field ??
+See the Sprout Forms documentation to learn more about Sprout Forms.
 
-### Removed
+## Documentation
 
-- Removed Notes Field in favor of Section Heading, Private Notes, and Custom HTML Fields
+See the [Sprout Website](https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs) for documentation, guides, and additional resources. 
 
-### Changed
+## Support
 
-- Updated Plain Text to Single Line Field
-- Updated Plain Text multiline to Paragraph Field
-- Updated Radio Buttons to Multiple Choice Field
-- Updated Assets to File Upload Field
-- Removed Phone Field with Pattern Mask
-  
+- [Send a Support Ticket](https://sprout.barrelstrengthdesign.com/craft-plugins/request/support) via the Sprout Website.
+- [Create an issue](https://github.com/barrelstrength/craft-sprout-forms/issues) on Github.
+
+<a href="https://sprout.barrelstrengthdesign.com" target="_blank">
+  <img src="https://sprout.barrelstrengthdesign.com/content/plugins/sprout-icon.svg" width="72" align="right">
+</a>
