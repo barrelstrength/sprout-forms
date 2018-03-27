@@ -1,0 +1,18 @@
+{%- if field.output == "richText" %}
+    {{ field.notes|raw }}
+{% endif -%}
+
+{%- if field.output == 'markdown' and field.notes is not empty %}
+    {{ field.notes|markdown }}
+{% endif -%}
+
+{%- if field.output == "html" %}
+
+    <div class="sproutform-exampleinput-customhtml">
+        <div class="customhtml-icon">{{ svg('@sproutbaseicons/code.svg') }}</div>
+        <p>{{ "This field will display your Custom HTML on your front-end form."|t('sprout-forms') }}</p>
+    </div>
+
+{% endif -%}
+
+

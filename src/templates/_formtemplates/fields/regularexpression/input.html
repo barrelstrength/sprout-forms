@@ -1,0 +1,26 @@
+{%- set id = renderingOptions.id ?? name %}
+{%- set class = renderingOptions.class ?? name %}
+{%- set required = field.required ? true : false %}
+{%- set hasInstructions = field.instructions ? true : false %}
+{%- set value = value ? value : null %}
+
+{%- set pattern  = pattern is defined and pattern ? pattern : null %}
+
+{%- set dataAttributes = null %}
+{%- set data = renderingOptions.data ?? null %}
+{%- for key, dataValue in data %}
+    {%- set dataAttributes = dataAttributes ~ ' data-'~key~'='~dataValue %}
+{% endfor -%}
+
+<input type="text"
+        {%- if name %} name="{{ name }}"{% endif %}
+        {%- if id %} id="{{ id }}"{% endif %}
+        {%- if class %} class="{{ class }}"{% endif %}
+        {%- if required %} required aria-required="true"{% endif %}
+        {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+        {%- if value %} value="{{ value }}"{% endif %}
+        {%- if pattern is not null %} oninvalid="setCustomValidity('{{ errorMessage|e('js') }}')"{% endif %}
+        {%- if pattern is not null %} oninput="setCustomValidity('')"{% endif %}
+        {%- if pattern is not null %} pattern="{{ pattern }}"{% endif %}
+        {{- dataAttributes|raw -}}
+>

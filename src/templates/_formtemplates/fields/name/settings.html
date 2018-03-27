@@ -1,0 +1,105 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.lightswitchField ({
+    label: "Display multiple fields"|t('sprout-fields'),
+    instructions: "Enable this setting if you wish to choose the specific name fields that display. By default the Name field displays a single field and dynamically treats everything that comes before the first space as the First Name and anything that comes after the first space as the Last Name."|t('sprout-fields'),
+    name: 'displayMultipleFields',
+    on: field.displayMultipleFields,
+    toggle: 'sproutnamefield-display-settings'
+}) }}
+
+<div id="sproutnamefield-display-settings"
+     class="{{ field.displayMultipleFields ?: 'hidden' }}">
+
+    {% set advancedInput %}
+        <table class="data" style="width: auto;">
+            <thead>
+            <tr>
+                <th style="min-width: 180px;">{{ "Field"|t('sprout-fields') }}</th>
+                <th>{{ "Enabled?"|t }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <label for="enableSentEmails">{{ "Prefix"|t('sprout-fields') }}</label>
+                </td>
+                <td class="centeralign">
+                    <div>
+                        {{ forms.lightswitch({
+                            name: 'displayPrefix',
+                            on: field.displayPrefix,
+                            small: true
+                        }) }}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="enableCampaignEmails">{{ "First Name"|t('sprout-fields') }}</label>
+                </td>
+                <td class="centeralign">
+                    <div>
+                        {{ forms.lightswitch({
+                            name: 'displayFirstName',
+                            on: true,
+                            small: true,
+                            disabled: true
+                        }) }}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="enableNotificationEmails">{{ "Middle Name"|t('sprout-fields') }}</label>
+                </td>
+                <td class="centeralign">
+                    <div>
+                        {{ forms.lightswitch({
+                            name: 'displayMiddleName',
+                            on: field.displayMiddleName,
+                            small: true
+                        }) }}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="enableSentEmails">{{ "Last Name"|t('sprout-fields') }}</label>
+                </td>
+                <td class="centeralign">
+                    <div>
+                        {{ forms.lightswitch({
+                            name: 'displayLastName',
+                            on: true,
+                            small: true,
+                            disabled: true
+                        }) }}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="enableSentEmails">{{ "Suffix"|t('sprout-fields') }}</label>
+                </td>
+                <td class="centeralign">
+                    <div>
+                        {{ forms.lightswitch({
+                            name: 'displaySuffix',
+                            on: field.displaySuffix,
+                            small: true
+                        }) }}
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    {% endset %}
+
+    {{ forms.field({
+        label: "Which fields do you wish to display?"|t('sprout-fields'),
+        instructions: "First Name and Last Name are enabled by default. Fields will display in the order that they appear.."|t('sprout-fields')
+    }, advancedInput) }}
+
+</div>

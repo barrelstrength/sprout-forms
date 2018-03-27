@@ -1,0 +1,69 @@
+{% macro tab(tab, tabFields, isHidden) %}
+  {% import _self as macros %}
+
+  <div id="sproutforms-tab-{{tab.id}}" data-tabname="{{tab.name}}" data-tabid="{{tab.id}}" class="sproutforms-tab-fields {% if isHidden %} hidden {% endif %}">
+    <div class="parent">
+      <div id="sproutforms-tab-container-{{tab.id}}" class="sprout-tab-container">
+        {# here will be the fields #}
+        {% for field in tabFields %}
+            {{ macros.field(field, 'active', tab) }}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endmacro %}
+
+{#
+field    = field object
+instance = source or active
+tab      = tab or null
+#}
+{% macro field(field, instance = 'active', tab = null) %}
+  <div
+    {% if instance == 'active' %}id="sproutfield-{{ field.id }}"{% endif %}
+    class="{%- if instance == 'active' %}target-field {% endif -%}{%- if instance == 'source' %}source-field {% endif -%}"
+    data-type="{{ craft.sproutForms.getFieldClassName(field) }}"
+    data-defaultname="{{ field.displayName }}"
+    >
+
+    {% if instance == 'source' %}
+      <div class="source-field-header{% if field.required %} required{% endif %}">
+        <h3>
+          <span class="sproutforms-icon">{{ svg(field.getSvgIconPath()) }}</span>
+          <span class="sproutforms-sourcefield-name">{{ field.displayName() }}</span>
+        </h3>
+      </div>
+    {% endif %}
+
+    {# This is built dynamically in js when creating new field from source #}
+    {% if instance == 'active' %}
+    <div class="active-field-header">
+      <h2 class="{% if field.required %} required {% endif %}" >{{ field.name }}</h2>
+      {% if field.instructions %}
+        <p>{{ field.instructions }}</p>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    <div class="body{% if instance == 'source' %} hidden{% endif %}">
+      {{ field.getExampleInputHtml()|raw }}
+    </div>
+
+    {# This is built dynamically in js when creating new field from source #}
+    {% if instance == 'active' %}
+      <ul class="settings">
+        <li><a id="sproutform-field-{{ field.id }}" data-fieldid="{{ field.id }}" href="#" tabindex="0" ><i class="fa fa-pencil fa-2x" title="Edit"></i></a></li>
+      </ul>
+    {% endif %}
+
+    {# Manage hidden input fields #}
+    {% if instance == 'active' %}
+      {# todo - why the tabName and not the tabId? #}
+      <input type="hidden" name="fieldLayout[{{ tab.name }}][]" value="{{ field.id }}" class="id-input">
+
+      {% if field.required %}
+        <input type="hidden" name="requiredFields[]" value="{{ field.id }}" class="sproutforms-required-input">
+      {% endif %}
+    {% endif %}
+  </div>
+{% endmacro %}

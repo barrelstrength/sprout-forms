@@ -1,0 +1,223 @@
+{% import "_includes/forms" as forms %}
+{% import "sprout-forms/_includes/macros" as sproutForms %}
+{% import "sprout-base/sproutfields/forms" as sproutFields %}
+
+
+{# @todo - Remove Notifications in favor of Sprout Email integration
+    Maybe list/link to related Notifications on the Form Settings tab.
+    notifications : {
+        "label" : "Notifications"|t('sprout-forms'),
+        "url" : "#tab-sproutforms-notification",
+    },
+#}
+
+{% set tab  = 1 %}
+{% set tab2 = false %}
+
+<nav id="form-settings-tabs" class="tabs">
+    <ul>
+        <li>
+            <a class="tab {{ tab == 1 ? ' sel' : '' }}"
+               href="#sproutforms-source-fields">
+                {{ "Fields"|t('sprout-forms') }}
+            </a>
+        </li>
+        <li>
+            <a class="tab {{ tab == 2 ? ' sel' : '' }} {{ tab2 ? 'error' : '' }}"
+               href="#tab-sproutforms-settings">
+                {{ "Form Settings"|t('sprout-forms') }}
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<div class="editform-sidebar-body">
+
+    {% set fieldTypes = craft.sproutForms.getRegisteredFields() %}
+    {% set fieldTypesByGroup = craft.sproutForms.getRegisteredFieldsByGroup() %}
+    {% set customFields =  craft.sproutForms.getCustomFields(fieldTypes, fieldTypesByGroup) %}
+
+    <div id="sproutforms-source-fields" class="meta">
+        <div class='parent'>
+            <div class="clear"></div>
+            <div id='right-copy'>
+                {% for name,group in fieldTypesByGroup %}
+                    <h6 class="tab-title donotdrag">{{ name }}</h6>
+                    {% for type in group %}
+                        {% set field = fieldTypes[type] %}
+                        {{ sproutForms.field(field, 'source') }}
+                    {% endfor %}
+                {% endfor %}
+
+                {% if customFields %}
+                    <h6 class="tab-title donotdrag">{{ 'Custom Fields'|t('sprout-forms') }}</h6>
+                    {% for field in customFields %}
+                        {{ sproutForms.field(field, 'source') }}
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div><!-- fields div -->
+    <div class="{{ tab != 2 ? 'hidden' : '' }}"
+         id="tab-sproutforms-settings">
+
+        <div class="meta">
+
+        <h6>{{ 'General'|t('sprout-forms') }}</h6>
+
+        {{ forms.textField({
+            first: (groups is defined and groups|length ? false : true),
+            label: "Name <span class='info'>What this form will be called in the CP.</span>"|t('sprout-forms'),
+            id: 'name',
+            name: 'name',
+            value: form.name,
+            errors: form.getErrors('name'),
+            autofocus: true,
+            required: true
+        }) }}
+
+        {{ forms.textField({
+            label: "Title Format <span class='info'>Entry Titles are auto-generated based on the Title Format you enter here. All information contained in the Title will also be searchable. You may use the same syntax here as you would with Dynamic Titles in your Sections. (i.e. {dateCreated|date('Ymd')} {fullName})</span>"|t('sprout-forms'),
+            id: 'titleFormat',
+            name: 'titleFormat',
+            value: form.titleFormat,
+            errors: form.getErrors('titleFormat')
+        }) }}
+
+        {{ forms.textField({
+            label: "Redirect <span class='info'>Where should the user be redirected upon form submission? Leaving blank will redirect user back to the form.</span>"|t('sprout-forms'),
+            name: 'redirectUri',
+            placeholder: siteUrl,
+            value: (form is defined ? form.redirectUri : null),
+            errors: (form is defined ? form.getErrors('redirectUri') : null)
+        }) }}
+
+        {{ forms.textField({
+            label: "Button <span class='info'>What the text in the submit button should be.</span>"|t('sprout-forms'),
+            name: 'submitButtonText',
+            placeholder: 'Submit',
+            value: (form is defined ? form.submitButtonText : null),
+            required: false,
+            errors: (form is defined ? form.getErrors('submitButtonText') : null)
+        }) }}
+
+        </div>
+        <hr>
+
+        <div class="meta">
+
+        <h6>{{ 'Advanced'|t('sprout-forms') }}</h6>
+
+        {% if groups is defined and groups|length %}
+
+            {% set groupOptions = [
+                { label: 'All Forms'|t('sprout-forms') , value: '*' }
+            ] %}
+            {% for group in groups %}
+                {% set groupOptions = groupOptions|merge([{ label: group.name, value: group.id }]) %}
+            {% endfor %}
+
+            {{ forms.selectField({
+                first: true,
+                label: "Group <span class='info'>Which group should this form be displayed in?</span>"|t('sprout-forms'),
+                id: 'groupId',
+                name: 'groupId',
+                options: groupOptions,
+                value: groupId
+            }) }}
+
+        {% endif %}
+
+        {{ forms.textField({
+            label: "Handle <span class='info'>How you’ll refer to this form in the templates.</span>"|t('sprout-forms'),
+            id: 'handle',
+            class: 'code',
+            name: 'handle',
+            value: form.handle,
+            errors: form.getErrors('handle'),
+            required: true
+        }) }}
+
+        {{ forms.lightswitchField({
+            label: "Page Titles <span class='info'>Display Page Titles on Forms</span>"|t('sprout-forms'),
+            id: 'displaySectionTitles',
+            name: 'displaySectionTitles',
+            on: form.displaySectionTitles,
+            onLabel: "Show"|t('sprout-forms'),
+            offLabel: "Hide"|t('sprout-forms')
+        }) }}
+
+        {% if settings.enablePerFormTemplateFolderOverride %}
+
+            {{ forms.field({
+                label: "Default Form Templates <span class='info'>The template that will be used to output your forms</span>"|t('sprout-forms'),
+                required: true,
+                errors: (form is defined ? form.getErrors('templateOverridesFolder') : null)
+            }, sproutFields.selectOther({
+                name: 'templateOverridesFolder',
+                options: form.getTemplateOptions(),
+                value: form.templateOverridesFolder ?? null,
+                otherPlaceholderText: '_forms/formHandle'|t('sprout-forms'),
+            })) }}
+
+        {% endif %}
+
+        </div>
+
+        {% if (settings.enableSaveDataPerFormBasis and settings.enableSaveData) or form.submitAction %}
+
+            <hr>
+            <div class="meta">
+
+                <h6>{{ 'Data Storage'|t('sprout-forms') }}</h6>
+
+                {{ forms.lightswitchField({
+                    label: "Save Data <span class='info'>Save Data submitted to this form to the Craft database</span>"|t('sprout-forms'),
+                    id: 'saveData',
+                    name: 'saveData',
+                    on: form.saveData,
+                    onLabel: "Show"|t('sprout-forms'),
+                    offLabel: "Hide"|t('sprout-forms')
+                }) }}
+
+            </div>
+
+        {% endif %}
+
+        {% if settings.enablePayloadForwarding or form.submitAction %}
+
+            <hr>
+            <div class="meta">
+
+                <h6>{{ 'Payload Forwarding'|t('sprout-forms') }}</h6>
+                {{ forms.textField({
+                    label: "Submit URL <span class='info'>Submit your form data to this URL, instead of directly to Sprout
+                    Forms.</span>"|t('sprout-forms'),
+                    name: 'submitAction',
+                    placeholder: 'http://example.com/somewhere-else',
+                    value: (form is defined ? form.submitAction : null),
+                    errors: (form is defined ? form.getErrors('submitAction') : null)
+                }) }}
+
+            </div>
+
+        {% endif %}
+        </div>
+    </div>
+</div>
+
+{% js %}
+    $(document).ready(function()
+    {
+        $("#form-settings-tabs a").click(function(ev){
+            ev.preventDefault();
+            var $currentUrl = $("#form-settings-tabs .sel");
+            var currentId = $currentUrl.attr('href');
+            $currentUrl.removeClass('sel');
+            $(currentId).addClass('hidden');
+            var newShow = $(this).attr('href');
+            $(newShow).removeClass('hidden');
+            $(this).addClass('sel');
+        });
+    });
+{% endjs %}

@@ -1,0 +1,40 @@
+{% requirePermission "editSproutFormsSettings" %}
+
+{% import "_includes/forms" as forms %}
+{% import "sprout-base/sproutfields/forms" as sproutFields %}
+<input type="hidden" name="sprout-scenario" value="general">
+
+{{ forms.textField({
+    label: "Plugin Name"|t('sprout-forms'),
+    instructions: "Intuitive, human-readable plugin name for the end user."|t('sprout-forms'),
+    id: 'pluginNameOverride',
+    name: 'pluginNameOverride',
+    value: settings.pluginNameOverride,
+    placeholder: settings.pluginNameOverride ?: 'Sprout Forms',
+    autofocus: true,
+    first: true,
+    errors: ''
+}) }}
+
+{% set templateOptions = craft.sproutForms.getTemplateOptions() %}
+
+{{ forms.field({
+    label: "Default Form Templates"|t('sprout-forms'),
+    required: true,
+    errors: (settings is defined ? settings.getErrors('templateFolderOverride') : null),
+    instructions: "The templates that will be used to output your forms when using the displayForm tag. Add additional form templates via the Form Templates API or providing a custom template path."|t,
+}, sproutFields.selectOther({
+    name: 'templateFolderOverride',
+    options: templateOptions,
+    value: settings.templateFolderOverride ?? null,
+    otherPlaceholderText: '_forms/mycustomtemplates'|t('sprout-forms')
+})) }}
+
+{{ forms.lightswitchField({
+    label: "Enable custom form templates on a per-form basis"|t,
+    instructions: "Allow admins to (optionally) add custom form templates for each form created. Enabling this setting will display additional fields to manage your custom form settings on every Form Element."|t,
+    id: 'enablePerFormTemplateFolderOverride',
+    name: 'enablePerFormTemplateFolderOverride',
+    on: settings.enablePerFormTemplateFolderOverride,
+    onLabel: "Enable"|t,
+}) }}

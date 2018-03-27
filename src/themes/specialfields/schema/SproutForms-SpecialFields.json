@@ -1,0 +1,147 @@
+[
+  {
+    "@model": "barrelstrength\\sproutforms\\integrations\\sproutimport\\elements\\Form",
+    "attributes": {
+      "name": "Special Fields Form",
+      "handle": "specialFieldsForm",
+      "titleFormat": "{dateCreated|date('Y-m-d')}",
+      "redirectUri": "?message=thank-you",
+      "displaySectionTitles": false
+    },
+    "settings": {
+      "fieldLayout": {
+        "Tab 1": [
+          {
+            "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+            "type": "barrelstrength\\sproutforms\\integrations\\sproutforms\\fields\\Name",
+            "name": "Full Name",
+            "handle": "fullName",
+            "instructions": "",
+            "displayMultipleFields": false,
+            "displayMiddleName": false,
+            "displayPrefix": false,
+            "displaySuffix": false
+          },
+          {
+            "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+            "type": "barrelstrength\\sproutforms\\integrations\\sproutforms\\fields\\Email",
+            "name": "Email",
+            "handle": "email",
+            "instructions": "",
+            "placeholder": "sprout@barrelstrengthdesign.com",
+            "customPattern": null,
+            "customPatternToggle": false,
+            "customPatternErrorMessage": null,
+            "uniqueEmail": false
+          },
+          {
+            "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+            "type": "barrelstrength\\sproutforms\\integrations\\sproutforms\\fields\\EmailDropdown",
+            "name": "Email Dropdown",
+            "handle": "emailDropdown",
+            "instructions": "",
+            "options": [
+              {
+                "label": "Sprout Support",
+                "value": "sprout@barrelstrengthdesign.com",
+                "default": true
+              },
+              {
+                "label": "The Great Migration",
+                "value": "info@barrelstrengthdesign.com",
+                "default": false
+              }
+            ]
+          },
+          {
+            "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+            "type": "barrelstrength\\sproutforms\\integrations\\sproutforms\\fields\\Phone",
+            "name": "Phone",
+            "handle": "phone",
+            "instructions": "",
+            "placeholder": "+1 (707) 123-1234"
+          },
+          {
+            "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+            "type": "barrelstrength\\sproutforms\\integrations\\sproutforms\\fields\\Url",
+            "name": "URL",
+            "handle": "customUrl",
+            "instructions": "",
+            "placeholder": "http://sprout.barrelstrengthdesign.com",
+            "customPattern": null,
+            "customPatternToggle": false,
+            "customPatternErrorMessage": null
+          },
+          {
+            "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+            "type": "barrelstrength\\sproutforms\\integrations\\sproutforms\\fields\\CustomHtml",
+            "name": "Custom HTML",
+            "handle": "customHtml",
+            "customHtml": "<iframe width='560' height='315' src='https://www.youtube.com/embed/zlfKdbWwruY?rel=0' frameborder='0' allow='autoplay; encrypted-media' allowfullscreen></iframe>",
+            "hideLabel": false
+          },
+          {
+            "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+            "type": "barrelstrength\\sproutforms\\integrations\\sproutforms\\fields\\PrivateNotes",
+            "name": "Private Notes",
+            "handle": "privateNotes",
+            "instructions": "This will only be seen in the Control Panel."
+          },
+          {
+            "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+            "type": "barrelstrength\\sproutforms\\integrations\\sproutforms\\fields\\Hidden",
+            "name": "Hidden",
+            "handle": "hidden",
+            "instructions": "",
+            "value": "{{ craft.app.request.getUrl() }}",
+            "allowEdits": false
+          },
+          {
+            "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+            "type": "barrelstrength\\sproutforms\\integrations\\sproutforms\\fields\\Invisible",
+            "name": "Invisible",
+            "handle": "invisible",
+            "instructions": "",
+            "allowEdits": false,
+            "hideValue": false,
+            "value": "{foo} {{ object.bar }}"
+          },
+          {
+            "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+            "type": "barrelstrength\\sproutforms\\integrations\\sproutforms\\fields\\MultiSelect",
+            "name": "Multi Select",
+            "handle": "multiSelect",
+            "instructions": "",
+            "options": [
+              {
+                "label": "Isle of Skye",
+                "value": "isleOfSkye",
+                "default": false
+              },
+              {
+                "label": "Koh Phangan",
+                "value": "kohPhangan",
+                "default": false
+              },
+              {
+                "label": "Zavodovski Island",
+                "value": "zavodovskiIsland",
+                "default": false
+              }
+            ]
+          },
+          {
+            "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+            "type": "barrelstrength\\sproutforms\\integrations\\sproutforms\\fields\\RegularExpression",
+            "name": "Regular Expression",
+            "handle": "regularExpression",
+            "instructions": "",
+            "placeholder": "My favorite place is ...",
+            "customPattern": "My favorite place is (.*)",
+            "customPatternErrorMessage": "Value must begin with 'My favorite place is '"
+          }
+        ]
+      }
+    }
+  }
+]

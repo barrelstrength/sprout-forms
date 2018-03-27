@@ -1,0 +1,151 @@
+[
+  {
+    "@model": "barrelstrength\\sproutforms\\integrations\\sproutimport\\elements\\Form",
+    "attributes": {
+      "name": "Basic Fields Form",
+      "handle": "basicFieldsForm",
+      "titleFormat": "{dateCreated|date('Y-m-d')} – {singleLine}",
+      "redirectUri": "?message=thank-you",
+      "displaySectionTitles": false
+    },
+    "settings": {
+      "fieldLayout": {
+        "Tab 1": [
+          {
+            "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+            "type": "barrelstrength\\sproutforms\\integrations\\sproutforms\\fields\\SectionHeading",
+            "name": "Section Heading",
+            "handle": "sectionHeading",
+            "notes": "<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
+            "hideLabel": "default",
+            "output": "richText"
+          },
+          {
+            "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+            "type": "barrelstrength\\sproutforms\\integrations\\sproutforms\\fields\\SingleLine",
+            "name": "Single Line",
+            "handle": "singleLine",
+            "instructions": "Example instructions",
+            "placeholder": "Example placeholder",
+            "charLimit": null,
+            "required": true
+          },
+          {
+            "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+            "type": "barrelstrength\\sproutforms\\integrations\\sproutforms\\fields\\Paragraph",
+            "name": "Paragraph",
+            "handle": "paragraph",
+            "instructions": "",
+            "placeholder": "",
+            "initialRows": 4,
+            "charLimit": null,
+            "columnType": "text"
+          },
+          {
+            "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+            "type": "barrelstrength\\sproutforms\\integrations\\sproutforms\\fields\\MultipleChoice",
+            "name": "Multiple Choice",
+            "handle": "multipleChoice",
+            "instructions": "",
+            "options": [
+              {
+                "label": "Option One",
+                "value": "optionOne",
+                "default": true
+              },
+              {
+                "label": "Option Two",
+                "value": "optionTwo",
+                "default": false
+              },
+              {
+                "label": "Option Three",
+                "value": "optionThree",
+                "default": false
+              }
+            ]
+          },
+          {
+            "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+            "type": "barrelstrength\\sproutforms\\integrations\\sproutforms\\fields\\Dropdown",
+            "name": "Dropdown",
+            "handle": "dropdown",
+            "instructions": "",
+            "options": [
+              {
+                "label": "Option One",
+                "value": "optionOne",
+                "default": true
+              },
+              {
+                "label": "Option Two",
+                "value": "optionTwo",
+                "default": false
+              },
+              {
+                "label": "Option Three",
+                "value": "optionThree",
+                "default": false
+              }
+            ]
+          },
+          {
+            "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+            "type": "barrelstrength\\sproutforms\\integrations\\sproutforms\\fields\\Checkboxes",
+            "name": "Checkboxes",
+            "handle": "checkboxes",
+            "instructions": "",
+            "options": [
+              {
+                "label": "Option One",
+                "value": "optionOne",
+                "default": true
+              },
+              {
+                "label": "Option Two",
+                "value": "optionTwo",
+                "default": false
+              },
+              {
+                "label": "Option Three",
+                "value": "optionThree",
+                "default": false
+              }
+            ]
+          },
+          {
+            "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+            "type": "barrelstrength\\sproutforms\\integrations\\sproutforms\\fields\\Number",
+            "name": "Number",
+            "handle": "number",
+            "instructions": "",
+            "min": 0,
+            "max": 100,
+            "decimals": 2,
+            "size": 10
+          },
+          {
+            "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+            "type": "barrelstrength\\sproutforms\\integrations\\sproutforms\\fields\\FileUpload",
+            "name": "FileUpload",
+            "handle": "fileUpload",
+            "instructions": "",
+            "useSingleFolder": false,
+            "sources": "*",
+            "defaultUploadLocationSource": "folder:1",
+            "defaultUploadLocationSubpath": "",
+            "singleUploadLocationSource": "folder:1",
+            "singleUploadLocationSubpath": "",
+            "restrictFiles": "",
+            "limit": "",
+            "viewMode": "list",
+            "selectionLabel": "Add an asset",
+            "useTargetSite": "",
+            "targetSiteId": 1,
+            "localizeRelations": ""
+          }
+        ]
+      }
+    }
+  }
+]

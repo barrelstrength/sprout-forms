@@ -1,0 +1,9 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.textarea({
+    class: 'nicetext',
+    placeholder: field.placeholder,
+    rows: field.initialRows,
+    readonly: true,
+    disabled: true
+}) }}

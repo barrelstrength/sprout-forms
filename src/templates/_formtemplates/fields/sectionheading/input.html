@@ -1,0 +1,25 @@
+{%- set id = renderingOptions.id ?? field.handle %}
+{%- set class = renderingOptions.class ?? field.handle %}
+
+{%- set notes = field.notes is not empty ? field.notes : null %}
+
+{%- set dataAttributes = null %}
+{%- set data = renderingOptions.data ?? null %}
+{%- for key, dataValue in data %}
+    {%- set dataAttributes = dataAttributes ~ ' data-'~key~'="'~dataValue~'"' %}
+{% endfor -%}
+
+<header {%- if id %} id="{{ id }}"{% endif %}
+        {%- if class %} class="{{ class }}"{% endif %}
+        {{- dataAttributes|raw }}>
+
+    {% if not field.hideLabel %}
+        <h3>{{ field.name }}</h3>
+    {% endif %}
+
+    {%- if field.output == "html" or field.output == "richText" %}
+        {{ notes|raw }}
+    {% else %}
+        {{ notes|markdown }}
+    {% endif %}
+</header>

@@ -1,0 +1,32 @@
+{%- set id = renderingOptions.id ?? name %}
+{%- set class = renderingOptions.class ?? name %}
+{%- set required = field.required ? true : false %}
+{%- set hasInstructions = field.instructions ? true : false %}
+{%- set values = value ? value : null %}
+
+{%- set options = field.options ? field.options : [] %}
+
+{%- set dataAttributes = null %}
+{%- set data = renderingOptions.data ?? null %}
+{%- for key, dataValue in data %}
+    {%- set dataAttributes = dataAttributes ~ ' data-'~key~'="'~dataValue~'"' %}
+{% endfor -%}
+
+{% spaceless %}
+    <select multiple
+            {%- if name %} name="{{ name }}[]"{% endif %}
+            {%- if id %} id="{{ id }}"{% endif %}
+            {%- if class %} class="{{ class }}"{% endif %}
+            {%- if required %} required aria-required="true"{% endif %}
+            {{- dataAttributes|raw -}}
+    >
+        {%- for key, option in options %}
+
+            {%- set optionLabel = (option.label is defined ? option.label : null) %}
+            {%- set optionValue = (option.value is defined ? option.value : key) -%}
+
+            <option value="{{ optionValue }}"{% if optionValue in values %} selected{% endif %}>{{ optionLabel }}</option>
+
+        {%- endfor %}
+    </select>
+{% endspaceless %}

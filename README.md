@@ -1,37 +1,26 @@
-Submit! Sprout Forms.
+# Sprout Forms
 
-Here are some online resources you might find useful:
+Simple, Beautiful Forms.
 
+- **Drag & Drop UI** - Easy to use, Craft-friendly UI for Content Editors
+- **Fields, Fields!** - 22 default fields and, if that's not enough, a Custom Field API 
+- **Custom Form Templates** - Developers can customize every detail of Form HTML
+- **Accessible Forms** - Default Form Templates follow many WCAG 2.0 best practices
+- **Spam Protection** - Protect your forms from evil robots
+- **Notifications** - Coming soon
+- **Reports** - Coming soon
 
-Sprout Forms Docs
-------------------------------------------------------------
-Code examples, tags, common questions:
-http://sprout.barrelstrengthdesign.com/craft-plugins/forms
+See the Sprout Forms documentation to learn more about Sprout Forms.
 
+## Documentation
 
-Sprout Forms Updates
-------------------------------------------------------------
-http://sprout.barrelstrengthdesign.com/craft-plugins/forms/updates
+See the [Sprout Website](https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs) for documentation, guides, and additional resources. 
 
+## Support
 
-Sprout Forms Translations
-------------------------------------------------------------
-A default translation file is provided on GitHub and can be modified 
-as needed for your language requirements.
-https://github.com/BarrelStrength/Sprout-Plugin-Translations
+- [Send a Support Ticket](https://sprout.barrelstrengthdesign.com/craft-plugins/request/support) via the Sprout Website.
+- [Create an issue](https://github.com/barrelstrength/craft-sprout-forms/issues) on Github.
 
-
-Sprout Forms Support
-------------------------------------------------------------
-
-Via Craft Stack Exchange: Tag your questions with `plugin-sproutforms`:
-https://craftcms.stackexchange.com/
-
-Via Email:
-Send us a note at: sprout@barrelstrengthdesign.com
-
-
-Sprout Forms License Terms
-------------------------------------------------------------
-Use of Sprout Forms is subject to the license agreement available here:
-http://sprout.barrelstrengthdesign.com/license
+<a href="https://sprout.barrelstrengthdesign.com" target="_blank">
+  <img src="https://sprout.barrelstrengthdesign.com/content/plugins/sprout-icon.svg" width="72" align="right">
+</a>
