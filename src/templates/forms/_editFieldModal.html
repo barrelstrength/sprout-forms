@@ -63,16 +63,17 @@
     </div>
 {% endfor %}
 
-
-{% if field.cssClasses is defined %}
+{% if field['cssClasses'] is defined %}
     <hr>
     {% namespace 'types['~fieldClass~']' %}
+        {% set cssClassesInstructions = "The CSS class names to output in your field's HTML."|t('sprout-forms') %}
+        {% set cssClassesPlaceholder = "class1 class2"|t('sprout-forms') %}
         {% if form.getFormTemplate().getCssClassDefaults()|length %}
             {% set cssOptions = form.getClassesOptions(field.cssClasses) %}
             {{ forms.field({
                 label: "CSS Classes"|t('sprout-forms'),
-                first: true,
-                instructions: "The CSS class names to output in your field's HTML."|t('sprout-forms'),
+                instructions: cssClassesInstructions,
+                placeholder: cssClassesPlaceholder,
             }, sproutFields.selectOther({
                 name: 'cssClasses',
                 options: cssOptions,
@@ -82,8 +83,8 @@
        {% else %}
             {{ forms.textField({
                 label: "CSS Classes"|t('sprout-forms'),
-                first: true,
-                instructions: "The CSS class names to output in your field's HTML."|t('sprout-forms'),
+                instructions: cssClassesInstructions,
+                placeholder: cssClassesPlaceholder,
                 name: 'cssClasses',
                 value: field.cssClasses ?? null,
                 otherPlaceholderText: 'Custom CSS Classes'|t('sprout-forms')
