@@ -1,7 +1,6 @@
 <!-- Custom form created using the Sprout Forms form builder plugin - https://sprout.barrelstrengthdesign.com/craft-plugins/forms -->
 
-{% set action = form.submitAction is empty ? 'sprout-forms/entries/save-entry' : 'sprout-forms/entries/forward-entry' %}
-{%- set renderingOptions = renderingOptions is defined and renderingOptions is not empty ? renderingOptions : {} %}
+{% set renderingOptions = renderingOptions is defined and renderingOptions is not empty ? renderingOptions : {} %}
 {%- set errors      = entry.getErrors()|length ? entry.getErrors() : false %}
 {%- set errorClass  = renderingOptions.errorClass is defined ? renderingOptions.errorClass : 'errors' %}
 {%- set id          = renderingOptions.id is defined ? renderingOptions.id : form.handle ~ '-form' %}
@@ -9,11 +8,12 @@
 {%- set redirectUri = form.redirectUri -%}
 
 <form method="post" accept-charset="utf-8" enctype="multipart/form-data"
-    {%- if id %} id="{{ id }}"{% endif -%}
-    {%- if class %} class="{{ class -}}{%- if errors %} {{ errorClass }}{% endif -%}"{% endif -%}
-    >
+        {%- if id %} id="{{ id }}"{% endif -%}
+        {%- if class %} class="{{ class -}}{%- if errors %} {{ errorClass }}{% endif -%}"{% endif -%}
+>
     {{ csrfInput() }}
-    <input type="hidden" name="action" value="{{ action }}">
+    <input type="hidden" aria-hidden="true" name="action"
+           value="sprout-forms/entries/save-entry">
     <input type="hidden" name="handle" value="{{ form.handle }}">
     {% if redirectUri is not empty -%}
         {% if redirectUri|slice(0, 1)|lower == '?' %}
@@ -24,7 +24,9 @@
     {% endif %}
 
     <div class="fields">
-        {{ body | raw }}
+        {%- for tab in form.getFieldLayout().getTabs() %}
+            {{ craft.sproutForms.displayTab(form, tab.id, renderingOptions) }}
+        {% endfor -%}
     </div>
 
     {% hook 'sproutForms.modifyForm' %}
