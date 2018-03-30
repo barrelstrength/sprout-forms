@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms;
 
+use barrelstrength\sproutbase\models\sproutreports\DataSource;
 use barrelstrength\sproutforms\integrations\sproutemail\events\SaveEntryEvent;
 use barrelstrength\sproutforms\integrations\sproutimport\elements\Form as FormElementImporter;
 use barrelstrength\sproutforms\integrations\sproutimport\elements\Entry as EntryElementImporter;
@@ -101,9 +102,9 @@ class SproutForms extends Plugin
         });
 
         // Register DataSources for sproutReports plugin integration
-//        Event::on(DataSources::class, DataSources::EVENT_REGISTER_DATA_SOURCES, function(RegisterComponentTypesEvent $event) {
-//            $event->types[] = EntriesDataSource::class;
-//        });
+        Event::on(DataSources::class, DataSources::EVENT_REGISTER_DATA_SOURCES, function(RegisterComponentTypesEvent $event) {
+            $event->types[] = EntriesDataSource::class;
+        });
 
         $this->setComponents([
             'sproutforms' => SproutFormsVariable::class
@@ -208,9 +209,9 @@ class SproutForms extends Plugin
             $parent['label'] = $this->getSettings()->pluginNameOverride;
         }
 
-//        $entriesDataSource = SproutBase::$app->dataSources->getDataSourceByType(EntriesDataSource::class);
+       $entriesDataSource = SproutBase::$app->dataSources->getDataSourceByType(EntriesDataSource::class);
 
-        return array_merge($parent, [
+        $subNav = array_merge($parent, [
             'subnav' => [
                 'forms' => [
                     'label' => Craft::t('sprout-forms', 'Forms'),
@@ -220,20 +221,26 @@ class SproutForms extends Plugin
                     'label' => Craft::t('sprout-forms', 'Entries'),
                     'url' => 'sprout-forms/entries'
                 ],
-//                'notifications' => [
-//                    'label' => Craft::t('sprout-forms', 'Notifications'),
-//                    'url' => 'sprout-forms/notifications'
-//                ],
-//                'reports' => [
-//                    'label' => Craft::t('sprout-forms', 'Reports'),
-//                    'url' => 'sprout-forms/reports/'.$entriesDataSource->dataSourceId.'-sproutforms-entriesdatasource'
-//                ],
-                'settings' => [
-                    'label' => Craft::t('sprout-forms', 'Settings'),
-                    'url' => 'sprout-forms/settings'
+                'notifications' => [
+                    'label' => Craft::t('sprout-forms', 'Notifications'),
+                    'url' => 'sprout-forms/notifications'
                 ]
             ]
         ]);
+
+        if ($entriesDataSource) {
+            $subNav['subnav']['reports'] = [
+                'label' => Craft::t('sprout-forms', 'Reports'),
+                'url' => 'sprout-forms/reports/'.$entriesDataSource->dataSourceId.'-sproutforms-entriesdatasource'
+            ];
+        }
+
+        $subNav['subnav']['settings'] = [
+            'label' => Craft::t('sprout-forms', 'Settings'),
+            'url' => 'sprout-forms/settings'
+        ];
+
+        return $subNav;
     }
 
     /**
@@ -309,14 +316,19 @@ class SproutForms extends Plugin
     /**
      * @throws \yii\db\Exception
      */
-//    protected function afterInstall()
-//    {
-//        $dataSourceClasses = [
-//            EntriesDataSource::class
-//        ];
-//
-//        SproutBase::$app->dataSources->installDataSources($dataSourceClasses);
-//    }
+    protected function afterInstall()
+    {
+        // Add sprout reports data source integration
+        $dataSourceClass = EntriesDataSource::class;
+
+        $dataSourceModel = new DataSource();
+        $dataSourceModel->type = $dataSourceClass;
+        $dataSourceModel->allowNew = 1;
+        // Set all pre-built class to sprout-reports pluginId
+        $dataSourceModel->pluginId = 'sprout-forms';
+
+        SproutBase::$app->dataSources->saveDataSource($dataSourceModel);
+    }
 
     /**
      * @return bool
