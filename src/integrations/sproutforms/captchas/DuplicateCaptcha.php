@@ -13,11 +13,6 @@ use Craft;
 class DuplicateCaptcha extends BaseCaptcha
 {
     /**
-     * @var string
-     */
-    private $duplicateId = 'sprout-forms-duplicate-captcha';
-
-    /**
      * @inheritdoc
      */
     public function getName()
@@ -38,11 +33,16 @@ class DuplicateCaptcha extends BaseCaptcha
      */
     public function getCaptchaHtml()
     {
-        $uniqueId = uniqid('sprout', false);
+        $inputName = uniqid('dupe', false);
+        $uniqueKeyId = uniqid('dupe', false);
 
-        Craft::$app->getSession()->set($this->duplicateId, $uniqueId);
+        // Set a session variable with a unique key. It doesn't matter what the value of this is
+        // we'll save the unique key in a hidden field and check for and remove the session based
+        // on the session key if it exists, so we can only validate a submission the first time
+        // it is used.
+        Craft::$app->getSession()->set($uniqueKeyId, true);
 
-        return '';
+        return '<input type="hidden" name="'.$inputName.'" value="'.$uniqueKeyId.'" />';
     }
 
     /**
@@ -50,18 +50,28 @@ class DuplicateCaptcha extends BaseCaptcha
      */
     public function verifySubmission(OnBeforeSaveEntryEvent $event): bool
     {
-        if (Craft::$app->getSession()->get($this->duplicateId)) {
-            // If we have a duplicate, unset our test variable
-            Craft::$app->getSession()->remove($this->duplicateId);
+        $uniqueid = null;
 
-            return true;
+        foreach ($_POST as $key => $value) {
+            // Fix issue on multiple forms on same page
+            if (strpos($key, 'dupe') === 0) {
+                $uniqueid = $_POST[$key];
+                break;
+            }
         }
 
-        SproutForms::error('A form submission failed the Duplicate Submission test.');
+        if (!Craft::$app->getSession()->get($uniqueid)) {
+            SproutForms::error('A form submission failed the Duplicate Submission test.');
 
-        $event->isValid = false;
+            $event->isValid = false;
 
-        return false;
+            return false;
+        }
+
+        // If we have a duplicate key, unset our test variable so we don't have it on the next request
+        Craft::$app->getSession()->remove($uniqueid);
+
+        return true;
     }
 }
 
