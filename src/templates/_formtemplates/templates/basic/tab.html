@@ -1,17 +1,25 @@
-{%- for tab in tabs -%}
+	{%- for tab in tabs -%}
 
-    {%- set layoutFields = tab.getFields() %}
+		{%- set layoutFields = tab.getFields() %}
 
-    <div class="tab">
+		<div class="tab">
 
-        {% if form.displaySectionTitles -%}
-            <h3>{{ tab.name|t }}</h3>
-        {%- endif %}
+			{% if displaySectionTitles -%}
+				<h3>{{ tab.name|t }}</h3>
+			{%- endif %}
 
-        {% for field in layoutFields -%}
-            {{- craft.sproutForms.displayField(form, field, renderingOptions) }}
-        {%- endfor %}
+			{% for layoutField in layoutFields -%}
+				{%- set field = layoutField -%}
+					{% include "field" with {
+						form:                 form,
+						field:                field,
+						element:              entry,
+						required:             field.required,
+						renderingOptions:     renderingOptions,
+						thirdPartySubmission: thirdPartySubmission,
+					} only %}
+			{%- endfor %}
 
-    </div>
+		</div>
 
-{%- endfor -%}
+	{%- endfor -%}
