@@ -25,15 +25,6 @@ class AccessibleTemplates extends BaseFormTemplates
     {
         return Craft::getAlias('@barrelstrength/sproutforms/templates/_formtemplates/templates/accessible');
     }
-
-    public function getCssClassDefaults()
-    {
-        return [
-            'left' => 'Left (left)',
-            'right' => 'Right (right)',
-            'hide' => 'Hide (hide)'
-        ];
-    }
 }
 
 

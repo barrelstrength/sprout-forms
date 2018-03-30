@@ -12,6 +12,11 @@ use barrelstrength\sproutbase\web\assets\sproutfields\notes\QuillAsset;
 class PrivateNotes extends BaseFormField
 {
     /**
+     * @var bool
+     */
+    public $allowRequired = false;
+
+    /**
      * @var string
      */
     public $cssClasses;

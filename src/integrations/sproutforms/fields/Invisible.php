@@ -14,6 +14,11 @@ use barrelstrength\sproutforms\contracts\BaseFormField;
 class Invisible extends BaseFormField implements PreviewableFieldInterface
 {
     /**
+     * @var bool
+     */
+    public $allowRequired = false;
+
+    /**
      * @var basename(path)ool
      */
     public $allowEdits;
