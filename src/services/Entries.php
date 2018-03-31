@@ -34,9 +34,11 @@ class Entries extends Component
     {
         $this->entryRecord = $entryRecord;
 
-        if (is_null($this->entryRecord)) {
+        if ($this->entryRecord === null) {
             $this->entryRecord = EntryRecord::find();
         }
+
+        parent::__construct($entryRecord);
     }
 
     /**
@@ -84,8 +86,7 @@ class Entries extends Component
      *
      * @return bool
      * @throws Exception
-     * @throws \CDbException
-     * @throws \Exception
+     * @throws \yii\db\Exception
      */
     public function saveEntryStatus(EntryStatus $entryStatus): bool
     {
@@ -103,7 +104,7 @@ class Entries extends Component
 
         $record->setAttributes($entryStatus->getAttributes(), false);
 
-        $record->sortOrder = $entryStatus->sortOrder ? $entryStatus->sortOrder : 999;
+        $record->sortOrder = $entryStatus->sortOrder ?: 999;
 
         $entryStatus->validate();
 
@@ -122,7 +123,7 @@ class Entries extends Component
                 }
 
                 $transaction->commit();
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $transaction->rollback();
 
                 throw $e;
@@ -167,10 +168,11 @@ class Entries extends Component
     /**
      * Reorders Entry Statuses
      *
-     * @param array $entryStatusIds
+     * @param $entryStatusIds
      *
-     * @throws \Exception
      * @return bool
+     * @throws Exception
+     * @throws \yii\db\Exception
      */
     public function reorderEntryStatuses($entryStatusIds)
     {
@@ -184,8 +186,8 @@ class Entries extends Component
             }
 
             $transaction->commit();
-        } catch (\Exception $e) {
-            $transaction->rollback();
+        } catch (Exception $e) {
+            $transaction->rollBack();
 
             throw $e;
         }
@@ -218,8 +220,9 @@ class Entries extends Component
         $query = EntryElement::find();
         $query->id($entryId);
         $query->siteId($siteId);
-        // @todo - research next function
-        #$query->enabledForSite(false);
+
+        // @todo - look into enabledForSite method
+        // $query->enabledForSite(false);
 
         return $query->one();
     }
@@ -245,6 +248,9 @@ class Entries extends Component
             }
         }
 
+        /**
+         * @var $form FormElement
+         */
         $form = SproutForms::$app->forms->getFormById($entry->formId);
         $entry->statusId = $entry->statusId != null ? $entry->statusId : $this->getDefaultEntryStatusId();
         $entry->title = $view->renderObjectTemplate($form->titleFormat, $entry);
@@ -363,7 +369,6 @@ class Entries extends Component
      */
     public function saveRelations(BaseRelationFormField $field, ElementInterface $source, array $targetIds)
     {
-        /** @var Element $source */
         if (!is_array($targetIds)) {
             $targetIds = [];
         }
@@ -438,13 +443,11 @@ class Entries extends Component
     /**
      * @param       $formId
      * @param array $submittedFields
-     *
-     * @return bool
      */
-    public function unobfuscateEmailAddresses($formId, $submittedFields = [])
+    public function unobfuscateEmailAddresses($formId, array $submittedFields = [])
     {
         if (!is_numeric($formId)) {
-            return false;
+            return;
         }
 
         $fieldContext = 'sproutForms:'.$formId;

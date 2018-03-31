@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\records;
 
 use craft\db\ActiveRecord;
+use craft\helpers\UrlHelper;
 
 /**
  * Class EntryStatus record.
@@ -27,7 +28,7 @@ class EntryStatus extends ActiveRecord
      */
     public function getCpEditUrl()
     {
-        return UrlHelper::cpUrl('sprout-forms/settings/orders-tatuses/'.$this->id);
+        return UrlHelper::cpUrl('sprout-forms/settings/orders-statuses/'.$this->id);
     }
 
     /**
@@ -35,8 +36,7 @@ class EntryStatus extends ActiveRecord
      */
     public function htmlLabel()
     {
-        return sprintf('<span class="sproutFormsStatusLabel"><span class="status %s"></span> %s</span>',
-            $this->color, $this->name);
+        return '<span class="sproutFormsStatusLabel"><span class="status '.$this->color.'"></span> '.$this->name.'</span>';
     }
 
 }

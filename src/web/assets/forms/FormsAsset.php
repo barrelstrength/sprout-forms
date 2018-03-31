@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutforms\web\assets\forms;
 
+use barrelstrength\sproutbase\web\assets\sproutfields\selectother\SelectOtherFieldAsset;
 use barrelstrength\sproutforms\web\assets\fontawesome\FontAwesomeAsset;
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
@@ -19,9 +20,11 @@ class FormsAsset extends AssetBundle
         $this->sourcePath = '@barrelstrength/sproutforms/web/assets/forms/dist';
 
         // define the dependencies
+        // @todo - refactor sproutfields.js asset within SelectOtherField asset
         $this->depends = [
             CpAsset::class,
-            FontAwesomeAsset::class
+            FontAwesomeAsset::class,
+            SelectOtherFieldAsset::class
         ];
 
         $this->css = [

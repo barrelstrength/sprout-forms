@@ -4,13 +4,11 @@ namespace barrelstrength\sproutforms\web\twig\variables;
 
 use barrelstrength\sproutforms\elements\Form;
 use Craft;
+use craft\base\ElementInterface;
+use craft\elements\db\ElementQueryInterface;
 use craft\helpers\Template as TemplateHelper;
-use craft\helpers\ElementHelper;
-
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
-use barrelstrength\sproutforms\models\FieldGroup;
-use barrelstrength\sproutforms\models\FieldLayout;
 use barrelstrength\sproutforms\contracts\BaseFormField;
 use yii\base\Exception;
 
@@ -21,7 +19,7 @@ use yii\base\Exception;
 class SproutFormsVariable
 {
     /**
-     * @var \barrelstrength\sproutforms\elements\FormQuery|\craft\elements\db\ElementQueryInterface
+     * @var ElementQueryInterface
      */
     public $entries;
 
@@ -30,7 +28,6 @@ class SproutFormsVariable
      */
     public function __construct()
     {
-        //$this->entries = Craft::$app->elements->getCriteria('SproutForms_Entry');
         $this->entries = EntryElement::find();
     }
 
@@ -265,7 +262,7 @@ class SproutFormsVariable
      *
      * @param $id
      *
-     * @return EntryElement|null
+     * @return ElementInterface|null
      */
     public function getEntryById($id)
     {
@@ -287,7 +284,7 @@ class SproutFormsVariable
     /**
      * Gets last entry submitted
      *
-     * @return EntryElement|null
+     * @return ElementInterface|null
      */
     public function getLastEntry()
     {
@@ -298,7 +295,7 @@ class SproutFormsVariable
             Craft::$app->getSession()->destroy('lastEntryId');
         }
 
-        return isset($entry) ? $entry : null;
+        return $entry ?? null;
     }
 
     /**
@@ -340,8 +337,8 @@ class SproutFormsVariable
      */
     public function multiStepForm($settings)
     {
-        $currentStep = isset($settings['currentStep']) ? $settings['currentStep'] : null;
-        $totalSteps = isset($settings['totalSteps']) ? $settings['totalSteps'] : null;
+        $currentStep = $settings['currentStep'] ?? null;
+        $totalSteps = $settings['totalSteps'] ?? null;
 
         if (!$currentStep OR !$totalSteps) {
             return;
@@ -383,7 +380,7 @@ class SproutFormsVariable
 
         SproutForms::error($message);
 
-        if (isset(Craft::$app->getConfig()->getGeneral()->devMode) && Craft::$app->getConfig()->getGeneral()->devMode) {
+        if (Craft::$app->getConfig()->getGeneral()->devMode) {
             throw new Exception($message);
         }
     }
@@ -465,7 +462,7 @@ class SproutFormsVariable
     }
 
     /**
-     * @return array|\barrelstrength\sproutforms\services\BaseFormField[]
+     * @return array|BaseFormField[]
      */
     public function getRegisteredFields()
     {

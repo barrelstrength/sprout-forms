@@ -10,11 +10,18 @@ use Craft;
 abstract class BaseFormTemplates
 {
     /**
+     * The Template ID of the Form Templates in the format {pluginhandle}-{formtemplateclassname}
+     *
+     * @example
+     * sproutforms-accessibletemplates
+     * sproutforms-basictemplates
+     *
      * @var string
      */
     public $templateId;
 
     /**
+     * Generates the Template ID
      * @return string
      * @throws \ReflectionException
      */
@@ -22,7 +29,7 @@ abstract class BaseFormTemplates
     {
         $pluginHandle = Craft::$app->getPlugins()->getPluginHandleByClass(get_class($this));
 
-        // Build $templateId: pluginname-captchaclassname
+        // Build $templateId: pluginhandle-formtemplateclassname
         $pluginHandleWithoutSpaces = str_replace('-', '', $pluginHandle);
 
         $captchaClass = (new \ReflectionClass($this))->getShortName();
@@ -35,7 +42,24 @@ abstract class BaseFormTemplates
     }
 
     /**
-     * Add initial options for css classes for each field on Sprout Forms
+     * The name of your Form Templates
+     *
+     * @return string
+     */
+    abstract public function getName();
+
+    /**
+     * The folder path where your form templates exist
+     * 
+     * @return string
+     */
+    abstract public function getPath();
+
+    /**
+     * Adds pre-defined options for css classes.
+     *
+     * These classes will display in the CSS Classes dropdown list on the Field Edit modal
+     * for Field Types that support the $cssClasses property.
      *
      * @return array
      */
@@ -43,14 +67,4 @@ abstract class BaseFormTemplates
     {
         return [];
     }
-
-    /**
-     * @return string
-     */
-    abstract public function getName();
-
-    /**
-     * @return string
-     */
-    abstract public function getPath();
 }

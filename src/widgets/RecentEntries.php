@@ -7,7 +7,7 @@
 
 namespace Craft;
 
-class _RecentEntries extends BaseWidget
+class RecentEntries extends BaseWidget
 {
     protected $colspan = 2;
 

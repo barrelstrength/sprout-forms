@@ -5,7 +5,7 @@ namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
 use Craft;
 use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
-use yii\db\Schema;
+
 use craft\helpers\Template as TemplateHelper;
 
 use barrelstrength\sproutbase\SproutBase;
@@ -46,14 +46,6 @@ class Email extends BaseFormField implements PreviewableFieldInterface
     public static function displayName(): string
     {
         return Craft::t('sprout-forms', 'Email');
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getContentColumnType(): string
-    {
-        return Schema::TYPE_STRING;
     }
 
     /**
@@ -128,7 +120,7 @@ class Email extends BaseFormField implements PreviewableFieldInterface
     {
         $attributes = $this->getAttributes();
         $errorMessage = SproutBase::$app->email->getErrorMessage($attributes['name'], $this);
-        $placeholder = isset($this['placeholder']) ? $this['placeholder'] : '';
+        $placeholder = $this['placeholder'] ?? '';
 
         $rendered = Craft::$app->getView()->renderTemplate(
             'email/input',

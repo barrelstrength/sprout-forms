@@ -23,15 +23,8 @@ use craft\records\Element;
  * @property string      $submitAction
  * @property string      $submitButtonText
  * @property bool        $saveData
- * @property bool        $notificationEnabled
- * @property string      $notificationRecipients
- * @property string      $notificationSubject
- * @property string      $notificationSender
- * @property string      $notificationSenderEmail
- * @property string      $notificationReplyToEmail
  * @property string      $templateOverridesFolder
  * @property bool        $enableFileAttachments
- * @property FieldLayout $fieldLayout
  */
 class Form extends ActiveRecord
 {
@@ -91,7 +84,7 @@ class Form extends ActiveRecord
      * Before Save
      *
      */
-    // @todo - add before save function
+    // @todo - add before save method
     /*
     public function beforeSave()
     {

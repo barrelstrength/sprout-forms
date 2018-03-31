@@ -6,7 +6,7 @@ use Craft;
 use craft\base\ElementInterface;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\PreviewableFieldInterface;
-use yii\db\Schema;
+
 
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\contracts\BaseFormField;
@@ -37,14 +37,6 @@ class RegularExpression extends BaseFormField implements PreviewableFieldInterfa
     public static function displayName(): string
     {
         return Craft::t('sprout-forms', 'Regex');
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getContentColumnType(): string
-    {
-        return Schema::TYPE_STRING;
     }
 
     /**
@@ -138,14 +130,6 @@ class RegularExpression extends BaseFormField implements PreviewableFieldInterfa
         );
 
         return TemplateHelper::raw($rendered);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getTableAttributeHtml($value, ElementInterface $element): string
-    {
-        return $value;
     }
 
     /**

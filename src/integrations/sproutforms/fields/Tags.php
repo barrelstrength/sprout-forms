@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
 
 use Craft;
+use craft\base\Element;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\ElementInterface;
 use craft\elements\Tag;

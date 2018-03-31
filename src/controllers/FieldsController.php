@@ -2,7 +2,11 @@
 
 namespace barrelstrength\sproutforms\controllers;
 
+
+use barrelstrength\sproutforms\elements\Form;
 use Craft;
+
+use craft\helpers\Json;
 use craft\web\Controller as BaseController;
 use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
 use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
@@ -15,6 +19,10 @@ class FieldsController extends BaseController
     /**
      * This action allows to load the modal field template.
      *
+     * @return \yii\web\Response
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
+     * @throws \yii\web\BadRequestHttpException
      */
     public function actionModalField()
     {
@@ -28,6 +36,9 @@ class FieldsController extends BaseController
     /**
      * This action allows create a default field given a type.
      *
+     * @return \yii\web\Response
+     * @throws \Throwable
+     * @throws \yii\web\BadRequestHttpException
      */
     public function actionCreateField()
     {
@@ -57,13 +68,15 @@ class FieldsController extends BaseController
                 }
             }
         }
-        // @todo - how add error messages?
+        // @todo - add error messages
         return $this->_returnJson(false, null, $form, null, $tabId);
     }
 
     /**
      * This action allows create a new Tab to current layout
      *
+     * @return \yii\web\Response
+     * @throws \yii\web\BadRequestHttpException
      */
     public function actionAddTab()
     {
@@ -74,6 +87,8 @@ class FieldsController extends BaseController
         $sortOrder = $request->getBodyParam('sortOrder');
         $formId = $request->getBodyParam('formId');
         $form = SproutForms::$app->forms->getFormById($formId);
+
+        $tab = null;
 
         if ($name && $form && $sortOrder) {
             $tab = SproutForms::$app->fields->createNewTab($name, $sortOrder, $form);
@@ -88,7 +103,7 @@ class FieldsController extends BaseController
                 ]);
             }
         }
-        // @todo - how add error messages?
+
         return $this->asJson([
             'success' => false,
             'errors' => $tab->getErrors()
@@ -98,6 +113,8 @@ class FieldsController extends BaseController
     /**
      * This action allows rename a current Tab
      *
+     * @return \yii\web\Response
+     * @throws \yii\web\BadRequestHttpException
      */
     public function actionRenameTab()
     {
@@ -118,7 +135,7 @@ class FieldsController extends BaseController
                 ]);
             }
         }
-        // @todo - how add error messages?
+
         return $this->asJson([
             'success' => false,
             'errors' => Craft::t('sprout-forms', 'Unable to rename tab')
@@ -127,6 +144,10 @@ class FieldsController extends BaseController
 
     /**
      * Save a field.
+     *
+     * @return \yii\web\Response
+     * @throws \Throwable
+     * @throws \yii\web\BadRequestHttpException
      */
     public function actionSaveField()
     {
@@ -135,7 +156,8 @@ class FieldsController extends BaseController
         $request = Craft::$app->getRequest();
         $fieldsService = Craft::$app->getFields();
         // Make sure our field has a section
-        // @TODO - handle this much more gracefully
+
+        // @todo - handle this much more gracefully
         $tabId = $request->getBodyParam('tabId');
 
         // Get the Form these fields are related to
@@ -151,7 +173,7 @@ class FieldsController extends BaseController
             'name' => $request->getBodyParam('name'),
             'handle' => $request->getBodyParam('handle'),
             'instructions' => $request->getBodyParam('instructions'),
-            // @todo - add locales
+            // @todo - confirm locales/Sites work as expected
             'translationMethod' => Field::TRANSLATION_METHOD_NONE,
             'settings' => $request->getBodyParam('types.'.$type),
         ]);
@@ -167,7 +189,7 @@ class FieldsController extends BaseController
 
         if ($fieldLayoutField) {
             $required = $request->getBodyParam('required');
-            $fieldLayoutField->required = $required !== '' ? true : false;
+            $fieldLayoutField->required = $required !== "" ? true : false;
             $fieldLayoutField->save(false);
             $field->required = $fieldLayoutField->required;
         }
@@ -254,8 +276,12 @@ class FieldsController extends BaseController
 
         $id = $request->getBodyParam('fieldId');
         $formId = $request->getBodyParam('formId');
-        $field = Craft::$app->fields->getFieldById($id);
         $form = SproutForms::$app->forms->getFormById($formId);
+
+        /**
+         * @var Field $field
+         */
+        $field = Craft::$app->fields->getFieldById($id);
 
         if ($field) {
             $fieldLayoutField = FieldLayoutFieldRecord::findOne([
@@ -294,6 +320,10 @@ class FieldsController extends BaseController
         }
     }
 
+    /**
+     * @return \yii\web\Response
+     * @throws \yii\web\BadRequestHttpException
+     */
     public function actionDeleteField()
     {
         $this->requirePostRequest();
@@ -316,17 +346,17 @@ class FieldsController extends BaseController
      * Reorder a field
      *
      * @return \yii\web\Response
-     * @throws \Exception
-     * @throws \barrelstrength\sproutforms\services\Exception
+     * @throws \yii\base\Exception
+     * @throws \yii\db\Exception
      * @throws \yii\web\BadRequestHttpException
      */
     public function actionReorderFields()
     {
-        Craft::$app->getSession()->requireAdmin();
+        $this->requireAdmin();
         $this->requirePostRequest();
         $this->requireAjaxRequest();
 
-        $fieldIds = JsonHelper::decode(Craft::$app->request->getRequiredBodyParam('ids'));
+        $fieldIds = Json::decode(Craft::$app->request->getRequiredBodyParam('ids'));
         SproutForms::$app->fields->reorderFields($fieldIds);
 
         return $this->asJson([
@@ -334,7 +364,18 @@ class FieldsController extends BaseController
         ]);
     }
 
-    private function _returnJson($success, $field, $form, $tabName = null, $tabId = null)
+    /**
+     * @param bool $success
+     * @param      $field
+     * @param Form $form
+     * @param null $tabName
+     * @param null $tabId
+     *
+     * @return \yii\web\Response
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
+     */
+    private function _returnJson(bool $success, $field, Form $form, $tabName = null, $tabId = null)
     {
         return $this->asJson([
             'success' => $success,

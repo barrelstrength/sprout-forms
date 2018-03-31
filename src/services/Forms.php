@@ -10,6 +10,7 @@ use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\records\Form as FormRecord;
 use barrelstrength\sproutforms\migrations\CreateFormContentTable;
 use Craft;
+use craft\base\ElementInterface;
 use craft\events\RegisterComponentTypesEvent;
 use yii\base\Component;
 use craft\helpers\StringHelper;
@@ -52,6 +53,8 @@ class Forms extends Component
         if ($this->formRecord === null) {
             $this->formRecord = new FormRecord();
         }
+
+        parent::__construct($formRecord);
     }
 
     /**
@@ -100,7 +103,7 @@ class Forms extends Component
             }
         }
 
-        $form->titleFormat = ($form->titleFormat ? $form->titleFormat : "{dateCreated|date('D, d M Y H:i:s')}");
+        $form->titleFormat = ($form->titleFormat ?: "{dateCreated|date('D, d M Y H:i:s')}");
 
         $form->validate();
 
@@ -250,8 +253,9 @@ class Forms extends Component
         $query = FormElement::find();
         $query->siteId($siteId);
         $query->orderBy(['name' => SORT_ASC]);
-        // @todo - research next function
-        #$query->enabledForSite(false);
+
+        // @todo - look into enabledForSite method
+        // $query->enabledForSite(false);
 
         return $query->all();
     }
@@ -259,18 +263,19 @@ class Forms extends Component
     /**
      * Returns a form model if one is found in the database by id
      *
-     * @param int $formId
-     * @param int $siteId
+     * @param int      $formId
+     * @param int|null $siteId
      *
-     * @return null|FormElement
+     * @return FormElement|ElementInterface|null
      */
     public function getFormById(int $formId, int $siteId = null)
     {
         $query = FormElement::find();
         $query->id($formId);
         $query->siteId($siteId);
-        // @todo - research next function
-        #$query->enabledForSite(false);
+
+        // @todo - look into enabledForSite method
+        // $query->enabledForSite(false);
 
         return $query->one();
     }
@@ -288,8 +293,8 @@ class Forms extends Component
         $query = FormElement::find();
         $query->handle($handle);
         $query->siteId($siteId);
-        // @todo - research next function
-        #$query->enabledForSite(false);
+        // @todo - look into enabledForSite method
+        // $query->enabledForSite(false);
 
         return $query->one();
     }
@@ -439,105 +444,6 @@ class Forms extends Component
     }
 
     /**
-     * Sprout Forms Send Notification service.
-     *
-     * @param FormElement  $form
-     * @param EntryElement $entry
-     * @param null         $post
-     *
-     * @return bool
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
-     */
-    public function sendNotification(FormElement $form, EntryElement $entry, $post = null)
-    {
-        // Get our recipients
-        $recipients = ArrayHelper::toArray($form->notificationRecipients);
-        $recipients = array_unique($recipients);
-        $response = false;
-        $view = Craft::$app->getView();
-
-        if (count($recipients)) {
-            $message = new Message();
-            $tabs = $form->getFieldLayout()->getTabs();
-            $templatePaths = SproutForms::$app->fields->getSproutFormsTemplates($form);
-            $emailTemplate = $templatePaths['email'];
-
-            // Set our Sprout Forms Email Template path
-            $view->setTemplatesPath($emailTemplate);
-
-            $htmlBodyTemplate = $view->renderTemplate(
-                'email', [
-                    'formName' => $form->name,
-                    'tabs' => $tabs,
-                    'element' => $entry
-                ]
-            );
-
-            $message->setHtmlBody($htmlBodyTemplate);
-
-            $view->setTemplatesPath(Craft::$app->path->getCpTemplatesPath());
-
-            if ($post === null) {
-                $post = $_POST;
-            }
-
-            $post = (object)$post;
-
-            $message->setFrom($form->notificationSenderEmail);
-            // @todo - how set from name on craft3?
-            #$message->setFrom  = $form->notificationSenderName;
-            $message->setSubject($form->notificationSubject);
-
-            $mailer = Craft::$app->getMailer();
-
-            try {
-                $subject = null;
-                // Has a custom subject been set for this form?
-                if ($form->notificationSubject) {
-                    $subject = $view->renderObjectTemplate($form->notificationSubject, $post, true);
-                }
-
-                $message->setSubject(SproutForms::$app->encodeSubjectLine($subject));
-
-                // custom replyTo has been set for this form
-                if ($form->notificationReplyToEmail) {
-                    $repleyTo = $view->renderObjectTemplate($form->notificationReplyToEmail, $post, true);
-
-                    $message->setReplyTo($repleyTo);
-
-                    if (!filter_var($repleyTo, FILTER_VALIDATE_EMAIL)) {
-                        $message->setReplyTo(null);
-                    }
-                }
-
-                foreach ($recipients as $emailAddress) {
-                    $toEmail = $view->renderObjectTemplate($emailAddress, $post, true);
-                    $message->setTo($toEmail);
-
-                    if (filter_var($toEmail, FILTER_VALIDATE_EMAIL)) {
-                        // @todo - add to the event
-                        /*$options =
-                            array(
-                                'sproutFormsEntry'      => $entry,
-                                'enableFileAttachments' => $form->enableFileAttachments,
-                            );*/
-
-                        $mailer->send($message);
-                    }
-                }
-
-                $response = true;
-            } catch (\Exception $e) {
-                $response = false;
-                SproutForms::error($e->getMessage());
-            }
-        }
-
-        return $response;
-    }
-
-    /**
      * Removes forms and related records from the database given the ids
      *
      * @param $formElements
@@ -594,7 +500,7 @@ class Forms extends Component
 
         if ($this->saveForm($form)) {
             // Let's delete the default field
-            if (isset($field) && $field->id) {
+            if ($field !== null && $field->id) {
                 Craft::$app->getFields()->deleteFieldById($field->id);
             }
 
@@ -763,7 +669,7 @@ class Forms extends Component
                 }
 
                 if (file_exists($fieldsFolder)) {
-                    $templates['fields'] = $basePath . 'fields';
+                    $templates['fields'] = $basePath.'fields';
                 }
 
                 if (file_exists($emailTemplate.'.'.$extension)) {
@@ -772,7 +678,7 @@ class Forms extends Component
             }
 
             if (file_exists($fieldsFolder)) {
-                $templates['fields'] = $basePath . 'fields';
+                $templates['fields'] = $basePath.'fields';
             }
         }
 

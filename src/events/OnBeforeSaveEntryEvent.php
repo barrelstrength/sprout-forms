@@ -10,12 +10,15 @@ use barrelstrength\sproutforms\elements\Entry;
  */
 class OnBeforeSaveEntryEvent extends Event
 {
+    /**
+     * @var array
+     */
     public $errors = [];
 
     /**
      * @var Entry
      */
-    public $entry = null;
+    public $entry;
 
     /**
      * @var bool

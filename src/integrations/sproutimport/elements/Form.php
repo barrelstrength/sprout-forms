@@ -3,12 +3,12 @@
 namespace barrelstrength\sproutforms\integrations\sproutimport\elements;
 
 use barrelstrength\sproutbase\contracts\sproutimport\BaseElementImporter;
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutimport\SproutImport;
 use Craft;
-use craft\models\FieldLayout;
-use craft\models\FieldLayoutTab;
+
 
 class Form extends BaseElementImporter
 {
@@ -86,9 +86,7 @@ class Form extends BaseElementImporter
         //'displaySectionTitles' => ''
 
         $fieldLayoutTabs = $settings['settings']['fieldLayout'];
-        $fieldLayoutFields = [];
         $requiredFields = [];
-        $tabSortOrder = 0;
         $fieldSortOrder = 0;
 
         $postedFieldLayout = [];
@@ -99,7 +97,7 @@ class Form extends BaseElementImporter
 
             foreach ($fields as $field) {
 
-                $importerClass = SproutImport::$app->importers->getImporter($field);
+                $importerClass = SproutBase::$app->importers->getImporter($field);
 
                 $field = SproutImport::$app->settingsImporter->saveSetting($field, $importerClass);
 

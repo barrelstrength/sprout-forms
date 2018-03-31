@@ -12,7 +12,7 @@ class OnBeforePopulateEntryEvent extends Event
     // Properties
     // =========================================================================
 
-    public $form = null;
+    public $form;
 
     public $isValid = true;
     public $fakeIt = false;

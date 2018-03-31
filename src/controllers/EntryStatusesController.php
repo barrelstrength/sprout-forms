@@ -39,9 +39,8 @@ class EntryStatusesController extends BaseController
 
     /**
      * @return null|\yii\web\Response
-     * @throws \CDbException
-     * @throws \Exception
-     * @throws \barrelstrength\sproutforms\services\Exception
+     * @throws \yii\base\Exception
+     * @throws \yii\db\Exception
      * @throws \yii\web\BadRequestHttpException
      */
     public function actionSave()

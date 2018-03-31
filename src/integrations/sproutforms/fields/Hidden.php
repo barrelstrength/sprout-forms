@@ -6,7 +6,7 @@ use Craft;
 use craft\base\ElementInterface;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\PreviewableFieldInterface;
-use yii\db\Schema;
+
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\contracts\BaseFormField;
 
@@ -41,14 +41,6 @@ class Hidden extends BaseFormField implements PreviewableFieldInterface
     public function isPlainInput()
     {
         return true;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getContentColumnType(): string
-    {
-        return Schema::TYPE_STRING;
     }
 
     /**

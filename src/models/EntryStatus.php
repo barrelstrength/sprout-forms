@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\models;
 
 use craft\base\Model;
+use Craft;
 
 class EntryStatus extends Model
 {
@@ -54,11 +55,13 @@ class EntryStatus extends Model
     /**
      * Use the translated section name as the string representation.
      *
-     * @return string
+     * @inheritdoc
      */
-    function __toString()
+    public function __toString()
     {
-        return Craft::t('sprout-forms', $this->name);
+        $name = Craft::t('sprout-forms', $this->name);
+
+        return (string)$name;
     }
 
     /**

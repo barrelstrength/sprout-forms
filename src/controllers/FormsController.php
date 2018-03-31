@@ -2,7 +2,9 @@
 
 namespace barrelstrength\sproutforms\controllers;
 
+use barrelstrength\sproutforms\elements\Form;
 use Craft;
+use craft\base\ElementInterface;
 use craft\web\Controller as BaseController;
 use craft\helpers\UrlHelper;
 use yii\base\Exception;
@@ -30,7 +32,7 @@ class FormsController extends BaseController
 
         if ($request->getBodyParam('saveAsNew')) {
             $form->saveAsNew = true;
-            $duplicateForm = SproutForms::$app()->forms->createNewForm(
+            $duplicateForm = SproutForms::$app->forms->createNewForm(
                 $request->getBodyParam('name'),
                 $request->getBodyParam('handle')
             );
@@ -56,13 +58,6 @@ class FormsController extends BaseController
         $form->submitAction = $request->getBodyParam('submitAction');
         $form->saveData = $request->getBodyParam('saveData', 0);
         $form->submitButtonText = $request->getBodyParam('submitButtonText');
-
-        $form->notificationEnabled = $request->getBodyParam('notificationEnabled');
-        $form->notificationRecipients = $request->getBodyParam('notificationRecipients');
-        $form->notificationSubject = $request->getBodyParam('notificationSubject');
-        $form->notificationSenderName = $request->getBodyParam('notificationSenderName');
-        $form->notificationSenderEmail = $request->getBodyParam('notificationSenderEmail');
-        $form->notificationReplyToEmail = $request->getBodyParam('notificationReplyToEmail');
         $form->templateOverridesFolder = $request->getBodyParam('templateOverridesFolder');
         $form->enableFileAttachments = $request->getBodyParam('enableFileAttachments');
 
@@ -123,27 +118,9 @@ class FormsController extends BaseController
 
             Craft::$app->getSession()->setError(Craft::t('sprout-forms', 'Couldn’t save form.'));
 
-            $notificationFields = [
-                'notificationRecipients',
-                'notificationSubject',
-                'notificationSenderName',
-                'notificationSenderEmail',
-                'notificationReplyToEmail'
-            ];
-
-            $notificationErrors = false;
-            foreach ($form->getErrors() as $fieldHandle => $error) {
-                if (in_array($fieldHandle, $notificationFields)) {
-                    $notificationErrors = 'error';
-                    break;
-                }
-            }
-
             Craft::$app->getUrlManager()->setRouteParams([
-                    'form' => $form,
-                    'notificationErrors' => $notificationErrors
-                ]
-            );
+                'form' => $form
+            ]);
 
             return null;
         }
@@ -157,7 +134,7 @@ class FormsController extends BaseController
      * Edit a form.
      *
      * @param int|null         $formId
-     * @param FormElement|null $form
+     * @param FormElement|ElementInterface|null $form
      *
      * @return \yii\web\Response
      * @throws NotFoundHttpException
@@ -226,7 +203,7 @@ class FormsController extends BaseController
         $formId = $request->getRequiredBodyParam('id');
         $form = SproutForms::$app->forms->getFormById($formId);
 
-        // @todo - handle errors
+        // @todo - handle errors/rollBack
         SproutForms::$app->forms->deleteForm($form);
 
         return $this->redirectToPostedUrl($form);

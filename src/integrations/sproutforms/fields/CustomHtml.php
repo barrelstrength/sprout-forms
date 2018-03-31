@@ -7,7 +7,7 @@ use craft\base\ElementInterface;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\PreviewableFieldInterface;
 use yii\db\Schema;
-use barrelstrength\sproutforms\SproutForms;
+
 use barrelstrength\sproutforms\contracts\BaseFormField;
 
 class CustomHtml extends BaseFormField implements PreviewableFieldInterface

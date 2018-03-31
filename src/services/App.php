@@ -42,16 +42,6 @@ class App extends Component
     }
 
     /**
-     * @param $subject
-     *
-     * @return string
-     */
-    public function encodeSubjectLine($subject)
-    {
-        return '=?UTF-8?B?'.base64_encode($subject).'?=';
-    }
-
-    /**
      * Return whether or not the example template already exists
      *
      * @return bool

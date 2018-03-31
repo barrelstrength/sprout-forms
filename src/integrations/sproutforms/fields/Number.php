@@ -61,7 +61,7 @@ class Number extends BaseFormField implements PreviewableFieldInterface
         }
 
         // Normalize $size
-        if ($this->size !== null && empty($this->size)) {
+        if ($this->size !== null && $this->size === null) {
             $this->size = null;
         }
     }

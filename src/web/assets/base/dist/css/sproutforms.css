@@ -225,8 +225,6 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 }
 
 .source-field {
-    flex-grow: 1;
-    /*display: inline-block;*/
     text-align: left;
     box-sizing: border-box;
     border: 2px solid transparent;

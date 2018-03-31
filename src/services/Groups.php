@@ -8,6 +8,7 @@ use yii\base\Component;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\models\FormGroup as FormGroupModel;
 use barrelstrength\sproutforms\records\FormGroup as FormGroupRecord;
+use yii\base\Exception;
 
 class Groups extends Component
 {
@@ -131,12 +132,10 @@ class Groups extends Component
     /**
      * Gets a form group record or creates a new one.
      *
-     * @access private
-     *
      * @param FormGroupModel $group
      *
+     * @return FormGroupRecord|null|static
      * @throws Exception
-     * @return FormGroupRecord
      */
     private function _getGroupRecord(FormGroupModel $group)
     {

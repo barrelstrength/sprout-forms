@@ -81,7 +81,7 @@ class SaveEntryEvent extends BaseEvent
                 return false;
             }
         }
-        
+
         // If only new entries was checked
         // Make sure the entry is new
         if (!$whenNew || ($whenNew && $isNewEntry)) {
@@ -131,12 +131,6 @@ class SaveEntryEvent extends BaseEvent
         return true;
     }
 
-
-    public function prepareValue($value)
-    {
-        return $value;
-    }
-
     /**
      * @return array|\craft\base\ElementInterface|null
      */
@@ -144,8 +138,7 @@ class SaveEntryEvent extends BaseEvent
     {
         $criteria = Entry::find();
 
-        $formIds = isset($this->options['sproutForms']['saveEntry']['formIds']) ?
-            $this->options['sproutForms']['saveEntry']['formIds'] : [];
+        $formIds = $this->options['sproutForms']['saveEntry']['formIds'] ?? [];
 
         if (is_array($formIds) && count($formIds)) {
             $formId = array_shift($formIds);
@@ -163,16 +156,16 @@ class SaveEntryEvent extends BaseEvent
      */
     protected function getAllForms()
     {
-        $result = SproutForms::$app->forms->getAllForms();
+        $forms = SproutForms::$app->forms->getAllForms();
         $options = [];
 
-        foreach ($result as $key => $forms) {
-            array_push(
-                $options, [
-                    'label' => $forms->name,
-                    'value' => $forms->id
-                ]
-            );
+        if (count($forms)) {
+            foreach ($forms as $key => $form) {
+                $options[] = [
+                    'label' => $form->name,
+                    'value' => $form->id
+                ];
+            }
         }
 
         return $options;

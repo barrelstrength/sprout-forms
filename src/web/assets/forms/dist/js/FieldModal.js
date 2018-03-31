@@ -392,7 +392,9 @@ if (typeof Craft.SproutForms === typeof undefined) {
          */
         saveField: function(e)
         {
-            if (e) e.preventDefault();
+            if (e) {
+                e.preventDefault();
+            }
 
             if (this.$saveBtn.hasClass('disabled') || !this.$saveSpinner.hasClass('hidden'))
             {

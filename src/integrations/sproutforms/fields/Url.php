@@ -6,7 +6,6 @@ use Craft;
 use craft\base\ElementInterface;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\PreviewableFieldInterface;
-use yii\db\Schema;
 
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\contracts\BaseFormField;
@@ -42,14 +41,6 @@ class Url extends BaseFormField implements PreviewableFieldInterface
     public static function displayName(): string
     {
         return Craft::t('sprout-forms', 'URL');
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getContentColumnType(): string
-    {
-        return Schema::TYPE_STRING;
     }
 
     /**

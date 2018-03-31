@@ -4,7 +4,7 @@ namespace barrelstrength\sproutforms\migrations;
 
 use craft\db\Migration;
 use craft\db\Query;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\SingleLine;
+
 use Craft;
 use craft\helpers\MigrationHelper;
 
@@ -66,8 +66,8 @@ class m180314_161540_craft2_to_craft3 extends Migration
             }
         }
 
-        if ($this->db->columnExists("{{%sproutforms_forms}}", 'enableTemplateOverrides')) {
-            $this->dropColumn("{{%sproutforms_forms}}", 'enableTemplateOverrides');
+        if ($this->db->columnExists('{{%sproutforms_forms}}', 'enableTemplateOverrides')) {
+            $this->dropColumn('{{%sproutforms_forms}}', 'enableTemplateOverrides');
         }
 
         return true;
