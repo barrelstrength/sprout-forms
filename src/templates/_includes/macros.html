@@ -58,7 +58,7 @@ tab      = tab or null
 
     {# Manage hidden input fields #}
     {% if instance == 'active' %}
-      {# todo - why the tabName and not the tabId? #}
+      {# todo - why are we using tabName and not tabId? #}
       <input type="hidden" name="fieldLayout[{{ tab.name }}][]" value="{{ field.id }}" class="id-input">
 
       {% if field.required %}

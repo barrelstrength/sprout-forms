@@ -228,7 +228,7 @@ class FormsController extends BaseController
         $formId = $request->getRequiredBodyParam('id');
         $form = SproutForms::$app->forms->getFormById($formId);
 
-        // @todo - handle errors
+        // @todo - handle errors/rollBack
         SproutForms::$app->forms->deleteForm($form);
 
         return $this->redirectToPostedUrl($form);

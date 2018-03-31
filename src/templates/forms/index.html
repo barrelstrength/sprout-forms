@@ -5,15 +5,16 @@
 {% set groupId = null %}
 {% set groups = craft.sproutForms.getAllFormGroups('id') %}
 
-{% block actionButton  %}
-	<div class="buttons">
-		<a class="btn submit add icon" href="{{ url('sprout-forms/forms/new') }}">{{ "New Form"|t('sprout-forms') }}</a>
-	</div>
+{% block actionButton %}
+    <div class="buttons">
+        <a class="btn submit add icon"
+           href="{{ url('sprout-forms/forms/new') }}">{{ "New Form"|t('sprout-forms') }}</a>
+    </div>
 {% endblock %}
 
 {% block sidebar %}
 
-	{% set customizableSources = false %}
+    {% set customizableSources = false %}
 
     {{ parent() }}
 

@@ -90,7 +90,7 @@ class Form extends ActiveRecord
      * Before Save
      *
      */
-    // @todo - add before save function
+    // @todo - add before save method
     /*
     public function beforeSave()
     {

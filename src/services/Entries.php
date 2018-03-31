@@ -221,8 +221,8 @@ class Entries extends Component
         $query->id($entryId);
         $query->siteId($siteId);
 
-        // @todo - research next function
-        #$query->enabledForSite(false);
+        // @todo - look into enabledForSite method
+        // $query->enabledForSite(false);
 
         return $query->one();
     }

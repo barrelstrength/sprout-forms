@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\validators;
 
 use yii\validators\Validator;
+use Craft;
 
 class EnabledNotificationValidator extends Validator
 {
@@ -11,7 +12,7 @@ class EnabledNotificationValidator extends Validator
     /**
      * If Notifications are enabled, make sure all Notification fields are set
      *
-     * @todo - update to provide specific validation for email fields and allow
+     * @todo update to provide specific validation for email fields
      *
      * @param \yii\base\Model $object
      * @param string          $attribute

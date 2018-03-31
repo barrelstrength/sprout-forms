@@ -68,7 +68,7 @@ class FieldsController extends BaseController
                 }
             }
         }
-        // @todo - how add error messages?
+        // @todo - add error messages
         return $this->_returnJson(false, null, $form, null, $tabId);
     }
 
@@ -104,7 +104,6 @@ class FieldsController extends BaseController
             }
         }
 
-        // @todo - how add error messages?
         return $this->asJson([
             'success' => false,
             'errors' => $tab->getErrors()
@@ -136,7 +135,7 @@ class FieldsController extends BaseController
                 ]);
             }
         }
-        // @todo - how add error messages?
+
         return $this->asJson([
             'success' => false,
             'errors' => Craft::t('sprout-forms', 'Unable to rename tab')
@@ -157,7 +156,8 @@ class FieldsController extends BaseController
         $request = Craft::$app->getRequest();
         $fieldsService = Craft::$app->getFields();
         // Make sure our field has a section
-        // @TODO - handle this much more gracefully
+
+        // @todo - handle this much more gracefully
         $tabId = $request->getBodyParam('tabId');
 
         // Get the Form these fields are related to
@@ -173,7 +173,7 @@ class FieldsController extends BaseController
             'name' => $request->getBodyParam('name'),
             'handle' => $request->getBodyParam('handle'),
             'instructions' => $request->getBodyParam('instructions'),
-            // @todo - add locales
+            // @todo - confirm locales/Sites work as expected
             'translationMethod' => Field::TRANSLATION_METHOD_NONE,
             'settings' => $request->getBodyParam('types.'.$type),
         ]);

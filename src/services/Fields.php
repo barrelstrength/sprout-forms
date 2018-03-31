@@ -562,7 +562,7 @@ class Fields extends Component
             'name' => $name,
             'handle' => $handle,
             'instructions' => '',
-            // @todo - add locales
+            // @todo - test locales/sites behavior
             'translationMethod' => Field::TRANSLATION_METHOD_NONE,
         ]);
 

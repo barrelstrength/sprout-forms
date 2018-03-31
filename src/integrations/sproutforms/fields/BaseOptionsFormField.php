@@ -146,7 +146,6 @@ abstract class BaseOptionsFormField extends BaseFormField implements Previewable
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
-        // @todo - for some reason the value of EmailDropdown comes as interger - handleUnobfuscateEmailAddresses is no having effect
         if ($value instanceof MultiOptionsFieldData || $value instanceof SingleOptionFieldData) {
             return $value;
         }

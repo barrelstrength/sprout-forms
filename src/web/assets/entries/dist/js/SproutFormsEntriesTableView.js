@@ -4,8 +4,8 @@
  * @license   http://sprout.barrelstrengthdesign.com/license
  */
 
-if (typeof Craft.SproutForms=== typeof undefined) {
-	Craft.SproutForms = {};
+if (typeof Craft.SproutForms === typeof undefined) {
+    Craft.SproutForms = {};
 }
 
 /**
@@ -13,228 +13,203 @@ if (typeof Craft.SproutForms=== typeof undefined) {
  */
 Craft.SproutForms.EntriesTableView = Craft.TableElementIndexView.extend({
 
-	startDate: null,
-	endDate: null,
+        startDate: null,
+        endDate: null,
 
-	startDatepicker: null,
-	endDatepicker: null,
+        startDatepicker: null,
+        endDatepicker: null,
 
-	$chartExplorer: null,
-	$totalValue: null,
-	$chartContainer: null,
-	$spinner: null,
-	$error: null,
-	$chart: null,
-	$startDate: null,
-	$endDate: null,
+        $chartExplorer: null,
+        $totalValue: null,
+        $chartContainer: null,
+        $spinner: null,
+        $error: null,
+        $chart: null,
+        $startDate: null,
+        $endDate: null,
 
-	afterInit: function()
-	{
-		this.$explorerContainer = $('<div class="chart-explorer-container"></div>').prependTo(this.$container);
+        afterInit: function() {
+            this.$explorerContainer = $('<div class="chart-explorer-container"></div>').prependTo(this.$container);
 
-		this.createChartExplorer();
+            this.createChartExplorer();
 
-		this.base();
-	},
+            this.base();
+        },
 
-	getStorage: function(key)
-	{
-		return Craft.SproutForms.EntriesTableView.getStorage(this.elementIndex._namespace, key);
-	},
+        getStorage: function(key) {
+            return Craft.SproutForms.EntriesTableView.getStorage(this.elementIndex._namespace, key);
+        },
 
-	setStorage: function(key, value)
-	{
-		Craft.SproutForms.EntriesTableView.setStorage(this.elementIndex._namespace, key, value);
-	},
+        setStorage: function(key, value) {
+            Craft.SproutForms.EntriesTableView.setStorage(this.elementIndex._namespace, key, value);
+        },
 
-	createChartExplorer: function()
-	{
-		// chart explorer
-		var $chartExplorer = $('<div class="chart-explorer"></div>').appendTo(this.$explorerContainer),
-		    $chartHeader = $('<div class="chart-header"></div>').appendTo($chartExplorer),
-		    $dateRange = $('<div class="date-range" />').appendTo($chartHeader),
-		    $startDateContainer = $('<div class="datewrapper"></div>').appendTo($dateRange),
-		    $to = $('<span class="to light">to</span>').appendTo($dateRange),
-		    $endDateContainer = $('<div class="datewrapper"></div>').appendTo($dateRange),
-		    $total = $('<div class="total"></div>').appendTo($chartHeader),
-		    $totalLabel = $('<div class="total-label light">'+Craft.t('sprout-forms','Total Submissions')+'</div>').appendTo($total),
-		    $totalValueWrapper = $('<div class="total-value-wrapper"></div>').appendTo($total);
-		$totalValue = $('<span class="total-value">&nbsp;</span>').appendTo($totalValueWrapper);
+        createChartExplorer: function() {
+            // chart explorer
+            var $chartExplorer = $('<div class="chart-explorer"></div>').appendTo(this.$explorerContainer),
+                $chartHeader = $('<div class="chart-header"></div>').appendTo($chartExplorer),
+                $dateRange = $('<div class="date-range" />').appendTo($chartHeader),
+                $startDateContainer = $('<div class="datewrapper"></div>').appendTo($dateRange),
+                $to = $('<span class="to light">to</span>').appendTo($dateRange),
+                $endDateContainer = $('<div class="datewrapper"></div>').appendTo($dateRange),
+                $total = $('<div class="total"></div>').appendTo($chartHeader),
+                $totalLabel = $('<div class="total-label light">' + Craft.t('sprout-forms', 'Total Submissions') + '</div>').appendTo($total),
+                $totalValueWrapper = $('<div class="total-value-wrapper"></div>').appendTo($total);
 
-		this.$chartExplorer = $chartExplorer;
-		this.$totalValue = $totalValue;
-		this.$chartContainer = $('<div class="chart-container"></div>').appendTo($chartExplorer);
-		this.$spinner = $('<div class="spinner hidden" />').prependTo($chartHeader);
-		this.$error = $('<div class="error"></div>').appendTo(this.$chartContainer);
-		this.$chart = $('<div class="chart"></div>').appendTo(this.$chartContainer);
+            var $totalValue = $('<span class="total-value">&nbsp;</span>').appendTo($totalValueWrapper);
 
-		this.$startDate = $('<input type="text" class="text" size="20" autocomplete="off" />').appendTo($startDateContainer);
-		this.$endDate = $('<input type="text" class="text" size="20" autocomplete="off" />').appendTo($endDateContainer);
+            this.$chartExplorer = $chartExplorer;
+            this.$totalValue = $totalValue;
+            this.$chartContainer = $('<div class="chart-container"></div>').appendTo($chartExplorer);
+            this.$spinner = $('<div class="spinner hidden" />').prependTo($chartHeader);
+            this.$error = $('<div class="error"></div>').appendTo(this.$chartContainer);
+            this.$chart = $('<div class="chart"></div>').appendTo(this.$chartContainer);
 
-		this.$startDate.datepicker($.extend({
-			onSelect: $.proxy(this, 'handleStartDateChange')
-		}, Craft.datepickerOptions));
+            this.$startDate = $('<input type="text" class="text" size="20" autocomplete="off" />').appendTo($startDateContainer);
+            this.$endDate = $('<input type="text" class="text" size="20" autocomplete="off" />').appendTo($endDateContainer);
 
-		this.$endDate.datepicker($.extend({
-			onSelect: $.proxy(this, 'handleEndDateChange')
-		}, Craft.datepickerOptions));
+            this.$startDate.datepicker($.extend({
+                onSelect: $.proxy(this, 'handleStartDateChange')
+            }, Craft.datepickerOptions));
 
-		this.startDatepicker = this.$startDate.data('datepicker');
-		this.endDatepicker = this.$endDate.data('datepicker');
+            this.$endDate.datepicker($.extend({
+                onSelect: $.proxy(this, 'handleEndDateChange')
+            }, Craft.datepickerOptions));
 
-		this.addListener(this.$startDate, 'keyup', 'handleStartDateChange');
-		this.addListener(this.$endDate, 'keyup', 'handleEndDateChange');
+            this.startDatepicker = this.$startDate.data('datepicker');
+            this.endDatepicker = this.$endDate.data('datepicker');
 
-		// Set the start/end dates
-		var startTime = this.getStorage('startTime') || ((new Date()).getTime() - (60 * 60 * 24 * 30 * 1000)),
-		    endTime = this.getStorage('endTime') || ((new Date()).getTime());
+            this.addListener(this.$startDate, 'keyup', 'handleStartDateChange');
+            this.addListener(this.$endDate, 'keyup', 'handleEndDateChange');
 
-		this.setStartDate(new Date(startTime));
-		this.setEndDate(new Date(endTime));
+            // Set the start/end dates
+            var startTime = this.getStorage('startTime') || ((new Date()).getTime() - (60 * 60 * 24 * 30 * 1000)),
+                endTime = this.getStorage('endTime') || ((new Date()).getTime());
 
-		// Load the report
-		this.loadReport();
-	},
+            this.setStartDate(new Date(startTime));
+            this.setEndDate(new Date(endTime));
 
-	handleStartDateChange: function()
-	{
-		if (this.setStartDate(Craft.SproutForms.EntriesTableView.getDateFromDatepickerInstance(this.startDatepicker)))
-		{
-			this.loadReport();
-		}
-	},
+            // Load the report
+            this.loadReport();
+        },
 
-	handleEndDateChange: function()
-	{
-		if (this.setEndDate(Craft.SproutForms.EntriesTableView.getDateFromDatepickerInstance(this.endDatepicker)))
-		{
-			this.loadReport();
-		}
-	},
+        handleStartDateChange: function() {
+            if (this.setStartDate(Craft.SproutForms.EntriesTableView.getDateFromDatepickerInstance(this.startDatepicker))) {
+                this.loadReport();
+            }
+        },
 
-	setStartDate: function(date)
-	{
-		// Make sure it has actually changed
-		if (this.startDate && date.getTime() === this.startDate.getTime())
-		{
-			return false;
-		}
+        handleEndDateChange: function() {
+            if (this.setEndDate(Craft.SproutForms.EntriesTableView.getDateFromDatepickerInstance(this.endDatepicker))) {
+                this.loadReport();
+            }
+        },
 
-		this.startDate = date;
-		this.setStorage('startTime', this.startDate.getTime());
-		this.$startDate.val(Craft.formatDate(this.startDate));
+        setStartDate: function(date) {
+            // Make sure it has actually changed
+            if (this.startDate && date.getTime() === this.startDate.getTime()) {
+                return false;
+            }
 
-		// If this is after the current end date, set the end date to match it
-		if (this.endDate && this.startDate.getTime() > this.endDate.getTime())
-		{
-			this.setEndDate(new Date(this.startDate.getTime()));
-		}
+            this.startDate = date;
+            this.setStorage('startTime', this.startDate.getTime());
+            this.$startDate.val(Craft.formatDate(this.startDate));
 
-		return true;
-	},
+            // If this is after the current end date, set the end date to match it
+            if (this.endDate && this.startDate.getTime() > this.endDate.getTime()) {
+                this.setEndDate(new Date(this.startDate.getTime()));
+            }
 
-	setEndDate: function(date)
-	{
-		// Make sure it has actually changed
-		if (this.endDate && date.getTime() === this.endDate.getTime())
-		{
-			return false;
-		}
+            return true;
+        },
 
-		this.endDate = date;
-		this.setStorage('endTime', this.endDate.getTime());
-		this.$endDate.val(Craft.formatDate(this.endDate));
+        setEndDate: function(date) {
+            // Make sure it has actually changed
+            if (this.endDate && date.getTime() === this.endDate.getTime()) {
+                return false;
+            }
 
-		// If this is before the current start date, set the start date to match it
-		if (this.startDate && this.endDate.getTime() < this.startDate.getTime())
-		{
-			this.setStartDate(new Date(this.endDate.getTime()));
-		}
+            this.endDate = date;
+            this.setStorage('endTime', this.endDate.getTime());
+            this.$endDate.val(Craft.formatDate(this.endDate));
 
-		return true;
-	},
+            // If this is before the current start date, set the start date to match it
+            if (this.startDate && this.endDate.getTime() < this.startDate.getTime()) {
+                this.setStartDate(new Date(this.endDate.getTime()));
+            }
 
-	loadReport: function()
-	{
-		var requestData = this.settings.params;
+            return true;
+        },
 
-		requestData.startDate = Craft.SproutForms.EntriesTableView.getDateValue(this.startDate);
-		requestData.endDate = Craft.SproutForms.EntriesTableView.getDateValue(this.endDate);
+        loadReport: function() {
+            var requestData = this.settings.params;
 
-		this.$spinner.removeClass('hidden');
-		this.$error.addClass('hidden');
-		this.$chart.removeClass('error');
+            requestData.startDate = Craft.SproutForms.EntriesTableView.getDateValue(this.startDate);
+            requestData.endDate = Craft.SproutForms.EntriesTableView.getDateValue(this.endDate);
 
-		Craft.postActionRequest('sprout-forms/charts/get-entries-data', requestData, $.proxy(function(response, textStatus)
-		{
-			this.$spinner.addClass('hidden');
+            this.$spinner.removeClass('hidden');
+            this.$error.addClass('hidden');
+            this.$chart.removeClass('error');
 
-			if(textStatus === 'success' && typeof(response.error) === 'undefined')
-			{
-				if(!this.chart)
-				{
-					this.chart = new Craft.charts.Area(this.$chart);
-				}
+            Craft.postActionRequest('sprout-forms/charts/get-entries-data', requestData, $.proxy(function(response, textStatus) {
+                this.$spinner.addClass('hidden');
 
-				var chartDataTable = new Craft.charts.DataTable(response.dataTable);
+                if (textStatus === 'success' && typeof(response.error) === 'undefined') {
+                    if (!this.chart) {
+                        this.chart = new Craft.charts.Area(this.$chart);
+                    }
 
-				var chartSettings = {
-					localeDefinition: response.localeDefinition,
-					orientation: response.orientation,
-					formats: response.formats,
-					dataScale: response.scale
-				};
+                    var chartDataTable = new Craft.charts.DataTable(response.dataTable);
 
-				this.chart.draw(chartDataTable, chartSettings);
+                    var chartSettings = {
+                        localeDefinition: response.localeDefinition,
+                        orientation: response.orientation,
+                        formats: response.formats,
+                        dataScale: response.scale
+                    };
 
-				this.$totalValue.html(response.totalHtml);
-			}
-			else
-			{
-				var msg = Craft.t('sprout-forms','An unknown error occurred.');
+                    this.chart.draw(chartDataTable, chartSettings);
 
-				if(typeof(response) !== 'undefined' && response && typeof(response.error) !== 'undefined')
-				{
-					msg = response.error;
-				}
+                    this.$totalValue.html(response.totalHtml);
+                }
+                else {
+                    var msg = Craft.t('sprout-forms', 'An unknown error occurred.');
 
-				this.$error.html(msg);
-				this.$error.removeClass('hidden');
-				this.$chart.addClass('error');
-			}
-		}, this));
-	}
-},
-{
-	storage: {},
+                    if (typeof(response) !== 'undefined' && response && typeof(response.error) !== 'undefined') {
+                        msg = response.error;
+                    }
 
-	getStorage: function(namespace, key)
-	{
-		if (Craft.SproutForms.EntriesTableView.storage[namespace] && Craft.SproutForms.EntriesTableView.storage[namespace][key])
-		{
-			return Craft.SproutForms.EntriesTableView.storage[namespace][key];
-		}
+                    this.$error.html(msg);
+                    this.$error.removeClass('hidden');
+                    this.$chart.addClass('error');
+                }
+            }, this));
+        }
+    },
+    {
+        storage: {},
 
-		return null;
-	},
+        getStorage: function(namespace, key) {
+            if (Craft.SproutForms.EntriesTableView.storage[namespace] && Craft.SproutForms.EntriesTableView.storage[namespace][key]) {
+                return Craft.SproutForms.EntriesTableView.storage[namespace][key];
+            }
 
-	setStorage: function(namespace, key, value)
-	{
-		if (typeof Craft.SproutForms.EntriesTableView.storage[namespace] === typeof undefined)
-		{
-			Craft.SproutForms.EntriesTableView.storage[namespace] = {};
-		}
+            return null;
+        },
 
-		Craft.SproutForms.EntriesTableView.storage[namespace][key] = value;
-	},
+        setStorage: function(namespace, key, value) {
+            if (typeof Craft.SproutForms.EntriesTableView.storage[namespace] === typeof undefined) {
+                Craft.SproutForms.EntriesTableView.storage[namespace] = {};
+            }
 
-	getDateFromDatepickerInstance: function(inst)
-	{
-		return new Date(inst.currentYear, inst.currentMonth, inst.currentDay);
-	},
+            Craft.SproutForms.EntriesTableView.storage[namespace][key] = value;
+        },
 
-	getDateValue: function(date)
-	{
-		return date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
-	}
-});
+        getDateFromDatepickerInstance: function(inst) {
+            return new Date(inst.currentYear, inst.currentMonth, inst.currentDay);
+        },
+
+        getDateValue: function(date) {
+            return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+        }
+    });

@@ -1,25 +1,24 @@
 {% import "_includes/forms" as forms %}
 
 {% set whenNew = (options.sproutForms.saveEntry.whenNew is defined)
-                     ? options.sproutForms.saveEntry.whenNew
-                     : false %}
+    ? options.sproutForms.saveEntry.whenNew
+    : false %}
 {% set formIds = (options.sproutForms.saveEntry.formIds is defined)
-                 ? options.sproutForms.saveEntry.formIds
-                 : null %}
+    ? options.sproutForms.saveEntry.formIds
+    : null %}
 
 {{ forms.checkboxField({
-	label: "Only for new entries?"|t,
-	name: "rules[sproutForms][saveEntry][whenNew]",
-	checked: whenNew
+    label: "Only for new entries?"|t,
+    name: "rules[sproutForms][saveEntry][whenNew]",
+    checked: whenNew
 }) }}
 
 {{ forms.field({
-		label: "Forms"|t,
-		instructions: "Leave unchecked to apply to all forms."|t,
-		errors: errors is defined ? errors : null,
-	},
-	forms.checkboxGroup({
-		name: "rules[sproutForms][saveEntry][formIds]",
-		options : availableForms,
-		values: formIds
+    label: "Forms"|t,
+    instructions: "Leave unchecked to apply to all forms."|t,
+    errors: errors is defined ? errors : null,
+}, forms.checkboxGroup({
+    name: "rules[sproutForms][saveEntry][formIds]",
+    options : availableForms,
+    values: formIds
 })) }}

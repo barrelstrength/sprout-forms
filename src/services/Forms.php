@@ -253,8 +253,9 @@ class Forms extends Component
         $query = FormElement::find();
         $query->siteId($siteId);
         $query->orderBy(['name' => SORT_ASC]);
-        // @todo - research next function
-        #$query->enabledForSite(false);
+
+        // @todo - look into enabledForSite method
+        // $query->enabledForSite(false);
 
         return $query->all();
     }
@@ -272,8 +273,9 @@ class Forms extends Component
         $query = FormElement::find();
         $query->id($formId);
         $query->siteId($siteId);
-        // @todo - research next function
-        #$query->enabledForSite(false);
+
+        // @todo - look into enabledForSite method
+        // $query->enabledForSite(false);
 
         return $query->one();
     }
@@ -291,8 +293,8 @@ class Forms extends Component
         $query = FormElement::find();
         $query->handle($handle);
         $query->siteId($siteId);
-        // @todo - research next function
-        #$query->enabledForSite(false);
+        // @todo - look into enabledForSite method
+        // $query->enabledForSite(false);
 
         return $query->one();
     }
@@ -444,6 +446,8 @@ class Forms extends Component
     /**
      * Sprout Forms Send Notification service.
      *
+     * @todo - remove in favor of Sprout Email
+     *
      * @param FormElement  $form
      * @param EntryElement $entry
      * @param Object|null  $post
@@ -488,8 +492,6 @@ class Forms extends Component
             $post = (object)$post;
 
             $message->setFrom($form->notificationSenderEmail);
-            // @todo - how set from name on craft3?
-            #$message->setFrom  = $form->notificationSenderName;
             $message->setSubject($form->notificationSubject);
 
             $mailer = Craft::$app->getMailer();
@@ -519,7 +521,6 @@ class Forms extends Component
                     $message->setTo($toEmail);
 
                     if (filter_var($toEmail, FILTER_VALIDATE_EMAIL)) {
-                        // @todo - add to the event
                         /*$options =
                             array(
                                 'sproutFormsEntry'      => $entry,

@@ -123,7 +123,7 @@ class Entry extends Element
     {
         try {
             // @todo - For some reason the Title returns null possible Craft3 bug
-            // @todo - Research why we need call populateElementContent
+            // @todo - Why do we need to call populateElementContent?
             Craft::$app->getContent()->populateElementContent($this);
 
             return $this->title ?: ((string)$this->id ?: static::class);
