@@ -51,6 +51,8 @@ abstract class BaseFormField extends Field
     }
 
     /**
+     * The name of your form field
+     *
      * @return string
      */
     public static function displayName(): string
@@ -59,6 +61,8 @@ abstract class BaseFormField extends Field
     }
 
     /**
+     * The icon to display for your form field
+     *
      * @return string
      */
     public function getSvgIconPath()
@@ -77,13 +81,15 @@ abstract class BaseFormField extends Field
     }
 
     /**
-     * Tells Sprout Forms NOT to add a (for) attribute to your field's top level label
+     * Tells Sprout Forms to use a <fieldset> instead of a <div> as your field wrapper and
+     * NOT to add a for="" attribute to your field's top level label.
      *
      * @note
      * Sprout Forms renders a label with a (for) attribute for all fields.
      * If your field has multiple labels, like radio buttons do for example,
      * it would make sense for your field no to have a (for) attribute at the top level
-     * but have them at the radio field level
+     * but have them at the radio field level. Individual inputs can then wrap each
+     * <input> field in a <label> attribute.
      */
     public function hasMultipleLabels()
     {
@@ -91,8 +97,11 @@ abstract class BaseFormField extends Field
     }
 
     /**
-     * Display or suppress instructions field. Useful for some field types like Notes where
-     * another textarea field may be the primary to use for output.
+     * Display or suppress instructions field.
+     *
+     * @note
+     * This is useful for some field types like the Section Heading field
+     * where another textarea field may be the primary to use for output.
      *
      * @return bool
      */
@@ -102,6 +111,14 @@ abstract class BaseFormField extends Field
     }
 
     /**
+     * The namespace to use when preparing your field's <input> name. This value
+     * is also prepended to the field ID.
+     *
+     * @example
+     * All fields default to having name attributes using the fields namespace:
+     *
+     * <input name="fields[fieldHandle]">
+     *
      * @return string
      */
     public function getNamespace()
@@ -110,6 +127,9 @@ abstract class BaseFormField extends Field
     }
 
     /**
+     * The folder path where this field template is located. This value may be overridden by users
+     * when using Form Templates.
+     *
      * @return string
      */
     public function getTemplatesPath()
@@ -118,6 +138,12 @@ abstract class BaseFormField extends Field
     }
 
     /**
+     * The folder name within the field path to find the input HTML file for this field. By default,
+     * the folder is expected to use the Field Class short name.
+     *
+     * @example
+     * The PlainText Field Class would look for it's respective input HTML in the `plaintext/input.html`
+     * file within the folder returned by getTemplatesPath()
      *
      * @return string
      * @throws \ReflectionException
@@ -137,19 +163,12 @@ abstract class BaseFormField extends Field
     abstract public function getExampleInputHtml();
 
     /**
+     * The HTML to render when a Form is output using the displayForm, displayTab, or displayField tags
+     *
      * @param mixed $value
      * @param array $renderingOptions
      *
      * @return \Twig_Markup
      */
     abstract public function getFrontEndInputHtml($value, array $renderingOptions = null);
-
-    /**
-     * @inheritdoc
-     */
-    public function getTableAttributeHtml($value, ElementInterface $element): string
-    {
-        return $value;
-    }
-
 }
