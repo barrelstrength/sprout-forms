@@ -2,9 +2,9 @@
 
 namespace barrelstrength\sproutforms\integrations\sproutreports\datasources;
 
+use barrelstrength\sproutbase\models\sproutreports\Report;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutreports\elements\Report;
 use Craft;
 use barrelstrength\sproutbase\contracts\sproutreports\BaseDataSource;
 use craft\db\Query;

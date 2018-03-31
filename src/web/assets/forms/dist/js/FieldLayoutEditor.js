@@ -82,7 +82,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
                     $(target).find('.drag-tab-active').removeClass('drag-tab-active');
                     $(source).find('.drag-tab-active').removeClass('drag-tab-active');
                     // Reorder fields
-                    if ($(target).attr("id") == $(source).attr("id")) {
+                    if ($(target).attr("id") === $(source).attr("id")) {
                         // lets update the hidden tab field to reorder the tabs
                         $("#sprout-forms-tabs li.drag-tab a").each(function(i) {
                             var tabId = $(this).attr('id');
@@ -112,7 +112,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
                     return source === that.fieldsLayout;
                 },
                 accepts: function(el, target) {
-                    return target !== that.fieldsLayout
+                    return target !== that.fieldsLayout;
                 },
                 invalid: function(el, handle) {
                     // do not move any item with donotdrag class.
@@ -128,7 +128,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
                     $(source).find('.drag-active').removeClass('drag-active');
 
                     // Reorder fields
-                    if ($(target).attr("id") == $(source).attr("id")) {
+                    if ($(target).attr("id") === $(source).attr("id")) {
                         // just if we need check when the field is reorder
                         // not needed because the order is saved from the hidden field
                         // when the form is saved
@@ -202,7 +202,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
                 nextId = nextDivId[1];
             }
 
-            var defaultName = $(el).data('defaultname') ? $(el).data('defaultname') : 'Untitled' | t;
+            var defaultName = $(el).data('defaultname') ? $(el).data('defaultname') : Craft.t('sprout-forms', 'Untitled');
 
             // Add the Field Header
             $(el).prepend($([
@@ -227,7 +227,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
         },
 
         initFieldOnDrop: function(defaultField, tabName, el) {
-            if (defaultField != null && defaultField.hasOwnProperty("id")) {
+            if (defaultField !== null && defaultField.hasOwnProperty("id")) {
                 $(el).attr('id', 'sproutfield-' + defaultField.id);
 
                 // Add the Settings buttons
@@ -359,7 +359,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
                 $tabs.each(function(i, el) {
                     var tabname = $(el).find('.tab-label').text();
 
-                    if (tabname == newName) {
+                    if (tabname === newName) {
                         response = false;
                         return false;
                     }
@@ -410,7 +410,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
                 var tabname = $(el).find('.tab-label').text();
 
                 if (tabname) {
-                    if (tabname == newName) {
+                    if (tabname === newName) {
                         response = false;
                         return false;
                     }
@@ -551,8 +551,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
                 // move element to new div - like ctrl+x
                 $($fieldDiv).detach().appendTo($(newTab));
             }
-        },
-
+        }
     });
 
 })(jQuery);

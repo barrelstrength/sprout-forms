@@ -7,7 +7,7 @@ use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutimport\models\jobs\SeedJob;
-use barrelstrength\sproutimport\SproutImport;
+
 use Craft;
 
 class Entry extends BaseElementImporter

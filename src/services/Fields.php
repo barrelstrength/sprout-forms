@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\services;
 
+use barrelstrength\sproutforms\contracts\BaseFormField;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\FileUpload;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Categories;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Checkboxes;
@@ -35,6 +36,7 @@ use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\events\RegisterFieldsEvent;
+use yii\base\Exception;
 
 class Fields extends Component
 {
@@ -53,7 +55,7 @@ class Fields extends Component
      *
      * @return bool
      * @throws Exception
-     * @throws \Exception
+     * @throws \yii\db\Exception
      */
     public function reorderFields($fieldIds)
     {
@@ -69,10 +71,10 @@ class Fields extends Component
             if ($transaction !== null) {
                 $transaction->commit();
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
 
             if ($transaction !== null) {
-                $transaction->rollback();
+                $transaction->rollBack();
             }
 
             throw $e;
@@ -107,7 +109,7 @@ class Fields extends Component
      */
     public function getRegisteredFields()
     {
-        if (is_null($this->registeredFields)) {
+        if (null === $this->registeredFields) {
             $this->registeredFields = [];
 
             // Our fields are registered in the SproutForms main class
@@ -252,7 +254,7 @@ class Fields extends Component
 
                 $form = $this->getFieldValue($field, $newField);
 
-                if (is_null($form)) {
+                if (null === $form) {
                     $band = false;
                 }
             } else {
@@ -278,44 +280,44 @@ class Fields extends Component
      */
     public function addDefaultTab($form, &$field = null)
     {
-        if ($form) {
-            if ($field === null) {
-                $fieldsService = Craft::$app->getFields();
-                $handle = $this->getFieldAsNew('handle', 'defaultField');
-
-                $field = $fieldsService->createField([
-                    'type' => SingleLine::class,
-                    'name' => Craft::t('sprout-forms', 'Default Field'),
-                    'handle' => $handle,
-                    'instructions' => '',
-                    'translationMethod' => Field::TRANSLATION_METHOD_NONE,
-                ]);
-                // Save our field
-                Craft::$app->content->fieldContext = $form->getFieldContext();
-                Craft::$app->fields->saveField($field);
-            }
-
-            // Create a tab
-            $tabName = $this->getDefaultTabName();
-            $requiredFields = [];
-            $postedFieldLayout = [];
-
-            // Add our new field
-            if (isset($field) && $field->id != null) {
-                $postedFieldLayout[$tabName][] = $field->id;
-            }
-
-            // Set the field layout
-            $fieldLayout = Craft::$app->fields->assembleLayout($postedFieldLayout, $requiredFields);
-
-            $fieldLayout->type = FormElement::class;
-            // Set the tab to the form
-            $form->setFieldLayout($fieldLayout);
-
-            return $form;
+        if (!$form) {
+            return null;
         }
 
-        return null;
+        if ($field === null) {
+            $fieldsService = Craft::$app->getFields();
+            $handle = $this->getFieldAsNew('handle', 'defaultField');
+
+            $field = $fieldsService->createField([
+                'type' => SingleLine::class,
+                'name' => Craft::t('sprout-forms', 'Default Field'),
+                'handle' => $handle,
+                'instructions' => '',
+                'translationMethod' => Field::TRANSLATION_METHOD_NONE,
+            ]);
+            // Save our field
+            Craft::$app->content->fieldContext = $form->getFieldContext();
+            Craft::$app->fields->saveField($field);
+        }
+
+        // Create a tab
+        $tabName = $this->getDefaultTabName();
+        $requiredFields = [];
+        $postedFieldLayout = [];
+
+        // Add our new field
+        if ($field !== null && $field->id != null) {
+            $postedFieldLayout[$tabName][] = $field->id;
+        }
+
+        // Set the field layout
+        $fieldLayout = Craft::$app->fields->assembleLayout($postedFieldLayout, $requiredFields);
+
+        $fieldLayout->type = FormElement::class;
+        // Set the tab to the form
+        $form->setFieldLayout($fieldLayout);
+
+        return $form;
     }
 
     /**
@@ -329,58 +331,59 @@ class Fields extends Component
      */
     public function getDuplicateLayout($form, $postFieldLayout)
     {
-        if ($form && $postFieldLayout) {
-            $postedFieldLayout = [];
-            $requiredFields = [];
-            $tabs = $postFieldLayout->getTabs();
+        if (!$form OR !$postFieldLayout) {
+            return null;
+        }
 
-            foreach ($tabs as $tab) {
-                $fields = [];
-                $fieldLayoutFields = $tab->getFields();
+        $postedFieldLayout = [];
+        $requiredFields = [];
+        $tabs = $postFieldLayout->getTabs();
 
-                foreach ($fieldLayoutFields as $fieldLayoutField) {
-                    $originalField = $fieldLayoutField->getField();
+        foreach ($tabs as $tab) {
+            $fields = [];
+            $fieldLayoutFields = $tab->getFields();
 
-                    $field = new FieldModel();
-                    $field->name = $originalField->name;
-                    $field->handle = $originalField->handle;
-                    $field->instructions = $originalField->instructions;
-                    $field->required = $fieldLayoutField->required;
-                    $field->translatable = $originalField->translatable;
-                    $field->type = $originalField->type;
+            foreach ($fieldLayoutFields as $fieldLayoutField) {
+                $originalField = $fieldLayoutField->getField();
 
-                    if (isset($originalField->settings)) {
-                        $field->settings = $originalField->settings;
-                    }
+                $field = new FieldModel();
+                $field->name = $originalField->name;
+                $field->handle = $originalField->handle;
+                $field->instructions = $originalField->instructions;
+                $field->required = $fieldLayoutField->required;
+                $field->translatable = $originalField->translatable;
+                $field->type = $originalField->type;
 
-                    Craft::$app->content->fieldContext = $form->getFieldContext();
-                    Craft::$app->content->contentTable = $form->getContentTable();
-                    // Save duplicate field
-                    Craft::$app->fields->saveField($field);
-                    array_push($fields, $field);
-
-                    if ($field->required) {
-                        array_push($requiredFields, $field->id);
-                    }
+                if (isset($originalField->settings)) {
+                    $field->settings = $originalField->settings;
                 }
 
-                foreach ($fields as $field) {
-                    // Add our new field
-                    if (isset($field) && $field->id != null) {
-                        $postedFieldLayout[$tab->name][] = $field->id;
-                    }
+                Craft::$app->content->fieldContext = $form->getFieldContext();
+                Craft::$app->content->contentTable = $form->getContentTable();
+                // Save duplicate field
+                Craft::$app->fields->saveField($field);
+
+                $fields[] = $field;
+
+                if ($field->required) {
+                    $requiredFields[] = $field->id;
                 }
             }
 
-            // Set the field layout
-            $fieldLayout = Craft::$app->fields->assembleLayout($postedFieldLayout, $requiredFields);
-
-            $fieldLayout->type = 'SproutForms_Form';
-
-            return $fieldLayout;
+            foreach ($fields as $field) {
+                // Add our new field
+                if ($field !== null && $field->id != null) {
+                    $postedFieldLayout[$tab->name][] = $field->id;
+                }
+            }
         }
 
-        return null;
+        // Set the field layout
+        $fieldLayout = Craft::$app->fields->assembleLayout($postedFieldLayout, $requiredFields);
+
+        $fieldLayout->type = 'SproutForms_Form';
+
+        return $fieldLayout;
     }
 
     /**
@@ -398,7 +401,7 @@ class Fields extends Component
         $response = false;
         $sortOrder = null;
 
-        if (isset($field) && isset($form)) {
+        if ($field !== null && $form !== null) {
             // Let's try to order the field where is droped
 
             if ($nextId){
@@ -418,7 +421,7 @@ class Fields extends Component
                         $sortOrder = $fieldLayoutFieldNext->sortOrder;
 
                         foreach ($fieldLayoutFields as  $fieldLayoutFieldRecord) {
-                            $fieldLayoutFieldRecord->sortOrder += 1;
+                            ++$fieldLayoutFieldRecord->sortOrder;
                             $fieldLayoutFieldRecord->save();
                         }
                 }
@@ -426,7 +429,7 @@ class Fields extends Component
 
             }
 
-            if (is_null($sortOrder))
+            if (null === $sortOrder)
             {
                 $fieldLayoutFields = FieldLayoutFieldRecord::findAll([
                     'tabId' => $tabId, 'layoutId' => $form->fieldLayoutId
@@ -461,7 +464,7 @@ class Fields extends Component
     {
         $response = false;
 
-        if (isset($field) && isset($form)) {
+        if ($field !== null && $form !== null) {
             $fieldRecord = FieldLayoutFieldRecord::findOne([
                 'fieldId' => $field->id,
                 'layoutId' => $form->fieldLayoutId
@@ -508,7 +511,7 @@ class Fields extends Component
             $data['field'] = $field;
             $tabIdByPost = $request->getBodyParam('tabId');
 
-            if (isset($tabIdByPost)) {
+            if ($tabIdByPost !== null) {
                 $data['tabId'] = $tabIdByPost;
             } else if ($tabId != null) //edit field
             {

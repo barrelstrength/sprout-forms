@@ -5,13 +5,13 @@ namespace barrelstrength\sproutforms;
 use barrelstrength\sproutforms\integrations\sproutemail\events\SaveEntryEvent;
 use barrelstrength\sproutforms\integrations\sproutimport\elements\Form as FormElementImporter;
 use barrelstrength\sproutforms\integrations\sproutimport\elements\Entry as EntryElementImporter;
-use barrelstrength\sproutforms\integrations\sproutimport\fields\Forms as FormsFieldImporter;
-use barrelstrength\sproutforms\integrations\sproutimport\fields\Entries as EntriesFieldImporter;
+
+
 use barrelstrength\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbase\services\sproutemail\NotificationEmails;
-use barrelstrength\sproutbase\services\sproutreports\DataSources;
+
 use barrelstrength\sproutbase\events\RegisterNotificationEvent;
-use barrelstrength\sproutbase\SproutBase;
+
 use barrelstrength\sproutforms\fields\Forms as FormsField;
 use barrelstrength\sproutforms\fields\Entries as FormEntriesField;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
@@ -43,7 +43,7 @@ use barrelstrength\sproutforms\models\Settings;
 use barrelstrength\sproutforms\web\twig\variables\SproutFormsVariable;
 use barrelstrength\sproutforms\events\RegisterFieldsEvent;
 use barrelstrength\sproutforms\services\Fields as SproutFormsFields;
-use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesDataSource;
+
 use barrelstrength\sproutforms\events\OnBeforePopulateEntryEvent;
 use barrelstrength\sproutforms\controllers\EntriesController;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;

@@ -31,19 +31,20 @@ class EntryQuery extends ElementQuery
      */
     public $formId;
 
+    /**
+     * @var string
+     */
     public $formHandle;
 
+    /**
+     * @var string
+     */
     public $formName;
 
-    public $formGroupId;
-
     /**
-     * @inheritdoc
+     * @var int
      */
-    public function __set($name, $value)
-    {
-        parent::__set($name, $value);
-    }
+    public $formGroupId;
 
     /**
      * Sets the [[statusId]] property.

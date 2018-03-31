@@ -189,6 +189,7 @@ class Install extends Migration
     /**
      * Populates the DB with the default data.
      *
+     * @throws \ReflectionException
      * @throws \yii\db\Exception
      */
     protected function insertDefaultData()

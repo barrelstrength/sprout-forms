@@ -5,6 +5,7 @@ namespace barrelstrength\sproutforms\elements;
 use barrelstrength\sproutforms\elements\db\FormQuery;
 use Craft;
 use craft\base\Element;
+use craft\base\ElementInterface;
 use craft\elements\db\ElementQueryInterface;
 use yii\base\ErrorHandler;
 use craft\helpers\UrlHelper;
@@ -13,6 +14,7 @@ use craft\elements\actions\Delete;
 use barrelstrength\sproutforms\elements\db\EntryQuery;
 use barrelstrength\sproutforms\records\Entry as EntryRecord;
 use barrelstrength\sproutforms\SproutForms;
+use yii\base\Exception;
 
 /**
  * Entry represents a entry element.
@@ -91,14 +93,6 @@ class Entry extends Element
     public static function hasTitles(): bool
     {
         return true;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function isLocalized(): bool
-    {
-        return false;
     }
 
     /**
@@ -367,6 +361,8 @@ class Entry extends Element
 
     /**
      * @param bool $isNew
+     *
+     * @throws Exception
      */
     public function afterSave(bool $isNew)
     {
@@ -405,11 +401,11 @@ class Entry extends Element
     /**
      * Returns the form element associated with this entry
      *
-     * @return Form|null
+     * @return ElementInterface|null
      */
     public function getForm()
     {
-        if (!isset($this->form)) {
+        if ($this->form === null) {
             $this->form = SproutForms::$app->forms->getFormById($this->formId);
         }
 

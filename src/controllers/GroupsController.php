@@ -14,7 +14,7 @@ class GroupsController extends BaseController
      * Save a group.
      *
      * @return \yii\web\Response
-     * @throws \barrelstrength\sproutforms\services\Exception
+     * @throws \yii\base\Exception
      * @throws \yii\web\BadRequestHttpException
      */
     public function actionSaveGroup()

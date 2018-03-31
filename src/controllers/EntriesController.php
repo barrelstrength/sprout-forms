@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\controllers;
 
 use barrelstrength\sproutforms\elements\Entry;
 use Craft;
+use craft\base\ElementInterface;
 use craft\web\Controller as BaseController;
 use yii\base\Exception;
 use yii\web\ForbiddenHttpException;
@@ -50,7 +51,6 @@ class EntriesController extends BaseController
      * @throws ForbiddenHttpException
      * @throws \Exception
      * @throws \Throwable
-     * @throws \Twig_Error_Loader
      * @throws \yii\web\BadRequestHttpException
      */
     public function actionSaveEntry()
@@ -146,13 +146,6 @@ class EntriesController extends BaseController
             return $this->redirectWithErrors($entry);
         }
 
-        // Send Notification Emails for front-end submissions
-        // @todo - Sprout Email integration
-        if (!Craft::$app->getRequest()->getIsCpRequest() && $this->form->notificationEnabled) {
-//            $post = $_POST;
-//            SproutForms::$app->forms->sendNotification($this->form, $entry, $post);
-        }
-
         if (Craft::$app->getRequest()->getAcceptsJson()) {
             return $this->asJson([
                 'success' => true
@@ -178,13 +171,6 @@ class EntriesController extends BaseController
             return $this->redirectWithErrors($entry);
         }
 
-        // Adds support for notification
-        // @todo - Sprout Email integration
-        if (!Craft::$app->getRequest()->getIsCpRequest() && $this->form->notificationEnabled) {
-//            $post = $_POST;
-//            SproutForms::$app->forms->sendNotification($this->form, $entry, $post);
-        }
-
         if ($this->form->saveData) {
             $success = SproutForms::$app->entries->saveEntry($entry);
 
@@ -208,7 +194,7 @@ class EntriesController extends BaseController
      * Route Controller for Edit Entry Template
      *
      * @param int|null          $entryId
-     * @param EntryElement|null $entry
+     * @param EntryElement|ElementInterface|array|null $entry
      *
      * @return \yii\web\Response
      * @throws NotFoundHttpException
@@ -257,6 +243,8 @@ class EntriesController extends BaseController
 
         // Get the fields for this entry
         $fieldLayoutTabs = $entry->getFieldLayout()->getTabs();
+
+        $tabs = [];
 
         foreach ($fieldLayoutTabs as $tab) {
             $tabs[$tab->id]['label'] = $tab->name;

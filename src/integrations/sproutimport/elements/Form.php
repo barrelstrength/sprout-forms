@@ -8,8 +8,7 @@ use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutimport\SproutImport;
 use Craft;
-use craft\models\FieldLayout;
-use craft\models\FieldLayoutTab;
+
 
 class Form extends BaseElementImporter
 {
@@ -87,9 +86,7 @@ class Form extends BaseElementImporter
         //'displaySectionTitles' => ''
 
         $fieldLayoutTabs = $settings['settings']['fieldLayout'];
-        $fieldLayoutFields = [];
         $requiredFields = [];
-        $tabSortOrder = 0;
         $fieldSortOrder = 0;
 
         $postedFieldLayout = [];

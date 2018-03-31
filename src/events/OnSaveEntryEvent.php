@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\events;
 
+use barrelstrength\sproutforms\elements\Entry;
 use yii\base\Event;
 
 /**
@@ -13,9 +14,12 @@ class OnSaveEntryEvent extends Event
     // =========================================================================
 
     /**
-     * @var ElementEntry
+     * @var Entry
      */
-    public $entry = null;
+    public $entry;
 
+    /**
+     * @var bool
+     */
     public $isNewEntry = true;
 }

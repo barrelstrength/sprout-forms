@@ -2,7 +2,9 @@
 
 namespace barrelstrength\sproutforms\controllers;
 
+use barrelstrength\sproutforms\elements\Form;
 use Craft;
+use craft\base\ElementInterface;
 use craft\web\Controller as BaseController;
 use craft\helpers\UrlHelper;
 use yii\base\Exception;
@@ -30,7 +32,7 @@ class FormsController extends BaseController
 
         if ($request->getBodyParam('saveAsNew')) {
             $form->saveAsNew = true;
-            $duplicateForm = SproutForms::$app()->forms->createNewForm(
+            $duplicateForm = SproutForms::$app->forms->createNewForm(
                 $request->getBodyParam('name'),
                 $request->getBodyParam('handle')
             );
@@ -157,7 +159,7 @@ class FormsController extends BaseController
      * Edit a form.
      *
      * @param int|null         $formId
-     * @param FormElement|null $form
+     * @param FormElement|ElementInterface|null $form
      *
      * @return \yii\web\Response
      * @throws NotFoundHttpException

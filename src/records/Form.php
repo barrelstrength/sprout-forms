@@ -31,7 +31,6 @@ use craft\records\Element;
  * @property string      $notificationReplyToEmail
  * @property string      $templateOverridesFolder
  * @property bool        $enableFileAttachments
- * @property FieldLayout $fieldLayout
  */
 class Form extends ActiveRecord
 {

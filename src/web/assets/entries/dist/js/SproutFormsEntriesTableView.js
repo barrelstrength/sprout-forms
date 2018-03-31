@@ -115,7 +115,7 @@ Craft.SproutForms.EntriesTableView = Craft.TableElementIndexView.extend({
 	setStartDate: function(date)
 	{
 		// Make sure it has actually changed
-		if (this.startDate && date.getTime() == this.startDate.getTime())
+		if (this.startDate && date.getTime() === this.startDate.getTime())
 		{
 			return false;
 		}
@@ -136,7 +136,7 @@ Craft.SproutForms.EntriesTableView = Craft.TableElementIndexView.extend({
 	setEndDate: function(date)
 	{
 		// Make sure it has actually changed
-		if (this.endDate && date.getTime() == this.endDate.getTime())
+		if (this.endDate && date.getTime() === this.endDate.getTime())
 		{
 			return false;
 		}
@@ -169,7 +169,7 @@ Craft.SproutForms.EntriesTableView = Craft.TableElementIndexView.extend({
 		{
 			this.$spinner.addClass('hidden');
 
-			if(textStatus == 'success' && typeof(response.error) == 'undefined')
+			if(textStatus === 'success' && typeof(response.error) === 'undefined')
 			{
 				if(!this.chart)
 				{
@@ -193,7 +193,7 @@ Craft.SproutForms.EntriesTableView = Craft.TableElementIndexView.extend({
 			{
 				var msg = Craft.t('sprout-forms','An unknown error occurred.');
 
-				if(typeof(response) != 'undefined' && response && typeof(response.error) != 'undefined')
+				if(typeof(response) !== 'undefined' && response && typeof(response.error) !== 'undefined')
 				{
 					msg = response.error;
 				}
@@ -220,7 +220,7 @@ Craft.SproutForms.EntriesTableView = Craft.TableElementIndexView.extend({
 
 	setStorage: function(namespace, key, value)
 	{
-		if (typeof Craft.SproutForms.EntriesTableView.storage[namespace] == typeof undefined)
+		if (typeof Craft.SproutForms.EntriesTableView.storage[namespace] === typeof undefined)
 		{
 			Craft.SproutForms.EntriesTableView.storage[namespace] = {};
 		}

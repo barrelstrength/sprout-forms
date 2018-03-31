@@ -6,7 +6,7 @@ use Craft;
 use craft\base\ElementInterface;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\PreviewableFieldInterface;
-use yii\db\Schema;
+
 
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\contracts\BaseFormField;
@@ -42,14 +42,6 @@ class Phone extends BaseFormField implements PreviewableFieldInterface
     public static function displayName(): string
     {
         return Craft::t('sprout-forms', 'Phone');
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getContentColumnType(): string
-    {
-        return Schema::TYPE_STRING;
     }
 
     /**

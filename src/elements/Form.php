@@ -2,10 +2,12 @@
 
 namespace barrelstrength\sproutforms\elements;
 
+use barrelstrength\sproutforms\contracts\BaseFormTemplates;
 use barrelstrength\sproutforms\integrations\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\validators\TemplateOverridesValidator;
 use Craft;
 use craft\base\Element;
+use craft\base\FieldInterface;
 use craft\elements\db\ElementQueryInterface;
 use yii\base\ErrorHandler;
 use craft\db\Query;
@@ -20,6 +22,7 @@ use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\actions\Delete;
 use barrelstrength\sproutforms\validators\RecipientsValidator;
 use barrelstrength\sproutforms\validators\EnabledNotificationValidator;
+use yii\base\Exception;
 
 /**
  * Form represents a form element.
@@ -112,30 +115,6 @@ class Form extends Element
     /**
      * @inheritdoc
      */
-    public static function hasContent(): bool
-    {
-        return false;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function hasTitles(): bool
-    {
-        return false;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function isLocalized(): bool
-    {
-        return false;
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getCpEditUrl()
     {
         return UrlHelper::cpUrl(
@@ -152,7 +131,7 @@ class Form extends Element
     public function __toString()
     {
         try {
-            return $this->name;
+            return (string) $this->name;
         } catch (\Exception $e) {
             ErrorHandler::convertExceptionToError($e);
         }
@@ -322,7 +301,6 @@ class Form extends Element
 
     /**
      * @inheritdoc
-     * @throws Exception if reasons
      */
     public function afterSave(bool $isNew)
     {
@@ -369,7 +347,7 @@ class Form extends Element
      */
     public function getFields()
     {
-        if (is_null($this->_fields)) {
+        if ($this->_fields === null) {
             $this->_fields = [];
 
             $fields = $this->getFieldLayout()->getFields();
@@ -385,14 +363,14 @@ class Form extends Element
     /**
      * @param string $handle
      *
-     * @return null|FieldModel
+     * @return null|FieldInterface
      */
     public function getField($handle)
     {
         $fields = $this->getFields();
 
         if (is_string($handle) && !empty($handle)) {
-            return isset($fields[$handle]) ? $fields[$handle] : null;
+            return $fields[$handle] ?? null;
         }
     }
 
@@ -519,7 +497,7 @@ class Form extends Element
      */
     public function getFormTemplate()
     {
-        $defaultVersion = new AccessibleTemplates();
+        $defaultFormTemplates = new AccessibleTemplates();
 
         if ($this->templateOverridesFolder) {
             $templatePath = SproutForms::$app->forms->getTemplateById($this->templateOverridesFolder);
@@ -528,6 +506,6 @@ class Form extends Element
             }
         }
 
-        return $defaultVersion;
+        return $defaultFormTemplates;
     }
 }

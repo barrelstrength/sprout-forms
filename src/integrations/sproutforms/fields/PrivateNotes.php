@@ -5,9 +5,7 @@ namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
 use Craft;
 use craft\base\ElementInterface;
 use yii\db\Schema;
-
 use barrelstrength\sproutforms\contracts\BaseFormField;
-use barrelstrength\sproutbase\web\assets\sproutfields\notes\QuillAsset;
 
 class PrivateNotes extends BaseFormField
 {

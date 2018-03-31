@@ -107,16 +107,15 @@ class FormQuery extends ElementQuery
      */
     public $enableFileAttachments;
 
+    /**
+     * @var int
+     */
     public $totalEntries;
-    public $numberOfFields;
 
     /**
-     * @inheritdoc
+     * @var int
      */
-    public function __set($name, $value)
-    {
-        parent::__set($name, $value);
-    }
+    public $numberOfFields;
 
     /**
      * @inheritdoc
@@ -229,12 +228,12 @@ class FormQuery extends ElementQuery
         ]);
 
         if ($this->totalEntries) {
-            $query->addSelect('COUNT(entries.id) totalEntries');
-            $query->leftJoin('sproutforms_entries entries', 'entries.formId = sproutforms_forms.id');
+            $this->query->addSelect('COUNT(entries.id) totalEntries');
+            $this->query->leftJoin('sproutforms_entries entries', 'entries.formId = sproutforms_forms.id');
         }
         if ($this->numberOfFields) {
-            $query->addSelect('COUNT(fields.id) numberOfFields');
-            $query->leftJoin('fieldlayoutfields fields', 'fields.layoutId = sproutforms_forms.fieldLayoutId');
+            $this->query->addSelect('COUNT(fields.id) numberOfFields');
+            $this->query->leftJoin('fieldlayoutfields fields', 'fields.layoutId = sproutforms_forms.fieldLayoutId');
         }
 
         if ($this->groupId) {

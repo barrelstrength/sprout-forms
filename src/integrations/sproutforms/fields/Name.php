@@ -5,7 +5,7 @@ namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
 use Craft;
 use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
-use yii\db\Schema;
+
 use craft\helpers\Template as TemplateHelper;
 
 use barrelstrength\sproutbase\SproutBase;
@@ -59,15 +59,6 @@ class Name extends BaseFormField implements PreviewableFieldInterface
     {
         return $this->hasMultipleLabels;
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function getContentColumnType(): string
-    {
-        return Schema::TYPE_STRING;
-    }
-
 
     /**
      * @return string

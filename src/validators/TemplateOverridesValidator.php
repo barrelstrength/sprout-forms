@@ -18,7 +18,7 @@ class TemplateOverridesValidator extends Validator
         $settings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
         if ($settings->enablePerFormTemplateFolderOverride) {
             if (!$value) {
-                $this->addError($object, $attribute, Craft::t('sprout-forms', "Cannot be blank."));
+                $this->addError($object, $attribute, Craft::t('sprout-forms', 'Cannot be blank.'));
             }
         }
     }

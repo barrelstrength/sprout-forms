@@ -6,9 +6,6 @@ use Craft;
 use craft\base\ElementInterface;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\PreviewableFieldInterface;
-use yii\db\Schema;
-
-use barrelstrength\sproutforms\contracts\FieldModel;
 use barrelstrength\sproutforms\contracts\BaseFormField;
 
 class Invisible extends BaseFormField implements PreviewableFieldInterface
@@ -19,7 +16,7 @@ class Invisible extends BaseFormField implements PreviewableFieldInterface
     public $allowRequired = false;
 
     /**
-     * @var basename(path)ool
+     * @var bool
      */
     public $allowEdits;
 
@@ -44,14 +41,6 @@ class Invisible extends BaseFormField implements PreviewableFieldInterface
     public function isPlainInput()
     {
         return true;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getContentColumnType(): string
-    {
-        return Schema::TYPE_STRING;
     }
 
     /**
@@ -124,10 +113,9 @@ class Invisible extends BaseFormField implements PreviewableFieldInterface
     public function normalizeValue($value, ElementInterface $element = null)
     {
         $session = Craft::$app->getSession()->get($this->handle);
-        $sessionValue = $session ? $session : '';
-        $value = Craft::$app->view->renderObjectTemplate($sessionValue, parent::getFieldVariables());
+        $sessionValue = $session ?: '';
 
-        return parent::normalizeValue($value, $element);
+        return Craft::$app->view->renderObjectTemplate($sessionValue, parent::getFieldVariables());
     }
 
     /**

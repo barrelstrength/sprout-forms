@@ -13,7 +13,7 @@ use craft\elements\db\ElementQuery;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\ElementHelper;
 use craft\helpers\StringHelper;
-use craft\tasks\LocalizeRelations;
+use craft\queue\jobs\LocalizeRelations;
 use craft\validators\ArrayValidator;
 use yii\base\NotSupportedException;
 

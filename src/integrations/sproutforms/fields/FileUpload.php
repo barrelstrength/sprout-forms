@@ -5,6 +5,7 @@ namespace barrelstrength\sproutforms\integrations\sproutforms\fields;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
+use craft\base\VolumeInterface;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\Volume;
 use craft\elements\Asset;
@@ -296,6 +297,8 @@ class FileUpload extends BaseRelationFormField
      * @return int
      * @throws InvalidSubpathException
      * @throws InvalidVolumeException
+     * @throws \craft\errors\AssetConflictException
+     * @throws \craft\errors\VolumeObjectExistsException
      */
     public function resolveDynamicPathToFolderId(ElementInterface $element = null): int
     {
@@ -434,7 +437,9 @@ class FileUpload extends BaseRelationFormField
      *
      * @throws InvalidSubpathException
      * @throws InvalidVolumeException
+     * @throws \craft\errors\AssetConflictException
      * @throws \craft\errors\AssetLogicException
+     * @throws \craft\errors\VolumeObjectExistsException
      */
     public function afterElementSave(ElementInterface $element, bool $isNew)
     {
@@ -790,7 +795,7 @@ class FileUpload extends BaseRelationFormField
     /**
      * Returns the target upload volume for the field.
      *
-     * @return Volume|null
+     * @return VolumeInterface|null
      */
     private function _uploadVolume()
     {
