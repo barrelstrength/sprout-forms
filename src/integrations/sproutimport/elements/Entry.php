@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\integrations\sproutimport\elements;
 
 use barrelstrength\sproutbase\contracts\sproutimport\BaseElementImporter;
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutimport\models\jobs\SeedJob;
@@ -114,7 +115,7 @@ class Entry extends BaseElementImporter
             foreach ($fields as $field) {
                 $fieldHandle = $field->handle;
                 $fieldType = $field->type;
-                $fieldImporterClass = SproutImport::$app->importers->getFieldImporterClassByType($fieldType);
+                $fieldImporterClass = SproutBase::$app->importers->getFieldImporterClassByType($fieldType);
 
                 if ($fieldImporterClass != null) {
                     $fieldImporterClass->setModel($field);

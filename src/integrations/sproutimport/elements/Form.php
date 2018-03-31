@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\integrations\sproutimport\elements;
 
 use barrelstrength\sproutbase\contracts\sproutimport\BaseElementImporter;
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutimport\SproutImport;
@@ -99,7 +100,7 @@ class Form extends BaseElementImporter
 
             foreach ($fields as $field) {
 
-                $importerClass = SproutImport::$app->importers->getImporter($field);
+                $importerClass = SproutBase::$app->importers->getImporter($field);
 
                 $field = SproutImport::$app->settingsImporter->saveSetting($field, $importerClass);
 
