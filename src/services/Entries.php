@@ -34,7 +34,7 @@ class Entries extends Component
     {
         $this->entryRecord = $entryRecord;
 
-        if ($this->_fields === null) {
+        if ($this->entryRecord === null) {
             $this->entryRecord = EntryRecord::find();
         }
 
