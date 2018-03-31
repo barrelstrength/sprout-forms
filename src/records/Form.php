@@ -23,12 +23,6 @@ use craft\records\Element;
  * @property string      $submitAction
  * @property string      $submitButtonText
  * @property bool        $saveData
- * @property bool        $notificationEnabled
- * @property string      $notificationRecipients
- * @property string      $notificationSubject
- * @property string      $notificationSender
- * @property string      $notificationSenderEmail
- * @property string      $notificationReplyToEmail
  * @property string      $templateOverridesFolder
  * @property bool        $enableFileAttachments
  */

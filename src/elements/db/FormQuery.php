@@ -67,37 +67,6 @@ class FormQuery extends ElementQuery
     public $saveData;
 
     /**
-     * @var bool
-     */
-    public $notificationEnabled;
-
-    /**
-     * @var string
-     */
-    public $notificationRecipients;
-
-    /**
-     * @var string
-     */
-    public $notificationSubject;
-
-    /**
-     * @var string
-     */
-    public $notificationSenderName;
-
-    /**
-     * @var string
-     */
-    public $notificationSenderEmail;
-
-    /**
-     * @var string
-     */
-    public $notificationReplyToEmail;
-
-
-    /**
      * @var string
      */
     public $templateOverridesFolder;
@@ -217,12 +186,6 @@ class FormQuery extends ElementQuery
             'sproutforms_forms.submitAction',
             'sproutforms_forms.saveData',
             'sproutforms_forms.submitButtonText',
-            'sproutforms_forms.notificationEnabled',
-            'sproutforms_forms.notificationRecipients',
-            'sproutforms_forms.notificationSubject',
-            'sproutforms_forms.notificationSenderName',
-            'sproutforms_forms.notificationSenderEmail',
-            'sproutforms_forms.notificationReplyToEmail',
             'sproutforms_forms.templateOverridesFolder',
             'sproutforms_forms.enableFileAttachments'
         ]);

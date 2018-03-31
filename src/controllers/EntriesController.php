@@ -93,16 +93,6 @@ class EntriesController extends BaseController
         // Populate the entry with post data
         $this->populateEntryModel($entry);
 
-        // Swap out any dynamic variables for our notifications
-        // @todo - remove in favor of Sprout Email
-        if ($this->form->notificationEnabled) {
-            $this->form->notificationRecipients = $view->renderObjectTemplate($this->form->notificationRecipients, $entry);
-            $this->form->notificationSubject = $view->renderObjectTemplate($this->form->notificationSubject, $entry);
-            $this->form->notificationSenderName = $view->renderObjectTemplate($this->form->notificationSenderName, $entry);
-            $this->form->notificationSenderEmail = $view->renderObjectTemplate($this->form->notificationSenderEmail, $entry);
-            $this->form->notificationReplyToEmail = $view->renderObjectTemplate($this->form->notificationReplyToEmail, $entry);
-        }
-
         $this->saveData = SproutForms::$app->entries->isDataSaved($this->form);
 
         /**

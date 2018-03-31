@@ -20,8 +20,6 @@ use barrelstrength\sproutforms\elements\db\FormQuery;
 use barrelstrength\sproutforms\records\Form as FormRecord;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\actions\Delete;
-use barrelstrength\sproutforms\validators\RecipientsValidator;
-use barrelstrength\sproutforms\validators\EnabledNotificationValidator;
 use yii\base\Exception;
 
 /**
@@ -52,12 +50,6 @@ class Form extends Element
     public $submitAction;
     public $submitButtonText;
     public $saveData;
-    public $notificationEnabled;
-    public $notificationRecipients;
-    public $notificationSubject;
-    public $notificationSenderName;
-    public $notificationSenderEmail;
-    public $notificationReplyToEmail;
     public $templateOverridesFolder;
     public $enableFileAttachments;
 
@@ -326,12 +318,6 @@ class Form extends Element
         $record->submitAction = $this->submitAction;
         $record->saveData = $this->saveData;
         $record->submitButtonText = $this->submitButtonText;
-        $record->notificationEnabled = $this->notificationEnabled;
-        $record->notificationRecipients = $this->notificationRecipients;
-        $record->notificationSubject = $this->notificationSubject;
-        $record->notificationSenderName = $this->notificationSenderName;
-        $record->notificationSenderEmail = $this->notificationSenderEmail;
-        $record->notificationReplyToEmail = $this->notificationReplyToEmail;
         $record->templateOverridesFolder = $this->templateOverridesFolder;
         $record->enableFileAttachments = $this->enableFileAttachments;
 
@@ -392,15 +378,7 @@ class Form extends Element
                 ['templateOverridesFolder'],
                 TemplateOverridesValidator::class
             ],
-            [['name', 'handle'], UniqueValidator::class, 'targetClass' => FormRecord::class],
-            [
-                ['notificationRecipients', 'notificationSubject', 'notificationSenderName', 'notificationSenderEmail', 'notificationReplyToEmail'],
-                EnabledNotificationValidator::class
-            ],
-            [
-                ['notificationRecipients', 'notificationSenderEmail', 'notificationReplyToEmail'],
-                RecipientsValidator::class
-            ]
+            [['name', 'handle'], UniqueValidator::class, 'targetClass' => FormRecord::class]
         ];
     }
 

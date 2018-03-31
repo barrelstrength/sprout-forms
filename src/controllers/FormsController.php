@@ -58,13 +58,6 @@ class FormsController extends BaseController
         $form->submitAction = $request->getBodyParam('submitAction');
         $form->saveData = $request->getBodyParam('saveData', 0);
         $form->submitButtonText = $request->getBodyParam('submitButtonText');
-
-        $form->notificationEnabled = $request->getBodyParam('notificationEnabled');
-        $form->notificationRecipients = $request->getBodyParam('notificationRecipients');
-        $form->notificationSubject = $request->getBodyParam('notificationSubject');
-        $form->notificationSenderName = $request->getBodyParam('notificationSenderName');
-        $form->notificationSenderEmail = $request->getBodyParam('notificationSenderEmail');
-        $form->notificationReplyToEmail = $request->getBodyParam('notificationReplyToEmail');
         $form->templateOverridesFolder = $request->getBodyParam('templateOverridesFolder');
         $form->enableFileAttachments = $request->getBodyParam('enableFileAttachments');
 
@@ -125,27 +118,9 @@ class FormsController extends BaseController
 
             Craft::$app->getSession()->setError(Craft::t('sprout-forms', 'Couldn’t save form.'));
 
-            $notificationFields = [
-                'notificationRecipients',
-                'notificationSubject',
-                'notificationSenderName',
-                'notificationSenderEmail',
-                'notificationReplyToEmail'
-            ];
-
-            $notificationErrors = false;
-            foreach ($form->getErrors() as $fieldHandle => $error) {
-                if (in_array($fieldHandle, $notificationFields)) {
-                    $notificationErrors = 'error';
-                    break;
-                }
-            }
-
             Craft::$app->getUrlManager()->setRouteParams([
-                    'form' => $form,
-                    'notificationErrors' => $notificationErrors
-                ]
-            );
+                'form' => $form
+            ]);
 
             return null;
         }
