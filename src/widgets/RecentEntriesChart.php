@@ -5,7 +5,9 @@
  * @license   http://sprout.barrelstrengthdesign.com/license
  */
 
-namespace Craft;
+namespace barrelstrength\sproutforms\widgets;
+
+use Craft;
 
 /**
  * Class SproutForms_RecentEntriesChartWidget
