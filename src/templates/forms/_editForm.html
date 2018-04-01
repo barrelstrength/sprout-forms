@@ -3,7 +3,7 @@
 {% import "sprout-forms/_includes/macros" as sproutForms %}
 
 {% set crumbs = [
-    { label: "Forms"|t, url: cpUrl('sprout-forms/forms') }
+    { label: "Forms"|t('sprout-forms'), url: cpUrl('sprout-forms/forms') }
 ] %}
 
 {% set fieldLayout = form.getFieldLayout() %}
@@ -36,19 +36,19 @@
             <div class="menu">
                 <ul>
                     <li><a class="formsubmit"
-                           data-redirect="{{ ('sprout-forms/forms/edit/'~form.id)|hash }}">{{ "Save and continue editing"|t }}
+                           data-redirect="{{ ('sprout-forms/forms/edit/'~form.id)|hash }}">{{ 'Save and continue editing'|t('sprout-forms') }}
                             <span class="shortcut">⌘S</span></a></li>
                     <li><a class="formsubmit"
                            data-redirect="{{ 'sprout-forms/forms/edit/'~form.id|hash }}"
                            data-param='saveAsNew'
-                           data-value="true">{{ "Save as a new form"|t }}</a>
+                           data-value="true">{{ "Save as a new form"|t('sprout-forms') }}</a>
                     </li>
                 </ul>
                 <hr>
                 <ul>
                     <li><a class="formsubmit error"
                            data-action="sprout-forms/forms/delete-form"
-                           data-confirm="Are you sure you want to delete this form?"
+                           data-confirm="{{ 'Are you sure you want to delete this form?'|t('sprout-forms') }}"
                            data-redirect="{{ 'sprout-forms/forms'|hash }}">{{ "Delete"|t('sprout-forms') }}</a>
                     </li>
                 </ul>

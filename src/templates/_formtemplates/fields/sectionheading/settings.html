@@ -5,7 +5,7 @@
 {% set quillEditor = id ~ "-quill" %}
 {% set quillWrapper = id ~ "-quill-wrapper" %}
 {% set textareaWrapper = id ~ "-textarea-wrapper" %}
-{% set notesIntructions = 'Add your field notes below. Note: The name of your Notes field above will be used as the first line of your notes.'|t('sprout-base') %}
+{% set notesIntructions = 'Add your field notes below. Note: The name of your Notes field above will be used as the first line of your notes.'|t('sprout-forms') %}
 
 <div id="{{ name ~ '-quill-wrapper' }}" class="hidden">
     <div class="field">
@@ -22,7 +22,7 @@
 <div id="{{ name ~ '-textarea-wrapper' }}" class="hidden">
     {{ forms.textareaField({
         id:   name ~ "-textarea",
-        label: 'Notes'|t,
+        label: 'Notes'|t('sprout-forms'),
         instructions: notesIntructions,
         name: 'notes',
         class: 'sproutnotes',
@@ -33,14 +33,13 @@
 {{ forms.selectField({
     id: name ~ "-output",
     name: 'output',
-    label: 'Format',
+    label: 'Format'|t('sprout-forms'),
     options: outputOptions,
     value: field.output
 }) }}
 
 {{ forms.lightswitchField ({
-    label: "Hide Field Label"|t,
-    instructions: ""|t,
+    label: "Hide Field Label"|t('sprout-forms'),
     name: 'hideLabel',
     on: field.hideLabel,
 }) }}

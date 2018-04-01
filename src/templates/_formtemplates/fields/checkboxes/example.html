@@ -4,9 +4,9 @@
 
 {% if not field.options|length %}
     {% set options = [
-        { label : "Option One", default: 1 },
-        { label : "Option Two", default: 0 },
-        { label : "Option Three", default: 0 }
+        { label : "Option One"|t('sprout-forms'), default: 1 },
+        { label : "Option Two"|t('sprout-forms'), default: 0 },
+        { label : "Option Three"|t('sprout-forms'), default: 0 }
 ] %}
 {% endif %}
 

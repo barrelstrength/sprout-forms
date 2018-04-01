@@ -64,12 +64,12 @@ class FieldsController extends BaseController
                     // it's a new field
                     $response = SproutForms::$app->fields->addFieldToLayout($field, $form, $tabId, $nextId);
 
-                    return $this->_returnJson($response, $field, $form, $tab->name, $tabId);
+                    return $this->returnJson($response, $field, $form, $tab->name, $tabId);
                 }
             }
         }
         // @todo - add error messages
-        return $this->_returnJson(false, null, $form, null, $tabId);
+        return $this->returnJson(false, null, $form, null, $tabId);
     }
 
     /**
@@ -214,7 +214,7 @@ class FieldsController extends BaseController
             $variables['tabId'] = $tabId;
             $variables['field'] = $field;
 
-            return $this->_returnJson(false, $field, $form, null, $tabId);
+            return $this->returnJson(false, $field, $form, null, $tabId);
         }
 
         // Check if the handle is updated to also update the titleFormat
@@ -250,14 +250,14 @@ class FieldsController extends BaseController
         if ($response) {
             SproutForms::info('Field Saved');
 
-            return $this->_returnJson(true, $field, $form, $tabName, $tabId);
+            return $this->returnJson(true, $field, $form, $tabName, $tabId);
         } else {
             $variables['tabId'] = $tabId;
             $variables['field'] = $field;
             SproutForms::error("Couldn't save field.");
             Craft::$app->getSession()->setError(Craft::t('sprout-forms', 'Couldn’t save field.'));
 
-            return $this->_returnJson(false, $field, $form);
+            return $this->returnJson(false, $field, $form);
         }
     }
 
@@ -375,7 +375,7 @@ class FieldsController extends BaseController
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    private function _returnJson(bool $success, $field, Form $form, $tabName = null, $tabId = null)
+    private function returnJson(bool $success, $field, Form $form, $tabName = null, $tabId = null)
     {
         return $this->asJson([
             'success' => $success,

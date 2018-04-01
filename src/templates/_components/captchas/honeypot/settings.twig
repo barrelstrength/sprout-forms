@@ -1,8 +1,8 @@
 {% import "_includes/forms" as forms %}
 
 {{ forms.textField({
-    label: 'Name of your honeypot field',
-    instructions: 'All lowercase, no spaces.',
+    label: 'Name of your honeypot field'|t('sprout-forms'),
+    instructions: 'All lowercase, no spaces.'|t('sprout-forms'),
     id: 'honeypotFieldName',
     name: 'captchaSettings['~captchaId~'][honeypotFieldName]',
     required: true,
@@ -11,10 +11,10 @@
 }) }}
 
 {{ forms.textField({
-    label: 'Hidden honeypot message for screen readers',
-    instructions: 'This is displayed to screen readers so users will know not to fill in this field.',
+    label: 'Hidden honeypot message for screen readers'|t('sprout-forms'),
+    instructions: 'This is displayed to screen readers so users will know not to fill in this field.'|t('sprout-forms'),
     id: 'honeypotScreenReaderMessage',
     name: 'captchaSettings['~captchaId~'][honeypotScreenReaderMessage]',
     required: true,
-    value: settings['honeypotScreenReaderMessage'] ?? 'Leave this field blank'
+    value: settings['honeypotScreenReaderMessage'] ?? 'Leave this field blank'|t('sprout-forms')
 }) }}

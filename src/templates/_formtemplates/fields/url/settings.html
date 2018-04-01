@@ -1,15 +1,15 @@
 {% import "_includes/forms" as forms %}
 
 {{ forms.textField({
-    label: "Placeholder Text"|t,
-    instructions: "The text that will be shown if the field doesn’t have a value."|t,
+    label: "Placeholder Text"|t('sprout-forms'),
+    instructions: "The text that will be shown if the field doesn’t have a value."|t('sprout-forms'),
     id: 'placeholder',
     name: 'placeholder',
     value: field.placeholder
 }) }}
 
 {{ forms.checkboxField({
-    label: "URLs for this field have their own validation pattern"|t,
+    label: "URLs for this field have their own validation pattern"|t('sprout-forms'),
     name: 'customPatternToggle',
     checked: field.customPatternToggle,
     toggle: 'sprouturlfield-custom-validation-pattern'
@@ -18,18 +18,18 @@
 <div id="sprouturlfield-custom-validation-pattern"
      {% if not field.customPatternToggle %}class="hidden"{% endif %}>
     {{ forms.textField({
-        label: 'Validation Pattern'|t,
-        instructions: 'Validate URLs using this regular expression.'|t,
+        label: 'Validation Pattern'|t('sprout-forms'),
+        instructions: 'Validate URLs using this regular expression.'|t('sprout-forms'),
         name: 'customPattern',
         placeholder: '^https://twitter.com/(.*)',
         value: field.customPattern
     }) }}
 
     {{ forms.textField({
-        label: 'Error Message'|t,
-        instructions: 'Display this error message when a URL is invalid.'|t,
+        label: 'Error Message'|t('sprout-forms'),
+        instructions: 'Display this error message when a URL is invalid.'|t('sprout-forms'),
         name: 'customPatternErrorMessage',
-        placeholder: 'Must be a valid profile URL from twitter.com',
+        placeholder: 'Must be a valid profile URL from twitter.com'|t('sprout-forms'),
         value: field.customPatternErrorMessage
     }) }}
 </div>

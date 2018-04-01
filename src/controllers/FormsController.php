@@ -40,7 +40,7 @@ class FormsController extends BaseController
             if ($duplicateForm) {
                 $form->id = $duplicateForm->id;
             } else {
-                throw new Exception(Craft::t('Error creating Form'));
+                throw new Exception(Craft::t('sprout-forms', 'Error creating Form'));
             }
         } else {
             $form = SproutForms::$app->forms->getFormById($request->getBodyParam('id'));

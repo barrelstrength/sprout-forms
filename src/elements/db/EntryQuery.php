@@ -10,7 +10,6 @@ use barrelstrength\sproutforms\SproutForms;
 
 class EntryQuery extends ElementQuery
 {
-
     /**
      * @var int
      */

@@ -1,15 +1,15 @@
 {% extends "_layouts/cp" %}
 
-{% set title  = "Settings"|t %}
+{% set title  = "Settings"|t('sprout-forms') %}
 {% set bodyClass = craft.request.getSegments()|slice(0, 3)|join(' ') %}
 
 {% set subnav = {
     entries: {
-        label: "Entries"|t,
+        label: "Entries"|t('sprout-forms'),
         url: cpUrl('sprout-forms/entries')
     },
     forms: {
-        label: "Forms"|t,
+        label: "Forms"|t('sprout-forms'),
         url: cpUrl('sprout-forms/forms')
     }
 } %}
@@ -17,7 +17,7 @@
 {% if currentUser.can('editSproutFormsSettings') %}
     {% set subnav = subnav|merge({
         settings: {
-            label: "Settings"|t,
+            label: "Settings"|t('sprout-forms'),
             url: cpUrl('sprout-forms/settings/general')
         }
     }) %}
@@ -31,23 +31,23 @@
     <nav class="last">
         <ul>
             <li><a href="{{ cpUrl('sprout-forms/settings/general') }}"
-                   {% if selectedSidebarItem == 'general' %}class="sel"{% endif %}>{{ "General"|t }}</a>
+                   {% if selectedSidebarItem == 'general' %}class="sel"{% endif %}>{{ "General"|t('sprout-forms') }}</a>
             </li>
 
             <li><a href="{{ url('sprout-forms/settings/entrystatuses') }}"
-                   {% if selectedSidebarItem == 'entrystatuses' %}class="sel"{% endif %}>{{ "Entry Statuses"|t }}</a>
+                   {% if selectedSidebarItem == 'entrystatuses' %}class="sel"{% endif %}>{{ "Entry Statuses"|t('sprout-forms') }}</a>
             </li>
 
             <li><a href="{{ url('sprout-forms/settings/advanced') }}"
-                   {% if selectedSidebarItem == 'advanced' %}class="sel"{% endif %}>{{ "Advanced"|t }}</a>
+                   {% if selectedSidebarItem == 'advanced' %}class="sel"{% endif %}>{{ "Advanced"|t('sprout-forms') }}</a>
             </li>
 
             <li class="heading"><span>Examples</span></li>
 
             <li><a href="{{ cpUrl('sprout-forms/settings/examples') }}"
-                   {% if selectedSidebarItem == 'examples' %}class="sel"{% endif %}>Form
-                    Templates</a></li>
-
+                   {% if selectedSidebarItem == 'examples' %}class="sel"{% endif %}>{{ "Form
+                    Templates"|t('sprout-forms') }}</a>
+            </li>
         </ul>
     </nav>
 

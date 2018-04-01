@@ -246,7 +246,7 @@ class Forms extends Component
      *
      * @param int|null $siteId
      *
-     * @return array|FormElement|null
+     * @return FormElement[]
      */
     public function getAllForms(int $siteId = null)
     {

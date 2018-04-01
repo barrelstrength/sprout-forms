@@ -12,7 +12,7 @@
         name: 'captchaSettings[' ~ captcha.getCaptchaId() ~ '][enabled]',
         toggle: captcha.getCaptchaId(),
         on: isEnabled,
-        onLabel: "Enable"|t,
+        onLabel: "Enable"|t('sprout-forms'),
     }) }}
 
     {% if captcha.getCaptchaSettingsHtml()|length %}

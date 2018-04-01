@@ -40,32 +40,4 @@ class App extends Component
         $this->entries = new Entries();
         $this->frontEndFields = new FrontEndFields();
     }
-
-    /**
-     * Return whether or not the example template already exists
-     *
-     * @return bool
-     * @throws \yii\base\Exception
-     */
-    public function hasExamples()
-    {
-        $path = Craft::$app->path->getSiteTemplatesPath().DIRECTORY_SEPARATOR.'sproutforms';
-
-        if (file_exists($path)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Returns whether or not the templates directory is writable
-     *
-     * @return bool
-     * @throws \yii\base\Exception
-     */
-    public function canCreateExamples()
-    {
-        return is_writable(Craft::$app->path->getSiteTemplatesPath());
-    }
 }

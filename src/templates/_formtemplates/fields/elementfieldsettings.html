@@ -7,8 +7,8 @@
         {% if sourceOptions %}
             {% if field.allowMultipleSources %}
                 {{ forms.checkboxSelectField({
-                    label: "Sources"|t('app'),
-                    instructions: "Which sources do you want to select {type} from?"|t('app', { type: field.displayName()|lower }),
+                    label: "Sources"|t('sprout-forms'),
+                    instructions: "Which sources do you want to select {type} from?"|t('sprout-forms', { type: field.displayName()|lower }),
                     id: 'sources',
                     name: 'sources',
                     options: sourceOptions,
@@ -18,7 +18,7 @@
             {% else %}
                 {{ forms.selectField({
                     label: "Source"|t('app'),
-                    instructions: "Which source do you want to select {type} from?"|t('app', { type: field.displayName()|lower }),
+                    instructions: "Which source do you want to select {type} from?"|t('sprout-forms', { type: field.displayName()|lower }),
                     id: 'source',
                     name: 'source',
                     options: sourceOptions,
@@ -27,16 +27,16 @@
             {% endif %}
         {% else %}
             {{ forms.field({
-                label: (field.allowMultipleSources ? "Sources"|t('app') : "Source"|t('app'))
-            }, '<p class="error">' ~ "No sources exist yet."|t('app') ~ '</p>') }}
+                label: (field.allowMultipleSources ? "Sources"|t('sprout-forms') : "Source"|t('sprout-forms'))
+            }, '<p class="error">' ~ "No sources exist yet."|t('sprout-forms') ~ '</p>') }}
         {% endif %}
     {% endblock %}
 
     {% block limitField %}
         {% if field.allowLimit %}
             {{ forms.textField({
-                label: "Limit"|t('app'),
-                instructions: "Limit the number of selectable {type}."|t('app', { type: field.displayName()|lower }),
+                label: "Limit"|t('sprout-forms'),
+                instructions: "Limit the number of selectable {type}."|t('sprout-forms', { type: field.displayName()|lower }),
                 id: 'limit',
                 name: 'limit',
                 value: field.limit,
@@ -48,8 +48,8 @@
 
     {% block selectionLabelField %}
         {{ forms.textField({
-            label: "Selection Label"|t('app'),
-            instructions: "Enter the text you want to appear on the {type} selection input."|t('app', { type: field.displayName()|lower }),
+            label: "Selection Label"|t('sprout-forms'),
+            instructions: "Enter the text you want to appear on the {type} selection input."|t('sprout-forms', { type: field.displayName()|lower }),
             id: 'selectionLabel',
             name: 'selectionLabel',
             value: field.selectionLabel,

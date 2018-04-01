@@ -33,7 +33,7 @@ class FrontEndFields extends Component
                     $entries[$pos]['section'] = $sectionById;
                 } else {
                     if ($section[0] == 'singles') {
-                        $singles = $this->_getSinglesEntries();
+                        $singles = $this->getSinglesEntries();
 
                         $entries[$pos]['entries'] = $singles;
                         $entries[$pos]['singles'] = true;
@@ -55,7 +55,7 @@ class FrontEndFields extends Component
                     }
                 }
 
-                $singles = $this->_getSinglesEntries();
+                $singles = $this->getSinglesEntries();
                 $pos = count($entries) + 1;
                 $entries[$pos]['entries'] = $singles;
                 $entries[$pos]['singles'] = true;
@@ -113,7 +113,7 @@ class FrontEndFields extends Component
         return $tags;
     }
 
-    private function _getSinglesEntries()
+    private function getSinglesEntries()
     {
         $sections = Craft::$app->getSections()->getSectionsByType(Section::TYPE_SINGLE);
         $singles = [];

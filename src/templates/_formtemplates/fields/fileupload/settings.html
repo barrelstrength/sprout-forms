@@ -22,7 +22,7 @@
                 class: 'ltr',
                 name: name~'Subpath',
                 value: field[name~'Subpath'],
-                placeholder: "path/to/subfolder"|t('app')
+                placeholder: "path/to/subfolder"|t('sprout-forms')
             }) }}
         </div>
     </div>
@@ -34,7 +34,7 @@
 {% block fieldSettings %}
     {% block uploadLocationFields %}
 
-        {% set uploadLocationNote = "Note that the subfolder path can contain variables like <code>{slug}</code> or <code>{author.username}</code>."|t('app') %}
+        {% set uploadLocationNote = "Note that the subfolder path can contain variables like <code>{slug}</code> or <code>{author.username}</code>."|t('sprout-forms') %}
         {% if isMatrix %}
             {% set uploadLocationNote = uploadLocationNote|replace({
                 '{slug}': '{owner.slug}',
@@ -47,14 +47,14 @@
 
             {{ forms.field({
                 label: "Default Upload Location"|t('app'),
-                instructions: "Where should files be uploaded when they are dragged directly onto the field, or uploaded from the front end?"|t('app') ~' '~ uploadLocationNote,
+                instructions: "Where should files be uploaded when they are dragged directly onto the field, or uploaded from the front end?"|t('sprout-forms') ~' '~ uploadLocationNote,
                 errors: field.getErrors('defaultUploadLocationSubpath')
             }, uploadLocationInput('defaultUploadLocation', field, sourceOptions)) }}
         </div>
 
         <div id="single-folder-settings"{% if not field.useSingleFolder %} class="hidden"{% endif %}>
             {{ forms.field({
-                label: "Upload Location"|t('app'),
+                label: "Upload Location"|t('sprout-forms'),
                 instructions: uploadLocationNote,
                 errors: field.getErrors('singleUploadLocationSubpath')
             }, uploadLocationInput('singleUploadLocation', field, sourceOptions)) }}
@@ -63,7 +63,7 @@
 
     {% block fileTypesField %}
         {{ forms.checkboxField({
-            label: "Restrict allowed file types?"|t('app'),
+            label: "Restrict allowed file types?"|t('sprout-forms'),
             class: 'restrictFiles',
             id: 'restrictFiles',
             name: 'restrictFiles',

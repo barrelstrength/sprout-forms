@@ -5,75 +5,103 @@
  * @license   http://sprout.barrelstrengthdesign.com/license
  */
 
-namespace Craft;
+namespace barrelstrength\sproutforms\widgets;
 
-class RecentEntries extends BaseWidget
+use barrelstrength\sproutforms\SproutForms;
+use craft\base\Widget;
+use Craft;
+
+class RecentEntries extends Widget
 {
-    protected $colspan = 2;
+    /**
+     * @var int
+     */
+    public $formId;
 
-    public function getName()
+    /**
+     * @var int
+     */
+    public $limit = 10;
+
+    /**
+     * @var string
+     */
+    public $showDate;
+
+    /**
+     * @inheritdoc
+     */
+    public static function displayName(): string
     {
-        $name = Craft::t('Recent Form Entries');
+        return Craft::t('sprout-forms', 'Recent Entries (Sprout Forms)');
+    }
 
+    /**
+     * @inheritdoc
+     */
+    public function getTitle(): string
+    {
         // Concat form name if the user select a specific form
-        if ($this->getSettings()->form != 0 && $this->getSettings()->form != null) {
-            $form = sproutForms()->forms->getFormById($this->getSettings()->form);
+        if ($this->formId !== 0 && $this->formId !== null) {
+            $form = SproutForms::$app->forms->getFormById($this->formId);
 
             if ($form) {
-                $name = Craft::t('Recent {formName} Entries', [
+                return Craft::t('sprout-forms', 'Recent {formName} Entries', [
                     'formName' => $form->name
                 ]);
             }
         }
 
-        return $name;
+        return static::displayName();
     }
 
-    public function getIconPath()
+    /**
+     * @inheritdoc
+     */
+    public static function iconPath()
     {
-        return craft()->path->getPluginsPath().'sproutforms/resources/icon.svg';
+        return Craft::getAlias('@barrelstrength/sproutforms/icon-mask.svg');
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getBodyHtml()
     {
-        $settings = $this->getSettings();
-        // Get the SproutForms_Entry Element type criteria
-        $criteria = craft()->elements->getCriteria('SproutForms_Entry');
-
-        if ($settings->form != 0) {
-            $criteria->formId = $settings->form;
-        }
-        $criteria->limit = $settings->limit;
-
-        return craft()->templates->render('sproutforms/_widgets/recententries/body', [
-            'entries' => $criteria->find(),
-            'settings' => $settings
-        ]);
+//        // Get the SproutForms_Entry Element type criteria
+//        $criteria = Craft::$app->elements->getCriteria('SproutForms_Entry');
+//
+//        if ($this->formId != 0) {
+//            $criteria->formId = $this->formId;
+//        }
+//        $criteria->limit = $this->limit;
+//
+//        return Craft::$app->getView()->renderTemplate('sprout-forms/_widgets/recententries/body', [
+//            'entries' => $criteria->all(),
+//            'widget' => $this
+//        ]);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getSettingsHtml()
     {
-        $forms = [0 => Craft::t('All forms')];
+        $forms = [
+            0 => Craft::t('sprout-forms', 'All forms')
+        ];
 
-        $sproutForms = sproutForms()->forms->getAllForms();
+        $sproutForms = SproutForms::$app->forms->getAllForms();
+
         if ($sproutForms) {
             foreach ($sproutForms as $form) {
                 $forms[$form->id] = $form->name;
             }
         }
 
-        return craft()->templates->render('sproutforms/_widgets/recententries/settings', [
-            'settings' => $this->getSettings(),
-            'sproutForms' => $forms
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_widgets/recententries/settings', [
+            'sproutForms' => $forms,
+            'widget' => $this
         ]);
-    }
-
-    protected function defineSettings()
-    {
-        return [
-            'form' => [AttributeType::Number, 'required' => true],
-            'limit' => [AttributeType::Number, 'min' => 0, 'default' => 10],
-            'showDate' => [AttributeType::String]
-        ];
     }
 }

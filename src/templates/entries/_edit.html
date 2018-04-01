@@ -2,17 +2,17 @@
 {% import "_includes/forms" as forms %}
 
 {% set crumbs = [
-    { label: "Entries"|t, url: cpUrl('sprout-forms/entries') }
+    { label: "Entries"|t('sprout-forms'), url: cpUrl('sprout-forms/entries') }
 ] %}
 
-{% set title = 'Edit Entry' %}
+{% set title = 'Edit Entry'|t('sprout-forms') %}
 
 {% set fullPageForm = true %}
 {% set saveShortcutRedirect = 'sprout-forms/entries/edit/' ~ entryId %}
 
 {% block actionButton %}
     <div class="btngroup submit first">
-        <input type="submit" class="btn submit" value="{{ 'Save'|t }}">
+        <input type="submit" class="btn submit" value="{{ 'Save'|t('sprout-forms') }}">
         {% if entryId != null %}
             <div class="btn submit menubtn"></div>
             <div class="menu">
@@ -73,13 +73,13 @@
         {% set formName = "<h6>" ~ form.name ~ "</h6>" %}
 
         {{ forms.field({
-            label: "Form Name"|t,
+            label: "Form Name"|t('sprout-forms'),
         }, formName) }}
 
         {% set dateSubmitted = entry.dateCreated|date('F j, Y') %}
 
         {{ forms.selectField({
-            label: "Entry Status"|t,
+            label: "Entry Status"|t('sprout-forms'),
             id: 'statusId',
             name: 'statusId',
             value: entry.statusId,
