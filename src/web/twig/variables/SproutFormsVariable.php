@@ -402,24 +402,6 @@ class SproutFormsVariable
     }
 
     /**
-     * @return bool
-     * @throws \yii\base\Exception
-     */
-    public function canCreateExamples()
-    {
-        return SproutForms::$app->canCreateExamples();
-    }
-
-    /**
-     * @return bool
-     * @throws \yii\base\Exception
-     */
-    public function hasExamples()
-    {
-        return SproutForms::$app->hasExamples();
-    }
-
-    /**
      * @param string
      *
      * @return bool

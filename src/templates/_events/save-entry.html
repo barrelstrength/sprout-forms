@@ -8,17 +8,17 @@
     : null %}
 
 {{ forms.checkboxField({
-    label: "Only for new entries?"|t,
+    label: "Only for new entries?"|t('sprout-forms'),
     name: "rules[sproutForms][saveEntry][whenNew]",
     checked: whenNew
 }) }}
 
 {{ forms.field({
     label: "Forms"|t,
-    instructions: "Leave unchecked to apply to all forms."|t,
+    instructions: "Leave unchecked to apply to all forms."|t('sprout-forms'),
     errors: errors is defined ? errors : null,
 }, forms.checkboxGroup({
     name: "rules[sproutForms][saveEntry][formIds]",
-    options : availableForms,
+    options: availableForms,
     values: formIds
 })) }}

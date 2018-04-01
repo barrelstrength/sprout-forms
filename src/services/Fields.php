@@ -26,6 +26,7 @@ use barrelstrength\sproutforms\integrations\sproutforms\fields\Tags;
 use barrelstrength\sproutforms\integrations\sproutforms\fields\Url;
 use Craft;
 use craft\base\FieldInterface;
+use craft\records\FieldLayoutField;
 use yii\base\Component;
 use craft\base\Field;
 use craft\records\Field as FieldRecord;
@@ -63,7 +64,7 @@ class Fields extends Component
 
         try {
             foreach ($fieldIds as $fieldOrder => $fieldId) {
-                $fieldLayoutFieldRecord = $this->_getFieldLayoutFieldRecordByFieldId($fieldId);
+                $fieldLayoutFieldRecord = $this->getFieldLayoutFieldRecordByFieldId($fieldId);
                 $fieldLayoutFieldRecord->sortOrder = $fieldOrder + 1;
                 $fieldLayoutFieldRecord->save();
             }
@@ -89,7 +90,7 @@ class Fields extends Component
      * @throws Exception
      * @return FieldLayoutFieldRecord
      */
-    protected function _getFieldLayoutFieldRecordByFieldId($fieldId = null)
+    protected function getFieldLayoutFieldRecordByFieldId($fieldId = null)
     {
         if ($fieldId) {
             $record = FieldLayoutFieldRecord::find('fieldId=:fieldId', [':fieldId' => $fieldId]);
@@ -228,9 +229,9 @@ class Fields extends Component
      */
     public function getFieldValue($field, $value)
     {
-        $result = FieldRecord::findOne([$field => $value]);
-
-        return $result;
+        return FieldRecord::findOne([
+            $field => $value
+        ]);
     }
 
     /**
@@ -272,7 +273,7 @@ class Fields extends Component
     /**
      * This service allows create a default tab given a form
      *
-     * @param      $form
+     * @param                     $form
      * @param FieldInterface|null $field
      *
      * @return null
@@ -337,22 +338,27 @@ class Fields extends Component
 
         $postedFieldLayout = [];
         $requiredFields = [];
+
+        /**
+         * @var $tabs FieldLayoutTabRecord
+         */
         $tabs = $postFieldLayout->getTabs();
 
         foreach ($tabs as $tab) {
             $fields = [];
             $fieldLayoutFields = $tab->getFields();
 
+            /**
+             * @var $fieldLayoutField FieldLayoutField
+             */
             foreach ($fieldLayoutFields as $fieldLayoutField) {
-                $originalField = $fieldLayoutField->getField();
-
-                $field = new FieldModel();
-                $field->name = $originalField->name;
-                $field->handle = $originalField->handle;
-                $field->instructions = $originalField->instructions;
-                $field->required = $fieldLayoutField->required;
-                $field->translatable = $originalField->translatable;
-                $field->type = $originalField->type;
+                $field = Craft::$app->getFields()->createField([
+                    'type' => get_class($fieldLayoutField),
+                    'name' => $fieldLayoutField->name,
+                    'handle' => $fieldLayoutField->handle,
+                    'instructions' => $fieldLayoutField->instructions,
+                    'required' => $fieldLayoutField->required
+                ]);
 
                 if (isset($originalField->settings)) {
                     $field->settings = $originalField->settings;
@@ -381,7 +387,7 @@ class Fields extends Component
         // Set the field layout
         $fieldLayout = Craft::$app->fields->assembleLayout($postedFieldLayout, $requiredFields);
 
-        $fieldLayout->type = 'SproutForms_Form';
+        $fieldLayout->type = FormElement::class;
 
         return $fieldLayout;
     }
@@ -389,10 +395,10 @@ class Fields extends Component
     /**
      * This service allows add a field to a current FieldLayoutFieldRecord
      *
-     * @param FieldModel            $field
-     * @param SproutForms_FormModel $form
-     * @param int                   $tabId
-     * @param int                   $nextId the next field Id
+     * @param Field       $field
+     * @param FormElement $form
+     * @param int         $tabId
+     * @param int         $nextId the next field Id
      *
      * @return boolean
      */
@@ -404,33 +410,30 @@ class Fields extends Component
         if ($field !== null && $form !== null) {
             // Let's try to order the field where is droped
 
-            if ($nextId){
+            if ($nextId) {
                 $fieldLayoutFieldNext = FieldLayoutFieldRecord::findOne([
                     'tabId' => $tabId, 'layoutId' => $form->fieldLayoutId, 'fieldId' => $nextId
                 ]);
 
-                if ($fieldLayoutFieldNext){
+                if ($fieldLayoutFieldNext) {
                     $fieldLayoutFields = FieldLayoutFieldRecord::find()
                         ->where([
                             'tabId' => $tabId, 'layoutId' => $form->fieldLayoutId
 
                         ])
-                        ->andWhere(['>=', 'sortOrder' , $fieldLayoutFieldNext->sortOrder])
+                        ->andWhere(['>=', 'sortOrder', $fieldLayoutFieldNext->sortOrder])
                         ->all();
 
-                        $sortOrder = $fieldLayoutFieldNext->sortOrder;
+                    $sortOrder = $fieldLayoutFieldNext->sortOrder;
 
-                        foreach ($fieldLayoutFields as  $fieldLayoutFieldRecord) {
-                            ++$fieldLayoutFieldRecord->sortOrder;
-                            $fieldLayoutFieldRecord->save();
-                        }
+                    foreach ($fieldLayoutFields as $fieldLayoutFieldRecord) {
+                        ++$fieldLayoutFieldRecord->sortOrder;
+                        $fieldLayoutFieldRecord->save();
+                    }
                 }
-
-
             }
 
-            if (null === $sortOrder)
-            {
+            if (null === $sortOrder) {
                 $fieldLayoutFields = FieldLayoutFieldRecord::findAll([
                     'tabId' => $tabId, 'layoutId' => $form->fieldLayoutId
                 ]);

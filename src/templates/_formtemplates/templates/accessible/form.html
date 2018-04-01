@@ -34,7 +34,7 @@
     {% hook 'sproutForms.modifyForm' %}
 
     <div class="submit">
-        <button type="submit">{{ form.submitButtonText is not empty ? form.submitButtonText : 'Submit' }}</button>
+        <button type="submit">{{ form.submitButtonText is not empty ? form.submitButtonText : 'Submit'|t('sprout-forms') }}</button>
     </div>
 </form>
 

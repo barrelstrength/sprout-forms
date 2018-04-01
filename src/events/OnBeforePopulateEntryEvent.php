@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\events;
 
+use barrelstrength\sproutforms\elements\Form;
 use yii\base\Event;
 
 /**
@@ -9,11 +10,18 @@ use yii\base\Event;
  */
 class OnBeforePopulateEntryEvent extends Event
 {
-    // Properties
-    // =========================================================================
-
+    /**
+     * @var Form
+     */
     public $form;
 
+    /**
+     * @var bool
+     */
     public $isValid = true;
+
+    /**
+     * @var bool
+     */
     public $fakeIt = false;
 }

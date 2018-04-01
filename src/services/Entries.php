@@ -23,9 +23,15 @@ use yii\base\Exception;
 
 class Entries extends Component
 {
+    /**
+     * @var bool
+     */
     public $fakeIt = false;
-    protected $entryRecord;
 
+    /**
+     * @var EntryRecord
+     */
+    protected $entryRecord;
 
     /**
      * @param EntryRecord $entryRecord
@@ -180,7 +186,7 @@ class Entries extends Component
 
         try {
             foreach ($entryStatusIds as $entryStatus => $entryStatusId) {
-                $entryStatusRecord = $this->_getEntryStatusRecordById($entryStatusId);
+                $entryStatusRecord = $this->getEntryStatusRecordById($entryStatusId);
                 $entryStatusRecord->sortOrder = $entryStatus + 1;
                 $entryStatusRecord->save();
             }
@@ -508,7 +514,7 @@ class Entries extends Component
      * @return EntryStatusRecord|null|static
      * @throws Exception
      */
-    private function _getEntryStatusRecordById($entryStatusId = null)
+    private function getEntryStatusRecordById($entryStatusId = null)
     {
         if ($entryStatusId) {
             $entryStatusRecord = EntryStatusRecord::findOne($entryStatusId);

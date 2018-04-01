@@ -1,8 +1,8 @@
 {% import "_includes/forms" as forms %}
 
 {{ forms.selectField({
-    label: "Forms"|t,
-    instructions: 'Select which forms to search',
+    label: "Forms"|t('sprout-forms'),
+    instructions: 'Select which forms to search'|t('sprout-forms'),
     name: 'settings[formId]',
     options: formOptions,
     value: (options.formId is defined ? options.formId : '*'),
@@ -10,14 +10,14 @@
 }) }}
 
 {{ forms.dateTimeField({
-    label: "Start Date"|t,
+    label: "Start Date"|t('sprout-forms'),
     id: 'startDate',
     name: 'settings[startDate]',
     value: (options.startDate is defined ? options.startDate : defaultStartDate)
 }) }}
 
 {{ forms.dateTimeField({
-    label: "End Date"|t,
+    label: "End Date"|t('sprout-forms'),
     id: 'endDate',
     name: 'settings[endDate]',
     value: (options.endDate is defined ? options.endDate : defaultEndDate)

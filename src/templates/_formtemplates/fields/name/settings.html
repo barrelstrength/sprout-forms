@@ -1,8 +1,8 @@
 {% import "_includes/forms" as forms %}
 
 {{ forms.lightswitchField ({
-    label: "Display multiple fields"|t('sprout-fields'),
-    instructions: "Enable this setting if you wish to choose the specific name fields that display. By default the Name field displays a single field and dynamically treats everything that comes before the first space as the First Name and anything that comes after the first space as the Last Name."|t('sprout-fields'),
+    label: "Display multiple fields"|t('sprout-forms'),
+    instructions: "Enable this setting if you wish to choose the specific name fields that display. By default the Name field displays a single field and dynamically treats everything that comes before the first space as the First Name and anything that comes after the first space as the Last Name."|t('sprout-forms'),
     name: 'displayMultipleFields',
     on: field.displayMultipleFields,
     toggle: 'sproutnamefield-display-settings'
@@ -15,14 +15,14 @@
         <table class="data" style="width: auto;">
             <thead>
             <tr>
-                <th style="min-width: 180px;">{{ "Field"|t('sprout-fields') }}</th>
+                <th style="min-width: 180px;">{{ "Field"|t('sprout-forms') }}</th>
                 <th>{{ "Enabled?"|t }}</th>
             </tr>
             </thead>
             <tbody>
             <tr>
                 <td>
-                    <label for="displayPrefix">{{ "Prefix"|t('sprout-fields') }}</label>
+                    <label for="displayPrefix">{{ "Prefix"|t('sprout-forms') }}</label>
                 </td>
                 <td class="centeralign">
                     <div>
@@ -37,7 +37,7 @@
             </tr>
             <tr>
                 <td>
-                    <label for="displayFirstName">{{ "First Name"|t('sprout-fields') }}</label>
+                    <label for="displayFirstName">{{ "First Name"|t('sprout-forms') }}</label>
                 </td>
                 <td class="centeralign">
                     <div>
@@ -53,7 +53,7 @@
             </tr>
             <tr>
                 <td>
-                    <label for="displayMiddleName">{{ "Middle Name"|t('sprout-fields') }}</label>
+                    <label for="displayMiddleName">{{ "Middle Name"|t('sprout-forms') }}</label>
                 </td>
                 <td class="centeralign">
                     <div>
@@ -68,7 +68,7 @@
             </tr>
             <tr>
                 <td>
-                    <label for="displayLastName">{{ "Last Name"|t('sprout-fields') }}</label>
+                    <label for="displayLastName">{{ "Last Name"|t('sprout-forms') }}</label>
                 </td>
                 <td class="centeralign">
                     <div>
@@ -84,7 +84,7 @@
             </tr>
             <tr>
                 <td>
-                    <label for="displaySuffix">{{ "Suffix"|t('sprout-fields') }}</label>
+                    <label for="displaySuffix">{{ "Suffix"|t('sprout-forms') }}</label>
                 </td>
                 <td class="centeralign">
                     <div>
@@ -103,8 +103,8 @@
     {% endset %}
 
     {{ forms.field({
-        label: "Which fields do you wish to display?"|t('sprout-fields'),
-        instructions: "First Name and Last Name are enabled by default. Fields will display in the order that they appear.."|t('sprout-fields')
+        label: "Which fields do you wish to display?"|t('sprout-forms'),
+        instructions: "First Name and Last Name are enabled by default. Fields will display in the order that they appear.."|t('sprout-forms')
     }, advancedInput) }}
 
 </div>

@@ -22,7 +22,7 @@
     label: "Default Form Templates"|t('sprout-forms'),
     required: true,
     errors: (settings is defined ? settings.getErrors('templateFolderOverride') : null),
-    instructions: "The templates that will be used to output your forms when using the displayForm tag. Add additional form templates via the Form Templates API or providing a custom template path."|t,
+    instructions: "The templates that will be used to output your forms when using the displayForm tag. Add additional form templates via the Form Templates API or providing a custom template path."|t('sprout-forms'),
 }, sproutFields.selectOther({
     name: 'templateFolderOverride',
     options: templateOptions,
@@ -31,10 +31,10 @@
 })) }}
 
 {{ forms.lightswitchField({
-    label: "Enable custom form templates on a per-form basis"|t,
-    instructions: "Allow admins to (optionally) add custom form templates for each form created. Enabling this setting will display additional fields to manage your custom form settings on every Form Element."|t,
+    label: "Enable custom form templates on a per-form basis"|t('sprout-forms'),
+    instructions: "Allow admins to (optionally) add custom form templates for each form created. Enabling this setting will display additional fields to manage your custom form settings on every Form Element."|t('sprout-forms'),
     id: 'enablePerFormTemplateFolderOverride',
     name: 'enablePerFormTemplateFolderOverride',
     on: settings.enablePerFormTemplateFolderOverride,
-    onLabel: "Enable"|t,
+    onLabel: "Enable"|t('sprout-forms'),
 }) }}

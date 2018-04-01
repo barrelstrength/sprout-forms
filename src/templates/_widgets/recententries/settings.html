@@ -1,0 +1,20 @@
+{% import '_includes/forms' as forms %}
+
+{{ forms.selectField({
+    label: 'Form'|t('sprout-forms'),
+    instructions: 'Which form do you want to display recent entries from?'|t('sprout-forms'),
+    id: 'formId',
+    name: 'formId',
+    options: sproutForms,
+    value: widget.formId,
+    errors: widget.getErrors('form')
+}) }}
+
+{{ forms.textField({
+    label: 'Limit'|t('sprout-forms'),
+    id: 'limit',
+    name: 'limit',
+    value: widget.limit,
+    size: 2,
+    errors: widget.getErrors('limit')
+}) }}

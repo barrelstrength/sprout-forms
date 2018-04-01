@@ -185,7 +185,7 @@
                     label: "Submit URL <span class='info'>Submit your form data to this URL, instead of directly to Sprout
                     Forms.</span>"|t('sprout-forms'),
                     name: 'submitAction',
-                    placeholder: 'http://example.com/somewhere-else',
+                    placeholder: 'http://example.com/somewhere-else'|t('sprout-forms'),
                     value: (form is defined ? form.submitAction : null),
                     errors: (form is defined ? form.getErrors('submitAction') : null)
                 }) }}
