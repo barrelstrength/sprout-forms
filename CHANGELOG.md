@@ -1,5 +1,23 @@
 # Changelog
 
+## 3.0.0-beta.2 - 2018-04-01
+
+### Changed
+- Improved translation support
+- Updated Accessible Form Templates submit button to use <button> tag
+- Removed default CSS options from Accessible Templates
+- Disabled required option on PrivateNotes, Invisible, and Hidden fields
+- Removed references to legacy notification email fields and logic
+- Removed legacy example files
+
+### Fixed
+- Updated Basic Templates to support new displayTab and displayField methods
+- Fixed bug where cssClasses was always true
+- Fixed bug where duplicate captcha could allow duplicates
+- Fixed bug where missing resources could disable drag and drop if per-form settings were disabled
+- Fixed reference to Sprout Base Importers service
+- Fixed Name field label identification
+
 ## 3.0.0-beta.1 - 2018-03-26
 
 ### Added

@@ -1,7 +1,7 @@
 {
   "name": "barrelstrength/sprout-forms",
   "description": "Simple, beautiful forms. 100% control.",
-  "version": "3.0.0-beta.1",
+  "version": "3.0.0-beta.2",
   "type": "craft-plugin",
   "keywords": [
     "craft",
@@ -10,7 +10,7 @@
     "craft-plugin",
     "sprout forms"
   ],
-  "license": "Barrel Strength Design LLC",
+  "license": "proprietary",
   "authors": [
     {
       "name": "Barrel Strength",
