@@ -148,8 +148,9 @@
 {% if field is empty or field.handle is empty %}
     {% js %}
         new Craft.HandleGenerator('#field-name', '#field-handle');
-
-        Craft.SproutFields.initFields($(".content"));
+        if (Craft.SproutFields) {
+            Craft.SproutFields.initFields($(".content"));
+        }
     {% endjs %}
 {% endif %}
 </div>

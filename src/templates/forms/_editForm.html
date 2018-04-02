@@ -104,7 +104,9 @@
 
     $(document).ready(function() {
 
-    Craft.SproutFields.initFields($("#details"));
+    if (Craft.SproutFields) {
+        Craft.SproutFields.initFields($("#details"));
+    }
 
     $("#maindiv").css("height","600px");
 
