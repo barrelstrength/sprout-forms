@@ -3,6 +3,8 @@
 namespace barrelstrength\sproutforms;
 
 use barrelstrength\sproutbase\models\sproutreports\DataSource;
+use barrelstrength\sproutbase\services\sproutreports\DataSources;
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\integrations\sproutemail\events\SaveEntryEvent;
 use barrelstrength\sproutforms\integrations\sproutimport\elements\Form as FormElementImporter;
 use barrelstrength\sproutforms\integrations\sproutimport\elements\Entry as EntryElementImporter;
@@ -23,6 +25,7 @@ use barrelstrength\sproutforms\integrations\sproutforms\formtemplates\BasicTempl
 use barrelstrength\sproutforms\integrations\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\integrations\sproutimport\themes\BasicFieldsTheme;
 use barrelstrength\sproutforms\integrations\sproutimport\themes\SpecialFieldsTheme;
+use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesDataSource;
 use barrelstrength\sproutforms\services\App;
 use barrelstrength\sproutforms\services\Entries;
 use barrelstrength\sproutforms\services\Forms;
