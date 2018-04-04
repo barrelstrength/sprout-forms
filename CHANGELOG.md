@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.0-beta.3 - 2018-04-04
+
+### Fixed
+- Fixed Form submission error where Sprout Email was being referenced when not present
+- Fixed javascript bug that could occur when Sprout Fields was disabled 
+
 ## 3.0.0-beta.2 - 2018-04-01
 
 ### Changed
