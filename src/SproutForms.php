@@ -127,9 +127,9 @@ class SproutForms extends Plugin
             self::$app->entries->handleUnobfuscateEmailAddresses($event->form);
         });
 
-        Event::on(NotificationEmails::class, NotificationEmails::EVENT_REGISTER_EMAIL_EVENTS, function(RegisterNotificationEvent $event) {
-            $event->availableEvents[] = new SaveEntryEvent;
-        });
+//        Event::on(NotificationEmails::class, NotificationEmails::EVENT_REGISTER_EMAIL_EVENTS, function(RegisterNotificationEvent $event) {
+//            $event->availableEvents[] = new SaveEntryEvent;
+//        });
 
         Event::on(Forms::class, Forms::EVENT_REGISTER_CAPTCHAS, function(Event $event) {
             $event->types[] = DuplicateCaptcha::class;
