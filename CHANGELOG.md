@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.0-beta.5 - 2018-04-05
+
+### Fixed
+- Fixed icon mask display issue
+
 ## 3.0.0-beta.4 - 2018-04-04
 
 ### Fixed
