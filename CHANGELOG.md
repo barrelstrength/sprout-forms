@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.0-beta.4 - 2018-04-04
+
+### Fixed
+- Fixed bug where a Form Element would not save properly when using PHP 7.2
+
 ## 3.0.0-beta.3 - 2018-04-04
 
 ### Fixed
