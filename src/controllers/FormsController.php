@@ -84,7 +84,7 @@ class FormsController extends BaseController
         $form->setFieldLayout($fieldLayout);
 
         // Delete any fields removed from the layout
-        $deletedFields = $request->getBodyParam('deletedFields');
+        $deletedFields = $request->getBodyParam('deletedFields', []);
 
         if (count($deletedFields) > 0) {
             // Backup our field context and content table
