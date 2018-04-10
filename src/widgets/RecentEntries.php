@@ -10,6 +10,7 @@ namespace barrelstrength\sproutforms\widgets;
 use barrelstrength\sproutforms\SproutForms;
 use craft\base\Widget;
 use Craft;
+use barrelstrength\sproutforms\elements\Entry;
 
 class RecentEntries extends Widget
 {
@@ -68,18 +69,17 @@ class RecentEntries extends Widget
      */
     public function getBodyHtml()
     {
-//        // Get the SproutForms_Entry Element type criteria
-//        $criteria = Craft::$app->elements->getCriteria('SproutForms_Entry');
-//
-//        if ($this->formId != 0) {
-//            $criteria->formId = $this->formId;
-//        }
-//        $criteria->limit = $this->limit;
-//
-//        return Craft::$app->getView()->renderTemplate('sprout-forms/_widgets/recententries/body', [
-//            'entries' => $criteria->all(),
-//            'widget' => $this
-//        ]);
+        $query = Entry::find();
+
+        if ($this->formId != 0) {
+            $query->formId = $this->formId;
+        }
+        $query->limit = $this->limit;
+
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_widgets/recententries/body', [
+            'entries' => $query->all(),
+            'widget' => $this
+        ]);
     }
 
     /**

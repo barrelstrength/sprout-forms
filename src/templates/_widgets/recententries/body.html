@@ -6,11 +6,11 @@
                 <td data-title="{{ 'Entry'|t('sprout-forms') }}">
                     {% if currentUser.can('accessPlugin-SproutForms') -%}
                         <a href="{{ entry.getCpEditUrl() }}"
-                           title="{{ 'Edit entry'|t }}">{{ entry.title }}</a>
+                           title="{{ 'Edit entry'|t('sprout-forms') }}">{{ entry.title }}</a>
                     {% else -%}
                         {{ entry.title }}
                     {% endif %}
-                    {% if widget.form == 0 -%}
+                    {% if widget.formId == 0 -%}
                         <br>
                         {{ entry.formName }} – <span
                             class="light">{{ entry.dateCreated|date('n/j/Y') }}</span>
@@ -21,5 +21,5 @@
         </tbody>
     </table>
 {% else %}
-    <p>{{ 'No recent form entries available.'|t }}</p>
+    <p>{{ 'No recent form entries available.'|t('sprout-forms') }}</p>
 {% endif %}

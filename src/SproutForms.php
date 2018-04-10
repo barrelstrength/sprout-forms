@@ -14,6 +14,7 @@ use barrelstrength\sproutbase\events\RegisterNotificationEvent;
 
 use barrelstrength\sproutforms\fields\Forms as FormsField;
 use barrelstrength\sproutforms\fields\Entries as FormEntriesField;
+use barrelstrength\sproutforms\widgets\RecentEntries;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use barrelstrength\sproutforms\integrations\sproutforms\captchas\DuplicateCaptcha;
 use barrelstrength\sproutforms\integrations\sproutforms\captchas\HoneypotCaptcha;
@@ -47,6 +48,7 @@ use barrelstrength\sproutforms\services\Fields as SproutFormsFields;
 use barrelstrength\sproutforms\events\OnBeforePopulateEntryEvent;
 use barrelstrength\sproutforms\controllers\EntriesController;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
+use craft\services\Dashboard;
 
 class SproutForms extends Plugin
 {
@@ -104,6 +106,10 @@ class SproutForms extends Plugin
 //        Event::on(DataSources::class, DataSources::EVENT_REGISTER_DATA_SOURCES, function(RegisterComponentTypesEvent $event) {
 //            $event->types[] = EntriesDataSource::class;
 //        });
+
+        Event::on(Dashboard::class, Dashboard::EVENT_REGISTER_WIDGET_TYPES, function(RegisterComponentTypesEvent $event) {
+            $event->types[] = RecentEntries::class;
+        });
 
         $this->setComponents([
             'sproutforms' => SproutFormsVariable::class
