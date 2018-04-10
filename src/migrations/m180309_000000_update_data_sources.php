@@ -16,6 +16,14 @@ class m180309_000000_update_data_sources extends Migration
      */
     public function safeUp()
     {
+        // First check that the user has Sprout Reports
+        $tableSchema = $this->getDb()->schema->getTableSchema('{{%sproutreports_datasources}}');
+
+        if ($tableSchema === null){
+            // we don't need this migration
+            return true;
+        }
+
         // Run our Sprout Reports migration in Sprout Base
         $migration = new SproutReportsCraft2toCraft3Migration();
 
