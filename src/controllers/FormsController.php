@@ -2,7 +2,6 @@
 
 namespace barrelstrength\sproutforms\controllers;
 
-use barrelstrength\sproutforms\elements\Form;
 use Craft;
 use craft\base\ElementInterface;
 use craft\web\Controller as BaseController;
@@ -68,7 +67,7 @@ class FormsController extends BaseController
             $fieldLayout = SproutForms::$app->fields->getDuplicateLayout($duplicateForm, $fieldLayout);
         }
 
-        $fieldLayout->type = Form::class;
+        $fieldLayout->type = FormElement::class;
 
         if (count($fieldLayout->getFields()) == 0) {
             Craft::$app->getSession()->setError(Craft::t('sprout-forms', 'The form needs at least have one field'));
@@ -126,6 +125,8 @@ class FormsController extends BaseController
         }
 
         Craft::$app->getSession()->setNotice(Craft::t('sprout-forms', 'Form saved.'));
+
+        $_POST['redirect'] = str_replace('{id}', $form->id, $_POST['redirect']);
 
         return $this->redirectToPostedUrl($form);
     }

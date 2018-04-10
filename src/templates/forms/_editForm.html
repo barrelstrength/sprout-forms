@@ -39,7 +39,7 @@
                            data-redirect="{{ ('sprout-forms/forms/edit/'~form.id)|hash }}">{{ 'Save and continue editing'|t('sprout-forms') }}
                             <span class="shortcut">⌘S</span></a></li>
                     <li><a class="formsubmit"
-                           data-redirect="{{ 'sprout-forms/forms/edit/'~form.id|hash }}"
+                           data-redirect="{{ 'sprout-forms/forms/edit/{id}'|hash }}"
                            data-param='saveAsNew'
                            data-value="true">{{ "Save as a new form"|t('sprout-forms') }}</a>
                     </li>
