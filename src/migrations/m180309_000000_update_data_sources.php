@@ -5,6 +5,7 @@ namespace barrelstrength\sproutforms\migrations;
 use craft\db\Migration;
 use craft\db\Query;
 use barrelstrength\sproutbase\migrations\sproutreports\m180307_042132_craft3_schema_changes as SproutReportsCraft2toCraft3Migration;
+use barrelstrength\sproutbase\migrations\sproutreports\Install as SproutBaseReportsInstall;
 
 /**
  * m180309_000000_update_data_sources migration.
@@ -16,13 +17,7 @@ class m180309_000000_update_data_sources extends Migration
      */
     public function safeUp()
     {
-        // First check that the user has Sprout Reports
-        $tableSchema = $this->getDb()->schema->getTableSchema('{{%sproutreports_datasources}}');
-
-        if ($tableSchema === null){
-            // we don't need this migration
-            return true;
-        }
+        $this->installSproutReports();
 
         // Run our Sprout Reports migration in Sprout Base
         $migration = new SproutReportsCraft2toCraft3Migration();
@@ -76,6 +71,15 @@ class m180309_000000_update_data_sources extends Migration
         ], [], false);
 
         return true;
+    }
+
+    public function installSproutReports()
+    {
+        $migration = new SproutBaseReportsInstall();
+
+        ob_start();
+        $migration->safeUp();
+        ob_end_clean();
     }
 
     /**
