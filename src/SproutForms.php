@@ -218,8 +218,6 @@ class SproutForms extends Plugin
             $parent['label'] = $this->getSettings()->pluginNameOverride;
         }
 
-       $entriesDataSource = SproutBase::$app->dataSources->getDataSourceByType(EntriesDataSource::class);
-
         if (Craft::$app->getUser()->checkPermission('manageSproutFormsForms')) {
             $parent['subnav']['forms'] = [
                 'label' => Craft::t('sprout-forms', 'Forms'),
@@ -234,12 +232,7 @@ class SproutForms extends Plugin
             ];
         }
 
-        if (Craft::$app->getUser()->checkPermission('editSproutFormsSettings')) {
-            $parent['subnav']['settings'] = [
-                'label' => Craft::t('sprout-forms', 'Settings'),
-                'url' => 'sprout-forms/settings'
-            ];
-        }
+        $entriesDataSource = SproutBase::$app->dataSources->getDataSourceByType(EntriesDataSource::class);
 
         if ($entriesDataSource) {
             $parent['subnav']['reports'] = [
@@ -252,6 +245,13 @@ class SproutForms extends Plugin
             'label' => Craft::t('sprout-forms', 'Notifications'),
             'url' => 'sprout-forms/notifications'
         ];
+
+        if (Craft::$app->getUser()->checkPermission('editSproutFormsSettings')) {
+            $parent['subnav']['settings'] = [
+                'label' => Craft::t('sprout-forms', 'Settings'),
+                'url' => 'sprout-forms/settings'
+            ];
+        }
 
         return $parent;
     }
