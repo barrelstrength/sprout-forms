@@ -216,16 +216,29 @@ class SproutForms extends Plugin
 
 //        $entriesDataSource = SproutBase::$app->dataSources->getDataSourceByType(EntriesDataSource::class);
 
-        return array_merge($parent, [
-            'subnav' => [
-                'forms' => [
-                    'label' => Craft::t('sprout-forms', 'Forms'),
-                    'url' => 'sprout-forms/forms'
-                ],
-                'entries' => [
-                    'label' => Craft::t('sprout-forms', 'Entries'),
-                    'url' => 'sprout-forms/entries'
-                ],
+        if (Craft::$app->getUser()->checkPermission('manageSproutFormsForms')) {
+            $parent['subnav']['forms'] = [
+                'label' => Craft::t('sprout-forms', 'Forms'),
+                'url' => 'sprout-forms/forms'
+            ];
+        }
+
+        if (Craft::$app->getUser()->checkPermission('viewSproutFormsEntries')) {
+            $parent['subnav']['entries'] = [
+                'label' => Craft::t('sprout-forms', 'Entries'),
+                'url' => 'sprout-forms/entries'
+            ];
+        }
+
+        if (Craft::$app->getUser()->checkPermission('editSproutFormsSettings')) {
+            $parent['subnav']['settings'] = [
+                'label' => Craft::t('sprout-forms', 'Settings'),
+                'url' => 'sprout-forms/settings'
+            ];
+        }
+
+        return $parent;
+
 //                'notifications' => [
 //                    'label' => Craft::t('sprout-forms', 'Notifications'),
 //                    'url' => 'sprout-forms/notifications'
@@ -234,12 +247,6 @@ class SproutForms extends Plugin
 //                    'label' => Craft::t('sprout-forms', 'Reports'),
 //                    'url' => 'sprout-forms/reports/'.$entriesDataSource->dataSourceId.'-sproutforms-entriesdatasource'
 //                ],
-                'settings' => [
-                    'label' => Craft::t('sprout-forms', 'Settings'),
-                    'url' => 'sprout-forms/settings'
-                ]
-            ]
-        ]);
     }
 
     /**

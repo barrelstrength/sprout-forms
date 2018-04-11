@@ -7,6 +7,7 @@ use craft\base\ElementInterface;
 use craft\web\Controller as BaseController;
 use craft\helpers\UrlHelper;
 use yii\base\Exception;
+use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
 
 use barrelstrength\sproutforms\SproutForms;
@@ -14,6 +15,14 @@ use barrelstrength\sproutforms\elements\Form as FormElement;
 
 class FormsController extends BaseController
 {
+    /**
+     * @throws HttpException
+     */
+    public function init()
+    {
+        $this->requirePermission('manageSproutFormsForms');
+        parent::init();
+    }
     /**
      * Save a form
      *
