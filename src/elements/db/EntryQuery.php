@@ -130,14 +130,13 @@ class EntryQuery extends ElementQuery
             'sproutforms_entries.dateCreated',
             'sproutforms_entries.dateUpdated',
             'sproutforms_entries.uid',
-            'forms.id as formId',
-            'forms.name as formName',
-            'forms.handle as formHandle',
-            'forms.groupId as formGroupId'
+            'sproutforms_forms.name as formName',
+            'sproutforms_forms.handle as formHandle',
+            'sproutforms_forms.groupId as formGroupId'
         ]);
 
-        $this->query->innerJoin('{{%sproutforms_entrystatuses}} entrystatuses', '[[entrystatuses.id]] = [[sproutforms_entries.statusId]]');
-        $this->query->innerJoin('{{%sproutforms_forms}} forms', '[[forms.id]] = [[sproutforms_entries.formId]]');
+        $this->query->innerJoin('{{%sproutforms_entrystatuses}} sproutforms_entrystatuses', '[[sproutforms_entrystatuses.id]] = [[sproutforms_entries.statusId]]');
+        $this->query->innerJoin('{{%sproutforms_forms}} sproutforms_forms', '[[sproutforms_forms.id]] = [[sproutforms_entries.formId]]');
 
         $this->joinContentTableAndAddContentSelects($this);
 
@@ -149,7 +148,7 @@ class EntryQuery extends ElementQuery
 
         if ($this->formId) {
             $this->subQuery->andWhere(Db::parseParam(
-                'formId', $this->formId)
+                'sproutforms_entries.formId', $this->formId)
             );
         }
 
@@ -160,14 +159,14 @@ class EntryQuery extends ElementQuery
         }
 
         if ($this->formHandle) {
-            $this->subQuery->andWhere(Db::parseParam(
-                'formHandle', $this->formHandle)
+            $this->query->andWhere(Db::parseParam(
+                'sproutforms_forms.handle', $this->formHandle)
             );
         }
 
         if ($this->formName) {
-            $this->subQuery->andWhere(Db::parseParam(
-                'forms.name', $this->formName)
+            $this->query->andWhere(Db::parseParam(
+                'sproutforms_forms.name', $this->formName)
             );
         }
 

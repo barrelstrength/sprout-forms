@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\web\twig\variables;
 
+use barrelstrength\sproutforms\elements\db\EntryQuery;
 use barrelstrength\sproutforms\elements\Form;
 use Craft;
 use craft\base\ElementInterface;
@@ -18,19 +19,6 @@ use yii\base\Exception;
  */
 class SproutFormsVariable
 {
-    /**
-     * @var ElementQueryInterface
-     */
-    public $entries;
-
-    /**
-     * SproutFormsVariable constructor.
-     */
-    public function __construct()
-    {
-        $this->entries = EntryElement::find();
-    }
-
     /**
      * @return string
      */
@@ -537,6 +525,21 @@ class SproutFormsVariable
         ];
 
         return $options;
+    }
+
+    /**
+     * Returns a new EntryQuery instance.
+     *
+     * @param mixed $criteria
+     * @return EntryQuery
+     */
+    public function entries($criteria = null): EntryQuery
+    {
+        $query = EntryElement::find();
+        if ($criteria) {
+            Craft::configure($query, $criteria);
+        }
+        return $query;
     }
 }
 

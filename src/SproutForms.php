@@ -17,6 +17,7 @@ use barrelstrength\sproutbase\events\RegisterNotificationEvent;
 
 use barrelstrength\sproutforms\fields\Forms as FormsField;
 use barrelstrength\sproutforms\fields\Entries as FormEntriesField;
+use barrelstrength\sproutforms\widgets\RecentEntries;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use barrelstrength\sproutforms\integrations\sproutforms\captchas\DuplicateCaptcha;
 use barrelstrength\sproutforms\integrations\sproutforms\captchas\HoneypotCaptcha;
@@ -51,6 +52,7 @@ use barrelstrength\sproutforms\services\Fields as SproutFormsFields;
 use barrelstrength\sproutforms\events\OnBeforePopulateEntryEvent;
 use barrelstrength\sproutforms\controllers\EntriesController;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
+use craft\services\Dashboard;
 
 class SproutForms extends Plugin
 {
@@ -107,6 +109,10 @@ class SproutForms extends Plugin
         // Register DataSources for sproutReports plugin integration
         Event::on(DataSources::class, DataSources::EVENT_REGISTER_DATA_SOURCES, function(RegisterComponentTypesEvent $event) {
             $event->types[] = EntriesDataSource::class;
+        });
+
+        Event::on(Dashboard::class, Dashboard::EVENT_REGISTER_WIDGET_TYPES, function(RegisterComponentTypesEvent $event) {
+            $event->types[] = RecentEntries::class;
         });
 
         $this->setComponents([
@@ -214,36 +220,40 @@ class SproutForms extends Plugin
 
        $entriesDataSource = SproutBase::$app->dataSources->getDataSourceByType(EntriesDataSource::class);
 
-        $subNav = array_merge($parent, [
-            'subnav' => [
-                'forms' => [
-                    'label' => Craft::t('sprout-forms', 'Forms'),
-                    'url' => 'sprout-forms/forms'
-                ],
-                'entries' => [
-                    'label' => Craft::t('sprout-forms', 'Entries'),
-                    'url' => 'sprout-forms/entries'
-                ],
-                'notifications' => [
-                    'label' => Craft::t('sprout-forms', 'Notifications'),
-                    'url' => 'sprout-forms/notifications'
-                ]
-            ]
-        ]);
+        if (Craft::$app->getUser()->checkPermission('manageSproutFormsForms')) {
+            $parent['subnav']['forms'] = [
+                'label' => Craft::t('sprout-forms', 'Forms'),
+                'url' => 'sprout-forms/forms'
+            ];
+        }
+
+        if (Craft::$app->getUser()->checkPermission('viewSproutFormsEntries')) {
+            $parent['subnav']['entries'] = [
+                'label' => Craft::t('sprout-forms', 'Entries'),
+                'url' => 'sprout-forms/entries'
+            ];
+        }
+
+        if (Craft::$app->getUser()->checkPermission('editSproutFormsSettings')) {
+            $parent['subnav']['settings'] = [
+                'label' => Craft::t('sprout-forms', 'Settings'),
+                'url' => 'sprout-forms/settings'
+            ];
+        }
 
         if ($entriesDataSource) {
-            $subNav['subnav']['reports'] = [
+            $parent['subnav']['reports'] = [
                 'label' => Craft::t('sprout-forms', 'Reports'),
                 'url' => 'sprout-forms/reports/'.$entriesDataSource->dataSourceId.'-sproutforms-entriesdatasource'
             ];
         }
 
-        $subNav['subnav']['settings'] = [
-            'label' => Craft::t('sprout-forms', 'Settings'),
-            'url' => 'sprout-forms/settings'
+        $parent['subnav']['notifications'] = [
+            'label' => Craft::t('sprout-forms', 'Notifications'),
+            'url' => 'sprout-forms/notifications'
         ];
 
-        return $subNav;
+        return $parent;
     }
 
     /**

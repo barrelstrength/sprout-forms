@@ -332,7 +332,7 @@ class Fields extends Component
      */
     public function getDuplicateLayout($form, $postFieldLayout)
     {
-        if (!$form OR !$postFieldLayout) {
+        if (!$form || !$postFieldLayout) {
             return null;
         }
 
@@ -352,17 +352,15 @@ class Fields extends Component
              * @var $fieldLayoutField FieldLayoutField
              */
             foreach ($fieldLayoutFields as $fieldLayoutField) {
+
                 $field = Craft::$app->getFields()->createField([
                     'type' => get_class($fieldLayoutField),
                     'name' => $fieldLayoutField->name,
                     'handle' => $fieldLayoutField->handle,
                     'instructions' => $fieldLayoutField->instructions,
-                    'required' => $fieldLayoutField->required
+                    'required' => $fieldLayoutField->required,
+                    'settings' => $fieldLayoutField->getSettings()
                 ]);
-
-                if (isset($originalField->settings)) {
-                    $field->settings = $originalField->settings;
-                }
 
                 Craft::$app->content->fieldContext = $form->getFieldContext();
                 Craft::$app->content->contentTable = $form->getContentTable();
