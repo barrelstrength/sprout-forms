@@ -53,7 +53,6 @@ class Form extends Element
     public $templateOverridesFolder;
     public $enableFileAttachments;
 
-
     /**
      * @inheritdoc
      */
