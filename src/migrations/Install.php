@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\migrations;
 
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutbase\migrations\sproutreports\Install as SproutBaseReportsInstall;
+use barrelstrength\sproutbase\migrations\sproutemail\Install as SproutBaseNotificationInstall;
 use barrelstrength\sproutforms\integrations\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesDataSource;
 use barrelstrength\sproutforms\models\Settings;
@@ -21,6 +22,8 @@ class Install extends Migration
     {
         // Make sure Sprout Reports is also configured
         $this->installSproutReports();
+        // Install Sprout Notifications Table
+        $this->installSproutEmail();
 
         // Install Sprout Forms
         $this->createTables();
@@ -241,6 +244,15 @@ class Install extends Migration
         ], [
             'handle' => strtolower('sprout-forms')
         ])->execute();
+    }
+
+    public function installSproutEmail()
+    {
+        $migration = new SproutBaseNotificationInstall();
+
+        ob_start();
+        $migration->safeUp();
+        ob_end_clean();
     }
 
     public function installSproutReports()
