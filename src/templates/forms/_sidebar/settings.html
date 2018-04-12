@@ -141,7 +141,7 @@
         {% if settings.enablePerFormTemplateFolderOverride %}
 
             {{ forms.field({
-                label: "Default Form Templates <span class='info'>The template that will be used to output your forms</span>"|t('sprout-forms'),
+                label: "Templates <span class='info'>The Form Templates that will be used to output your forms</span>"|t('sprout-forms'),
                 required: true,
                 errors: (form is defined ? form.getErrors('templateOverridesFolder') : null)
             }, sproutFields.selectOther({

@@ -138,7 +138,7 @@ class SproutForms extends Plugin
         });
 
         Event::on(NotificationEmails::class, NotificationEmails::EVENT_REGISTER_EMAIL_EVENTS, function(RegisterNotificationEvent $event) {
-            $event->availableEvents[] = new SaveEntryEvent;
+            $event->availableEvents[] = new SaveEntryEvent();
         });
 
         Event::on(Forms::class, Forms::EVENT_REGISTER_CAPTCHAS, function(Event $event) {
