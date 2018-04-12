@@ -1,5 +1,17 @@
 # Changelog
 
+## 3.0.0-beta.6 - 2018-04-12
+
+### Added
+- Added support for `craft.sproutForms.entries` tag
+- Added Recent Form Entries Widget
+- Added user permissions to Manage, View, and Edit forms
+
+### Fixed
+- Fixed various migration bugs  
+- Fixed bug where "Save as New Form" did not copy all data
+- Fixed bug where Tags field did not allow selecting multiple tags
+
 ## 3.0.0-beta.5 - 2018-04-05
 
 ### Fixed
