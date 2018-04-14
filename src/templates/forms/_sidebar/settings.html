@@ -140,13 +140,15 @@
 
         {% if settings.enablePerFormTemplateFolderOverride %}
 
+            {% set templateOptions = craft.sproutForms.getTemplateOptions(form) %}
+
             {{ forms.field({
                 label: "Templates <span class='info'>The Form Templates that will be used to output your forms</span>"|t('sprout-forms'),
                 required: true,
                 errors: (form is defined ? form.getErrors('templateOverridesFolder') : null)
             }, sproutFields.selectOther({
                 name: 'templateOverridesFolder',
-                options: form.getTemplateOptions(),
+                options: templateOptions,
                 value: form.templateOverridesFolder ?? null,
                 otherPlaceholderText: '_forms/formHandle'|t('sprout-forms'),
             })) }}

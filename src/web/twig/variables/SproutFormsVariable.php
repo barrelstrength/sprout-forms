@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\web\twig\variables;
 
 use barrelstrength\sproutforms\elements\db\EntryQuery;
 use barrelstrength\sproutforms\elements\Form;
+use barrelstrength\sproutforms\integrations\sproutforms\formtemplates\AccessibleTemplates;
 use Craft;
 use craft\base\ElementInterface;
 use craft\elements\db\ElementQueryInterface;
@@ -483,10 +484,14 @@ class SproutFormsVariable
     }
 
     /**
+     * @param Form|null $form
+     *
      * @return array
      */
-    public function getTemplateOptions()
+    public function getTemplateOptions(Form $form = null)
     {
+        $defaultFormTemplates = new AccessibleTemplates();
+
         $templates = SproutForms::$app->forms->getAllGlobalTemplates();
         $templateIds = [];
         $options = [
@@ -504,15 +509,20 @@ class SproutFormsVariable
             $templateIds[] = $template->getTemplateId();
         }
 
+        $templateFolder = null;
         $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
-        $settings = $plugin->getSettings();
-        $templateFolder = $settings->templateFolderOverride;
+
+        if ($plugin) {
+            $settings = $plugin->getSettings();
+        }
+
+        $templateFolder = $form->templateOverridesFolder ?? $settings->templateFolderOverride ?? $defaultFormTemplates->getPath();
 
         $options[] = [
             'optgroup' => Craft::t('sprout-forms', 'Custom Template Folder')
         ];
 
-        if (!in_array($templateFolder, $templateIds) && $templateFolder != '') {
+        if (!in_array($templateFolder, $templateIds, false) && $templateFolder != '') {
             $options[] = [
                 'label' => $templateFolder,
                 'value' => $templateFolder

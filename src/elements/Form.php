@@ -382,49 +382,6 @@ class Form extends Element
     }
 
     /**
-     * @return array
-     */
-    public function getTemplateOptions()
-    {
-        $templates = SproutForms::$app->forms->getAllGlobalTemplates();
-        $templateIds = [];
-        $options = [
-            [
-                'label' => Craft::t('sprout-forms', 'Select...'),
-                'value' => ''
-            ]
-        ];
-
-        foreach ($templates as $template) {
-            $options[] = [
-                'label' => $template->getName(),
-                'value' => $template->getTemplateId()
-            ];
-            $templateIds[] = $template->getTemplateId();
-        }
-
-        $templateFolder = $this->templateOverridesFolder;
-
-        $options[] = [
-            'optgroup' => Craft::t('sprout-forms', 'Custom Template Folder')
-        ];
-
-        if (!in_array($templateFolder, $templateIds) && $templateFolder != '') {
-            $options[] = [
-                'label' => $templateFolder,
-                'value' => $templateFolder
-            ];
-        }
-
-        $options[] = [
-            'label' => Craft::t('sprout-forms', 'Add Custom'),
-            'value' => 'custom'
-        ];
-
-        return $options;
-    }
-
-    /**
      * @param null $cssClasses
      *
      * @return array
