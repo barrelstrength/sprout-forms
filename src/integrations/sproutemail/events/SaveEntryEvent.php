@@ -28,7 +28,7 @@ class SaveEntryEvent extends BaseEvent
     /**
      * @inheritdoc
      */
-    public function getEventName()
+    public function getEvent()
     {
         return Elements::EVENT_AFTER_SAVE_ELEMENT;
     }
@@ -47,11 +47,7 @@ class SaveEntryEvent extends BaseEvent
     }
 
     /**
-     * @param array $context
-     *
-     * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @inheritdoc
      */
     public function getSettingsHtml($context = [])
     {
@@ -62,6 +58,9 @@ class SaveEntryEvent extends BaseEvent
         return Craft::$app->getView()->renderTemplate('sprout-forms/_events/save-entry', $context);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function prepareOptions()
     {
         $rules = Craft::$app->getRequest()->getBodyParam('rules.sproutForms');
@@ -72,13 +71,37 @@ class SaveEntryEvent extends BaseEvent
     }
 
     /**
-     * Returns whether or not the entry meets the criteria necessary to trigger the event
-     *
-     * @param mixed $options
-     * @param Entry $entry
-     * @param array $params
-     *
-     * @return bool
+     * @inheritdoc
+     */
+    public function prepareParams(Event $event)
+    {
+        if ($this->isElementEntry($event) == false) {
+            return false;
+        }
+
+        return ['value' => $event->element, 'isNewEntry' => $event->isNew];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getMockedParams()
+    {
+        $criteria = Entry::find();
+
+        $formIds = $this->options['sproutForms']['saveEntry']['formIds'] ?? [];
+
+        if (is_array($formIds) && count($formIds)) {
+            $formId = array_shift($formIds);
+
+            $criteria->formId = $formId;
+        }
+
+        return $criteria->one();
+    }
+
+    /**
+     * @inheritdoc
      */
     public function validateOptions($options, $entry, array $params = [])
     {
@@ -107,64 +130,6 @@ class SaveEntryEvent extends BaseEvent
     }
 
     /**
-     * @param Event $event
-     *
-     * @return array|bool|mixed
-     * @throws \craft\errors\SiteNotFoundException
-     */
-    public function prepareParams(Event $event)
-    {
-        if ($this->_isElementEntry($event) == false) {
-            return false;
-        }
-
-        return ['value' => $event->element, 'isNewEntry' => $event->isNew];
-    }
-
-    /**
-     * @param $event
-     *
-     * @return bool
-     * @throws \craft\errors\SiteNotFoundException
-     */
-    private function _isElementEntry($event)
-    {
-        $element = get_class($event->element);
-
-        $primarySite = Craft::$app->getSites()->getPrimarySite();
-
-        // Ensure that only User Element class get triggered.
-        if ($element != Entry::class) {
-            return false;
-        }
-
-        // This will ensure that the event will trigger only once
-        if ($primarySite->id != $event->element->siteId) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @return array|\craft\base\ElementInterface|null
-     */
-    public function getMockedParams()
-    {
-        $criteria = Entry::find();
-
-        $formIds = $this->options['sproutForms']['saveEntry']['formIds'] ?? [];
-
-        if (is_array($formIds) && count($formIds)) {
-            $formId = array_shift($formIds);
-
-            $criteria->formId = $formId;
-        }
-
-        return $criteria->one();
-    }
-
-    /**
      * Returns an array of forms suitable for use in checkbox field
      *
      * @return array
@@ -184,5 +149,30 @@ class SaveEntryEvent extends BaseEvent
         }
 
         return $options;
+    }
+
+    /**
+     * @param $event
+     *
+     * @return bool
+     * @throws \craft\errors\SiteNotFoundException
+     */
+    private function isElementEntry($event)
+    {
+        $element = get_class($event->element);
+
+        $primarySite = Craft::$app->getSites()->getPrimarySite();
+
+        // Ensure that only User Element class get triggered.
+        if ($element != Entry::class) {
+            return false;
+        }
+
+        // This will ensure that the event will trigger only once
+        if ($primarySite->id != $event->element->siteId) {
+            return false;
+        }
+
+        return true;
     }
 }
