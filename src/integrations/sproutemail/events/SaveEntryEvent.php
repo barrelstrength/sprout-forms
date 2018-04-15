@@ -17,16 +17,31 @@ use yii\base\Event;
  */
 class SaveEntryEvent extends BaseEvent
 {
-    public function getEventParams()
+    /**
+     * @inheritdoc
+     */
+    public function getEventClassName()
     {
-        return [
-            'class' => Elements::class,
-            'name' => Elements::EVENT_AFTER_SAVE_ELEMENT,
-            'event' => ElementEvent::class
-        ];
+        return Elements::class;
     }
 
-    public function getTitle()
+    /**
+     * @inheritdoc
+     */
+    public function getEventName()
+    {
+        return Elements::EVENT_AFTER_SAVE_ELEMENT;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getEventHandlerClassName()
+    {
+        return ElementEvent::class;
+    }
+
+    public function getName()
     {
         return Craft::t('sprout-forms', 'When a Sprout Forms entry is saved');
     }

@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms;
 
 use barrelstrength\sproutbase\models\sproutreports\DataSource;
+use barrelstrength\sproutbase\services\sproutemail\NotificationEmailEvents;
 use barrelstrength\sproutbase\services\sproutreports\DataSources;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\integrations\sproutemail\events\SaveEntryEvent;
@@ -13,7 +14,7 @@ use barrelstrength\sproutforms\integrations\sproutimport\elements\Entry as Entry
 use barrelstrength\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbase\services\sproutemail\NotificationEmails;
 
-use barrelstrength\sproutbase\events\RegisterNotificationEvent;
+use barrelstrength\sproutbase\events\NotificationEmailEvent;
 
 use barrelstrength\sproutforms\fields\Forms as FormsField;
 use barrelstrength\sproutforms\fields\Entries as FormEntriesField;
@@ -137,8 +138,8 @@ class SproutForms extends Plugin
             self::$app->entries->handleUnobfuscateEmailAddresses($event->form);
         });
 
-        Event::on(NotificationEmails::class, NotificationEmails::EVENT_REGISTER_EMAIL_EVENTS, function(RegisterNotificationEvent $event) {
-            $event->availableEvents[] = new SaveEntryEvent();
+        Event::on(NotificationEmailEvents::class, NotificationEmailEvents::EVENT_REGISTER_EMAIL_EVENT_TYPES, function(NotificationEmailEvent $event) {
+            $event->events[] = SaveEntryEvent::class;
         });
 
         Event::on(Forms::class, Forms::EVENT_REGISTER_CAPTCHAS, function(Event $event) {
