@@ -248,6 +248,25 @@ class EntriesController extends BaseController
     }
 
     /**
+     * @return Response
+     * @throws \Throwable
+     * @throws \yii\web\BadRequestHttpException
+     */
+    public function actionDeleteEntry()
+    {
+        $this->requirePostRequest();
+
+        $request = Craft::$app->getRequest();
+
+        // Get the Entry
+        $entryId = $request->getRequiredBodyParam('entryId');
+
+        Craft::$app->elements->deleteElementById($entryId);
+
+        return $this->redirectToPostedUrl();
+    }
+
+    /**
      * Populate a EntryElement with post data
      *
      * @access private
