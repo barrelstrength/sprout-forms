@@ -25,39 +25,42 @@ class m180314_161540_craft2_to_craft3 extends Migration
 
         foreach ($forms as $form) {
             $table = '{{%sproutformscontent_'.$form['handle'].'}}';
-            // P&T already add a site column
-            if ($this->db->columnExists($table, 'locale__siteId')) {
-                MigrationHelper::renameColumn($table, 'locale__siteId', 'siteId', $this);
-            } else {
-                // let's do it manually
-                $siteId = Craft::$app->getSites()->getPrimarySite()->id;
-                $isNew = false;
+            $siteId = Craft::$app->getSites()->getPrimarySite()->id;
+            $isNew = false;
 
-                if (!$this->db->columnExists($table, 'siteId')) {
+            if (!$this->db->columnExists($table, 'siteId')) {
 
-                    $this->addColumn($table, 'siteId', $this->integer()->after('elementId')->notNull());
-                    $isNew = true;
-                }
+                $this->addColumn($table, 'siteId', $this->integer()->after('elementId')->notNull());
+                $isNew = true;
+            }
 
-                $rows = (new Query())
-                    ->select(['id'])
-                    ->from([$table])
-                    ->all();
+            $rows = (new Query())
+                ->select(['id'])
+                ->from([$table])
+                ->all();
 
-                foreach ($rows as $row) {
-                    $this->update($table, ['siteId' => $siteId], ['id' => $row['id']], [], false);
-                }
+            foreach ($rows as $row) {
+                $this->update($table, ['siteId' => $siteId], ['id' => $row['id']], [], false);
+            }
 
-                if ($isNew) {
-                    $this->createIndex($this->db->getIndexName($table, 'elementId,siteId'), $table, 'elementId,siteId', true);
+            if ($isNew) {
+                $this->createIndex($this->db->getIndexName($table, 'elementId,siteId'), $table, 'elementId,siteId', true);
 
-                    $this->addForeignKey($this->db->getForeignKeyName($table, 'siteId'), $table, 'siteId', '{{%sites}}', 'id', 'CASCADE', 'CASCADE');
-                }
+                $this->addForeignKey($this->db->getForeignKeyName($table, 'siteId'), $table, 'siteId', '{{%sites}}', 'id', 'CASCADE', 'CASCADE');
             }
 
             if ($this->db->columnExists($table, 'locale')) {
+                MigrationHelper::dropIndexIfExists($table, ['elementId', 'locale'], true, $this);
+                MigrationHelper::dropIndexIfExists($table, ['locale'], false, $this);
                 MigrationHelper::dropForeignKeyIfExists($table, ['locale'], $this);
                 $this->dropColumn($table, 'locale');
+            }
+
+            if ($this->db->columnExists($table, 'locale__siteId')) {
+                MigrationHelper::dropIndexIfExists($table, ['elementId', 'locale__siteId'], true, $this);
+                MigrationHelper::dropIndexIfExists($table, ['locale__siteId'], false, $this);
+                MigrationHelper::dropForeignKeyIfExists($table, ['locale__siteId'], $this);
+                $this->dropColumn($table, 'locale__siteId');
             }
         }
 
