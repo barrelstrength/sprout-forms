@@ -3,9 +3,11 @@
 namespace barrelstrength\sproutforms;
 
 use barrelstrength\sproutbase\models\sproutreports\DataSource;
+use barrelstrength\sproutbase\services\sproutbase\Template;
 use barrelstrength\sproutbase\services\sproutemail\NotificationEmailEvents;
 use barrelstrength\sproutbase\services\sproutreports\DataSources;
 use barrelstrength\sproutbase\SproutBase;
+use barrelstrength\sproutforms\integrations\sproutemail\emailtemplates\basic\BasicSproutFormsNotification;
 use barrelstrength\sproutforms\integrations\sproutemail\events\SaveEntryEvent;
 use barrelstrength\sproutforms\integrations\sproutimport\elements\Form as FormElementImporter;
 use barrelstrength\sproutforms\integrations\sproutimport\elements\Entry as EntryElementImporter;
@@ -172,6 +174,11 @@ class SproutForms extends Plugin
         Event::on(Forms::class, Forms::EVENT_REGISTER_FORM_TEMPLATES, function(Event $event) {
             $event->types[] = BasicTemplates::class;
             $event->types[] = AccessibleTemplates::class;
+        });
+
+        // Register Sprout Email Templates
+        Event::on(Template::class, Template::EVENT_REGISTER_EMAIL_TEMPLATES, function(Event $event) {
+            $event->types[] = BasicSproutFormsNotification::class;
         });
 
         Event::on(Importers::class, Importers::EVENT_REGISTER_IMPORTER_TYPES, function(RegisterComponentTypesEvent $event) {
