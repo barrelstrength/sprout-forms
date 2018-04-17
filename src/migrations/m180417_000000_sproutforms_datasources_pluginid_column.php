@@ -3,22 +3,23 @@
 namespace barrelstrength\sproutforms\migrations;
 
 use craft\db\Migration;
+use barrelstrength\sproutbase\migrations\sproutreports\m180417_000000_sproutreports_datasources_pluginid_column as SproutReportsPluginId;
 
 /**
- * sproutforms_datasources_pluginid_column migration.
+ * m180417_000000_sproutforms_datasources_pluginid_column migration.
  */
-class sproutforms_datasources_pluginid_column extends Migration
+class m180417_000000_sproutforms_datasources_pluginid_column extends Migration
 {
     /**
      * @inheritdoc
      */
     public function safeUp()
     {
-        $table = '{{%sproutreports_datasources}}';
+        $migration = new SproutReportsPluginId();
 
-        if (!$this->db->columnExists($table, 'pluginId')) {
-            $this->addColumn($table, 'pluginId', $this->string()->after('id'));
-        }
+        ob_start();
+        $migration->safeUp();
+        ob_end_clean();
 
         return true;
     }
@@ -28,7 +29,7 @@ class sproutforms_datasources_pluginid_column extends Migration
      */
     public function safeDown()
     {
-        echo "sproutforms_datasources_pluginid_column cannot be reverted.\n";
+        echo "m180417_000000_sproutforms_datasources_pluginid_column cannot be reverted.\n";
         return false;
     }
 }
