@@ -57,7 +57,7 @@ class EntriesController extends BaseController
     {
         $this->requirePostRequest();
 
-        if (Craft::$app->getRequest()->getIsSiteRequest()) {
+        if (Craft::$app->getRequest()->getIsCpRequest()) {
             $currentUser = Craft::$app->getUser()->getIdentity();
             if (!$currentUser->can('editSproutFormsEntries')) {
                 throw new ForbiddenHttpException(Craft::t('sprout-forms', "Your account doesn't have permission to edit Form Entries."));
