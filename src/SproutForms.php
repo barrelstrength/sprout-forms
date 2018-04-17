@@ -216,6 +216,7 @@ class SproutForms extends Plugin
 
     /**
      * @return array|null
+     * @throws \yii\db\Exception
      */
     public function getCpNavItem()
     {
@@ -247,12 +248,16 @@ class SproutForms extends Plugin
 
         $entriesDataSource = SproutBase::$app->dataSources->getDataSourceByType(EntriesDataSource::class);
 
-        if ($entriesDataSource) {
-            $parent['subnav']['reports'] = [
-                'label' => Craft::t('sprout-forms', 'Reports'),
-                'url' => 'sprout-forms/reports/'.$entriesDataSource->dataSourceId.'-sproutforms-entriesdatasource'
-            ];
+        // If we don't find a dataSource we need to generate our Sprout Forms Data Source record and then query for it again.
+        if (!$entriesDataSource) {
+            SproutBase::$app->dataSources->getAllDataSources();
+            $entriesDataSource = SproutBase::$app->dataSources->getDataSourceByType(EntriesDataSource::class);
         }
+
+        $parent['subnav']['reports'] = [
+            'label' => Craft::t('sprout-forms', 'Reports'),
+            'url' => 'sprout-forms/reports/'.$entriesDataSource->dataSourceId.'-sproutforms-entriesdatasource'
+        ];
 
         if (Craft::$app->getUser()->checkPermission('editSproutFormsSettings')) {
             $parent['subnav']['settings'] = [
@@ -302,8 +307,6 @@ class SproutForms extends Plugin
                     'hideSidebar' => true
                 ]
             ],
-
-
 
             'sprout-forms/settings/notifications/edit/<emailId:\d+|new>' =>
                 'sprout-base/notifications/edit-notification-email-settings-template',
