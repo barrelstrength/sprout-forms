@@ -302,12 +302,21 @@ class SproutForms extends Plugin
                     'hideSidebar' => true
                 ]
             ],
-            'sprout-forms/settings/notifications/edit/<emailId:\d+|new>' => 'sprout-base/notifications/edit-notification-email-settings-template',
-            'sprout-forms/notifications/edit/<emailId:\d+|new>' => 'sprout-base/notifications/edit-notification-email-template',
 
-            'sprout-forms/settings' => 'sprout-base/settings/edit-settings',
-            'sprout-forms/settings/<settingsSectionHandle:.*>' => 'sprout-base/settings/edit-settings',
-            'sprout-forms/preview/notification/<emailId:\d+>' => ['template' => 'sprout-base/sproutemail/notifications/_special/preview']
+
+
+            'sprout-forms/settings/notifications/edit/<emailId:\d+|new>' =>
+                'sprout-base/notifications/edit-notification-email-settings-template',
+            'sprout-forms/notifications/edit/<emailId:\d+|new>' =>
+                'sprout-base/notifications/edit-notification-email-template',
+            'sprout-forms/preview/notification/<emailId:\d+>' => [
+                'template' => 'sprout-base/sproutemail/notifications/_special/preview'
+            ],
+
+            'sprout-forms/settings' =>
+                'sprout-base/settings/edit-settings',
+            'sprout-forms/settings/<settingsSectionHandle:.*>' =>
+                'sprout-base/settings/edit-settings'
         ];
     }
 
