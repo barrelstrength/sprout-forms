@@ -1,5 +1,19 @@
 # Changelog
 
+## 3.0.0-beta.7 - 2018-04-17
+
+### Added
+- Added Notifications powered by Sprout Email
+- Added Basic Notification Email Templates integration 
+- Added Custom Save Entry Event for Notification Emails  
+- Added Reports powered by Sprout Reports
+- Added Sprout Forms Entries Data Source
+
+### Fixed
+- Fixed bug when updating from Craft 2
+- Fixed bug where a Form Entry could not be deleted
+- Fixes bug where user was unable to submit a form if not logged in
+
 ## 3.0.0-beta.6 - 2018-04-12
 
 ### Added
