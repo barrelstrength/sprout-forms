@@ -7,8 +7,8 @@ Simple, Beautiful Forms.
 - **Custom Form Templates** - Developers can customize every detail of Form HTML
 - **Accessible Forms** - Default Form Templates follow many WCAG 2.0 best practices
 - **Spam Protection** - Protect your forms from evil robots
-- **Notifications** - Coming soon
-- **Reports** - Coming soon
+- **Notifications** - Send notifications to users and admins. Customize your Email Templates.
+- **Reports** - Run reports and export Form Entries as CSV files.
 
 See the Sprout Forms documentation to learn more about Sprout Forms.
 
