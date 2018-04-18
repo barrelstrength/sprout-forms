@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.0-beta.8 - 2018-04-17
+
+### Fixed
+- Fixed bug where report migration was not run for existing Sprout Report installations
+
 ## 3.0.0-beta.7 - 2018-04-17
 
 ### Added
