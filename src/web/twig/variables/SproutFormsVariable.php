@@ -114,7 +114,9 @@ class SproutFormsVariable
 
         $tabIndex = null;
 
-        foreach ($form->getFieldLayout()->getTabs() as $key => $tabInfo) {
+        $layoutTabs = $form->getFieldLayout()->getTabs();
+
+        foreach ($layoutTabs as $key => $tabInfo) {
             if ($tabId == $tabInfo->id) {
                 $tabIndex = $key;
             }
@@ -124,7 +126,6 @@ class SproutFormsVariable
             return false;
         }
 
-        $layoutTabs = $form->getFieldLayout()->getTabs();
         $layoutTab = $layoutTabs[$tabIndex] ?? null;
 
         // Build the HTML for our form tabs and fields
