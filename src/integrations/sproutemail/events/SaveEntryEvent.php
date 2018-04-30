@@ -2,35 +2,47 @@
 
 namespace barrelstrength\sproutforms\integrations\sproutemail\events;
 
-use barrelstrength\sproutbase\contracts\sproutemail\BaseEvent;
+use barrelstrength\sproutbase\contracts\sproutemail\BaseNotificationEvent;
+
 use barrelstrength\sproutforms\elements\Entry;
+use barrelstrength\sproutforms\elements\Form;
+use barrelstrength\sproutforms\services\Entries;
 use barrelstrength\sproutforms\SproutForms;
+use craft\events\ModelEvent;
 use craft\services\Elements;
 use craft\events\ElementEvent;
 use Craft;
-use yii\base\Event;
+
 
 /**
  * Class SaveEntryEvent
  *
  * @package barrelstrength\sproutforms\integrations\sproutemail\events
  */
-class SaveEntryEvent extends BaseEvent
+class SaveEntryEvent extends BaseNotificationEvent
 {
+    public $whenNew;
+
+    public $whenUpdated;
+
+    public $availableForms;
+
+    public $formIds = [];
+
     /**
      * @inheritdoc
      */
     public function getEventClassName()
     {
-        return Elements::class;
+        return Entries::class;
     }
 
     /**
      * @inheritdoc
      */
-    public function getEvent()
+    public function getEventName()
     {
-        return Elements::EVENT_AFTER_SAVE_ELEMENT;
+        return Entry::EVENT_AFTER_SAVE;
     }
 
     /**
@@ -38,60 +50,54 @@ class SaveEntryEvent extends BaseEvent
      */
     public function getEventHandlerClassName()
     {
-        return ElementEvent::class;
+        return ModelEvent::class;
     }
 
     public function getName()
     {
-        return Craft::t('sprout-forms', 'When a Sprout Forms entry is saved');
+        return Craft::t('sprout-forms', 'When a form entry is saved (Sprout Forms)');
     }
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml($context = [])
     {
-        if (!isset($context['availableForms'])) {
-            $context['availableForms'] = $this->getAllForms();
+        if (!$this->availableForms) {
+            $this->availableForms = $this->getAllForms();
         }
 
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_events/save-entry', $context);
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_events/save-entry', [
+            'event' => $this
+        ]);
     }
 
     /**
      * @inheritdoc
      */
-    public function prepareOptions()
+    public function getEventObject()
     {
-        $rules = Craft::$app->getRequest()->getBodyParam('rules.sproutForms');
+        /**
+         * @var ElementEvent $event
+         */
+        $event = $this->event ?? null;
 
-        return [
-            'sproutForms' => $rules,
-        ];
+        return $event->element ?? null;
     }
 
     /**
+     * @todo fix bug where incorrect form can be selected.
+     *
      * @inheritdoc
      */
-    public function prepareParams(Event $event)
-    {
-        if ($this->isElementEntry($event) == false) {
-            return false;
-        }
-
-        return ['value' => $event->element, 'isNewEntry' => $event->isNew];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getMockedParams()
+    public function getMockEventObject()
     {
         $criteria = Entry::find();
 
-        $formIds = $this->options['sproutForms']['saveEntry']['formIds'] ?? [];
-
-        if (is_array($formIds) && count($formIds)) {
+        if (count($this->formIds)) {
             $formId = array_shift($formIds);
 
             $criteria->formId = $formId;
@@ -100,33 +106,91 @@ class SaveEntryEvent extends BaseEvent
         return $criteria->one();
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function validateOptions($options, $entry, array $params = [])
+    public function rules()
     {
-        $isNewEntry = isset($params['isNewEntry']) && $params['isNewEntry'];
+        $rules = parent::rules();
 
-        $whenNew = isset($options['sproutForms']['saveEntry']['whenNew']) &&
-            $options['sproutForms']['saveEntry']['whenNew'];
+        $rules[] = ['whenNew', 'required', 'when' => function() {
+            return $this->whenUpdated == false;
+        }];
 
-        // If any section ids were checked
-        // Make sure the entry belongs in one of them
-        if (!empty($options['sproutForms']['saveEntry']['formIds']) &&
-            count($options['sproutForms']['saveEntry']['formIds'])
-        ) {
-            if (!in_array($entry->getForm()->id, $options['sproutForms']['saveEntry']['formIds'])) {
-                return false;
-            }
+        $rules[] = ['whenUpdated', 'required', 'when' => function() {
+            return $this->whenNew == false;
+        }];
+
+        $rules[] = [['whenNew', 'whenUpdated'], 'validateWhenTriggers'];
+        $rules[] = [['event'], 'validateEvent'];
+        $rules[] = [['formIds'], 'validateFormIds'];
+
+        return $rules;
+    }
+
+    public function validateWhenTriggers()
+    {
+        /**
+         * @var ElementEvent $event
+         */
+        $event = $this->event ?? null;
+
+        $isNewEntry = $event->isNewEntry ?? false;
+
+        $matchesWhenNew = $this->whenNew && $isNewEntry ?? false;
+        $matchesWhenUpdated = $this->whenUpdated && !$isNewEntry ?? false;
+
+        if (!$matchesWhenNew && !$matchesWhenUpdated)
+        {
+            $this->addError('event', Craft::t('sprout-email', 'When a form entry is saved Event does not match any scenarios.'));
         }
 
-        // If only new entries was checked
-        // Make sure the entry is new
-        if (!$whenNew || ($whenNew && $isNewEntry)) {
-            return true;
+        // Make sure new entries are new.
+        if (($this->whenNew && !$isNewEntry) && !$this->whenUpdated) {
+            $this->addError('event', Craft::t('sprout-email', '"When an entry is created" is selected but the entry is being updated.'));
         }
 
-        return false;
+        // Make sure updated entries are not new
+        if (($this->whenUpdated && $isNewEntry) && !$this->whenNew) {
+            $this->addError('event', Craft::t('sprout-email', '"When an entry is updated" is selected but the entry is new.'));
+        }
+    }
+
+    public function validateEvent()
+    {
+        /**
+         * @var ElementEvent $event
+         */
+        $event = $this->event ?? null;
+
+        if (!$event)
+        {
+            $this->addError('event', Craft::t('sprout-forms', 'ElementEvent does not exist.'));
+        }
+
+        if (get_class($event->entry) !== Entry::class) {
+            $this->addError('event', Craft::t('sprout-forms', 'Event Element does not match barrelstrength\sproutforms\elements\Entry class.'));
+        }
+    }
+
+    public function validateFormIds()
+    {
+        /**
+         * @var ElementEvent $event
+         */
+        $event = $this->event ?? null;
+
+        $elementId = null;
+
+        if (get_class($event->entry) === Entry::class) {
+            /**
+             * @var Form $form
+             */
+            $form = $event->element->getForm();
+            $elementId = $form->id;
+        }
+
+        // If any section ids were checked, make sure the entry belongs in one of them
+        if (!in_array($elementId, $this->formIds, false)) {
+            $this->addError('event', Craft::t('sprout-email', 'The Form associated with the saved Form Entry Element does not match any selected Forms.'));
+        }
     }
 
     /**
@@ -149,30 +213,5 @@ class SaveEntryEvent extends BaseEvent
         }
 
         return $options;
-    }
-
-    /**
-     * @param $event
-     *
-     * @return bool
-     * @throws \craft\errors\SiteNotFoundException
-     */
-    private function isElementEntry($event)
-    {
-        $element = get_class($event->element);
-
-        $primarySite = Craft::$app->getSites()->getPrimarySite();
-
-        // Ensure that only User Element class get triggered.
-        if ($element != Entry::class) {
-            return false;
-        }
-
-        // This will ensure that the event will trigger only once
-        if ($primarySite->id != $event->element->siteId) {
-            return false;
-        }
-
-        return true;
     }
 }
