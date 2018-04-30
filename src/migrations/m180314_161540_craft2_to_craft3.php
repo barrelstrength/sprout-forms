@@ -24,7 +24,7 @@ class m180314_161540_craft2_to_craft3 extends Migration
             ->all();
 
         foreach ($forms as $form) {
-            $table = '{{%sproutformscontent_'.$form['handle'].'}}';
+            $table = '{{%sproutformscontent_'.strtolower($form['handle']).'}}';
             $siteId = Craft::$app->getSites()->getPrimarySite()->id;
             $isNew = false;
 
