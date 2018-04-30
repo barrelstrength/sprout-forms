@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.0-beta.10 - 2018-04-17
+
+### Fixed
+- Fixed migration bug where form content table names could be created with improper casing
+
 ## 3.0.0-beta.9 - 2018-04-17
 
 ### Fixed
