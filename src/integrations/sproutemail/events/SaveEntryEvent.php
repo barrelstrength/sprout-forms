@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutforms\integrations\sproutemail\events;
 
-use barrelstrength\sproutbase\contracts\sproutemail\BaseNotificationEvent;
+use barrelstrength\sproutbase\sproutemail\contracts\BaseNotificationEvent;
 
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Form;

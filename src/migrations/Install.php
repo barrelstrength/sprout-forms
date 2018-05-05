@@ -3,8 +3,8 @@
 namespace barrelstrength\sproutforms\migrations;
 
 use barrelstrength\sproutbase\SproutBase;
-use barrelstrength\sproutbase\migrations\sproutreports\Install as SproutBaseReportsInstall;
-use barrelstrength\sproutbase\migrations\sproutemail\Install as SproutBaseNotificationInstall;
+use barrelstrength\sproutbase\sproutreports\migrations\Install as SproutBaseReportsInstall;
+use barrelstrength\sproutbase\sproutemail\migrations\Install as SproutBaseNotificationInstall;
 use barrelstrength\sproutforms\integrations\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesDataSource;
 use barrelstrength\sproutforms\models\Settings;

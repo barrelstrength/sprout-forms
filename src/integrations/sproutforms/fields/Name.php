@@ -9,7 +9,7 @@ use craft\base\PreviewableFieldInterface;
 use craft\helpers\Template as TemplateHelper;
 
 use barrelstrength\sproutbase\SproutBase;
-use barrelstrength\sproutbase\models\sproutfields\Name as NameModel;
+use barrelstrength\sproutbase\sproutfields\models\Name as NameModel;
 use barrelstrength\sproutforms\contracts\BaseFormField;
 
 class Name extends BaseFormField implements PreviewableFieldInterface

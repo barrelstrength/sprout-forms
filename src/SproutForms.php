@@ -2,22 +2,17 @@
 
 namespace barrelstrength\sproutforms;
 
-use barrelstrength\sproutbase\models\sproutreports\DataSource;
-use barrelstrength\sproutbase\services\sproutbase\Template;
-use barrelstrength\sproutbase\services\sproutemail\NotificationEmailEvents;
-use barrelstrength\sproutbase\services\sproutreports\DataSources;
+use barrelstrength\sproutbase\sproutreports\models\DataSource;
+use barrelstrength\sproutbase\sproutbase\services\Template;
+use barrelstrength\sproutbase\sproutemail\services\NotificationEmailEvents;
+use barrelstrength\sproutbase\sproutreports\services\DataSources;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\integrations\sproutemail\emailtemplates\basic\BasicSproutFormsNotification;
 use barrelstrength\sproutforms\integrations\sproutemail\events\SaveEntryEvent;
 use barrelstrength\sproutforms\integrations\sproutimport\elements\Form as FormElementImporter;
 use barrelstrength\sproutforms\integrations\sproutimport\elements\Entry as EntryElementImporter;
-
-
-use barrelstrength\sproutbase\base\BaseSproutTrait;
-use barrelstrength\sproutbase\services\sproutemail\NotificationEmails;
-
-use barrelstrength\sproutbase\events\NotificationEmailEvent;
-
+use barrelstrength\sproutbase\sproutbase\base\BaseSproutTrait;
+use barrelstrength\sproutbase\sproutemail\events\NotificationEmailEvent;
 use barrelstrength\sproutforms\fields\Forms as FormsField;
 use barrelstrength\sproutforms\fields\Entries as FormEntriesField;
 use barrelstrength\sproutforms\widgets\RecentEntries;
@@ -33,8 +28,8 @@ use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesDat
 use barrelstrength\sproutforms\services\App;
 use barrelstrength\sproutforms\services\Entries;
 use barrelstrength\sproutforms\services\Forms;
-use barrelstrength\sproutbase\services\sproutimport\Importers;
-use barrelstrength\sproutbase\services\sproutimport\Themes;
+use barrelstrength\sproutbase\sproutimport\services\Importers;
+use barrelstrength\sproutbase\sproutimport\services\Themes;
 use Craft;
 use craft\base\Plugin;
 use craft\events\RegisterComponentTypesEvent;
@@ -51,7 +46,6 @@ use barrelstrength\sproutforms\models\Settings;
 use barrelstrength\sproutforms\web\twig\variables\SproutFormsVariable;
 use barrelstrength\sproutforms\events\RegisterFieldsEvent;
 use barrelstrength\sproutforms\services\Fields as SproutFormsFields;
-
 use barrelstrength\sproutforms\events\OnBeforePopulateEntryEvent;
 use barrelstrength\sproutforms\controllers\EntriesController;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
