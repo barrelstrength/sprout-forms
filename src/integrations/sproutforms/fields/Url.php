@@ -78,7 +78,7 @@ class Url extends BaseFormField implements PreviewableFieldInterface
 
         $fieldContext = SproutBase::$app->utilities->getFieldContext($this, $element);
 
-        return Craft::$app->getView()->renderTemplate('sprout-base/sproutfields/_fields/url/input', [
+        return Craft::$app->getView()->renderTemplate('sprout-base-fields/_fields/url/input', [
                 'namespaceInputId' => $namespaceInputId,
                 'id' => $inputId,
                 'name' => $name,

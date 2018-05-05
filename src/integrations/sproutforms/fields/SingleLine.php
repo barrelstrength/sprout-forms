@@ -73,7 +73,7 @@ class SingleLine extends BaseFormField implements PreviewableFieldInterface
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        return Craft::$app->getView()->renderTemplate('sprout-base/sproutfields/_fields/singleline/input',
+        return Craft::$app->getView()->renderTemplate('sprout-base-fields/_fields/singleline/input',
             [
                 'name' => $this->handle,
                 'value' => $value,

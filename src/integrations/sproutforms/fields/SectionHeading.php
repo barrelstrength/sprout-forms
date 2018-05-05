@@ -127,7 +127,7 @@ class SectionHeading extends BaseFormField
         }
 
         return Craft::$app->getView()->renderTemplate(
-            'sprout-base/sproutfields/_fields/sectionheading/input',
+            'sprout-base-fields/_fields/sectionheading/input',
             [
                 'id' => $namespaceInputId,
                 'name' => $name,

@@ -136,7 +136,7 @@ class Phone extends BaseFormField implements PreviewableFieldInterface
         $val = $value['phone'] ?? null;
 
         return Craft::$app->getView()->renderTemplate(
-            'sprout-base/sproutfields/_fields/phone/input',
+            'sprout-base-fields/_fields/phone/input',
             [
                 'namespaceInputId' => $namespaceInputId,
                 'namespaceCountryId' => $namespaceCountryId,

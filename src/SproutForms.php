@@ -302,7 +302,7 @@ class SproutForms extends Plugin
             'sprout-forms/reports/<dataSourceId>-<dataSourceSlug>' => 'sprout-base/reports/index',
 
             'sprout-forms/notifications' => [
-                'template' => 'sprout-base/sproutemail/notifications/index',
+                'template' => 'sprout-base-email/notifications/index',
                 'params' => [
                     'hideSidebar' => true
                 ]
@@ -313,7 +313,7 @@ class SproutForms extends Plugin
             'sprout-forms/notifications/edit/<emailId:\d+|new>' =>
                 'sprout-base/notifications/edit-notification-email-template',
             'sprout-forms/preview/notification/<emailId:\d+>' => [
-                'template' => 'sprout-base/sproutemail/notifications/_special/preview'
+                'template' => 'sprout-base-email/notifications/_special/preview'
             ],
 
             'sprout-forms/settings' =>

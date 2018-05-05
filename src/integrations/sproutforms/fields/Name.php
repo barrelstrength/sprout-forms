@@ -73,7 +73,7 @@ class Name extends BaseFormField implements PreviewableFieldInterface
      */
     public function getSettingsHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-base/sproutfields/_fields/name/settings',
+        return Craft::$app->getView()->renderTemplate('sprout-base-fields/_fields/name/settings',
             [
                 'field' => $this,
             ]);
@@ -95,7 +95,7 @@ class Name extends BaseFormField implements PreviewableFieldInterface
         $elementId = ($element != null) ? $element->id : false;
 
         $rendered = Craft::$app->getView()->renderTemplate(
-            'sprout-base/sproutfields/_fields/name/input',
+            'sprout-base-fields/_fields/name/input',
             [
                 'namespaceInputId' => $namespaceInputId,
                 'id' => $inputId,

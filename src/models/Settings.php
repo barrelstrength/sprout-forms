@@ -21,7 +21,7 @@ class Settings extends Model
     {
         // Added new items override if needed
         // 'fullPageForm' => true,
-        // 'actionTemplate' => 'sprout-base/sproutbase/_includes/actionButton'
+        // 'actionTemplate' => 'sprout-base/_includes/actionButton'
         // 'actionUrl' => 'sprout-base/settings/save-settings'
         $variables['entryStatuses'] = SproutForms::$app->entries->getAllEntryStatuses();
 

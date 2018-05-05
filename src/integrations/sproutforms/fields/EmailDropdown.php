@@ -109,7 +109,7 @@ class EmailDropdown extends BaseOptionsFormField
 
         $options = $this->options;
 
-        return Craft::$app->getView()->renderTemplate('sprout-base/sproutfields/_fields/emaildropdown/input',
+        return Craft::$app->getView()->renderTemplate('sprout-base-fields/_fields/emaildropdown/input',
             [
                 'name' => $name,
                 'value' => $value,
