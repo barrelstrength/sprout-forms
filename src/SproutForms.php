@@ -290,10 +290,10 @@ class SproutForms extends Plugin
             'sprout-forms/forms/<groupId:\d+>' =>
                 'sprout-forms/forms',
 
-            'sprout-forms/reports/<dataSourceId>-<dataSourceSlug>/new' => 'sprout-base/reports/edit-report',
-            'sprout-forms/reports/<dataSourceId>-<dataSourceSlug>/edit/<reportId>' => 'sprout-base/reports/edit-report',
-            'sprout-forms/reports/view/<reportId>' => 'sprout-base/reports/results-index',
-            'sprout-forms/reports/<dataSourceId>-<dataSourceSlug>' => 'sprout-base/reports/index',
+            'sprout-forms/reports/<dataSourceId>-<dataSourceSlug>/new' => 'sprout-base/sprout-reports/edit-report',
+            'sprout-forms/reports/<dataSourceId>-<dataSourceSlug>/edit/<reportId>' => 'sprout-base/sprout-reports/edit-report',
+            'sprout-forms/reports/view/<reportId>' => 'sprout-base/sprout-reports/results-index',
+            'sprout-forms/reports/<dataSourceId>-<dataSourceSlug>' => 'sprout-base/sprout-reports/index',
 
             'sprout-forms/notifications' => [
                 'template' => 'sprout-base-email/notifications/index',
@@ -303,17 +303,17 @@ class SproutForms extends Plugin
             ],
 
             'sprout-forms/settings/notifications/edit/<emailId:\d+|new>' =>
-                'sprout-base/notifications/edit-notification-email-settings-template',
+                'sprout-base/sprout-email-notifications/edit-notification-email-settings-template',
             'sprout-forms/notifications/edit/<emailId:\d+|new>' =>
-                'sprout-base/notifications/edit-notification-email-template',
+                'sprout-base/sprout-email-notifications/edit-notification-email-template',
             'sprout-forms/preview/notification/<emailId:\d+>' => [
                 'template' => 'sprout-base-email/notifications/_special/preview'
             ],
 
             'sprout-forms/settings' =>
-                'sprout-base/settings/edit-settings',
+                'sprout-base/sprout-base-settings/edit-settings',
             'sprout-forms/settings/<settingsSectionHandle:.*>' =>
-                'sprout-base/settings/edit-settings'
+                'sprout-base/sprout-base-settings/edit-settings'
         ];
     }
 
