@@ -183,7 +183,7 @@ class SaveEntryEvent extends BaseNotificationEvent
             /**
              * @var Form $form
              */
-            $form = $event->element->getForm();
+            $form = $event->entry->getForm();
             $elementId = $form->id;
         }
 
