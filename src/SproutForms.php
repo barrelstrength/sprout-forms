@@ -79,9 +79,21 @@ class SproutForms extends Plugin
      */
     public $hasCpSettings = true;
 
+    /**
+     * @var string
+     */
+    public $schemaVersion = '3.0.1';
+
+    /**
+     * @throws \yii\base\InvalidConfigException
+     */
     public function init()
     {
         parent::init();
+
+        $this->setComponents([
+            'app' => App::class
+        ]);
 
         self::$app = $this->get('app');
 

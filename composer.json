@@ -36,15 +36,11 @@
   "extra": {
     "name": "Sprout Forms",
     "handle": "sprout-forms",
-    "schemaVersion": "3.0.1",
     "developer": "Barrel Strength",
     "developerUrl": "https://barrelstrengthdesign.com",
     "documentationUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms",
     "changelogUrl": "https://raw.githubusercontent.com/BarrelStrength/sprout-forms/master/CHANGELOG.md",
     "downloadUrl": "https://github.com/BarrelStrength/sprout-forms/archive/master.zip",
-    "class": "barrelstrength\\sproutforms\\SproutForms",
-    "components": {
-      "app": "barrelstrength\\sproutforms\\services\\App"
-    }
+    "class": "barrelstrength\\sproutforms\\SproutForms"
   }
 }
