@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutforms\integrations\sproutimport\elements;
 
-use barrelstrength\sproutbase\sproutimport\contracts\BaseElementImporter;
+use barrelstrength\sproutbase\app\import\contracts\BaseElementImporter;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\SproutForms;

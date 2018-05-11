@@ -2,17 +2,17 @@
 
 namespace barrelstrength\sproutforms;
 
-use barrelstrength\sproutbase\sproutreports\models\DataSource;
-use barrelstrength\sproutbase\sproutbase\services\Template;
-use barrelstrength\sproutbase\sproutemail\services\NotificationEmailEvents;
-use barrelstrength\sproutbase\sproutreports\services\DataSources;
+use barrelstrength\sproutbase\app\reports\models\DataSource;
+use barrelstrength\sproutbase\services\Template;
+use barrelstrength\sproutbase\app\email\services\NotificationEmailEvents;
+use barrelstrength\sproutbase\app\reports\services\DataSources;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\integrations\sproutemail\emailtemplates\basic\BasicSproutFormsNotification;
 use barrelstrength\sproutforms\integrations\sproutemail\events\SaveEntryEvent;
 use barrelstrength\sproutforms\integrations\sproutimport\elements\Form as FormElementImporter;
 use barrelstrength\sproutforms\integrations\sproutimport\elements\Entry as EntryElementImporter;
-use barrelstrength\sproutbase\sproutbase\base\BaseSproutTrait;
-use barrelstrength\sproutbase\sproutemail\events\NotificationEmailEvent;
+use barrelstrength\sproutbase\base\BaseSproutTrait;
+use barrelstrength\sproutbase\app\email\events\NotificationEmailEvent;
 use barrelstrength\sproutforms\fields\Forms as FormsField;
 use barrelstrength\sproutforms\fields\Entries as FormEntriesField;
 use barrelstrength\sproutforms\widgets\RecentEntries;
@@ -28,8 +28,8 @@ use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesDat
 use barrelstrength\sproutforms\services\App;
 use barrelstrength\sproutforms\services\Entries;
 use barrelstrength\sproutforms\services\Forms;
-use barrelstrength\sproutbase\sproutimport\services\Importers;
-use barrelstrength\sproutbase\sproutimport\services\Themes;
+use barrelstrength\sproutbase\app\import\services\Importers;
+use barrelstrength\sproutbase\app\import\services\Themes;
 use Craft;
 use craft\base\Plugin;
 use craft\events\RegisterComponentTypesEvent;
@@ -290,10 +290,14 @@ class SproutForms extends Plugin
             'sprout-forms/forms/<groupId:\d+>' =>
                 'sprout-forms/forms',
 
-            'sprout-forms/reports/<dataSourceId>-<dataSourceSlug>/new' => 'sprout-base/sprout-reports/edit-report',
-            'sprout-forms/reports/<dataSourceId>-<dataSourceSlug>/edit/<reportId>' => 'sprout-base/sprout-reports/edit-report',
-            'sprout-forms/reports/view/<reportId>' => 'sprout-base/sprout-reports/results-index',
-            'sprout-forms/reports/<dataSourceId>-<dataSourceSlug>' => 'sprout-base/sprout-reports/index',
+            'sprout-forms/reports/<dataSourceId>-<dataSourceSlug>/new' =>
+                'sprout-base/sprout-reports/edit-report',
+            'sprout-forms/reports/<dataSourceId>-<dataSourceSlug>/edit/<reportId>' =>
+                'sprout-base/sprout-reports/edit-report',
+            'sprout-forms/reports/view/<reportId>' =>
+                'sprout-base/sprout-reports/results-index',
+            'sprout-forms/reports/<dataSourceId>-<dataSourceSlug>' =>
+                'sprout-base/sprout-reports/index',
 
             'sprout-forms/notifications' => [
                 'template' => 'sprout-base-email/notifications/index',

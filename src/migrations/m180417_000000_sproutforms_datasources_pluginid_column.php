@@ -3,7 +3,7 @@
 namespace barrelstrength\sproutforms\migrations;
 
 use craft\db\Migration;
-use barrelstrength\sproutbase\sproutreports\migrations\m180417_000000_sproutreports_datasources_pluginid_column as SproutReportsPluginId;
+use barrelstrength\sproutbase\app\reports\migrations\m180417_000000_sproutreports_datasources_pluginid_column as SproutReportsPluginId;
 
 /**
  * m180417_000000_sproutforms_datasources_pluginid_column migration.

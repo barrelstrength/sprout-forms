@@ -4,7 +4,7 @@ namespace barrelstrength\sproutforms\migrations;
 
 use craft\db\Migration;
 
-use barrelstrength\sproutbase\sproutemail\migrations\Install as SproutBaseNotificationInstall;
+use barrelstrength\sproutbase\app\email\migrations\Install as SproutBaseNotificationInstall;
 
 /**
  * m180412_000000_sproutforms_sprout_email migration.

@@ -10,7 +10,7 @@ use craft\base\PreviewableFieldInterface;
 
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\contracts\BaseFormField;
-use barrelstrength\sproutbase\sproutfields\models\Phone as PhoneModel;
+use barrelstrength\sproutbase\app\fields\models\Phone as PhoneModel;
 
 class Phone extends BaseFormField implements PreviewableFieldInterface
 {

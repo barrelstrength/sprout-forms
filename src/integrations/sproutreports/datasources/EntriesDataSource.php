@@ -4,9 +4,9 @@ namespace barrelstrength\sproutforms\integrations\sproutreports\datasources;
 
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutbase\sproutreports\elements\Report;
+use barrelstrength\sproutbase\app\reports\elements\Report;
 use Craft;
-use barrelstrength\sproutbase\sproutreports\contracts\BaseDataSource;
+use barrelstrength\sproutbase\app\reports\contracts\BaseDataSource;
 use craft\db\Query;
 use craft\helpers\DateTimeHelper;
 

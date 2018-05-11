@@ -8,7 +8,7 @@ use craft\helpers\Template as TemplateHelper;
 use yii\db\Schema;
 
 use barrelstrength\sproutforms\contracts\BaseFormField;
-use barrelstrength\sproutbase\sproutfields\web\assets\notes\QuillAsset;
+use barrelstrength\sproutbase\app\fields\web\assets\notes\QuillAsset;
 
 class SectionHeading extends BaseFormField
 {
