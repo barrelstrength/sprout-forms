@@ -4,7 +4,7 @@ namespace barrelstrength\sproutforms\migrations;
 
 use craft\db\Migration;
 use craft\db\Query;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Number;
+use barrelstrength\sproutforms\fields\formfields\Number;
 use craft\fields\Number as CraftNumber;
 
 /**

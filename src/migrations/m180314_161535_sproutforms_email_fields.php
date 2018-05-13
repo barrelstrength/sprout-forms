@@ -4,7 +4,7 @@ namespace barrelstrength\sproutforms\migrations;
 
 use craft\db\Migration;
 use craft\db\Query;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Email;
+use barrelstrength\sproutforms\fields\formfields\Email;
 
 /**
  * m180314_161535_sproutforms_email_fields migration.

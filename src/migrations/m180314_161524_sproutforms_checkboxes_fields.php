@@ -4,7 +4,7 @@ namespace barrelstrength\sproutforms\migrations;
 
 use craft\db\Migration;
 use craft\db\Query;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Checkboxes;
+use barrelstrength\sproutforms\fields\formfields\Checkboxes;
 use craft\fields\Checkboxes as CraftCheckboxes;
 
 /**

@@ -1,0 +1,84 @@
+{%- set id = renderingOptions.id ?? name %}
+{%- set class = renderingOptions.class ?? name %}
+{%- set required = field.required ? true : false %}
+{%- set hasInstructions = field.instructions ? true : false %}
+{%- set value = value ? value : null %}
+
+{%- set dataAttributes = null %}
+{%- set data = renderingOptions.data ?? null %}
+{%- for key, dataValue in data %}
+    {%- set dataAttributes = dataAttributes ~ ' data-'~key~'="'~dataValue~'"' %}
+{% endfor -%}
+
+{% if field.displayMultipleFields %}
+
+    <div class="{{ name }}-wrapper"
+            {%- if id %} id="{{ id }}"{% endif %}
+            {%- if class %} class="{{ class }}"{% endif %}
+            {{- dataAttributes|raw -}}>
+
+        {% if field.displayPrefix %}
+            <div {%- if id %} id="{{ id }}-prefix"{% endif %}>
+                <label>{{ "Prefix"|t('sprout-forms') }}</label>
+                <input type="text"
+                        {%- if name %} name="{{ name ~ '[address][prefix]' }}"{% endif %}
+                        {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+                        {%- if value %} value="{{ value.prefix }}"{% endif %}
+                >
+            </div>
+        {% endif %}
+
+        <div {%- if id %} id="{{ id }}-firstName"{% endif %}>
+            <label>{{ "First"|t('sprout-forms') }}</label>
+            <input type="text" autocomplete="given-name"
+                    {%- if name %} name="{{ name ~ '[address][firstName]' }}"{% endif %}
+                    {%- if required %} required aria-required="true"{% endif %}
+                    {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+                    {%- if value %} value="{{ value.firstName }}"{% endif %}
+            >
+        </div>
+
+        {% if field.displayMiddleName %}
+            <div {%- if id %} id="{{ id }}-middleName"{% endif %}>
+                <label>{{ "Middle"|t('sprout-forms') }}</label>
+                <input type="text" autocomplete="additional-name"
+                        {%- if name %} name="{{ name ~ '[address][middleName]' }}"{% endif %}
+                        {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+                        {%- if value %} value="{{ value.middleName }}"{% endif %}
+                >
+            </div>
+        {% endif %}
+
+        <div {%- if id %} id="{{ id }}-lastName"{% endif %}>
+            <label>{{ "Last"|t('sprout-forms') }}</label>
+            <input type="text" autocomplete="family-name"
+                    {%- if name %} name="{{ name ~ '[address][lastName]' }}"{% endif %}
+                    {%- if required %} required aria-required=" true"{% endif %}
+                    {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+                    {%- if value %} value="{{ value.lastName }}"{% endif %}
+            >
+        </div>
+
+        {% if field.displaySuffix %}
+            <div {%- if id %} id="{{ id }}-suffix"{% endif %}>
+                <label>{{ "Suffix"|t('sprout-forms') }}</label>
+                <input type="text"
+                        {%- if name %} name="{{ name ~ '[address][suffix]' }}"{% endif %}
+                        {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+                        {%- if value %} value="{{ value.suffix }}"{% endif %}
+                >
+            </div>
+        {% endif %}
+
+    </div>
+
+{% else %}
+
+    <input type="text" autocomplete="name"
+            {%- if name %} name="{{ name ~ '[address][fullNameShort]' }}"{% endif %}
+            {%- if required %} required aria-required=" true"{% endif %}
+            {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+            {%- if value %} value="{{ value.getFullName() }}"{% endif %}
+    >
+
+{% endif %}

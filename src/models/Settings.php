@@ -22,7 +22,7 @@ class Settings extends Model
         // Added new items override if needed
         // 'fullPageForm' => true,
         // 'actionTemplate' => 'sprout-base/_includes/actionButton'
-        // 'actionUrl' => 'sprout-base/sprout-base-settings/save-settings'
+        // 'actionUrl' => 'sprout-base/settings/save-settings'
         $variables['entryStatuses'] = SproutForms::$app->entries->getAllEntryStatuses();
 
         return [
@@ -30,27 +30,27 @@ class Settings extends Model
                 'label' => Craft::t('sprout-forms', 'General'),
                 'url' => 'sprout-forms/settings/general',
                 'selected' => 'general',
-                'template' => 'sprout-forms/_settings/general'
+                'template' => 'sprout-forms/settings/general'
             ],
             'spam-protection' => [
                 'label' => Craft::t('sprout-forms', 'Spam Protection'),
                 'url' => 'sprout-forms/settings/spam-protection',
                 'selected' => 'spam-protection',
-                'template' => 'sprout-forms/_settings/spamprotection'
+                'template' => 'sprout-forms/settings/spamprotection'
             ],
             'entry-statuses' => [
                 'label' => Craft::t('sprout-forms', 'Entry Statuses'),
                 'url' => 'sprout-forms/settings/entry-statuses',
                 'selected' => 'entry-statuses',
-                'template' => 'sprout-forms/_settings/entrystatuses',
-                'actionTemplate' => 'sprout-forms/_includes/actionStatusButton',
+                'template' => 'sprout-forms/settings/entrystatuses',
+                'actionTemplate' => 'sprout-forms/settings/entrystatuses/_actionStatusButton',
                 'variables' => $variables
             ],
             'advanced' => [
                 'label' => Craft::t('sprout-forms', 'Advanced'),
                 'url' => 'sprout-forms/settings/advanced',
                 'selected' => 'advanced',
-                'template' => 'sprout-forms/_settings/advanced'
+                'template' => 'sprout-forms/settings/advanced'
             ]
         ];
     }

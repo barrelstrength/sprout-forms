@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutforms\integrations\sproutimport\elements;
 
-use barrelstrength\sproutbase\sproutimport\contracts\BaseElementImporter;
+use barrelstrength\sproutbase\app\import\base\ElementImporter;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\SproutForms;
@@ -10,7 +10,7 @@ use barrelstrength\sproutimport\models\jobs\SeedJob;
 
 use Craft;
 
-class Entry extends BaseElementImporter
+class Entry extends ElementImporter
 {
     /**
      * @inheritdoc
@@ -62,7 +62,7 @@ class Entry extends BaseElementImporter
             }
         }
 
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_integrations/sproutimport/entries/settings', [
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_integrations/sproutimport/importers/elements/seed-generators/Entry/settings', [
             'id' => $this->getModelName(),
             'formOptions' => $formOptions
         ]);

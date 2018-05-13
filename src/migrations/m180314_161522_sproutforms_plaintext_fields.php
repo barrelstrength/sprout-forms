@@ -4,8 +4,8 @@ namespace barrelstrength\sproutforms\migrations;
 
 use craft\db\Migration;
 use craft\db\Query;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\SingleLine;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Paragraph;
+use barrelstrength\sproutforms\fields\formfields\SingleLine;
+use barrelstrength\sproutforms\fields\formfields\Paragraph;
 use craft\fields\PlainText;
 
 /**

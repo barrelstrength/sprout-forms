@@ -2,11 +2,11 @@
 
 namespace barrelstrength\sproutforms\integrations\sproutimport\fields;
 
-use barrelstrength\sproutbase\sproutimport\contracts\BaseFieldImporter;
+use barrelstrength\sproutbase\app\import\base\FieldImporter;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutimport\SproutImport;
 
-class Forms extends BaseFieldImporter
+class Forms extends FieldImporter
 {
     /**
      * @inheritdoc

@@ -1,6 +1,6 @@
 {% import "_includes/forms" as forms %}
-{% import "sprout-forms/_includes/macros" as sproutForms %}
-{% import "sprout-base-fields/forms" as sproutFields %}
+{% import "sprout-forms/_includes/formbuilder" as formBuilder %}
+{% import "sprout-base-fields/_includes/forms" as sproutFields %}
 
 {% set tab  = 1 %}
 {% set tab2 = false %}
@@ -36,14 +36,14 @@
                     <h6 class="tab-title donotdrag">{{ name }}</h6>
                     {% for type in group %}
                         {% set field = fieldTypes[type] %}
-                        {{ sproutForms.field(field, 'source') }}
+                        {{ formBuilder.field(field, 'source') }}
                     {% endfor %}
                 {% endfor %}
 
                 {% if customFields %}
                     <h6 class="tab-title donotdrag">{{ 'Custom Fields'|t('sprout-forms') }}</h6>
                     {% for field in customFields %}
-                        {{ sproutForms.field(field, 'source') }}
+                        {{ formBuilder.field(field, 'source') }}
                     {% endfor %}
                 {% endif %}
             </div>

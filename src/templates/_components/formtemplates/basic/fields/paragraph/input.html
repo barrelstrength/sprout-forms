@@ -1,0 +1,27 @@
+{%- set id = renderingOptions.id ?? name %}
+{%- set class = renderingOptions.class ?? name %}
+{%- set required = field.required ? true : false %}
+{%- set hasInstructions = field.instructions ? true : false %}
+{%- set value = value ? value : null %}
+
+{%- set placeholder = field.placeholder ? field.placeholder : null %}
+{%- set maxLength = field.charLimit ? field.charLimit : null %}
+{%- set initialRows = field.initialRows ? field.initialRows : 10 %}
+
+{%- set dataAttributes = null %}
+{%- set data = renderingOptions.data ?? null %}
+{%- for key, dataValue in data %}
+    {%- set dataAttributes = dataAttributes ~ ' data-'~key~'="'~dataValue~'"' %}
+{% endfor -%}
+
+<textarea aria-multiline="true"
+        {%- if name %} name="{{ name }}"{% endif %}
+        {%- if id %} id="{{ id }}"{% endif %}
+        {%- if class %} class="{{ class }}"{% endif %}
+        {%- if required %} required aria-required="true"{% endif %}
+        {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+        {%- if placeholder %} placeholder="{{ placeholder }}"{% endif %}
+        {%- if maxLength %} maxlength="{{ maxLength }}"{% endif %}
+        {%- if initialRows %} rows="{{ initialRows }}"{% endif %}
+        {{- dataAttributes|raw -}}
+>{{ value }}</textarea>

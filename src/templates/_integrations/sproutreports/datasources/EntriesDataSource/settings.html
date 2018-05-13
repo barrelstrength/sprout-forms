@@ -1,0 +1,43 @@
+{% import "_includes/forms" as forms %}
+{% import 'sprout-base/_includes/sproutcp' as sprout %}
+
+{% if formOptions|length %}
+
+    {{ forms.selectField({
+        label: "Forms"|t('sprout-forms'),
+        instructions: 'Select which forms to search'|t('sprout-forms'),
+        name: 'settings[formId]',
+        options: formOptions,
+        value: (options.formId is defined ? options.formId : '*'),
+        first: true
+    }) }}
+
+    {{ forms.dateTimeField({
+        label: "Start Date"|t('sprout-forms'),
+        id: 'startDate',
+        name: 'settings[startDate]',
+        value: (options.startDate is defined ? options.startDate : defaultStartDate)
+    }) }}
+
+    {{ forms.dateTimeField({
+        label: "End Date"|t('sprout-forms'),
+        id: 'endDate',
+        name: 'settings[endDate]',
+        value: (options.endDate is defined ? options.endDate : defaultEndDate)
+    }) }}
+
+{% else %}
+
+    {% set boxBody %}
+        <p>{{ "Create your first form and return to customize this report. Once you create a form, you'll be able to select this report's form and data range."|t('sprout-base')|raw }}</p>
+    {% endset %}
+
+    {{ sprout.mediaBox({
+        heading: "One more step"|t('sprout-base'),
+        body: boxBody,
+        resourcePath: '@sproutbase/web/assets/sproutreports/dist/images/icon.svg'
+    }) }}
+
+{% endif %}
+
+{% do view.registerAssetBundle("barrelstrength\\sproutbase\\web\\assets\\cp\\CpAsset") %}

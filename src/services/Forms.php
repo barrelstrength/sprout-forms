@@ -2,8 +2,8 @@
 
 namespace barrelstrength\sproutforms\services;
 
-use barrelstrength\sproutforms\contracts\BaseFormTemplates;
-use barrelstrength\sproutforms\integrations\sproutforms\formtemplates\AccessibleTemplates;
+use barrelstrength\sproutforms\base\FormTemplates;
+use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
@@ -511,11 +511,11 @@ class Forms extends Component
     }
 
     /**
-     * Returns all available Global Form Templates
+     * Returns all available Form Templates Class Names
      *
      * @return string[]
      */
-    public function getAllGlobalTemplateTypes()
+    public function getAllFormTemplateTypes()
     {
         $event = new RegisterComponentTypesEvent([
             'types' => []
@@ -527,13 +527,13 @@ class Forms extends Component
     }
 
     /**
-     * Returns all available Global Form Templates
+     * Returns all available Form Templates
      *
      * @return string[]
      */
-    public function getAllGlobalTemplates()
+    public function getAllFormTemplates()
     {
-        $templateTypes = $this->getAllGlobalTemplateTypes();
+        $templateTypes = $this->getAllFormTemplateTypes();
         $templates = [];
 
         foreach ($templateTypes as $templateType) {
@@ -542,8 +542,8 @@ class Forms extends Component
 
         uasort($templates, function($a, $b) {
             /**
-             * @var $a BaseFormTemplates
-             * @var $b BaseFormTemplates
+             * @var $a FormTemplates
+             * @var $b FormTemplates
              */
             return $a->getName() <=> $b->getName();
         });
@@ -552,62 +552,12 @@ class Forms extends Component
     }
 
     /**
-     * Returns all available Captcha classes
-     *
-     * @return string[]
-     */
-    public function getAllCaptchaTypes()
-    {
-        $event = new RegisterComponentTypesEvent([
-            'types' => []
-        ]);
-
-        $this->trigger(self::EVENT_REGISTER_CAPTCHAS, $event);
-
-        return $event->types;
-    }
-
-    /**
-     * @return array
-     */
-    public function getAllCaptchas()
-    {
-        $captchaTypes = $this->getAllCaptchaTypes();
-        $captchas = [];
-
-        foreach ($captchaTypes as $captchaType) {
-            $captchas[$captchaType] = new $captchaType();
-        }
-
-        return $captchas;
-    }
-
-    /**
-     * @return array
-     */
-    public function getAllEnabledCaptchas()
-    {
-        $sproutFormsSettings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
-        $captchaTypes = $this->getAllCaptchas();
-        $captchas = [];
-
-        foreach ($captchaTypes as $captchaType) {
-            $isEnabled = $sproutFormsSettings->captchaSettings[$captchaType->getCaptchaId()]['enabled'] ?? false;
-            if ($isEnabled) {
-                $captchas[get_class($captchaType)] = $captchaType;
-            }
-        }
-
-        return $captchas;
-    }
-
-    /**
      * @param FormElement|null $form
      *
      * @return array
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
-    public function getSproutFormsTemplates(FormElement $form = null)
+    public function getFormTemplatePaths(FormElement $form = null)
     {
         $templates = [];
         $settings = Craft::$app->plugins->getPlugin('sprout-forms')->getSettings();
@@ -616,7 +566,7 @@ class Forms extends Component
         $defaultTemplate = $defaultVersion->getPath();
 
         if ($settings->templateFolderOverride) {
-            $templatePath = $this->getTemplateById($settings->templateFolderOverride);
+            $templatePath = $this->getFormTemplateById($settings->templateFolderOverride);
             if ($templatePath) {
                 // custom path by template API
                 $templateFolderOverride = $templatePath->getPath();
@@ -627,7 +577,7 @@ class Forms extends Component
         }
 
         if ($form->templateOverridesFolder) {
-            $formTemplatePath = $this->getTemplateById($form->templateOverridesFolder);
+            $formTemplatePath = $this->getFormTemplateById($form->templateOverridesFolder);
             if ($formTemplatePath) {
                 // custom path by template API
                 $templateFolderOverride = $formTemplatePath->getPath();
@@ -686,6 +636,24 @@ class Forms extends Component
     }
 
     /**
+     * @param $templateId
+     *
+     * @return null|FormTemplates
+     */
+    public function getFormTemplateById($templateId)
+    {
+        $templates = SproutForms::$app->forms->getAllFormTemplates();
+
+        foreach ($templates as $template) {
+            if ($template->getTemplateId() == $templateId) {
+                return $template;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * @param $path
      *
      * @return string
@@ -697,20 +665,52 @@ class Forms extends Component
     }
 
     /**
-     * @param $templateId
+     * Returns all available Captcha classes
      *
-     * @return null|BaseFormTemplates
+     * @return string[]
      */
-    public function getTemplateById($templateId)
+    public function getAllCaptchaTypes()
     {
-        $templates = SproutForms::$app->forms->getAllGlobalTemplates();
+        $event = new RegisterComponentTypesEvent([
+            'types' => []
+        ]);
 
-        foreach ($templates as $template) {
-            if ($template->getTemplateId() == $templateId) {
-                return $template;
+        $this->trigger(self::EVENT_REGISTER_CAPTCHAS, $event);
+
+        return $event->types;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllCaptchas()
+    {
+        $captchaTypes = $this->getAllCaptchaTypes();
+        $captchas = [];
+
+        foreach ($captchaTypes as $captchaType) {
+            $captchas[$captchaType] = new $captchaType();
+        }
+
+        return $captchas;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllEnabledCaptchas()
+    {
+        $sproutFormsSettings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
+        $captchaTypes = $this->getAllCaptchas();
+        $captchas = [];
+
+        foreach ($captchaTypes as $captchaType) {
+            $isEnabled = $sproutFormsSettings->captchaSettings[$captchaType->getCaptchaId()]['enabled'] ?? false;
+            if ($isEnabled) {
+                $captchas[get_class($captchaType)] = $captchaType;
             }
         }
 
-        return null;
+        return $captchas;
     }
 }
