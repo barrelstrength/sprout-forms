@@ -4,7 +4,7 @@ namespace barrelstrength\sproutforms\migrations;
 
 use craft\db\Migration;
 use craft\db\Query;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Multiselect;
+use barrelstrength\sproutforms\fields\formfields\Multiselect;
 use craft\fields\Multiselect as CraftMultiselect;
 
 /**

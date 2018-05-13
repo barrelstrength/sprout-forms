@@ -1,0 +1,35 @@
+{%- set id = renderingOptions.id ?? name %}
+{%- set class = renderingOptions.class ?? name %}
+{%- set required = field.required ? true : false %}
+{%- set hasInstructions = field.instructions ? true : false %}
+{%- set value = value ? value : null %}
+
+{%- set min = field.min ? field.min : null %}
+{%- set max = field.max ? field.max : null %}
+{%- set decimals = field.decimals > 0 ? field.decimals : null %}
+
+{%- set dataAttributes = null %}
+{%- set data = renderingOptions.data ?? null %}
+{%- for key, dataValue in data %}
+    {%- set dataAttributes = dataAttributes ~ ' data-'~key~'="'~dataValue~'"' %}
+{% endfor -%}
+
+{%- set step = null %}
+{%- if decimals -%}
+    {%- for i in 1..decimals %}
+        {%- set step = (loop.last ? step ~ 1 : step ~ 0) %}
+    {%- endfor -%}
+{%- endif -%}
+
+<input type="number"
+        {%- if name %} name="{{ name }}"{% endif %}
+        {%- if id %} id="{{ id }}"{% endif %}
+        {%- if class %} class="{{ class }}"{% endif %}
+        {%- if required %} required aria-required="true"{% endif %}
+        {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+        {%- if value %} value="{{ value }}"{% endif %}
+        {%- if min is not null %} min="{{ min }}"{% endif %}
+        {%- if max is not null %} max="{{ max }}"{% endif %}
+        {%- if step is not null %} step="0.{{ step }}"{% endif %}
+        {{- dataAttributes|raw -}}
+>

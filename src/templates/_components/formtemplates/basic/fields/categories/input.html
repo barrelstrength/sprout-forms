@@ -1,0 +1,39 @@
+{%- set id = renderingOptions.id ?? name %}
+{%- set class = renderingOptions.class ?? name %}
+{%- set required = field.required ? true : false %}
+{%- set hasInstructions = field.instructions ? true : false %}
+{%- set value = value ? value : null %}
+
+{%- set multiple = field.limit == '' ? true : field.limit > 1 ? true : false %}
+{%- set selectionLabel = field.selectionLabel != '' ? field.selectionLabel : "Select a category..."|t('sprout-forms') -%}
+
+{%- set dataAttributes = null %}
+{%- set data = renderingOptions.data ?? null %}
+{%- for key, dataValue in data %}
+    {%- set dataAttributes = dataAttributes ~ ' data-'~key~'="'~dataValue~'"' %}
+{%- endfor -%}
+
+{% spaceless %}
+    <select {%- if name %} name="{{ name }}[]"{% endif %}
+            {%- if id %} id="{{ id }}"{% endif %}
+            {%- if class %} class="{{ class }}"{% endif %}
+            {%- if required %} required aria-required="true"{% endif %}
+            {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+            {%- if multiple %} multiple {% endif %}
+            {{- dataAttributes|raw -}}
+    >
+        {%- if not multiple -%}
+            <option value="" disabled selected>{{ selectionLabel }}</option>
+        {%- endif -%}
+        {%- for options in categories -%}
+            {%- for option in options.categories -%}
+                {%- set optionLabel = option.title -%}
+                {%- set optionValue = option.id -%}
+
+                <option value="{{ optionValue }}"
+                        {% if optionValue == value %}selected{% endif %}>{{ optionLabel }}</option>
+
+            {% endfor %}
+        {% endfor %}
+    </select>
+{% endspaceless %}

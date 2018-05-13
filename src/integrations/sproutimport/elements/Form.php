@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutforms\integrations\sproutimport\elements;
 
-use barrelstrength\sproutbase\app\import\contracts\BaseElementImporter;
+use barrelstrength\sproutbase\app\import\base\ElementImporter;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\SproutForms;
@@ -10,7 +10,7 @@ use barrelstrength\sproutimport\SproutImport;
 use Craft;
 
 
-class Form extends BaseElementImporter
+class Form extends ElementImporter
 {
     /**
      * @bool

@@ -4,7 +4,7 @@ namespace barrelstrength\sproutforms\migrations;
 
 use craft\db\Migration;
 use craft\db\Query;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Invisible;
+use barrelstrength\sproutforms\fields\formfields\Invisible;
 
 /**
  * m180314_161533_sproutforms_invisible_fields migration.

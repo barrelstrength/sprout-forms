@@ -4,7 +4,7 @@ namespace barrelstrength\sproutforms\migrations;
 
 use craft\db\Migration;
 use craft\db\Query;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\RegularExpression;
+use barrelstrength\sproutforms\fields\formfields\RegularExpression;
 
 /**
  * m180314_161537_sproutforms_regular_expressions_fields migration.

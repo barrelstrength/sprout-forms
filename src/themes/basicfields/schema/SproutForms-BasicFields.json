@@ -13,7 +13,7 @@
         "Tab 1": [
           {
             "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
-            "type": "barrelstrength\\sproutforms\\integrations\\sproutforms\\fields\\SectionHeading",
+            "type": "barrelstrength\\sproutforms\\fields\\formfields\\SectionHeading",
             "name": "Section Heading",
             "handle": "sectionHeading",
             "notes": "<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>",
@@ -22,7 +22,7 @@
           },
           {
             "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
-            "type": "barrelstrength\\sproutforms\\integrations\\sproutforms\\fields\\SingleLine",
+            "type": "barrelstrength\\sproutforms\\fields\\formfields\\SingleLine",
             "name": "Single Line",
             "handle": "singleLine",
             "instructions": "Example instructions",
@@ -32,7 +32,7 @@
           },
           {
             "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
-            "type": "barrelstrength\\sproutforms\\integrations\\sproutforms\\fields\\Paragraph",
+            "type": "barrelstrength\\sproutforms\\fields\\formfields\\Paragraph",
             "name": "Paragraph",
             "handle": "paragraph",
             "instructions": "",
@@ -43,7 +43,7 @@
           },
           {
             "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
-            "type": "barrelstrength\\sproutforms\\integrations\\sproutforms\\fields\\MultipleChoice",
+            "type": "barrelstrength\\sproutforms\\fields\\formfields\\MultipleChoice",
             "name": "Multiple Choice",
             "handle": "multipleChoice",
             "instructions": "",
@@ -67,7 +67,7 @@
           },
           {
             "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
-            "type": "barrelstrength\\sproutforms\\integrations\\sproutforms\\fields\\Dropdown",
+            "type": "barrelstrength\\sproutforms\\fields\\formfields\\Dropdown",
             "name": "Dropdown",
             "handle": "dropdown",
             "instructions": "",
@@ -91,7 +91,7 @@
           },
           {
             "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
-            "type": "barrelstrength\\sproutforms\\integrations\\sproutforms\\fields\\Checkboxes",
+            "type": "barrelstrength\\sproutforms\\fields\\formfields\\Checkboxes",
             "name": "Checkboxes",
             "handle": "checkboxes",
             "instructions": "",
@@ -115,7 +115,7 @@
           },
           {
             "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
-            "type": "barrelstrength\\sproutforms\\integrations\\sproutforms\\fields\\Number",
+            "type": "barrelstrength\\sproutforms\\fields\\formfields\\Number",
             "name": "Number",
             "handle": "number",
             "instructions": "",
@@ -126,7 +126,7 @@
           },
           {
             "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
-            "type": "barrelstrength\\sproutforms\\integrations\\sproutforms\\fields\\FileUpload",
+            "type": "barrelstrength\\sproutforms\\fields\\formfields\\FileUpload",
             "name": "FileUpload",
             "handle": "fileUpload",
             "instructions": "",

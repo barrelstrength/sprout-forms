@@ -4,7 +4,7 @@ namespace barrelstrength\sproutforms\migrations;
 
 use craft\db\Migration;
 use craft\db\Query;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\FileUpload;
+use barrelstrength\sproutforms\fields\formfields\FileUpload;
 use craft\fields\Assets as CraftAssets;
 
 /**

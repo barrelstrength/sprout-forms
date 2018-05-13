@@ -1,0 +1,40 @@
+{%- set id = renderingOptions.id ?? name %}
+{%- set class = renderingOptions.class ?? name %}
+{%- set required = field.required ? true : false %}
+{%- set hasInstructions = field.instructions ? true : false %}
+{%- set selectedValue = value is defined ? value : null %}
+
+{%- set options = field.options ? field.options : [] %}
+
+{%- set dataAttributes = null %}
+{%- set data = renderingOptions.data ?? null %}
+{%- for key, dataValue in data %}
+    {%- set dataAttributes = dataAttributes ~ ' data-'~key~'="'~dataValue~'"' %}
+{% endfor -%}
+
+{% spaceless %}
+    <div
+            {%- if id %} id="{{ id }}"{% endif %}
+            {%- if class %} class="{{ class }}{% endif %}">
+
+        {%- for key, option in options %}
+
+            {%- set label = (option.label is defined ? option.label : option) %}
+            {%- set optionValue = (option.value is defined ? option.value : key) %}
+            {%- set checked = (optionValue == selectedValue) %}
+
+            <label {%- if id %} for="{{ id }}-{{ loop.index }}"{% endif %}>
+                <input type="radio"
+                        {%- if name %} name="{{ name }}"{% endif %}
+                        {%- if id %} id="{{ id }}-{{ loop.index }}"{% endif %}
+                        {%- if required %} required aria-required="true"{% endif %}
+                        {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+                        {%- if optionValue %} value="{{ optionValue }}"{% endif %}
+                        {%- if checked %} checked aria-checked="true"{% else %} aria-checked="false"{% endif %}
+                        {{- dataAttributes|raw -}}
+                >
+                {%- if label %}{{ label|raw }}{% endif -%}
+            </label>
+        {% endfor %}
+    </div>
+{% endspaceless %}

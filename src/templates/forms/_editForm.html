@@ -1,6 +1,6 @@
 {% extends "sprout-forms/_layouts/base" %}
 {% import "_includes/forms" as forms %}
-{% import "sprout-forms/_includes/macros" as sproutForms %}
+{% import "sprout-forms/_includes/formbuilder" as formBuilder %}
 
 {% set crumbs = [
     { label: "Forms"|t('sprout-forms'), url: cpUrl('sprout-forms/forms') }
@@ -70,7 +70,7 @@
         {# let's add the tabs and fields to the dropped divs #}
         {% if fieldLayout %}
             {% for tab in fieldLayout.getTabs() %}
-                {{ sproutForms.tab(tab, tab.getFields(), not loop.first) }}
+                {{ formBuilder.tab(tab, tab.getFields(), not loop.first) }}
             {% endfor %}
         {% endif %}
 
@@ -86,8 +86,8 @@
 {% endblock %}
 
 {% do view.registerAssetBundle("craft\\web\\assets\\fields\\FieldsAsset") %}
-{% do view.registerAssetBundle("barrelstrength\\sproutforms\\web\\assets\\forms\\FormsAsset") %}
-{% do view.registerAssetBundle("barrelstrength\\sproutforms\\web\\assets\\dragula\\DragulaAsset") %}
+{% do view.registerAssetBundle("barrelstrength\\sproutbase\\app\\forms\\web\\assets\\forms\\FormsAsset") %}
+{% do view.registerAssetBundle("barrelstrength\\sproutbase\\app\\forms\\web\\assets\\dragula\\DragulaAsset") %}
 
 {% js %}
     {% if not form.handle %}
