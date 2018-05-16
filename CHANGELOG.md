@@ -4,12 +4,21 @@
 
 {warning} If you have more than one Sprout Plugin installed, to avoid errors use the 'Update All' option.
 
+### Added
+- Added minVersionRequired as Sprout Forms v2.5.1 ([#92](https://github.com/barrelstrength/craft-sprout-forms/issues/92))
+
 ### Changed
 - Updated Sprout Email Notification Events to extend new BaseNotificationEvent class
 - Updated folder structure
 - Moved schema and component definitions to Plugin class
 - Moved templates to Sprout Base
 - Moved asset bundles to Sprout Base 
+
+### Fixed
+- Fixed several deprecation errors
+- Fixed bug when using CLI ([#91](https://github.com/barrelstrength/craft-sprout-forms/issues/91), [#5](https://github.com/barrelstrength/craft-sprout-base/issues/5))
+- Fixed bug where form handle casing could cause error during migration ([#84](https://github.com/barrelstrength/craft-sprout-forms/issues/84))
+- Fixed Notification exception where parameter did not work in PHP 7.2 ([#86](https://github.com/barrelstrength/craft-sprout-forms/issues/86))   
 
 ## 3.0.0-beta.10 - 2018-04-17
 
