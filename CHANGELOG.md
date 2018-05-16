@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.0.0-beta.11 - 2018-05-15
+
+### Changed
+- Updated Sprout Email Notification Events to extend new BaseNotificationEvent class
+- Updated folder structure
+- Moved schema and component definitions to Plugin class
+- Moved templates to Sprout Base
+- Moved asset bundles to Sprout Base
+
 ## 3.0.0-beta.10 - 2018-04-17
 
 ### Fixed

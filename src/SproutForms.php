@@ -32,6 +32,9 @@ use barrelstrength\sproutbase\app\import\services\Importers;
 use barrelstrength\sproutbase\app\import\services\Themes;
 use Craft;
 use craft\base\Plugin;
+
+use craft\db\Connection;
+use yii\db\Migration;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
@@ -67,7 +70,7 @@ class SproutForms extends Plugin
      *
      * @var string
      */
-    public static $pluginId = 'sprout-forms';
+    public static $pluginHandle = 'sprout-forms';
 
     /**
      * @var bool
@@ -82,7 +85,12 @@ class SproutForms extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '3.0.1';
+    public $schemaVersion = '3.0.2';
+
+    /**
+     * @var string
+     */
+    public $minVersionRequired = '2.5.1';
 
     /**
      * @throws \yii\base\InvalidConfigException
@@ -365,8 +373,8 @@ class SproutForms extends Plugin
         $dataSourceModel = new DataSource();
         $dataSourceModel->type = $dataSourceClass;
         $dataSourceModel->allowNew = 1;
-        // Set all pre-built class to sprout-reports pluginId
-        $dataSourceModel->pluginId = 'sprout-forms';
+        // Set all pre-built class to sprout-reports $pluginHandle
+        $dataSourceModel->pluginHandle = 'sprout-forms';
 
         SproutBase::$app->dataSources->saveDataSource($dataSourceModel);
     }
