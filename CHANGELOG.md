@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.0.0-beta.11 - 2018-05-15
+## 3.0.0-beta.12 - 2018-05-15
 
 {warning} If you have more than one Sprout Plugin installed, to avoid errors use the 'Update All' option.
 
@@ -9,6 +9,7 @@
 
 ### Changed
 - Updated Sprout Email Notification Events to extend new BaseNotificationEvent class
+- Updated pattern of Report Edit URL
 - Updated folder structure
 - Moved schema and component definitions to Plugin class
 - Moved templates to Sprout Base
