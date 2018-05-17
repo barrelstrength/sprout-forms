@@ -268,7 +268,7 @@ class SproutForms extends Plugin
 
         $parent['subnav']['reports'] = [
             'label' => Craft::t('sprout-forms', 'Reports'),
-            'url' => 'sprout-forms/reports/'.$entriesDataSource->dataSourceId.'-sproutforms-entriesdatasource'
+            'url' => 'sprout-forms/reports/'.$entriesDataSource->dataSourceId
         ];
 
         if (Craft::$app->getUser()->checkPermission('editSproutFormsSettings')) {
@@ -308,13 +308,13 @@ class SproutForms extends Plugin
             'sprout-forms/forms/<groupId:\d+>' =>
                 'sprout-forms/forms',
 
-            'sprout-forms/reports/<dataSourceId>-<dataSourceSlug>/new' =>
+            'sprout-forms/reports/<dataSourceId>/new' =>
                 'sprout-base/reports/edit-report',
-            'sprout-forms/reports/<dataSourceId>-<dataSourceSlug>/edit/<reportId>' =>
+            'sprout-forms/reports/<dataSourceId>/edit/<reportId>' =>
                 'sprout-base/reports/edit-report',
             'sprout-forms/reports/view/<reportId>' =>
                 'sprout-base/reports/results-index',
-            'sprout-forms/reports/<dataSourceId>-<dataSourceSlug>' =>
+            'sprout-forms/reports/<dataSourceId>' =>
                 'sprout-base/reports/index',
 
             'sprout-forms/notifications' => [
