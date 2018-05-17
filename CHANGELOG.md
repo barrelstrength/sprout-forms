@@ -1,8 +1,13 @@
 # Changelog
 
+## 3.0.0-beta.13 - 2018-05-17
+
+### Fixed
+- Fixes release notes warning syntax
+
 ## 3.0.0-beta.12 - 2018-05-15
 
-{warning} If you have more than one Sprout Plugin installed, to avoid errors use the 'Update All' option.
+> {warning} If you have more than one Sprout Plugin installed, to avoid errors use the 'Update All' option.
 
 ### Added
 - Added minVersionRequired as Sprout Forms v2.5.1 ([#92](https://github.com/barrelstrength/craft-sprout-forms/issues/92))
