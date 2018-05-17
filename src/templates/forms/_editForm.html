@@ -28,7 +28,7 @@
     <input type="hidden" id="formId" name="id"
            value="{{ form.id is defined ? form.id : '' }}">
 
-    <div class="btngroup submit first">
+    <div id="save-form-button" class="btngroup submit first">
         <input type="submit" class="btn submit"
                value="{{ 'Save'|t('sprout-forms') }}">
         {% if form.id != null %}
@@ -55,6 +55,7 @@
             </div>
         {% endif %}
     </div>
+    <div class="spinner hidden"></div>
 {% endblock %}
 
 {% block tabs %}
