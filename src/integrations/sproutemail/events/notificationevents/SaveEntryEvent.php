@@ -85,7 +85,7 @@ class SaveEntryEvent extends NotificationEvent
          */
         $event = $this->event ?? null;
 
-        return $event->element ?? null;
+        return $event->entry ?? null;
     }
 
     /**
