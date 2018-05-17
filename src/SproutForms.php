@@ -326,8 +326,12 @@ class SproutForms extends Plugin
 
             'sprout-forms/settings/notifications/edit/<emailId:\d+|new>' =>
                 'sprout-base/notifications/edit-notification-email-settings-template',
-            'sprout-forms/notifications/edit/<emailId:\d+|new>' =>
-                'sprout-base/notifications/edit-notification-email-template',
+            'sprout-forms/notifications/edit/<emailId:\d+|new>' => [
+                'route' => 'sprout-base/notifications/edit-notification-email-template',
+                'params' => [
+                    'defaultEmailTemplate' => BasicSproutFormsNotification::class
+                ]
+            ],
             'sprout-forms/preview/notification/<emailId:\d+>' => [
                 'template' => 'sprout-base-email/notifications/_special/preview'
             ],

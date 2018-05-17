@@ -5,6 +5,7 @@ namespace barrelstrength\sproutforms\migrations;
 use barrelstrength\sproutbase\app\email\migrations\m180515_000000_rename_notification_pluginId_column;
 use barrelstrength\sproutbase\app\email\migrations\m180515_000001_update_notification_element_types;
 use barrelstrength\sproutbase\app\email\migrations\m180515_000002_rename_notification_options_column;
+use barrelstrength\sproutbase\app\email\migrations\m180515_000003_update_notification_eventId_types;
 use barrelstrength\sproutbase\app\reports\migrations\m180515_000001_rename_datasources_pluginId_column;
 use barrelstrength\sproutbase\app\reports\migrations\m180515_000002_update_report_element_types;
 use craft\db\Migration;
@@ -47,6 +48,12 @@ class m180515_000000_schema_version_v302 extends Migration
 
         ob_start();
         $reportElementTypeMigration->safeUp();
+        ob_end_clean();
+
+        $notificationEmailTemplateIdMigration = new m180515_000003_update_notification_eventId_types();
+
+        ob_start();
+        $notificationEmailTemplateIdMigration->safeUp();
         ob_end_clean();
 
         return true;
