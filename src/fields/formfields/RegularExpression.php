@@ -10,7 +10,7 @@ use craft\base\PreviewableFieldInterface;
 
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\base\FormField;
-use barrelstrength\sproutfields\web\assets\regularexpression\RegularExpressionFieldAsset;
+use barrelstrength\sproutbase\app\fields\web\assets\regularexpression\RegularExpressionFieldAsset;
 
 class RegularExpression extends FormField implements PreviewableFieldInterface
 {
