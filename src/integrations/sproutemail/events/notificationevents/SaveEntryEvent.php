@@ -98,7 +98,7 @@ class SaveEntryEvent extends NotificationEvent
         $criteria = Entry::find();
 
         if (count($this->formIds)) {
-            $formId = array_shift($formIds);
+            $formId = array_shift($this->formIds);
 
             $criteria->formId = $formId;
         }
