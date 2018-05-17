@@ -7,10 +7,10 @@
 
 namespace barrelstrength\sproutforms\integrations\sproutimport\themes;
 
-use barrelstrength\sproutbase\contracts\sproutimport\BaseTheme;
+use barrelstrength\sproutbase\app\import\base\Theme;
 use Craft;
 
-class BasicFieldsTheme extends BaseTheme
+class BasicFieldsTheme extends Theme
 {
     /**
      * @return string

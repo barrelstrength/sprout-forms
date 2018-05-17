@@ -4,7 +4,7 @@ namespace barrelstrength\sproutforms\migrations;
 
 use craft\db\Migration;
 use craft\db\Query;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Hidden;
+use barrelstrength\sproutforms\fields\formfields\Hidden;
 
 /**
  * m180314_161532_sproutforms_hidden_fields migration.

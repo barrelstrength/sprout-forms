@@ -4,7 +4,7 @@ namespace barrelstrength\sproutforms\migrations;
 
 use craft\db\Migration;
 use craft\db\Query;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\SectionHeading;
+use barrelstrength\sproutforms\fields\formfields\SectionHeading;
 
 /**
  * m180314_161538_sproutforms_notes_fields migration.

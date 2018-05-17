@@ -1,0 +1,68 @@
+{% requirePermission "editSproutFormsSettings" %}
+
+{% import "_includes/forms" as forms %}
+{% import "sprout-base-fields/_includes/forms" as sproutFields %}
+
+{% set saveShortcutRedirect = 'sproutforms/settings/advanced' %}
+
+{% if currentUser.can('editSproutFormsSettings') %}
+
+    <div id="settings-cp">
+
+        {% namespace 'settings' %}
+
+            {{ forms.lightswitchField({
+                label: "Save data from form submissions in the Craft database"|t('sprout-forms'),
+                instructions: "By default, Sprout Forms will save your form submissions to the Craft database. Disable this setting if you wish to stop Sprout Forms from saving data to the Craft database."|t('sprout-forms'),
+                id: 'enableSaveData',
+                name: 'enableSaveData',
+                toggle: 'settings-savedatadetails',
+                on: settings.enableSaveData,
+                onLabel: "Enable"|t('sprout-forms'),
+            }) }}
+
+            <div id="settings-savedatadetails"
+                 class="{{ not settings.enableSaveData ? "hidden" : '' }}">
+
+                {{ forms.lightswitchField({
+                    label: "Enable Save Data control on a per-form basis"|t('sprout-forms'),
+                    instructions: "If you wish to have some of your forms save data to the Craft database and ensure others do not save any data, enable this setting and a new setting will appear on the Advanced tab of your Form Edit page to control whether a particular Form will save data to the database."|t('sprout-forms'),
+                    id: 'enableSaveDataPerFormBasis',
+                    name: 'enableSaveDataPerFormBasis',
+                    toggle: 'settings-savedatadefault',
+                    on: settings.enableSaveDataPerFormBasis,
+                    onLabel: "Enable"|t('sprout-forms'),
+                }) }}
+
+                <div id="settings-savedatadefault"
+                     class="{{ not settings.enableSaveDataPerFormBasis ? "hidden" : '' }}">
+
+                    {{ forms.lightswitchField({
+                        label: "Default Save Data value"|t('sprout-forms'),
+                        instructions: "The default value a new Form's Save Data setting will use on the Advanced tab of your form settings: Enabled or Disabled"|t('sprout-forms'),
+                        id: 'saveDataByDefault',
+                        name: 'saveDataByDefault',
+                        on: settings.saveDataByDefault,
+                        onLabel: "Enable"|t('sprout-forms'),
+                    }) }}
+
+                </div>
+
+            </div>
+
+            <hr>
+
+            {{ forms.lightswitchField({
+                label: "Enable payload forwarding"|t('sprout-forms'),
+                instructions: "Payload Forwarding enables your forms with advanced settings that allow you to submit a form to a third-party endpoint."|t('sprout-forms'),
+                id: 'enablePayloadForwarding',
+                name: 'enablePayloadForwarding',
+                on: settings.enablePayloadForwarding,
+                onLabel: "Enable"|t('sprout-forms'),
+            }) }}
+
+        {% endnamespace %}
+
+    </div>
+
+{% endif %}

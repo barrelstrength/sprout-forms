@@ -4,9 +4,9 @@ namespace barrelstrength\sproutforms\integrations\sproutreports\datasources;
 
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutbase\elements\sproutreports\Report;
+use barrelstrength\sproutbase\app\reports\elements\Report;
 use Craft;
-use barrelstrength\sproutbase\contracts\sproutreports\BaseDataSource;
+use barrelstrength\sproutbase\app\reports\base\DataSource;
 use craft\db\Query;
 use craft\helpers\DateTimeHelper;
 
@@ -15,7 +15,7 @@ use craft\helpers\DateTimeHelper;
  *
  * @package barrelstrength\sproutforms\integrations\sproutreports\datasources
  */
-class EntriesDataSource extends BaseDataSource
+class EntriesDataSource extends DataSource
 {
     /**
      * @return string
@@ -153,7 +153,7 @@ class EntriesDataSource extends BaseDataSource
             }
         }
 
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_reports/options/entries', [
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_integrations/sproutreports/datasources/EntriesDataSource/settings', [
             'formOptions' => $formOptions,
             'defaultStartDate' => new \DateTime($defaultStartDate),
             'defaultEndDate' => new \DateTime($defaultEndDate),

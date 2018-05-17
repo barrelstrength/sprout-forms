@@ -75,7 +75,7 @@ class _RecentEntriesChart extends BaseWidget
         craft()->templates->includeJsResource('sproutforms/js/SproutFormsRecentEntriesChartWidget.js');
         craft()->templates->includeJs('new Craft.SproutForms.RecentEntriesChartWidget('.$this->model->id.', '.JsonHelper::encode($options).');');
 
-        return craft()->templates->render('sproutforms/_widgets/recententrieschart/body');
+        return craft()->templates->render('sproutforms/widgets/recententrieschart/body');
     }
 
     /**
@@ -92,7 +92,7 @@ class _RecentEntriesChart extends BaseWidget
             }
         }
 
-        return craft()->templates->render('sproutforms/_widgets/recententrieschart/settings', [
+        return craft()->templates->render('sproutforms/widgets/recententrieschart/settings', [
             'settings' => $this->getSettings(),
             'sproutForms' => $forms
         ]);

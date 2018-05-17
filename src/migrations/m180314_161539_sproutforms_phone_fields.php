@@ -4,7 +4,7 @@ namespace barrelstrength\sproutforms\migrations;
 
 use craft\db\Migration;
 use craft\db\Query;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\SingleLine;
+use barrelstrength\sproutforms\fields\formfields\SingleLine;
 
 /**
  * m180314_161539_sproutforms_phone_fields migration.

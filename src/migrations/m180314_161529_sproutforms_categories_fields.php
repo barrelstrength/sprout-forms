@@ -4,7 +4,7 @@ namespace barrelstrength\sproutforms\migrations;
 
 use craft\db\Migration;
 use craft\db\Query;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Categories;
+use barrelstrength\sproutforms\fields\formfields\Categories;
 use craft\fields\Categories as CraftCategories;
 
 /**

@@ -1,0 +1,23 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.checkboxField({
+    label: "When entry is created?"|t('sprout-forms'),
+    name: "whenNew",
+    checked: event.whenNew
+}) }}
+
+{{ forms.checkboxField({
+    label: "When entry is updated?"|t('sprout-forms'),
+    name: "whenUpdated",
+    checked: event.whenUpdated
+}) }}
+
+{{ forms.field({
+    label: "Forms <span class='info'>Select which forms will trigger this notification</span>"|t('sprout-forms'),
+    errors: event is defined ? event.getErrors('formIds') : null,
+}, forms.checkboxGroup({
+    name: "formIds",
+    options: event.availableForms,
+    values: event.formIds,
+    showAllOption: true
+})) }}

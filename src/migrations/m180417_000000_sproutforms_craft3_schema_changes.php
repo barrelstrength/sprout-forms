@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutbase\migrations\sproutreports\m180307_042132_craft3_schema_changes;
+use barrelstrength\sproutbase\app\reports\migrations\m180307_042132_craft3_schema_changes;
 use craft\db\Migration;
 
 /**

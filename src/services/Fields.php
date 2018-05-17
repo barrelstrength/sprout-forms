@@ -2,35 +2,35 @@
 
 namespace barrelstrength\sproutforms\services;
 
-use barrelstrength\sproutforms\contracts\BaseFormField;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\FileUpload;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Categories;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Checkboxes;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Dropdown;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Email;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\EmailDropdown;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Hidden;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Invisible;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\MultiSelect;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Name;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Number;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Paragraph;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Phone;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\MultipleChoice;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\RegularExpression;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\PrivateNotes;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Entries;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\CustomHtml;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\SectionHeading;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Tags;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\Url;
+use barrelstrength\sproutforms\base\FormField;
+use barrelstrength\sproutforms\fields\formfields\FileUpload;
+use barrelstrength\sproutforms\fields\formfields\Categories;
+use barrelstrength\sproutforms\fields\formfields\Checkboxes;
+use barrelstrength\sproutforms\fields\formfields\Dropdown;
+use barrelstrength\sproutforms\fields\formfields\Email;
+use barrelstrength\sproutforms\fields\formfields\EmailDropdown;
+use barrelstrength\sproutforms\fields\formfields\Hidden;
+use barrelstrength\sproutforms\fields\formfields\Invisible;
+use barrelstrength\sproutforms\fields\formfields\MultiSelect;
+use barrelstrength\sproutforms\fields\formfields\Name;
+use barrelstrength\sproutforms\fields\formfields\Number;
+use barrelstrength\sproutforms\fields\formfields\Paragraph;
+use barrelstrength\sproutforms\fields\formfields\Phone;
+use barrelstrength\sproutforms\fields\formfields\MultipleChoice;
+use barrelstrength\sproutforms\fields\formfields\RegularExpression;
+use barrelstrength\sproutforms\fields\formfields\PrivateNotes;
+use barrelstrength\sproutforms\fields\formfields\Entries;
+use barrelstrength\sproutforms\fields\formfields\CustomHtml;
+use barrelstrength\sproutforms\fields\formfields\SectionHeading;
+use barrelstrength\sproutforms\fields\formfields\Tags;
+use barrelstrength\sproutforms\fields\formfields\Url;
 use Craft;
 use craft\base\FieldInterface;
 use craft\records\FieldLayoutField;
 use yii\base\Component;
 use craft\base\Field;
 use craft\records\Field as FieldRecord;
-use barrelstrength\sproutforms\integrations\sproutforms\fields\SingleLine;
+use barrelstrength\sproutforms\fields\formfields\SingleLine;
 use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
 use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
 
@@ -42,7 +42,7 @@ use yii\base\Exception;
 class Fields extends Component
 {
     /**
-     * @var BaseFormField[]
+     * @var FormField[]
      */
     protected $registeredFields;
 
@@ -106,7 +106,7 @@ class Fields extends Component
     }
 
     /**
-     * @return array|BaseFormField[]
+     * @return array|FormField[]
      */
     public function getRegisteredFields()
     {
@@ -123,7 +123,7 @@ class Fields extends Component
             $fields = $event->fields;
 
             /**
-             * @var BaseFormField $instance
+             * @var FormField $instance
              */
             foreach ($fields as $instance) {
                 $this->registeredFields[get_class($instance)] = $instance;
@@ -176,7 +176,7 @@ class Fields extends Component
     /**
      * @param $type
      *
-     * @return BaseFormField|mixed
+     * @return FormField|mixed
      */
     public function getRegisteredField($type)
     {

@@ -2,8 +2,8 @@
 
 namespace barrelstrength\sproutforms\elements;
 
-use barrelstrength\sproutforms\contracts\BaseFormTemplates;
-use barrelstrength\sproutforms\integrations\sproutforms\formtemplates\AccessibleTemplates;
+use barrelstrength\sproutforms\base\FormTemplates;
+use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\validators\TemplateOverridesValidator;
 use Craft;
 use craft\base\Element;
@@ -278,7 +278,7 @@ class Form extends Element
         $html = '';
 
         if ($this->getType()->hasTitleField) {
-            $html = Craft::$app->getView()->renderTemplate('_cp/fields/titlefield',
+            $html = Craft::$app->getView()->renderTemplate('forms/_hud/titlefield',
                 [
                     'entry' => $this
                 ]
@@ -427,14 +427,14 @@ class Form extends Element
     /**
      * Get the global template used by Sprout Forms
      *
-     * @return BaseFormTemplates
+     * @return FormTemplates
      */
     public function getFormTemplate()
     {
         $defaultFormTemplates = new AccessibleTemplates();
 
         if ($this->templateOverridesFolder) {
-            $templatePath = SproutForms::$app->forms->getTemplateById($this->templateOverridesFolder);
+            $templatePath = SproutForms::$app->forms->getFormTemplateById($this->templateOverridesFolder);
             if ($templatePath) {
                 return $templatePath;
             }

@@ -4,14 +4,14 @@ namespace barrelstrength\sproutforms\web\twig\variables;
 
 use barrelstrength\sproutforms\elements\db\EntryQuery;
 use barrelstrength\sproutforms\elements\Form;
-use barrelstrength\sproutforms\integrations\sproutforms\formtemplates\AccessibleTemplates;
+use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use Craft;
 use craft\base\ElementInterface;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\Template as TemplateHelper;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
-use barrelstrength\sproutforms\contracts\BaseFormField;
+use barrelstrength\sproutforms\base\FormField;
 use yii\base\Exception;
 
 /**
@@ -67,7 +67,7 @@ class SproutFormsVariable
         $view = Craft::$app->getView();
         $entry = SproutForms::$app->entries->getEntry($form);
 
-        $templatePaths = SproutForms::$app->forms->getSproutFormsTemplates($form);
+        $templatePaths = SproutForms::$app->forms->getFormTemplatePaths($form);
 
         // Check if we need to update our Front-end Form Template Path
         $view->setTemplatesPath($templatePaths['form']);
@@ -107,7 +107,7 @@ class SproutFormsVariable
         $view = Craft::$app->getView();
         $entry = SproutForms::$app->entries->getEntry($form);
 
-        $templatePaths = SproutForms::$app->forms->getSproutFormsTemplates($form);
+        $templatePaths = SproutForms::$app->forms->getFormTemplatePaths($form);
 
         // Set Tab template path
         $view->setTemplatesPath($templatePaths['tab']);
@@ -146,16 +146,16 @@ class SproutFormsVariable
     /**
      * Returns a complete field for display in template
      *
-     * @param Form          $form
-     * @param BaseFormField $field
-     * @param array|null    $renderingOptions
+     * @param Form       $form
+     * @param FormField  $field
+     * @param array|null $renderingOptions
      *
      * @return \Twig_Markup
      * @throws Exception
      * @throws \ReflectionException
      * @throws \Twig_Error_Loader
      */
-    public function displayField(Form $form, BaseFormField $field, array $renderingOptions = null)
+    public function displayField(Form $form, FormField $field, array $renderingOptions = null)
     {
         if (!$form) {
             throw new Exception(Craft::t('sprout-forms', 'The displayField tag requires a Form model.'));
@@ -176,7 +176,7 @@ class SproutFormsVariable
         $view = Craft::$app->getView();
         $entry = SproutForms::$app->entries->getEntry($form);
 
-        $templatePaths = SproutForms::$app->forms->getSproutFormsTemplates($form);
+        $templatePaths = SproutForms::$app->forms->getFormTemplatePaths($form);
 
         $view->setTemplatesPath($field->getTemplatesPath());
 
@@ -388,7 +388,7 @@ class SproutFormsVariable
      */
     public function addFieldVariables(array $variables)
     {
-        BaseFormField::addFieldVariables($variables);
+        FormField::addFieldVariables($variables);
     }
 
     /**
@@ -434,7 +434,7 @@ class SproutFormsVariable
     }
 
     /**
-     * @return array|BaseFormField[]
+     * @return array|FormField[]
      */
     public function getRegisteredFields()
     {
@@ -493,7 +493,7 @@ class SproutFormsVariable
     {
         $defaultFormTemplates = new AccessibleTemplates();
 
-        $templates = SproutForms::$app->forms->getAllGlobalTemplates();
+        $templates = SproutForms::$app->forms->getAllFormTemplates();
         $templateIds = [];
         $options = [
             [
