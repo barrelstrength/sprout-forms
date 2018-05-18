@@ -143,7 +143,7 @@ class EmailDropdown extends BaseOptionsFormField
         $selectedValue = $value->value ?? null;
 
         $options = $this->options;
-        $options = SproutBase::$app->emailFieldDropdown->obfuscateEmailAddresses($options, $selectedValue);
+        $options = SproutBase::$app->emailDropdownField->obfuscateEmailAddresses($options, $selectedValue);
 
         $rendered = Craft::$app->getView()->renderTemplate(
             'emaildropdown/input',
