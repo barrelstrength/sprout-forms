@@ -2,6 +2,9 @@
 
 ## 3.0.0-beta.14 - 2018-05-18
 
+### Changed
+- Updates Sprout Base to v2.0.3
+
 ### Fixed
 - Fixed reference to Email Dropdown Field Service
 
