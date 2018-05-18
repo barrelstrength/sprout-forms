@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.0-beta.14 - 2018-05-18
+
+### Fixed
+- Fixed reference to Email Dropdown Field Service
+
 ## 3.0.0-beta.13 - 2018-05-17
 
 ### Fixed
