@@ -93,6 +93,7 @@ class SproutFormsService extends BaseApplicationComponent
 		// We only act if...
 		// 1. This is a side effect of submitting a form
 		// 2. File attachments are enabled for Sprout Forms
+		// This will be called for each recipient, let's update the email model just for the first time
 		if (isset($variables['sproutFormsEntry']) && $enableFileAttachments)
 		{
 			$entry = $variables['sproutFormsEntry'];
@@ -174,6 +175,8 @@ class SproutFormsService extends BaseApplicationComponent
 	 */
 	protected function attachAssetFilesToEmailModel(EmailModel $email, array $assets, &$variables = null)
 	{
+		// Reset attachments
+		$email->attachments = []; 
 		foreach ($assets as $asset)
 		{
 			$name = $asset->filename;
