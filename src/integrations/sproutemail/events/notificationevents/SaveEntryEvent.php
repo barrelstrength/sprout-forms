@@ -139,17 +139,17 @@ class SaveEntryEvent extends NotificationEvent
 
         if (!$matchesWhenNew && !$matchesWhenUpdated)
         {
-            $this->addError('event', Craft::t('sprout-email', 'When a form entry is saved Event does not match any scenarios.'));
+            $this->addError('event', Craft::t('sprout-base', 'When a form entry is saved Event does not match any scenarios.'));
         }
 
         // Make sure new entries are new.
         if (($this->whenNew && !$isNewEntry) && !$this->whenUpdated) {
-            $this->addError('event', Craft::t('sprout-email', '"When an entry is created" is selected but the entry is being updated.'));
+            $this->addError('event', Craft::t('sprout-base', '"When an entry is created" is selected but the entry is being updated.'));
         }
 
         // Make sure updated entries are not new
         if (($this->whenUpdated && $isNewEntry) && !$this->whenNew) {
-            $this->addError('event', Craft::t('sprout-email', '"When an entry is updated" is selected but the entry is new.'));
+            $this->addError('event', Craft::t('sprout-base', '"When an entry is updated" is selected but the entry is new.'));
         }
     }
 
@@ -189,7 +189,7 @@ class SaveEntryEvent extends NotificationEvent
 
         // If any section ids were checked, make sure the entry belongs in one of them
         if (!in_array($elementId, $this->formIds, false)) {
-            $this->addError('event', Craft::t('sprout-email', 'The Form associated with the saved Form Entry Element does not match any selected Forms.'));
+            $this->addError('event', Craft::t('sprout-base', 'The Form associated with the saved Form Entry Element does not match any selected Forms.'));
         }
     }
 

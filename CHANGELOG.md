@@ -1,5 +1,18 @@
 # Changelog
 
+## 3.0.0-beta.15 - 2018-05-22
+
+### Added
+- Added support for Email Attachments ([#85])
+
+### Fixed
+- Added support for tab scrolling when Forms have a large number of tabs ([#97])
+- Fixed bug where File Upload field did not upload files if the filename already existed ([#101])
+ 
+[#85]: https://github.com/barrelstrength/craft-sprout-forms/issues/85
+[#97]: https://github.com/barrelstrength/craft-sprout-forms/issues/97
+[#101]: https://github.com/barrelstrength/craft-sprout-forms/issues/101
+
 ## 3.0.0-beta.14 - 2018-05-18
 
 ### Changed

@@ -9,7 +9,7 @@ use craft\base\PreviewableFieldInterface;
 
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\base\FormField;
-use barrelstrength\sproutbase\web\assets\sproutfields\url\UrlFieldAsset;
+use barrelstrength\sproutbase\app\fields\web\assets\url\UrlFieldAsset;
 
 class Url extends FormField implements PreviewableFieldInterface
 {
