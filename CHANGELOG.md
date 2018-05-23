@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.0-beta.16 - 2018-05-23
+- Fixed bug when using custom email template overrides [#102]
+
+[#102]: https://github.com/barrelstrength/craft-sprout-forms/issues/102
+
 ## 3.0.0-beta.15 - 2018-05-22
 
 ### Added
