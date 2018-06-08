@@ -165,7 +165,8 @@ class EntryQuery extends ElementQuery
             'sproutforms_forms.name as formName',
             'sproutforms_forms.handle as formHandle',
             'sproutforms_forms.groupId as formGroupId',
-            'sproutforms_entrystatuses.id'
+            'sproutforms_entrystatuses.id',
+            'sproutforms_entrystatuses.handle as statusHandle'
         ]);
 
         $this->query->innerJoin('{{%sproutforms_entrystatuses}} sproutforms_entrystatuses', '[[sproutforms_entrystatuses.id]] = [[sproutforms_entries.statusId]]');
@@ -194,6 +195,12 @@ class EntryQuery extends ElementQuery
         if ($this->formHandle) {
             $this->query->andWhere(Db::parseParam(
                 'sproutforms_forms.handle', $this->formHandle)
+            );
+        }
+
+        if ($this->statusHandle) {
+            $this->query->andWhere(Db::parseParam(
+                'sproutforms_entrystatuses.handle', $this->statusHandle)
             );
         }
 
