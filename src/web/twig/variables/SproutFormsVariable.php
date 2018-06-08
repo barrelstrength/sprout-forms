@@ -166,9 +166,7 @@ class SproutFormsVariable
 
         if ($renderingOptions !== null) {
             $renderingOptions = [
-                'fields' => [
-                    $field->handle => $renderingOptions
-                ]
+                'fields' => $renderingOptions['fields'] ?? null
             ];
         }
 
@@ -191,8 +189,14 @@ class SproutFormsVariable
             }
         }
 
+        $fieldRenderingOptions = null;
+
+        if (isset($renderingOptions['fields'][$field->handle])) {
+            $fieldRenderingOptions = $renderingOptions['fields'][$field->handle];
+        }
+
         $value = $entry->getFieldValue($field->handle);
-        $inputHtml = $field->getFrontEndInputHtml($value, $renderingOptions);
+        $inputHtml = $field->getFrontEndInputHtml($value, $fieldRenderingOptions);
 
         // Set Tab template path
         $view->setTemplatesPath($templatePaths['field']);

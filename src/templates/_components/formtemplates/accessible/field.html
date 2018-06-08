@@ -4,8 +4,8 @@
 {%- set instructions     = field.instructions ?? null %}
 {%- set name             = field.handle ?? null %}
 {%- set required         = field.required is defined and field.required ? true : false %}
-{%- set renderingOptions = attribute(renderingOptions.fields, name) is defined ? attribute(renderingOptions
-    .fields, name) : {} %}
+{%- set renderingOptions = attribute(renderingOptions.fields, name) is defined ? renderingOptions.fields[name] : {} %}
+
 {%- set id               = renderingOptions.id ?? name %}
 {%- set class            = renderingOptions.class ?? name ~ '-field' %}
 {%- set value            = entry is not empty ? entry.getFieldValue(name) : null %}
