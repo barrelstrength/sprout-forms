@@ -51,6 +51,14 @@ class Paragraph extends FormField implements PreviewableFieldInterface
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getContentColumnType(): string
+    {
+        return Schema::TYPE_TEXT;
+    }
+
+    /**
      * @return string
      */
     public function getSvgIconPath()

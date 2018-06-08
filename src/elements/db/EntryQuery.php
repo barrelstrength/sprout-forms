@@ -2,7 +2,9 @@
 
 namespace barrelstrength\sproutforms\elements\db;
 
+use barrelstrength\sproutforms\elements\Form;
 use Craft;
+use craft\db\Query;
 use craft\elements\db\ElementQuery;
 use craft\helpers\Db;
 
@@ -34,6 +36,11 @@ class EntryQuery extends ElementQuery
      * @var string
      */
     public $formHandle;
+
+    /**
+     * @var string
+     */
+    public $statusHandle;
 
     /**
      * @var string
@@ -88,6 +95,20 @@ class EntryQuery extends ElementQuery
     }
 
     /**
+     * Sets the [[statusHandle]] property.
+     *
+     * @param int
+     *
+     * @return static self reference
+     */
+    public function statusHandle($value)
+    {
+        $this->statusHandle = $value;
+
+        return $this;
+    }
+
+    /**
      * Sets the [[formName]] property.
      *
      * @param int
@@ -113,8 +134,19 @@ class EntryQuery extends ElementQuery
 
         // Figure out which content table to use
         $this->contentTable = null;
+        if (!$this->formId && $this->id) {
+            $formIds = (new Query())
+                ->select(['formId'])
+                ->distinct()
+                ->from(['{{%sproutforms_entries}}'])
+                ->where(Db::parseParam('id', $this->id))
+                ->column();
 
-        if ($this->id && $this->formId) {
+            $this->formId = count($formIds) === 1 ? $formIds[0] :  $formIds;
+        }
+
+        if ($this->formId && is_numeric($this->formId)) {
+            /** @var Form $form */
             $form = SproutForms::$app->forms->getFormById($this->formId);
 
             if ($form) {
@@ -132,7 +164,8 @@ class EntryQuery extends ElementQuery
             'sproutforms_entries.uid',
             'sproutforms_forms.name as formName',
             'sproutforms_forms.handle as formHandle',
-            'sproutforms_forms.groupId as formGroupId'
+            'sproutforms_forms.groupId as formGroupId',
+            'sproutforms_entrystatuses.id'
         ]);
 
         $this->query->innerJoin('{{%sproutforms_entrystatuses}} sproutforms_entrystatuses', '[[sproutforms_entrystatuses.id]] = [[sproutforms_entries.statusId]]');
@@ -140,15 +173,15 @@ class EntryQuery extends ElementQuery
 
         $this->joinContentTableAndAddContentSelects($this);
 
-        if ($this->id) {
-            $this->subQuery->andWhere(Db::parseParam(
-                'sproutforms_entries.id', $this->id)
-            );
-        }
-
         if ($this->formId) {
             $this->subQuery->andWhere(Db::parseParam(
                 'sproutforms_entries.formId', $this->formId)
+            );
+        }
+
+        if ($this->id) {
+            $this->subQuery->andWhere(Db::parseParam(
+                'sproutforms_entries.id', $this->id)
             );
         }
 
@@ -171,7 +204,7 @@ class EntryQuery extends ElementQuery
         }
 
         if (!$this->orderBy) {
-            $this->orderBy = ['sproutforms_entries.dateCreated' => SORT_DESC];
+            $this->orderBy = ['elements.dateCreated' => SORT_DESC];
         }
 
         return parent::beforePrepare();
@@ -228,5 +261,16 @@ class EntryQuery extends ElementQuery
                 $entryQuery->query->select = $select;
             }
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function customFields(): array
+    {
+        // This method won't get called if $this->formId isn't set to a single int
+        /** @var Form $form */
+        $form = SproutForms::$app->forms->getFormById($this->formId);
+        return $form->getFields();
     }
 }
