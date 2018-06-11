@@ -3,9 +3,11 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use Craft;
+use craft\helpers\Db;
 use craft\helpers\Template as TemplateHelper;
 use yii\db\Schema;
 use craft\base\ElementInterface;
+use LitEmoji\LitEmoji;
 use craft\base\PreviewableFieldInterface;
 
 use barrelstrength\sproutforms\base\FormField;
@@ -45,6 +47,17 @@ class Paragraph extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
+    public function rules()
+    {
+        $rules = parent::rules();
+        $rules[] = [['charLimit'], 'validateCharLimit'];
+
+        return $rules;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public static function displayName(): string
     {
         return Craft::t('sprout-forms', 'Paragraph');
@@ -55,7 +68,36 @@ class Paragraph extends FormField implements PreviewableFieldInterface
      */
     public function getContentColumnType(): string
     {
-        return Schema::TYPE_TEXT;
+        return $this->columnType;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function normalizeValue($value, ElementInterface $element = null)
+    {
+        if ($value !== null) {
+            $value = LitEmoji::shortcodeToUnicode($value);
+            $value = trim(preg_replace('/\R/u', "\n", $value));
+        }
+
+        return $value !== '' ? $value : null;
+    }
+
+    /**
+     * Validates that the Character Limit isn't set to something higher than the Column Type will hold.
+     *
+     * @param string $attribute
+     */
+    public function validateCharLimit(string $attribute)
+    {
+        if ($this->charLimit) {
+            $columnTypeMax = Db::getTextualColumnStorageCapacity($this->columnType);
+
+            if ($columnTypeMax && $columnTypeMax < $this->charLimit) {
+                $this->addError($attribute, Craft::t('app', 'Character Limit is too big for your chosen Column Type.'));
+            }
+        }
     }
 
     /**
@@ -82,6 +124,8 @@ class Paragraph extends FormField implements PreviewableFieldInterface
 
         return $rendered;
     }
+
+
 
     /**
      * Adds support for edit field in the Entries section of SproutForms (Control
@@ -132,5 +176,26 @@ class Paragraph extends FormField implements PreviewableFieldInterface
         );
 
         return TemplateHelper::raw($rendered);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function serializeValue($value, ElementInterface $element = null)
+    {
+        if ($value !== null) {
+            $value = LitEmoji::unicodeToShortcode($value);
+        }
+        return $value;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSearchKeywords($value, ElementInterface $element): string
+    {
+        $value = (string)$value;
+        $value = LitEmoji::unicodeToShortcode($value);
+        return $value;
     }
 }
