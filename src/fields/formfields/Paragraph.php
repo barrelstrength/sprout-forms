@@ -125,8 +125,6 @@ class Paragraph extends FormField implements PreviewableFieldInterface
         return $rendered;
     }
 
-
-
     /**
      * Adds support for edit field in the Entries section of SproutForms (Control
      * panel html)
