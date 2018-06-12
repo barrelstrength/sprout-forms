@@ -23,38 +23,39 @@
         {% set fieldHtmlTag = field.hasMultipleLabels() ? 'fieldset' : 'div' -%}
 
         <{{ fieldHtmlTag }}
-            {%- if id %} id="{{ id }}-field"{% endif %} class="field {{ field.getFieldInputFolder() }}
-            {%- if class %} {{ class }}{% endif -%}
-            {%- if fieldCssClasses %} {{ fieldCssClasses }}{% endif -%}
-            {%- if errors %} {{ errorClass }}{% endif -%}
-            {%- if required %} required{% endif -%}
-            ">
-            {% if label or instructions -%}
-                <div class="heading">
-                    {% if label -%}
-                        {%- if field.hasMultipleLabels() -%}
-                            <legend>{{- label|raw|t('sprout-forms') -}}</legend>
-                        {%- else -%}
-                            <label{% if name %} for="{{ name }}"{% endif %}>
-                                {{- label|raw|t('sprout-forms') -}}
-                            </label>
-                        {%- endif -%}
+        {%- if id %} id="{{ id }}-field"{% endif %} class="field {{ field.getFieldInputFolder() }}
+        {%- if class %} {{ class }}{% endif -%}
+        {%- if fieldCssClasses %} {{ fieldCssClasses }}{% endif -%}
+        {%- if errors %} {{ errorClass }}{% endif -%}
+        {%- if required %} required{% endif -%}
+        ">
+        {% if label or instructions -%}
+            <div class="heading">
+                {% if label -%}
+                    {%- if field.hasMultipleLabels() -%}
+                        <legend>{{- label|raw|t('sprout-forms') -}}</legend>
+                    {%- else -%}
+                        <label{% if name %} for="{{ name }}"{% endif %}>
+                            {{- label|raw|t('sprout-forms') -}}
+                        </label>
                     {%- endif -%}
-                    {% if instructions %}
+                {%- endif -%}
+                {% if instructions %}
 
-                        <p id="{{ id }}-instructions" class="instructions">{{ instructions|raw|t('sprout-forms') }}</p>
-                    {%- endif %}
+                    <p id="{{ id }}-instructions"
+                       class="instructions">{{ instructions|raw|t('sprout-forms') }}</p>
+                {%- endif %}
 
-                </div>
-            {% endif -%}
-
-            <div class="input">
-                {{ input|raw }}
             </div>
-            {% include "errors" with {
-                errors: errors,
-                name: name
-            } %}
+        {% endif -%}
+
+        <div class="input">
+            {{ input|raw }}
+        </div>
+        {% include "errors" with {
+            errors: errors,
+            name: name
+        } %}
 
         </{{ fieldHtmlTag }}>
     {%- endif -%}
