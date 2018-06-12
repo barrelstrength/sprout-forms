@@ -23,7 +23,7 @@
         {% set fieldHtmlTag = field.hasMultipleLabels() ? 'fieldset' : 'div' -%}
 
         <{{ fieldHtmlTag }}
-            {%- if id %} id="{{ id }}-field"{% endif %} class="field
+            {%- if id %} id="{{ id }}-field"{% endif %} class="field {{ field.getFieldInputFolder() }}
             {%- if class %} {{ class }}{% endif -%}
             {%- if fieldCssClasses %} {{ fieldCssClasses }}{% endif -%}
             {%- if errors %} {{ errorClass }}{% endif -%}
