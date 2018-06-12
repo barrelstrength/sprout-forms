@@ -31,7 +31,9 @@
         {% endfor %}
     </select>
     {%- if field.limitToSingleCountry %}
-        <input type="hidden" name="{% if name %}{{ name~'[country]' }}{% endif %}" value="{{ country }}">
+        <input type="hidden"
+               name="{% if name %}{{ name~'[country]' }}{% endif %}"
+               value="{{ country }}">
     {% endif %}
 
     <input type="tel" autocomplete="tel"

@@ -20,7 +20,8 @@
         {%- else %}
 
             <div
-                {%- if id %} id="{{ id }}-field"{% endif %} class="field
+                    {%- if id %} id="{{ id }}-field"{% endif %}
+                    class="field {{ field.getFieldInputFolder() }}
                 {%- if class %} {{ class }}{% endif -%}
                 {%- if errors %} {{ errorClass }}{% endif -%}
                 {%- if required %} required{% endif -%}

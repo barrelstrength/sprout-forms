@@ -33,6 +33,10 @@ class Entry extends Element
     public $formName;
     public $ipAddress;
     public $userAgent;
+    /**
+     * @var string
+     */
+    public $statusHandle;
 
     public function init()
     {
@@ -191,12 +195,11 @@ class Entry extends Element
 
     /**
      * @inheritdoc
-     *
-     * @return EntryQuery The newly created [[FormQuery]] instance.
+     * @return EntryQuery The newly created [[EntryQuery]] instance.
      */
     public static function find(): ElementQueryInterface
     {
-        return new EntryQuery(get_called_class());
+        return new EntryQuery(static::class);
     }
 
     /**

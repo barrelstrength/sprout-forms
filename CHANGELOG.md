@@ -1,6 +1,28 @@
 # Changelog
 
+## 3.0.0-beta.17 - 2018-06-12
+
+### Added
+- Added field-specific class name to field wrappers in Form Templates ([#112])
+- Added status handle filter to Entry Query
+
+### Fixed
+- Fixed behavior of Rendering Options in field override templates ([#103])
+- Fixed bug where Paragraph Field Column Type setting did not validate over 255 characters ([#110])
+- Fixed bug where the Checkboxes field only saved the value of the final checkbox ([#108])
+- Fixed issue where custom fields behaved incorrectly on Form Entry Elements ([#89])
+- Fixed error when moving a field between two tabs ([#106])
+
+[#89]: https://github.com/barrelstrength/craft-sprout-forms/issues/89
+[#106]: https://github.com/barrelstrength/craft-sprout-forms/issues/106
+[#108]: https://github.com/barrelstrength/craft-sprout-forms/issues/108
+[#112]: https://github.com/barrelstrength/craft-sprout-forms/issues/112
+[#103]: https://github.com/barrelstrength/craft-sprout-forms/issues/103
+[#110]: https://github.com/barrelstrength/craft-sprout-forms/issues/110
+
 ## 3.0.0-beta.16 - 2018-05-23
+
+### Fixed
 - Fixed bug when using custom email template overrides [#102]
 
 [#102]: https://github.com/barrelstrength/craft-sprout-forms/issues/102

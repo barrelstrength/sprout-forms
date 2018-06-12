@@ -27,7 +27,7 @@
 
             <label {%- if id %} for="{{ id }}-{{ loop.index }}"{% endif %}>
                 <input type="checkbox"
-                        {%- if name %} name="{{ name }}"{% endif %}
+                        {%- if name %} name="{{ name }}[]"{% endif %}
                         {%- if id %} id="{{ id }}-{{ loop.index }}"{% endif %}
                         {%- if value %} value="{{ value }}"{% endif %}
                         {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
