@@ -85,7 +85,7 @@ class SproutForms extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '3.0.2';
+    public $schemaVersion = '3.0.3';
 
     /**
      * @var string
