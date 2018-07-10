@@ -97,8 +97,11 @@ class SproutFormsService extends BaseApplicationComponent
 		if (isset($variables['sproutFormsEntry']) && $enableFileAttachments)
 		{
 			$entry = $variables['sproutFormsEntry'];
+            $email = $event->params['emailModel'];
+            // Reset attachments
+            $email->attachments = [];
 
-            /**
+			/**
 			 * @var $field FieldModel
 			 */
 			foreach ($entry->form->getFields() as $field)
@@ -116,7 +119,8 @@ class SproutFormsService extends BaseApplicationComponent
 					{
 						$assets = $criteria->find();
 
-						$this->attachAssetFilesToEmailModel($event->params['emailModel'], $assets, $variables);
+						$this->attachAssetFilesToEmailModel($email, $assets, $variables);
+                        $event->params['emailModel'] = $email;
 						$event->params['variables'] = $variables;
 					}
 				}
@@ -173,7 +177,7 @@ class SproutFormsService extends BaseApplicationComponent
 	 * @param AssetFileModel[] $assets
 	 * @param array $variables from event
 	 */
-	protected function attachAssetFilesToEmailModel(EmailModel $email, array $assets, &$variables = null)
+	protected function attachAssetFilesToEmailModel(EmailModel &$email, array $assets, &$variables = null)
 	{
 		foreach ($assets as $asset)
 		{
