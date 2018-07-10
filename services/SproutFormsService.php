@@ -98,7 +98,7 @@ class SproutFormsService extends BaseApplicationComponent
 		{
 			$entry = $variables['sproutFormsEntry'];
 
-			/**
+            /**
 			 * @var $field FieldModel
 			 */
 			foreach ($entry->form->getFields() as $field)
@@ -175,8 +175,6 @@ class SproutFormsService extends BaseApplicationComponent
 	 */
 	protected function attachAssetFilesToEmailModel(EmailModel $email, array $assets, &$variables = null)
 	{
-		// Reset attachments
-		$email->attachments = []; 
 		foreach ($assets as $asset)
 		{
 			$name = $asset->filename;
