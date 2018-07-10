@@ -90,6 +90,11 @@ class EntryQuery extends ElementQuery
     public function formHandle($value)
     {
         $this->formHandle = $value;
+        $form = SproutForms::$app->forms->getFormByHandle($value);
+        // To add support to filtering we need to have the formId set.
+        if ($form){
+            $this->formId = $form->id;
+        }
 
         return $this;
     }
@@ -171,8 +176,6 @@ class EntryQuery extends ElementQuery
         $this->query->innerJoin('{{%sproutforms_entrystatuses}} sproutforms_entrystatuses', '[[sproutforms_entrystatuses.id]] = [[sproutforms_entries.statusId]]');
         $this->query->innerJoin('{{%sproutforms_forms}} sproutforms_forms', '[[sproutforms_forms.id]] = [[sproutforms_entries.formId]]');
 
-        $this->joinContentTableAndAddContentSelects($this);
-
         if ($this->formId) {
             $this->subQuery->andWhere(Db::parseParam(
                 'sproutforms_entries.formId', $this->formId)
@@ -215,60 +218,7 @@ class EntryQuery extends ElementQuery
 
         return parent::beforePrepare();
     }
-
-    /**
-     * Updates the query command, criteria, and select fields when a source is available
-     *
-     * @param EntryQuery $entryQuery
-     */
-    protected function joinContentTableAndAddContentSelects(
-        EntryQuery $entryQuery
-    ) {
-        // Do we have a source selected in the sidebar?
-        // If so, we have a form id and we can use that to fetch the content table
-        if ($entryQuery->formId || $entryQuery->formHandle) {
-            $form = null;
-
-            if ($entryQuery->formId) {
-                $form = SproutForms::$app->forms->getFormById($entryQuery->formId);
-            } else {
-                if ($entryQuery->formHandle) {
-                    $form = SproutForms::$app->forms->getFormByHandle($entryQuery->formHandle);
-                }
-            }
-
-            if ($form) {
-                $fields = $form->getFields();
-                $fieldPrefix = Craft::$app->content->fieldColumnPrefix;
-
-                $select = $entryQuery->query->select;
-                $select[] = "{$form->handle}.title";
-
-                // Added support for filtering any sproutform content table
-                foreach ($fields as $key => $field) {
-                    if ($field->hasContentColumn()) {
-                        $select[] = "{$form->handle}.{$fieldPrefix}{$field->handle} as {$field->handle}";
-                        $handle = $field->handle;
-
-                        if (isset($entryQuery->$handle)) {
-                            $entryQuery->subQuery->andWhere(Db::parseParam(
-                                $form->handle.'.'.$fieldPrefix.$field->handle,
-                                $entryQuery->$handle)
-                            );
-                        }
-                    }
-                }
-
-                $entryQuery->query->innerJoin(
-                    $form->getContentTable().' as '.$form->handle,
-                    '[['.$form->handle.'.elementId]] = [[subquery.elementsId]]'
-                );
-
-                $entryQuery->query->select = $select;
-            }
-        }
-    }
-
+    
     /**
      * @inheritdoc
      */
