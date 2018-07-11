@@ -1,0 +1,553 @@
+[
+  {
+    "version": "2.5.2",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/archive/v2.5.2.zip",
+    "date": "2018-05-22T07:00:00+00:00",
+    "notes": [
+      "[Fixed] Fixed issue where not all recipients would receive email notifications when S3 file attachments were enabled"
+    ]
+  },
+  {
+    "version": "2.5.1",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/archive/v2.5.1.zip",
+    "date": "2017-10-18T07:00:00+00:00",
+    "notes": [
+      "[Added] Added support for the Assets filename in Sprout Forms Entries Report integration",
+      "[Added] Added support for $criteria-&gt;formHandle",
+      "[Improved] Improved validation for field handles to include reserved words from Entry Model",
+      "[Improved] Improved translation support",
+      "[Fixed] Fixed bug where getEntryById could return last entry if entryId was null",
+      "[Fixed] Fixed bug where Amazon S3 files could not be attached to a notification email"
+    ]
+  },
+  {
+    "version": "2.5.0",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/archive/v2.5.0.zip",
+    "date": "2017-08-30T07:00:00+00:00",
+    "notes": [
+      "[Added] Added `Manage Forms` permission",
+      "[Added] Added `View Form Entries` and `Edit Form Entries` permissions",
+      "[Fixed] Fixed bug where Forms could be saved with a duplicate slug"
+    ]
+  },
+  {
+    "version": "2.4.9",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2017-08-23T07:00:00+00:00",
+    "notes": [
+      "[Added] Added support to retrieve Form Entries by `statusHandle`",
+      "[Added] Added translate filter to placeholder text",
+      "[Improved] Updated Sprout Forms Entry Elements to use SproutForms_EntryElement::getFieldsForElementsQuery"
+    ]
+  },
+  {
+    "version": "2.4.2",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2017-05-25T07:00:00+00:00",
+    "notes": [
+      "[Fixed] Fixed bug where `craft.sproutForms.lastEntry()` would return null"
+    ]
+  },
+  {
+    "version": "2.4.1",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2017-05-06T21:43:44+00:00",
+    "notes": [
+      "[Added] Added option to disable saving form submission data to the database globally or on a per-form basis",
+      "[Added] Added Support for Email Notifications when using Payload Forwarding",
+      "[Added] Added hidden config override `sproutForms-&gt;enableEditFormEntryViaFrontEnd` to make forms editable on the front-end",
+      "[Improved] Improved support for static translations on tabs and fields",
+      "[Improved] Improved default settings on install",
+      "[Fixed] Fixed bug in Sprout Import integration settings"
+    ]
+  },
+  {
+    "version": "2.3.5",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2017-01-11T08:00:00+00:00",
+    "notes": [
+      "[Improved] The SproutForms_FormModel variable is now available within tab and field templates",
+      "[Improved] Updated post variable to be passed as a parameter to the SproutForms_FormsService service",
+      "[Improved] Updated renderObjectTemplate methods to set safe mode to true",
+      "[Fixed] Fixed javascript error that could occur when some fields were marked as required",
+      "[Fixed] Fixed Sprout Import integration bug with how dateCreated was imported to Form Entries Elements"
+    ]
+  },
+  {
+    "version": "2.3.4",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2016-09-26T16:00:00+00:00",
+    "notes": [
+      "[Improved] Added support for line breaks in default notification email template",
+      "[Improved] Improved support for Sprout Import",
+      "[Fixed] Fixed errors that could occur on servers running PHP 5.3"
+    ]
+  },
+  {
+    "version": "2.3.2",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2016-06-07T07:00:00+00:00",
+    "notes": [
+      "[Fixed] Fixed issue on Sprout Reports integration when the form does not exist.",
+      "[Fixed] Fixed issue on Sprout Reports integration when dates are empty.",
+      "[Fixed] Fixed bug on getAllEntries service method."
+    ]
+  },
+  {
+    "version": "2.3.1",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2016-05-26T18:00:00+00:00",
+    "notes": [
+      "[Fixed] Fixed casing of entry statuses template folder reference"
+    ]
+  },
+  {
+    "version": "2.3.0",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2016-05-26T17:00:00+00:00",
+    "notes": [
+      "[Added] Added Form Entry Statuses and customizable status workflow",
+      "[Added] Added front-end field support for Entries Relations field",
+      "[Added] Added front-end field support for Categories Relations field",
+      "[Added] Added front-end field support for Tags Relations field",
+      "[Added] Added support for S3 Asset uploads and file attachments",
+      "[Added] Added option for third-party form submissions to also save a copy of the submission to the Craft database",
+      "[Improved] Added an advanced settings section to allow customization of which user-facing advanced settings to display",
+      "[Improved] Improved labeling around custom form template overrides options",
+      "[Improved] Improved error logging",
+      "[Improved] Updated form redirect behavior to follow Craft conventions",
+      "[Fixed] Fixed several minor security vulnerabilities",
+      "[Fixed] Added support for Form Entries Explorer chart in PHP 5.3",
+      "[Fixed] Fixed issue where a checkbox field marked as required would require all checkboxes to be selected before validating"
+    ]
+  },
+  {
+    "version": "2.2.6",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2016-04-20T10:00:00+00:00",
+    "notes": [
+      "[Added] When form validation fails, the displayForm tag now adds focus to the first error in the form",
+      "[Improved] Improved &quot;Save as new form&quot; behavior",
+      "[Fixed] Fixed method signature compatibility error with FieldsService::saveField() method in PHP7",
+      "[Fixed] Fixed deprecation error introduced in Craft 2.6.2779"
+    ]
+  },
+  {
+    "version": "2.2.5",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2016-04-07T07:30:00+00:00",
+    "notes": [
+      "[Added] Added support for editing fields via the field modal workflow",
+      "[Improved] Improved Sprout Reports integration adding support for updating report options on the fly",
+      "[Fixed] Fixed a bug where deleting a Form via the bulk action dropdown didn&#039;t delete the Form&#039;s related content table",
+      "[Fixed] Fixed issue where Form field input tag data attributes were not wrapped in quotations",
+      "[Fixed] Fixed bug where the Tab name would be repeated before each field in notifications if a Form had more than one tab",
+      "[Fixed] Fixed a bug where Tab names could misbehave if they had blank spaces"
+    ]
+  },
+  {
+    "version": "2.2.3",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2016-03-31T17:00:00+00:00",
+    "notes": [
+      "[Added] Added Form Entries Explorer Chart",
+      "[Added] Added Recent Form Entries Chart dashboard widget"
+    ]
+  },
+  {
+    "version": "2.2.2",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2016-03-03T17:00:00+00:00",
+    "notes": [
+      "[Added] Added PHP 7 compatibility",
+      "[Added] Added support for creating fields via a modal",
+      "[Improved] Improved workflow around creating new fields and tabs",
+      "[Improved] Improved sending of notifications via the service layer",
+      "[Improved] Added &#039;Save and continue editing&#039; option in the save form dropdown",
+      "[Improved] Updated default form save behavior to save and redirect to form index page",
+      "[Improved] Various code cleanup and improved organization",
+      "[Fixed] Fixed error when displaying fields that were not in the content table",
+      "[Fixed] Added form handle validation"
+    ]
+  },
+  {
+    "version": "2.2.1",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2016-02-05T08:00:00+00:00",
+    "notes": [
+      "[Fixed] Fixed bug on forms using an Assets field"
+    ]
+  },
+  {
+    "version": "2.2.0",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2016-02-04T08:00:00+00:00",
+    "notes": [
+      "[Added] Added Recent Form Entries dashboard widget",
+      "[Added] Added support for filtering and ordering Form Entries using the `craft.sproutForms.entries` tag",
+      "[Improved] New Forms are now immediately editable",
+      "[Fixed] Fixed broken link in sidebar documentation"
+    ]
+  },
+  {
+    "version": "2.1.5",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2016-01-13T22:20:00+00:00",
+    "notes": [
+      "[Added] Added support for Form redirects to use relative URLs",
+      "[Added] Added support for importing Form and Form Entry Elements using Sprout Import",
+      "[Improved] Improved messaging around spam protection using Sprout Invisible Captcha"
+    ]
+  },
+  {
+    "version": "2.1.4",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2015-12-31T11:30:00+00:00",
+    "notes": [
+      "[Added] Added upcoming Sprout Reports Form Entries integration",
+      "[Fixed] Fixed Sprout Email integration where a notification email could default to the most recent entry instead of the most recent entry of a particular form type.",
+      "[Fixed] Fixed issue with notification subject line encoding that could  when using PHP Mail protocol.",
+      "[Fixed] Fixed issue where email notification template couldn&#039;t be overridden when using custom template overrides.",
+      "[Fixed] Fixed issue where bulk renaming forms titles failed when some special characters were in the title."
+    ]
+  },
+  {
+    "version": "2.1.3",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2015-12-05T04:26:53+00:00",
+    "notes": [
+      "[Fixed] Fixed asset upload bug introduced in Craft 2.5 updates"
+    ]
+  },
+  {
+    "version": "2.1.2",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2015-12-03T09:30:00+00:00",
+    "notes": [
+      "# Bug Fixes",
+      "[Fixed] Fixed redirect issue (404) after installation"
+    ]
+  },
+  {
+    "version": "2.1.1",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2015-12-02T08:00:00+00:00",
+    "notes": [
+      "# General",
+      "[Added] The entire Control Panel has been updated to work with Craft 2.5",
+      "[Added] Added Plugin icon",
+      "[Added] Added Plugin description",
+      "[Added] Added link to documentation",
+      "[Added] Added link to plugin settings",
+      "[Added] Added link to release feed",
+      "[Added] Added subnav in place of tabs for top level navigation",
+      "[Added] Added Sprout Migrate support for SproutForms_Form Element Type",
+      "[Added] Added Sprout Migrate support for SproutForms_Entry Element Type",
+      "[Improved] Improved and standardized display of Sprout plugin info in footer",
+      "[Improved] Improved errors and messaging on examples page",
+      "# Forms",
+      "[Added] Form Entry titles on existing entries get updated when Title Format is changed",
+      "[Added] Field variables used in Title Format will be updated dynamically if field name is changed",
+      "[Improved] Updated emails to use filter_var for validation",
+      "[Improved] Updated `SproutForms_FormRecord::validateRecipent()` method to allow twig syntax",
+      "[Improved] Removed customize source link on Form element index page",
+      "# Bug Fixes",
+      "[Fixed] Fixed a bug where setting an id using renderingOptions would output duplicate ids",
+      "[Fixed] Fixed a bug where checkbox field only captured last value",
+      "[Fixed] Fixed a bug where sidebar list stopped showing in Craft 2.5",
+      "[Fixed] Fixed a bug where making field required or removing it would fail in Craft 2.5",
+      "[Fixed] Fixed a bug where Form Entry element types could throw an error on Form Entry",
+      "element index page"
+    ]
+  },
+  {
+    "version": "2.1.0",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/archive/v2.1.0.zip",
+    "date": "2015-10-20T17:00:00+00:00",
+    "notes": [
+      "# Custom Template Overrides",
+      "Designers and front-end developers now have 100% control over every form template. Customize the HTML, CSS, and Javascript used to output your forms, tabs, fields,  error messages, and notification emails.",
+      "[Added] Added [Custom Template Overrides](https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/customization/template-overrides) setting to override default form templates with custom templates on a per-form basis.",
+      "[Added] Added Custom Template Override support for email notification templates",
+      "[Added] Added setting to allow files to be attached to email notifications on a per-form basis (when using Local Asset Sources)",
+      "[Added] Template Folder Override form setting defaults to Template Folder Override global setting when a new form is created",
+      "[Added] Added support to dynamically set form options in templates using displayForm, displayTab, and displayField tags.",
+      "[Improved] Improved underlying front-end form templates and removed form macro dependencies",
+      "# Front-end Field API",
+      "Developers can now add field type support for front-end forms as easily as they can add support for fields in Craft. Sprout Forms currently supports seven Standard Fields. Additional support can be added for native or custom field types via the Front-end Field API.",
+      "[Added] Added [Front-end Field API](https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/customization/custom-front-end-fields)",
+      "[Added] Added support for plugins to register one or more custom front-end fields",
+      "[Added] Added form.getField() method which returns a complete FieldModel",
+      "[Added] Added front-end support for Assets field and single and multiple file submissions",
+      "[Added] Added front-end support for Number field with `number` attribute and decimal validation",
+      "[Added] Added support for `for` attribute and multiple labels with the Checkboxes and RadioButtons fields",
+      "[Added] Added support for `required` attribute on input tags",
+      "[Added] Added support for fields that should not display a value on the front-end using SproutFormsBaseField::isPlainInput()",
+      "[Added] Added support for fields that need to use multiple labels using SproutFormsBaseField::hasMultipleLabels()",
+      "[Added] Added `craft.sproutForms.addFieldVariables()` tag which makes Twig _context, and the option to make additional variables, available to fields. There&#039;s a new field type on the way and you won&#039;t even see it coming!",
+      "[Improved] Migrated all supported front-end fields to use the Front-end Field API",
+      "# Payload Forwarding",
+      "Manage forms that submit your data to third-party endpoints. Enjoy the benefits of the Sprout Forms form builder and integration with Craft relations and validation while sending your data someplace else (for example, to have tighter integration between your website and CRM or to meet specific data security requirements).",
+      "[Added] Added actionForwardEntry() action to handle form submissions to third-party locations",
+      "[Added] Added SproutForms_EntryModel::getPayloadFields() to clean up form fields before forwarding",
+      "[Added] Added support for form field validation before forwarding",
+      "[Added] Added support for payload error messages to be returned to form just like all other form error messages",
+      "# Misc",
+      "[Added] Added `craft.sproutForms.getEntry()` tag which gets an active or new SproutForms_EntryModel.",
+      "[Added] Front-end FieldModel now includes the `required` attribute",
+      "[Added] Added integration with upcoming Sprout Reports",
+      "[Improved] Removed `enableTemplateOverrides` and `enableFileAttachments` config settings as they are no longer needed",
+      "[Improved] Moved several Form settings from the _Overview_ tab to a new _Advanced_ settings tab.",
+      "[Improved] Renamed Form settings _Overview_ tab to _Settings_",
+      "[Improved] Renamed plugin settings _Control Panel_ tab to _Settings_"
+    ]
+  },
+  {
+    "version": "1.1.0",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2015-08-17T22:08:00+00:00",
+    "notes": [
+      "[Added] Added the ability to delete entries via bulk actions",
+      "[Added] Added the ability to sort entries by the number of fields",
+      "[Added] Added the ability to sort entries by the number of total entries",
+      "[Added] Added the ability to duplicate a form via Save as new form option",
+      "[Improved] Improved breadcrumbs and save button styles",
+      "[Fixed] Fixed an issue that occurred while deleting a field from duplicated form"
+    ]
+  },
+  {
+    "version": "1.0.3",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2015-07-01T07:00:00+00:00",
+    "notes": [
+      "[Fixed] Fixes logging error in migration"
+    ]
+  },
+  {
+    "version": "1.0.2",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2015-06-30T04:00:00+00:00",
+    "notes": [
+      "[Improved] Updated naming conventions of rules options"
+    ]
+  },
+  {
+    "version": "1.0.1",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2015-06-27T16:00:00+00:00",
+    "notes": [
+      "[Improved] Updated onSaveEntry event to take place after context switching",
+      "[Improved] Updated Sprout Forms Save Entry event input name to avoid collisions"
+    ]
+  },
+  {
+    "version": "1.0.0",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2015-05-13T07:00:00+00:00",
+    "notes": [
+      "[Added] Commercial Release"
+    ]
+  },
+  {
+    "version": "0.9.1",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2015-05-07T07:00:00+00:00",
+    "notes": [
+      "[Added] Adds the ability for a Sprout Email users to trigger notifications when a form entry is saved"
+    ]
+  },
+  {
+    "version": "0.9.0",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2015-04-24T15:00:00+00:00",
+    "notes": [
+      "[Added] Added conditional validation to Form Notification fields",
+      "[Added] Added craft.sproutForms.getForm() tag",
+      "[Added] Added `has-errors` class to field container of form output",
+      "[Added] Added example US English translation file",
+      "[Improved] Form Entries now display in the default order of most recent first",
+      "[Improved] Updated Form Entry page to display fields by tab",
+      "[Improved] Improved organization of templates and code",
+      "[Improved] Updated Field Name instructions to indicate usage on front-end as well",
+      "[Fixed] Removed Number of Fields and Number of Entries sorting options which were throwing errors"
+    ]
+  },
+  {
+    "version": "0.8.8",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2015-04-14T15:00:00+00:00",
+    "notes": [
+      "[Added] Added support for {siteUrl} and all entry and entry content attributes in redirect rule",
+      "[Added] Added support for attaching files to notification emails via hidden config setting (sproutForms =&gt; enableFileAttachments)",
+      "[Improved] Added support for tabs in Notification emails",
+      "[Improved] Notification emails now order fields in the order they appear",
+      "[Improved] Improved error messages when submitted fields don&#039;t validate",
+      "[Improved] Cleaned up code in tab template for displayForm() tag output",
+      "[Improved] Template overrides now need to be enabled via a hidden config setting (sproutForms =&gt; enableTemplateOverrides)",
+      "[Fixed] Fixed output of date on Form Entries in Control Panel"
+    ]
+  },
+  {
+    "version": "0.8.7",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2015-03-19T18:00:00+00:00",
+    "notes": [
+      "[Added] Added support for front-end file uploads via custom Asset fields",
+      "[Added] Added support for Sprout Forms Entry Element queries",
+      "[Fixed] Fixed rendering issue which cased notifications to fail silently",
+      "[Fixed] Removed initial draft of event integration API",
+      "[Fixed] Fixed issue where Forms could not be organized into multiple groups"
+    ]
+  },
+  {
+    "version": "0.8.6",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2015-01-29T08:00:00+00:00",
+    "notes": [
+      "[Improved] Improved how integrations with older versions of Sprout Email are handled",
+      "[Fixed] Fixed issue where defineSproutEmailEvents() was called even if SproutEmailBaseEvent did not exist"
+    ]
+  },
+  {
+    "version": "0.8.5",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2015-01-23T08:00:00+00:00",
+    "notes": [
+      "[Added] Added sproutForms.saveEntry event integration for the upcoming release of Sprout Email",
+      "[Improved] Improved instructions on how to set up notification emails",
+      "[Improved] Improved the way field values are checked to prevent arrays from being outputted in string context",
+      "[Fixed] Fixed issue where admin notifications were not being sent on Ajax submissions",
+      "[Fixed] Fixed issue where a fatal syntax error in older versions of PHP would break layouts"
+    ]
+  },
+  {
+    "version": "0.8.4",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2015-01-09T21:24:00+00:00",
+    "notes": [
+      "[Fixed] Fixed issue where globals would disappear after a failed form submission",
+      "[Fixed] Fixed issue where templates using template_from_string() would not finish rendering after failed submission"
+    ]
+  },
+  {
+    "version": "0.8.3",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2014-12-08T23:16:00+00:00",
+    "notes": [
+      "[Fixed] Fixed sorting issue on Form Entries index caused by the Craft 2.3 update"
+    ]
+  },
+  {
+    "version": "0.8.2",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2014-11-14T18:00:00+00:00",
+    "notes": [
+      "[Added] Forms now support all native Craft fields and custom third-party fields",
+      "[Added] Forms now use Craft&#039;s Field Layout Editor",
+      "[Added] Added Edit Field option to Field Layout Designer",
+      "[Added] Build multi-page Forms and single-page Forms with multiple sections",
+      "[Added] Forms are searchable",
+      "[Added] Forms can be grouped",
+      "[Added] Forms can be related to other content via the Sprout Forms Relations Field Type",
+      "[Added] Forms can submit to third-party locations",
+      "[Improved] Notifications can be customized with the values submitted in a Form Entry",
+      "[Added] Form Entry Titles can be customized with any Form field values",
+      "[Added] Form Entry Titles can be customized with values from any Form Fields using the Title Format syntax",
+      "[Added] Form Entries are searchable (by Title)",
+      "[Added] Form Entries are filterable by the Form they belong to",
+      "[Added] Form Entries can now be edited in the Control Panel",
+      "[Added] Form Entries can be related to other content via the Sprout Form Entry Relations Field Type",
+      "[Added] All data from the last Form Entry can be viewed on the Thank You page with the lastEntry() tag",
+      "[Added] Form Entries can now be submitted via ajax",
+      "[Added] Output your simple forms with one line of code using the displayForm() tag (Supported Fields: Text, Textarea, Number, Dropdown, Checkboxes, Radio Buttons, Multi-select",
+      "[Added] Build complex front-end Forms using all field types just as you would with a Craft Entry Form",
+      "[Added] Third-party developers can add front-end output support for custom fields",
+      "[Added] Distiguish between Basic and Advanced field types when creating Fields",
+      "[Added] Override the default Form templates to have 100% control over your dynamic template design",
+      "[Added] Override the default email template to have 100% control over your notification email design",
+      "[Added] Updated example Forms and various help notes throughout the interface into tool tips",
+      "[Added] Forms are now Element Types",
+      "[Added] Entries are now Element Types",
+      "[Added] Added CSRF Support",
+      "[Added] Added support for Command+S to all forms",
+      "[Added] Added `editSproutFormsSettings` permission",
+      "[Added] Added sproutForms.modifyForm hook to form displayForm() template",
+      "[Added] Improved layout of Form Edit page",
+      "[Added] Form submission can now be faked by third-party plugins",
+      "[Added] Added the `SproutFormsFieldType` Class",
+      "[Added] Added `onSaveEntry` and `onBeforeSaveEntry` events",
+      "[Improved] Deprecated `onBeforeSubmitFormEvent`",
+      "[Fixed] Fixed Entries page display bug where entries would disappear",
+      "[Fixed] Fixed bug where dropdown and radio fields did not retain state"
+    ]
+  },
+  {
+    "version": "0.7.1",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2014-04-10T19:00:00+00:00",
+    "notes": [
+      "[Fixed] Fixed bug if IP address or browser info don&#039;t exist when viewing pre-existing entries"
+    ]
+  },
+  {
+    "version": "0.7.0",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2014-04-10T13:00:00+00:00",
+    "notes": [
+      "[Added] Added support for error handling on pages with multiple forms",
+      "[Added] Added Contact Form and Mailing List example forms available on installation",
+      "[Added] Added onBeforeSubmitForm() and onBeforeSaveEntry() Events",
+      "[Added] Added Twig support to notification field",
+      "[Added] Added initial framework for unit testing",
+      "[Added] Each submitted entry now captures IP address and browser info",
+      "[Added] Added Form settings for submit button type and label",
+      "[Added] Added subject and reply-to fields to notifications",
+      "[Added] Added support for Sprout Email notifications options to select specific forms",
+      "[Improved] Added support for displaying form fields without the need for Twig&#039;s raw filter",
+      "[Improved] Various UI adjustments",
+      "[Improved] Removed Sprout Footer from form entries index page",
+      "[Improved] Improve email recipient list validation when saving",
+      "[Improved] A form that fails validation now returns an object that matches the forms handle and falls back to a &#039;form&#039; object",
+      "[Improved] A form that fails validation will now return errors as part of the form object formHandle.errors or form.errors. Return values &#039;error&#039; and &#039;errors&#039; have been removed.",
+      "[Improved] A form that fails validation no longer returns an &#039;entry&#039; object",
+      "[Improved] Removed error handling using msg() variable",
+      "[Improved] Deprecated sproutFormsPrePost hook, use onBeforeSubmitForm() Event instead",
+      "[Fixed] Fixed Publish tab code examples to reflect new syntax",
+      "[Fixed] Fixed recipient list validation bug"
+    ]
+  },
+  {
+    "version": "0.6.0.1",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2014-01-25T23:55:00+00:00",
+    "notes": [
+      "[Added] Added a &quot;type&quot; variable to each field",
+      "[Added] Added a type classname to the parent div when outputting forms programmatically &lt;div class=&quot;field checkbox&quot;&gt;",
+      "[Added] Added an on-submit redirect url form setting on backend that outputs in the form tag",
+      "[Added] Added displayField tag: craft.sproutForms.displayField(&#039;fieldHandle&#039;)",
+      "[Added] Added auto-population for &#039;handle&#039; when title is written in on Form Settings tab",
+      "[Added] Added support for Checkboxes, Dropdown, Multi-select, and Radio button fields",
+      "[Added] Added field.required variable",
+      "[Added] Added support to drag-and-drop fields on field settings page",
+      "[Added] Added &lt;span class=&quot;required&quot;&gt; * &lt;/span&gt; when outputting forms programmatically",
+      "[Improved] A form that doesn&#039;t validate now returns an &#039;errors&#039; variable",
+      "[Improved] Renamed PublicController to EntriesController",
+      "[Improved] Renamed PublicController &#039;post&#039; function to EntriesController &#039;saveEntry&#039;",
+      "[Improved] Renamed field.html to field.input",
+      "[Improved] You can now retrieve submitted form values using the &#039;entry&#039; object which is returned when a form doesn&#039;t validate",
+      "[Improved] Renamed field.name to field.label",
+      "[Improved] Notification emails now recognize line breaks",
+      "[Fixed] Fixed bug on settings page where clicking &#039;Publish Your Form&#039; would cause a 404",
+      "[Fixed] Fixed bug on notification settings page where clicking &#039;Submit&#039; would cause a 404",
+      "[Fixed] Remove extraneous output from error messages"
+    ]
+  },
+  {
+    "version": "0.5.1.7",
+    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "date": "2014-01-11T20:44:00+00:00",
+    "notes": [
+      "[Added] Private Beta"
+    ]
+  }
+]

@@ -72,7 +72,7 @@ class SproutFormsPlugin extends BasePlugin
 	 */
 	public function getReleaseFeedUrl()
 	{
-		return 'https://sprout.barrelstrengthdesign.com/craft-plugins/forms/releases.json';
+		return 'https://github.com/barrelstrength/craft-sprout-forms/blob/v2/releases.json';
 	}
 
 	/**
