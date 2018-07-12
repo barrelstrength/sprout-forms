@@ -163,8 +163,8 @@ abstract class BaseOptionsFormField extends FormField implements PreviewableFiel
             // Convert the value to a MultiOptionsFieldData object
             $options = [];
             foreach ($selectedValues as $val) {
-                $label = $this->optionLabel($val);
-                $options[] = new OptionData($label, $val, true);
+                $label = $this->optionLabel($val['value']);
+                $options[] = new OptionData($label, $val['value'], true);
             }
             $value = new MultiOptionsFieldData($options);
         } else {
