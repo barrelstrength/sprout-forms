@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutforms;
 
-use barrelstrength\sproutbase\app\email\services\Email;
+use barrelstrength\sproutbase\app\email\services\EmailTemplates;
 use barrelstrength\sproutbase\app\reports\models\DataSource;
 use barrelstrength\sproutbase\app\email\services\NotificationEmailEvents;
 use barrelstrength\sproutbase\app\reports\services\DataSources;
@@ -189,7 +189,7 @@ class SproutForms extends Plugin
         });
 
         // Register Sprout Email Templates
-        Event::on(Email::class, Email::EVENT_REGISTER_EMAIL_TEMPLATES, function(RegisterComponentTypesEvent $event) {
+        Event::on(EmailTemplates::class, EmailTemplates::EVENT_REGISTER_EMAIL_TEMPLATES, function(RegisterComponentTypesEvent $event) {
             $event->types[] = BasicSproutFormsNotification::class;
         });
 
