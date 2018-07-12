@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.0.0-beta.18 - 2018-07-12
+
+### Fixed
+- Fixed bug where checkboxes field would throw error when displaying on Entry page ([#125])
+
+[#125]: https://github.com/barrelstrength/craft-sprout-forms/issues/125#issuecomment-404460226
+
 ## 3.0.0-beta.17 - 2018-06-12
 
 ### Added
