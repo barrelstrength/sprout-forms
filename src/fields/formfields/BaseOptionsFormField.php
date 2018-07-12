@@ -163,8 +163,8 @@ abstract class BaseOptionsFormField extends FormField implements PreviewableFiel
             // Convert the value to a MultiOptionsFieldData object
             $options = [];
             foreach ($selectedValues as $val) {
-                $label = $this->optionLabel($val['value']);
-                $options[] = new OptionData($label, $val['value'], true);
+                $label = $this->optionLabel($val);
+                $options[] = new OptionData($label, $val, true);
             }
             $value = new MultiOptionsFieldData($options);
         } else {
@@ -186,6 +186,23 @@ abstract class BaseOptionsFormField extends FormField implements PreviewableFiel
         $value->setOptions($options);
 
         return $value;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function serializeValue($value, ElementInterface $element = null)
+    {
+        if ($value instanceof MultiOptionsFieldData) {
+            $serialized = [];
+            foreach ($value as $selectedValue) {
+                /** @var OptionData $selectedValue */
+                $serialized[] = $selectedValue->value;
+            }
+            return Json::encode($serialized);
+        }
+
+        return parent::serializeValue($value, $element);
     }
 
     /**
