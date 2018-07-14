@@ -1,97 +1,104 @@
-{%- set entry = object  -%}
+{%- set entry = object -%}
 {%- set form = entry.form -%}
 
 <!doctype html>
 <html>
 <head>
-  <title>{{ siteName }}</title>
+    <title>{{ siteName }}</title>
 </head>
 <body marginwidth="0" marginheight="0" topmargin="0" leftmargin="0" offset="0">
-  <table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
     <tr>
-      <td valign="top">
-        <table>
-          <tr>
-            <td valign="top" style="width:600px;">
-
-              <table>
+        <td valign="top">
+            <table>
                 <tr>
-                  <td valign="top" style="width:600px;">
+                    <td valign="top" style="width:600px;">
 
-                    <p>{{ "Form submission from"|t('sprout-forms') }} {{ siteName }}</p>
+                        <table>
+                            <tr>
+                                <td valign="top" style="width:600px;">
 
-                    <p>
-                      <span style="text-transform: uppercase;"><strong>{{ form.name }}</strong></span>
-                    </p>
+                                    <p>{{ "Form submission from"|t('sprout-forms') }} {{ siteName }}</p>
 
-                  </td>
-                </tr>
-              </table>
+                                    <p>
+                                        <span style="text-transform: uppercase;"><strong>{{ form.name }}</strong></span>
+                                    </p>
 
-              <table>
-                <tr>
-                  <td style="border-top:1px solid #eee;border-bottom:1px solid #eee;background-color:#fefefe;width:600px;">
+                                    {% if email.defaultBody|length %}
+                                        <p>{{ email.defaultBody }}</p>
+                                    {% endif %}
 
-                      {% set tabs = entry.getFieldLayout().getTabs() %}
+                                </td>
+                            </tr>
+                        </table>
 
-                      {% for tab in tabs %}
-                          <table>
-                              <tr>
-                                  <td>
+                        <table>
+                            <tr>
+                                <td style="border-top:1px solid #eee;border-bottom:1px solid #eee;background-color:#fefefe;width:600px;">
 
-                                    {% set fields = tab.getFields() %}
+                                    {% set tabs = entry.getFieldLayout().getTabs() %}
 
-                                    {% for field in fields %}
+                                    {% for tab in tabs %}
+                                        <table>
+                                            <tr>
+                                                <td>
 
-                                      {% set value = attribute(entry, field.handle) %}
+                                                    {% set fields = tab.getFields() %}
 
-                                      {% if loop.first and tabs|length > 1 %}
-                                      <p><strong>{{ tab.name }}</strong></p>
-                                      {% endif %}
+                                                    {% for field in fields %}
 
-                                      <p>
-                                        <strong>{{ field.name }}</strong><br/>
+                                                        {% set value = attribute(entry, field.handle) %}
 
-                                        {% if value is not iterable and value is not empty %}
+                                                        {% if loop.first and tabs|length > 1 %}
+                                                            <p>
+                                                                <strong>{{ tab.name }}</strong>
+                                                            </p>
+                                                        {% endif %}
 
-                                          {{ value|nl2br }}
+                                                        <p>
+                                                        <strong>{{ field.name }}</strong>
+                                                        <br/>
 
-                                        {% else %}
+                                                        {% if value is not iterable and value is not empty %}
 
-                                          <ul style="margin-left:0;">
-                                          {% for item in value %}
-                                            <li>{{ item }}</li>
-                                          {% endfor %}
-                                          </ul>
+                                                            {{ value|nl2br }}
 
-                                        {% endif %}
-                                      </p>
+                                                        {% else %}
+
+                                                            <ul style="margin-left:0;">
+                                                                {% for item in value %}
+                                                                    <li>{{ item }}</li>
+                                                                {% endfor %}
+                                                            </ul>
+
+                                                        {% endif %}
+                                                        </p>
+
+                                                    {% endfor %}
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td {% if not loop.last %}style="border-top:1px solid #eee;background-color:#fefefe;
+                                width:600px;"{% endif %}>
+
+                                                </td>
+                                            </tr>
+                                        </table>
 
                                     {% endfor %}
 
-                                  </td>
-                              </tr>
-                              <tr>
-                                <td {% if not loop.last %}style="border-top:1px solid #eee;background-color:#fefefe;
-                                width:600px;"{% endif %}>
+                                </td>
+                            </tr>
+                        </table>
 
-                                  </td>
-                              </tr>
-                          </table>
-
-                      {% endfor %}
-
-                  </td>
+                    </td>
                 </tr>
-              </table>
+            </table>
+            <!-- END TEMPLATE CONTAINER -->
 
-            </td>
-          </tr>
-        </table>
-        <!-- END TEMPLATE CONTAINER -->
-
-      </td>
+        </td>
     </tr>
-  </table>
+</table>
 </body>
 </html>
