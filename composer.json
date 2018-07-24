@@ -26,7 +26,7 @@
   },
   "require": {
     "craftcms/cms": "^3.0.0",
-    "barrelstrength/sprout-base": "^2.0.7"
+    "barrelstrength/sprout-base": "^2.0.9"
   },
   "autoload": {
     "psr-4": {
