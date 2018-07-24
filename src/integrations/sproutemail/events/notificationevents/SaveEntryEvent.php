@@ -108,20 +108,30 @@ class SaveEntryEvent extends NotificationEvent
             $criteria->formId = $formId;
         }
 
-        return $criteria->one();
+        $formEntry = $criteria->one();
+
+        if (!count($formEntry)) {
+            return new Entry();
+        }
+
+        return $formEntry;
     }
 
     public function rules()
     {
         $rules = parent::rules();
 
-        $rules[] = ['whenNew', 'required', 'when' => function() {
-            return $this->whenUpdated == false;
-        }];
+        $rules[] = [
+            'whenNew', 'required', 'when' => function() {
+                return $this->whenUpdated == false;
+            }
+        ];
 
-        $rules[] = ['whenUpdated', 'required', 'when' => function() {
-            return $this->whenNew == false;
-        }];
+        $rules[] = [
+            'whenUpdated', 'required', 'when' => function() {
+                return $this->whenNew == false;
+            }
+        ];
 
         $rules[] = [['whenNew', 'whenUpdated'], 'validateWhenTriggers'];
         $rules[] = [['event'], 'validateEvent'];
@@ -142,8 +152,7 @@ class SaveEntryEvent extends NotificationEvent
         $matchesWhenNew = $this->whenNew && $isNewEntry ?? false;
         $matchesWhenUpdated = $this->whenUpdated && !$isNewEntry ?? false;
 
-        if (!$matchesWhenNew && !$matchesWhenUpdated)
-        {
+        if (!$matchesWhenNew && !$matchesWhenUpdated) {
             $this->addError('event', Craft::t('sprout-base', 'When a form entry is saved Event does not match any scenarios.'));
         }
 
@@ -165,8 +174,7 @@ class SaveEntryEvent extends NotificationEvent
          */
         $event = $this->event ?? null;
 
-        if (!$event)
-        {
+        if (!$event) {
             $this->addError('event', Craft::t('sprout-forms', 'ElementEvent does not exist.'));
         }
 
