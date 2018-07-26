@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.0-beta.21 - 2018-07-26
+
+## Changed
+- Updated Sprout Base requirement to v3.0.0
+
 ## 3.0.0-beta.20 - 2018-07-26
 
 ## Added
