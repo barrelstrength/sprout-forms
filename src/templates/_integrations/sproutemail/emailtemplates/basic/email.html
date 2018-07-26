@@ -14,23 +14,17 @@
                 <tr>
                     <td valign="top" style="width:600px;">
 
+                        {% if email.defaultBody|length %}
                         <table>
                             <tr>
                                 <td valign="top" style="width:600px;">
 
-                                    <p>{{ "Form submission from"|t('sprout-forms') }} {{ siteName }}</p>
-
-                                    <p>
-                                        <span style="text-transform: uppercase;"><strong>{{ form.name }}</strong></span>
-                                    </p>
-
-                                    {% if email.defaultBody|length %}
-                                        <p>{{ email.defaultBody }}</p>
-                                    {% endif %}
+                                    <p>{{ email.defaultBody|nl2br }}</p>
 
                                 </td>
                             </tr>
                         </table>
+                        {% endif %}
 
                         <table>
                             <tr>
@@ -42,6 +36,9 @@
                                         <table>
                                             <tr>
                                                 <td>
+                                                    <p><em>{{ "Form submission received from:"|t('sprout-forms') }} {{ siteName }}</em></p>
+
+                                                    <p><span style="text-transform: uppercase;"><strong>{{ form.name }}</strong></span></p>
 
                                                     {% set fields = tab.getFields() %}
 
@@ -63,13 +60,19 @@
 
                                                             {{ value|nl2br }}
 
-                                                        {% else %}
+                                                        {% elseif value is iterable %}
 
-                                                            <ul style="margin-left:0;">
+                                                            <ul style="margin-left:0;padding-left:10px;">
                                                                 {% for item in value %}
+                                                                    {% if item is not empty %}
                                                                     <li>{{ item }}</li>
+                                                                    {% endif %}
                                                                 {% endfor %}
                                                             </ul>
+
+                                                        {% else %}
+
+                                                            <em>{{ "No response"|t('sprout-forms') }}</em>
 
                                                         {% endif %}
                                                         </p>

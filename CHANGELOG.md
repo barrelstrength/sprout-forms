@@ -1,5 +1,27 @@
 # Changelog
 
+## 3.0.0-beta.20 - 2018-07-26
+
+## Added
+- Added support for `defaultBody` field in Basic Email Template
+- Improvements in Notification Emails from Sprout Email v4.0.0-beta.1
+- Improvements in Reports from Sprout Reports v1.0.0-beta.11
+
+## Changed
+- Updates Form Edit sidebar to use a single column ([#122], [#118])
+- Updated Basic Notification Email Template styles
+- Updated Sprout Base requirement to v2.0.10
+
+## Fixed
+- Added Form and Entry Element Type migration
+- Fixed potential syntax error with Form Notification Email template and SaveEntry Event
+- Fixed broken styles introduced in recent Craft update ([#122])
+- Fixed bug where Sender fields would not validate if using dynamic values ([#124])
+
+[#118]: https://github.com/barrelstrength/craft-sprout-forms/issues/118
+[#122]: https://github.com/barrelstrength/craft-sprout-forms/issues/122
+[#124]: https://github.com/barrelstrength/craft-sprout-forms/issues/124
+
 ## 3.0.0-beta.18 - 2018-07-12
 
 ### Fixed

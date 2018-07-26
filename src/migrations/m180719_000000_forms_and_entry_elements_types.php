@@ -2,8 +2,6 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutforms\elements\Entry;
-use barrelstrength\sproutforms\elements\Form;
 use craft\db\Migration;
 
 /**
@@ -19,11 +17,11 @@ class m180719_000000_forms_and_entry_elements_types extends Migration
         $types = [
             0 => [
                 'oldType' => 'SproutForms_Form',
-                'newType' => Form::class
+                'newType' => 'barrelstrength\sproutforms\elements\Form'
             ],
             1 => [
                 'oldType' => 'SproutForms_Entry',
-                'newType' => Entry::class
+                'newType' => 'barrelstrength\sproutforms\elements\Entry'
             ]
         ];
 
