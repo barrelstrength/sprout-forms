@@ -1,5 +1,13 @@
 [
   {
+    "version": "2.6.0",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/archive/v2.6.0.zip",
+    "date": "2018-07-28T08:00:00+00:00",
+    "notes": [
+      "[Improved] Moved release feed to Github"
+    ]
+  },
+  {
     "version": "2.5.2",
     "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/archive/v2.5.2.zip",
     "date": "2018-05-22T07:00:00+00:00",
@@ -32,7 +40,7 @@
   },
   {
     "version": "2.4.9",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2017-08-23T07:00:00+00:00",
     "notes": [
       "[Added] Added support to retrieve Form Entries by `statusHandle`",
@@ -42,7 +50,7 @@
   },
   {
     "version": "2.4.2",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2017-05-25T07:00:00+00:00",
     "notes": [
       "[Fixed] Fixed bug where `craft.sproutForms.lastEntry()` would return null"
@@ -50,7 +58,7 @@
   },
   {
     "version": "2.4.1",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2017-05-06T21:43:44+00:00",
     "notes": [
       "[Added] Added option to disable saving form submission data to the database globally or on a per-form basis",
@@ -63,7 +71,7 @@
   },
   {
     "version": "2.3.5",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2017-01-11T08:00:00+00:00",
     "notes": [
       "[Improved] The SproutForms_FormModel variable is now available within tab and field templates",
@@ -75,7 +83,7 @@
   },
   {
     "version": "2.3.4",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2016-09-26T16:00:00+00:00",
     "notes": [
       "[Improved] Added support for line breaks in default notification email template",
@@ -85,7 +93,7 @@
   },
   {
     "version": "2.3.2",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2016-06-07T07:00:00+00:00",
     "notes": [
       "[Fixed] Fixed issue on Sprout Reports integration when the form does not exist.",
@@ -95,7 +103,7 @@
   },
   {
     "version": "2.3.1",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2016-05-26T18:00:00+00:00",
     "notes": [
       "[Fixed] Fixed casing of entry statuses template folder reference"
@@ -103,7 +111,7 @@
   },
   {
     "version": "2.3.0",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2016-05-26T17:00:00+00:00",
     "notes": [
       "[Added] Added Form Entry Statuses and customizable status workflow",
@@ -123,7 +131,7 @@
   },
   {
     "version": "2.2.6",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2016-04-20T10:00:00+00:00",
     "notes": [
       "[Added] When form validation fails, the displayForm tag now adds focus to the first error in the form",
@@ -134,7 +142,7 @@
   },
   {
     "version": "2.2.5",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2016-04-07T07:30:00+00:00",
     "notes": [
       "[Added] Added support for editing fields via the field modal workflow",
@@ -147,7 +155,7 @@
   },
   {
     "version": "2.2.3",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2016-03-31T17:00:00+00:00",
     "notes": [
       "[Added] Added Form Entries Explorer Chart",
@@ -156,7 +164,7 @@
   },
   {
     "version": "2.2.2",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2016-03-03T17:00:00+00:00",
     "notes": [
       "[Added] Added PHP 7 compatibility",
@@ -172,7 +180,7 @@
   },
   {
     "version": "2.2.1",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2016-02-05T08:00:00+00:00",
     "notes": [
       "[Fixed] Fixed bug on forms using an Assets field"
@@ -180,7 +188,7 @@
   },
   {
     "version": "2.2.0",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2016-02-04T08:00:00+00:00",
     "notes": [
       "[Added] Added Recent Form Entries dashboard widget",
@@ -191,7 +199,7 @@
   },
   {
     "version": "2.1.5",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2016-01-13T22:20:00+00:00",
     "notes": [
       "[Added] Added support for Form redirects to use relative URLs",
@@ -201,7 +209,7 @@
   },
   {
     "version": "2.1.4",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2015-12-31T11:30:00+00:00",
     "notes": [
       "[Added] Added upcoming Sprout Reports Form Entries integration",
@@ -213,7 +221,7 @@
   },
   {
     "version": "2.1.3",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2015-12-05T04:26:53+00:00",
     "notes": [
       "[Fixed] Fixed asset upload bug introduced in Craft 2.5 updates"
@@ -221,7 +229,7 @@
   },
   {
     "version": "2.1.2",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2015-12-03T09:30:00+00:00",
     "notes": [
       "# Bug Fixes",
@@ -230,7 +238,7 @@
   },
   {
     "version": "2.1.1",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2015-12-02T08:00:00+00:00",
     "notes": [
       "# General",
@@ -262,7 +270,7 @@
   },
   {
     "version": "2.1.0",
-    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/archive/v2.1.0.zip",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2015-10-20T17:00:00+00:00",
     "notes": [
       "# Custom Template Overrides",
@@ -304,7 +312,7 @@
   },
   {
     "version": "1.1.0",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2015-08-17T22:08:00+00:00",
     "notes": [
       "[Added] Added the ability to delete entries via bulk actions",
@@ -317,7 +325,7 @@
   },
   {
     "version": "1.0.3",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2015-07-01T07:00:00+00:00",
     "notes": [
       "[Fixed] Fixes logging error in migration"
@@ -325,7 +333,7 @@
   },
   {
     "version": "1.0.2",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2015-06-30T04:00:00+00:00",
     "notes": [
       "[Improved] Updated naming conventions of rules options"
@@ -333,7 +341,7 @@
   },
   {
     "version": "1.0.1",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2015-06-27T16:00:00+00:00",
     "notes": [
       "[Improved] Updated onSaveEntry event to take place after context switching",
@@ -342,7 +350,7 @@
   },
   {
     "version": "1.0.0",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2015-05-13T07:00:00+00:00",
     "notes": [
       "[Added] Commercial Release"
@@ -350,7 +358,7 @@
   },
   {
     "version": "0.9.1",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2015-05-07T07:00:00+00:00",
     "notes": [
       "[Added] Adds the ability for a Sprout Email users to trigger notifications when a form entry is saved"
@@ -358,7 +366,7 @@
   },
   {
     "version": "0.9.0",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2015-04-24T15:00:00+00:00",
     "notes": [
       "[Added] Added conditional validation to Form Notification fields",
@@ -374,7 +382,7 @@
   },
   {
     "version": "0.8.8",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2015-04-14T15:00:00+00:00",
     "notes": [
       "[Added] Added support for {siteUrl} and all entry and entry content attributes in redirect rule",
@@ -389,7 +397,7 @@
   },
   {
     "version": "0.8.7",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2015-03-19T18:00:00+00:00",
     "notes": [
       "[Added] Added support for front-end file uploads via custom Asset fields",
@@ -401,7 +409,7 @@
   },
   {
     "version": "0.8.6",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2015-01-29T08:00:00+00:00",
     "notes": [
       "[Improved] Improved how integrations with older versions of Sprout Email are handled",
@@ -410,7 +418,7 @@
   },
   {
     "version": "0.8.5",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2015-01-23T08:00:00+00:00",
     "notes": [
       "[Added] Added sproutForms.saveEntry event integration for the upcoming release of Sprout Email",
@@ -422,7 +430,7 @@
   },
   {
     "version": "0.8.4",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2015-01-09T21:24:00+00:00",
     "notes": [
       "[Fixed] Fixed issue where globals would disappear after a failed form submission",
@@ -431,7 +439,7 @@
   },
   {
     "version": "0.8.3",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2014-12-08T23:16:00+00:00",
     "notes": [
       "[Fixed] Fixed sorting issue on Form Entries index caused by the Craft 2.3 update"
@@ -439,7 +447,7 @@
   },
   {
     "version": "0.8.2",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2014-11-14T18:00:00+00:00",
     "notes": [
       "[Added] Forms now support all native Craft fields and custom third-party fields",
@@ -483,7 +491,7 @@
   },
   {
     "version": "0.7.1",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2014-04-10T19:00:00+00:00",
     "notes": [
       "[Fixed] Fixed bug if IP address or browser info don&#039;t exist when viewing pre-existing entries"
@@ -491,7 +499,7 @@
   },
   {
     "version": "0.7.0",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2014-04-10T13:00:00+00:00",
     "notes": [
       "[Added] Added support for error handling on pages with multiple forms",
@@ -518,7 +526,7 @@
   },
   {
     "version": "0.6.0.1",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2014-01-25T23:55:00+00:00",
     "notes": [
       "[Added] Added a &quot;type&quot; variable to each field",
@@ -544,7 +552,7 @@
   },
   {
     "version": "0.5.1.7",
-    "downloadUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs/getting-started/installing-and-updating",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/releases",
     "date": "2014-01-11T20:44:00+00:00",
     "notes": [
       "[Added] Private Beta"

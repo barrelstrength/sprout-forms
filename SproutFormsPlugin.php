@@ -32,7 +32,7 @@ class SproutFormsPlugin extends BasePlugin
 	 */
 	public function getVersion()
 	{
-		return '2.5.3';
+		return '2.6.0';
 	}
 
 	/**
@@ -64,7 +64,7 @@ class SproutFormsPlugin extends BasePlugin
 	 */
 	public function getDocumentationUrl()
 	{
-		return 'http://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs';
+		return 'https://sprout.barrelstrengthdesign.com/docs/forms';
 	}
 
 	/**
@@ -72,7 +72,7 @@ class SproutFormsPlugin extends BasePlugin
 	 */
 	public function getReleaseFeedUrl()
 	{
-		return 'https://github.com/barrelstrength/craft-sprout-forms/blob/v2/releases.json';
+		return 'https://raw.githubusercontent.com/barrelstrength/craft-sprout-forms/v2/releases.json';
 	}
 
 	/**
