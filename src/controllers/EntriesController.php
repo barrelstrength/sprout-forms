@@ -299,11 +299,9 @@ class EntriesController extends BaseController
         $entryId = null;
         $request = Craft::$app->getRequest();
 
-        $configSettings = Craft::$app->getConfig()->getConfigFromFile('sprout-forms');
+        $settings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
 
-        $enableEditFormEntryViaFrontEnd = $configSettings['enableEditFormEntryViaFrontEnd'] ?? false;
-
-        if ($request->getIsCpRequest() || $enableEditFormEntryViaFrontEnd) {
+        if ($request->getIsCpRequest() || $settings->enableEditFormEntryViaFrontEnd) {
             $entryId = $request->getBodyParam('entryId');
         }
 

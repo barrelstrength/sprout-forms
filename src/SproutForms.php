@@ -173,14 +173,9 @@ class SproutForms extends Plugin
         });
 
         Craft::$app->view->hook('sproutForms.modifyForm', function(&$context) {
-            $captchas = SproutForms::$app->forms->getAllEnabledCaptchas();
-            $captchaHtml = '';
+            $captchasHtml = SproutForms::$app->forms->getCaptchasHtml();
 
-            foreach ($captchas as $captcha) {
-                $captchaHtml .= $captcha->getCaptchaHtml();
-            }
-
-            return $captchaHtml;
+            return $captchasHtml;
         });
 
         Event::on(Forms::class, Forms::EVENT_REGISTER_FORM_TEMPLATES, function(RegisterComponentTypesEvent $event) {

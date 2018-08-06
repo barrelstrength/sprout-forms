@@ -38,3 +38,12 @@
     on: settings.enablePerFormTemplateFolderOverride,
     onLabel: "Enable"|t('sprout-forms'),
 }) }}
+
+{{ forms.lightswitchField({
+    label: "Enable edit form entries via front-end"|t('sprout-forms'),
+    instructions: "Allow edit form entries via front-end"|t('sprout-forms'),
+    id: 'enableEditFormEntryViaFrontEnd',
+    name: 'enableEditFormEntryViaFrontEnd',
+    on: settings.enableEditFormEntryViaFrontEnd,
+    onLabel: "Enable"|t('sprout-forms'),
+}) }}

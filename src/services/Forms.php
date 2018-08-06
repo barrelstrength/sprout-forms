@@ -713,4 +713,19 @@ class Forms extends Component
 
         return $captchas;
     }
+
+    /**
+     * @return string
+     */
+    function getCaptchasHtml()
+    {
+        $captchas = $this->getAllEnabledCaptchas();
+        $captchaHtml = '';
+
+        foreach ($captchas as $captcha) {
+            $captchaHtml .= $captcha->getCaptchaHtml();
+        }
+
+        return $captchaHtml;
+    }
 }

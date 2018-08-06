@@ -556,5 +556,15 @@ class SproutFormsVariable
         }
         return $query;
     }
+
+    /**
+     * @return string
+     */
+    public function getChatchasHtml()
+    {
+        $captchasHtml = SproutForms::$app->forms->getCaptchasHtml();
+
+        return $captchasHtml;
+    }
 }
 

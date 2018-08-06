@@ -16,6 +16,7 @@ class Settings extends Model
     public $saveDataByDefault = 1;
     public $enablePerFormTemplateFolderOverride = 0;
     public $captchaSettings = [];
+    public $enableEditFormEntryViaFrontEnd = 0;
 
     public function getSettingsNavItems()
     {

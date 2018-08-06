@@ -500,7 +500,7 @@ class Entries extends Component
             return;
         }
 
-        $submittedFields = Craft::$app->request->getBodyParam('fields');
+        $submittedFields = Craft::$app->request->getBodyParam('fields') ?? [];
 
         // Unobfuscate email address in $_POST request
         $this->unobfuscateEmailAddresses($form->id, $submittedFields);
