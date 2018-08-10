@@ -319,14 +319,6 @@ class Entries extends Component
 
     public function forwardEntry(Entry $entry)
     {
-        // Setting the title explicitly to perform field validation
-        $entry->title = sha1(time());
-
-        if (!$entry->validate()) {
-            SproutForms::error($entry->getErrors());
-            return false;
-        }
-
         $fields = $entry->getPayloadFields();
         $endpoint = $entry->getForm()->submitAction;
 
@@ -345,13 +337,13 @@ class Entries extends Component
             $response = $client->post($endpoint, null, $fields);
 
             SproutForms::info($response->getBody()->getContents());
-
-            return true;
         } catch (RequestException $e) {
             $entry->addError('general', $e->getMessage());
 
             return false;
         }
+
+        return true;
     }
 
     public function getDefaultEntryStatusId()

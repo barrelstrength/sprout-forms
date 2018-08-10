@@ -96,6 +96,9 @@ class EntriesController extends BaseController
         // Populate the entry with post data
         $this->populateEntryModel($entry);
 
+        // Setting the title explicitly to perform field validation
+        $entry->title = sha1(time());
+
         $event = new OnBeforeValidateEntryEvent([
             'form' => $this->form
         ]);
@@ -105,6 +108,7 @@ class EntriesController extends BaseController
         $success = $entry->validate();
 
         if (!$success) {
+            SproutForms::error($entry->getErrors());
             return $this->redirectWithErrors($entry);
         }
 
