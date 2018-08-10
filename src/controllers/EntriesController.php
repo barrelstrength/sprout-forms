@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\controllers;
 
 use barrelstrength\sproutforms\elements\Entry;
+use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
 use Craft;
 use craft\base\ElementInterface;
 use craft\web\Controller as BaseController;
@@ -19,6 +20,7 @@ use yii\web\Response;
 class EntriesController extends BaseController
 {
     const EVENT_BEFORE_POPULATE = 'beforePopulate';
+    const EVENT_BEFORE_VALIDATE = 'beforeValidate';
 
     /**
      * Allows anonymous execution
@@ -57,14 +59,15 @@ class EntriesController extends BaseController
     {
         $this->requirePostRequest();
 
-        if (Craft::$app->getRequest()->getIsCpRequest()) {
+        $request = Craft::$app->getRequest();
+
+        if ($request->getIsCpRequest()) {
             $currentUser = Craft::$app->getUser()->getIdentity();
             if (!$currentUser->can('editSproutFormsEntries')) {
                 throw new ForbiddenHttpException(Craft::t('sprout-forms', "Your account doesn't have permission to edit Form Entries."));
             }
         }
 
-        $request = Craft::$app->getRequest();
         $view = Craft::$app->getView();
 
         $formHandle = $request->getRequiredBodyParam('handle');
@@ -92,6 +95,18 @@ class EntriesController extends BaseController
 
         // Populate the entry with post data
         $this->populateEntryModel($entry);
+
+        $event = new OnBeforeValidateEntryEvent([
+            'form' => $this->form
+        ]);
+
+        $this->trigger(self::EVENT_BEFORE_VALIDATE, $event);
+
+        $success = $entry->validate();
+
+        if (!$success) {
+            return $this->redirectWithErrors($entry);
+        }
 
         $this->saveData = SproutForms::$app->entries->isDataSaved($this->form);
 
