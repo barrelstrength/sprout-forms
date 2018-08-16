@@ -161,6 +161,8 @@ class EntriesController extends BaseController
             ]);
         }
 
+        $this->createLastEntryId($entry);
+
         Craft::$app->getSession()->setNotice(Craft::t('sprout-forms', 'Entry saved.'));
 
         return $this->redirectToPostedUrl($entry);
@@ -184,6 +186,9 @@ class EntriesController extends BaseController
             $success = SproutForms::$app->entries->saveEntry($entry);
 
             if (!$success) {
+                $this->createLastEntryId($entry);
+            }
+            else{
                 SproutForms::error(Craft::t('sprout-forms', 'Unable to save Form Entry to Craft.'));
             }
         }
@@ -396,5 +401,17 @@ class EntriesController extends BaseController
         ]);
 
         return null;
+    }
+
+    /**
+     * @param $entry
+     */
+    private function createLastEntryId($entry)
+    {
+        if (!Craft::$app->getRequest()->getIsCpRequest())
+        {
+            // Store our new entry so we can recreate the Entry object on our thank you page
+            Craft::$app->getSession()->set('lastEntryId', $entry->id);
+        }
     }
 }

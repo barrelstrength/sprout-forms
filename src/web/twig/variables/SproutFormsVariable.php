@@ -286,7 +286,7 @@ class SproutFormsVariable
             $entryId = Craft::$app->getSession()->get('lastEntryId');
             $entry = SproutForms::$app->entries->getEntryById($entryId);
 
-            Craft::$app->getSession()->destroy('lastEntryId');
+            Craft::$app->getSession()->remove('lastEntryId');
         }
 
         return $entry ?? null;
