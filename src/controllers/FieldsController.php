@@ -111,6 +111,39 @@ class FieldsController extends BaseController
     }
 
     /**
+     * This action allows delete a Tab of the current layout
+     *
+     * @return \yii\web\Response
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
+     * @throws \yii\web\BadRequestHttpException
+     */
+    public function actionDeleteTab()
+    {
+        $this->requireAcceptsJson();
+
+        $request = Craft::$app->getRequest();
+        $tabId = $request->getBodyParam('tabId');
+        $tabId = str_replace("tab-", "", $tabId);
+        $tabRecord = FieldLayoutTabRecord::findOne($tabId);
+
+        if ($tabRecord) {
+            $result = $tabRecord->delete();
+
+            if ($result) {
+                return $this->asJson([
+                    'success' => true
+                ]);
+            }
+        }
+
+        return $this->asJson([
+            'success' => false,
+            'errors' => $tabRecord->getErrors() ?? null
+        ]);
+    }
+
+    /**
      * This action allows rename a current Tab
      *
      * @return \yii\web\Response
