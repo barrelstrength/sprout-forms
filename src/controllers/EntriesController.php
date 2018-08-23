@@ -36,8 +36,6 @@ class EntriesController extends BaseController
      */
     public $form;
 
-    protected $saveData;
-
     public function init()
     {
         $response = Craft::$app->getResponse();
@@ -68,8 +66,6 @@ class EntriesController extends BaseController
             }
         }
 
-        $view = Craft::$app->getView();
-
         $formHandle = $request->getRequiredBodyParam('handle');
         $this->form = SproutForms::$app->forms->getFormByHandle($formHandle);
 
@@ -96,8 +92,16 @@ class EntriesController extends BaseController
         // Populate the entry with post data
         $this->populateEntryModel($entry);
 
-        // Setting the title explicitly to perform field validation
-        $entry->title = sha1(time());
+        $entry->statusId = $entry->statusId != null
+            ? $entry->statusId
+            : SproutForms::$app->entries->getDefaultEntryStatusId();
+
+        // Render the Entry Title
+        try {
+            $entry->title = Craft::$app->getView()->renderObjectTemplate($this->form->titleFormat, $entry);
+        } catch (\Exception $e) {
+            $entry->addError('title', $e->getMessage());
+        }
 
         $event = new OnBeforeValidateEntryEvent([
             'form' => $this->form
@@ -111,8 +115,6 @@ class EntriesController extends BaseController
             SproutForms::error($entry->getErrors());
             return $this->redirectWithErrors($entry);
         }
-
-        $this->saveData = SproutForms::$app->entries->isDataSaved($this->form);
 
         /**
          * Route our request to Craft or a third-party endpoint
@@ -144,8 +146,10 @@ class EntriesController extends BaseController
     {
         $success = true;
 
+        $saveData = SproutForms::$app->entries->isDataSaved($this->form);
+
         // Save Data and Trigger the onSaveEntryEvent
-        if ($this->saveData) {
+        if ($saveData) {
             $success = SproutForms::$app->entries->saveEntry($entry);
         } else {
             $isNewEntry = !$entry->id;
@@ -157,13 +161,13 @@ class EntriesController extends BaseController
             return $this->redirectWithErrors($entry);
         }
 
+        $this->createLastEntryId($entry);
+
         if (Craft::$app->getRequest()->getAcceptsJson()) {
             return $this->asJson([
                 'success' => true
             ]);
         }
-
-        $this->createLastEntryId($entry);
 
         Craft::$app->getSession()->setNotice(Craft::t('sprout-forms', 'Entry saved.'));
 

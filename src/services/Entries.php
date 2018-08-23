@@ -244,8 +244,6 @@ class Entries extends Component
     {
         $isNewEntry = !$entry->id;
 
-        $view = Craft::$app->getView();
-
         if ($entry->id) {
             $entryRecord = EntryRecord::findOne($entry->id);
 
@@ -253,13 +251,6 @@ class Entries extends Component
                 throw new Exception(Craft::t('sprout-forms', 'No entry exists with id '.$entry->id));
             }
         }
-
-        /**
-         * @var $form FormElement
-         */
-        $form = SproutForms::$app->forms->getFormById($entry->formId);
-        $entry->statusId = $entry->statusId != null ? $entry->statusId : $this->getDefaultEntryStatusId();
-        $entry->title = $view->renderObjectTemplate($form->titleFormat, $entry);
 
         $entry->validate();
 
