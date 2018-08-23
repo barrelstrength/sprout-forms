@@ -100,7 +100,7 @@ class EntriesController extends BaseController
         try {
             $entry->title = Craft::$app->getView()->renderObjectTemplate($this->form->titleFormat, $entry);
         } catch (\Exception $e) {
-            $entry->addError('title', $e->getMessage());
+            SproutForms::error('Title format error: '.$e->getMessage());
         }
 
         $event = new OnBeforeValidateEntryEvent([
