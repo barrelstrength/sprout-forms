@@ -1,5 +1,30 @@
 # Changelog
 
+## 3.0.0-beta.22 - 2018-07-23
+
+## Added
+- Added support for lastEntry tag [#146]
+- Added EntriesController::EVENT_BEFORE_VALIDATE [#136]
+
+## Changed
+- Refactored Save Entry workflow [#135], [#139]
+- Improved error message when a Form's Title Format value causes a render error
+- Updated Sprout Base requirement to v3.0.2
+
+## Fixed
+- Fixed bug where validation would not trigger if data was not being saved in the database [#135]
+- Fixed a bug where creating a field after deleting a new tab resulted in inaccessible fields in the db [#149]
+- Fixed deprecated `includeJs` tags [#148]
+- Fixed javascript parse error on Entry Statuses settings page [#140]
+
+[#135] https://github.com/barrelstrength/craft-sprout-forms/issues/135
+[#136] https://github.com/barrelstrength/craft-sprout-forms/issues/136
+[#139] https://github.com/barrelstrength/craft-sprout-forms/issues/139
+[#140] https://github.com/barrelstrength/craft-sprout-forms/issues/140
+[#146] https://github.com/barrelstrength/craft-sprout-forms/issues/146
+[#148] https://github.com/barrelstrength/craft-sprout-forms/issues/148
+[#149] https://github.com/barrelstrength/craft-sprout-forms/issues/149
+
 ## 3.0.0-beta.21 - 2018-07-26
 
 ## Changed

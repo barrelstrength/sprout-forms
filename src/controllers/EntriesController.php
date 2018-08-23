@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\controllers;
 
 use barrelstrength\sproutforms\elements\Entry;
+use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
 use Craft;
 use craft\base\ElementInterface;
 use craft\web\Controller as BaseController;
@@ -19,6 +20,7 @@ use yii\web\Response;
 class EntriesController extends BaseController
 {
     const EVENT_BEFORE_POPULATE = 'beforePopulate';
+    const EVENT_BEFORE_VALIDATE = 'beforeValidate';
 
     /**
      * Allows anonymous execution
@@ -33,8 +35,6 @@ class EntriesController extends BaseController
      * @var FormElement
      */
     public $form;
-
-    protected $saveData;
 
     public function init()
     {
@@ -57,15 +57,14 @@ class EntriesController extends BaseController
     {
         $this->requirePostRequest();
 
-        if (Craft::$app->getRequest()->getIsCpRequest()) {
+        $request = Craft::$app->getRequest();
+
+        if ($request->getIsCpRequest()) {
             $currentUser = Craft::$app->getUser()->getIdentity();
             if (!$currentUser->can('editSproutFormsEntries')) {
                 throw new ForbiddenHttpException(Craft::t('sprout-forms', "Your account doesn't have permission to edit Form Entries."));
             }
         }
-
-        $request = Craft::$app->getRequest();
-        $view = Craft::$app->getView();
 
         $formHandle = $request->getRequiredBodyParam('handle');
         $this->form = SproutForms::$app->forms->getFormByHandle($formHandle);
@@ -93,7 +92,29 @@ class EntriesController extends BaseController
         // Populate the entry with post data
         $this->populateEntryModel($entry);
 
-        $this->saveData = SproutForms::$app->entries->isDataSaved($this->form);
+        $entry->statusId = $entry->statusId != null
+            ? $entry->statusId
+            : SproutForms::$app->entries->getDefaultEntryStatusId();
+
+        // Render the Entry Title
+        try {
+            $entry->title = Craft::$app->getView()->renderObjectTemplate($this->form->titleFormat, $entry);
+        } catch (\Exception $e) {
+            SproutForms::error('Title format error: '.$e->getMessage());
+        }
+
+        $event = new OnBeforeValidateEntryEvent([
+            'form' => $this->form
+        ]);
+
+        $this->trigger(self::EVENT_BEFORE_VALIDATE, $event);
+
+        $success = $entry->validate();
+
+        if (!$success) {
+            SproutForms::error($entry->getErrors());
+            return $this->redirectWithErrors($entry);
+        }
 
         /**
          * Route our request to Craft or a third-party endpoint
@@ -104,7 +125,9 @@ class EntriesController extends BaseController
          * the third-party endpoint.
          */
         if ($this->form->submitAction && !$request->getIsCpRequest()) {
-            return $this->forwardEntrySomewhereElse($entry);
+            if (!SproutForms::$app->entries->forwardEntry($entry)) {
+                return $this->redirectWithErrors($entry);
+            }
         }
 
         return $this->saveEntryInCraft($entry);
@@ -121,10 +144,12 @@ class EntriesController extends BaseController
      */
     private function saveEntryInCraft(Entry $entry)
     {
-        $success = false;
+        $success = true;
+
+        $saveData = SproutForms::$app->entries->isDataSaved($this->form);
 
         // Save Data and Trigger the onSaveEntryEvent
-        if ($this->saveData) {
+        if ($saveData) {
             $success = SproutForms::$app->entries->saveEntry($entry);
         } else {
             $isNewEntry = !$entry->id;
@@ -136,38 +161,7 @@ class EntriesController extends BaseController
             return $this->redirectWithErrors($entry);
         }
 
-        if (Craft::$app->getRequest()->getAcceptsJson()) {
-            return $this->asJson([
-                'success' => true
-            ]);
-        }
-
-        Craft::$app->getSession()->setNotice(Craft::t('sprout-forms', 'Entry saved.'));
-
-        return $this->redirectToPostedUrl($entry);
-    }
-
-    /**
-     * @param $entry
-     *
-     * @return null|Response
-     * @throws Exception
-     * @throws \Throwable
-     * @throws \yii\web\BadRequestHttpException
-     */
-    private function forwardEntrySomewhereElse($entry)
-    {
-        if (!SproutForms::$app->entries->forwardEntry($entry)) {
-            return $this->redirectWithErrors($entry);
-        }
-
-        if ($this->form->saveData) {
-            $success = SproutForms::$app->entries->saveEntry($entry);
-
-            if (!$success) {
-                SproutForms::error(Craft::t('sprout-forms', 'Unable to save Form Entry to Craft.'));
-            }
-        }
+        $this->createLastEntryId($entry);
 
         if (Craft::$app->getRequest()->getAcceptsJson()) {
             return $this->asJson([
@@ -299,11 +293,9 @@ class EntriesController extends BaseController
         $entryId = null;
         $request = Craft::$app->getRequest();
 
-        $configSettings = Craft::$app->getConfig()->getConfigFromFile('sprout-forms');
+        $settings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
 
-        $enableEditFormEntryViaFrontEnd = $configSettings['enableEditFormEntryViaFrontEnd'] ?? false;
-
-        if ($request->getIsCpRequest() || $enableEditFormEntryViaFrontEnd) {
+        if ($request->getIsCpRequest() || $settings->enableEditFormEntryViaFrontEnd) {
             $entryId = $request->getBodyParam('entryId');
         }
 
@@ -379,5 +371,17 @@ class EntriesController extends BaseController
         ]);
 
         return null;
+    }
+
+    /**
+     * @param $entry
+     */
+    private function createLastEntryId($entry)
+    {
+        if (!Craft::$app->getRequest()->getIsCpRequest())
+        {
+            // Store our new entry so we can recreate the Entry object on our thank you page
+            Craft::$app->getSession()->set('lastEntryId', $entry->id);
+        }
     }
 }

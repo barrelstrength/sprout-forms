@@ -244,8 +244,6 @@ class Entries extends Component
     {
         $isNewEntry = !$entry->id;
 
-        $view = Craft::$app->getView();
-
         if ($entry->id) {
             $entryRecord = EntryRecord::findOne($entry->id);
 
@@ -253,13 +251,6 @@ class Entries extends Component
                 throw new Exception(Craft::t('sprout-forms', 'No entry exists with id '.$entry->id));
             }
         }
-
-        /**
-         * @var $form FormElement
-         */
-        $form = SproutForms::$app->forms->getFormById($entry->formId);
-        $entry->statusId = $entry->statusId != null ? $entry->statusId : $this->getDefaultEntryStatusId();
-        $entry->title = $view->renderObjectTemplate($form->titleFormat, $entry);
 
         $entry->validate();
 
@@ -317,16 +308,12 @@ class Entries extends Component
         return true;
     }
 
+    /**
+     * @param EntryElement $entry
+     * @return bool
+     */
     public function forwardEntry(Entry $entry)
     {
-        // Setting the title explicitly to perform field validation
-        $entry->title = sha1(time());
-
-        if (!$entry->validate()) {
-            SproutForms::error($entry->getErrors());
-            return false;
-        }
-
         $fields = $entry->getPayloadFields();
         $endpoint = $entry->getForm()->submitAction;
 
@@ -345,13 +332,13 @@ class Entries extends Component
             $response = $client->post($endpoint, null, $fields);
 
             SproutForms::info($response->getBody()->getContents());
-
-            return true;
         } catch (RequestException $e) {
             $entry->addError('general', $e->getMessage());
 
             return false;
         }
+
+        return true;
     }
 
     public function getDefaultEntryStatusId()
@@ -500,7 +487,7 @@ class Entries extends Component
             return;
         }
 
-        $submittedFields = Craft::$app->request->getBodyParam('fields');
+        $submittedFields = Craft::$app->request->getBodyParam('fields') ?? [];
 
         // Unobfuscate email address in $_POST request
         $this->unobfuscateEmailAddresses($form->id, $submittedFields);
