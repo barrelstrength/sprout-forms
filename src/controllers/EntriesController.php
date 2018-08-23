@@ -123,7 +123,9 @@ class EntriesController extends BaseController
          * the third-party endpoint.
          */
         if ($this->form->submitAction && !$request->getIsCpRequest()) {
-            return $this->forwardEntrySomewhereElse($entry);
+            if (!SproutForms::$app->entries->forwardEntry($entry)) {
+                return $this->redirectWithErrors($entry);
+            }
         }
 
         return $this->saveEntryInCraft($entry);
@@ -140,7 +142,7 @@ class EntriesController extends BaseController
      */
     private function saveEntryInCraft(Entry $entry)
     {
-        $success = false;
+        $success = true;
 
         // Save Data and Trigger the onSaveEntryEvent
         if ($this->saveData) {
@@ -162,42 +164,6 @@ class EntriesController extends BaseController
         }
 
         $this->createLastEntryId($entry);
-
-        Craft::$app->getSession()->setNotice(Craft::t('sprout-forms', 'Entry saved.'));
-
-        return $this->redirectToPostedUrl($entry);
-    }
-
-    /**
-     * @param $entry
-     *
-     * @return null|Response
-     * @throws Exception
-     * @throws \Throwable
-     * @throws \yii\web\BadRequestHttpException
-     */
-    private function forwardEntrySomewhereElse($entry)
-    {
-        if (!SproutForms::$app->entries->forwardEntry($entry)) {
-            return $this->redirectWithErrors($entry);
-        }
-
-        if ($this->form->saveData) {
-            $success = SproutForms::$app->entries->saveEntry($entry);
-
-            if (!$success) {
-                $this->createLastEntryId($entry);
-            }
-            else{
-                SproutForms::error(Craft::t('sprout-forms', 'Unable to save Form Entry to Craft.'));
-            }
-        }
-
-        if (Craft::$app->getRequest()->getAcceptsJson()) {
-            return $this->asJson([
-                'success' => true
-            ]);
-        }
 
         Craft::$app->getSession()->setNotice(Craft::t('sprout-forms', 'Entry saved.'));
 

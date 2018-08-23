@@ -317,6 +317,10 @@ class Entries extends Component
         return true;
     }
 
+    /**
+     * @param EntryElement $entry
+     * @return bool
+     */
     public function forwardEntry(Entry $entry)
     {
         $fields = $entry->getPayloadFields();
