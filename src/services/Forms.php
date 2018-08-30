@@ -387,7 +387,7 @@ class Forms extends Component
         if ($field) {
             $context = explode(':', $field->context);
             $formId = $context[1];
-            $formRecord = FormRecord::find($formId)->one();
+            $formRecord = FormRecord::findOne($formId);
 
             // Check if the field is in the titleformat
             if (strpos($formRecord->titleFormat, $field->handle) !== false) {
