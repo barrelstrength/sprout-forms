@@ -355,6 +355,7 @@ class FieldsController extends BaseController
 
     /**
      * @return \yii\web\Response
+     * @throws \Throwable
      * @throws \yii\web\BadRequestHttpException
      */
     public function actionDeleteField()
@@ -363,8 +364,25 @@ class FieldsController extends BaseController
         $this->requireAcceptsJson();
 
         $fieldId = Craft::$app->request->getRequiredBodyParam('fieldId');
+        $formId = Craft::$app->request->getRequiredBodyParam('formId');
+        $form = SproutForms::$app->forms->getFormById((int)$formId);
 
-        if ($response = Craft::$app->fields->deleteFieldById($fieldId)) {
+        // Backup our field context and content table
+        $oldFieldContext = Craft::$app->getContent()->fieldContext;
+        $oldContentTable = Craft::$app->getContent()->contentTable;
+
+        // Set our field content and content table to work with our form output
+        Craft::$app->getContent()->fieldContext = $form->getFieldContext();
+        Craft::$app->getContent()->contentTable = $form->getContentTable();
+
+        $response = Craft::$app->fields->deleteFieldById($fieldId);
+
+        // Reset our field context and content table to what they were previously
+        Craft::$app->getContent()->fieldContext = $oldFieldContext;
+        Craft::$app->getContent()->contentTable = $oldContentTable;
+
+
+        if ($response) {
             return $this->asJson([
                 'success' => true
             ]);
