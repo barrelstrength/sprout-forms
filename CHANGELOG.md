@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.0.0-beta.23 - 2018-08-31
+
+> {warning} This is a recommended upgrade.
+
+## Fixed
+- Fixed issue where deleting a Form Field could also delete a field with a matching handle in the global context
+
 ## 3.0.0-beta.22 - 2018-07-23
 
 ## Added
