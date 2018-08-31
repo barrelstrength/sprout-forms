@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.0.0-beta.23 - 2018-08-31
+## 3.0.0-beta.24 - 2018-08-31
 
 > {warning} This is a recommended upgrade.
 
