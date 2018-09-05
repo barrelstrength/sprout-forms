@@ -53,6 +53,19 @@ class EntryQuery extends ElementQuery
     public $formGroupId;
 
     /**
+     * @inheritdoc
+     */
+    public function __construct($elementType, array $config = [])
+    {
+        // Default orderBy
+        if (!isset($config['orderBy'])) {
+            $config['orderBy'] = 'sproutforms_entries.id';
+        }
+
+        parent::__construct($elementType, $config);
+    }
+
+    /**
      * Sets the [[statusId]] property.
      *
      * @param int
@@ -210,10 +223,6 @@ class EntryQuery extends ElementQuery
             $this->query->andWhere(Db::parseParam(
                 'sproutforms_forms.name', $this->formName)
             );
-        }
-
-        if (!$this->orderBy) {
-            $this->orderBy = ['elements.dateCreated' => SORT_DESC];
         }
 
         return parent::beforePrepare();
