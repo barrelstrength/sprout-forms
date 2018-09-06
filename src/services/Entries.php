@@ -119,7 +119,7 @@ class Entries extends Component
 
             try {
                 if ($record->isDefault) {
-                    EntryStatusRecord::updateAll(['isDefault' => 0]);
+                    EntryStatusRecord::updateAll(['isDefault' => false]);
                 }
 
                 $record->save(false);
