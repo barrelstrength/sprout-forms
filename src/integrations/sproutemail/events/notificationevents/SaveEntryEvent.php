@@ -110,11 +110,11 @@ class SaveEntryEvent extends NotificationEvent
 
         $formEntry = $criteria->one();
 
-        if (!count($formEntry)) {
-            return new Entry();
+        if ($formEntry) {
+            return $formEntry;
         }
 
-        return $formEntry;
+        return new Entry();
     }
 
     public function rules()
@@ -216,13 +216,11 @@ class SaveEntryEvent extends NotificationEvent
         $forms = SproutForms::$app->forms->getAllForms();
         $options = [];
 
-        if (count($forms)) {
-            foreach ($forms as $key => $form) {
-                $options[] = [
-                    'label' => $form->name,
-                    'value' => $form->id
-                ];
-            }
+        foreach ($forms as $key => $form) {
+            $options[] = [
+                'label' => $form->name,
+                'value' => $form->id
+            ];
         }
 
         return $options;

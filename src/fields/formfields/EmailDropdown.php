@@ -30,6 +30,22 @@ class EmailDropdown extends BaseOptionsFormField
         return Schema::TYPE_STRING;
     }
 
+    public function serializeValue($value, ElementInterface $element = null)
+    {
+        if (Craft::$app->getRequest()->isSiteRequest){
+            if ($value->selected){
+                // Default fist position.
+                $pos = $value->value ? $value->value : 0;
+
+                if (isset($this->options[$pos])) {
+                    return $this->options[$pos]['value'];
+                }
+            }
+        }
+
+        return $value;
+    }
+
     /**
      * @return string
      */

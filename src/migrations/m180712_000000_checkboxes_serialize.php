@@ -21,7 +21,7 @@ class m180712_000000_checkboxes_serialize extends Migration
             ->select(['id', 'handle'])
             ->from(['{{%fields}}'])
             ->where(['type' => Checkboxes::class])
-            ->andWhere('context LIKE "%sproutForms:%"')
+            ->andWhere("[[context]] LIKE '%sproutForms:%'")
             ->all();
 
         $forms = (new Query())

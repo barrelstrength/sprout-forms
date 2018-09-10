@@ -91,8 +91,8 @@ class EntriesDataSource extends DataSource
                 ->from($contentTable.' AS entries');
 
             if ($startDate && $endDate) {
-                $formQuery->where('entries.dateCreated > :startDate', [':startDate' => $startDate->format('Y-m-d H:i:s')]);
-                $formQuery->andWhere('entries.dateCreated < :endDate', [':endDate' => $endDate->format('Y-m-d H:i:s')]);
+                $formQuery->where('[[entries.dateCreated]] > :startDate', [':startDate' => $startDate->format('Y-m-d H:i:s')]);
+                $formQuery->andWhere('[[entries.dateCreated]] < :endDate', [':endDate' => $endDate->format('Y-m-d H:i:s')]);
             }
 
             $results = $formQuery->all();
