@@ -1,6 +1,23 @@
 # Changelog
 
-## 3.0.0-beta.24 - 2018-08-31
+## 3.0.0-beta.24 - 2018-09-10
+    
+### Changed
+- Improved support in PHP 7.2 [#144]
+- Improved Postgres support [#137], [#158]
+- Improved error messaging if Title Format setting includes an incorrect field handle [#96]
+- Updated Sprout Base requirement to v3.0.2
+    
+### Fixed
+- Fixed Email Dropdown field bug where front-end submissions would save incorrect value in database [#63]
+
+[#63] https://github.com/barrelstrength/craft-sprout-forms/issues/63
+[#96] https://github.com/barrelstrength/craft-sprout-forms/issues/96
+[#137] https://github.com/barrelstrength/craft-sprout-forms/issues/137
+[#144] https://github.com/barrelstrength/craft-sprout-forms/issues/147
+[#158] https://github.com/barrelstrength/craft-sprout-forms/issues/158
+
+## 3.0.0-beta.23 - 2018-08-31
 
 > {warning} This is a recommended upgrade.
 
