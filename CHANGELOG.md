@@ -1,6 +1,11 @@
 # Changelog
 
-## 3.0.0-beta.24 - 2018-09-10
+## 3.0.0-beta.26 - 2018-09-10
+	
+### Fixed
+- Fixed Changelog link format
+
+## 3.0.0-beta.25 - 2018-09-10
 	
 ### Changed
 - Improved support in PHP 7.2 ([#144])
