@@ -1,5 +1,24 @@
 # Changelog
 
+## 3.0.0-beta.25 - 2018-09-10
+    
+### Changed
+- Improved support in PHP 7.2 [#144]
+- Improved Postgres support [#137], [#158]
+- Improved error messaging if Title Format setting includes an incorrect field handle [#96]
+- Updated Sprout Base requirement to v3.0.2
+    
+### Fixed
+- Fixed Email Dropdown field bug where front-end submissions would save incorrect value in database [#63]
+
+[#63] https://github.com/barrelstrength/craft-sprout-forms/issues/63
+[#96] https://github.com/barrelstrength/craft-sprout-forms/issues/96
+[#137] https://github.com/barrelstrength/craft-sprout-forms/issues/137
+[#144] https://github.com/barrelstrength/craft-sprout-forms/issues/147
+[#158] https://github.com/barrelstrength/craft-sprout-forms/issues/158
+
+# Changelog
+
 ## 3.0.0-beta.24 - 2018-09-10
     
 ### Changed
@@ -21,21 +40,21 @@
 
 > {warning} This is a recommended upgrade.
 
-## Fixed
+### Fixed
 - Fixed issue where deleting a Form Field could also delete a field with a matching handle in the global context
 
 ## 3.0.0-beta.22 - 2018-07-23
 
-## Added
+### Added
 - Added support for lastEntry tag [#146]
 - Added EntriesController::EVENT_BEFORE_VALIDATE [#136]
 
-## Changed
+### Changed
 - Refactored Save Entry workflow [#135], [#139]
 - Improved error message when a Form's Title Format value causes a render error
 - Updated Sprout Base requirement to v3.0.2
 
-## Fixed
+### Fixed
 - Fixed bug where validation would not trigger if data was not being saved in the database [#135]
 - Fixed a bug where creating a field after deleting a new tab resulted in inaccessible fields in the db [#149]
 - Fixed deprecated `includeJs` tags [#148]
@@ -51,22 +70,22 @@
 
 ## 3.0.0-beta.21 - 2018-07-26
 
-## Changed
+### Changed
 - Updated Sprout Base requirement to v3.0.0
 
 ## 3.0.0-beta.20 - 2018-07-26
 
-## Added
+### Added
 - Added support for `defaultBody` field in Basic Email Template
 - Improvements in Notification Emails from Sprout Email v4.0.0-beta.1
 - Improvements in Reports from Sprout Reports v1.0.0-beta.11
 
-## Changed
+### Changed
 - Updates Form Edit sidebar to use a single column ([#122], [#118])
 - Updated Basic Notification Email Template styles
 - Updated Sprout Base requirement to v2.0.10
 
-## Fixed
+### Fixed
 - Added Form and Entry Element Type migration
 - Fixed potential syntax error with Form Notification Email template and SaveEntry Event
 - Fixed broken styles introduced in recent Craft update ([#122])
