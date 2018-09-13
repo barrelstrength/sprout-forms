@@ -78,33 +78,36 @@ class SproutForms_FormsController extends BaseController
 		// Delete any fields removed from the layout
 		$deletedFields = craft()->request->getPost('deletedFields');
 
-		if (count($deletedFields) > 0)
+		if (is_array($deletedFields))
 		{
-			// Backup our field context and content table
-			$oldFieldContext = craft()->content->fieldContext;
-			$oldContentTable = craft()->content->contentTable;
-
-			// Set our field content and content table to work with our form output
-			craft()->content->fieldContext = $form->getFieldContext();
-			craft()->content->contentTable = $form->getContentTable();
-
-			$currentTitleFormat = null;
-			foreach ($deletedFields as $fieldId)
+			if (count($deletedFields) > 0)
 			{
-				// Each field deleted will be update the titleFormat
-				$currentTitleFormat = sproutForms()->forms->cleanTitleFormat($fieldId);
-				craft()->fields->deleteFieldById($fieldId);
-			}
+				// Backup our field context and content table
+				$oldFieldContext = craft()->content->fieldContext;
+				$oldContentTable = craft()->content->contentTable;
 
-			if ($currentTitleFormat)
-			{
-				// update the titleFormat
-				$form->titleFormat = $currentTitleFormat;
-			}
+				// Set our field content and content table to work with our form output
+				craft()->content->fieldContext = $form->getFieldContext();
+				craft()->content->contentTable = $form->getContentTable();
 
-			// Reset our field context and content table to what they were previously
-			craft()->content->fieldContext = $oldFieldContext;
-			craft()->content->contentTable = $oldContentTable;
+				$currentTitleFormat = null;
+				foreach ($deletedFields as $fieldId)
+				{
+					// Each field deleted will be update the titleFormat
+					$currentTitleFormat = sproutForms()->forms->cleanTitleFormat($fieldId);
+					craft()->fields->deleteFieldById($fieldId);
+				}
+
+				if ($currentTitleFormat)
+				{
+					// update the titleFormat
+					$form->titleFormat = $currentTitleFormat;
+				}
+
+				// Reset our field context and content table to what they were previously
+				craft()->content->fieldContext = $oldFieldContext;
+				craft()->content->contentTable = $oldContentTable;
+			}
 		}
 
 		// Save it
