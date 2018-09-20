@@ -12,7 +12,7 @@
       "fieldLayout": {
         "Tab 1": [
           {
-            "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+            "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
             "type": "barrelstrength\\sproutforms\\fields\\formfields\\Name",
             "name": "Full Name",
             "handle": "fullName",
@@ -23,7 +23,7 @@
             "displaySuffix": false
           },
           {
-            "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+            "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
             "type": "barrelstrength\\sproutforms\\fields\\formfields\\Email",
             "name": "Email",
             "handle": "email",
@@ -35,7 +35,7 @@
             "uniqueEmail": false
           },
           {
-            "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+            "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
             "type": "barrelstrength\\sproutforms\\fields\\formfields\\EmailDropdown",
             "name": "Email Dropdown",
             "handle": "emailDropdown",
@@ -54,7 +54,7 @@
             ]
           },
           {
-            "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+            "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
             "type": "barrelstrength\\sproutforms\\fields\\formfields\\Phone",
             "name": "Phone",
             "handle": "phone",
@@ -62,7 +62,7 @@
             "placeholder": "+1 (707) 123-1234"
           },
           {
-            "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+            "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
             "type": "barrelstrength\\sproutforms\\fields\\formfields\\Url",
             "name": "URL",
             "handle": "customUrl",
@@ -73,7 +73,7 @@
             "customPatternErrorMessage": null
           },
           {
-            "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+            "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
             "type": "barrelstrength\\sproutforms\\fields\\formfields\\CustomHtml",
             "name": "Custom HTML",
             "handle": "customHtml",
@@ -81,14 +81,14 @@
             "hideLabel": false
           },
           {
-            "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+            "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
             "type": "barrelstrength\\sproutforms\\fields\\formfields\\PrivateNotes",
             "name": "Private Notes",
             "handle": "privateNotes",
             "instructions": "This will only be seen in the Control Panel."
           },
           {
-            "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+            "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
             "type": "barrelstrength\\sproutforms\\fields\\formfields\\Hidden",
             "name": "Hidden",
             "handle": "hidden",
@@ -97,7 +97,7 @@
             "allowEdits": false
           },
           {
-            "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+            "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
             "type": "barrelstrength\\sproutforms\\fields\\formfields\\Invisible",
             "name": "Invisible",
             "handle": "invisible",
@@ -107,7 +107,7 @@
             "value": "{foo} {{ object.bar }}"
           },
           {
-            "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+            "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
             "type": "barrelstrength\\sproutforms\\fields\\formfields\\MultiSelect",
             "name": "Multi Select",
             "handle": "multiSelect",
@@ -131,7 +131,7 @@
             ]
           },
           {
-            "@model": "barrelstrength\\sproutimport\\integrations\\sproutimport\\settings\\Field",
+            "@model": "barrelstrength\\sproutimport\\importers\\settings\\Field",
             "type": "barrelstrength\\sproutforms\\fields\\formfields\\RegularExpression",
             "name": "Regular Expression",
             "handle": "regularExpression",
