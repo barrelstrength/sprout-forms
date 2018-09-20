@@ -5,12 +5,12 @@
  * @license   http://sprout.barrelstrengthdesign.com/license
  */
 
-namespace barrelstrength\sproutforms\integrations\sproutimport\themes;
+namespace barrelstrength\sproutforms\integrations\sproutimport\bundles;
 
-use barrelstrength\sproutbase\app\import\base\Theme;
+use barrelstrength\sproutbase\app\import\base\Bundle;
 use Craft;
 
-class BasicFieldsTheme extends Theme
+class BasicFieldsBundle extends Bundle
 {
     /**
      * @return string
@@ -29,7 +29,7 @@ class BasicFieldsTheme extends Theme
     }
 
     /**
-     * The folder where this theme's importable schema files are located
+     * The folder where this bundles's importable schema files are located
      *
      * @default plugin-handle/src/schema
      *
@@ -37,11 +37,11 @@ class BasicFieldsTheme extends Theme
      */
     public function getSchemaFolder()
     {
-        return $this->plugin->getBasePath().DIRECTORY_SEPARATOR.'themes/basicfields/schema';
+        return $this->plugin->getBasePath().DIRECTORY_SEPARATOR.'bundles/basicfields/schema';
     }
 
     /**
-     * The folder where this theme's template files are located
+     * The folder where this bundle's template files are located
      *
      * @default plugin-handle/src/templates
      *
@@ -49,7 +49,7 @@ class BasicFieldsTheme extends Theme
      */
     public function getSourceTemplateFolder()
     {
-        return $this->plugin->getBasePath().DIRECTORY_SEPARATOR.'themes/basicfields/templates';
+        return $this->plugin->getBasePath().DIRECTORY_SEPARATOR.'bundles/basicfields/templates';
     }
 
 }

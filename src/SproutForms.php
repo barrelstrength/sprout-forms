@@ -22,14 +22,14 @@ use barrelstrength\sproutforms\captchas\HoneypotCaptcha;
 use barrelstrength\sproutforms\captchas\JavascriptCaptcha;
 use barrelstrength\sproutforms\formtemplates\BasicTemplates;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
-use barrelstrength\sproutforms\integrations\sproutimport\themes\BasicFieldsTheme;
-use barrelstrength\sproutforms\integrations\sproutimport\themes\SpecialFieldsTheme;
+use barrelstrength\sproutforms\integrations\sproutimport\bundles\BasicFieldsBundle;
+use barrelstrength\sproutforms\integrations\sproutimport\bundles\SpecialFieldsBundle;
 use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesDataSource;
 use barrelstrength\sproutforms\services\App;
 use barrelstrength\sproutforms\services\Entries;
 use barrelstrength\sproutforms\services\Forms;
 use barrelstrength\sproutbase\app\import\services\Importers;
-use barrelstrength\sproutbase\app\import\services\Themes;
+use barrelstrength\sproutbase\app\import\services\Bundles;
 use Craft;
 use craft\base\Plugin;
 
@@ -188,9 +188,9 @@ class SproutForms extends Plugin
 //            $event->types[] = EntriesFieldImporter::class;
         });
 
-        Event::on(Themes::class, Themes::EVENT_REGISTER_THEME_TYPES, function(RegisterComponentTypesEvent $event) {
-            $event->types[] = BasicFieldsTheme::class;
-            $event->types[] = SpecialFieldsTheme::class;
+        Event::on(Bundles::class, Bundles::EVENT_REGISTER_BUNDLE_TYPES, function(RegisterComponentTypesEvent $event) {
+            $event->types[] = BasicFieldsBundle::class;
+            $event->types[] = SpecialFieldsBundle::class;
         });
     }
 
