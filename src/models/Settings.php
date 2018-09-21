@@ -47,6 +47,14 @@ class Settings extends Model
                 'actionTemplate' => 'sprout-forms/settings/entrystatuses/_actionStatusButton',
                 'variables' => $variables
             ],
+            'bundles' => [
+                'label' => Craft::t('sprout-forms', 'Bundles'),
+                'url' => 'sprout-forms/settings/bundles',
+                'selected' => 'bundles',
+                'template' => 'sprout-base-import/bundles/bundle-cards',
+                'actionTemplate' => '',
+                'variables' => $variables
+            ],
             'advanced' => [
                 'label' => Craft::t('sprout-forms', 'Advanced'),
                 'url' => 'sprout-forms/settings/advanced',
