@@ -51,7 +51,7 @@ class Settings extends Model
                 'label' => Craft::t('sprout-forms', 'Bundles'),
                 'url' => 'sprout-forms/settings/bundles',
                 'selected' => 'bundles',
-                'template' => 'sprout-forms/_integrations/sproutimport/bundles/bundle-cards',
+                'template' => 'sprout-base-import/bundles/bundle-cards',
                 'actionTemplate' => false,
                 'fullPageForm' => false,
                 'settingsForm' => false,
