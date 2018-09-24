@@ -52,7 +52,9 @@ class Settings extends Model
                 'url' => 'sprout-forms/settings/bundles',
                 'selected' => 'bundles',
                 'template' => 'sprout-base-import/bundles/bundle-cards',
-                'actionTemplate' => '',
+                'actionTemplate' => false,
+                'fullPageForm' => false,
+                'settingsForm' => false,
                 'variables' => $variables
             ],
             'advanced' => [

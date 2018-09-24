@@ -17,7 +17,7 @@ class BasicFieldsBundle extends Bundle
      */
     public function getName(): string
     {
-        return Craft::t('sprout-import', 'Example Form - Basic Fields');
+        return Craft::t('sprout-forms', 'Example Form - Basic Fields');
     }
 
     /**
@@ -25,7 +25,7 @@ class BasicFieldsBundle extends Bundle
      */
     public function getDescription(): string
     {
-        return Craft::t('sprout-import', 'An example form with all basic fields.');
+        return Craft::t('sprout-forms', 'An example form with all basic fields.');
     }
 
     /**
