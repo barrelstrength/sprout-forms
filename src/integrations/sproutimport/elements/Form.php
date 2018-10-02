@@ -96,10 +96,11 @@ class Form extends ElementImporter
             $postedFieldLayout[$tabName] = [];
 
             foreach ($fields as $field) {
-
                 $importerClass = SproutBase::$app->importers->getImporter($field);
 
-                $field = SproutImport::$app->settingsImporter->saveSetting($field, $importerClass);
+                if (!$importerClass) continue;
+
+                $field = SproutBase::$app->settingsImporter->saveSetting($field, $importerClass);
 
                 if ($field->required) {
                     $requiredFields[] = $field->id;
@@ -109,6 +110,10 @@ class Form extends ElementImporter
 
                 $postedFieldLayout[$tabName][] = $field->id;
             }
+        }
+
+        if (SproutBase::$app->importers->hasErrors()) {
+            SproutBase::$app->importUtilities->addErrors(SproutBase::$app->importers->getErrors());
         }
 
         // Create the FieldLayout Class
