@@ -9,7 +9,7 @@
         {%- endif %}
 
         {% for field in layoutFields -%}
-            {{- craft.sproutForms.displayField(form, field, renderingOptions) }}
+            {{- craft.sproutForms.displayField(form, field, renderingOptions, entry) }}
         {%- endfor %}
 
     </div>

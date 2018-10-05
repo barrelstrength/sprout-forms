@@ -89,12 +89,13 @@ class SproutFormsVariable
      * @param Form       $form
      * @param int        $tabId
      * @param array|null $renderingOptions
+     * @param EntryElement $entry
      *
      * @return bool|\Twig_Markup
      * @throws Exception
      * @throws \Twig_Error_Loader
      */
-    public function displayTab(Form $form, int $tabId, array $renderingOptions = null)
+    public function displayTab(Form $form, int $tabId, array $renderingOptions = null, $entry = null)
     {
         if (!$form) {
             throw new Exception(Craft::t('sprout-forms', 'The displayTab tag requires a Form model.'));
@@ -105,7 +106,10 @@ class SproutFormsVariable
         }
 
         $view = Craft::$app->getView();
-        $entry = SproutForms::$app->entries->getEntry($form);
+
+        if (is_null($entry)){
+            $entry = SproutForms::$app->entries->getEntry($form);
+        }
 
         $templatePaths = SproutForms::$app->forms->getFormTemplatePaths($form);
 
@@ -149,13 +153,14 @@ class SproutFormsVariable
      * @param Form       $form
      * @param FormField  $field
      * @param array|null $renderingOptions
+     * @param EntryElement $entry
      *
      * @return \Twig_Markup
      * @throws Exception
      * @throws \ReflectionException
      * @throws \Twig_Error_Loader
      */
-    public function displayField(Form $form, FormField $field, array $renderingOptions = null)
+    public function displayField(Form $form, FormField $field, array $renderingOptions = null, $entry = null)
     {
         if (!$form) {
             throw new Exception(Craft::t('sprout-forms', 'The displayField tag requires a Form model.'));
@@ -172,7 +177,10 @@ class SproutFormsVariable
         }
 
         $view = Craft::$app->getView();
-        $entry = SproutForms::$app->entries->getEntry($form);
+
+        if (is_null($entry)){
+            $entry = SproutForms::$app->entries->getEntry($form);
+        }
 
         $templatePaths = SproutForms::$app->forms->getFormTemplatePaths($form);
 

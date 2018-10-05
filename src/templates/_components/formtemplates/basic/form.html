@@ -25,7 +25,7 @@
 
     <div class="fields">
         {%- for tab in form.getFieldLayout().getTabs() %}
-            {{ craft.sproutForms.displayTab(form, tab.id, renderingOptions) }}
+            {{ craft.sproutForms.displayTab(form, tab.id, renderingOptions, entry) }}
         {% endfor -%}
     </div>
 
