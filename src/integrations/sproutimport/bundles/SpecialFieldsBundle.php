@@ -8,6 +8,7 @@
 namespace barrelstrength\sproutforms\integrations\sproutimport\bundles;
 
 use barrelstrength\sproutbase\app\import\base\Bundle;
+use function Couchbase\defaultDecoder;
 use Craft;
 
 class SpecialFieldsBundle extends Bundle
@@ -17,7 +18,7 @@ class SpecialFieldsBundle extends Bundle
      */
     public function getName(): string
     {
-        return Craft::t('sprout-import', 'Example Form - Special Fields');
+        return Craft::t('sprout-forms', 'Example Form - Special Fields');
     }
 
     /**
@@ -25,7 +26,8 @@ class SpecialFieldsBundle extends Bundle
      */
     public function getDescription(): string
     {
-        return Craft::t('sprout-import', 'An example form with all special fields.');
+
+        return Craft::t('sprout-forms', 'An example form with all special fields.');
     }
 
     /**
@@ -37,7 +39,7 @@ class SpecialFieldsBundle extends Bundle
      */
     public function getSchemaFolder()
     {
-        return $this->plugin->getBasePath().DIRECTORY_SEPARATOR.'bundles/specialfields/schema';
+        return $this->plugin->getBasePath().DIRECTORY_SEPARATOR.'templates/_integrations/sproutimport/bundles/specialfields/schema';
     }
 
     /**
@@ -49,7 +51,7 @@ class SpecialFieldsBundle extends Bundle
      */
     public function getSourceTemplateFolder()
     {
-        return $this->plugin->getBasePath().DIRECTORY_SEPARATOR.'bundles/specialfields/templates';
+        return $this->plugin->getBasePath().DIRECTORY_SEPARATOR.'templates/_integrations/sproutimport/bundles/specialfields/templates';
     }
 
 }
