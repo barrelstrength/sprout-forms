@@ -6,7 +6,7 @@ use barrelstrength\sproutbase\app\import\base\ElementImporter;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutimport\models\jobs\SeedJob;
+use barrelstrength\sproutbase\app\import\models\jobs\SeedJob;
 
 use Craft;
 
@@ -50,9 +50,9 @@ class Entry extends ElementImporter
     /**
      * @inheritdoc
      */
-    public function getSettingsHtml(SeedJob $seedJob)
+    public function getSeedSettingsHtml(SeedJob $seedJob)
     {
-        $forms = SproutForms::$app->forms->getAllForms();
+       $forms = SproutForms::$app->forms->getAllForms();
 
         $formOptions[''] = Craft::t('sprout-forms', 'Select a form...');
 
@@ -66,6 +66,18 @@ class Entry extends ElementImporter
             'id' => $this->getModelName(),
             'formOptions' => $formOptions
         ]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSeedSettingsErrors($settings)
+    {
+        if (isset($settings['formId']) && empty($settings['formId'])) {
+            return Craft::t('sprout-forms', 'Form is required.');
+        }
+
+        return null;
     }
 
     /**
@@ -112,9 +124,13 @@ class Entry extends ElementImporter
         $fieldsWithMockData = [];
 
         if (!empty($fields)) {
+
             foreach ($fields as $field) {
+
                 $fieldHandle = $field->handle;
-                $fieldType = $field->type;
+
+                $fieldType = get_class($field);
+
                 $fieldImporterClass = SproutBase::$app->importers->getFieldImporterClassByType($fieldType);
 
                 if ($fieldImporterClass != null) {
