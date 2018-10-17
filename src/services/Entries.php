@@ -61,10 +61,27 @@ class Entries extends Component
         }
 
         $entry = new EntryElement;
-
         $entry->formId = $form->id;
 
+        SproutForms::$app->forms->activeEntries[$form->handle] = $entry;
+
         return $entry;
+    }
+
+    /**
+     * Set an activeEntry on the Forms Service
+     *
+     * One scenario this can be used is if you are allowing users
+     * to edit Form Entries on the front-end and need to make the
+     * displayTab or displayField tags aware of the active entry
+     * without calling the displayForm tag.
+     *
+     * @param FormElement  $form
+     * @param EntryElement $entry
+     */
+    public function setEntry(FormElement $form, EntryElement $entry)
+    {
+        SproutForms::$app->forms->activeEntries[$form->handle] = $entry;
     }
 
     /**

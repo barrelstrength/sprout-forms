@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\web\twig\variables;
 
 use barrelstrength\sproutforms\elements\db\EntryQuery;
+use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use Craft;
@@ -65,6 +66,7 @@ class SproutFormsVariable
         }
 
         $view = Craft::$app->getView();
+
         $entry = SproutForms::$app->entries->getEntry($form);
 
         $templatePaths = SproutForms::$app->forms->getFormTemplatePaths($form);
@@ -89,13 +91,12 @@ class SproutFormsVariable
      * @param Form       $form
      * @param int        $tabId
      * @param array|null $renderingOptions
-     * @param EntryElement $entry
      *
      * @return bool|\Twig_Markup
      * @throws Exception
      * @throws \Twig_Error_Loader
      */
-    public function displayTab(Form $form, int $tabId, array $renderingOptions = null, $entry = null)
+    public function displayTab(Form $form, int $tabId, array $renderingOptions = null)
     {
         if (!$form) {
             throw new Exception(Craft::t('sprout-forms', 'The displayTab tag requires a Form model.'));
@@ -107,9 +108,7 @@ class SproutFormsVariable
 
         $view = Craft::$app->getView();
 
-        if (is_null($entry)){
-            $entry = SproutForms::$app->entries->getEntry($form);
-        }
+        $entry = SproutForms::$app->entries->getEntry($form);
 
         $templatePaths = SproutForms::$app->forms->getFormTemplatePaths($form);
 
@@ -160,7 +159,7 @@ class SproutFormsVariable
      * @throws \ReflectionException
      * @throws \Twig_Error_Loader
      */
-    public function displayField(Form $form, FormField $field, array $renderingOptions = null, $entry = null)
+    public function displayField(Form $form, FormField $field, array $renderingOptions = null)
     {
         if (!$form) {
             throw new Exception(Craft::t('sprout-forms', 'The displayField tag requires a Form model.'));
@@ -178,9 +177,7 @@ class SproutFormsVariable
 
         $view = Craft::$app->getView();
 
-        if (is_null($entry)){
-            $entry = SproutForms::$app->entries->getEntry($form);
-        }
+        $entry = SproutForms::$app->entries->getEntry($form);
 
         $templatePaths = SproutForms::$app->forms->getFormTemplatePaths($form);
 
@@ -284,9 +281,23 @@ class SproutFormsVariable
     }
 
     /**
+     * Set an active entry for use in your Form Templates
+     *
+     * See the Entries service setEntry method for more details.
+     *
+     * @param Form         $form
+     * @param EntryElement $entry
+     */
+    public function setEntry(Form $form, Entry $entry)
+    {
+        SproutForms::$app->entries->setEntry($form, $entry);
+    }
+
+    /**
      * Gets last entry submitted
      *
-     * @return ElementInterface|null
+     * @return array|ElementInterface|null
+     * @throws \craft\errors\MissingComponentException
      */
     public function getLastEntry()
     {
