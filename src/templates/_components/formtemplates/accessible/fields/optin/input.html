@@ -1,7 +1,7 @@
 {%- set id = renderingOptions.id ?? name %}
 {%- set class = renderingOptions.class ?? name %}
-{%- set value = value is defined ? value : 0 %}
 {%- set label = field.optInMessage -%}
+{%- set selectedByDefault = field.selectedByDefault ?? null %}
 
 {%- set dataAttributes = null %}
 {%- set data = renderingOptions.data ?? null %}
@@ -22,8 +22,8 @@
             <input type="checkbox"
                     {%- if name %} name="{{ name }}"{% endif %}
                     {%- if id %} id="{{ id }}"{% endif %}
-                    {%- if value %} value="{{ value }}"{% endif %}
-                    {%- if value %} checked aria-checked="true"{% else %} aria-checked="false"{% endif %}
+                    value="1"
+                    {%- if selectedByDefault %} checked aria-checked="true"{% else %} aria-checked="false"{% endif %}
                     {{- dataAttributes|raw -}}
             >
             {%- if label is defined %}&nbsp;{{ label|raw }}{% endif -%}

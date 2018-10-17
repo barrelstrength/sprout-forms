@@ -7,7 +7,8 @@
     name: 'optInMessage',
     value: field.optInMessage,
     placeholder: 'Agree to terms?'|t('sprout-forms'),
-    required: true
+    required: true,
+    errors: field.getErrors('optInMessage')
 }) }}
 
 {{ forms.lightswitchField ({

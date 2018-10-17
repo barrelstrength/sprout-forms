@@ -29,6 +29,13 @@ class OptIn extends FormField implements PreviewableFieldInterface
      */
     public $selectedByDefault;
 
+    public function init()
+    {
+        $this->optInMessage = Craft::t('sprout-forms', 'Agree to terms?');
+
+        parent::init();
+    }
+
     /**
      * @inheritdoc
      */
@@ -77,10 +84,17 @@ class OptIn extends FormField implements PreviewableFieldInterface
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        return Craft::$app->getView()->renderTemplate('_includes/forms/checkbox',
+        $name = $this->handle;
+        $inputId = Craft::$app->getView()->formatInputId($name);
+        $namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
+
+        return Craft::$app->getView()->renderTemplate('sprout-base-fields/_components/fields/formfields/optin/input',
             [
                 'name' => $this->handle,
-                'value' => $value
+                'namespaceInputId' => $namespaceInputId,
+                'label' => $this->optInMessage,
+                'value' => 1,
+                'checked' => $value
             ]);
     }
 
@@ -112,5 +126,16 @@ class OptIn extends FormField implements PreviewableFieldInterface
         );
 
         return TemplateHelper::raw($rendered);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        $rules = parent::rules();
+        $rules[] = [['optInMessage'], 'required'];
+
+        return $rules;
     }
 }
