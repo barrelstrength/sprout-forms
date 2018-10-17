@@ -10,16 +10,6 @@
     required: true
 }) }}
 
-{{ forms.textField({
-    label: "Opt-in Value"|t('sprout-forms'),
-    instructions: "The value that will be submitted to your form."|t('sprout-forms'),
-    id: 'opt-in-value',
-    name: 'optInValue',
-    placeholder: "Yes"|t('sprout-forms'),
-    value: field.optInValue,
-    required: true
-}) }}
-
 {{ forms.lightswitchField ({
     label: "Selected by default"|t('sprout-forms'),
     instructions: "Set the default value of the checkbox to be selected. Note: this effectively makes the opt-in field an 'opt-out' field. Be nice!"|t('sprout-forms'),

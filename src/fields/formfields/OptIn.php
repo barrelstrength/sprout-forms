@@ -25,11 +25,6 @@ class OptIn extends FormField implements PreviewableFieldInterface
     public $optInMessage;
 
     /**
-     * @var string
-     */
-    public $optInValue;
-
-    /**
      * @var bool
      */
     public $selectedByDefault;
@@ -106,7 +101,6 @@ class OptIn extends FormField implements PreviewableFieldInterface
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-
         $rendered = Craft::$app->getView()->renderTemplate(
             'optin/input',
             [
