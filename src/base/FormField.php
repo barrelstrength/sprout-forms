@@ -97,6 +97,20 @@ abstract class FormField extends Field
     }
 
     /**
+     * Display or suppress the label field and behavior
+     *
+     * @note
+     * This is useful for fields like the Opt-In field where
+     * a label may not appear above the input.
+     *
+     * @return bool
+     */
+    public function displayLabel()
+    {
+        return true;
+    }
+
+    /**
      * Display or suppress instructions field.
      *
      * @note

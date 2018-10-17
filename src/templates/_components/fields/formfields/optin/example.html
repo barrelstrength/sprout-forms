@@ -1,0 +1,20 @@
+{% import "_includes/forms" as forms %}
+
+<label>
+    {% set checkedStatus = field.selectedByDefault ?? false %}
+    {% set optionLabel = field.optInMessage is not empty ? field.optInMessage : 'Agree to terms?'|t('sprout-forms') %}
+
+    {{ forms.checkbox({
+        name: 'checkboxes',
+        label: optionLabel,
+        checked: checkedStatus,
+        readonly: true,
+        disabled: true
+    }) }}
+</label>
+
+{% css %}
+    #sproutfield-{{ field.id }} .active-field-header {
+        display: none;
+    }
+{% endcss %}

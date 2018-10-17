@@ -29,7 +29,7 @@
         {%- if errors %} {{ errorClass }}{% endif -%}
         {%- if required %} required{% endif -%}
         ">
-        {% if label or instructions -%}
+        {% if (label or instructions) and field.displayLabel() -%}
             <div class="heading">
                 {% if label -%}
                     {%- if field.hasMultipleLabels() -%}
