@@ -1,0 +1,36 @@
+{# This is used for the Country and Region dropdown fields #}
+{% import "_includes/forms" as forms %}
+
+{%- set errors = errors is defined ? errors : null -%}
+
+{%- set class = [
+    'select',
+    class is defined ? class : null
+]|filter|join(' ') %}
+
+{%- set fieldClass = [
+    first is defined and first ? 'first' : null,
+    errors ? 'has-errors' : null,
+    fieldClass is defined and fieldClass ? fieldClass : null
+]|filter|join(' ') -%}
+
+{% if hidden is defined and hidden %}
+
+    <div class="hidden {{ fieldClass }}">
+        <div class="{{ class }}">
+            <input type="hidden" name="{{ name }}" value="{{ value }}"/>
+        </div>
+    </div>
+
+{% else %}
+    {{ forms.selectField({
+        name: name,
+        label: label,
+        fieldClass: fieldClass,
+        options: options,
+        value: value,
+        class: class,
+        errors: errors
+    }) }}
+
+{% endif %}

@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\services;
 
 use barrelstrength\sproutforms\base\FormField;
+use barrelstrength\sproutforms\fields\formfields\Address;
 use barrelstrength\sproutforms\fields\formfields\FileUpload;
 use barrelstrength\sproutforms\fields\formfields\Categories;
 use barrelstrength\sproutforms\fields\formfields\Checkboxes;
@@ -159,6 +160,7 @@ class Fields extends Component
         $groupedFields[$specialLabel][] = EmailDropdown::class;
         $groupedFields[$specialLabel][] = Phone::class;
         $groupedFields[$specialLabel][] = Url::class;
+        $groupedFields[$specialLabel][] = Address::class;
         $groupedFields[$specialLabel][] = CustomHtml::class;
         $groupedFields[$specialLabel][] = PrivateNotes::class;
         $groupedFields[$specialLabel][] = MultiSelect::class;
