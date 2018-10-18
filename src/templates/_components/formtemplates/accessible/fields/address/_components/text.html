@@ -1,0 +1,21 @@
+{% import "_includes/forms" as forms %}
+
+{%- set errors = errors is defined ? errors : null -%}
+
+{%- set class = [
+    'select',
+    class is defined ? class : null
+]|filter|join(' ') %}
+
+{%- set fieldClass = [
+    first is defined and first ? 'first' : null,
+    errors ? 'has-errors' : null,
+    fieldClass is defined and fieldClass ? fieldClass : null
+]|filter|join(' ') -%}
+
+{{ forms.textField({
+    label: label,
+    fieldClass: fieldClass,
+    name: name,
+    value: value
+}) }}
