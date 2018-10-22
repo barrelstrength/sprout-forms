@@ -3,7 +3,6 @@
 namespace barrelstrength\sproutforms\services;
 
 use craft\base\Component;
-use Craft;
 
 class App extends Component
 {

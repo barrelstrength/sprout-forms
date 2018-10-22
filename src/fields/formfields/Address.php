@@ -2,7 +2,8 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
-use barrelstrength\sproutbase\app\fields\helpers\AddressHelper;
+//use barrelstrength\sproutbase\app\fields\helpers\AddressHelper;
+use barrelstrength\sproutforms\services\Address as AddressHelper;
 use Craft;
 use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
@@ -120,6 +121,7 @@ class Address extends FormField implements PreviewableFieldInterface
         }
 
         $countryInput = $this->addressHelper->countryInput($hideCountryDropdown);
+
         $addressForm = $this->addressHelper->getAddressFormHtml();
 
         return Craft::$app->getView()->renderTemplate(
@@ -160,6 +162,41 @@ class Address extends FormField implements PreviewableFieldInterface
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
+        $name = $this->handle;
+        $inputId = Craft::$app->getView()->formatInputId($name);
+        $namespaceInputName = Craft::$app->getView()->namespaceInputName($inputId);
+        $namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
+
+        $settings = $this->getSettings();
+
+        $defaultCountryCode = $settings['defaultCountry'] ?? null;
+        $hideCountryDropdown = $settings['hideCountryDropdown'] ?? null;
+
+        $addressId = null;
+
+        if (is_object($value)) {
+            $addressId = $value->id;
+        } elseif (is_array($value)) {
+            $addressId = $value['id'];
+        }
+
+        $addressInfoModel = SproutBase::$app->addressField->getAddressById($addressId);
+
+        $countryCode = $addressInfoModel->countryCode ?? $defaultCountryCode;
+
+        $this->addressHelper->setParams($countryCode, $name, $addressInfoModel);
+
+        $addressFormat = "";
+        if ($addressId) {
+            $addressFormat = $this->addressHelper->getAddressWithFormat($addressInfoModel);
+        }
+
+        $countryInput = $this->countryInput($hideCountryDropdown);
+
+        $addressForm = $this->addressHelper->getAddressFormHtml();
+
+/*
+
         $rendered = Craft::$app->getView()->renderTemplate(
             'address/input',
             [
@@ -168,9 +205,49 @@ class Address extends FormField implements PreviewableFieldInterface
                 'field' => $this,
                 'renderingOptions' => $renderingOptions
             ]
-        );
+        );*/
 
-        return TemplateHelper::raw($rendered);
+        return Craft::$app->getView()->renderTemplate(
+            'address/input',
+            [
+                'namespaceInputId' => $namespaceInputId,
+                'namespaceInputName' => $namespaceInputName,
+                'field' => $this,
+                'addressId' => $addressId,
+                'renderingOptions' => $renderingOptions,
+                'defaultCountryCode' => $defaultCountryCode,
+                'addressFormat' => $addressFormat,
+                'form' => TemplateHelper::raw($addressForm),
+                'countryInput' => TemplateHelper::raw($countryInput),
+                'hideCountryDropdown' => $hideCountryDropdown
+            ]
+        );
+    }
+
+    /**
+     * @param null $hidden
+     *
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
+     */
+    public function countryInput($hidden = null)
+    {
+        $countries = $this->addressHelper->getCountries();
+
+        return Craft::$app->getView()->renderTemplate('address/_components/select',
+            [
+                'class' => 'sproutaddress-country-select',
+                'label' => 'Country',
+                'name' => $this->handle . '[countryCode]',
+                'inputName' => 'countryCode',
+                'options' => $countries,
+                'value' => '',
+                'nameValue' => '',
+                'field' => $this,
+                'hidden' => $hidden
+            ]
+        );
     }
 
     /**

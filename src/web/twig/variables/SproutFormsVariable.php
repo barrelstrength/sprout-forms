@@ -202,6 +202,7 @@ class SproutFormsVariable
         }
 
         $value = $entry->getFieldValue($field->handle);
+
         $inputHtml = $field->getFrontEndInputHtml($value, $fieldRenderingOptions);
 
         // Set Tab template path

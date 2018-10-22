@@ -1,5 +1,7 @@
-{# This is used for the Country and Region dropdown fields #}
-{% import "_includes/forms" as forms %}
+
+{%- set required = field.required ? true : false %}
+{%- set hasInstructions = field.instructions ? true : false %}
+{%- set value = value ? value : null %}
 
 {%- set errors = errors is defined ? errors : null -%}
 
@@ -23,14 +25,18 @@
     </div>
 
 {% else %}
-    {{ forms.selectField({
-        name: name,
-        label: label,
-        fieldClass: fieldClass,
-        options: options,
-        value: value,
-        class: class,
-        errors: errors
-    }) }}
+    {% spaceless %}
+    <select
+            {%- if name %} name="{{ name }}"{% endif %}
+            {%- if class %} class="{{ class }}"{% endif %}
+            {%- if required %} required aria-required="true"{% endif %}
+            {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+    >
+        {%- for key, option in options -%}
 
+        <option value="{{ key }}"
+                {% if key == value %}selected{% endif %}>{{ option }}</option>
+        {% endfor %}
+    </select>
+    {% endspaceless %}
 {% endif %}
