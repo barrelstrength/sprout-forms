@@ -1,0 +1,19 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.textField({
+    label: "Opt-in Message"|t('sprout-forms'),
+    instructions: "The text that will display to the user."|t('sprout-forms'),
+    id: 'opt-in-message',
+    name: 'optInMessage',
+    value: field.optInMessage,
+    placeholder: 'Agree to terms?'|t('sprout-forms'),
+    required: true,
+    errors: field.getErrors('optInMessage')
+}) }}
+
+{{ forms.lightswitchField ({
+    label: "Selected by default"|t('sprout-forms'),
+    instructions: "Set the default value of the checkbox to be selected. Note: this effectively makes the opt-in field an 'opt-out' field. Be nice!"|t('sprout-forms'),
+    name: 'selectedByDefault',
+    on: field.selectedByDefault
+}) }}

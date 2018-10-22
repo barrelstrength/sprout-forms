@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.0.0-beta.27 - 2018-10-22
+
+### Added
+- Added Opt-In Form Field
+- Added support for Sprout Google ReCaptcha Spam Protection
+- Added `setEntry` variable
+
+### Improved
+- Improved front-end form editing the `entry` variable is managed in Form Templates when using the displayForm tag
+
 ## 3.0.0-beta.26 - 2018-09-10
 	
 ### Fixed

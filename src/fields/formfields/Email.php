@@ -5,9 +5,7 @@ namespace barrelstrength\sproutforms\fields\formfields;
 use Craft;
 use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
-
 use craft\helpers\Template as TemplateHelper;
-
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\base\FormField;
 

@@ -45,13 +45,13 @@ class Form extends Element
     public $saveAsNew;
     public $fieldLayoutId;
     public $titleFormat;
-    public $displaySectionTitles;
+    public $displaySectionTitles = false;
     public $redirectUri;
     public $submitAction;
     public $submitButtonText;
-    public $saveData;
+    public $saveData = false;
     public $templateOverridesFolder;
-    public $enableFileAttachments;
+    public $enableFileAttachments = false;
 
     /**
      * @inheritdoc

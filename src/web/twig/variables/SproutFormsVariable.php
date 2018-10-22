@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\web\twig\variables;
 
 use barrelstrength\sproutforms\elements\db\EntryQuery;
+use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use Craft;
@@ -65,6 +66,7 @@ class SproutFormsVariable
         }
 
         $view = Craft::$app->getView();
+
         $entry = SproutForms::$app->entries->getEntry($form);
 
         $templatePaths = SproutForms::$app->forms->getFormTemplatePaths($form);
@@ -105,6 +107,7 @@ class SproutFormsVariable
         }
 
         $view = Craft::$app->getView();
+
         $entry = SproutForms::$app->entries->getEntry($form);
 
         $templatePaths = SproutForms::$app->forms->getFormTemplatePaths($form);
@@ -149,6 +152,7 @@ class SproutFormsVariable
      * @param Form       $form
      * @param FormField  $field
      * @param array|null $renderingOptions
+     * @param EntryElement $entry
      *
      * @return \Twig_Markup
      * @throws Exception
@@ -172,6 +176,7 @@ class SproutFormsVariable
         }
 
         $view = Craft::$app->getView();
+
         $entry = SproutForms::$app->entries->getEntry($form);
 
         $templatePaths = SproutForms::$app->forms->getFormTemplatePaths($form);
@@ -276,9 +281,23 @@ class SproutFormsVariable
     }
 
     /**
+     * Set an active entry for use in your Form Templates
+     *
+     * See the Entries service setEntry method for more details.
+     *
+     * @param Form         $form
+     * @param EntryElement $entry
+     */
+    public function setEntry(Form $form, Entry $entry)
+    {
+        SproutForms::$app->entries->setEntry($form, $entry);
+    }
+
+    /**
      * Gets last entry submitted
      *
-     * @return ElementInterface|null
+     * @return array|ElementInterface|null
+     * @throws \craft\errors\MissingComponentException
      */
     public function getLastEntry()
     {

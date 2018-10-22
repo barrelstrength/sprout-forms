@@ -14,6 +14,7 @@ use barrelstrength\sproutforms\fields\formfields\Invisible;
 use barrelstrength\sproutforms\fields\formfields\MultiSelect;
 use barrelstrength\sproutforms\fields\formfields\Name;
 use barrelstrength\sproutforms\fields\formfields\Number;
+use barrelstrength\sproutforms\fields\formfields\OptIn;
 use barrelstrength\sproutforms\fields\formfields\Paragraph;
 use barrelstrength\sproutforms\fields\formfields\Phone;
 use barrelstrength\sproutforms\fields\formfields\MultipleChoice;
@@ -24,19 +25,19 @@ use barrelstrength\sproutforms\fields\formfields\CustomHtml;
 use barrelstrength\sproutforms\fields\formfields\SectionHeading;
 use barrelstrength\sproutforms\fields\formfields\Tags;
 use barrelstrength\sproutforms\fields\formfields\Url;
+use barrelstrength\sproutforms\SproutForms;
+use barrelstrength\sproutforms\elements\Form as FormElement;
+use barrelstrength\sproutforms\events\RegisterFieldsEvent;
 use Craft;
 use craft\base\FieldInterface;
 use craft\records\FieldLayoutField;
-use yii\base\Component;
+use craft\helpers\StringHelper;
 use craft\base\Field;
 use craft\records\Field as FieldRecord;
 use barrelstrength\sproutforms\fields\formfields\SingleLine;
 use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
 use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
-
-use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutforms\elements\Form as FormElement;
-use barrelstrength\sproutforms\events\RegisterFieldsEvent;
+use yii\base\Component;
 use yii\base\Exception;
 
 class Fields extends Component
@@ -164,6 +165,7 @@ class Fields extends Component
         $groupedFields[$specialLabel][] = Hidden::class;
         $groupedFields[$specialLabel][] = Invisible::class;
         $groupedFields[$specialLabel][] = RegularExpression::class;
+        $groupedFields[$specialLabel][] = OptIn::class;
 
         // Relations
         $groupedFields[$relationsLabel][] = Categories::class;
@@ -553,7 +555,7 @@ class Fields extends Component
         $fieldsService = Craft::$app->getFields();
         // get the field name and remove spaces
         $fieldName = preg_replace('/\s+/', '', $intanceField->displayName());
-        $handleName = lcfirst($fieldName);
+        $handleName = StringHelper::toCamelCase(lcfirst($fieldName));
 
         $name = $this->getFieldAsNew('name', $fieldName);
         $handle = $this->getFieldAsNew('handle', $handleName);
