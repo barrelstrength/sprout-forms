@@ -4,19 +4,7 @@
     {{ countryInput }}
 
     {# The form output will include several fields that use the text.html and select.html fields. #}
-    {{ form }}
 
+    {{ form }}
     {# the hidden.html file will be output here ??? #}
 </div>
-
-{# @todo - update to use Asset Bundles if in use #}
-{#% includeJsResource 'sproutseo/js/AddressForm.js' %#}
-
-{% js %}
-
-    {# Add all of our JS right here if we can. #}
-    $(document).ready(function () {
-        SproutBase.AddressForm.init($('.sproutaddress-form'), { actionUrl: '{{ actionUrl }}' })
-    })
-
-{% endjs %}
