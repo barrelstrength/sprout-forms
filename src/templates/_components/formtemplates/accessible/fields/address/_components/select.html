@@ -1,6 +1,4 @@
 
-{%- set required = field.required ? true : false %}
-{%- set hasInstructions = field.instructions ? true : false %}
 {%- set value = value ? value : null %}
 
 {%- set errors = errors is defined ? errors : null -%}
@@ -26,17 +24,22 @@
 
 {% else %}
     {% spaceless %}
-    <select
-            {%- if name %} name="{{ name }}"{% endif %}
-            {%- if class %} class="{{ class }}"{% endif %}
-            {%- if required %} required aria-required="true"{% endif %}
-            {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
-    >
-        {%- for key, option in options -%}
+    <div class="field">
+        <div class="heading">
+            <label>{{ label }}</label>
+        </div>
+        <div class="input">
+            <select
+                    {%- if name %} name="{{ name }}"{% endif %}
+                    {%- if class %} class="{{ class }}"{% endif %}
+            >
+                {%- for key, option in options -%}
 
-        <option value="{{ key }}"
-                {% if key == value %}selected{% endif %}>{{ option }}</option>
-        {% endfor %}
-    </select>
+                <option value="{{ key }}"
+                        {% if key == value %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
     {% endspaceless %}
 {% endif %}

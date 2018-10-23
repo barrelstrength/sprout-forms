@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
-//use barrelstrength\sproutbase\app\fields\helpers\AddressHelper;
+use barrelstrength\sproutbase\app\fields\helpers\AddressHelper as BaseAddressHelper;
 use barrelstrength\sproutforms\services\Address as AddressHelper;
 use Craft;
 use craft\base\ElementInterface;
@@ -11,6 +11,7 @@ use craft\helpers\Template as TemplateHelper;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutbase\app\fields\models\Name as NameModel;
 use barrelstrength\sproutforms\base\FormField;
+use barrelstrength\sproutbase\app\fields\models\Address as AddressModel;
 
 class Address extends FormField implements PreviewableFieldInterface
 {
@@ -22,7 +23,7 @@ class Address extends FormField implements PreviewableFieldInterface
     /**
      * @var string
      */
-    public $defaultCountry;
+    public $defaultCountry = 'US';
 
     /**
      * @var bool
@@ -36,7 +37,7 @@ class Address extends FormField implements PreviewableFieldInterface
 
     public function init()
     {
-        $this->addressHelper = new AddressHelper();
+        $this->addressHelper = new BaseAddressHelper();
 
         parent::init();
     }
@@ -84,8 +85,10 @@ class Address extends FormField implements PreviewableFieldInterface
     }
 
     /**
-     * @inheritdoc
+     * @param mixed                 $value
+     * @param ElementInterface|null $element
      *
+     * @return string
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
@@ -162,6 +165,8 @@ class Address extends FormField implements PreviewableFieldInterface
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
+        $this->addressHelper = new AddressHelper();
+
         $name = $this->handle;
         $inputId = Craft::$app->getView()->formatInputId($name);
         $namespaceInputName = Craft::$app->getView()->namespaceInputName($inputId);
@@ -169,43 +174,17 @@ class Address extends FormField implements PreviewableFieldInterface
 
         $settings = $this->getSettings();
 
-        $defaultCountryCode = $settings['defaultCountry'] ?? null;
+        $countryCode = $settings['defaultCountry'] ?? $this->defaultCountry;
+
         $hideCountryDropdown = $settings['hideCountryDropdown'] ?? null;
 
-        $addressId = null;
-
-        if (is_object($value)) {
-            $addressId = $value->id;
-        } elseif (is_array($value)) {
-            $addressId = $value['id'];
-        }
-
-        $addressInfoModel = SproutBase::$app->addressField->getAddressById($addressId);
-
-        $countryCode = $addressInfoModel->countryCode ?? $defaultCountryCode;
+        $addressInfoModel = new AddressModel();
 
         $this->addressHelper->setParams($countryCode, $name, $addressInfoModel);
 
-        $addressFormat = "";
-        if ($addressId) {
-            $addressFormat = $this->addressHelper->getAddressWithFormat($addressInfoModel);
-        }
-
-        $countryInput = $this->countryInput($hideCountryDropdown);
+        $countryInput = $this->addressHelper->countryInput($hideCountryDropdown);
 
         $addressForm = $this->addressHelper->getAddressFormHtml();
-
-/*
-
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'address/input',
-            [
-                'name' => $this->handle,
-                'value' => $value,
-                'field' => $this,
-                'renderingOptions' => $renderingOptions
-            ]
-        );*/
 
         return Craft::$app->getView()->renderTemplate(
             'address/input',
@@ -213,39 +192,10 @@ class Address extends FormField implements PreviewableFieldInterface
                 'namespaceInputId' => $namespaceInputId,
                 'namespaceInputName' => $namespaceInputName,
                 'field' => $this,
-                'addressId' => $addressId,
                 'renderingOptions' => $renderingOptions,
-                'defaultCountryCode' => $defaultCountryCode,
-                'addressFormat' => $addressFormat,
                 'form' => TemplateHelper::raw($addressForm),
                 'countryInput' => TemplateHelper::raw($countryInput),
                 'hideCountryDropdown' => $hideCountryDropdown
-            ]
-        );
-    }
-
-    /**
-     * @param null $hidden
-     *
-     * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
-     */
-    public function countryInput($hidden = null)
-    {
-        $countries = $this->addressHelper->getCountries();
-
-        return Craft::$app->getView()->renderTemplate('address/_components/select',
-            [
-                'class' => 'sproutaddress-country-select',
-                'label' => 'Country',
-                'name' => $this->handle . '[countryCode]',
-                'inputName' => 'countryCode',
-                'options' => $countries,
-                'value' => '',
-                'nameValue' => '',
-                'field' => $this,
-                'hidden' => $hidden
             ]
         );
     }
@@ -262,30 +212,30 @@ class Address extends FormField implements PreviewableFieldInterface
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
-//        $nameModel = new NameModel();
-//
-//        // String value when retrieved from db
-//        if (is_string($value)) {
-//            $nameArray = json_decode($value, true);
-//            $nameModel->setAttributes($nameArray, false);
-//        }
-//
-//        // Array value from post data
-//        if (is_array($value) && isset($value['address'])) {
-//
-//            $nameModel->setAttributes($value['address'], false);
-//
-//            if ($fullNameShort = $value['address']['fullNameShort'] ?? null) {
-//                $nameArray = explode(' ', trim($fullNameShort));
-//
-//                $nameModel->firstName = $nameArray[0] ?? $fullNameShort;
-//                unset($nameArray[0]);
-//
-//                $nameModel->lastName = implode(' ', $nameArray);
-//            }
-//        }
-//
-//        return $nameModel;
+        $nameModel = new NameModel();
+
+        // String value when retrieved from db
+        if (is_string($value)) {
+            $nameArray = json_decode($value, true);
+            $nameModel->setAttributes($nameArray, false);
+        }
+
+        // Array value from post data
+        if (is_array($value) && isset($value['address'])) {
+
+            $nameModel->setAttributes($value['address'], false);
+
+            if ($fullNameShort = $value['address']['fullNameShort'] ?? null) {
+                $nameArray = explode(' ', trim($fullNameShort));
+
+                $nameModel->firstName = $nameArray[0] ?? $fullNameShort;
+                unset($nameArray[0]);
+
+                $nameModel->lastName = implode(' ', $nameArray);
+            }
+        }
+
+        return $nameModel;
     }
 
     /**
@@ -303,15 +253,15 @@ class Address extends FormField implements PreviewableFieldInterface
      */
     public function serializeValue($value, ElementInterface $element = null)
     {
-//        if (empty($value)) {
-//            return false;
-//        }
-//
-//        // Submitting an Element to be saved
-//        if (is_object($value) && get_class($value) == NameModel::class) {
-//            return json_encode($value->getAttributes());
-//        }
-//
-//        return $value;
+        if (empty($value)) {
+            return false;
+        }
+
+        // Submitting an Element to be saved
+        if (is_object($value) && get_class($value) == NameModel::class) {
+            return json_encode($value->getAttributes());
+        }
+
+        return $value;
     }
 }
