@@ -341,12 +341,14 @@ class Entries extends Component
             return false;
         }
 
-        $client = new Client(['verify' => false]);
+        $client = new Client();
 
         try {
             SproutForms::info($fields);
 
-            $response = $client->post($endpoint, null, $fields);
+            $response = $client->request('POST', $endpoint, [
+                'form_params' => $fields
+            ]);
 
             SproutForms::info($response->getBody()->getContents());
         } catch (RequestException $e) {
