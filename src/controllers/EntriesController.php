@@ -278,6 +278,7 @@ class EntriesController extends BaseController
 
         // Set the entry attributes, defaulting to the existing values for whatever is missing from the post data
         $fieldsLocation = $request->getBodyParam('fieldsLocation', 'fields');
+
         $entry->setFieldValuesFromRequest($fieldsLocation);
         $entry->setFieldParamNamespace($fieldsLocation);
     }
