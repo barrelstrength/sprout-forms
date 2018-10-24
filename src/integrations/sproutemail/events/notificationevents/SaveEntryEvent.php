@@ -96,6 +96,7 @@ class SaveEntryEvent extends NotificationEvent
     public function getMockEventObject()
     {
         $criteria = Entry::find();
+        $criteria->orderBy(['id' => SORT_DESC]);
 
         if (!empty($this->formIds)) {
 
