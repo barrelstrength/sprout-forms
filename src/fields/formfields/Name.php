@@ -112,6 +112,38 @@ class Name extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
+    public function getElementValidationRules(): array
+    {
+        return ['validateName'];
+    }
+
+    /**
+     * Validates our fields submitted value beyond the checks
+     * that were assumed based on the content attribute.
+     *
+     * @param ElementInterface $element
+     *
+     * @return void
+     */
+    public function validateName(ElementInterface $element)
+    {
+        $value = $element->getFieldValue($this->handle);
+
+        if ($this->required){
+            if (!$value->getFullName()){
+                $element->addError(
+                    $this->handle,
+                    Craft::t('sprout-forms','{field} cannot be blank', [
+                        'field' => $this->name
+                    ])
+                );
+            }
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getExampleInputHtml()
     {
         return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/formfields/name/example',
