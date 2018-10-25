@@ -4,7 +4,6 @@ namespace barrelstrength\sproutforms\base;
 
 use Craft;
 use craft\base\Field;
-use craft\base\ElementInterface;
 
 /**
  * Class FormField
