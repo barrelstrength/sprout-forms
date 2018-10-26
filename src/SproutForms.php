@@ -33,7 +33,6 @@ use barrelstrength\sproutbase\app\import\services\Themes;
 use Craft;
 use craft\base\Plugin;
 
-use craft\db\Connection;
 use yii\db\Migration;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
@@ -49,8 +48,6 @@ use barrelstrength\sproutforms\models\Settings;
 use barrelstrength\sproutforms\web\twig\variables\SproutFormsVariable;
 use barrelstrength\sproutforms\events\RegisterFieldsEvent;
 use barrelstrength\sproutforms\services\Fields as SproutFormsFields;
-use barrelstrength\sproutforms\events\OnBeforePopulateEntryEvent;
-use barrelstrength\sproutforms\controllers\EntriesController;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use craft\services\Dashboard;
 
@@ -146,10 +143,6 @@ class SproutForms extends Plugin
 
         Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
             $event->permissions['Sprout Forms'] = $this->getUserPermissions();
-        });
-
-        Event::on(EntriesController::class, EntriesController::EVENT_BEFORE_POPULATE, function(OnBeforePopulateEntryEvent $event) {
-            self::$app->entries->handleUnobfuscateEmailAddresses($event->form);
         });
 
         Event::on(NotificationEmailEvents::class, NotificationEmailEvents::EVENT_REGISTER_EMAIL_EVENT_TYPES, function(NotificationEmailEvent $event) {
