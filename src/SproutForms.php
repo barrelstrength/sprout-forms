@@ -297,13 +297,13 @@ class SproutForms extends Plugin
                 'sprout-forms/forms',
 
             'sprout-forms/reports/<dataSourceId>/new' =>
-                'sprout-base/reports/edit-report',
+                'sprout/reports/edit-report',
             'sprout-forms/reports/<dataSourceId>/edit/<reportId>' =>
-                'sprout-base/reports/edit-report',
+                'sprout/reports/edit-report',
             'sprout-forms/reports/view/<reportId>' =>
-                'sprout-base/reports/results-index',
+                'sprout/reports/results-index',
             'sprout-forms/reports/<dataSourceId>' =>
-                'sprout-base/reports/index',
+                'sprout/reports/index',
 
             'sprout-forms/notifications' => [
                 'template' => 'sprout-base-email/notifications/index',
@@ -313,9 +313,9 @@ class SproutForms extends Plugin
             ],
 
             'sprout-forms/settings/notifications/edit/<emailId:\d+|new>' =>
-                'sprout-base/notifications/edit-notification-email-settings-template',
+                'sprout/notifications/edit-notification-email-settings-template',
             'sprout-forms/notifications/edit/<emailId:\d+|new>' => [
-                'route' => 'sprout-base/notifications/edit-notification-email-template',
+                'route' => 'sprout/notifications/edit-notification-email-template',
                 'params' => [
                     'defaultEmailTemplate' => BasicSproutFormsNotification::class
                 ]
@@ -325,9 +325,9 @@ class SproutForms extends Plugin
             ],
 
             'sprout-forms/settings' =>
-                'sprout-base/settings/edit-settings',
+                'sprout/settings/edit-settings',
             'sprout-forms/settings/<settingsSectionHandle:.*>' =>
-                'sprout-base/settings/edit-settings'
+                'sprout/settings/edit-settings'
         ];
     }
 

@@ -6,7 +6,6 @@ use barrelstrength\sproutbase\app\import\base\ElementImporter;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutimport\SproutImport;
 use Craft;
 
 
@@ -58,6 +57,8 @@ class Form extends ElementImporter
 
     /**
      * @inheritdoc
+     *
+     * @throws \Throwable
      */
     public function resolveNestedSettings($section, $settings)
     {
