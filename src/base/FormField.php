@@ -141,14 +141,6 @@ abstract class FormField extends Field
     }
 
     /**
-     * @return string
-     */
-    public function getType()
-    {
-        return get_class($this);
-    }
-
-    /**
      * The folder path where this field template is located. This value may be overridden by users
      * when using Form Templates.
      *
