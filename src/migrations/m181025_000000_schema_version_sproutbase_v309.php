@@ -9,6 +9,7 @@ use barrelstrength\sproutbase\app\email\migrations\m180515_000000_rename_notific
 use barrelstrength\sproutbase\app\email\migrations\m180501_000001_update_notification_element_types;
 use barrelstrength\sproutbase\app\email\migrations\m180501_000002_rename_notification_options_column;
 use barrelstrength\sproutbase\app\email\migrations\m180515_000003_update_notification_eventId_types;
+use barrelstrength\sproutbase\app\email\migrations\m181026_000000_update_notification_data;
 use barrelstrength\sproutbase\app\reports\migrations\m180515_000002_update_report_element_types;
 use craft\db\Migration;
 
@@ -60,6 +61,11 @@ class m181025_000000_schema_version_sproutbase_v309 extends Migration
         $notificationEmailTemplateIdMigration = new m180515_000003_update_notification_eventId_types();
         ob_start();
         $notificationEmailTemplateIdMigration->safeUp();
+        ob_end_clean();
+
+        $notificationEmailDataMigration = new m181026_000000_update_notification_data();
+        ob_start();
+        $notificationEmailDataMigration->safeUp();
         ob_end_clean();
 
         return true;
