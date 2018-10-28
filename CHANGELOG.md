@@ -1,5 +1,26 @@
 # Changelog
 
+## 3.0.0-beta.28 - 2018-10-26
+
+### Changed
+- Removed &nbsp; from Checkboxes and Opt-in field Form Templates [#95]
+- Updated Form Field getTemplatesPath to be dynamic [#98]
+- Updated Sprout Forms Save Entry Notification Event to return the latest entry as a mock value
+- Updated Sprout Base requirement to v3.0.10
+
+### Fixed
+- Fixed bug where user was unable to update Opt-in Field message
+- Fixed issue where payload was sending empty POST params. [#145] 
+- Fixed issue where Email Dropdown field would not render the correct value in Notification Email templates ([#171])
+- Fixed bug where Name field would not throw error if it was required and submitted blank [#172]
+- Fixed various issues in Notification Email migrations from Craft 2
+
+[#95]: https://github.com/barrelstrength/craft-sprout-forms/issues/95
+[#98]: https://github.com/barrelstrength/craft-sprout-forms/issues/98
+[#145]: https://github.com/barrelstrength/craft-sprout-forms/issues/145
+[#171]: https://github.com/barrelstrength/craft-sprout-forms/issues/171
+[#172]: https://github.com/barrelstrength/craft-sprout-forms/issues/172
+
 ## 3.0.0-beta.27 - 2018-10-22
 
 ### Added
