@@ -6,7 +6,6 @@ use barrelstrength\sproutbase\app\import\base\ElementImporter;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutimport\SproutImport;
 use Craft;
 
 
@@ -58,6 +57,8 @@ class Form extends ElementImporter
 
     /**
      * @inheritdoc
+     *
+     * @throws \Throwable
      */
     public function resolveNestedSettings($section, $settings)
     {
@@ -96,10 +97,11 @@ class Form extends ElementImporter
             $postedFieldLayout[$tabName] = [];
 
             foreach ($fields as $field) {
-
                 $importerClass = SproutBase::$app->importers->getImporter($field);
 
-                $field = SproutImport::$app->settingsImporter->saveSetting($field, $importerClass);
+                if (!$importerClass) continue;
+
+                $field = SproutBase::$app->settingsImporter->saveSetting($field, $importerClass);
 
                 if ($field->required) {
                     $requiredFields[] = $field->id;
@@ -109,6 +111,10 @@ class Form extends ElementImporter
 
                 $postedFieldLayout[$tabName][] = $field->id;
             }
+        }
+
+        if (SproutBase::$app->importers->hasErrors()) {
+            SproutBase::$app->importUtilities->addErrors(SproutBase::$app->importers->getErrors());
         }
 
         // Create the FieldLayout Class

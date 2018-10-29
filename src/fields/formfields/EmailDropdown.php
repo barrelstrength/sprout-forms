@@ -174,24 +174,17 @@ class EmailDropdown extends BaseOptionsFormField
         return TemplateHelper::raw($rendered);
     }
 
-    /**
-     * @inheritdoc
-     *
-     * public function normalizeValue($value, ElementInterface $element = null)
-     * {
-     * #$value = parent::normalizeValue($value, $element);
-     * Craft::dd($value);
-     *
-     * if (isset($value->value))
-     * {
-     * $val = $value->value;
-     * $options = $value->getOptions();
-     * $value->value = $options[$val]->value;
-     * $value->label = $options[$val]->label;
-     * }
-     *
-     * return $value;
-     * } */
+    public function normalizeValue($value, ElementInterface $element = null)
+    {
+        // Make the unobfuscated values available to email notifications
+        if (Craft::$app->request->getIsSiteRequest() && Craft::$app->getRequest()->getIsPost()) {
+            // Swap our obfuscated number value (e.g. 1) with the email value
+            $selectedOption = $this->options[$value];
+            $value = $selectedOption['value'];
+        }
+
+        return parent::normalizeValue($value, $element);
+    }
 
     /**
      * @inheritdoc

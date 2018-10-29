@@ -1,0 +1,9 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.selectField({
+    label: "Form"|t('sprout-forms'),
+    instructions: "Generate entries for this form."|t('sprout-forms'),
+    name: "formId",
+    options: formOptions,
+    value: formOptions.formId is defined ? formOptions.formId : null,
+}) }}
