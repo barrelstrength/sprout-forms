@@ -110,6 +110,8 @@ class Address extends FormField implements PreviewableFieldInterface
 
         $addressForm = $this->addressHelper->getAddressFormHtml();
 
+        $csrfTokenName = Craft::$app->getConfig()->getGeneral()->csrfTokenName;
+
         return Craft::$app->getView()->renderTemplate(
             'address/input',
             [
@@ -119,7 +121,8 @@ class Address extends FormField implements PreviewableFieldInterface
                 'renderingOptions' => $renderingOptions,
                 'form' => TemplateHelper::raw($addressForm),
                 'countryInput' => TemplateHelper::raw($countryInput),
-                'hideCountryDropdown' => $hideCountryDropdown
+                'hideCountryDropdown' => $hideCountryDropdown,
+                'csrfTokenName' => $csrfTokenName
             ]
         );
     }
