@@ -30,6 +30,9 @@
         </div>
         <div class="input">
             <select
+                    {% if inputName == 'countryCode' %}
+                        onChange="loadAdministrativeArea('{{ actionUrl }}', this, '{{ name }}')"
+                    {% endif %}
                     {%- if name %} name="{{ name }}"{% endif %}
                     {%- if class %} class="{{ class }}"{% endif %}
             >
