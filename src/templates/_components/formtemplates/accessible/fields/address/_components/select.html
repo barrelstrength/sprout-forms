@@ -24,14 +24,14 @@
 
 {% else %}
     {% spaceless %}
-    <div class="field">
+    <div class="field {{ fieldClass }}">
         <div class="heading">
             <label>{{ label }}</label>
         </div>
         <div class="input">
             <select
                     {% if inputName == 'countryCode' %}
-                        onChange="loadAdministrativeArea('{{ actionUrl }}', this, '{{ name }}')"
+                        onChange="loadAdministrativeArea('{{ actionUrl }}', this, '{{ nameValue }}')"
                     {% endif %}
                     {%- if name %} name="{{ name }}"{% endif %}
                     {%- if class %} class="{{ class }}"{% endif %}
