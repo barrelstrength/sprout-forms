@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.0-beta.31 - 2018-10-30
+
+### Changed
+- Fixed bug in Email Notifications migration
+
 ## 3.0.0-beta.30 - 2018-10-30
 
 ### Changed
