@@ -4,8 +4,10 @@ namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutbase\app\fields\base\AddressFieldTrait;
 use barrelstrength\sproutbase\app\fields\helpers\AddressHelper as BaseAddressHelper;
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\services\Address as AddressHelper;
 use Craft;
+use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
 use craft\helpers\Template as TemplateHelper;
 use yii\db\Schema;
@@ -126,4 +128,30 @@ class Address extends FormField implements PreviewableFieldInterface
             ]
         );
     }
+
+    public function getElementValidationRules(): array
+    {
+        return ['validateAddress'];
+    }
+
+    public function validateAddress(ElementInterface $element)
+    {
+        $values = $element->getFieldValue($this->handle);
+        $addressInfoModel = new AddressModel($values);
+
+        $addressInfoModel->validate();
+
+        if ($addressInfoModel->hasErrors()) {
+            $errors = $addressInfoModel->getErrors();
+
+            if ($errors) {
+                foreach ($errors as $error) {
+                    $firstMessage = $error[0] ?? null;
+                    $element->addError($this->handle, $firstMessage);
+                }
+            }
+
+        }
+    }
+
 }
