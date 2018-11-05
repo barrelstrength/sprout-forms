@@ -339,6 +339,14 @@ class Entry extends Element
         $attributes['dateCreated'] = ['label' => Craft::t('sprout-forms', 'Date Created')];
         $attributes['dateUpdated'] = ['label' => Craft::t('sprout-forms', 'Date Updated')];
 
+        foreach (Craft::$app->elementIndexes->getAvailableTableAttributes(Form::class) as $key => $field){
+            $customFields = explode(':', $key);
+            if (count($customFields) > 1){
+                $fieldId = $customFields[1];
+                $attributes['field:' . $fieldId] = ['label' => $field['label']];
+            }
+        }
+
         return $attributes;
     }
 

@@ -32,7 +32,7 @@
                 <optgroup label="{{ label }}">
             {% endif %}
             {%- for option in options.entries -%}
-                {% set section = craft.sections.getSectionById(option.sectionId) %}
+                {% set section = craft.app.sections.getSectionById(option.sectionId) %}
                 {%- set optionLabel = options.singles is defined ? section.name : option.title -%}
                 {%- set optionValue =  option.id -%}
 

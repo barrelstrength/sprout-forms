@@ -82,7 +82,7 @@ class SproutForms extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '3.0.7';
+    public $schemaVersion = '3.0.8';
 
     /**
      * @var string
@@ -350,6 +350,9 @@ class SproutForms extends Plugin
             ],
             'editSproutFormsSettings' => [
                 'label' => Craft::t('sprout-forms', 'Edit Settings')
+            ],
+            'editSproutReports' => [
+                'label' => Craft::t('sprout-forms', 'Edit Reports')
             ]
         ];
     }
