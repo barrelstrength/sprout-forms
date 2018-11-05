@@ -351,7 +351,7 @@ class SproutForms extends Plugin
             'editSproutFormsSettings' => [
                 'label' => Craft::t('sprout-forms', 'Edit Settings')
             ],
-            'editReportsOnSproutForms' => [
+            'editSproutReports' => [
                 'label' => Craft::t('sprout-forms', 'Edit Reports')
             ]
         ];
