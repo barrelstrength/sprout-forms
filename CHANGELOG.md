@@ -1,5 +1,19 @@
 # Changelog
 
+## 3.0.0-beta.32 - 2018-11-05
+
+### Added
+- Added customize sources support for Form Entries Element Index
+
+### Changed
+- Improved migration for Notification Emails ([#189])
+	
+### Fixed
+- Fixed various Deprecation Warnings ([#184])
+
+[#184]: https://github.com/barrelstrength/craft-sprout-forms/issues/184
+[#189]: https://github.com/barrelstrength/craft-sprout-forms/issues/189
+
 ## 3.0.0-beta.31 - 2018-10-30
 
 ### Changed
