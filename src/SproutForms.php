@@ -15,6 +15,9 @@ use barrelstrength\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbase\app\email\events\NotificationEmailEvent;
 use barrelstrength\sproutforms\fields\Forms as FormsField;
 use barrelstrength\sproutforms\fields\Entries as FormEntriesField;
+use barrelstrength\sproutforms\integrationtypes\CustomIntegration;
+use barrelstrength\sproutforms\integrationtypes\FormEntryElementIntegration;
+use barrelstrength\sproutforms\services\Integrations;
 use barrelstrength\sproutforms\widgets\RecentEntries;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use barrelstrength\sproutforms\captchas\DuplicateCaptcha;
@@ -169,6 +172,11 @@ class SproutForms extends Plugin
             $captchasHtml = SproutForms::$app->forms->getCaptchasHtml();
 
             return $captchasHtml;
+        });
+
+        Event::on(Integrations::class, Integrations::EVENT_REGISTER_INTEGRATIONS, function(RegisterComponentTypesEvent $event) {
+            $event->types[] = CustomIntegration::class;
+            $event->types[] = FormEntryElementIntegration::class;
         });
 
         Event::on(Forms::class, Forms::EVENT_REGISTER_FORM_TEMPLATES, function(RegisterComponentTypesEvent $event) {

@@ -170,6 +170,24 @@
 
     <hr>
     <div class="meta read-only sprout-meta-heading">
+        <h6>{{ "Integrations"|t('sprout-forms') }}</h6>
+    </div>
+    <hr>
+
+    <div class="meta">
+        {% for integration in integrations %}
+        	<h5>{{ integration.getName() }}</h5>
+            {{ integration.getSettingsHtml()|raw }}
+            {% if not loop.last %}
+                <hr>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+
+    {# @todo WE WILL REPLACE PAYLOAD FORWARDING WITH THE CUSTOM API INTEGRATION #}
+    <hr>
+    <div class="meta read-only sprout-meta-heading">
         <h6>{{ "Payload Forwarding"|t('sprout-forms') }}</h6>
     </div>
     <hr>

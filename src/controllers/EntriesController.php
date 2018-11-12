@@ -116,6 +116,19 @@ class EntriesController extends BaseController
             return $this->redirectWithErrors($entry);
         }
 
+
+        // @TODO - example pseudo code, doesn't work
+        $integrations = $this->form->integrations;
+
+        foreach ($integrations as $integration)
+        {
+            if (!$integration->submit()) {
+                // failure
+            }
+
+            // success
+        }
+
         /**
          * Route our request to Craft or a third-party endpoint
          *
