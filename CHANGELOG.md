@@ -32,7 +32,7 @@
 ## 3.0.0-beta.28 - 2018-10-26
 
 ### Changed
-- Removed &nbsp; from Checkboxes and Opt-in field Form Templates [#95]
+- Removed `&nbsp;` from Checkboxes and Opt-in field Form Templates [#95]
 - Updated Form Field getTemplatesPath to be dynamic [#98]
 - Updated Sprout Forms Save Entry Notification Event to return the latest entry as a mock value
 - Updated Sprout Base requirement to v3.0.10
