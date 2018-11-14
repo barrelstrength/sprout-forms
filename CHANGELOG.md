@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.0.0-beta.33 - 2018-11-14
+
+### Added
+- Field handles now display when hovering over a field
+
+### Changed
+- Updated Sprout Base requirement to v4.0.2
+
 ## 3.0.0-beta.32 - 2018-11-05
 
 ### Added
@@ -32,7 +40,7 @@
 ## 3.0.0-beta.28 - 2018-10-26
 
 ### Changed
-- Removed &nbsp; from Checkboxes and Opt-in field Form Templates [#95]
+- Removed `&nbsp;` from Checkboxes and Opt-in field Form Templates [#95]
 - Updated Form Field getTemplatesPath to be dynamic [#98]
 - Updated Sprout Forms Save Entry Notification Event to return the latest entry as a mock value
 - Updated Sprout Base requirement to v3.0.10
