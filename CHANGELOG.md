@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.0.0-beta.33 - 2018-11-14
+
+### Added
+- Field handles now display when hovering over a field
+
+### Changed
+- Updated Sprout Base requirement to v4.0.2
+
 ## 3.0.0-beta.32 - 2018-11-05
 
 ### Added
