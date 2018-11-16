@@ -22,8 +22,8 @@ class Settings extends Model
     {
         // Added new items override if needed
         // 'fullPageForm' => true,
-        // 'actionTemplate' => 'sprout-base/_includes/actionButton'
-        // 'actionUrl' => 'sprout-base/settings/save-settings'
+        // 'actionTemplate' => 'sprout/_includes/actionButton'
+        // 'actionUrl' => 'sprout/settings/save-settings'
         $variables['entryStatuses'] = SproutForms::$app->entries->getAllEntryStatuses();
 
         return [
@@ -47,6 +47,16 @@ class Settings extends Model
                 'actionTemplate' => 'sprout-forms/settings/entrystatuses/_actionStatusButton',
                 'variables' => $variables
             ],
+//            'bundles' => [
+//                'label' => Craft::t('sprout-forms', 'Bundles'),
+//                'url' => 'sprout-forms/settings/bundles',
+//                'selected' => 'bundles',
+//                'template' => 'sprout-base-import/bundles/bundle-cards',
+//                'actionTemplate' => false,
+//                'fullPageForm' => false,
+//                'settingsForm' => false,
+//                'variables' => $variables
+//            ],
             'advanced' => [
                 'label' => Craft::t('sprout-forms', 'Advanced'),
                 'url' => 'sprout-forms/settings/advanced',

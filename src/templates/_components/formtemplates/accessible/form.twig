@@ -18,7 +18,7 @@
            value="{{ form.handle }}">
     {%- if redirectUri is not empty %}
         {% if redirectUri|slice(0, 1)|lower == '?' %}
-            {%- set redirectUri = craft.request.getUrl()~redirectUri %}
+            {%- set redirectUri = craft.app.request.getUrl()~redirectUri %}
         {% endif %}
 
         <input type="hidden" aria-hidden="true" name="redirect"

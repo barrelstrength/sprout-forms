@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\base;
 
+use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use Craft;
 use craft\base\Field;
 
@@ -147,7 +148,9 @@ abstract class FormField extends Field
      */
     public function getTemplatesPath()
     {
-        return Craft::getAlias('@barrelstrength/sproutforms/templates/_components/formtemplates/accessible/fields/');
+        $defaultFormTemplates = new AccessibleTemplates();
+
+        return Craft::getAlias($defaultFormTemplates->getPath().'/fields/');
     }
 
     /**

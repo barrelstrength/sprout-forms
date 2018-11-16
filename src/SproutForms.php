@@ -22,18 +22,17 @@ use barrelstrength\sproutforms\captchas\HoneypotCaptcha;
 use barrelstrength\sproutforms\captchas\JavascriptCaptcha;
 use barrelstrength\sproutforms\formtemplates\BasicTemplates;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
-use barrelstrength\sproutforms\integrations\sproutimport\themes\BasicFieldsTheme;
-use barrelstrength\sproutforms\integrations\sproutimport\themes\SpecialFieldsTheme;
+use barrelstrength\sproutforms\integrations\sproutimport\bundles\BasicFieldsBundle;
+use barrelstrength\sproutforms\integrations\sproutimport\bundles\SpecialFieldsBundle;
 use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesDataSource;
 use barrelstrength\sproutforms\services\App;
 use barrelstrength\sproutforms\services\Entries;
 use barrelstrength\sproutforms\services\Forms;
 use barrelstrength\sproutbase\app\import\services\Importers;
-use barrelstrength\sproutbase\app\import\services\Themes;
+use barrelstrength\sproutbase\app\import\services\Bundles;
 use Craft;
 use craft\base\Plugin;
 
-use craft\db\Connection;
 use yii\db\Migration;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
@@ -49,8 +48,6 @@ use barrelstrength\sproutforms\models\Settings;
 use barrelstrength\sproutforms\web\twig\variables\SproutFormsVariable;
 use barrelstrength\sproutforms\events\RegisterFieldsEvent;
 use barrelstrength\sproutforms\services\Fields as SproutFormsFields;
-use barrelstrength\sproutforms\events\OnBeforePopulateEntryEvent;
-use barrelstrength\sproutforms\controllers\EntriesController;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use craft\services\Dashboard;
 
@@ -85,7 +82,7 @@ class SproutForms extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '3.0.5';
+    public $schemaVersion = '3.0.8';
 
     /**
      * @var string
@@ -148,10 +145,6 @@ class SproutForms extends Plugin
             $event->permissions['Sprout Forms'] = $this->getUserPermissions();
         });
 
-        Event::on(EntriesController::class, EntriesController::EVENT_BEFORE_POPULATE, function(OnBeforePopulateEntryEvent $event) {
-            self::$app->entries->handleUnobfuscateEmailAddresses($event->form);
-        });
-
         Event::on(NotificationEmailEvents::class, NotificationEmailEvents::EVENT_REGISTER_EMAIL_EVENT_TYPES, function(NotificationEmailEvent $event) {
             $event->events[] = SaveEntryEvent::class;
         });
@@ -195,10 +188,10 @@ class SproutForms extends Plugin
 //            $event->types[] = EntriesFieldImporter::class;
         });
 
-        Event::on(Themes::class, Themes::EVENT_REGISTER_THEME_TYPES, function(RegisterComponentTypesEvent $event) {
-            $event->types[] = BasicFieldsTheme::class;
-            $event->types[] = SpecialFieldsTheme::class;
-        });
+//        Event::on(Bundles::class, Bundles::EVENT_REGISTER_BUNDLE_TYPES, function(RegisterComponentTypesEvent $event) {
+//            $event->types[] = BasicFieldsBundle::class;
+//            $event->types[] = SpecialFieldsBundle::class;
+//        });
     }
 
     /**
@@ -304,13 +297,13 @@ class SproutForms extends Plugin
                 'sprout-forms/forms',
 
             'sprout-forms/reports/<dataSourceId>/new' =>
-                'sprout-base/reports/edit-report',
+                'sprout/reports/edit-report',
             'sprout-forms/reports/<dataSourceId>/edit/<reportId>' =>
-                'sprout-base/reports/edit-report',
+                'sprout/reports/edit-report',
             'sprout-forms/reports/view/<reportId>' =>
-                'sprout-base/reports/results-index',
+                'sprout/reports/results-index',
             'sprout-forms/reports/<dataSourceId>' =>
-                'sprout-base/reports/index',
+                'sprout/reports/index',
 
             'sprout-forms/notifications' => [
                 'template' => 'sprout-base-email/notifications/index',
@@ -320,9 +313,9 @@ class SproutForms extends Plugin
             ],
 
             'sprout-forms/settings/notifications/edit/<emailId:\d+|new>' =>
-                'sprout-base/notifications/edit-notification-email-settings-template',
+                'sprout/notifications/edit-notification-email-settings-template',
             'sprout-forms/notifications/edit/<emailId:\d+|new>' => [
-                'route' => 'sprout-base/notifications/edit-notification-email-template',
+                'route' => 'sprout/notifications/edit-notification-email-template',
                 'params' => [
                     'defaultEmailTemplate' => BasicSproutFormsNotification::class
                 ]
@@ -332,9 +325,9 @@ class SproutForms extends Plugin
             ],
 
             'sprout-forms/settings' =>
-                'sprout-base/settings/edit-settings',
+                'sprout/settings/edit-settings',
             'sprout-forms/settings/<settingsSectionHandle:.*>' =>
-                'sprout-base/settings/edit-settings'
+                'sprout/settings/edit-settings'
         ];
     }
 
@@ -357,6 +350,9 @@ class SproutForms extends Plugin
             ],
             'editSproutFormsSettings' => [
                 'label' => Craft::t('sprout-forms', 'Edit Settings')
+            ],
+            'editSproutReports' => [
+                'label' => Craft::t('sprout-forms', 'Edit Reports')
             ]
         ];
     }
