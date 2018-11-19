@@ -69,13 +69,51 @@ class Address extends FormField implements PreviewableFieldInterface
     }
 
     /**
-     * @inheritdoc
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/formfields/address/example',
+        $name = 'address';
+
+        $settings = $this->getSettings();
+
+        $defaultCountryCode = $settings['defaultCountry'] ?? null;
+        $hideCountryDropdown = $settings['hideCountryDropdown'] ?? null;
+
+        $addressId = null;
+
+        $addressInfoModel = SproutBase::$app->addressField->getAddressById($addressId);
+
+        $countryCode = $addressInfoModel->countryCode ?? $defaultCountryCode;
+
+        $addressHelper = $this->addressHelper;
+
+        /**
+         * @var $addressHelper AddressHelper
+         */
+        $addressHelper->setParams($countryCode, $name, $addressInfoModel);
+
+        $addressFormat = "";
+        if ($addressId) {
+            $addressFormat = $addressHelper->getAddressWithFormat($addressInfoModel);
+        }
+
+        $countryInput = $addressHelper->countryInput($hideCountryDropdown);
+
+        $addressForm = $addressHelper->getAddressFormHtml();
+
+        return Craft::$app->getView()->renderTemplate(
+            'sprout-base-fields/_components/fields/formfields/address/input',
             [
-                'field' => $this
+                'field' => $this,
+                'addressId' => $addressId,
+                'defaultCountryCode' => $defaultCountryCode,
+                'addressFormat' => $addressFormat,
+                'countryInput' => $countryInput,
+                'addressForm' => $addressForm,
+                'hideCountryDropdown' => $hideCountryDropdown
             ]
         );
     }
