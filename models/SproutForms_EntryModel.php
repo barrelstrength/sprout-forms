@@ -37,7 +37,7 @@ class SproutForms_EntryModel extends BaseElementModel
 				'form'      => AttributeType::Mixed,
 				'formId'    => AttributeType::Number,
 				'statusId'  => AttributeType::Number,
-				'formName'  => AttributeType::Number,
+				'formName'  => AttributeType::String,
 				'ipAddress' => AttributeType::String,
 				'userAgent' => AttributeType::Mixed,
 			)
