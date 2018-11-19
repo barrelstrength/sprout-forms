@@ -99,7 +99,7 @@ class SproutFormsService extends BaseApplicationComponent
 			$entry = $variables['sproutFormsEntry'];
             $email = $event->params['emailModel'];
             // Reset attachments
-            $email->attachments = [];
+            $email->attachments = array();
 
 			/**
 			 * @var $field FieldModel
