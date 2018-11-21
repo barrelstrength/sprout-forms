@@ -70,3 +70,60 @@ tab      = tab or null
     {% endif %}
   </div>
 {% endmacro %}
+
+{#
+integration = integration object
+instance = source or active
+#}
+{% macro integration(integration, instance = 'active') %}
+  <div
+          {% if instance == 'active' %}id="sprout-integration-{{ integration.id }}"{% endif %}
+          class="{%- if instance == 'active' %}target-field {% endif -%}{%- if instance == 'source' %}source-field {% endif -%}"
+          data-type="{{ integration.type }}"
+          data-defaultname="{{ integration.getName() }}"
+  >
+
+      {% if instance == 'source' %}
+        <div class="source-integration-header{% if integration.required %} required{% endif %}">
+          <h3>
+            <span class="sproutforms-icon">{{ svg(integration.getSvgIconPath()) }}</span>
+            <span class="sproutforms-sourceintegration-name">{{ integration.getName() }}</span>
+          </h3>
+        </div>
+      {% endif %}
+
+      {# This is built dynamically in js when creating new integration from source #}
+      {% if instance == 'active' %}
+        <div class="active-integration-header">
+          <h2 class="{% if integration.required %} required {% endif %}" >
+              {{ integration.name }}
+            <code class="light">{{ "{" ~ integration.handle ~ "}" }}</code>
+          </h2>
+            {% if integration.instructions %}
+              <p>{{ integration.instructions }}</p>
+            {% endif %}
+        </div>
+      {% endif %}
+
+    <div class="body{% if instance == 'source' %} hidden{% endif %}">
+        {{ integration.getExampleInputHtml()|raw }}
+    </div>
+
+      {# This is built dynamically in js when creating new integration from source #}
+      {% if instance == 'active' %}
+        <ul class="settings">
+          <li><a id="sproutform-integration-{{ integration.id }}" data-integrationid="{{ integration.id }}" href="#" tabindex="0" ><i class="fa fa-pencil fa-2x" title="Edit"></i></a></li>
+        </ul>
+      {% endif %}
+
+      {# Manage hidden input integrations #}
+      {% if instance == 'active' %}
+          {# todo - why are we using tabName and not tabId? #}
+        <input type="hidden" name="fieldLayout[{{ tab.name }}][]" value="{{ integration.id }}" class="id-input">
+
+          {% if integration.required %}
+            <input type="hidden" name="requiredFields[]" value="{{ integration.id }}" class="sproutforms-required-input">
+          {% endif %}
+      {% endif %}
+  </div>
+{% endmacro %}

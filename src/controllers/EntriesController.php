@@ -116,7 +116,6 @@ class EntriesController extends BaseController
             return $this->redirectWithErrors($entry);
         }
 
-
         // @TODO - example pseudo code, doesn't work
         $integrations = $this->form->integrations;
 
