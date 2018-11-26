@@ -1,5 +1,13 @@
 [
   {
+    "version": "2.6.2",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/archive/v2.6.2.zip",
+    "date": "2018-11-26T08:00:00+00:00",
+    "notes": [
+      "[Improved] Improved support for older versions of PHP"
+    ]
+  },
+  {
     "version": "2.6.0",
     "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/archive/v2.6.0.zip",
     "date": "2018-07-28T08:00:00+00:00",
