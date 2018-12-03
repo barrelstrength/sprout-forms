@@ -5,9 +5,9 @@ namespace barrelstrength\sproutforms\migrations;
 use craft\db\Migration;
 
 /**
- * m181128_000000_add_save_data_column migration.
+ * m181028_000000_add_save_data_column migration.
  */
-class m181128_000000_add_save_data_column extends Migration
+class m181028_000000_add_save_data_column extends Migration
 {
     /**
      * @return bool
@@ -28,7 +28,7 @@ class m181128_000000_add_save_data_column extends Migration
      */
     public function safeDown()
     {
-        echo "m181128_000000_add_save_data_column cannot be reverted.\n";
+        echo "m181028_000000_add_save_data_column cannot be reverted.\n";
         return false;
     }
 }
