@@ -1,5 +1,19 @@
 # Changelog
 
+## 3.0.0-beta.34 - 2018-11-28
+
+### Changed
+- Updated Per-form Form Templates to default to global setting ([#193])
+- Updated Sprout Base requirement to v4.0.3
+
+### Fixed
+- Fixed email notification logic for Craft 2 to Craft 3 migration ([#198])
+- Fixed namespace naming conflict in PHP 7 ([#195])
+
+[#193]: https://github.com/barrelstrength/craft-sprout-forms/issues/193
+[#195]: https://github.com/barrelstrength/craft-sprout-forms/issues/195
+[#198]: https://github.com/barrelstrength/craft-sprout-forms/issues/198
+
 ## 3.0.0-beta.33 - 2018-11-14
 
 ### Added
