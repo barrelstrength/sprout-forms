@@ -2,6 +2,8 @@
 
 namespace barrelstrength\sproutforms\services;
 
+use barrelstrength\sproutforms\base\Integration;
+use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\SproutForms;
 use craft\base\Component;
@@ -22,6 +24,9 @@ class Integrations extends Component
         return $event->types;
     }
 
+    /**
+     * @return Integration[]
+     */
     public function getAllIntegrations()
     {
         $integrationTypes = SproutForms::$app->integrations->getAllIntegrationTypes();
@@ -32,6 +37,17 @@ class Integrations extends Component
         {
             $integrations[] = new $integrationType();
         }
+
+        return $integrations;
+    }
+
+    /**
+     * @param $formId
+     * @return IntegrationRecord[]
+     */
+    public function getFormIntegrations($formId)
+    {
+        $integrations = IntegrationRecord::findAll(['formId' => $formId]);
 
         return $integrations;
     }

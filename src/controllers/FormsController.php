@@ -192,7 +192,7 @@ class FormsController extends BaseController
 
         $variables['settings'] = Craft::$app->plugins->getPlugin('sprout-forms')->getSettings();
 
-        $variables['integrations'] = SproutForms::$app->integrations->getAllIntegrations();
+        $variables['integrations'] = SproutForms::$app->integrations->getFormIntegrations($formId);
 
         return $this->renderTemplate('sprout-forms/forms/_editForm', $variables);
     }

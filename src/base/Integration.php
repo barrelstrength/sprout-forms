@@ -19,6 +19,11 @@ abstract class Integration
     abstract public function getName();
 
     /**
+     * Send the submission to the desired endpoint
+     */
+    abstract public function submit();
+
+    /**
      * Settings that help us customize the Field Mapping Table
      *
      * Each settings template will also call a Twig Field Mapping Table Macro to help with the field mapping (can we just have a Twig Macro that wraps the default Craft Table for this and outputs two columns?)
@@ -37,8 +42,12 @@ abstract class Integration
     }
 
     /**
-     * Send the submission to the desired endpoint
+     * Return Class name as Type
+     *
+     * @return string
      */
-    abstract public function submit();
+    public function getType() {
+        return self::class;
+    }
 }
 

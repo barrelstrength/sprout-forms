@@ -575,5 +575,20 @@ class SproutFormsVariable
         }
         return $query;
     }
+
+    /**
+     * @return array
+     */
+    public function getIntegrationOptions()
+    {
+        $integrations = SproutForms::$app->integrations->getAllIntegrations();
+        $options = [];
+
+        foreach ($integrations as $integration) {
+            $options[] = ['label' => $integration->getName(), 'value' => $integration->getType()];
+        }
+
+        return $options;
+    }
 }
 
