@@ -32,5 +32,14 @@ class FormEntryElementIntegration extends ElementIntegration
 //
 //        return $this->saveEntryInCraft($entry);
     }
+
+    /**
+     * Return Class name as Type
+     *
+     * @return string
+     */
+    public function getType() {
+        return self::class;
+    }
 }
 

@@ -116,6 +116,7 @@ class Install extends Migration
         $this->createTable('{{%sproutforms_integrations}}', [
             'id' => $this->primaryKey(),
             'formId' => $this->integer()->notNull(),
+            'name' => $this->string()->notNull(),
             'type' => $this->string()->notNull(),
             'settings' => $this->text(),
             'dateCreated' => $this->dateTime()->notNull(),

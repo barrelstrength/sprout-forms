@@ -19,6 +19,13 @@ abstract class Integration
     abstract public function getName();
 
     /**
+     * Return Class name as Type
+     *
+     * @return string
+     */
+    abstract public function getType();
+
+    /**
      * Send the submission to the desired endpoint
      */
     abstract public function submit();
@@ -39,15 +46,6 @@ abstract class Integration
      */
     public function resolveFieldMapping($fields) {
         return $fields;
-    }
-
-    /**
-     * Return Class name as Type
-     *
-     * @return string
-     */
-    public function getType() {
-        return self::class;
     }
 }
 

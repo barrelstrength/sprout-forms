@@ -3,6 +3,8 @@
 namespace barrelstrength\sproutforms\controllers;
 
 
+use barrelstrength\sproutforms\base\Integration;
+use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
 use barrelstrength\sproutforms\elements\Form;
 use Craft;
 
@@ -13,7 +15,7 @@ use craft\base\Field;
 
 use barrelstrength\sproutforms\SproutForms;
 
-class IntegrationController extends BaseController
+class IntegrationsController extends BaseController
 {
     /**
      * This action allows to load the modal field template.
@@ -32,42 +34,30 @@ class IntegrationController extends BaseController
     }
 
     /**
-     * This action allows create a default field given a type.
+     * This action allows create a default integration given a type.
      *
      * @return \yii\web\Response
      * @throws \Throwable
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionCreateField()
+    public function actionCreateIntegration()
     {
         $this->requireAcceptsJson();
 
         $request = Craft::$app->getRequest();
         $type = $request->getBodyParam('type');
-        $tabId = $request->getBodyParam('tabId');
-        $tab = FieldLayoutTabRecord::findOne($tabId);
         $formId = $request->getBodyParam('formId');
-        $nextId = $request->getBodyParam('nextId');
         $form = SproutForms::$app->forms->getFormById($formId);
 
-        if ($type && $form && $tab) {
-            $field = SproutForms::$app->fields->createDefaultField($type, $form);
+        if ($type && $form) {
+            $integration = SproutForms::$app->integrations->createIntegration($type, $form);
 
-            if ($field) {
-                // Set the field layout
-                $oldFieldLayout = $form->getFieldLayout();
-                $oldTabs = $oldFieldLayout->getTabs();
-
-                if ($oldTabs) {
-                    // it's a new field
-                    $response = SproutForms::$app->fields->addFieldToLayout($field, $form, $tabId, $nextId);
-
-                    return $this->returnJson($response, $field, $form, $tab->name, $tabId);
-                }
+            if ($integration) {
+                return $this->returnJson(true, $integration, $form);
             }
         }
-        // @todo - add error messages
-        return $this->returnJson(false, null, $form, null, $tabId);
+
+        return $this->returnJson(false, null, $form);
     }
 
     /**
@@ -289,34 +279,21 @@ class IntegrationController extends BaseController
 
     /**
      * @param bool $success
-     * @param      $field
+     * @param      $integrationRecord IntegrationRecord
      * @param Form $form
-     * @param null $tabName
-     * @param null $tabId
      *
      * @return \yii\web\Response
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
      */
-    private function returnJson(bool $success, $field, Form $form, $tabName = null, $tabId = null)
+    private function returnJson(bool $success, $integrationRecord, Form $form)
     {
         return $this->asJson([
             'success' => $success,
-            'errors' => $field ? $field->getErrors() : null,
-            'field' => [
-                'id' => $field->id,
-                'name' => $field->name,
-                'handle' => $field->handle,
-                'icon' => $field->getSvgIconPath(),
-                'htmlExample' => $field->getExampleInputHtml(),
-                'required' => $field->required,
-                'instructions' => $field->instructions,
-                'group' => [
-                    'name' => $tabName,
-                    'id' => $tabId
-                ],
+            'errors' => $integrationRecord ? $integrationRecord->getErrors() : null,
+            'integration' => [
+                'id' => $integrationRecord->id,
+                'name' => $integrationRecord->name ?? null
             ],
-            'template' => $success ? false : SproutForms::$app->fields->getModalFieldTemplate($form, $field),
+            //'template' => $success ? false : SproutForms::$app->integrations->getModalIntegrationTemplate($form, $integration),
         ]);
     }
 }

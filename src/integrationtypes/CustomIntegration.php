@@ -29,5 +29,14 @@ class CustomIntegration extends ApiIntegration
         // Send payload to $this->submitAction URL
         Craft::dd('Submitting Custom Integration!');
     }
+
+    /**
+     * Return Class name as Type
+     *
+     * @return string
+     */
+    public function getType() {
+        return self::class;
+    }
 }
 

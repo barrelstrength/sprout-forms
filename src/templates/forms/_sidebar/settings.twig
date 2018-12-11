@@ -174,65 +174,31 @@
     </div>
     <hr>
     {% set integrationOptions = craft.sproutForms.getIntegrationOptions() %}
-    {% set cols = [
-        {
-            type: 'select',
-            options: integrationOptions
-        },
-        {
-            type: 'edit'
-        }
-    ] %}
 
     <div class="meta">
-        <table id="sproutseo-schema-contacts" class="data fullwidth">
-            <thead>
-            <tr>
-                <th>{{ "Contact Type"|t }}</th>
-                <th>{{ "Telephone"|t }}</th>
-                <th class="thin"></th>
-                <th class="thin"></th>
-            </tr>
-            </thead>
-            <tbody>
 
-            {% for integration in globals.integrations %}
+        <div id="integrations-wrapper">
+        {% for integration in integrations %}
+            <div class="active-field-header">
+            <a href="#" id ="sproutform-integration-{{ integration.id }}" data-integrationid="{{ integration.id }}">{{ integration.name }}</a>
+            </div>
+        {% endfor %}
+        </div>
 
-                <tr data-id="{{ loop.index }}">
-                    <td>
-                        {{ forms.select({
-                            options: options,
-                            value: field.country,
-                            readonly: true,
-                            disabled: true
-                        }) }}
-                    </td>
-                    <td>
-                        <a class="edit-integration" data-integration-id = "{{ integration.id }}" href="#">{{ "Edit"|t }}</a>
-                    </td>
-                    <td class="thin action"><a class="move icon"
-                                               title="Reorder"></a></td>
-                    <td class="thin action"><a class="delete icon"
-                                               title="Delete"></a></td>
-                </tr>
-
-            {% endfor %}
-
-            </tbody>
-        </table>
+        {{ forms.selectField({
+            label: "Integrations"|t('enupal-stripe'),
+            id: 'integrationsOptions',
+            name: 'integrationsOptions',
+            options: integrationOptions,
+            required: true
+        }) }}
 
         <div class="buttons">
-            <div id="addContact" class="btn add icon small" tabindex="0">
-                Add an Integration
+            <div id="add-integration" class="btn add icon small" tabindex="0">
+                {{ "Add new"|t('sprout-forms') }}
             </div>
         </div>
-        {% for integration in integrations %}
-        	<h5>{{ integration.getName() }}</h5>
-            {{ integration.getSettingsHtml()|raw }}
-            {% if not loop.last %}
-                <hr>
-            {% endif %}
-        {% endfor %}
+
     </div>
 
 
@@ -258,25 +224,3 @@
 
 {% endif %}
 
-{% js %}
-    $( document ).ready(function() {
-    var globals = {{ globals.contacts|json_encode|raw }};
-
-    if (globals == null)
-    {
-    $('#addContact').trigger('click');
-    }
-    });
-
-    (function() {
-
-    var tableId = 'sproutseo-schema-contacts';
-    var baseName = 'sproutseo[globals][contacts]';
-    var columns = {{ cols|json_encode|raw }};
-    var settings = {};
-
-    new Craft.SproutSeo.EditableTable(tableId, baseName, columns, settings);
-
-    })();
-
-{% endjs %}

@@ -24,6 +24,28 @@ class Integrations extends Component
         return $event->types;
     }
 
+
+    /**
+     * @param $type
+     * @param $form
+     * @param $name
+     * @return IntegrationRecord|null
+     */
+    public function createIntegration($type, $form, $name = null)
+    {
+        $integration = null;
+        $integrationRecord = new IntegrationRecord();
+        $integrationRecord->type = $type;
+        $integrationRecord->formId = $form->id;
+        $integrationRecord->name = $name ?? $integrationRecord->getIntegrationApi()->getName();
+
+        if ($integrationRecord->save()){
+            $integration = $integrationRecord;
+        }
+
+        return $integration;
+    }
+
     /**
      * @return Integration[]
      */
@@ -57,11 +79,10 @@ class Integrations extends Component
      *
      * @param      $form Form
      * @param null $integration
-     * @param null $tabId
      *
      * @return array
      */
-    public function getModalIntegrationTemplate($form, $integration = null, $tabId = null)
+    public function getModalIntegrationTemplate($form, $integration = null)
     {
         $data = [];
         $data['tabId'] = null;

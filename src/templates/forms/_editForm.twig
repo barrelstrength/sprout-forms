@@ -119,6 +119,7 @@
     var continueEditing = "{{ ('sprout-forms/forms/edit/'~form.id)|hash }}";
 
     new Craft.SproutForms.FieldLayoutEditor(tabs, continueEditing);
+    new Craft.SproutForms.FormSettings();
 
     });
 {% endjs %}
