@@ -222,6 +222,36 @@ class Fields extends Component
     }
 
     /**
+     * Returns a integration type selection array grouped by category
+     *
+     * Categories
+     * - Standard integrations
+     * - Custom integrations that need to be registered using the Sprout Forms Integrations API
+     *
+     * @return array
+     */
+    public function prepareIntegrationTypeSelection()
+    {
+        $fields = $this->getRegisteredFields();
+        $standardFields = [];
+
+        if (count($fields)) {
+            // Loop through registered fields and add them to the standard group
+            foreach ($fields as $class => $field) {
+                $standardFields[$class] = $field::displayName();
+            }
+
+            // Sort fields alphabetically by name
+            asort($standardFields);
+
+            // Add the group label to the beginning of the standard group
+            $standardFields = $this->prependKeyValue($standardFields, 'standardFieldGroup', ['optgroup' => Craft::t('sprout-forms', 'Standard Fields')]);
+        }
+
+        return $standardFields;
+    }
+
+    /**
      * Returns the value of a given field
      *
      * @param string $field
@@ -639,7 +669,7 @@ class Fields extends Component
      *
      * @return array
      */
-    protected function prependKeyValue(array $haystack, $key, $value)
+    public function prependKeyValue(array $haystack, $key, $value)
     {
         $haystack = array_reverse($haystack, true);
         $haystack[$key] = $value;

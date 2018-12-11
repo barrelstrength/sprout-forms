@@ -1,0 +1,48 @@
+{% import "_includes/forms" as forms %}
+
+<div id="sprout-content">
+    {% set integrationTypeGroups = craft.sproutForms.prepareIntegrationTypeSelection() %}
+
+    <input type="hidden" name="formId" value="{{ form.id }}">
+
+    {% if integration.id %}
+        <input type="hidden" name="integrationId" value="{{ integration.id }}">
+    {% endif %}
+
+    {{ forms.lightswitchField({
+        label: "Enabled"|t('sprout-forms'),
+        name: 'enabled',
+        on: integration.enabled
+    }) }}
+
+    {{ forms.textField({
+        label: "Name <span class='info'>The integration label</span>"|t('sprout-forms'),
+        id: 'field-name',
+        name: 'name',
+        value: (integration is defined ? integration.name : null),
+        errors: (integration is defined ? integration.getErrors('name') : null),
+        required: true,
+    }) }}
+
+{#{{ integration.getIntegrationApi().getSettingsHtml()|raw }}#}
+
+
+    {{ forms.selectField({
+        label: "Integration Type <span class='info'>Create a new integration if you need to update your integration type. This value cannot be changed.</span>"|t('sprout-forms'),
+        id: 'type',
+        name: 'slectType',
+        hasOptgroups: true,
+        options: integrationTypeGroups,
+        value: integration.type,
+        errors: integration.getErrors('type') ?? null,
+        disabled: true
+    }) }}
+
+    {{ forms.textField({
+        id: 'type',
+        name: 'type',
+        type: 'hidden',
+        value: integration.type,
+        errors: integration.getErrors('type') ?? null
+    }) }}
+</div>

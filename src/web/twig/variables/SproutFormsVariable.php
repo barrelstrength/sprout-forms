@@ -346,6 +346,16 @@ class SproutFormsVariable
     }
 
     /**
+     * @see SproutForms::$app->integrations->prepareIntegrationTypeSelection()
+     *
+     * @return array
+     */
+    public function prepareIntegrationTypeSelection()
+    {
+        return SproutForms::$app->integrations->prepareIntegrationTypeSelection();
+    }
+
+    /**
      * @param $settings
      */
     public function multiStepForm($settings)

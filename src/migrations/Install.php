@@ -119,6 +119,7 @@ class Install extends Migration
             'name' => $this->string()->notNull(),
             'type' => $this->string()->notNull(),
             'settings' => $this->text(),
+            'enabled' => $this->boolean()->defaultValue(true),
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull(),
             'uid' => $this->uid(),

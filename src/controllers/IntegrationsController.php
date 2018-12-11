@@ -191,43 +191,14 @@ class IntegrationsController extends BaseController
         $this->requireAcceptsJson();
         $request = Craft::$app->getRequest();
 
-        $id = $request->getBodyParam('fieldId');
+        $id = $request->getBodyParam('integrationId');
         $formId = $request->getBodyParam('formId');
         $form = SproutForms::$app->forms->getFormById($formId);
 
-        /**
-         * @var Field $field
-         */
-        $field = Craft::$app->fields->getFieldById($id);
+        $integration = IntegrationRecord::findOne($id);
 
-        if ($field) {
-            $fieldLayoutField = FieldLayoutFieldRecord::findOne([
-                'fieldId' => $field->id,
-                'layoutId' => $form->fieldLayoutId
-            ]);
-
-            $field->required = $fieldLayoutField->required;
-
-            $group = FieldLayoutTabRecord::findOne($fieldLayoutField->tabId);
-
-            return $this->asJson([
-                'success' => true,
-                'errors' => $field->getErrors(),
-                'field' => [
-                    'id' => $field->id,
-                    'name' => $field->name,
-                    'handle' => $field->handle,
-                    'instructions' => $field->instructions,
-                    'required' => $field->required,
-                    //'translatable' => $field->translatable,
-                    'group' => [
-                        'name' => $group->name,
-                    ],
-                ],
-                'template' => SproutForms::$app->fields->getModalFieldTemplate($form, $field, $group->id),
-            ]);
-        } else {
-            $message = Craft::t('sprout-forms', 'The field requested to edit no longer exists.');
+        if (is_null($integration)) {
+            $message = Craft::t('sprout-forms', 'The integration requested to edit no longer exists.');
             SproutForms::error($message);
 
             return $this->asJson([
@@ -235,6 +206,16 @@ class IntegrationsController extends BaseController
                 'error' => $message,
             ]);
         }
+
+        return $this->asJson([
+            'success' => true,
+            'errors' => $integration->getErrors(),
+            'integration' => [
+                'id' => $integration->id,
+                'name' => $integration->name
+            ],
+            'template' => SproutForms::$app->integrations->getModalIntegrationTemplate($form, $integration),
+        ]);
     }
 
     /**

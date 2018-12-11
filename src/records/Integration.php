@@ -13,6 +13,7 @@ use barrelstrength\sproutforms\base\Integration as IntegrationApi;
  * @property $name
  * @property $type
  * @property $settings
+ * @property $enabled
  */
 class Integration extends ActiveRecord
 {
