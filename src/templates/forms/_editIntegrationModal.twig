@@ -24,8 +24,7 @@
         required: true,
     }) }}
 
-{#{{ integration.getIntegrationApi().getSettingsHtml()|raw }}#}
-
+{{ integration.getIntegrationApi().getSettingsHtml()|raw }}
 
     {{ forms.selectField({
         label: "Integration Type <span class='info'>Create a new integration if you need to update your integration type. This value cannot be changed.</span>"|t('sprout-forms'),
