@@ -3,46 +3,30 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutbase\app\fields\base\AddressFieldTrait;
-use barrelstrength\sproutbase\app\fields\helpers\AddressHelper as BaseAddressHelper;
-use barrelstrength\sproutbase\SproutBase;
-use barrelstrength\sproutforms\services\Address as AddressHelper;
 use Craft;
 use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
-use craft\helpers\Template as TemplateHelper;
+use craft\helpers\Template;
+use craft\helpers\UrlHelper;
 use yii\db\Schema;
 use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutbase\app\fields\models\Address as AddressModel;
 
+/**
+ *
+ * @property array  $elementValidationRules
+ * @property string $contentColumnType
+ * @property string $svgIconPath
+ * @property string $exampleInputHtml
+ */
 class Address extends FormField implements PreviewableFieldInterface
 {
     use AddressFieldTrait;
+
     /**
      * @var string
      */
     public $cssClasses;
-
-    /**
-     * @var string
-     */
-    public $defaultCountry = 'US';
-
-    /**
-     * @var bool
-     */
-    public $hideCountryDropdown;
-
-    /**
-     * @var AddressHelper $addressHelper
-     */
-    public $addressHelper;
-
-    public function init()
-    {
-        $this->addressHelper = new BaseAddressHelper();
-
-        parent::init();
-    }
 
     /**
      * @inheritdoc
@@ -63,7 +47,7 @@ class Address extends FormField implements PreviewableFieldInterface
     /**
      * @return string
      */
-    public function getSvgIconPath()
+    public function getSvgIconPath(): string
     {
         return '@sproutbaseicons/map-marker-alt.svg';
     }
@@ -73,47 +57,11 @@ class Address extends FormField implements PreviewableFieldInterface
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getExampleInputHtml()
+    public function getExampleInputHtml(): string
     {
-        $name = 'address';
-
-        $settings = $this->getSettings();
-
-        $defaultCountryCode = $settings['defaultCountry'] ?? null;
-        $hideCountryDropdown = $settings['hideCountryDropdown'] ?? null;
-
-        $addressId = null;
-
-        $addressInfoModel = SproutBase::$app->addressField->getAddressById($addressId);
-
-        $countryCode = $addressInfoModel->countryCode ?? $defaultCountryCode;
-
-        $addressHelper = $this->addressHelper;
-
-        /**
-         * @var $addressHelper AddressHelper
-         */
-        $addressHelper->setParams($countryCode, $name, $addressInfoModel);
-
-        $addressFormat = "";
-        if ($addressId) {
-            $addressFormat = $addressHelper->getAddressWithFormat($addressInfoModel);
-        }
-
-        $countryInput = $addressHelper->countryInput($hideCountryDropdown);
-
-        $addressForm = $addressHelper->getAddressFormHtml();
-
-        return Craft::$app->getView()->renderTemplate(
-            'sprout-base-fields/_components/fields/formfields/address/input',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/formfields/address/example',
             [
-                'field' => $this,
-                'addressId' => $addressId,
-                'defaultCountryCode' => $defaultCountryCode,
-                'addressFormat' => $addressFormat,
-                'countryInput' => $countryInput,
-                'addressForm' => $addressForm,
-                'hideCountryDropdown' => $hideCountryDropdown
+                'field' => $this
             ]
         );
     }
@@ -128,41 +76,39 @@ class Address extends FormField implements PreviewableFieldInterface
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-        $this->addressHelper = new AddressHelper();
-
         $name = $this->handle;
-
-        $inputId = Craft::$app->getView()->formatInputId($name);
-        $namespaceInputName = Craft::$app->getView()->namespaceInputName($inputId);
-        $namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
-
         $settings = $this->getSettings();
 
         $countryCode = $settings['defaultCountry'] ?? $this->defaultCountry;
+        $showCountryDropdown = $settings['showCountryDropdown'] ?? 0;
 
-        $hideCountryDropdown = $settings['hideCountryDropdown'] ?? null;
+        $addressModel = new AddressModel();
 
-        $addressInfoModel = new AddressModel();
+        // This defaults to Sprout Base and we need it to get updated to look
+        // in the Sprout Forms Form Template location like other fields.
+        $this->addressHelper->setBaseAddressFieldPath('');
 
-        $this->addressHelper->setParams($countryCode, $name, $addressInfoModel);
+        $this->addressHelper->setNamespace($name);
+        $this->addressHelper->setCountryCode($countryCode);
+        $this->addressHelper->setAddressModel($addressModel);
+        $this->addressHelper->setLanguage($this->defaultLanguage);
 
-        $countryInput = $this->addressHelper->countryInput($hideCountryDropdown);
-
-        $addressForm = $this->addressHelper->getAddressFormHtml();
-
-        $csrfTokenName = Craft::$app->getConfig()->getGeneral()->csrfTokenName;
+        $countryInputHtml = $this->addressHelper->getCountryInputHtml($showCountryDropdown);
+        $addressFormHtml = $this->addressHelper->getAddressFormHtml();
 
         return Craft::$app->getView()->renderTemplate(
-            'address/input',
-            [
-                'namespaceInputId' => $namespaceInputId,
-                'namespaceInputName' => $namespaceInputName,
+            'address/input', [
                 'field' => $this,
+                'name' => $this->handle,
                 'renderingOptions' => $renderingOptions,
-                'form' => TemplateHelper::raw($addressForm),
-                'countryInput' => TemplateHelper::raw($countryInput),
-                'hideCountryDropdown' => $hideCountryDropdown,
-                'csrfTokenName' => $csrfTokenName
+
+                'addressFormHtml' => Template::raw($addressFormHtml),
+                'countryInputHtml' => Template::raw($countryInputHtml),
+                'showCountryDropdown' => $showCountryDropdown,
+
+                // For our country update requests
+                'csrfTokenName' => Craft::$app->getConfig()->getGeneral()->csrfTokenName,
+                'actionUrl' => UrlHelper::actionUrl('sprout/fields-address/update-address-form-html')
             ]
         );
     }
@@ -174,13 +120,18 @@ class Address extends FormField implements PreviewableFieldInterface
 
     public function validateAddress(ElementInterface $element)
     {
+        // @todo - improve validation
+        if (!$this->required) {
+            return true;
+        }
+
         $values = $element->getFieldValue($this->handle);
-        $addressInfoModel = new AddressModel($values);
 
-        $addressInfoModel->validate();
+        $addressModel = new AddressModel($values);
+        $addressModel->validate();
 
-        if ($addressInfoModel->hasErrors()) {
-            $errors = $addressInfoModel->getErrors();
+        if ($addressModel->hasErrors()) {
+            $errors = $addressModel->getErrors();
 
             if ($errors) {
                 foreach ($errors as $error) {
@@ -188,8 +139,9 @@ class Address extends FormField implements PreviewableFieldInterface
                     $element->addError($this->handle, $firstMessage);
                 }
             }
-
         }
+
+        return true;
     }
 
 }
