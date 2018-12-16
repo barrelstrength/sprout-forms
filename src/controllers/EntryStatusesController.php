@@ -5,6 +5,7 @@ namespace barrelstrength\sproutforms\controllers;
 use Craft;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\models\EntryStatus;
+use craft\helpers\Json;
 use craft\web\Controller as BaseController;
 use yii\web\NotFoundHttpException;
 
@@ -79,7 +80,7 @@ class EntryStatusesController extends BaseController
     {
         $this->requirePostRequest();
 
-        $ids = json_decode(Craft::$app->request->getRequiredBodyParam('ids'), true);
+        $ids = Json::decode(Craft::$app->request->getRequiredBodyParam('ids'), true);
 
         if ($success = SproutForms::$app->entries->reorderEntryStatuses($ids)) {
             return $this->asJson(['success' => $success]);

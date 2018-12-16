@@ -117,6 +117,8 @@ class EntriesDataSource extends DataSource
      * @return null|string
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
+     * @throws \Exception
+     * @throws \Exception
      */
     public function getSettingsHtml(array $settings = [])
     {

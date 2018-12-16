@@ -9,6 +9,9 @@ use craft\base\ElementInterface;
 /**
  * Class SproutFormsMultiSelectField
  *
+ *
+ * @property string $svgIconPath
+ * @property mixed  $exampleInputHtml
  */
 class MultiSelect extends BaseOptionsFormField
 {

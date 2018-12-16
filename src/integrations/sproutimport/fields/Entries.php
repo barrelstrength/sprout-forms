@@ -18,6 +18,7 @@ class Entries extends FieldImporter
 
     /**
      * @inheritdoc
+     * @throws \Exception
      */
     public function getMockData()
     {

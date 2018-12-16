@@ -6,6 +6,7 @@ use craft\db\Migration;
 use craft\db\Query;
 use barrelstrength\sproutforms\fields\formfields\Number;
 use craft\fields\Number as CraftNumber;
+use craft\helpers\Json;
 
 /**
  * m180314_161527_sproutforms_number_fields migration.
@@ -25,9 +26,9 @@ class m180314_161527_sproutforms_number_fields extends Migration
             ->all();
 
         foreach ($numberFields as $numberField) {
-            $settings = json_decode($numberField['settings'], true);
+            $settings = Json::decode($numberField['settings'], true);
             $settings['size'] = '';
-            $settingsAsJson = json_encode($settings);
+            $settingsAsJson = Json::encode($settings);
 
             $this->update('{{%fields}}', ['type' => Number::class, 'settings' => $settingsAsJson], ['id' => $numberField['id']], [], false);
         }

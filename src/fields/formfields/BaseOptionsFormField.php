@@ -17,6 +17,11 @@ use barrelstrength\sproutforms\base\FormField;
 /**
  * BaseOptionsFormField is the base class for classes representing an options field.
  *
+ *
+ * @property array  $elementValidationRules
+ * @property bool   $isMultiOptionsField
+ * @property string $contentColumnType
+ * @property mixed  $settingsHtml
  */
 abstract class BaseOptionsFormField extends FormField implements PreviewableFieldInterface
 {
@@ -77,6 +82,7 @@ abstract class BaseOptionsFormField extends FormField implements PreviewableFiel
 
     /**
      * @inheritdoc
+     * @throws \yii\base\Exception
      */
     public function getContentColumnType(): string
     {
@@ -100,6 +106,7 @@ abstract class BaseOptionsFormField extends FormField implements PreviewableFiel
 
     /**
      * @inheritdoc
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {

@@ -14,6 +14,7 @@ class m180611_000000_paragraph_column_type extends Migration
 {
     /**
      * @inheritdoc
+     * @throws \yii\base\NotSupportedException
      */
     public function safeUp()
     {
@@ -24,7 +25,7 @@ class m180611_000000_paragraph_column_type extends Migration
 
         foreach ($forms as $form) {
             $handle = $form['handle'];
-            $table = "{{%sproutformscontent_".$handle."}}";
+            $table = '{{%sproutformscontent_'.$handle.'}}';
 
             $context = 'sproutForms:'.$form['id'];
             $fields = (new Query())

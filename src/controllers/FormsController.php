@@ -171,7 +171,7 @@ class FormsController extends BaseController
                     $variables['brandNewForm'] = false;
 
                     $variables['groups'] = SproutForms::$app->groups->getAllFormGroups();
-                    $variables['groupId'] = "";
+                    $variables['groupId'] = '';
 
                     // Get the Form
                     $form = SproutForms::$app->forms->getFormById($formId);

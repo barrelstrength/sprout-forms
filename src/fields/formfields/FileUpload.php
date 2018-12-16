@@ -19,6 +19,12 @@ use craft\web\UploadedFile;
  * Class SproutFormsAssetsField
  *
  * @package Craft
+ *
+ * @property array  $elementValidationRules
+ * @property array  $fileKindOptions
+ * @property string $svgIconPath
+ * @property array  $sourceOptions
+ * @property mixed  $exampleInputHtml
  */
 class FileUpload extends BaseRelationFormField
 {
@@ -297,6 +303,8 @@ class FileUpload extends BaseRelationFormField
 
     /**
      * @inheritdoc
+     * @throws \craft\errors\SiteNotFoundException
+     * @throws \yii\base\NotSupportedException
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
@@ -346,8 +354,7 @@ class FileUpload extends BaseRelationFormField
      * @return int
      * @throws InvalidSubpathException
      * @throws InvalidVolumeException
-     * @throws \craft\errors\AssetConflictException
-     * @throws \craft\errors\VolumeObjectExistsException
+     * @throws \craft\errors\VolumeException
      */
     public function resolveDynamicPathToFolderId(ElementInterface $element = null): int
     {
@@ -359,6 +366,20 @@ class FileUpload extends BaseRelationFormField
 
     /**
      * @inheritdoc
+     *
+     * @param ElementInterface $element
+     * @param bool             $isNew
+     *
+     * @throws InvalidSubpathException
+     * @throws InvalidVolumeException
+     * @throws \Throwable
+     * @throws \craft\errors\AssetLogicException
+     * @throws \craft\errors\ElementNotFoundException
+     * @throws \craft\errors\SiteNotFoundException
+     * @throws \craft\errors\VolumeException
+     * @throws \yii\base\ErrorException
+     * @throws \yii\base\Exception
+     * @throws \yii\base\NotSupportedException
      */
     public function afterElementSave(ElementInterface $element, bool $isNew)
     {
@@ -462,7 +483,13 @@ class FileUpload extends BaseRelationFormField
 
     /**
      * @inheritdoc
-     */
+     * @param ElementInterface|null $element
+     * @return array|string
+     * @throws InvalidSubpathException
+     * @throws InvalidVolumeException
+     * @throws \craft\errors\MissingComponentException
+     * @throws \craft\errors\VolumeException
+*/
     protected function inputSources(ElementInterface $element = null)
     {
         $folderId = $this->_determineUploadFolderId($element, false);
@@ -590,12 +617,15 @@ class FileUpload extends BaseRelationFormField
     /**
      * Resolve a source path to it's folder ID by the source path and the matched source beginning.
      *
-     * @param string $uploadSource
-     * @param string $subpath
+     * @param string                $uploadSource
+     * @param string                $subpath
      * @param ElementInterface|null $element
-     * @param bool $createDynamicFolders whether missing folders should be created in the process
+     * @param bool                  $createDynamicFolders whether missing folders should be created in the process
+     *
      * @throws InvalidVolumeException if the volume root folder doesn’t exist
-     * @throws InvalidSubpathException if the subpath cannot be parsed in full
+     * @throws InvalidSubpathException if the subpath cannot be parsed in full*@throws \craft\errors\VolumeException
+     * @throws \craft\errors\VolumeException
+     * @throws \craft\errors\VolumeException
      * @return int
      */
     private function _resolveVolumePathToFolderId(string $uploadSource, string $subpath, ElementInterface $element = null, bool $createDynamicFolders = true): int
@@ -667,11 +697,12 @@ class FileUpload extends BaseRelationFormField
      * Determine an upload folder id by looking at the settings and whether Element this field belongs to is new or not.
      *
      * @param ElementInterface|null $element
-     * @param bool $createDynamicFolders whether missing folders should be created in the process
+     * @param bool                  $createDynamicFolders whether missing folders should be created in the process
      * @return int
      * @throws InvalidSubpathException if the folder subpath is not valid
      * @throws InvalidVolumeException if there's a problem with the field's volume configuration
-     */
+     * @throws \craft\errors\VolumeException
+*/
     private function _determineUploadFolderId(ElementInterface $element = null, bool $createDynamicFolders = true): int
     {
         /** @var Element $element */

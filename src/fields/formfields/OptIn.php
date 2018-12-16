@@ -11,6 +11,10 @@ use craft\base\ElementInterface;
 /**
  * Class SproutFormsCheckboxesField
  *
+ *
+ * @property string $svgIconPath
+ * @property mixed  $settingsHtml
+ * @property mixed  $exampleInputHtml
  */
 class OptIn extends FormField implements PreviewableFieldInterface
 {

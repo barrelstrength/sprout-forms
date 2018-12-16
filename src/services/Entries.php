@@ -13,14 +13,18 @@ use barrelstrength\sproutforms\events\OnSaveEntryEvent;
 use barrelstrength\sproutforms\fields\formfields\BaseRelationFormField;
 use barrelstrength\sproutforms\models\EntryStatus;
 use barrelstrength\sproutforms\records\Entry as EntryRecord;
-use barrelstrength\sproutforms\fields\formfields\EmailDropdown as EmailDropdownField;
-use craft\db\Query;
 use barrelstrength\sproutforms\records\EntryStatus as EntryStatusRecord;
 use craft\base\ElementInterface;
 use GuzzleHttp\Exception\RequestException;
 use yii\base\Component;
 use yii\base\Exception;
 
+/**
+ *
+ * @property null                                      $defaultEntryStatusId
+ * @property \barrelstrength\sproutforms\elements\Form $entry
+ * @property array                                     $allEntryStatuses
+ */
 class Entries extends Component
 {
     /**
@@ -327,7 +331,9 @@ class Entries extends Component
 
     /**
      * @param EntryElement $entry
+     *
      * @return bool
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function forwardEntry(Entry $entry)
     {
