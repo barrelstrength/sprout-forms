@@ -10,6 +10,13 @@ use yii\db\Schema;
 
 use barrelstrength\sproutforms\base\FormField;
 
+/**
+ *
+ * @property string $contentColumnType
+ * @property string $svgIconPath
+ * @property mixed  $settingsHtml
+ * @property mixed  $exampleInputHtml
+ */
 class CustomHtml extends FormField implements PreviewableFieldInterface
 {
     /**

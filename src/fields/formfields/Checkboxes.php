@@ -9,6 +9,9 @@ use craft\base\ElementInterface;
 /**
  * Class SproutFormsCheckboxesField
  *
+ *
+ * @property string $svgIconPath
+ * @property mixed  $exampleInputHtml
  */
 class Checkboxes extends BaseOptionsFormField
 {

@@ -15,6 +15,11 @@ use barrelstrength\sproutforms\base\FormField;
 /**
  * Class SproutFormsNumberField
  *
+ *
+ * @property string      $contentColumnType
+ * @property string      $svgIconPath
+ * @property null|string $settingsHtml
+ * @property mixed       $exampleInputHtml
  */
 class Number extends FormField implements PreviewableFieldInterface
 {
@@ -85,6 +90,7 @@ class Number extends FormField implements PreviewableFieldInterface
 
     /**
      * @inheritdoc
+     * @throws \yii\base\Exception
      */
     public function getContentColumnType(): string
     {

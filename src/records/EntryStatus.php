@@ -9,6 +9,7 @@ use craft\helpers\UrlHelper;
  * Class EntryStatus record.
  *
  * @property int    $id    ID
+ * @property string $cpEditUrl
  * @property string $name  Name
  */
 class EntryStatus extends ActiveRecord

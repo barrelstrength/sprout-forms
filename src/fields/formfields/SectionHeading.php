@@ -10,6 +10,12 @@ use yii\db\Schema;
 use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutbase\app\fields\web\assets\quill\QuillAsset;
 
+/**
+ *
+ * @property string $svgIconPath
+ * @property mixed  $settingsHtml
+ * @property mixed  $exampleInputHtml
+ */
 class SectionHeading extends FormField
 {
     /**
@@ -84,6 +90,11 @@ class SectionHeading extends FormField
 
     /**
      * @inheritdoc
+     * @return string
+     * @throws \ReflectionException
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
+     * @throws \yii\base\InvalidConfigException
      */
     public function getSettingsHtml()
     {

@@ -6,7 +6,6 @@ use barrelstrength\sproutforms\base\FormTemplates;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Form as FormElement;
-use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\records\Form as FormRecord;
 use barrelstrength\sproutforms\migrations\CreateFormContentTable;
 use Craft;
@@ -15,11 +14,18 @@ use craft\events\RegisterComponentTypesEvent;
 use yii\base\Component;
 use craft\helpers\StringHelper;
 use craft\helpers\MigrationHelper;
-use craft\helpers\ArrayHelper;
-use craft\mail\Message;
 use yii\base\Exception;
 
 
+/**
+ *
+ * @property array    $allEnabledCaptchas
+ * @property array    $allCaptchas
+ * @property string[] $allFormTemplateTypes
+ * @property string[] $allFormTemplates
+ * @property string   $captchasHtml
+ * @property string[] $allCaptchaTypes
+ */
 class Forms extends Component
 {
     const EVENT_REGISTER_CAPTCHAS = 'registerSproutFormsCaptchas';

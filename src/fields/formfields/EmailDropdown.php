@@ -10,6 +10,14 @@ use craft\helpers\StringHelper;
 
 use barrelstrength\sproutbase\SproutBase;
 
+/**
+ *
+ * @property array  $elementValidationRules
+ * @property string $contentColumnType
+ * @property string $svgIconPath
+ * @property mixed  $settingsHtml
+ * @property mixed  $exampleInputHtml
+ */
 class EmailDropdown extends BaseOptionsFormField
 {
     /**
@@ -64,6 +72,7 @@ class EmailDropdown extends BaseOptionsFormField
 
     /**
      * @inheritdoc
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {

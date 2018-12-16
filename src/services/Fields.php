@@ -41,6 +41,11 @@ use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
 use yii\base\Component;
 use yii\base\Exception;
 
+/**
+ *
+ * @property mixed $defaultTabName
+ * @property array $registeredFieldsByGroup
+ */
 class Fields extends Component
 {
     /**
@@ -269,7 +274,7 @@ class Fields extends Component
     }
 
     /**
-     * Create a secuencial string for the "name" and "handle" fields if they are already taken
+     * Create a sequential string for the "name" and "handle" fields if they are already taken
      *
      * @param $field
      * @param $value
@@ -440,7 +445,7 @@ class Fields extends Component
         $sortOrder = null;
 
         if ($field !== null && $form !== null) {
-            // Let's try to order the field where is droped
+            // Let's try to order the field where is dropped
 
             if ($nextId) {
                 $fieldLayoutFieldNext = FieldLayoutFieldRecord::findOne([
@@ -583,10 +588,10 @@ class Fields extends Component
      */
     public function createDefaultField($type, $form)
     {
-        $intanceField = new $type;
+        $instanceField = new $type;
         $fieldsService = Craft::$app->getFields();
         // get the field name and remove spaces
-        $fieldName = preg_replace('/\s+/', '', $intanceField->displayName());
+        $fieldName = preg_replace('/\s+/', '', $instanceField->displayName());
         $handleName = StringHelper::toCamelCase(lcfirst($fieldName));
 
         $name = $this->getFieldAsNew('name', $fieldName);

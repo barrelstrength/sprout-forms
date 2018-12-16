@@ -9,6 +9,9 @@ use craft\base\ElementInterface;
 /**
  * Class SproutFormsRadioButtonsField
  *
+ *
+ * @property string $svgIconPath
+ * @property mixed  $exampleInputHtml
  */
 class MultipleChoice extends BaseOptionsFormField
 {

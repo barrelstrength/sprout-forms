@@ -6,12 +6,20 @@ use Craft;
 use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
 
+use craft\helpers\Json;
 use craft\helpers\Template as TemplateHelper;
 
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutbase\app\fields\models\Name as NameModel;
 use barrelstrength\sproutforms\base\FormField;
 
+/**
+ *
+ * @property array  $elementValidationRules
+ * @property string $svgIconPath
+ * @property mixed  $settingsHtml
+ * @property mixed  $exampleInputHtml
+ */
 class Name extends FormField implements PreviewableFieldInterface
 {
     /**
@@ -196,7 +204,7 @@ class Name extends FormField implements PreviewableFieldInterface
 
         // String value when retrieved from db
         if (is_string($value)) {
-            $nameArray = json_decode($value, true);
+            $nameArray = Json::decode($value, true);
             $nameModel->setAttributes($nameArray, false);
         }
 
@@ -239,7 +247,7 @@ class Name extends FormField implements PreviewableFieldInterface
 
         // Submitting an Element to be saved
         if (is_object($value) && get_class($value) == NameModel::class) {
-            return json_encode($value->getAttributes());
+            return Json::encode($value->getAttributes());
         }
 
         return $value;

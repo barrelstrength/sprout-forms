@@ -12,6 +12,12 @@ use craft\base\Widget;
 use Craft;
 use barrelstrength\sproutforms\elements\Entry;
 
+/**
+ *
+ * @property mixed  $bodyHtml
+ * @property mixed  $settingsHtml
+ * @property string $title
+ */
 class RecentEntries extends Widget
 {
     /**

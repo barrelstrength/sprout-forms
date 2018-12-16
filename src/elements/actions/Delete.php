@@ -8,6 +8,10 @@ use craft\elements\db\ElementQueryInterface;
 
 use barrelstrength\sproutforms\SproutForms;
 
+/**
+ *
+ * @property string $triggerLabel
+ */
 class Delete extends ElementAction
 {
     // Properties
@@ -55,6 +59,7 @@ class Delete extends ElementAction
 
     /**
      * @inheritdoc
+     * @throws \Throwable
      */
     public function performAction(ElementQueryInterface $query): bool
     {

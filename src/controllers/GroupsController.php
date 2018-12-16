@@ -52,6 +52,7 @@ class GroupsController extends BaseController
      * @return \yii\web\Response
      * @throws \yii\db\Exception
      * @throws \yii\web\BadRequestHttpException
+     * @throws \craft\errors\MissingComponentException
      */
     public function actionDeleteGroup()
     {

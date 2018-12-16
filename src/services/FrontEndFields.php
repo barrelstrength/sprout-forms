@@ -9,6 +9,10 @@ use craft\elements\Entry;
 use craft\elements\Tag;
 use craft\models\Section;
 
+/**
+ *
+ * @property array $singlesEntries
+ */
 class FrontEndFields extends Component
 {
     /**

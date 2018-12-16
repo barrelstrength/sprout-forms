@@ -10,6 +10,10 @@ use craft\fields\Dropdown as DropdownField;
 /**
  * Class SproutFormsDropdownField
  *
+ *
+ * @property string $modelName
+ * @property string $svgIconPath
+ * @property mixed  $exampleInputHtml
  */
 class Dropdown extends BaseOptionsFormField
 {

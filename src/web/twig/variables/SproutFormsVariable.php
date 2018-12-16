@@ -8,7 +8,6 @@ use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use Craft;
 use craft\base\ElementInterface;
-use craft\elements\db\ElementQueryInterface;
 use craft\helpers\Template as TemplateHelper;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
@@ -152,7 +151,6 @@ class SproutFormsVariable
      * @param Form       $form
      * @param FormField  $field
      * @param array|null $renderingOptions
-     * @param EntryElement $entry
      *
      * @return \Twig_Markup
      * @throws Exception
@@ -358,6 +356,8 @@ class SproutFormsVariable
 
     /**
      * @param $settings
+     *
+     * @throws \craft\errors\MissingComponentException
      */
     public function multiStepForm($settings)
     {
