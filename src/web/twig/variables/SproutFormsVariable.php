@@ -205,7 +205,7 @@ class SproutFormsVariable
 
         $inputHtml = $field->getFrontEndInputHtml($value, $fieldRenderingOptions);
 
-        // Set Tab template path
+        // Set Field template path (we handled the case for overriding the field input templates above)
         $view->setTemplatesPath($templatePaths['field']);
 
         // Build the HTML for our form field
