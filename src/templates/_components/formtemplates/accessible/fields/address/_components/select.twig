@@ -1,0 +1,28 @@
+{%- set value = value ? value : null %}
+
+<div class="{{ name }}-field {%- if class is defined %}{{ class }}{% endif %}">
+
+    {% if hidden is defined and hidden %}
+
+        <input type="hidden" name="{{ name ~ '[' ~ inputName ~ ']' }}" value="{{ value }}"/>
+
+    {% else %}
+
+        <div class="{{ name }}-heading">
+            <label>{{ label }}</label>
+        </div>
+        <div class="{{ name }}-input">
+            <select {% if id is defined %}id="{{ id }}"{% endif %}
+                {%- if name %} name="{{ name ~ '[' ~ inputName ~ ']' }}"{% endif %}
+            >
+                {%- for key, option in options -%}
+                    <option value="{{ key }}" {% if key == value %}selected{% endif %}>
+                        {{ option }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+    {% endif %}
+
+</div>
