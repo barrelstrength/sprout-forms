@@ -72,12 +72,6 @@ class IntegrationsController extends BaseController
         $this->requirePostRequest();
 
         $request = Craft::$app->getRequest();
-        $fieldsService = Craft::$app->getFields();
-        // Make sure our field has a section
-
-        // @todo - handle this much more gracefully
-        $tabId = $request->getBodyParam('tabId');
-
         // Get the Form these fields are related to
         $formId = $request->getRequiredBodyParam('formId');
         $form = SproutForms::$app->forms->getFormById($formId);
@@ -85,16 +79,6 @@ class IntegrationsController extends BaseController
         $type = $request->getRequiredBodyParam('type');
         $fieldId = $request->getBodyParam('fieldId');
 
-        $field = $fieldsService->createField([
-            'type' => $type,
-            'id' => $fieldId,
-            'name' => $request->getBodyParam('name'),
-            'handle' => $request->getBodyParam('handle'),
-            'instructions' => $request->getBodyParam('instructions'),
-            // @todo - confirm locales/Sites work as expected
-            'translationMethod' => Field::TRANSLATION_METHOD_NONE,
-            'settings' => $request->getBodyParam('types.'.$type),
-        ]);
 
         // required field validation
         $fieldLayout = $form->getFieldLayout();

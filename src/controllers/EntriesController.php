@@ -117,7 +117,7 @@ class EntriesController extends BaseController
         }
 
         // @TODO - example pseudo code, doesn't work
-        $integrations = $this->form->integrations;
+        /*$integrations = $this->form->integrations;
 
         foreach ($integrations as $integration)
         {
@@ -126,7 +126,7 @@ class EntriesController extends BaseController
             }
 
             // success
-        }
+        }*/
 
         /**
          * Route our request to Craft or a third-party endpoint
