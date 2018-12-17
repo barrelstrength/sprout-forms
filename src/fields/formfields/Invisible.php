@@ -115,8 +115,6 @@ class Invisible extends FormField implements PreviewableFieldInterface
     {
         $value = Craft::$app->getSession()->get($this->handle) ?? '';
 
-        $value = $this->afterProcessInvisibleValue($value, $element);
-
         return $value;
     }
 
@@ -145,27 +143,6 @@ class Invisible extends FormField implements PreviewableFieldInterface
         if ($this->value) {
             try {
                 $value = Craft::$app->view->renderObjectTemplate($this->value, parent::getFieldVariables());
-                Craft::$app->getSession()->set($this->handle, $value);
-            } catch (\Exception $e) {
-                SproutForms::error($e->getMessage());
-            }
-        }
-
-        return $value;
-    }
-
-    /**
-     * @param $value
-     * @param $element ElementInterface
-     * @return string
-     * @throws \Throwable
-     */
-    private function afterProcessInvisibleValue($value, $element)
-    {
-        if ($value) {
-            try {
-                /* HERE WE LOOSE THE OLD STRING */
-                $value = Craft::$app->view->renderObjectTemplate($value, $element->getFieldLayout()->getFields());
                 Craft::$app->getSession()->set($this->handle, $value);
             } catch (\Exception $e) {
                 SproutForms::error($e->getMessage());
