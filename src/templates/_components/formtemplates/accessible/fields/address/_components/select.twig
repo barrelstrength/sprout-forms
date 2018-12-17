@@ -1,19 +1,20 @@
-{%- set value = value ? value : null %}
+{%- set value = value ? value : null -%}
 
-<div class="{{ name }}-field {%- if class is defined %}{{ class }}{% endif %}">
+<div id="{{ name }}-{{ inputName }}" class="{{ name }}-field {{ name }}-{{ inputName }}-field sproutformsaddress-select-field{%- if class is defined %} {{ class }}{% endif %}">
 
     {% if hidden is defined and hidden %}
 
         <input type="hidden" name="{{ name ~ '[' ~ inputName ~ ']' }}" value="{{ value }}"/>
 
     {% else %}
-
-        <div class="{{ name }}-heading">
+        <div class="heading">
             <label>{{ label }}</label>
         </div>
-        <div class="{{ name }}-input">
-            <select {% if id is defined %}id="{{ id }}"{% endif %}
-                {%- if name %} name="{{ name ~ '[' ~ inputName ~ ']' }}"{% endif %}
+        <div class="input">
+            <select
+                {%- if id is defined %} id="{{ id }}"{% endif %}
+                {%- if name %} name="{{ name ~ '[' ~ inputName ~ ']' }}"{% endif -%}
+                {%- if autocomplete is defined %} autocomplete="{{ autocomplete }}"{% endif -%}
             >
                 {%- for key, option in options -%}
                     <option value="{{ key }}" {% if key == value %}selected{% endif %}>
@@ -22,7 +23,5 @@
                 {% endfor %}
             </select>
         </div>
-
     {% endif %}
-
 </div>
