@@ -39,6 +39,14 @@ class Address extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
+    public function hasMultipleLabels()
+    {
+        return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getContentColumnType(): string
     {
         return Schema::TYPE_INTEGER;

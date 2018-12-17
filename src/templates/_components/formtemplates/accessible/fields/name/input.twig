@@ -12,9 +12,9 @@
 
 {% if field.displayMultipleFields %}
 
-    <div class="{{ name }}-wrapper {%- if class %} {{ class }}{% endif %}"
-            {%- if id %} id="{{ id }}"{% endif %}
-            {{- dataAttributes|raw -}}>
+    <div {%- if id %} id="{{ id }}"{% endif %} class="{{ name }}-wrapper
+        {%- if class %} {{ class }}{% endif %}"
+        {{- dataAttributes|raw -}}>
 
         {% if field.displayPrefix %}
             <div {%- if id %} id="{{ id }}-prefix"{% endif %}>
