@@ -2,7 +2,7 @@
 
 <div id="{{ name }}-{{ inputName }}" class="{{ name }}-field {{ name }}-{{ inputName }}-field sproutformsaddress-select-field{%- if class is defined %} {{ class }}{% endif %}">
 
-    {% if hidden is defined and hidden %}
+    {% if hideDropdown is defined and hideDropdown %}
 
         <input type="hidden" name="{{ name ~ '[' ~ inputName ~ ']' }}" value="{{ value }}"/>
 
