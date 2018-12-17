@@ -35,8 +35,7 @@ abstract class FormField extends Field
      * @var string
      */
     protected $originalTemplatesPath;
-
-
+    
     /**
      *
      * Allows a user to add variables to an object that can be parsed by fields
@@ -46,17 +45,14 @@ abstract class FormField extends Field
      * {{ craft.sproutForms.displayForm('contact') }}
      *
      * @param array $variables
-     * @throws \craft\errors\MissingComponentException
      */
     public static function addFieldVariables(array $variables)
     {
         static::$fieldVariables = array_merge(static::$fieldVariables, $variables);
-        //Craft::$app->getSession()->set(self::ADD_VARIABLES_SESSION_KEY, static::$fieldVariables);
     }
 
     /**
      * @return mixed
-     * @throws \craft\errors\MissingComponentException
      */
     public static function getFieldVariables()
     {
