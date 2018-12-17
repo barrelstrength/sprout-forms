@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\base\ElementInterface;
 use craft\helpers\Template as TemplateHelper;
@@ -100,7 +101,7 @@ class Invisible extends FormField implements PreviewableFieldInterface
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
-        Craft::$app->getSession()->set($this->handle, $this->value);
+        $this->preProcessInvisibleValue();
 
         $html = '<input type="hidden" name="'.$this->handle.'">';
 
@@ -112,10 +113,9 @@ class Invisible extends FormField implements PreviewableFieldInterface
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
-        $session = Craft::$app->getSession()->get($this->handle);
-        $sessionValue = $session ?: '';
+        $value = Craft::$app->getSession()->get($this->handle) ?? '';
 
-        return Craft::$app->view->renderObjectTemplate($sessionValue, parent::getFieldVariables());
+        return $value;
     }
 
     /**
@@ -130,5 +130,25 @@ class Invisible extends FormField implements PreviewableFieldInterface
         }
 
         return $hiddenValue;
+    }
+
+    /**
+     * @return string
+     * @throws \Throwable
+     */
+    private function preProcessInvisibleValue()
+    {
+        $value = '';
+
+        if ($this->value) {
+            try {
+                $value = Craft::$app->view->renderObjectTemplate($this->value, parent::getFieldVariables());
+                Craft::$app->getSession()->set($this->handle, $value);
+            } catch (\Exception $e) {
+                SproutForms::error($e->getMessage());
+            }
+        }
+
+        return $value;
     }
 }
