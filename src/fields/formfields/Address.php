@@ -112,11 +112,7 @@ class Address extends FormField implements PreviewableFieldInterface
 
                 'addressFormHtml' => Template::raw($addressFormHtml),
                 'countryInputHtml' => Template::raw($countryInputHtml),
-                'showCountryDropdown' => $showCountryDropdown,
-
-                // For our country update requests
-                'csrfTokenName' => Craft::$app->getConfig()->getGeneral()->csrfTokenName,
-                'actionUrl' => UrlHelper::actionUrl('sprout/fields-address/update-address-form-html')
+                'showCountryDropdown' => $showCountryDropdown
             ]
         );
     }
