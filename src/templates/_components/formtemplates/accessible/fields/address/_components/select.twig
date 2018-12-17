@@ -13,9 +13,10 @@
         <div class="input">
             <select
                 {%- if id is defined %} id="{{ id }}"{% endif %}
+                {%- if fieldClass is defined %} class="{{ fieldClass }}"{% endif -%}
                 {%- if name %} name="{{ name ~ '[' ~ inputName ~ ']' }}"{% endif -%}
-                {%- if autocomplete is defined %} autocomplete="{{ autocomplete }}"{% endif -%}
-            >
+                {%- if autocomplete is defined %} autocomplete="{{ autocomplete }}"{% endif -%}>
+
                 {%- for key, option in options -%}
                     <option value="{{ key }}" {% if key == value %}selected{% endif %}>
                         {{ option }}
