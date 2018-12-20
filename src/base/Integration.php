@@ -50,6 +50,8 @@ abstract class Integration extends Model
 
     /**
      * Send the submission to the desired endpoint
+     *
+     * @return boolean
      */
     abstract public function submit();
 
@@ -63,12 +65,10 @@ abstract class Integration extends Model
     /**
      * Process the submission and field mapping settings to get the payload. Resolve the field mapping.
      *
-     * @param $fields
-     *
      * @return mixed
      */
-    public function resolveFieldMapping($fields) {
-        return $fields;
+    public function resolveFieldMapping() {
+        return $this->fieldsMapped ?? [];
     }
 
     /**
@@ -121,7 +121,20 @@ abstract class Integration extends Model
     public function getFormFieldsAsOptions()
     {
         $fields = $this->form->getFields();
-        $options = [];
+        $options = [
+            [
+                'label' => 'Id',
+                'value' => 'id'
+            ],
+            [
+                'label' => 'Title',
+                'value' => 'title'
+            ],
+            [
+                'label' => 'Ip Address',
+                'value' => 'ipAddress'
+            ]
+        ];
 
         foreach ($fields as $field) {
             $options[] = [

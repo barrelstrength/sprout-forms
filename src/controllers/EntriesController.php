@@ -116,29 +116,21 @@ class EntriesController extends BaseController
             return $this->redirectWithErrors($entry);
         }
 
-        // @TODO - example pseudo code, doesn't work
-        /*$integrations = $this->form->integrations;
 
-        foreach ($integrations as $integration)
+        $integrations = SproutForms::$app->integrations->getFormIntegrations($this->form->id);
+
+        foreach ($integrations as $integrationRecord)
         {
-            if (!$integration->submit()) {
-                // failure
-            }
+            $integration = $integrationRecord->getIntegrationApi();
+            $integration->entry = $entry;
 
-            // success
-        }*/
-
-        /**
-         * Route our request to Craft or a third-party endpoint
-         *
-         * Payload forwarding is only available on front-end requests. Any
-         * data saved to the database after a forwarded request is editable
-         * in Craft as normal, but will not trigger any further calls to
-         * the third-party endpoint.
-         */
-        if ($this->form->submitAction && !$request->getIsCpRequest()) {
-            if (!SproutForms::$app->entries->forwardEntry($entry)) {
-                return $this->redirectWithErrors($entry);
+            try{
+                if (!$integration->submit()) {
+                    // @todo - failure - should we add a setting to the API to redirectWithError if sumit() fails?
+                    return $this->redirectWithErrors($entry);
+                }
+            }catch (\Exception $e){
+                Craft::error('Submit Integration Api fails: '.$e->getMessage(), __METHOD__);
             }
         }
 

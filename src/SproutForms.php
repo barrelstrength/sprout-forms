@@ -15,7 +15,7 @@ use barrelstrength\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbase\app\email\events\NotificationEmailEvent;
 use barrelstrength\sproutforms\fields\Forms as FormsField;
 use barrelstrength\sproutforms\fields\Entries as FormEntriesField;
-use barrelstrength\sproutforms\integrationtypes\CustomIntegration;
+use barrelstrength\sproutforms\integrationtypes\PayloadForwarding;
 use barrelstrength\sproutforms\integrationtypes\FormEntryElementIntegration;
 use barrelstrength\sproutforms\services\Integrations;
 use barrelstrength\sproutforms\widgets\RecentEntries;
@@ -175,7 +175,7 @@ class SproutForms extends Plugin
         });
 
         Event::on(Integrations::class, Integrations::EVENT_REGISTER_INTEGRATIONS, function(RegisterComponentTypesEvent $event) {
-            $event->types[] = CustomIntegration::class;
+            $event->types[] = PayloadForwarding::class;
             $event->types[] = FormEntryElementIntegration::class;
         });
 

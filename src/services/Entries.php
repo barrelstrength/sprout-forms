@@ -4,7 +4,6 @@ namespace barrelstrength\sproutforms\services;
 
 use barrelstrength\sproutforms\elements\Entry;
 use Craft;
-use GuzzleHttp\Client;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\elements\Form as FormElement;
@@ -326,40 +325,8 @@ class Entries extends Component
     }
 
     /**
-     * @param EntryElement $entry
-     * @return bool
+     * @return mixed|null
      */
-    public function forwardEntry(Entry $entry)
-    {
-        $fields = $entry->getPayloadFields();
-        $endpoint = $entry->getForm()->submitAction;
-
-        if (!filter_var($endpoint, FILTER_VALIDATE_URL)) {
-
-            SproutForms::error($entry->formName.' submit action is an invalid URL: '.$endpoint);
-
-            return false;
-        }
-
-        $client = new Client();
-
-        try {
-            SproutForms::info($fields);
-
-            $response = $client->request('POST', $endpoint, [
-                'form_params' => $fields
-            ]);
-
-            SproutForms::info($response->getBody()->getContents());
-        } catch (RequestException $e) {
-            $entry->addError('general', $e->getMessage());
-
-            return false;
-        }
-
-        return true;
-    }
-
     public function getDefaultEntryStatusId()
     {
         $entryStatus = EntryStatusRecord::find()
