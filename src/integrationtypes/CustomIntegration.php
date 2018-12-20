@@ -9,6 +9,11 @@ class CustomIntegration extends ApiIntegration
 {
     public $submitAction;
 
+    /**
+     * @var boolean
+     */
+    public $hasFieldMapping = true;
+
     public function getName() {
         return Craft::t('sprout-forms', 'Custom (Payload Forwarding)');
     }

@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\records;
 
+use barrelstrength\sproutforms\SproutForms;
 use craft\db\ActiveRecord;
 use barrelstrength\sproutforms\base\Integration as IntegrationApi;
 
@@ -36,6 +37,9 @@ class Integration extends ActiveRecord
 
         if($this->type){
             $integrationApi = new $this->type;
+            $form = SproutForms::$app->forms->getFormById($this->formId);
+            $integrationApi->form = $form;
+
             if ($this->settings){
                 $settings = json_decode($this->settings, true);
                 $integrationApi->setAttributes($settings, false);

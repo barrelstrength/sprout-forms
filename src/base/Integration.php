@@ -2,8 +2,10 @@
 
 namespace barrelstrength\sproutforms\base;
 
-use Craft;
+use barrelstrength\sproutforms\elements\Entry;
+use barrelstrength\sproutforms\elements\Form;
 use craft\base\Model;
+use Craft;
 
 /**
  * Class IntegrationType
@@ -12,6 +14,26 @@ use craft\base\Model;
  */
 abstract class Integration extends Model
 {
+    /**
+     * @var Entry
+     */
+    public $entry;
+
+    /**
+     * @var Form
+     */
+    public $form;
+
+    /**
+     * @var boolean
+     */
+    public $hasFieldMapping = false;
+
+    /**
+     * @var array|null The fields mapped
+     */
+    public $fieldsMapped;
+
     /**
      * Name of the Integration
      *
@@ -47,6 +69,68 @@ abstract class Integration extends Model
      */
     public function resolveFieldMapping($fields) {
         return $fields;
+    }
+
+    /**
+     * Returns a default field mapping html
+     *
+     * @return string
+     * @throws \yii\base\Exception
+     */
+    public function getFieldMappingSettingsHtml()
+    {
+        if (!$this->hasFieldMapping){
+            return '';
+        }
+
+        if (empty($this->fieldsMapped)) {
+            // Give it a default row
+            $this->fieldsMapped = [['label' => '', 'value' => '']];
+        }
+
+        $rendered = Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'editableTableField',
+            [
+                [
+                    'label' => Craft::t('sprout-forms', 'Field Mapping'),
+                    'instructions' => Craft::t('sprout-forms', 'Define your field mapping.'),
+                    'id' => 'fieldsMapped',
+                    'name' => 'fieldsMapped',
+                    'addRowLabel' => Craft::t('sprout-forms', 'Add a field mapping'),
+                    'cols' => [
+                        'label' => [
+                            'heading' => Craft::t('sprout-forms', 'Form Field'),
+                            'type' => 'select',
+                            'options' => $this->getFormFieldsAsOptions()
+                        ],
+                        'value' => [
+                            'heading' => Craft::t('sprout-forms', 'Api Field'),
+                            'type' => 'singleline',
+                            'class' => 'code'
+                        ]
+                    ],
+                    'rows' => $this->fieldsMapped
+                ]
+            ]);
+
+        return $rendered;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFormFieldsAsOptions()
+    {
+        $fields = $this->form->getFields();
+        $options = [];
+
+        foreach ($fields as $field) {
+            $options[] = [
+                'label' => $field->handle,
+                'value' => $field->handle
+            ];
+        }
+
+        return $options;
     }
 }
 

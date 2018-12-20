@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\elements;
 
+use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\base\FormTemplates;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\validators\TemplateOverridesValidator;
@@ -328,7 +329,7 @@ class Form extends Element
     /**
      * Returns the fields associated with this form.
      *
-     * @return array
+     * @return FormField[]
      */
     public function getFields()
     {
