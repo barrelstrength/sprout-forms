@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\services;
 
 use barrelstrength\sproutforms\base\Integration;
+use barrelstrength\sproutforms\integrationtypes\FormEntryElementIntegration;
 use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\SproutForms;
@@ -24,7 +25,6 @@ class Integrations extends Component
 
         return $event->types;
     }
-
 
     /**
      * @param $type
@@ -58,7 +58,9 @@ class Integrations extends Component
 
         foreach ($integrationTypes as $integrationType)
         {
-            $integrations[] = new $integrationType();
+            if ($integrationType !== FormEntryElementIntegration::class){
+                $integrations[] = new $integrationType();
+            }
         }
 
         return $integrations;
@@ -73,6 +75,17 @@ class Integrations extends Component
         $integrations = IntegrationRecord::findAll(['formId' => $formId]);
 
         return $integrations;
+    }
+
+    /**
+     * @param $integrationId
+     * @return IntegrationRecord|null
+     */
+    public function getFormIntegrationById($integrationId)
+    {
+        $integration = IntegrationRecord::findOne(['id' => $integrationId]);
+
+        return $integration;
     }
 
     /**

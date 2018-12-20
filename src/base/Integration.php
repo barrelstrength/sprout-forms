@@ -3,13 +3,14 @@
 namespace barrelstrength\sproutforms\base;
 
 use Craft;
+use craft\base\Model;
 
 /**
  * Class IntegrationType
  *
  * @package Craft
  */
-abstract class Integration
+abstract class Integration extends Model
 {
     /**
      * Name of the Integration

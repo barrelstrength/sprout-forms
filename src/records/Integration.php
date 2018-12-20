@@ -36,6 +36,10 @@ class Integration extends ActiveRecord
 
         if($this->type){
             $integrationApi = new $this->type;
+            if ($this->settings){
+                $settings = json_decode($this->settings, true);
+                $integrationApi->setAttributes($settings, false);
+            }
         }
 
         return $integrationApi;

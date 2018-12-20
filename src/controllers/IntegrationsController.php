@@ -61,10 +61,8 @@ class IntegrationsController extends BaseController
     }
 
     /**
-     * Save a field.
-     *
+     * Save an Integration
      * @return \yii\web\Response
-     * @throws \Throwable
      * @throws \yii\web\BadRequestHttpException
      */
     public function actionSaveIntegration()
@@ -72,95 +70,28 @@ class IntegrationsController extends BaseController
         $this->requirePostRequest();
 
         $request = Craft::$app->getRequest();
-        // Get the Form these fields are related to
         $formId = $request->getRequiredBodyParam('formId');
         $form = SproutForms::$app->forms->getFormById($formId);
 
         $type = $request->getRequiredBodyParam('type');
-        $fieldId = $request->getBodyParam('fieldId');
+        $integrationId = $request->getBodyParam('integrationId');
+        $enabled = $request->getBodyParam('enabled');
+        $name = $request->getBodyParam('name');
+        $settings = $request->getBodyParam('types.'.$type);
+        $integration = SproutForms::$app->integrations->getFormIntegrationById($integrationId);
 
+        $integration->enabled = $enabled;
+        $integration->settings = json_encode($settings);
+        $integration->name = $name ?? $integration->name;
+        $result = $integration->save();
 
-        // required field validation
-        $fieldLayout = $form->getFieldLayout();
-        $fieldLayoutField = FieldLayoutFieldRecord::findOne([
-                'layoutId' => $fieldLayout->id,
-                'tabId' => $tabId,
-                'fieldId' => $fieldId
-            ]
-        );
-
-        if ($fieldLayoutField) {
-            $required = $request->getBodyParam('required');
-            $fieldLayoutField->required = $required !== "" ? true : false;
-            $fieldLayoutField->save(false);
-            $field->required = $fieldLayoutField->required;
+        if (!$result) {
+            SproutForms::error('Integration does not validate.');
         }
 
-        // Set our field context
-        Craft::$app->content->fieldContext = $form->getFieldContext();
-        Craft::$app->content->contentTable = $form->getContentTable();
+        SproutForms::info('Integration Saved');
 
-        // Save a new field
-        if (!$field->id) {
-            $isNewField = true;
-        } else {
-            $isNewField = false;
-            $oldHandle = Craft::$app->fields->getFieldById($field->id)->handle;
-        }
-
-        // Save our field
-        if (!$fieldsService->saveField($field)) {
-            // Does not validate
-            SproutForms::error('Field does not validate.');
-
-            $variables['tabId'] = $tabId;
-            $variables['field'] = $field;
-
-            return $this->returnJson(false, $field, $form, null, $tabId);
-        }
-
-        // Check if the handle is updated to also update the titleFormat
-        if (!$isNewField) {
-            // Let's update the title format
-            if ($oldHandle != $field->handle && strpos($form->titleFormat, $oldHandle) !== false) {
-                $newTitleFormat = SproutForms::$app->forms->updateTitleFormat($oldHandle, $field->handle, $form->titleFormat);
-                $form->titleFormat = $newTitleFormat;
-            }
-        }
-
-        // Now let's add this field to our field layout
-        // ------------------------------------------------------------
-
-        // Set the field layout
-        $oldFieldLayout = $form->getFieldLayout();
-        $oldTabs = $oldFieldLayout->getTabs();
-        $tabName = null;
-        $response = false;
-
-        if ($oldTabs) {
-            $tabName = FieldLayoutTabRecord::findOne($tabId)->name;
-
-            if ($isNewField) {
-                $response = SproutForms::$app->fields->addFieldToLayout($field, $form, $tabId);
-            } else {
-                $response = SproutForms::$app->fields->updateFieldToLayout($field, $form, $tabId);
-            }
-        }
-
-        // Hand the field off to be saved in the
-        // field layout of our Form Element
-        if ($response) {
-            SproutForms::info('Field Saved');
-
-            return $this->returnJson(true, $field, $form, $tabName, $tabId);
-        } else {
-            $variables['tabId'] = $tabId;
-            $variables['field'] = $field;
-            SproutForms::error("Couldn't save field.");
-            Craft::$app->getSession()->setError(Craft::t('sprout-forms', 'Couldn’t save field.'));
-
-            return $this->returnJson(false, $field, $form);
-        }
+        return $this->returnJson($result, $integration, $form);
     }
 
     /**
@@ -212,34 +143,14 @@ class IntegrationsController extends BaseController
         $this->requirePostRequest();
         $this->requireAcceptsJson();
 
-        $fieldId = Craft::$app->request->getRequiredBodyParam('fieldId');
-        $formId = Craft::$app->request->getRequiredBodyParam('formId');
-        $form = SproutForms::$app->forms->getFormById((int)$formId);
+        $integrationId = Craft::$app->request->getRequiredBodyParam('integrationId');
+        $integration = IntegrationRecord::findOne($integrationId);
 
-        // Backup our field context and content table
-        $oldFieldContext = Craft::$app->getContent()->fieldContext;
-        $oldContentTable = Craft::$app->getContent()->contentTable;
+        $response = $integration->delete();
 
-        // Set our field content and content table to work with our form output
-        Craft::$app->getContent()->fieldContext = $form->getFieldContext();
-        Craft::$app->getContent()->contentTable = $form->getContentTable();
-
-        $response = Craft::$app->fields->deleteFieldById($fieldId);
-
-        // Reset our field context and content table to what they were previously
-        Craft::$app->getContent()->fieldContext = $oldFieldContext;
-        Craft::$app->getContent()->contentTable = $oldContentTable;
-
-
-        if ($response) {
-            return $this->asJson([
-                'success' => true
-            ]);
-        } else {
-            return $this->asJson([
-                'success' => false
-            ]);
-        }
+        return $this->asJson([
+            'success' => $response
+        ]);
     }
 
     /**
@@ -251,6 +162,7 @@ class IntegrationsController extends BaseController
      */
     private function returnJson(bool $success, $integrationRecord, Form $form)
     {
+        // @todo how we should return errors to the edit integration modal? template response is disabled for now
         return $this->asJson([
             'success' => $success,
             'errors' => $integrationRecord ? $integrationRecord->getErrors() : null,
