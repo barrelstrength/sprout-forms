@@ -85,6 +85,7 @@ abstract class Integration extends Model
 
         if (empty($this->fieldsMapped)) {
             // Give it a default row
+            // @todo show all the current fields
             $this->fieldsMapped = [['label' => '', 'value' => '']];
         }
 

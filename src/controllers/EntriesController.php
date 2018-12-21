@@ -116,7 +116,6 @@ class EntriesController extends BaseController
             return $this->redirectWithErrors($entry);
         }
 
-
         $integrations = SproutForms::$app->integrations->getFormIntegrations($this->form->id);
 
         foreach ($integrations as $integrationRecord)
