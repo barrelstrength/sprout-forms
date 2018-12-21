@@ -1,0 +1,64 @@
+{%- set value = value ? value : null -%}
+
+{% if hideDropdown is defined and hideDropdown %}
+
+    <div class="hidden">
+        <input type="hidden" name="{{ name ~ '[' ~ inputName ~ ']' }}" value="{{ value }}"/>
+    </div>
+
+{% else %}
+
+    <div id="{{ name }}-{{ inputName }}" class="{{ name }}-field {{ name }}-{{ inputName }}-field sproutformsaddress-select-field{%- if class is defined %} {{ class }}{% endif %}">
+
+        {% if hideDropdown is defined and hideDropdown %}
+
+            <input type="hidden" name="{{ name ~ '[' ~ inputName ~ ']' }}" value="{{ value }}"/>
+
+        {% else %}
+            <div class="heading">
+                <label>{{ label }}</label>
+            </div>
+            <div class="input">
+                <select
+                    {%- if id is defined %} id="{{ id }}"{% endif %}
+                    {%- if fieldClass is defined %} class="{{ fieldClass }}"{% endif -%}
+                    {%- if name %} name="{{ name ~ '[' ~ inputName ~ ']' }}"{% endif -%}
+                    {%- if autocomplete is defined %} autocomplete="{{ autocomplete }}"{% endif -%}>
+
+                    {% if highlightCountries is not empty %}
+                        {%- for key, option in highlightCountries -%}
+                            {%- set optionLabel = option -%}
+                            {%- set optionValue = key -%}
+
+                            <option value="{{ optionValue }}"
+                                    {% if optionValue == value %}selected{% endif %}>
+                                {{ optionLabel }}
+                            </option>
+                        {% endfor %}
+                        <option disabled>---</option>
+                    {% endif %}
+
+                    {%- for key, option in options -%}
+                        {%- set optionLabel = option -%}
+                        {%- set optionValue = key -%}
+
+                        <option value="{{ optionValue }}"  {% if optionValue == value %}selected{% endif %}>
+                            {{ optionLabel }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        {% endif %}
+    </div>
+
+
+
+
+    </div>
+{% endif %}
+
+
+
+
+
+

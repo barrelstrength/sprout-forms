@@ -24,6 +24,9 @@ use yii\base\Exception;
 
 /**
  * Form represents a form element.
+ *
+ * @property \barrelstrength\sproutforms\base\FormTemplates $formTemplate
+ * @property array                                          $fields
  */
 class Form extends Element
 {
@@ -292,6 +295,7 @@ class Form extends Element
 
     /**
      * @inheritdoc
+     * @throws Exception
      */
     public function afterSave(bool $isNew)
     {

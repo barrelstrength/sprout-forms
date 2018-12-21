@@ -23,6 +23,12 @@ use barrelstrength\sproutforms\base\FormField;
 /**
  * BaseRelationFormField is the base class for classes representing a relational field.
  *
+ *
+ * @property null|string $viewModeFieldHtml
+ * @property array       $elementValidationRules
+ * @property null|string $targetSiteFieldHtml
+ * @property array       $sourceOptions
+ * @property mixed       $settingsHtml
  */
 abstract class BaseRelationFormField extends FormField implements PreviewableFieldInterface, EagerLoadingFieldInterface
 {
@@ -235,6 +241,8 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
 
     /**
      * @inheritdoc
+     * @throws \craft\errors\SiteNotFoundException
+     * @throws NotSupportedException
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
@@ -340,6 +348,15 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
 
     /**
      * @inheritdoc
+     *
+     * @param                       $value
+     * @param ElementInterface|null $element
+     *
+     * @return string
+     * @throws NotSupportedException
+     * @throws \Twig_Error_Loader
+     * @throws \craft\errors\SiteNotFoundException
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -415,6 +432,8 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
 
     /**
      * @inheritdoc
+     * @throws NotSupportedException
+     * @throws \craft\errors\SiteNotFoundException
      */
     public function getEagerLoadingMap(array $sourceElements)
     {
@@ -499,6 +518,7 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
 
     /**
      * @inheritdoc
+     * @throws \Exception
      */
     public function afterElementSave(ElementInterface $element, bool $isNew)
     {
@@ -644,8 +664,12 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
      * Returns an array of variables that should be passed to the input template.
      *
      * @param ElementQueryInterface|array|null $value
-     * @param ElementInterface|null $element
+     * @param ElementInterface|null            $element
+     *
      * @return array
+     * @throws NotSupportedException
+     * @throws \craft\errors\SiteNotFoundException
+     * @throws \craft\errors\SiteNotFoundException
      */
     protected function inputTemplateVariables($value = null, ElementInterface $element = null): array
     {
@@ -711,7 +735,9 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
      * Returns the site ID that target elements should have.
      *
      * @param ElementInterface|null $element
+     *
      * @return int
+     * @throws \craft\errors\SiteNotFoundException
      */
     protected function targetSiteId(ElementInterface $element = null): int
     {

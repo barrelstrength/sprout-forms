@@ -10,6 +10,12 @@ use craft\base\PreviewableFieldInterface;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\base\FormField;
 
+/**
+ *
+ * @property string $svgIconPath
+ * @property mixed  $settingsHtml
+ * @property mixed  $exampleInputHtml
+ */
 class Hidden extends FormField implements PreviewableFieldInterface
 {
     /**
@@ -95,6 +101,7 @@ class Hidden extends FormField implements PreviewableFieldInterface
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
+     * @throws \Throwable
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {

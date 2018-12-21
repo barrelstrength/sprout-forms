@@ -17,6 +17,10 @@ use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\events\OnBeforePopulateEntryEvent;
 use yii\web\Response;
 
+/**
+ *
+ * @property null|\barrelstrength\sproutforms\elements\Entry $entryModel
+ */
 class EntriesController extends BaseController
 {
     const EVENT_BEFORE_POPULATE = 'beforePopulate';
@@ -52,6 +56,8 @@ class EntriesController extends BaseController
      * @throws \Exception
      * @throws \Throwable
      * @throws \yii\web\BadRequestHttpException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function actionSaveEntry()
     {
@@ -177,11 +183,12 @@ class EntriesController extends BaseController
     /**
      * Route Controller for Edit Entry Template
      *
-     * @param int|null          $entryId
+     * @param int|null                                 $entryId
      * @param EntryElement|ElementInterface|array|null $entry
      *
      * @return \yii\web\Response
      * @throws NotFoundHttpException
+     * @throws \craft\errors\MissingComponentException
      */
     public function actionEditEntry(int $entryId = null, EntryElement $entry = null)
     {
@@ -278,6 +285,7 @@ class EntriesController extends BaseController
 
         // Set the entry attributes, defaulting to the existing values for whatever is missing from the post data
         $fieldsLocation = $request->getBodyParam('fieldsLocation', 'fields');
+
         $entry->setFieldValuesFromRequest($fieldsLocation);
         $entry->setFieldParamNamespace($fieldsLocation);
     }
@@ -320,6 +328,7 @@ class EntriesController extends BaseController
      *
      * @return null|Response
      * @throws \yii\web\BadRequestHttpException
+     * @throws \craft\errors\MissingComponentException
      */
     private function redirectWithErrors(Entry $entry)
     {
@@ -375,6 +384,8 @@ class EntriesController extends BaseController
 
     /**
      * @param $entry
+     *
+     * @throws \craft\errors\MissingComponentException
      */
     private function createLastEntryId($entry)
     {

@@ -9,6 +9,12 @@ use craft\helpers\Template as TemplateHelper;
 use craft\base\PreviewableFieldInterface;
 use barrelstrength\sproutforms\base\FormField;
 
+/**
+ *
+ * @property string $svgIconPath
+ * @property mixed  $settingsHtml
+ * @property mixed  $exampleInputHtml
+ */
 class Invisible extends FormField implements PreviewableFieldInterface
 {
     /**
@@ -98,6 +104,7 @@ class Invisible extends FormField implements PreviewableFieldInterface
 
     /**
      * @inheritdoc
+     * @throws \craft\errors\MissingComponentException
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
@@ -110,6 +117,14 @@ class Invisible extends FormField implements PreviewableFieldInterface
 
     /**
      * @inheritdoc
+     *
+     * @param                       $value
+     * @param ElementInterface|null $element
+     *
+     * @return string
+     * @throws \Throwable
+     * @throws \craft\errors\MissingComponentException
+     * @throws \yii\base\Exception
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {

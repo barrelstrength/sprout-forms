@@ -5,6 +5,7 @@ namespace barrelstrength\sproutforms\migrations;
 use craft\db\Migration;
 use craft\db\Query;
 use barrelstrength\sproutforms\fields\formfields\SingleLine;
+use craft\helpers\Json;
 
 /**
  * m180314_161539_sproutforms_phone_fields migration.
@@ -30,7 +31,7 @@ class m180314_161539_sproutforms_phone_fields extends Migration
             ->all();
 
         foreach ($fields as $field) {
-            $settingsAsJson = json_encode($newSettings);
+            $settingsAsJson = Json::encode($newSettings);
             $this->update('{{%fields}}', ['type' => SingleLine::class, 'settings' => $settingsAsJson], ['id' => $field['id']], [], false);
         }
 

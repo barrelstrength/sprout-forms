@@ -10,21 +10,22 @@ use craft\records\Element;
 /**
  * Class Form record.
  *
- * @property int         $id
- * @property int         $groupId
- * @property int         $fieldLayoutId
- * @property string      $name
- * @property string      $handle
- * @property string      $titleFormat
- * @property bool        $displaySectionTitles
- * @property Element     $element
- * @property FormGroup   $group
- * @property string      $redirectUri
- * @property string      $submitAction
- * @property string      $submitButtonText
- * @property bool        $saveData
- * @property string      $templateOverridesFolder
- * @property bool        $enableFileAttachments
+ * @property int       $id
+ * @property int       $groupId
+ * @property int       $fieldLayoutId
+ * @property string    $name
+ * @property string    $handle
+ * @property string    $titleFormat
+ * @property bool      $displaySectionTitles
+ * @property Element   $element
+ * @property FormGroup $group
+ * @property string    $redirectUri
+ * @property string    $submitAction
+ * @property string    $submitButtonText
+ * @property bool      $saveData
+ * @property string    $templateOverridesFolder
+ * @property string    $oldHandle
+ * @property bool      $enableFileAttachments
  */
 class Form extends ActiveRecord
 {

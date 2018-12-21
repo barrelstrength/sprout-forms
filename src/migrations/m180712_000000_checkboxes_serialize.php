@@ -5,7 +5,7 @@ namespace barrelstrength\sproutforms\migrations;
 use barrelstrength\sproutforms\fields\formfields\Checkboxes;
 use craft\db\Migration;
 use craft\db\Query;
-use craft\helpers\MigrationHelper;
+use craft\helpers\Json;
 
 /**
  * m180712_000000_checkboxes_serialize migration.
@@ -14,6 +14,7 @@ class m180712_000000_checkboxes_serialize extends Migration
 {
     /**
      * @inheritdoc
+     * @throws \yii\base\NotSupportedException
      */
     public function safeUp()
     {
@@ -30,10 +31,10 @@ class m180712_000000_checkboxes_serialize extends Migration
             ->all();
 
         foreach ($forms as $form) {
-            $contentTable = "{{%sproutformscontent_".$form['handle']."}}";
+            $contentTable = '{{%sproutformscontent_'.$form['handle'].'}}';
 
             foreach ($fields as $field) {
-                $column = "field_".$field['handle'];
+                $column = 'field_'.$field['handle'];
 
                 if ($this->db->columnExists($contentTable, $column)) {
 
@@ -45,7 +46,7 @@ class m180712_000000_checkboxes_serialize extends Migration
                     foreach ($entries as $entry) {
                         $newValue = [];
                         $value = $entry[$column];
-                        $values = json_decode($value, true);
+                        $values = Json::decode($value, true);
 
                         if ($values){
                             foreach ($values as $value) {
@@ -56,7 +57,7 @@ class m180712_000000_checkboxes_serialize extends Migration
                         }
 
                         if ($newValue){
-                            $newValueAsJson = json_encode($newValue);
+                            $newValueAsJson = Json::encode($newValue);
                             $this->update($contentTable, [$column => $newValueAsJson], ['id' => $entry['id']], [], false);
                         }
                     }

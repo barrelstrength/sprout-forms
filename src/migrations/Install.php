@@ -9,6 +9,7 @@ use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesDataSource;
 use barrelstrength\sproutforms\models\Settings;
 use craft\db\Migration;
+use craft\helpers\Json;
 
 /**
  * Installation Migration
@@ -36,6 +37,7 @@ class Install extends Migration
 
     /**
      * @inheritdoc
+     * @throws \yii\db\Exception
      */
     public function safeDown()
     {
@@ -237,7 +239,7 @@ class Install extends Migration
             ],
         ];
 
-        $newSettings = json_encode($settings->getAttributes());
+        $newSettings = Json::encode($settings->getAttributes());
 
         $this->db->createCommand()->update('{{%plugins}}', [
             'settings' => $newSettings

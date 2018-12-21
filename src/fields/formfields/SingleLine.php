@@ -16,6 +16,11 @@ use barrelstrength\sproutforms\base\FormField;
  * Class SingleLine
  *
  * @package Craft
+ *
+ * @property string $contentColumnType
+ * @property string $svgIconPath
+ * @property mixed  $settingsHtml
+ * @property mixed  $exampleInputHtml
  */
 class SingleLine extends FormField implements PreviewableFieldInterface
 {

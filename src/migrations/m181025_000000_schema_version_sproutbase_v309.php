@@ -20,6 +20,9 @@ class m181025_000000_schema_version_sproutbase_v309 extends Migration
 {
     /**
      * @inheritdoc
+     * @throws \yii\base\NotSupportedException
+     * @throws \yii\base\NotSupportedException
+     * @throws \yii\base\NotSupportedException
      */
     public function safeUp()
     {

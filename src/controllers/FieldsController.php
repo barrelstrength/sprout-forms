@@ -124,7 +124,7 @@ class FieldsController extends BaseController
 
         $request = Craft::$app->getRequest();
         $tabId = $request->getBodyParam('tabId');
-        $tabId = str_replace("tab-", "", $tabId);
+        $tabId = str_replace('tab-', '', $tabId);
         $tabRecord = FieldLayoutTabRecord::findOne($tabId);
 
         if ($tabRecord) {
@@ -222,7 +222,7 @@ class FieldsController extends BaseController
 
         if ($fieldLayoutField) {
             $required = $request->getBodyParam('required');
-            $fieldLayoutField->required = $required !== "" ? true : false;
+            $fieldLayoutField->required = $required !== '' ? true : false;
             $fieldLayoutField->save(false);
             $field->required = $fieldLayoutField->required;
         }

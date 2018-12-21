@@ -7,6 +7,11 @@ use craft\base\ElementInterface;
 use yii\db\Schema;
 use barrelstrength\sproutforms\base\FormField;
 
+/**
+ *
+ * @property string $svgIconPath
+ * @property mixed  $exampleInputHtml
+ */
 class PrivateNotes extends FormField
 {
     /**

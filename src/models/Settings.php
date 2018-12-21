@@ -6,6 +6,10 @@ use barrelstrength\sproutforms\SproutForms;
 use craft\base\Model;
 use Craft;
 
+/**
+ *
+ * @property array $settingsNavItems
+ */
 class Settings extends Model
 {
     public $pluginNameOverride = '';

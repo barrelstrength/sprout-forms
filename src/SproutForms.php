@@ -22,18 +22,14 @@ use barrelstrength\sproutforms\captchas\HoneypotCaptcha;
 use barrelstrength\sproutforms\captchas\JavascriptCaptcha;
 use barrelstrength\sproutforms\formtemplates\BasicTemplates;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
-use barrelstrength\sproutforms\integrations\sproutimport\bundles\BasicFieldsBundle;
-use barrelstrength\sproutforms\integrations\sproutimport\bundles\SpecialFieldsBundle;
 use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesDataSource;
 use barrelstrength\sproutforms\services\App;
 use barrelstrength\sproutforms\services\Entries;
 use barrelstrength\sproutforms\services\Forms;
 use barrelstrength\sproutbase\app\import\services\Importers;
-use barrelstrength\sproutbase\app\import\services\Bundles;
 use Craft;
 use craft\base\Plugin;
 
-use yii\db\Migration;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
@@ -51,6 +47,13 @@ use barrelstrength\sproutforms\services\Fields as SproutFormsFields;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use craft\services\Dashboard;
 
+/**
+ *
+ * @property null|array                    $cpNavItem
+ * @property array                         $cpUrlRules
+ * @property $this|\yii\web\Response|mixed $settingsResponse
+ * @property array                         $userPermissions
+ */
 class SproutForms extends Plugin
 {
     use BaseSproutTrait;

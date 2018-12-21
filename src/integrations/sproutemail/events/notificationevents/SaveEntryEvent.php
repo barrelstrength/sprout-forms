@@ -9,7 +9,6 @@ use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\services\Entries;
 use barrelstrength\sproutforms\SproutForms;
 use craft\events\ModelEvent;
-use craft\services\Elements;
 use craft\events\ElementEvent;
 use Craft;
 
@@ -18,6 +17,14 @@ use Craft;
  * Class SaveEntryEvent
  *
  * @package barrelstrength\sproutforms\integrations\sproutemail\events\notificationevents
+ *
+ * @property string                                     $eventHandlerClassName
+ * @property array                                      $allForms
+ * @property \barrelstrength\sproutforms\elements\Entry $mockEventObject
+ * @property null                                       $eventObject
+ * @property mixed                                      $name
+ * @property mixed                                      $eventName
+ * @property string                                     $eventClassName
  */
 class SaveEntryEvent extends NotificationEvent
 {

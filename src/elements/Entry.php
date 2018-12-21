@@ -2,7 +2,6 @@
 
 namespace barrelstrength\sproutforms\elements;
 
-use barrelstrength\sproutforms\elements\db\FormQuery;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
@@ -18,6 +17,9 @@ use yii\base\Exception;
 
 /**
  * Entry represents a entry element.
+ *
+ * @property array $payloadFields
+ * @property array $fields
  */
 class Entry extends Element
 {
@@ -425,6 +427,7 @@ class Entry extends Element
 
     /**
      * @inheritdoc
+     * @throws \yii\base\InvalidConfigException
      */
     public function rules()
     {

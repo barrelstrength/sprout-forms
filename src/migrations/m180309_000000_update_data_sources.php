@@ -14,6 +14,7 @@ class m180309_000000_update_data_sources extends Migration
 {
     /**
      * @inheritdoc
+     * @throws \yii\base\NotSupportedException
      */
     public function safeUp()
     {

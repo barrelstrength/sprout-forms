@@ -40,6 +40,10 @@ class HoneypotCaptcha extends Captcha
 
     /**
      * @inheritdoc
+     * @return string
+     * @throws \ReflectionException
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getCaptchaSettingsHtml()
     {
@@ -56,6 +60,8 @@ class HoneypotCaptcha extends Captcha
 
     /**
      * @inheritdoc
+     * @throws \ReflectionException
+     * @throws \ReflectionException
      */
     public function getCaptchaHtml()
     {
@@ -75,6 +81,7 @@ class HoneypotCaptcha extends Captcha
 
     /**
      * @inheritdoc
+     * @throws \ReflectionException
      */
     public function verifySubmission(OnBeforeSaveEntryEvent $event): bool
     {

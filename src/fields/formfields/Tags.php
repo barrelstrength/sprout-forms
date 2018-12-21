@@ -15,6 +15,9 @@ use barrelstrength\sproutforms\SproutForms;
 /**
  * Class SproutFormsTagsField
  *
+ *
+ * @property string $svgIconPath
+ * @property mixed  $exampleInputHtml
  */
 class Tags extends BaseRelationFormField
 {
@@ -72,6 +75,15 @@ class Tags extends BaseRelationFormField
 
     /**
      * @inheritdoc
+     *
+     * @param                       $value
+     * @param ElementInterface|null $element
+     *
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \craft\errors\SiteNotFoundException
+     * @throws \yii\base\Exception
+     * @throws \yii\base\NotSupportedException
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {

@@ -1,0 +1,28 @@
+{%- set value = value ? value : null -%}
+
+<div id="{{ name }}-{{ inputName }}" class="{{ name }}-field {{ name }}-{{ inputName }}-field sproutformsaddress-select-field{%- if class is defined %} {{ class }}{% endif %}">
+
+    {% if hideDropdown is defined and hideDropdown %}
+
+        <input type="hidden" name="{{ name ~ '[' ~ inputName ~ ']' }}" value="{{ value }}"/>
+
+    {% else %}
+        <div class="heading">
+            <label>{{ label }}</label>
+        </div>
+        <div class="input">
+            <select
+                {%- if id is defined %} id="{{ id }}"{% endif %}
+                {%- if fieldClass is defined %} class="{{ fieldClass }}"{% endif -%}
+                {%- if name %} name="{{ name ~ '[' ~ inputName ~ ']' }}"{% endif -%}
+                {%- if autocomplete is defined %} autocomplete="{{ autocomplete }}"{% endif -%}>
+
+                {%- for key, option in options -%}
+                    <option value="{{ key }}" {% if key == value %}selected{% endif %}>
+                        {{ option }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    {% endif %}
+</div>

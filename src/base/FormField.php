@@ -10,6 +10,12 @@ use craft\base\Field;
  * Class FormField
  *
  * @package Craft
+ *
+ * @property string $templatesPath
+ * @property string $fieldInputFolder
+ * @property string $namespace
+ * @property string $svgIconPath
+ * @property string $exampleInputHtml
  */
 abstract class FormField extends Field
 {
