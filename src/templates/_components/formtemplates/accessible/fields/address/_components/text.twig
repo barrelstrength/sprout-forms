@@ -1,0 +1,10 @@
+<div id="{{ name }}-{{ inputName|lower }}-field" class="field text {{ name }}-{{ inputName|lower }}-field{% if class is defined %} {{ class }}{% endif %}">
+    <div class="heading">
+        <label for="{{ name }}-{{ inputName|lower }}">{{ label }}</label>
+    </div>
+    <div class="input">
+        <input id="{{ name }}-{{ inputName|lower }}" type="text" name="{{ name }}[{{ inputName }}]" value="{{ value }}"
+            {%- if autocomplete is defined %} autocomplete="{{ autocomplete }}"{% endif -%}
+        />
+    </div>
+</div>

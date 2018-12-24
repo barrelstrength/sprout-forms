@@ -7,6 +7,7 @@ use craft\db\Query;
 use barrelstrength\sproutforms\fields\formfields\SingleLine;
 use barrelstrength\sproutforms\fields\formfields\Paragraph;
 use craft\fields\PlainText;
+use craft\helpers\Json;
 
 /**
  * m180314_161522_sproutforms_plaintext_fields migration.
@@ -33,7 +34,7 @@ class m180314_161522_sproutforms_plaintext_fields extends Migration
                 'columnType' => 'string'
             ];
 
-            $settings = json_decode($plainTextField['settings'], true);
+            $settings = Json::decode($plainTextField['settings'], true);
             $newType = SingleLine::class;
 
             if ($settings['multiline']) {
@@ -42,7 +43,7 @@ class m180314_161522_sproutforms_plaintext_fields extends Migration
                 $newSettings['initialRows'] = $settings['initialRows'];
             }
 
-            $settingsAsJson = json_encode($newSettings);
+            $settingsAsJson = Json::encode($newSettings);
 
             $this->update('{{%fields}}', ['type' => $newType, 'settings' => $settingsAsJson], ['id' => $plainTextField['id']], [], false);
         }

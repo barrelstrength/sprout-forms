@@ -11,6 +11,9 @@ use barrelstrength\sproutforms\SproutForms;
 /**
  * Class SproutFormsEntriesField
  *
+ *
+ * @property string $svgIconPath
+ * @property mixed  $exampleInputHtml
  */
 class Entries extends BaseRelationFormField
 {

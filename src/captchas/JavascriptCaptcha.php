@@ -35,6 +35,7 @@ class JavascriptCaptcha extends Captcha
 
     /**
      * @inheritdoc
+     * @throws \craft\errors\MissingComponentException
      */
     public function getCaptchaHtml()
     {
@@ -55,6 +56,7 @@ class JavascriptCaptcha extends Captcha
 
     /**
      * @inheritdoc
+     * @throws \craft\errors\MissingComponentException
      */
     public function verifySubmission(OnBeforeSaveEntryEvent $event): bool
     {

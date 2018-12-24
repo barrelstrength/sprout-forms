@@ -16,6 +16,11 @@ use barrelstrength\sproutforms\base\FormField;
  * Class PlainText
  *
  * @package Craft
+ *
+ * @property string      $contentColumnType
+ * @property string      $svgIconPath
+ * @property null|string $settingsHtml
+ * @property mixed       $exampleInputHtml
  */
 class Paragraph extends FormField implements PreviewableFieldInterface
 {

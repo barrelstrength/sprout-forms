@@ -6,6 +6,7 @@ use craft\db\Migration;
 use craft\db\Query;
 
 use Craft;
+use craft\helpers\Json;
 use craft\helpers\MigrationHelper;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutbase\app\email\elements\NotificationEmail;
@@ -22,6 +23,11 @@ class m180314_161540_craft2_to_craft3 extends Migration
 {
     /**
      * @inheritdoc
+     * @return bool
+     * @throws \Throwable
+     * @throws \craft\errors\SiteNotFoundException
+     * @throws \yii\base\NotSupportedException
+     * @throws \yii\db\Exception
      */
     public function safeUp()
     {
@@ -127,7 +133,7 @@ class m180314_161540_craft2_to_craft3 extends Migration
                 $notificationEmail = new NotificationEmail();
 
                 $settings = [
-                    'whenNew' => "1",
+                    'whenNew' => '1',
                     'formIds' => [
                         $form['id']
                     ]
@@ -141,7 +147,7 @@ class m180314_161540_craft2_to_craft3 extends Migration
                 $notificationEmail->title = $notificationEmail->subjectLine;
                 $notificationEmail->pluginHandle = 'sprout-forms';
                 $notificationEmail->enableFileAttachments = $form['enableFileAttachments'];
-                $notificationEmail->settings = json_encode($settings);
+                $notificationEmail->settings = Json::encode($settings);
                 $notificationEmail->enabled = $form['notificationEnabled'] ?? 0;
                 $notificationEmail->eventId = 'barrelstrength\sproutforms\integrations\sproutemail\events\notificationevents\SaveEntryEvent';
 

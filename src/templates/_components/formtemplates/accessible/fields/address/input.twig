@@ -1,0 +1,28 @@
+{%- set id = renderingOptions.id ?? name %}
+{%- set class = renderingOptions.class ?? name %}
+{%- set required = field.required ? true : false %}
+{%- set hasInstructions = field.instructions ? true : false %}
+
+{%- set dataAttributes = null %}
+{%- set data = renderingOptions.data ?? null %}
+{%- for key, dataValue in data %}
+    {%- set dataAttributes = dataAttributes ~ ' data-'~key~'='~dataValue %}
+{% endfor -%}
+
+    {#{%- if required %} required aria-required="true"{% endif %}#}
+    {#{%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}#}
+
+{# This will wrap the generated HTML for all the address fields #}
+<div{%- if id %} id="{{ id }}"{% endif %} class="{{ name }}-wrapper sproutfields-address-formfields {%- if class %} {{ class }}{% endif %}" data-namespace="{{ field.getNamespace() ~ '[' ~ name ~ ']' }}" {{- dataAttributes|raw -}}>
+    {# The select.html file is used for the Country dropdown fields. It will also be used used for the Region dropdown fields if hey exist, in the {{ form }} output below. #}
+    {{ countryInputHtml }}
+
+    {# The form output will include several fields that use the text.html and select.html fields. #}
+    <div class="sprout-address-country-fields">
+        {{ addressFormHtml }}
+    </div>
+    {# the hidden.html file will be output here ??? #}
+</div>
+
+{# Store our dynamic field template path for our address field logic #}
+{% do craft.app.getSession().set('sproutforms-templatepath-fields', craft.app.getView().getTemplatesPath()) %}

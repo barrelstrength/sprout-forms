@@ -11,6 +11,13 @@ use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutbase\app\fields\web\assets\url\UrlFieldAsset;
 
+/**
+ *
+ * @property array  $elementValidationRules
+ * @property string $svgIconPath
+ * @property mixed  $settingsHtml
+ * @property mixed  $exampleInputHtml
+ */
 class Url extends FormField implements PreviewableFieldInterface
 {
     /**
@@ -66,6 +73,14 @@ class Url extends FormField implements PreviewableFieldInterface
 
     /**
      * @inheritdoc
+     *
+     * @param                       $value
+     * @param ElementInterface|null $element
+     *
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
+     * @throws \yii\base\InvalidConfigException
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {

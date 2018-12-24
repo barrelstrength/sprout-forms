@@ -2,10 +2,7 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutforms\fields\formfields\Paragraph;
-use barrelstrength\sproutforms\fields\formfields\SingleLine;
 use craft\db\Migration;
-use craft\db\Query;
 
 /**
  * m181101_000000_not_null_columns migration.
@@ -17,7 +14,7 @@ class m181101_000000_not_null_columns extends Migration
      */
     public function safeUp()
     {
-        $table = "{{%sproutforms_forms}}";
+        $table = '{{%sproutforms_forms}}';
 
         //for drop not null
         $this->alterColumn($table, 'groupId', $this->integer(11)->defaultValue(null));

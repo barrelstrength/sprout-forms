@@ -12,11 +12,14 @@ use barrelstrength\sproutforms\records\EntryStatus as EntryStatusRecord;
 /**
  * Class Entry record.
  *
- * @property int    $id
- * @property int    $statusId
- * @property string $ipAddress
- * @property string $userAgent
- * @property string $formId
+ * @property int                          $id
+ * @property int                          $statusId
+ * @property string                       $ipAddress
+ * @property string                       $userAgent
+ * @property \yii\db\ActiveQueryInterface $element
+ * @property \yii\db\ActiveQueryInterface $entryStatuses
+ * @property \yii\db\ActiveQueryInterface $form
+ * @property string                       $formId
  */
 class Entry extends ActiveRecord
 {

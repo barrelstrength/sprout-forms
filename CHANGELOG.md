@@ -1,5 +1,17 @@
 # Changelog
 
+## 3.0.0-beta.35 - 2018-12-17
+
+### Fixed
+- Fixed issue where Invisible Field was not processing dynamic values on front-end requests ([#205])
+- Improved support for migrating from Craft 2 to Craft 3  ([#199], [#204])
+- Fixed consistency of Phone field error message ([#201])
+
+[#199]: https://github.com/barrelstrength/craft-sprout-forms/issues/199
+[#201]: https://github.com/barrelstrength/craft-sprout-forms/issues/201
+[#204]: https://github.com/barrelstrength/craft-sprout-forms/issues/204
+[#205]: https://github.com/barrelstrength/craft-sprout-forms/issues/205
+
 ## 3.0.0-beta.34 - 2018-11-28
 
 ### Changed

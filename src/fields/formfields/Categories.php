@@ -14,6 +14,9 @@ use barrelstrength\sproutforms\SproutForms;
 /**
  * Class SproutFormsCategoriesField
  *
+ *
+ * @property string $svgIconPath
+ * @property mixed  $exampleInputHtml
  */
 class Categories extends BaseRelationFormField
 {
@@ -78,6 +81,7 @@ class Categories extends BaseRelationFormField
 
     /**
      * @inheritdoc
+     * @throws \yii\base\NotSupportedException
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {

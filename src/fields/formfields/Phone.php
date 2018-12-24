@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\fields\formfields;
 
 use Craft;
 use craft\base\ElementInterface;
+use craft\helpers\Json;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\PreviewableFieldInterface;
 
@@ -12,6 +13,14 @@ use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutbase\app\fields\models\Phone as PhoneModel;
 
+/**
+ *
+ * @property array  $elementValidationRules
+ * @property string $svgIconPath
+ * @property mixed  $settingsHtml
+ * @property mixed  $exampleInputHtml
+ * @property array  $countries
+ */
 class Phone extends FormField implements PreviewableFieldInterface
 {
     /**
@@ -97,7 +106,7 @@ class Phone extends FormField implements PreviewableFieldInterface
         }
 
         if (is_string($value)) {
-            $phoneInfo = json_decode($value, true);
+            $phoneInfo = Json::decode($value, true);
         }
 
         if (!isset($phoneInfo['phone']) || !isset($phoneInfo['country'])){
@@ -218,7 +227,7 @@ class Phone extends FormField implements PreviewableFieldInterface
             if (!$value->phone){
                 $element->addError(
                     $this->handle,
-                    Craft::t('sprout-forms','{field} cannot be blank', [
+                    Craft::t('sprout-forms','{field} cannot be blank.', [
                         'field' => $this->name
                     ])
                 );

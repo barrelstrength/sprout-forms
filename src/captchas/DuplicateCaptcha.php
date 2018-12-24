@@ -30,6 +30,7 @@ class DuplicateCaptcha extends Captcha
 
     /**
      * @inheritdoc
+     * @throws \craft\errors\MissingComponentException
      */
     public function getCaptchaHtml()
     {
@@ -47,6 +48,8 @@ class DuplicateCaptcha extends Captcha
 
     /**
      * @inheritdoc
+     * @throws \craft\errors\MissingComponentException
+     * @throws \craft\errors\MissingComponentException
      */
     public function verifySubmission(OnBeforeSaveEntryEvent $event): bool
     {

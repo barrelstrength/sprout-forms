@@ -6,6 +6,7 @@ use craft\db\Migration;
 use craft\db\Query;
 use barrelstrength\sproutforms\fields\formfields\FileUpload;
 use craft\fields\Assets as CraftAssets;
+use craft\helpers\Json;
 
 /**
  * m180314_161531_sproutforms_assets_fields migration.
@@ -25,7 +26,7 @@ class m180314_161531_sproutforms_assets_fields extends Migration
             ->all();
 
         foreach ($fields as $field) {
-            $settings = json_decode($field['settings'], true);
+            $settings = Json::decode($field['settings'], true);
             $settings['sources'] = '*';
             $settings['sources'] = null;
             $settings['useSingleFolder'] = 1;
@@ -33,7 +34,7 @@ class m180314_161531_sproutforms_assets_fields extends Migration
             $settings['singleUploadLocationSource'] = $settings['singleUploadLocationSource'] ? 'folder:'.$settings['singleUploadLocationSource'] : '';
             $settings['viewMode'] = 'large';
             $settings['localizeRelations'] = false;
-            $settingsAsJson = json_encode($settings);
+            $settingsAsJson = Json::encode($settings);
 
             $this->update('{{%fields}}', ['type' => FileUpload::class, 'settings' => $settingsAsJson], ['id' => $field['id']], [], false);
         }
