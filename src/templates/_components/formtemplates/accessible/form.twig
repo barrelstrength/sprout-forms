@@ -136,9 +136,8 @@
             init: function(id) {
                 this.formId = id;
                 this.form = document.getElementById(this.formId);
-                this.addressFields = document.querySelectorAll('.sproutaddressfield-form-fields');
-                this.countrySelectFields = document.querySelectorAll('.sproutaddressfield-country-select');
-
+                this.addressFields = document.querySelectorAll('.sproutfields-address-formfields');
+                this.countrySelectFields = document.querySelectorAll('.sprout-address-country-select');
                 this.getNamespace();
                 this.initCountrySelectFields();
             },
@@ -177,9 +176,9 @@
                     //Call a function when the state changes.
                     if(http.readyState === 4 && http.status === 200) {
 
-                        self.removeElements('.sproutaddressfield-update-onchange-field', oForm);
+                        self.removeElements('.sprout-address-onchange-country', oForm);
                         var response = JSON.parse(http.response);
-                        var countrySpecificFields = oForm.querySelector('.sproutaddressfield-country-fields');
+                        var countrySpecificFields = oForm.querySelector('.sprout-address-country-fields');
 
                         countrySpecificFields.innerHTML = response.html;
                     }

@@ -19,7 +19,7 @@ class Entries extends BaseRelationField
      */
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms', 'Entries (Sprout)');
+        return Craft::t('sprout-forms', 'Entries (Sprout Forms)');
     }
 
     /**

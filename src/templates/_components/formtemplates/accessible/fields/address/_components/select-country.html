@@ -2,58 +2,47 @@
 
 {% if hideDropdown is defined and hideDropdown %}
 
-    <div class="hidden">
-        <input type="hidden" name="{{ name ~ '[' ~ inputName ~ ']' }}" value="{{ value }}"/>
-    </div>
+    <input type="hidden" name="{{ name ~ '[' ~ inputName ~ ']' }}" value="{{ value }}"/>
 
 {% else %}
 
-    <div id="{{ name }}-{{ inputName }}" class="{{ name }}-field {{ name }}-{{ inputName }}-field sproutformsaddress-select-field{%- if class is defined %} {{ class }}{% endif %}">
+    <div id="{{ name }}-{{ inputName|lower }}-field" class="field select {{ name }}-{{ inputName|lower }}-field{%- if class is defined %} {{ class }}{% endif %}">
 
-        {% if hideDropdown is defined and hideDropdown %}
+        <div class="heading">
+            <label for="{{ name }}-{{ inputName|lower }}">{{ label }}</label>
+        </div>
+        <div class="input">
+            <select
+                id="{{ name }}-{{ inputName|lower }}"
+                {%- if fieldClass is defined %} class="{{ fieldClass }}"{% endif -%}
+                {%- if name %} name="{{ name ~ '[' ~ inputName ~ ']' }}"{% endif -%}
+                {%- if autocomplete is defined %} autocomplete="{{ autocomplete }}"{% endif -%}>
 
-            <input type="hidden" name="{{ name ~ '[' ~ inputName ~ ']' }}" value="{{ value }}"/>
+                <option disabled>{{ "Select..."|t('sprout-forms') }}</option>
 
-        {% else %}
-            <div class="heading">
-                <label>{{ label }}</label>
-            </div>
-            <div class="input">
-                <select
-                    {%- if id is defined %} id="{{ id }}"{% endif %}
-                    {%- if fieldClass is defined %} class="{{ fieldClass }}"{% endif -%}
-                    {%- if name %} name="{{ name ~ '[' ~ inputName ~ ']' }}"{% endif -%}
-                    {%- if autocomplete is defined %} autocomplete="{{ autocomplete }}"{% endif -%}>
-
-                    {% if highlightCountries is not empty %}
-                        {%- for key, option in highlightCountries -%}
-                            {%- set optionLabel = option -%}
-                            {%- set optionValue = key -%}
-
-                            <option value="{{ optionValue }}"
-                                    {% if optionValue == value %}selected{% endif %}>
-                                {{ optionLabel }}
-                            </option>
-                        {% endfor %}
-                        <option disabled>---</option>
-                    {% endif %}
-
-                    {%- for key, option in options -%}
+                {% if highlightCountries is not empty %}
+                    {%- for key, option in highlightCountries -%}
                         {%- set optionLabel = option -%}
                         {%- set optionValue = key -%}
 
-                        <option value="{{ optionValue }}"  {% if optionValue == value %}selected{% endif %}>
+                        <option value="{{ optionValue }}"
+                                {% if optionValue == value %}selected{% endif %}>
                             {{ optionLabel }}
                         </option>
                     {% endfor %}
-                </select>
-            </div>
-        {% endif %}
-    </div>
+                    <option disabled>--</option>
+                {% endif %}
 
+                {%- for key, option in options -%}
+                    {%- set optionLabel = option -%}
+                    {%- set optionValue = key -%}
 
-
-
+                    <option value="{{ optionValue }}" {% if optionValue == value %}selected{% endif %}>
+                        {{ optionLabel }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
     </div>
 {% endif %}
 
