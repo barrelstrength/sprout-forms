@@ -18,6 +18,8 @@
                 {%- if name %} name="{{ name ~ '[' ~ inputName ~ ']' }}"{% endif -%}
                 {%- if autocomplete is defined %} autocomplete="{{ autocomplete }}"{% endif -%}>
 
+                <option disabled>{{ "Select..."|t('sprout-forms') }}</option>
+
                 {% if highlightCountries is not empty %}
                     {%- for key, option in highlightCountries -%}
                         {%- set optionLabel = option -%}
@@ -28,7 +30,7 @@
                             {{ optionLabel }}
                         </option>
                     {% endfor %}
-                    <option disabled>---</option>
+                    <option disabled>--</option>
                 {% endif %}
 
                 {%- for key, option in options -%}
