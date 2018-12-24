@@ -13,12 +13,12 @@
     {#{%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}#}
 
 {# This will wrap the generated HTML for all the address fields #}
-<div{%- if id %} id="{{ id }}"{% endif %} class="{{ name }}-wrapper sproutaddressfield-form-fields {%- if class %} {{ class }}{% endif %}" {{- dataAttributes|raw -}} data-namespace="{{ field.getNamespace() ~ '[' ~ name ~ ']' }}">
+<div{%- if id %} id="{{ id }}"{% endif %} class="{{ name }}-wrapper sproutfields-address-formfields {%- if class %} {{ class }}{% endif %}" data-namespace="{{ field.getNamespace() ~ '[' ~ name ~ ']' }}" {{- dataAttributes|raw -}}>
     {# The select.html file is used for the Country dropdown fields. It will also be used used for the Region dropdown fields if hey exist, in the {{ form }} output below. #}
     {{ countryInputHtml }}
 
     {# The form output will include several fields that use the text.html and select.html fields. #}
-    <div class="sproutaddressfield-country-fields">
+    <div class="sprout-address-country-fields">
         {{ addressFormHtml }}
     </div>
     {# the hidden.html file will be output here ??? #}
