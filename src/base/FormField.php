@@ -19,6 +19,8 @@ use craft\base\Field;
  */
 abstract class FormField extends Field
 {
+    CONST ADD_VARIABLES_SESSION_KEY = 'sprout-forms-field-variables';
+
     /**
      * @var array
      */
@@ -33,12 +35,13 @@ abstract class FormField extends Field
      * @var string
      */
     protected $originalTemplatesPath;
-
+    
     /**
+     *
      * Allows a user to add variables to an object that can be parsed by fields
      *
      * @example
-     * {% do craft.sproutForms.addFieldVariables({ entry: entry }) %}
+     * {% do craft.sproutForms.addFieldVariables({ entryTitle: entry.title }) %}
      * {{ craft.sproutForms.displayForm('contact') }}
      *
      * @param array $variables
@@ -49,7 +52,7 @@ abstract class FormField extends Field
     }
 
     /**
-     * @return array
+     * @return mixed
      */
     public static function getFieldVariables()
     {
