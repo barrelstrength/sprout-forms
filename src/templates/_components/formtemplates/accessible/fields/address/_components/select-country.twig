@@ -1,0 +1,45 @@
+{% set id = id ?? name %}
+{% set fieldClass = fieldClass ?? name %}
+{% set class = class ?? name %}
+
+<div id="{{ name }}-{{ inputName }}" class="{{ name }}-field {{ name }}-{{ inputName }}-field sproutformsaddress-select-field{%- if class is defined %} {{ class }}{% endif %}">
+
+{% if hideDropdown is defined and hideDropdown %}
+
+    <div class="hidden">
+        <input type="hidden" name="{{ name ~ '[' ~ inputName ~ ']' }}" value="{{ value }}"/>
+    </div>
+
+{% else %}
+        <div class="heading">
+            <label>{{ label }}</label>
+        </div>
+        <div class="input " {%- if class %} class="{{ class }}"{% endif %}>
+            <select
+                    {%- if name %} name="{{ name ~ '[' ~ inputName ~ ']' }}"{% endif %}
+                    {%- if id %} id="{{ id }}"{% endif %}
+                    {%- if fieldClass is defined %} class="{{ fieldClass }}"{% endif -%}
+            >
+                {% if highlightCountries is not empty %}
+                    {%- for key, option in highlightCountries -%}
+                        {%- set optionLabel = option -%}
+                        {%- set optionValue = key -%}
+
+                        <option value="{{ optionValue }}"
+                                {% if optionValue == value %}selected{% endif %}>{{ optionLabel }}</option>
+                    {% endfor %}
+                    <option disabled>---</option>
+                {% endif %}
+
+                {%- for key, option in options -%}
+
+                    {%- set optionLabel = option -%}
+                    {%- set optionValue = key -%}
+
+                    <option value="{{ optionValue }}"
+                            {% if optionValue == value %}selected{% endif %}>{{ optionLabel }}</option>
+                {% endfor %}
+            </select>
+        </div>
+{% endif %}
+</div>
