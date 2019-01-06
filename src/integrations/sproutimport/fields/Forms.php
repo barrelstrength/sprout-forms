@@ -11,7 +11,7 @@ class Forms extends FieldImporter
     /**
      * @inheritdoc
      */
-    public function getModelName()
+    public function getModelName(): string
     {
         return FormElement::class;
     }

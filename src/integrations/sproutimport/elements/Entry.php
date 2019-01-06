@@ -15,7 +15,7 @@ class Entry extends ElementImporter
     /**
      * @inheritdoc
      */
-    public function getModelName()
+    public function getModelName(): string
     {
         return EntryElement::class;
     }
@@ -23,7 +23,7 @@ class Entry extends ElementImporter
     /**
      * @inheritdoc
      */
-    public function hasSeedGenerator()
+    public function hasSeedGenerator(): bool
     {
         return true;
     }
@@ -50,7 +50,7 @@ class Entry extends ElementImporter
     /**
      * @inheritdoc
      */
-    public function getSeedSettingsHtml(SeedJob $seedJob)
+    public function getSeedSettingsHtml(SeedJob $seedJob): string
     {
        $forms = SproutForms::$app->forms->getAllForms();
 

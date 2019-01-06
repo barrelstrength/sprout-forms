@@ -37,7 +37,7 @@ class SpecialFieldsBundle extends Bundle
      *
      * @return string
      */
-    public function getSchemaFolder()
+    public function getSchemaFolder(): string
     {
         return $this->plugin->getBasePath().DIRECTORY_SEPARATOR.'templates/_integrations/sproutimport/bundles/specialfields/schema';
     }
@@ -49,7 +49,7 @@ class SpecialFieldsBundle extends Bundle
      *
      * @return string
      */
-    public function getSourceTemplateFolder()
+    public function getSourceTemplateFolder(): string
     {
         return $this->plugin->getBasePath().DIRECTORY_SEPARATOR.'templates/_integrations/sproutimport/bundles/specialfields/templates';
     }
