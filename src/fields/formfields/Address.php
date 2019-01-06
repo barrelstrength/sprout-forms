@@ -97,6 +97,11 @@ class Address extends FormField implements PreviewableFieldInterface
         $this->addressHelper->setBaseAddressFieldPath('');
 
         $this->addressHelper->setNamespace($name);
+
+        if (isset($this->highlightCountries) && count($this->highlightCountries)) {
+            $this->addressHelper->setHighlightCountries($this->highlightCountries);
+        }
+
         $this->addressHelper->setCountryCode($countryCode);
         $this->addressHelper->setAddressModel($addressModel);
         $this->addressHelper->setLanguage($this->defaultLanguage);
