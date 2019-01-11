@@ -19,7 +19,7 @@ class Form extends ElementImporter
     /**
      * @inheritdoc
      */
-    public function getModelName()
+    public function getModelName(): string
     {
         return FormElement::class;
     }

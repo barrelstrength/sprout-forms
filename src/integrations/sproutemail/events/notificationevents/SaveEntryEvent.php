@@ -60,7 +60,7 @@ class SaveEntryEvent extends NotificationEvent
         return ModelEvent::class;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return Craft::t('sprout-forms', 'When a form entry is saved (Sprout Forms)');
     }
@@ -71,7 +71,7 @@ class SaveEntryEvent extends NotificationEvent
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getSettingsHtml($context = [])
+    public function getSettingsHtml($context = []): string
     {
         if (!$this->availableForms) {
             $this->availableForms = $this->getAllForms();

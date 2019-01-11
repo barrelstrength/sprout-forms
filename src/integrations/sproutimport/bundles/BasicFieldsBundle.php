@@ -35,7 +35,7 @@ class BasicFieldsBundle extends Bundle
      *
      * @return string
      */
-    public function getSchemaFolder()
+    public function getSchemaFolder(): string
     {
         return $this->plugin->getBasePath().DIRECTORY_SEPARATOR.'templates/_integrations/sproutimport/bundles/basicfields/schema';
     }
@@ -47,7 +47,7 @@ class BasicFieldsBundle extends Bundle
      *
      * @return string
      */
-    public function getSourceTemplateFolder()
+    public function getSourceTemplateFolder(): string
     {
         return $this->plugin->getBasePath().DIRECTORY_SEPARATOR.'templates/_integrations/sproutimport/bundles/basicfields/templates';
     }
