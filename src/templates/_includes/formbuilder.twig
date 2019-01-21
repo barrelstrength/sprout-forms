@@ -62,9 +62,11 @@ tab      = tab or null
 
     {# This is built dynamically in js when creating new field from source #}
     {% if instance == 'active' %}
-      <ul class="settings">
-        <li><a id="sproutform-field-{{ field.id }}" data-fieldid="{{ field.id }}" href="#" tabindex="0" ><i class="fa fa-pencil fa-2x" title="Edit"></i></a></li>
-      </ul>
+      {% if craft.sproutSeo.validateField(field) %}
+        <ul class="settings">
+          <li><a id="sproutform-field-{{ field.id }}" data-fieldid="{{ field.id }}" href="#" tabindex="0" ><i class="fa fa-pencil fa-2x" title="Edit"></i></a></li>
+        </ul>
+      {% endif %}
     {% endif %}
 
     {# Manage hidden input fields #}

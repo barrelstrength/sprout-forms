@@ -43,7 +43,7 @@
                 {% if instructions %}
 
                     <p id="{{ id }}-instructions"
-                       class="instructions">{{ instructions|raw|t('sprout-forms') }}</p>
+                       class="instructions">{{ instructions|t('sprout-forms')|raw }}</p>
                 {%- endif %}
 
             </div>
