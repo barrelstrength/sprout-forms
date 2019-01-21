@@ -5,7 +5,7 @@
 {%- set value = value ? value : null %}
 
 {%- set multiple = field.limit == '' ? true : field.limit > 1 ? true : false %}
-{%- set selectionLabel = field.selectionLabel != '' ? field.selectionLabel : "Select a category..."|t('sprout-forms') -%}
+{%- set selectionLabel = field.selectionLabel != '' ? field.selectionLabel : "Select a category..."|t('site') -%}
 
 {%- set dataAttributes = null %}
 {%- set data = renderingOptions.data ?? null %}
