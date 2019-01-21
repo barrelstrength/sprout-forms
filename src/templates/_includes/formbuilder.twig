@@ -49,7 +49,15 @@ tab      = tab or null
     {% endif %}
 
     <div class="body{% if instance == 'source' %} hidden{% endif %}">
-      {{ field.getExampleInputHtml()|raw }}
+      {% if craft.sproutSeo.validateField(field) %}
+        {{ field.getExampleInputHtml()|raw }}
+      {% else %}
+        <div class="missing-component pane">
+          <p class="error">
+            Unable to find component class {{ craft.sproutSeo.getFieldClass(field) }}
+          </p>
+        </div>
+      {% endif %}
     </div>
 
     {# This is built dynamically in js when creating new field from source #}
