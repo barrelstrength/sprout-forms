@@ -31,9 +31,9 @@ class FrontEndFields extends Component
                 $pos = count($entries) + 1;
 
                 if (count($section) == 2) {
-                    $sectionById = $sectionsService->getSectionById($section[1]);
+                    $sectionById = $sectionsService->getSectionByUid($section[1]);
 
-                    $entries[$pos]['entries'] = Entry::find()->sectionId($section[1])->all();
+                    $entries[$pos]['entries'] = Entry::find()->sectionId($sectionById->id)->all();
                     $entries[$pos]['section'] = $sectionById;
                 } else {
                     if ($section[0] == 'singles') {
@@ -83,7 +83,7 @@ class FrontEndFields extends Component
             $pos = count($categories) + 1;
 
             if (count($group) == 2) {
-                $groupById = Craft::$app->getCategories()->getGroupById($group[1]);
+                $groupById = Craft::$app->getCategories()->getGroupByUid($group[1]);
 
                 $categories[$pos]['categories'] = Category::find()->groupId($group[1])->all();
                 $categories[$pos]['group'] = $groupById;
@@ -107,7 +107,7 @@ class FrontEndFields extends Component
             $pos = count($tags) + 1;
 
             if (count($group) == 2) {
-                $groupById = Craft::$app->getTags()->getTagGroupById($group[1]);
+                $groupById = Craft::$app->getTags()->getTagGroupByUid($group[1]);
 
                 $tags[$pos]['tags'] = Tag::find()->groupId($group[1])->all();
                 $tags[$pos]['group'] = $groupById;
