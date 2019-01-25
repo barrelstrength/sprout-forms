@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.0.0-beta.37 - 2019-01-25
+
+### Added
+- Added initial support for Craft 3.1
+
+### Changed
+- Updated Craft CMS requirement to v3.1.0
+- Updated Sprout Base requirement to v4.0.5
+
 ## 3.0.0-beta.36 - 2019-01-23
 
 ### Added
