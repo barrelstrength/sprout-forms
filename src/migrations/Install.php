@@ -10,6 +10,8 @@ use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesDat
 use barrelstrength\sproutforms\models\Settings;
 use craft\db\Migration;
 use craft\helpers\Json;
+use Craft;
+use craft\services\Plugins;
 
 /**
  * Installation Migration
@@ -239,13 +241,9 @@ class Install extends Migration
             ],
         ];
 
-        $newSettings = Json::encode($settings->getAttributes());
-
-        $this->db->createCommand()->update('{{%plugins}}', [
-            'settings' => $newSettings
-        ], [
-            'handle' => strtolower('sprout-forms')
-        ])->execute();
+        $pluginHandle = 'sprout-forms';
+        $projectConfig = Craft::$app->getProjectConfig();
+        $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY . '.' . $pluginHandle . '.settings', $settings->toArray());
     }
 
     public function installSproutEmail()

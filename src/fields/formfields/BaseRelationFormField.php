@@ -89,7 +89,7 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
     public $source;
 
     /**
-     * @var int|null The site that this field should relate elements from
+     * @var string|null The site that this field should relate elements from
      */
     public $targetSiteId;
 
@@ -241,8 +241,6 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
 
     /**
      * @inheritdoc
-     * @throws \craft\errors\SiteNotFoundException
-     * @throws NotSupportedException
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
@@ -323,9 +321,9 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
         }
 
         if ($value === ':notempty:' || $value === ':empty:') {
-            $alias = 'relations_'.$this->handle;
+            $alias = 'relations_' . $this->handle;
             $operator = ($value === ':notempty:' ? '!=' : '=');
-            $paramHandle = ':fieldId'.StringHelper::randomString(8);
+            $paramHandle = ':fieldId' . StringHelper::randomString(8);
 
             $query->subQuery->andWhere(
                 "(select count([[{$alias}.id]]) from {{%relations}} {{{$alias}}} where [[{$alias}.sourceId]] = [[elements.id]] and [[{$alias}.fieldId]] = {$paramHandle}) {$operator} 0",
@@ -341,6 +339,19 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
     /**
      * @inheritdoc
      */
+    public function modifyElementIndexQuery(ElementQueryInterface $query)
+    {
+        $query->andWith([
+            $this->handle, [
+                'status' => null,
+                'enabledForSite' => false,
+            ]
+        ]);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getIsTranslatable(ElementInterface $element = null): bool
     {
         return $this->localizeRelations;
@@ -348,19 +359,10 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
 
     /**
      * @inheritdoc
-     *
-     * @param                       $value
-     * @param ElementInterface|null $element
-     *
-     * @return string
-     * @throws NotSupportedException
-     * @throws \Twig_Error_Loader
-     * @throws \craft\errors\SiteNotFoundException
-     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        /** @var Element $element */
+        /** @var Element|null $element */
         if ($element !== null && $element->hasEagerLoadedElements($this->handle)) {
             $value = $element->getEagerLoadedElements($this->handle);
         }
@@ -379,7 +381,7 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
         /** @var ElementQuery $value */
         $titles = [];
 
-        foreach ($value->all() as $relatedElement) {
+        foreach ($this->_all($value)->all() as $relatedElement) {
             $titles[] = (string)$relatedElement;
         }
 
@@ -394,10 +396,12 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
         $value = $this->_all($value)->all();
 
         if (empty($value)) {
-            return '<p class="light">'.Craft::t('app', 'Nothing selected.').'</p>';
+            return '<p class="light">' . Craft::t('app', 'Nothing selected.') . '</p>';
         }
 
-        $html = '<div class="elementselect"><div class="elements">';
+        $view = Craft::$app->getView();
+        $id = $view->formatInputId($this->handle);
+        $html = "<div id='{$id}' class='elementselect'><div class='elements'>";
 
         foreach ($value as $relatedElement) {
             $html .= Craft::$app->getView()->renderTemplate('_elements/element', [
@@ -406,6 +410,12 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
         }
 
         $html .= '</div></div>';
+
+        $nsId = $view->namespaceInputId($id);
+        $js = <<<JS
+(new Craft.ElementThumbLoader()).load($('#{$nsId}'));
+JS;
+        $view->registerJs($js);
 
         return $html;
     }
@@ -416,7 +426,7 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
     public function getTableAttributeHtml($value, ElementInterface $element): string
     {
         if ($value instanceof ElementQueryInterface) {
-            $element = $value->first();
+            $element = $this->_all($value)->one();
         } else {
             $element = $value[0] ?? null;
         }
@@ -432,8 +442,6 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
 
     /**
      * @inheritdoc
-     * @throws NotSupportedException
-     * @throws \craft\errors\SiteNotFoundException
      */
     public function getEagerLoadingMap(array $sourceElements)
     {
@@ -450,7 +458,7 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
         // Return any relation data on these elements, defined with this field
         $map = (new Query())
             ->select(['sourceId as source', 'targetId as target'])
-            ->from(['{{%relations}}'])
+            ->from([TableName::RELATIONS])
             ->where([
                 'and',
                 [
@@ -488,11 +496,11 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
     {
         $this->_makeExistingRelationsTranslatable = false;
 
-        if ($this->id && $this->localizeRelations) {
+        if (!$this->getIsNew() && $this->localizeRelations) {
             /** @var Field $existingField */
             $existingField = Craft::$app->getFields()->getFieldById($this->id);
 
-            if ($existingField && $existingField instanceof BaseRelationFormField && !$existingField->localizeRelations) {
+            if ($existingField && $existingField instanceof self && !$existingField->localizeRelations) {
                 $this->_makeExistingRelationsTranslatable = true;
             }
         }
@@ -500,17 +508,15 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
         return parent::beforeSave($isNew);
     }
 
-
     /**
      * @inheritdoc
      */
     public function afterSave(bool $isNew)
     {
         if ($this->_makeExistingRelationsTranslatable) {
-            Craft::$app->getTasks()->queueTask([
-                'type' => LocalizeRelations::class,
+            Craft::$app->getQueue()->push(new LocalizeRelations([
                 'fieldId' => $this->id,
-            ]);
+            ]));
         }
 
         parent::afterSave($isNew);
@@ -518,7 +524,6 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
 
     /**
      * @inheritdoc
-     * @throws \Exception
      */
     public function afterElementSave(ElementInterface $element, bool $isNew)
     {
@@ -546,7 +551,6 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
      * Normalizes the available sources into select input options.
      *
      * @return array
-     * @throws NotSupportedException
      */
     public function getSourceOptions(): array
     {
@@ -557,7 +561,7 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
             // Make sure it's not a heading
             if (!isset($source['heading'])) {
                 $options[] = [
-                    'label' => $source['label'],
+                    'label' => Html::encode($source['label']),
                     'value' => $source['key']
                 ];
                 $optionNames[] = $source['label'];
@@ -573,9 +577,7 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
     /**
      * Returns the HTML for the Target Site setting.
      *
-     * @return null|string
-     * @throws NotSupportedException
-     * @throws \yii\base\Exception
+     * @return string|null
      */
     public function getTargetSiteFieldHtml()
     {
@@ -586,33 +588,33 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
             return null;
         }
 
-        $type = StringHelper::toLowerCase(static::displayName());
+        $type = mb_strtolower(static::displayName());
         $showTargetSite = !empty($this->targetSiteId);
 
         $html = Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'checkboxField',
                 [
                     [
-                        'label' => Craft::t('sprout-forms', 'Relate {type} from a specific site?', ['type' => $type]),
+                        'label' => Craft::t('app', 'Relate {type} from a specific site?', ['type' => $type]),
                         'name' => 'useTargetSite',
                         'checked' => $showTargetSite,
                         'toggle' => 'target-site-container'
                     ]
-                ]).
-            '<div id="target-site-container"'.(!$showTargetSite ? ' class="hidden"' : '').'>';
+                ]) .
+            '<div id="target-site-container"' . (!$showTargetSite ? ' class="hidden"' : '') . '>';
 
         $siteOptions = [];
 
         foreach (Craft::$app->getSites()->getAllSites() as $site) {
             $siteOptions[] = [
-                'label' => Craft::t('sprout-forms', $site->name),
-                'value' => $site->id
+                'label' => Craft::t('site', $site->name),
+                'value' => $site->uid
             ];
         }
 
         $html .= Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'selectField',
             [
                 [
-                    'label' => Craft::t('sprout-forms', 'Which site should {type} be related from?', ['type' => $type]),
+                    'label' => Craft::t('app', 'Which site should {type} be related from?', ['type' => $type]),
                     'id' => 'targetSiteId',
                     'name' => 'targetSiteId',
                     'options' => $siteOptions,
@@ -628,8 +630,7 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
     /**
      * Returns the HTML for the View Mode setting.
      *
-     * @return null|string
-     * @throws \yii\base\Exception
+     * @return string|null
      */
     public function getViewModeFieldHtml()
     {
@@ -647,8 +648,8 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
 
         return Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'selectField', [
             [
-                'label' => Craft::t('sprout-forms', 'View Mode'),
-                'instructions' => Craft::t('sprout-forms', 'Choose how the field should look for authors.'),
+                'label' => Craft::t('app', 'View Mode'),
+                'instructions' => Craft::t('app', 'Choose how the field should look for authors.'),
                 'id' => 'viewMode',
                 'name' => 'viewMode',
                 'options' => $viewModeOptions,
@@ -664,19 +665,14 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
      * Returns an array of variables that should be passed to the input template.
      *
      * @param ElementQueryInterface|array|null $value
-     * @param ElementInterface|null            $element
-     *
+     * @param ElementInterface|null $element
      * @return array
-     * @throws NotSupportedException
-     * @throws \craft\errors\SiteNotFoundException
-     * @throws \craft\errors\SiteNotFoundException
      */
     protected function inputTemplateVariables($value = null, ElementInterface $element = null): array
     {
         if ($value instanceof ElementQueryInterface) {
             $value = $value
-                ->status(null)
-                ->enabledForSite(false)
+                ->anyStatus()
                 ->all();
         } else if (!is_array($value)) {
             $value = [];
@@ -691,7 +687,7 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
             'elementType' => static::elementType(),
             'id' => Craft::$app->getView()->formatInputId($this->handle),
             'fieldId' => $this->id,
-            'storageKey' => 'field.'.$this->id,
+            'storageKey' => 'field.' . $this->id,
             'name' => $this->handle,
             'elements' => $value,
             'sources' => $this->inputSources($element),
@@ -700,6 +696,7 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
             'limit' => $this->allowLimit ? $this->limit : null,
             'viewMode' => $this->viewMode(),
             'selectionLabel' => $this->selectionLabel ? Craft::t('site', $this->selectionLabel) : static::defaultSelectionLabel(),
+            'sortable' => $this->sortable,
         ];
     }
 
@@ -707,7 +704,6 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
      * Returns an array of the source keys the field should be able to select elements from.
      *
      * @param ElementInterface|null $element
-     *
      * @return array|string
      */
     protected function inputSources(ElementInterface $element = null)
@@ -735,16 +731,18 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
      * Returns the site ID that target elements should have.
      *
      * @param ElementInterface|null $element
-     *
      * @return int
-     * @throws \craft\errors\SiteNotFoundException
      */
     protected function targetSiteId(ElementInterface $element = null): int
     {
         /** @var Element|null $element */
         if (Craft::$app->getIsMultiSite()) {
             if ($this->targetSiteId) {
-                return $this->targetSiteId;
+                try {
+                    return Craft::$app->getSites()->getSiteByUid($this->targetSiteId)->id;
+                } catch (SiteNotFoundException $exception) {
+                    Craft::warning($exception->getMessage(), __METHOD__);
+                }
             }
 
             if ($element !== null) {
@@ -763,11 +761,11 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
     protected function supportedViewModes(): array
     {
         $viewModes = [
-            'list' => Craft::t('sprout-forms', 'List'),
+            'list' => Craft::t('app', 'List'),
         ];
 
         if ($this->allowLargeThumbsView) {
-            $viewModes['large'] = Craft::t('sprout-forms', 'Large Thumbnails');
+            $viewModes['large'] = Craft::t('app', 'Large Thumbnails');
         }
 
         return $viewModes;
@@ -794,7 +792,6 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
      * Returns the sources that should be available to choose from within the field's settings
      *
      * @return array
-     * @throws NotSupportedException
      */
     protected function availableSources(): array
     {
@@ -809,6 +806,7 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
      */
     private function _all(ElementQueryInterface $query): ElementQueryInterface
     {
-        return (clone $query)->status(null)->enabledForSite(false);
+        return (clone $query)
+            ->anyStatus();
     }
 }
