@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutforms\fields\Entries;
+use barrelstrength\sproutforms\fields\formfields\Entries;
 use barrelstrength\sproutforms\fields\formfields\Categories;
 use barrelstrength\sproutforms\fields\formfields\FileUpload;
 use barrelstrength\sproutforms\fields\formfields\Tags;
