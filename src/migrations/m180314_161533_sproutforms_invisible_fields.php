@@ -20,7 +20,7 @@ class m180314_161533_sproutforms_invisible_fields extends Migration
             ->select(['id', 'handle', 'settings'])
             ->from(['{{%fields}}'])
             ->where(['type' => 'SproutFields_Invisible'])
-            ->andWhere('context LIKE "%sproutForms:%"')
+            ->andWhere(['like', 'context', 'sproutForms:'])
             ->all();
 
         foreach ($fields as $field) {

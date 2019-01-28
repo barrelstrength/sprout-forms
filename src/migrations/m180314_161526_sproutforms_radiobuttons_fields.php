@@ -21,7 +21,7 @@ class m180314_161526_sproutforms_radiobuttons_fields extends Migration
             ->select(['id', 'handle', 'settings'])
             ->from(['{{%fields}}'])
             ->where(['type' => CraftRadioButtons::class])
-            ->andWhere('context LIKE "%sproutForms:%"')
+            ->andWhere(['like', 'context', 'sproutForms:'])
             ->all();
 
         foreach ($radioButtonsFields as $radioButtonsField) {

@@ -24,7 +24,7 @@ class m180314_161522_sproutforms_plaintext_fields extends Migration
             ->select(['id', 'handle', 'settings'])
             ->from(['{{%fields}}'])
             ->where(['type' => PlainText::class])
-            ->andWhere('context LIKE "%sproutForms:%"')
+            ->andWhere(['like', 'context', 'sproutForms:'])
             ->all();
 
         foreach ($plainTextFields as $plainTextField) {

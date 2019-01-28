@@ -21,7 +21,7 @@ class m180314_161525_sproutforms_multiselect_fields extends Migration
             ->select(['id', 'handle', 'settings'])
             ->from(['{{%fields}}'])
             ->where(['type' => CraftMultiselect::class])
-            ->andWhere('context LIKE "%sproutForms:%"')
+            ->andWhere(['like', 'context', 'sproutForms:'])
             ->all();
 
         foreach ($multiselectFields as $multiselectField) {
