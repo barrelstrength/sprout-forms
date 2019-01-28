@@ -22,7 +22,7 @@ class m180314_161527_sproutforms_number_fields extends Migration
             ->select(['id', 'handle', 'settings'])
             ->from(['{{%fields}}'])
             ->where(['type' => CraftNumber::class])
-            ->andWhere('context LIKE "%sproutForms:%"')
+            ->andWhere(['like', 'context', 'sproutForms:'])
             ->all();
 
         foreach ($numberFields as $numberField) {

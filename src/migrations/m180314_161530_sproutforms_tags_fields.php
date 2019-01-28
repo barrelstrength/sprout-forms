@@ -22,7 +22,7 @@ class m180314_161530_sproutforms_tags_fields extends Migration
             ->select(['id', 'handle', 'settings'])
             ->from(['{{%fields}}'])
             ->where(['type' => CraftTags::class])
-            ->andWhere('context LIKE "%sproutForms:%"')
+            ->andWhere(['like', 'context', 'sproutForms:'])
             ->all();
 
         foreach ($tagFields as $tagField) {

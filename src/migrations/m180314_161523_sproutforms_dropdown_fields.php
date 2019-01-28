@@ -21,7 +21,7 @@ class m180314_161523_sproutforms_dropdown_fields extends Migration
             ->select(['id', 'handle', 'settings'])
             ->from(['{{%fields}}'])
             ->where(['type' => CraftDropdown::class])
-            ->andWhere('context LIKE "%sproutForms:%"')
+            ->andWhere(['like', 'context', 'sproutForms:'])
             ->all();
 
         foreach ($dropdownFields as $dropdownField) {

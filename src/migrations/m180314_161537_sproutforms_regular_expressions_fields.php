@@ -20,7 +20,7 @@ class m180314_161537_sproutforms_regular_expressions_fields extends Migration
             ->select(['id', 'handle', 'settings'])
             ->from(['{{%fields}}'])
             ->where(['type' => 'SproutFields_RegularExpression'])
-            ->andWhere('context LIKE "%sproutForms:%"')
+            ->andWhere(['like', 'context', 'sproutForms:'])
             ->all();
 
         foreach ($fields as $field) {

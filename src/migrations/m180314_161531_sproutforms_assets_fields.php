@@ -22,7 +22,7 @@ class m180314_161531_sproutforms_assets_fields extends Migration
             ->select(['id', 'handle', 'settings'])
             ->from(['{{%fields}}'])
             ->where(['type' => CraftAssets::class])
-            ->andWhere('context LIKE "%sproutForms:%"')
+            ->andWhere(['like', 'context', 'sproutForms:'])
             ->all();
 
         foreach ($fields as $field) {

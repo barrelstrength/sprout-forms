@@ -22,7 +22,7 @@ class m180314_161529_sproutforms_categories_fields extends Migration
             ->select(['id', 'handle', 'settings'])
             ->from(['{{%fields}}'])
             ->where(['type' => CraftCategories::class])
-            ->andWhere('context LIKE "%sproutForms:%"')
+            ->andWhere(['like', 'context', 'sproutForms:'])
             ->all();
 
         foreach ($categoriesFields as $categoryField) {

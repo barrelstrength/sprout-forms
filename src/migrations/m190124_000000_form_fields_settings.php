@@ -24,7 +24,7 @@ class m190124_000000_form_fields_settings extends Migration
         $fields = (new Query())
             ->select(['id', 'settings', 'type'])
             ->from([Table::FIELDS])
-            ->andWhere('context LIKE "%sproutForms:%"')
+            ->andWhere(['like', 'context', 'sproutForms:'])
             ->all();
 
         $folderIds = [];
