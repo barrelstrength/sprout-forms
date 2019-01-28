@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.0.0-beta.38 - 2019-01-28
+
+### Fixed
+- Fixed error when using Number Fields in Craft 3.1 migration
+
+### Improved
+- Improved PostgreSQL compatibility in migrations
+
 ## 3.0.0-beta.37 - 2019-01-25
 
 ### Added
