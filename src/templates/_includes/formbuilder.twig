@@ -49,14 +49,24 @@ tab      = tab or null
     {% endif %}
 
     <div class="body{% if instance == 'source' %} hidden{% endif %}">
-      {{ field.getExampleInputHtml()|raw }}
+      {% if craft.sproutForms.validateField(field) %}
+        {{ field.getExampleInputHtml()|raw }}
+      {% else %}
+        <div class="missing-component pane">
+          <p class="error">
+            Unable to find component class {{ craft.sproutForms.getFieldClass(field) }}
+          </p>
+        </div>
+      {% endif %}
     </div>
 
     {# This is built dynamically in js when creating new field from source #}
     {% if instance == 'active' %}
-      <ul class="settings">
-        <li><a id="sproutform-field-{{ field.id }}" data-fieldid="{{ field.id }}" href="#" tabindex="0" ><i class="fa fa-pencil fa-2x" title="Edit"></i></a></li>
-      </ul>
+      {% if craft.sproutForms.validateField(field) %}
+        <ul class="settings">
+          <li><a id="sproutform-field-{{ field.id }}" data-fieldid="{{ field.id }}" href="#" tabindex="0" ><i class="fa fa-pencil fa-2x" title="Edit"></i></a></li>
+        </ul>
+      {% endif %}
     {% endif %}
 
     {# Manage hidden input fields #}

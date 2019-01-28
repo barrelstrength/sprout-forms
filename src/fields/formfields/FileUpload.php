@@ -86,6 +86,15 @@ class FileUpload extends BaseRelationFormField
         $this->settingsTemplate = 'sprout-forms/_components/fields/formfields/fileupload/settings';
         $this->inputTemplate = '_components/fieldtypes/Assets/input';
         $this->inputJsClass = 'Craft.AssetSelectInput';
+
+        $this->defaultUploadLocationSource = $this->_folderSourceToVolumeSource($this->defaultUploadLocationSource);
+        $this->singleUploadLocationSource = $this->_folderSourceToVolumeSource($this->singleUploadLocationSource);
+
+        if (is_array($this->sources)) {
+            foreach ($this->sources as &$source) {
+                $source = $this->_folderSourceToVolumeSource($source);
+            }
+        }
     }
 
     /**
@@ -489,20 +498,20 @@ class FileUpload extends BaseRelationFormField
      * @throws InvalidVolumeException
      * @throws \craft\errors\MissingComponentException
      * @throws \craft\errors\VolumeException
-*/
+    */
     protected function inputSources(ElementInterface $element = null)
     {
         $folderId = $this->_determineUploadFolderId($element, false);
-        Craft::$app->getSession()->authorize('saveAssetInVolume:'.$folderId);
+        Craft::$app->getSession()->authorize('saveAssetInVolume:' . $folderId);
 
         if ($this->useSingleFolder) {
-            $folderPath = 'folder:'.$folderId;
             $folder = Craft::$app->getAssets()->getFolderById($folderId);
+            $folderPath = 'folder:' . $folder->uid;
 
             // Construct the path
             while ($folder->parentId && $folder->volumeId !== null) {
                 $parent = $folder->getParent();
-                $folderPath = 'folder:'.$parent->id.'/'.$folderPath;
+                $folderPath = 'folder:' . $parent->uid . '/' . $folderPath;
                 $folder = $parent;
             }
 
@@ -516,6 +525,8 @@ class FileUpload extends BaseRelationFormField
             foreach ($this->sources as $source) {
                 if (strpos($source, 'folder:') === 0) {
                     $sources[] = $source;
+                } else if (strpos($source, 'volume:') === 0) {
+                    $sources[] = $this->_volumeSourceToFolderSource($source);
                 }
             }
         } else {
@@ -575,8 +586,8 @@ class FileUpload extends BaseRelationFormField
                         continue;
                     }
 
-                    if (!empty($this->_uploadedDataFiles['filenames'][$index])) {
-                        $filename = $this->_uploadedDataFiles['filenames'][$index];
+                    if (!empty($this->_uploadedDataFiles['filename'][$index])) {
+                        $filename = $this->_uploadedDataFiles['filename'][$index];
                     } else {
                         $extensions = FileHelper::getExtensionsByMimeType($type);
 
@@ -584,7 +595,7 @@ class FileUpload extends BaseRelationFormField
                             continue;
                         }
 
-                        $filename = 'Uploaded_file.'.reset($extensions);
+                        $filename = 'Uploaded_file.' . reset($extensions);
                     }
 
                     $uploadedFiles[] = [
@@ -650,7 +661,7 @@ class FileUpload extends BaseRelationFormField
             try {
                 $renderedSubpath = Craft::$app->getView()->renderObjectTemplate($subpath, $element);
             } catch (\Throwable $e) {
-                throw new InvalidSubpathException($subpath);
+                throw new InvalidSubpathException($subpath, null, 0, $e);
             }
 
             // Did any of the tokens return null?
@@ -674,7 +685,7 @@ class FileUpload extends BaseRelationFormField
 
             $folder = $assetsService->findFolder([
                 'volumeId' => $volumeId,
-                'path' => $subpath.'/'
+                'path' => $subpath . '/'
             ]);
 
             // Ensure that the folder exists
@@ -781,13 +792,13 @@ class FileUpload extends BaseRelationFormField
     {
         $parts = explode(':', $sourceKey, 2);
 
-        if (count($parts) !== 2 || !is_numeric($parts[1])) {
+        if (count($parts) !== 2) {
             return null;
         }
 
-        $folder = Craft::$app->getAssets()->getFolderById((int)$parts[1]);
+        $volume = Craft::$app->getVolumes()->getVolumeByUid($parts[1]);
 
-        return $folder->volumeId ?? null;
+        return $volume ? $volume->id : null;
     }
 
     /**
@@ -808,5 +819,45 @@ class FileUpload extends BaseRelationFormField
         }
 
         return Craft::$app->getVolumes()->getVolumeById($volumeId);
+    }
+
+    /**
+     * Convert a folder:UID source key to a volume:UID source key.
+     *
+     * @param mixed $sourceKey
+     * @return string
+     */
+    private function _folderSourceToVolumeSource($sourceKey): string
+    {
+        if ($sourceKey && is_string($sourceKey) && strpos($sourceKey, 'folder:') === 0) {
+            $parts = explode(':', $sourceKey);
+            $folder = Craft::$app->getAssets()->getFolderByUid($parts[1]);
+
+            if ($folder) {
+                return 'volume:' . $folder->getVolume()->uid;
+            }
+        }
+
+        return (string)$sourceKey;
+    }
+
+    /**
+     * Convert a volume:UID source key to a folder:UID source key.
+     *
+     * @param mixed $sourceKey
+     * @return string
+     */
+    private function _volumeSourceToFolderSource($sourceKey): string
+    {
+        if ($sourceKey && is_string($sourceKey) && strpos($sourceKey, 'volume:') === 0) {
+            $parts = explode(':', $sourceKey);
+            $volume = Craft::$app->getVolumes()->getVolumeByUid($parts[1]);
+
+            if ($volume && $folder = Craft::$app->getAssets()->getRootFolderByVolumeId($volume->id)) {
+                return 'folder:' . $folder->uid;
+            }
+        }
+
+        return (string)$sourceKey;
     }
 }

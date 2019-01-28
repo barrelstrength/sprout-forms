@@ -4,7 +4,7 @@
 {%- set hasInstructions = field.instructions ? true : false %}
 {%- set value = value ? value : null %}
 
-{%- set selectionLabel = field.selectionLabel != '' ? field.selectionLabel : "Select a tag..."|t('sprout-forms') -%}
+{%- set selectionLabel = field.selectionLabel != '' ? field.selectionLabel : "Select a tag..."|t('site') -%}
 
 {%- set dataAttributes = null %}
 {%- set data = renderingOptions.data ?? null %}

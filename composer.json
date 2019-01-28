@@ -1,7 +1,7 @@
 {
   "name": "barrelstrength/sprout-forms",
   "description": "Simple, beautiful forms. 100% control.",
-  "version": "3.0.0-beta.35",
+  "version": "3.0.0-beta.36",
   "type": "craft-plugin",
   "keywords": [
     "craft",
@@ -25,8 +25,8 @@
     "rss": "https://github.com/barrelstrength/sprout-forms/commits/v2.atom"
   },
   "require": {
-    "craftcms/cms": "^3.0.0",
-    "barrelstrength/sprout-base": "^4.0.3"
+    "craftcms/cms": "^3.1.0",
+    "barrelstrength/sprout-base": "^4.0.4"
   },
   "autoload": {
     "psr-4": {

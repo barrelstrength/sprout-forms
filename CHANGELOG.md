@@ -1,5 +1,28 @@
 # Changelog
 
+## 3.0.0-beta.36 - 2019-01-23
+
+### Added
+- Added International Address Form Field
+- Added autocomplete support to base Address Form Field templates
+
+### Changed
+- Updated translation filter to use the category 'site' as templates output front-end content and should be translatable on the front-end [#214]
+- Improved error message when a Form Field is missing from a Field Layout [#209]
+- Updated Entries Relations field from 'Entries (Sprout)' => 'Entries (Sprout Forms)'
+- Updated Entries Relations field from 'Forms (Sprout)' => 'Forms (Sprout Forms)'
+- Added several assets back to repo that were previously stored in Sprout Base
+- Updated barrelstrength/sprout-base to require v4.0.4
+
+### Fixed
+- Added placeholder output to regex field [#212]
+- Fixed issue where instructions would not output HTML [#208]
+
+[#208]: https://github.com/barrelstrength/craft-sprout-forms/issues/208
+[#209]: https://github.com/barrelstrength/craft-sprout-forms/issues/209
+[#212]: https://github.com/barrelstrength/craft-sprout-forms/issues/212
+[#214]: https://github.com/barrelstrength/craft-sprout-forms/issues/214
+
 ## 3.0.0-beta.35 - 2018-12-17
 
 ### Fixed

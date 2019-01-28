@@ -33,17 +33,17 @@
             <div class="heading">
                 {% if label -%}
                     {%- if field.hasMultipleLabels() -%}
-                        <legend>{{- label|raw|t('sprout-forms') -}}</legend>
+                        <legend>{{- label|raw|t('site') -}}</legend>
                     {%- else -%}
                         <label{% if name %} for="{{ name }}"{% endif %}>
-                            {{- label|raw|t('sprout-forms') -}}
+                            {{- label|raw|t('site') -}}
                         </label>
                     {%- endif -%}
                 {%- endif -%}
                 {% if instructions %}
 
                     <p id="{{ id }}-instructions"
-                       class="instructions">{{ instructions|raw|t('sprout-forms') }}</p>
+                       class="instructions">{{ instructions|t('site')|raw }}</p>
                 {%- endif %}
 
             </div>

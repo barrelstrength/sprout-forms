@@ -18,7 +18,7 @@
 
         {% if field.displayPrefix %}
             <div {%- if id %} id="{{ id }}-prefix"{% endif %}>
-                <label>{{ "Prefix"|t('sprout-forms') }}</label>
+                <label>{{ "Prefix"|t('site') }}</label>
                 <input type="text"
                         {%- if name %} name="{{ name ~ '[address][prefix]' }}"{% endif %}
                         {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
@@ -28,7 +28,7 @@
         {% endif %}
 
         <div {%- if id %} id="{{ id }}-firstName"{% endif %}>
-            <label>{{ "First"|t('sprout-forms') }}</label>
+            <label>{{ "First"|t('site') }}</label>
             <input type="text" autocomplete="given-name"
                     {%- if name %} name="{{ name ~ '[address][firstName]' }}"{% endif %}
                     {%- if required %} required aria-required="true"{% endif %}
@@ -39,7 +39,7 @@
 
         {% if field.displayMiddleName %}
             <div {%- if id %} id="{{ id }}-middleName"{% endif %}>
-                <label>{{ "Middle"|t('sprout-forms') }}</label>
+                <label>{{ "Middle"|t('site') }}</label>
                 <input type="text" autocomplete="additional-name"
                         {%- if name %} name="{{ name ~ '[address][middleName]' }}"{% endif %}
                         {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
@@ -49,7 +49,7 @@
         {% endif %}
 
         <div {%- if id %} id="{{ id }}-lastName"{% endif %}>
-            <label>{{ "Last"|t('sprout-forms') }}</label>
+            <label>{{ "Last"|t('site') }}</label>
             <input type="text" autocomplete="family-name"
                     {%- if name %} name="{{ name ~ '[address][lastName]' }}"{% endif %}
                     {%- if required %} required aria-required=" true"{% endif %}
@@ -60,7 +60,7 @@
 
         {% if field.displaySuffix %}
             <div {%- if id %} id="{{ id }}-suffix"{% endif %}>
-                <label>{{ "Suffix"|t('sprout-forms') }}</label>
+                <label>{{ "Suffix"|t('site') }}</label>
                 <input type="text"
                         {%- if name %} name="{{ name ~ '[address][suffix]' }}"{% endif %}
                         {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}

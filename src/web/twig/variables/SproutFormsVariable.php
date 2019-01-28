@@ -601,5 +601,24 @@ class SproutFormsVariable
 
         return $options;
     }
+
+
+    /**
+     * @param $field
+     * @return mixed
+     */
+    public function validateField($field)
+    {
+        return $field instanceof FormField;
+    }
+
+    /**
+     * @param $field
+     * @return mixed
+     */
+    public function getFieldClass($field)
+    {
+        return get_class($field);
+    }
 }
 

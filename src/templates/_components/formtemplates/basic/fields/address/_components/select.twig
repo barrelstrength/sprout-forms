@@ -1,0 +1,21 @@
+{%- set value = value ? value : null -%}
+
+<div id="{{ name }}-{{ inputName }}-field" class="field select {{ name }}-{{ inputName|lower }}-field{%- if class is defined %} {{ class }}{% endif %}">
+    <div class="heading">
+        <label for="{{ name }}-{{ inputName|lower }}">{{ label }}</label>
+    </div>
+    <div class="input">
+        <select
+            id="{{ name }}-{{ inputName|lower }}"
+            {%- if fieldClass is defined %} class="{{ fieldClass }}"{% endif -%}
+            {%- if name %} name="{{ name ~ '[' ~ inputName ~ ']' }}"{% endif -%}
+            {%- if autocomplete is defined %} autocomplete="{{ autocomplete }}"{% endif -%}>
+
+            {%- for key, option in options -%}
+                <option value="{{ key }}" {% if key == value %}selected{% endif %}>
+                    {{ option }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+</div>

@@ -30,16 +30,16 @@
                     <div class="heading">
                         {% if label -%}
                             {%- if field.hasMultipleLabels() -%}
-                                {{- label|raw|t('sprout-forms') -}}
+                                {{- label|raw|t('site') -}}
                             {%- else -%}
                                 <label{% if name %} for="{{ name }}"{% endif %}>
-                                    {{- label|raw|t('sprout-forms') -}}
+                                    {{- label|raw|t('site') -}}
                                 </label>
                             {%- endif -%}
                         {%- endif -%}
                         {% if instructions %}
 
-                            <p class="instructions">{{ instructions|raw|t('sprout-forms') }}</p>
+                            <p class="instructions">{{ instructions|t('site')|raw }}</p>
                         {%- endif %}
 
                     </div>

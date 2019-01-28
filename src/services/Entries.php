@@ -347,11 +347,12 @@ class Entries extends Component
      * @param ElementInterface      $source
      * @param array                 $targetIds
      *
-     * @throws \Exception
+     * @throws \Throwable
      * @return void
      */
     public function saveRelations(BaseRelationFormField $field, ElementInterface $source, array $targetIds)
     {
+        /** @var Element $source */
         if (!is_array($targetIds)) {
             $targetIds = [];
         }
@@ -416,7 +417,7 @@ class Entries extends Component
             }
 
             $transaction->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $transaction->rollBack();
 
             throw $e;

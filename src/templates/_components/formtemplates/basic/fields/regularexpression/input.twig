@@ -3,7 +3,7 @@
 {%- set required = field.required ? true : false %}
 {%- set hasInstructions = field.instructions ? true : false %}
 {%- set value = value ? value : null %}
-
+{%- set placeholder = field.placeholder ? field.placeholder : null %}
 {%- set pattern  = pattern is defined and pattern ? pattern : null %}
 
 {%- set dataAttributes = null %}
@@ -22,5 +22,6 @@
         {%- if pattern is not null %} oninvalid="setCustomValidity('{{ errorMessage|e('js') }}')"{% endif %}
         {%- if pattern is not null %} oninput="setCustomValidity('')"{% endif %}
         {%- if pattern is not null %} pattern="{{ pattern }}"{% endif %}
+        {%- if placeholder %} placeholder="{{ placeholder }}"{% endif %}
         {{- dataAttributes|raw -}}
 >
