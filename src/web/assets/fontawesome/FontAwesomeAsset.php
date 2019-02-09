@@ -15,7 +15,7 @@ class FontAwesomeAsset extends AssetBundle
     public function init()
     {
         // define the path that your publishable resources live
-        $this->sourcePath = '@sproutbaselib/font-awesome';
+        $this->sourcePath = '@sproutformslib/font-awesome';
 
         // define the dependencies
         $this->depends = [
