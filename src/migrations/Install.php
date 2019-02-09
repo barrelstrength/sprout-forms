@@ -2,14 +2,13 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutbase\SproutBase;
-use barrelstrength\sproutbase\app\reports\migrations\Install as SproutBaseReportsInstall;
-use barrelstrength\sproutbase\app\email\migrations\Install as SproutBaseNotificationInstall;
+use barrelstrength\sproutbasereports\migrations\Install as SproutBaseReportsInstall;
+use barrelstrength\sproutbaseemail\migrations\Install as SproutBaseNotificationInstall;
+use barrelstrength\sproutbasereports\SproutBaseReports;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesDataSource;
 use barrelstrength\sproutforms\models\Settings;
 use craft\db\Migration;
-use craft\helpers\Json;
 use Craft;
 use craft\services\Plugins;
 
@@ -43,7 +42,7 @@ class Install extends Migration
      */
     public function safeDown()
     {
-        SproutBase::$app->dataSources->deleteReportsByType(EntriesDataSource::class);
+        SproutBaseReports::$app->dataSources->deleteReportsByType(EntriesDataSource::class);
 
         $this->dropTable('{{%sproutforms_entries}}');
         $this->dropTable('{{%sproutforms_forms}}');

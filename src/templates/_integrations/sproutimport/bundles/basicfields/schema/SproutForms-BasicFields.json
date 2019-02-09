@@ -12,7 +12,7 @@
       "fieldLayout": {
         "Tab 1": [
           {
-            "@model": "barrelstrength\\sproutbase\\app\\import\\importers\\settings\\Field",
+            "@model": "barrelstrength\\sproutbaseimport\\importers\\settings\\Field",
             "type": "barrelstrength\\sproutforms\\fields\\formfields\\SectionHeading",
             "name": "Section Heading",
             "handle": "sectionHeading",
@@ -21,7 +21,7 @@
             "output": "richText"
           },
           {
-            "@model": "barrelstrength\\sproutbase\\app\\import\\importers\\settings\\Field",
+            "@model": "barrelstrength\\sproutbaseimport\\importers\\settings\\Field",
             "type": "barrelstrength\\sproutforms\\fields\\formfields\\SingleLine",
             "name": "Single Line",
             "handle": "singleLine",
@@ -31,7 +31,7 @@
             "required": true
           },
           {
-            "@model": "barrelstrength\\sproutbase\\app\\import\\importers\\settings\\Field",
+            "@model": "barrelstrength\\sproutbaseimport\\importers\\settings\\Field",
             "type": "barrelstrength\\sproutforms\\fields\\formfields\\Paragraph",
             "name": "Paragraph",
             "handle": "paragraph",
@@ -42,7 +42,7 @@
             "columnType": "text"
           },
           {
-            "@model": "barrelstrength\\sproutbase\\app\\import\\importers\\settings\\Field",
+            "@model": "barrelstrength\\sproutbaseimport\\importers\\settings\\Field",
             "type": "barrelstrength\\sproutforms\\fields\\formfields\\MultipleChoice",
             "name": "Multiple Choice",
             "handle": "multipleChoice",
@@ -66,7 +66,7 @@
             ]
           },
           {
-            "@model": "barrelstrength\\sproutbase\\app\\import\\importers\\settings\\Field",
+            "@model": "barrelstrength\\sproutbaseimport\\importers\\settings\\Field",
             "type": "barrelstrength\\sproutforms\\fields\\formfields\\Dropdown",
             "name": "Dropdown",
             "handle": "dropdown",
@@ -90,7 +90,7 @@
             ]
           },
           {
-            "@model": "barrelstrength\\sproutbase\\app\\import\\importers\\settings\\Field",
+            "@model": "barrelstrength\\sproutbaseimport\\importers\\settings\\Field",
             "type": "barrelstrength\\sproutforms\\fields\\formfields\\Checkboxes",
             "name": "Checkboxes",
             "handle": "checkboxes",
@@ -114,7 +114,7 @@
             ]
           },
           {
-            "@model": "barrelstrength\\sproutbase\\app\\import\\importers\\settings\\Field",
+            "@model": "barrelstrength\\sproutbaseimport\\importers\\settings\\Field",
             "type": "barrelstrength\\sproutforms\\fields\\formfields\\Number",
             "name": "Number",
             "handle": "number",
@@ -125,7 +125,7 @@
             "size": 10
           },
           {
-            "@model": "barrelstrength\\sproutbase\\app\\import\\importers\\settings\\Field",
+            "@model": "barrelstrength\\sproutbaseimport\\importers\\settings\\Field",
             "type": "barrelstrength\\sproutforms\\fields\\formfields\\FileUpload",
             "name": "FileUpload",
             "handle": "fileUpload",

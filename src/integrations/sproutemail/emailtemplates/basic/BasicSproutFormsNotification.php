@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutforms\integrations\sproutemail\emailtemplates\basic;
 
-use barrelstrength\sproutbase\app\email\base\EmailTemplates;
+use barrelstrength\sproutbaseemail\base\EmailTemplates;
 use Craft;
 
 /**

@@ -170,7 +170,7 @@
 
                 var http = new XMLHttpRequest();
 
-                http.open('POST', '{{ actionUrl('sprout/fields-address/update-address-form-html') }}', true);
+                http.open('POST', '{{ actionUrl('sprout-base-fields/fields-address/update-address-form-html') }}', true);
                 http.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
                 http.onreadystatechange = function() {
 

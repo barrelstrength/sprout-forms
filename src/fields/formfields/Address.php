@@ -2,15 +2,14 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
-use barrelstrength\sproutbase\app\fields\base\AddressFieldTrait;
+use barrelstrength\sproutbasefields\base\AddressFieldTrait;
 use Craft;
 use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
 use craft\helpers\Template;
-use craft\helpers\UrlHelper;
 use yii\db\Schema;
 use barrelstrength\sproutforms\base\FormField;
-use barrelstrength\sproutbase\app\fields\models\Address as AddressModel;
+use barrelstrength\sproutbasefields\models\Address as AddressModel;
 
 /**
  *

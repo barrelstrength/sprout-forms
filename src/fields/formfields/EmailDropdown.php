@@ -2,13 +2,12 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutbasefields\SproutBaseFields;
 use Craft;
 use craft\base\ElementInterface;
 use craft\helpers\Template as TemplateHelper;
 use yii\db\Schema;
 use craft\helpers\StringHelper;
-
-use barrelstrength\sproutbase\SproutBase;
 
 /**
  *
@@ -120,7 +119,7 @@ class EmailDropdown extends BaseOptionsFormField
     public function getInputHtml($value, ElementInterface $element = null): string
     {
         $valueOptions = $value->getOptions();
-        $anySelected = SproutBase::$app->utilities->isAnyOptionsSelected(
+        $anySelected = SproutBaseFields::$app->utilities->isAnyOptionsSelected(
             $valueOptions,
             $value->value
         );
@@ -168,7 +167,7 @@ class EmailDropdown extends BaseOptionsFormField
         $selectedValue = $value->value ?? null;
 
         $options = $this->options;
-        $options = SproutBase::$app->emailDropdownField->obfuscateEmailAddresses($options, $selectedValue);
+        $options = SproutBaseFields::$app->emailDropdownField->obfuscateEmailAddresses($options, $selectedValue);
 
         $rendered = Craft::$app->getView()->renderTemplate(
             'emaildropdown/input',

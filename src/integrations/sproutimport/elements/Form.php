@@ -2,8 +2,8 @@
 
 namespace barrelstrength\sproutforms\integrations\sproutimport\elements;
 
-use barrelstrength\sproutbase\app\import\base\ElementImporter;
-use barrelstrength\sproutbase\SproutBase;
+use barrelstrength\sproutbaseimport\base\ElementImporter;
+use barrelstrength\sproutbaseimport\SproutBaseImport;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
@@ -60,15 +60,15 @@ class Form extends ElementImporter
      *
      * @throws \Throwable
      */
-    public function resolveNestedSettings($section, $settings)
+    public function resolveNestedSettings($model, $settings)
     {
         // Check to see if we have any Entry Types we should also save
-        if (empty($settings['settings']['fieldLayout']) OR empty($section->id)) {
+        if (empty($settings['settings']['fieldLayout']) OR empty($model->id)) {
             return true;
         }
 
-        Craft::$app->content->fieldContext = $section->fieldContext;
-        Craft::$app->content->contentTable = $section->contentTable;
+        Craft::$app->content->fieldContext = $model->fieldContext;
+        Craft::$app->content->contentTable = $model->contentTable;
 
         //------------------------------------------------------------
 
@@ -97,11 +97,11 @@ class Form extends ElementImporter
             $postedFieldLayout[$tabName] = [];
 
             foreach ($fields as $field) {
-                $importerClass = SproutBase::$app->importers->getImporter($field);
+                $importerClass = SproutBaseImport::$app->importers->getImporter($field);
 
                 if (!$importerClass) continue;
 
-                $field = SproutBase::$app->settingsImporter->saveSetting($field, $importerClass);
+                $field = SproutBaseImport::$app->settingsImporter->saveSetting($field, $importerClass);
 
                 if ($field->required) {
                     $requiredFields[] = $field->id;
@@ -113,19 +113,19 @@ class Form extends ElementImporter
             }
         }
 
-        if (SproutBase::$app->importers->hasErrors()) {
-            SproutBase::$app->importUtilities->addErrors(SproutBase::$app->importers->getErrors());
+        if (SproutBaseImport::$app->importers->hasErrors()) {
+            SproutBaseImport::$app->importUtilities->addErrors(SproutBaseImport::$app->importers->getErrors());
         }
 
         // Create the FieldLayout Class
         $fieldLayout = Craft::$app->fields->assembleLayout($postedFieldLayout, $requiredFields);
         $fieldLayout->type = FormElement::class;
 
-        $section->setFieldLayout($fieldLayout);
+        $model->setFieldLayout($fieldLayout);
 
-        if (!SproutForms::$app->forms->saveForm($section)) {
+        if (!SproutForms::$app->forms->saveForm($model)) {
 
-            SproutForms::error($section->getErrors());
+            SproutForms::error($model->getErrors());
 
             return false;
         }

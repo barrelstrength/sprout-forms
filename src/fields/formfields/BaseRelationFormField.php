@@ -12,6 +12,7 @@ use craft\base\PreviewableFieldInterface;
 use craft\db\Query;
 use craft\elements\db\ElementQuery;
 use craft\elements\db\ElementQueryInterface;
+use craft\errors\SiteNotFoundException;
 use craft\helpers\ElementHelper;
 use craft\helpers\Html;
 use craft\helpers\StringHelper;

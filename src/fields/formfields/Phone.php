@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutbasefields\SproutBaseFields;
 use Craft;
 use craft\base\ElementInterface;
 use craft\helpers\Json;
@@ -9,9 +10,8 @@ use craft\helpers\Template as TemplateHelper;
 use craft\base\PreviewableFieldInterface;
 
 
-use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\base\FormField;
-use barrelstrength\sproutbase\app\fields\models\Phone as PhoneModel;
+use barrelstrength\sproutbasefields\models\Phone as PhoneModel;
 
 /**
  *
@@ -235,10 +235,10 @@ class Phone extends FormField implements PreviewableFieldInterface
         }
 
         if ($value->country && $value->phone) {
-            if (!SproutBase::$app->phoneField->validate($value->phone, $value->country)) {
+            if (!SproutBaseFields::$app->phoneField->validate($value->phone, $value->country)) {
                 $element->addError(
                     $this->handle,
-                    SproutBase::$app->phoneField->getErrorMessage($this, $value->country)
+                    SproutBaseFields::$app->phoneField->getErrorMessage($this, $value->country)
                 );
             }
         }
@@ -249,7 +249,7 @@ class Phone extends FormField implements PreviewableFieldInterface
      */
     public function getCountries()
     {
-        $countries = SproutBase::$app->phoneField->getCountries();
+        $countries = SproutBaseFields::$app->phoneField->getCountries();
 
         return $countries;
     }
