@@ -4,9 +4,9 @@ namespace barrelstrength\sproutforms\integrations\sproutreports\datasources;
 
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutbase\app\reports\elements\Report;
+use barrelstrength\sproutbasereports\elements\Report;
 use Craft;
-use barrelstrength\sproutbase\app\reports\base\DataSource;
+use barrelstrength\sproutbasereports\base\DataSource;
 use craft\db\Query;
 use craft\helpers\DateTimeHelper;
 
@@ -20,7 +20,7 @@ class EntriesDataSource extends DataSource
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return Craft::t('sprout-forms', 'Sprout Forms Entries');
     }
@@ -28,12 +28,12 @@ class EntriesDataSource extends DataSource
     /**
      * @return null|string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return Craft::t('sprout-forms', 'Query form entries');
     }
 
-    public function getResults(Report $report, array $settings = [])
+    public function getResults(Report $report, array $settings = []): array
     {
         $startDate = null;
         $endDate = null;

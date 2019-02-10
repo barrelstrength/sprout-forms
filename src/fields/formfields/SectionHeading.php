@@ -8,7 +8,7 @@ use craft\helpers\Template as TemplateHelper;
 use yii\db\Schema;
 
 use barrelstrength\sproutforms\base\FormField;
-use barrelstrength\sproutbase\app\fields\web\assets\quill\QuillAsset;
+use barrelstrength\sproutbasefields\web\assets\quill\QuillAsset;
 
 /**
  *

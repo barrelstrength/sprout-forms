@@ -20,7 +20,7 @@ class m180314_161536_sproutforms_email_select_fields extends Migration
             ->select(['id', 'handle', 'settings'])
             ->from(['{{%fields}}'])
             ->where(['type' => 'SproutFields_EmailSelect'])
-            ->andWhere('context LIKE "%sproutForms:%"')
+            ->andWhere(['like', 'context', 'sproutForms:'])
             ->all();
 
         foreach ($fields as $field) {

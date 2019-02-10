@@ -113,7 +113,7 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 }
 
 /*#main-container #main #main-content #details {*/
-    /*background-color: #fff;*/
+/*background-color: #fff;*/
 /*}*/
 #main-container #main #main-content #details #sproutforms-source-fields {
     padding: 14px 16px 20px;
@@ -125,6 +125,7 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
     width: 14px;
     vertical-align: middle;
 }
+
 .sproutforms-sourcefield-name {
     vertical-align: middle;
 }
@@ -154,15 +155,18 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
     border: 2px dashed lightblue;
     transition: all 0.2s ease-in-out;
 }
+
 .target-field h2 code {
     opacity: 0;
     margin-left: 4px;
 }
+
 .target-field:hover h2 code,
 .target-field:hover ul.settings {
     opacity: 1;
     transition: opacity 0.4s ease-in-out;
 }
+
 .target-field ul.settings {
     opacity: 0;
     position: absolute;
@@ -172,13 +176,13 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 
 .target-field ul.settings li {
     float: left;
-    color: #888;
+    color: #888888;
     font-size: 8px;
     padding-left: 8px;
 }
 
 .target-field ul.settings li i {
-    color: #888;
+    color: #888888;
 }
 
 .target-field h2 {
@@ -188,7 +192,7 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 }
 
 .target-field h2 a {
-    color: #aaa;
+    color: #aaaaaa;
     display: inline-block;
     font-size: 8px;
     margin-left: 5px;
@@ -197,7 +201,7 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 }
 
 .target-field p {
-    color: #aaa;
+    color: #aaaaaa;
     margin: -7px 0 10px 0;
 }
 
@@ -208,7 +212,7 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 /* Field Instances - Source */
 
 #sproutforms-source-fields #right-copy {
-    display:flex;
+    display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 }
@@ -232,8 +236,8 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 .source-field:hover,
 .source-field:hover svg {
     background-color: rgb(13, 120, 242);
-    color: #fff;
-    fill: #fff;
+    color: #ffffff;
+    fill: #ffffff;
 }
 
 .source-field h3 {
@@ -257,16 +261,16 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 .target-field .body input[type="number"] {
     font-size: 14px;
     padding: 5px;
-    border: 1px solid #ccc;
-    border-top-color: #888;
-    border-bottom-color: #ddd;
+    border: 1px solid #cccccc;
+    border-top-color: #888888;
+    border-bottom-color: #dddddd;
     box-shadow: inset 1px 1px 2px 0 #707070;
     width: 60%;
 }
 
 .target-field .body textarea {
-    border: 1px solid #eee;
-    box-shadow: inset 1px 1px 2px 0 #ccc;
+    border: 1px solid #eeeeee;
+    box-shadow: inset 1px 1px 2px 0 #cccccc;
 }
 
 /* Drag Behavior */
@@ -293,12 +297,13 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 
 .source-field.drag-active {
     background-color: rgb(13, 120, 242);
-    color: #fff;
+    color: #ffffff;
     font-size: 14px;
     opacity: 1;
     box-sizing: border-box;
     transition: opacity 0.4s ease-in-out;
 }
+
 #sproutforms-source-fields .source-field.drag-active {
     background-color: rgba(0, 0, 0, .025);
     border: 2px dashed rgba(0, 0, 0, .1);
@@ -313,6 +318,7 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 .target-field.drag-active.gu-mirror {
     border: 2px solid transparent;
 }
+
 .target-field.drag-active.gu-mirror ul.settings {
     opacity: 0;
     transition: opacity 0.2s ease-in-out;
@@ -354,6 +360,7 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
     padding-left: 1px;
     transition: opacity 0.2s ease-in-out;
 }
+
 #sprout-forms-tabs .tab.sel .settings {
     opacity: .8;
     transition: opacity 0.2s ease-in-out;
@@ -366,7 +373,7 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
     text-align: center;
 }
 
-.tab-title{
+.tab-title {
     width: 100%;
     text-align: left;
 }
@@ -374,10 +381,12 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 #tabs {
     width: 100%;
 }
+
 ul#sprout-forms-tabs {
-    width:100% !important;
+    width: 100% !important;
     display: flex;
 }
+
 ul#sprout-forms-tabs li {
     display: inline-table;
 }

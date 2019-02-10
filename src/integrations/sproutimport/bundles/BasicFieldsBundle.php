@@ -7,7 +7,7 @@
 
 namespace barrelstrength\sproutforms\integrations\sproutimport\bundles;
 
-use barrelstrength\sproutbase\app\import\base\Bundle;
+use barrelstrength\sproutbaseimport\base\Bundle;
 use Craft;
 
 class BasicFieldsBundle extends Bundle

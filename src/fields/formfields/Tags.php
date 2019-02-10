@@ -81,7 +81,6 @@ class Tags extends BaseRelationFormField
      *
      * @return string
      * @throws \Twig_Error_Loader
-     * @throws \craft\errors\SiteNotFoundException
      * @throws \yii\base\Exception
      * @throws \yii\base\NotSupportedException
      */
@@ -116,7 +115,7 @@ class Tags extends BaseRelationFormField
                 ]);
         }
 
-        return '<p class="error">' . Craft::t('app', 'This field is not set to a valid source.') . '</p>';
+        return '<p class="error">'.Craft::t('app', 'This field is not set to a valid source.').'</p>';
     }
 
     /**

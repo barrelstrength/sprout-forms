@@ -23,6 +23,7 @@ class FormsController extends BaseController
         $this->requirePermission('manageSproutFormsForms');
         parent::init();
     }
+
     /**
      * Save a form
      *
@@ -143,7 +144,7 @@ class FormsController extends BaseController
     /**
      * Edit a form.
      *
-     * @param int|null         $formId
+     * @param int|null                          $formId
      * @param FormElement|ElementInterface|null $form
      *
      * @return \yii\web\Response

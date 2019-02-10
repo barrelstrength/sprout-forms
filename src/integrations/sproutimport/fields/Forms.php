@@ -2,8 +2,8 @@
 
 namespace barrelstrength\sproutforms\integrations\sproutimport\fields;
 
-use barrelstrength\sproutbase\app\import\base\FieldImporter;
-use barrelstrength\sproutbase\SproutBase;
+use barrelstrength\sproutbaseimport\base\FieldImporter;
+use barrelstrength\sproutbaseimport\SproutBaseImport;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 
 class Forms extends FieldImporter
@@ -24,11 +24,11 @@ class Forms extends FieldImporter
     public function getMockData()
     {
         $settings = $this->model->settings;
-        $limit = SproutBase::$app->fieldImporter->getLimit($settings['limit'], 1);
+        $limit = SproutBaseImport::$app->fieldImporter->getLimit($settings['limit'], 1);
         $sources = $settings['sources'];
         $attributes = [];
 
-        $groupIds = SproutBase::$app->fieldImporter->getElementGroupIds($sources);
+        $groupIds = SproutBaseImport::$app->fieldImporter->getElementGroupIds($sources);
 
         if (!empty($groupIds) && $groupIds != '*') {
             $attributes = [
@@ -38,7 +38,7 @@ class Forms extends FieldImporter
 
         $element = new FormElement();
 
-        $elementIds = SproutBase::$app->fieldImporter->getMockRelations($element, $attributes, $limit);
+        $elementIds = SproutBaseImport::$app->fieldImporter->getMockRelations($element, $attributes, $limit);
 
         return $elementIds;
     }

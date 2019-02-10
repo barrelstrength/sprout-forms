@@ -2,14 +2,14 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutbasefields\SproutBaseFields;
 use Craft;
 use craft\base\ElementInterface;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\PreviewableFieldInterface;
 
-use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\base\FormField;
-use barrelstrength\sproutbase\app\fields\web\assets\url\UrlFieldAsset;
+use barrelstrength\sproutbasefields\web\assets\url\UrlFieldAsset;
 
 /**
  *
@@ -91,7 +91,7 @@ class Url extends FormField implements PreviewableFieldInterface
         $inputId = Craft::$app->getView()->formatInputId($name);
         $namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
 
-        $fieldContext = SproutBase::$app->utilities->getFieldContext($this, $element);
+        $fieldContext = SproutBaseFields::$app->utilities->getFieldContext($this, $element);
 
         return Craft::$app->getView()->renderTemplate('sprout-base-fields/_components/fields/formfields/url/input', [
                 'namespaceInputId' => $namespaceInputId,
@@ -127,7 +127,7 @@ class Url extends FormField implements PreviewableFieldInterface
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
         $attributes = $this->getAttributes();
-        $errorMessage = SproutBase::$app->urlField->getErrorMessage($attributes['name'], $this);
+        $errorMessage = SproutBaseFields::$app->urlField->getErrorMessage($attributes['name'], $this);
         $placeholder = $this->placeholder ?? '';
 
         $rendered = Craft::$app->getView()->renderTemplate(
@@ -178,10 +178,10 @@ class Url extends FormField implements PreviewableFieldInterface
     {
         $value = $element->getFieldValue($this->handle);
 
-        if (!SproutBase::$app->urlField->validate($value, $this)) {
+        if (!SproutBaseFields::$app->urlField->validate($value, $this)) {
             $element->addError(
                 $this->handle,
-                SproutBase::$app->urlField->getErrorMessage($this->name, $this)
+                SproutBaseFields::$app->urlField->getErrorMessage($this->name, $this)
             );
         }
     }

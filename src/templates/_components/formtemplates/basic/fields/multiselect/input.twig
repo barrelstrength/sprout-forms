@@ -14,11 +14,11 @@
 
 {% spaceless %}
     <select multiple
-            {%- if name %} name="{{ name }}[]"{% endif %}
-            {%- if id %} id="{{ id }}"{% endif %}
-            {%- if class %} class="{{ class }}"{% endif %}
-            {%- if required %} required aria-required="true"{% endif %}
-            {{- dataAttributes|raw -}}
+        {%- if name %} name="{{ name }}[]"{% endif %}
+        {%- if id %} id="{{ id }}"{% endif %}
+        {%- if class %} class="{{ class }}"{% endif %}
+        {%- if required %} required aria-required="true"{% endif %}
+        {{- dataAttributes|raw -}}
     >
         {%- for key, option in options %}
 

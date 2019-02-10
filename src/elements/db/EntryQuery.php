@@ -104,7 +104,7 @@ class EntryQuery extends ElementQuery
         $this->formHandle = $value;
         $form = SproutForms::$app->forms->getFormByHandle($value);
         // To add support to filtering we need to have the formId set.
-        if ($form){
+        if ($form) {
             $this->formId = $form->id;
         }
 
@@ -159,7 +159,7 @@ class EntryQuery extends ElementQuery
                 ->where(Db::parseParam('id', $this->id))
                 ->column();
 
-            $this->formId = count($formIds) === 1 ? $formIds[0] :  $formIds;
+            $this->formId = count($formIds) === 1 ? $formIds[0] : $formIds;
         }
 
         if ($this->formId && is_numeric($this->formId)) {
@@ -226,7 +226,7 @@ class EntryQuery extends ElementQuery
 
         return parent::beforePrepare();
     }
-    
+
     /**
      * @inheritdoc
      */

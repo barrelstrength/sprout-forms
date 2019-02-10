@@ -21,7 +21,7 @@ class m180314_161524_sproutforms_checkboxes_fields extends Migration
             ->select(['id', 'handle', 'settings'])
             ->from(['{{%fields}}'])
             ->where(['type' => CraftCheckboxes::class])
-            ->andWhere('context LIKE "%sproutForms:%"')
+            ->andWhere(['like', 'context', 'sproutForms:'])
             ->all();
 
         foreach ($checkboxesFields as $checkboxesField) {

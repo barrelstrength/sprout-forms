@@ -104,7 +104,12 @@ class Invisible extends FormField implements PreviewableFieldInterface
 
     /**
      * @inheritdoc
-     * @throws \craft\errors\MissingComponentException
+     *
+     * @param            $value
+     * @param array|null $renderingOptions
+     *
+     * @return string
+     * @throws \Throwable
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {

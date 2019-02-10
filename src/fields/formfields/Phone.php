@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutbasefields\SproutBaseFields;
 use Craft;
 use craft\base\ElementInterface;
 use craft\helpers\Json;
@@ -9,9 +10,8 @@ use craft\helpers\Template as TemplateHelper;
 use craft\base\PreviewableFieldInterface;
 
 
-use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\base\FormField;
-use barrelstrength\sproutbase\app\fields\models\Phone as PhoneModel;
+use barrelstrength\sproutbasefields\models\Phone as PhoneModel;
 
 /**
  *
@@ -98,7 +98,7 @@ class Phone extends FormField implements PreviewableFieldInterface
     {
         $phoneInfo = [];
 
-        if (is_array($value)){
+        if (is_array($value)) {
             $namespace = $element->getFieldParamNamespace();
             $namespace = $namespace.'.'.$this->handle;
             $phoneInfo = Craft::$app->getRequest()->getBodyParam($namespace);
@@ -109,7 +109,7 @@ class Phone extends FormField implements PreviewableFieldInterface
             $phoneInfo = Json::decode($value, true);
         }
 
-        if (!isset($phoneInfo['phone']) || !isset($phoneInfo['country'])){
+        if (!isset($phoneInfo['phone']) || !isset($phoneInfo['country'])) {
             return null;
         }
         // Always return array
@@ -223,11 +223,11 @@ class Phone extends FormField implements PreviewableFieldInterface
     {
         $value = $element->getFieldValue($this->handle);
 
-        if ($this->required){
-            if (!$value->phone){
+        if ($this->required) {
+            if (!$value->phone) {
                 $element->addError(
                     $this->handle,
-                    Craft::t('sprout-forms','{field} cannot be blank.', [
+                    Craft::t('sprout-forms', '{field} cannot be blank.', [
                         'field' => $this->name
                     ])
                 );
@@ -235,10 +235,10 @@ class Phone extends FormField implements PreviewableFieldInterface
         }
 
         if ($value->country && $value->phone) {
-            if (!SproutBase::$app->phoneField->validate($value->phone, $value->country)) {
+            if (!SproutBaseFields::$app->phoneField->validate($value->phone, $value->country)) {
                 $element->addError(
                     $this->handle,
-                    SproutBase::$app->phoneField->getErrorMessage($this, $value->country)
+                    SproutBaseFields::$app->phoneField->getErrorMessage($this, $value->country)
                 );
             }
         }
@@ -249,7 +249,7 @@ class Phone extends FormField implements PreviewableFieldInterface
      */
     public function getCountries()
     {
-        $countries = SproutBase::$app->phoneField->getCountries();
+        $countries = SproutBaseFields::$app->phoneField->getCountries();
 
         return $countries;
     }

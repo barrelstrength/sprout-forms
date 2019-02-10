@@ -500,7 +500,7 @@ class Forms extends Component
         $form->handle = $this->getFieldAsNew('handle', $handle);
         $accessible = new AccessibleTemplates();
         $form->templateOverridesFolder = $settings->templateFolderOverride ?? $accessible->getTemplateId();
-        if($settings->enablePerFormTemplateFolderOverride && $settings->templateFolderOverride){
+        if ($settings->enablePerFormTemplateFolderOverride && $settings->templateFolderOverride) {
             $form->templateOverridesFolder = $settings->templateFolderOverride;
         }
         // Set default tab

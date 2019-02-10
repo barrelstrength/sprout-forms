@@ -230,7 +230,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
             var nextId = nextDiv.attr('id');
             if (typeof nextId === 'undefined' || nextId === null) {
                 nextDiv = null;
-            }else{
+            } else {
                 // Last field
                 var nextDivId = nextId.split('-');
                 nextId = nextDivId[1];
@@ -279,8 +279,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
                 ));
 
                 this.addListener($("#sproutform-field-" + defaultField.id), 'activate', 'editField');
-            }
-            else {
+            } else {
                 Craft.cp.displayError(Craft.t('sprout-forms', 'Something went wrong when creating the field :('));
 
                 $(el).remove();
@@ -385,8 +384,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
                         $("#" + tabId).closest("li").slideUp(500, function() {
                             $(this).remove();
                         });
-                    }
-                    else {
+                    } else {
                         Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to delete the tab'));
                     }
                 }, this));
@@ -436,14 +434,12 @@ if (typeof Craft.SproutForms === typeof undefined) {
                                 $labelSpan.text(newName);
                             });
                             $("#sproutforms-" + tabId).attr('data-tabname', newName);
-                        }
-                        else {
+                        } else {
                             Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to rename tab'));
                         }
                     }, this));
 
-                }
-                else {
+                } else {
                     Craft.cp.displayError(Craft.t('sprout-forms', 'Invalid tab name'));
                 }
             }
@@ -503,14 +499,12 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
                         // Reinitialize tabs
                         Craft.cp.initTabs();
-                    }
-                    else {
+                    } else {
                         Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to create a new tab'));
                     }
                 }, this));
 
-            }
-            else {
+            } else {
                 Craft.cp.displayError(Craft.t('sprout-forms', 'Invalid tab name'));
             }
 
@@ -562,16 +556,12 @@ if (typeof Craft.SproutForms === typeof undefined) {
                 $($fieldDiv).find('.active-field-header h2').addClass('required');
 
                 // Update or create our hidden required div
-                if(!$requiredDiv.length)
-                {
+                if (!$requiredDiv.length) {
                     $('<input type="hidden" name="requiredFields[]" value="' + field.id + '" class="sproutforms-required-input">').appendTo($fieldDiv);
-                }
-                else
-                {
+                } else {
                     $($requiredDiv).val(field.id);
                 }
-            }
-            else {
+            } else {
                 $($fieldDiv).find('.active-field-header h2').removeClass('required');
 
                 // Update our hidden required div
@@ -585,7 +575,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
             var tab = $($fieldDiv).closest(".sproutforms-tab-fields");
             var tabName = tab.data('tabname');
             var tabId = tab.data('tabid');
-            
+
             if (tabName !== group.name) {
                 // let's remove the hidden field just if the user change the tab
                 $($fieldDiv).find('.id-input').remove();

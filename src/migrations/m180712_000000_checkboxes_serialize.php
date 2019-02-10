@@ -22,7 +22,7 @@ class m180712_000000_checkboxes_serialize extends Migration
             ->select(['id', 'handle'])
             ->from(['{{%fields}}'])
             ->where(['type' => Checkboxes::class])
-            ->andWhere("[[context]] LIKE '%sproutForms:%'")
+            ->andWhere(['like', 'context', 'sproutForms:'])
             ->all();
 
         $forms = (new Query())
@@ -48,15 +48,15 @@ class m180712_000000_checkboxes_serialize extends Migration
                         $value = $entry[$column];
                         $values = Json::decode($value, true);
 
-                        if ($values){
+                        if ($values) {
                             foreach ($values as $value) {
-                                if (isset($value['value'])){
+                                if (isset($value['value'])) {
                                     $newValue[] = $value['value'];
                                 }
                             }
                         }
 
-                        if ($newValue){
+                        if ($newValue) {
                             $newValueAsJson = Json::encode($newValue);
                             $this->update($contentTable, [$column => $newValueAsJson], ['id' => $entry['id']], [], false);
                         }

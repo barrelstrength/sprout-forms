@@ -56,7 +56,7 @@
                 };
 
                 Craft.postActionRequest('sprout-forms/charts/getEntriesData', requestData, $.proxy(function(response, textStatus) {
-                    if (textStatus === 'success' && typeof(response.error) === 'undefined') {
+                    if (textStatus === 'success' && typeof (response.error) === 'undefined') {
                         this.$chartContainer.removeClass('hidden');
 
                         // Create chart
@@ -74,12 +74,11 @@
 
                         // Resize chart when grid is refreshed
                         window.dashboard.grid.on('refreshCols', $.proxy(this, 'handleGridRefresh'));
-                    }
-                    else {
+                    } else {
                         // Error
                         var msg = Craft.t('sprout-forms', 'An unknown error occurred.');
 
-                        if (typeof(response) !== 'undefined' && response && typeof(response.error) !== 'undefined') {
+                        if (typeof (response) !== 'undefined' && response && typeof (response.error) !== 'undefined') {
                             msg = response.error;
                         }
 

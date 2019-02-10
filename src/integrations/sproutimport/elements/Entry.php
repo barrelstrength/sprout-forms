@@ -2,11 +2,11 @@
 
 namespace barrelstrength\sproutforms\integrations\sproutimport\elements;
 
-use barrelstrength\sproutbase\app\import\base\ElementImporter;
-use barrelstrength\sproutbase\SproutBase;
+use barrelstrength\sproutbaseimport\base\ElementImporter;
+use barrelstrength\sproutbaseimport\models\jobs\SeedJob;
+use barrelstrength\sproutbaseimport\SproutBaseImport;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutbase\app\import\models\jobs\SeedJob;
 
 use Craft;
 
@@ -52,7 +52,7 @@ class Entry extends ElementImporter
      */
     public function getSeedSettingsHtml(SeedJob $seedJob): string
     {
-       $forms = SproutForms::$app->forms->getAllForms();
+        $forms = SproutForms::$app->forms->getAllForms();
 
         $formOptions[''] = Craft::t('sprout-forms', 'Select a form...');
 
@@ -131,7 +131,7 @@ class Entry extends ElementImporter
 
                 $fieldType = get_class($field);
 
-                $fieldImporterClass = SproutBase::$app->importers->getFieldImporterClassByType($fieldType);
+                $fieldImporterClass = SproutBaseImport::$app->importers->getFieldImporterClassByType($fieldType);
 
                 if ($fieldImporterClass != null) {
                     $fieldImporterClass->setModel($field);

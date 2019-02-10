@@ -65,6 +65,11 @@ class Number extends FormField implements PreviewableFieldInterface
             $this->min = null;
         }
 
+        // Normalize $decimals
+        if (!$this->decimals) {
+            $this->decimals = 0;
+        }
+
         // Normalize $size
         if ($this->size !== null && $this->size === null) {
             $this->size = null;

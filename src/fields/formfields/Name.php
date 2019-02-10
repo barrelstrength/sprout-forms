@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutbasefields\SproutBaseFields;
 use Craft;
 use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
@@ -9,8 +10,7 @@ use craft\base\PreviewableFieldInterface;
 use craft\helpers\Json;
 use craft\helpers\Template as TemplateHelper;
 
-use barrelstrength\sproutbase\SproutBase;
-use barrelstrength\sproutbase\app\fields\models\Name as NameModel;
+use barrelstrength\sproutbasefields\models\Name as NameModel;
 use barrelstrength\sproutforms\base\FormField;
 
 /**
@@ -97,7 +97,7 @@ class Name extends FormField implements PreviewableFieldInterface
         $inputId = Craft::$app->getView()->formatInputId($name);
         $namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
 
-        $fieldContext = SproutBase::$app->utilities->getFieldContext($this, $element);
+        $fieldContext = SproutBaseFields::$app->utilities->getFieldContext($this, $element);
 
         // Set this to false for Quick Entry Dashboard Widget
         $elementId = ($element != null) ? $element->id : false;
@@ -137,11 +137,11 @@ class Name extends FormField implements PreviewableFieldInterface
     {
         $value = $element->getFieldValue($this->handle);
 
-        if ($this->required){
-            if (!$value->getFullName()){
+        if ($this->required) {
+            if (!$value->getFullName()) {
                 $element->addError(
                     $this->handle,
-                    Craft::t('sprout-forms','{field} cannot be blank', [
+                    Craft::t('sprout-forms', '{field} cannot be blank', [
                         'field' => $this->name
                     ])
                 );

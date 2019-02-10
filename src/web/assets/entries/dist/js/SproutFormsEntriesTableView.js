@@ -154,7 +154,7 @@ Craft.SproutForms.EntriesTableView = Craft.TableElementIndexView.extend({
             Craft.postActionRequest('sprout-forms/charts/get-entries-data', requestData, $.proxy(function(response, textStatus) {
                 this.$spinner.addClass('hidden');
 
-                if (textStatus === 'success' && typeof(response.error) === 'undefined') {
+                if (textStatus === 'success' && typeof (response.error) === 'undefined') {
                     if (!this.chart) {
                         this.chart = new Craft.charts.Area(this.$chart);
                     }
@@ -171,11 +171,10 @@ Craft.SproutForms.EntriesTableView = Craft.TableElementIndexView.extend({
                     this.chart.draw(chartDataTable, chartSettings);
 
                     this.$totalValue.html(response.totalHtml);
-                }
-                else {
+                } else {
                     var msg = Craft.t('sprout-forms', 'An unknown error occurred.');
 
-                    if (typeof(response) !== 'undefined' && response && typeof(response.error) !== 'undefined') {
+                    if (typeof (response) !== 'undefined' && response && typeof (response.error) !== 'undefined') {
                         msg = response.error;
                     }
 

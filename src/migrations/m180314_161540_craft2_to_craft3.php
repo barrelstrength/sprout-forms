@@ -2,19 +2,19 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
+use barrelstrength\sproutbaseemail\SproutBaseEmail;
 use craft\db\Migration;
 use craft\db\Query;
 
 use Craft;
 use craft\helpers\Json;
 use craft\helpers\MigrationHelper;
-use barrelstrength\sproutbase\SproutBase;
-use barrelstrength\sproutbase\app\email\elements\NotificationEmail;
-use barrelstrength\sproutbase\app\email\migrations\m180927_080639_add_cc_bcc_columns as CcBccMigration;
-use barrelstrength\sproutbase\app\email\migrations\m180501_000002_rename_notification_options_column;
-use barrelstrength\sproutbase\app\email\migrations\m180501_000003_add_notification_columns;
-use barrelstrength\sproutbase\app\email\migrations\m180515_000000_rename_notification_pluginId_column;
-use barrelstrength\sproutbase\app\email\migrations\Install as SproutBaseNotificationInstall;
+use barrelstrength\sproutbaseemail\elements\NotificationEmail;
+use barrelstrength\sproutbaseemail\migrations\m180927_080639_add_cc_bcc_columns as CcBccMigration;
+use barrelstrength\sproutbaseemail\migrations\m180501_000002_rename_notification_options_column;
+use barrelstrength\sproutbaseemail\migrations\m180501_000003_add_notification_columns;
+use barrelstrength\sproutbaseemail\migrations\m180515_000000_rename_notification_pluginId_column;
+use barrelstrength\sproutbaseemail\migrations\Install as SproutBaseNotificationInstall;
 
 /**
  * m180314_161540_craft2_to_craft3 migration.
@@ -127,36 +127,37 @@ class m180314_161540_craft2_to_craft3 extends Migration
             ->all();
 
         foreach ($forms as $form) {
+            if (isset($form['notificationSubject']) && isset($form['notificationSenderName']) && isset($form['notificationSenderEmail'])) {
+                if ($form['notificationSubject'] && $form['notificationSenderName'] && $form['notificationSenderEmail']) {
 
-            if ($form['notificationSubject'] && $form['notificationSenderName'] && $form['notificationSenderEmail']){
+                    $notificationEmail = new NotificationEmail();
 
-                $notificationEmail = new NotificationEmail();
+                    $settings = [
+                        'whenNew' => '1',
+                        'formIds' => [
+                            $form['id']
+                        ]
+                    ];
 
-                $settings = [
-                    'whenNew' => '1',
-                    'formIds' => [
-                        $form['id']
-                    ]
-                ];
+                    $notificationEmail->subjectLine = $form['notificationSubject'];
+                    $notificationEmail->fromName = $form['notificationSenderName'];
+                    $notificationEmail->fromEmail = $form['notificationSenderEmail'];
+                    $notificationEmail->replyToEmail = $form['notificationReplyToEmail'];
+                    $notificationEmail->recipients = $form['notificationRecipients'];
+                    $notificationEmail->title = $notificationEmail->subjectLine;
+                    $notificationEmail->pluginHandle = 'sprout-forms';
+                    $notificationEmail->enableFileAttachments = $form['enableFileAttachments'];
+                    $notificationEmail->settings = Json::encode($settings);
+                    $notificationEmail->enabled = $form['notificationEnabled'] ?? 0;
+                    $notificationEmail->eventId = 'barrelstrength\sproutforms\integrations\sproutemail\events\notificationevents\SaveEntryEvent';
 
-                $notificationEmail->subjectLine = $form['notificationSubject'];
-                $notificationEmail->fromName = $form['notificationSenderName'];
-                $notificationEmail->fromEmail = $form['notificationSenderEmail'];
-                $notificationEmail->replyToEmail = $form['notificationReplyToEmail'];
-                $notificationEmail->recipients = $form['notificationRecipients'];
-                $notificationEmail->title = $notificationEmail->subjectLine;
-                $notificationEmail->pluginHandle = 'sprout-forms';
-                $notificationEmail->enableFileAttachments = $form['enableFileAttachments'];
-                $notificationEmail->settings = Json::encode($settings);
-                $notificationEmail->enabled = $form['notificationEnabled'] ?? 0;
-                $notificationEmail->eventId = 'barrelstrength\sproutforms\integrations\sproutemail\events\notificationevents\SaveEntryEvent';
-
-                SproutBase::$app->notifications->saveNotification($notificationEmail);
+                    SproutBaseEmail::$app->notifications->saveNotification($notificationEmail);
+                }
             }
         }
 
         foreach ($notificationColumns as $notificationColumn) {
-            if ($this->db->columnExists($table, $notificationColumn)){
+            if ($this->db->columnExists($table, $notificationColumn)) {
                 $this->dropColumn($table, $notificationColumn);
             }
         }

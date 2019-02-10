@@ -22,14 +22,14 @@
 {%- endif -%}
 
 <input type="number"
-        {%- if name %} name="{{ name }}"{% endif %}
-        {%- if id %} id="{{ id }}"{% endif %}
-        {%- if class %} class="{{ class }}"{% endif %}
-        {%- if required %} required aria-required="true"{% endif %}
-        {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
-        {%- if value %} value="{{ value }}"{% endif %}
-        {%- if min is not null %} min="{{ min }}"{% endif %}
-        {%- if max is not null %} max="{{ max }}"{% endif %}
-        {%- if step is not null %} step="0.{{ step }}"{% endif %}
-        {{- dataAttributes|raw -}}
+    {%- if name %} name="{{ name }}"{% endif %}
+    {%- if id %} id="{{ id }}"{% endif %}
+    {%- if class %} class="{{ class }}"{% endif %}
+    {%- if required %} required aria-required="true"{% endif %}
+    {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+    {%- if value %} value="{{ value }}"{% endif %}
+    {%- if min is not null %} min="{{ min }}"{% endif %}
+    {%- if max is not null %} max="{{ max }}"{% endif %}
+    {%- if step is not null %} step="0.{{ step }}"{% endif %}
+    {{- dataAttributes|raw -}}
 >

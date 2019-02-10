@@ -22,6 +22,7 @@ abstract class FormTemplates
 
     /**
      * Generates the Template ID
+     *
      * @return string
      * @throws \ReflectionException
      */
@@ -50,7 +51,7 @@ abstract class FormTemplates
 
     /**
      * The folder path where your form templates exist
-     * 
+     *
      * @return string
      */
     abstract public function getPath();

@@ -20,9 +20,9 @@
             <div {%- if id %} id="{{ id }}-prefix"{% endif %}>
                 <label>{{ "Prefix"|t('site') }}</label>
                 <input type="text"
-                        {%- if name %} name="{{ name ~ '[address][prefix]' }}"{% endif %}
-                        {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
-                        {%- if value %} value="{{ value.prefix }}"{% endif %}
+                    {%- if name %} name="{{ name ~ '[address][prefix]' }}"{% endif %}
+                    {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+                    {%- if value %} value="{{ value.prefix }}"{% endif %}
                 >
             </div>
         {% endif %}
@@ -30,10 +30,10 @@
         <div {%- if id %} id="{{ id }}-firstName"{% endif %}>
             <label>{{ "First"|t('site') }}</label>
             <input type="text" autocomplete="given-name"
-                    {%- if name %} name="{{ name ~ '[address][firstName]' }}"{% endif %}
-                    {%- if required %} required aria-required="true"{% endif %}
-                    {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
-                    {%- if value %} value="{{ value.firstName }}"{% endif %}
+                {%- if name %} name="{{ name ~ '[address][firstName]' }}"{% endif %}
+                {%- if required %} required aria-required="true"{% endif %}
+                {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+                {%- if value %} value="{{ value.firstName }}"{% endif %}
             >
         </div>
 
@@ -41,9 +41,9 @@
             <div {%- if id %} id="{{ id }}-middleName"{% endif %}>
                 <label>{{ "Middle"|t('site') }}</label>
                 <input type="text" autocomplete="additional-name"
-                        {%- if name %} name="{{ name ~ '[address][middleName]' }}"{% endif %}
-                        {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
-                        {%- if value %} value="{{ value.middleName }}"{% endif %}
+                    {%- if name %} name="{{ name ~ '[address][middleName]' }}"{% endif %}
+                    {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+                    {%- if value %} value="{{ value.middleName }}"{% endif %}
                 >
             </div>
         {% endif %}
@@ -51,10 +51,10 @@
         <div {%- if id %} id="{{ id }}-lastName"{% endif %}>
             <label>{{ "Last"|t('site') }}</label>
             <input type="text" autocomplete="family-name"
-                    {%- if name %} name="{{ name ~ '[address][lastName]' }}"{% endif %}
-                    {%- if required %} required aria-required=" true"{% endif %}
-                    {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
-                    {%- if value %} value="{{ value.lastName }}"{% endif %}
+                {%- if name %} name="{{ name ~ '[address][lastName]' }}"{% endif %}
+                {%- if required %} required aria-required=" true"{% endif %}
+                {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+                {%- if value %} value="{{ value.lastName }}"{% endif %}
             >
         </div>
 
@@ -62,9 +62,9 @@
             <div {%- if id %} id="{{ id }}-suffix"{% endif %}>
                 <label>{{ "Suffix"|t('site') }}</label>
                 <input type="text"
-                        {%- if name %} name="{{ name ~ '[address][suffix]' }}"{% endif %}
-                        {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
-                        {%- if value %} value="{{ value.suffix }}"{% endif %}
+                    {%- if name %} name="{{ name ~ '[address][suffix]' }}"{% endif %}
+                    {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+                    {%- if value %} value="{{ value.suffix }}"{% endif %}
                 >
             </div>
         {% endif %}
@@ -74,10 +74,10 @@
 {% else %}
 
     <input type="text" autocomplete="name"
-            {%- if name %} name="{{ name ~ '[address][fullNameShort]' }}"{% endif %}
-            {%- if required %} required aria-required=" true"{% endif %}
-            {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
-            {%- if value %} value="{{ value.getFullName() }}"{% endif %}
+        {%- if name %} name="{{ name ~ '[address][fullNameShort]' }}"{% endif %}
+        {%- if required %} required aria-required=" true"{% endif %}
+        {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+        {%- if value %} value="{{ value.getFullName() }}"{% endif %}
     >
 
 {% endif %}

@@ -126,7 +126,7 @@ class Form extends Element
     public function __toString()
     {
         try {
-            return (string) $this->name;
+            return (string)$this->name;
         } catch (\Exception $e) {
             ErrorHandler::convertExceptionToError($e);
         }
@@ -397,7 +397,7 @@ class Form extends Element
         $apiOptions = $this->getFormTemplate()->getCssClassDefaults();
         $options = [
             [
-                'label' => Craft::t('sprout-forms','Select...'),
+                'label' => Craft::t('sprout-forms', 'Select...'),
                 'value' => ''
             ]
         ];
@@ -411,7 +411,7 @@ class Form extends Element
         }
 
         $options[] = [
-            'optgroup' => Craft::t('sprout-forms','Custom CSS Classes')
+            'optgroup' => Craft::t('sprout-forms', 'Custom CSS Classes')
         ];
 
         if (!in_array($cssClasses, $classesIds) && $cssClasses) {
@@ -422,7 +422,7 @@ class Form extends Element
         }
 
         $options[] = [
-            'label' => Craft::t('sprout-forms','Add Custom'),
+            'label' => Craft::t('sprout-forms', 'Add Custom'),
             'value' => 'custom'
         ];
 

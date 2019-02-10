@@ -576,6 +576,7 @@ class SproutFormsVariable
      * Returns a new EntryQuery instance.
      *
      * @param mixed $criteria
+     *
      * @return EntryQuery
      */
     public function entries($criteria = null): EntryQuery
@@ -605,6 +606,7 @@ class SproutFormsVariable
 
     /**
      * @param $field
+     *
      * @return mixed
      */
     public function validateField($field)
@@ -614,6 +616,7 @@ class SproutFormsVariable
 
     /**
      * @param $field
+     *
      * @return mixed
      */
     public function getFieldClass($field)
