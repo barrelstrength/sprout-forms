@@ -389,8 +389,7 @@ class EntriesController extends BaseController
      */
     private function createLastEntryId($entry)
     {
-        if (!Craft::$app->getRequest()->getIsCpRequest())
-        {
+        if (!Craft::$app->getRequest()->getIsCpRequest()) {
             // Store our new entry so we can recreate the Entry object on our thank you page
             Craft::$app->getSession()->set('lastEntryId', $entry->id);
         }

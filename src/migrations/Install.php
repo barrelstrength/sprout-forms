@@ -190,7 +190,11 @@ class Install extends Migration
      * Populates the DB with the default data.
      *
      * @throws \ReflectionException
+     * @throws \yii\base\ErrorException
+     * @throws \yii\base\Exception
+     * @throws \yii\base\NotSupportedException
      * @throws \yii\db\Exception
+     * @throws \yii\web\ServerErrorHttpException
      */
     protected function insertDefaultData()
     {
@@ -242,7 +246,7 @@ class Install extends Migration
 
         $pluginHandle = 'sprout-forms';
         $projectConfig = Craft::$app->getProjectConfig();
-        $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY . '.' . $pluginHandle . '.settings', $settings->toArray());
+        $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings', $settings->toArray());
     }
 
     public function installSproutEmail()

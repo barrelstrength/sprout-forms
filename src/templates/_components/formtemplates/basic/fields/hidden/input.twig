@@ -10,10 +10,10 @@
 {% endfor -%}
 
 <input type="hidden" aria-hidden="true"
-        {%- if name %} name="{{ name }}"{% endif %}
-        {%- if id %} id="{{ id }}"{% endif %}
-        {%- if class %} class="{{ class }}"{% endif %}
-        {%- if required %} required aria-required="true"{% endif %}
-        {%- if value %} value="{{ value }}"{% endif -%}
-        {{- dataAttributes -}}
+    {%- if name %} name="{{ name }}"{% endif %}
+    {%- if id %} id="{{ id }}"{% endif %}
+    {%- if class %} class="{{ class }}"{% endif %}
+    {%- if required %} required aria-required="true"{% endif %}
+    {%- if value %} value="{{ value }}"{% endif -%}
+    {{- dataAttributes -}}
 >

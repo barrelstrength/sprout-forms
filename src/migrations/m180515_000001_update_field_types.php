@@ -107,7 +107,8 @@ class m180515_000001_update_field_types extends Migration
 
         foreach ($seedClasses as $seedClass) {
             $this->update('{{%fields}}', [
-                'type' => $seedClass['newType']], ['type' => $seedClass['oldType']], [], false);
+                'type' => $seedClass['newType']
+            ], ['type' => $seedClass['oldType']], [], false);
         }
 
         return true;

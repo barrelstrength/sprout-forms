@@ -14,13 +14,13 @@
 {% endfor -%}
 
 <input type="text"
-        {%- if name %} name="{{ name }}"{% endif %}
-        {%- if id %} id="{{ id }}"{% endif %}
-        {%- if class %} class="{{ class }}"{% endif %}
-        {%- if required %} required aria-required="true"{% endif %}
-        {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
-        {%- if value %} value="{{ value }}"{% endif %}
-        {%- if placeholder %} placeholder="{{ placeholder }}"{% endif %}
-        {%- if maxLength %} maxlength="{{ maxLength }}"{% endif %}
-        {{- dataAttributes|raw -}}
+    {%- if name %} name="{{ name }}"{% endif %}
+    {%- if id %} id="{{ id }}"{% endif %}
+    {%- if class %} class="{{ class }}"{% endif %}
+    {%- if required %} required aria-required="true"{% endif %}
+    {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+    {%- if value %} value="{{ value }}"{% endif %}
+    {%- if placeholder %} placeholder="{{ placeholder }}"{% endif %}
+    {%- if maxLength %} maxlength="{{ maxLength }}"{% endif %}
+    {{- dataAttributes|raw -}}
 >

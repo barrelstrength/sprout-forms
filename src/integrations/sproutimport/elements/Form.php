@@ -99,7 +99,9 @@ class Form extends ElementImporter
             foreach ($fields as $field) {
                 $importerClass = SproutBaseImport::$app->importers->getImporter($field);
 
-                if (!$importerClass) continue;
+                if (!$importerClass) {
+                    continue;
+                }
 
                 $field = SproutBaseImport::$app->settingsImporter->saveSetting($field, $importerClass);
 

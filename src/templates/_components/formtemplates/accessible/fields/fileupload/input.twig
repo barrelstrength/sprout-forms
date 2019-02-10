@@ -17,11 +17,11 @@
 {% endfor -%}
 
 <input type="file"
-        {%- if name %} name="{{ name }}"{% endif %}
-        {%- if id %} id="{{ id }}"{% endif %}
-        {%- if class %} class="{{ class }}"{% endif %}
-        {%- if required %} required aria-required="true"{% endif %}
-        {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
-        {%- if multiple %} multiple{% endif %}
-        {{- dataAttributes|raw -}}
+    {%- if name %} name="{{ name }}"{% endif %}
+    {%- if id %} id="{{ id }}"{% endif %}
+    {%- if class %} class="{{ class }}"{% endif %}
+    {%- if required %} required aria-required="true"{% endif %}
+    {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+    {%- if multiple %} multiple{% endif %}
+    {{- dataAttributes|raw -}}
 >

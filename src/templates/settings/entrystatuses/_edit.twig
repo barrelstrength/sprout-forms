@@ -58,17 +58,16 @@
     }) }}
     {% set colorField %}
         <div>
-            <a id="color-menu-btn" class="btn menubtn" href="#"><span
-                        class="status {{ entryStatus.color }}"></span>{{ entryStatus.color|t|title }}
+            <a id="color-menu-btn" class="btn menubtn" href="#">
+                <span class="status {{ entryStatus.color }}"></span>{{ entryStatus.color|t|title }}
             </a>
             <div class="menu">
                 <ul class="padded">
                     {% for color in ['green','orange', 'red', 'blue', 'yellow', 'pink', 'purple', 'turquoise', 'light', 'grey', 'black'] %}
-                        <li><a data-val="{{ color }}"
-                               {% if entryStatus.color == color %}class="sel"{% endif %}
-                               href="#"><span
-                                        class="status {{ color }}"></span>{{ color|t|title }}
-                            </a></li>
+                        <li>
+                            <a data-val="{{ color }}" {% if entryStatus.color == color %}class="sel"{% endif %} href="#"><span class="status {{ color }}"></span>{{ color|t|title }}
+                            </a>
+                        </li>
                     {% endfor %}
                 </ul>
             </div>
@@ -93,15 +92,15 @@
 
     $(function () {
 
-        $colorSelect = $('#color-menu-btn');
+    $colorSelect = $('#color-menu-btn');
 
-        new Garnish.MenuBtn($colorSelect, {
-            onOptionSelect: function(data){
-                var val = $(data).data('val');
-                $('#color').val(val);
-                var html = "<span class='status "+val+"'></span>"+Craft.uppercaseFirst(val);
-                    $colorSelect.html(html);
-                }
-            });
+    new Garnish.MenuBtn($colorSelect, {
+    onOptionSelect: function(data){
+    var val = $(data).data('val');
+    $('#color').val(val);
+    var html = "<span class='status "+val+"'></span>"+Craft.uppercaseFirst(val);
+    $colorSelect.html(html);
+    }
+    });
     })();
 {% endjs %}

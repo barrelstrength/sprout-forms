@@ -52,7 +52,7 @@ class Entry extends ElementImporter
      */
     public function getSeedSettingsHtml(SeedJob $seedJob): string
     {
-       $forms = SproutForms::$app->forms->getAllForms();
+        $forms = SproutForms::$app->forms->getAllForms();
 
         $formOptions[''] = Craft::t('sprout-forms', 'Select a form...');
 

@@ -127,8 +127,8 @@ class m180314_161540_craft2_to_craft3 extends Migration
             ->all();
 
         foreach ($forms as $form) {
-            if (isset($form['notificationSubject']) && isset($form['notificationSenderName']) && isset($form['notificationSenderEmail'])){
-                if ($form['notificationSubject'] && $form['notificationSenderName'] && $form['notificationSenderEmail']){
+            if (isset($form['notificationSubject']) && isset($form['notificationSenderName']) && isset($form['notificationSenderEmail'])) {
+                if ($form['notificationSubject'] && $form['notificationSenderName'] && $form['notificationSenderEmail']) {
 
                     $notificationEmail = new NotificationEmail();
 
@@ -157,7 +157,7 @@ class m180314_161540_craft2_to_craft3 extends Migration
         }
 
         foreach ($notificationColumns as $notificationColumn) {
-            if ($this->db->columnExists($table, $notificationColumn)){
+            if ($this->db->columnExists($table, $notificationColumn)) {
                 $this->dropColumn($table, $notificationColumn);
             }
         }

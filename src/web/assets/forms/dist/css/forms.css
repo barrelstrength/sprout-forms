@@ -4,12 +4,14 @@
     flex-direction: row;
     align-items: center;
 }
+
 .sproutforms-exampleinput-address .address-icon svg,
-.sproutforms-exampleinput-customhtml .customhtml-icon svg{
-    height:48px;
-    width:48px;
-    fill: #ccc;
+.sproutforms-exampleinput-customhtml .customhtml-icon svg {
+    height: 48px;
+    width: 48px;
+    fill: #cccccc;
 }
+
 .sproutforms-exampleinput-address p,
 .sproutforms-exampleinput-customhtml p {
     flex-grow: 1;
@@ -18,22 +20,24 @@
 }
 
 .target-field .body .sproutform-exampleinput-privatenotes textarea {
-    border: 2px dashed #ccc;
+    border: 2px dashed #cccccc;
     box-shadow: none;
     padding: 4px;
     margin-bottom: 12px;
 }
+
 .sproutform-exampleinput-privatenotes p {
     font-style: italic;
     margin: 5px 0 10px;
 }
 
 .sproutform-exampleinput-hidden input[type="text"] {
-    border: 2px dashed #bbb;
+    border: 2px dashed #bbbbbb;
     box-shadow: none;
     padding: 4px;
     margin-bottom: 12px;
 }
+
 .sproutform-exampleinput-hidden p {
     font-style: italic;
     margin: 5px 0 10px;

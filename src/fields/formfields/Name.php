@@ -137,11 +137,11 @@ class Name extends FormField implements PreviewableFieldInterface
     {
         $value = $element->getFieldValue($this->handle);
 
-        if ($this->required){
-            if (!$value->getFullName()){
+        if ($this->required) {
+            if (!$value->getFullName()) {
                 $element->addError(
                     $this->handle,
-                    Craft::t('sprout-forms','{field} cannot be blank', [
+                    Craft::t('sprout-forms', '{field} cannot be blank', [
                         'field' => $this->name
                     ])
                 );

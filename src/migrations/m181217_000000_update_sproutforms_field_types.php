@@ -27,7 +27,8 @@ class m181217_000000_update_sproutforms_field_types extends Migration
 
         foreach ($fieldClasses as $fieldClass) {
             $this->update('{{%fields}}', [
-                'type' => $fieldClass['newType']], ['type' => $fieldClass['oldType']], [], false);
+                'type' => $fieldClass['newType']
+            ], ['type' => $fieldClass['oldType']], [], false);
         }
 
         return true;

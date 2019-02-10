@@ -77,7 +77,7 @@ class Settings extends Model implements SproutSettingsInterface
     public function rules()
     {
         return [
-          [['templateFolderOverride'], 'required', 'on' => 'general']
+            [['templateFolderOverride'], 'required', 'on' => 'general']
         ];
     }
 }

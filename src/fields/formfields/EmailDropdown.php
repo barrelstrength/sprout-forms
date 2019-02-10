@@ -39,8 +39,8 @@ class EmailDropdown extends BaseOptionsFormField
 
     public function serializeValue($value, ElementInterface $element = null)
     {
-        if (Craft::$app->getRequest()->isSiteRequest){
-            if ($value->selected){
+        if (Craft::$app->getRequest()->isSiteRequest) {
+            if ($value->selected) {
                 // Default fist position.
                 $pos = $value->value ? $value->value : 0;
 

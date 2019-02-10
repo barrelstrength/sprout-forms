@@ -323,9 +323,9 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
         }
 
         if ($value === ':notempty:' || $value === ':empty:') {
-            $alias = 'relations_' . $this->handle;
+            $alias = 'relations_'.$this->handle;
             $operator = ($value === ':notempty:' ? '!=' : '=');
-            $paramHandle = ':fieldId' . StringHelper::randomString(8);
+            $paramHandle = ':fieldId'.StringHelper::randomString(8);
 
             $query->subQuery->andWhere(
                 "(select count([[{$alias}.id]]) from {{%relations}} {{{$alias}}} where [[{$alias}.sourceId]] = [[elements.id]] and [[{$alias}.fieldId]] = {$paramHandle}) {$operator} 0",
@@ -398,7 +398,7 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
         $value = $this->_all($value)->all();
 
         if (empty($value)) {
-            return '<p class="light">' . Craft::t('app', 'Nothing selected.') . '</p>';
+            return '<p class="light">'.Craft::t('app', 'Nothing selected.').'</p>';
         }
 
         $view = Craft::$app->getView();
@@ -553,6 +553,7 @@ JS;
      * Normalizes the available sources into select input options.
      *
      * @return array
+     * @throws NotSupportedException
      */
     public function getSourceOptions(): array
     {
@@ -580,6 +581,8 @@ JS;
      * Returns the HTML for the Target Site setting.
      *
      * @return string|null
+     * @throws NotSupportedException
+     * @throws \yii\base\Exception
      */
     public function getTargetSiteFieldHtml()
     {
@@ -601,8 +604,8 @@ JS;
                         'checked' => $showTargetSite,
                         'toggle' => 'target-site-container'
                     ]
-                ]) .
-            '<div id="target-site-container"' . (!$showTargetSite ? ' class="hidden"' : '') . '>';
+                ]).
+            '<div id="target-site-container"'.(!$showTargetSite ? ' class="hidden"' : '').'>';
 
         $siteOptions = [];
 
@@ -633,6 +636,7 @@ JS;
      * Returns the HTML for the View Mode setting.
      *
      * @return string|null
+     * @throws \yii\base\Exception
      */
     public function getViewModeFieldHtml()
     {
@@ -667,8 +671,11 @@ JS;
      * Returns an array of variables that should be passed to the input template.
      *
      * @param ElementQueryInterface|array|null $value
-     * @param ElementInterface|null $element
+     * @param ElementInterface|null            $element
+     *
      * @return array
+     * @throws NotSupportedException
+     * @throws SiteNotFoundException
      */
     protected function inputTemplateVariables($value = null, ElementInterface $element = null): array
     {
@@ -689,7 +696,7 @@ JS;
             'elementType' => static::elementType(),
             'id' => Craft::$app->getView()->formatInputId($this->handle),
             'fieldId' => $this->id,
-            'storageKey' => 'field.' . $this->id,
+            'storageKey' => 'field.'.$this->id,
             'name' => $this->handle,
             'elements' => $value,
             'sources' => $this->inputSources($element),
@@ -706,6 +713,7 @@ JS;
      * Returns an array of the source keys the field should be able to select elements from.
      *
      * @param ElementInterface|null $element
+     *
      * @return array|string
      */
     protected function inputSources(ElementInterface $element = null)
@@ -733,7 +741,9 @@ JS;
      * Returns the site ID that target elements should have.
      *
      * @param ElementInterface|null $element
+     *
      * @return int
+     * @throws SiteNotFoundException
      */
     protected function targetSiteId(ElementInterface $element = null): int
     {
@@ -794,6 +804,7 @@ JS;
      * Returns the sources that should be available to choose from within the field's settings
      *
      * @return array
+     * @throws NotSupportedException
      */
     protected function availableSources(): array
     {
@@ -804,6 +815,7 @@ JS;
      * Returns a clone of the element query value, prepped to include disabled elements.
      *
      * @param ElementQueryInterface $query
+     *
      * @return ElementQueryInterface
      */
     private function _all(ElementQueryInterface $query): ElementQueryInterface
