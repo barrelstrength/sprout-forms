@@ -149,7 +149,7 @@ class Form extends Element
      */
     public static function find(): ElementQueryInterface
     {
-        return new FormQuery(get_called_class());
+        return new FormQuery(static::class);
     }
 
     /**
@@ -232,9 +232,7 @@ class Form extends Element
 
     protected static function defineDefaultTableAttributes(string $source): array
     {
-        $attributes = ['name', 'handle', 'numberOfFields', 'totalEntries'];
-
-        return $attributes;
+        return ['name', 'handle', 'numberOfFields', 'totalEntries'];
     }
 
     /**
@@ -275,6 +273,9 @@ class Form extends Element
 
     /**
      * @inheritdoc
+     *
+     * @throws Exception
+     * @throws \Twig_Error_Loader
      */
     public function getEditorHtml(): string
     {

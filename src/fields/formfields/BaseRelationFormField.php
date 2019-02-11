@@ -10,6 +10,7 @@ use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\base\PreviewableFieldInterface;
 use craft\db\Query;
+use craft\db\Table;
 use craft\elements\db\ElementQuery;
 use craft\elements\db\ElementQueryInterface;
 use craft\errors\SiteNotFoundException;
@@ -206,6 +207,9 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {
@@ -243,6 +247,9 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
 
     /**
      * @inheritdoc
+     *
+     * @throws NotSupportedException
+     * @throws SiteNotFoundException
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
@@ -361,6 +368,11 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
 
     /**
      * @inheritdoc
+     *
+     * @throws NotSupportedException
+     * @throws SiteNotFoundException
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -392,6 +404,9 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getStaticHtml($value, ElementInterface $element): string
     {
@@ -424,6 +439,9 @@ JS;
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getTableAttributeHtml($value, ElementInterface $element): string
     {
@@ -444,6 +462,9 @@ JS;
 
     /**
      * @inheritdoc
+     *
+     * @throws NotSupportedException
+     * @throws SiteNotFoundException
      */
     public function getEagerLoadingMap(array $sourceElements)
     {
@@ -460,7 +481,7 @@ JS;
         // Return any relation data on these elements, defined with this field
         $map = (new Query())
             ->select(['sourceId as source', 'targetId as target'])
-            ->from([TableName::RELATIONS])
+            ->from([Table::RELATIONS])
             ->where([
                 'and',
                 [
@@ -526,6 +547,8 @@ JS;
 
     /**
      * @inheritdoc
+     *
+     * @throws \Throwable
      */
     public function afterElementSave(ElementInterface $element, bool $isNew)
     {

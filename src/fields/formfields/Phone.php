@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use Craft;
+use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\helpers\Json;
 use craft\helpers\Template as TemplateHelper;
@@ -63,6 +64,9 @@ class Phone extends FormField implements PreviewableFieldInterface
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {
@@ -109,16 +113,18 @@ class Phone extends FormField implements PreviewableFieldInterface
             $phoneInfo = Json::decode($value, true);
         }
 
-        if (!isset($phoneInfo['phone']) || !isset($phoneInfo['country'])) {
+        if (!isset($phoneInfo['phone'], $phoneInfo['country'])) {
             return null;
         }
         // Always return array
-        $phoneModel = new PhoneModel($phoneInfo['phone'], $phoneInfo['country']);
-        return $phoneModel;
+        return new PhoneModel($phoneInfo['phone'], $phoneInfo['country']);
     }
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml()
     {
@@ -131,6 +137,9 @@ class Phone extends FormField implements PreviewableFieldInterface
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -215,7 +224,7 @@ class Phone extends FormField implements PreviewableFieldInterface
      * Validates our fields submitted value beyond the checks
      * that were assumed based on the content attribute.
      *
-     * @param ElementInterface $element
+     * @param Element|ElementInterface $element
      *
      * @return void
      */
@@ -223,24 +232,20 @@ class Phone extends FormField implements PreviewableFieldInterface
     {
         $value = $element->getFieldValue($this->handle);
 
-        if ($this->required) {
-            if (!$value->phone) {
-                $element->addError(
-                    $this->handle,
-                    Craft::t('sprout-forms', '{field} cannot be blank.', [
-                        'field' => $this->name
-                    ])
-                );
-            }
+        if ($this->required && !$value->phone) {
+            $element->addError(
+                $this->handle,
+                Craft::t('sprout-forms', '{field} cannot be blank.', [
+                    'field' => $this->name
+                ])
+            );
         }
 
-        if ($value->country && $value->phone) {
-            if (!SproutBaseFields::$app->phoneField->validate($value->phone, $value->country)) {
-                $element->addError(
-                    $this->handle,
-                    SproutBaseFields::$app->phoneField->getErrorMessage($this, $value->country)
-                );
-            }
+        if ($value->country && $value->phone && !SproutBaseFields::$app->phoneField->validate($value->phone, $value->country)) {
+            $element->addError(
+                $this->handle,
+                SproutBaseFields::$app->phoneField->getErrorMessage($this, $value->country)
+            );
         }
     }
 
@@ -249,8 +254,6 @@ class Phone extends FormField implements PreviewableFieldInterface
      */
     public function getCountries()
     {
-        $countries = SproutBaseFields::$app->phoneField->getCountries();
-
-        return $countries;
+        return SproutBaseFields::$app->phoneField->getCountries();
     }
 }

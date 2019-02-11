@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use Craft;
+use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
 use craft\helpers\Template as TemplateHelper;
@@ -55,6 +56,9 @@ class Email extends FormField implements PreviewableFieldInterface
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml()
     {
@@ -75,6 +79,9 @@ class Email extends FormField implements PreviewableFieldInterface
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {
@@ -86,6 +93,9 @@ class Email extends FormField implements PreviewableFieldInterface
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -95,8 +105,9 @@ class Email extends FormField implements PreviewableFieldInterface
 
         $fieldContext = SproutBaseFields::$app->utilities->getFieldContext($this, $element);
 
-        // Set this to false for Quick Entry Dashboard Widget
-        $elementId = ($element != null) ? $element->id : false;
+        /** Set this to false for Quick Entry Dashboard Widget
+         * @var Element $element */
+        $elementId = ($element !== null) ? $element->id : false;
 
         $rendered = Craft::$app->getView()->renderTemplate(
             'sprout-base-fields/_components/fields/formfields/email/input',
@@ -155,7 +166,7 @@ class Email extends FormField implements PreviewableFieldInterface
      * that were assumed based on the content attribute.
      *
      *
-     * @param ElementInterface $element
+     * @param Element|ElementInterface $element
      *
      * @return void
      */

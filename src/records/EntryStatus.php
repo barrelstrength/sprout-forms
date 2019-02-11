@@ -6,11 +6,14 @@ use craft\db\ActiveRecord;
 use craft\helpers\UrlHelper;
 
 /**
- * Class EntryStatus record.
+ * Class EntryStatus record
  *
  * @property int    $id    ID
  * @property string $cpEditUrl
  * @property string $name  Name
+ * @property string $color
+ * @property int $sortOrder
+ * @property bool $isDefault
  */
 class EntryStatus extends ActiveRecord
 {

@@ -28,7 +28,6 @@ class m180314_161531_sproutforms_assets_fields extends Migration
         foreach ($fields as $field) {
             $settings = Json::decode($field['settings'], true);
             $settings['sources'] = '*';
-            $settings['sources'] = null;
             $settings['useSingleFolder'] = 1;
             $settings['defaultUploadLocationSource'] = $settings['defaultUploadLocationSource'] ? 'folder:'.$settings['defaultUploadLocationSource'] : '';
             $settings['singleUploadLocationSource'] = $settings['singleUploadLocationSource'] ? 'folder:'.$settings['singleUploadLocationSource'] : '';

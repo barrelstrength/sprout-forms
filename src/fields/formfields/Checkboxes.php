@@ -63,6 +63,9 @@ class Checkboxes extends BaseOptionsFormField
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -83,6 +86,9 @@ class Checkboxes extends BaseOptionsFormField
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml()
     {
@@ -95,6 +101,9 @@ class Checkboxes extends BaseOptionsFormField
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {

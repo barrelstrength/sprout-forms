@@ -33,6 +33,11 @@ class EntriesDataSource extends DataSource
         return Craft::t('sprout-forms', 'Query form entries');
     }
 
+    /**
+     * @inheritdoc
+     *
+     * @throws \Exception
+     */
     public function getResults(Report $report, array $settings = []): array
     {
         $startDate = null;
@@ -99,9 +104,7 @@ class EntriesDataSource extends DataSource
 
             if ($results) {
                 foreach ($results as $key => $result) {
-                    unset($result['elementId']);
-                    unset($result['siteId']);
-                    unset($result['uid']);
+                    unset($result['elementId'], $result['siteId'], $result['uid']);
 
                     $results[$key] = $result;
                 }
@@ -112,16 +115,14 @@ class EntriesDataSource extends DataSource
     }
 
     /**
-     * @param array $settings
+     * @inheritdoc
      *
-     * @return null|string
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
-     * @throws \Exception
-     * @throws \Exception
      */
     public function getSettingsHtml(array $settings = [])
     {
+        /** @var Form[] $forms */
         $forms = Form::find()->limit(null)->orderBy('name')->all();
 
         if (empty($settings)) {
@@ -165,6 +166,8 @@ class EntriesDataSource extends DataSource
 
     /**
      * @inheritdoc
+     *
+     * @throws \Exception
      */
     public function prepSettings(array $settings)
     {

@@ -5,6 +5,7 @@ namespace barrelstrength\sproutforms\fields\formfields;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
+use craft\base\VolumeInterface;
 use craft\helpers\Template as TemplateHelper;
 use craft\elements\Asset;
 use craft\elements\db\AssetQuery;
@@ -191,6 +192,9 @@ class FileUpload extends BaseRelationFormField
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml()
     {
@@ -296,10 +300,8 @@ class FileUpload extends BaseRelationFormField
                 if (strlen($file['data']) > $maxSize) {
                     $filenames[] = $file['filename'];
                 }
-            } else {
-                if (filesize($file['location']) > $maxSize) {
-                    $filenames[] = $file['filename'];
-                }
+            } else if (filesize($file['location']) > $maxSize) {
+                $filenames[] = $file['filename'];
             }
         }
 
@@ -531,10 +533,8 @@ class FileUpload extends BaseRelationFormField
                     $sources[] = $this->_volumeSourceToFolderSource($source);
                 }
             }
-        } else {
-            if ($this->sources === '*') {
-                $sources = '*';
-            }
+        } else if ($this->sources === '*') {
+            $sources = '*';
         }
 
         return $sources;
@@ -650,7 +650,7 @@ class FileUpload extends BaseRelationFormField
 
         // Make sure the volume and root folder actually exists
         if ($volumeId === null || ($rootFolder = $assetsService->getRootFolderByVolumeId($volumeId)) === null) {
-            throw new InvalidVolumeException();
+            throw new InvalidVolumeException(Craft::t('sprout-forms', 'Invalid volume.'));
         }
 
         // Are we looking for a subfolder?
@@ -724,18 +724,18 @@ class FileUpload extends BaseRelationFormField
         if ($this->useSingleFolder) {
             $uploadVolume = $this->singleUploadLocationSource;
             $subpath = $this->singleUploadLocationSubpath;
-            $settingName = Craft::t('app', 'Upload Location');
+            $settingName = Craft::t('sprout-forms', 'Upload Location');
         } else {
             $uploadVolume = $this->defaultUploadLocationSource;
             $subpath = $this->defaultUploadLocationSubpath;
-            $settingName = Craft::t('app', 'Default Upload Location');
+            $settingName = Craft::t('sprout-forms', 'Default Upload Location');
         }
 
         $assets = Craft::$app->getAssets();
 
         try {
             if (!$uploadVolume) {
-                throw new InvalidVolumeException();
+                throw new InvalidVolumeException(Craft::t('sprout-forms', 'Invalid volume.'));
             }
             $folderId = $this->_resolveVolumePathToFolderId($uploadVolume, $subpath, $element, $createDynamicFolders);
         } catch (InvalidVolumeException $e) {
@@ -809,7 +809,7 @@ class FileUpload extends BaseRelationFormField
     /**
      * Returns the target upload volume for the field.
      *
-     * @return Volume|null
+     * @return VolumeInterface|null
      */
     private function _uploadVolume()
     {

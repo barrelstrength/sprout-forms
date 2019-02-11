@@ -25,9 +25,10 @@ class SproutFormsVariable
      */
     public function getName()
     {
+        /** @var SproutForms $plugin */
         $plugin = Craft::$app->plugins->getPlugin('sprout-forms');
 
-        return $plugin->getName();
+        return $plugin->name;
     }
 
     /**
@@ -35,6 +36,7 @@ class SproutFormsVariable
      */
     public function getVersion()
     {
+        /** @var SproutForms $plugin */
         $plugin = Craft::$app->plugins->getPlugin('sprout-forms');
 
         return $plugin->getVersion();
@@ -193,11 +195,7 @@ class SproutFormsVariable
             }
         }
 
-        $fieldRenderingOptions = null;
-
-        if (isset($renderingOptions['fields'][$field->handle])) {
-            $fieldRenderingOptions = $renderingOptions['fields'][$field->handle];
-        }
+        $fieldRenderingOptions = $renderingOptions['fields'][$field->handle] ?? null;
 
         $value = $entry->getFieldValue($field->handle);
 
@@ -327,7 +325,7 @@ class SproutFormsVariable
      *
      * @param $id
      *
-     * @return Form
+     * @return Form[]
      */
     public function getFormsByGroupId($id)
     {
@@ -449,7 +447,7 @@ class SproutFormsVariable
         $registeredFields = SproutForms::$app->fields->getRegisteredFields();
 
         foreach ($registeredFields as $sproutFormfield) {
-            if ($sproutFormfield->getType() == get_class($field) && get_class($field) == 'craft\fields\PlainText') {
+            if ($sproutFormfield->getType() == get_class($field) && $field instanceof \craft\fields\PlainText) {
                 return $sproutFormfield;
             }
         }

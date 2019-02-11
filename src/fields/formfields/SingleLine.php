@@ -102,6 +102,9 @@ class SingleLine extends FormField implements PreviewableFieldInterface
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {
@@ -117,6 +120,9 @@ class SingleLine extends FormField implements PreviewableFieldInterface
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -138,6 +144,9 @@ class SingleLine extends FormField implements PreviewableFieldInterface
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml()
     {
@@ -150,6 +159,9 @@ class SingleLine extends FormField implements PreviewableFieldInterface
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {

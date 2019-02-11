@@ -130,10 +130,8 @@ class EntriesController extends BaseController
          * in Craft as normal, but will not trigger any further calls to
          * the third-party endpoint.
          */
-        if ($this->form->submitAction && !$request->getIsCpRequest()) {
-            if (!SproutForms::$app->entries->forwardEntry($entry)) {
-                return $this->redirectWithErrors($entry);
-            }
+        if ($this->form->submitAction && !$request->getIsCpRequest() && !SproutForms::$app->entries->forwardEntry($entry)) {
+            return $this->redirectWithErrors($entry);
         }
 
         return $this->saveEntryInCraft($entry);
@@ -301,7 +299,9 @@ class EntriesController extends BaseController
         $entryId = null;
         $request = Craft::$app->getRequest();
 
-        $settings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
+        /** @var SproutForms $plugin */
+        $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
+        $settings = $plugin->getSettings();
 
         if ($request->getIsCpRequest() || $settings->enableEditFormEntryViaFrontEnd) {
             $entryId = $request->getBodyParam('entryId');

@@ -4,7 +4,6 @@ namespace barrelstrength\sproutforms\elements;
 
 use Craft;
 use craft\base\Element;
-use craft\base\ElementInterface;
 use craft\elements\db\ElementQueryInterface;
 use yii\base\ErrorHandler;
 use craft\helpers\UrlHelper;
@@ -154,9 +153,7 @@ class Entry extends Element
     {
         $statusId = $this->statusId;
 
-        $status = SproutForms::$app->entries->getEntryStatusById($statusId);
-
-        return $status->color;
+        return SproutForms::$app->entries->getEntryStatusById($statusId)->color;
     }
 
     /**
@@ -359,17 +356,7 @@ class Entry extends Element
      */
     protected static function defineDefaultTableAttributes(string $source): array
     {
-        $attributes = ['title', 'formName', 'dateCreated', 'dateUpdated'];
-
-        return $attributes;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function tableAttributeHtml(string $attribute): string
-    {
-        return parent::tableAttributeHtml($attribute);
+        return ['title', 'formName', 'dateCreated', 'dateUpdated'];
     }
 
     /**
@@ -414,7 +401,7 @@ class Entry extends Element
     /**
      * Returns the form element associated with this entry
      *
-     * @return ElementInterface|null
+     * @return Form|null
      */
     public function getForm()
     {

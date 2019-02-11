@@ -5,6 +5,7 @@ namespace barrelstrength\sproutforms\integrations\sproutimport\elements;
 use barrelstrength\sproutbaseimport\base\ElementImporter;
 use barrelstrength\sproutbaseimport\models\jobs\SeedJob;
 use barrelstrength\sproutbaseimport\SproutBaseImport;
+use barrelstrength\sproutforms\elements\Entry as FormElement;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\SproutForms;
 
@@ -49,6 +50,9 @@ class Entry extends ElementImporter
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getSeedSettingsHtml(SeedJob $seedJob): string
     {
@@ -82,18 +86,23 @@ class Entry extends ElementImporter
 
     /**
      * @inheritdoc
+     *
+     * @throws \Throwable
+     * @throws \yii\base\Exception
      */
     public function getMockData($quantity, $settings)
     {
         $saveIds = [];
         $formId = $settings['formId'];
 
+        /** @var FormElement $form */
         $form = SproutForms::$app->forms->getFormById($formId);
 
         if (!empty($quantity)) {
             for ($i = 1; $i <= $quantity; $i++) {
                 $fakerDate = $this->fakerService->dateTimeThisYear('now');
 
+                /** @var EntryElement $formEntry */
                 $formEntry = new EntryElement();
                 $formEntry->formId = $form->id;
                 $formEntry->ipAddress = '127.0.0.1';

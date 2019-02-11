@@ -60,6 +60,9 @@ class Url extends FormField implements PreviewableFieldInterface
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {
@@ -106,6 +109,9 @@ class Url extends FormField implements PreviewableFieldInterface
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml()
     {

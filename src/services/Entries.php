@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\services;
 
 use barrelstrength\sproutforms\elements\Entry;
 use Craft;
+use craft\base\Element;
 use GuzzleHttp\Client;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
@@ -117,7 +118,7 @@ class Entries extends Component
      */
     public function saveEntryStatus(EntryStatus $entryStatus): bool
     {
-        $record = new EntryStatusRecord;
+        $record = new EntryStatusRecord();
 
         if ($entryStatus->id) {
             $record = EntryStatusRecord::findOne($entryStatus->id);
@@ -151,7 +152,7 @@ class Entries extends Component
 
                 $transaction->commit();
             } catch (Exception $e) {
-                $transaction->rollback();
+                $transaction->rollBack();
 
                 throw $e;
             }
@@ -366,28 +367,30 @@ class Entries extends Component
         return true;
     }
 
+    /**
+     * @return mixed|null
+     */
     public function getDefaultEntryStatusId()
     {
         $entryStatus = EntryStatusRecord::find()
             ->orderBy(['isDefault' => SORT_DESC])
             ->one();
 
-        return $entryStatus != null ? $entryStatus->id : null;
+        return $entryStatus->id ?? null;
     }
 
     /**
      * Saves some relations for a field.
      *
      * @param BaseRelationFormField $field
-     * @param ElementInterface      $source
+     * @param Element               $source
      * @param array                 $targetIds
      *
      * @throws \Throwable
      * @return void
      */
-    public function saveRelations(BaseRelationFormField $field, ElementInterface $source, array $targetIds)
+    public function saveRelations(BaseRelationFormField $field, Element $source, array $targetIds)
     {
-        /** @var Element $source */
         if (!is_array($targetIds)) {
             $targetIds = [];
         }
@@ -487,7 +490,9 @@ class Entries extends Component
 
     public function isDataSaved($form)
     {
-        $settings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
+        /** @var SproutForms $plugin */
+        $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
+        $settings = $plugin->getSettings();
 
         $saveData = $settings->enableSaveData;
 
