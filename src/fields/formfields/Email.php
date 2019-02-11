@@ -106,7 +106,9 @@ class Email extends FormField implements PreviewableFieldInterface
         $fieldContext = SproutBaseFields::$app->utilities->getFieldContext($this, $element);
 
         /** Set this to false for Quick Entry Dashboard Widget
-         * @var Element $element */
+         *
+         * @var Element $element
+         */
         $elementId = ($element !== null) ? $element->id : false;
 
         $rendered = Craft::$app->getView()->renderTemplate(

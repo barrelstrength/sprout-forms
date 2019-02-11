@@ -16,7 +16,7 @@ class ChartsController extends ElementIndexesController
 {
     /**
      * Returns the data needed to display a Submissions chart.
-     * 
+     *
      * @return Response
      * @throws \yii\base\Exception
      * @throws \yii\web\BadRequestHttpException
