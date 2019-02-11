@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\services;
 
 use barrelstrength\sproutforms\base\FormField;
+use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\fields\formfields\Address;
 use barrelstrength\sproutforms\fields\formfields\FileUpload;
 use barrelstrength\sproutforms\fields\formfields\Categories;
@@ -31,6 +32,8 @@ use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\events\RegisterFieldsEvent;
 use Craft;
 use craft\base\FieldInterface;
+use craft\models\FieldLayout;
+use craft\models\FieldLayoutTab;
 use craft\records\FieldLayoutField;
 use craft\helpers\StringHelper;
 use craft\base\Field;
@@ -312,13 +315,13 @@ class Fields extends Component
     /**
      * This service allows create a default tab given a form
      *
-     * @param                     $form
-     * @param FieldInterface|null $field
+     * @param Form                      $form
+     * @param Field|FieldInterface|null $field
      *
      * @return null
      * @throws \Throwable
      */
-    public function addDefaultTab($form, &$field = null)
+    public function addDefaultTab(Form $form, &$field = null)
     {
         if (!$form) {
             return null;
@@ -363,13 +366,13 @@ class Fields extends Component
     /**
      * This service allows duplicate fields from Layout
      *
-     * @param $form
-     * @param $postFieldLayout
+     * @param Form $form
+     * @param      $postFieldLayout
      *
      * @return \craft\models\FieldLayout|null
      * @throws \Throwable
      */
-    public function getDuplicateLayout($form, $postFieldLayout)
+    public function getDuplicateLayout(Form $form, FieldLayout $postFieldLayout)
     {
         if (!$form || !$postFieldLayout) {
             return null;
@@ -378,20 +381,17 @@ class Fields extends Component
         $postedFieldLayout = [];
         $requiredFields = [];
 
-        /**
-         * @var $tabs FieldLayoutTabRecord
-         */
+        /** @var FieldLayoutTab[] $tabs */
         $tabs = $postFieldLayout->getTabs();
 
         foreach ($tabs as $tab) {
-            $fields = [];
+            /** @var Field[] $fieldLayoutFields */
             $fieldLayoutFields = $tab->getFields();
+            $fields = [];
 
-            /**
-             * @var $fieldLayoutField FieldLayoutField
-             */
             foreach ($fieldLayoutFields as $fieldLayoutField) {
 
+                /** @var Field $field */
                 $field = Craft::$app->getFields()->createField([
                     'type' => get_class($fieldLayoutField),
                     'name' => $fieldLayoutField->name,
@@ -403,6 +403,7 @@ class Fields extends Component
 
                 Craft::$app->content->fieldContext = $form->getFieldContext();
                 Craft::$app->content->contentTable = $form->getContentTable();
+
                 // Save duplicate field
                 Craft::$app->fields->saveField($field);
 

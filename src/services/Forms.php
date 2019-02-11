@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\services;
 
 use barrelstrength\sproutforms\base\FormTemplates;
+use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Form as FormElement;
@@ -10,6 +11,7 @@ use barrelstrength\sproutforms\records\Form as FormRecord;
 use barrelstrength\sproutforms\migrations\CreateFormContentTable;
 use Craft;
 use craft\base\ElementInterface;
+use craft\base\Field;
 use craft\events\RegisterComponentTypesEvent;
 use yii\base\Component;
 use craft\helpers\StringHelper;
@@ -82,11 +84,14 @@ class Forms extends Component
      * @throws \Exception
      * @throws \Throwable
      */
-    public function saveForm(FormElement $form)
+    public function saveForm(FormElement $form): bool
     {
         $isNewForm = true;
+        $hasLayout = null;
+        $oldForm = null;
 
         if ($form->id) {
+            /** @var FormRecord $formRecord */
             $formRecord = FormRecord::findOne($form->id);
 
             if (!$formRecord) {
@@ -136,27 +141,23 @@ class Forms extends Component
                 $form->fieldLayoutId = $fieldLayout->id;
                 $form->setFieldLayout($fieldLayout);
                 $form->fieldLayoutId = $fieldLayout->id;
+            } else if ($hasLayout) {
+                // Delete our previous record
+                Craft::$app->getFields()->deleteLayoutById($oldForm->fieldLayoutId);
+
+                $fieldLayout = $form->getFieldLayout();
+
+                // Save the field layout
+                Craft::$app->getFields()->saveLayout($fieldLayout);
+
+                // Assign our new layout id info to our
+                // form model and records
+                $form->fieldLayoutId = $fieldLayout->id;
+                $form->setFieldLayout($fieldLayout);
+                $form->fieldLayoutId = $fieldLayout->id;
             } else {
-                // If we have a layout use it, otherwise
-                // since this is an existing form, grab the oldForm layout
-                if ($hasLayout) {
-                    // Delete our previous record
-                    Craft::$app->getFields()->deleteLayoutById($oldForm->fieldLayoutId);
-
-                    $fieldLayout = $form->getFieldLayout();
-
-                    // Save the field layout
-                    Craft::$app->getFields()->saveLayout($fieldLayout);
-
-                    // Assign our new layout id info to our
-                    // form model and records
-                    $form->fieldLayoutId = $fieldLayout->id;
-                    $form->setFieldLayout($fieldLayout);
-                    $form->fieldLayoutId = $fieldLayout->id;
-                } else {
-                    // We don't have a field layout right now
-                    $form->fieldLayoutId = null;
-                }
+                // We don't have a field layout right now
+                $form->fieldLayoutId = null;
             }
 
             // Create the content table first since the form will need it
@@ -231,7 +232,7 @@ class Forms extends Component
             $success = Craft::$app->elements->deleteElementById($form->id);
 
             if (!$success) {
-                $transaction->rollback();
+                $transaction->rollBack();
                 SproutForms::error('Couldn’t delete Form on deleteForm service.');
 
                 return false;
@@ -239,7 +240,7 @@ class Forms extends Component
 
             $transaction->commit();
         } catch (\Exception $e) {
-            $transaction->rollback();
+            $transaction->rollBack();
 
             throw $e;
         }
@@ -292,7 +293,7 @@ class Forms extends Component
      * @param string   $handle
      * @param int|null $siteId
      *
-     * @return array|\craft\base\ElementInterface|null
+     * @return Form|ElementInterface|null
      */
     public function getFormByHandle(string $handle, int $siteId = null)
     {
@@ -340,7 +341,7 @@ class Forms extends Component
         $form = $this->getFormById($formId);
 
         if ($form) {
-            return sprintf('sproutformscontent_%s', trim(strtolower($form->handle)));
+            return sprintf('sproutformscontent_%s', strtolower(trim($form->handle)));
         }
 
         return 'content';
@@ -388,11 +389,14 @@ class Forms extends Component
      */
     public function cleanTitleFormat($fieldId)
     {
+        /** @var Field $field */
         $field = Craft::$app->getFields()->getFieldById($fieldId);
 
         if ($field) {
             $context = explode(':', $field->context);
             $formId = $context[1];
+
+            /** @var FormRecord $formRecord */
             $formRecord = FormRecord::findOne($formId);
 
             // Check if the field is in the titleformat
@@ -488,12 +492,13 @@ class Forms extends Component
         $form = new FormElement();
         $name = $name ?? 'Form';
         $handle = $handle ?? 'form';
-        $settings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
 
-        if ($settings->enableSaveData) {
-            if ($settings->enableSaveDataPerFormBasis) {
-                $form->saveData = $settings->saveDataByDefault;
-            }
+        /** @var SproutForms $plugin */
+        $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
+        $settings = $plugin->getSettings();
+
+        if ($settings->enableSaveData && $settings->enableSaveDataPerFormBasis) {
+            $form->saveData = $settings->saveDataByDefault;
         }
 
         $form->name = $this->getFieldAsNew('name', $name);
@@ -568,8 +573,11 @@ class Forms extends Component
      */
     public function getFormTemplatePaths(FormElement $form = null)
     {
+        /** @var SproutForms $plugin */
+        $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
+        $settings = $plugin->getSettings();
+
         $templates = [];
-        $settings = Craft::$app->plugins->getPlugin('sprout-forms')->getSettings();
         $templateFolderOverride = '';
         $defaultVersion = new AccessibleTemplates();
         $defaultTemplate = $defaultVersion->getPath();
@@ -726,7 +734,7 @@ class Forms extends Component
     /**
      * @return string
      */
-    function getCaptchasHtml()
+    public function getCaptchasHtml()
     {
         $captchas = $this->getAllEnabledCaptchas();
         $captchaHtml = '';

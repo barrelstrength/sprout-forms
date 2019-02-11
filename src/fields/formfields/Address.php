@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutbasefields\base\AddressFieldTrait;
 use Craft;
+use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
 use craft\helpers\Template;
@@ -124,11 +125,19 @@ class Address extends FormField implements PreviewableFieldInterface
         );
     }
 
+    /**
+     * @return array
+     */
     public function getElementValidationRules(): array
     {
         return ['validateAddress'];
     }
 
+    /**
+     * @param Element|ElementInterface $element
+     *
+     * @return bool
+     */
     public function validateAddress(ElementInterface $element)
     {
         // @todo - improve validation

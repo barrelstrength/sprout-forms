@@ -39,8 +39,6 @@ class FormGroup extends Model
      */
     public function __toString()
     {
-        $name = Craft::t('sprout-forms', $this->name);
-
-        return (string)$name;
+        return Craft::t('sprout-forms', $this->name);
     }
 }

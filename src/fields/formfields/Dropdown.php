@@ -59,6 +59,9 @@ class Dropdown extends BaseOptionsFormField
      * panel html)
      *
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -80,6 +83,9 @@ class Dropdown extends BaseOptionsFormField
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml()
     {

@@ -8,7 +8,6 @@
 namespace barrelstrength\sproutforms\integrations\sproutimport\bundles;
 
 use barrelstrength\sproutbaseimport\base\Bundle;
-use function Couchbase\defaultDecoder;
 use Craft;
 
 class SpecialFieldsBundle extends Bundle

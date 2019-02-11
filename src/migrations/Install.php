@@ -19,8 +19,15 @@ class Install extends Migration
 {
     /**
      * @inheritdoc
+     *
+     * @throws \ReflectionException
+     * @throws \yii\base\ErrorException
+     * @throws \yii\base\Exception
+     * @throws \yii\base\NotSupportedException
+     * @throws \yii\db\Exception
+     * @throws \yii\web\ServerErrorHttpException
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         // Make sure Sprout Reports is also configured
         $this->installSproutReports();
@@ -40,7 +47,7 @@ class Install extends Migration
      * @inheritdoc
      * @throws \yii\db\Exception
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         SproutBaseReports::$app->dataSources->deleteReportsByType(EntriesDataSource::class);
 

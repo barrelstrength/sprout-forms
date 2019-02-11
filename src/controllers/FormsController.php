@@ -38,6 +38,7 @@ class FormsController extends BaseController
         $this->requirePostRequest();
         $request = Craft::$app->getRequest();
         $form = new FormElement();
+        $duplicateForm = null;
 
         if ($request->getBodyParam('saveAsNew')) {
             $form->saveAsNew = true;
@@ -161,32 +162,32 @@ class FormsController extends BaseController
             if ($form) {
                 $url = UrlHelper::cpUrl('sprout-forms/forms/edit/'.$form->id);
                 return $this->redirect($url);
-            } else {
-                throw new Exception(Craft::t('Error creating Form'));
             }
-        } else {
-            if ($formId !== null) {
-                $variables['formId'] = $formId;
 
-                if ($form === null) {
-                    $variables['brandNewForm'] = false;
+            throw new Exception(Craft::t('sprout-forms', 'Error creating Form'));
+        }
 
-                    $variables['groups'] = SproutForms::$app->groups->getAllFormGroups();
-                    $variables['groupId'] = '';
+        if ($formId !== null) {
+            $variables['formId'] = $formId;
 
-                    // Get the Form
-                    $form = SproutForms::$app->forms->getFormById($formId);
+            if ($form === null) {
+                $variables['brandNewForm'] = false;
 
-                    if (!$form) {
-                        throw new NotFoundHttpException(Craft::t('sprout-forms', 'Form not found'));
-                    }
+                $variables['groups'] = SproutForms::$app->groups->getAllFormGroups();
+                $variables['groupId'] = '';
+
+                // Get the Form
+                $form = SproutForms::$app->forms->getFormById($formId);
+
+                if (!$form) {
+                    throw new NotFoundHttpException(Craft::t('sprout-forms', 'Form not found'));
                 }
             }
-
-            $variables['form'] = $form;
-            $variables['title'] = $form->name;
-            $variables['groupId'] = $form->groupId;
         }
+
+        $variables['form'] = $form;
+        $variables['title'] = $form->name;
+        $variables['groupId'] = $form->groupId;
 
         // Set the "Continue Editing" URL
         $variables['continueEditingUrl'] = 'sprout-forms/forms/edit/{id}';

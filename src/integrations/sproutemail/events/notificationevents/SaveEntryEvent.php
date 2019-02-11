@@ -177,9 +177,7 @@ class SaveEntryEvent extends NotificationEvent
 
     public function validateEvent()
     {
-        /**
-         * @var ElementEvent $event
-         */
+        /** @var ElementEvent $event */
         $event = $this->event ?? null;
 
         if (!$event) {

@@ -60,6 +60,9 @@ class Invisible extends FormField implements PreviewableFieldInterface
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {
@@ -73,6 +76,9 @@ class Invisible extends FormField implements PreviewableFieldInterface
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -92,6 +98,9 @@ class Invisible extends FormField implements PreviewableFieldInterface
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml()
     {
@@ -131,11 +140,9 @@ class Invisible extends FormField implements PreviewableFieldInterface
      * @throws \craft\errors\MissingComponentException
      * @throws \yii\base\Exception
      */
-    public function normalizeValue($value, ElementInterface $element = null)
+    public function normalizeValue($value, ElementInterface $element = null): string
     {
-        $value = Craft::$app->getSession()->get($this->handle) ?? '';
-
-        return $value;
+        return Craft::$app->getSession()->get($this->handle) ?? '';
     }
 
     /**

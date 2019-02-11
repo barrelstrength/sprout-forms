@@ -110,11 +110,9 @@ class Number extends FormField implements PreviewableFieldInterface
         // Is this a post request?
         $request = Craft::$app->getRequest();
 
-        if (!$request->getIsConsoleRequest() && $request->getIsPost()) {
+        if (!$request->getIsConsoleRequest() && $request->getIsPost() && $value !== '') {
             // Normalize the number and make it look like this is what was posted
-            if ($value !== '') {
-                $value = Localization::normalizeNumber($value);
-            }
+            $value = Localization::normalizeNumber($value);
         }
 
         return $value;
@@ -139,6 +137,9 @@ class Number extends FormField implements PreviewableFieldInterface
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -159,6 +160,9 @@ class Number extends FormField implements PreviewableFieldInterface
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml()
     {

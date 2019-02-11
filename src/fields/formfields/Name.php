@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use Craft;
+use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
 
@@ -78,6 +79,9 @@ class Name extends FormField implements PreviewableFieldInterface
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {
@@ -89,10 +93,12 @@ class Name extends FormField implements PreviewableFieldInterface
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-
         $name = $this->handle;
         $inputId = Craft::$app->getView()->formatInputId($name);
         $namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
@@ -100,7 +106,8 @@ class Name extends FormField implements PreviewableFieldInterface
         $fieldContext = SproutBaseFields::$app->utilities->getFieldContext($this, $element);
 
         // Set this to false for Quick Entry Dashboard Widget
-        $elementId = ($element != null) ? $element->id : false;
+        // @todo - can we update the Quick Entry widget to expect null?
+        $elementId = $element->id ?? false;
 
         $rendered = Craft::$app->getView()->renderTemplate(
             'sprout-base-fields/_components/fields/formfields/name/input',
@@ -129,7 +136,7 @@ class Name extends FormField implements PreviewableFieldInterface
      * Validates our fields submitted value beyond the checks
      * that were assumed based on the content attribute.
      *
-     * @param ElementInterface $element
+     * @param Element|ElementInterface $element
      *
      * @return void
      */
@@ -137,20 +144,21 @@ class Name extends FormField implements PreviewableFieldInterface
     {
         $value = $element->getFieldValue($this->handle);
 
-        if ($this->required) {
-            if (!$value->getFullName()) {
-                $element->addError(
-                    $this->handle,
-                    Craft::t('sprout-forms', '{field} cannot be blank', [
-                        'field' => $this->name
-                    ])
-                );
-            }
+        if ($this->required && !$value->getFullName()) {
+            $element->addError(
+                $this->handle,
+                Craft::t('sprout-forms', '{field} cannot be blank', [
+                    'field' => $this->name
+                ])
+            );
         }
     }
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml()
     {

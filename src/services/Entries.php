@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\services;
 
 use barrelstrength\sproutforms\elements\Entry;
 use Craft;
+
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\elements\Form as FormElement;
@@ -116,7 +117,7 @@ class Entries extends Component
      */
     public function saveEntryStatus(EntryStatus $entryStatus): bool
     {
-        $record = new EntryStatusRecord;
+        $record = new EntryStatusRecord();
 
         if ($entryStatus->id) {
             $record = EntryStatusRecord::findOne($entryStatus->id);
@@ -150,7 +151,7 @@ class Entries extends Component
 
                 $transaction->commit();
             } catch (Exception $e) {
-                $transaction->rollback();
+                $transaction->rollBack();
 
                 throw $e;
             }
@@ -331,28 +332,61 @@ class Entries extends Component
     /**
      * @return mixed|null
      */
+    public function forwardEntry(Entry $entry)
+    {
+        $fields = $entry->getPayloadFields();
+        $endpoint = $entry->getForm()->submitAction;
+
+        if (!filter_var($endpoint, FILTER_VALIDATE_URL)) {
+
+            SproutForms::error($entry->formName.' submit action is an invalid URL: '.$endpoint);
+
+            return false;
+        }
+
+        $client = new Client();
+
+        try {
+            SproutForms::info($fields);
+
+            $response = $client->request('POST', $endpoint, [
+                'form_params' => $fields
+            ]);
+
+            SproutForms::info($response->getBody()->getContents());
+        } catch (RequestException $e) {
+            $entry->addError('general', $e->getMessage());
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @return mixed|null
+     */
     public function getDefaultEntryStatusId()
     {
         $entryStatus = EntryStatusRecord::find()
             ->orderBy(['isDefault' => SORT_DESC])
             ->one();
 
-        return $entryStatus != null ? $entryStatus->id : null;
+        return $entryStatus->id ?? null;
     }
 
     /**
      * Saves some relations for a field.
      *
      * @param BaseRelationFormField $field
-     * @param ElementInterface      $source
+     * @param Element               $source
      * @param array                 $targetIds
      *
      * @throws \Throwable
      * @return void
      */
-    public function saveRelations(BaseRelationFormField $field, ElementInterface $source, array $targetIds)
+    public function saveRelations(BaseRelationFormField $field, Element $source, array $targetIds)
     {
-        /** @var Element $source */
         if (!is_array($targetIds)) {
             $targetIds = [];
         }
@@ -452,7 +486,9 @@ class Entries extends Component
 
     public function isDataSaved($form)
     {
-        $settings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
+        /** @var SproutForms $plugin */
+        $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
+        $settings = $plugin->getSettings();
 
         $saveData = $settings->enableSaveData;
 

@@ -10,6 +10,7 @@ use barrelstrength\sproutbaseemail\services\NotificationEmailEvents;
 use barrelstrength\sproutbasereports\services\DataSources;
 use barrelstrength\sproutbasereports\SproutBaseReports;
 use barrelstrength\sproutbasereports\SproutBaseReportsHelper;
+use barrelstrength\sproutforms\base\Captcha;
 use barrelstrength\sproutforms\integrations\sproutemail\emailtemplates\basic\BasicSproutFormsNotification;
 use barrelstrength\sproutforms\integrations\sproutemail\events\notificationevents\SaveEntryEvent;
 use barrelstrength\sproutforms\integrations\sproutimport\elements\Form as FormElementImporter;
@@ -163,7 +164,7 @@ class SproutForms extends Plugin
             $event->events[] = SaveEntryEvent::class;
         });
 
-        Event::on(Forms::class, Forms::EVENT_REGISTER_CAPTCHAS, function(Event $event) {
+        Event::on(Forms::class, Forms::EVENT_REGISTER_CAPTCHAS, function(RegisterComponentTypesEvent $event) {
             $event->types[] = DuplicateCaptcha::class;
             $event->types[] = JavascriptCaptcha::class;
             $event->types[] = HoneypotCaptcha::class;
@@ -171,6 +172,7 @@ class SproutForms extends Plugin
 
         Event::on(Entries::class, EntryElement::EVENT_BEFORE_SAVE, function(OnBeforeSaveEntryEvent $event) {
             if (Craft::$app->getRequest()->getIsSiteRequest()) {
+                /** @var Captcha[] $captchas */
                 $captchas = SproutForms::$app->forms->getAllEnabledCaptchas();
 
                 foreach ($captchas as $captcha) {
@@ -180,9 +182,7 @@ class SproutForms extends Plugin
         });
 
         Craft::$app->view->hook('sproutForms.modifyForm', function(&$context) {
-            $captchasHtml = SproutForms::$app->forms->getCaptchasHtml();
-
-            return $captchasHtml;
+            return SproutForms::$app->forms->getCaptchasHtml();
         });
 
         Event::on(Integrations::class, Integrations::EVENT_REGISTER_INTEGRATIONS, function(RegisterComponentTypesEvent $event) {
@@ -291,7 +291,7 @@ class SproutForms extends Plugin
     /**
      * @return array
      */
-    private function getCpUrlRules()
+    private function getCpUrlRules(): array
     {
         return [
             'sprout-forms/forms/new' =>
@@ -400,10 +400,10 @@ class SproutForms extends Plugin
      */
     public function beforeUninstall(): bool
     {
-        $forms = SproutForms::$app->forms->getAllForms();
+        $forms = self::$app->forms->getAllForms();
 
         foreach ($forms as $form) {
-            SproutForms::$app->forms->deleteForm($form);
+            self::$app->forms->deleteForm($form);
         }
 
         return true;
