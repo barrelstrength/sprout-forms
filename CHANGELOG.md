@@ -1,9 +1,24 @@
 # Changelog
 
+## 3.0.0-beta.40 - 2019-02-13
+
+### Changed
+- Added resources previously managed in Sprout Base
+- Updated settings to implement SproutSettingsInterface
+- Updated barrelstrength/sprout-base requirement to v4.0.6
+- Added barrelstrength/sprout-base-email requirement v1.0.0
+- Added barrelstrength/sprout-base-fields requirement v1.0.0
+- Added barrelstrength/sprout-base-reports requirement v1.0.0
+
+### Fixed
+- Fixed bug where it does not display form entries when one of the form is deleted
+
 ## 3.0.0-beta.39 - 2019-02-06
 
 ### Fixed
-- Fixed bug in Craft 3.1 migration
+- Fixed bug in Craft 3.1 migration ([#226])
+
+[#226]: https://github.com/barrelstrength/craft-sprout-forms/issues/226
 
 ## 3.0.0-beta.38 - 2019-01-28
 
