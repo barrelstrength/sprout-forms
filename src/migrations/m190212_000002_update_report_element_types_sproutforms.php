@@ -2,17 +2,20 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
+use barrelstrength\sproutbasereports\migrations\m190212_000002_update_report_element_types;
 use craft\db\Migration;
-use barrelstrength\sproutbaseemail\migrations\m191202_000004_add_sent_emails_elements;
 
-class m191202_000000_add_sent_emails_elements_sproutforms extends Migration
+/**
+ * m190212_000002_update_report_element_types_sproutforms migration.
+ */
+class m190212_000002_update_report_element_types_sproutforms extends Migration
 {
     /**
      * @inheritdoc
      */
     public function safeUp(): bool
     {
-        $migration = new m191202_000004_add_sent_emails_elements();
+        $migration = new m190212_000002_update_report_element_types();
 
         ob_start();
         $migration->safeUp();
@@ -26,7 +29,7 @@ class m191202_000000_add_sent_emails_elements_sproutforms extends Migration
      */
     public function safeDown(): bool
     {
-        echo "m191202_000000_add_sent_emails_elements_sproutforms cannot be reverted.\n";
+        echo "m190212_000002_update_report_element_types_sproutforms cannot be reverted.\n";
         return false;
     }
 }

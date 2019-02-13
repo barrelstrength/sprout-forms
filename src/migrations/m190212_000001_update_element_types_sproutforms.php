@@ -2,20 +2,17 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutbasereports\migrations\m191202_000002_update_report_element_types;
+use barrelstrength\sproutbaseemail\migrations\m190212_000004_update_element_types;
 use craft\db\Migration;
 
-/**
- * m191202_000002_update_report_element_types_sproutforms migration.
- */
-class m191202_000002_update_report_element_types_sproutforms extends Migration
+class m190212_000001_update_element_types_sproutforms extends Migration
 {
     /**
      * @inheritdoc
      */
     public function safeUp(): bool
     {
-        $migration = new m191202_000002_update_report_element_types();
+        $migration = new m190212_000004_update_element_types();
 
         ob_start();
         $migration->safeUp();
@@ -29,7 +26,7 @@ class m191202_000002_update_report_element_types_sproutforms extends Migration
      */
     public function safeDown(): bool
     {
-        echo "m191202_000002_update_report_element_types_sproutforms cannot be reverted.\n";
+        echo "m191202_000001_update_element_types_sproutforms cannot be reverted.\n";
         return false;
     }
 }
