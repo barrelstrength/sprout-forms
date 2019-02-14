@@ -2,11 +2,12 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutbasefields\SproutBaseFields;
 use Craft;
+use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
 use craft\helpers\Template as TemplateHelper;
-use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\base\FormField;
 
 /**
@@ -55,6 +56,9 @@ class Email extends FormField implements PreviewableFieldInterface
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml()
     {
@@ -75,6 +79,9 @@ class Email extends FormField implements PreviewableFieldInterface
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {
@@ -86,6 +93,9 @@ class Email extends FormField implements PreviewableFieldInterface
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -93,10 +103,13 @@ class Email extends FormField implements PreviewableFieldInterface
         $inputId = Craft::$app->getView()->formatInputId($name);
         $namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
 
-        $fieldContext = SproutBase::$app->utilities->getFieldContext($this, $element);
+        $fieldContext = SproutBaseFields::$app->utilities->getFieldContext($this, $element);
 
-        // Set this to false for Quick Entry Dashboard Widget
-        $elementId = ($element != null) ? $element->id : false;
+        /** Set this to false for Quick Entry Dashboard Widget
+         *
+         * @var Element $element
+         */
+        $elementId = ($element !== null) ? $element->id : false;
 
         $rendered = Craft::$app->getView()->renderTemplate(
             'sprout-base-fields/_components/fields/formfields/email/input',
@@ -124,7 +137,7 @@ class Email extends FormField implements PreviewableFieldInterface
     public function getFrontEndInputHtml($value, array $renderingOptions = null): string
     {
         $attributes = $this->getAttributes();
-        $errorMessage = SproutBase::$app->emailField->getErrorMessage($attributes['name'], $this);
+        $errorMessage = SproutBaseFields::$app->emailField->getErrorMessage($attributes['name'], $this);
         $placeholder = $this['placeholder'] ?? '';
 
         $rendered = Craft::$app->getView()->renderTemplate(
@@ -155,7 +168,7 @@ class Email extends FormField implements PreviewableFieldInterface
      * that were assumed based on the content attribute.
      *
      *
-     * @param ElementInterface $element
+     * @param Element|ElementInterface $element
      *
      * @return void
      */
@@ -166,16 +179,16 @@ class Email extends FormField implements PreviewableFieldInterface
         $customPattern = $this->customPattern;
         $checkPattern = $this->customPatternToggle;
 
-        if (!SproutBase::$app->emailField->validateEmailAddress($value, $customPattern, $checkPattern)) {
+        if (!SproutBaseFields::$app->emailField->validateEmailAddress($value, $customPattern, $checkPattern)) {
             $element->addError($this->handle,
-                SproutBase::$app->emailField->getErrorMessage(
+                SproutBaseFields::$app->emailField->getErrorMessage(
                     $this->name, $this)
             );
         }
 
         $uniqueEmail = $this->uniqueEmail;
 
-        if ($uniqueEmail && !SproutBase::$app->emailField->validateUniqueEmailAddress($value, $element, $this)) {
+        if ($uniqueEmail && !SproutBaseFields::$app->emailField->validateUniqueEmailAddress($value, $element, $this)) {
             $element->addError($this->handle,
                 Craft::t('sprout-forms', $this->name.' must be a unique email.')
             );

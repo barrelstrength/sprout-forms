@@ -4,9 +4,9 @@ namespace barrelstrength\sproutforms\integrations\sproutreports\datasources;
 
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutbase\app\reports\elements\Report;
+use barrelstrength\sproutbasereports\elements\Report;
 use Craft;
-use barrelstrength\sproutbase\app\reports\base\DataSource;
+use barrelstrength\sproutbasereports\base\DataSource;
 use craft\db\Query;
 use craft\helpers\DateTimeHelper;
 
@@ -20,7 +20,7 @@ class EntriesDataSource extends DataSource
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return Craft::t('sprout-forms', 'Sprout Forms Entries');
     }
@@ -28,12 +28,17 @@ class EntriesDataSource extends DataSource
     /**
      * @return null|string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return Craft::t('sprout-forms', 'Query form entries');
     }
 
-    public function getResults(Report $report, array $settings = [])
+    /**
+     * @inheritdoc
+     *
+     * @throws \Exception
+     */
+    public function getResults(Report $report, array $settings = []): array
     {
         $startDate = null;
         $endDate = null;
@@ -99,9 +104,7 @@ class EntriesDataSource extends DataSource
 
             if ($results) {
                 foreach ($results as $key => $result) {
-                    unset($result['elementId']);
-                    unset($result['siteId']);
-                    unset($result['uid']);
+                    unset($result['elementId'], $result['siteId'], $result['uid']);
 
                     $results[$key] = $result;
                 }
@@ -112,16 +115,14 @@ class EntriesDataSource extends DataSource
     }
 
     /**
-     * @param array $settings
+     * @inheritdoc
      *
-     * @return null|string
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
-     * @throws \Exception
-     * @throws \Exception
      */
     public function getSettingsHtml(array $settings = [])
     {
+        /** @var Form[] $forms */
         $forms = Form::find()->limit(null)->orderBy('name')->all();
 
         if (empty($settings)) {
@@ -165,6 +166,8 @@ class EntriesDataSource extends DataSource
 
     /**
      * @inheritdoc
+     *
+     * @throws \Exception
      */
     public function prepSettings(array $settings)
     {

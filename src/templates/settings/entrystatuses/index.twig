@@ -14,23 +14,24 @@
         {% for entryStatus in entryStatuses %}
             <tr data-id="{{ entryStatus.id }}"
                 data-name="{{ entryStatus.name|t('sprout-forms') }}">
-                <th scope="row" data-title="{{ 'Name'|t('sprout-forms') }}"><a
-                            href="{{ url('sprout-forms/settings/entry-statuses/' ~ entryStatus.id) }}">{{ entryStatus.htmlLabel|raw }}</a>
+                <th scope="row" data-title="{{ 'Name'|t('sprout-forms') }}">
+                    <a href="{{ url('sprout-forms/settings/entry-statuses/' ~ entryStatus.id) }}">{{ entryStatus.htmlLabel|raw }}</a>
                 </th>
-                <td data-title="{{ 'Handle'|t('sprout-forms') }}"
-                    class="code">{{ entryStatus.handle }}</td>
-                <td>{% if entryStatus.isDefault %}<span data-icon="check"
-                                                        title="{{ 'Yes'|t('sprout-forms') }}"></span>{% endif %}
+                <td data-title="{{ 'Handle'|t('sprout-forms') }}" class="code">
+                    {{ entryStatus.handle }}
                 </td>
                 <td>
-                <td class="thin"><a class="move icon"
-                                    title="{{ 'Reorder'|t('sprout-forms') }}"
-                                    role="button"></a></td>
+                    {% if entryStatus.isDefault %}
+                        <span data-icon="check" title="{{ 'Yes'|t('sprout-forms') }}"></span>
+                    {% endif %}
+                </td>
+                <td>
+                <td class="thin">
+                    <a class="move icon" title="{{ 'Reorder'|t('sprout-forms') }}" role="button"></a>
+                </td>
                 <td class="thin">
                     {% if entryStatus.id not in [1,2] %}
-                        <a class="delete icon"
-                           title="{{ 'Delete'|t('sprout-forms') }}"
-                           role="button"></a>
+                        <a class="delete icon" title="{{ 'Delete'|t('sprout-forms') }}" role="button"></a>
                     {% endif %}
                 </td>
             </tr>

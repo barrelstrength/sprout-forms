@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection ClassConstantCanBeUsedInspection */
 
 namespace barrelstrength\sproutforms\migrations;
 
@@ -27,7 +27,8 @@ class m180719_000000_forms_and_entry_elements_types extends Migration
 
         foreach ($types as $type) {
             $this->update('{{%elements}}', [
-                'type' => $type['newType']], ['type' => $type['oldType']], [], false);
+                'type' => $type['newType']
+            ], ['type' => $type['oldType']], [], false);
         }
 
         return true;

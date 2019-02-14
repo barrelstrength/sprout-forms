@@ -38,12 +38,11 @@ class GroupsController extends BaseController
                 'success' => true,
                 'group' => $group->getAttributes(),
             ]);
-        } else {
-
-            return $this->asJson([
-                'errors' => $group->getErrors(),
-            ]);
         }
+
+        return $this->asJson([
+            'errors' => $group->getErrors(),
+        ]);
     }
 
     /**

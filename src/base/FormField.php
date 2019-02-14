@@ -35,7 +35,7 @@ abstract class FormField extends Field
      * @var string
      */
     protected $originalTemplatesPath;
-    
+
     /**
      *
      * Allows a user to add variables to an object that can be parsed by fields

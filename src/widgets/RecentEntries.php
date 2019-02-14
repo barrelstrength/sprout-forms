@@ -72,6 +72,9 @@ class RecentEntries extends Widget
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getBodyHtml()
     {
@@ -90,6 +93,9 @@ class RecentEntries extends Widget
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {

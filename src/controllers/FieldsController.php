@@ -13,6 +13,7 @@ use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
 use craft\base\Field;
 
 use barrelstrength\sproutforms\SproutForms;
+use yii\web\NotFoundHttpException;
 
 class FieldsController extends BaseController
 {
@@ -197,6 +198,10 @@ class FieldsController extends BaseController
         $formId = $request->getRequiredBodyParam('formId');
         $form = SproutForms::$app->forms->getFormById($formId);
 
+        if (!$form) {
+            throw new NotFoundHttpException(Craft::t('sprout-forms', 'Form not found.'));
+        }
+
         $type = $request->getRequiredBodyParam('type');
         $fieldId = $request->getBodyParam('fieldId');
 
@@ -222,7 +227,7 @@ class FieldsController extends BaseController
 
         if ($fieldLayoutField) {
             $required = $request->getBodyParam('required');
-            $fieldLayoutField->required = $required !== '' ? true : false;
+            $fieldLayoutField->required = $required !== '';
             $fieldLayoutField->save(false);
             $field->required = $fieldLayoutField->required;
         }
@@ -234,6 +239,7 @@ class FieldsController extends BaseController
         // Save a new field
         if (!$field->id) {
             $isNewField = true;
+            $oldHandle = null;
         } else {
             $isNewField = false;
             $oldHandle = Craft::$app->fields->getFieldById($field->id)->handle;
@@ -251,12 +257,9 @@ class FieldsController extends BaseController
         }
 
         // Check if the handle is updated to also update the titleFormat
-        if (!$isNewField) {
-            // Let's update the title format
-            if ($oldHandle != $field->handle && strpos($form->titleFormat, $oldHandle) !== false) {
-                $newTitleFormat = SproutForms::$app->forms->updateTitleFormat($oldHandle, $field->handle, $form->titleFormat);
-                $form->titleFormat = $newTitleFormat;
-            }
+        if (!$isNewField && $oldHandle !== $field->handle && strpos($form->titleFormat, $oldHandle) !== false) {
+            $newTitleFormat = SproutForms::$app->forms->updateTitleFormat($oldHandle, $field->handle, $form->titleFormat);
+            $form->titleFormat = $newTitleFormat;
         }
 
         // Now let's add this field to our field layout
@@ -284,14 +287,14 @@ class FieldsController extends BaseController
             SproutForms::info('Field Saved');
 
             return $this->returnJson(true, $field, $form, $tabName, $tabId);
-        } else {
-            $variables['tabId'] = $tabId;
-            $variables['field'] = $field;
-            SproutForms::error("Couldn't save field.");
-            Craft::$app->getSession()->setError(Craft::t('sprout-forms', 'Couldn’t save field.'));
-
-            return $this->returnJson(false, $field, $form);
         }
+
+        $variables['tabId'] = $tabId;
+        $variables['field'] = $field;
+        SproutForms::error("Couldn't save field.");
+        Craft::$app->getSession()->setError(Craft::t('sprout-forms', 'Couldn’t save field.'));
+
+        return $this->returnJson(false, $field, $form);
     }
 
     /**
@@ -342,15 +345,15 @@ class FieldsController extends BaseController
                 ],
                 'template' => SproutForms::$app->fields->getModalFieldTemplate($form, $field, $group->id),
             ]);
-        } else {
-            $message = Craft::t('sprout-forms', 'The field requested to edit no longer exists.');
-            SproutForms::error($message);
-
-            return $this->asJson([
-                'success' => false,
-                'error' => $message,
-            ]);
         }
+
+        $message = Craft::t('sprout-forms', 'The field requested to edit no longer exists.');
+        SproutForms::error($message);
+
+        return $this->asJson([
+            'success' => false,
+            'error' => $message,
+        ]);
     }
 
     /**
@@ -386,11 +389,11 @@ class FieldsController extends BaseController
             return $this->asJson([
                 'success' => true
             ]);
-        } else {
-            return $this->asJson([
-                'success' => false
-            ]);
         }
+
+        return $this->asJson([
+            'success' => false
+        ]);
     }
 
     /**

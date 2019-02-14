@@ -109,12 +109,12 @@ class m190124_000000_form_fields_settings extends Migration
                 case FileUpload::class:
                     if (!empty($settings['defaultUploadLocationSource']) && strpos($settings['defaultUploadLocationSource'], ':') !== false) {
                         $default = explode(':', $settings['defaultUploadLocationSource']);
-                        $settings['defaultUploadLocationSource'] = isset($folders[$default[1]]) ? $default[0] . ':' . $folders[$default[1]] : null;
+                        $settings['defaultUploadLocationSource'] = isset($folders[$default[1]]) ? $default[0].':'.$folders[$default[1]] : null;
                     }
 
                     if (!empty($settings['singleUploadLocationSource']) && strpos($settings['singleUploadLocationSource'], ':') !== false) {
                         $single = explode(':', $settings['singleUploadLocationSource']);
-                        $settings['singleUploadLocationSource'] = isset($folders[$single[1]]) ? $single[0] . ':' . $folders[$single[1]] : null;
+                        $settings['singleUploadLocationSource'] = isset($folders[$single[1]]) ? $single[0].':'.$folders[$single[1]] : null;
                     }
 
                     break;
@@ -125,7 +125,7 @@ class m190124_000000_form_fields_settings extends Migration
                         foreach ($settings['sources'] as $source) {
                             $source = explode(':', $source);
                             if (count($source) > 1) {
-                                $newSources[] = $source[0] . ':' . ($sections[$source[1]] ?? $source[1]);
+                                $newSources[] = $source[0].':'.($sections[$source[1]] ?? $source[1]);
                             } else {
                                 $newSources[] = $source[0];
                             }
@@ -138,14 +138,14 @@ class m190124_000000_form_fields_settings extends Migration
                 case Categories::class:
                     if (!empty($settings['source']) && strpos($settings['source'], ':') !== false) {
                         $source = explode(':', $settings['source']);
-                        $settings['source'] = $source[0] . ':' . ($categoryGroups[$source[1]] ?? $source[1]);
+                        $settings['source'] = $source[0].':'.($categoryGroups[$source[1]] ?? $source[1]);
                     }
 
                     break;
                 case Tags::class:
                     if (!empty($settings['source']) && strpos($settings['source'], ':') !== false) {
                         $source = explode(':', $settings['source']);
-                        $settings['source'] = $source[0] . ':' . ($tagGroups[$source[1]] ?? $source[1]);
+                        $settings['source'] = $source[0].':'.($tagGroups[$source[1]] ?? $source[1]);
                     }
 
                     break;

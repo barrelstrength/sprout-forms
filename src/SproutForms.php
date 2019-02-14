@@ -2,17 +2,21 @@
 
 namespace barrelstrength\sproutforms;
 
-use barrelstrength\sproutbase\app\email\services\EmailTemplates;
-use barrelstrength\sproutbase\app\reports\models\DataSource;
-use barrelstrength\sproutbase\app\email\services\NotificationEmailEvents;
-use barrelstrength\sproutbase\app\reports\services\DataSources;
-use barrelstrength\sproutbase\SproutBase;
+use barrelstrength\sproutbaseemail\services\EmailTemplates;
+use barrelstrength\sproutbaseemail\SproutBaseEmailHelper;
+use barrelstrength\sproutbasefields\SproutBaseFieldsHelper;
+use barrelstrength\sproutbasereports\models\DataSource;
+use barrelstrength\sproutbaseemail\services\NotificationEmailEvents;
+use barrelstrength\sproutbasereports\services\DataSources;
+use barrelstrength\sproutbasereports\SproutBaseReports;
+use barrelstrength\sproutbasereports\SproutBaseReportsHelper;
+use barrelstrength\sproutforms\base\Captcha;
 use barrelstrength\sproutforms\integrations\sproutemail\emailtemplates\basic\BasicSproutFormsNotification;
 use barrelstrength\sproutforms\integrations\sproutemail\events\notificationevents\SaveEntryEvent;
 use barrelstrength\sproutforms\integrations\sproutimport\elements\Form as FormElementImporter;
 use barrelstrength\sproutforms\integrations\sproutimport\elements\Entry as EntryElementImporter;
 use barrelstrength\sproutbase\base\BaseSproutTrait;
-use barrelstrength\sproutbase\app\email\events\NotificationEmailEvent;
+use barrelstrength\sproutbaseemail\events\NotificationEmailEvent;
 use barrelstrength\sproutforms\fields\Forms as FormsField;
 use barrelstrength\sproutforms\fields\Entries as FormEntriesField;
 use barrelstrength\sproutforms\widgets\RecentEntries;
@@ -26,7 +30,7 @@ use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesDat
 use barrelstrength\sproutforms\services\App;
 use barrelstrength\sproutforms\services\Entries;
 use barrelstrength\sproutforms\services\Forms;
-use barrelstrength\sproutbase\app\import\services\Importers;
+use barrelstrength\sproutbaseimport\services\Importers;
 use Craft;
 use craft\base\Plugin;
 
@@ -85,7 +89,7 @@ class SproutForms extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '3.0.11';
+    public $schemaVersion = '3.0.13';
 
     /**
      * @var string
@@ -104,9 +108,13 @@ class SproutForms extends Plugin
         ]);
 
         self::$app = $this->get('app');
+
         Craft::setAlias('@sproutformslib', dirname(__DIR__, 2).'/sprout-forms/lib');
 
         SproutBaseHelper::registerModule();
+        SproutBaseEmailHelper::registerModule();
+        SproutBaseFieldsHelper::registerModule();
+        SproutBaseReportsHelper::registerModule();
 
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $event) {
             $event->rules = array_merge($event->rules, $this->getCpUrlRules());
@@ -153,7 +161,7 @@ class SproutForms extends Plugin
             $event->events[] = SaveEntryEvent::class;
         });
 
-        Event::on(Forms::class, Forms::EVENT_REGISTER_CAPTCHAS, function(Event $event) {
+        Event::on(Forms::class, Forms::EVENT_REGISTER_CAPTCHAS, function(RegisterComponentTypesEvent $event) {
             $event->types[] = DuplicateCaptcha::class;
             $event->types[] = JavascriptCaptcha::class;
             $event->types[] = HoneypotCaptcha::class;
@@ -161,6 +169,7 @@ class SproutForms extends Plugin
 
         Event::on(Entries::class, EntryElement::EVENT_BEFORE_SAVE, function(OnBeforeSaveEntryEvent $event) {
             if (Craft::$app->getRequest()->getIsSiteRequest()) {
+                /** @var Captcha[] $captchas */
                 $captchas = SproutForms::$app->forms->getAllEnabledCaptchas();
 
                 foreach ($captchas as $captcha) {
@@ -170,9 +179,7 @@ class SproutForms extends Plugin
         });
 
         Craft::$app->view->hook('sproutForms.modifyForm', function(&$context) {
-            $captchasHtml = SproutForms::$app->forms->getCaptchasHtml();
-
-            return $captchasHtml;
+            return SproutForms::$app->forms->getCaptchasHtml();
         });
 
         Event::on(Forms::class, Forms::EVENT_REGISTER_FORM_TEMPLATES, function(RegisterComponentTypesEvent $event) {
@@ -250,12 +257,12 @@ class SproutForms extends Plugin
             'url' => 'sprout-forms/notifications'
         ];
 
-        $entriesDataSource = SproutBase::$app->dataSources->getDataSourceByType(EntriesDataSource::class);
+        $entriesDataSource = SproutBaseReports::$app->dataSources->getDataSourceByType(EntriesDataSource::class);
 
         // If we don't find a dataSource we need to generate our Sprout Forms Data Source record and then query for it again.
         if (!$entriesDataSource) {
-            SproutBase::$app->dataSources->getAllDataSources();
-            $entriesDataSource = SproutBase::$app->dataSources->getDataSourceByType(EntriesDataSource::class);
+            SproutBaseReports::$app->dataSources->getAllDataSources();
+            $entriesDataSource = SproutBaseReports::$app->dataSources->getDataSourceByType(EntriesDataSource::class);
         }
 
         $parent['subnav']['reports'] = [
@@ -276,7 +283,7 @@ class SproutForms extends Plugin
     /**
      * @return array
      */
-    private function getCpUrlRules()
+    private function getCpUrlRules(): array
     {
         return [
             'sprout-forms/forms/new' =>
@@ -301,13 +308,13 @@ class SproutForms extends Plugin
                 'sprout-forms/forms',
 
             'sprout-forms/reports/<dataSourceId>/new' =>
-                'sprout/reports/edit-report',
+                'sprout-base-reports/reports/edit-report',
             'sprout-forms/reports/<dataSourceId>/edit/<reportId>' =>
-                'sprout/reports/edit-report',
+                'sprout-base-reports/reports/edit-report',
             'sprout-forms/reports/view/<reportId>' =>
-                'sprout/reports/results-index',
+                'sprout-base-reports/reports/results-index',
             'sprout-forms/reports/<dataSourceId>' =>
-                'sprout/reports/index',
+                'sprout-base-reports/reports/index',
 
             'sprout-forms/notifications' => [
                 'template' => 'sprout-base-email/notifications/index',
@@ -317,9 +324,9 @@ class SproutForms extends Plugin
             ],
 
             'sprout-forms/settings/notifications/edit/<emailId:\d+|new>' =>
-                'sprout/notifications/edit-notification-email-settings-template',
+                'sprout-base-email/notifications/edit-notification-email-settings-template',
             'sprout-forms/notifications/edit/<emailId:\d+|new>' => [
-                'route' => 'sprout/notifications/edit-notification-email-template',
+                'route' => 'sprout-base-email/notifications/edit-notification-email-template',
                 'params' => [
                     'defaultEmailTemplate' => BasicSproutFormsNotification::class
                 ]
@@ -375,7 +382,7 @@ class SproutForms extends Plugin
         // Set all pre-built class to sprout-reports $pluginHandle
         $dataSourceModel->pluginHandle = 'sprout-forms';
 
-        SproutBase::$app->dataSources->saveDataSource($dataSourceModel);
+        SproutBaseReports::$app->dataSources->saveDataSource($dataSourceModel);
     }
 
     /**
@@ -385,10 +392,10 @@ class SproutForms extends Plugin
      */
     public function beforeUninstall(): bool
     {
-        $forms = SproutForms::$app->forms->getAllForms();
+        $forms = self::$app->forms->getAllForms();
 
         foreach ($forms as $form) {
-            SproutForms::$app->forms->deleteForm($form);
+            self::$app->forms->deleteForm($form);
         }
 
         return true;

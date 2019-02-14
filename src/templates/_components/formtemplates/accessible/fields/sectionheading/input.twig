@@ -10,8 +10,8 @@
 {% endfor -%}
 
 <header {%- if id %} id="{{ id }}"{% endif %}
-        {%- if class %} class="{{ class }}"{% endif %}
-        {{- dataAttributes|raw }}>
+    {%- if class %} class="{{ class }}"{% endif %}
+    {{- dataAttributes|raw }}>
 
     {% if not field.hideLabel %}
         <h3>{{ field.name }}</h3>

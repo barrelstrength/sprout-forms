@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\services;
 
 use Craft;
+use craft\db\Query;
 use yii\base\Component;
 
 use barrelstrength\sproutforms\elements\Form as FormElement;
@@ -37,11 +38,11 @@ class Groups extends Component
             }
 
             return true;
-        } else {
-            $group->addErrors($groupRecord->getErrors());
-
-            return false;
         }
+
+        $group->addErrors($groupRecord->getErrors());
+
+        return false;
     }
 
     /**
@@ -92,14 +93,12 @@ class Groups extends Component
 
         if ($indexBy == 'id') {
             $groups = $this->_groupsById;
+        } else if (!$indexBy) {
+            $groups = array_values($this->_groupsById);
         } else {
-            if (!$indexBy) {
-                $groups = array_values($this->_groupsById);
-            } else {
-                $groups = [];
-                foreach ($this->_groupsById as $group) {
-                    $groups[$group->$indexBy] = $group;
-                }
+            $groups = [];
+            foreach ($this->_groupsById as $group) {
+                $groups[$group->$indexBy] = $group;
             }
         }
 
@@ -111,15 +110,15 @@ class Groups extends Component
      *
      * @param  int $groupId
      *
-     * @return FormElement
+     * @return FormElement[]
      */
     public function getFormsByGroupId($groupId)
     {
-        $query = Craft::$app->getDb()
-            ->createCommand()
+        $query = (new Query())
+            ->select('*')
             ->from('{{%sproutforms_formgroups}}')
             ->where('groupId=:groupId', ['groupId' => $groupId])
-            ->order('name')
+            ->orderBy('name')
             ->all();
 
         foreach ($query as $key => $value) {

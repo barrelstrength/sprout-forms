@@ -14,8 +14,8 @@
 
 {% spaceless %}
     <div
-            {%- if id %} id="{{ id }}"{% endif %}
-            {%- if class %} class="{{ class }}{% endif %}">
+        {%- if id %} id="{{ id }}"{% endif %}
+        {%- if class %} class="{{ class }}{% endif %}">
 
         {%- for key, option in options %}
 
@@ -25,13 +25,13 @@
 
             <label {%- if id %} for="{{ id }}-{{ loop.index }}"{% endif %}>
                 <input type="radio"
-                        {%- if name %} name="{{ name }}"{% endif %}
-                        {%- if id %} id="{{ id }}-{{ loop.index }}"{% endif %}
-                        {%- if required %} required aria-required="true"{% endif %}
-                        {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
-                        {%- if optionValue %} value="{{ optionValue }}"{% endif %}
-                        {%- if checked %} checked aria-checked="true"{% else %} aria-checked="false"{% endif %}
-                        {{- dataAttributes|raw -}}
+                    {%- if name %} name="{{ name }}"{% endif %}
+                    {%- if id %} id="{{ id }}-{{ loop.index }}"{% endif %}
+                    {%- if required %} required aria-required="true"{% endif %}
+                    {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+                    {%- if optionValue %} value="{{ optionValue }}"{% endif %}
+                    {%- if checked %} checked aria-checked="true"{% else %} aria-checked="false"{% endif %}
+                    {{- dataAttributes|raw -}}
                 >
                 {%- if label %}{{ label|raw }}{% endif -%}
             </label>

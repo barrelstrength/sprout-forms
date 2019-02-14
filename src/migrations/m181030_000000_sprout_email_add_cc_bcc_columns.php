@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutbase\app\email\migrations\m180927_080639_add_cc_bcc_columns as CcBccMigration;
+use barrelstrength\sproutbaseemail\migrations\m180927_080639_add_cc_bcc_columns as CcBccMigration;
 use craft\db\Migration;
 
 /**

@@ -8,7 +8,7 @@ use craft\helpers\Template as TemplateHelper;
 use yii\db\Schema;
 
 use barrelstrength\sproutforms\base\FormField;
-use barrelstrength\sproutbase\app\fields\web\assets\quill\QuillAsset;
+use barrelstrength\sproutbasefields\web\assets\quill\QuillAsset;
 
 /**
  *
@@ -126,6 +126,9 @@ class SectionHeading extends FormField
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -149,6 +152,9 @@ class SectionHeading extends FormField
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml()
     {

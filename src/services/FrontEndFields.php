@@ -35,35 +35,31 @@ class FrontEndFields extends Component
 
                     $entries[$pos]['entries'] = Entry::find()->sectionId($sectionById->id)->all();
                     $entries[$pos]['section'] = $sectionById;
-                } else {
-                    if ($section[0] == 'singles') {
-                        $singles = $this->getSinglesEntries();
+                } else if ($section[0] == 'singles') {
+                    $singles = $this->getSinglesEntries();
 
-                        $entries[$pos]['entries'] = $singles;
-                        $entries[$pos]['singles'] = true;
-                    }
+                    $entries[$pos]['entries'] = $singles;
+                    $entries[$pos]['singles'] = true;
                 }
             }
-        } else {
-            if ($settings['sources'] == '*') {
-                $sections = $sectionsService->getAllSections();
+        } else if ($settings['sources'] == '*') {
+            $sections = $sectionsService->getAllSections();
 
-                foreach ($sections as $section) {
-                    $pos = count($entries) + 1;
-
-                    if ($section->type != Section::TYPE_SINGLE) {
-                        $sectionById = $sectionsService->getSectionById($section->id);
-
-                        $entries[$pos]['entries'] = Entry::find()->sectionId($section->id)->all();
-                        $entries[$pos]['section'] = $sectionById;
-                    }
-                }
-
-                $singles = $this->getSinglesEntries();
+            foreach ($sections as $section) {
                 $pos = count($entries) + 1;
-                $entries[$pos]['entries'] = $singles;
-                $entries[$pos]['singles'] = true;
+
+                if ($section->type != Section::TYPE_SINGLE) {
+                    $sectionById = $sectionsService->getSectionById($section->id);
+
+                    $entries[$pos]['entries'] = Entry::find()->sectionId($section->id)->all();
+                    $entries[$pos]['section'] = $sectionById;
+                }
             }
+
+            $singles = $this->getSinglesEntries();
+            $pos = count($entries) + 1;
+            $entries[$pos]['entries'] = $singles;
+            $entries[$pos]['singles'] = true;
         }
 
         return $entries;

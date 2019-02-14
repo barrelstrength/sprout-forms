@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutforms\integrations\sproutemail\emailtemplates\basic;
 
-use barrelstrength\sproutbase\app\email\base\EmailTemplates;
+use barrelstrength\sproutbaseemail\base\EmailTemplates;
 use Craft;
 
 /**
@@ -15,7 +15,7 @@ class BasicSproutFormsNotification extends EmailTemplates
      */
     public function getName(): string
     {
-        return Craft::t('sprout-base', 'Basic Notification (Sprout Forms)');
+        return Craft::t('sprout-forms', 'Basic Notification (Sprout Forms)');
     }
 
     /**

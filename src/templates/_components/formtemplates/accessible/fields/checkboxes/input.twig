@@ -13,8 +13,8 @@
 
 {% spaceless %}
     <div
-            {%- if id %} id="{{ id }}"{% endif %}
-            {%- if class %} class="{{ class }}"{% endif %}>
+        {%- if id %} id="{{ id }}"{% endif %}
+        {%- if class %} class="{{ class }}"{% endif %}>
 
         {% if name is defined and (name|length < 3 or name|slice(-2) != '[]') %}
             <input type="hidden" aria-hidden="true" name="{{ name }}" value="">
@@ -27,12 +27,12 @@
 
             <label {%- if id %} for="{{ id }}-{{ loop.index }}"{% endif %}>
                 <input type="checkbox"
-                        {%- if name %} name="{{ name }}[]"{% endif %}
-                        {%- if id %} id="{{ id }}-{{ loop.index }}"{% endif %}
-                        {%- if value %} value="{{ value }}"{% endif %}
-                        {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
-                        {%- if value in values %} checked aria-checked="true"{% else %} aria-checked="false"{% endif %}
-                        {{- dataAttributes|raw -}}
+                    {%- if name %} name="{{ name }}[]"{% endif %}
+                    {%- if id %} id="{{ id }}-{{ loop.index }}"{% endif %}
+                    {%- if value %} value="{{ value }}"{% endif %}
+                    {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+                    {%- if value in values %} checked aria-checked="true"{% else %} aria-checked="false"{% endif %}
+                    {{- dataAttributes|raw -}}
                 >
                 {%- if label is defined %} {{ label|raw }}{% endif -%}
             </label>

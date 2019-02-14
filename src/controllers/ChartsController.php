@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\controllers;
 
+use barrelstrength\sproutforms\elements\db\EntryQuery;
 use Craft;
 use craft\controllers\ElementIndexesController;
 use craft\helpers\ChartHelper;
@@ -34,7 +35,7 @@ class ChartsController extends ElementIndexesController
 
         $intervalUnit = ChartHelper::getRunChartIntervalUnit($startDate, $endDate);
 
-        // Prep the query
+        /** @var EntryQuery $query */
         $query = $this->getElementQuery();
         $query->limit = null;
 

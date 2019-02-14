@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\models;
 
+use barrelstrength\sproutbase\base\SproutSettingsInterface;
 use barrelstrength\sproutforms\SproutForms;
 use craft\base\Model;
 use Craft;
@@ -10,7 +11,7 @@ use Craft;
  *
  * @property array $settingsNavItems
  */
-class Settings extends Model
+class Settings extends Model implements SproutSettingsInterface
 {
     public $pluginNameOverride = '';
     public $templateFolderOverride = '';
@@ -22,7 +23,10 @@ class Settings extends Model
     public $captchaSettings = [];
     public $enableEditFormEntryViaFrontEnd = 0;
 
-    public function getSettingsNavItems()
+    /**
+     * @inheritdoc
+     */
+    public function getSettingsNavItems(): array
     {
         // Added new items override if needed
         // 'fullPageForm' => true,
@@ -73,7 +77,7 @@ class Settings extends Model
     public function rules()
     {
         return [
-          [['templateFolderOverride'], 'required', 'on' => 'general']
+            [['templateFolderOverride'], 'required', 'on' => 'general']
         ];
     }
 }

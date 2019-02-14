@@ -1,11 +1,11 @@
-<?php
+<?php /** @noinspection ClassConstantCanBeUsedInspection */
 
 namespace barrelstrength\sproutforms\migrations;
 
 use craft\db\Migration;
 use craft\db\Query;
-use barrelstrength\sproutbase\app\reports\migrations\m180307_042132_craft3_schema_changes as SproutReportsCraft2toCraft3Migration;
-use barrelstrength\sproutbase\app\reports\migrations\Install as SproutBaseReportsInstall;
+use barrelstrength\sproutbasereports\migrations\m180307_042132_craft3_schema_changes as SproutReportsCraft2toCraft3Migration;
+use barrelstrength\sproutbasereports\migrations\Install as SproutBaseReportsInstall;
 
 /**
  * m180309_000000_update_data_sources migration.

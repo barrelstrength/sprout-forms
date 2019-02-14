@@ -35,7 +35,7 @@ class m180611_000000_paragraph_column_type extends Migration
                 ->all();
 
             foreach ($fields as $field) {
-                if ($field['type'] == SingleLine::class || $field['type'] == Paragraph::class){
+                if ($field['type'] == SingleLine::class || $field['type'] == Paragraph::class) {
                     $column = 'field_'.$field['handle'];
                     if ($this->db->columnExists($table, $column)) {
                         $this->alterColumn($table, $column, $this->text());

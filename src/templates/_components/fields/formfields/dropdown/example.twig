@@ -3,9 +3,9 @@
 {% set options = field.options %}
 
 {% if not options|length %}
-        {% set options = [
-                { label : "Select..."|t('sprout-forms'), default: 1 }
-        ] %}
+    {% set options = [
+        { label : "Select..."|t('sprout-forms'), default: 1 }
+    ] %}
 {% endif %}
 
 {{ forms.select({

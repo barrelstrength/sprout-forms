@@ -2,13 +2,13 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutbasefields\SproutBaseFields;
 use Craft;
+use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\helpers\Template as TemplateHelper;
 use yii\db\Schema;
 use craft\helpers\StringHelper;
-
-use barrelstrength\sproutbase\SproutBase;
 
 /**
  *
@@ -40,14 +40,12 @@ class EmailDropdown extends BaseOptionsFormField
 
     public function serializeValue($value, ElementInterface $element = null)
     {
-        if (Craft::$app->getRequest()->isSiteRequest){
-            if ($value->selected){
-                // Default fist position.
-                $pos = $value->value ? $value->value : 0;
+        if (Craft::$app->getRequest()->isSiteRequest && $value->selected) {
+            // Default fist position.
+            $pos = $value->value ?: 0;
 
-                if (isset($this->options[$pos])) {
-                    return $this->options[$pos]['value'];
-                }
+            if (isset($this->options[$pos])) {
+                return $this->options[$pos]['value'];
             }
         }
 
@@ -116,11 +114,14 @@ class EmailDropdown extends BaseOptionsFormField
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
         $valueOptions = $value->getOptions();
-        $anySelected = SproutBase::$app->utilities->isAnyOptionsSelected(
+        $anySelected = SproutBaseFields::$app->utilities->isAnyOptionsSelected(
             $valueOptions,
             $value->value
         );
@@ -145,6 +146,9 @@ class EmailDropdown extends BaseOptionsFormField
 
     /**
      * @inheritdoc
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml()
     {
@@ -168,7 +172,7 @@ class EmailDropdown extends BaseOptionsFormField
         $selectedValue = $value->value ?? null;
 
         $options = $this->options;
-        $options = SproutBase::$app->emailDropdownField->obfuscateEmailAddresses($options, $selectedValue);
+        $options = SproutBaseFields::$app->emailDropdownField->obfuscateEmailAddresses($options, $selectedValue);
 
         $rendered = Craft::$app->getView()->renderTemplate(
             'emaildropdown/input',
@@ -221,7 +225,7 @@ class EmailDropdown extends BaseOptionsFormField
      * Validates our fields submitted value beyond the checks
      * that were assumed based on the content attribute.
      *
-     * @param ElementInterface $element
+     * @param Element|ElementInterface $element
      *
      * @return void
      */

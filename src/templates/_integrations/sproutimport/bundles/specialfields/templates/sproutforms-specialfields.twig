@@ -5,12 +5,12 @@
 </head>
 <body>
 
-    {% do craft.sproutForms.addFieldVariables({
-        foo: 'Foo',
-        bar: 'Bar'
-    }) %}
+{% do craft.sproutForms.addFieldVariables({
+    foo: 'Foo',
+    bar: 'Bar'
+}) %}
 
-    {{ craft.sproutForms.displayForm('specialFieldsForm') }}
-    
+{{ craft.sproutForms.displayForm('specialFieldsForm') }}
+
 </body>
 </html>
