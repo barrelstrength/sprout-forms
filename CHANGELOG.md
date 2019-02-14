@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.0-beta.41 - 2019-02-13
+
+### Fixed
+- Added barrelstrength/sprout-base-import requirement v1.0.0
+
 ## 3.0.0-beta.40 - 2019-02-13
 
 ### Changed
