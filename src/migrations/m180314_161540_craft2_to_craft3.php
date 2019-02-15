@@ -64,15 +64,21 @@ class m180314_161540_craft2_to_craft3 extends Migration
 
             if ($this->db->columnExists($table, 'locale')) {
                 MigrationHelper::dropIndexIfExists($table, ['elementId', 'locale'], true, $this);
-                MigrationHelper::dropIndexIfExists($table, ['locale'], false, $this);
-                MigrationHelper::dropForeignKeyIfExists($table, ['locale'], $this);
+
+                if (MigrationHelper::doesForeignKeyExist($table, ['locale'])) {
+                    MigrationHelper::dropIndexIfExists($table, ['locale'], false, $this);
+                    MigrationHelper::dropForeignKeyIfExists($table, ['locale'], $this);
+                }
+
                 $this->dropColumn($table, 'locale');
             }
 
             if ($this->db->columnExists($table, 'locale__siteId')) {
                 MigrationHelper::dropIndexIfExists($table, ['elementId', 'locale__siteId'], true, $this);
-                MigrationHelper::dropIndexIfExists($table, ['locale__siteId'], false, $this);
-                MigrationHelper::dropForeignKeyIfExists($table, ['locale__siteId'], $this);
+                if (MigrationHelper::doesForeignKeyExist($table, ['locale__siteId'])) {
+                    MigrationHelper::dropIndexIfExists($table, ['locale__siteId'], false, $this);
+                    MigrationHelper::dropForeignKeyIfExists($table, ['locale__siteId'], $this);
+                }
                 $this->dropColumn($table, 'locale__siteId');
             }
         }
