@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.0-beta.43 - 2019-02-15
+
+### Fixed
+- Fixed a Foreign Key issue when migrating from Craft 2 to Craft 3 (drop index needed in a foreign key constraint) ([#234])
+
 ## 3.0.0-beta.42 - 2019-02-15
 
 ### Fixed
