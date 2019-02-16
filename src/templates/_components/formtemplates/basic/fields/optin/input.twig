@@ -1,0 +1,27 @@
+{%- set id = renderingOptions.id ?? name %}
+{%- set class = renderingOptions.class ?? name %}
+{%- set label = field.optInMessage -%}
+{%- set selectedByDefault = field.selectedByDefault ?? null %}
+
+{%- set dataAttributes = null %}
+{%- set data = renderingOptions.data ?? null %}
+{%- for key, dataValue in data %}
+    {%- set dataAttributes = dataAttributes ~ ' data-'~key~'="'~dataValue~'"' %}
+{% endfor -%}
+
+{% spaceless %}
+    {% if name is defined and (name|length < 3 or name|slice(-2) != '[]') %}
+        <input type="hidden" aria-hidden="true" name="{{ name }}" value="">
+    {% endif %}
+
+    <label {%- if id %} for="{{ id }}"{% endif %}>
+        <input type="checkbox"
+            {%- if name %} name="{{ name }}"{% endif %}
+            {%- if id %} id="{{ id }}"{% endif %}
+               value="1"
+            {%- if selectedByDefault %} checked aria-checked="true"{% else %} aria-checked="false"{% endif %}
+            {{- dataAttributes|raw -}}
+        >
+        {%- if label is defined %} {{ label|markdown('original', true) }}{% endif -%}
+    </label>
+{% endspaceless %}
