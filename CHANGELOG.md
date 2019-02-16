@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.0.0-beta.42 - 2019-02-15
+
+### Fixed
+- Fixed a Foreign Key issue when migrating from Craft 2 to Craft 3 ([#234])
+
+[#234]: https://github.com/barrelstrength/craft-sprout-forms/issues/234
+
 ## 3.0.0-beta.41 - 2019-02-13
 
 ### Fixed
