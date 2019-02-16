@@ -37,7 +37,7 @@
                                             <tr>
                                                 <td>
                                                     <p>
-                                                        <em>{{ "Form submission received from:"|t('sprout-forms') }} {{ siteName }}</em>
+                                                        <em>{{ "Form submission received from:"|t('site') }} {{ siteName }}</em>
                                                     </p>
 
                                                     <p>
@@ -56,30 +56,68 @@
                                                             </p>
                                                         {% endif %}
 
-                                                        <p>
-                                                        <strong>{{ field.name }}</strong>
-                                                        <br/>
+                                                        {% if field.getFieldInputFolder() == 'optin' %}
+                                                            <strong>{{ field.optInMessage|markdown('original', true)|striptags }}</strong><br/>
+                                                        {% else %}
+                                                            <strong>{{ field.name }}</strong><br/>
+                                                        {% endif %}
 
-                                                        {% if value is not iterable and value is not empty %}
+                                                        {% if field.getFieldInputFolder() == 'address' %}
 
-                                                            {{ value|nl2br }}
+                                                            {% if value.address1 %}
+                                                                {{ value.address1 }}<br>
+                                                            {% endif %}
+                                                            {% if value.address2 %}
+                                                                {{ value.address2 }}<br>
+                                                            {% endif %}
+                                                            {% if value.administrativeArea %}
+                                                                {{ value.administrativeArea }}<br>
+                                                            {% endif %}
+                                                            {% if value.locality %}
+                                                                {{ value.locality }}<br>
+                                                            {% endif %}
+                                                            {% if value.dependentLocality %}
+                                                                {{ value.dependentLocality }}<br>
+                                                            {% endif %}
+                                                            {% if value.postalCode %}
+                                                                {{ value.postalCode }}<br>
+                                                            {% endif %}
+                                                            {% if value.sortingCode %}
+                                                                {{ value.sortingCode }}<br>
+                                                            {% endif %}
+                                                            {% if value.country %}
+                                                                {{ value.country }}<br>
+                                                            {% endif %}
+
+                                                        {% elseif field.getFieldInputFolder() == 'name' %}
+
+                                                            {{ value.getFullNameExtended() }}<br>
+
+                                                        {% elseif field.getFieldInputFolder() == 'optin' %}
+
+                                                            {{ value ? field.optInValueWhenTrue : field.optInValueWhenFalse }}<br>
+
+                                                        {% elseif value is not iterable and value is not empty %}
+
+                                                            {{ value|striptags|nl2br }}<br>
 
                                                         {% elseif value is iterable %}
 
                                                             <ul style="margin-left:0;padding-left:10px;">
                                                                 {% for item in value %}
                                                                     {% if item is not empty %}
-                                                                        <li>{{ item }}</li>
+                                                                        <li>{{ item|striptags }}</li>
                                                                     {% endif %}
                                                                 {% endfor %}
                                                             </ul>
 
                                                         {% else %}
 
-                                                            <em>{{ "No response"|t('sprout-forms') }}</em>
+                                                            <em>{{ "No response"|t('site') }}</em><br>
 
                                                         {% endif %}
 
+                                                        <br>
                                                     {% endfor %}
 
                                                 </td>
