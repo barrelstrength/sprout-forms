@@ -1,9 +1,18 @@
 <!-- Custom form created using the Sprout Forms form builder plugin - https://sprout.barrelstrengthdesign.com/craft-plugins/forms -->
 
-{% set renderingOptions = renderingOptions is defined and renderingOptions is not empty ? renderingOptions : {} %}
-{%- set errors      = entry.getErrors()|length ? entry.getErrors() : false %}
-{%- set errorClass  = renderingOptions.errorClass is defined ? renderingOptions.errorClass : 'errors' %}
-{%- set id          = renderingOptions.id is defined ? renderingOptions.id : form.handle ~ '-form' %}
+{% do craft.sproutForms.addFieldVariables({
+    'craft': craft,
+    'now': now,
+    'currentSite': currentSite,
+    'currentUser': currentUser,
+    'siteName': siteName,
+    'siteUrl': siteUrl,
+    'systemName': systemName
+}) -%}
+{%- set renderingOptions = renderingOptions is defined and renderingOptions is not empty ? renderingOptions : {} -%}
+{%- set errors      = entry.getErrors()|length ? entry.getErrors() : false -%}
+{%- set errorClass  = renderingOptions.errorClass is defined ? renderingOptions.errorClass : 'errors' -%}
+{%- set id          = renderingOptions.id is defined ? renderingOptions.id : form.handle ~ '-form' -%}
 {%- set class       = renderingOptions.class is defined ? renderingOptions.class : form.handle ~ '-form' -%}
 {%- set redirectUri = form.redirectUri -%}
 

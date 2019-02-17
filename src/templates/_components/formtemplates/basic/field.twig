@@ -1,55 +1,53 @@
-{%- do craft.sproutForms.addFieldVariables(_context) -%}
+{%- set label            = field.name is defined ? field.name : null %}
+{%- set instructions     = field.instructions is defined ? field.instructions : null %}
+{%- set name             = field.handle is defined ? field.handle : null %}
+{%- set required         = field.required is defined and field.required ? true : false %}
+{%- set renderingOptions = attribute(renderingOptions.fields, name) is defined ? attribute(renderingOptions
+    .fields, name) : {} %}
+{%- set id               = renderingOptions.id is defined ? renderingOptions.id : name %}
+{%- set class            = renderingOptions.class is defined ? renderingOptions.class : name ~ '-field' %}
+{%- set value            = entry is not empty ? entry.getFieldValue(name) : null %}
+{%- set errors           = entry is not empty ? entry.getErrors(name) : null %}
+{%- set errorClass       = renderingOptions.errorClass is defined ? renderingOptions.errorClass : 'errors' %}
 
-    {%- set label            = field.name is defined ? field.name : null %}
-    {%- set instructions     = field.instructions is defined ? field.instructions : null %}
-    {%- set name             = field.handle is defined ? field.handle : null %}
-    {%- set required         = field.required is defined and field.required ? true : false %}
-    {%- set renderingOptions = attribute(renderingOptions.fields, name) is defined ? attribute(renderingOptions
-        .fields, name) : {} %}
-    {%- set id               = renderingOptions.id is defined ? renderingOptions.id : name %}
-    {%- set class            = renderingOptions.class is defined ? renderingOptions.class : name ~ '-field' %}
-    {%- set value            = entry is not empty ? entry.getFieldValue(name) : null %}
-    {%- set errors           = entry is not empty ? entry.getErrors(name) : null %}
-    {%- set errorClass       = renderingOptions.errorClass is defined ? renderingOptions.errorClass : 'errors' %}
+{%- namespace field.getNamespace() -%}
+    {%- if field.isPlainInput() -%}
 
-    {%- namespace field.getNamespace() -%}
-        {%- if field.isPlainInput() -%}
+        {{ input|raw }}
 
-            {{ input|raw }}
+    {%- else %}
 
-        {%- else %}
-
-            <div
-                {%- if id %} id="{{ id }}-field"{% endif %}
-                class="field {{ field.getFieldInputFolder() }}
-                {%- if class %} {{ class }}{% endif -%}
-                {%- if errors %} {{ errorClass }}{% endif -%}
-                {%- if required %} required{% endif -%}
-            ">
-                {% if (label or instructions) and field.displayLabel() -%}
-                    <div class="heading">
-                        {% if label -%}
-                            {%- if field.hasMultipleLabels() -%}
+        <div
+            {%- if id %} id="{{ id }}-field"{% endif %}
+            class="field {{ field.getFieldInputFolder() }}
+            {%- if class %} {{ class }}{% endif -%}
+            {%- if errors %} {{ errorClass }}{% endif -%}
+            {%- if required %} required{% endif -%}
+        ">
+            {% if (label or instructions) and field.displayLabel() -%}
+                <div class="heading">
+                    {% if label -%}
+                        {%- if field.hasMultipleLabels() -%}
+                            {{- label|raw|t('site') -}}
+                        {%- else -%}
+                            <label{% if name %} for="{{ name }}"{% endif %}>
                                 {{- label|raw|t('site') -}}
-                            {%- else -%}
-                                <label{% if name %} for="{{ name }}"{% endif %}>
-                                    {{- label|raw|t('site') -}}
-                                </label>
-                            {%- endif -%}
+                            </label>
                         {%- endif -%}
-                        {% if instructions %}
+                    {%- endif -%}
+                    {% if instructions %}
 
-                            <p class="instructions">{{ instructions|t('site')|raw }}</p>
-                        {%- endif %}
+                        <p class="instructions">{{ instructions|t('site')|raw }}</p>
+                    {%- endif %}
 
-                    </div>
-                {% endif -%}
-
-                <div class="input">
-                    {{ input|raw }}
                 </div>
-                {% include "errors" with { errors: errors } %}
+            {% endif -%}
 
+            <div class="input">
+                {{ input|raw }}
             </div>
-        {%- endif -%}
-    {%- endnamespace -%}
+            {% include "errors" with { errors: errors } %}
+
+        </div>
+    {%- endif -%}
+{%- endnamespace -%}

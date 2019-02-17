@@ -93,7 +93,7 @@
                         "name": "Hidden",
                         "handle": "hidden",
                         "instructions": "",
-                        "value": "{{ craft.app.request.getUrl() }}",
+                        "value": "{{ object.craft.app.getRequest.getAbsoluteUrl() }}",
                         "allowEdits": false
                     },
                     {

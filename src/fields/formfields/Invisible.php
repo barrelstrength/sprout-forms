@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\services\Forms;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\base\ElementInterface;
@@ -169,7 +170,7 @@ class Invisible extends FormField implements PreviewableFieldInterface
 
         if ($this->value) {
             try {
-                $value = Craft::$app->view->renderObjectTemplate($this->value, parent::getFieldVariables());
+                $value = Craft::$app->view->renderObjectTemplate($this->value, Forms::getFieldVariables());
                 Craft::$app->getSession()->set($this->handle, $value);
             } catch (\Exception $e) {
                 SproutForms::error($e->getMessage());

@@ -5,8 +5,8 @@
 {{ forms.textField({
     label: 'Hidden Field Value'|t('sprout-forms'),
     name: 'value',
-    instructions: 'Value to set when the field is displayed. Twig syntax is supported.'|t('sprout-forms'),
-    placeholder: '{{ craft.app.request.path }}',
+    instructions: 'Value to set when the field is displayed. Craft Object Syntax is supported.'|t('sprout-forms'),
+    placeholder: '{craft.app.getRequest().getAbsoluteUrl()}',
     value: field.value
 }) }}
 

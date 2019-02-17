@@ -50,6 +50,34 @@ class Forms extends Component
     protected $formRecord;
 
     /**
+     * @var array
+     */
+    protected static $fieldVariables = [];
+
+    /**
+     *
+     * Allows a user to add variables to an object that can be parsed by fields
+     *
+     * @example
+     * {% do craft.sproutForms.addFieldVariables({ entryTitle: entry.title }) %}
+     * {{ craft.sproutForms.displayForm('contact') }}
+     *
+     * @param array $variables
+     */
+    public static function addFieldVariables(array $variables)
+    {
+        static::$fieldVariables = array_merge(static::$fieldVariables, $variables);
+    }
+
+    /**
+     * @return mixed
+     */
+    public static function getFieldVariables()
+    {
+        return static::$fieldVariables;
+    }
+
+    /**
      * Constructor
      *
      * @param object $formRecord

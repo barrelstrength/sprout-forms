@@ -3,8 +3,8 @@
 {{ forms.textField({
     label: 'Invisible Field Value'|t('sprout-forms'),
     name: 'value',
-    instructions: 'Value to set when the field is saved/sent. Twig syntax is supported.'|t('sprout-forms'),
-    placeholder: '{{ entry.id is defined ? entry.id : null }}',
+    instructions: 'Value to set when the field is saved/sent. Craft Object Syntax is supported.'|t('sprout-forms'),
+    placeholder: '{{ object.entry.id is defined ? object.entry.id : null }}',
     value: field.value
 }) }}
 
