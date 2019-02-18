@@ -1,5 +1,5 @@
 {%- set entry = object -%}
-{%- set form = entry.getForm() -%}
+{%- set form = entry.getForm() ?? null -%}
 
 <!doctype html>
 <html>
@@ -29,6 +29,8 @@
                         <table>
                             <tr>
                                 <td style="border-top:1px solid #eee;border-bottom:1px solid #eee;background-color:#fefefe;width:600px;">
+
+                                {% if entry %}
 
                                     {% set tabs = entry.getFieldLayout().getTabs() %}
 
@@ -140,6 +142,9 @@
 
                                     {% endfor %}
 
+                                {% else %}
+                                    <p>{{ "No Form Entry found." }}</p>
+                                {% endif %}
                                 </td>
                             </tr>
                         </table>
@@ -147,6 +152,7 @@
                     </td>
                 </tr>
             </table>
+
             <!-- END TEMPLATE CONTAINER -->
 
         </td>
