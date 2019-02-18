@@ -385,6 +385,9 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 ul#sprout-forms-tabs {
     width: 100% !important;
     display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
 }
 
 ul#sprout-forms-tabs li {
