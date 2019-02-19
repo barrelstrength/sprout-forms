@@ -2,7 +2,7 @@
 
 <label>
     {% set checkedStatus = field.selectedByDefault ?? false %}
-    {% set optionLabel = field.optInMessage is not empty ? field.optInMessage : 'Agree to terms?'|t('sprout-forms') %}
+    {% set optionLabel = field.optInMessage is not empty ? field.optInMessage|markdown('original', true)|striptags : 'Agree to terms?'|t('sprout-forms') %}
 
     {{ forms.checkbox({
         name: 'checkboxes',

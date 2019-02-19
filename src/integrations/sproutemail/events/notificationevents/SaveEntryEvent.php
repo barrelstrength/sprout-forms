@@ -11,6 +11,8 @@ use barrelstrength\sproutforms\SproutForms;
 use craft\events\ModelEvent;
 use craft\events\ElementEvent;
 use Craft;
+use yii\db\Exception;
+use yii\web\NotFoundHttpException;
 
 
 /**
@@ -122,7 +124,9 @@ class SaveEntryEvent extends NotificationEvent
             return $formEntry;
         }
 
-        return new Entry();
+        Craft::warning('sprout-forms', 'Unable to generate a mock form Entry. Make sure you have at least one Entry submitted in your database.');
+
+        return null;
     }
 
     public function rules()
