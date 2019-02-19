@@ -98,6 +98,10 @@
 
                                                             {{ value.getFullNameExtended() }}<br>
 
+                                                        {% elseif field.getFieldInputFolder() == 'phone' and value.phone != '' %}
+
+                                                            {{ value.international }}<br>
+
                                                         {% elseif field.getFieldInputFolder() == 'optin' %}
 
                                                             {{ value ? field.optInValueWhenTrue : field.optInValueWhenFalse }}<br>
@@ -106,7 +110,7 @@
 
                                                             {{ value|striptags|nl2br }}<br>
 
-                                                        {% elseif value is iterable and field.getFieldInputFolder() != 'address' and field.getFieldInputFolder() != 'name' %}
+                                                        {% elseif value is iterable and field.getFieldInputFolder() != 'address' and field.getFieldInputFolder() != 'name' and field.getFieldInputFolder() != 'phone' %}
 
                                                             {% if value|length %}
                                                                 <ul style="margin-left:10px;padding-left:10px;">
