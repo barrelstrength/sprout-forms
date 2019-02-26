@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutbasefields\base\AddressFieldTrait;
+use barrelstrength\sproutbasefields\SproutBaseFields;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
@@ -94,24 +95,24 @@ class Address extends FormField implements PreviewableFieldInterface
 
         // This defaults to Sprout Base and we need it to get updated to look
         // in the Sprout Forms Form Template location like other fields.
-        $this->addressHelper->setBaseAddressFieldPath('');
+        SproutBaseFields::$app->addressHelper->setBaseAddressFieldPath('');
 
-        $this->addressHelper->setNamespace($name);
+        SproutBaseFields::$app->addressHelper->setNamespace($name);
 
         if (isset($this->highlightCountries) && count($this->highlightCountries)) {
-            $this->addressHelper->setHighlightCountries($this->highlightCountries);
+            SproutBaseFields::$app->addressHelper->setHighlightCountries($this->highlightCountries);
         }
 
-        $this->addressHelper->setCountryCode($countryCode);
-        $this->addressHelper->setAddressModel($addressModel);
-        $this->addressHelper->setLanguage($this->defaultLanguage);
+        SproutBaseFields::$app->addressHelper->setCountryCode($countryCode);
+        SproutBaseFields::$app->addressHelper->setAddressModel($addressModel);
+        SproutBaseFields::$app->addressHelper->setLanguage($this->defaultLanguage);
 
         if (count($this->highlightCountries)) {
-            $this->addressHelper->setHighlightCountries($this->highlightCountries);
+            SproutBaseFields::$app->addressHelper->setHighlightCountries($this->highlightCountries);
         }
 
-        $countryInputHtml = $this->addressHelper->getCountryInputHtml($showCountryDropdown);
-        $addressFormHtml = $this->addressHelper->getAddressFormHtml();
+        $countryInputHtml = SproutBaseFields::$app->addressHelper->getCountryInputHtml($showCountryDropdown);
+        $addressFormHtml = SproutBaseFields::$app->addressHelper->getAddressFormHtml();
 
         return Craft::$app->getView()->renderTemplate(
             'address/input', [
