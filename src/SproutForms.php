@@ -89,7 +89,7 @@ class SproutForms extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '3.0.13';
+    public $schemaVersion = '3.0.14';
 
     /**
      * @var string
@@ -109,7 +109,7 @@ class SproutForms extends Plugin
 
         self::$app = $this->get('app');
 
-        Craft::setAlias('@sproutformslib', dirname(__DIR__, 2).'/sprout-forms/lib');
+        Craft::setAlias('@sproutformslib', dirname(__DIR__, 1).'/lib');
 
         SproutBaseHelper::registerModule();
         SproutBaseEmailHelper::registerModule();

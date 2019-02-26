@@ -1,5 +1,18 @@
 # Changelog
 
+## 3.0.0-beta.45 - 2019-02-26
+
+### Changed
+- Updated craftcms/cms requirement to v3.1.15
+- Updated barrelstrength/sprout-base-fields requirement v1.0.1
+
+### Fixed 
+- Fixed Address Field settings that blocked field from being saved in Postgres and Project Config ([#77][#77sproutfields], [#81][#81sproutfields])
+- Fixed bug where Address Table was not created on new installation
+
+[#77sproutfields]: https://github.com/barrelstrength/craft-sprout-fields/issues/77
+[#81sproutfields]: https://github.com/barrelstrength/craft-sprout-fields/issues/81
+
 ## 3.0.0-beta.44 - 2019-02-18
 
 > {note} This release includes updates to the default Notification Email Templates and updates to what variables are defined by default for the Hidden and Invisible Fields. Please be sure to review your custom Form implementations if you use these features and ensure everything is working as you'd like.
