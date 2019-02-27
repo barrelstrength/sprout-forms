@@ -4,7 +4,6 @@ namespace barrelstrength\sproutforms\fields\formfields;
 
 use Craft;
 use craft\base\ElementInterface;
-use Stringy\StaticStringy;
 use yii\db\Schema;
 use barrelstrength\sproutforms\base\FormField;
 

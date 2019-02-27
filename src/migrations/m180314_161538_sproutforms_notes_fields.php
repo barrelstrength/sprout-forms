@@ -25,7 +25,7 @@ class m180314_161538_sproutforms_notes_fields extends Migration
             ->all();
 
         foreach ($fields as $field) {
-            $settings = Json::decode($field['settings'], true);
+            $settings = Json::decode($field['settings']);
             $settings['notes'] = $settings['instructions'] ?? '';
             unset($settings['instructions'], $settings['style']);
             $settingsAsJson = Json::encode($settings);

@@ -617,7 +617,7 @@ JS;
         }
 
         $type = mb_strtolower(static::displayName());
-        $showTargetSite = !empty($this->targetSiteId);
+        $showTargetSite = $this->targetSiteId !== null;
 
         $html = Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'checkboxField',
                 [

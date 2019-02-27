@@ -100,7 +100,7 @@ class Entry extends ElementImporter
 
         if (!empty($quantity)) {
             for ($i = 1; $i <= $quantity; $i++) {
-                $fakerDate = $this->fakerService->dateTimeThisYear('now');
+                $fakerDate = $this->fakerService->dateTimeThisYear();
 
                 /** @var EntryElement $formEntry */
                 $formEntry = new EntryElement();
@@ -119,7 +119,7 @@ class Entry extends ElementImporter
                 SproutForms::$app->entries->saveEntry($formEntry);
 
                 // Avoid duplication of saveIds
-                if (!in_array($formEntry->id, $saveIds) && $formEntry->id !== false) {
+                if (!in_array($formEntry->id, $saveIds, true) && $formEntry->id !== false) {
                     $saveIds[] = $formEntry->id;
                 }
             }

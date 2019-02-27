@@ -26,7 +26,7 @@ class m180314_161530_sproutforms_tags_fields extends Migration
             ->all();
 
         foreach ($tagFields as $tagField) {
-            $settings = Json::decode($tagField['settings'], true);
+            $settings = Json::decode($tagField['settings']);
             $settings['sources'] = '*';
             $settings['targetSiteId'] = null;
             $settings['viewMode'] = 'large';

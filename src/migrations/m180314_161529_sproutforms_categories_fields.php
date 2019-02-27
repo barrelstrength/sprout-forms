@@ -26,7 +26,7 @@ class m180314_161529_sproutforms_categories_fields extends Migration
             ->all();
 
         foreach ($categoriesFields as $categoryField) {
-            $settings = Json::decode($categoryField['settings'], true);
+            $settings = Json::decode($categoryField['settings']);
             $settings['branchLimit'] = $settings['limit'] ?? null;
             $settings['targetSiteId'] = null;
             $settings['localizeRelations'] = false;

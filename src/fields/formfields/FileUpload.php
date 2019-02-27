@@ -369,7 +369,7 @@ class FileUpload extends BaseRelationFormField
      */
     public function resolveDynamicPathToFolderId(ElementInterface $element = null): int
     {
-        return $this->_determineUploadFolderId($element, true);
+        return $this->_determineUploadFolderId($element);
     }
 
     // Events

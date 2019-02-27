@@ -81,7 +81,7 @@ class EntryStatusesController extends BaseController
     {
         $this->requirePostRequest();
 
-        $ids = Json::decode(Craft::$app->request->getRequiredBodyParam('ids'), true);
+        $ids = Json::decode(Craft::$app->request->getRequiredBodyParam('ids'));
 
         if ($success = SproutForms::$app->entries->reorderEntryStatuses($ids)) {
             return $this->asJson(['success' => $success]);

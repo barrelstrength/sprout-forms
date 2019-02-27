@@ -46,7 +46,7 @@ class m180712_000000_checkboxes_serialize extends Migration
                     foreach ($entries as $entry) {
                         $newValue = [];
                         $value = $entry[$column];
-                        $values = Json::decode($value, true);
+                        $values = Json::decode($value);
 
                         if ($values) {
                             foreach ($values as $value) {

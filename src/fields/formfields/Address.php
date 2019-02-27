@@ -8,7 +8,7 @@ use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
-use craft\helpers\Template;
+use craft\helpers\Template as TemplateHelper;
 use yii\db\Schema;
 use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutbasefields\models\Address as AddressModel;
@@ -114,7 +114,7 @@ class Address extends FormField implements PreviewableFieldInterface
         $countryInputHtml = SproutBaseFields::$app->addressHelper->getCountryInputHtml($showCountryDropdown);
         $addressFormHtml = SproutBaseFields::$app->addressHelper->getAddressFormHtml();
 
-        return Craft::$app->getView()->renderTemplate(
+        $rendered = Craft::$app->getView()->renderTemplate(
             'address/input', [
                 'field' => $this,
                 'name' => $this->handle,
@@ -124,6 +124,8 @@ class Address extends FormField implements PreviewableFieldInterface
                 'showCountryDropdown' => $showCountryDropdown
             ]
         );
+
+        return TemplateHelper::raw($rendered);
     }
 
     /**

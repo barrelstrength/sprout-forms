@@ -34,8 +34,8 @@ class DuplicateCaptcha extends Captcha
      */
     public function getCaptchaHtml(): string
     {
-        $inputName = uniqid('dupe', false);
-        $uniqueKeyId = uniqid('dupe', false);
+        $inputName = uniqid('dupe', true);
+        $uniqueKeyId = uniqid('dupe', true);
 
         // Set a session variable with a unique key. It doesn't matter what the value of this is
         // we'll save the unique key in a hidden field and check for and remove the session based

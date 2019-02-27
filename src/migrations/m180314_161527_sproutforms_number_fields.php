@@ -26,7 +26,7 @@ class m180314_161527_sproutforms_number_fields extends Migration
             ->all();
 
         foreach ($numberFields as $numberField) {
-            $settings = Json::decode($numberField['settings'], true);
+            $settings = Json::decode($numberField['settings']);
             $settings['size'] = '';
             $settingsAsJson = Json::encode($settings);
 

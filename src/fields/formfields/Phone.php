@@ -110,7 +110,7 @@ class Phone extends FormField implements PreviewableFieldInterface
         }
 
         if (is_string($value)) {
-            $phoneInfo = Json::decode($value, true);
+            $phoneInfo = Json::decode($value);
         }
 
         if (!isset($phoneInfo['phone'], $phoneInfo['country'])) {

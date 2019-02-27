@@ -138,7 +138,7 @@ class Entry extends Element
 
             return $this->title ?: ((string)$this->id ?: static::class);
         } catch (\Exception $e) {
-            // return empty to avoid erros when form is deleted
+            // return empty to avoid errors when form is deleted
             return '';
         }
     }

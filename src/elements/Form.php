@@ -414,7 +414,7 @@ class Form extends Element
             'optgroup' => Craft::t('sprout-forms', 'Custom CSS Classes')
         ];
 
-        if (!in_array($cssClasses, $classesIds) && $cssClasses) {
+        if (!in_array($cssClasses, $classesIds, true) && $cssClasses) {
             $options[] = [
                 'label' => $cssClasses,
                 'value' => $cssClasses

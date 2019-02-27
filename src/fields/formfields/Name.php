@@ -212,7 +212,7 @@ class Name extends FormField implements PreviewableFieldInterface
 
         // String value when retrieved from db
         if (is_string($value)) {
-            $nameArray = Json::decode($value, true);
+            $nameArray = Json::decode($value);
             $nameModel->setAttributes($nameArray, false);
         }
 
