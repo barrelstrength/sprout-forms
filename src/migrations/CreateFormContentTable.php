@@ -20,7 +20,7 @@ class CreateFormContentTable extends Migration
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $this->createTable($this->tableName, [
             'id' => $this->primaryKey(),
@@ -40,7 +40,7 @@ class CreateFormContentTable extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         return false;
     }

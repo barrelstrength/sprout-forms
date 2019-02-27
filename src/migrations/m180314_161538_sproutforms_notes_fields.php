@@ -15,7 +15,7 @@ class m180314_161538_sproutforms_notes_fields extends Migration
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $fields = (new Query())
             ->select(['id', 'handle', 'settings'])
@@ -39,7 +39,7 @@ class m180314_161538_sproutforms_notes_fields extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180314_161538_sproutforms_notes_fields cannot be reverted.\n";
         return false;

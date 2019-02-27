@@ -345,7 +345,7 @@ class SproutForms extends Plugin
     /**
      * @return array
      */
-    public function getUserPermissions()
+    public function getUserPermissions(): array
     {
         return [
             'manageSproutFormsForms' => [

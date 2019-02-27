@@ -15,7 +15,7 @@ class m180314_161524_sproutforms_checkboxes_fields extends Migration
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $checkboxesFields = (new Query())
             ->select(['id', 'handle', 'settings'])
@@ -34,7 +34,7 @@ class m180314_161524_sproutforms_checkboxes_fields extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180314_161524_sproutforms_checkboxes_fields cannot be reverted.\n";
         return false;

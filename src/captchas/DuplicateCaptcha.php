@@ -15,7 +15,7 @@ class DuplicateCaptcha extends Captcha
     /**
      * @inheritdoc
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Duplicate Submission Captcha';
     }
@@ -23,7 +23,7 @@ class DuplicateCaptcha extends Captcha
     /**
      * @inheritdoc
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return Craft::t('sprout-forms', 'Prevent duplicate submissions if a user hits submit more than once');
     }
@@ -32,7 +32,7 @@ class DuplicateCaptcha extends Captcha
      * @inheritdoc
      * @throws \craft\errors\MissingComponentException
      */
-    public function getCaptchaHtml()
+    public function getCaptchaHtml(): string
     {
         $inputName = uniqid('dupe', false);
         $uniqueKeyId = uniqid('dupe', false);

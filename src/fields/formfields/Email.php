@@ -60,7 +60,7 @@ class Email extends FormField implements PreviewableFieldInterface
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getExampleInputHtml()
+    public function getExampleInputHtml(): string
     {
         return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/formfields/email/example',
             [
@@ -72,7 +72,7 @@ class Email extends FormField implements PreviewableFieldInterface
     /**
      * @return string
      */
-    public function getSvgIconPath()
+    public function getSvgIconPath(): string
     {
         return '@sproutbaseicons/envelope.svg';
     }
@@ -130,11 +130,11 @@ class Email extends FormField implements PreviewableFieldInterface
      * @param mixed      $value
      * @param array|null $renderingOptions
      *
-     * @return string
+     * @return \Twig_Markup
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): string
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
     {
         $attributes = $this->getAttributes();
         $errorMessage = SproutBaseFields::$app->emailField->getErrorMessage($attributes['name'], $this);

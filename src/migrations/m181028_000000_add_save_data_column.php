@@ -13,7 +13,7 @@ class m181028_000000_add_save_data_column extends Migration
      * @return bool
      * @throws \yii\base\NotSupportedException
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $table = '{{%sproutforms_forms}}';
 
@@ -26,7 +26,7 @@ class m181028_000000_add_save_data_column extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m181028_000000_add_save_data_column cannot be reverted.\n";
         return false;

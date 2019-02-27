@@ -31,7 +31,7 @@ class MultipleChoice extends BaseOptionsFormField
     /**
      * @return bool
      */
-    public function hasMultipleLabels()
+    public function hasMultipleLabels(): bool
     {
         return true;
     }
@@ -39,7 +39,7 @@ class MultipleChoice extends BaseOptionsFormField
     /**
      * @return string
      */
-    public function getSvgIconPath()
+    public function getSvgIconPath(): string
     {
         return '@sproutbaseicons/dot-circle-o.svg';
     }
@@ -82,7 +82,7 @@ class MultipleChoice extends BaseOptionsFormField
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getExampleInputHtml()
+    public function getExampleInputHtml(): string
     {
         return Craft::$app->getView()->renderTemplate(
             'sprout-forms/_components/fields/formfields/multiplechoice/example',
@@ -98,7 +98,7 @@ class MultipleChoice extends BaseOptionsFormField
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): string
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
     {
         $rendered = Craft::$app->getView()->renderTemplate(
             'multiplechoice/input',

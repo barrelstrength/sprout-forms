@@ -76,7 +76,7 @@ class Form extends ActiveRecord
      *
      * @return string
      */
-    public function getOldHandle()
+    public function getOldHandle(): string
     {
         return $this->_oldHandle;
     }

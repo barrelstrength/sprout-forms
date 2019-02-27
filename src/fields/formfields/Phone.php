@@ -57,7 +57,7 @@ class Phone extends FormField implements PreviewableFieldInterface
     /**
      * @return string
      */
-    public function getSvgIconPath()
+    public function getSvgIconPath(): string
     {
         return '@sproutbaseicons/phone.svg';
     }
@@ -126,7 +126,7 @@ class Phone extends FormField implements PreviewableFieldInterface
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getExampleInputHtml()
+    public function getExampleInputHtml(): string
     {
         return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/formfields/phone/example',
             [
@@ -174,11 +174,11 @@ class Phone extends FormField implements PreviewableFieldInterface
      * @param mixed      $value
      * @param array|null $renderingOptions
      *
-     * @return string
+     * @return \Twig_Markup
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): string
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
     {
         $name = $this->handle;
         $country = $value['country'] ?? $this->country;
@@ -252,7 +252,7 @@ class Phone extends FormField implements PreviewableFieldInterface
     /**
      * @return array
      */
-    public function getCountries()
+    public function getCountries(): array
     {
         return SproutBaseFields::$app->phoneField->getCountries();
     }

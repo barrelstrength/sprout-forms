@@ -71,7 +71,7 @@ class OptIn extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function displayLabel()
+    public function displayLabel(): bool
     {
         return false;
     }
@@ -79,7 +79,7 @@ class OptIn extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function displayInstructionsField()
+    public function displayInstructionsField(): bool
     {
         return false;
     }
@@ -87,7 +87,7 @@ class OptIn extends FormField implements PreviewableFieldInterface
     /**
      * @return string
      */
-    public function getSvgIconPath()
+    public function getSvgIconPath(): string
     {
         return '@sproutbaseicons/check-square.svg';
     }
@@ -134,7 +134,7 @@ class OptIn extends FormField implements PreviewableFieldInterface
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getExampleInputHtml()
+    public function getExampleInputHtml(): string
     {
         return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/formfields/optin/example',
             [
@@ -149,7 +149,7 @@ class OptIn extends FormField implements PreviewableFieldInterface
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): string
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
     {
         $rendered = Craft::$app->getView()->renderTemplate(
             'optin/input',

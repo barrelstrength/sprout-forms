@@ -24,7 +24,7 @@ class m181025_000000_schema_version_sproutbase_v309 extends Migration
      * @throws \yii\base\NotSupportedException
      * @throws \yii\base\NotSupportedException
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $reportElementTypeMigration = new m180515_000002_update_report_element_types();
         ob_start();
@@ -77,7 +77,7 @@ class m181025_000000_schema_version_sproutbase_v309 extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180515_000000_schema_version_v302 cannot be reverted.\n";
         return false;

@@ -17,7 +17,7 @@ class m180314_161522_sproutforms_plaintext_fields extends Migration
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         // PlainText - Update to single line or paragraph
         $plainTextFields = (new Query())
@@ -54,7 +54,7 @@ class m180314_161522_sproutforms_plaintext_fields extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180314_161522_sproutforms_plaintext_fields cannot be reverted.\n";
         return false;

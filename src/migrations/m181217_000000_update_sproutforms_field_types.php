@@ -12,7 +12,7 @@ class m181217_000000_update_sproutforms_field_types extends Migration
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $fieldClasses = [
             0 => [
@@ -37,7 +37,7 @@ class m181217_000000_update_sproutforms_field_types extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m181217_000000_update_sproutforms_field_types cannot be reverted.\n";
         return false;

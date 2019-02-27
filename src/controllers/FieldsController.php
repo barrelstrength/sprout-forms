@@ -5,27 +5,26 @@ namespace barrelstrength\sproutforms\controllers;
 
 use barrelstrength\sproutforms\elements\Form;
 use Craft;
-
 use craft\helpers\Json;
 use craft\web\Controller as BaseController;
 use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
 use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
 use craft\base\Field;
-
 use barrelstrength\sproutforms\SproutForms;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 class FieldsController extends BaseController
 {
     /**
      * This action allows to load the modal field template.
      *
-     * @return \yii\web\Response
+     * @return Response
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionModalField()
+    public function actionModalField(): Response
     {
         $this->requireAcceptsJson();
         $formId = Craft::$app->getRequest()->getBodyParam('formId');
@@ -37,11 +36,11 @@ class FieldsController extends BaseController
     /**
      * This action allows create a default field given a type.
      *
-     * @return \yii\web\Response
+     * @return Response
      * @throws \Throwable
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionCreateField()
+    public function actionCreateField(): Response
     {
         $this->requireAcceptsJson();
 
@@ -76,10 +75,10 @@ class FieldsController extends BaseController
     /**
      * This action allows create a new Tab to current layout
      *
-     * @return \yii\web\Response
+     * @return Response
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionAddTab()
+    public function actionAddTab(): Response
     {
         $this->requireAcceptsJson();
 
@@ -114,12 +113,12 @@ class FieldsController extends BaseController
     /**
      * This action allows delete a Tab of the current layout
      *
-     * @return \yii\web\Response
+     * @return Response
      * @throws \Throwable
      * @throws \yii\db\StaleObjectException
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionDeleteTab()
+    public function actionDeleteTab(): Response
     {
         $this->requireAcceptsJson();
 
@@ -147,10 +146,10 @@ class FieldsController extends BaseController
     /**
      * This action allows rename a current Tab
      *
-     * @return \yii\web\Response
+     * @return Response
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionRenameTab()
+    public function actionRenameTab(): Response
     {
         $this->requireAcceptsJson();
 
@@ -179,11 +178,11 @@ class FieldsController extends BaseController
     /**
      * Save a field.
      *
-     * @return \yii\web\Response
+     * @return Response
      * @throws \Throwable
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionSaveField()
+    public function actionSaveField(): Response
     {
         $this->requirePostRequest();
 
@@ -300,12 +299,12 @@ class FieldsController extends BaseController
     /**
      * Edits an existing field.
      *
-     * @return \yii\web\Response
+     * @return Response
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionEditField()
+    public function actionEditField(): Response
     {
         $this->requireAcceptsJson();
         $request = Craft::$app->getRequest();
@@ -357,11 +356,11 @@ class FieldsController extends BaseController
     }
 
     /**
-     * @return \yii\web\Response
+     * @return Response
      * @throws \Throwable
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionDeleteField()
+    public function actionDeleteField(): Response
     {
         $this->requirePostRequest();
         $this->requireAcceptsJson();
@@ -399,12 +398,12 @@ class FieldsController extends BaseController
     /**
      * Reorder a field
      *
-     * @return \yii\web\Response
+     * @return Response
      * @throws \yii\base\Exception
      * @throws \yii\db\Exception
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionReorderFields()
+    public function actionReorderFields(): Response
     {
         $this->requireAdmin();
         $this->requirePostRequest();
@@ -425,11 +424,11 @@ class FieldsController extends BaseController
      * @param null $tabName
      * @param null $tabId
      *
-     * @return \yii\web\Response
+     * @return Response
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    private function returnJson(bool $success, $field, Form $form, $tabName = null, $tabId = null)
+    private function returnJson(bool $success, $field, Form $form, $tabName = null, $tabId = null): Response
     {
         return $this->asJson([
             'success' => $success,

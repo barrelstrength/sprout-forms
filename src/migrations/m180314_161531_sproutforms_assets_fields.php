@@ -16,7 +16,7 @@ class m180314_161531_sproutforms_assets_fields extends Migration
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $fields = (new Query())
             ->select(['id', 'handle', 'settings'])
@@ -44,7 +44,7 @@ class m180314_161531_sproutforms_assets_fields extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180314_161531_sproutforms_assets_fields cannot be reverted.\n";
         return false;

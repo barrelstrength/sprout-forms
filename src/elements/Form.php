@@ -335,7 +335,7 @@ class Form extends Element
      *
      * @return array
      */
-    public function getFields()
+    public function getFields(): array
     {
         if ($this->_fields === null) {
             $this->_fields = [];
@@ -367,7 +367,7 @@ class Form extends Element
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['name', 'handle'], 'required'],
@@ -391,7 +391,7 @@ class Form extends Element
      *
      * @return array
      */
-    public function getClassesOptions($cssClasses = null)
+    public function getClassesOptions($cssClasses = null): array
     {
         $classesIds = [];
         $apiOptions = $this->getFormTemplate()->getCssClassDefaults();
@@ -434,7 +434,7 @@ class Form extends Element
      *
      * @return FormTemplates
      */
-    public function getFormTemplate()
+    public function getFormTemplate(): FormTemplates
     {
         $defaultFormTemplates = new AccessibleTemplates();
 

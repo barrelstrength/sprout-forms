@@ -26,7 +26,7 @@ abstract class Captcha
      * @return string
      * @throws \ReflectionException
      */
-    public function getCaptchaId()
+    public function getCaptchaId(): string
     {
         $pluginHandle = Craft::$app->getPlugins()->getPluginHandleByClass(get_class($this));
 
@@ -47,14 +47,14 @@ abstract class Captcha
      *
      * @return string
      */
-    abstract public function getName();
+    abstract public function getName(): string;
 
     /**
      * A description of the captcha behavior
      *
      * @return string
      */
-    abstract public function getDescription();
+    abstract public function getDescription(): string;
 
     /**
      * Returns any values saved as settings for this captcha
@@ -79,7 +79,7 @@ abstract class Captcha
      *
      * @return string
      */
-    public function getCaptchaSettingsHtml()
+    public function getCaptchaSettingsHtml(): string
     {
         return '';
     }
@@ -93,7 +93,7 @@ abstract class Captcha
      *
      * @return string
      */
-    public function getCaptchaHtml()
+    public function getCaptchaHtml(): string
     {
         return '';
     }

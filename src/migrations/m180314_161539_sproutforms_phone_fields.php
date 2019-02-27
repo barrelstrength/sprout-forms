@@ -15,7 +15,7 @@ class m180314_161539_sproutforms_phone_fields extends Migration
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $newSettings = [
             'placeholder' => '',
@@ -41,7 +41,7 @@ class m180314_161539_sproutforms_phone_fields extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180314_161539_sproutforms_phone_fields cannot be reverted.\n";
         return false;

@@ -14,7 +14,7 @@ class m180314_161532_sproutforms_hidden_fields extends Migration
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $fields = (new Query())
             ->select(['id', 'handle', 'settings'])
@@ -33,7 +33,7 @@ class m180314_161532_sproutforms_hidden_fields extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180314_161532_sproutforms_hidden_fields cannot be reverted.\n";
         return false;

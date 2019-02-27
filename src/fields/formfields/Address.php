@@ -40,7 +40,7 @@ class Address extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function hasMultipleLabels()
+    public function hasMultipleLabels(): bool
     {
         return true;
     }
@@ -79,11 +79,11 @@ class Address extends FormField implements PreviewableFieldInterface
      * @param mixed      $value
      * @param array|null $renderingOptions
      *
-     * @return string
+     * @return \Twig_Markup
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): string
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
     {
         $name = $this->handle;
         $settings = $this->getSettings();
@@ -139,7 +139,7 @@ class Address extends FormField implements PreviewableFieldInterface
      *
      * @return bool
      */
-    public function validateAddress(ElementInterface $element)
+    public function validateAddress(ElementInterface $element): bool
     {
         // @todo - improve validation
         if (!$this->required) {

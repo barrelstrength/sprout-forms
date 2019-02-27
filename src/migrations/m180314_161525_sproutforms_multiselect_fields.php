@@ -15,7 +15,7 @@ class m180314_161525_sproutforms_multiselect_fields extends Migration
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $multiselectFields = (new Query())
             ->select(['id', 'handle', 'settings'])
@@ -34,7 +34,7 @@ class m180314_161525_sproutforms_multiselect_fields extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180314_161525_sproutforms_multiselect_fields cannot be reverted.\n";
         return false;

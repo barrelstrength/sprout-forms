@@ -32,7 +32,7 @@ class Entry extends ElementImporter
     /**
      * @inheritdoc
      */
-    public function save()
+    public function save(): bool
     {
         return SproutForms::$app->entries->saveEntry($this->model);
     }

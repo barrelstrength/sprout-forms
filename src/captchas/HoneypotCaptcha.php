@@ -25,7 +25,7 @@ class HoneypotCaptcha extends Captcha
     /**
      * @inheritdoc
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Honeypot Captcha';
     }
@@ -33,7 +33,7 @@ class HoneypotCaptcha extends Captcha
     /**
      * @inheritdoc
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return Craft::t('sprout-forms', 'Block form submissions by robots who auto-fill all of your form fields ');
     }
@@ -45,7 +45,7 @@ class HoneypotCaptcha extends Captcha
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getCaptchaSettingsHtml()
+    public function getCaptchaSettingsHtml(): string
     {
         $settings = $this->getSettings();
 
@@ -63,7 +63,7 @@ class HoneypotCaptcha extends Captcha
      * @throws \ReflectionException
      * @throws \ReflectionException
      */
-    public function getCaptchaHtml()
+    public function getCaptchaHtml(): string
     {
         $this->honeypotFieldName = $this->getHoneypotFieldName();
         $this->honeypotScreenReaderMessage = $this->getHoneypotScreenReaderMessage();
@@ -115,7 +115,7 @@ class HoneypotCaptcha extends Captcha
      * @return string
      * @throws \ReflectionException
      */
-    public function getHoneypotFieldName()
+    public function getHoneypotFieldName(): string
     {
         $settings = $this->getSettings();
 
@@ -126,7 +126,7 @@ class HoneypotCaptcha extends Captcha
      * @return string
      * @throws \ReflectionException
      */
-    public function getHoneypotScreenReaderMessage()
+    public function getHoneypotScreenReaderMessage(): string
     {
         $settings = $this->getSettings();
 
