@@ -106,11 +106,12 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 
 	/**
 	 * @param SproutForms_EntryModel $entry
+	 * @param SproutForms_OnBeforeSaveEntryEvent|null $onBeforeSaveEntryEvent
 	 *
 	 * @throws \Exception
 	 * @return bool
 	 */
-	public function saveEntry(SproutForms_EntryModel &$entry)
+	public function saveEntry(SproutForms_EntryModel &$entry, $onBeforeSaveEntryEvent = null)
 	{
 		$isNewEntry = !$entry->id;
 
@@ -136,16 +137,12 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 		$entryRecord->validate();
 		$entry->addErrors($entryRecord->getErrors());
 
-		Craft::import('plugins.sproutforms.events.SproutForms_OnBeforeSaveEntryEvent');
+		$event = $onBeforeSaveEntryEvent;
 
-		$event = new SproutForms_OnBeforeSaveEntryEvent(
-			$this, array(
-				'entry'      => $entry,
-				'isNewEntry' => $isNewEntry
-			)
-		);
-
-		craft()->sproutForms->onBeforeSaveEntry($event);
+		if (is_null($event))
+		{
+			$event = $this->callOnBeforeSaveEntryEvent($entry, $isNewEntry);
+		}
 
 		if (!$entry->hasErrors())
 		{
@@ -228,6 +225,22 @@ class SproutForms_EntriesService extends BaseApplicationComponent
 
 			return false;
 		}
+	}
+
+	public function callOnBeforeSaveEntryEvent($entry, $isNewEntry)
+	{
+		Craft::import('plugins.sproutforms.events.SproutForms_OnBeforeSaveEntryEvent');
+
+		$event = new SproutForms_OnBeforeSaveEntryEvent(
+			$this, array(
+				'entry'      => $entry,
+				'isNewEntry' => $isNewEntry
+			)
+		);
+
+		craft()->sproutForms->onBeforeSaveEntry($event);
+
+		return $event;
 	}
 
 	public function callOnSaveEntryEvent($entry, $isNewEntry)

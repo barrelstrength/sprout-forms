@@ -63,37 +63,49 @@ class SproutForms_EntriesController extends BaseController
 		$this->form->notificationSenderEmail  = craft()->templates->renderObjectTemplate($this->form->notificationSenderEmail, $entry);
 		$this->form->notificationReplyToEmail = craft()->templates->renderObjectTemplate($this->form->notificationReplyToEmail, $entry);
 
-		if (sproutForms()->entries->forwardEntry($entry))
+
+		$isNewEntry = !$entry->id;
+		$event = sproutForms()->entries->callOnBeforeSaveEntryEvent($entry, $isNewEntry);
+
+		if ($event->isValid)
 		{
-			// Adds support for notification
-			if (!craft()->request->isCpRequest() && $this->form->notificationEnabled)
+			if (sproutForms()->entries->forwardEntry($entry))
 			{
-				$post = $_POST;
-				sproutForms()->forms->sendNotification($this->form, $entry, $post);
-			}
-
-			if ($this->form->saveData)
-			{
-				if (!sproutForms()->entries->saveEntry($entry))
+				// Adds support for notification
+				if (!craft()->request->isCpRequest() && $this->form->notificationEnabled)
 				{
-					SproutFormsPlugin::log("Unable to save payload data to Craft.", LogLevel::Error, true);
+					$post = $_POST;
+					sproutForms()->forms->sendNotification($this->form, $entry, $post);
 				}
-			}
 
-			if (craft()->request->isAjaxRequest())
-			{
-				$return['success'] = true;
+				if ($this->form->saveData)
+				{
+					if (!sproutForms()->entries->saveEntry($entry, $event))
+					{
+						SproutFormsPlugin::log("Unable to save payload data to Craft.", LogLevel::Error, true);
+					}
+				}
 
-				$this->returnJson($return);
+				if (craft()->request->isAjaxRequest())
+				{
+					$return['success'] = true;
+
+					$this->returnJson($return);
+				}
+				else
+				{
+					craft()->userSession->setNotice(Craft::t('Entry saved.'));
+					$this->redirectToPostedUrl($entry);
+				}
 			}
 			else
 			{
-				craft()->userSession->setNotice(Craft::t('Entry saved.'));
-				$this->redirectToPostedUrl($entry);
+				$this->_redirectOnError($entry);
 			}
 		}
 		else
 		{
+			SproutFormsPlugin::log("On Before Save Entry Event is not valid", LogLevel::Error, true);
 			$this->_redirectOnError($entry);
 		}
 	}
