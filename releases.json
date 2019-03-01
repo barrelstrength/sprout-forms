@@ -1,5 +1,13 @@
 [
   {
+    "version": "2.6.4",
+    "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/archive/v2.6.4.zip",
+    "date": "2019-03-01T08:00:00+00:00",
+    "notes": [
+      "[Fixed] Fixed Payload Forwarding behavior when spam check fails"
+    ]
+  },
+  {
     "version": "2.6.3",
     "downloadUrl": "https://github.com/barrelstrength/craft-sprout-forms/archive/v2.6.3.zip",
     "date": "2018-12-03T08:00:00+00:00",
