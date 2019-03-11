@@ -10,7 +10,14 @@
 }) }}
 
 {{ forms.text({
+    class: 'sproutfields-phone-example',
     placeholder: field.placeholder,
     readonly: true,
     disabled: true
 }) }}
+
+{% css %}
+    input.sproutfields-phone-example {
+        width: 40% !important;
+    }
+{% endcss %}

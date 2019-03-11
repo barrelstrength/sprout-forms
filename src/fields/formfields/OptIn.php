@@ -33,10 +33,28 @@ class OptIn extends FormField implements PreviewableFieldInterface
      */
     public $selectedByDefault;
 
+    /**
+     * @var string
+     */
+    public $optInValueWhenTrue;
+
+    /**
+     * @var string
+     */
+    public $optInValueWhenFalse;
+
     public function init()
     {
         if ($this->optInMessage === null) {
             $this->optInMessage = Craft::t('sprout-forms', 'Agree to terms?');
+        }
+
+        if ($this->optInValueWhenTrue === null) {
+            $this->optInValueWhenTrue = Craft::t('sprout-forms', 'Yes');
+        }
+
+        if ($this->optInValueWhenFalse === null) {
+            $this->optInValueWhenFalse= Craft::t('sprout-forms', 'No');
         }
 
         parent::init();

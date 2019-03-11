@@ -1,9 +1,72 @@
 # Changelog
 
+## 3.0.0-beta.44 - 2019-02-18
+
+> {note} This release includes updates to the default Notification Email Templates and updates to what variables are defined by default for the Hidden and Invisible Fields. Please be sure to review your custom Form implementations if you use these features and ensure everything is working as you'd like.
+ 
+### Added
+- Added support for Markdown and custom true/false values for Opt-in Field ([#216])
+- Added support for Opt-in Field in Basic Form Template
+
+### Changed
+- Improved support for Address, Name, Phone, and Opt-in Fields in Notification Email Template ([#239])
+- Added `striptags` filter to field values being dynamically output in Notification Email ([#227])
+- Updated default `addFieldVariables` in base Form Templates to only include the most common variables from the Craft `_context`: `craft`, `now`, `currentSite`, `currentUser`, `siteName`, `siteUrl`, `systemName`
+- Updated Email Template to hide plainInput fields in Notification Emails ([#240])
+- Updated _When a Form Entry is saved_ event to return null and improved logic in Email Template to handle test emails where no mock Entry could be found
+- Updated barrelstrength/sprout-base-email requirement v1.0.1
+
+### Fixed
+- Fixed scenario where `addFieldVariables` was called in Form Templates more than once
+- Fixed labels and wrapper div in Opt-in Field template ([#235])
+- Fixed issue where tab navigation did not scroll with a large number of tabs ([#238])
+- Fixed label ids in Name Field template ([#235])
+- Fixed false positives that could occur with Notification Email validation ([#100][#100email])
+
+[#216]: https://github.com/barrelstrength/craft-sprout-forms/issues/216
+[#227]: https://github.com/barrelstrength/craft-sprout-forms/issues/227
+[#235]: https://github.com/barrelstrength/craft-sprout-forms/issues/235
+[#238]: https://github.com/barrelstrength/craft-sprout-forms/issues/238
+[#239]: https://github.com/barrelstrength/craft-sprout-forms/issues/239
+[#240]: https://github.com/barrelstrength/craft-sprout-forms/issues/240
+[#100email]: https://github.com/barrelstrength/craft-sprout-email/issues/100
+
+## 3.0.0-beta.43 - 2019-02-15
+
+### Fixed
+- Fixed a Foreign Key issue when migrating from Craft 2 to Craft 3 (drop index needed in a foreign key constraint) ([#234])
+
+## 3.0.0-beta.42 - 2019-02-15
+
+### Fixed
+- Fixed a Foreign Key issue when migrating from Craft 2 to Craft 3 ([#234])
+
+[#234]: https://github.com/barrelstrength/craft-sprout-forms/issues/234
+
+## 3.0.0-beta.41 - 2019-02-13
+
+### Fixed
+- Added barrelstrength/sprout-base-import requirement v1.0.0
+
+## 3.0.0-beta.40 - 2019-02-13
+
+### Changed
+- Added resources previously managed in Sprout Base
+- Updated settings to implement SproutSettingsInterface
+- Updated barrelstrength/sprout-base requirement to v4.0.6
+- Added barrelstrength/sprout-base-email requirement v1.0.0
+- Added barrelstrength/sprout-base-fields requirement v1.0.0
+- Added barrelstrength/sprout-base-reports requirement v1.0.0
+
+### Fixed
+- Fixed bug where it does not display form entries when one of the form is deleted
+
 ## 3.0.0-beta.39 - 2019-02-06
 
 ### Fixed
-- Fixed bug in Craft 3.1 migration
+- Fixed bug in Craft 3.1 migration ([#226])
+
+[#226]: https://github.com/barrelstrength/craft-sprout-forms/issues/226
 
 ## 3.0.0-beta.38 - 2019-01-28
 

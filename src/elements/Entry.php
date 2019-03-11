@@ -5,6 +5,7 @@ namespace barrelstrength\sproutforms\elements;
 use Craft;
 use craft\base\Element;
 use craft\elements\db\ElementQueryInterface;
+use craft\helpers\DateTimeHelper;
 use yii\base\ErrorHandler;
 use craft\helpers\UrlHelper;
 use craft\elements\actions\Delete;
@@ -63,7 +64,13 @@ class Entry extends Element
      */
     public function getContentTable(): string
     {
-        return SproutForms::$app->forms->getContentTableName($this->getForm());
+        $form = $this->getForm();
+
+        if ($form) {
+            return SproutForms::$app->forms->getContentTableName($this->getForm());
+        }
+
+        return '';
     }
 
     /**
@@ -133,7 +140,8 @@ class Entry extends Element
 
             return $this->title ?: ((string)$this->id ?: static::class);
         } catch (\Exception $e) {
-            ErrorHandler::convertExceptionToError($e);
+            // return empty to avoid erros when form is deleted
+            return '';
         }
     }
 

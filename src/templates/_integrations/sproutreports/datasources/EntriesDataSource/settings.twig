@@ -29,11 +29,11 @@
 {% else %}
 
     {% set boxBody %}
-        <p>{{ "Create your first form and return to customize this report. Once you create a form, you'll be able to select this report's form and data range."|tt('sprout-forms')|raw }}</p>
+        <p>{{ "Create your first form and return to customize this report. Once you create a form, you'll be able to select this report's form and data range."|t('sprout-forms')|raw }}</p>
     {% endset %}
 
     {{ sprout.mediaBox({
-        heading: "One more step"|tt('sprout-forms'),
+        heading: "One more step"|t('sprout-forms'),
         body: boxBody,
         resourcePath: '@sproutbase/web/assets/sproutreports/dist/images/icon.svg'
     }) }}

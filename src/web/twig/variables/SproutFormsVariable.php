@@ -6,6 +6,7 @@ use barrelstrength\sproutforms\elements\db\EntryQuery;
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
+use barrelstrength\sproutforms\services\Forms;
 use Craft;
 use craft\base\ElementInterface;
 use craft\helpers\Template as TemplateHelper;
@@ -420,7 +421,7 @@ class SproutFormsVariable
      */
     public function addFieldVariables(array $variables)
     {
-        FormField::addFieldVariables($variables);
+        Forms::addFieldVariables($variables);
     }
 
     /**
