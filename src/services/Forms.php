@@ -557,7 +557,7 @@ class Forms extends Component
      *
      * @return string[]
      */
-    public function getAllFormTemplateTypes(): string
+    public function getAllFormTemplateTypes(): array
     {
         $event = new RegisterComponentTypesEvent([
             'types' => []

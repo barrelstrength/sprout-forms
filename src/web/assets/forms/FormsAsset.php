@@ -36,6 +36,8 @@ class FormsAsset extends AssetBundle
         $this->js = [
             'js/FieldLayoutEditor.js',
             'js/FieldModal.js',
+            'js/FormSettings.js',
+            'js/IntegrationModal.js',
         ];
 
         parent::init();

@@ -677,7 +677,7 @@ class Fields extends Component
      *
      * @return array
      */
-    protected function prependKeyValue(array $haystack, $key, $value): array
+    public function prependKeyValue(array $haystack, $key, $value): array
     {
         $haystack = array_reverse($haystack, true);
         $haystack[$key] = $value;
