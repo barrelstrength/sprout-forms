@@ -9,9 +9,7 @@ use barrelstrength\sproutbasereports\elements\Report;
 use Craft;
 use barrelstrength\sproutbasereports\base\DataSource;
 use craft\db\Query;
-use craft\elements\db\ElementQuery;
 use craft\elements\db\ElementQueryInterface;
-use craft\elements\db\EntryQuery;
 use craft\helpers\DateTimeHelper;
 
 /**
@@ -82,8 +80,7 @@ class EntriesFieldsDataSource extends DataSource
             $formId = $settings['formId'];
         }
 
-        $results = [];
-
+        $rows = [];
         if ($formId) {
             $form = SproutForms::$app->forms->getFormById($formId);
 
@@ -105,38 +102,52 @@ class EntriesFieldsDataSource extends DataSource
             }
 
             $results = $formQuery->all();
-            $rows = [];
+
             if ($results) {
                 foreach ($results as $key => $result) {
+
                     $elementId = $result['elementId'];
+                    $rows[$key]['id']          = $result['id'];
+                    $rows[$key]['elementId']   = $elementId;
+                    $rows[$key]['siteId']      = $result['siteId'];
+                    $rows[$key]['title']       = $result['title'];
+                    $rows[$key]['dateCreated'] = $result['dateCreated'];
+                    $rows[$key]['dateUpdated'] = $result['dateUpdated'];
+
+
                     $entry = Craft::$app->getElements()->getElementById($elementId, Entry::class);
 
-                    //Craft::$app->getContent()->populateElementContent($entry);
                     $fields = $entry->getFieldValues();
-                   // Craft::dump($fields);
+
                     if (count($fields) > 0) {
                         foreach ($fields as $handle => $field) {
                             if ($field instanceof ElementQueryInterface) {
 
-                                $value = json_encode($field->ids());
+                                $entries = $field->all();
+                                $titles = [];
+                                if (!empty($entries)) {
+                                    foreach ($entries as $entry) {
+                                        $titles[] = $entry->title;
+                                    }
+                                }
+                                $value = '';
 
+                                if (!empty($titles)) {
+                                    $value = implode(', ',  $titles);
+                                }
                             } else {
                                 $value = $field;
                             }
 
                             $fieldHandleKey = 'field_' . $handle;
-                            $result[$key] = $value;
+                            $rows[$key][$fieldHandleKey] = $value;
                         }
                     }
-
-                    unset($result['elementId'], $result['siteId'], $result['uid']);
-
-                    $results[$key] = $result;
                 }
             }
         }
 
-        return $results;
+        return $rows;
     }
 
     /**
