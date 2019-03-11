@@ -19,6 +19,7 @@ use barrelstrength\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbaseemail\events\NotificationEmailEvent;
 use barrelstrength\sproutforms\fields\Forms as FormsField;
 use barrelstrength\sproutforms\fields\Entries as FormEntriesField;
+use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesFieldsDataSource;
 use barrelstrength\sproutforms\widgets\RecentEntries;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use barrelstrength\sproutforms\captchas\DuplicateCaptcha;
@@ -133,6 +134,7 @@ class SproutForms extends Plugin
         // Register DataSources for sproutReports plugin integration
         Event::on(DataSources::class, DataSources::EVENT_REGISTER_DATA_SOURCES, function(RegisterComponentTypesEvent $event) {
             $event->types[] = EntriesDataSource::class;
+            $event->types[] = EntriesFieldsDataSource::class;
         });
 
         Event::on(Dashboard::class, Dashboard::EVENT_REGISTER_WIDGET_TYPES, function(RegisterComponentTypesEvent $event) {
