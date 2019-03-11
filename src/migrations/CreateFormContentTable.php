@@ -20,7 +20,7 @@ class CreateFormContentTable extends Migration
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $this->createTable($this->tableName, [
             'id' => $this->primaryKey(),
@@ -33,14 +33,14 @@ class CreateFormContentTable extends Migration
         ]);
 
         $this->createIndex($this->db->getIndexName($this->tableName, 'elementId,siteId'), $this->tableName, 'elementId,siteId', true);
-        $this->addForeignKey($this->db->getForeignKeyName($this->tableName, 'elementId'), $this->tableName, 'elementId', '{{%elements}}', 'id', 'CASCADE', null);
+        $this->addForeignKey($this->db->getForeignKeyName($this->tableName, 'elementId'), $this->tableName, 'elementId', '{{%elements}}', 'id', 'CASCADE');
         $this->addForeignKey($this->db->getForeignKeyName($this->tableName, 'siteId'), $this->tableName, 'siteId', '{{%sites}}', 'id', 'CASCADE', 'CASCADE');
     }
 
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         return false;
     }

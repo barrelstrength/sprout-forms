@@ -5,8 +5,6 @@ namespace barrelstrength\sproutforms\elements;
 use Craft;
 use craft\base\Element;
 use craft\elements\db\ElementQueryInterface;
-use craft\helpers\DateTimeHelper;
-use yii\base\ErrorHandler;
 use craft\helpers\UrlHelper;
 use craft\elements\actions\Delete;
 
@@ -140,7 +138,7 @@ class Entry extends Element
 
             return $this->title ?: ((string)$this->id ?: static::class);
         } catch (\Exception $e) {
-            // return empty to avoid erros when form is deleted
+            // return empty to avoid errors when form is deleted
             return '';
         }
     }
@@ -187,7 +185,7 @@ class Entry extends Element
      *
      * @return array
      */
-    public function getPayloadFields()
+    public function getPayloadFields(): array
     {
         $fields = [];
 
@@ -401,7 +399,7 @@ class Entry extends Element
      *
      * @return array
      */
-    public function getFields()
+    public function getFields(): array
     {
         return $this->getForm()->getFields();
     }
@@ -424,7 +422,7 @@ class Entry extends Element
      * @inheritdoc
      * @throws \yii\base\InvalidConfigException
      */
-    public function rules()
+    public function rules(): array
     {
         $rules = parent::rules();
         $rules[] = [['formId'], 'required'];

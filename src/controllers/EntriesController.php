@@ -193,7 +193,7 @@ class EntriesController extends BaseController
      * @throws NotFoundHttpException
      * @throws \craft\errors\MissingComponentException
      */
-    public function actionEditEntry(int $entryId = null, EntryElement $entry = null)
+    public function actionEditEntry(int $entryId = null, EntryElement $entry = null): Response
     {
         if (SproutForms::$app->forms->activeCpEntry) {
             $entry = SproutForms::$app->forms->activeCpEntry;
@@ -256,7 +256,7 @@ class EntriesController extends BaseController
      * @throws \Throwable
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionDeleteEntry()
+    public function actionDeleteEntry(): Response
     {
         $this->requirePostRequest();
 

@@ -53,7 +53,7 @@ class Groups extends Component
      * @return bool
      * @throws \yii\db\Exception
      */
-    public function deleteGroupById($groupId)
+    public function deleteGroupById($groupId): bool
     {
         $groupRecord = FormGroupRecord::findOne($groupId);
 
@@ -76,7 +76,7 @@ class Groups extends Component
      *
      * @return array
      */
-    public function getAllFormGroups($indexBy = null)
+    public function getAllFormGroups($indexBy = null): array
     {
         if (!$this->_fetchedAllGroups) {
             $groupRecords = FormGroupRecord::find()
@@ -112,7 +112,7 @@ class Groups extends Component
      *
      * @return FormElement[]
      */
-    public function getFormsByGroupId($groupId)
+    public function getFormsByGroupId($groupId): array
     {
         $query = (new Query())
             ->select('*')

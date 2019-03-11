@@ -16,7 +16,7 @@ class m180314_161529_sproutforms_categories_fields extends Migration
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $categoriesFields = (new Query())
             ->select(['id', 'handle', 'settings'])
@@ -26,7 +26,7 @@ class m180314_161529_sproutforms_categories_fields extends Migration
             ->all();
 
         foreach ($categoriesFields as $categoryField) {
-            $settings = Json::decode($categoryField['settings'], true);
+            $settings = Json::decode($categoryField['settings']);
             $settings['branchLimit'] = $settings['limit'] ?? null;
             $settings['targetSiteId'] = null;
             $settings['localizeRelations'] = false;
@@ -41,7 +41,7 @@ class m180314_161529_sproutforms_categories_fields extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180314_161529_sproutforms_categories_fields cannot be reverted.\n";
         return false;

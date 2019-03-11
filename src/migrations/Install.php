@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
+use barrelstrength\sproutbasefields\migrations\Install as SproutBaseFieldsInstall;
 use barrelstrength\sproutbasereports\migrations\Install as SproutBaseReportsInstall;
 use barrelstrength\sproutbaseemail\migrations\Install as SproutBaseNotificationInstall;
 use barrelstrength\sproutbasereports\SproutBaseReports;
@@ -29,6 +30,8 @@ class Install extends Migration
      */
     public function safeUp(): bool
     {
+        // Make sure Sprout Fields is also configured
+        $this->installSproutFields();
         // Make sure Sprout Reports is also configured
         $this->installSproutReports();
         // Install Sprout Notifications Table
@@ -150,8 +153,7 @@ class Install extends Migration
                 false, true
             ),
             '{{%sproutforms_forms}}',
-            'fieldLayoutId',
-            false
+            'fieldLayoutId'
         );
 
         $this->createIndex(
@@ -161,8 +163,7 @@ class Install extends Migration
                 false, true
             ),
             '{{%sproutforms_entries}}',
-            'formId',
-            false
+            'formId'
         );
 
         $this->createIndex(
@@ -189,7 +190,7 @@ class Install extends Migration
                 '{{%sproutforms_forms}}', 'fieldLayoutId'
             ),
             '{{%sproutforms_forms}}', 'fieldLayoutId',
-            '{{%fieldlayouts}}', 'id', 'SET NULL', null
+            '{{%fieldlayouts}}', 'id', 'SET NULL'
         );
 
         $this->addForeignKey(
@@ -197,7 +198,7 @@ class Install extends Migration
                 '{{%sproutforms_forms}}', 'id'
             ),
             '{{%sproutforms_forms}}', 'id',
-            '{{%elements}}', 'id', 'CASCADE', null
+            '{{%elements}}', 'id', 'CASCADE'
         );
 
         $this->addForeignKey(
@@ -205,7 +206,7 @@ class Install extends Migration
                 '{{%sproutforms_entries}}', 'id'
             ),
             '{{%sproutforms_entries}}', 'id',
-            '{{%elements}}', 'id', 'CASCADE', null
+            '{{%elements}}', 'id', 'CASCADE'
         );
 
         $this->addForeignKey(
@@ -213,7 +214,7 @@ class Install extends Migration
                 '{{%sproutforms_entries}}', 'formId'
             ),
             '{{%sproutforms_entries}}', 'formId',
-            '{{%sproutforms_forms}}', 'id', 'CASCADE', null
+            '{{%sproutforms_forms}}', 'id', 'CASCADE'
         );
 
         $this->addForeignKey(
@@ -286,6 +287,15 @@ class Install extends Migration
         $pluginHandle = 'sprout-forms';
         $projectConfig = Craft::$app->getProjectConfig();
         $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings', $settings->toArray());
+    }
+
+    public function installSproutFields()
+    {
+        $migration = new SproutBaseFieldsInstall();
+
+        ob_start();
+        $migration->safeUp();
+        ob_end_clean();
     }
 
     public function installSproutEmail()

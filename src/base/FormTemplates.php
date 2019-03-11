@@ -26,7 +26,7 @@ abstract class FormTemplates
      * @return string
      * @throws \ReflectionException
      */
-    public function getTemplateId()
+    public function getTemplateId(): string
     {
         $pluginHandle = Craft::$app->getPlugins()->getPluginHandleByClass(get_class($this));
 
@@ -47,14 +47,14 @@ abstract class FormTemplates
      *
      * @return string
      */
-    abstract public function getName();
+    abstract public function getName(): string;
 
     /**
      * The folder path where your form templates exist
      *
      * @return string
      */
-    abstract public function getPath();
+    abstract public function getPath(): string;
 
     /**
      * Adds pre-defined options for css classes.
@@ -64,7 +64,7 @@ abstract class FormTemplates
      *
      * @return array
      */
-    public function getCssClassDefaults()
+    public function getCssClassDefaults(): array
     {
         return [];
     }

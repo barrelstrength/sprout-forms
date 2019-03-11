@@ -336,7 +336,7 @@ class Form extends Element
      *
      * @return FormField[]
      */
-    public function getFields()
+    public function getFields(): array
     {
         if ($this->_fields === null) {
             $this->_fields = [];
@@ -368,7 +368,7 @@ class Form extends Element
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['name', 'handle'], 'required'],
@@ -392,7 +392,7 @@ class Form extends Element
      *
      * @return array
      */
-    public function getClassesOptions($cssClasses = null)
+    public function getClassesOptions($cssClasses = null): array
     {
         $classesIds = [];
         $apiOptions = $this->getFormTemplate()->getCssClassDefaults();
@@ -415,7 +415,7 @@ class Form extends Element
             'optgroup' => Craft::t('sprout-forms', 'Custom CSS Classes')
         ];
 
-        if (!in_array($cssClasses, $classesIds) && $cssClasses) {
+        if (!in_array($cssClasses, $classesIds, true) && $cssClasses) {
             $options[] = [
                 'label' => $cssClasses,
                 'value' => $cssClasses
@@ -435,7 +435,7 @@ class Form extends Element
      *
      * @return FormTemplates
      */
-    public function getFormTemplate()
+    public function getFormTemplate(): FormTemplates
     {
         $defaultFormTemplates = new AccessibleTemplates();
 

@@ -12,7 +12,7 @@ class m180719_000000_forms_and_entry_elements_types extends Migration
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $types = [
             0 => [
@@ -37,7 +37,7 @@ class m180719_000000_forms_and_entry_elements_types extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180719_000000_forms_and_entry_elements_types cannot be reverted.\n";
         return false;

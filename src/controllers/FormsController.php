@@ -6,6 +6,7 @@ use Craft;
 use craft\base\ElementInterface;
 use craft\web\Controller as BaseController;
 use craft\helpers\UrlHelper;
+use yii\web\Response;
 use yii\base\Exception;
 use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
@@ -148,12 +149,12 @@ class FormsController extends BaseController
      * @param int|null                          $formId
      * @param FormElement|ElementInterface|null $form
      *
-     * @return \yii\web\Response
+     * @return Response
      * @throws NotFoundHttpException
      * @throws \Exception
      * @throws \Throwable
      */
-    public function actionEditFormTemplate(int $formId = null, FormElement $form = null)
+    public function actionEditFormTemplate(int $formId = null, FormElement $form = null): Response
     {
         // Immediately create a new Form
         if (Craft::$app->request->getSegment(3) == 'new') {
@@ -202,12 +203,12 @@ class FormsController extends BaseController
     /**
      * Delete a Form
      *
-     * @return \yii\web\Response
+     * @return Response
      * @throws \Exception
      * @throws \Throwable
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionDeleteForm()
+    public function actionDeleteForm(): Response
     {
         $this->requirePostRequest();
 

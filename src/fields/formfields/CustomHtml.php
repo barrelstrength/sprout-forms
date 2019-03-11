@@ -42,7 +42,7 @@ class CustomHtml extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function isPlainInput()
+    public function isPlainInput(): bool
     {
         return true;
     }
@@ -50,7 +50,7 @@ class CustomHtml extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function displayInstructionsField()
+    public function displayInstructionsField(): bool
     {
         return false;
     }
@@ -71,7 +71,7 @@ class CustomHtml extends FormField implements PreviewableFieldInterface
     /**
      * @return string
      */
-    public function getSvgIconPath()
+    public function getSvgIconPath(): string
     {
         return '@sproutbaseicons/code.svg';
     }
@@ -114,7 +114,7 @@ class CustomHtml extends FormField implements PreviewableFieldInterface
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getExampleInputHtml()
+    public function getExampleInputHtml(): string
     {
         return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/formfields/customhtml/example',
             [
@@ -127,11 +127,11 @@ class CustomHtml extends FormField implements PreviewableFieldInterface
      * @param mixed      $value
      * @param array|null $renderingOptions
      *
-     * @return string
+     * @return \Twig_Markup
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): string
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
     {
         $rendered = Craft::$app->getView()->renderTemplate(
             'customhtml/input',

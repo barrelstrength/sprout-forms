@@ -29,7 +29,7 @@ class m180314_161540_craft2_to_craft3 extends Migration
      * @throws \yii\base\NotSupportedException
      * @throws \yii\db\Exception
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $forms = (new Query())
             ->select(['id', 'handle'])
@@ -172,7 +172,7 @@ class m180314_161540_craft2_to_craft3 extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180314_161540_craft2_to_craft3 cannot be reverted.\n";
         return false;

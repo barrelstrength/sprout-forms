@@ -4,20 +4,20 @@ namespace barrelstrength\sproutforms\controllers;
 
 use Craft;
 use craft\web\Controller as BaseController;
-
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\models\FormGroup as FormGroupModel;
+use yii\web\Response;
 
 class GroupsController extends BaseController
 {
     /**
      * Save a group.
      *
-     * @return \yii\web\Response
+     * @return Response
      * @throws \yii\base\Exception
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionSaveGroup()
+    public function actionSaveGroup(): Response
     {
         $this->requirePostRequest();
 
@@ -48,12 +48,12 @@ class GroupsController extends BaseController
     /**
      * Deletes a group.
      *
-     * @return \yii\web\Response
+     * @return Response
      * @throws \yii\db\Exception
      * @throws \yii\web\BadRequestHttpException
      * @throws \craft\errors\MissingComponentException
      */
-    public function actionDeleteGroup()
+    public function actionDeleteGroup(): Response
     {
         $this->requirePostRequest();
         $this->requireAcceptsJson();

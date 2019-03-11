@@ -16,7 +16,7 @@ class m180712_000000_checkboxes_serialize extends Migration
      * @inheritdoc
      * @throws \yii\base\NotSupportedException
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $fields = (new Query())
             ->select(['id', 'handle'])
@@ -46,7 +46,7 @@ class m180712_000000_checkboxes_serialize extends Migration
                     foreach ($entries as $entry) {
                         $newValue = [];
                         $value = $entry[$column];
-                        $values = Json::decode($value, true);
+                        $values = Json::decode($value);
 
                         if ($values) {
                             foreach ($values as $value) {
@@ -71,7 +71,7 @@ class m180712_000000_checkboxes_serialize extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180712_000000_checkboxes_serialize cannot be reverted.\n";
         return false;

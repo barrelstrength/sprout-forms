@@ -14,7 +14,7 @@ class m180417_000000_sproutforms_craft3_schema_changes extends Migration
      * @inheritdoc
      * @throws \yii\base\NotSupportedException
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $migration = new m180307_042132_craft3_schema_changes();
 
@@ -26,7 +26,7 @@ class m180417_000000_sproutforms_craft3_schema_changes extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180417_000000_sproutforms_craft3_schema_changes cannot be reverted.\n";
         return false;

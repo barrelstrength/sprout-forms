@@ -8,6 +8,7 @@ use barrelstrength\sproutforms\models\EntryStatus;
 use craft\helpers\Json;
 use craft\web\Controller as BaseController;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 class EntryStatusesController extends BaseController
 {
@@ -15,10 +16,10 @@ class EntryStatusesController extends BaseController
      * @param int|null         $entryStatusId
      * @param EntryStatus|null $entryStatus
      *
-     * @return \yii\web\Response
+     * @return Response
      * @throws NotFoundHttpException
      */
-    public function actionEdit(int $entryStatusId = null, EntryStatus $entryStatus = null)
+    public function actionEdit(int $entryStatusId = null, EntryStatus $entryStatus = null): Response
     {
         if (!$entryStatus) {
             if ($entryStatusId) {
@@ -39,7 +40,7 @@ class EntryStatusesController extends BaseController
     }
 
     /**
-     * @return null|\yii\web\Response
+     * @return null|Response
      * @throws \yii\base\Exception
      * @throws \yii\db\Exception
      * @throws \yii\web\BadRequestHttpException
@@ -72,15 +73,15 @@ class EntryStatusesController extends BaseController
     }
 
     /**
-     * @return \yii\web\Response
+     * @return Response
      * @throws \Exception
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionReorder()
+    public function actionReorder(): Response
     {
         $this->requirePostRequest();
 
-        $ids = Json::decode(Craft::$app->request->getRequiredBodyParam('ids'), true);
+        $ids = Json::decode(Craft::$app->request->getRequiredBodyParam('ids'));
 
         if ($success = SproutForms::$app->entries->reorderEntryStatuses($ids)) {
             return $this->asJson(['success' => $success]);
@@ -90,13 +91,13 @@ class EntryStatusesController extends BaseController
     }
 
     /**
-     * @return \yii\web\Response
+     * @return Response
      * @throws \Exception
      * @throws \Throwable
      * @throws \yii\db\StaleObjectException
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionDelete()
+    public function actionDelete(): Response
     {
         $this->requirePostRequest();
 
@@ -108,5 +109,4 @@ class EntryStatusesController extends BaseController
 
         return $this->asJson(['success' => true]);
     }
-
 }

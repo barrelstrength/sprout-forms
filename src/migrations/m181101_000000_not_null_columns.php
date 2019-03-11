@@ -12,7 +12,7 @@ class m181101_000000_not_null_columns extends Migration
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $table = '{{%sproutforms_forms}}';
 
@@ -28,7 +28,7 @@ class m181101_000000_not_null_columns extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m181101_000000_not_null_columns cannot be reverted.\n";
         return false;

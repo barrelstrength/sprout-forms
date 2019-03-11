@@ -20,7 +20,7 @@ class JavascriptCaptcha extends Captcha
     /**
      * @inheritdoc
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Javascript Captcha';
     }
@@ -28,7 +28,7 @@ class JavascriptCaptcha extends Captcha
     /**
      * @inheritdoc
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return Craft::t('sprout-forms', 'Prevent a form from being submmitted if a user does not have JavaScript enabled');
     }
@@ -37,7 +37,7 @@ class JavascriptCaptcha extends Captcha
      * @inheritdoc
      * @throws \craft\errors\MissingComponentException
      */
-    public function getCaptchaHtml()
+    public function getCaptchaHtml(): string
     {
         $uniqueId = uniqid('alojs', true);
 

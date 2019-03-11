@@ -92,7 +92,7 @@ class SproutForms extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '3.0.13';
+    public $schemaVersion = '3.0.14';
 
     /**
      * @var string
@@ -112,7 +112,7 @@ class SproutForms extends Plugin
 
         self::$app = $this->get('app');
 
-        Craft::setAlias('@sproutformslib', dirname(__DIR__, 2).'/sprout-forms/lib');
+        Craft::setAlias('@sproutformslib', dirname(__DIR__).'/lib');
 
         SproutBaseHelper::registerModule();
         SproutBaseEmailHelper::registerModule();
@@ -181,7 +181,7 @@ class SproutForms extends Plugin
             }
         });
 
-        Craft::$app->view->hook('sproutForms.modifyForm', function(&$context) {
+        Craft::$app->view->hook('sproutForms.modifyForm', function() {
             return SproutForms::$app->forms->getCaptchasHtml();
         });
 
@@ -353,7 +353,7 @@ class SproutForms extends Plugin
     /**
      * @return array
      */
-    public function getUserPermissions()
+    public function getUserPermissions(): array
     {
         return [
             'manageSproutFormsForms' => [

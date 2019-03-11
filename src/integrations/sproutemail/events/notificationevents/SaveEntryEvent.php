@@ -11,8 +11,6 @@ use barrelstrength\sproutforms\SproutForms;
 use craft\events\ModelEvent;
 use craft\events\ElementEvent;
 use Craft;
-use yii\db\Exception;
-use yii\web\NotFoundHttpException;
 
 
 /**
@@ -129,7 +127,7 @@ class SaveEntryEvent extends NotificationEvent
         return null;
     }
 
-    public function rules()
+    public function rules(): array
     {
         $rules = parent::rules();
 
@@ -221,7 +219,7 @@ class SaveEntryEvent extends NotificationEvent
      *
      * @return array
      */
-    protected function getAllForms()
+    protected function getAllForms(): array
     {
         $forms = SproutForms::$app->forms->getAllForms();
         $options = [];
