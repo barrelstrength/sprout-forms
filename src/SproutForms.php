@@ -19,6 +19,7 @@ use barrelstrength\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbaseemail\events\NotificationEmailEvent;
 use barrelstrength\sproutforms\fields\Forms as FormsField;
 use barrelstrength\sproutforms\fields\Entries as FormEntriesField;
+use barrelstrength\sproutforms\integrationtypes\ElementIntegration;
 use barrelstrength\sproutforms\integrationtypes\PayloadForwarding;
 use barrelstrength\sproutforms\integrationtypes\FormEntryElementIntegration;
 use barrelstrength\sproutforms\services\Integrations;
@@ -188,6 +189,7 @@ class SproutForms extends Plugin
         Event::on(Integrations::class, Integrations::EVENT_REGISTER_INTEGRATIONS, function(RegisterComponentTypesEvent $event) {
             $event->types[] = PayloadForwarding::class;
             $event->types[] = FormEntryElementIntegration::class;
+            $event->types[] = ElementIntegration::class;
         });
 
         Event::on(Forms::class, Forms::EVENT_REGISTER_FORM_TEMPLATES, function(RegisterComponentTypesEvent $event) {

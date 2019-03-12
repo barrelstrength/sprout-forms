@@ -1,0 +1,11 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.selectField({
+    first: true,
+    required: true,
+    label: "Section <span class='info'>Create an entry on this section</span>"|t('sprout-forms'),
+    id: 'section',
+    name: 'section',
+    options: sectionsOptions,
+    value: integration.section
+}) }}

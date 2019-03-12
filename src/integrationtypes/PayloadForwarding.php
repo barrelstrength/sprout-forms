@@ -34,7 +34,7 @@ class PayloadForwarding extends ApiIntegration
     // public function resolveFieldMapping() {}
 
     public function getSettingsHtml() {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/integrationtypes/custom/settings',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/integrationtypes/payloadforwarding/settings',
             [
                 'integration' => $this
             ]
