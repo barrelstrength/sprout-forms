@@ -80,7 +80,6 @@ class ElementIntegration extends ApiIntegration
     {
         $entry = $this->entry;
         $fields = $this->resolveFieldMapping();
-        $endpoint = $this->submitAction;
 
         // @todo Create the entry here
 
