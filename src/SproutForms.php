@@ -348,21 +348,26 @@ class SproutForms extends Plugin
     public function getUserPermissions(): array
     {
         return [
-            'manageSproutFormsForms' => [
-                'label' => Craft::t('sprout-forms', 'Manage Forms')
+            'sproutForms-editForms' => [
+                'label' => Craft::t('sprout-forms', 'Edit Forms')
             ],
-            'viewSproutFormsEntries' => [
+            'sproutForms-viewFormEntries' => [
                 'label' => Craft::t('sprout-forms', 'View Form Entries'),
                 'nested' => [
-                    'editSproutFormsEntries' => [
+                    'sproutForms-editFormEntries' => [
                         'label' => Craft::t('sprout-forms', 'Edit Form Entries')
                     ]
                 ]
             ],
-            'editSproutFormsSettings' => [
-                'label' => Craft::t('sprout-forms', 'Edit Settings')
+            'sproutForms-editNotifications' => [
+                'label' => Craft::t('sprout-forms', 'Edit Notification Emails'),
+                'nested' => [
+                    'sproutForms-editNotificationFieldLayouts' => [
+                        'label' => Craft::t('sprout-forms', 'Edit Notification Email Field Layouts')
+                    ]
+                ]
             ],
-            'editSproutReports' => [
+            'sproutForms-editReports' => [
                 'label' => Craft::t('sprout-forms', 'Edit Reports')
             ]
         ];
