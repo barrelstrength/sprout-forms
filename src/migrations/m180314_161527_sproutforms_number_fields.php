@@ -16,7 +16,7 @@ class m180314_161527_sproutforms_number_fields extends Migration
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $numberFields = (new Query())
             ->select(['id', 'handle', 'settings'])
@@ -26,7 +26,7 @@ class m180314_161527_sproutforms_number_fields extends Migration
             ->all();
 
         foreach ($numberFields as $numberField) {
-            $settings = Json::decode($numberField['settings'], true);
+            $settings = Json::decode($numberField['settings']);
             $settings['size'] = '';
             $settingsAsJson = Json::encode($settings);
 
@@ -39,7 +39,7 @@ class m180314_161527_sproutforms_number_fields extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180314_161527_sproutforms_number_fields cannot be reverted.\n";
         return false;

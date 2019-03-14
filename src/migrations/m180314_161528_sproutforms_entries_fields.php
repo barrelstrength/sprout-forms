@@ -16,7 +16,7 @@ class m180314_161528_sproutforms_entries_fields extends Migration
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $entriesFields = (new Query())
             ->select(['id', 'handle', 'settings'])
@@ -26,7 +26,7 @@ class m180314_161528_sproutforms_entries_fields extends Migration
             ->all();
 
         foreach ($entriesFields as $entryField) {
-            $settings = Json::decode($entryField['settings'], true);
+            $settings = Json::decode($entryField['settings']);
             $settings['source'] = $settings['source'] ?? null;
             $settings['targetSiteId'] = null;
             $settings['localizeRelations'] = false;
@@ -41,7 +41,7 @@ class m180314_161528_sproutforms_entries_fields extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180314_161528_sproutforms_entries_fields cannot be reverted.\n";
         return false;

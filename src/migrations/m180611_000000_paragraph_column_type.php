@@ -16,7 +16,7 @@ class m180611_000000_paragraph_column_type extends Migration
      * @inheritdoc
      * @throws \yii\base\NotSupportedException
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $forms = (new Query())
             ->select(['id', 'handle'])
@@ -50,7 +50,7 @@ class m180611_000000_paragraph_column_type extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180611_000000_paragraph_column_type cannot be reverted.\n";
         return false;

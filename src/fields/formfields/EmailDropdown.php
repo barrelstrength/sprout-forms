@@ -63,7 +63,7 @@ class EmailDropdown extends BaseOptionsFormField
     /**
      * @return string
      */
-    public function getSvgIconPath()
+    public function getSvgIconPath(): string
     {
         return '@sproutbaseicons/share.svg';
     }
@@ -150,7 +150,7 @@ class EmailDropdown extends BaseOptionsFormField
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getExampleInputHtml()
+    public function getExampleInputHtml(): string
     {
         return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/formfields/emaildropdown/example',
             [
@@ -163,11 +163,11 @@ class EmailDropdown extends BaseOptionsFormField
      * @param mixed      $value
      * @param array|null $renderingOptions
      *
-     * @return string
+     * @return \Twig_Markup
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): string
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
     {
         $selectedValue = $value->value ?? null;
 

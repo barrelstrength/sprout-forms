@@ -16,7 +16,7 @@ class m180314_161530_sproutforms_tags_fields extends Migration
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $tagFields = (new Query())
             ->select(['id', 'handle', 'settings'])
@@ -26,7 +26,7 @@ class m180314_161530_sproutforms_tags_fields extends Migration
             ->all();
 
         foreach ($tagFields as $tagField) {
-            $settings = Json::decode($tagField['settings'], true);
+            $settings = Json::decode($tagField['settings']);
             $settings['sources'] = '*';
             $settings['targetSiteId'] = null;
             $settings['viewMode'] = 'large';
@@ -43,7 +43,7 @@ class m180314_161530_sproutforms_tags_fields extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180314_161530_sproutforms_tags_fields cannot be reverted.\n";
         return false;

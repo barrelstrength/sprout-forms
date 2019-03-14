@@ -15,7 +15,7 @@ class m180314_161526_sproutforms_radiobuttons_fields extends Migration
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $radioButtonsFields = (new Query())
             ->select(['id', 'handle', 'settings'])
@@ -34,7 +34,7 @@ class m180314_161526_sproutforms_radiobuttons_fields extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180314_161526_sproutforms_radiobuttons_fields cannot be reverted.\n";
         return false;

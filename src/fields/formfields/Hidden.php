@@ -45,7 +45,7 @@ class Hidden extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function isPlainInput()
+    public function isPlainInput(): bool
     {
         return true;
     }
@@ -53,7 +53,7 @@ class Hidden extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function getSvgIconPath()
+    public function getSvgIconPath(): string
     {
         return '@sproutbaseicons/user-secret.svg';
     }
@@ -95,7 +95,7 @@ class Hidden extends FormField implements PreviewableFieldInterface
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getExampleInputHtml()
+    public function getExampleInputHtml(): string
     {
         return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/formfields/hidden/example',
             [
@@ -108,12 +108,12 @@ class Hidden extends FormField implements PreviewableFieldInterface
      * @param mixed      $value
      * @param array|null $renderingOptions
      *
-     * @return string
+     * @return \Twig_Markup
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      * @throws \Throwable
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): string
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
     {
         if ($this->value) {
             try {

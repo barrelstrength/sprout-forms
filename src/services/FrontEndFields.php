@@ -20,7 +20,7 @@ class FrontEndFields extends Component
      *
      * @return array
      */
-    public function getFrontEndEntries($settings)
+    public function getFrontEndEntries($settings): array
     {
         $entries = [];
         $sectionsService = Craft::$app->getSections();
@@ -70,7 +70,7 @@ class FrontEndFields extends Component
      *
      * @return array
      */
-    public function getFrontEndCategories($settings)
+    public function getFrontEndCategories($settings): array
     {
         $categories = [];
 
@@ -94,7 +94,7 @@ class FrontEndFields extends Component
      *
      * @return array
      */
-    public function getFrontEndTags($settings)
+    public function getFrontEndTags($settings): array
     {
         $tags = [];
 
@@ -113,7 +113,7 @@ class FrontEndFields extends Component
         return $tags;
     }
 
-    private function getSinglesEntries()
+    private function getSinglesEntries(): array
     {
         $sections = Craft::$app->getSections()->getSectionsByType(Section::TYPE_SINGLE);
         $singles = [];

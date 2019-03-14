@@ -68,7 +68,7 @@ class Fields extends Component
      * @throws Exception
      * @throws \yii\db\Exception
      */
-    public function reorderFields($fieldIds)
+    public function reorderFields($fieldIds): bool
     {
         $transaction = Craft::$app->db->getTransaction() === null ? Craft::$app->db->beginTransaction() : null;
 
@@ -100,7 +100,7 @@ class Fields extends Component
      * @throws Exception
      * @return FieldLayoutFieldRecord
      */
-    protected function getFieldLayoutFieldRecordByFieldId($fieldId = null)
+    protected function getFieldLayoutFieldRecordByFieldId($fieldId = null): FieldLayoutFieldRecord
     {
         if ($fieldId) {
             $record = FieldLayoutFieldRecord::find('fieldId=:fieldId', [':fieldId' => $fieldId]);
@@ -118,7 +118,7 @@ class Fields extends Component
     /**
      * @return array|FormField[]
      */
-    public function getRegisteredFields()
+    public function getRegisteredFields(): array
     {
         if (null === $this->registeredFields) {
             $this->registeredFields = [];
@@ -146,7 +146,7 @@ class Fields extends Component
     /**
      * @return array
      */
-    public function getRegisteredFieldsByGroup()
+    public function getRegisteredFieldsByGroup(): array
     {
         $standardLabel = Craft::t('sprout-forms', 'Standard Fields');
         $specialLabel = Craft::t('sprout-forms', 'Special Fields');
@@ -210,7 +210,7 @@ class Fields extends Component
      *
      * @return array
      */
-    public function prepareFieldTypeSelection()
+    public function prepareFieldTypeSelection(): array
     {
         $fields = $this->getRegisteredFields();
         $standardFields = [];
@@ -493,7 +493,7 @@ class Fields extends Component
         return $response;
     }
 
-    public function getDefaultTabName()
+    public function getDefaultTabName(): string
     {
         return Craft::t('sprout-forms', 'Tab 1');
     }
@@ -509,7 +509,7 @@ class Fields extends Component
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getModalFieldTemplate($form, $field = null, $tabId = null)
+    public function getModalFieldTemplate($form, $field = null, $tabId = null): array
     {
         $fieldsService = Craft::$app->getFields();
         $request = Craft::$app->getRequest();
@@ -557,7 +557,7 @@ class Fields extends Component
      * @return \craft\base\FieldInterface
      * @throws \Throwable
      */
-    public function createDefaultField($type, $form)
+    public function createDefaultField($type, $form): FieldInterface
     {
         $instanceField = new $type;
         $fieldsService = Craft::$app->getFields();
@@ -593,7 +593,7 @@ class Fields extends Component
      *
      * @return FieldLayoutTabRecord
      */
-    public function createNewTab($name, $sortOrder, FormElement $form)
+    public function createNewTab($name, $sortOrder, FormElement $form): FieldLayoutTabRecord
     {
         $fieldLayout = $form->getFieldLayout();
 
@@ -614,9 +614,9 @@ class Fields extends Component
      * @param string      $oldName
      * @param FormElement $form
      *
-     * @return boolean
+     * @return bool
      */
-    public function renameTab($name, $oldName, FormElement $form)
+    public function renameTab($name, $oldName, FormElement $form): bool
     {
         $fieldLayout = $form->getFieldLayout();
         $tabs = $fieldLayout->getTabs();
@@ -647,7 +647,7 @@ class Fields extends Component
      *
      * @return array
      */
-    protected function prependKeyValue(array $haystack, $key, $value)
+    protected function prependKeyValue(array $haystack, $key, $value): array
     {
         $haystack = array_reverse($haystack, true);
         $haystack[$key] = $value;

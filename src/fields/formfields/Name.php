@@ -64,7 +64,7 @@ class Name extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function hasMultipleLabels()
+    public function hasMultipleLabels(): bool
     {
         return $this->hasMultipleLabels;
     }
@@ -72,7 +72,7 @@ class Name extends FormField implements PreviewableFieldInterface
     /**
      * @return string
      */
-    public function getSvgIconPath()
+    public function getSvgIconPath(): string
     {
         return '@sproutbaseicons/user.svg';
     }
@@ -160,7 +160,7 @@ class Name extends FormField implements PreviewableFieldInterface
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getExampleInputHtml()
+    public function getExampleInputHtml(): string
     {
         return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/formfields/name/example',
             [
@@ -173,11 +173,11 @@ class Name extends FormField implements PreviewableFieldInterface
      * @param mixed      $value
      * @param array|null $renderingOptions
      *
-     * @return string
+     * @return \Twig_Markup
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): string
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
     {
         if ($this->displayMultipleFields) {
             $this->hasMultipleLabels = true;
@@ -212,7 +212,7 @@ class Name extends FormField implements PreviewableFieldInterface
 
         // String value when retrieved from db
         if (is_string($value)) {
-            $nameArray = Json::decode($value, true);
+            $nameArray = Json::decode($value);
             $nameModel->setAttributes($nameArray, false);
         }
 

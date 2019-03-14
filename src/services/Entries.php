@@ -59,13 +59,13 @@ class Entries extends Component
      *
      * @return EntryElement
      */
-    public function getEntry(FormElement $form)
+    public function getEntry(FormElement $form): EntryElement
     {
         if (isset(SproutForms::$app->forms->activeEntries[$form->handle])) {
             return SproutForms::$app->forms->activeEntries[$form->handle];
         }
 
-        $entry = new EntryElement;
+        $entry = new EntryElement();
         $entry->formId = $form->id;
 
         SproutForms::$app->forms->activeEntries[$form->handle] = $entry;
@@ -94,13 +94,13 @@ class Entries extends Component
      *
      * @return EntryStatus
      */
-    public function getEntryStatusById($entryStatusId)
+    public function getEntryStatusById($entryStatusId): EntryStatus
     {
         $entryStatus = EntryStatusRecord::find()
             ->where(['id' => $entryStatusId])
             ->one();
 
-        $entryStatusesModel = new EntryStatus;
+        $entryStatusesModel = new EntryStatus();
 
         if ($entryStatus) {
             $entryStatusesModel->setAttributes($entryStatus->getAttributes(), false);
@@ -171,7 +171,7 @@ class Entries extends Component
      * @throws \Throwable
      * @throws \yii\db\StaleObjectException
      */
-    public function deleteEntryStatusById($id)
+    public function deleteEntryStatusById($id): bool
     {
         $statuses = $this->getAllEntryStatuses();
 
@@ -202,7 +202,7 @@ class Entries extends Component
      * @throws Exception
      * @throws \yii\db\Exception
      */
-    public function reorderEntryStatuses($entryStatusIds)
+    public function reorderEntryStatuses($entryStatusIds): bool
     {
         $transaction = Craft::$app->db->beginTransaction();
 
@@ -226,7 +226,7 @@ class Entries extends Component
     /**
      * @return array
      */
-    public function getAllEntryStatuses()
+    public function getAllEntryStatuses(): array
     {
         $entryStatuses = EntryStatusRecord::find()
             ->orderBy(['sortOrder' => 'asc'])
@@ -262,7 +262,7 @@ class Entries extends Component
      * @throws Exception
      * @throws \Throwable
      */
-    public function saveEntry(EntryElement $entry)
+    public function saveEntry(EntryElement $entry): bool
     {
         $isNewEntry = !$entry->id;
 
@@ -336,7 +336,7 @@ class Entries extends Component
      * @return bool
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function forwardEntry(Entry $entry)
+    public function forwardEntry(Entry $entry): bool
     {
         $fields = $entry->getPayloadFields();
         $endpoint = $entry->getForm()->submitAction;

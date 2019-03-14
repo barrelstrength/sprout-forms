@@ -44,7 +44,7 @@ abstract class FormField extends Field
      *
      * @return string
      */
-    public function getSvgIconPath()
+    public function getSvgIconPath(): string
     {
         return '';
     }
@@ -54,7 +54,7 @@ abstract class FormField extends Field
      *
      * @return bool
      */
-    public function isPlainInput()
+    public function isPlainInput(): bool
     {
         return false;
     }
@@ -69,8 +69,9 @@ abstract class FormField extends Field
      * it would make sense for your field no to have a (for) attribute at the top level
      * but have them at the radio field level. Individual inputs can then wrap each
      * <input> field in a <label> attribute.
+     * @return bool
      */
-    public function hasMultipleLabels()
+    public function hasMultipleLabels(): bool
     {
         return false;
     }
@@ -84,7 +85,7 @@ abstract class FormField extends Field
      *
      * @return bool
      */
-    public function displayLabel()
+    public function displayLabel(): bool
     {
         return true;
     }
@@ -98,7 +99,7 @@ abstract class FormField extends Field
      *
      * @return bool
      */
-    public function displayInstructionsField()
+    public function displayInstructionsField(): bool
     {
         return true;
     }
@@ -114,7 +115,7 @@ abstract class FormField extends Field
      *
      * @return string
      */
-    public function getNamespace()
+    public function getNamespace(): string
     {
         return 'fields';
     }
@@ -125,7 +126,7 @@ abstract class FormField extends Field
      *
      * @return string
      */
-    public function getTemplatesPath()
+    public function getTemplatesPath(): string
     {
         $defaultFormTemplates = new AccessibleTemplates();
 
@@ -143,7 +144,7 @@ abstract class FormField extends Field
      * @return string
      * @throws \ReflectionException
      */
-    public function getFieldInputFolder()
+    public function getFieldInputFolder(): string
     {
         $fieldClassReflection = new \ReflectionClass($this);
 
@@ -155,7 +156,7 @@ abstract class FormField extends Field
      *
      * @return string
      */
-    abstract public function getExampleInputHtml();
+    abstract public function getExampleInputHtml(): string;
 
     /**
      * The HTML to render when a Form is output using the displayForm, displayTab, or displayField tags
@@ -165,5 +166,5 @@ abstract class FormField extends Field
      *
      * @return \Twig_Markup
      */
-    abstract public function getFrontEndInputHtml($value, array $renderingOptions = null);
+    abstract public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup;
 }

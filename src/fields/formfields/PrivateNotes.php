@@ -35,7 +35,7 @@ class PrivateNotes extends FormField
     /**
      * @inheritdoc
      */
-    public function defineContentAttribute()
+    public function defineContentAttribute(): string
     {
         return Schema::TYPE_TEXT;
     }
@@ -43,7 +43,7 @@ class PrivateNotes extends FormField
     /**
      * @inheritdoc
      */
-    public function isPlainInput()
+    public function isPlainInput(): bool
     {
         return true;
     }
@@ -51,7 +51,7 @@ class PrivateNotes extends FormField
     /**
      * @return string
      */
-    public function getSvgIconPath()
+    public function getSvgIconPath(): string
     {
         return '@sproutbaseicons/sticky-note.svg';
     }
@@ -79,7 +79,7 @@ class PrivateNotes extends FormField
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getExampleInputHtml()
+    public function getExampleInputHtml(): string
     {
         return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/formfields/privatenotes/example',
             [
@@ -92,9 +92,9 @@ class PrivateNotes extends FormField
      * @param mixed      $value
      * @param array|null $renderingOptions
      *
-     * @return string
+     * @return \Twig_Markup
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): string
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
     {
         // Only visible and updated in the Control Panel
         return '';

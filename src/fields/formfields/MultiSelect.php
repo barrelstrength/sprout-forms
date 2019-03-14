@@ -40,7 +40,7 @@ class MultiSelect extends BaseOptionsFormField
     /**
      * @return string
      */
-    public function getSvgIconPath()
+    public function getSvgIconPath(): string
     {
         return '@sproutbaseicons/bars.svg';
     }
@@ -82,7 +82,7 @@ class MultiSelect extends BaseOptionsFormField
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getExampleInputHtml()
+    public function getExampleInputHtml(): string
     {
         return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/formfields/multiselect/example',
             [
@@ -95,11 +95,11 @@ class MultiSelect extends BaseOptionsFormField
      * @param mixed      $value
      * @param array|null $renderingOptions
      *
-     * @return string
+     * @return \Twig_Markup
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): string
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
     {
         $rendered = Craft::$app->getView()->renderTemplate(
             'multiselect/input',

@@ -4,7 +4,7 @@ namespace barrelstrength\sproutforms\migrations;
 
 use craft\db\Migration;
 use craft\db\Query;
-use barrelstrength\sproutforms\fields\formfields\Multiselect;
+use barrelstrength\sproutforms\fields\formfields\MultiSelect;
 use craft\fields\Multiselect as CraftMultiselect;
 
 /**
@@ -15,7 +15,7 @@ class m180314_161525_sproutforms_multiselect_fields extends Migration
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $multiselectFields = (new Query())
             ->select(['id', 'handle', 'settings'])
@@ -25,7 +25,7 @@ class m180314_161525_sproutforms_multiselect_fields extends Migration
             ->all();
 
         foreach ($multiselectFields as $multiselectField) {
-            $this->update('{{%fields}}', ['type' => Multiselect::class], ['id' => $multiselectField['id']], [], false);
+            $this->update('{{%fields}}', ['type' => MultiSelect::class], ['id' => $multiselectField['id']], [], false);
         }
 
         return true;
@@ -34,7 +34,7 @@ class m180314_161525_sproutforms_multiselect_fields extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180314_161525_sproutforms_multiselect_fields cannot be reverted.\n";
         return false;

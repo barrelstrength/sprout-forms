@@ -24,7 +24,7 @@ class SproutFormsVariable
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         /** @var SproutForms $plugin */
         $plugin = Craft::$app->plugins->getPlugin('sprout-forms');
@@ -35,7 +35,7 @@ class SproutFormsVariable
     /**
      * @return string
      */
-    public function getVersion()
+    public function getVersion(): string
     {
         /** @var SproutForms $plugin */
         $plugin = Craft::$app->plugins->getPlugin('sprout-forms');
@@ -54,7 +54,7 @@ class SproutFormsVariable
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function displayForm($formHandle, array $renderingOptions = null)
+    public function displayForm($formHandle, array $renderingOptions = null): \Twig_Markup
     {
         /**
          * @var $form Form
@@ -160,7 +160,7 @@ class SproutFormsVariable
      * @throws \ReflectionException
      * @throws \Twig_Error_Loader
      */
-    public function displayField(Form $form, FormField $field, array $renderingOptions = null)
+    public function displayField(Form $form, FormField $field, array $renderingOptions = null): \Twig_Markup
     {
         if (!$form) {
             throw new Exception(Craft::t('sprout-forms', 'The displayField tag requires a Form model.'));
@@ -249,7 +249,7 @@ class SproutFormsVariable
      *
      * @return array
      */
-    public function getAllForms()
+    public function getAllForms(): array
     {
         return SproutForms::$app->forms->getAllForms();
     }
@@ -316,7 +316,7 @@ class SproutFormsVariable
      *
      * @return array
      */
-    public function getAllFormGroups($id = null)
+    public function getAllFormGroups($id = null): array
     {
         return SproutForms::$app->groups->getAllFormGroups($id);
     }
@@ -328,7 +328,7 @@ class SproutFormsVariable
      *
      * @return Form[]
      */
-    public function getFormsByGroupId($id)
+    public function getFormsByGroupId($id): array
     {
         return SproutForms::$app->groups->getFormsByGroupId($id);
     }
@@ -338,7 +338,7 @@ class SproutFormsVariable
      *
      * @return array
      */
-    public function prepareFieldTypeSelection()
+    public function prepareFieldTypeSelection(): array
     {
         return SproutForms::$app->fields->prepareFieldTypeSelection();
     }
@@ -419,7 +419,7 @@ class SproutFormsVariable
      *
      * @return bool
      */
-    public function isPluginInstalled($plugin)
+    public function isPluginInstalled($plugin): bool
     {
         $plugins = Craft::$app->plugins->getAllPlugins();
 
@@ -433,7 +433,7 @@ class SproutFormsVariable
     /**
      * @return array
      */
-    public function getEntryStatuses()
+    public function getEntryStatuses(): array
     {
         return SproutForms::$app->entries->getAllEntryStatuses();
     }
@@ -459,7 +459,7 @@ class SproutFormsVariable
     /**
      * @return array|FormField[]
      */
-    public function getRegisteredFields()
+    public function getRegisteredFields(): array
     {
         return SproutForms::$app->fields->getRegisteredFields();
     }
@@ -467,7 +467,7 @@ class SproutFormsVariable
     /**
      * @return array
      */
-    public function getRegisteredFieldsByGroup()
+    public function getRegisteredFieldsByGroup(): array
     {
         return SproutForms::$app->fields->getRegisteredFieldsByGroup();
     }
@@ -494,7 +494,7 @@ class SproutFormsVariable
      *
      * @return string
      */
-    public function getFieldClassName($field)
+    public function getFieldClassName($field): string
     {
         return get_class($field);
     }
@@ -502,7 +502,7 @@ class SproutFormsVariable
     /**
      * @return array
      */
-    public function getAllCaptchas()
+    public function getAllCaptchas(): array
     {
         return SproutForms::$app->forms->getAllCaptchas();
     }
@@ -512,7 +512,7 @@ class SproutFormsVariable
      *
      * @return array
      */
-    public function getTemplateOptions(Form $form = null)
+    public function getTemplateOptions(Form $form = null): array
     {
         $defaultFormTemplates = new AccessibleTemplates();
 

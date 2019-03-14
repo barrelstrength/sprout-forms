@@ -42,7 +42,7 @@ class Entries extends BaseRelationFormField
     /**
      * @return string
      */
-    public function getSvgIconPath()
+    public function getSvgIconPath(): string
     {
         return '@sproutbaseicons/newspaper-o.svg';
     }
@@ -61,7 +61,7 @@ class Entries extends BaseRelationFormField
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getExampleInputHtml()
+    public function getExampleInputHtml(): string
     {
         return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/formfields/entries/example',
             [
@@ -74,11 +74,11 @@ class Entries extends BaseRelationFormField
      * @param mixed      $value
      * @param array|null $renderingOptions
      *
-     * @return string
+     * @return \Twig_Markup
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): string
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
     {
         $entries = SproutForms::$app->frontEndFields->getFrontEndEntries($this->getSettings());
 

@@ -46,7 +46,7 @@ class Invisible extends FormField implements PreviewableFieldInterface
     /**
      * @return bool
      */
-    public function isPlainInput()
+    public function isPlainInput(): bool
     {
         return true;
     }
@@ -54,7 +54,7 @@ class Invisible extends FormField implements PreviewableFieldInterface
     /**
      * @return string
      */
-    public function getSvgIconPath()
+    public function getSvgIconPath(): string
     {
         return '@sproutbaseicons/eye-slash.svg';
     }
@@ -103,7 +103,7 @@ class Invisible extends FormField implements PreviewableFieldInterface
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getExampleInputHtml()
+    public function getExampleInputHtml(): string
     {
         return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/formfields/invisible/example',
             [
@@ -121,7 +121,7 @@ class Invisible extends FormField implements PreviewableFieldInterface
      * @return string
      * @throws \Throwable
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): string
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
     {
         $this->preProcessInvisibleValue();
 
@@ -164,7 +164,7 @@ class Invisible extends FormField implements PreviewableFieldInterface
      * @return string
      * @throws \Throwable
      */
-    private function preProcessInvisibleValue()
+    private function preProcessInvisibleValue(): string
     {
         $value = '';
 

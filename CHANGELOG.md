@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.0.0-beta.46 - 2019-03-13
+> {warning} This is a critical release. Please update to the latest to ensure your Address Field Administrative Area code data is being saved correctly.
+
+### Changed
+- Updated barrelstrength/sprout-base-fields requirement v1.0.3
+
+### Fixed
+- Fixed bug where Administrative Area Input was not populated correctly ([#85][#85fields])
+
+[#85fields]: https://github.com/barrelstrength/craft-sprout-fields/issues/85
+
 ## 3.0.0-beta.45 - 2019-02-26
 
 ### Changed

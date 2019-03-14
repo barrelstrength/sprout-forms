@@ -14,7 +14,7 @@ class m180412_000000_sproutforms_sprout_email extends Migration
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         // Install Sprout Notifications Table
         $this->installSproutEmail();
@@ -34,7 +34,7 @@ class m180412_000000_sproutforms_sprout_email extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180412_000000_sproutforms_sprout_email cannot be reverted.\n";
         return false;

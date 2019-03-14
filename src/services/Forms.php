@@ -232,7 +232,7 @@ class Forms extends Component
      * @throws \Exception
      * @throws \Throwable
      */
-    public function deleteForm(FormElement $form)
+    public function deleteForm(FormElement $form): bool
     {
         $transaction = Craft::$app->db->beginTransaction();
 
@@ -283,7 +283,7 @@ class Forms extends Component
      *
      * @return FormElement[]
      */
-    public function getAllForms(int $siteId = null)
+    public function getAllForms(int $siteId = null): array
     {
         $query = FormElement::find();
         $query->siteId($siteId);
@@ -364,7 +364,7 @@ class Forms extends Component
      *
      * @return string
      */
-    public function getContentTable($formId)
+    public function getContentTable($formId): string
     {
         $form = $this->getFormById($formId);
 
@@ -415,7 +415,7 @@ class Forms extends Component
      *
      * @return string newTitleFormat
      */
-    public function cleanTitleFormat($fieldId)
+    public function cleanTitleFormat($fieldId): string
     {
         /** @var Field $field */
         $field = Craft::$app->getFields()->getFieldById($fieldId);
@@ -450,7 +450,7 @@ class Forms extends Component
      *
      * @return string newTitleFormat
      */
-    public function updateTitleFormat($oldHandle, $newHandle, $titleFormat)
+    public function updateTitleFormat($oldHandle, $newHandle, $titleFormat): string
     {
         return str_replace($oldHandle, $newHandle, $titleFormat);
     }
@@ -490,7 +490,7 @@ class Forms extends Component
      * @throws \Exception
      * @throws \Throwable
      */
-    public function deleteForms($formElements)
+    public function deleteForms($formElements): bool
     {
         foreach ($formElements as $key => $formElement) {
             $form = SproutForms::$app->forms->getFormById($formElement->id);
@@ -557,7 +557,7 @@ class Forms extends Component
      *
      * @return string[]
      */
-    public function getAllFormTemplateTypes()
+    public function getAllFormTemplateTypes(): array
     {
         $event = new RegisterComponentTypesEvent([
             'types' => []
@@ -571,9 +571,9 @@ class Forms extends Component
     /**
      * Returns all available Form Templates
      *
-     * @return string[]
+     * @return array[]
      */
-    public function getAllFormTemplates()
+    public function getAllFormTemplates(): array
     {
         $templateTypes = $this->getAllFormTemplateTypes();
         $templates = [];
@@ -599,7 +599,7 @@ class Forms extends Component
      * @return array
      * @throws Exception
      */
-    public function getFormTemplatePaths(FormElement $form = null)
+    public function getFormTemplatePaths(FormElement $form = null): array
     {
         /** @var SproutForms $plugin */
         $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
@@ -704,7 +704,7 @@ class Forms extends Component
      * @return string
      * @throws \yii\base\Exception
      */
-    private function getSitePath($path)
+    private function getSitePath($path): string
     {
         return Craft::$app->path->getSiteTemplatesPath().DIRECTORY_SEPARATOR.$path;
     }
@@ -712,9 +712,9 @@ class Forms extends Component
     /**
      * Returns all available Captcha classes
      *
-     * @return string[]
+     * @return array[]
      */
-    public function getAllCaptchaTypes()
+    public function getAllCaptchaTypes(): array
     {
         $event = new RegisterComponentTypesEvent([
             'types' => []
@@ -728,7 +728,7 @@ class Forms extends Component
     /**
      * @return array
      */
-    public function getAllCaptchas()
+    public function getAllCaptchas(): array
     {
         $captchaTypes = $this->getAllCaptchaTypes();
         $captchas = [];
@@ -743,7 +743,7 @@ class Forms extends Component
     /**
      * @return array
      */
-    public function getAllEnabledCaptchas()
+    public function getAllEnabledCaptchas(): array
     {
         $sproutFormsSettings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
         $captchaTypes = $this->getAllCaptchas();
@@ -762,7 +762,7 @@ class Forms extends Component
     /**
      * @return string
      */
-    public function getCaptchasHtml()
+    public function getCaptchasHtml(): string
     {
         $captchas = $this->getAllEnabledCaptchas();
         $captchaHtml = '';

@@ -16,7 +16,7 @@ class m180309_000000_update_data_sources extends Migration
      * @inheritdoc
      * @throws \yii\base\NotSupportedException
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $this->installSproutReports();
 
@@ -86,7 +86,7 @@ class m180309_000000_update_data_sources extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m180309_000000_update_data_sources cannot be reverted.\n";
         return false;

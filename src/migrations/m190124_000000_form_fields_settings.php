@@ -19,7 +19,7 @@ class m190124_000000_form_fields_settings extends Migration
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $fields = (new Query())
             ->select(['id', 'settings', 'type'])
@@ -162,7 +162,7 @@ class m190124_000000_form_fields_settings extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m190124_000000_form_fields_settings cannot be reverted.\n";
         return false;

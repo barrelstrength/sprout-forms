@@ -30,7 +30,7 @@ class EntryStatus extends ActiveRecord
     /**
      * @return string
      */
-    public function getCpEditUrl()
+    public function getCpEditUrl(): string
     {
         return UrlHelper::cpUrl('sprout-forms/settings/orders-statuses/'.$this->id);
     }
@@ -38,7 +38,7 @@ class EntryStatus extends ActiveRecord
     /**
      * @return string
      */
-    public function htmlLabel()
+    public function htmlLabel(): string
     {
         return '<span class="sproutFormsStatusLabel"><span class="status '.$this->color.'"></span> '.$this->name.'</span>';
     }

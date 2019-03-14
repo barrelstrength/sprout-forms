@@ -8,7 +8,7 @@ use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
-use craft\helpers\Template;
+use craft\helpers\Template as TemplateHelper;
 use yii\db\Schema;
 use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutbasefields\models\Address as AddressModel;
@@ -40,7 +40,7 @@ class Address extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function hasMultipleLabels()
+    public function hasMultipleLabels(): bool
     {
         return true;
     }
@@ -79,11 +79,11 @@ class Address extends FormField implements PreviewableFieldInterface
      * @param mixed      $value
      * @param array|null $renderingOptions
      *
-     * @return string
+     * @return \Twig_Markup
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): string
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
     {
         $name = $this->handle;
         $settings = $this->getSettings();
@@ -114,7 +114,7 @@ class Address extends FormField implements PreviewableFieldInterface
         $countryInputHtml = SproutBaseFields::$app->addressHelper->getCountryInputHtml($showCountryDropdown);
         $addressFormHtml = SproutBaseFields::$app->addressHelper->getAddressFormHtml();
 
-        return Craft::$app->getView()->renderTemplate(
+        $rendered = Craft::$app->getView()->renderTemplate(
             'address/input', [
                 'field' => $this,
                 'name' => $this->handle,
@@ -124,6 +124,8 @@ class Address extends FormField implements PreviewableFieldInterface
                 'showCountryDropdown' => $showCountryDropdown
             ]
         );
+
+        return TemplateHelper::raw($rendered);
     }
 
     /**
@@ -139,7 +141,7 @@ class Address extends FormField implements PreviewableFieldInterface
      *
      * @return bool
      */
-    public function validateAddress(ElementInterface $element)
+    public function validateAddress(ElementInterface $element): bool
     {
         // @todo - improve validation
         if (!$this->required) {
