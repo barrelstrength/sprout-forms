@@ -555,7 +555,7 @@ class Forms extends Component
     /**
      * Returns all available Form Templates Class Names
      *
-     * @return string[]
+     * @return array
      */
     public function getAllFormTemplateTypes(): array
     {
