@@ -116,8 +116,16 @@ class SproutForms extends Plugin
         SproutBaseFieldsHelper::registerModule();
         SproutBaseReportsHelper::registerModule();
 
+        Event::on(Dashboard::class, Dashboard::EVENT_REGISTER_WIDGET_TYPES, function(RegisterComponentTypesEvent $event) {
+            $event->types[] = RecentEntries::class;
+        });
+
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $event) {
             $event->rules = array_merge($event->rules, $this->getCpUrlRules());
+        });
+
+        Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
+            $event->permissions['Sprout Forms'] = $this->getUserPermissions();
         });
 
         Event::on(SproutFormsFields::class, SproutFormsFields::EVENT_REGISTER_FIELDS, function(RegisterFieldsEvent $event) {
@@ -135,26 +143,18 @@ class SproutForms extends Plugin
             $event->types[] = EntriesDataSource::class;
         });
 
-        Event::on(Dashboard::class, Dashboard::EVENT_REGISTER_WIDGET_TYPES, function(RegisterComponentTypesEvent $event) {
-            $event->types[] = RecentEntries::class;
-        });
 
         $this->setComponents([
             'sproutforms' => SproutFormsVariable::class
         ]);
 
         Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function(Event $event) {
-            $variable = $event->sender;
-            $variable->set('sproutForms', SproutFormsVariable::class);
+            $event->sender->set('sproutForms', SproutFormsVariable::class);
         });
 
         Event::on(Fields::class, Fields::EVENT_REGISTER_FIELD_TYPES, function(RegisterComponentTypesEvent $event) {
             $event->types[] = FormsField::class;
             $event->types[] = FormEntriesField::class;
-        });
-
-        Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
-            $event->permissions['Sprout Forms'] = $this->getUserPermissions();
         });
 
         Event::on(NotificationEmailEvents::class, NotificationEmailEvents::EVENT_REGISTER_EMAIL_EVENT_TYPES, function(NotificationEmailEvent $event) {
