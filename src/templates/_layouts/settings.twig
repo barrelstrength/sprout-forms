@@ -14,7 +14,7 @@
     }
 } %}
 
-{% if currentUser.can('editSproutFormsSettings') %}
+{% if currentUser.admin %}
     {% set subnav = subnav|merge({
         settings: {
             label: "Settings"|t('sprout-forms'),

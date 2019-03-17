@@ -66,10 +66,7 @@ class EntriesController extends BaseController
         $request = Craft::$app->getRequest();
 
         if ($request->getIsCpRequest()) {
-            $currentUser = Craft::$app->getUser()->getIdentity();
-            if (!$currentUser->can('editSproutFormsEntries')) {
-                throw new ForbiddenHttpException(Craft::t('sprout-forms', "Your account doesn't have permission to edit Form Entries."));
-            }
+            $this->requirePermission('sproutForms-editEntries');
         }
 
         $formHandle = $request->getRequiredBodyParam('handle');
@@ -181,15 +178,18 @@ class EntriesController extends BaseController
     /**
      * Route Controller for Edit Entry Template
      *
-     * @param int|null                                 $entryId
-     * @param EntryElement|ElementInterface|array|null $entry
+     * @param int|null          $entryId
+     * @param EntryElement|null $entry
      *
-     * @return \yii\web\Response
+     * @return Response
+     * @throws ForbiddenHttpException
      * @throws NotFoundHttpException
      * @throws \craft\errors\MissingComponentException
      */
     public function actionEditEntry(int $entryId = null, EntryElement $entry = null): Response
     {
+        $this->requirePermission('sproutForms-editEntries');
+
         if (SproutForms::$app->forms->activeCpEntry) {
             $entry = SproutForms::$app->forms->activeCpEntry;
         } else {
@@ -254,6 +254,7 @@ class EntriesController extends BaseController
     public function actionDeleteEntry(): Response
     {
         $this->requirePostRequest();
+        $this->requirePermission('sproutForms-editEntries');
 
         $request = Craft::$app->getRequest();
 
