@@ -238,14 +238,14 @@ class SproutForms extends Plugin
             $parent['label'] = $this->getSettings()->pluginNameOverride;
         }
 
-        if (Craft::$app->getUser()->checkPermission('manageSproutFormsForms')) {
+        if (Craft::$app->getUser()->checkPermission('sproutForms-editForms')) {
             $parent['subnav']['forms'] = [
                 'label' => Craft::t('sprout-forms', 'Forms'),
                 'url' => 'sprout-forms/forms'
             ];
         }
 
-        if (Craft::$app->getUser()->checkPermission('viewSproutFormsEntries')) {
+        if (Craft::$app->getUser()->checkPermission('sproutForms-viewEntries')) {
             $parent['subnav']['entries'] = [
                 'label' => Craft::t('sprout-forms', 'Entries'),
                 'url' => 'sprout-forms/entries'
@@ -270,7 +270,7 @@ class SproutForms extends Plugin
             'url' => 'sprout-forms/reports/'.$entriesDataSource->dataSourceId
         ];
 
-        if (Craft::$app->getUser()->checkPermission('editSproutFormsSettings')) {
+        if (Craft::$app->getUser()->getIsAdmin()) {
             $parent['subnav']['settings'] = [
                 'label' => Craft::t('sprout-forms', 'Settings'),
                 'url' => 'sprout-forms/settings'
@@ -307,24 +307,30 @@ class SproutForms extends Plugin
             'sprout-forms/forms/<groupId:\d+>' =>
                 'sprout-forms/forms',
 
-            'sprout-forms/reports/<dataSourceId>/new' =>
-                'sprout-base-reports/reports/edit-report',
-            'sprout-forms/reports/<dataSourceId>/edit/<reportId>' =>
-                'sprout-base-reports/reports/edit-report',
-            'sprout-forms/reports/view/<reportId>' =>
-                'sprout-base-reports/reports/results-index',
-            'sprout-forms/reports/<dataSourceId>' =>
-                'sprout-base-reports/reports/index',
-
-            'sprout-forms/notifications' => [
-                'template' => 'sprout-base-email/notifications/index',
+            // Reports
+            'sprout-forms/reports/<dataSourceId:\d+>/new' => [
+                'route' => 'sprout-base-reports/reports/edit-report'
+            ],
+            'sprout-forms/reports/<dataSourceId:\d+>/edit/<reportId:\d+>' => [
+                'route' => 'sprout-base-reports/reports/edit-report'
+            ],
+            'sprout-forms/reports/view/<reportId:\d+>' => [
+                'route' => 'sprout-base-reports/reports/results-index'
+            ],
+            'sprout-forms/reports/<dataSourceId:\d+>' => [
+                'route' => 'sprout-base-reports/reports/index',
                 'params' => [
                     'hideSidebar' => true
                 ]
             ],
 
-            'sprout-forms/settings/notifications/edit/<emailId:\d+|new>' =>
-                'sprout-base-email/notifications/edit-notification-email-settings-template',
+            // Notifications
+            'sprout-forms/notifications' => [
+                'route' => 'sprout-base-email/notifications/index',
+                'params' => [
+                    'hideSidebar' => true
+                ]
+            ],
             'sprout-forms/notifications/edit/<emailId:\d+|new>' => [
                 'route' => 'sprout-base-email/notifications/edit-notification-email-template',
                 'params' => [
@@ -332,9 +338,13 @@ class SproutForms extends Plugin
                 ]
             ],
             'sprout-forms/preview/notification/<emailId:\d+>' => [
-                'template' => 'sprout-base-email/notifications/_special/preview'
+                'route' => 'sprout-base-email/notifications/preview'
+            ],
+            'sprout-forms/settings/notifications/edit/<emailId:\d+|new>' => [
+                'route' => 'sprout-base-email/notifications/edit-notification-email-settings-template'
             ],
 
+            // Settings
             'sprout-forms/settings' =>
                 'sprout/settings/edit-settings',
             'sprout-forms/settings/<settingsSectionHandle:.*>' =>
@@ -351,24 +361,33 @@ class SproutForms extends Plugin
             'sproutForms-editForms' => [
                 'label' => Craft::t('sprout-forms', 'Edit Forms')
             ],
-            'sproutForms-viewFormEntries' => [
+            'sproutForms-viewEntries' => [
                 'label' => Craft::t('sprout-forms', 'View Form Entries'),
                 'nested' => [
-                    'sproutForms-editFormEntries' => [
+                    'sproutForms-editEntries' => [
                         'label' => Craft::t('sprout-forms', 'Edit Form Entries')
                     ]
                 ]
             ],
-            'sproutForms-editNotifications' => [
-                'label' => Craft::t('sprout-forms', 'Edit Notification Emails'),
+
+            // Notifications
+            'sproutForms-viewNotifications' => [
+                'label' => Craft::t('sprout-forms', 'View Notifications'),
                 'nested' => [
-                    'sproutForms-editNotificationFieldLayouts' => [
-                        'label' => Craft::t('sprout-forms', 'Edit Notification Email Field Layouts')
+                    'sproutForms-editNotifications' => [
+                        'label' => Craft::t('sprout-forms', 'Edit Notification Emails')
                     ]
                 ]
             ],
-            'sproutForms-editReports' => [
-                'label' => Craft::t('sprout-forms', 'Edit Reports')
+
+            // Reports
+            'sproutForms-viewReports' => [
+                'label' => Craft::t('sprout-forms', 'View Reports'),
+                'nested' => [
+                    'sproutForms-editReports' => [
+                        'label' => Craft::t('sprout-forms', 'Edit Reports')
+                    ]
+                ]
             ]
         ];
     }
