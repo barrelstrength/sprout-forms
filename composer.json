@@ -26,10 +26,10 @@
   },
   "require": {
     "craftcms/cms": "^3.1.15",
-    "barrelstrength/sprout-base": "^4.0.6",
-    "barrelstrength/sprout-base-email": "^1.0.1",
+    "barrelstrength/sprout-base": "^4.0.7",
+    "barrelstrength/sprout-base-email": "^1.0.3",
     "barrelstrength/sprout-base-fields": "^1.0.3",
-    "barrelstrength/sprout-base-reports": "^1.0.0",
+    "barrelstrength/sprout-base-reports": "^1.0.1",
     "barrelstrength/sprout-base-import": "^1.0.0"
   },
   "autoload": {
