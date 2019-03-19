@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.0.0-beta.49 - 2019-03-19
+
+### Fixed
+- Fixed issue when dragging and dropping a field to a form ([#255], [#260])
+- Fixed TypeError in migration ([#259], [#258])
+
+[#255]: https://github.com/barrelstrength/craft-sprout-forms/issues/255
+[#258]: https://github.com/barrelstrength/craft-sprout-forms/pull/258
+[#259]: https://github.com/barrelstrength/craft-sprout-forms/issues/259
+[#260]: https://github.com/barrelstrength/craft-sprout-forms/pull/260
+
 ## 3.0.0-beta.48 - 2019-03-19
 
 ### Changed
