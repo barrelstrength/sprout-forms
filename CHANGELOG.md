@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.0.0-beta.48 - 2019-03-19
+
+### Changed
+- Improved performance of several Element queries
+- Updated barrelstrength/sprout-base-email requirement to v1.0.4
+- Updated barrelstrength/sprout-base-reports requirement to v1.0.2
+
+### Fixed
+- Fixed bug where Settings model was not available for Email integration
+
 ## 3.0.0-beta.47 - 2019-03-18
 
 > {warning} If your site uses custom Form Fields, Form Templates, or Captchas be sure to confirm those custom integrations work with the latest version of Sprout Forms before updating on a live site. Return Type hints have been added to several base classes and require commensurate changes in custom integrations.
