@@ -288,59 +288,50 @@ class SproutForms extends Plugin
         return [
             'sprout-forms/forms/new' =>
                 'sprout-forms/forms/edit-form-template',
-
             'sprout-forms/forms/edit/<formId:\d+>' =>
                 'sprout-forms/forms/edit-form-template',
-
             'sprout-forms/entries/edit/<entryId:\d+>' =>
                 'sprout-forms/entries/edit-entry',
-
             'sprout-forms/settings/(general|advanced)' =>
                 'sprout-forms/settings/settings-index-template',
-
             'sprout-forms/settings/entry-statuses/new' =>
                 'sprout-forms/entry-statuses/edit',
-
             'sprout-forms/settings/entry-statuses/<entryStatusId:\d+>' =>
                 'sprout-forms/entry-statuses/edit',
-
             'sprout-forms/forms/<groupId:\d+>' =>
                 'sprout-forms/forms',
 
             // Reports
-            'sprout-forms/reports/<dataSourceId:\d+>/new' => [
-                'route' => 'sprout-base-reports/reports/edit-report'
-            ],
-            'sprout-forms/reports/<dataSourceId:\d+>/edit/<reportId:\d+>' => [
-                'route' => 'sprout-base-reports/reports/edit-report'
-            ],
-            'sprout-forms/reports/view/<reportId:\d+>' => [
-                'route' => 'sprout-base-reports/reports/results-index'
-            ],
-            'sprout-forms/reports/<dataSourceId:\d+>' => [
-                'route' => 'sprout-base-reports/reports/index',
+            '<pluginHandle:sprout-forms>/reports/<dataSourceId:\d+>/new' =>
+                'sprout-base-reports/reports/edit-report-template',
+            '<pluginHandle:sprout-forms>/reports/<dataSourceId:\d+>/edit/<reportId:\d+>' =>
+                'sprout-base-reports/reports/edit-report-template',
+            '<pluginHandle:sprout-forms>/reports/view/<reportId:\d+>' =>
+                'sprout-base-reports/reports/results-index-template',
+            '<pluginHandle:sprout-forms>/reports/<dataSourceId:\d+>' => [
+                'route' => 'sprout-base-reports/reports/reports-index-template',
                 'params' => [
                     'hideSidebar' => true
                 ]
             ],
 
             // Notifications
-            'sprout-forms/notifications' => [
+            '<pluginHandle:sprout-forms>/notifications' => [
                 'route' => 'sprout-base-email/notifications/index',
                 'params' => [
                     'hideSidebar' => true
                 ]
             ],
-            'sprout-forms/notifications/edit/<emailId:\d+|new>' => [
+            '<pluginHandle:sprout-forms>/notifications/edit/<emailId:\d+|new>' => [
                 'route' => 'sprout-base-email/notifications/edit-notification-email-template',
                 'params' => [
                     'defaultEmailTemplate' => BasicSproutFormsNotification::class
                 ]
             ],
-            'sprout-forms/preview/notification/<emailId:\d+>' => [
+            '<pluginHandle:sprout-forms>/preview/<emailType:notification>/<emailId:\d+>' => [
                 'route' => 'sprout-base-email/notifications/preview'
             ],
-            'sprout-forms/settings/notifications/edit/<emailId:\d+|new>' => [
+            '<pluginHandle:sprout-forms>/settings/notifications/edit/<emailId:\d+|new>' => [
                 'route' => 'sprout-base-email/notifications/edit-notification-email-settings-template'
             ],
 
