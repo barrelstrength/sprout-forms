@@ -8,7 +8,10 @@
 - Updated barrelstrength/sprout-base-reports requirement to v1.0.2
 
 ### Fixed
-- Fixed bug where Settings model was not available for Email integration
+- Fixed bug where Settings model was not available for Email integration ([#261])
+- Fixed bug where Settings model was not available for Report integration
+
+[#261]: https://github.com/barrelstrength/craft-sprout-forms/issues/261
 
 ## 3.0.0-beta.47 - 2019-03-18
 
