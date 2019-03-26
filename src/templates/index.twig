@@ -1,6 +1,6 @@
-{% if currentUser.can('viewSproutFormsEntries') %}
+{% if currentUser.can('sproutForms-viewEntries') %}
     {% redirect 'sprout-forms/entries' %}
-{% elseif currentUser.can('manageSproutFormsForms') %}
+{% elseif currentUser.can('sproutForms-editForms') %}
     {% redirect 'sprout-forms/forms' %}
 {% else %}
     {% redirect 'sprout-forms/settings/general' %}

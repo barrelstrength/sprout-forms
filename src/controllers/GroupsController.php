@@ -20,6 +20,7 @@ class GroupsController extends BaseController
     public function actionSaveGroup(): Response
     {
         $this->requirePostRequest();
+        $this->requireAdmin();
 
         $request = Craft::$app->getRequest();
 
@@ -49,14 +50,16 @@ class GroupsController extends BaseController
      * Deletes a group.
      *
      * @return Response
+     * @throws \craft\errors\MissingComponentException
      * @throws \yii\db\Exception
      * @throws \yii\web\BadRequestHttpException
-     * @throws \craft\errors\MissingComponentException
+     * @throws \yii\web\ForbiddenHttpException
      */
     public function actionDeleteGroup(): Response
     {
         $this->requirePostRequest();
         $this->requireAcceptsJson();
+        $this->requireAdmin();
 
         $request = Craft::$app->getRequest();
 

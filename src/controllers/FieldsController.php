@@ -43,6 +43,7 @@ class FieldsController extends BaseController
     public function actionCreateField(): Response
     {
         $this->requireAcceptsJson();
+        $this->requirePermission('sproutForms-editEntries');
 
         $request = Craft::$app->getRequest();
         $type = $request->getBodyParam('type');
@@ -77,10 +78,12 @@ class FieldsController extends BaseController
      *
      * @return Response
      * @throws \yii\web\BadRequestHttpException
+     * @throws \yii\web\ForbiddenHttpException
      */
     public function actionAddTab(): Response
     {
         $this->requireAcceptsJson();
+        $this->requirePermission('sproutForms-editEntries');
 
         $request = Craft::$app->getRequest();
         $name = $request->getBodyParam('name');
@@ -121,6 +124,7 @@ class FieldsController extends BaseController
     public function actionDeleteTab(): Response
     {
         $this->requireAcceptsJson();
+        $this->requirePermission('sproutForms-editEntries');
 
         $request = Craft::$app->getRequest();
         $tabId = $request->getBodyParam('tabId');
@@ -148,10 +152,12 @@ class FieldsController extends BaseController
      *
      * @return Response
      * @throws \yii\web\BadRequestHttpException
+     * @throws \yii\web\ForbiddenHttpException
      */
     public function actionRenameTab(): Response
     {
         $this->requireAcceptsJson();
+        $this->requirePermission('sproutForms-editEntries');
 
         $request = Craft::$app->getRequest();
         $name = $request->getBodyParam('name');
@@ -185,6 +191,7 @@ class FieldsController extends BaseController
     public function actionSaveField(): Response
     {
         $this->requirePostRequest();
+        $this->requirePermission('sproutForms-editEntries');
 
         $request = Craft::$app->getRequest();
         $fieldsService = Craft::$app->getFields();
@@ -307,6 +314,8 @@ class FieldsController extends BaseController
     public function actionEditField(): Response
     {
         $this->requireAcceptsJson();
+        $this->requirePermission('sproutForms-editEntries');
+
         $request = Craft::$app->getRequest();
 
         $id = $request->getBodyParam('fieldId');
@@ -364,6 +373,7 @@ class FieldsController extends BaseController
     {
         $this->requirePostRequest();
         $this->requireAcceptsJson();
+        $this->requirePermission('sproutForms-editEntries');
 
         $fieldId = Craft::$app->request->getRequiredBodyParam('fieldId');
         $formId = Craft::$app->request->getRequiredBodyParam('formId');
@@ -402,12 +412,14 @@ class FieldsController extends BaseController
      * @throws \yii\base\Exception
      * @throws \yii\db\Exception
      * @throws \yii\web\BadRequestHttpException
+     * @throws \yii\web\ForbiddenHttpException
      */
     public function actionReorderFields(): Response
     {
         $this->requireAdmin();
         $this->requirePostRequest();
-        $this->requireAjaxRequest();
+        $this->requireAcceptsJson();
+        $this->requirePermission('sproutForms-editEntries');
 
         $fieldIds = Json::decode(Craft::$app->request->getRequiredBodyParam('ids'));
         SproutForms::$app->fields->reorderFields($fieldIds);

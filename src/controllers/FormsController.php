@@ -21,7 +21,7 @@ class FormsController extends BaseController
      */
     public function init()
     {
-        $this->requirePermission('manageSproutFormsForms');
+        $this->requirePermission('sproutForms-editForms');
         parent::init();
     }
 

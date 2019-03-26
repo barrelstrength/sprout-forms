@@ -93,7 +93,7 @@ class SproutForms extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '3.0.14';
+    public $schemaVersion = '3.0.17';
 
     /**
      * @var string
@@ -120,8 +120,16 @@ class SproutForms extends Plugin
         SproutBaseFieldsHelper::registerModule();
         SproutBaseReportsHelper::registerModule();
 
+        Event::on(Dashboard::class, Dashboard::EVENT_REGISTER_WIDGET_TYPES, function(RegisterComponentTypesEvent $event) {
+            $event->types[] = RecentEntries::class;
+        });
+
         Event::on(UrlManager::class, UrlManager::EVENT_REGISTER_CP_URL_RULES, function(RegisterUrlRulesEvent $event) {
             $event->rules = array_merge($event->rules, $this->getCpUrlRules());
+        });
+
+        Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
+            $event->permissions['Sprout Forms'] = $this->getUserPermissions();
         });
 
         Event::on(SproutFormsFields::class, SproutFormsFields::EVENT_REGISTER_FIELDS, function(RegisterFieldsEvent $event) {
@@ -139,26 +147,18 @@ class SproutForms extends Plugin
             $event->types[] = EntriesDataSource::class;
         });
 
-        Event::on(Dashboard::class, Dashboard::EVENT_REGISTER_WIDGET_TYPES, function(RegisterComponentTypesEvent $event) {
-            $event->types[] = RecentEntries::class;
-        });
 
         $this->setComponents([
             'sproutforms' => SproutFormsVariable::class
         ]);
 
         Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function(Event $event) {
-            $variable = $event->sender;
-            $variable->set('sproutForms', SproutFormsVariable::class);
+            $event->sender->set('sproutForms', SproutFormsVariable::class);
         });
 
         Event::on(Fields::class, Fields::EVENT_REGISTER_FIELD_TYPES, function(RegisterComponentTypesEvent $event) {
             $event->types[] = FormsField::class;
             $event->types[] = FormEntriesField::class;
-        });
-
-        Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
-            $event->permissions['Sprout Forms'] = $this->getUserPermissions();
         });
 
         Event::on(NotificationEmailEvents::class, NotificationEmailEvents::EVENT_REGISTER_EMAIL_EVENT_TYPES, function(NotificationEmailEvent $event) {
@@ -248,14 +248,14 @@ class SproutForms extends Plugin
             $parent['label'] = $this->getSettings()->pluginNameOverride;
         }
 
-        if (Craft::$app->getUser()->checkPermission('manageSproutFormsForms')) {
+        if (Craft::$app->getUser()->checkPermission('sproutForms-editForms')) {
             $parent['subnav']['forms'] = [
                 'label' => Craft::t('sprout-forms', 'Forms'),
                 'url' => 'sprout-forms/forms'
             ];
         }
 
-        if (Craft::$app->getUser()->checkPermission('viewSproutFormsEntries')) {
+        if (Craft::$app->getUser()->checkPermission('sproutForms-viewEntries')) {
             $parent['subnav']['entries'] = [
                 'label' => Craft::t('sprout-forms', 'Entries'),
                 'url' => 'sprout-forms/entries'
@@ -280,7 +280,7 @@ class SproutForms extends Plugin
             'url' => 'sprout-forms/reports/'.$entriesDataSource->dataSourceId
         ];
 
-        if (Craft::$app->getUser()->checkPermission('editSproutFormsSettings')) {
+        if (Craft::$app->getUser()->getIsAdmin()) {
             $parent['subnav']['settings'] = [
                 'label' => Craft::t('sprout-forms', 'Settings'),
                 'url' => 'sprout-forms/settings'
@@ -298,53 +298,54 @@ class SproutForms extends Plugin
         return [
             'sprout-forms/forms/new' =>
                 'sprout-forms/forms/edit-form-template',
-
             'sprout-forms/forms/edit/<formId:\d+>' =>
                 'sprout-forms/forms/edit-form-template',
-
             'sprout-forms/entries/edit/<entryId:\d+>' =>
                 'sprout-forms/entries/edit-entry',
-
             'sprout-forms/settings/(general|advanced)' =>
                 'sprout-forms/settings/settings-index-template',
-
             'sprout-forms/settings/entry-statuses/new' =>
                 'sprout-forms/entry-statuses/edit',
-
             'sprout-forms/settings/entry-statuses/<entryStatusId:\d+>' =>
                 'sprout-forms/entry-statuses/edit',
-
             'sprout-forms/forms/<groupId:\d+>' =>
                 'sprout-forms/forms',
 
-            'sprout-forms/reports/<dataSourceId>/new' =>
-                'sprout-base-reports/reports/edit-report',
-            'sprout-forms/reports/<dataSourceId>/edit/<reportId>' =>
-                'sprout-base-reports/reports/edit-report',
-            'sprout-forms/reports/view/<reportId>' =>
-                'sprout-base-reports/reports/results-index',
-            'sprout-forms/reports/<dataSourceId>' =>
-                'sprout-base-reports/reports/index',
-
-            'sprout-forms/notifications' => [
-                'template' => 'sprout-base-email/notifications/index',
+            // Reports
+            '<pluginHandle:sprout-forms>/reports/<dataSourceId:\d+>/new' =>
+                'sprout-base-reports/reports/edit-report-template',
+            '<pluginHandle:sprout-forms>/reports/<dataSourceId:\d+>/edit/<reportId:\d+>' =>
+                'sprout-base-reports/reports/edit-report-template',
+            '<pluginHandle:sprout-forms>/reports/view/<reportId:\d+>' =>
+                'sprout-base-reports/reports/results-index-template',
+            '<pluginHandle:sprout-forms>/reports/<dataSourceId:\d+>' => [
+                'route' => 'sprout-base-reports/reports/reports-index-template',
                 'params' => [
                     'hideSidebar' => true
                 ]
             ],
 
-            'sprout-forms/settings/notifications/edit/<emailId:\d+|new>' =>
-                'sprout-base-email/notifications/edit-notification-email-settings-template',
-            'sprout-forms/notifications/edit/<emailId:\d+|new>' => [
+            // Notifications
+            '<pluginHandle:sprout-forms>/notifications' => [
+                'route' => 'sprout-base-email/notifications/index',
+                'params' => [
+                    'hideSidebar' => true
+                ]
+            ],
+            '<pluginHandle:sprout-forms>/notifications/edit/<emailId:\d+|new>' => [
                 'route' => 'sprout-base-email/notifications/edit-notification-email-template',
                 'params' => [
                     'defaultEmailTemplate' => BasicSproutFormsNotification::class
                 ]
             ],
-            'sprout-forms/preview/notification/<emailId:\d+>' => [
-                'template' => 'sprout-base-email/notifications/_special/preview'
+            '<pluginHandle:sprout-forms>/preview/<emailType:notification>/<emailId:\d+>' => [
+                'route' => 'sprout-base-email/notifications/preview'
+            ],
+            '<pluginHandle:sprout-forms>/settings/notifications/edit/<emailId:\d+|new>' => [
+                'route' => 'sprout-base-email/notifications/edit-notification-email-settings-template'
             ],
 
+            // Settings
             'sprout-forms/settings' =>
                 'sprout/settings/edit-settings',
             'sprout-forms/settings/<settingsSectionHandle:.*>' =>
@@ -358,22 +359,36 @@ class SproutForms extends Plugin
     public function getUserPermissions(): array
     {
         return [
-            'manageSproutFormsForms' => [
-                'label' => Craft::t('sprout-forms', 'Manage Forms')
+            'sproutForms-editForms' => [
+                'label' => Craft::t('sprout-forms', 'Edit Forms')
             ],
-            'viewSproutFormsEntries' => [
+            'sproutForms-viewEntries' => [
                 'label' => Craft::t('sprout-forms', 'View Form Entries'),
                 'nested' => [
-                    'editSproutFormsEntries' => [
+                    'sproutForms-editEntries' => [
                         'label' => Craft::t('sprout-forms', 'Edit Form Entries')
                     ]
                 ]
             ],
-            'editSproutFormsSettings' => [
-                'label' => Craft::t('sprout-forms', 'Edit Settings')
+
+            // Notifications
+            'sproutForms-viewNotifications' => [
+                'label' => Craft::t('sprout-forms', 'View Notifications'),
+                'nested' => [
+                    'sproutForms-editNotifications' => [
+                        'label' => Craft::t('sprout-forms', 'Edit Notification Emails')
+                    ]
+                ]
             ],
-            'editSproutReports' => [
-                'label' => Craft::t('sprout-forms', 'Edit Reports')
+
+            // Reports
+            'sproutForms-viewReports' => [
+                'label' => Craft::t('sprout-forms', 'View Reports'),
+                'nested' => [
+                    'sproutForms-editReports' => [
+                        'label' => Craft::t('sprout-forms', 'Edit Reports')
+                    ]
+                ]
             ]
         ];
     }

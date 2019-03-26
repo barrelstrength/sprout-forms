@@ -1,5 +1,62 @@
 # Changelog
 
+## 3.0.0-beta.49 - 2019-03-19
+
+### Fixed
+- Fixed issue when dragging and dropping a field to a form ([#255], [#260])
+- Fixed TypeError in migration ([#259], [#258])
+
+[#255]: https://github.com/barrelstrength/craft-sprout-forms/issues/255
+[#258]: https://github.com/barrelstrength/craft-sprout-forms/pull/258
+[#259]: https://github.com/barrelstrength/craft-sprout-forms/issues/259
+[#260]: https://github.com/barrelstrength/craft-sprout-forms/pull/260
+
+## 3.0.0-beta.48 - 2019-03-19
+
+### Changed
+- Improved performance of several Element queries
+- Updated barrelstrength/sprout-base-email requirement to v1.0.4
+- Updated barrelstrength/sprout-base-reports requirement to v1.0.2
+
+### Fixed
+- Fixed bug where Settings model was not available for Email integration ([#261])
+- Fixed bug where Settings model was not available for Report integration
+
+[#261]: https://github.com/barrelstrength/craft-sprout-forms/issues/261
+
+## 3.0.0-beta.47 - 2019-03-18
+
+> {warning} If your site uses custom Form Fields, Form Templates, or Captchas be sure to confirm those custom integrations work with the latest version of Sprout Forms before updating on a live site. Return Type hints have been added to several base classes and require commensurate changes in custom integrations.
+
+### Added
+- Added additional permissions support including permissions for Notifications and Reports
+
+### Changed
+- Updated settings to require Admin permission to edit
+- Updated Report export naming to use toString method ([#9][#9-sproutbasereports])
+- Updated barrelstrength/sprout-base-email requirement to v1.0.3
+- Updated barrelstrength/sprout-base-reports requirement to v1.0.1
+- Updated barrelstrength/sprout-base requirement v4.0.7
+
+### Fixed
+- Added Report Element migration ([#44][#44-sproutreports])
+- Fixed TypeError in migration ([#259])
+
+[#9-sproutbasereports]: https://github.com/barrelstrength/craft-sprout-base/pull/9
+[#44-sproutreports]: https://github.com/barrelstrength/craft-sprout-reports/issues/44
+[#259]: https://github.com/barrelstrength/craft-sprout-forms/issues/259
+
+## 3.0.0-beta.46 - 2019-03-13
+> {warning} This is a critical release. Please update to the latest to ensure your Address Field Administrative Area code data is being saved correctly.
+
+### Changed
+- Updated barrelstrength/sprout-base-fields requirement v1.0.3
+
+### Fixed
+- Fixed bug where Administrative Area Input was not populated correctly ([#85][#85fields])
+
+[#85fields]: https://github.com/barrelstrength/craft-sprout-fields/issues/85
+
 ## 3.0.0-beta.45 - 2019-02-26
 
 ### Changed

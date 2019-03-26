@@ -269,7 +269,7 @@ class Fields extends Component
      *
      * @return FieldRecord
      */
-    public function getFieldValue($field, $value): FieldRecord
+    public function getFieldValue($field, $value)
     {
         return FieldRecord::findOne([
             $field => $value

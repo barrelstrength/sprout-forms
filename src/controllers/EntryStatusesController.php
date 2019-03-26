@@ -18,9 +18,12 @@ class EntryStatusesController extends BaseController
      *
      * @return Response
      * @throws NotFoundHttpException
+     * @throws \yii\web\ForbiddenHttpException
      */
     public function actionEdit(int $entryStatusId = null, EntryStatus $entryStatus = null): Response
     {
+        $this->requireAdmin();
+
         if (!$entryStatus) {
             if ($entryStatusId) {
                 $entryStatus = SproutForms::$app->entries->getEntryStatusById($entryStatusId);
@@ -48,6 +51,7 @@ class EntryStatusesController extends BaseController
     public function actionSave()
     {
         $this->requirePostRequest();
+        $this->requireAdmin();
 
         $id = Craft::$app->request->getBodyParam('entryStatusId');
         $entryStatus = SproutForms::$app->entries->getEntryStatusById($id);
@@ -80,6 +84,7 @@ class EntryStatusesController extends BaseController
     public function actionReorder(): Response
     {
         $this->requirePostRequest();
+        $this->requireAdmin();
 
         $ids = Json::decode(Craft::$app->request->getRequiredBodyParam('ids'));
 
@@ -100,6 +105,7 @@ class EntryStatusesController extends BaseController
     public function actionDelete(): Response
     {
         $this->requirePostRequest();
+        $this->requireAdmin();
 
         $entryStatusId = Craft::$app->request->getRequiredBodyParam('id');
 
