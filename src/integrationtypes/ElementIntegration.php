@@ -74,6 +74,50 @@ class ElementIntegration extends ApiIntegration
     }
 
     /**
+     * Returns a default field mapping html
+     *
+     * @return string
+     * @throws \yii\base\Exception
+     */
+    public function getFieldMappingSettingsHtml()
+    {
+        if (!$this->hasFieldMapping){
+            return '';
+        }
+
+        if (empty($this->fieldsMapped)) {
+            $this->fieldsMapped = [['label' => '', 'value' => '']];
+        }
+
+        $rendered = Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'editableTableField',
+            [
+                [
+                    'label' => Craft::t('sprout-forms', 'Field Mapping'),
+                    'instructions' => Craft::t('sprout-forms', 'Define your field mapping.'),
+                    'id' => 'fieldsMapped',
+                    'name' => 'fieldsMapped',
+                    'addRowLabel' => Craft::t('sprout-forms', 'Add a field mapping'),
+                    'cols' => [
+                        'label' => [
+                            'heading' => Craft::t('sprout-forms', 'Form Field'),
+                            'type' => 'select',
+                            'options' => $this->getFormFieldsAsOptions()
+                        ],
+                        'value' => [
+                            'heading' => Craft::t('sprout-forms', 'Entry Field'),
+                            'type' => 'select',
+                            'class' => 'craftEntryFields',
+                            'options' => []
+                        ]
+                    ],
+                    'rows' => $this->fieldsMapped
+                ]
+            ]);
+
+        return $rendered;
+    }
+
+    /**
      * @return bool
      */
     private function createEntry()
@@ -95,10 +139,16 @@ class ElementIntegration extends ApiIntegration
         $options = [];
 
         foreach ($sections as $section) {
-            $options[] = [
-                'label' => $section->name,
-                'value' => $section->id
-            ];
+            $entryTypes = $section->getEntryTypes();
+
+            $options[] = ['optgroup' => $section->name];
+
+            foreach ($entryTypes as $entryType) {
+                $options[] = [
+                    'label' => $entryType->name,
+                    'value' => $entryType->id
+                ];
+            }
         }
 
         return $options;

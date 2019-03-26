@@ -153,6 +153,46 @@ class IntegrationsController extends BaseController
         ]);
     }
 
+
+    public function actionGetEntryFields()
+    {
+        $this->requirePostRequest();
+        $this->requireAcceptsJson();
+
+        $entryTypeId = Craft::$app->request->getRequiredBodyParam('entryTypeId');
+        $entryType = Craft::$app->getSections()->getEntryTypeById($entryTypeId);
+
+        $fields = $entryType->getFields();
+        $fieldOptions = $this->getFieldsAsOptions($fields);
+        $integration = IntegrationRecord::findOne($integrationId);
+
+        $response = $integration->delete();
+
+        return $this->asJson([
+            'success' => $response,
+            '$fieldOptions' => $fieldOptions
+        ]);
+    }
+
+
+    /**
+     * @param Field[] $fields
+     * @return array
+     */
+    private function getFieldsAsOptions($fields)
+    {
+        $options = [];
+
+        foreach ($fields as $field) {
+            $options[] = [
+                'label' => $field->name,
+                'value' => $field->id
+            ];
+        }
+
+        return $options;
+    }
+
     /**
      * @param bool $success
      * @param      $integrationRecord IntegrationRecord

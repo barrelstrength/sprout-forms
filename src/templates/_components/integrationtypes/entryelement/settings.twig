@@ -10,14 +10,29 @@
     value: integration.section
 }) }}
 
-
-{% js %}
+<script>
     $(document).ready(function() {
         console.log("as1");
+        init();
+        // We have three scenarios:
+        // 1.- on load (the init function should load current rows with proper dropdown)
+        // 2.- when user add a new row (display the fields dropdown on the new row)
+        // 3.- When user update the section dropdown (Update all rows field dropdown)
         $("div.btn.add.icon").on("click", function(){
             console.log("as");
         });
+
+        function init(){
+            console.log("as333");
+            $('.craftEntryFields').each(function(){
+                var $select = $(this).find('select');
+                console.log($select);
+            });
+        }
     });
+</script>
+{% js %}
+
 {% endjs %}
 
 
