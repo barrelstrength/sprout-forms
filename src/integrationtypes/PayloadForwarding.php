@@ -63,12 +63,12 @@ class PayloadForwarding extends ApiIntegration
         
         if ($this->fieldsMapped){
             foreach ($this->fieldsMapped as $fieldMapped) {
-                if (isset($entry->{$fieldMapped['label']}) && $fieldMapped['value']){
-                    $fields[$fieldMapped['value']] = $entry->{$fieldMapped['label']};
+                if (isset($entry->{$fieldMapped['sproutFormField']}) && $fieldMapped['integrationField']){
+                    $fields[$fieldMapped['integrationField']] = $entry->{$fieldMapped['sproutFormField']};
                 }else{
-                    // Leave default handle is the value is blank
-                    if (empty($fieldMapped['value'])){
-                        $fields[$fieldMapped['label']] = $entry->{$fieldMapped['label']};
+                    // Leave default handle is the integrationField is blank
+                    if (empty($fieldMapped['integrationField'])){
+                        $fields[$fieldMapped['sproutFormField']] = $entry->{$fieldMapped['sproutFormField']};
                     }
                 }
             }

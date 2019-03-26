@@ -12,42 +12,96 @@
 
 <script>
     $(document).ready(function() {
-        console.log("as1");
         init();
         // We have three scenarios:
         // 1.- on load (the init function should load current rows with proper dropdown)
         // 2.- when user add a new row (display the fields dropdown on the new row)
         // 3.- When user update the section dropdown (Update all rows field dropdown)
-        $("div.btn.add.icon").on("click", function(){
-        });
 
         function init(){
-
-            $('.craftEntryFields').each(function(){
-                var $select = $(this).find('select');
-                appendFieldsToSelect($select);
+            // Init all empty field selects
+            updateAllFieldSelects()
+            // When click on new field
+            $("div.btn.add.icon").on("click", function(){
+                checkForEmptyFieldSelects();
+            });
+            // When the entry type is changed
+            $('#types-barrelstrength-sproutforms-integrationtypes-ElementIntegration-section').change(function() {
+                var changed = $(this).val() != $(this).data('default');
+                if (changed){
+                    updateAllFieldSelects();
+                }
             });
         }
 
-        function appendFieldsToSelect($select) {
-            var entryTypeId = $('#types-barrelstrength-sproutforms-integrationtypes-ElementIntegration-section').val();
-            var data = {'entryTypeId':entryTypeId};
-            Craft.postActionRequest('sprout-forms/integrations/get-entry-fields', data, $.proxy(function(response, textStatus)
-            {
-                var statusSuccess = (textStatus === 'success');
-
-                if(statusSuccess && response.success) {
-                    fields = response.fieldOptions;
-                    for (i = 0; i < fields.length; i++) {
-                        var field = fields[i];
-                        $select.append('<option value="'+field['value']+'">'+field['label']+'</option>');
-                    }
-                }
-                else
+        function updateAllFieldSelects() {
+            var position = 0;
+            $('.craftEntryFields').each(function(){
+                var $select = $(this).find('select');
+                var entryTypeId = $('#types-barrelstrength-sproutforms-integrationtypes-ElementIntegration-section').val();
+                var data = {
+                    'entryTypeId':entryTypeId
+                };
+                console.log(data);
+                Craft.postActionRequest('sprout-forms/integrations/get-entry-fields', data, $.proxy(function(response, textStatus)
                 {
-                    Craft.cp.displayError(Craft.t('sprout-forms','Unable to get the Entry fields'));
+                    var statusSuccess = (textStatus === 'success');
+
+                    if(statusSuccess && response.success) {
+                        fields = response.fieldOptions;
+                        appendFieldsToSelect($select, fields);
+                    }
+                    else
+                    {
+                        Craft.cp.displayError(Craft.t('sprout-forms','Unable to get the Entry fields'));
+                    }
+                }, this));
+
+
+                position++;
+            });
+        }
+
+        function checkForEmptyFieldSelects()
+        {
+            $('.craftEntryFields').each(function(){
+                var $select = $(this).find('select');
+                if ($select.has('option').length == 0){
+                    var entryTypeId = $('#types-barrelstrength-sproutforms-integrationtypes-ElementIntegration-section').val();
+                    var data = {
+                        'entryTypeId':entryTypeId
+                    };
+                    Craft.postActionRequest('sprout-forms/integrations/get-entry-fields', data, $.proxy(function(response, textStatus)
+                    {
+                        var statusSuccess = (textStatus === 'success');
+
+                        if(statusSuccess && response.success) {
+                            fields = response.fieldOptions;
+                            appendFieldsToSelect($select, fields);
+                        }
+                        else
+                        {
+                            Craft.cp.displayError(Craft.t('sprout-forms','Unable to get the Entry fields'));
+                        }
+                    }, this));
                 }
-            }, this));
+            });
+        }
+
+        function appendFieldsToSelect($select, fields, position = null) {
+            $select.empty();
+            for (i = 0; i < fields.length; i++) {
+                var field = fields[i];
+                var selected = false;
+                if ("selected" in field){
+                    selected = true;
+                }
+                $select.append('<option  value="'+field['value']+'">'+field['label']+'</option>');
+            }
+
+            if (position){
+
+            }
         }
     });
 </script>

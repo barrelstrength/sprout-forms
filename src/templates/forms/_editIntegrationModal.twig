@@ -6,7 +6,7 @@
     <input type="hidden" name="formId" value="{{ form.id }}">
 
     {% if integration.id %}
-        <input type="hidden" name="integrationId" value="{{ integration.id }}">
+        <input type="hidden" id="integrationId" name="integrationId" value="{{ integration.id }}">
     {% endif %}
 
     {{ forms.lightswitchField({

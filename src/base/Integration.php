@@ -98,12 +98,12 @@ abstract class Integration extends Model
                     'name' => 'fieldsMapped',
                     'addRowLabel' => Craft::t('sprout-forms', 'Add a field mapping'),
                     'cols' => [
-                        'label' => [
+                        'sproutFormField' => [
                             'heading' => Craft::t('sprout-forms', 'Form Field'),
                             'type' => 'select',
                             'options' => $this->getFormFieldsAsOptions()
                         ],
-                        'value' => [
+                        'integrationField' => [
                             'heading' => Craft::t('sprout-forms', 'Api Field'),
                             'type' => 'singleline',
                             'class' => 'code'

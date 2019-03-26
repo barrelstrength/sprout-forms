@@ -182,8 +182,13 @@ class IntegrationsController extends BaseController
     {
         $options = [];
 
+        $options[] = [
+            'label' => Craft::t('sprout-forms', 'Select a Field'),
+            'value' => ''
+        ];
+
         foreach ($fields as $field) {
-            $options[] = [
+            $options[] =  [
                 'label' => $field->name.': '.$field->handle,
                 'value' => $field->id
             ];
