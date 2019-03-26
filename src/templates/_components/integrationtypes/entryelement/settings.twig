@@ -36,13 +36,10 @@
 
         function updateAllFieldSelects() {
             var position = 0;
-            $('.craftEntryFields').each(function(){
+            var $currentRows = getCurrentRows();
+            $currentRows.each(function(index){
                 var $select = $(this).find('select');
-                var entryTypeId = $('#types-barrelstrength-sproutforms-integrationtypes-ElementIntegration-section').val();
-                var data = {
-                    'entryTypeId':entryTypeId
-                };
-                console.log(data);
+                var data = getEntryFieldsData(index);
                 Craft.postActionRequest('sprout-forms/integrations/get-entry-fields', data, $.proxy(function(response, textStatus)
                 {
                     var statusSuccess = (textStatus === 'success');
@@ -62,15 +59,28 @@
             });
         }
 
+        function getEntryFieldsData(index = null)
+        {
+            var entryTypeId = $('#types-barrelstrength-sproutforms-integrationtypes-ElementIntegration-section').val();
+            var integrationId = $('#integrationId').val();
+            var sectionId = $("#types-barrelstrength-sproutforms-integrationtypes-ElementIntegration-section").val();
+            var data = {
+                'entryTypeId':entryTypeId,
+                'integrationId':integrationId,
+                'sectionId': sectionId,
+                'position': index
+            };
+
+            return data;
+        }
+
         function checkForEmptyFieldSelects()
         {
-            $('.craftEntryFields').each(function(){
+            var $currentRows = getCurrentRows();
+            $currentRows.each(function(){
                 var $select = $(this).find('select');
                 if ($select.has('option').length == 0){
-                    var entryTypeId = $('#types-barrelstrength-sproutforms-integrationtypes-ElementIntegration-section').val();
-                    var data = {
-                        'entryTypeId':entryTypeId
-                    };
+                    var data = getEntryFieldsData();
                     Craft.postActionRequest('sprout-forms/integrations/get-entry-fields', data, $.proxy(function(response, textStatus)
                     {
                         var statusSuccess = (textStatus === 'success');
@@ -88,15 +98,20 @@
             });
         }
 
+        function getCurrentRows()
+        {
+            return $('tbody .craftEntryFields');
+        }
+
         function appendFieldsToSelect($select, fields, position = null) {
             $select.empty();
             for (i = 0; i < fields.length; i++) {
                 var field = fields[i];
-                var selected = false;
+                var selectedCode = '';
                 if ("selected" in field){
-                    selected = true;
+                    selectedCode = 'selected';
                 }
-                $select.append('<option  value="'+field['value']+'">'+field['label']+'</option>');
+                $select.append('<option '+selectedCode+' value="'+field['value']+'">'+field['label']+'</option>');
             }
 
             if (position){

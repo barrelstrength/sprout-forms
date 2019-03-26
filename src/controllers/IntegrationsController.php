@@ -163,10 +163,13 @@ class IntegrationsController extends BaseController
         $this->requireAcceptsJson();
 
         $entryTypeId = Craft::$app->request->getRequiredBodyParam('entryTypeId');
+        $integrationId = Craft::$app->request->getBodyParam('integrationId');
+        $position = Craft::$app->request->getBodyParam('position');
+        $sectionId = Craft::$app->request->getBodyParam('sectionId');
         $entryType = Craft::$app->getSections()->getEntryTypeById($entryTypeId);
 
         $fields = $entryType->getFields();
-        $fieldOptions = $this->getFieldsAsOptions($fields);
+        $fieldOptions = $this->getFieldsAsOptions($fields, $integrationId, $position, $sectionId);
 
         return $this->asJson([
             'success' => 'true',
@@ -178,7 +181,7 @@ class IntegrationsController extends BaseController
      * @param Field[] $fields
      * @return array
      */
-    private function getFieldsAsOptions($fields)
+    private function getFieldsAsOptions($fields, $integrationId = null, $position = null, $sectionId = null)
     {
         $options = [];
 
@@ -187,11 +190,33 @@ class IntegrationsController extends BaseController
             'value' => ''
         ];
 
+        $fieldsMapped = [];
+        $integrationSectionId = null;
+
+        if (!is_null($integrationId) && !is_null($sectionId)){
+            $integrationRecord = IntegrationRecord::findOne($integrationId);
+            $integration = $integrationRecord->getIntegrationApi();
+            $fieldsMapped = $integration->fieldsMapped;
+            $settings = json_decode($integrationRecord->settings, true);
+            $integrationSectionId = $settings['section'] ?? null;
+        }
+
         foreach ($fields as $field) {
-            $options[] =  [
+            $option =  [
                 'label' => $field->name.': '.$field->handle,
                 'value' => $field->id
             ];
+
+            if (!is_null($position)){
+                if ($integrationSectionId == $sectionId){
+                    if (isset($fieldsMapped[$position])){
+                        if ($field->id == $fieldsMapped[$position]['integrationField']){
+                            $option['selected'] = true;
+                        }
+                    }
+                }
+            }
+            $options[] = $option;
         }
 
         return $options;
