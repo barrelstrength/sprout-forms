@@ -19,15 +19,35 @@
         // 2.- when user add a new row (display the fields dropdown on the new row)
         // 3.- When user update the section dropdown (Update all rows field dropdown)
         $("div.btn.add.icon").on("click", function(){
-            console.log("as");
         });
 
         function init(){
-            console.log("as333");
+
             $('.craftEntryFields').each(function(){
                 var $select = $(this).find('select');
-                console.log($select);
+                appendFieldsToSelect($select);
             });
+        }
+
+        function appendFieldsToSelect($select) {
+            var entryTypeId = $('#types-barrelstrength-sproutforms-integrationtypes-ElementIntegration-section').val();
+            var data = {'entryTypeId':entryTypeId};
+            Craft.postActionRequest('sprout-forms/integrations/get-entry-fields', data, $.proxy(function(response, textStatus)
+            {
+                var statusSuccess = (textStatus === 'success');
+
+                if(statusSuccess && response.success) {
+                    fields = response.fieldOptions;
+                    for (i = 0; i < fields.length; i++) {
+                        var field = fields[i];
+                        $select.append('<option value="'+field['value']+'">'+field['label']+'</option>');
+                    }
+                }
+                else
+                {
+                    Craft.cp.displayError(Craft.t('sprout-forms','Unable to get the Entry fields'));
+                }
+            }, this));
         }
     });
 </script>

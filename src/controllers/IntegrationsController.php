@@ -153,7 +153,10 @@ class IntegrationsController extends BaseController
         ]);
     }
 
-
+    /**
+     * @return \yii\web\Response
+     * @throws \yii\web\BadRequestHttpException
+     */
     public function actionGetEntryFields()
     {
         $this->requirePostRequest();
@@ -164,16 +167,12 @@ class IntegrationsController extends BaseController
 
         $fields = $entryType->getFields();
         $fieldOptions = $this->getFieldsAsOptions($fields);
-        $integration = IntegrationRecord::findOne($integrationId);
-
-        $response = $integration->delete();
 
         return $this->asJson([
-            'success' => $response,
-            '$fieldOptions' => $fieldOptions
+            'success' => 'true',
+            'fieldOptions' => $fieldOptions
         ]);
     }
-
 
     /**
      * @param Field[] $fields
@@ -185,7 +184,7 @@ class IntegrationsController extends BaseController
 
         foreach ($fields as $field) {
             $options[] = [
-                'label' => $field->name,
+                'label' => $field->name.': '.$field->handle,
                 'value' => $field->id
             ];
         }
