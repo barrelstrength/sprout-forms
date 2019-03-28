@@ -39,6 +39,8 @@ class Integration extends ActiveRecord
             $integrationApi = new $this->type;
             $form = SproutForms::$app->forms->getFormById($this->formId);
             $integrationApi->form = $form;
+            $integrationApi->name = $this->name;
+            $integrationApi->integrationId = $this->id;
 
             if ($this->settings){
                 $settings = json_decode($this->settings, true);

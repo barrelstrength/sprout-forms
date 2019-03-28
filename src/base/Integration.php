@@ -15,6 +15,16 @@ use Craft;
 abstract class Integration extends Model
 {
     /**
+     * @var string
+     */
+    public $name;
+
+    /**
+     * @var int
+     */
+    public $integrationId;
+
+    /**
      * @var Entry
      */
     public $entry;
@@ -86,7 +96,7 @@ abstract class Integration extends Model
         if (empty($this->fieldsMapped)) {
             // Give it a default row
             // @todo show all the current fields
-            $this->fieldsMapped = [['label' => '', 'value' => '']];
+            $this->fieldsMapped = [['sproutFormField' => '', 'integrationField' => '']];
         }
 
         $rendered = Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'editableTableField',

@@ -120,6 +120,7 @@ class EntriesController extends BaseController
         }
 
         $integrations = SproutForms::$app->integrations->getFormIntegrations($this->form->id);
+        $isSubmitFails = false;
 
         foreach ($integrations as $integrationRecord)
         {
@@ -128,12 +129,17 @@ class EntriesController extends BaseController
 
             try{
                 if (!$integration->submit()) {
-                    // @todo - failure - should we add a setting to the API to redirectWithError if sumit() fails?
-                    return $this->redirectWithErrors($entry);
+                    $isSubmitFails = true;
                 }
             }catch (\Exception $e){
+                $isSubmitFails = true;
                 Craft::error('Submit Integration Api fails: '.$e->getMessage(), __METHOD__);
             }
+        }
+
+        if ($isSubmitFails){
+            // @todo - failure - should we add a setting to the API to redirectWithError if sumit() fails?
+            return $this->redirectWithErrors($entry);
         }
 
         return $this->saveEntryInCraft($entry);

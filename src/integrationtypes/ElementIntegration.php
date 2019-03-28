@@ -4,15 +4,14 @@ namespace barrelstrength\sproutforms\integrationtypes;
 
 use barrelstrength\sproutforms\base\ApiIntegration;
 use Craft;
+use craft\elements\Entry;
 
 /**
  * Create a Craft Entry element
  */
 class ElementIntegration extends ApiIntegration
 {
-    public $section;
-
-    public $entryType;
+    public $entryTypeId;
 
     /**
      * @var boolean
@@ -41,7 +40,7 @@ class ElementIntegration extends ApiIntegration
      * @inheritdoc
      */
     public function submit() {
-        if ($this->section && !Craft::$app->getRequest()->getIsCpRequest()) {
+        if ($this->entryTypeId && !Craft::$app->getRequest()->getIsCpRequest()) {
             if (!$this->createEntry()) {
                 return false;
             }
@@ -59,12 +58,12 @@ class ElementIntegration extends ApiIntegration
 
         if ($this->fieldsMapped){
             foreach ($this->fieldsMapped as $fieldMapped) {
-                if (isset($entry->{$fieldMapped['label']}) && $fieldMapped['value']){
-                    $fields[$fieldMapped['value']] = $entry->{$fieldMapped['label']};
+                if (isset($entry->{$fieldMapped['sproutFormField']}) && $fieldMapped['integrationField']){
+                    $fields[$fieldMapped['integrationField']] = $entry->{$fieldMapped['sproutFormField']};
                 }else{
-                    // Leave default handle is the value is blank
-                    if (empty($fieldMapped['value'])){
-                        $fields[$fieldMapped['label']] = $entry->{$fieldMapped['label']};
+                    // Leave default handle is the integrationField is blank
+                    if (empty($fieldMapped['integrationField'])){
+                        $fields[$fieldMapped['sproutFormField']] = $entry->{$fieldMapped['sproutFormField']};
                     }
                 }
             }
@@ -86,7 +85,7 @@ class ElementIntegration extends ApiIntegration
         }
 
         if (empty($this->fieldsMapped)) {
-            $this->fieldsMapped = [['label' => '', 'value' => '']];
+            $this->fieldsMapped = [['sproutFormField' => '', 'integrationField' => '']];
         }
 
         $rendered = Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'editableTableField',
@@ -119,15 +118,36 @@ class ElementIntegration extends ApiIntegration
 
     /**
      * @return bool
+     * @throws \Throwable
      */
     private function createEntry()
     {
         $entry = $this->entry;
         $fields = $this->resolveFieldMapping();
+        $entryType = Craft::$app->getSections()->getEntryTypeById($this->entryTypeId);
+        $entryElement = new Entry();
+        $entryElement->typeId = $entryType->id;
+        $entryElement->sectionId = $entryType->sectionId;
 
-        // @todo Create the entry here
+        $entryElement->setAttributes($fields, false);
 
-        return true;
+        try {
+            if ($entryElement->validate()){
+                $result = Craft::$app->getElements()->saveElement($entryElement);
+                if ($result){
+                    Craft::info('Element Integration successfully saved: '.$entryElement->id, __METHOD__);
+                    return true;
+                }
+
+                $entry->addError('general', Craft::t('sprout-forms', 'Unable to create Entry via Element Integration'));
+            }else{
+                $entry->addError('general', Craft::t('sprout-forms', 'Element Integration does not validate: '.$this->name));
+            }
+        } catch (\Exception $e) {
+            $entry->addError('general', $e->getMessage());
+        }
+
+        return false;
     }
 
     /**

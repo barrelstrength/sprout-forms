@@ -165,11 +165,8 @@ class IntegrationsController extends BaseController
         $entryTypeId = Craft::$app->request->getRequiredBodyParam('entryTypeId');
         $integrationId = Craft::$app->request->getBodyParam('integrationId');
         $position = Craft::$app->request->getBodyParam('position');
-        $sectionId = Craft::$app->request->getBodyParam('sectionId');
-        $entryType = Craft::$app->getSections()->getEntryTypeById($entryTypeId);
 
-        $fields = $entryType->getFields();
-        $fieldOptions = $this->getFieldsAsOptions($fields, $integrationId, $position, $sectionId);
+        $fieldOptions = $this->getFieldsAsOptions($entryTypeId, $integrationId, $position);
 
         return $this->asJson([
             'success' => 'true',
@@ -178,27 +175,52 @@ class IntegrationsController extends BaseController
     }
 
     /**
-     * @param Field[] $fields
+     * @param $entryTypeId
+     * @param null $integrationId
+     * @param null $position
      * @return array
      */
-    private function getFieldsAsOptions($fields, $integrationId = null, $position = null, $sectionId = null)
+    private function getFieldsAsOptions($entryTypeId, $integrationId = null, $position = null)
     {
-        $options = [];
+        $entryType = Craft::$app->getSections()->getEntryTypeById($entryTypeId);
 
-        $options[] = [
-            'label' => Craft::t('sprout-forms', 'Select a Field'),
-            'value' => ''
+        $fields = $entryType->getFields();
+        // @todo title is required ? what about slug?
+        $options = [
+            [
+                'label' => Craft::t('sprout-forms', 'Select a Field'),
+                'value' => ''
+            ],
+            [
+                'label' => Craft::t('app', 'Title (*)'),
+                'value' => 'title'
+            ],
+            [
+                'label' => Craft::t('app', 'Slug (*)'),
+                'value' => 'slug'
+            ],
+            [
+                'label' => Craft::t('app', 'URI (*)'),
+                'value' => 'expiryDate'
+            ],
+            [
+                'label' => Craft::t('app', 'Expiry Date'),
+                'value' => 'uri'
+            ],
+            [
+                'label' => Craft::t('app', 'Post Date'),
+                'value' => 'postDate'
+            ]
         ];
 
         $fieldsMapped = [];
         $integrationSectionId = null;
 
-        if (!is_null($integrationId) && !is_null($sectionId)){
+        if (!is_null($integrationId) && !is_null($entryTypeId)){
             $integrationRecord = IntegrationRecord::findOne($integrationId);
             $integration = $integrationRecord->getIntegrationApi();
             $fieldsMapped = $integration->fieldsMapped;
-            $settings = json_decode($integrationRecord->settings, true);
-            $integrationSectionId = $settings['section'] ?? null;
+            $integrationSectionId = $integration->entryTypeId ?? null;
         }
 
         foreach ($fields as $field) {
@@ -208,7 +230,7 @@ class IntegrationsController extends BaseController
             ];
 
             if (!is_null($position)){
-                if ($integrationSectionId == $sectionId){
+                if ($integrationSectionId == $entryTypeId){
                     if (isset($fieldsMapped[$position])){
                         if ($field->id == $fieldsMapped[$position]['integrationField']){
                             $option['selected'] = true;
