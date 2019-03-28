@@ -234,11 +234,16 @@ class Install extends Migration
             ])->execute();
         }
 
-        $settings = new Settings();
-        $accessible = new AccessibleTemplates();
-        $settings->templateFolderOverride = $accessible->getTemplateId();
+        $projectConfig = Craft::$app->getProjectConfig();
+        $pluginHandle = 'sprout-forms';
+        $currentSettings = $projectConfig->get(Plugins::CONFIG_PLUGINS_KEY . '.' . $pluginHandle . '.settings');
 
-        $settings->captchaSettings = [
+        $settings = new Settings();
+        $settings->setAttributes($currentSettings);
+        $accessible = new AccessibleTemplates();
+        $settings->templateFolderOverride = $currentSettings['templateFolderOverride'] ?? $accessible->getTemplateId();
+
+        $settings->captchaSettings = $currentSettings['captchaSettings'] ?? [
             'sproutforms-duplicatecaptcha' => [
                 'enabled' => 1
             ],
@@ -252,8 +257,6 @@ class Install extends Migration
             ],
         ];
 
-        $pluginHandle = 'sprout-forms';
-        $projectConfig = Craft::$app->getProjectConfig();
         $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings', $settings->toArray());
     }
 
