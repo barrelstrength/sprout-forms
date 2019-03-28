@@ -238,7 +238,8 @@ class Install extends Migration
         $pluginHandle = 'sprout-forms';
         $currentSettings = $projectConfig->get(Plugins::CONFIG_PLUGINS_KEY . '.' . $pluginHandle . '.settings');
 
-        $settings = new Settings($currentSettings);
+        $settings = new Settings();
+        $settings->setAttributes($currentSettings);
         $accessible = new AccessibleTemplates();
         $settings->templateFolderOverride = $currentSettings['templateFolderOverride'] ?? $accessible->getTemplateId();
 
