@@ -379,13 +379,13 @@ class Entries extends Component
      * Saves some relations for a field.
      *
      * @param BaseRelationFormField $field
-     * @param Element               $source
+     * @param ElementInterface               $source
      * @param array                 $targetIds
      *
      * @throws \Throwable
      * @return void
      */
-    public function saveRelations(BaseRelationFormField $field, Element $source, array $targetIds)
+    public function saveRelations(BaseRelationFormField $field, ElementInterface $source, array $targetIds)
     {
         if (!is_array($targetIds)) {
             $targetIds = [];

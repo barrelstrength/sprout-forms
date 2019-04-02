@@ -8,3 +8,13 @@
     value: integration.submitAction ?? null,
     errors: integration.getErrors('submitAction') ?? null
 }) }}
+
+<script>
+    $(document).ready(function() {
+        init();
+
+        function init(){
+            $("div.btn.add.icon").addClass('hidden');
+        }
+    });
+</script>

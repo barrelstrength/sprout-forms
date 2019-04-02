@@ -3,10 +3,9 @@
 namespace barrelstrength\sproutforms\integrationtypes;
 
 use barrelstrength\sproutforms\base\ApiIntegration;
-use GuzzleHttp\Exception\RequestException;
-use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use GuzzleHttp\Client;
+use GuzzleHttp\RequestOptions;
 
 /**
  * Route our request to Craft or a third-party endpoint
@@ -65,11 +64,6 @@ class PayloadForwarding extends ApiIntegration
             foreach ($this->fieldsMapped as $fieldMapped) {
                 if (isset($entry->{$fieldMapped['sproutFormField']}) && $fieldMapped['integrationField']){
                     $fields[$fieldMapped['integrationField']] = $entry->{$fieldMapped['sproutFormField']};
-                }else{
-                    // Leave default handle is the integrationField is blank
-                    if (empty($fieldMapped['integrationField'])){
-                        $fields[$fieldMapped['sproutFormField']] = $entry->{$fieldMapped['sproutFormField']};
-                    }
                 }
             }
         }
@@ -79,18 +73,16 @@ class PayloadForwarding extends ApiIntegration
 
     /**
      * @return bool
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     private function forwardEntry()
     {
         $entry = $this->entry;
-        #$fields = $entry->getPayloadFields();
         $fields = $this->resolveFieldMapping();
         $endpoint = $this->submitAction;
 
         if (!filter_var($endpoint, FILTER_VALIDATE_URL)) {
 
-            SproutForms::error($entry->formName.' submit action is an invalid URL: '.$endpoint);
+            Craft::error($entry->formName.' submit action is an invalid URL: '.$endpoint, __METHOD__);
 
             return false;
         }
@@ -98,15 +90,16 @@ class PayloadForwarding extends ApiIntegration
         $client = new Client();
 
         try {
-            SproutForms::info($fields);
+            Craft::info($fields, __METHOD__);
 
-            $response = $client->request('POST', $endpoint, [
-                'form_params' => $fields
+            $response = $client->post($endpoint, [
+                RequestOptions::JSON => $fields
             ]);
 
-            SproutForms::info($response->getBody()->getContents());
-        } catch (RequestException $e) {
+            Craft::info($response->getBody()->getContents(), __METHOD__);
+        } catch (\Exception $e) {
             $entry->addError('general', $e->getMessage());
+            Craft::error('Error on submit payload: '.$e->getMessage(), __METHOD__);
 
             return false;
         }

@@ -85,7 +85,6 @@ abstract class Integration extends Model
      * Returns a default field mapping html
      *
      * @return string
-     * @throws \yii\base\Exception
      */
     public function getFieldMappingSettingsHtml()
     {
@@ -94,9 +93,13 @@ abstract class Integration extends Model
         }
 
         if (empty($this->fieldsMapped)) {
-            // Give it a default row
-            // @todo show all the current fields
-            $this->fieldsMapped = [['sproutFormField' => '', 'integrationField' => '']];
+            // show all the form fields
+            foreach ($this->getFormFieldsAsOptions() as $formField) {
+                $this->fieldsMapped[] = [
+                    'sproutFormField' => $formField['value'],
+                    'integrationField' => ''
+                ];
+            }
         }
 
         $rendered = Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'editableTableField',
@@ -110,13 +113,14 @@ abstract class Integration extends Model
                     'cols' => [
                         'sproutFormField' => [
                             'heading' => Craft::t('sprout-forms', 'Form Field'),
-                            'type' => 'select',
-                            'options' => $this->getFormFieldsAsOptions()
+                            'type' => 'singleline',
+                            'class' => 'code'
                         ],
                         'integrationField' => [
                             'heading' => Craft::t('sprout-forms', 'Api Field'),
                             'type' => 'singleline',
-                            'class' => 'code'
+                            'class' => 'code',
+                            'placeholder' => 'Leave blank to no mapping'
                         ]
                     ],
                     'rows' => $this->fieldsMapped

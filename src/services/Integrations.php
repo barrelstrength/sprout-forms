@@ -72,7 +72,7 @@ class Integrations extends Component
      */
     public function getFormIntegrations($formId)
     {
-        $integrations = IntegrationRecord::findAll(['formId' => $formId]);
+        $integrations = IntegrationRecord::findAll(['formId' => $formId, 'enabled' => true]);
 
         return $integrations;
     }
