@@ -108,6 +108,56 @@ class PayloadForwarding extends ApiIntegration
     }
 
     /**
+     * Returns a default field mapping html
+     *
+     * @return string
+     */
+    public function getFieldMappingSettingsHtml()
+    {
+        if (!$this->hasFieldMapping){
+            return '';
+        }
+
+        if (empty($this->fieldsMapped)) {
+            // show all the form fields
+            foreach ($this->getFormFieldsAsOptions() as $formField) {
+                $this->fieldsMapped[] = [
+                    'sproutFormField' => $formField['value'],
+                    'integrationField' => ''
+                ];
+            }
+        }
+
+        $rendered = Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'editableTableField',
+            [
+                [
+                    'label' => Craft::t('sprout-forms', 'Field Mapping'),
+                    'instructions' => Craft::t('sprout-forms', 'Define your field mapping.'),
+                    'id' => 'fieldsMapped',
+                    'name' => 'fieldsMapped',
+                    'addRowLabel' => Craft::t('sprout-forms', 'Add a field mapping'),
+                    'static' => true,
+                    'cols' => [
+                        'sproutFormField' => [
+                            'heading' => Craft::t('sprout-forms', 'Form Field'),
+                            'type' => 'singleline',
+                            'class' => 'code formField'
+                        ],
+                        'integrationField' => [
+                            'heading' => Craft::t('sprout-forms', 'Api Field'),
+                            'type' => 'singleline',
+                            'class' => 'code payloadField',
+                            'placeholder' => 'Leave blank to no mapping'
+                        ]
+                    ],
+                    'rows' => $this->fieldsMapped
+                ]
+            ]);
+
+        return $rendered;
+    }
+
+    /**
      * Return Class name as Type
      *
      * @return string

@@ -14,7 +14,22 @@
         init();
 
         function init(){
-            $("div.btn.add.icon").addClass('hidden');
+            var $formFields = getCurrentRows('.formField');
+            $formFields.each(function(index){
+                var $textarea = $(this).find('textarea');
+                $textarea.prop("disabled", true);
+            });
+
+            var $payloadFields = getCurrentRows('.payloadField');
+            $payloadFields.each(function(index){
+                var $textarea = $(this).find('textarea');
+                $textarea.prop("disabled", false);
+            });
+        }
+
+        function getCurrentRows(className)
+        {
+            return $(className);
         }
     });
 </script>
