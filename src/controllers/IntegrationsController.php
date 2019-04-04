@@ -77,6 +77,7 @@ class IntegrationsController extends BaseController
         $type = $request->getRequiredBodyParam('type');
         $integrationId = $request->getBodyParam('integrationId');
         $enabled = $request->getBodyParam('enabled');
+        $addErrorOnSubmit = $request->getBodyParam('addErrorOnSubmit');
         $name = $request->getBodyParam('name');
         $settings = $request->getBodyParam('types.'.$type);
         $integration = SproutForms::$app->integrations->getFormIntegrationById($integrationId);
@@ -84,6 +85,7 @@ class IntegrationsController extends BaseController
         $integration->enabled = $enabled;
         $integration->settings = json_encode($settings);
         $integration->name = $name ?? $integration->name;
+        $integration->addErrorOnSubmit = $addErrorOnSubmit;
         $result = $integration->save();
 
         if (!$result) {

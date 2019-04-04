@@ -129,7 +129,9 @@ class EntriesController extends BaseController
 
             try{
                 if (!$integration->submit()) {
-                    $isSubmitFails = true;
+                    if ($integration->addErrorOnSubmit){
+                        $isSubmitFails = true;
+                    }
                 }
             }catch (\Exception $e){
                 $isSubmitFails = true;
@@ -138,8 +140,6 @@ class EntriesController extends BaseController
         }
 
         if ($isSubmitFails){
-            // We may need to add events
-            // @todo - failure - should we add a setting to the API to redirectWithError if sumit() fails?
             return $this->redirectWithErrors($entry);
         }
 

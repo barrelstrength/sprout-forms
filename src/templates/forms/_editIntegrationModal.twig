@@ -15,6 +15,13 @@
         on: integration.enabled
     }) }}
 
+    {{ forms.lightswitchField({
+        label: "Add error on submit"|t('sprout-forms'),
+        instructions: "Add an error to the entry if the submit call fails"|t('sprout-forms'),
+        name: 'enabled',
+        on: integration.addErrorOnSubmit
+    }) }}
+
     {{ forms.textField({
         label: "Name <span class='info'>The integration label</span>"|t('sprout-forms'),
         id: 'field-name',

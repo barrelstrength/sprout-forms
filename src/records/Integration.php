@@ -5,6 +5,7 @@ namespace barrelstrength\sproutforms\records;
 use barrelstrength\sproutforms\SproutForms;
 use craft\db\ActiveRecord;
 use barrelstrength\sproutforms\base\Integration as IntegrationApi;
+use Craft;
 
 /**
  * Class Integration record.
@@ -15,6 +16,7 @@ use barrelstrength\sproutforms\base\Integration as IntegrationApi;
  * @property $type
  * @property $settings
  * @property $enabled
+ * @property $addErrorOnSubmit
  */
 class Integration extends ActiveRecord
 {
@@ -41,6 +43,7 @@ class Integration extends ActiveRecord
             $integrationApi->form = $form;
             $integrationApi->name = $this->name;
             $integrationApi->integrationId = $this->id;
+            $integrationApi->addErrorOnSubmit = $this->addErrorOnSubmit;
 
             if ($this->settings){
                 $settings = json_decode($this->settings, true);

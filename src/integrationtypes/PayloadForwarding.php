@@ -27,11 +27,10 @@ class PayloadForwarding extends ApiIntegration
     public function getName() {
         return Craft::t('sprout-forms', 'Custom (Payload Forwarding)');
     }
-    // Any general customizations we need specifically for Element Integrations
 
-    // We may want to consider extending the Form Field API and adding support for Form Fields to identify what Field Class/Classes they can be mapped to. In the Element Integration case, this method resolves the field mapping by matching Sprout Form fields classes to Craft Field classes.
-    // public function resolveFieldMapping() {}
-
+    /**
+     * @inheritdoc
+     */
     public function getSettingsHtml() {
         return Craft::$app->getView()->renderTemplate('sprout-forms/_components/integrationtypes/payloadforwarding/settings',
             [
@@ -98,8 +97,7 @@ class PayloadForwarding extends ApiIntegration
 
             Craft::info($response->getBody()->getContents(), __METHOD__);
         } catch (\Exception $e) {
-            $entry->addError('general', $e->getMessage());
-            Craft::error('Error on submit payload: '.$e->getMessage(), __METHOD__);
+            $this->addFormEntryError( $e->getMessage());
 
             return false;
         }
@@ -118,12 +116,34 @@ class PayloadForwarding extends ApiIntegration
             return '';
         }
 
-        $this->fieldsMapped = [];
-        foreach ($this->getFormFieldsAsOptions() as $formField) {
-            $this->fieldsMapped[] = [
-                'sproutFormField' => $formField['value'],
-                'integrationField' => ''
-            ];
+        $currentFields = $this->getFormFieldsAsOptions();
+
+        if (empty($this->fieldsMapped)) {
+            // show all the form fields
+            foreach ($currentFields as $formField) {
+                $this->fieldsMapped[] = [
+                    'sproutFormField' => $formField['value'],
+                    'integrationField' => ''
+                ];
+            }
+        }else {
+            $fieldsMappedSaved = $this->fieldsMapped;
+            $this->fieldsMapped = [];
+            foreach ($currentFields as $key => $formField) {
+
+                $fieldMapped = [
+                    'sproutFormField' => $formField['value'],
+                    'integrationField' => ''
+                ];
+
+                foreach ($fieldsMappedSaved as $fieldMappedSaved) {
+                    if ($fieldMappedSaved['sproutFormField'] == $formField['value']){
+                        $fieldMapped['integrationField'] = $fieldMappedSaved['integrationField'];
+                    }
+                }
+
+                $this->fieldsMapped[] = $fieldMapped;
+            }
         }
 
         $rendered = Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'editableTableField',

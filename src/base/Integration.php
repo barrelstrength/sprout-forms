@@ -45,6 +45,11 @@ abstract class Integration extends Model
     public $fieldsMapped;
 
     /**
+     * @var boolean
+     */
+    public $addErrorOnSubmit = false;
+
+    /**
      * Name of the Integration
      *
      * @return mixed
@@ -159,6 +164,17 @@ abstract class Integration extends Model
         }
 
         return $options;
+    }
+
+    /**
+     * @param string $message
+     */
+    public function addFormEntryError($message)
+    {
+        Craft::error($message, __METHOD__);
+        if ($this->addErrorOnSubmit){
+            $this->entry->addError('general', $message);
+        }
     }
 }
 

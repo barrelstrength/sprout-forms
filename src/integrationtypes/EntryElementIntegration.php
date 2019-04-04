@@ -5,6 +5,7 @@ namespace barrelstrength\sproutforms\integrationtypes;
 use barrelstrength\sproutforms\base\BaseElementIntegration;
 use Craft;
 use craft\elements\Entry;
+use barrelstrength\sproutforms\elements\Entry as SproutFormEntry;
 
 /**
  * Create a Craft Entry element
@@ -174,12 +175,15 @@ class EntryElementIntegration extends BaseElementIntegration
                     return true;
                 }
 
-                $entry->addError('general', Craft::t('sprout-forms', 'Unable to create Entry via Element Integration'));
+                $message = Craft::t('sprout-forms', 'Unable to create Entry via Element Integration');
+
+                $this->addFormEntryError($message);
             }else{
-                $entry->addError('general', Craft::t('sprout-forms', 'Element Integration does not validate: '.$this->name));
+                $message = Craft::t('sprout-forms', 'Element Integration does not validate: '.$this->name);
+                $this->addFormEntryError($message);
             }
         } catch (\Exception $e) {
-            $entry->addError('general', $e->getMessage());
+            $this->addFormEntryError($e->getMessage());
         }
 
         return false;
