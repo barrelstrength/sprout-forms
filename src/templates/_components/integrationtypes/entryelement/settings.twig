@@ -32,19 +32,39 @@
                     updateAllFieldSelects();
                 }
             });
+
+            disableOptions();
+        }
+
+        function disableOptions()
+        {
+            var $formFields = getCurrentRows('.formField');
+            $formFields.each(function(index){
+                var $textarea = $(this).find('textarea');
+                $textarea.prop("disabled", true);
+            });
+
+            var $craftEntryFields = getCurrentRows('.craftEntryFields');
+            $craftEntryFields.each(function(index){
+                var $select = $(this).find('select');
+                $select.prop("disabled", false);
+            });
         }
 
         function updateAllFieldSelects() {
             var position = 0;
             var $currentRows = getCurrentRows();
-            $currentRows.each(function(index){
+
                 var $select = $(this).find('select');
-                var data = getEntryFieldsData(index);
+                var data = getEntryFieldsData();
                 Craft.postActionRequest('sprout-forms/integrations/get-entry-fields', data, $.proxy(function(response, textStatus)
                 {
                     var statusSuccess = (textStatus === 'success');
 
                     if(statusSuccess && response.success) {
+                        // Field the rows here :D
+                        $currentRows.each(function(index){
+                        });
                         fields = response.fieldOptions;
                         appendFieldsToSelect($select, fields);
                     }
@@ -54,8 +74,6 @@
                     }
                 }, this));
 
-                position++;
-            });
         }
 
         function getEntryFieldsData(index = null)
@@ -95,8 +113,11 @@
             });
         }
 
-        function getCurrentRows()
+        function getCurrentRows(className = null)
         {
+            if (className === null){
+                className = 'tbody .craftEntryFields';
+            }
             return $('tbody .craftEntryFields');
         }
 

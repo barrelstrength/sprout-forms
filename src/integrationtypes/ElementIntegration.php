@@ -76,7 +76,6 @@ class ElementIntegration extends ApiIntegration
      * Returns a default field mapping html
      *
      * @return string
-     * @throws \yii\base\Exception
      */
     public function getFieldMappingSettingsHtml()
     {
@@ -85,7 +84,13 @@ class ElementIntegration extends ApiIntegration
         }
 
         if (empty($this->fieldsMapped)) {
-            $this->fieldsMapped = [['sproutFormField' => '', 'integrationField' => '']];
+            // show all the form fields
+            foreach ($this->getFormFieldsAsOptions() as $formField) {
+                $this->fieldsMapped[] = [
+                    'sproutFormField' => $formField['value'],
+                    'integrationField' => ''
+                ];
+            }
         }
 
         $rendered = Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'editableTableField',
@@ -96,11 +101,12 @@ class ElementIntegration extends ApiIntegration
                     'id' => 'fieldsMapped',
                     'name' => 'fieldsMapped',
                     'addRowLabel' => Craft::t('sprout-forms', 'Add a field mapping'),
+                    'static' => true,
                     'cols' => [
                         'sproutFormField' => [
                             'heading' => Craft::t('sprout-forms', 'Form Field'),
-                            'type' => 'select',
-                            'options' => $this->getFormFieldsAsOptions()
+                            'type' => 'singleline',
+                            'class' => 'code formField'
                         ],
                         'integrationField' => [
                             'heading' => Craft::t('sprout-forms', 'Entry Field'),
