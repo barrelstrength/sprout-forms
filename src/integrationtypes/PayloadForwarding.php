@@ -118,14 +118,12 @@ class PayloadForwarding extends ApiIntegration
             return '';
         }
 
-        if (empty($this->fieldsMapped)) {
-            // show all the form fields
-            foreach ($this->getFormFieldsAsOptions() as $formField) {
-                $this->fieldsMapped[] = [
-                    'sproutFormField' => $formField['value'],
-                    'integrationField' => ''
-                ];
-            }
+        $this->fieldsMapped = [];
+        foreach ($this->getFormFieldsAsOptions() as $formField) {
+            $this->fieldsMapped[] = [
+                'sproutFormField' => $formField['value'],
+                'integrationField' => ''
+            ];
         }
 
         $rendered = Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'editableTableField',

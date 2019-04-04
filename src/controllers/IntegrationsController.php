@@ -213,7 +213,8 @@ class IntegrationsController extends BaseController
             if ($fieldsMapped && ($integrationSectionId == $entryTypeId)){
                 if (isset($fieldsMapped[$rowPosition])){
                     foreach ($optionsByRow as $key => $option) {
-                        if ($option['value'] == $fieldsMapped[$rowPosition]['integrationField']){
+                        if ($option['value'] == $fieldsMapped[$rowPosition]['integrationField'] &&
+                            $fieldsMapped[$rowPosition]['sproutFormField'] == $formField['value']){
                             $optionsByRow[$key]['selected'] = true;
                         }
                     }
