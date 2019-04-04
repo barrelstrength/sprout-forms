@@ -22,7 +22,8 @@
             var $formFields = getCurrentRows('.formField');
             $formFields.each(function(index){
                 var $textarea = $(this).find('textarea');
-                $textarea.prop("disabled", true);
+                $textarea.prop("disabled", false);
+                $textarea.prop("readonly", true);
             });
 
             var $payloadFields = getCurrentRows('.payloadField');

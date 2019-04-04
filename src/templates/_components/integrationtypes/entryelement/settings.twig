@@ -41,12 +41,14 @@
             var $formFields = getCurrentRows('.formField');
             $formFields.each(function(index){
                 var $textarea = $(this).find('textarea');
-                $textarea.prop("disabled", true);
+                $textarea.prop("disabled", false);
+                $textarea.prop("readonly", true);
             });
 
             var $craftEntryFields = getCurrentRows('.craftEntryFields');
             $craftEntryFields.each(function(index){
                 var $select = $(this).find('select');
+                $select.addClass("AAAAAAA");
                 $select.prop("disabled", false);
             });
         }
@@ -54,36 +56,34 @@
         function updateAllFieldSelects() {
             var position = 0;
             var $currentRows = getCurrentRows();
+            var data = getEntryFieldsData();
+            Craft.postActionRequest('sprout-forms/integrations/get-entry-fields', data, $.proxy(function(response, textStatus)
+            {
+                var statusSuccess = (textStatus === 'success');
 
-                var $select = $(this).find('select');
-                var data = getEntryFieldsData();
-                Craft.postActionRequest('sprout-forms/integrations/get-entry-fields', data, $.proxy(function(response, textStatus)
-                {
-                    var statusSuccess = (textStatus === 'success');
-
-                    if(statusSuccess && response.success) {
-                        // Field the rows here :D
-                        $currentRows.each(function(index){
-                        });
-                        fields = response.fieldOptions;
+                if(statusSuccess && response.success) {
+                    var rows = response.fieldOptionsByRow;
+                    $currentRows.each(function(index){
+                        var $select = $(this).find('select');
+                        var fields = rows[index];
                         appendFieldsToSelect($select, fields);
-                    }
-                    else
-                    {
-                        Craft.cp.displayError(Craft.t('sprout-forms','Unable to get the Entry fields'));
-                    }
-                }, this));
+                    });
+                }
+                else
+                {
+                    Craft.cp.displayError(Craft.t('sprout-forms','Unable to get the Entry fields'));
+                }
+            }, this));
 
         }
 
-        function getEntryFieldsData(index = null)
+        function getEntryFieldsData()
         {
-            var entryTypeId = $('#types-barrelstrength-sproutforms-integrationtypes-ElementIntegration-entryTypeId').val();
+            var entryTypeId = $('#types-barrelstrength-sproutforms-integrationtypes-EntryElementIntegration-entryTypeId').val();
             var integrationId = $('#integrationId').val();
             var data = {
                 'entryTypeId':entryTypeId,
-                'integrationId':integrationId,
-                'position': index
+                'integrationId':integrationId
             };
 
             return data;
@@ -118,10 +118,10 @@
             if (className === null){
                 className = 'tbody .craftEntryFields';
             }
-            return $('tbody .craftEntryFields');
+            return $(className);
         }
 
-        function appendFieldsToSelect($select, fields, position = null) {
+        function appendFieldsToSelect($select, fields) {
             $select.empty();
             for (i = 0; i < fields.length; i++) {
                 var field = fields[i];
@@ -130,10 +130,6 @@
                     selectedCode = 'selected';
                 }
                 $select.append('<option '+selectedCode+' value="'+field['value']+'">'+field['label']+'</option>');
-            }
-
-            if (position){
-
             }
         }
     });

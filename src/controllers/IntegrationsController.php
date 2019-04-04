@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\controllers;
 
 
 use barrelstrength\sproutforms\base\Integration;
+use barrelstrength\sproutforms\integrationtypes\EntryElementIntegration;
 use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
 use barrelstrength\sproutforms\elements\Form;
 use Craft;
@@ -163,85 +164,68 @@ class IntegrationsController extends BaseController
         $this->requireAcceptsJson();
 
         $entryTypeId = Craft::$app->request->getRequiredBodyParam('entryTypeId');
-        $integrationId = Craft::$app->request->getBodyParam('integrationId');
-        $position = Craft::$app->request->getBodyParam('position');
+        $integrationId = Craft::$app->request->getRequiredBodyParam('integrationId');
 
-        $fieldOptions = $this->getFieldsAsOptions($entryTypeId, $integrationId, $position);
+        $fieldOptionsByRow = $this->getFieldsAsOptionsByRow($entryTypeId, $integrationId);
 
         return $this->asJson([
             'success' => 'true',
-            'fieldOptions' => $fieldOptions
+            'fieldOptionsByRow' => $fieldOptionsByRow
         ]);
     }
 
     /**
      * @param $entryTypeId
      * @param null $integrationId
-     * @param null $position
      * @return array
      */
-    private function getFieldsAsOptions($entryTypeId, $integrationId = null, $position = null)
+    private function getFieldsAsOptionsByRow($entryTypeId, $integrationId)
     {
         $entryType = Craft::$app->getSections()->getEntryTypeById($entryTypeId);
+        $entryFields = $entryType->getFields();
 
-        $fields = $entryType->getFields();
-        // @todo title is required ? what about slug?
-        $options = [
-            [
-                'label' => Craft::t('sprout-forms', 'Select a Field'),
-                'value' => ''
-            ],
-            [
-                'label' => Craft::t('app', 'Title (*)'),
-                'value' => 'title'
-            ],
-            [
-                'label' => Craft::t('app', 'Slug (*)'),
-                'value' => 'slug'
-            ],
-            [
-                'label' => Craft::t('app', 'URI (*)'),
-                'value' => 'expiryDate'
-            ],
-            [
-                'label' => Craft::t('app', 'Expiry Date'),
-                'value' => 'uri'
-            ],
-            [
-                'label' => Craft::t('app', 'Post Date'),
-                'value' => 'postDate'
-            ]
-        ];
+        $integrationRecord = IntegrationRecord::findOne($integrationId);
+        /** @var EntryElementIntegration $integration */
+        $integration = $integrationRecord->getIntegrationApi();
+        $fieldsMapped = $integration->fieldsMapped;
+        $integrationSectionId = $integration->entryTypeId ?? null;
 
-        $fieldsMapped = [];
-        $integrationSectionId = null;
+        $defaultEntryFields = $integration->getDefaultAttributes();
+        $options = $defaultEntryFields;
+        $formFields = $integration->getFormFieldsAsOptions();
 
-        if (!is_null($integrationId) && !is_null($entryTypeId)){
-            $integrationRecord = IntegrationRecord::findOne($integrationId);
-            $integration = $integrationRecord->getIntegrationApi();
-            $fieldsMapped = $integration->fieldsMapped;
-            $integrationSectionId = $integration->entryTypeId ?? null;
-        }
-
-        foreach ($fields as $field) {
+        foreach ($entryFields as $field) {
             $option =  [
                 'label' => $field->name.': '.$field->handle,
-                'value' => $field->id
+                'value' => $field->handle
             ];
 
-            if (!is_null($position)){
-                if ($integrationSectionId == $entryTypeId){
-                    if (isset($fieldsMapped[$position])){
-                        if ($field->id == $fieldsMapped[$position]['integrationField']){
-                            $option['selected'] = true;
+            $options[] = $option;
+        }
+
+        $rowPosition = 0;
+
+        $finalOptions = [];
+
+        foreach ($formFields as $formField) {
+            $optionsByRow = $options;
+            // We have rows stored and are for the same sectionType
+            if ($fieldsMapped && ($integrationSectionId == $entryTypeId)){
+                if (isset($fieldsMapped[$rowPosition])){
+                    foreach ($optionsByRow as $key => $option) {
+                        if ($option['value'] == $fieldsMapped[$rowPosition]['integrationField']){
+                            $optionsByRow[$key]['selected'] = true;
                         }
                     }
                 }
             }
-            $options[] = $option;
+
+            $finalOptions[$rowPosition] = $optionsByRow;
+
+            $rowPosition++;
         }
 
-        return $options;
+        return $finalOptions;
     }
 
     /**

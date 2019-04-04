@@ -2,14 +2,14 @@
 
 namespace barrelstrength\sproutforms\integrationtypes;
 
-use barrelstrength\sproutforms\base\ApiIntegration;
+use barrelstrength\sproutforms\base\BaseElementIntegration;
 use Craft;
 use craft\elements\Entry;
 
 /**
  * Create a Craft Entry element
  */
-class ElementIntegration extends ApiIntegration
+class EntryElementIntegration extends BaseElementIntegration
 {
     public $entryTypeId;
 
@@ -23,7 +23,7 @@ class ElementIntegration extends ApiIntegration
     }
 
     /**
-     * @throws \yii\base\Exception
+     * @inheritdoc
      */
     public function getSettingsHtml() {
         $sections = $this->getSectionsAsOptions();
@@ -120,6 +120,38 @@ class ElementIntegration extends ApiIntegration
             ]);
 
         return $rendered;
+    }
+
+    public function getDefaultAttributes()
+    {
+        $default = [
+            [
+                'label' => Craft::t('sprout-forms', 'None'),
+                'value' => ''
+            ],
+            [
+                'label' => Craft::t('app', 'Title'),
+                'value' => 'title'
+            ],
+            [
+                'label' => Craft::t('app', 'Slug'),
+                'value' => 'slug'
+            ],
+            [
+                'label' => Craft::t('app', 'URI'),
+                'value' => 'expiryDate'
+            ],
+            [
+                'label' => Craft::t('app', 'Expiry Date'),
+                'value' => 'uri'
+            ],
+            [
+                'label' => Craft::t('app', 'Post Date'),
+                'value' => 'postDate'
+            ]
+        ];
+
+        return $default;
     }
 
     /**
