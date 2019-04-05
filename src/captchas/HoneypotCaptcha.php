@@ -100,7 +100,7 @@ class HoneypotCaptcha extends Captcha
         // The honeypot field must be left blank
         if ($honeypotValue) {
 
-            SproutForms::error('A form submission failed the Honeypot test.');
+            Craft::error('A form submission failed the Honeypot test.', __METHOD__);
 
             $event->isValid = false;
             $event->fakeIt = true;

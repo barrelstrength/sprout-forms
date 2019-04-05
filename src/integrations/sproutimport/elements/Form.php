@@ -127,7 +127,7 @@ class Form extends ElementImporter
 
         if (!SproutForms::$app->forms->saveForm($model)) {
 
-            SproutForms::error($model->getErrors());
+            Craft::error($model->getErrors(), __METHOD__);
 
             return false;
         }

@@ -277,7 +277,7 @@ class Entries extends Component
 
         if ($entry->hasErrors()) {
 
-            SproutForms::error($entry->getErrors());
+            Craft::error($entry->getErrors(), __METHOD__);
 
             return false;
         }
@@ -297,7 +297,7 @@ class Entries extends Component
                     $entry->addError($key, $error);
                 }
 
-                SproutForms::error('OnBeforeSaveEntryEvent is not valid');
+                Craft::error('OnBeforeSaveEntryEvent is not valid', __METHOD__);
 
                 if ($event->fakeIt) {
                     SproutForms::$app->entries->fakeIt = true;
@@ -309,55 +309,21 @@ class Entries extends Component
             $success = Craft::$app->getElements()->saveElement($entry);
 
             if (!$success) {
-                SproutForms::error('Couldn’t save Element on saveEntry service.');
+                Craft::error('Couldn’t save Element on saveEntry service.', __METHOD__);
                 $transaction->rollBack();
                 return false;
             }
 
-            SproutForms::info('Form Entry Element Saved.');
+            Craft::info('Form Entry Element Saved.', __METHOD__);
 
             $transaction->commit();
 
             $this->callOnSaveEntryEvent($entry, $isNewEntry);
         } catch (\Exception $e) {
-            SproutForms::error('Failed to save element: '.$e->getMessage());
+            Craft::error('Failed to save element: '.$e->getMessage(), __METHOD__);
             $transaction->rollBack();
 
             throw $e;
-        }
-
-        return true;
-    }
-
-    /**
-     * @return mixed|null
-     */
-    public function forwardEntry(Entry $entry): bool
-    {
-        $fields = $entry->getPayloadFields();
-        $endpoint = $entry->getForm()->submitAction;
-
-        if (!filter_var($endpoint, FILTER_VALIDATE_URL)) {
-
-            SproutForms::error($entry->formName.' submit action is an invalid URL: '.$endpoint);
-
-            return false;
-        }
-
-        $client = new Client();
-
-        try {
-            SproutForms::info($fields);
-
-            $response = $client->request('POST', $endpoint, [
-                'form_params' => $fields
-            ]);
-
-            SproutForms::info($response->getBody()->getContents());
-        } catch (RequestException $e) {
-            $entry->addError('general', $e->getMessage());
-
-            return false;
         }
 
         return true;

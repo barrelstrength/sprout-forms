@@ -120,7 +120,7 @@ class Hidden extends FormField implements PreviewableFieldInterface
                 $value = Craft::$app->view->renderObjectTemplate($this->value, Forms::getFieldVariables());
 
             } catch (\Exception $e) {
-                SproutForms::error($e->getMessage());
+                Craft::error($e->getMessage(), __METHOD__);
             }
         }
 

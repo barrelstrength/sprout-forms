@@ -147,7 +147,7 @@ class Forms extends Component
         $form->validate();
 
         if ($form->hasErrors()) {
-            SproutForms::error('Form has errors');
+            Craft::error('Form has errors', __METHOD__);
 
             return false;
         }
@@ -204,7 +204,7 @@ class Forms extends Component
             $success = Craft::$app->elements->saveElement($form, false);
 
             if (!$success) {
-                SproutForms::error('Couldn’t save Element on saveForm service.');
+                Craft::error('Couldn’t save Element on saveForm service.', __METHOD__);
 
                 return false;
             }
@@ -212,9 +212,9 @@ class Forms extends Component
             // FormRecord saved on afterSave form element
             $transaction->commit();
 
-            SproutForms::info('Form Saved!');
+            Craft::info('Form Saved!', __METHOD__);
         } catch (\Exception $e) {
-            SproutForms::error('Failed to save form: '.$e->getMessage());
+            Craft::error('Failed to save form: '.$e->getMessage(), __METHOD__);
             $transaction->rollBack();
 
             throw $e;
@@ -261,7 +261,7 @@ class Forms extends Component
 
             if (!$success) {
                 $transaction->rollBack();
-                SproutForms::error('Couldn’t delete Form on deleteForm service.');
+                Craft::error('Couldn’t delete Form on deleteForm service.', __METHOD__);
 
                 return false;
             }
@@ -498,7 +498,7 @@ class Forms extends Component
             if ($form) {
                 SproutForms::$app->forms->deleteForm($form);
             } else {
-                SproutForms::error("Can't delete the form with id: {$formElement->id}");
+                Craft::error("Can't delete the form with id: {$formElement->id}", __METHOD__);
             }
         }
 

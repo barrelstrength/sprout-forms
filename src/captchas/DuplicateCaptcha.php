@@ -64,7 +64,7 @@ class DuplicateCaptcha extends Captcha
         }
 
         if (!Craft::$app->getSession()->get($uniqueid)) {
-            SproutForms::error('A form submission failed the Duplicate Submission test.');
+            Craft::error('A form submission failed the Duplicate Submission test.', __METHOD__);
 
             $event->isValid = false;
 

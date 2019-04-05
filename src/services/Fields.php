@@ -516,7 +516,7 @@ class Fields extends Component
 
                 $response = $fieldRecord->save(false);
             } else {
-                SproutForms::error('Unable to find the FieldLayoutFieldRecord');
+                Craft::error('Unable to find the FieldLayoutFieldRecord', __METHOD__);
             }
         }
 

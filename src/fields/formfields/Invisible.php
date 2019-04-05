@@ -173,7 +173,7 @@ class Invisible extends FormField implements PreviewableFieldInterface
                 $value = Craft::$app->view->renderObjectTemplate($this->value, Forms::getFieldVariables());
                 Craft::$app->getSession()->set($this->handle, $value);
             } catch (\Exception $e) {
-                SproutForms::error($e->getMessage());
+                Craft::error($e->getMessage(), __METHOD__);
             }
         }
 

@@ -104,7 +104,7 @@ class EntriesController extends BaseController
         try {
             $entry->title = Craft::$app->getView()->renderObjectTemplate($this->form->titleFormat, $entry);
         } catch (\Exception $e) {
-            SproutForms::error('Title format error: '.$e->getMessage());
+            Craft::error('Title format error: '.$e->getMessage(), __METHOD__);
         }
 
         $event = new OnBeforeValidateEntryEvent([
@@ -116,7 +116,7 @@ class EntriesController extends BaseController
         $success = $entry->validate();
 
         if (!$success) {
-            SproutForms::error($entry->getErrors());
+            Craft::error($entry->getErrors(), __METHOD__);
             return $this->redirectWithErrors($entry);
         }
 
@@ -368,7 +368,7 @@ class EntriesController extends BaseController
             $_POST['redirect'] = Craft::$app->getRequest()->getBodyParam('redirectOnFailure');
         }
 
-        SproutForms::error($entry->getErrors());
+        Craft::error($entry->getErrors(), __METHOD__);
 
         // Send spam to the thank you page
         if (SproutForms::$app->entries->fakeIt) {

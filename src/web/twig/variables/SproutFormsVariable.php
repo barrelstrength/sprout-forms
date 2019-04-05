@@ -401,7 +401,7 @@ class SproutFormsVariable
             ]
         );
 
-        SproutForms::error($message);
+        Craft::error($message, __METHOD__);
 
         if (Craft::$app->getConfig()->getGeneral()->devMode) {
             throw new Exception($message);

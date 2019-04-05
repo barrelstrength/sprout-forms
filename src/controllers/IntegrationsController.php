@@ -89,10 +89,10 @@ class IntegrationsController extends BaseController
         $result = $integration->save();
 
         if (!$result) {
-            SproutForms::error('Integration does not validate.');
+            Craft::error('Integration does not validate.', __METHOD__);
         }
 
-        SproutForms::info('Integration Saved');
+        Craft::info('Integration Saved', __METHOD__);
 
         return $this->returnJson($result, $integration, $form);
     }
@@ -117,7 +117,7 @@ class IntegrationsController extends BaseController
 
         if (is_null($integration)) {
             $message = Craft::t('sprout-forms', 'The integration requested to edit no longer exists.');
-            SproutForms::error($message);
+            Craft::error($message, __METHOD__);
 
             return $this->asJson([
                 'success' => false,
