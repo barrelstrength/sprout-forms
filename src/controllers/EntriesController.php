@@ -120,9 +120,9 @@ class EntriesController extends BaseController
             return $this->redirectWithErrors($entry);
         }
 
-        $isSubmitFails = $this->runIntegrations($entry);
+        $integrationResult = $this->runIntegrations($entry);
 
-        if ($isSubmitFails){
+        if (!$integrationResult){
             return $this->redirectWithErrors($entry);
         }
 
