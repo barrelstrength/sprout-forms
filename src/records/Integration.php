@@ -44,6 +44,7 @@ class Integration extends ActiveRecord
             $integrationApi->name = $this->name;
             $integrationApi->integrationId = $this->id;
             $integrationApi->addErrorOnSubmit = $this->addErrorOnSubmit;
+            $integrationApi->enabled = $this->enabled;
 
             if ($this->settings){
                 $settings = json_decode($this->settings, true);

@@ -158,7 +158,6 @@ class EntryElementIntegration extends BaseElementIntegration
      */
     private function createEntry()
     {
-        $entry = $this->entry;
         $fields = $this->resolveFieldMapping();
         $entryType = Craft::$app->getSections()->getEntryTypeById($this->entryTypeId);
         $entryElement = new Entry();

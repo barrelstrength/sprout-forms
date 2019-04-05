@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\controllers;
 
+use barrelstrength\sproutforms\base\Integration;
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
 use Craft;
@@ -119,31 +120,48 @@ class EntriesController extends BaseController
             return $this->redirectWithErrors($entry);
         }
 
-        $integrations = SproutForms::$app->integrations->getFormIntegrations($this->form->id);
-        $isSubmitFails = false;
-
-        foreach ($integrations as $integrationRecord)
-        {
-            $integration = $integrationRecord->getIntegrationApi();
-            $integration->entry = $entry;
-
-            try{
-                if (!$integration->submit()) {
-                    if ($integration->addErrorOnSubmit){
-                        $isSubmitFails = true;
-                    }
-                }
-            }catch (\Exception $e){
-                $isSubmitFails = true;
-                Craft::error('Submit Integration Api fails: '.$e->getMessage(), __METHOD__);
-            }
-        }
+        $isSubmitFails = $this->runIntegrations($entry);
 
         if ($isSubmitFails){
             return $this->redirectWithErrors($entry);
         }
 
         return $this->saveEntryInCraft($entry);
+    }
+
+    /**
+     * Run all the integrations related to the Form Element. If at least one fails it will return false
+     *
+     * @param $entry
+     * @return bool
+     */
+    private function runIntegrations($entry)
+    {
+        $integrations = SproutForms::$app->integrations->getFormIntegrations($this->form->id);
+        $success = true;
+
+        foreach ($integrations as $integrationRecord)
+        {
+            $integration = $integrationRecord->getIntegrationApi();
+            $integration->entry = $entry;
+            Craft::info('Running Sprout Forms integration: '.$integration->name);
+
+            try{
+                if ($integration->enabled){
+                    if (!$integration->submit()) {
+                        if ($integration->addErrorOnSubmit){
+                            $success = false;
+                        }
+                    }
+                }
+
+            }catch (\Exception $e){
+                $success = false;
+                Craft::error('Submit Integration Api fails: '.$e->getMessage(), __METHOD__);
+            }
+        }
+
+        return $success;
     }
 
     /**

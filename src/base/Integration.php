@@ -50,6 +50,11 @@ abstract class Integration extends Model
     public $addErrorOnSubmit = false;
 
     /**
+     * @var boolean
+     */
+    public $enabled = true;
+
+    /**
      * Name of the Integration
      *
      * @return mixed
