@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\controllers;
 
 
+use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\base\Integration;
 use barrelstrength\sproutforms\integrationtypes\EntryElementIntegration;
 use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
@@ -196,21 +197,13 @@ class IntegrationsController extends BaseController
         $options = $defaultEntryFields;
         $formFields = $integration->getFormFieldsAsOptions();
 
-        foreach ($entryFields as $field) {
-            $option =  [
-                'label' => $field->name.': '.$field->handle,
-                'value' => $field->handle
-            ];
-
-            $options[] = $option;
-        }
-
         $rowPosition = 0;
 
         $finalOptions = [];
 
+
         foreach ($formFields as $formField) {
-            $optionsByRow = $options;
+            $optionsByRow = $this->getCompatibleFields($options, $entryFields, $formField);
             // We have rows stored and are for the same sectionType
             if ($fieldsMapped && ($integrationSectionId == $entryTypeId)){
                 if (isset($fieldsMapped[$rowPosition])){
@@ -229,6 +222,36 @@ class IntegrationsController extends BaseController
         }
 
         return $finalOptions;
+    }
+
+    /**
+     * @param array $options
+     * @param array $entryFields
+     * @param array $formField
+     * @return array
+     */
+    private function getCompatibleFields(array $options, array $entryFields, array $formField)
+    {
+        $compatibleFields = $formField['compatibleCraftFields'] ?? '*';
+
+        foreach ($entryFields as $field) {
+            $option =  [
+                'label' => $field->name.': '.$field->handle,
+                'value' => $field->handle
+            ];
+
+            if (is_array($compatibleFields)){
+                if (!in_array(get_class($field), $compatibleFields)){
+                    $option = null;
+                }
+            }
+
+            if ($option){
+                $options[] = $option;
+            }
+        }
+
+        return $options;
     }
 
     /**
