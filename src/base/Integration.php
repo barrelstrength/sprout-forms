@@ -6,6 +6,7 @@ use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Form;
 use craft\base\Model;
 use Craft;
+use craft\fields\Date as CraftDate;
 use craft\fields\Dropdown as CraftDropdown;
 use craft\fields\Number as CraftNumber;
 use craft\fields\PlainText as CraftPlainText;
@@ -172,6 +173,13 @@ abstract class Integration extends Model
                 'label' => 'Ip Address',
                 'value' => 'ipAddress',
                 'compatibleCraftFields' => $commonFields
+            ],
+            [
+                'label' => 'Date Created',
+                'value' => 'dateCreated',
+                'compatibleCraftFields' => [
+                    CraftDate::class
+                ]
             ]
         ];
 
