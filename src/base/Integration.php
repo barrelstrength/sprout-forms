@@ -6,6 +6,9 @@ use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Form;
 use craft\base\Model;
 use Craft;
+use craft\fields\Dropdown as CraftDropdown;
+use craft\fields\Number as CraftNumber;
+use craft\fields\PlainText as CraftPlainText;
 
 /**
  * Class IntegrationType
@@ -146,18 +149,29 @@ abstract class Integration extends Model
     public function getFormFieldsAsOptions()
     {
         $fields = $this->form->getFields();
+        $commonFields = [
+            CraftPlainText::class,
+            CraftDropdown::class
+        ];
         $options = [
             [
                 'label' => 'Id',
-                'value' => 'id'
+                'value' => 'id',
+                'compatibleCraftFields' => [
+                    CraftPlainText::class,
+                    CraftDropdown::class,
+                    CraftNumber::class
+                ]
             ],
             [
                 'label' => 'Title',
-                'value' => 'title'
+                'value' => 'title',
+                'compatibleCraftFields' => $commonFields
             ],
             [
                 'label' => 'Ip Address',
-                'value' => 'ipAddress'
+                'value' => 'ipAddress',
+                'compatibleCraftFields' => $commonFields
             ]
         ];
 

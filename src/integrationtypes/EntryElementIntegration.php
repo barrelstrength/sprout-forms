@@ -5,6 +5,8 @@ namespace barrelstrength\sproutforms\integrationtypes;
 use barrelstrength\sproutforms\base\BaseElementIntegration;
 use Craft;
 use craft\elements\Entry;
+use craft\fields\Date;
+use craft\fields\PlainText;
 
 /**
  * Create a Craft Entry element
@@ -127,23 +129,28 @@ class EntryElementIntegration extends BaseElementIntegration
         $default = [
             [
                 'label' => Craft::t('app', 'Title'),
-                'value' => 'title'
+                'value' => 'title',
+                'class' => PlainText::class
             ],
             [
                 'label' => Craft::t('app', 'Slug'),
-                'value' => 'slug'
+                'value' => 'slug',
+                'class' => PlainText::class
             ],
             [
                 'label' => Craft::t('app', 'URI'),
-                'value' => 'expiryDate'
+                'value' => 'uri',
+                'class' => PlainText::class
             ],
             [
                 'label' => Craft::t('app', 'Expiry Date'),
-                'value' => 'uri'
+                'value' => 'expiryDate',
+                'class' => Date::class
             ],
             [
                 'label' => Craft::t('app', 'Post Date'),
-                'value' => 'postDate'
+                'value' => 'postDate',
+                'class' => Date::class
             ]
         ];
 

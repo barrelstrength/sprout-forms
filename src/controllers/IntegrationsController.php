@@ -233,6 +233,19 @@ class IntegrationsController extends BaseController
     private function getCompatibleFields(array $options, array $entryFields, array $formField)
     {
         $compatibleFields = $formField['compatibleCraftFields'] ?? '*';
+        $finalOptions = [];
+        // Check first default entry attributes
+        foreach ($options as $option){
+            if (isset($option['class'])){
+                if (!in_array($option['class'], $compatibleFields)){
+                    $option = null;
+                }
+            }
+
+            if ($option){
+                $finalOptions[] = $option;
+            }
+        }
 
         foreach ($entryFields as $field) {
             $option =  [
@@ -247,11 +260,11 @@ class IntegrationsController extends BaseController
             }
 
             if ($option){
-                $options[] = $option;
+                $finalOptions[] = $option;
             }
         }
 
-        return $options;
+        return $finalOptions;
     }
 
     /**
