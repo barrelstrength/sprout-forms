@@ -5,6 +5,8 @@ namespace barrelstrength\sproutforms\fields\formfields;
 use barrelstrength\sproutforms\services\Forms;
 use Craft;
 use craft\base\ElementInterface;
+use craft\fields\Dropdown as CraftDropdown;
+use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\PreviewableFieldInterface;
 
@@ -135,5 +137,16 @@ class Hidden extends FormField implements PreviewableFieldInterface
         );
 
         return TemplateHelper::raw($rendered);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleCraftFields()
+    {
+        return [
+            CraftPlainText::class,
+            CraftDropdown::class
+        ];
     }
 }

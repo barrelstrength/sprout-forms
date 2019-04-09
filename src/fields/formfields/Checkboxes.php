@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use Craft;
+use craft\fields\Checkboxes as CraftCheckboxes;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\ElementInterface;
 
@@ -118,5 +119,15 @@ class Checkboxes extends BaseOptionsFormField
         );
 
         return TemplateHelper::raw($rendered);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleCraftFields()
+    {
+        return [
+            CraftCheckboxes::class
+        ];
     }
 }

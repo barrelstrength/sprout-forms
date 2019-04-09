@@ -6,6 +6,7 @@ use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\base\VolumeInterface;
+use craft\fields\Assets as CraftAssets;
 use craft\helpers\Template as TemplateHelper;
 use craft\elements\Asset;
 use craft\elements\db\AssetQuery;
@@ -804,6 +805,16 @@ class FileUpload extends BaseRelationFormField
         $volume = Craft::$app->getVolumes()->getVolumeByUid($parts[1]);
 
         return $volume ? $volume->id : null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleCraftFields()
+    {
+        return [
+            CraftAssets::class
+        ];
     }
 
     /**

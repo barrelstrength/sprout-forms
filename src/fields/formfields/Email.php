@@ -7,6 +7,8 @@ use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
+use craft\fields\Dropdown as CraftDropdown;
+use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Template as TemplateHelper;
 use barrelstrength\sproutforms\base\FormField;
 
@@ -193,5 +195,16 @@ class Email extends FormField implements PreviewableFieldInterface
                 Craft::t('sprout-forms', $this->name.' must be a unique email.')
             );
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleCraftFields()
+    {
+        return [
+            CraftPlainText::class,
+            CraftDropdown::class
+        ];
     }
 }

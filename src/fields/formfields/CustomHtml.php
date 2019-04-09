@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\fields\formfields;
 
 use Craft;
 use craft\base\ElementInterface;
+use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\PreviewableFieldInterface;
 use yii\db\Schema;
@@ -144,5 +145,15 @@ class CustomHtml extends FormField implements PreviewableFieldInterface
         );
 
         return TemplateHelper::raw($rendered);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleCraftFields()
+    {
+        return [
+            CraftPlainText::class
+        ];
     }
 }

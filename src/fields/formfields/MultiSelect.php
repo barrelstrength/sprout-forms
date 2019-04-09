@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use Craft;
+use craft\fields\MultiSelect as CraftMultiSelect;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\ElementInterface;
 
@@ -112,5 +113,15 @@ class MultiSelect extends BaseOptionsFormField
         );
 
         return TemplateHelper::raw($rendered);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleCraftFields()
+    {
+        return [
+            CraftMultiSelect::class
+        ];
     }
 }

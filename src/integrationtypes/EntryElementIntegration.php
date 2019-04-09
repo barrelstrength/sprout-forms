@@ -176,7 +176,8 @@ class EntryElementIntegration extends BaseElementIntegration
 
                 $this->addFormEntryError($message);
             }else{
-                $message = Craft::t('sprout-forms', 'Element Integration does not validate: '.$this->name);
+                $errors = json_encode($entryElement->getErrors());
+                $message = Craft::t('sprout-forms', 'Element Integration does not validate: '.$this->name. ' - Errors: '.$errors);
                 $this->addFormEntryError($message);
             }
         } catch (\Exception $e) {

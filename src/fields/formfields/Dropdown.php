@@ -5,7 +5,8 @@ namespace barrelstrength\sproutforms\fields\formfields;
 use Craft;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\ElementInterface;
-use craft\fields\Dropdown as DropdownField;
+use craft\fields\Dropdown as CraftDropdown;
+use craft\fields\PlainText as CraftPlainText;
 
 /**
  * Class SproutFormsDropdownField
@@ -27,7 +28,7 @@ class Dropdown extends BaseOptionsFormField
      */
     public function getModelName(): string
     {
-        return DropdownField::class;
+        return CraftDropdown::class;
     }
 
     /**
@@ -117,5 +118,16 @@ class Dropdown extends BaseOptionsFormField
         );
 
         return TemplateHelper::raw($rendered);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleCraftFields()
+    {
+        return [
+            CraftPlainText::class,
+            CraftDropdown::class
+        ];
     }
 }

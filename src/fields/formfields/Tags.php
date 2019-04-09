@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\fields\formfields;
 
 use Craft;
 use craft\base\Element;
+use craft\fields\Tags as CraftTags;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\ElementInterface;
 use craft\elements\Tag;
@@ -194,5 +195,15 @@ class Tags extends BaseRelationFormField
         }
 
         return $this->_tagGroupId = $matches[1];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleCraftFields()
+    {
+        return [
+            CraftTags::class
+        ];
     }
 }

@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use Craft;
+use craft\fields\Entries as CraftEntries;
 use craft\helpers\Template as TemplateHelper;
 use craft\elements\Entry;
 
@@ -94,5 +95,15 @@ class Entries extends BaseRelationFormField
         );
 
         return TemplateHelper::raw($rendered);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleCraftFields()
+    {
+        return [
+            CraftEntries::class
+        ];
     }
 }

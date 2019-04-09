@@ -6,6 +6,8 @@ use barrelstrength\sproutforms\services\Forms;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\base\ElementInterface;
+use craft\fields\Dropdown as CraftDropdown;
+use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\PreviewableFieldInterface;
 use barrelstrength\sproutforms\base\FormField;
@@ -178,5 +180,16 @@ class Invisible extends FormField implements PreviewableFieldInterface
         }
 
         return $value;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleCraftFields()
+    {
+        return [
+            CraftPlainText::class,
+            CraftDropdown::class
+        ];
     }
 }

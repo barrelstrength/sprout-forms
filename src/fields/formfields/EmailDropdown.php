@@ -6,6 +6,8 @@ use barrelstrength\sproutbasefields\SproutBaseFields;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
+use craft\fields\Dropdown as CraftDropdown;
+use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Template as TemplateHelper;
 use yii\db\Schema;
 use craft\helpers\StringHelper;
@@ -254,5 +256,16 @@ class EmailDropdown extends BaseOptionsFormField
                 $element->addError($this->handle, $invalidEmail);
             }
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleCraftFields()
+    {
+        return [
+            CraftPlainText::class,
+            CraftDropdown::class
+        ];
     }
 }

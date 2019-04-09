@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use Craft;
+use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Db;
 use craft\helpers\Template as TemplateHelper;
 use yii\db\Schema;
@@ -206,5 +207,15 @@ class Paragraph extends FormField implements PreviewableFieldInterface
         $value = (string)$value;
         $value = LitEmoji::unicodeToShortcode($value);
         return $value;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleCraftFields()
+    {
+        return [
+            CraftPlainText::class
+        ];
     }
 }

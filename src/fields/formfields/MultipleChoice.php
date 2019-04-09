@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use Craft;
+use craft\fields\RadioButtons as CraftRadioButtons;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\ElementInterface;
 
@@ -111,5 +112,15 @@ class MultipleChoice extends BaseOptionsFormField
         );
 
         return TemplateHelper::raw($rendered);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleCraftFields()
+    {
+        return [
+            CraftRadioButtons::class
+        ];
     }
 }

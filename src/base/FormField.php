@@ -5,6 +5,7 @@ namespace barrelstrength\sproutforms\base;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use Craft;
 use craft\base\Field;
+use craft\fields\PlainText as CraftPlainText;
 
 /**
  * Class FormField
@@ -28,6 +29,19 @@ abstract class FormField extends Field
      * @var string
      */
     protected $originalTemplatesPath;
+
+
+    /**
+     * Return a list of compatible Craft Fields to associate on the Element Integration API
+     *
+     * @return array
+     */
+    public function getCompatibleCraftFields()
+    {
+        return [
+            CraftPlainText::class
+        ];
+    }
 
     /**
      * The name of your form field
