@@ -5,7 +5,6 @@ namespace barrelstrength\sproutforms\integrationtypes;
 use barrelstrength\sproutforms\base\BaseElementIntegration;
 use Craft;
 use craft\elements\Entry;
-use barrelstrength\sproutforms\elements\Entry as SproutFormEntry;
 
 /**
  * Create a Craft Entry element
@@ -120,13 +119,12 @@ class EntryElementIntegration extends BaseElementIntegration
         return $rendered;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getDefaultAttributes()
     {
         $default = [
-            [
-                'label' => Craft::t('sprout-forms', 'None'),
-                'value' => ''
-            ],
             [
                 'label' => Craft::t('app', 'Title'),
                 'value' => 'title'

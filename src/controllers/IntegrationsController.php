@@ -192,7 +192,7 @@ class IntegrationsController extends BaseController
         $fieldsMapped = $integration->fieldsMapped;
         $integrationSectionId = $integration->entryTypeId ?? null;
 
-        $defaultEntryFields = $integration->getDefaultAttributes();
+        $defaultEntryFields = $integration->getDefaultEntryFieldsAsOptions();
         $options = $defaultEntryFields;
         $formFields = $integration->getFormFieldsAsOptions();
 
