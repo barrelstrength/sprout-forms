@@ -185,7 +185,7 @@ abstract class Integration extends Model
 
         foreach ($fields as $field) {
             $options[] = [
-                'label' => $field->handle,
+                'label' => $field->name,
                 'value' => $field->handle,
                 'compatibleCraftFields' => $field->getCompatibleCraftFields(),
                 'fieldType' == get_class($field)

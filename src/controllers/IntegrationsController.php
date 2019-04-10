@@ -242,7 +242,7 @@ class IntegrationsController extends BaseController
 
         foreach ($entryFields as $field) {
             $option =  [
-                'label' => $field->name.': '.$field->handle,
+                'label' => $field->name.' ('.$field->handle.')',
                 'value' => $field->handle
             ];
 
