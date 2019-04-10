@@ -119,8 +119,8 @@ class Address extends FormField implements PreviewableFieldInterface
                 'field' => $this,
                 'name' => $this->handle,
                 'renderingOptions' => $renderingOptions,
-                'addressFormHtml' => Template::raw($addressFormHtml),
-                'countryInputHtml' => Template::raw($countryInputHtml),
+                'addressFormHtml' => TemplateHelper::raw($addressFormHtml),
+                'countryInputHtml' => TemplateHelper::raw($countryInputHtml),
                 'showCountryDropdown' => $showCountryDropdown
             ]
         );
