@@ -2,19 +2,12 @@
 
 namespace barrelstrength\sproutforms\controllers;
 
-
-use barrelstrength\sproutforms\base\FormField;
-use barrelstrength\sproutforms\base\Integration;
 use barrelstrength\sproutforms\integrationtypes\EntryElementIntegration;
 use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
 use barrelstrength\sproutforms\elements\Form;
 use Craft;
 
 use craft\web\Controller as BaseController;
-use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
-use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
-use craft\base\Field;
-
 use barrelstrength\sproutforms\SproutForms;
 
 class IntegrationsController extends BaseController

@@ -25,7 +25,7 @@ class PayloadForwarding extends ApiIntegration
     public $hasFieldMapping = true;
 
     public function getName() {
-        return Craft::t('sprout-forms', 'Custom (Payload Forwarding)');
+        return Craft::t('sprout-forms', 'Payload Forwarding');
     }
 
     /**
