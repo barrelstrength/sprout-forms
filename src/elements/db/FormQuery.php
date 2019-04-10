@@ -192,11 +192,11 @@ class FormQuery extends ElementQuery
 
         if ($this->totalEntries) {
             $this->query->addSelect('COUNT(entries.id) totalEntries');
-            $this->query->leftJoin('sproutforms_entries entries', 'entries.formId = sproutforms_forms.id');
+            $this->query->leftJoin('sproutforms_entries entries', '[[entries.formId]] = [[sproutforms_forms.id]]');
         }
         if ($this->numberOfFields) {
             $this->query->addSelect('COUNT(fields.id) numberOfFields');
-            $this->query->leftJoin('fieldlayoutfields fields', 'fields.layoutId = sproutforms_forms.fieldLayoutId');
+            $this->query->leftJoin('fieldlayoutfields fields', '[[fields.layoutId]] = [[sproutforms_forms.fieldLayoutId]]');
         }
 
         if ($this->groupId) {
