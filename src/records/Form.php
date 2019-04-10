@@ -20,7 +20,6 @@ use craft\records\Element;
  * @property Element   $element
  * @property FormGroup $group
  * @property string    $redirectUri
- * @property string    $submitAction
  * @property string    $submitButtonText
  * @property bool      $saveData
  * @property string    $templateOverridesFolder
@@ -80,34 +79,4 @@ class Form extends ActiveRecord
     {
         return $this->_oldHandle;
     }
-
-    /**
-     * Before Save
-     *
-     */
-    // @todo - add before save method
-    /*
-    public function beforeSave()
-    {
-        // Check if the titleFormat is updated
-        if (!$this->isNewRecord())
-        {
-            if ($this->titleFormat != $this->oldRecord->titleFormat)
-            {
-                $contentTable = 'sproutformscontent_' . trim(strtolower($this->handle));
-                $entries      = sproutForms()->entries->getContentEntries($contentTable);
-                // Call the update task
-                craft()->tasks->createTask('SproutForms_TitleFormat', null,
-                    array(
-                        'contentRows'  => $entries,
-                        'newFormat'    => $this->titleFormat,
-                        'contentTable' => $contentTable
-                    )
-                );
-            }
-        }
-
-        return true;
-    }*/
-
 }

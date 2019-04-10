@@ -51,7 +51,6 @@ class Form extends Element
     public $titleFormat;
     public $displaySectionTitles = false;
     public $redirectUri;
-    public $submitAction;
     public $submitButtonText;
     public $saveData = false;
     public $templateOverridesFolder;
@@ -320,7 +319,6 @@ class Form extends Element
         $record->displaySectionTitles = $this->displaySectionTitles;
         $record->groupId = $this->groupId;
         $record->redirectUri = $this->redirectUri;
-        $record->submitAction = $this->submitAction;
         $record->saveData = $this->saveData;
         $record->submitButtonText = $this->submitButtonText;
         $record->templateOverridesFolder = $this->templateOverridesFolder;

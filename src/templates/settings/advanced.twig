@@ -50,17 +50,6 @@
 
             </div>
 
-            <hr>
-
-            {{ forms.lightswitchField({
-                label: "Enable payload forwarding"|t('sprout-forms'),
-                instructions: "Payload Forwarding enables your forms with advanced settings that allow you to submit a form to a third-party endpoint."|t('sprout-forms'),
-                id: 'enablePayloadForwarding',
-                name: 'enablePayloadForwarding',
-                on: settings.enablePayloadForwarding,
-                onLabel: "Enable"|t('sprout-forms'),
-            }) }}
-
         {% endnamespace %}
 
     </div>

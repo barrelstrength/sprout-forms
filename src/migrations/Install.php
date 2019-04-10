@@ -79,7 +79,6 @@ class Install extends Migration
             'titleFormat' => $this->string()->notNull(),
             'displaySectionTitles' => $this->boolean()->defaultValue(false),
             'redirectUri' => $this->string(),
-            'submitAction' => $this->string(),
             'submitButtonText' => $this->string(),
             'saveData' => $this->boolean()->defaultValue(false),
             'templateOverridesFolder' => $this->string(),

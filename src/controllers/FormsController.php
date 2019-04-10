@@ -66,7 +66,6 @@ class FormsController extends BaseController
         $form->titleFormat = $request->getBodyParam('titleFormat');
         $form->displaySectionTitles = $request->getBodyParam('displaySectionTitles');
         $form->redirectUri = $request->getBodyParam('redirectUri');
-        $form->submitAction = $request->getBodyParam('submitAction');
         $form->saveData = $request->getBodyParam('saveData', 0);
         $form->submitButtonText = $request->getBodyParam('submitButtonText');
         $form->templateOverridesFolder = $request->getBodyParam('templateOverridesFolder');

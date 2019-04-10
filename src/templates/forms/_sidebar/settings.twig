@@ -143,7 +143,7 @@
 
 </div>
 
-{% if (settings.enableSaveDataPerFormBasis and settings.enableSaveData) or form.submitAction %}
+{% if settings.enableSaveDataPerFormBasis and settings.enableSaveData %}
 
     <hr>
     <div class="meta read-only sprout-meta-heading">
@@ -166,61 +166,36 @@
 
 {% endif %}
 
-{% if settings.enablePayloadForwarding or form.submitAction %}
+<hr>
+<div class="meta read-only sprout-meta-heading">
+    <h6>{{ "Integrations"|t('sprout-forms') }}</h6>
+</div>
+<hr>
+{% set integrationOptions = craft.sproutForms.getIntegrationOptions() %}
 
-    <hr>
-    <div class="meta read-only sprout-meta-heading">
-        <h6>{{ "Integrations"|t('sprout-forms') }}</h6>
-    </div>
-    <hr>
-    {% set integrationOptions = craft.sproutForms.getIntegrationOptions() %}
+<div class="meta">
 
-    <div class="meta">
-
-        <div id="integrations-wrapper">
-        {% for integration in integrations %}
-            <div class="active-field-header">
-            <a href="#" id ="sproutform-integration-{{ integration.id }}" data-integrationid="{{ integration.id }}">{{ integration.name }}</a>
-            </div>
-        {% endfor %}
+    <div id="integrations-wrapper">
+    {% for integration in integrations %}
+        <div class="active-field-header">
+        <a href="#" id ="sproutform-integration-{{ integration.id }}" data-integrationid="{{ integration.id }}">{{ integration.name }}</a>
         </div>
+    {% endfor %}
+    </div>
 
-        {{ forms.selectField({
-            label: "Integrations"|t('enupal-stripe'),
-            id: 'integrationsOptions',
-            name: 'integrationsOptions',
-            options: integrationOptions,
-            required: true
-        }) }}
+    {{ forms.selectField({
+        label: "Integrations"|t('enupal-stripe'),
+        id: 'integrationsOptions',
+        name: 'integrationsOptions',
+        options: integrationOptions,
+        required: true
+    }) }}
 
-        <div class="buttons">
-            <div id="add-integration" class="btn add icon small" tabindex="0">
-                {{ "Add new"|t('sprout-forms') }}
-            </div>
+    <div class="buttons">
+        <div id="add-integration" class="btn add icon small" tabindex="0">
+            {{ "Add new"|t('sprout-forms') }}
         </div>
-
     </div>
 
-
-    {# @todo WE WILL REPLACE PAYLOAD FORWARDING WITH THE CUSTOM API INTEGRATION #}
-    <hr>
-    <div class="meta read-only sprout-meta-heading">
-        <h6>{{ "Payload Forwarding"|t('sprout-forms') }}</h6>
-    </div>
-    <hr>
-
-    <div class="meta">
-
-        {{ forms.textField({
-            label: "Submit URL <span class='info'>Submit your form data to this URL, instead of directly to Sprout
-            Forms.</span>"|t('sprout-forms'),
-            name: 'submitAction',
-            placeholder: 'http://example.com/somewhere-else'|t('sprout-forms'),
-            value: (form is defined ? form.submitAction : null),
-            errors: (form is defined ? form.getErrors('submitAction') : null)
-        }) }}
-
-    </div>
-
-{% endif %}
+</div>
 
