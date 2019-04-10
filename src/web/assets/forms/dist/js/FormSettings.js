@@ -74,7 +74,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
                     // Add integration edit link
                     integrationsWrapper.prepend($([
                         '<div class="active-field-header">',
-                        '<a href="#" id ="sproutform-integration-'+integration.id+'" data-integrationid="'+integration.id+'">'+integration.name+'</a>',
+                        '<a href="#" class="btn small integrations-btn" id ="sproutform-integration-'+integration.id+'" data-integrationid="'+integration.id+'">'+integration.name+'</a>',
                         '</div>'
                     ].join('')));
 
