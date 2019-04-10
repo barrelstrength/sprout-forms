@@ -1,5 +1,28 @@
 # Changelog
 
+## 3.0.0-beta.50 - 2019-04-10
+
+### Changed
+- Improved permission handling for Reports
+- Improved support for Postgres
+- Added check for errors on the OnBeforeSaveEntryEvent ([#263])
+- Updated barrelstrength/sprout-base-email requirement to v1.0.5
+- Updated barrelstrength/sprout-base-reports requirement to v1.0.3
+- Updated barrelstrength/sprout-base requirement v4.0.8
+
+### Fixed
+- Fixed template output for Address Field ([#266])
+- Improved support for default Project Config settings when installing the plugin ([#254])
+- Fixed behavior of permissions around Notifications and Report tabs
+- Fixed bug where could not set 'Reply To' value dynamically ([#247])
+- Fixed bug where Sprout Lists integration was not being recognized for Notification Emails ([#106-sproutemail])
+
+[#247]: https://github.com/barrelstrength/craft-sprout-forms/issues/247
+[#254]: https://github.com/barrelstrength/craft-sprout-forms/issues/254
+[#263]: https://github.com/barrelstrength/craft-sprout-forms/issues/263
+[#266]: https://github.com/barrelstrength/craft-sprout-forms/issues/266
+[#106-sproutemail]: https://github.com/barrelstrength/craft-sprout-email/issues/106
+
 ## 3.0.0-beta.49 - 2019-03-19
 
 ### Fixed
