@@ -292,7 +292,7 @@ class Entries extends Component
         $transaction = $db->beginTransaction();
 
         try {
-            if (!$event->isValid) {
+            if (!$event->isValid || !empty($event->errors)) {
                 foreach ($event->errors as $key => $error) {
                     $entry->addError($key, $error);
                 }

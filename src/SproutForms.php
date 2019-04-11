@@ -262,10 +262,12 @@ class SproutForms extends Plugin
             ];
         }
 
-        $parent['subnav']['notifications'] = [
-            'label' => Craft::t('sprout-forms', 'Notifications'),
-            'url' => 'sprout-forms/notifications'
-        ];
+        if (Craft::$app->getUser()->checkPermission('sproutForms-viewNotifications')) {
+            $parent['subnav']['notifications'] = [
+                'label' => Craft::t('sprout-forms', 'Notifications'),
+                'url' => 'sprout-forms/notifications'
+            ];
+        }
 
         $entriesDataSource = SproutBaseReports::$app->dataSources->getDataSourceByType(EntriesDataSource::class);
 
@@ -275,10 +277,12 @@ class SproutForms extends Plugin
             $entriesDataSource = SproutBaseReports::$app->dataSources->getDataSourceByType(EntriesDataSource::class);
         }
 
-        $parent['subnav']['reports'] = [
-            'label' => Craft::t('sprout-forms', 'Reports'),
-            'url' => 'sprout-forms/reports/'.$entriesDataSource->dataSourceId
-        ];
+        if (Craft::$app->getUser()->checkPermission('sproutForms-viewReports')) {
+            $parent['subnav']['reports'] = [
+                'label' => Craft::t('sprout-forms', 'Reports'),
+                'url' => 'sprout-forms/reports/'.$entriesDataSource->dataSourceId
+            ];
+        }
 
         if (Craft::$app->getUser()->getIsAdmin()) {
             $parent['subnav']['settings'] = [
