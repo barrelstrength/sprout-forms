@@ -156,12 +156,19 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
     transition: all 0.2s ease-in-out;
 }
 
-.target-field h2 code {
+.target-field h2 {
+    float: left;
+}
+.target-field .active-field-header p,
+.target-field body {
+    clear: both;
+}
+.target-field h2 + code {
     opacity: 0;
-    margin-left: 4px;
+    margin-left: 6px;
 }
 
-.target-field:hover h2 code,
+.target-field:hover h2 + code,
 .target-field:hover ul.settings {
     opacity: 1;
     transition: opacity 0.4s ease-in-out;
