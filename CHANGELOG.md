@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.0.0-beta.52 - 2019-04-21
+
+### Fixed
+- Fixed missing migration for updated Opt-in Field settings ([#268])
+- Fixed display issue with required labels ([#271])
+
+[#271]: https://github.com/barrelstrength/craft-sprout-forms/issues/271
+[#268]: https://github.com/barrelstrength/craft-sprout-forms/issues/268
+
+
 ## 3.0.0-beta.51 - 2019-04-20
 
 ### Changed
