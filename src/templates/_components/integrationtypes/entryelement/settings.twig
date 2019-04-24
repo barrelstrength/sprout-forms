@@ -24,7 +24,7 @@
             $('#types-barrelstrength-sproutforms-integrationtypes-EntryElementIntegration-entryTypeId').change(function() {
                 var changed = $(this).val() != $(this).data('default');
                 if (changed){
-                    updateAllFieldSelects();
+                    updateAllFieldSelectsAndRemoveRows();
                 }
             });
 
@@ -46,12 +46,34 @@
                 $select.prop("disabled", false);
             });
         }
+        function updateAllFieldSelectsAndRemoveRows() {
+            var tableId = "#types-barrelstrength-sproutforms-integrationtypes-EntryElementIntegration-fieldsMapped";
+            $(tableId+" tbody tr").remove();
+            var data = getEntryFieldsData();
+
+            Craft.postActionRequest('sprout-forms/integrations/get-element-entry-fields', data, $.proxy(function(response, textStatus)
+            {
+                var statusSuccess = (textStatus === 'success');
+
+                if(statusSuccess && response.success) {
+                    var rows = response.fieldOptionsByRow;
+                    for(i = 0; i < rows.length; i++) {
+                        var field = rows[i];
+                        $(tableId+' tbody').append('<tr data-id="'+i+'"> <td class="textual code formField"><textarea name="types[barrelstrength\\sproutforms\\integrationtypes\\EntryElementIntegration][fieldsMapped]['+i+'][integrationField]" rows="1" readonly> '+field["value"]+'</textarea></td> <td class="formEntryFields"><div class="select small"><select name="types[barrelstrength\\sproutforms\\integrationtypes\\EntryElementIntegration][fieldsMapped]['+i+'][sproutFormField]"></select></div></td></tr>');
+                        updateAllFieldSelects();
+                    }
+                }
+                else
+                {
+                    Craft.cp.displayError(Craft.t('sprout-forms','Unable to get the Entry fields'));
+                }
+            }, this));
+        }
 
         function updateAllFieldSelects() {
-            var $table = $("#types-barrelstrength-sproutforms-integrationtypes-EntryElementIntegration-fieldsMapped");
             var $currentRows = getCurrentRows();
             var data = getEntryFieldsData();
-            Craft.postActionRequest('sprout-forms/integrations/get-entry-fields', data, $.proxy(function(response, textStatus)
+            Craft.postActionRequest('sprout-forms/integrations/get-form-fields', data, $.proxy(function(response, textStatus)
             {
                 var statusSuccess = (textStatus === 'success');
 
@@ -65,7 +87,7 @@
                 }
                 else
                 {
-                    Craft.cp.displayError(Craft.t('sprout-forms','Unable to get the Entry fields'));
+                    Craft.cp.displayError(Craft.t('sprout-forms','Unable to get the Form fields'));
                 }
             }, this));
 

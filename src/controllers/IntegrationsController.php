@@ -154,7 +154,7 @@ class IntegrationsController extends BaseController
      * @return \yii\web\Response
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionGetEntryFields()
+    public function actionGetFormFields()
     {
         $this->requirePostRequest();
         $this->requireAcceptsJson();
@@ -167,6 +167,29 @@ class IntegrationsController extends BaseController
         return $this->asJson([
             'success' => 'true',
             'fieldOptionsByRow' => $fieldOptionsByRow
+        ]);
+    }
+
+    /**
+     * @return \yii\web\Response
+     * @throws \yii\web\BadRequestHttpException
+     */
+    public function actionGetElementEntryFields()
+    {
+        $this->requirePostRequest();
+        $this->requireAcceptsJson();
+
+        $entryTypeId = Craft::$app->request->getRequiredBodyParam('entryTypeId');
+        $integrationId = Craft::$app->request->getRequiredBodyParam('integrationId');
+        $integrationRecord = IntegrationRecord::findOne($integrationId);
+        /** @var EntryElementIntegration $integration */
+        $integration = $integrationRecord->getIntegrationApi();
+
+        $entryFields = $integration->getElementFieldsAsOptions($entryTypeId);
+
+        return $this->asJson([
+            'success' => 'true',
+            'fieldOptionsByRow' => $entryFields
         ]);
     }
 
