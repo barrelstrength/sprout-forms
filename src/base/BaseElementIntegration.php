@@ -29,12 +29,9 @@ abstract class BaseElementIntegration extends ApiIntegration
     /**
      * @return array
      */
-    public function getDefaultEntryFieldsAsOptions()
+    public function getDefaultElementFieldsAsOptions()
     {
-        $options = [[
-            'label' => Craft::t('sprout-forms', 'None'),
-            'value' => ''
-        ]];
+        $options = [];
 
         if ($this->getDefaultAttributes()){
             foreach ($this->getDefaultAttributes() as $item) {
@@ -43,6 +40,15 @@ abstract class BaseElementIntegration extends ApiIntegration
         }
 
         return $options;
+    }
+
+    /**
+     * @param $elementGroupId
+     * @return array
+     */
+    public function getElementFieldsAsOptions($elementGroupId)
+    {
+        return [];
     }
 }
 

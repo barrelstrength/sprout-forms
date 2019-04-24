@@ -13,10 +13,9 @@
 <script>
     $(document).ready(function() {
         init();
-        // We have three scenarios:
+        // We have 2 scenarios:
         // 1.- on load (the init function should load current rows with proper dropdown)
-        // 2.- when user add a new row (display the fields dropdown on the new row)
-        // 3.- When user update the section dropdown (Update all rows field dropdown)
+        // 2.- When user update the section dropdown (Update all rows field dropdown)
 
         function init(){
             // Init all empty field selects
@@ -41,14 +40,15 @@
                 $textarea.prop("readonly", true);
             });
 
-            var $craftEntryFields = getCurrentRows('.craftEntryFields');
-            $craftEntryFields.each(function(index){
+            var $formEntryFields = getCurrentRows('.formEntryFields');
+            $formEntryFields.each(function(index){
                 var $select = $(this).find('select');
                 $select.prop("disabled", false);
             });
         }
 
         function updateAllFieldSelects() {
+            var $table = $("#types-barrelstrength-sproutforms-integrationtypes-EntryElementIntegration-fieldsMapped");
             var $currentRows = getCurrentRows();
             var data = getEntryFieldsData();
             Craft.postActionRequest('sprout-forms/integrations/get-entry-fields', data, $.proxy(function(response, textStatus)
@@ -86,7 +86,7 @@
         function getCurrentRows(className = null)
         {
             if (className === null){
-                className = 'tbody .craftEntryFields';
+                className = 'tbody .formEntryFields';
             }
             return $(className);
         }

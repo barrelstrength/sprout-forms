@@ -177,32 +177,32 @@ class IntegrationsController extends BaseController
      */
     private function getFieldsAsOptionsByRow($entryTypeId, $integrationId)
     {
-        $entryType = Craft::$app->getSections()->getEntryTypeById($entryTypeId);
-        $entryFields = $entryType->getFields();
-
         $integrationRecord = IntegrationRecord::findOne($integrationId);
         /** @var EntryElementIntegration $integration */
         $integration = $integrationRecord->getIntegrationApi();
+        $entryFields = $integration->getElementFieldsAsOptions($entryTypeId);
         $fieldsMapped = $integration->fieldsMapped;
         $integrationSectionId = $integration->entryTypeId ?? null;
-
-        $defaultEntryFields = $integration->getDefaultEntryFieldsAsOptions();
-        $options = $defaultEntryFields;
+        $firstRow = [
+            'label' => 'None',
+            'value' => ''
+        ];
         $formFields = $integration->getFormFieldsAsOptions();
+        array_unshift($formFields, $firstRow);
 
         $rowPosition = 0;
 
         $finalOptions = [];
 
-
-        foreach ($formFields as $formField) {
-            $optionsByRow = $this->getCompatibleFields($options, $entryFields, $formField);
+        foreach ($entryFields as $entryField) {
+            $optionsByRow = $this->getCompatibleFields($formFields, $entryField);
             // We have rows stored and are for the same sectionType
             if ($fieldsMapped && ($integrationSectionId == $entryTypeId)){
                 if (isset($fieldsMapped[$rowPosition])){
                     foreach ($optionsByRow as $key => $option) {
-                        if ($option['value'] == $fieldsMapped[$rowPosition]['integrationField'] &&
-                            $fieldsMapped[$rowPosition]['sproutFormField'] == $formField['value']){
+                        $integrationValue =  $entryField['value'] ?? $entryField->handle;
+                        if ($option['value'] == $fieldsMapped[$rowPosition]['sproutFormField'] &&
+                            $fieldsMapped[$rowPosition]['integrationField'] == $integrationValue){
                             $optionsByRow[$key]['selected'] = true;
                         }
                     }
@@ -218,42 +218,27 @@ class IntegrationsController extends BaseController
     }
 
     /**
-     * @param array $options
-     * @param array $entryFields
-     * @param array $formField
+     * @param array $formFields
+     * @param $entryField
      * @return array
      */
-    private function getCompatibleFields(array $options, array $entryFields, array $formField)
+    private function getCompatibleFields(array $formFields, $entryField)
     {
-        $compatibleFields = $formField['compatibleCraftFields'] ?? '*';
         $finalOptions = [];
-        // Check first default entry attributes
-        foreach ($options as $option){
-            if (isset($option['class'])){
-                if (!in_array($option['class'], $compatibleFields)){
-                    $option = null;
+
+        foreach ($formFields as $field) {
+            $compatibleFields = $field['compatibleCraftFields'] ?? '*';
+            // Check default attributes
+            if (isset($entryField['class'])){
+                if (is_array($compatibleFields)){
+                    if (!in_array($entryField['class'], $compatibleFields)){
+                        $field = null;
+                    }
                 }
-            }
 
-            if ($option){
-                $finalOptions[] = $option;
-            }
-        }
-
-        foreach ($entryFields as $field) {
-            $option =  [
-                'label' => $field->name.' ('.$field->handle.')',
-                'value' => $field->handle
-            ];
-
-            if (is_array($compatibleFields)){
-                if (!in_array(get_class($field), $compatibleFields)){
-                    $option = null;
+                if ($field){
+                    $finalOptions[] = $field;
                 }
-            }
-
-            if ($option){
-                $finalOptions[] = $option;
             }
         }
 

@@ -85,11 +85,21 @@ class EntryElementIntegration extends BaseElementIntegration
             return '';
         }
         $this->fieldsMapped = [];
-        foreach ($this->getFormFieldsAsOptions() as $formField) {
-            $this->fieldsMapped[] = [
-                'sproutFormField' => $formField['value'],
-                'integrationField' => ''
-            ];
+
+        $entryTypeId = $this->entryTypeId;
+
+        if (is_null($entryTypeId) || empty($entryTypeId)){
+            $sections = $this->getSectionsAsOptions();
+            $entryTypeId = $sections[1]['value'] ?? null;
+        }
+
+        if (!is_null($entryTypeId)){
+            foreach ($this->getElementFieldsAsOptions($entryTypeId) as $elementFieldsAsOption) {
+                $this->fieldsMapped[] = [
+                    'integrationField' => $elementFieldsAsOption['value'],
+                    'sproutFormField' => ''
+                ];
+            }
         }
 
         $rendered = Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'editableTableField',
@@ -102,15 +112,15 @@ class EntryElementIntegration extends BaseElementIntegration
                     'addRowLabel' => Craft::t('sprout-forms', 'Add a field mapping'),
                     'static' => true,
                     'cols' => [
-                        'sproutFormField' => [
-                            'heading' => Craft::t('sprout-forms', 'Form Field'),
+                        'integrationField' => [
+                            'heading' => Craft::t('sprout-forms', 'Entry Field'),
                             'type' => 'singleline',
                             'class' => 'code formField'
                         ],
-                        'integrationField' => [
-                            'heading' => Craft::t('sprout-forms', 'Entry Field'),
+                        'sproutFormField' => [
+                            'heading' => Craft::t('sprout-forms', 'Form Field'),
                             'type' => 'select',
-                            'class' => 'craftEntryFields',
+                            'class' => 'formEntryFields',
                             'options' => []
                         ]
                     ],
@@ -155,6 +165,28 @@ class EntryElementIntegration extends BaseElementIntegration
         ];
 
         return $default;
+    }
+
+    /**
+     * @param $elementGroupId
+     * @return array
+     */
+    public function getElementFieldsAsOptions($elementGroupId)
+    {
+        $entryType = Craft::$app->getSections()->getEntryTypeById($elementGroupId);
+        $defaultEntryFields = $this->getDefaultElementFieldsAsOptions();
+        $entryFields = $entryType->getFields();
+        $options = $defaultEntryFields;
+
+        foreach ($entryFields as $field) {
+            $options[] = [
+                'label' => $field->name,
+                'value' => $field->handle,
+                'class' => get_class($field)
+            ];
+        }
+
+        return $options;
     }
 
     /**
