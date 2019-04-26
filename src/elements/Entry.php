@@ -24,6 +24,7 @@ class Entry extends Element
     // Properties
     // =========================================================================
     private $form;
+    private $entryIntegrationLogs = [];
 
     public $id;
     public $formId;
@@ -428,5 +429,27 @@ class Entry extends Element
         $rules[] = [['formId'], 'required'];
 
         return $rules;
+    }
+
+    /**
+     * @param $integrationId
+     * @param $message
+     * @param $details
+     */
+    public function addEntryIntegrationLog($integrationId, $message, $details)
+    {
+        $this->entryIntegrationLogs[] = [
+            'integrationId' => $integrationId,
+            'message' => $message,
+            'details' => $details
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getEntryIntegrationLogs()
+    {
+        return $this->entryIntegrationLogs;
     }
 }

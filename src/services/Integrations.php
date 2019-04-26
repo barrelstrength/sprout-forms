@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\services;
 
 use barrelstrength\sproutforms\base\Integration;
 use barrelstrength\sproutforms\integrationtypes\FormEntryElementIntegration;
+use barrelstrength\sproutforms\records\EntryIntegrationLog;
 use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\SproutForms;
@@ -144,5 +145,25 @@ class Integrations extends Component
             'js' => $js,
             'css' => $css
         ];
+    }
+
+    /**
+     * @param $integrationId
+     * @param $entryId
+     * @param $message
+     * @param array $details
+     * @return bool
+     */
+    public function saveEntryIntegrationLog($integrationId, $entryId, $message, $details = [])
+    {
+        $entryIntegration = new EntryIntegrationLog();
+        $entryIntegration->entryId = $entryId;
+        $entryIntegration->integrationId = $integrationId;
+        $entryIntegration->message = $message;
+        if (is_array($details)){
+            $details = json_encode($details);
+        }
+        $entryIntegration->details = $details;
+        return $entryIntegration->save();
     }
 }

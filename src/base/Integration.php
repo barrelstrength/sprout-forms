@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\base;
 
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Form;
+use barrelstrength\sproutforms\SproutForms;
 use craft\base\Model;
 use Craft;
 use craft\fields\Date as CraftDate;
@@ -204,6 +205,15 @@ abstract class Integration extends Model
         if ($this->addErrorOnSubmit){
             $this->entry->addError('general', $message);
         }
+    }
+
+    /**
+     * @param $message
+     * @param array $details
+     */
+    public function logResponse($message, $details = [])
+    {
+        $this->entry->addEntryIntegrationLog($this->integrationId, $message, $details);
     }
 }
 

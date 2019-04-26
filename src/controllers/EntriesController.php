@@ -154,10 +154,11 @@ class EntriesController extends BaseController
                         }
                     }
                 }
-
             }catch (\Exception $e){
                 $success = false;
-                Craft::error('Submit Integration Api fails: '.$e->getMessage(), __METHOD__);
+                $message = 'Submit Integration Api fails: '.$e->getMessage();
+                $integration->logResponse($message, $e->getTrace());
+                Craft::error($message, __METHOD__);
             }
         }
 

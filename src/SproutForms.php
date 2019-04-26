@@ -11,6 +11,7 @@ use barrelstrength\sproutbasereports\services\DataSources;
 use barrelstrength\sproutbasereports\SproutBaseReports;
 use barrelstrength\sproutbasereports\SproutBaseReportsHelper;
 use barrelstrength\sproutforms\base\Captcha;
+use barrelstrength\sproutforms\events\OnSaveEntryEvent;
 use barrelstrength\sproutforms\integrations\sproutemail\emailtemplates\basic\BasicSproutFormsNotification;
 use barrelstrength\sproutforms\integrations\sproutemail\events\notificationevents\SaveEntryEvent;
 use barrelstrength\sproutforms\integrations\sproutimport\elements\Form as FormElementImporter;
@@ -93,7 +94,7 @@ class SproutForms extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '3.0.19';
+    public $schemaVersion = '3.0.20';
 
     /**
      * @var string
@@ -178,6 +179,23 @@ class SproutForms extends Plugin
 
                 foreach ($captchas as $captcha) {
                     $captcha->verifySubmission($event);
+                }
+            }
+        });
+
+        Event::on(Entries::class, EntryElement::EVENT_AFTER_SAVE, function(OnSaveEntryEvent $event) {
+            if (Craft::$app->getRequest()->getIsSiteRequest()) {
+                $entry = $event->entry;
+                $integrationLogs = $entry->getEntryIntegrationLogs();
+                if ($integrationLogs){
+                    foreach ($integrationLogs as $integrationLog) {
+                        SproutForms::$app->integrations->saveEntryIntegrationLog(
+                            $integrationLog['integrationId'],
+                            $entry->id,
+                            $integrationLog['message'],
+                            $integrationLog['details']
+                        );
+                    }
                 }
             }
         });

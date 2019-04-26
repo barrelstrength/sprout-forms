@@ -55,6 +55,7 @@ class Install extends Migration
         SproutBaseReports::$app->dataSources->deleteReportsByType(EntriesDataSource::class);
 
         $this->dropTable('{{%sproutforms_entries}}');
+        $this->dropTable('{{%sproutforms_integrations_entries}}');
         $this->dropTable('{{%sproutforms_integrations}}');
         $this->dropTable('{{%sproutforms_forms}}');
         $this->dropTable('{{%sproutforms_formgroups}}');
@@ -137,6 +138,17 @@ class Install extends Migration
             'dateUpdated' => $this->dateTime()->notNull(),
             'uid' => $this->uid(),
         ]);
+
+        $this->createTable('{{%sproutforms_integrations_entries}}', [
+            'id' => $this->primaryKey(),
+            'entryId' => $this->integer()->notNull(),
+            'integrationId' => $this->integer()->notNull(),
+            'message' => $this->text(),
+            'details' => $this->text(),
+            'dateCreated' => $this->dateTime()->notNull(),
+            'dateUpdated' => $this->dateTime()->notNull(),
+            'uid' => $this->uid(),
+        ]);
     }
 
     /**
@@ -174,6 +186,28 @@ class Install extends Migration
             ),
             '{{%sproutforms_integrations}}',
             'formId',
+            false
+        );
+
+        $this->createIndex(
+            $this->db->getIndexName(
+                '{{%sproutforms_integrations_entries}}',
+                'entryId',
+                false, true
+            ),
+            '{{%sproutforms_integrations_entries}}',
+            'entryId',
+            false
+        );
+
+        $this->createIndex(
+            $this->db->getIndexName(
+                '{{%sproutforms_integrations_entries}}',
+                'integrationId',
+                false, true
+            ),
+            '{{%sproutforms_integrations_entries}}',
+            'integrationId',
             false
         );
     }
@@ -223,6 +257,22 @@ class Install extends Migration
             ),
             '{{%sproutforms_integrations}}', 'formId',
             '{{%sproutforms_forms}}', 'id', 'CASCADE', null
+        );
+
+        $this->addForeignKey(
+            $this->db->getForeignKeyName(
+                '{{%sproutforms_integrations_entries}}', 'entryId'
+            ),
+            '{{%sproutforms_integrations_entries}}', 'entryId',
+            '{{%sproutforms_entries}}', 'id', 'CASCADE', null
+        );
+
+        $this->addForeignKey(
+            $this->db->getForeignKeyName(
+                '{{%sproutforms_integrations_entries}}', 'integrationId'
+            ),
+            '{{%sproutforms_integrations_entries}}', 'integrationId',
+            '{{%sproutforms_integrations}}', 'id', 'CASCADE', null
         );
     }
 
