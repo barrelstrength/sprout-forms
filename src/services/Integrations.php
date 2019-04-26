@@ -9,6 +9,7 @@ use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\SproutForms;
 use craft\base\Component;
+use craft\db\Query;
 use craft\events\RegisterComponentTypesEvent;
 use Craft;
 
@@ -165,5 +166,20 @@ class Integrations extends Component
         }
         $entryIntegration->details = $details;
         return $entryIntegration->save();
+    }
+
+    /**
+     * @param $entryId
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function getEntryIntegrationLogsByEntryId($entryId)
+    {
+        $entryIntegrations = (new Query())
+            ->select(['*'])
+            ->from(['{{%sproutforms_integrations_entries}}'])
+            ->where(['entryId' => $entryId])
+            ->all();
+
+        return $entryIntegrations;
     }
 }

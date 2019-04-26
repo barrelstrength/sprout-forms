@@ -622,5 +622,27 @@ class SproutFormsVariable
     {
         return get_class($field);
     }
+
+    /**
+     * @param $entryId
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function getEntryIntegrationLogsByEntryId($entryId)
+    {
+        $entryIntegrations = SproutForms::$app->integrations->getEntryIntegrationLogsByEntryId($entryId);
+
+        return $entryIntegrations;
+    }
+
+    /**
+     * @param $integrationId
+     * @return \barrelstrength\sproutforms\records\Integration|null
+     */
+    public function getIntegrationById($integrationId)
+    {
+        $integration = SproutForms::$app->integrations->getFormIntegrationById($integrationId);
+
+        return $integration;
+    }
 }
 

@@ -452,4 +452,12 @@ class Entry extends Element
     {
         return $this->entryIntegrationLogs;
     }
+
+    /**
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function getEntryIntegrationLogsRecords()
+    {
+        return SproutForms::$app->integrations->getEntryIntegrationLogsByEntryId($this->id);
+    }
 }
