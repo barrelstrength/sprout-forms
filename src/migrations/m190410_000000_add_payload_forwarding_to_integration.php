@@ -20,7 +20,7 @@ class m190410_000000_add_payload_forwarding_to_integration extends Migration
         $forms = (new Query())
             ->select(['id', 'submitAction'])
             ->from(['{{%sproutforms_forms}}'])
-            ->where('submitAction is not null')
+            ->where('[[submitAction]] is not null')
             ->all();
 
         $type = PayloadForwarding::class;
