@@ -148,11 +148,6 @@ class EntryElementIntegration extends BaseElementIntegration
                 'class' => PlainText::class
             ],
             [
-                'label' => Craft::t('app', 'URI'),
-                'value' => 'uri',
-                'class' => PlainText::class
-            ],
-            [
                 'label' => Craft::t('app', 'Expiry Date'),
                 'value' => 'expiryDate',
                 'class' => Date::class
@@ -238,15 +233,17 @@ class EntryElementIntegration extends BaseElementIntegration
         $options = [];
 
         foreach ($sections as $section) {
-            $entryTypes = $section->getEntryTypes();
+            if ($section->type != 'single'){
+                $entryTypes = $section->getEntryTypes();
 
-            $options[] = ['optgroup' => $section->name];
+                $options[] = ['optgroup' => $section->name];
 
-            foreach ($entryTypes as $entryType) {
-                $options[] = [
-                    'label' => $entryType->name,
-                    'value' => $entryType->id
-                ];
+                foreach ($entryTypes as $entryType) {
+                    $options[] = [
+                        'label' => $entryType->name,
+                        'value' => $entryType->id
+                    ];
+                }
             }
         }
 

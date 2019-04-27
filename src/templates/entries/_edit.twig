@@ -94,18 +94,21 @@
             <h5 class="heading">{{ "Submitted"|t('sprout-forms') }}</h5>
             <div class="value">{{  entry.dateCreated|datetime('short') }}</div>
         </div>
-        <h3 class="title">{{ "Integrations"|t('sprout-forms') }}</h3>
-        <hr>
+
         {% set entryIntegrations = entry.getEntryIntegrationLogsRecords() %}
-        {% for entryIntegration in entryIntegrations %}
-        <div>
-            {% set integration = craft.sproutForms.getIntegrationById(entryIntegration.integrationId) %}
-            <h4 class="heading">{{ integration.name }}</h4>
-            <div class="value" > Message <span class="info">{{ entryIntegration.message }}</span></div>
-            <div class="value"> Details <span class="info">{{ entryIntegration.details }}</span></div>
+        {% if entryIntegrations %}
+            <h3 class="title">{{ "Integrations"|t('sprout-forms') }}</h3>
             <hr>
-        </div>
-        {% endfor %}
+            {% for entryIntegration in entryIntegrations %}
+            <div>
+                {% set integration = craft.sproutForms.getIntegrationById(entryIntegration.integrationId) %}
+                <h4 class="heading">{{ integration.name }}</h4>
+                <div class="value" > Message <span class="info">{{ entryIntegration.message }}</span></div>
+                <div class="value"> Details <span class="info">{{ entryIntegration.details }}</span></div>
+                <hr>
+            </div>
+            {% endfor %}
+        {% endif %}
     </div>
 {% endblock %}
 

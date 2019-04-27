@@ -10,6 +10,29 @@
     value: integration.entryTypeId
 }) }}
 
+{{ forms.lightswitchField({
+    label: "Author as current user"|t('sprout-forms'),
+    instructions: "Enable to set the author to the User logged in or the admin if it's a guest submission"|t('sprout-forms'),
+    id: 'enableAuthorAsCurrentUser',
+    name: 'enableAuthorAsCurrentUser',
+    toggle: 'settings-save-author',
+    on: integration.enableAuthorAsCurrentUser,
+    onLabel: "Enable"|t('sprout-forms'),
+}) }}
+
+<div id="settings-save-author" class="{{ integration.enableAuthorAsCurrentUser ? "hiddenss" : '' }}">
+    {{ forms.elementSelectField({
+        label: "Author"|t('app'),
+        id: 'authorId',
+        name: 'authorId',
+        elementType: integration.getUserElementType(),
+        selectionLabel: "Choose"|t('app'),
+        criteria: ['*'],
+        limit: 1,
+        elements: [integration.getAuthor()]
+    }) }}
+</div>
+
 <script>
     $(document).ready(function() {
         init();

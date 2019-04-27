@@ -95,8 +95,8 @@ class PayloadForwarding extends ApiIntegration
             $response = $client->post($endpoint, [
                 RequestOptions::JSON => $fields
             ]);
-            $res = ['code' => $response->getCode()];
-            $this->logResponse($res, $response->getBody()->getContents());
+
+            $this->logResponse('success', $response->getBody()->getContents());
             Craft::info($response->getBody()->getContents(), __METHOD__);
         } catch (\Exception $e) {
             $this->addFormEntryError( $e->getMessage());
