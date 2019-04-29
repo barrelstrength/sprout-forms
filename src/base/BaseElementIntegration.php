@@ -14,7 +14,7 @@ abstract class BaseElementIntegration extends ApiIntegration
 {
     public $authorId;
 
-    public $enableAuthorAsCurrentUser = true;
+    public $enableSetAuthorManually = false;
 
     /**
      * Default attributes as options
@@ -70,8 +70,9 @@ abstract class BaseElementIntegration extends ApiIntegration
     public function getAuthor()
     {
         $author = Craft::$app->getUser()->getIdentity();
-        if ($this->authorId){
-            $user = Craft::$app->getUsers()->getUserById($this->authorId);
+
+        if ($this->authorId && is_array($this->authorId) && $this->enableSetAuthorManually){
+            $user = Craft::$app->getUsers()->getUserById($this->authorId[0]);
             if ($user){
                 $author = $user;
             }

@@ -195,6 +195,10 @@ class EntryElementIntegration extends BaseElementIntegration
         $entryElement = new Entry();
         $entryElement->typeId = $entryType->id;
         $entryElement->sectionId = $entryType->sectionId;
+        $author = $this->getAuthor();
+        if ($author){
+            $entryElement->authorId = $author->id;
+        }
 
         $entryElement->setAttributes($fields, false);
 
