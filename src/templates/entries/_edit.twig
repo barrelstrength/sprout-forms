@@ -94,19 +94,22 @@
             <h5 class="heading">{{ "Submitted"|t('sprout-forms') }}</h5>
             <div class="value">{{  entry.dateCreated|datetime('short') }}</div>
         </div>
-
+    </div>
+    <div class="meta read-only">
         {% set entryIntegrations = entry.getEntryIntegrationLogsRecords() %}
         {% if entryIntegrations %}
-            <h3 class="title">{{ "Integrations"|t('sprout-forms') }}</h3>
+            <h6 class="title">{{ "Integrations"|t('sprout-forms') }}</h6>
             <hr>
             {% for entryIntegration in entryIntegrations %}
-            <div>
-                {% set integration = craft.sproutForms.getIntegrationById(entryIntegration.integrationId) %}
-                <h4 class="heading">{{ integration.name }}</h4>
-                <div class="value" > Message <span class="info">{{ entryIntegration.message }}</span></div>
-                <div class="value"> Details <span class="info">{{ entryIntegration.details }}</span></div>
-                <hr>
-            </div>
+                <div class="data">
+                    {% set integration = craft.sproutForms.getIntegrationById(entryIntegration.integrationId) %}
+                    <h5 class="heading">{{ integration.name }}</h5>
+                    {% if loop.first %}
+                        <div class="value" > <span class="status live "></span> Success <span class="info">{{ entryIntegration.message }}</span></div>
+                        {% else %}
+                            <div class="value" > <span class="status disabled"></span> Error <span class="info">{{ entryIntegration.message }}</span></div>
+                    {% endif %}
+                </div>
             {% endfor %}
         {% endif %}
     </div>
