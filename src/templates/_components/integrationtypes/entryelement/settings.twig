@@ -10,27 +10,26 @@
     value: integration.entryTypeId
 }) }}
 
+{{ forms.elementSelectField({
+    label: "Default Author"|t('app'),
+    id: 'authorId',
+    name: 'authorId',
+    required: true,
+    elementType: integration.getUserElementType(),
+    selectionLabel: "Choose"|t('app'),
+    limit: 1,
+    elements: [integration.getAuthor()]
+}) }}
+
 {{ forms.lightswitchField({
-    label: "Set Author manually"|t('sprout-forms'),
-    instructions: "If disable, the author will be set to the User logged in or the admin if it's a guest submission"|t('sprout-forms'),
+    label: "Set Author to Logged in User"|t('sprout-forms'),
+    instructions: "When enabled, Sprout Forms will assign the logged in User as the author and fallback to the Default Author."|t('sprout-forms'),
     id: 'enableSetAuthorManually',
     name: 'enableSetAuthorManually',
     toggle: 'settings-save-author',
     on: integration.enableSetAuthorManually,
     onLabel: "Enable"|t('sprout-forms'),
 }) }}
-
-<div id="settings-save-author" class="{% if not integration.enableSetAuthorManually %} hidden {% endif %}" >
-    {{ forms.elementSelectField({
-        label: "Author"|t('app'),
-        id: 'authorId',
-        name: 'authorId',
-        elementType: integration.getUserElementType(),
-        selectionLabel: "Choose"|t('app'),
-        limit: 1,
-        elements: [integration.getAuthor()]
-    }) }}
-</div>
 
 <script>
     $(document).ready(function() {

@@ -12,18 +12,12 @@
     {{ forms.lightswitchField({
         label: "Enabled"|t('sprout-forms'),
         name: 'enabled',
-        on: integration.enabled
-    }) }}
-
-    {{ forms.lightswitchField({
-        label: "Add error on submit"|t('sprout-forms'),
-        instructions: "Add an error to the entry if the submit call fails"|t('sprout-forms'),
-        name: 'addErrorOnSubmit',
-        on: integration.addErrorOnSubmit
+        on: integration.enabled,
+        first: true
     }) }}
 
     {{ forms.textField({
-        label: "Name <span class='info'>The integration label</span>"|t('sprout-forms'),
+        label: "Integration Name"|t('sprout-forms'),
         id: 'field-name',
         name: 'name',
         value: (integration is defined ? integration.name : null),
@@ -36,6 +30,13 @@
 
         {{ integration.getIntegrationApi().getFieldMappingSettingsHtml()|raw }}
     {% endnamespace %}
+
+    {{ forms.lightswitchField({
+        label: "Add errors from Integration to Form Entry"|t('sprout-forms'),
+        instructions: "Display errors to user if form submission fails."|t('sprout-forms'),
+        name: 'addErrorOnSubmit',
+        on: integration.addErrorOnSubmit
+    }) }}
 
     {{ forms.selectField({
         label: "Integration Type <span class='info'>Create a new integration if you need to update your integration type. This value cannot be changed.</span>"|t('sprout-forms'),
