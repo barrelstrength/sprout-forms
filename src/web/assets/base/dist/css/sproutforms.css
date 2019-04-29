@@ -156,11 +156,8 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
     transition: all 0.2s ease-in-out;
 }
 
-.target-field h2 {
-    float: left;
-}
 .target-field .active-field-header p,
-.target-field body {
+.target-field .body {
     clear: both;
 }
 .target-field h2 + code {
@@ -193,9 +190,13 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 }
 
 .target-field h2 {
+    float: left;
     font-size: 14px;
     font-weight: bold;
-    margin: 0 0 10px 0;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 10px !important;
+    margin-left: 0;
 }
 
 .target-field h2 a {
