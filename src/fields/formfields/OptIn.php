@@ -54,7 +54,7 @@ class OptIn extends FormField implements PreviewableFieldInterface
         }
 
         if ($this->optInValueWhenFalse === null) {
-            $this->optInValueWhenFalse= Craft::t('sprout-forms', 'No');
+            $this->optInValueWhenFalse = Craft::t('sprout-forms', 'No');
         }
 
         parent::init();

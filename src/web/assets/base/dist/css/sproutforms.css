@@ -160,6 +160,7 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 .target-field .body {
     clear: both;
 }
+
 .target-field h2 + code {
     opacity: 0;
     margin-left: 6px;

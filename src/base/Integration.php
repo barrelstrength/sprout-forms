@@ -85,14 +85,17 @@ abstract class Integration extends Model
      *
      * Each settings template will also call a Twig Field Mapping Table Macro to help with the field mapping (can we just have a Twig Macro that wraps the default Craft Table for this and outputs two columns?)
      */
-    public function getSettingsHtml() {}
+    public function getSettingsHtml()
+    {
+    }
 
     /**
      * Process the submission and field mapping settings to get the payload. Resolve the field mapping.
      *
      * @return mixed
      */
-    public function resolveFieldMapping() {
+    public function resolveFieldMapping()
+    {
         return $this->fieldsMapped ?? [];
     }
 
@@ -103,7 +106,7 @@ abstract class Integration extends Model
      */
     public function getFieldMappingSettingsHtml()
     {
-        if (!$this->hasFieldMapping){
+        if (!$this->hasFieldMapping) {
             return '';
         }
 
@@ -157,7 +160,7 @@ abstract class Integration extends Model
         ];
         $options = [];
 
-        if ($addOptGroup){
+        if ($addOptGroup) {
             $options[] = ['optgroup' => Craft::t('sprout-forms', 'Default')];
         }
 
@@ -190,8 +193,8 @@ abstract class Integration extends Model
             ]
         ]);
 
-        if (count($fields)){
-            if ($addOptGroup){
+        if (count($fields)) {
+            if ($addOptGroup) {
                 $options[] = [
                     'optgroup' => Craft::t('sprout-forms', 'Form Fields')
                 ];
@@ -215,7 +218,7 @@ abstract class Integration extends Model
     public function addFormEntryError($message)
     {
         Craft::error($message, __METHOD__);
-        if ($this->addErrorOnSubmit){
+        if ($this->addErrorOnSubmit) {
             $this->entry->addError('general', $message);
         }
     }

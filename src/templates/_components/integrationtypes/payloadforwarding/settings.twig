@@ -13,28 +13,26 @@
     $(document).ready(function() {
         init();
 
-        function init(){
+        function init() {
             disableOptions();
         }
 
-        function disableOptions()
-        {
+        function disableOptions() {
             var $formFields = getCurrentRows('.formField');
-            $formFields.each(function(index){
+            $formFields.each(function(index) {
                 var $textarea = $(this).find('textarea');
                 $textarea.prop("disabled", false);
                 $textarea.prop("readonly", true);
             });
 
             var $payloadFields = getCurrentRows('.payloadField');
-            $payloadFields.each(function(index){
+            $payloadFields.each(function(index) {
                 var $textarea = $(this).find('textarea');
                 $textarea.prop("disabled", false);
             });
         }
 
-        function getCurrentRows(className)
-        {
+        function getCurrentRows(className) {
             return $(className);
         }
     });

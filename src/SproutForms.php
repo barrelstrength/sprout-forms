@@ -191,7 +191,7 @@ class SproutForms extends Plugin
 
                 $integrationLogs = $entry->getEntryIntegrationLogs();
                 $entryId = $entry->id ?? null;
-                if ($integrationLogs){
+                if ($integrationLogs) {
                     foreach ($integrationLogs as $integrationLog) {
                         SproutForms::$app->integrations->saveEntryIntegrationLog(
                             $integrationLog['integrationId'],

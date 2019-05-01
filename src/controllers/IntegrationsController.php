@@ -57,6 +57,7 @@ class IntegrationsController extends BaseController
 
     /**
      * Save an Integration
+     *
      * @return \yii\web\Response
      * @throws \yii\web\BadRequestHttpException
      */
@@ -193,8 +194,9 @@ class IntegrationsController extends BaseController
     }
 
     /**
-     * @param $entryTypeId
+     * @param      $entryTypeId
      * @param null $integrationId
+     *
      * @return array
      */
     private function getFieldsAsOptionsByRow($entryTypeId, $integrationId)
@@ -219,16 +221,16 @@ class IntegrationsController extends BaseController
         foreach ($entryFields as $entryField) {
             $optionsByRow = $this->getCompatibleFields($formFields, $entryField);
             // We have rows stored and are for the same sectionType
-            if ($fieldsMapped && ($integrationSectionId == $entryTypeId)){
-                if (isset($fieldsMapped[$rowPosition])){
+            if ($fieldsMapped && ($integrationSectionId == $entryTypeId)) {
+                if (isset($fieldsMapped[$rowPosition])) {
                     foreach ($optionsByRow as $key => $option) {
-                        if (isset($option['optgroup'])){
+                        if (isset($option['optgroup'])) {
                             continue;
                         }
-                        $integrationValue =  $entryField['value'] ?? $entryField->handle;
+                        $integrationValue = $entryField['value'] ?? $entryField->handle;
 
                         if ($option['value'] == $fieldsMapped[$rowPosition]['sproutFormField'] &&
-                            $fieldsMapped[$rowPosition]['integrationField'] == $integrationValue){
+                            $fieldsMapped[$rowPosition]['integrationField'] == $integrationValue) {
                             $optionsByRow[$key]['selected'] = true;
                         }
                     }
@@ -246,20 +248,19 @@ class IntegrationsController extends BaseController
         foreach ($auxOptions as $rowPos => $finalOptionsByRow) {
             foreach ($finalOptionsByRow as $row => $finalOptionByRow) {
 
-                if (isset($finalOptionByRow['optgroup'])){
+                if (isset($finalOptionByRow['optgroup'])) {
                     $removeOptGroup = true;
 
-                    if (isset($finalOptionsByRow[$row+1])){
-                        if (isset($finalOptionsByRow[$row+1]['value'])){
+                    if (isset($finalOptionsByRow[$row + 1])) {
+                        if (isset($finalOptionsByRow[$row + 1]['value'])) {
                             $removeOptGroup = false;
                         }
                     }
-                    if ($removeOptGroup){
+                    if ($removeOptGroup) {
                         unset($finalOptions[$rowPos][$row]);
                     }
                 }
             }
-
         }
 
         return $finalOptions;
@@ -267,7 +268,8 @@ class IntegrationsController extends BaseController
 
     /**
      * @param array $formFields
-     * @param $entryField
+     * @param       $entryField
+     *
      * @return array
      */
     private function getCompatibleFields(array $formFields, $entryField)
@@ -276,20 +278,20 @@ class IntegrationsController extends BaseController
         $groupFields = [];
 
         foreach ($formFields as $pos => $field) {
-            if (isset($field['optgroup'])){
+            if (isset($field['optgroup'])) {
                 $finalOptions[] = $field;
                 continue;
             }
             $compatibleFields = $field['compatibleCraftFields'] ?? '*';
             // Check default attributes
-            if (isset($entryField['class'])){
-                if (is_array($compatibleFields)){
-                    if (!in_array($entryField['class'], $compatibleFields)){
+            if (isset($entryField['class'])) {
+                if (is_array($compatibleFields)) {
+                    if (!in_array($entryField['class'], $compatibleFields)) {
                         $field = null;
                     }
                 }
 
-                if ($field){
+                if ($field) {
                     $groupFields[] = $field;
                     $finalOptions[] = $field;
                 }

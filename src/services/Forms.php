@@ -58,11 +58,12 @@ class Forms extends Component
      *
      * Allows a user to add variables to an object that can be parsed by fields
      *
+     * @param array $variables
+     *
      * @example
      * {% do craft.sproutForms.addFieldVariables({ entryTitle: entry.title }) %}
      * {{ craft.sproutForms.displayForm('contact') }}
      *
-     * @param array $variables
      */
     public static function addFieldVariables(array $variables)
     {

@@ -24,14 +24,16 @@ class PayloadForwarding extends ApiIntegration
      */
     public $hasFieldMapping = true;
 
-    public function getName() {
+    public function getName()
+    {
         return Craft::t('sprout-forms', 'Payload Forwarding');
     }
 
     /**
      * @inheritdoc
      */
-    public function getSettingsHtml() {
+    public function getSettingsHtml()
+    {
         return Craft::$app->getView()->renderTemplate('sprout-forms/_components/integrationtypes/payloadforwarding/settings',
             [
                 'integration' => $this
@@ -42,7 +44,8 @@ class PayloadForwarding extends ApiIntegration
     /**
      * @inheritdoc
      */
-    public function submit() {
+    public function submit()
+    {
         if ($this->submitAction && !Craft::$app->getRequest()->getIsCpRequest()) {
             if (!$this->forwardEntry()) {
                 return false;
@@ -55,18 +58,19 @@ class PayloadForwarding extends ApiIntegration
     /**
      * @inheritdoc
      */
-    public function resolveFieldMapping() {
+    public function resolveFieldMapping()
+    {
         $fields = [];
         $entry = $this->entry;
-        
-        if ($this->fieldsMapped){
+
+        if ($this->fieldsMapped) {
             foreach ($this->fieldsMapped as $fieldMapped) {
-                if (isset($entry->{$fieldMapped['sproutFormField']}) && $fieldMapped['integrationField']){
+                if (isset($entry->{$fieldMapped['sproutFormField']}) && $fieldMapped['integrationField']) {
                     $fields[$fieldMapped['integrationField']] = $entry->{$fieldMapped['sproutFormField']};
                 }
             }
         }
-        
+
         return $fields;
     }
 
@@ -99,7 +103,7 @@ class PayloadForwarding extends ApiIntegration
             $this->logResponse(true, $response->getBody()->getContents());
             Craft::info($response->getBody()->getContents(), __METHOD__);
         } catch (\Exception $e) {
-            $this->addFormEntryError( $e->getMessage());
+            $this->addFormEntryError($e->getMessage());
             $this->logResponse(false, $e->getMessage());
             return false;
         }
@@ -114,7 +118,7 @@ class PayloadForwarding extends ApiIntegration
      */
     public function getFieldMappingSettingsHtml()
     {
-        if (!$this->hasFieldMapping){
+        if (!$this->hasFieldMapping) {
             return '';
         }
 
@@ -128,7 +132,7 @@ class PayloadForwarding extends ApiIntegration
                     'integrationField' => ''
                 ];
             }
-        }else {
+        } else {
             $fieldsMappedSaved = $this->fieldsMapped;
             $this->fieldsMapped = [];
             foreach ($currentFields as $key => $formField) {
@@ -139,7 +143,7 @@ class PayloadForwarding extends ApiIntegration
                 ];
 
                 foreach ($fieldsMappedSaved as $fieldMappedSaved) {
-                    if ($fieldMappedSaved['sproutFormField'] == $formField['value']){
+                    if ($fieldMappedSaved['sproutFormField'] == $formField['value']) {
                         $fieldMapped['integrationField'] = $fieldMappedSaved['integrationField'];
                     }
                 }

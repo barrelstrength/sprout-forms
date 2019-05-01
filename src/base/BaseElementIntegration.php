@@ -38,7 +38,7 @@ abstract class BaseElementIntegration extends ApiIntegration
     {
         $options = [];
 
-        if ($this->getDefaultAttributes()){
+        if ($this->getDefaultAttributes()) {
             foreach ($this->getDefaultAttributes() as $item) {
                 $options[] = $item;
             }
@@ -49,6 +49,7 @@ abstract class BaseElementIntegration extends ApiIntegration
 
     /**
      * @param $elementGroupId
+     *
      * @return array
      */
     public function getElementFieldsAsOptions($elementGroupId)
@@ -71,13 +72,13 @@ abstract class BaseElementIntegration extends ApiIntegration
     {
         $author = Craft::$app->getUser()->getIdentity();
 
-        if ($this->enableSetAuthorToLoggedInUser){
+        if ($this->enableSetAuthorToLoggedInUser) {
             return $author;
         }
 
-        if ($this->authorId && is_array($this->authorId)){
+        if ($this->authorId && is_array($this->authorId)) {
             $user = Craft::$app->getUsers()->getUserById($this->authorId[0]);
-            if ($user){
+            if ($user) {
                 $author = $user;
             }
         }

@@ -8,14 +8,12 @@ if (typeof Craft.SproutForms === typeof undefined) {
     Craft.SproutForms = {};
 }
 
-(function($)
-{
+(function($) {
     var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 
     // If mutation observer is not supported, create a harness for it for graceful degradation.
     // Older browsers could be supported through the DOMNodeInserted event, but that can be saved for another day...
-    if (!MutationObserver)
-    {
+    if (!MutationObserver) {
         MutationObserver = function() {
         };
         MutationObserver.prototype.observe = function() {
@@ -61,8 +59,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
             /**
              * The constructor.
              */
-            init: function(settings)
-            {
+            init: function(settings) {
                 this.base();
                 this.setSettings(settings, {
                     resizable: true
@@ -77,10 +74,8 @@ if (typeof Craft.SproutForms === typeof undefined) {
                 this.loadedCss = {};
 
                 // Observe the DOM
-                this.observer = new MutationObserver($.proxy(function(mutations)
-                {
-                    for (var i = 0; i < mutations.length; i++)
-                    {
+                this.observer = new MutationObserver($.proxy(function(mutations) {
+                    for (var i = 0; i < mutations.length; i++) {
                         this.$observed = this.$observed.add(mutations[i].addedNodes);
                     }
                 }, this));
@@ -98,9 +93,9 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
                 this.$deleteSpinner = $('<div class="spinner hidden">').appendTo(this.$leftButtons);
 
-                this.$deleteBtn = $('<div class="btn delete hidden" role="button">').text(Craft.t('sprout-forms','Delete')).appendTo(this.$leftButtons);
-                this.$cancelBtn = $('<div class="btn disabled" role="button">').text(Craft.t('sprout-forms','Cancel')).appendTo(this.$rightButtons);
-                this.$saveBtn = $('<div class="btn submit disabled" role="button">').text(Craft.t('sprout-forms','Save')).appendTo(this.$rightButtons);
+                this.$deleteBtn = $('<div class="btn delete hidden" role="button">').text(Craft.t('sprout-forms', 'Delete')).appendTo(this.$leftButtons);
+                this.$cancelBtn = $('<div class="btn disabled" role="button">').text(Craft.t('sprout-forms', 'Cancel')).appendTo(this.$rightButtons);
+                this.$saveBtn = $('<div class="btn submit disabled" role="button">').text(Craft.t('sprout-forms', 'Save')).appendTo(this.$rightButtons);
                 this.$saveSpinner = $('<div class="spinner hidden">').appendTo(this.$rightButtons);
 
                 this.setContainer($container);
@@ -119,18 +114,15 @@ if (typeof Craft.SproutForms === typeof undefined) {
              *
              * @param template
              */
-            initTemplate: function(template)
-            {
-                var callback = $.proxy(function(e)
-                {
+            initTemplate: function(template) {
+                var callback = $.proxy(function(e) {
                     this.$html = e.$html;
                     this.$js = e.$js;
                     this.$css = e.$css;
 
                     this.templateLoaded = true;
                     this.initListeners();
-                    if (this.visible)
-                    {
+                    if (this.visible) {
                         this.initSettings();
                     }
 
@@ -147,8 +139,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
              *
              * @param template
              */
-            parseTemplate: function(template)
-            {
+            parseTemplate: function(template) {
                 var that = this;
                 var $head = Garnish.$doc.find('head');
 
@@ -160,13 +151,11 @@ if (typeof Craft.SproutForms === typeof undefined) {
                 var $cssFiles = $css.filter('link').prop('async', true);
                 var $cssInline = $css.filter('style');
 
-                $cssFiles.each(function()
-                {
+                $cssFiles.each(function() {
                     var $this = $(this);
                     var src = $this.prop('href');
 
-                    if (!that.loadedCss.hasOwnProperty(src))
-                    {
+                    if (!that.loadedCss.hasOwnProperty(src)) {
                         $head.append($this);
                         that.loadedCss[src] = $this;
                     }
@@ -182,19 +171,16 @@ if (typeof Craft.SproutForms === typeof undefined) {
                 var $jsInline = $js.filter(':not([src])');
 
                 var jsFiles = [];
-                $jsFiles.each(function()
-                {
+                $jsFiles.each(function() {
                     var $this = $(this);
                     var src = $this.prop('src');
-                    if (!that.executedJs.hasOwnProperty(src))
-                    {
+                    if (!that.executedJs.hasOwnProperty(src)) {
                         jsFiles.push(src);
                         that.executedJs[src] = true;
                     }
                 });
 
-                var callback = function()
-                {
+                var callback = function() {
                     that.off('runExternalScripts', callback);
                     that.trigger('parseTemplate', {
                         target: this,
@@ -217,48 +203,37 @@ if (typeof Craft.SproutForms === typeof undefined) {
              *
              * @param files - An array of URL's (as strings) to Javascript files
              */
-            runExternalScripts: function(files)
-            {
+            runExternalScripts: function(files) {
                 var filesCount = files.length;
 
-                if (filesCount > 0)
-                {
-                    for (var i = 0; i < files.length; i++)
-                    {
+                if (filesCount > 0) {
+                    for (var i = 0; i < files.length; i++) {
                         var src = files[i];
                         console.log(src);
                         // Fixes Double-instantiating bug
-                        if ((src.indexOf('MatrixConfigurator')  >= 0 ) ||
-                            (src.indexOf('TableFieldSettings.min.js')  >= 0 )||
-                            (src.indexOf('quill.min.js')  >= 0 ) ||
-                            (src.indexOf('sproutfields.js')  >= 0 ) ||
-                            (src.indexOf('EditableTable.js')  >= 0 ) ||
-                            (src.indexOf('initialize.js')  >= 0 )
-                        )
-                        {
-                            $.getScript(src, $.proxy(function(data, status)
-                            {
-                                if (status === 'success')
-                                {
+                        if ((src.indexOf('MatrixConfigurator') >= 0) ||
+                            (src.indexOf('TableFieldSettings.min.js') >= 0) ||
+                            (src.indexOf('quill.min.js') >= 0) ||
+                            (src.indexOf('sproutfields.js') >= 0) ||
+                            (src.indexOf('EditableTable.js') >= 0) ||
+                            (src.indexOf('initialize.js') >= 0)
+                        ) {
+                            $.getScript(src, $.proxy(function(data, status) {
+                                if (status === 'success') {
                                     filesCount--;
 
-                                    if (filesCount === 0)
-                                    {
+                                    if (filesCount === 0) {
                                         this.trigger('runExternalScripts', {
                                             target: this
                                         });
                                     }
-                                }
-                                else
-                                {
-                                    Craft.cp.displayError(Craft.t('sprout-forms','Could not load all resources.'));
+                                } else {
+                                    Craft.cp.displayError(Craft.t('sprout-forms', 'Could not load all resources.'));
                                 }
                             }, this));
                         }
                     }
-                }
-                else
-                {
+                } else {
                     this.trigger('runExternalScripts', {
                         target: this
                     });
@@ -268,15 +243,14 @@ if (typeof Craft.SproutForms === typeof undefined) {
             /**
              * Binds all listeners so the quick integration buttons can start working.
              */
-            initListeners: function()
-            {
+            initListeners: function() {
                 this.$deleteBtn.addClass('hidden');
                 this.$cancelBtn.addClass('disabled');
                 this.$saveBtn.addClass('disabled');
 
                 this.addListener(this.$cancelBtn, 'activate', 'closeModal');
                 this.addListener(this.$saveBtn, 'activate', 'saveIntegration');
-                if (!this.addedDelete){
+                if (!this.addedDelete) {
                     this.addListener(this.$deleteBtn, 'click', 'deleteIntegration');
                     this.addedDelete = true;
                 }
@@ -290,8 +264,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
             /**
              * Unbinds all listeners.
              */
-            destroyListeners: function()
-            {
+            destroyListeners: function() {
                 this.$cancelBtn.addClass('disabled');
                 this.$saveBtn.addClass('disabled');
 
@@ -307,13 +280,11 @@ if (typeof Craft.SproutForms === typeof undefined) {
             /**
              * Initialises the HTML, CSS and Javascript for the modal window.
              */
-            initSettings: function(e)
-            {
+            initSettings: function(e) {
                 var that = e && e.target ? e.target : this;
 
                 // If the template files are not loaded yet, just cancel initialisation of the settings.
-                if (!that.templateLoaded)
-                {
+                if (!that.templateLoaded) {
                     return;
                 }
 
@@ -323,7 +294,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
                 // Save any new nodes that are added to the body during initialisation, so they can be safely removed later.
                 that.$observed = $();
-                that.observer.observe(Garnish.$bod[0], { childList: true, subtree: false });
+                that.observer.observe(Garnish.$bod[0], {childList: true, subtree: false});
 
                 that.$main.append(that.$currentHtml);
                 Garnish.$bod.append(that.$currentJs);
@@ -333,13 +304,11 @@ if (typeof Craft.SproutForms === typeof undefined) {
                 // Rerun the external scripts as some field types may need to make DOM changes in their external files.
                 // This means that libraries are being initialized multiple times, but hopefully they're smart enough to
                 // deal with that. So far, no issues.
-                var callback = function()
-                {
+                var callback = function() {
                     that.off('runExternalScripts', callback);
 
                     // Stop observing after a healthy timeout to ensure all mutations are captured.
-                    setTimeout(function()
-                    {
+                    setTimeout(function() {
                         that.observer.disconnect();
                     }, 1);
                 };
@@ -352,8 +321,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
              * Event handler for when the modal window finishes fading out after hiding.
              * Clears out all events and elements of the modal.
              */
-            destroySettings: function(e)
-            {
+            destroySettings: function(e) {
                 var that = e && e.target ? e.target : this;
 
                 that.$currentHtml.remove();
@@ -366,8 +334,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
              * Event handler for the Close button.
              * Hides the modal window from view.
              */
-            closeModal: function()
-            {
+            closeModal: function() {
                 this.hide();
             },
 
@@ -377,14 +344,12 @@ if (typeof Craft.SproutForms === typeof undefined) {
              *
              * @param e
              */
-            saveIntegration: function(e)
-            {
+            saveIntegration: function(e) {
                 if (e) {
                     e.preventDefault();
                 }
 
-                if (this.$saveBtn.hasClass('disabled') || !this.$saveSpinner.hasClass('hidden'))
-                {
+                if (this.$saveBtn.hasClass('disabled') || !this.$saveSpinner.hasClass('hidden')) {
                     return;
                 }
 
@@ -396,14 +361,12 @@ if (typeof Craft.SproutForms === typeof undefined) {
                 var inputId = this.$container.find('input[name="integrationId"]');
                 var id = inputId.length ? inputId.val() : false;
 
-                Craft.postActionRequest('sprout-forms/integrations/save-integration', data, $.proxy(function(response, textStatus)
-                {
+                Craft.postActionRequest('sprout-forms/integrations/save-integration', data, $.proxy(function(response, textStatus) {
                     this.$saveSpinner.addClass('hidden');
 
                     var statusSuccess = (textStatus === 'success');
 
-                    if (statusSuccess && response.success)
-                    {
+                    if (statusSuccess && response.success) {
                         this.initListeners();
 
                         this.trigger('saveIntegration', {
@@ -411,16 +374,12 @@ if (typeof Craft.SproutForms === typeof undefined) {
                             integration: response.integration
                         });
 
-                        Craft.cp.displayNotice(Craft.t('sprout-forms','\'{name}\' integration saved.', { name: response.integration.name }));
+                        Craft.cp.displayNotice(Craft.t('sprout-forms', '\'{name}\' integration saved.', {name: response.integration.name}));
 
                         this.hide();
-                    }
-                    else if (statusSuccess && response.template)
-                    {
-                        if (this.visible)
-                        {
-                            var callback = $.proxy(function(e)
-                            {
+                    } else if (statusSuccess && response.template) {
+                        if (this.visible) {
+                            var callback = $.proxy(function(e) {
                                 this.initListeners();
                                 this.destroySettings();
                                 this.initSettings(e);
@@ -431,17 +390,13 @@ if (typeof Craft.SproutForms === typeof undefined) {
                             this.parseTemplate(response.template);
 
                             Garnish.shake(this.$container);
-                        }
-                        else
-                        {
+                        } else {
                             this.initListeners();
                         }
-                    }
-                    else
-                    {
+                    } else {
                         this.initListeners();
 
-                        Craft.cp.displayError(Craft.t('sprout-forms','An unknown error occurred.'));
+                        Craft.cp.displayError(Craft.t('sprout-forms', 'An unknown error occurred.'));
                     }
                 }, this));
             },
@@ -450,8 +405,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
              *
              * @param id
              */
-            editIntegration: function(id)
-            {
+            editIntegration: function(id) {
                 this.destroyListeners();
                 this.show();
                 this.initListeners();
@@ -461,16 +415,13 @@ if (typeof Craft.SproutForms === typeof undefined) {
                 var formId = $("#formId").val();
                 var data = {'integrationId': id, 'formId': formId};
 
-                Craft.postActionRequest('sprout-forms/integrations/edit-integration', data, $.proxy(function(response, textStatus)
-                {
+                Craft.postActionRequest('sprout-forms/integrations/edit-integration', data, $.proxy(function(response, textStatus) {
                     this.$loadSpinner.addClass('hidden');
 
                     var statusSuccess = (textStatus === 'success');
 
-                    if(statusSuccess && response.success)
-                    {
-                        var callback = $.proxy(function(e)
-                        {
+                    if (statusSuccess && response.success) {
+                        var callback = $.proxy(function(e) {
                             this.destroySettings();
                             this.initSettings(e);
                             this.off('parseTemplate', callback);
@@ -478,50 +429,42 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
                         this.on('parseTemplate', callback);
                         this.parseTemplate(response.template);
-                    }
-                    else if(statusSuccess && response.error)
-                    {
+                    } else if (statusSuccess && response.error) {
                         Craft.cp.displayError(response.error);
 
                         this.hide();
-                    }
-                    else
-                    {
-                        Craft.cp.displayError(Craft.t('sprout-forms','An unknown error occurred. '));
+                    } else {
+                        Craft.cp.displayError(Craft.t('sprout-forms', 'An unknown error occurred. '));
 
                         this.hide();
                     }
                 }, this));
             },
 
-            deleteIntegration: function(e)
-            {
+            deleteIntegration: function(e) {
                 e.preventDefault();
                 var userResponse = this.confirmDeleteIntegration();
 
-                if (userResponse){
+                if (userResponse) {
                     this.destroyListeners();
 
                     var data = this.$container.serialize();
 
                     var integrationId = $(this.$container).find('input[name="integrationId"]').val();
 
-                    Craft.postActionRequest('sprout-forms/integrations/delete-integration', data, $.proxy(function(response, textStatus)
-                    {
+                    Craft.postActionRequest('sprout-forms/integrations/delete-integration', data, $.proxy(function(response, textStatus) {
                         var statusSuccess = (textStatus === 'success');
 
-                        if(statusSuccess && response.success) {
+                        if (statusSuccess && response.success) {
 
-                            Craft.cp.displayNotice(Craft.t('sprout-forms','Integration deleted.'));
+                            Craft.cp.displayNotice(Craft.t('sprout-forms', 'Integration deleted.'));
 
-                            $('#sproutform-integration-'+integrationId).remove();
+                            $('#sproutform-integration-' + integrationId).remove();
 
                             this.initListeners();
                             this.hide();
-                        }
-                        else
-                        {
-                            Craft.cp.displayError(Craft.t('sprout-forms','Unable to delete integration.'));
+                        } else {
+                            Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to delete integration.'));
 
                             this.hide();
                         }
@@ -529,8 +472,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
                 }
             },
 
-            confirmDeleteIntegration: function()
-            {
+            confirmDeleteIntegration: function() {
                 return confirm("Are you sure you want to delete this integration and all of it's settings?");
             },
 
@@ -538,10 +480,8 @@ if (typeof Craft.SproutForms === typeof undefined) {
              * Prevents the modal from closing if it's disabled.
              * This fixes issues if the modal is closed when saving/deleting integrations.
              */
-            hide: function()
-            {
-                if (!this._disabled)
-                {
+            hide: function() {
+                if (!this._disabled) {
                     this.base();
                 }
             },
@@ -549,8 +489,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
             /**
              * Removes everything to do with the modal form the DOM.
              */
-            destroy: function()
-            {
+            destroy: function() {
                 this.base.destroy();
 
                 this.destroyListeners();
@@ -568,10 +507,8 @@ if (typeof Craft.SproutForms === typeof undefined) {
              *
              * @returns IntegrationModal
              */
-            getInstance: function()
-            {
-                if (!this._instance)
-                {
+            getInstance: function() {
+                if (!this._instance) {
                     this._instance = new Craft.SproutForms.IntegrationModal();
                 }
 

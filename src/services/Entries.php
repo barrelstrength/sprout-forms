@@ -345,11 +345,11 @@ class Entries extends Component
      * Saves some relations for a field.
      *
      * @param BaseRelationFormField $field
-     * @param ElementInterface               $source
+     * @param ElementInterface      $source
      * @param array                 $targetIds
      *
-     * @throws \Throwable
      * @return void
+     * @throws \Throwable
      */
     public function saveRelations(BaseRelationFormField $field, ElementInterface $source, array $targetIds)
     {

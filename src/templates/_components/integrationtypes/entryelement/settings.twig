@@ -38,13 +38,13 @@
         // 1.- on load (the init function should load current rows with proper dropdown)
         // 2.- When user update the section dropdown (Update all rows field dropdown)
 
-        function init(){
+        function init() {
             // Init all empty field selects
             updateAllFieldSelects()
             // When the entry type is changed
             $('#types-barrelstrength-sproutforms-integrationtypes-EntryElementIntegration-entryTypeId').change(function() {
                 var changed = $(this).val() != $(this).data('default');
-                if (changed){
+                if (changed) {
                     updateAllFieldSelectsAndRemoveRows();
                 }
             });
@@ -52,41 +52,38 @@
             disableOptions();
         }
 
-        function disableOptions()
-        {
+        function disableOptions() {
             var $formFields = getCurrentRows('.formField');
-            $formFields.each(function(index){
+            $formFields.each(function(index) {
                 var $textarea = $(this).find('textarea');
                 $textarea.prop("disabled", false);
                 $textarea.prop("readonly", true);
             });
 
             var $formEntryFields = getCurrentRows('.formEntryFields');
-            $formEntryFields.each(function(index){
+            $formEntryFields.each(function(index) {
                 var $select = $(this).find('select');
                 $select.prop("disabled", false);
             });
         }
+
         function updateAllFieldSelectsAndRemoveRows() {
             var tableId = "#types-barrelstrength-sproutforms-integrationtypes-EntryElementIntegration-fieldsMapped";
-            $(tableId+" tbody tr").remove();
+            $(tableId + " tbody tr").remove();
             var data = getEntryFieldsData();
 
-            Craft.postActionRequest('sprout-forms/integrations/get-element-entry-fields', data, $.proxy(function(response, textStatus)
-            {
+            Craft.postActionRequest('sprout-forms/integrations/get-element-entry-fields', data, $.proxy(function(response, textStatus) {
                 var statusSuccess = (textStatus === 'success');
 
-                if(statusSuccess && response.success) {
+                if (statusSuccess && response.success) {
                     var rows = response.fieldOptionsByRow;
-                    for(i = 0; i < rows.length; i++) {
+                    for (i = 0; i < rows.length; i++) {
                         var field = rows[i];
-                        $(tableId+' tbody').append('<tr data-id="'+i+'"> <td class="textual code formField"><textarea name="types[barrelstrength\\sproutforms\\integrationtypes\\EntryElementIntegration][fieldsMapped]['+i+'][integrationField]" rows="1" readonly> '+field["value"]+'</textarea></td> <td class="formEntryFields"><div class="select small"><select name="types[barrelstrength\\sproutforms\\integrationtypes\\EntryElementIntegration][fieldsMapped]['+i+'][sproutFormField]"></select></div></td></tr>');
+                        $(tableId + ' tbody').append('<tr data-id="' + i + '"> <td class="textual code formField"><textarea name="types[barrelstrength\\sproutforms\\integrationtypes\\EntryElementIntegration][fieldsMapped][' + i + '][integrationField]" rows="1" readonly> ' + field["value"] + '</textarea></td> <td class="formEntryFields"><div class="select small"><select name="types[barrelstrength\\sproutforms\\integrationtypes\\EntryElementIntegration][fieldsMapped][' + i + '][sproutFormField]"></select></div></td></tr>');
                         updateAllFieldSelects();
                     }
-                }
-                else
-                {
-                    Craft.cp.displayError(Craft.t('sprout-forms','Unable to get the Entry fields'));
+                } else {
+                    Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to get the Entry fields'));
                 }
             }, this));
         }
@@ -94,42 +91,37 @@
         function updateAllFieldSelects() {
             var $currentRows = getCurrentRows();
             var data = getEntryFieldsData();
-            Craft.postActionRequest('sprout-forms/integrations/get-form-fields', data, $.proxy(function(response, textStatus)
-            {
+            Craft.postActionRequest('sprout-forms/integrations/get-form-fields', data, $.proxy(function(response, textStatus) {
                 var statusSuccess = (textStatus === 'success');
 
-                if(statusSuccess && response.success) {
+                if (statusSuccess && response.success) {
                     var rows = $.parseJSON(response.fieldOptionsByRow);
 
-                    $currentRows.each(function(index){
+                    $currentRows.each(function(index) {
                         var $select = $(this).find('select');
                         var fields = rows[index];
                         appendFieldsToSelect($select, fields);
                     });
-                }
-                else
-                {
-                    Craft.cp.displayError(Craft.t('sprout-forms','Unable to get the Form fields'));
+                } else {
+                    Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to get the Form fields'));
                 }
             }, this));
 
         }
 
-        function getEntryFieldsData()
-        {
+        function getEntryFieldsData() {
             var entryTypeId = $('#types-barrelstrength-sproutforms-integrationtypes-EntryElementIntegration-entryTypeId').val();
             var integrationId = $('#integrationId').val();
             var data = {
-                'entryTypeId':entryTypeId,
-                'integrationId':integrationId
+                'entryTypeId': entryTypeId,
+                'integrationId': integrationId
             };
 
             return data;
         }
 
-        function getCurrentRows(className = null)
-        {
-            if (className === null){
+        function getCurrentRows(className = null) {
+            if (className === null) {
                 className = 'tbody .formEntryFields';
             }
             return $(className);
@@ -142,18 +134,18 @@
             for (i = 0; i < fields.length; i++) {
                 var field = fields[i];
                 var selectedCode = '';
-                if ("optgroup" in field){
-                    if (closeOptgroup){
+                if ("optgroup" in field) {
+                    if (closeOptgroup) {
                         $select.append('</optgroup>');
                         closeOptgroup = false;
                     }
-                    $select.append('<optgroup label="'+field['optgroup']+'">');
+                    $select.append('<optgroup label="' + field['optgroup'] + '">');
                     closeOptgroup = true;
-                }else{
-                    if ("selected" in field){
+                } else {
+                    if ("selected" in field) {
                         selectedCode = 'selected';
                     }
-                    $select.append('<option '+selectedCode+' value="'+field['value']+'">'+field['label']+'</option>');
+                    $select.append('<option ' + selectedCode + ' value="' + field['value'] + '">' + field['label'] + '</option>');
                 }
 
             }

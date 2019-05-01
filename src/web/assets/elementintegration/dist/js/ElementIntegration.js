@@ -31,7 +31,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
             var that = this;
 
             // Select the current
-            $(".btn")[0].click(function(){
+            $(".btn")[0].click(function() {
                 console.log("as");
             });
         },

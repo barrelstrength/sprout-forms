@@ -37,7 +37,7 @@ class Integration extends ActiveRecord
     {
         $integrationApi = null;
 
-        if($this->type){
+        if ($this->type) {
             $integrationApi = new $this->type;
             $form = SproutForms::$app->forms->getFormById($this->formId);
             $integrationApi->form = $form;
@@ -46,7 +46,7 @@ class Integration extends ActiveRecord
             $integrationApi->addErrorOnSubmit = $this->addErrorOnSubmit;
             $integrationApi->enabled = $this->enabled;
 
-            if ($this->settings){
+            if ($this->settings) {
                 $settings = json_decode($this->settings, true);
                 $integrationApi->setAttributes($settings, false);
             }

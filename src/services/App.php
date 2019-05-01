@@ -43,6 +43,6 @@ class App extends Component
         $this->fields = new Fields();
         $this->entries = new Entries();
         $this->frontEndFields = new FrontEndFields();
-        $this->integrations= new Integrations();
+        $this->integrations = new Integrations();
     }
 }

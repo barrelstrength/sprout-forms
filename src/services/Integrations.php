@@ -33,6 +33,7 @@ class Integrations extends Component
      * @param $type
      * @param $form
      * @param $name
+     *
      * @return IntegrationRecord|null
      */
     public function createIntegration($type, $form, $name = null)
@@ -43,7 +44,7 @@ class Integrations extends Component
         $integrationRecord->formId = $form->id;
         $integrationRecord->name = $name ?? $integrationRecord->getIntegrationApi()->getName();
 
-        if ($integrationRecord->save()){
+        if ($integrationRecord->save()) {
             $integration = $integrationRecord;
         }
 
@@ -59,9 +60,8 @@ class Integrations extends Component
 
         $integrations = [];
 
-        foreach ($integrationTypes as $integrationType)
-        {
-            if ($integrationType !== FormEntryElementIntegration::class){
+        foreach ($integrationTypes as $integrationType) {
+            if ($integrationType !== FormEntryElementIntegration::class) {
                 $integrations[] = new $integrationType();
             }
         }
@@ -71,6 +71,7 @@ class Integrations extends Component
 
     /**
      * @param $formId
+     *
      * @return IntegrationRecord[]
      */
     public function getFormIntegrations($formId)
@@ -82,6 +83,7 @@ class Integrations extends Component
 
     /**
      * @param $integrationId
+     *
      * @return IntegrationRecord|null
      */
     public function getFormIntegrationById($integrationId)
@@ -124,8 +126,9 @@ class Integrations extends Component
     /**
      * Loads the sprout modal integration via ajax.
      *
-     * @param $form
+     * @param      $form
      * @param null $integration
+     *
      * @return array
      * @throws \yii\base\Exception
      */
@@ -150,10 +153,11 @@ class Integrations extends Component
     }
 
     /**
-     * @param $integrationId
-     * @param $entryId
-     * @param $isValid
+     * @param       $integrationId
+     * @param       $entryId
+     * @param       $isValid
      * @param array $message
+     *
      * @return bool
      */
     public function saveEntryIntegrationLog($integrationId, $entryId, $isValid, $message = [])
@@ -162,7 +166,7 @@ class Integrations extends Component
         $entryIntegration->entryId = $entryId;
         $entryIntegration->integrationId = $integrationId;
         $entryIntegration->isValid = $isValid;
-        if (is_array($message)){
+        if (is_array($message)) {
             $message = json_encode($message);
         }
         $entryIntegration->message = $message;
@@ -171,6 +175,7 @@ class Integrations extends Component
 
     /**
      * @param $entryId
+     *
      * @return array|\yii\db\ActiveRecord[]
      */
     public function getEntryIntegrationLogsByEntryId($entryId)
@@ -188,6 +193,7 @@ class Integrations extends Component
      * Run all the integrations related to the Form Element. If at least one fails it will return false
      *
      * @param Entry $entry
+     *
      * @return bool
      */
     public function runEntryIntegrations(Entry $entry)
@@ -196,21 +202,20 @@ class Integrations extends Component
         $integrations = SproutForms::$app->integrations->getFormIntegrations($form->id);
         $success = true;
 
-        foreach ($integrations as $integrationRecord)
-        {
+        foreach ($integrations as $integrationRecord) {
             $integration = $integrationRecord->getIntegrationApi();
             $integration->entry = $entry;
             Craft::info('Running Sprout Forms integration: '.$integration->name, __METHOD__);
 
-            try{
-                if ($integration->enabled){
+            try {
+                if ($integration->enabled) {
                     if (!$integration->submit()) {
-                        if ($integration->addErrorOnSubmit){
+                        if ($integration->addErrorOnSubmit) {
                             $success = false;
                         }
                     }
                 }
-            }catch (\Exception $e){
+            } catch (\Exception $e) {
                 $success = false;
                 $message = 'Submit Integration Api fails: '.$e->getMessage();
                 $integration->logResponse($message, $e->getTrace());

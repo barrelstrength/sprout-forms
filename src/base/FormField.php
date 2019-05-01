@@ -122,12 +122,12 @@ abstract class FormField extends Field
      * The namespace to use when preparing your field's <input> name. This value
      * is also prepended to the field ID.
      *
+     * @return string
      * @example
      * All fields default to having name attributes using the fields namespace:
      *
      * <input name="fields[fieldHandle]">
      *
-     * @return string
      */
     public function getNamespace(): string
     {
@@ -151,12 +151,12 @@ abstract class FormField extends Field
      * The folder name within the field path to find the input HTML file for this field. By default,
      * the folder is expected to use the Field Class short name.
      *
+     * @return string
+     * @throws \ReflectionException
      * @example
      * The PlainText Field Class would look for it's respective input HTML in the `plaintext/input.html`
      * file within the folder returned by getTemplatesPath()
      *
-     * @return string
-     * @throws \ReflectionException
      */
     public function getFieldInputFolder(): string
     {

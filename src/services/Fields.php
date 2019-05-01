@@ -97,8 +97,8 @@ class Fields extends Component
     /**
      * @param int $fieldId
      *
-     * @throws Exception
      * @return FieldLayoutFieldRecord
+     * @throws Exception
      */
     protected function getFieldLayoutFieldRecordByFieldId($fieldId = null): FieldLayoutFieldRecord
     {
@@ -669,13 +669,13 @@ class Fields extends Component
     /**
      * Prepends a key/value pair to an array
      *
-     * @see array_unshift()
-     *
      * @param array  $haystack
      * @param string $key
      * @param mixed  $value
      *
      * @return array
+     * @see array_unshift()
+     *
      */
     public function prependKeyValue(array $haystack, $key, $value): array
     {

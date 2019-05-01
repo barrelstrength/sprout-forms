@@ -223,7 +223,7 @@ class SproutFormsVariable
     /**
      * Gets a specific form. If no form is found, returns null
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return mixed
      */
@@ -235,7 +235,7 @@ class SproutFormsVariable
     /**
      * Gets a specific form by handle. If no form is found, returns null
      *
-     * @param  string $formHandle
+     * @param string $formHandle
      *
      * @return mixed
      */
@@ -312,7 +312,7 @@ class SproutFormsVariable
     /**
      * Gets Form Groups
      *
-     * @param  int $id Group ID (optional)
+     * @param int $id Group ID (optional)
      *
      * @return array
      */
@@ -334,9 +334,9 @@ class SproutFormsVariable
     }
 
     /**
+     * @return array
      * @see SproutForms::$app->fields->prepareFieldTypeSelection()
      *
-     * @return array
      */
     public function prepareFieldTypeSelection(): array
     {
@@ -344,9 +344,9 @@ class SproutFormsVariable
     }
 
     /**
+     * @return array
      * @see SproutForms::$app->integrations->prepareIntegrationTypeSelection()
      *
-     * @return array
      */
     public function prepareIntegrationTypeSelection()
     {
@@ -625,6 +625,7 @@ class SproutFormsVariable
 
     /**
      * @param $entryId
+     *
      * @return array|\yii\db\ActiveRecord[]
      */
     public function getEntryIntegrationLogsByEntryId($entryId)
@@ -636,6 +637,7 @@ class SproutFormsVariable
 
     /**
      * @param $integrationId
+     *
      * @return \barrelstrength\sproutforms\records\Integration|null
      */
     public function getIntegrationById($integrationId)

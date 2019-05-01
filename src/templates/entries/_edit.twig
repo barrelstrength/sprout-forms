@@ -92,7 +92,7 @@
     <div class="meta read-only">
         <div class="data">
             <h5 class="heading">{{ "Submitted"|t('sprout-forms') }}</h5>
-            <div class="value">{{  entry.dateCreated|datetime('short') }}</div>
+            <div class="value">{{ entry.dateCreated|datetime('short') }}</div>
         </div>
     </div>
     <div class="meta read-only">
@@ -105,9 +105,15 @@
                     {% set integration = craft.sproutForms.getIntegrationById(entryIntegration.integrationId) %}
                     <h5 class="heading">{{ integration.name }}</h5>
                     {% if entryIntegration.isValid %}
-                        <div class="value" > <span class="status live "></span> Success <span class="info">{{ entryIntegration.message }}</span></div>
-                        {% else %}
-                            <div class="value" > <span class="status disabled"></span> Error <span class="info">{{ entryIntegration.message }}</span></div>
+                        <div class="value"><span class="status live "></span>
+                            Success
+                            <span class="info">{{ entryIntegration.message }}</span>
+                        </div>
+                    {% else %}
+                        <div class="value"><span class="status disabled"></span>
+                            Error
+                            <span class="info">{{ entryIntegration.message }}</span>
+                        </div>
                     {% endif %}
                 </div>
             {% endfor %}

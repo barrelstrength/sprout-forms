@@ -318,7 +318,7 @@ class Install extends Migration
 
         $projectConfig = Craft::$app->getProjectConfig();
         $pluginHandle = 'sprout-forms';
-        $currentSettings = $projectConfig->get(Plugins::CONFIG_PLUGINS_KEY . '.' . $pluginHandle . '.settings');
+        $currentSettings = $projectConfig->get(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings');
 
         $settings = new Settings();
         $settings->setAttributes($currentSettings);
@@ -326,18 +326,18 @@ class Install extends Migration
         $settings->templateFolderOverride = $currentSettings['templateFolderOverride'] ?? $accessible->getTemplateId();
 
         $settings->captchaSettings = $currentSettings['captchaSettings'] ?? [
-            'sproutforms-duplicatecaptcha' => [
-                'enabled' => 1
-            ],
-            'sproutforms-javascriptcaptcha' => [
-                'enabled' => 1
-            ],
-            'sproutforms-honeypotcaptcha' => [
-                'enabled' => 1,
-                'honeypotFieldName' => 'beesknees',
-                'honeypotScreenReaderMessage' => 'Leave this field blank'
-            ],
-        ];
+                'sproutforms-duplicatecaptcha' => [
+                    'enabled' => 1
+                ],
+                'sproutforms-javascriptcaptcha' => [
+                    'enabled' => 1
+                ],
+                'sproutforms-honeypotcaptcha' => [
+                    'enabled' => 1,
+                    'honeypotFieldName' => 'beesknees',
+                    'honeypotScreenReaderMessage' => 'Leave this field blank'
+                ],
+            ];
 
         $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings', $settings->toArray());
     }

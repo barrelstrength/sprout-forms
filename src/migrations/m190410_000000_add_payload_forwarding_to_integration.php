@@ -33,11 +33,11 @@ class m190410_000000_add_payload_forwarding_to_integration extends Migration
             $integrationApi = $integrationRecord->getIntegrationApi();
             $settings = [];
 
-            if ($form['submitAction']){
+            if ($form['submitAction']) {
                 $settings['submitAction'] = $form['submitAction'];
                 $formFields = $integrationApi->getFormFieldsAsOptions();
                 $fieldsMapped = [];
-                foreach ($formFields as $formField){
+                foreach ($formFields as $formField) {
                     $fieldsMapped[] = [
                         'sproutFormField' => $formField['value'],
                         'integrationField' => ''

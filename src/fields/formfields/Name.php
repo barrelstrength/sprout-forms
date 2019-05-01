@@ -199,12 +199,12 @@ class Name extends FormField implements PreviewableFieldInterface
     /**
      * Prepare our Name for use as an NameModel
      *
-     * @todo - move to helper as we can use this on both Sprout Forms and Sprout Fields
-     *
      * @param                       $value
      * @param ElementInterface|null $element
      *
      * @return NameModel|mixed
+     * @todo - move to helper as we can use this on both Sprout Forms and Sprout Fields
+     *
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
@@ -238,14 +238,14 @@ class Name extends FormField implements PreviewableFieldInterface
      *
      * Prepare the field value for the database.
      *
-     * @todo - move to helper as we can use this on both Sprout Forms and Sprout Fields
-     *
-     * We store the Name as JSON in the content column.
-     *
      * @param                       $value
      * @param ElementInterface|null $element
      *
      * @return array|bool|mixed|null|string
+     * @todo - move to helper as we can use this on both Sprout Forms and Sprout Fields
+     *
+     * We store the Name as JSON in the content column.
+     *
      */
     public function serializeValue($value, ElementInterface $element = null)
     {

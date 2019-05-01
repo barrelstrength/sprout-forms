@@ -20,14 +20,16 @@ class EntryElementIntegration extends BaseElementIntegration
      */
     public $hasFieldMapping = true;
 
-    public function getName() {
+    public function getName()
+    {
         return Craft::t('sprout-forms', 'Craft Entries');
     }
 
     /**
      * @inheritdoc
      */
-    public function getSettingsHtml() {
+    public function getSettingsHtml()
+    {
         $sections = $this->getSectionsAsOptions();
 
         return Craft::$app->getView()->renderTemplate('sprout-forms/_components/integrationtypes/entryelement/settings',
@@ -41,7 +43,8 @@ class EntryElementIntegration extends BaseElementIntegration
     /**
      * @inheritdoc
      */
-    public function submit() {
+    public function submit()
+    {
         if ($this->entryTypeId && !Craft::$app->getRequest()->getIsCpRequest()) {
             if (!$this->createEntry()) {
                 return false;
@@ -54,17 +57,18 @@ class EntryElementIntegration extends BaseElementIntegration
     /**
      * @inheritdoc
      */
-    public function resolveFieldMapping() {
+    public function resolveFieldMapping()
+    {
         $fields = [];
         $entry = $this->entry;
 
-        if ($this->fieldsMapped){
+        if ($this->fieldsMapped) {
             foreach ($this->fieldsMapped as $fieldMapped) {
-                if (isset($entry->{$fieldMapped['sproutFormField']}) && $fieldMapped['integrationField']){
+                if (isset($entry->{$fieldMapped['sproutFormField']}) && $fieldMapped['integrationField']) {
                     $fields[$fieldMapped['integrationField']] = $entry->{$fieldMapped['sproutFormField']};
-                }else{
+                } else {
                     // Leave default handle is the integrationField is blank
-                    if (empty($fieldMapped['integrationField'])){
+                    if (empty($fieldMapped['integrationField'])) {
                         $fields[$fieldMapped['sproutFormField']] = $entry->{$fieldMapped['sproutFormField']};
                     }
                 }
@@ -81,19 +85,19 @@ class EntryElementIntegration extends BaseElementIntegration
      */
     public function getFieldMappingSettingsHtml()
     {
-        if (!$this->hasFieldMapping){
+        if (!$this->hasFieldMapping) {
             return '';
         }
         $this->fieldsMapped = [];
 
         $entryTypeId = $this->entryTypeId;
 
-        if (is_null($entryTypeId) || empty($entryTypeId)){
+        if (is_null($entryTypeId) || empty($entryTypeId)) {
             $sections = $this->getSectionsAsOptions();
             $entryTypeId = $sections[1]['value'] ?? null;
         }
 
-        if (!is_null($entryTypeId)){
+        if (!is_null($entryTypeId)) {
             foreach ($this->getElementFieldsAsOptions($entryTypeId) as $elementFieldsAsOption) {
                 $this->fieldsMapped[] = [
                     'integrationField' => $elementFieldsAsOption['value'],
@@ -164,6 +168,7 @@ class EntryElementIntegration extends BaseElementIntegration
 
     /**
      * @param $elementGroupId
+     *
      * @return array
      */
     public function getElementFieldsAsOptions($elementGroupId)
@@ -196,17 +201,17 @@ class EntryElementIntegration extends BaseElementIntegration
         $entryElement->typeId = $entryType->id;
         $entryElement->sectionId = $entryType->sectionId;
         $author = $this->getAuthor();
-        if ($author){
+        if ($author) {
             $entryElement->authorId = $author->id;
         }
 
         $entryElement->setAttributes($fields, false);
 
         try {
-            if ($entryElement->validate()){
+            if ($entryElement->validate()) {
                 $result = Craft::$app->getElements()->saveElement($entryElement);
-                if ($result){
-                    $this->logResponse(true,"Entry successfully created");
+                if ($result) {
+                    $this->logResponse(true, "Entry successfully created");
                     Craft::info('Element Integration successfully saved: '.$entryElement->id, __METHOD__);
                     return true;
                 }
@@ -214,9 +219,9 @@ class EntryElementIntegration extends BaseElementIntegration
                 $message = Craft::t('sprout-forms', 'Unable to create Entry via Element Integration');
                 $this->logResponse(false, $entryElement->getErrors());
                 $this->addFormEntryError($message);
-            }else{
+            } else {
                 $errors = json_encode($entryElement->getErrors());
-                $message = Craft::t('sprout-forms', 'Element Integration does not validate: '.$this->name. ' - Errors: '.$errors);
+                $message = Craft::t('sprout-forms', 'Element Integration does not validate: '.$this->name.' - Errors: '.$errors);
                 $this->addFormEntryError($message);
                 $this->logResponse(false, $message);
             }
@@ -237,7 +242,7 @@ class EntryElementIntegration extends BaseElementIntegration
         $options = [];
 
         foreach ($sections as $section) {
-            if ($section->type != 'single'){
+            if ($section->type != 'single') {
                 $entryTypes = $section->getEntryTypes();
 
                 $options[] = ['optgroup' => $section->name];

@@ -38,7 +38,8 @@ class FormEntryElementIntegration extends ElementIntegration
      *
      * @return string
      */
-    public function getType() {
+    public function getType()
+    {
         return self::class;
     }
 }
