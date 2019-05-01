@@ -107,7 +107,7 @@ class Integrations extends Component
         if (count($integrations)) {
             // Loop through registered integrations and add them to the standard group
             foreach ($integrations as $class => $integration) {
-                $standardIntegrations[$class] = $integration->getName();
+                $standardIntegrations[get_class($integration)] = $integration->getName();
             }
 
             // Sort fields alphabetically by name
