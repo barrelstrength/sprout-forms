@@ -23,10 +23,10 @@ class m190425_000000_add_integrations_entries extends Migration
     {
         $this->createTable('{{%sproutforms_integrations_entries}}', [
             'id' => $this->primaryKey(),
-            'entryId' => $this->integer()->notNull(),
+            'entryId' => $this->integer(),
             'integrationId' => $this->integer()->notNull(),
+            'isValid' => $this->boolean()->defaultValue(false),
             'message' => $this->text(),
-            'details' => $this->text(),
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull(),
             'uid' => $this->uid(),

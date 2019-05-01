@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\services;
 
 use barrelstrength\sproutforms\base\Integration;
+use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\integrationtypes\FormEntryElementIntegration;
 use barrelstrength\sproutforms\records\EntryIntegrationLog;
 use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
@@ -151,20 +152,20 @@ class Integrations extends Component
     /**
      * @param $integrationId
      * @param $entryId
-     * @param $message
-     * @param array $details
+     * @param $isValid
+     * @param array $message
      * @return bool
      */
-    public function saveEntryIntegrationLog($integrationId, $entryId, $message, $details = [])
+    public function saveEntryIntegrationLog($integrationId, $entryId, $isValid, $message = [])
     {
         $entryIntegration = new EntryIntegrationLog();
         $entryIntegration->entryId = $entryId;
         $entryIntegration->integrationId = $integrationId;
-        $entryIntegration->message = $message;
-        if (is_array($details)){
-            $details = json_encode($details);
+        $entryIntegration->isValid = $isValid;
+        if (is_array($message)){
+            $message = json_encode($message);
         }
-        $entryIntegration->details = $details;
+        $entryIntegration->message = $message;
         return $entryIntegration->save();
     }
 
@@ -181,5 +182,42 @@ class Integrations extends Component
             ->all();
 
         return $entryIntegrations;
+    }
+
+    /**
+     * Run all the integrations related to the Form Element. If at least one fails it will return false
+     *
+     * @param Entry $entry
+     * @return bool
+     */
+    public function runEntryIntegrations(Entry $entry)
+    {
+        $form = $entry->getForm();
+        $integrations = SproutForms::$app->integrations->getFormIntegrations($form->id);
+        $success = true;
+
+        foreach ($integrations as $integrationRecord)
+        {
+            $integration = $integrationRecord->getIntegrationApi();
+            $integration->entry = $entry;
+            Craft::info('Running Sprout Forms integration: '.$integration->name, __METHOD__);
+
+            try{
+                if ($integration->enabled){
+                    if (!$integration->submit()) {
+                        if ($integration->addErrorOnSubmit){
+                            $success = false;
+                        }
+                    }
+                }
+            }catch (\Exception $e){
+                $success = false;
+                $message = 'Submit Integration Api fails: '.$e->getMessage();
+                $integration->logResponse($message, $e->getTrace());
+                Craft::error($message, __METHOD__);
+            }
+        }
+
+        return $success;
     }
 }

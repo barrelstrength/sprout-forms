@@ -206,23 +206,23 @@ class EntryElementIntegration extends BaseElementIntegration
             if ($entryElement->validate()){
                 $result = Craft::$app->getElements()->saveElement($entryElement);
                 if ($result){
-                    $this->logResponse("Entry successfully created");
+                    $this->logResponse(true,"Entry successfully created");
                     Craft::info('Element Integration successfully saved: '.$entryElement->id, __METHOD__);
                     return true;
                 }
 
                 $message = Craft::t('sprout-forms', 'Unable to create Entry via Element Integration');
-                $this->logResponse($message, $entryElement->getErrors());
+                $this->logResponse(false, $entryElement->getErrors());
                 $this->addFormEntryError($message);
             }else{
                 $errors = json_encode($entryElement->getErrors());
                 $message = Craft::t('sprout-forms', 'Element Integration does not validate: '.$this->name. ' - Errors: '.$errors);
                 $this->addFormEntryError($message);
-                $this->logResponse($message, $errors);
+                $this->logResponse(false, $message);
             }
         } catch (\Exception $e) {
             $this->addFormEntryError($e->getMessage());
-            $this->logResponse($e->getMessage(), $e->getTrace());
+            $this->logResponse(false, $e->getTrace());
         }
 
         return false;

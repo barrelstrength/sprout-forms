@@ -81,7 +81,7 @@ class PayloadForwarding extends ApiIntegration
 
         if (!filter_var($endpoint, FILTER_VALIDATE_URL)) {
             $message = $entry->formName.' submit action is an invalid URL: '.$endpoint;
-            $this->logResponse($message);
+            $this->logResponse(false, $message);
             Craft::error($message, __METHOD__);
 
             return false;
@@ -96,11 +96,11 @@ class PayloadForwarding extends ApiIntegration
                 RequestOptions::JSON => $fields
             ]);
 
-            $this->logResponse('success', $response->getBody()->getContents());
+            $this->logResponse(true, $response->getBody()->getContents());
             Craft::info($response->getBody()->getContents(), __METHOD__);
         } catch (\Exception $e) {
             $this->addFormEntryError( $e->getMessage());
-            $this->logResponse($e->getMessage(), $e->getTrace());
+            $this->logResponse(false, $e->getMessage());
             return false;
         }
 

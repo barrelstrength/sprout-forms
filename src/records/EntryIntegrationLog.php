@@ -14,7 +14,7 @@ use Craft;
  * @property $entryId
  * @property $integrationId
  * @property $message
- * @property $details
+ * @property $isValid
  * @property $addErrorOnSubmit
  */
 class EntryIntegrationLog extends ActiveRecord

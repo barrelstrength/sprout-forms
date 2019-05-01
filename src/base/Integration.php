@@ -221,12 +221,12 @@ abstract class Integration extends Model
     }
 
     /**
+     * @param $isValid
      * @param $message
-     * @param array $details
      */
-    public function logResponse($message, $details = [])
+    public function logResponse($isValid, $message)
     {
-        $this->entry->addEntryIntegrationLog($this->integrationId, $message, $details);
+        $this->entry->addEntryIntegrationLog($this->integrationId, $isValid, $message);
     }
 }
 
