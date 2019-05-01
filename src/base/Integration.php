@@ -155,7 +155,9 @@ abstract class Integration extends Model
             CraftPlainText::class,
             CraftDropdown::class
         ];
+
         $options = [
+            ['optgroup' => Craft::t('sprout-forms', 'Default')],
             [
                 'label' => 'Id',
                 'value' => 'id',
@@ -184,15 +186,20 @@ abstract class Integration extends Model
             ]
         ];
 
-        foreach ($fields as $field) {
+        if (count($fields)){
             $options[] = [
-                'label' => $field->name,
-                'value' => $field->handle,
-                'compatibleCraftFields' => $field->getCompatibleCraftFields(),
-                'fieldType' => get_class($field)
+                'optgroup' => Craft::t('sprout-forms', 'Form Fields')
             ];
-        }
 
+            foreach ($fields as $field) {
+                $options[] = [
+                    'label' => $field->name,
+                    'value' => $field->handle,
+                    'compatibleCraftFields' => $field->getCompatibleCraftFields(),
+                    'fieldType' => get_class($field)
+                ];
+            }
+        }
         return $options;
     }
 

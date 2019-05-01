@@ -223,6 +223,9 @@ class IntegrationsController extends BaseController
             if ($fieldsMapped && ($integrationSectionId == $entryTypeId)){
                 if (isset($fieldsMapped[$rowPosition])){
                     foreach ($optionsByRow as $key => $option) {
+                        if (isset($option['optgroup'])){
+                            continue;
+                        }
                         $integrationValue =  $entryField['value'] ?? $entryField->handle;
                         if ($option['value'] == $fieldsMapped[$rowPosition]['sproutFormField'] &&
                             $fieldsMapped[$rowPosition]['integrationField'] == $integrationValue){
@@ -236,6 +239,29 @@ class IntegrationsController extends BaseController
 
             $rowPosition++;
         }
+        // Removes optgroups with not fields
+        /*
+        $auxOptions = $finalOptions;
+
+        foreach ($auxOptions as $rowPos => $finalOptionsByRow) {
+            foreach ($finalOptionsByRow as $row => $finalOptionByRow) {
+
+                if (isset($finalOptionByRow['optgroup'])){
+                    $removeOptGroup = true;
+
+                    if (isset($finalOptionsByRow[$row+1])){
+                        if (isset($finalOptionsByRow[$row+1]['value'])){
+                            $removeOptGroup = false;
+                        }
+                    }
+                    if ($removeOptGroup){
+                        unset($finalOptions[$rowPos][$row]);
+                    }
+                }
+            }
+
+        }
+        */
 
         return $finalOptions;
     }
@@ -248,8 +274,13 @@ class IntegrationsController extends BaseController
     private function getCompatibleFields(array $formFields, $entryField)
     {
         $finalOptions = [];
+        $groupFields = [];
 
-        foreach ($formFields as $field) {
+        foreach ($formFields as $pos => $field) {
+            if (isset($field['optgroup'])){
+                $finalOptions[] = $field;
+                continue;
+            }
             $compatibleFields = $field['compatibleCraftFields'] ?? '*';
             // Check default attributes
             if (isset($entryField['class'])){
@@ -260,6 +291,7 @@ class IntegrationsController extends BaseController
                 }
 
                 if ($field){
+                    $groupFields[] = $field;
                     $finalOptions[] = $field;
                 }
             }

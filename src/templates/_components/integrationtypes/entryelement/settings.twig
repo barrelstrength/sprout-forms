@@ -103,7 +103,11 @@
                     $currentRows.each(function(index){
                         var $select = $(this).find('select');
                         var fields = rows[index];
-                        appendFieldsToSelect($select, fields);
+                        var debug = false;
+                        if (index == 8){
+                            debug = true;
+                        }
+                        appendFieldsToSelect($select, fields, debug);
                     });
                 }
                 else
@@ -134,15 +138,31 @@
             return $(className);
         }
 
-        function appendFieldsToSelect($select, fields) {
+        function appendFieldsToSelect($select, fields, debug = false) {
             $select.empty();
+            var closeOptgroup = false;
+
+
+            if (debug){
+                console.log(fields);
+            }
             for (i = 0; i < fields.length; i++) {
                 var field = fields[i];
                 var selectedCode = '';
-                if ("selected" in field){
-                    selectedCode = 'selected';
+                if ("optgroup" in field){
+                    if (closeOptgroup){
+                        $select.append('</optgroup>');
+                        closeOptgroup = false;
+                    }
+                    $select.append('<optgroup label="'+field['optgroup']+'">');
+                    closeOptgroup = true;
+                }else{
+                    if ("selected" in field){
+                        selectedCode = 'selected';
+                    }
+                    $select.append('<option '+selectedCode+' value="'+field['value']+'">'+field['label']+'</option>');
                 }
-                $select.append('<option '+selectedCode+' value="'+field['value']+'">'+field['label']+'</option>');
+
             }
         }
     });
