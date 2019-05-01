@@ -5,6 +5,7 @@ namespace barrelstrength\sproutforms\integrationtypes;
 use barrelstrength\sproutforms\base\BaseElementIntegration;
 use Craft;
 use craft\elements\Entry;
+use craft\elements\User;
 use craft\fields\Date;
 use craft\fields\PlainText;
 
@@ -14,11 +15,6 @@ use craft\fields\PlainText;
 class EntryElementIntegration extends BaseElementIntegration
 {
     public $entryTypeId;
-
-    /**
-     * @var boolean
-     */
-    public $hasFieldMapping = true;
 
     public function getName()
     {
@@ -218,15 +214,15 @@ class EntryElementIntegration extends BaseElementIntegration
 
                 $message = Craft::t('sprout-forms', 'Unable to create Entry via Element Integration');
                 $this->logResponse(false, $entryElement->getErrors());
-                $this->addFormEntryError($message);
+                Craft::error($message, __METHOD__);
             } else {
                 $errors = json_encode($entryElement->getErrors());
                 $message = Craft::t('sprout-forms', 'Element Integration does not validate: '.$this->name.' - Errors: '.$errors);
-                $this->addFormEntryError($message);
+                Craft::error($message, __METHOD__);
                 $this->logResponse(false, $message);
             }
         } catch (\Exception $e) {
-            $this->addFormEntryError($e->getMessage());
+            Craft::error($e->getMessage(), __METHOD__);
             $this->logResponse(false, $e->getTrace());
         }
 
@@ -267,6 +263,35 @@ class EntryElementIntegration extends BaseElementIntegration
     public function getType()
     {
         return self::class;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserElementType()
+    {
+        return User::class;
+    }
+
+    /**
+     * @return User|false|\yii\web\IdentityInterface|null
+     */
+    public function getAuthor()
+    {
+        $author = Craft::$app->getUser()->getIdentity();
+
+        if ($this->enableSetAuthorToLoggedInUser) {
+            return $author;
+        }
+
+        if ($this->authorId && is_array($this->authorId)) {
+            $user = Craft::$app->getUsers()->getUserById($this->authorId[0]);
+            if ($user) {
+                $author = $user;
+            }
+        }
+
+        return $author;
     }
 }
 

@@ -16,6 +16,10 @@ use craft\fields\PlainText as CraftPlainText;
  * Class IntegrationType
  *
  * @package Craft
+ *
+ * @property string $fieldMappingSettingsHtml
+ * @property void   $settingsHtml
+ * @property string $type
  */
 abstract class Integration extends Model
 {
@@ -40,19 +44,16 @@ abstract class Integration extends Model
     public $form;
 
     /**
+     * The default Sprout Forms Entry does not require a mapping. All other integrations will likely leave this set to true.
+     *
      * @var boolean
      */
-    public $hasFieldMapping = false;
+    public $hasFieldMapping = true;
 
     /**
      * @var array|null The fields mapped
      */
     public $fieldsMapped;
-
-    /**
-     * @var boolean
-     */
-    public $addErrorOnSubmit = false;
 
     /**
      * @var boolean
@@ -210,17 +211,6 @@ abstract class Integration extends Model
             }
         }
         return $options;
-    }
-
-    /**
-     * @param string $message
-     */
-    public function addFormEntryError($message)
-    {
-        Craft::error($message, __METHOD__);
-        if ($this->addErrorOnSubmit) {
-            $this->entry->addError('general', $message);
-        }
     }
 
     /**

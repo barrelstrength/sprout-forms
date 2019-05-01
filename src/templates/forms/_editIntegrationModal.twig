@@ -31,13 +31,6 @@
         {{ integration.getIntegrationApi().getFieldMappingSettingsHtml()|raw }}
     {% endnamespace %}
 
-    {{ forms.lightswitchField({
-        label: "Add errors from Integration to Form Entry"|t('sprout-forms'),
-        instructions: "Display errors to user if form submission fails."|t('sprout-forms'),
-        name: 'addErrorOnSubmit',
-        on: integration.addErrorOnSubmit
-    }) }}
-
     {{ forms.selectField({
         label: "Integration Type <span class='info'>Create a new integration if you need to update your integration type. This value cannot be changed.</span>"|t('sprout-forms'),
         id: 'type',

@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutforms\integrationtypes;
 
-use barrelstrength\sproutforms\base\ApiIntegration;
+use barrelstrength\sproutforms\base\Integration;
 use Craft;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
@@ -15,14 +15,9 @@ use GuzzleHttp\RequestOptions;
  * in Craft as normal, but will not trigger any further calls to
  * the third-party endpoint.
  */
-class PayloadForwarding extends ApiIntegration
+class PayloadForwarding extends Integration
 {
     public $submitAction;
-
-    /**
-     * @var boolean
-     */
-    public $hasFieldMapping = true;
 
     public function getName()
     {
@@ -103,7 +98,7 @@ class PayloadForwarding extends ApiIntegration
             $this->logResponse(true, $response->getBody()->getContents());
             Craft::info($response->getBody()->getContents(), __METHOD__);
         } catch (\Exception $e) {
-            $this->addFormEntryError($e->getMessage());
+            Craft::error($e->getMessage(), __METHOD__);
             $this->logResponse(false, $e->getMessage());
             return false;
         }

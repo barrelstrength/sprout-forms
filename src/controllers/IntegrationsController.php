@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\controllers;
 
+use barrelstrength\sproutforms\base\BaseElementIntegration;
 use barrelstrength\sproutforms\integrationtypes\EntryElementIntegration;
 use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
 use barrelstrength\sproutforms\elements\Form;
@@ -72,7 +73,6 @@ class IntegrationsController extends BaseController
         $type = $request->getRequiredBodyParam('type');
         $integrationId = $request->getBodyParam('integrationId');
         $enabled = $request->getBodyParam('enabled');
-        $addErrorOnSubmit = $request->getBodyParam('addErrorOnSubmit');
         $name = $request->getBodyParam('name');
         $settings = $request->getBodyParam('types.'.$type);
         $integration = SproutForms::$app->integrations->getFormIntegrationById($integrationId);
@@ -80,7 +80,6 @@ class IntegrationsController extends BaseController
         $integration->enabled = $enabled;
         $integration->settings = json_encode($settings);
         $integration->name = $name ?? $integration->name;
-        $integration->addErrorOnSubmit = $addErrorOnSubmit;
         $result = $integration->save();
 
         if (!$result) {
@@ -166,7 +165,7 @@ class IntegrationsController extends BaseController
         $fieldOptionsByRow = $this->getFieldsAsOptionsByRow($entryTypeId, $integrationId);
         return $this->asJson([
             'success' => 'true',
-            'fieldOptionsByRow' => json_encode($fieldOptionsByRow)
+            'fieldOptionsByRow' => $fieldOptionsByRow
         ]);
     }
 
@@ -202,68 +201,61 @@ class IntegrationsController extends BaseController
     private function getFieldsAsOptionsByRow($entryTypeId, $integrationId)
     {
         $integrationRecord = IntegrationRecord::findOne($integrationId);
-        /** @var EntryElementIntegration $integration */
+
+        /** @var BaseElementIntegration $integration */
         $integration = $integrationRecord->getIntegrationApi();
-        $entryFields = $integration->getElementFieldsAsOptions($entryTypeId);
+        $targetElementFields = $integration->getElementFieldsAsOptions($entryTypeId);
         $fieldsMapped = $integration->fieldsMapped;
         $integrationSectionId = $integration->entryTypeId ?? null;
         $firstRow = [
             'label' => 'None',
             'value' => ''
         ];
-        $formFields = $integration->getFormFieldsAsOptions(true);
-        array_unshift($formFields, $firstRow);
+        $sourceFormFields = $integration->getFormFieldsAsOptions(true);
+        array_unshift($sourceFormFields, $firstRow);
 
         $rowPosition = 0;
 
-        $finalOptions = [];
+        $allTargetElementFieldOptions = [];
 
-        foreach ($entryFields as $entryField) {
-            $optionsByRow = $this->getCompatibleFields($formFields, $entryField);
+        foreach ($targetElementFields as $targetElementField) {
+            $compatibleFields = $this->getCompatibleFields($sourceFormFields, $targetElementField);
             // We have rows stored and are for the same sectionType
             if ($fieldsMapped && ($integrationSectionId == $entryTypeId)) {
                 if (isset($fieldsMapped[$rowPosition])) {
-                    foreach ($optionsByRow as $key => $option) {
+                    foreach ($compatibleFields as $key => $option) {
                         if (isset($option['optgroup'])) {
                             continue;
                         }
-                        $integrationValue = $entryField['value'] ?? $entryField->handle;
+                        $integrationValue = $targetElementField['value'] ?? $targetElementField->handle;
 
                         if ($option['value'] == $fieldsMapped[$rowPosition]['sproutFormField'] &&
                             $fieldsMapped[$rowPosition]['integrationField'] == $integrationValue) {
-                            $optionsByRow[$key]['selected'] = true;
+                            $compatibleFields[$key]['selected'] = true;
                         }
                     }
                 }
             }
 
-            $finalOptions[$rowPosition] = $optionsByRow;
+            $allTargetElementFieldOptions[$rowPosition] = $compatibleFields;
 
             $rowPosition++;
         }
-        // Removes optgroups with not fields
 
-        $auxOptions = $finalOptions;
+        $tempAllTargetElementFieldOptions = $allTargetElementFieldOptions;
 
-        foreach ($auxOptions as $rowPos => $finalOptionsByRow) {
-            foreach ($finalOptionsByRow as $row => $finalOptionByRow) {
+        // Removes optgroups with no fields
+        foreach ($allTargetElementFieldOptions as $rowIndex => $targetElementFieldOptions) {
+            foreach ($targetElementFieldOptions as $key => $dropdownOption) {
 
-                if (isset($finalOptionByRow['optgroup'])) {
-                    $removeOptGroup = true;
-
-                    if (isset($finalOptionsByRow[$row + 1])) {
-                        if (isset($finalOptionsByRow[$row + 1]['value'])) {
-                            $removeOptGroup = false;
-                        }
-                    }
-                    if ($removeOptGroup) {
-                        unset($finalOptions[$rowPos][$row]);
-                    }
+                if (isset($dropdownOption['optgroup']) &&
+                    !isset($targetElementFieldOptions[$key + 1]['value'])) {
+                    array_splice($tempAllTargetElementFieldOptions[$rowIndex], $key, 1);
                 }
             }
         }
 
-        return $finalOptions;
+        return $tempAllTargetElementFieldOptions;
     }
 
     /**

@@ -190,6 +190,7 @@ class SproutForms extends Plugin
                 SproutForms::$app->integrations->runEntryIntegrations($entry);
 
                 $integrationLogs = $entry->getEntryIntegrationLogs();
+
                 $entryId = $entry->id ?? null;
                 if ($integrationLogs) {
                     foreach ($integrationLogs as $integrationLog) {
@@ -235,6 +236,33 @@ class SproutForms extends Plugin
 //            $event->types[] = BasicFieldsBundle::class;
 //            $event->types[] = SpecialFieldsBundle::class;
 //        });
+
+
+//        $array = [
+//            0 => [
+//                'label' => 'None',
+//                'value' => ''
+//            ],
+//            1 => [
+//                'optgroup' => 'Remove Me'
+//            ],
+//            2 => [
+//                'optgroup' => 'Form Fields'
+//            ],
+//            3 => [
+//                'label' => 'Checkboxes',
+//                'value' => 'checkboxes1',
+//                'compatibleCraftFields' => [
+//                    0 => 'craft\\fields\\Checkboxes',
+//                ],
+//                'fieldType' => 'barrelstrength\\sproutforms\\fields\\formfields\\Checkboxes'
+//            ]
+//        ];
+//
+//        unset($array[1]);
+//
+//        \Craft::dd(array_values($array));
+
     }
 
     /**

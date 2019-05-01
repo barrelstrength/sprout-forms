@@ -10,7 +10,7 @@ use craft\elements\User;
  *
  * @package Craft
  */
-abstract class BaseElementIntegration extends ApiIntegration
+abstract class BaseElementIntegration extends Integration
 {
     public $authorId;
 
@@ -55,35 +55,6 @@ abstract class BaseElementIntegration extends ApiIntegration
     public function getElementFieldsAsOptions($elementGroupId)
     {
         return [];
-    }
-
-    /**
-     * @return string
-     */
-    public function getUserElementType()
-    {
-        return User::class;
-    }
-
-    /**
-     * @return User|false|\yii\web\IdentityInterface|null
-     */
-    public function getAuthor()
-    {
-        $author = Craft::$app->getUser()->getIdentity();
-
-        if ($this->enableSetAuthorToLoggedInUser) {
-            return $author;
-        }
-
-        if ($this->authorId && is_array($this->authorId)) {
-            $user = Craft::$app->getUsers()->getUserById($this->authorId[0]);
-            if ($user) {
-                $author = $user;
-            }
-        }
-
-        return $author;
     }
 }
 

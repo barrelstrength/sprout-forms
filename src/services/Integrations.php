@@ -193,14 +193,11 @@ class Integrations extends Component
      * Run all the integrations related to the Form Element. If at least one fails it will return false
      *
      * @param Entry $entry
-     *
-     * @return bool
      */
     public function runEntryIntegrations(Entry $entry)
     {
         $form = $entry->getForm();
         $integrations = SproutForms::$app->integrations->getFormIntegrations($form->id);
-        $success = true;
 
         foreach ($integrations as $integrationRecord) {
             $integration = $integrationRecord->getIntegrationApi();
@@ -209,20 +206,13 @@ class Integrations extends Component
 
             try {
                 if ($integration->enabled) {
-                    if (!$integration->submit()) {
-                        if ($integration->addErrorOnSubmit) {
-                            $success = false;
-                        }
-                    }
+                    $integration->submit();
                 }
             } catch (\Exception $e) {
-                $success = false;
                 $message = 'Submit Integration Api fails: '.$e->getMessage();
                 $integration->logResponse($message, $e->getTrace());
                 Craft::error($message, __METHOD__);
             }
         }
-
-        return $success;
     }
 }

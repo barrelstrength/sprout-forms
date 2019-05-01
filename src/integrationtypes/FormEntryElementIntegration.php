@@ -7,6 +7,11 @@ use Craft;
 
 class FormEntryElementIntegration extends ElementIntegration
 {
+    /**
+     * @var boolean
+     */
+    public $hasFieldMapping = false;
+
     public function getName()
     {
         return Craft::t('sprout-forms', 'Sprout Forms (Default)');

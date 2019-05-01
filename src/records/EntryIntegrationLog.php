@@ -15,7 +15,6 @@ use Craft;
  * @property $integrationId
  * @property $message
  * @property $isValid
- * @property $addErrorOnSubmit
  */
 class EntryIntegrationLog extends ActiveRecord
 {
