@@ -24,10 +24,10 @@
 {{ forms.lightswitchField({
     label: "Set Author to Logged in User"|t('sprout-forms'),
     instructions: "When enabled, Sprout Forms will assign the logged in User as the author and fallback to the Default Author."|t('sprout-forms'),
-    id: 'enableSetAuthorManually',
-    name: 'enableSetAuthorManually',
+    id: 'enableSetAuthorToLoggedInUser',
+    name: 'enableSetAuthorToLoggedInUser',
     toggle: 'settings-save-author',
-    on: integration.enableSetAuthorManually,
+    on: integration.enableSetAuthorToLoggedInUser,
     onLabel: "Enable"|t('sprout-forms'),
 }) }}
 
