@@ -148,16 +148,20 @@ abstract class Integration extends Model
     /**
      * @return array
      */
-    public function getFormFieldsAsOptions()
+    public function getFormFieldsAsOptions($addOptGroup = false)
     {
         $fields = $this->form->getFields();
         $commonFields = [
             CraftPlainText::class,
             CraftDropdown::class
         ];
+        $options = [];
 
-        $options = [
-            ['optgroup' => Craft::t('sprout-forms', 'Default')],
+        if ($addOptGroup){
+            $options[] = ['optgroup' => Craft::t('sprout-forms', 'Default')];
+        }
+
+        $options = array_merge($options, [
             [
                 'label' => 'Id',
                 'value' => 'id',
@@ -184,12 +188,14 @@ abstract class Integration extends Model
                     CraftDate::class
                 ]
             ]
-        ];
+        ]);
 
         if (count($fields)){
-            $options[] = [
-                'optgroup' => Craft::t('sprout-forms', 'Form Fields')
-            ];
+            if ($addOptGroup){
+                $options[] = [
+                    'optgroup' => Craft::t('sprout-forms', 'Form Fields')
+                ];
+            }
 
             foreach ($fields as $field) {
                 $options[] = [

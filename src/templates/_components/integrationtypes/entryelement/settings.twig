@@ -99,15 +99,12 @@
                 var statusSuccess = (textStatus === 'success');
 
                 if(statusSuccess && response.success) {
-                    var rows = response.fieldOptionsByRow;
+                    var rows = $.parseJSON(response.fieldOptionsByRow);
+
                     $currentRows.each(function(index){
                         var $select = $(this).find('select');
                         var fields = rows[index];
-                        var debug = false;
-                        if (index == 8){
-                            debug = true;
-                        }
-                        appendFieldsToSelect($select, fields, debug);
+                        appendFieldsToSelect($select, fields);
                     });
                 }
                 else
@@ -138,14 +135,10 @@
             return $(className);
         }
 
-        function appendFieldsToSelect($select, fields, debug = false) {
+        function appendFieldsToSelect($select, fields) {
             $select.empty();
             var closeOptgroup = false;
 
-
-            if (debug){
-                console.log(fields);
-            }
             for (i = 0; i < fields.length; i++) {
                 var field = fields[i];
                 var selectedCode = '';

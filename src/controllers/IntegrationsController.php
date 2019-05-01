@@ -163,10 +163,9 @@ class IntegrationsController extends BaseController
         $integrationId = Craft::$app->request->getRequiredBodyParam('integrationId');
 
         $fieldOptionsByRow = $this->getFieldsAsOptionsByRow($entryTypeId, $integrationId);
-
         return $this->asJson([
             'success' => 'true',
-            'fieldOptionsByRow' => $fieldOptionsByRow
+            'fieldOptionsByRow' => json_encode($fieldOptionsByRow)
         ]);
     }
 
@@ -210,7 +209,7 @@ class IntegrationsController extends BaseController
             'label' => 'None',
             'value' => ''
         ];
-        $formFields = $integration->getFormFieldsAsOptions();
+        $formFields = $integration->getFormFieldsAsOptions(true);
         array_unshift($formFields, $firstRow);
 
         $rowPosition = 0;
@@ -227,6 +226,7 @@ class IntegrationsController extends BaseController
                             continue;
                         }
                         $integrationValue =  $entryField['value'] ?? $entryField->handle;
+
                         if ($option['value'] == $fieldsMapped[$rowPosition]['sproutFormField'] &&
                             $fieldsMapped[$rowPosition]['integrationField'] == $integrationValue){
                             $optionsByRow[$key]['selected'] = true;
@@ -240,7 +240,7 @@ class IntegrationsController extends BaseController
             $rowPosition++;
         }
         // Removes optgroups with not fields
-        /*
+
         $auxOptions = $finalOptions;
 
         foreach ($auxOptions as $rowPos => $finalOptionsByRow) {
@@ -261,7 +261,6 @@ class IntegrationsController extends BaseController
             }
 
         }
-        */
 
         return $finalOptions;
     }
