@@ -242,20 +242,35 @@ class IntegrationsController extends BaseController
             $rowPosition++;
         }
 
-        $tempAllTargetElementFieldOptions = $allTargetElementFieldOptions;
+        $allTargetElementFieldOptions = $this->removeUnnecessaryOptgroups($allTargetElementFieldOptions);
 
+        return $allTargetElementFieldOptions;
+    }
+
+    /**
+     * @param $allTargetElementFieldOptions
+     * @return array
+     */
+    private function removeUnnecessaryOptgroups($allTargetElementFieldOptions)
+    {
+        $aux = [];
         // Removes optgroups with no fields
         foreach ($allTargetElementFieldOptions as $rowIndex => $targetElementFieldOptions) {
             foreach ($targetElementFieldOptions as $key => $dropdownOption) {
+                if (isset($dropdownOption['optgroup'])){
 
-                if (isset($dropdownOption['optgroup']) &&
-                    !isset($targetElementFieldOptions[$key + 1]['value'])) {
-                    array_splice($tempAllTargetElementFieldOptions[$rowIndex], $key, 1);
+                    if (isset($targetElementFieldOptions[$key+1])){
+                        if (isset($targetElementFieldOptions[$key+1]['value'])){
+                            $aux[$rowIndex][] = $targetElementFieldOptions[$key];
+                        }
+                    }
+                }else{
+                    $aux[$rowIndex][] = $dropdownOption;
                 }
             }
         }
 
-        return $tempAllTargetElementFieldOptions;
+        return $aux;
     }
 
     /**
