@@ -228,7 +228,7 @@ class IntegrationsController extends BaseController
                         if (isset($option['optgroup'])) {
                             continue;
                         }
-                        
+
                         if ($option['value'] == $fieldsMapped[$rowPosition]['sproutFormField'] &&
                             $fieldsMapped[$rowPosition]['integrationField'] == $integrationValue) {
                             $compatibleFields[$key]['selected'] = true;

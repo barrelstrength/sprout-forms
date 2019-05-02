@@ -50,6 +50,10 @@ class m190410_000000_add_payload_forwarding_to_integration extends Migration
             }
         }
 
+        if ($this->db->columnExists('{{%sproutforms_forms}}', 'submitAction')) {
+            $this->dropColumn('{{%sproutforms_forms}}', 'submitAction');
+        }
+
         return true;
     }
 
