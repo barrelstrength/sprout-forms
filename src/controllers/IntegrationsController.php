@@ -220,6 +220,7 @@ class IntegrationsController extends BaseController
 
         foreach ($targetElementFields as $targetElementField) {
             $compatibleFields = $this->getCompatibleFields($sourceFormFields, $targetElementField);
+            $integrationValue = $targetElementField['value'] ?? $targetElementField->handle;
             // We have rows stored and are for the same sectionType
             if ($fieldsMapped && ($integrationSectionId == $entryTypeId)) {
                 if (isset($fieldsMapped[$rowPosition])) {
@@ -227,8 +228,7 @@ class IntegrationsController extends BaseController
                         if (isset($option['optgroup'])) {
                             continue;
                         }
-                        $integrationValue = $targetElementField['value'] ?? $targetElementField->handle;
-
+                        
                         if ($option['value'] == $fieldsMapped[$rowPosition]['sproutFormField'] &&
                             $fieldsMapped[$rowPosition]['integrationField'] == $integrationValue) {
                             $compatibleFields[$key]['selected'] = true;
