@@ -33,7 +33,12 @@ class FrontEndFields extends Component
                 if (count($section) == 2) {
                     $sectionById = $sectionsService->getSectionByUid($section[1]);
 
-                    $entries[$pos]['entries'] = Entry::find()->sectionId($sectionById->id)->all();
+                    $entryQuery = Entry::find()->sectionId($sectionById->id);
+                    if ($sectionById->type == Section::TYPE_CHANNEL){
+                        $entryQuery->orderBy(['title' => SORT_ASC]);
+                    }
+
+                    $entries[$pos]['entries'] = $entryQuery->all();
                     $entries[$pos]['section'] = $sectionById;
                 } else if ($section[0] == 'singles') {
                     $singles = $this->getSinglesEntries();
@@ -47,13 +52,20 @@ class FrontEndFields extends Component
 
             foreach ($sections as $section) {
                 $pos = count($entries) + 1;
-
                 if ($section->type != Section::TYPE_SINGLE) {
                     $sectionById = $sectionsService->getSectionById($section->id);
 
-                    $entries[$pos]['entries'] = Entry::find()->sectionId($section->id)->all();
+                    $entryQuery = Entry::find()->sectionId($section->id);
+
+                    if ($section->type == Section::TYPE_CHANNEL){
+                        $entryQuery->orderBy(['title' => SORT_ASC]);
+                    }
+
+                    $entries[$pos]['entries'] = $entryQuery->all();
+
                     $entries[$pos]['section'] = $sectionById;
                 }
+
             }
 
             $singles = $this->getSinglesEntries();
@@ -119,7 +131,7 @@ class FrontEndFields extends Component
         $singles = [];
 
         foreach ($sections as $key => $section) {
-            $results = Entry::find()->sectionId($section->id)->all();
+            $results = Entry::find()->sectionId($section->id)->orderBy(['title' => SORT_ASC])->all();
             $singles[] = $results[0];
         }
 
