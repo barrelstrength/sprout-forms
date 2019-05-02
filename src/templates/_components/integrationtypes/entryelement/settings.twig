@@ -94,15 +94,12 @@
             Craft.postActionRequest('sprout-forms/integrations/get-form-fields', data, $.proxy(function(response, textStatus) {
                 var statusSuccess = (textStatus === 'success');
 
-                console.log(response);
                 if (statusSuccess && response.success) {
                     var rows = response.fieldOptionsByRow;
 
                     $currentRows.each(function(index) {
                         var $select = $(this).find('select');
                         var fields = rows[index];
-
-                        console.log(fields);
 
                         appendFieldsToSelect($select, fields);
                     });
