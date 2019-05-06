@@ -8,6 +8,7 @@ use barrelstrength\sproutbasereports\elements\Report;
 use Craft;
 use barrelstrength\sproutbasereports\base\DataSource;
 use craft\db\Query;
+use craft\fields\data\MultiOptionsFieldData;
 use craft\helpers\DateTimeHelper;
 use barrelstrength\sproutforms\elements\Entry;
 use craft\elements\db\ElementQueryInterface;
@@ -127,13 +128,29 @@ class EntriesDataSource extends DataSource
                                 $titles = [];
                                 if (!empty($entries)) {
                                     foreach ($entries as $entry) {
-                                        $titles[] = '"' . $entry->title . '"';
+                                        $titles[] = '"'.$entry->title.'"';
                                     }
                                 }
                                 $value = '';
 
                                 if (!empty($titles)) {
-                                    $value = implode(', ',  $titles);
+                                    $value = implode(', ', $titles);
+                                }
+                            } else if ($field instanceof MultiOptionsFieldData) {
+                                $options = $field->getOptions();
+
+                                $selectedOptions = [];
+                                foreach ($options AS $option)
+                                {
+                                    if ($option->selected) {
+                                        $selectedOptions[] = '"'.$option->selected.'"';
+                                    }
+                                }
+
+                                $value = '';
+
+                                if (count($selectedOptions)) {
+                                    $value = implode(', ', $selectedOptions);
                                 }
                             } else {
                                 $value = $field;

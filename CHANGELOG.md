@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.0-beta.54 - 2019-05-06
+
+### Fixed
+- Fixed options support in Form Entries Data Source
+
 ## 3.0.0-beta.53 - 2019-05-06
 
 ### Added
