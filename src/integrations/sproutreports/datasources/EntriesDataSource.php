@@ -9,6 +9,8 @@ use Craft;
 use barrelstrength\sproutbasereports\base\DataSource;
 use craft\db\Query;
 use craft\helpers\DateTimeHelper;
+use barrelstrength\sproutforms\elements\Entry;
+use craft\elements\db\ElementQueryInterface;
 
 /**
  * Class EntriesDataSource
@@ -78,8 +80,7 @@ class EntriesDataSource extends DataSource
             $formId = $settings['formId'];
         }
 
-        $results = [];
-
+        $rows = [];
         if ($formId) {
             $form = SproutForms::$app->forms->getFormById($formId);
 
@@ -104,14 +105,49 @@ class EntriesDataSource extends DataSource
 
             if ($results) {
                 foreach ($results as $key => $result) {
-                    unset($result['elementId'], $result['siteId'], $result['uid']);
 
-                    $results[$key] = $result;
+                    $elementId = $result['elementId'];
+                    $rows[$key]['id']          = $result['id'];
+                    $rows[$key]['elementId']   = $elementId;
+                    $rows[$key]['siteId']      = $result['siteId'];
+                    $rows[$key]['title']       = $result['title'];
+                    $rows[$key]['dateCreated'] = $result['dateCreated'];
+                    $rows[$key]['dateUpdated'] = $result['dateUpdated'];
+
+
+                    $entry = Craft::$app->getElements()->getElementById($elementId, Entry::class);
+
+                    $fields = $entry->getFieldValues();
+
+                    if (count($fields) > 0) {
+                        foreach ($fields as $handle => $field) {
+                            if ($field instanceof ElementQueryInterface) {
+
+                                $entries = $field->all();
+                                $titles = [];
+                                if (!empty($entries)) {
+                                    foreach ($entries as $entry) {
+                                        $titles[] = '"' . $entry->title . '"';
+                                    }
+                                }
+                                $value = '';
+
+                                if (!empty($titles)) {
+                                    $value = implode(', ',  $titles);
+                                }
+                            } else {
+                                $value = $field;
+                            }
+
+                            $fieldHandleKey = 'field_' . $handle;
+                            $rows[$key][$fieldHandleKey] = $value;
+                        }
+                    }
                 }
             }
         }
 
-        return $results;
+        return $rows;
     }
 
     /**

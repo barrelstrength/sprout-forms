@@ -31,15 +31,17 @@ class FrontEndFields extends Component
                 $pos = count($entries) + 1;
 
                 if (count($section) == 2) {
-                    $sectionById = $sectionsService->getSectionByUid($section[1]);
+                    $sectionModel = $sectionsService->getSectionByUid($section[1]);
 
-                    $entryQuery = Entry::find()->sectionId($sectionById->id);
-                    if ($sectionById->type == Section::TYPE_CHANNEL){
+                    $entryQuery = Entry::find()->sectionId($sectionModel->id);
+
+                    if ($sectionModel->type == Section::TYPE_CHANNEL){
                         $entryQuery->orderBy(['title' => SORT_ASC]);
                     }
 
                     $entries[$pos]['entries'] = $entryQuery->all();
-                    $entries[$pos]['section'] = $sectionById;
+                    $entries[$pos]['section'] = $sectionModel;
+
                 } else if ($section[0] == 'singles') {
                     $singles = $this->getSinglesEntries();
 
@@ -53,7 +55,7 @@ class FrontEndFields extends Component
             foreach ($sections as $section) {
                 $pos = count($entries) + 1;
                 if ($section->type != Section::TYPE_SINGLE) {
-                    $sectionById = $sectionsService->getSectionById($section->id);
+                    $sectionModel = $sectionsService->getSectionById($section->id);
 
                     $entryQuery = Entry::find()->sectionId($section->id);
 
@@ -62,8 +64,7 @@ class FrontEndFields extends Component
                     }
 
                     $entries[$pos]['entries'] = $entryQuery->all();
-
-                    $entries[$pos]['section'] = $sectionById;
+                    $entries[$pos]['section'] = $sectionModel;
                 }
 
             }
@@ -91,10 +92,10 @@ class FrontEndFields extends Component
             $pos = count($categories) + 1;
 
             if (count($group) == 2) {
-                $groupById = Craft::$app->getCategories()->getGroupByUid($group[1]);
+                $categoryGroup = Craft::$app->getCategories()->getGroupByUid($group[1]);
 
-                $categories[$pos]['categories'] = Category::find()->groupId($group[1])->all();
-                $categories[$pos]['group'] = $groupById;
+                $categories[$pos]['categories'] = Category::find()->groupId($categoryGroup->id)->all();
+                $categories[$pos]['group'] = $categoryGroup;
             }
         }
 
@@ -115,10 +116,10 @@ class FrontEndFields extends Component
             $pos = count($tags) + 1;
 
             if (count($group) == 2) {
-                $groupById = Craft::$app->getTags()->getTagGroupByUid($group[1]);
+                $tagGroup = Craft::$app->getTags()->getTagGroupByUid($group[1]);
 
-                $tags[$pos]['tags'] = Tag::find()->groupId($group[1])->all();
-                $tags[$pos]['group'] = $groupById;
+                $tags[$pos]['tags'] = Tag::find()->groupId($tagGroup->id)->all();
+                $tags[$pos]['group'] = $tagGroup;
             }
         }
 
