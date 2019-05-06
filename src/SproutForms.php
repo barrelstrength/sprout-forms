@@ -19,6 +19,7 @@ use barrelstrength\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbaseemail\events\NotificationEmailEvent;
 use barrelstrength\sproutforms\fields\Forms as FormsField;
 use barrelstrength\sproutforms\fields\Entries as FormEntriesField;
+use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesFieldsDataSource;
 use barrelstrength\sproutforms\widgets\RecentEntries;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use barrelstrength\sproutforms\captchas\DuplicateCaptcha;
