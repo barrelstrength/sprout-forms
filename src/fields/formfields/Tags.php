@@ -149,7 +149,7 @@ class Tags extends BaseRelationFormField
             'tags/input',
             [
                 'name' => $this->handle,
-                'value' => $value,
+                'value' => $value->ids(),
                 'field' => $this,
                 'renderingOptions' => $renderingOptions,
                 'tags' => $tags,

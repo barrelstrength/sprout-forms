@@ -116,7 +116,7 @@ class Categories extends BaseRelationFormField
      * @param mixed      $value
      * @param array|null $renderingOptions
      *
-     * @return \Twig_Markup
+     * @return \Twig\Markup
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
@@ -128,7 +128,7 @@ class Categories extends BaseRelationFormField
             'categories/input',
             [
                 'name' => $this->handle,
-                'value' => $value,
+                'value' => $value->ids(),
                 'field' => $this,
                 'renderingOptions' => $renderingOptions,
                 'categories' => $categories,

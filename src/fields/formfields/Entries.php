@@ -86,7 +86,7 @@ class Entries extends BaseRelationFormField
             'entries/input',
             [
                 'name' => $this->handle,
-                'value' => $value,
+                'value' => $value->ids(),
                 'field' => $this,
                 'renderingOptions' => $renderingOptions,
                 'entries' => $entries,

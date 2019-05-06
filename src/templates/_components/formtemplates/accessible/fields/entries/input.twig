@@ -2,7 +2,7 @@
 {%- set class = renderingOptions.class ?? name %}
 {%- set required = field.required ? true : false %}
 {%- set hasInstructions = field.instructions ? true : false %}
-{%- set value = value ? value : null %}
+{%- set value = value ? value : [] %}
 
 {%- set multiple = field.limit == '' ? true : field.limit > 1 ? true : false %}
 {%- set selectionLabel = field.selectionLabel != '' ? field.selectionLabel : "Select an entry..."|t('site') -%}
@@ -37,7 +37,7 @@
                 {%- set optionValue =  option.id -%}
 
                 <option value="{{ optionValue }}"
-                        {% if optionValue == value %}selected{% endif %}>{{ optionLabel }}</option>
+                        {% if optionValue in value %}selected{% endif %}>{{ optionLabel }}</option>
 
             {% endfor %}
             {% if hasTitle %}
