@@ -590,13 +590,20 @@ class SproutFormsVariable
     /**
      * @return array
      */
-    public function getIntegrationOptions()
+    public function getIntegrationOptions(): array
     {
         $integrations = SproutForms::$app->integrations->getAllIntegrations();
-        $options = [];
+
+        $options[] = [
+            'label' => Craft::t('sprout-forms', 'Add Integration...'),
+            'value' => ''
+        ];
 
         foreach ($integrations as $integration) {
-            $options[] = ['label' => $integration->getName(), 'value' => $integration->getType()];
+            $options[] = [
+                'label' => $integration->getName(),
+                'value' => $integration->getType()
+            ];
         }
 
         return $options;

@@ -403,6 +403,9 @@ ul#sprout-forms-tabs li {
     display: inline-table;
 }
 
-.integrations-btn {
-    margin-bottom: 5px;
+.field.sproutforms-integration-row {
+    align-items: center;
+}
+.field.sproutforms-integration-row .heading {
+    flex: 0 0 80%;
 }

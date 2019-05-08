@@ -526,7 +526,7 @@ class Forms extends Component
         $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
         $settings = $plugin->getSettings();
 
-        if ($settings->enableSaveData && $settings->enableSaveDataPerFormBasis) {
+        if ($settings->enableSaveData && $settings->enableIntegrationsPerFormBasis) {
             $form->saveData = $settings->saveDataByDefault;
         }
 

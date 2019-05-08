@@ -46,7 +46,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
                 this.resetIntegration(integration);
             }, this));
 
-            this.addListener($("#add-integration"), 'activate', 'createDefaultIntegration');
+            this.addListener($("#integrationsOptions"), 'change', 'createDefaultIntegration');
         },
 
         /**
@@ -61,24 +61,41 @@ if (typeof Craft.SproutForms === typeof undefined) {
         },
 
         createDefaultIntegration: function(type) {
+
             var that = this;
-            var integrationsWrapper = $("#integrations-wrapper");
+            var integrationRows = $(".sproutforms-integration-row");
             var currentIntegration = $("#integrationsOptions").val();
             var formId = $("#formId").val();
+
+            if (currentIntegration === '') {
+                return;
+            }
 
             var data = {type: currentIntegration, formId: formId};
 
             Craft.postActionRequest('sprout-forms/integrations/create-integration', data, $.proxy(function(response, textStatus) {
                 if (textStatus === 'success') {
                     var integration = response.integration;
-                    // Add integration edit link
-                    integrationsWrapper.prepend($([
-                        '<div class="active-field-header">',
-                        '<a href="#" class="btn small integrations-btn" id ="sproutform-integration-' + integration.id + '" data-integrationid="' + integration.id + '">' + integration.name + '</a>',
-                        '</div>'
-                    ].join('')));
+
+                    integrationRows.last().after('<div class="field sproutforms-integration-row">' +
+                        '<div class="heading">' +
+                        '<a href="#" id ="sproutform-integration-' + integration.id + '" data-integrationid="' + integration.id + '">' + integration.name + '</a>' +
+                        '</div>' +
+                        '<div>' +
+                        '<div class="lightswitch small" tabindex="0" data-value="1" role="checkbox" aria-checked="false">' +
+                        '<div class="lightswitch-container">' +
+                        '<div class="label on"></div>' +
+                        '<div class="handle"></div>' +
+                        '<div class="label off"></div>' +
+                        '</div>' +
+                        '<input type="hidden" name="" value="">' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>');
 
                     that.addListener($("#sproutform-integration-" + integration.id), 'activate', 'editIntegration');
+
+                    $('#integrationsOptions').val('');
 
                 } else {
                     // something went wrong

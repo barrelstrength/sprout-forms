@@ -163,10 +163,10 @@ class PayloadForwarding extends Integration
                             'class' => 'code formField'
                         ],
                         'integrationField' => [
-                            'heading' => Craft::t('sprout-forms', 'Api Field'),
+                            'heading' => Craft::t('sprout-forms', 'API Field'),
                             'type' => 'singleline',
                             'class' => 'code payloadField',
-                            'placeholder' => 'Leave blank to no mapping'
+                            'placeholder' => Craft::t('sprout-forms', 'Leave blank and no data will be mapped')
                         ]
                     ],
                     'rows' => $this->fieldsMapped
