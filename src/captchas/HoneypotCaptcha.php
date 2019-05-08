@@ -4,7 +4,6 @@ namespace barrelstrength\sproutforms\captchas;
 
 use barrelstrength\sproutforms\base\Captcha;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
-use barrelstrength\sproutforms\SproutForms;
 use Craft;
 
 /**
@@ -42,8 +41,9 @@ class HoneypotCaptcha extends Captcha
      * @inheritdoc
      * @return string
      * @throws \ReflectionException
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getCaptchaSettingsHtml(): string
     {

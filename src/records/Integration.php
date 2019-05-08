@@ -5,17 +5,17 @@ namespace barrelstrength\sproutforms\records;
 use barrelstrength\sproutforms\SproutForms;
 use craft\db\ActiveRecord;
 use barrelstrength\sproutforms\base\Integration as IntegrationApi;
-use Craft;
 
 /**
  * Class Integration record.
  *
- * @property $id
- * @property $formId
- * @property $name
- * @property $type
- * @property $settings
- * @property $enabled
+ * @property                                                   $id
+ * @property                                                   $formId
+ * @property                                                   $name
+ * @property                                                   $type
+ * @property                                                   $settings
+ * @property null|\barrelstrength\sproutforms\base\Integration $integrationApi
+ * @property                                                   $enabled
  */
 class Integration extends ActiveRecord
 {

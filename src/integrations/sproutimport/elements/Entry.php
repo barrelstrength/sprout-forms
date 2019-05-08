@@ -51,8 +51,12 @@ class Entry extends ElementImporter
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @param SeedJob $seedJob
+     *
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getSeedSettingsHtml(SeedJob $seedJob): string
     {

@@ -39,7 +39,7 @@ class PayloadForwarding extends Integration
     /**
      * @inheritdoc
      */
-    public function submit()
+    public function submit(): bool
     {
         if ($this->submitAction && !Craft::$app->getRequest()->getIsCpRequest()) {
             if (!$this->forwardEntry()) {
@@ -110,8 +110,11 @@ class PayloadForwarding extends Integration
      * Returns a default field mapping html
      *
      * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
-    public function getFieldMappingSettingsHtml()
+    public function getFieldMappingSettingsHtml(): string
     {
         if (!$this->hasFieldMapping) {
             return '';
@@ -181,7 +184,7 @@ class PayloadForwarding extends Integration
      *
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return self::class;
     }

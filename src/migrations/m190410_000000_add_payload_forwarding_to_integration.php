@@ -15,7 +15,7 @@ class m190410_000000_add_payload_forwarding_to_integration extends Migration
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $forms = (new Query())
             ->select(['id', 'submitAction'])
@@ -60,7 +60,7 @@ class m190410_000000_add_payload_forwarding_to_integration extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m190410_000000_add_payload_forwarding_to_integration cannot be reverted.\n";
         return false;

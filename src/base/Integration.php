@@ -4,7 +4,6 @@ namespace barrelstrength\sproutforms\base;
 
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Form;
-use barrelstrength\sproutforms\SproutForms;
 use craft\base\Model;
 use Craft;
 use craft\fields\Date as CraftDate;
@@ -72,14 +71,14 @@ abstract class Integration extends Model
      *
      * @return string
      */
-    abstract public function getType();
+    abstract public function getType(): string;
 
     /**
      * Send the submission to the desired endpoint
      *
      * @return boolean
      */
-    abstract public function submit();
+    abstract public function submit(): bool;
 
     /**
      * Settings that help us customize the Field Mapping Table
@@ -104,8 +103,11 @@ abstract class Integration extends Model
      * Returns a default field mapping html
      *
      * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
-    public function getFieldMappingSettingsHtml()
+    public function getFieldMappingSettingsHtml(): string
     {
         if (!$this->hasFieldMapping) {
             return '';
@@ -150,9 +152,11 @@ abstract class Integration extends Model
     }
 
     /**
+     * @param bool $addOptGroup
+     *
      * @return array
      */
-    public function getFormFieldsAsOptions($addOptGroup = false)
+    public function getFormFieldsAsOptions($addOptGroup = false): array
     {
         $fields = $this->form->getFields();
         $commonFields = [

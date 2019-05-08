@@ -2,11 +2,9 @@
 
 namespace barrelstrength\sproutforms\controllers;
 
-use barrelstrength\sproutforms\base\Integration;
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
 use Craft;
-use craft\base\ElementInterface;
 use craft\web\Controller as BaseController;
 use yii\base\Exception;
 use yii\web\ForbiddenHttpException;
@@ -57,8 +55,6 @@ class EntriesController extends BaseController
      * @throws \Exception
      * @throws \Throwable
      * @throws \yii\web\BadRequestHttpException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function actionSaveEntry()
     {

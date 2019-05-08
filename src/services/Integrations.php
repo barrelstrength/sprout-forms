@@ -7,13 +7,17 @@ use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\integrationtypes\FormEntryElementIntegration;
 use barrelstrength\sproutforms\records\EntryIntegrationLog;
 use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
-use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\SproutForms;
 use craft\base\Component;
 use craft\db\Query;
 use craft\events\RegisterComponentTypesEvent;
 use Craft;
 
+/**
+ *
+ * @property \barrelstrength\sproutforms\base\Integration[] $allIntegrations
+ * @property mixed                                          $allIntegrationTypes
+ */
 class Integrations extends Component
 {
     const EVENT_REGISTER_INTEGRATIONS = 'registerIntegrations';
@@ -76,9 +80,7 @@ class Integrations extends Component
      */
     public function getFormIntegrations($formId)
     {
-        $integrations = IntegrationRecord::findAll(['formId' => $formId]);
-
-        return $integrations;
+        return IntegrationRecord::findAll(['formId' => $formId]);
     }
 
     /**
@@ -88,9 +90,7 @@ class Integrations extends Component
      */
     public function getFormIntegrationById($integrationId)
     {
-        $integration = IntegrationRecord::findOne(['id' => $integrationId]);
-
-        return $integration;
+        return IntegrationRecord::findOne(['id' => $integrationId]);
     }
 
     /**
@@ -130,7 +130,9 @@ class Integrations extends Component
      * @param null $integration
      *
      * @return array
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getModalIntegrationTemplate($form, $integration = null)
     {

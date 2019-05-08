@@ -49,12 +49,11 @@ class SproutFormsVariable
      * @param            $formHandle
      * @param array|null $renderingOptions
      *
-     * @return \Twig_Markup
+     * @return \Twig\Markup
      * @throws \Exception
-     * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function displayForm($formHandle, array $renderingOptions = null): \Twig_Markup
+    public function displayForm($formHandle, array $renderingOptions = null): \Twig\Markup
     {
         /**
          * @var $form Form
@@ -96,7 +95,9 @@ class SproutFormsVariable
      *
      * @return bool|\Twig_Markup
      * @throws Exception
-     * @throws \Twig_Error_Loader
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function displayTab(Form $form, int $tabId, array $renderingOptions = null)
     {
@@ -155,12 +156,14 @@ class SproutFormsVariable
      * @param FormField  $field
      * @param array|null $renderingOptions
      *
-     * @return \Twig_Markup
+     * @return \Twig\Markup
      * @throws Exception
      * @throws \ReflectionException
-     * @throws \Twig_Error_Loader
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
-    public function displayField(Form $form, FormField $field, array $renderingOptions = null): \Twig_Markup
+    public function displayField(Form $form, FormField $field, array $renderingOptions = null): \Twig\Markup
     {
         if (!$form) {
             throw new Exception(Craft::t('sprout-forms', 'The displayField tag requires a Form model.'));

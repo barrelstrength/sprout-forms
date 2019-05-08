@@ -27,7 +27,6 @@ class m180314_161540_craft2_to_craft3 extends Migration
      * @throws \Throwable
      * @throws \craft\errors\SiteNotFoundException
      * @throws \yii\base\NotSupportedException
-     * @throws \yii\db\Exception
      */
     public function safeUp(): bool
     {

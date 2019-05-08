@@ -12,6 +12,7 @@ use craft\base\ElementInterface;
  *
  *
  * @property string $svgIconPath
+ * @property array  $compatibleCraftFields
  * @property mixed  $exampleInputHtml
  */
 class MultipleChoice extends BaseOptionsFormField
@@ -56,8 +57,13 @@ class MultipleChoice extends BaseOptionsFormField
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @param                       $value
+     * @param ElementInterface|null $element
+     *
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -80,8 +86,10 @@ class MultipleChoice extends BaseOptionsFormField
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getExampleInputHtml(): string
     {
@@ -96,10 +104,15 @@ class MultipleChoice extends BaseOptionsFormField
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @param            $value
+     * @param array|null $renderingOptions
+     *
+     * @return \Twig_Markup
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup
     {
         $rendered = Craft::$app->getView()->renderTemplate(
             'multiplechoice/input',
@@ -117,7 +130,7 @@ class MultipleChoice extends BaseOptionsFormField
     /**
      * @inheritdoc
      */
-    public function getCompatibleCraftFields()
+    public function getCompatibleCraftFields(): array
     {
         return [
             CraftRadioButtons::class

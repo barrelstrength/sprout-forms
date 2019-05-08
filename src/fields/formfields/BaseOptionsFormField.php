@@ -106,7 +106,10 @@ abstract class BaseOptionsFormField extends FormField implements PreviewableFiel
 
     /**
      * @inheritdoc
-     * @throws \yii\base\Exception
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getSettingsHtml()
     {

@@ -22,6 +22,7 @@ use barrelstrength\sproutforms\base\FormField;
  * @property string $contentColumnType
  * @property string $svgIconPath
  * @property mixed  $settingsHtml
+ * @property array  $compatibleCraftFields
  * @property mixed  $exampleInputHtml
  */
 class SingleLine extends FormField implements PreviewableFieldInterface
@@ -105,8 +106,10 @@ class SingleLine extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getSettingsHtml()
     {
@@ -123,8 +126,13 @@ class SingleLine extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @param                       $value
+     * @param ElementInterface|null $element
+     *
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -147,8 +155,10 @@ class SingleLine extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getExampleInputHtml(): string
     {
@@ -162,10 +172,15 @@ class SingleLine extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @param            $value
+     * @param array|null $renderingOptions
+     *
+     * @return \Twig_Markup
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup
     {
         $rendered = Craft::$app->getView()->renderTemplate(
             'singleline/input',
@@ -204,7 +219,7 @@ class SingleLine extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function getCompatibleCraftFields()
+    public function getCompatibleCraftFields(): array
     {
         return [
             CraftPlainText::class,

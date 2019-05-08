@@ -3,7 +3,6 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutforms\services\Forms;
-use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\base\ElementInterface;
 use craft\fields\Dropdown as CraftDropdown;
@@ -16,6 +15,7 @@ use barrelstrength\sproutforms\base\FormField;
  *
  * @property string $svgIconPath
  * @property mixed  $settingsHtml
+ * @property array  $compatibleCraftFields
  * @property mixed  $exampleInputHtml
  */
 class Invisible extends FormField implements PreviewableFieldInterface
@@ -64,8 +64,10 @@ class Invisible extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getSettingsHtml()
     {
@@ -80,8 +82,13 @@ class Invisible extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @param                       $value
+     * @param ElementInterface|null $element
+     *
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -102,8 +109,10 @@ class Invisible extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getExampleInputHtml(): string
     {
@@ -123,7 +132,7 @@ class Invisible extends FormField implements PreviewableFieldInterface
      * @return string
      * @throws \Throwable
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup
     {
         $this->preProcessInvisibleValue();
 
@@ -185,7 +194,7 @@ class Invisible extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function getCompatibleCraftFields()
+    public function getCompatibleCraftFields(): array
     {
         return [
             CraftPlainText::class,

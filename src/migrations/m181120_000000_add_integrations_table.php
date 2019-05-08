@@ -12,7 +12,7 @@ class m181120_000000_add_integrations_table extends Migration
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $this->createTable('{{%sproutforms_integrations}}', [
             'id' => $this->primaryKey(),
@@ -33,8 +33,7 @@ class m181120_000000_add_integrations_table extends Migration
                 false, true
             ),
             '{{%sproutforms_integrations}}',
-            'formId',
-            false
+            'formId'
         );
 
         $this->addForeignKey(
@@ -42,7 +41,7 @@ class m181120_000000_add_integrations_table extends Migration
                 '{{%sproutforms_integrations}}', 'formId'
             ),
             '{{%sproutforms_integrations}}', 'formId',
-            '{{%sproutforms_forms}}', 'id', 'CASCADE', null
+            '{{%sproutforms_forms}}', 'id', 'CASCADE'
         );
 
         return true;
@@ -51,7 +50,7 @@ class m181120_000000_add_integrations_table extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m181120_000000_add_integrations_table cannot be reverted.\n";
         return false;

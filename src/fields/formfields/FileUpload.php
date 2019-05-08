@@ -26,6 +26,7 @@ use craft\web\UploadedFile;
  * @property array  $fileKindOptions
  * @property string $svgIconPath
  * @property array  $sourceOptions
+ * @property array  $compatibleCraftFields
  * @property mixed  $exampleInputHtml
  */
 class FileUpload extends BaseRelationFormField
@@ -194,8 +195,10 @@ class FileUpload extends BaseRelationFormField
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getExampleInputHtml(): string
     {
@@ -212,10 +215,11 @@ class FileUpload extends BaseRelationFormField
      * @param array|null $renderingOptions
      *
      * @return \Twig_Markup
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup
     {
         $rendered = Craft::$app->getView()->renderTemplate(
             'fileupload/input',
@@ -810,7 +814,7 @@ class FileUpload extends BaseRelationFormField
     /**
      * @inheritdoc
      */
-    public function getCompatibleCraftFields()
+    public function getCompatibleCraftFields(): array
     {
         return [
             CraftAssets::class
@@ -843,6 +847,7 @@ class FileUpload extends BaseRelationFormField
      * @param mixed $sourceKey
      *
      * @return string
+     * @throws \yii\base\InvalidConfigException
      */
     private function _folderSourceToVolumeSource($sourceKey): string
     {

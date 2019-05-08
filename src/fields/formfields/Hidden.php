@@ -10,13 +10,13 @@ use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\PreviewableFieldInterface;
 
-use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\base\FormField;
 
 /**
  *
  * @property string $svgIconPath
  * @property mixed  $settingsHtml
+ * @property array  $compatibleCraftFields
  * @property mixed  $exampleInputHtml
  */
 class Hidden extends FormField implements PreviewableFieldInterface
@@ -63,8 +63,10 @@ class Hidden extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getSettingsHtml()
     {
@@ -77,8 +79,13 @@ class Hidden extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @param                       $value
+     * @param ElementInterface|null $element
+     *
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -94,8 +101,10 @@ class Hidden extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getExampleInputHtml(): string
     {
@@ -111,11 +120,9 @@ class Hidden extends FormField implements PreviewableFieldInterface
      * @param array|null $renderingOptions
      *
      * @return \Twig_Markup
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
      * @throws \Throwable
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup
     {
         if ($this->value) {
             try {
@@ -141,7 +148,7 @@ class Hidden extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function getCompatibleCraftFields()
+    public function getCompatibleCraftFields(): array
     {
         return [
             CraftPlainText::class,

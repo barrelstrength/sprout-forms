@@ -2,10 +2,7 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutforms\fields\formfields\OptIn;
 use craft\db\Migration;
-use barrelstrength\sproutbasereports\migrations\m190305_000002_update_record_to_element_types as BaseUpdateElements;
-use craft\db\Query;
 
 /**
  * m190425_000000_add_integrations_entries migration.
@@ -15,9 +12,6 @@ class m190425_000000_add_integrations_entries extends Migration
     /**
      * @return bool
      * @throws \Throwable
-     * @throws \craft\errors\ElementNotFoundException
-     * @throws \yii\base\Exception
-     * @throws \yii\db\Exception
      */
     public function safeUp(): bool
     {
@@ -39,8 +33,7 @@ class m190425_000000_add_integrations_entries extends Migration
                 false, true
             ),
             '{{%sproutforms_integrations_entries}}',
-            'entryId',
-            false
+            'entryId'
         );
 
         $this->createIndex(
@@ -50,8 +43,7 @@ class m190425_000000_add_integrations_entries extends Migration
                 false, true
             ),
             '{{%sproutforms_integrations_entries}}',
-            'integrationId',
-            false
+            'integrationId'
         );
 
         $this->addForeignKey(
@@ -59,7 +51,7 @@ class m190425_000000_add_integrations_entries extends Migration
                 '{{%sproutforms_integrations_entries}}', 'entryId'
             ),
             '{{%sproutforms_integrations_entries}}', 'entryId',
-            '{{%sproutforms_entries}}', 'id', 'CASCADE', null
+            '{{%sproutforms_entries}}', 'id', 'CASCADE'
         );
 
         $this->addForeignKey(
@@ -67,7 +59,7 @@ class m190425_000000_add_integrations_entries extends Migration
                 '{{%sproutforms_integrations_entries}}', 'integrationId'
             ),
             '{{%sproutforms_integrations_entries}}', 'integrationId',
-            '{{%sproutforms_integrations}}', 'id', 'CASCADE', null
+            '{{%sproutforms_integrations}}', 'id', 'CASCADE'
         );
 
         return true;

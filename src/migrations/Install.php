@@ -184,8 +184,7 @@ class Install extends Migration
                 false, true
             ),
             '{{%sproutforms_integrations}}',
-            'formId',
-            false
+            'formId'
         );
 
         $this->createIndex(
@@ -195,8 +194,7 @@ class Install extends Migration
                 false, true
             ),
             '{{%sproutforms_integrations_entries}}',
-            'entryId',
-            false
+            'entryId'
         );
 
         $this->createIndex(
@@ -206,8 +204,7 @@ class Install extends Migration
                 false, true
             ),
             '{{%sproutforms_integrations_entries}}',
-            'integrationId',
-            false
+            'integrationId'
         );
     }
 
@@ -255,7 +252,7 @@ class Install extends Migration
                 '{{%sproutforms_integrations}}', 'formId'
             ),
             '{{%sproutforms_integrations}}', 'formId',
-            '{{%sproutforms_forms}}', 'id', 'CASCADE', null
+            '{{%sproutforms_forms}}', 'id', 'CASCADE'
         );
 
         $this->addForeignKey(
@@ -263,7 +260,7 @@ class Install extends Migration
                 '{{%sproutforms_integrations_entries}}', 'entryId'
             ),
             '{{%sproutforms_integrations_entries}}', 'entryId',
-            '{{%sproutforms_entries}}', 'id', 'CASCADE', null
+            '{{%sproutforms_entries}}', 'id', 'CASCADE'
         );
 
         $this->addForeignKey(
@@ -271,7 +268,7 @@ class Install extends Migration
                 '{{%sproutforms_integrations_entries}}', 'integrationId'
             ),
             '{{%sproutforms_integrations_entries}}', 'integrationId',
-            '{{%sproutforms_integrations}}', 'id', 'CASCADE', null
+            '{{%sproutforms_integrations}}', 'id', 'CASCADE'
         );
     }
 

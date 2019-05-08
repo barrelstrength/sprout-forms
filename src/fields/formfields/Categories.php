@@ -17,6 +17,7 @@ use barrelstrength\sproutforms\SproutForms;
  *
  *
  * @property string $svgIconPath
+ * @property array  $compatibleCraftFields
  * @property mixed  $exampleInputHtml
  */
 class Categories extends BaseRelationFormField
@@ -101,8 +102,10 @@ class Categories extends BaseRelationFormField
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getExampleInputHtml(): string
     {
@@ -117,11 +120,12 @@ class Categories extends BaseRelationFormField
      * @param mixed      $value
      * @param array|null $renderingOptions
      *
-     * @return \Twig\Markup
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @return \Twig_Markup
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup
     {
         $categories = SproutForms::$app->frontEndFields->getFrontEndCategories($this->getSettings());
 
@@ -181,7 +185,7 @@ class Categories extends BaseRelationFormField
     /**
      * @inheritdoc
      */
-    public function getCompatibleCraftFields()
+    public function getCompatibleCraftFields(): array
     {
         return [
             CraftCategories::class,

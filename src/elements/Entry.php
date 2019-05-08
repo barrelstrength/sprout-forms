@@ -16,8 +16,9 @@ use yii\base\Exception;
 /**
  * Entry represents a entry element.
  *
- * @property array $payloadFields
- * @property array $fields
+ * @property array                        $payloadFields
+ * @property array|\yii\db\ActiveRecord[] $entryIntegrationLogsRecords
+ * @property array                        $fields
  */
 class Entry extends Element
 {

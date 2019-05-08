@@ -2,10 +2,9 @@
 
 namespace barrelstrength\sproutforms\controllers;
 
-use barrelstrength\sproutforms\base\BaseElementIntegration;
+use barrelstrength\sproutforms\base\ElementIntegration;
 use barrelstrength\sproutforms\integrationtypes\EntryElementIntegration;
 use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
-use barrelstrength\sproutforms\elements\Form;
 use Craft;
 
 use craft\web\Controller as BaseController;
@@ -17,7 +16,9 @@ class IntegrationsController extends BaseController
      * This action allows to load the modal field template.
      *
      * @return \yii\web\Response
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      * @throws \yii\web\BadRequestHttpException
      */
     public function actionModalIntegration()
@@ -49,11 +50,11 @@ class IntegrationsController extends BaseController
             $integration = SproutForms::$app->integrations->createIntegration($type, $form);
 
             if ($integration) {
-                return $this->returnJson(true, $integration, $form);
+                return $this->returnJson(true, $integration);
             }
         }
 
-        return $this->returnJson(false, null, $form);
+        return $this->returnJson(false, null);
     }
 
     /**
@@ -67,8 +68,6 @@ class IntegrationsController extends BaseController
         $this->requirePostRequest();
 
         $request = Craft::$app->getRequest();
-        $formId = $request->getRequiredBodyParam('formId');
-        $form = SproutForms::$app->forms->getFormById($formId);
 
         $type = $request->getRequiredBodyParam('type');
         $integrationId = $request->getBodyParam('integrationId');
@@ -88,14 +87,16 @@ class IntegrationsController extends BaseController
 
         Craft::info('Integration Saved', __METHOD__);
 
-        return $this->returnJson($result, $integration, $form);
+        return $this->returnJson($result, $integration);
     }
 
     /**
      * Edits an existing integration.
      *
      * @return \yii\web\Response
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      * @throws \yii\web\BadRequestHttpException
      */
     public function actionEditIntegration()
@@ -109,7 +110,7 @@ class IntegrationsController extends BaseController
 
         $integration = IntegrationRecord::findOne($id);
 
-        if (is_null($integration)) {
+        if ($integration === null) {
             $message = Craft::t('sprout-forms', 'The integration requested to edit no longer exists.');
             Craft::error($message, __METHOD__);
 
@@ -202,7 +203,7 @@ class IntegrationsController extends BaseController
     {
         $integrationRecord = IntegrationRecord::findOne($integrationId);
 
-        /** @var BaseElementIntegration $integration */
+        /** @var ElementIntegration $integration */
         $integration = $integrationRecord->getIntegrationApi();
         $targetElementFields = $integration->getElementFieldsAsOptions($entryTypeId);
         $fieldsMapped = $integration->fieldsMapped;
@@ -312,11 +313,10 @@ class IntegrationsController extends BaseController
     /**
      * @param bool $success
      * @param      $integrationRecord IntegrationRecord
-     * @param Form $form
      *
      * @return \yii\web\Response
      */
-    private function returnJson(bool $success, $integrationRecord, Form $form)
+    private function returnJson(bool $success, $integrationRecord)
     {
         // @todo how we should return errors to the edit integration modal? template response is disabled for now
         return $this->asJson([

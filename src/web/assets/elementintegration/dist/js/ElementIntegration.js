@@ -20,7 +20,6 @@ if (typeof Craft.SproutForms === typeof undefined) {
          */
         init: function() {
             // init method
-            console.log("HLOA");
             this.initDropdowns();
         },
 

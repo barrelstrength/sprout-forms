@@ -3,14 +3,16 @@
 namespace barrelstrength\sproutforms\base;
 
 use Craft;
-use craft\elements\User;
 
 /**
  * Class ElementIntegration
  *
  * @package Craft
+ *
+ * @property array $defaultAttributes
+ * @property array $defaultElementFieldsAsOptions
  */
-abstract class BaseElementIntegration extends Integration
+abstract class ElementIntegration extends Integration
 {
     public $authorId;
 
@@ -21,7 +23,7 @@ abstract class BaseElementIntegration extends Integration
      *
      * @return array
      */
-    public function getDefaultAttributes()
+    public function getDefaultAttributes(): array
     {
         return [
             [
@@ -34,7 +36,7 @@ abstract class BaseElementIntegration extends Integration
     /**
      * @return array
      */
-    public function getDefaultElementFieldsAsOptions()
+    public function getDefaultElementFieldsAsOptions(): array
     {
         $options = [];
 
@@ -52,7 +54,7 @@ abstract class BaseElementIntegration extends Integration
      *
      * @return array
      */
-    public function getElementFieldsAsOptions($elementGroupId)
+    public function getElementFieldsAsOptions($elementGroupId): array
     {
         return [];
     }

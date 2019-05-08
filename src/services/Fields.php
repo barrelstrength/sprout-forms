@@ -27,7 +27,6 @@ use barrelstrength\sproutforms\fields\formfields\CustomHtml;
 use barrelstrength\sproutforms\fields\formfields\SectionHeading;
 use barrelstrength\sproutforms\fields\formfields\Tags;
 use barrelstrength\sproutforms\fields\formfields\Url;
-use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\events\RegisterFieldsEvent;
 use Craft;
@@ -41,6 +40,7 @@ use craft\records\Field as FieldRecord;
 use barrelstrength\sproutforms\fields\formfields\SingleLine;
 use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
 use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
+use Throwable;
 use yii\base\Component;
 use yii\base\Exception;
 
@@ -66,7 +66,6 @@ class Fields extends Component
      *
      * @return bool
      * @throws Exception
-     * @throws \yii\db\Exception
      */
     public function reorderFields($fieldIds): bool
     {
@@ -319,7 +318,7 @@ class Fields extends Component
      * @param Field|FieldInterface|null $field
      *
      * @return null
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function addDefaultTab(Form $form, &$field = null)
     {
@@ -370,7 +369,7 @@ class Fields extends Component
      * @param      $postFieldLayout
      *
      * @return \craft\models\FieldLayout|null
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function getDuplicateLayout(Form $form, FieldLayout $postFieldLayout)
     {
@@ -536,8 +535,9 @@ class Fields extends Component
      * @param null $tabId
      *
      * @return array
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getModalFieldTemplate($form, $field = null, $tabId = null): array
     {
@@ -585,7 +585,7 @@ class Fields extends Component
      * @param $form
      *
      * @return \craft\base\FieldInterface
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function createDefaultField($type, $form): FieldInterface
     {

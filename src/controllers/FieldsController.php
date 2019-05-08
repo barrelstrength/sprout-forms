@@ -20,8 +20,9 @@ class FieldsController extends BaseController
      * This action allows to load the modal field template.
      *
      * @return Response
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      * @throws \yii\web\BadRequestHttpException
      */
     public function actionModalField(): Response
@@ -307,9 +308,11 @@ class FieldsController extends BaseController
      * Edits an existing field.
      *
      * @return Response
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      * @throws \yii\web\BadRequestHttpException
+     * @throws \yii\web\ForbiddenHttpException
      */
     public function actionEditField(): Response
     {
@@ -410,7 +413,6 @@ class FieldsController extends BaseController
      *
      * @return Response
      * @throws \yii\base\Exception
-     * @throws \yii\db\Exception
      * @throws \yii\web\BadRequestHttpException
      * @throws \yii\web\ForbiddenHttpException
      */
@@ -437,8 +439,9 @@ class FieldsController extends BaseController
      * @param null $tabId
      *
      * @return Response
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     private function returnJson(bool $success, $field, Form $form, $tabName = null, $tabId = null): Response
     {

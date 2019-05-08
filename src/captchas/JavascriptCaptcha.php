@@ -4,7 +4,6 @@ namespace barrelstrength\sproutforms\captchas;
 
 use barrelstrength\sproutforms\base\Captcha;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
-use barrelstrength\sproutforms\SproutForms;
 use Craft;
 
 /**

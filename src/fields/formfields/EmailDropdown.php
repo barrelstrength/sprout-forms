@@ -18,6 +18,7 @@ use craft\helpers\StringHelper;
  * @property string $contentColumnType
  * @property string $svgIconPath
  * @property mixed  $settingsHtml
+ * @property array  $compatibleCraftFields
  * @property mixed  $exampleInputHtml
  */
 class EmailDropdown extends BaseOptionsFormField
@@ -72,7 +73,10 @@ class EmailDropdown extends BaseOptionsFormField
 
     /**
      * @inheritdoc
-     * @throws \yii\base\Exception
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getSettingsHtml()
     {
@@ -117,8 +121,13 @@ class EmailDropdown extends BaseOptionsFormField
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @param                       $value
+     * @param ElementInterface|null $element
+     *
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -149,8 +158,10 @@ class EmailDropdown extends BaseOptionsFormField
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getExampleInputHtml(): string
     {
@@ -166,10 +177,11 @@ class EmailDropdown extends BaseOptionsFormField
      * @param array|null $renderingOptions
      *
      * @return \Twig_Markup
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup
     {
         $selectedValue = $value->value ?? null;
 
@@ -261,7 +273,7 @@ class EmailDropdown extends BaseOptionsFormField
     /**
      * @inheritdoc
      */
-    public function getCompatibleCraftFields()
+    public function getCompatibleCraftFields(): array
     {
         return [
             CraftPlainText::class,

@@ -15,15 +15,14 @@ use barrelstrength\sproutforms\models\EntryStatus;
 use barrelstrength\sproutforms\records\Entry as EntryRecord;
 use barrelstrength\sproutforms\records\EntryStatus as EntryStatusRecord;
 use craft\base\ElementInterface;
-use GuzzleHttp\Exception\RequestException;
 use yii\base\Component;
 use yii\base\Exception;
 
 /**
  *
- * @property null                                      $defaultEntryStatusId
- * @property \barrelstrength\sproutforms\elements\Form $entry
- * @property array                                     $allEntryStatuses
+ * @property null        $defaultEntryStatusId
+ * @property FormElement $entry
+ * @property array       $allEntryStatuses
  */
 class Entries extends Component
 {
@@ -113,7 +112,6 @@ class Entries extends Component
      *
      * @return bool
      * @throws Exception
-     * @throws \yii\db\Exception
      */
     public function saveEntryStatus(EntryStatus $entryStatus): bool
     {
@@ -199,7 +197,6 @@ class Entries extends Component
      *
      * @return bool
      * @throws Exception
-     * @throws \yii\db\Exception
      */
     public function reorderEntryStatuses($entryStatusIds): bool
     {

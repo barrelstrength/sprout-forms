@@ -16,6 +16,7 @@ use craft\fields\PlainText as CraftPlainText;
  * @property string $fieldInputFolder
  * @property string $namespace
  * @property string $svgIconPath
+ * @property array  $compatibleCraftFields
  * @property string $exampleInputHtml
  */
 abstract class FormField extends Field
@@ -36,7 +37,7 @@ abstract class FormField extends Field
      *
      * @return array
      */
-    public function getCompatibleCraftFields()
+    public function getCompatibleCraftFields(): array
     {
         return [
             CraftPlainText::class
@@ -180,5 +181,5 @@ abstract class FormField extends Field
      *
      * @return \Twig_Markup
      */
-    abstract public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup;
+    abstract public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup;
 }

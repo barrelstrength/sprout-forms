@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutforms\integrationtypes;
 
-use barrelstrength\sproutforms\base\BaseElementIntegration;
+use barrelstrength\sproutforms\base\ElementIntegration;
 use Craft;
 use craft\elements\Entry;
 use craft\elements\User;
@@ -11,8 +11,13 @@ use craft\fields\PlainText;
 
 /**
  * Create a Craft Entry element
+ *
+ * @property string                                                     $userElementType
+ * @property \yii\web\IdentityInterface|\craft\elements\User|null|false $author
+ * @property array                                                      $defaultAttributes
+ * @property array                                                      $sectionsAsOptions
  */
-class EntryElementIntegration extends BaseElementIntegration
+class EntryElementIntegration extends ElementIntegration
 {
     public $entryTypeId;
 
@@ -39,7 +44,7 @@ class EntryElementIntegration extends BaseElementIntegration
     /**
      * @inheritdoc
      */
-    public function submit()
+    public function submit(): bool
     {
         if ($this->entryTypeId && !Craft::$app->getRequest()->getIsCpRequest()) {
             if (!$this->createEntry()) {
@@ -78,8 +83,11 @@ class EntryElementIntegration extends BaseElementIntegration
      * Returns a default field mapping html
      *
      * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
-    public function getFieldMappingSettingsHtml()
+    public function getFieldMappingSettingsHtml(): string
     {
         if (!$this->hasFieldMapping) {
             return '';
@@ -88,12 +96,12 @@ class EntryElementIntegration extends BaseElementIntegration
 
         $entryTypeId = $this->entryTypeId;
 
-        if (is_null($entryTypeId) || empty($entryTypeId)) {
+        if ($entryTypeId === null || empty($entryTypeId)) {
             $sections = $this->getSectionsAsOptions();
             $entryTypeId = $sections[1]['value'] ?? null;
         }
 
-        if (!is_null($entryTypeId)) {
+        if ($entryTypeId !== null) {
             foreach ($this->getElementFieldsAsOptions($entryTypeId) as $elementFieldsAsOption) {
                 $this->fieldsMapped[] = [
                     'integrationField' => $elementFieldsAsOption['value'],
@@ -134,7 +142,7 @@ class EntryElementIntegration extends BaseElementIntegration
     /**
      * @inheritdoc
      */
-    public function getDefaultAttributes()
+    public function getDefaultAttributes(): array
     {
         $default = [
             [
@@ -167,7 +175,7 @@ class EntryElementIntegration extends BaseElementIntegration
      *
      * @return array
      */
-    public function getElementFieldsAsOptions($elementGroupId)
+    public function getElementFieldsAsOptions($elementGroupId): array
     {
         $entryType = Craft::$app->getSections()->getEntryTypeById($elementGroupId);
         $defaultEntryFields = $this->getDefaultElementFieldsAsOptions();
@@ -207,7 +215,7 @@ class EntryElementIntegration extends BaseElementIntegration
             if ($entryElement->validate()) {
                 $result = Craft::$app->getElements()->saveElement($entryElement);
                 if ($result) {
-                    $this->logResponse(true, "Entry successfully created");
+                    $this->logResponse(true, 'Entry successfully created');
                     Craft::info('Element Integration successfully saved: '.$entryElement->id, __METHOD__);
                     return true;
                 }
@@ -260,7 +268,7 @@ class EntryElementIntegration extends BaseElementIntegration
      *
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return self::class;
     }

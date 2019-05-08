@@ -274,8 +274,10 @@ class Form extends Element
     /**
      * @inheritdoc
      *
-     * @throws Exception
-     * @throws \Twig_Error_Loader
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getEditorHtml(): string
     {
