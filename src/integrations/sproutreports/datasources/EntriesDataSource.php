@@ -108,10 +108,10 @@ class EntriesDataSource extends DataSource
                 foreach ($results as $key => $result) {
 
                     $elementId = $result['elementId'];
-                    $rows[$key]['id']          = $result['id'];
-                    $rows[$key]['elementId']   = $elementId;
-                    $rows[$key]['siteId']      = $result['siteId'];
-                    $rows[$key]['title']       = $result['title'];
+                    $rows[$key]['id'] = $result['id'];
+                    $rows[$key]['elementId'] = $elementId;
+                    $rows[$key]['siteId'] = $result['siteId'];
+                    $rows[$key]['title'] = $result['title'];
                     $rows[$key]['dateCreated'] = $result['dateCreated'];
                     $rows[$key]['dateUpdated'] = $result['dateUpdated'];
 
@@ -140,8 +140,7 @@ class EntriesDataSource extends DataSource
                                 $options = $field->getOptions();
 
                                 $selectedOptions = [];
-                                foreach ($options AS $option)
-                                {
+                                foreach ($options AS $option) {
                                     if ($option->selected) {
                                         $selectedOptions[] = '"'.$option->selected.'"';
                                     }
@@ -156,7 +155,7 @@ class EntriesDataSource extends DataSource
                                 $value = $field;
                             }
 
-                            $fieldHandleKey = 'field_' . $handle;
+                            $fieldHandleKey = 'field_'.$handle;
                             $rows[$key][$fieldHandleKey] = $value;
                         }
                     }

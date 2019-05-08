@@ -249,6 +249,7 @@ class IntegrationsController extends BaseController
 
     /**
      * @param $allTargetElementFieldOptions
+     *
      * @return array
      */
     private function removeUnnecessaryOptgroups($allTargetElementFieldOptions)
@@ -257,14 +258,14 @@ class IntegrationsController extends BaseController
         // Removes optgroups with no fields
         foreach ($allTargetElementFieldOptions as $rowIndex => $targetElementFieldOptions) {
             foreach ($targetElementFieldOptions as $key => $dropdownOption) {
-                if (isset($dropdownOption['optgroup'])){
+                if (isset($dropdownOption['optgroup'])) {
 
-                    if (isset($targetElementFieldOptions[$key+1])){
-                        if (isset($targetElementFieldOptions[$key+1]['value'])){
+                    if (isset($targetElementFieldOptions[$key + 1])) {
+                        if (isset($targetElementFieldOptions[$key + 1]['value'])) {
                             $aux[$rowIndex][] = $targetElementFieldOptions[$key];
                         }
                     }
-                }else{
+                } else {
                     $aux[$rowIndex][] = $dropdownOption;
                 }
             }

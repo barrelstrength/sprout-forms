@@ -139,7 +139,7 @@ abstract class Integration extends Model
                             'heading' => Craft::t('sprout-forms', 'API Field'),
                             'type' => 'singleline',
                             'class' => 'code',
-                            'placeholder' => Craft::t('sprout-forms','Leave blank and no data will be mapped')
+                            'placeholder' => Craft::t('sprout-forms', 'Leave blank and no data will be mapped')
                         ]
                     ],
                     'rows' => $this->fieldsMapped

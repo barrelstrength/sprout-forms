@@ -35,13 +35,12 @@ class FrontEndFields extends Component
 
                     $entryQuery = Entry::find()->sectionId($sectionModel->id);
 
-                    if ($sectionModel->type == Section::TYPE_CHANNEL){
+                    if ($sectionModel->type == Section::TYPE_CHANNEL) {
                         $entryQuery->orderBy(['title' => SORT_ASC]);
                     }
 
                     $entries[$pos]['entries'] = $entryQuery->all();
                     $entries[$pos]['section'] = $sectionModel;
-
                 } else if ($section[0] == 'singles') {
                     $singles = $this->getSinglesEntries();
 
@@ -59,14 +58,13 @@ class FrontEndFields extends Component
 
                     $entryQuery = Entry::find()->sectionId($section->id);
 
-                    if ($section->type == Section::TYPE_CHANNEL){
+                    if ($section->type == Section::TYPE_CHANNEL) {
                         $entryQuery->orderBy(['title' => SORT_ASC]);
                     }
 
                     $entries[$pos]['entries'] = $entryQuery->all();
                     $entries[$pos]['section'] = $sectionModel;
                 }
-
             }
 
             $singles = $this->getSinglesEntries();
