@@ -1,5 +1,25 @@
 # Changelog
 
+## 3.0.0-beta.54 - 2019-05-06
+
+### Fixed
+- Fixed options support in Form Entries Data Source
+
+## 3.0.0-beta.53 - 2019-05-06
+
+### Added
+- Added support for Relations fields in Reports ([#253])
+
+### Changed
+- Updated Relations fields to order related items alphabetically by default ([#270])
+
+### Fixed
+- Fixed bug in Relations field queries and Postgres support
+- Fixed label display bug
+
+[#253]: https://github.com/barrelstrength/craft-sprout-forms/issues/253
+[#270]: https://github.com/barrelstrength/craft-sprout-forms/issues/270
+
 ## 3.0.0-beta.52 - 2019-04-21
 
 ### Fixed
