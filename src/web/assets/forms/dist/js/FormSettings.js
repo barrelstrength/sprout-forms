@@ -14,6 +14,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
         options: null,
         modal: null,
+        $lightswitches: null,
 
         /**
          * The constructor.
@@ -38,6 +39,10 @@ if (typeof Craft.SproutForms === typeof undefined) {
                 }
             });
 
+            this.$lightswitches = $('.sproutforms-integration-row .lightswitch');
+
+            this.addListener(this.$lightswitches, 'click', 'onChange');
+
             this.modal = Craft.SproutForms.IntegrationModal.getInstance();
 
             this.modal.on('saveIntegration', $.proxy(function(e) {
@@ -47,6 +52,25 @@ if (typeof Craft.SproutForms === typeof undefined) {
             }, this));
 
             this.addListener($("#integrationsOptions"), 'change', 'createDefaultIntegration');
+        },
+
+        onChange: function(ev) {
+            var lightswitch = ev.currentTarget;
+            var integrationId = lightswitch.id;
+            var enabled = $(lightswitch).attr('aria-checked');
+            enabled = enabled == 'true' ? 1 : 0;
+            var formId = $("#formId").val();
+
+            var data = {integrationId: integrationId, enabled: enabled, formId: formId};
+
+            Craft.postActionRequest('sprout-forms/integrations/enable-integration', data, $.proxy(function(response, textStatus) {
+                if (textStatus === 'success' && response.success) {
+                    Craft.cp.displayNotice(Craft.t('sprout-forms', "Integration updated."));
+                } else {
+                    Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to update integration'));
+                }
+            }, this));
+
         },
 
         /**

@@ -58,6 +58,51 @@ class IntegrationsController extends BaseController
     }
 
     /**
+     * This action allows enable or disable an integration
+     *
+     * @return \yii\web\Response
+     * @throws \Throwable
+     * @throws \yii\web\BadRequestHttpException
+     */
+    public function actionEnableIntegration()
+    {
+        $this->requireAcceptsJson();
+
+        $request = Craft::$app->getRequest();
+        $integrationId = $request->getBodyParam('integrationId');
+        $enabled = $request->getBodyParam('enabled');
+        $enabled = $enabled == 1 ? true : false;
+        $formId = $request->getBodyParam('formId');
+        $form = SproutForms::$app->forms->getFormById($formId);
+
+        if ($integrationId == 'saveData' && $form) {
+            $form->saveData = $enabled;
+
+            if (SproutForms::$app->forms->saveForm($form)) {
+                return $this->asJson([
+                    'success' => true
+                ]);
+            }
+        }else{
+            $pieces = explode('-', $integrationId);
+
+            if (count($pieces) == 3){
+                $integration = SproutForms::$app->integrations->getFormIntegrationById($pieces[2]);
+                if ($integration){
+                    $integration->enabled = $enabled;
+                    if ($integration->save()){
+                        return $this->returnJson(true, $integration);
+                    }
+                }
+            }
+        }
+
+        return  $this->asJson([
+            'success' => false
+        ]);
+    }
+
+    /**
      * Save an Integration
      *
      * @return \yii\web\Response

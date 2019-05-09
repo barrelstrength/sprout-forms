@@ -177,9 +177,9 @@
                 </div>
                 <div>
                     {{ forms.lightswitch({
-                        name: 'saveData',
                         on: integration.enabled,
                         small: true,
+                        id: "integration-enabled-"~integration.id,
                         onLabel: "Show"|t('sprout-forms'),
                         offLabel: "Hide"|t('sprout-forms')
                     }) }}
