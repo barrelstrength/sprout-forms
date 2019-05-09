@@ -20,7 +20,7 @@ class m181120_000000_add_integrations_table extends Migration
             'name' => $this->string()->notNull(),
             'type' => $this->string()->notNull(),
             'settings' => $this->text(),
-            'enabled' => $this->boolean()->defaultValue(true),
+            'enabled' => $this->boolean()->defaultValue(false),
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull(),
             'uid' => $this->uid(),

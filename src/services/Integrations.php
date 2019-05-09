@@ -47,6 +47,7 @@ class Integrations extends Component
         $integrationRecord->type = $type;
         $integrationRecord->formId = $form->id;
         $integrationRecord->name = $name ?? $integrationRecord->getIntegrationApi()->getName();
+        $integrationRecord->enabled = false;
 
         if ($integrationRecord->save()) {
             $integration = $integrationRecord;
