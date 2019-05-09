@@ -369,7 +369,8 @@ class IntegrationsController extends BaseController
             'errors' => $integrationRecord ? $integrationRecord->getErrors() : null,
             'integration' => [
                 'id' => $integrationRecord->id,
-                'name' => $integrationRecord->name ?? null
+                'name' => $integrationRecord->name ?? null,
+                'enabled' => $integrationRecord->enabled
             ],
             //'template' => $success ? false : SproutForms::$app->integrations->getModalIntegrationTemplate($form, $integration),
         ]);

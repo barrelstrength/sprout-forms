@@ -459,7 +459,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
                             Craft.cp.displayNotice(Craft.t('sprout-forms', 'Integration deleted.'));
 
-                            $('#sproutform-integration-' + integrationId).remove();
+                            $('#sproutforms-integration-row-' + integrationId).remove();
 
                             this.initListeners();
                             this.hide();

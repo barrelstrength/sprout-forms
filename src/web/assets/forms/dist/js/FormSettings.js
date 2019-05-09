@@ -81,6 +81,18 @@ if (typeof Craft.SproutForms === typeof undefined) {
          */
         resetIntegration: function(integration) {
             var $integrationDiv = $("#sproutform-integration-" + integration.id);
+
+            var $container = $("#integration-enabled-"+ integration.id);
+            var currentValue = integration.enabled == 1 ? true : false;
+            var settingsValue = $container.attr('aria-checked');
+            if (currentValue != settingsValue){
+                $container.attr('aria-checked', ""+currentValue);
+                if (currentValue){
+                    $container.addClass("on");
+                }else{
+                    $container.removeClass("on");
+                }
+            }
             $integrationDiv.html(integration.name);
         },
 
@@ -101,12 +113,12 @@ if (typeof Craft.SproutForms === typeof undefined) {
                 if (textStatus === 'success') {
                     var integration = response.integration;
 
-                    integrationRows.last().after('<div class="field sproutforms-integration-row">' +
+                    integrationRows.last().after('<div class="field sproutforms-integration-row" id ="sproutforms-integration-row-' + integration.id + '">' +
                         '<div class="heading">' +
                         '<a href="#" id ="sproutform-integration-' + integration.id + '" data-integrationid="' + integration.id + '">' + integration.name + '</a>' +
                         '</div>' +
                         '<div>' +
-                        '<div class="lightswitch small" tabindex="0" data-value="1" role="checkbox" aria-checked="false">' +
+                        '<div class="lightswitch small" tabindex="0" data-value="1" role="checkbox" aria-checked="false" id ="integration-enabled-' + integration.id + '">' +
                         '<div class="lightswitch-container">' +
                         '<div class="label on"></div>' +
                         '<div class="handle"></div>' +
@@ -120,7 +132,9 @@ if (typeof Craft.SproutForms === typeof undefined) {
                     that.addListener($("#sproutform-integration-" + integration.id), 'activate', 'editIntegration');
 
                     $('#integrationsOptions').val('');
-
+                    var $container = $("#integration-enabled-"+ integration.id);
+                    $container.lightswitch();
+                    that.addListener($container, 'click', 'onChange');
                 } else {
                     // something went wrong
                 }
