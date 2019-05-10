@@ -23,155 +23,113 @@ use craft\fields\PlainText as CraftPlainText;
 abstract class Integration extends Model
 {
     /**
-     * @var string
-     */
-    public $name;
-
-    /**
+     * The ID of the integration stored in the database
+     *
      * @var int
      */
     public $integrationId;
 
     /**
-     * @var Entry
-     */
-    public $entry;
-
-    /**
-     * @var Form
-     */
-    public $form;
-
-    /**
-     * The default Sprout Forms Entry does not require a mapping. All other integrations will likely leave this set to true.
+     * Whether this Integration will be processed when a form is submitted
      *
-     * @var boolean
-     */
-    public $hasFieldMapping = true;
-
-    /**
-     * @var array|null The fields mapped
-     */
-    public $fieldsMapped;
-
-    /**
      * @var boolean
      */
     public $enabled = true;
 
     /**
-     * Name of the Integration
+     * The Form Entry Element associated with an Integration
      *
-     * @return mixed
+     * @var Entry
      */
-    abstract public function getName();
+    public $entry;
 
     /**
-     * Return Class name as Type
+     * The Form Element where the Integration is used
+     *
+     * @var Form
+     */
+    public $form;
+
+    /**
+     * @var array|null The fields mapped
+     */
+    public $fieldMapping;
+
+    /**
+     * The name the User gives an integration after it is created
+     *
+     * @var string
+     */
+    public $name;
+
+    /**
+     * Name of the Integration that displays as an option in the Form settings
      *
      * @return string
      */
-    abstract public function getType(): string;
+    abstract public function getName(): string;
 
     /**
      * Send the submission to the desired endpoint
      *
-     * @return boolean
+     * @return bool
      */
     abstract public function submit(): bool;
 
     /**
+     *
      * Settings that help us customize the Field Mapping Table
      *
      * Each settings template will also call a Twig Field Mapping Table Macro to help with the field mapping (can we just have a Twig Macro that wraps the default Craft Table for this and outputs two columns?)
+     *
+     * @return string|null
      */
     public function getSettingsHtml()
     {
+        return null;
     }
 
     /**
-     * Process the submission and field mapping settings to get the payload. Resolve the field mapping.
+     * Process the submission and field mapping settings to prepare the payload.
+     *
+     * In this context, $this->fieldMapping will be populated from the values
+     * saved via the settings defined in $this->getFieldMappingSettingsHtml()
      *
      * @return mixed
      */
     public function resolveFieldMapping()
     {
-        return $this->fieldsMapped ?? [];
+        return $this->fieldMapping ?? [];
     }
 
     /**
-     * Returns a default field mapping html
+     * Returns the HTML where a user will prepare a field mapping
      *
-     * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @return string|null
      */
-    public function getFieldMappingSettingsHtml(): string
+    public function getFieldMappingSettingsHtml()
     {
-        if (!$this->hasFieldMapping) {
-            return '';
-        }
-
-        if (empty($this->fieldsMapped)) {
-            // show all the form fields
-            foreach ($this->getFormFieldsAsOptions() as $formField) {
-                $this->fieldsMapped[] = [
-                    'sproutFormField' => $formField['value'],
-                    'integrationField' => ''
-                ];
-            }
-        }
-
-        $rendered = Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'editableTableField',
-            [
-                [
-                    'label' => Craft::t('sprout-forms', 'Field Mapping'),
-                    'instructions' => Craft::t('sprout-forms', 'Define your field mapping.'),
-                    'id' => 'fieldsMapped',
-                    'name' => 'fieldsMapped',
-                    'addRowLabel' => Craft::t('sprout-forms', 'Add a field mapping'),
-                    'cols' => [
-                        'sproutFormField' => [
-                            'heading' => Craft::t('sprout-forms', 'Form Field'),
-                            'type' => 'singleline',
-                            'class' => 'code'
-                        ],
-                        'integrationField' => [
-                            'heading' => Craft::t('sprout-forms', 'API Field'),
-                            'type' => 'singleline',
-                            'class' => 'code',
-                            'placeholder' => Craft::t('sprout-forms', 'Leave blank and no data will be mapped')
-                        ]
-                    ],
-                    'rows' => $this->fieldsMapped
-                ]
-            ]);
-
-        return $rendered;
+        return null;
     }
 
     /**
+     * Prepares a list of the Form Fields from the current form that a user can choose to map to an endpoint
+     *
      * @param bool $addOptGroup
      *
      * @return array
      */
-    public function getFormFieldsAsOptions($addOptGroup = false): array
+    public function getFormFieldsAsMappingOptions($addOptGroup = false): array
     {
-        $fields = $this->form->getFields();
-        $commonFields = [
-            CraftPlainText::class,
-            CraftDropdown::class
-        ];
         $options = [];
 
         if ($addOptGroup) {
-            $options[] = ['optgroup' => Craft::t('sprout-forms', 'Default')];
+            $options[] = ['optgroup' => Craft::t('sprout-forms', 'Default Fields')];
         }
 
         $options = array_merge($options, [
             [
-                'label' => 'Id',
+                'label' => 'Form ID',
                 'value' => 'id',
                 'compatibleCraftFields' => [
                     CraftPlainText::class,
@@ -182,12 +140,10 @@ abstract class Integration extends Model
             [
                 'label' => 'Title',
                 'value' => 'title',
-                'compatibleCraftFields' => $commonFields
-            ],
-            [
-                'label' => 'Ip Address',
-                'value' => 'ipAddress',
-                'compatibleCraftFields' => $commonFields
+                'compatibleCraftFields' => [
+                    CraftPlainText::class,
+                    CraftDropdown::class
+                ]
             ],
             [
                 'label' => 'Date Created',
@@ -195,13 +151,30 @@ abstract class Integration extends Model
                 'compatibleCraftFields' => [
                     CraftDate::class
                 ]
+            ],
+            [
+                'label' => 'IP Address',
+                'value' => 'ipAddress',
+                'compatibleCraftFields' => [
+                    CraftPlainText::class,
+                    CraftDropdown::class
+                ]
+            ],
+            [
+                'label' => 'User Agent',
+                'value' => 'userAgent',
+                'compatibleCraftFields' => [
+                    CraftPlainText::class
+                ]
             ]
         ]);
+
+        $fields = $this->form->getFields();
 
         if (count($fields)) {
             if ($addOptGroup) {
                 $options[] = [
-                    'optgroup' => Craft::t('sprout-forms', 'Form Fields')
+                    'optgroup' => Craft::t('sprout-forms', 'Custom Fields')
                 ];
             }
 
@@ -214,6 +187,7 @@ abstract class Integration extends Model
                 ];
             }
         }
+
         return $options;
     }
 

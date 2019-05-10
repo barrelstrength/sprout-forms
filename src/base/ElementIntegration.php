@@ -19,7 +19,7 @@ abstract class ElementIntegration extends Integration
     public $enableSetAuthorToLoggedInUser = false;
 
     /**
-     * Default attributes as options
+     * Returns a list of the Default Element Fields that can be mapped for this Element Type
      *
      * @return array
      */
@@ -34,6 +34,8 @@ abstract class ElementIntegration extends Integration
     }
 
     /**
+     * Returns a list of the default Element Fields prepared for the Integration::getElementFieldsAsOptions method
+     *
      * @return array
      */
     public function getDefaultElementFieldsAsOptions(): array
@@ -54,7 +56,7 @@ abstract class ElementIntegration extends Integration
      *
      * @return array
      */
-    public function getElementFieldsAsOptions($elementGroupId): array
+    public function getElementCustomFieldsAsOptions($elementGroupId): array
     {
         return [];
     }

@@ -19,15 +19,23 @@ use craft\fields\PlainText;
  */
 class EntryElementIntegration extends ElementIntegration
 {
+    /**
+     * The Entry Type ID where the Form Field values will be mapped to
+     *
+     * @var int
+     */
     public $entryTypeId;
 
-    public function getName()
+    /**
+     * @inheritDoc
+     */
+    public function getName(): string
     {
         return Craft::t('sprout-forms', 'Craft Entries');
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function getSettingsHtml()
     {
@@ -42,35 +50,35 @@ class EntryElementIntegration extends ElementIntegration
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
+     *
+     * @throws \Throwable
      */
     public function submit(): bool
     {
         if ($this->entryTypeId && !Craft::$app->getRequest()->getIsCpRequest()) {
-            if (!$this->createEntry()) {
-                return false;
-            }
+            return false;
         }
 
-        return true;
+        return $this->createEntry();
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function resolveFieldMapping()
     {
         $fields = [];
         $entry = $this->entry;
 
-        if ($this->fieldsMapped) {
-            foreach ($this->fieldsMapped as $fieldMapped) {
-                if (isset($entry->{$fieldMapped['sproutFormField']}) && $fieldMapped['integrationField']) {
-                    $fields[$fieldMapped['integrationField']] = $entry->{$fieldMapped['sproutFormField']};
+        if ($this->fieldMapping) {
+            foreach ($this->fieldMapping as $fieldMap) {
+                if (isset($entry->{$fieldMap['sproutFormField']}) && $fieldMap['integrationField']) {
+                    $fields[$fieldMap['integrationField']] = $entry->{$fieldMap['sproutFormField']};
                 } else {
                     // Leave default handle is the integrationField is blank
-                    if (empty($fieldMapped['integrationField'])) {
-                        $fields[$fieldMapped['sproutFormField']] = $entry->{$fieldMapped['sproutFormField']};
+                    if (empty($fieldMap['integrationField'])) {
+                        $fields[$fieldMap['sproutFormField']] = $entry->{$fieldMap['sproutFormField']};
                     }
                 }
             }
@@ -80,19 +88,15 @@ class EntryElementIntegration extends ElementIntegration
     }
 
     /**
-     * Returns a default field mapping html
+     * @inheritDoc
      *
-     * @return string
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
-    public function getFieldMappingSettingsHtml(): string
+    public function getFieldMappingSettingsHtml()
     {
-        if (!$this->hasFieldMapping) {
-            return '';
-        }
-        $this->fieldsMapped = [];
+        $this->fieldMapping = [];
 
         $entryTypeId = $this->entryTypeId;
 
@@ -102,8 +106,8 @@ class EntryElementIntegration extends ElementIntegration
         }
 
         if ($entryTypeId !== null) {
-            foreach ($this->getElementFieldsAsOptions($entryTypeId) as $elementFieldsAsOption) {
-                $this->fieldsMapped[] = [
+            foreach ($this->getElementCustomFieldsAsOptions($entryTypeId) as $elementFieldsAsOption) {
+                $this->fieldMapping[] = [
                     'integrationField' => $elementFieldsAsOption['value'],
                     'sproutFormField' => ''
                 ];
@@ -115,8 +119,8 @@ class EntryElementIntegration extends ElementIntegration
                 [
                     'label' => Craft::t('sprout-forms', 'Field Mapping'),
                     'instructions' => Craft::t('sprout-forms', 'Define your field mapping.'),
-                    'id' => 'fieldsMapped',
-                    'name' => 'fieldsMapped',
+                    'id' => 'fieldMapping',
+                    'name' => 'fieldMapping',
                     'addRowLabel' => Craft::t('sprout-forms', 'Add a field mapping'),
                     'static' => true,
                     'cols' => [
@@ -124,7 +128,7 @@ class EntryElementIntegration extends ElementIntegration
                             'heading' => Craft::t('sprout-forms', 'Entry Field'),
                             'type' => 'select',
                             'class' => 'formField',
-                            'options' => $this->getElementFieldsAsOptions($entryTypeId)
+                            'options' => $this->getElementCustomFieldsAsOptions($entryTypeId)
                         ],
                         'sproutFormField' => [
                             'heading' => Craft::t('sprout-forms', 'Form Field'),
@@ -133,7 +137,7 @@ class EntryElementIntegration extends ElementIntegration
                             'options' => []
                         ]
                     ],
-                    'rows' => $this->fieldsMapped
+                    'rows' => $this->fieldMapping
                 ]
             ]);
 
@@ -141,7 +145,7 @@ class EntryElementIntegration extends ElementIntegration
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function getDefaultAttributes(): array
     {
@@ -155,11 +159,6 @@ class EntryElementIntegration extends ElementIntegration
                 'label' => Craft::t('app', 'Slug'),
                 'value' => 'slug',
                 'class' => PlainText::class
-            ],
-            [
-                'label' => Craft::t('app', 'Expiry Date'),
-                'value' => 'expiryDate',
-                'class' => Date::class
             ],
             [
                 'label' => Craft::t('app', 'Post Date'),
@@ -176,7 +175,7 @@ class EntryElementIntegration extends ElementIntegration
      *
      * @return array
      */
-    public function getElementFieldsAsOptions($elementGroupId): array
+    public function getElementCustomFieldsAsOptions($elementGroupId): array
     {
         $entryType = Craft::$app->getSections()->getEntryTypeById($elementGroupId);
         $defaultEntryFields = $this->getDefaultElementFieldsAsOptions();
@@ -198,7 +197,7 @@ class EntryElementIntegration extends ElementIntegration
      * @return bool
      * @throws \Throwable
      */
-    private function createEntry()
+    private function createEntry(): bool
     {
         $fields = $this->resolveFieldMapping();
         $entryType = Craft::$app->getSections()->getEntryTypeById($this->entryTypeId);
@@ -241,7 +240,7 @@ class EntryElementIntegration extends ElementIntegration
     /**
      * @return array
      */
-    private function getSectionsAsOptions()
+    private function getSectionsAsOptions(): array
     {
         $sections = Craft::$app->getSections()->getAllSections();
         $options = [];
@@ -262,16 +261,6 @@ class EntryElementIntegration extends ElementIntegration
         }
 
         return $options;
-    }
-
-    /**
-     * Return Class name as Type
-     *
-     * @return string
-     */
-    public function getType(): string
-    {
-        return self::class;
     }
 
     /**

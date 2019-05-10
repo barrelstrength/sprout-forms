@@ -34,8 +34,8 @@
                 $select.before(selectedLabel);
             });
 
-            var $payloadFields = getCurrentRows('.payloadField');
-            $payloadFields.each(function(index) {
+            var customEndpointFields = getCurrentRows('.custom-endpoint');
+            customEndpointFields.each(function(index) {
                 var $textarea = $(this).find('textarea');
                 $textarea.prop("disabled", false);
             });

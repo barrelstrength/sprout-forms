@@ -605,7 +605,7 @@ class SproutFormsVariable
         foreach ($integrations as $integration) {
             $options[] = [
                 'label' => $integration->getName(),
-                'value' => $integration->getType()
+                'value' => get_class($integration)
             ];
         }
 

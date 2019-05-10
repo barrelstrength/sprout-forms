@@ -9,19 +9,20 @@ use Craft;
 
 use craft\web\Controller as BaseController;
 use barrelstrength\sproutforms\SproutForms;
+use yii\web\Response as Response;
 
 class IntegrationsController extends BaseController
 {
     /**
-     * This action allows to load the modal field template.
+     * Load the Integration modal field template
      *
-     * @return \yii\web\Response
+     * @return Response
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionModalIntegration()
+    public function actionModalIntegration(): Response
     {
         $this->requireAcceptsJson();
         $formId = Craft::$app->getRequest()->getBodyParam('formId');
@@ -31,13 +32,13 @@ class IntegrationsController extends BaseController
     }
 
     /**
-     * This action allows create a default integration given a type.
+     * Create a default Integration of the given type
      *
-     * @return \yii\web\Response
+     * @return Response
      * @throws \Throwable
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionCreateIntegration()
+    public function actionCreateIntegration(): Response
     {
         $this->requireAcceptsJson();
 
@@ -58,20 +59,20 @@ class IntegrationsController extends BaseController
     }
 
     /**
-     * This action allows enable or disable an integration
+     * Enable or disable an Integration
      *
-     * @return \yii\web\Response
+     * @return Response
      * @throws \Throwable
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionEnableIntegration()
+    public function actionEnableIntegration(): Response
     {
         $this->requireAcceptsJson();
 
         $request = Craft::$app->getRequest();
         $integrationId = $request->getBodyParam('integrationId');
         $enabled = $request->getBodyParam('enabled');
-        $enabled = $enabled == 1 ? true : false;
+        $enabled = $enabled == 1;
         $formId = $request->getBodyParam('formId');
         $form = SproutForms::$app->forms->getFormById($formId);
 
@@ -83,16 +84,16 @@ class IntegrationsController extends BaseController
                     'success' => true
                 ]);
             }
-        } else {
-            $pieces = explode('-', $integrationId);
+        }
 
-            if (count($pieces) == 3) {
-                $integration = SproutForms::$app->integrations->getFormIntegrationById($pieces[2]);
-                if ($integration) {
-                    $integration->enabled = $enabled;
-                    if ($integration->save()) {
-                        return $this->returnJson(true, $integration);
-                    }
+        $pieces = explode('-', $integrationId);
+
+        if (count($pieces) == 3) {
+            $integration = SproutForms::$app->integrations->getFormIntegrationById($pieces[2]);
+            if ($integration) {
+                $integration->enabled = $enabled;
+                if ($integration->save()) {
+                    return $this->returnJson(true, $integration);
                 }
             }
         }
@@ -105,10 +106,10 @@ class IntegrationsController extends BaseController
     /**
      * Save an Integration
      *
-     * @return \yii\web\Response
+     * @return Response
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionSaveIntegration()
+    public function actionSaveIntegration(): Response
     {
         $this->requirePostRequest();
 
@@ -138,13 +139,13 @@ class IntegrationsController extends BaseController
     /**
      * Edits an existing integration.
      *
-     * @return \yii\web\Response
+     * @return Response
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionEditIntegration()
+    public function actionEditIntegration(): Response
     {
         $this->requireAcceptsJson();
         $request = Craft::$app->getRequest();
@@ -177,11 +178,11 @@ class IntegrationsController extends BaseController
     }
 
     /**
-     * @return \yii\web\Response
+     * @return Response
      * @throws \Throwable
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionDeleteIntegration()
+    public function actionDeleteIntegration(): Response
     {
         $this->requirePostRequest();
         $this->requireAcceptsJson();
@@ -197,10 +198,10 @@ class IntegrationsController extends BaseController
     }
 
     /**
-     * @return \yii\web\Response
+     * @return Response
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionGetFormFields()
+    public function actionGetFormFields(): Response
     {
         $this->requirePostRequest();
         $this->requireAcceptsJson();
@@ -209,17 +210,18 @@ class IntegrationsController extends BaseController
         $integrationId = Craft::$app->request->getRequiredBodyParam('integrationId');
 
         $fieldOptionsByRow = $this->getFieldsAsOptionsByRow($entryTypeId, $integrationId);
+
         return $this->asJson([
-            'success' => 'true',
+            'success' => true,
             'fieldOptionsByRow' => $fieldOptionsByRow
         ]);
     }
 
     /**
-     * @return \yii\web\Response
+     * @return Response
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionGetElementEntryFields()
+    public function actionGetElementEntryFields(): Response
     {
         $this->requirePostRequest();
         $this->requireAcceptsJson();
@@ -227,13 +229,14 @@ class IntegrationsController extends BaseController
         $entryTypeId = Craft::$app->request->getRequiredBodyParam('entryTypeId');
         $integrationId = Craft::$app->request->getRequiredBodyParam('integrationId');
         $integrationRecord = IntegrationRecord::findOne($integrationId);
+
         /** @var EntryElementIntegration $integration */
         $integration = $integrationRecord->getIntegrationApi();
 
-        $entryFields = $integration->getElementFieldsAsOptions($entryTypeId);
+        $entryFields = $integration->getElementCustomFieldsAsOptions($entryTypeId);
 
         return $this->asJson([
-            'success' => 'true',
+            'success' => true,
             'fieldOptionsByRow' => $entryFields
         ]);
     }
@@ -244,20 +247,20 @@ class IntegrationsController extends BaseController
      *
      * @return array
      */
-    private function getFieldsAsOptionsByRow($entryTypeId, $integrationId)
+    private function getFieldsAsOptionsByRow($entryTypeId, $integrationId): array
     {
         $integrationRecord = IntegrationRecord::findOne($integrationId);
 
         /** @var ElementIntegration $integration */
         $integration = $integrationRecord->getIntegrationApi();
-        $targetElementFields = $integration->getElementFieldsAsOptions($entryTypeId);
-        $fieldsMapped = $integration->fieldsMapped;
+        $targetElementFields = $integration->getElementCustomFieldsAsOptions($entryTypeId);
+        $fieldMapping = $integration->fieldMapping;
         $integrationSectionId = $integration->entryTypeId ?? null;
         $firstRow = [
             'label' => 'None',
             'value' => ''
         ];
-        $sourceFormFields = $integration->getFormFieldsAsOptions(true);
+        $sourceFormFields = $integration->getFormFieldsAsMappingOptions(true);
         array_unshift($sourceFormFields, $firstRow);
 
         $rowPosition = 0;
@@ -268,15 +271,15 @@ class IntegrationsController extends BaseController
             $compatibleFields = $this->getCompatibleFields($sourceFormFields, $targetElementField);
             $integrationValue = $targetElementField['value'] ?? $targetElementField->handle;
             // We have rows stored and are for the same sectionType
-            if ($fieldsMapped && ($integrationSectionId == $entryTypeId)) {
-                if (isset($fieldsMapped[$rowPosition])) {
+            if ($fieldMapping && ($integrationSectionId == $entryTypeId)) {
+                if (isset($fieldMapping[$rowPosition])) {
                     foreach ($compatibleFields as $key => $option) {
                         if (isset($option['optgroup'])) {
                             continue;
                         }
 
-                        if ($option['value'] == $fieldsMapped[$rowPosition]['sproutFormField'] &&
-                            $fieldsMapped[$rowPosition]['integrationField'] == $integrationValue) {
+                        if ($option['value'] == $fieldMapping[$rowPosition]['sproutFormField'] &&
+                            $fieldMapping[$rowPosition]['integrationField'] == $integrationValue) {
                             $compatibleFields[$key]['selected'] = true;
                         }
                     }
@@ -298,7 +301,7 @@ class IntegrationsController extends BaseController
      *
      * @return array
      */
-    private function removeUnnecessaryOptgroups($allTargetElementFieldOptions)
+    private function removeUnnecessaryOptgroups($allTargetElementFieldOptions): array
     {
         $aux = [];
         // Removes optgroups with no fields
@@ -326,10 +329,9 @@ class IntegrationsController extends BaseController
      *
      * @return array
      */
-    private function getCompatibleFields(array $formFields, $entryField)
+    private function getCompatibleFields(array $formFields, $entryField): array
     {
         $finalOptions = [];
-        $groupFields = [];
 
         foreach ($formFields as $pos => $field) {
             if (isset($field['optgroup'])) {
@@ -339,14 +341,12 @@ class IntegrationsController extends BaseController
             $compatibleFields = $field['compatibleCraftFields'] ?? '*';
             // Check default attributes
             if (isset($entryField['class'])) {
-                if (is_array($compatibleFields)) {
-                    if (!in_array($entryField['class'], $compatibleFields)) {
-                        $field = null;
-                    }
+                if (is_array($compatibleFields) &&
+                    !in_array($entryField['class'], $compatibleFields, true)) {
+                    $field = null;
                 }
 
                 if ($field) {
-                    $groupFields[] = $field;
                     $finalOptions[] = $field;
                 }
             }
@@ -359,9 +359,9 @@ class IntegrationsController extends BaseController
      * @param bool $success
      * @param      $integrationRecord IntegrationRecord
      *
-     * @return \yii\web\Response
+     * @return Response
      */
-    private function returnJson(bool $success, $integrationRecord)
+    private function returnJson(bool $success, $integrationRecord): Response
     {
         // @todo how we should return errors to the edit integration modal? template response is disabled for now
         return $this->asJson([

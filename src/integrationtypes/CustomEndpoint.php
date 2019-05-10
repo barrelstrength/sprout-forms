@@ -15,21 +15,33 @@ use GuzzleHttp\RequestOptions;
  * in Craft as normal, but will not trigger any further calls to
  * the third-party endpoint.
  */
-class PayloadForwarding extends Integration
+class CustomEndpoint extends Integration
 {
+    /**
+     * The URL to use when submitting the Form payload
+     *
+     * @var string
+     */
     public $submitAction;
 
-    public function getName()
+    /**
+     * @inheritDoc
+     */
+    public function getName(): string
     {
-        return Craft::t('sprout-forms', 'Payload Forwarding');
+        return Craft::t('sprout-forms', 'Custom Endpoint');
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
+     *
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getSettingsHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/integrationtypes/payloadforwarding/settings',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/integrationtypes/customendpoint/settings',
             [
                 'integration' => $this
             ]
@@ -37,31 +49,29 @@ class PayloadForwarding extends Integration
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function submit(): bool
     {
         if ($this->submitAction && !Craft::$app->getRequest()->getIsCpRequest()) {
-            if (!$this->forwardEntry()) {
-                return false;
-            }
+            return false;
         }
 
-        return true;
+        return $this->forwardEntry();
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function resolveFieldMapping()
     {
         $fields = [];
         $entry = $this->entry;
 
-        if ($this->fieldsMapped) {
-            foreach ($this->fieldsMapped as $fieldMapped) {
-                if (isset($entry->{$fieldMapped['sproutFormField']}) && $fieldMapped['integrationField']) {
-                    $fields[$fieldMapped['integrationField']] = $entry->{$fieldMapped['sproutFormField']};
+        if ($this->fieldMapping) {
+            foreach ($this->fieldMapping as $fieldMap) {
+                if (isset($entry->{$fieldMap['sproutFormField']}) && $fieldMap['integrationField']) {
+                    $fields[$fieldMap['integrationField']] = $entry->{$fieldMap['sproutFormField']};
                 }
             }
         }
@@ -72,7 +82,7 @@ class PayloadForwarding extends Integration
     /**
      * @return bool
      */
-    private function forwardEntry()
+    private function forwardEntry(): bool
     {
         $entry = $this->entry;
         $fields = $this->resolveFieldMapping();
@@ -107,46 +117,41 @@ class PayloadForwarding extends Integration
     }
 
     /**
-     * Returns a default field mapping html
+     * @inheritDoc
      *
-     * @return string
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
-    public function getFieldMappingSettingsHtml(): string
+    public function getFieldMappingSettingsHtml()
     {
-        if (!$this->hasFieldMapping) {
-            return '';
-        }
+        $currentFields = $this->getFormFieldsAsMappingOptions();
 
-        $currentFields = $this->getFormFieldsAsOptions();
-
-        if (empty($this->fieldsMapped)) {
+        if (empty($this->fieldMapping)) {
             // show all the form fields
             foreach ($currentFields as $formField) {
-                $this->fieldsMapped[] = [
+                $this->fieldMapping[] = [
                     'sproutFormField' => $formField['value'],
                     'integrationField' => ''
                 ];
             }
         } else {
-            $fieldsMappedSaved = $this->fieldsMapped;
-            $this->fieldsMapped = [];
+            $savedFieldMapping = $this->fieldMapping;
+            $this->fieldMapping = [];
             foreach ($currentFields as $key => $formField) {
 
-                $fieldMapped = [
+                $fieldMap = [
                     'sproutFormField' => $formField['value'],
                     'integrationField' => ''
                 ];
 
-                foreach ($fieldsMappedSaved as $fieldMappedSaved) {
-                    if ($fieldMappedSaved['sproutFormField'] == $formField['value']) {
-                        $fieldMapped['integrationField'] = $fieldMappedSaved['integrationField'];
+                foreach ($savedFieldMapping as $savedFieldMap) {
+                    if ($savedFieldMap['sproutFormField'] === $formField['value']) {
+                        $fieldMap['integrationField'] = $savedFieldMap['integrationField'];
                     }
                 }
 
-                $this->fieldsMapped[] = $fieldMapped;
+                $this->fieldMapping[] = $fieldMap;
             }
         }
 
@@ -155,8 +160,8 @@ class PayloadForwarding extends Integration
                 [
                     'label' => Craft::t('sprout-forms', 'Field Mapping'),
                     'instructions' => Craft::t('sprout-forms', 'Define your field mapping.'),
-                    'id' => 'fieldsMapped',
-                    'name' => 'fieldsMapped',
+                    'id' => 'fieldMapping',
+                    'name' => 'fieldMapping',
                     'addRowLabel' => Craft::t('sprout-forms', 'Add a field mapping'),
                     'static' => true,
                     'cols' => [
@@ -169,25 +174,15 @@ class PayloadForwarding extends Integration
                         'integrationField' => [
                             'heading' => Craft::t('sprout-forms', 'API Field'),
                             'type' => 'singleline',
-                            'class' => 'code payloadField',
+                            'class' => 'code custom-endpoint',
                             'placeholder' => Craft::t('sprout-forms', 'Leave blank and no data will be mapped')
                         ]
                     ],
-                    'rows' => $this->fieldsMapped
+                    'rows' => $this->fieldMapping
                 ]
             ]);
 
         return $rendered;
-    }
-
-    /**
-     * Return Class name as Type
-     *
-     * @return string
-     */
-    public function getType(): string
-    {
-        return self::class;
     }
 }
 

@@ -77,7 +77,7 @@
         }
 
         function updateAllFieldSelectsAndRemoveRows() {
-            var tableId = "#types-barrelstrength-sproutforms-integrationtypes-EntryElementIntegration-fieldsMapped";
+            var tableId = "#types-barrelstrength-sproutforms-integrationtypes-EntryElementIntegration-fieldMapping";
             $(tableId + " tbody tr").remove();
             var data = getEntryFieldsData();
 
@@ -88,7 +88,7 @@
                     var rows = response.fieldOptionsByRow;
                     for (i = 0; i < rows.length; i++) {
                         var field = rows[i];
-                        $(tableId + ' tbody').append('<tr data-id="' + i + '"> <td class="formField">' + field["label"] + '<input class="hidden" name="types[barrelstrength\\sproutforms\\integrationtypes\\EntryElementIntegration][fieldsMapped][' + i + '][integrationField]" rows="1" readonly value="' + field["value"] + '">' + '</td> <td class="formEntryFields"><div class="select small"><select name="types[barrelstrength\\sproutforms\\integrationtypes\\EntryElementIntegration][fieldsMapped][' + i + '][sproutFormField]"></select></div></td></tr>');
+                        $(tableId + ' tbody').append('<tr data-id="' + i + '"> <td class="formField">' + field["label"] + '<input class="hidden" name="types[barrelstrength\\sproutforms\\integrationtypes\\EntryElementIntegration][fieldMapping][' + i + '][integrationField]" rows="1" readonly value="' + field["value"] + '">' + '</td> <td class="formEntryFields"><div class="select small"><select name="types[barrelstrength\\sproutforms\\integrationtypes\\EntryElementIntegration][fieldMapping][' + i + '][sproutFormField]"></select></div></td></tr>');
                     }
                     updateAllFieldSelects();
                 } else {

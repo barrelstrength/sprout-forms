@@ -16,7 +16,6 @@ use yii\base\Exception;
 /**
  * Entry represents a entry element.
  *
- * @property array                        $payloadFields
  * @property array|\yii\db\ActiveRecord[] $entryIntegrationLogsRecords
  * @property array                        $fields
  */
@@ -180,24 +179,6 @@ class Entry extends Element
         }
 
         return $statusArray;
-    }
-
-    /**
-     * Returns an array of key/value pairs to send along in payload forwarding requests
-     *
-     * @return array
-     */
-    public function getPayloadFields(): array
-    {
-        $fields = [];
-
-        $content = $this->getAttributes();
-
-        foreach ($content as $field => $value) {
-            $fields[$field] = $value;
-        }
-
-        return $fields;
     }
 
     /**

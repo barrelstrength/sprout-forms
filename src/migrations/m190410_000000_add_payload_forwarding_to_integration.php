@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutforms\integrationtypes\PayloadForwarding;
+use barrelstrength\sproutforms\integrationtypes\CustomEndpoint;
 use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
 use craft\db\Migration;
 use craft\db\Query;
@@ -23,22 +23,22 @@ class m190410_000000_add_payload_forwarding_to_integration extends Migration
             ->where('[[submitAction]] is not null')
             ->all();
 
-        $type = PayloadForwarding::class;
+        $type = CustomEndpoint::class;
 
         foreach ($forms as $form) {
             $integrationRecord = new IntegrationRecord();
             $integrationRecord->type = $type;
             $integrationRecord->formId = $form['id'];
-            /** @var PayloadForwarding $integrationApi */
+            /** @var CustomEndpoint $integrationApi */
             $integrationApi = $integrationRecord->getIntegrationApi();
             $settings = [];
 
             if ($form['submitAction']) {
                 $settings['submitAction'] = $form['submitAction'];
-                $formFields = $integrationApi->getFormFieldsAsOptions();
-                $fieldsMapped = [];
+                $formFields = $integrationApi->getFormFieldsAsMappingOptions();
+                $fieldMapping = [];
                 foreach ($formFields as $formField) {
-                    $fieldsMapped[] = [
+                    $fieldMapping[] = [
                         'sproutFormField' => $formField['value'],
                         'integrationField' => ''
                     ];
