@@ -122,8 +122,9 @@ class EntryElementIntegration extends ElementIntegration
                     'cols' => [
                         'integrationField' => [
                             'heading' => Craft::t('sprout-forms', 'Entry Field'),
-                            'type' => 'singleline',
-                            'class' => 'code formField'
+                            'type' => 'select',
+                            'class' => 'formField',
+                            'options' => $this->getElementFieldsAsOptions($entryTypeId)
                         ],
                         'sproutFormField' => [
                             'heading' => Craft::t('sprout-forms', 'Form Field'),

@@ -40,7 +40,7 @@
 
         function init() {
             // Init all empty field selects
-            updateAllFieldSelects()
+            updateAllFieldSelects();
             // When the entry type is changed
             $('#types-barrelstrength-sproutforms-integrationtypes-EntryElementIntegration-entryTypeId').change(function() {
                 var changed = $(this).val() != $(this).data('default');
@@ -55,9 +55,18 @@
         function disableOptions() {
             var $formFields = getCurrentRows('.formField');
             $formFields.each(function(index) {
-                var $textarea = $(this).find('textarea');
-                $textarea.prop("disabled", false);
-                $textarea.prop("readonly", true);
+                var $wrapperDiv = $(this).find('div.select');
+                var $select = $(this).find('select');
+
+                var selectedLabel = $select.find('option:selected').text();
+
+                $wrapperDiv.removeClass('select');
+                $wrapperDiv.removeClass('small');
+                $select.attr("disabled", false);
+                $select.attr("readonly", true);
+                $select.addClass("hidden");
+
+                $select.before(selectedLabel);
             });
 
             var $formEntryFields = getCurrentRows('.formEntryFields');
@@ -79,12 +88,15 @@
                     var rows = response.fieldOptionsByRow;
                     for (i = 0; i < rows.length; i++) {
                         var field = rows[i];
-                        $(tableId + ' tbody').append('<tr data-id="' + i + '"> <td class="textual code formField"><textarea name="types[barrelstrength\\sproutforms\\integrationtypes\\EntryElementIntegration][fieldsMapped][' + i + '][integrationField]" rows="1" readonly>' + field["value"] + '</textarea></td> <td class="formEntryFields"><div class="select small"><select name="types[barrelstrength\\sproutforms\\integrationtypes\\EntryElementIntegration][fieldsMapped][' + i + '][sproutFormField]"></select></div></td></tr>');
+                        $(tableId + ' tbody').append('<tr data-id="' + i + '"> <td class="formField">' + field["label"] + '<input class="hidden" name="types[barrelstrength\\sproutforms\\integrationtypes\\EntryElementIntegration][fieldsMapped][' + i + '][integrationField]" rows="1" readonly value="' + field["value"] + '">' + '</td> <td class="formEntryFields"><div class="select small"><select name="types[barrelstrength\\sproutforms\\integrationtypes\\EntryElementIntegration][fieldsMapped][' + i + '][sproutFormField]"></select></div></td></tr>');
                     }
                     updateAllFieldSelects();
                 } else {
                     Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to get the Entry fields'));
                 }
+
+                Craft.initUiElements();
+
             }, this));
         }
 
@@ -130,26 +142,34 @@
 
         function appendFieldsToSelect($select, fields) {
             $select.empty();
+
+            var dropdown = '';
             var closeOptgroup = false;
 
             for (i = 0; i < fields.length; i++) {
                 var field = fields[i];
                 var selectedCode = '';
-                if ("optgroup" in field) {
-                    if (closeOptgroup) {
-                        $select.append('</optgroup>');
-                        closeOptgroup = false;
-                    }
-                    $select.append('<optgroup label="' + field['optgroup'] + '">');
-                    closeOptgroup = true;
-                } else {
+                var lastItem = i === (fields.length - 1);
+
+                if (!("optgroup" in field)) {
                     if ("selected" in field) {
                         selectedCode = 'selected';
                     }
-                    $select.append('<option ' + selectedCode + ' value="' + field['value'] + '">' + field['label'] + '</option>');
+                    dropdown += '<option ' + selectedCode + ' value="' + field['value'] + '">' + field['label'] + '</option>';
                 }
 
+                if (("optgroup" in field && closeOptgroup) || (lastItem && closeOptgroup)) {
+                    dropdown += '</optgroup>';
+                    closeOptgroup = false;
+                }
+
+                if ("optgroup" in field) {
+                    dropdown += '<optgroup label="' + field['optgroup'] + '">';
+                    closeOptgroup = true;
+                }
             }
+
+            $select.append(dropdown)
         }
     });
 </script>

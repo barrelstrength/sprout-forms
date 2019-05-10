@@ -20,9 +20,18 @@
         function disableOptions() {
             var $formFields = getCurrentRows('.formField');
             $formFields.each(function(index) {
-                var $textarea = $(this).find('textarea');
-                $textarea.prop("disabled", false);
-                $textarea.prop("readonly", true);
+                var $wrapperDiv = $(this).find('div.select');
+                var $select = $(this).find('select');
+
+                var selectedLabel = $select.find('option:selected').text();
+
+                $wrapperDiv.removeClass('select');
+                $wrapperDiv.removeClass('small');
+                $select.attr("disabled", false);
+                $select.attr("readonly", true);
+                $select.addClass("hidden");
+
+                $select.before(selectedLabel);
             });
 
             var $payloadFields = getCurrentRows('.payloadField');

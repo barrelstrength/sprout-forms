@@ -162,8 +162,9 @@ class PayloadForwarding extends Integration
                     'cols' => [
                         'sproutFormField' => [
                             'heading' => Craft::t('sprout-forms', 'Form Field'),
-                            'type' => 'singleline',
-                            'class' => 'code formField'
+                            'type' => 'select',
+                            'class' => 'formField',
+                            'options' => $currentFields
                         ],
                         'integrationField' => [
                             'heading' => Craft::t('sprout-forms', 'API Field'),
