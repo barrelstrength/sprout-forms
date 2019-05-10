@@ -82,14 +82,14 @@ if (typeof Craft.SproutForms === typeof undefined) {
         resetIntegration: function(integration) {
             var $integrationDiv = $("#sproutform-integration-" + integration.id);
 
-            var $container = $("#integration-enabled-"+ integration.id);
+            var $container = $("#integration-enabled-" + integration.id);
             var currentValue = integration.enabled == 1 ? true : false;
             var settingsValue = $container.attr('aria-checked');
-            if (currentValue != settingsValue){
-                $container.attr('aria-checked', ""+currentValue);
-                if (currentValue){
+            if (currentValue != settingsValue) {
+                $container.attr('aria-checked', "" + currentValue);
+                if (currentValue) {
                     $container.addClass("on");
-                }else{
+                } else {
                     $container.removeClass("on");
                 }
             }
@@ -132,7 +132,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
                     that.addListener($("#sproutform-integration-" + integration.id), 'activate', 'editIntegration');
 
                     $('#integrationsOptions').val('');
-                    var $container = $("#integration-enabled-"+ integration.id);
+                    var $container = $("#integration-enabled-" + integration.id);
                     $container.lightswitch();
                     that.addListener($container, 'click', 'onChange');
                 } else {

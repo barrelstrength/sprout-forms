@@ -21,7 +21,7 @@ class m190508_000000_add_enable_integrations_per_form_basis extends Migration
         $pluginHandle = 'sprout-forms';
         $currentSettings = $projectConfig->get(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings');
 
-        if (isset($currentSettings['enableSaveDataPerFormBasis'])){
+        if (isset($currentSettings['enableSaveDataPerFormBasis'])) {
             $currentSettings['enableIntegrationsPerFormBasis'] = $currentSettings['enableSaveDataPerFormBasis'];
         }
 

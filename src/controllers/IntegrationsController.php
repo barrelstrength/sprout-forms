@@ -83,21 +83,21 @@ class IntegrationsController extends BaseController
                     'success' => true
                 ]);
             }
-        }else{
+        } else {
             $pieces = explode('-', $integrationId);
 
-            if (count($pieces) == 3){
+            if (count($pieces) == 3) {
                 $integration = SproutForms::$app->integrations->getFormIntegrationById($pieces[2]);
-                if ($integration){
+                if ($integration) {
                     $integration->enabled = $enabled;
-                    if ($integration->save()){
+                    if ($integration->save()) {
                         return $this->returnJson(true, $integration);
                     }
                 }
             }
         }
 
-        return  $this->asJson([
+        return $this->asJson([
             'success' => false
         ]);
     }
