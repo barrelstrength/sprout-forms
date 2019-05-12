@@ -3,4 +3,5 @@
 /.env
 /.idea
 /composer.lock
+/node_modules
 /vendor
