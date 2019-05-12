@@ -93,7 +93,7 @@ class SproutFormsVariable
      * @param int        $tabId
      * @param array|null $renderingOptions
      *
-     * @return bool|\Twig_Markup
+     * @return bool|\Twig\Markup
      * @throws Exception
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
@@ -348,10 +348,10 @@ class SproutFormsVariable
 
     /**
      * @return array
-     * @see SproutForms::$app->integrations->prepareIntegrationTypeSelection()
      *
+     * @see SproutForms::$app->integrations->prepareIntegrationTypeSelection()
      */
-    public function prepareIntegrationTypeSelection()
+    public function prepareIntegrationTypeSelection(): array
     {
         return SproutForms::$app->integrations->prepareIntegrationTypeSelection();
     }
@@ -378,9 +378,9 @@ class SproutFormsVariable
             Craft::$app->getSession()->remove('totalSteps');
         }
 
-        Craft::$app->getSession()->add('multiStepForm', true);
-        Craft::$app->getSession()->add('currentStep', $currentStep);
-        Craft::$app->getSession()->add('totalSteps', $totalSteps);
+        Craft::$app->getSession()->set('multiStepForm', true);
+        Craft::$app->getSession()->set('currentStep', $currentStep);
+        Craft::$app->getSession()->set('totalSteps', $totalSteps);
     }
 
     /**
@@ -416,7 +416,7 @@ class SproutFormsVariable
      */
     public function getTemplatesPath()
     {
-        return Craft::$app->path->getTemplatesPath();
+        return Craft::$app->getView()->getTemplatesPath();
     }
 
     /**
@@ -638,11 +638,9 @@ class SproutFormsVariable
      *
      * @return array|\yii\db\ActiveRecord[]
      */
-    public function getEntryIntegrationLogsByEntryId($entryId)
+    public function getEntryIntegrationLogsByEntryId($entryId): array
     {
-        $entryIntegrations = SproutForms::$app->integrations->getEntryIntegrationLogsByEntryId($entryId);
-
-        return $entryIntegrations;
+        return SproutForms::$app->integrations->getEntryIntegrationLogsByEntryId($entryId);
     }
 
     /**
@@ -652,9 +650,7 @@ class SproutFormsVariable
      */
     public function getIntegrationById($integrationId)
     {
-        $integration = SproutForms::$app->integrations->getFormIntegrationById($integrationId);
-
-        return $integration;
+        return SproutForms::$app->integrations->getFormIntegrationById($integrationId);
     }
 }
 

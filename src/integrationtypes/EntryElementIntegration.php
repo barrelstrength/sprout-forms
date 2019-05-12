@@ -36,6 +36,10 @@ class EntryElementIntegration extends ElementIntegration
 
     /**
      * @inheritDoc
+     *
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getSettingsHtml()
     {
@@ -75,11 +79,9 @@ class EntryElementIntegration extends ElementIntegration
             foreach ($this->fieldMapping as $fieldMap) {
                 if (isset($entry->{$fieldMap['sproutFormField']}) && $fieldMap['integrationField']) {
                     $fields[$fieldMap['integrationField']] = $entry->{$fieldMap['sproutFormField']};
-                } else {
+                } else if (empty($fieldMap['integrationField'])) {
                     // Leave default handle is the integrationField is blank
-                    if (empty($fieldMap['integrationField'])) {
-                        $fields[$fieldMap['sproutFormField']] = $entry->{$fieldMap['sproutFormField']};
-                    }
+                    $fields[$fieldMap['sproutFormField']] = $entry->{$fieldMap['sproutFormField']};
                 }
             }
         }
@@ -266,7 +268,7 @@ class EntryElementIntegration extends ElementIntegration
     /**
      * @return string
      */
-    public function getUserElementType()
+    public function getUserElementType(): string
     {
         return User::class;
     }

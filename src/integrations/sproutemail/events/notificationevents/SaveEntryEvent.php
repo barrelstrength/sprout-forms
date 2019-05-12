@@ -6,6 +6,7 @@ use barrelstrength\sproutbaseemail\base\NotificationEvent;
 
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Form;
+use barrelstrength\sproutforms\events\OnSaveEntryEvent;
 use barrelstrength\sproutforms\services\Entries;
 use barrelstrength\sproutforms\SproutForms;
 use craft\events\ModelEvent;
@@ -183,7 +184,7 @@ class SaveEntryEvent extends NotificationEvent
 
     public function validateEvent()
     {
-        /** @var ElementEvent $event */
+        /** @var OnSaveEntryEvent $event */
         $event = $this->event ?? null;
 
         if (!$event) {
@@ -197,17 +198,13 @@ class SaveEntryEvent extends NotificationEvent
 
     public function validateFormIds()
     {
-        /**
-         * @var ElementEvent $event
-         */
+        /** @var OnSaveEntryEvent $event */
         $event = $this->event ?? null;
 
         $elementId = null;
 
         if (get_class($event->entry) === Entry::class) {
-            /**
-             * @var Form $form
-             */
+            /** @var Form $form */
             $form = $event->entry->getForm();
             $elementId = $form->id;
         }

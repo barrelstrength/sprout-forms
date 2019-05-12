@@ -13,7 +13,9 @@ use craft\db\Query;
 class m190410_000000_add_payload_forwarding_to_integration extends Migration
 {
     /**
-     * @inheritdoc
+     * @inheritDoc
+     *
+     * @throws \yii\base\NotSupportedException
      */
     public function safeUp(): bool
     {

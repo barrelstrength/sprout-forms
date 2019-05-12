@@ -26,6 +26,7 @@ use yii\base\Exception;
 /**
  * Form represents a form element.
  *
+ * @mixin FieldLayoutBehavior
  * @property \barrelstrength\sproutforms\base\FormTemplates $formTemplate
  * @property array                                          $fields
  */

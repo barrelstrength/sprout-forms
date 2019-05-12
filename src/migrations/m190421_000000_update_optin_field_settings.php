@@ -24,7 +24,7 @@ class m190421_000000_update_optin_field_settings extends Migration
             ->all();
 
         foreach ($optinFields as $optinField) {
-            $settings = json_decode($optinField['settings']);
+            $settings = json_decode($optinField['settings'], false);
 
             if (!isset($settings->optInValueWhenTrue)) {
                 $settings->optInValueWhenTrue = 'Yes';

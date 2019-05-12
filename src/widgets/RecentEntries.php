@@ -78,7 +78,7 @@ class RecentEntries extends Widget
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
-    public function getBodyHtml()
+    public function getBodyHtml(): string
     {
         $query = Entry::find();
 
@@ -101,7 +101,7 @@ class RecentEntries extends Widget
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
-    public function getSettingsHtml()
+    public function getSettingsHtml(): string
     {
         $forms = [
             0 => Craft::t('sprout-forms', 'All forms')

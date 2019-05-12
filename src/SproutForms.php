@@ -22,7 +22,6 @@ use barrelstrength\sproutforms\fields\Forms as FormsField;
 use barrelstrength\sproutforms\fields\Entries as FormEntriesField;
 use barrelstrength\sproutforms\integrationtypes\EntryElementIntegration;
 use barrelstrength\sproutforms\integrationtypes\CustomEndpoint;
-use barrelstrength\sproutforms\integrationtypes\FormEntryElementIntegration;
 use barrelstrength\sproutforms\services\Integrations;
 use barrelstrength\sproutforms\widgets\RecentEntries;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
@@ -211,7 +210,6 @@ class SproutForms extends Plugin
 
         Event::on(Integrations::class, Integrations::EVENT_REGISTER_INTEGRATIONS, function(RegisterComponentTypesEvent $event) {
             $event->types[] = CustomEndpoint::class;
-            $event->types[] = FormEntryElementIntegration::class;
             $event->types[] = EntryElementIntegration::class;
         });
 
@@ -236,32 +234,6 @@ class SproutForms extends Plugin
 //            $event->types[] = BasicFieldsBundle::class;
 //            $event->types[] = SpecialFieldsBundle::class;
 //        });
-
-
-//        $array = [
-//            0 => [
-//                'label' => 'None',
-//                'value' => ''
-//            ],
-//            1 => [
-//                'optgroup' => 'Remove Me'
-//            ],
-//            2 => [
-//                'optgroup' => 'Form Fields'
-//            ],
-//            3 => [
-//                'label' => 'Checkboxes',
-//                'value' => 'checkboxes1',
-//                'compatibleCraftFields' => [
-//                    0 => 'craft\\fields\\Checkboxes',
-//                ],
-//                'fieldType' => 'barrelstrength\\sproutforms\\fields\\formfields\\Checkboxes'
-//            ]
-//        ];
-//
-//        unset($array[1]);
-//
-//        \Craft::dd(array_values($array));
 
     }
 

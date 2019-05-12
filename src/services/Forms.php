@@ -95,18 +95,6 @@ class Forms extends Component
     }
 
     /**
-     * Returns a criteria model for SproutForms_Form elements
-     *
-     * @param array $attributes
-     *
-     * @return mixed
-     */
-    public function getCriteria(array $attributes = [])
-    {
-        return Craft::$app->elements->getCriteria(FormElement::class, $attributes);
-    }
-
-    /**
      * @param FormElement $form
      *
      * @return bool
@@ -538,6 +526,8 @@ class Forms extends Component
             $form->templateOverridesFolder = $settings->templateFolderOverride;
         }
         // Set default tab
+
+        /** @var Field $field */
         $field = null;
         $form = SproutForms::$app->fields->addDefaultTab($form, $field);
 

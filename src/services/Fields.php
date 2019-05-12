@@ -45,7 +45,6 @@ use yii\base\Component;
 use yii\base\Exception;
 
 /**
- *
  * @property mixed $defaultTabName
  * @property array $registeredFieldsByGroup
  */
@@ -239,7 +238,7 @@ class Fields extends Component
      *
      * @return array
      */
-    public function prepareIntegrationTypeSelection()
+    public function prepareIntegrationTypeSelection(): array
     {
         $fields = $this->getRegisteredFields();
         $standardFields = [];
@@ -268,7 +267,7 @@ class Fields extends Component
      *
      * @return FieldRecord
      */
-    public function getFieldValue($field, $value)
+    public function getFieldValue($field, $value): FieldRecord
     {
         return FieldRecord::findOne([
             $field => $value
@@ -352,10 +351,10 @@ class Fields extends Component
             $postedFieldLayout[$tabName][] = $field->id;
         }
 
-        // Set the field layout
         $fieldLayout = Craft::$app->fields->assembleLayout($postedFieldLayout, $requiredFields);
 
         $fieldLayout->type = FormElement::class;
+
         // Set the tab to the form
         $form->setFieldLayout($fieldLayout);
 
@@ -539,7 +538,7 @@ class Fields extends Component
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
-    public function getModalFieldTemplate($form, $field = null, $tabId = null): array
+    public function getModalFieldTemplate(Form $form, $field = null, $tabId = null): array
     {
         $fieldsService = Craft::$app->getFields();
         $request = Craft::$app->getRequest();
@@ -587,12 +586,13 @@ class Fields extends Component
      * @return \craft\base\FieldInterface
      * @throws Throwable
      */
-    public function createDefaultField($type, $form): FieldInterface
+    public function createDefaultField($type, Form $form): FieldInterface
     {
+        /** @var FieldInterface $instanceField */
         $instanceField = new $type;
         $fieldsService = Craft::$app->getFields();
         // get the field name and remove spaces
-        $fieldName = preg_replace('/\s+/', '', $instanceField->displayName());
+        $fieldName = preg_replace('/\s+/', '', $instanceField::displayName());
         $handleName = StringHelper::toCamelCase(lcfirst($fieldName));
 
         $name = $this->getFieldAsNew('name', $fieldName);

@@ -9,7 +9,7 @@ use Craft;
 
 use craft\web\Controller as BaseController;
 use barrelstrength\sproutforms\SproutForms;
-use yii\web\Response as Response;
+use yii\web\Response;
 
 class IntegrationsController extends BaseController
 {
@@ -271,17 +271,17 @@ class IntegrationsController extends BaseController
             $compatibleFields = $this->getCompatibleFields($sourceFormFields, $targetElementField);
             $integrationValue = $targetElementField['value'] ?? $targetElementField->handle;
             // We have rows stored and are for the same sectionType
-            if ($fieldMapping && ($integrationSectionId == $entryTypeId)) {
-                if (isset($fieldMapping[$rowPosition])) {
-                    foreach ($compatibleFields as $key => $option) {
-                        if (isset($option['optgroup'])) {
-                            continue;
-                        }
+            if ($fieldMapping && ($integrationSectionId == $entryTypeId) &&
+                isset($fieldMapping[$rowPosition])) {
 
-                        if ($option['value'] == $fieldMapping[$rowPosition]['sproutFormField'] &&
-                            $fieldMapping[$rowPosition]['integrationField'] == $integrationValue) {
-                            $compatibleFields[$key]['selected'] = true;
-                        }
+                foreach ($compatibleFields as $key => $option) {
+                    if (isset($option['optgroup'])) {
+                        continue;
+                    }
+
+                    if ($option['value'] == $fieldMapping[$rowPosition]['sproutFormField'] &&
+                        $fieldMapping[$rowPosition]['integrationField'] == $integrationValue) {
+                        $compatibleFields[$key]['selected'] = true;
                     }
                 }
             }
@@ -309,10 +309,8 @@ class IntegrationsController extends BaseController
             foreach ($targetElementFieldOptions as $key => $dropdownOption) {
                 if (isset($dropdownOption['optgroup'])) {
 
-                    if (isset($targetElementFieldOptions[$key + 1])) {
-                        if (isset($targetElementFieldOptions[$key + 1]['value'])) {
-                            $aux[$rowIndex][] = $targetElementFieldOptions[$key];
-                        }
+                    if (isset($targetElementFieldOptions[$key + 1]['value'])) {
+                        $aux[$rowIndex][] = $targetElementFieldOptions[$key];
                     }
                 } else {
                     $aux[$rowIndex][] = $dropdownOption;

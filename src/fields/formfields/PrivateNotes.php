@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\fields\formfields;
 
 use Craft;
 use craft\base\ElementInterface;
+use craft\helpers\Template as TemplateHelper;
 use yii\db\Schema;
 use barrelstrength\sproutforms\base\FormField;
 
@@ -99,11 +100,11 @@ class PrivateNotes extends FormField
      * @param mixed      $value
      * @param array|null $renderingOptions
      *
-     * @return \Twig_Markup
+     * @return \Twig\Markup
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup
     {
         // Only visible and updated in the Control Panel
-        return '';
+        return TemplateHelper::raw('');
     }
 }

@@ -167,14 +167,12 @@ class EntriesDataSource extends DataSource
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      *
-     * @param array $settings
-     *
-     * @return string
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
+     * @throws \Exception
      */
     public function getSettingsHtml(array $settings = [])
     {

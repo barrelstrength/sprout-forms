@@ -95,7 +95,6 @@ class OptIn extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      *
-     * @return string
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError

@@ -34,6 +34,7 @@ class Integration extends ActiveRecord
      */
     public function getIntegrationApi()
     {
+        /** @var IntegrationApi $integrationApi */
         $integrationApi = null;
 
         if ($this->type) {

@@ -6,6 +6,7 @@ use barrelstrength\sproutbasefields\SproutBaseFields;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
+use craft\fields\data\SingleOptionFieldData;
 use craft\fields\Dropdown as CraftDropdown;
 use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Template as TemplateHelper;
@@ -73,7 +74,7 @@ class EmailDropdown extends BaseOptionsFormField
 
     /**
      * @inheritdoc
-     * @return string
+     *
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
@@ -131,6 +132,7 @@ class EmailDropdown extends BaseOptionsFormField
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
+        /** @var SingleOptionFieldData $value */
         $valueOptions = $value->getOptions();
         $anySelected = SproutBaseFields::$app->utilities->isAnyOptionsSelected(
             $valueOptions,

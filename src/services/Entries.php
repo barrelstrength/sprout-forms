@@ -14,7 +14,7 @@ use barrelstrength\sproutforms\fields\formfields\BaseRelationFormField;
 use barrelstrength\sproutforms\models\EntryStatus;
 use barrelstrength\sproutforms\records\Entry as EntryRecord;
 use barrelstrength\sproutforms\records\EntryStatus as EntryStatusRecord;
-use craft\base\ElementInterface;
+use craft\base\Element;
 use yii\base\Component;
 use yii\base\Exception;
 
@@ -237,7 +237,7 @@ class Entries extends Component
      * @param          $entryId
      * @param int|null $siteId
      *
-     * @return array|ElementInterface|null
+     * @return Entry|null
      */
     public function getEntryById($entryId, int $siteId = null)
     {
@@ -248,6 +248,7 @@ class Entries extends Component
         // @todo - look into enabledForSite method
         // $query->enabledForSite(false);
 
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $query->one();
     }
 
@@ -342,13 +343,13 @@ class Entries extends Component
      * Saves some relations for a field.
      *
      * @param BaseRelationFormField $field
-     * @param ElementInterface      $source
+     * @param Element               $source
      * @param array                 $targetIds
      *
      * @return void
      * @throws \Throwable
      */
-    public function saveRelations(BaseRelationFormField $field, ElementInterface $source, array $targetIds)
+    public function saveRelations(BaseRelationFormField $field, Element $source, array $targetIds)
     {
         if (!is_array($targetIds)) {
             $targetIds = [];

@@ -80,7 +80,6 @@ class Name extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      *
-     * @return string
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
@@ -259,7 +258,8 @@ class Name extends FormField implements PreviewableFieldInterface
      */
     public function serializeValue($value, ElementInterface $element = null)
     {
-        if (empty($value)) {
+        /** @var NameModel $value */
+        if ($value === null) {
             return false;
         }
 

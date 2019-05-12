@@ -137,7 +137,8 @@ class Entry extends Element
             // @todo - Why do we need to call populateElementContent?
             Craft::$app->getContent()->populateElementContent($this);
 
-            return $this->title ?: ((string)$this->id ?: static::class);
+            $string = (string)$this->id ?: static::class;
+            return $this->title ?: $string;
         } catch (\Exception $e) {
             // return empty to avoid errors when form is deleted
             return '';
@@ -430,7 +431,7 @@ class Entry extends Element
     /**
      * @return array
      */
-    public function getEntryIntegrationLogs()
+    public function getEntryIntegrationLogs(): array
     {
         return $this->entryIntegrationLogs;
     }
@@ -438,7 +439,7 @@ class Entry extends Element
     /**
      * @return array|\yii\db\ActiveRecord[]
      */
-    public function getEntryIntegrationLogsRecords()
+    public function getEntryIntegrationLogsRecords(): array
     {
         return SproutForms::$app->integrations->getEntryIntegrationLogsByEntryId($this->id);
     }

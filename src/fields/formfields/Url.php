@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use Craft;
+use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\PreviewableFieldInterface;
@@ -61,7 +62,6 @@ class Url extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      *
-     * @return string
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
@@ -188,6 +188,7 @@ class Url extends FormField implements PreviewableFieldInterface
      */
     public function validateUrl(ElementInterface $element)
     {
+        /** @var Element $element */
         $value = $element->getFieldValue($this->handle);
 
         if (!SproutBaseFields::$app->urlField->validate($value, $this)) {

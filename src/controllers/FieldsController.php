@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\controllers;
 
 
+use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\elements\Form;
 use Craft;
 use craft\helpers\Json;
@@ -212,6 +213,7 @@ class FieldsController extends BaseController
         $type = $request->getRequiredBodyParam('type');
         $fieldId = $request->getBodyParam('fieldId');
 
+        /** @var Field $field */
         $field = $fieldsService->createField([
             'type' => $type,
             'id' => $fieldId,
@@ -445,6 +447,7 @@ class FieldsController extends BaseController
      */
     private function returnJson(bool $success, $field, Form $form, $tabName = null, $tabId = null): Response
     {
+        /** @var FormField $field */
         return $this->asJson([
             'success' => $success,
             'errors' => $field ? $field->getErrors() : null,

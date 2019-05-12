@@ -80,7 +80,9 @@ class FileUpload extends BaseRelationFormField
     private $_uploadedDataFiles;
 
     /**
-     * @inheritdoc
+     * @inheritDoc
+     *
+     * @throws \yii\base\InvalidConfigException
      */
     public function init()
     {
@@ -171,7 +173,13 @@ class FileUpload extends BaseRelationFormField
      * Adds support for edit field in the Entries section of SproutForms (Control
      * panel html)
      *
-     * @inheritdoc
+     * @inheritDoc
+     *
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     * @throws \craft\errors\SiteNotFoundException
+     * @throws \yii\base\NotSupportedException
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -293,12 +301,12 @@ class FileUpload extends BaseRelationFormField
      */
     public function validateFileSize(ElementInterface $element)
     {
-
         $maxSize = AssetsHelper::getMaxUploadSize();
 
         $filenames = [];
 
         // Get any uploaded filenames
+        /** @var Element $element */
         $uploadedFiles = $this->_getUploadedFiles($element);
         foreach ($uploadedFiles as $file) {
             if ($file['type'] === 'data') {
@@ -400,6 +408,8 @@ class FileUpload extends BaseRelationFormField
     public function afterElementSave(ElementInterface $element, bool $isNew)
     {
         // Everything has been handled for propagating fields already.
+
+        /** @var Element $element */
         if (!$element->propagating) {
             // Were there any uploaded files?
             $uploadedFiles = $this->_getUploadedFiles($element);

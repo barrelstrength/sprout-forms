@@ -4,7 +4,6 @@ namespace barrelstrength\sproutforms\services;
 
 use barrelstrength\sproutforms\base\Integration;
 use barrelstrength\sproutforms\elements\Entry;
-use barrelstrength\sproutforms\integrationtypes\FormEntryElementIntegration;
 use barrelstrength\sproutforms\records\EntryIntegrationLog;
 use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
 use barrelstrength\sproutforms\SproutForms;
@@ -22,7 +21,12 @@ class Integrations extends Component
 {
     const EVENT_REGISTER_INTEGRATIONS = 'registerIntegrations';
 
-    public function getAllIntegrationTypes()
+    /**
+     * Returns all registered Integration Types
+     *
+     * @return array
+     */
+    public function getAllIntegrationTypes(): array
     {
         $event = new RegisterComponentTypesEvent([
             'types' => []
@@ -59,16 +63,14 @@ class Integrations extends Component
     /**
      * @return Integration[]
      */
-    public function getAllIntegrations()
+    public function getAllIntegrations(): array
     {
         $integrationTypes = SproutForms::$app->integrations->getAllIntegrationTypes();
 
         $integrations = [];
 
         foreach ($integrationTypes as $integrationType) {
-            if ($integrationType !== FormEntryElementIntegration::class) {
-                $integrations[] = new $integrationType();
-            }
+            $integrations[] = new $integrationType();
         }
 
         return $integrations;
@@ -79,7 +81,7 @@ class Integrations extends Component
      *
      * @return IntegrationRecord[]
      */
-    public function getFormIntegrations($formId)
+    public function getFormIntegrations($formId): array
     {
         return IntegrationRecord::findAll(['formId' => $formId]);
     }
@@ -103,7 +105,7 @@ class Integrations extends Component
      *
      * @return array
      */
-    public function prepareIntegrationTypeSelection()
+    public function prepareIntegrationTypeSelection(): array
     {
         $integrations = $this->getAllIntegrations();
         $standardIntegrations = [];
@@ -127,17 +129,19 @@ class Integrations extends Component
     /**
      * Loads the sprout modal integration via ajax.
      *
-     * @param      $form
-     * @param null $integration
+     * @param                  $form
+     * @param Integration|null $integration
      *
      * @return array
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
-    public function getModalIntegrationTemplate($form, $integration = null)
+    public function getModalIntegrationTemplate($form, $integration = null): array
     {
         $data = [];
+
+        /** @var Integration $integration */
         $data['integration'] = $integration;
         $data['integrationId'] = $integration->id;
 
@@ -163,7 +167,7 @@ class Integrations extends Component
      *
      * @return bool
      */
-    public function saveEntryIntegrationLog($integrationId, $entryId, $isValid, $message = [])
+    public function saveEntryIntegrationLog($integrationId, $entryId, $isValid, $message = []): bool
     {
         $entryIntegration = new EntryIntegrationLog();
         $entryIntegration->entryId = $entryId;
@@ -181,7 +185,7 @@ class Integrations extends Component
      *
      * @return array|\yii\db\ActiveRecord[]
      */
-    public function getEntryIntegrationLogsByEntryId($entryId)
+    public function getEntryIntegrationLogsByEntryId($entryId): array
     {
         $entryIntegrations = (new Query())
             ->select(['*'])
