@@ -119,7 +119,11 @@ class EntriesDataSource extends DataSource
 
                     $entry = Craft::$app->getElements()->getElementById($elementId, Entry::class);
 
-                    $fields = $entry->getFieldValues();
+                    if ($entry === null) {
+                        $fields = [];
+                    } else {
+                        $fields = $entry->getFieldValues();
+                    }
 
                     if (count($fields) > 0) {
                         foreach ($fields as $handle => $field) {

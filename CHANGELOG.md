@@ -1,9 +1,14 @@
 # Changelog
 
-## 3.0.0-beta.55 - 2019-05-15
+## 3.0.0-beta.56 - 2019-05-15
 
 ### Fixed
 - Fixed issue where deleted relations would throw an error in Entries Report
+
+## 3.0.0-beta.55 - 2019-05-15
+
+### Fixed
+- Fixed issue where deleted entries would throw an error in Entries Report
 
 ## 3.0.0-beta.54 - 2019-05-06
 
