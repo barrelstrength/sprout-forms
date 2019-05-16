@@ -60,7 +60,7 @@ class EntryElementIntegration extends ElementIntegration
      */
     public function submit(): bool
     {
-        if ($this->entryTypeId && !Craft::$app->getRequest()->getIsCpRequest()) {
+        if (!$this->entryTypeId || Craft::$app->getRequest()->getIsCpRequest()) {
             return false;
         }
 
