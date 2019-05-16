@@ -53,7 +53,7 @@ class CustomEndpoint extends Integration
      */
     public function submit(): bool
     {
-        if ($this->submitAction && !Craft::$app->getRequest()->getIsCpRequest()) {
+        if ($this->submitAction == '' || Craft::$app->getRequest()->getIsCpRequest()) {
             return false;
         }
 
