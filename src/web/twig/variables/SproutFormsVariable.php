@@ -652,5 +652,13 @@ class SproutFormsVariable
     {
         return SproutForms::$app->integrations->getFormIntegrationById($integrationId);
     }
+
+    /**
+     * @return bool
+     */
+    public function isPro()
+    {
+        return SproutForms::$app->forms->isPro();
+    }
 }
 

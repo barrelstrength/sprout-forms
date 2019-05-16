@@ -100,6 +100,9 @@ class SproutForms extends Plugin
      */
     public $minVersionRequired = '2.5.1';
 
+    const EDITION_LITE = 'lite';
+    const EDITION_PRO = 'pro';
+
     /**
      * @throws \yii\base\InvalidConfigException
      */
@@ -235,6 +238,17 @@ class SproutForms extends Plugin
 //            $event->types[] = SpecialFieldsBundle::class;
 //        });
 
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function editions(): array
+    {
+        return [
+            self::EDITION_LITE,
+            self::EDITION_PRO,
+        ];
     }
 
     /**
