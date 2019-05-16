@@ -95,11 +95,17 @@ class EntriesDataSource extends DataSource
 
             $formQuery = $query
                 ->select('*')
-                ->from($contentTable.' AS entries');
+                ->from($contentTable.' AS formcontenttable')
+                ->innerJoin('{{%elements}}', '[[formcontenttable.elementId]] = [[elements.id]]')
+                ->where(['elements.dateDeleted' => null]);
 
             if ($startDate && $endDate) {
-                $formQuery->where('[[entries.dateCreated]] > :startDate', [':startDate' => $startDate->format('Y-m-d H:i:s')]);
-                $formQuery->andWhere('[[entries.dateCreated]] < :endDate', [':endDate' => $endDate->format('Y-m-d H:i:s')]);
+                $formQuery->andWhere('[[formcontenttable.dateCreated]] > :startDate', [
+                    ':startDate' => $startDate->format('Y-m-d H:i:s')
+                ]);
+                $formQuery->andWhere('[[formcontenttable.dateCreated]] < :endDate', [
+                    ':endDate' => $endDate->format('Y-m-d H:i:s')
+                ]);
             }
 
             $results = $formQuery->all();
@@ -115,10 +121,13 @@ class EntriesDataSource extends DataSource
                     $rows[$key]['dateCreated'] = $result['dateCreated'];
                     $rows[$key]['dateUpdated'] = $result['dateUpdated'];
 
-
                     $entry = Craft::$app->getElements()->getElementById($elementId, Entry::class);
 
-                    $fields = $entry->getFieldValues();
+                    if ($entry === null) {
+                        $fields = [];
+                    } else {
+                        $fields = $entry->getFieldValues();
+                    }
 
                     if (count($fields) > 0) {
                         foreach ($fields as $handle => $field) {
