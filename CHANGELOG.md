@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.0-beta.57 - 2019-05-16
+
+### Fixed
+- Fixed issue where Form Entries results were based on incorrect Element ID match 
+
 ## 3.0.0-beta.56 - 2019-05-15
 
 ### Fixed

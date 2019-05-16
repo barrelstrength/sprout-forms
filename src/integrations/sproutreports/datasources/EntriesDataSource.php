@@ -95,13 +95,17 @@ class EntriesDataSource extends DataSource
 
             $formQuery = $query
                 ->select('*')
-                ->from($contentTable.' AS entries')
-                ->innerJoin('{{%elements}}', '[[entries.id]] = [[elements.id]]')
+                ->from($contentTable.' AS formcontenttable')
+                ->innerJoin('{{%elements}}', '[[formcontenttable.elementId]] = [[elements.id]]')
                 ->where(['elements.dateDeleted' => null]);
 
             if ($startDate && $endDate) {
-                $formQuery->andWhere('[[entries.dateCreated]] > :startDate', [':startDate' => $startDate->format('Y-m-d H:i:s')]);
-                $formQuery->andWhere('[[entries.dateCreated]] < :endDate', [':endDate' => $endDate->format('Y-m-d H:i:s')]);
+                $formQuery->andWhere('[[formcontenttable.dateCreated]] > :startDate', [
+                    ':startDate' => $startDate->format('Y-m-d H:i:s')
+                ]);
+                $formQuery->andWhere('[[formcontenttable.dateCreated]] < :endDate', [
+                    ':endDate' => $endDate->format('Y-m-d H:i:s')
+                ]);
             }
 
             $results = $formQuery->all();
