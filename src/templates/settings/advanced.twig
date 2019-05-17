@@ -12,8 +12,8 @@
         {% namespace 'settings' %}
 
             {{ forms.lightswitchField({
-                label: "Save data from form submissions in the Craft database"|t('sprout-forms'),
-                instructions: "By default, Sprout Forms will save your form submissions to the Craft database. Disable this setting to stop Sprout Forms from saving data to the Craft database."|t('sprout-forms'),
+                label: "Save data to the Craft database"|t('sprout-forms'),
+                instructions: "Disable this setting to stop Sprout Forms from saving data to the Craft database."|t('sprout-forms'),
                 id: 'enableSaveData',
                 name: 'enableSaveData',
                 toggle: 'settings-savedatadetails',
@@ -25,21 +25,21 @@
                  class="{{ not settings.enableSaveData ? "hidden" : '' }}">
 
                 {{ forms.lightswitchField({
-                    label: "Enable Data Controls and Integrations on a per-form basis"|t('sprout-forms'),
-                    instructions: "If you wish send your Form data to third-party integrations or have some of your forms save data to the Craft database and ensure others do not save any data, enable this setting and a new Integrations section will appear on  your Form Edit page."|t('sprout-forms'),
-                    id: 'enableIntegrationsPerFormBasis',
-                    name: 'enableIntegrationsPerFormBasis',
+                    label: "Enable Save Data settings on a per-form basis"|t('sprout-forms'),
+                    instructions: "Enable this setting to control Save Data behavior via an option on each Form Edit page."|t('sprout-forms'),
+                    id: 'enableSaveDataPerFormBasis',
+                    name: 'enableSaveDataPerFormBasis',
                     toggle: 'settings-savedatadefault',
-                    on: settings.enableIntegrationsPerFormBasis,
+                    on: settings.enableSaveDataPerFormBasis,
                     onLabel: "Enable"|t('sprout-forms'),
                 }) }}
 
                 <div id="settings-savedatadefault"
-                     class="{{ not settings.enableIntegrationsPerFormBasis ? "hidden" : '' }}">
+                     class="{{ not settings.enableSaveDataPerFormBasis ? "hidden" : '' }}">
 
                     {{ forms.lightswitchField({
-                        label: "Save form submissions to the Craft database"|t('sprout-forms'),
-                        instructions: "The default behavior for saving data when a new Form is created. This setting will update the value of the Form Entries Integration lightswitch field on the Integrations tab of your form settings."|t('sprout-forms'),
+                        label: "Enable Save Data by default"|t('sprout-forms'),
+                        instructions: "The default behavior for saving data when a new Form is created."|t('sprout-forms'),
                         id: 'saveDataByDefault',
                         name: 'saveDataByDefault',
                         on: settings.saveDataByDefault,
@@ -49,6 +49,15 @@
                 </div>
 
             </div>
+
+            {{ forms.lightswitchField({
+                label: "Enable Integrations"|t('sprout-forms'),
+                instructions: "Enable this setting and a new Integrations section will appear on your Form Edit page. Integrations allow you to send your Form data to third-party services."|t('sprout-forms'),
+                id: 'enableIntegrationsPerFormBasis',
+                name: 'enableIntegrationsPerFormBasis',
+                on: settings.enableIntegrationsPerFormBasis,
+                onLabel: "Enable"|t('sprout-forms'),
+            }) }}
 
         {% endnamespace %}
 

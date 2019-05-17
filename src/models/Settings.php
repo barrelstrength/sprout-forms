@@ -16,6 +16,7 @@ class Settings extends Model implements SproutSettingsInterface
     public $pluginNameOverride = '';
     public $templateFolderOverride = '';
     public $enableSaveData = 1;
+    public $enableSaveDataPerFormBasis = 0;
     public $enableIntegrationsPerFormBasis = 0;
     public $saveDataByDefault = 1;
     public $enablePerFormTemplateFolderOverride = 0;
