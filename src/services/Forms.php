@@ -775,4 +775,22 @@ class Forms extends Component
 
         return $sproutFormssIsPro;
     }
+
+    /**
+     * @return bool
+     */
+    public function canCreateForm()
+    {
+        $isPro = $this->isPro();
+
+        if (!$isPro){
+            $forms = $this->getAllForms();
+
+            if (count($forms) >= 1){
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

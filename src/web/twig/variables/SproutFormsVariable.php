@@ -656,9 +656,9 @@ class SproutFormsVariable
     /**
      * @return bool
      */
-    public function isPro()
+    public function canCreateForm()
     {
-        return SproutForms::$app->forms->isPro();
+        return SproutForms::$app->forms->canCreateForm();
     }
 }
 
