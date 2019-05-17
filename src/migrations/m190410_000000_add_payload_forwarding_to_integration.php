@@ -31,6 +31,8 @@ class m190410_000000_add_payload_forwarding_to_integration extends Migration
             $integrationRecord = new IntegrationRecord();
             $integrationRecord->type = $type;
             $integrationRecord->formId = $form['id'];
+            $integrationRecord->enabled = true;
+            
             /** @var CustomEndpoint $integrationApi */
             $integrationApi = $integrationRecord->getIntegrationApi();
             $settings = [];
@@ -42,7 +44,7 @@ class m190410_000000_add_payload_forwarding_to_integration extends Migration
                 foreach ($formFields as $formField) {
                     $fieldMapping[] = [
                         'sproutFormField' => $formField['value'],
-                        'integrationField' => ''
+                        'integrationField' => $formField['value']
                     ];
                 }
 
