@@ -3,7 +3,6 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use Craft;
-use craft\fields\Categories as CraftCategories;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\ElementInterface;
 use craft\elements\Category;
@@ -17,7 +16,6 @@ use barrelstrength\sproutforms\SproutForms;
  *
  *
  * @property string $svgIconPath
- * @property array  $compatibleCraftFields
  * @property mixed  $exampleInputHtml
  */
 class Categories extends BaseRelationFormField
@@ -102,10 +100,8 @@ class Categories extends BaseRelationFormField
     /**
      * @inheritdoc
      *
-     * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml(): string
     {
@@ -120,12 +116,11 @@ class Categories extends BaseRelationFormField
      * @param mixed      $value
      * @param array|null $renderingOptions
      *
-     * @return \Twig_Markup
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @return \Twig\Markup
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
     {
         $categories = SproutForms::$app->frontEndFields->getFrontEndCategories($this->getSettings());
 
@@ -180,15 +175,5 @@ class Categories extends BaseRelationFormField
         $variables['branchLimit'] = $this->branchLimit;
 
         return $variables;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getCompatibleCraftFields(): array
-    {
-        return [
-            CraftCategories::class,
-        ];
     }
 }

@@ -36,7 +36,7 @@ class m190410_000000_add_payload_forwarding_to_integration extends Migration
             $integrationRecord->type = $type;
             $integrationRecord->formId = $form['id'];
             $integrationRecord->enabled = true;
-            
+
             /** @var CustomEndpoint $integrationApi */
             $integrationApi = $integrationRecord->getIntegrationApi();
             $settings = [];
@@ -53,7 +53,7 @@ class m190410_000000_add_payload_forwarding_to_integration extends Migration
                     ];
                 }
                 $settings['fieldMapping'] = $fieldMapping;
-                
+
                 $integrationRecord->name = $integrationApi->getName();
                 $integrationRecord->settings = json_encode($settings);
                 $integrationRecord->save();
