@@ -183,7 +183,9 @@ class SproutForms extends Plugin
         });
 
         Event::on(Entries::class, EntryElement::EVENT_AFTER_SAVE, function(OnSaveEntryEvent $event) {
-            if (Craft::$app->getRequest()->getIsSiteRequest()) {
+            if (Craft::$app->getRequest()->getIsSiteRequest() &&
+                $this->getSettings()->enableIntegrationsPerFormBasis) {
+
                 $entry = $event->entry;
 
                 SproutForms::$app->integrations->runEntryIntegrations($entry);

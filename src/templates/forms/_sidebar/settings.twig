@@ -125,6 +125,21 @@
         offLabel: "Hide"|t('sprout-forms')
     }) }}
 
+    {% if settings.enableSaveData %}
+
+        {{ forms.lightswitchField({
+            label: "Save Data <span class='info'>Save submitted Sprout Form Entries for this form to the Craft database</span>"|t('sprout-forms'),
+            id: 'saveData',
+            fieldClass: 'sproutforms-integration-row',
+            name: 'saveData',
+            on: form.saveData,
+            small: true,
+            onLabel: "Show"|t('sprout-forms'),
+            offLabel: "Hide"|t('sprout-forms')
+        }) }}
+
+    {% endif %}
+
     {% if settings.enablePerFormTemplateFolderOverride %}
 
         {% set templateOptions = craft.sproutForms.getTemplateOptions(form) %}
@@ -154,21 +169,6 @@
     {% set integrationOptions = craft.sproutForms.getIntegrationOptions() %}
 
     <div id="integrations-wrapper" class="meta">
-
-        {% if settings.enableSaveData %}
-
-            {{ forms.lightswitchField({
-                label: "Form Entries <span class='info'>Save submitted Sprout Form Entries for this form to the Craft database</span>"|t('sprout-forms'),
-                id: 'saveData',
-                fieldClass: 'sproutforms-integration-row',
-                name: 'saveData',
-                on: form.saveData,
-                small: true,
-                onLabel: "Show"|t('sprout-forms'),
-                offLabel: "Hide"|t('sprout-forms')
-            }) }}
-
-        {% endif %}
 
         {% for integration in integrations %}
             <div class="field sproutforms-integration-row" id="sproutforms-integration-row-{{ integration.id }}">
