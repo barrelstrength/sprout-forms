@@ -4,20 +4,21 @@
 {% import 'sprout-base/_includes/sproutcp' as sprout %}
 {% set title = "Forms"|t('sprout-forms') %}
 {% set elementType = 'barrelstrength\\sproutforms\\elements\\Form' %}
-{% set canCreateForm = craft.sproutForms.canCreateForm() %}
+{% set canCreateForm = craft.app.getModule('sprout-forms').app.forms.canCreateForm() %}
 
 {% set groupId = null %}
 {% set groups = craft.sproutForms.getAllFormGroups('id') %}
 
 {% block actionButton %}
-    {% if not canCreateForm %}
-        {{ sprout.upgradeToProButton({
-            url: cpUrl('plugin-store/sprout-forms')
-        }) }}
-    {% endif %}
-    <div class="buttonss">
+    <div class="buttons">
         <a id="create-new-form" class="btn submit add icon {% if not canCreateForm %}isDisabled{% endif %}"
            href="{{ url('sprout-forms/forms/new') }}">{{ "New Form"|t('sprout-forms') }}</a>
+
+        {% if not canCreateForm %}
+            {{ sprout.upgradeToProButton({
+                url: cpUrl('plugin-store/sprout-forms')
+            }) }}
+        {% endif %}
     </div>
 {% endblock %}
 
@@ -49,6 +50,7 @@
 
 {% endblock %}
 
+{% do view.registerAssetBundle("barrelstrength\\sproutbase\\web\\assets\\cp\\CpAsset") %}
 {% do view.registerAssetBundle("barrelstrength\\sproutbase\\web\\assets\\groups\\GroupsAsset") %}
 
 {% js %}

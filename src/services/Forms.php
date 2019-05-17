@@ -771,9 +771,9 @@ class Forms extends Component
     public function isPro()
     {
         $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
-        $sproutFormssIsPro = $plugin !== null ? $plugin->is(SproutForms::EDITION_PRO) : false;
+        $sproutFormsIsPro = $plugin !== null ? $plugin->is(SproutForms::EDITION_PRO) : false;
 
-        return $sproutFormssIsPro;
+        return $sproutFormsIsPro;
     }
 
     /**
@@ -783,10 +783,10 @@ class Forms extends Component
     {
         $isPro = $this->isPro();
 
-        if (!$isPro){
+        if (!$isPro) {
             $forms = $this->getAllForms();
 
-            if (count($forms) >= 1){
+            if (count($forms) >= 1) {
                 return false;
             }
         }

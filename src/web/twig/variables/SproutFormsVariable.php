@@ -652,13 +652,5 @@ class SproutFormsVariable
     {
         return SproutForms::$app->integrations->getFormIntegrationById($integrationId);
     }
-
-    /**
-     * @return bool
-     */
-    public function canCreateForm()
-    {
-        return SproutForms::$app->forms->canCreateForm();
-    }
 }
 

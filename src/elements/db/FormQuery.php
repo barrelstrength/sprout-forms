@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\elements\db;
 
+use barrelstrength\sproutforms\SproutForms;
 use craft\db\Query;
 use craft\elements\db\ElementQuery;
 use craft\helpers\Db;
@@ -203,6 +204,10 @@ class FormQuery extends ElementQuery
 
         if ($this->name) {
             $this->subQuery->andWhere(Db::parseParam('sproutforms_forms.name', $this->name));
+        }
+
+        if (!SproutForms::$app->forms->isPro()) {
+            $this->query->limit(1);
         }
 
         return parent::beforePrepare();
