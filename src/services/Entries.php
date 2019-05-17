@@ -4,8 +4,7 @@ namespace barrelstrength\sproutforms\services;
 
 use barrelstrength\sproutforms\elements\Entry;
 use Craft;
-use craft\base\Element;
-use GuzzleHttp\Client;
+
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\elements\Form as FormElement;
@@ -15,16 +14,15 @@ use barrelstrength\sproutforms\fields\formfields\BaseRelationFormField;
 use barrelstrength\sproutforms\models\EntryStatus;
 use barrelstrength\sproutforms\records\Entry as EntryRecord;
 use barrelstrength\sproutforms\records\EntryStatus as EntryStatusRecord;
-use craft\base\ElementInterface;
-use GuzzleHttp\Exception\RequestException;
+use craft\base\Element;
 use yii\base\Component;
 use yii\base\Exception;
 
 /**
  *
- * @property null                                      $defaultEntryStatusId
- * @property \barrelstrength\sproutforms\elements\Form $entry
- * @property array                                     $allEntryStatuses
+ * @property null        $defaultEntryStatusId
+ * @property FormElement $entry
+ * @property array       $allEntryStatuses
  */
 class Entries extends Component
 {
@@ -114,7 +112,6 @@ class Entries extends Component
      *
      * @return bool
      * @throws Exception
-     * @throws \yii\db\Exception
      */
     public function saveEntryStatus(EntryStatus $entryStatus): bool
     {
@@ -200,7 +197,6 @@ class Entries extends Component
      *
      * @return bool
      * @throws Exception
-     * @throws \yii\db\Exception
      */
     public function reorderEntryStatuses($entryStatusIds): bool
     {
@@ -241,7 +237,7 @@ class Entries extends Component
      * @param          $entryId
      * @param int|null $siteId
      *
-     * @return array|ElementInterface|null
+     * @return Entry|null
      */
     public function getEntryById($entryId, int $siteId = null)
     {
@@ -252,6 +248,7 @@ class Entries extends Component
         // @todo - look into enabledForSite method
         // $query->enabledForSite(false);
 
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $query->one();
     }
 
@@ -278,7 +275,7 @@ class Entries extends Component
 
         if ($entry->hasErrors()) {
 
-            SproutForms::error($entry->getErrors());
+            Craft::error($entry->getErrors(), __METHOD__);
 
             return false;
         }
@@ -298,7 +295,7 @@ class Entries extends Component
                     $entry->addError($key, $error);
                 }
 
-                SproutForms::error('OnBeforeSaveEntryEvent is not valid');
+                Craft::error('OnBeforeSaveEntryEvent is not valid', __METHOD__);
 
                 if ($event->fakeIt) {
                     SproutForms::$app->entries->fakeIt = true;
@@ -310,58 +307,21 @@ class Entries extends Component
             $success = Craft::$app->getElements()->saveElement($entry);
 
             if (!$success) {
-                SproutForms::error('Couldn’t save Element on saveEntry service.');
+                Craft::error('Couldn’t save Element on saveEntry service.', __METHOD__);
                 $transaction->rollBack();
                 return false;
             }
 
-            SproutForms::info('Form Entry Element Saved.');
+            Craft::info('Form Entry Element Saved.', __METHOD__);
 
             $transaction->commit();
 
             $this->callOnSaveEntryEvent($entry, $isNewEntry);
         } catch (\Exception $e) {
-            SproutForms::error('Failed to save element: '.$e->getMessage());
+            Craft::error('Failed to save element: '.$e->getMessage(), __METHOD__);
             $transaction->rollBack();
 
             throw $e;
-        }
-
-        return true;
-    }
-
-    /**
-     * @param EntryElement $entry
-     *
-     * @return bool
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function forwardEntry(Entry $entry): bool
-    {
-        $fields = $entry->getPayloadFields();
-        $endpoint = $entry->getForm()->submitAction;
-
-        if (!filter_var($endpoint, FILTER_VALIDATE_URL)) {
-
-            SproutForms::error($entry->formName.' submit action is an invalid URL: '.$endpoint);
-
-            return false;
-        }
-
-        $client = new Client();
-
-        try {
-            SproutForms::info($fields);
-
-            $response = $client->request('POST', $endpoint, [
-                'form_params' => $fields
-            ]);
-
-            SproutForms::info($response->getBody()->getContents());
-        } catch (RequestException $e) {
-            $entry->addError('general', $e->getMessage());
-
-            return false;
         }
 
         return true;
@@ -386,8 +346,8 @@ class Entries extends Component
      * @param Element               $source
      * @param array                 $targetIds
      *
-     * @throws \Throwable
      * @return void
+     * @throws \Throwable
      */
     public function saveRelations(BaseRelationFormField $field, Element $source, array $targetIds)
     {
@@ -496,7 +456,7 @@ class Entries extends Component
 
         $saveData = $settings->enableSaveData;
 
-        if (($settings->enableSaveDataPerFormBasis && $saveData) || $form->submitAction) {
+        if ($settings->enableIntegrationsPerFormBasis && $saveData) {
             $saveData = $form->saveData;
         }
 

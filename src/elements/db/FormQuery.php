@@ -54,11 +54,6 @@ class FormQuery extends ElementQuery
     /**
      * @var string
      */
-    public $submitAction;
-
-    /**
-     * @var string
-     */
     public $submitButtonText;
 
     /**
@@ -183,7 +178,6 @@ class FormQuery extends ElementQuery
             'sproutforms_forms.titleFormat',
             'sproutforms_forms.displaySectionTitles',
             'sproutforms_forms.redirectUri',
-            'sproutforms_forms.submitAction',
             'sproutforms_forms.saveData',
             'sproutforms_forms.submitButtonText',
             'sproutforms_forms.templateOverridesFolder',

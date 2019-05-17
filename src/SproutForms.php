@@ -11,6 +11,7 @@ use barrelstrength\sproutbasereports\services\DataSources;
 use barrelstrength\sproutbasereports\SproutBaseReports;
 use barrelstrength\sproutbasereports\SproutBaseReportsHelper;
 use barrelstrength\sproutforms\base\Captcha;
+use barrelstrength\sproutforms\events\OnSaveEntryEvent;
 use barrelstrength\sproutforms\integrations\sproutemail\emailtemplates\basic\BasicSproutFormsNotification;
 use barrelstrength\sproutforms\integrations\sproutemail\events\notificationevents\SaveEntryEvent;
 use barrelstrength\sproutforms\integrations\sproutimport\elements\Form as FormElementImporter;
@@ -19,7 +20,9 @@ use barrelstrength\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbaseemail\events\NotificationEmailEvent;
 use barrelstrength\sproutforms\fields\Forms as FormsField;
 use barrelstrength\sproutforms\fields\Entries as FormEntriesField;
-use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesFieldsDataSource;
+use barrelstrength\sproutforms\integrationtypes\EntryElementIntegration;
+use barrelstrength\sproutforms\integrationtypes\CustomEndpoint;
+use barrelstrength\sproutforms\services\Integrations;
 use barrelstrength\sproutforms\widgets\RecentEntries;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use barrelstrength\sproutforms\captchas\DuplicateCaptcha;
@@ -90,7 +93,7 @@ class SproutForms extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '3.0.18';
+    public $schemaVersion = '3.0.20';
 
     /**
      * @var string
@@ -179,8 +182,35 @@ class SproutForms extends Plugin
             }
         });
 
+        Event::on(Entries::class, EntryElement::EVENT_AFTER_SAVE, function(OnSaveEntryEvent $event) {
+            if (Craft::$app->getRequest()->getIsSiteRequest()) {
+                $entry = $event->entry;
+
+                SproutForms::$app->integrations->runEntryIntegrations($entry);
+
+                $integrationLogs = $entry->getEntryIntegrationLogs();
+
+                $entryId = $entry->id ?? null;
+                if ($integrationLogs) {
+                    foreach ($integrationLogs as $integrationLog) {
+                        SproutForms::$app->integrations->saveEntryIntegrationLog(
+                            $integrationLog['integrationId'],
+                            $entryId,
+                            $integrationLog['isValid'],
+                            $integrationLog['message']
+                        );
+                    }
+                }
+            }
+        });
+
         Craft::$app->view->hook('sproutForms.modifyForm', function() {
             return SproutForms::$app->forms->getCaptchasHtml();
+        });
+
+        Event::on(Integrations::class, Integrations::EVENT_REGISTER_INTEGRATIONS, function(RegisterComponentTypesEvent $event) {
+            $event->types[] = CustomEndpoint::class;
+            $event->types[] = EntryElementIntegration::class;
         });
 
         Event::on(Forms::class, Forms::EVENT_REGISTER_FORM_TEMPLATES, function(RegisterComponentTypesEvent $event) {
@@ -204,6 +234,7 @@ class SproutForms extends Plugin
 //            $event->types[] = BasicFieldsBundle::class;
 //            $event->types[] = SpecialFieldsBundle::class;
 //        });
+
     }
 
     /**

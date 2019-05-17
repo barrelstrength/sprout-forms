@@ -55,6 +55,8 @@ class Install extends Migration
         SproutBaseReports::$app->dataSources->deleteReportsByType(EntriesDataSource::class);
 
         $this->dropTable('{{%sproutforms_entries}}');
+        $this->dropTable('{{%sproutforms_integrations_entries}}');
+        $this->dropTable('{{%sproutforms_integrations}}');
         $this->dropTable('{{%sproutforms_forms}}');
         $this->dropTable('{{%sproutforms_formgroups}}');
         $this->dropTable('{{%sproutforms_entrystatuses}}');
@@ -78,7 +80,6 @@ class Install extends Migration
             'titleFormat' => $this->string()->notNull(),
             'displaySectionTitles' => $this->boolean()->defaultValue(false),
             'redirectUri' => $this->string(),
-            'submitAction' => $this->string(),
             'submitButtonText' => $this->string(),
             'saveData' => $this->boolean()->defaultValue(false),
             'templateOverridesFolder' => $this->string(),
@@ -124,6 +125,29 @@ class Install extends Migration
             'dateUpdated' => $this->dateTime()->notNull(),
             'uid' => $this->uid(),
         ]);
+
+        $this->createTable('{{%sproutforms_integrations}}', [
+            'id' => $this->primaryKey(),
+            'formId' => $this->integer()->notNull(),
+            'name' => $this->string()->notNull(),
+            'type' => $this->string()->notNull(),
+            'settings' => $this->text(),
+            'enabled' => $this->boolean()->defaultValue(false),
+            'dateCreated' => $this->dateTime()->notNull(),
+            'dateUpdated' => $this->dateTime()->notNull(),
+            'uid' => $this->uid(),
+        ]);
+
+        $this->createTable('{{%sproutforms_integrations_entries}}', [
+            'id' => $this->primaryKey(),
+            'entryId' => $this->integer(),
+            'integrationId' => $this->integer()->notNull(),
+            'isValid' => $this->boolean()->defaultValue(false),
+            'message' => $this->text(),
+            'dateCreated' => $this->dateTime()->notNull(),
+            'dateUpdated' => $this->dateTime()->notNull(),
+            'uid' => $this->uid(),
+        ]);
     }
 
     /**
@@ -151,6 +175,36 @@ class Install extends Migration
             ),
             '{{%sproutforms_entries}}',
             'formId'
+        );
+
+        $this->createIndex(
+            $this->db->getIndexName(
+                '{{%sproutforms_integrations}}',
+                'formId',
+                false, true
+            ),
+            '{{%sproutforms_integrations}}',
+            'formId'
+        );
+
+        $this->createIndex(
+            $this->db->getIndexName(
+                '{{%sproutforms_integrations_entries}}',
+                'entryId',
+                false, true
+            ),
+            '{{%sproutforms_integrations_entries}}',
+            'entryId'
+        );
+
+        $this->createIndex(
+            $this->db->getIndexName(
+                '{{%sproutforms_integrations_entries}}',
+                'integrationId',
+                false, true
+            ),
+            '{{%sproutforms_integrations_entries}}',
+            'integrationId'
         );
     }
 
@@ -191,6 +245,30 @@ class Install extends Migration
             ),
             '{{%sproutforms_entries}}', 'formId',
             '{{%sproutforms_forms}}', 'id', 'CASCADE'
+        );
+
+        $this->addForeignKey(
+            $this->db->getForeignKeyName(
+                '{{%sproutforms_integrations}}', 'formId'
+            ),
+            '{{%sproutforms_integrations}}', 'formId',
+            '{{%sproutforms_forms}}', 'id', 'CASCADE'
+        );
+
+        $this->addForeignKey(
+            $this->db->getForeignKeyName(
+                '{{%sproutforms_integrations_entries}}', 'entryId'
+            ),
+            '{{%sproutforms_integrations_entries}}', 'entryId',
+            '{{%sproutforms_entries}}', 'id', 'CASCADE'
+        );
+
+        $this->addForeignKey(
+            $this->db->getForeignKeyName(
+                '{{%sproutforms_integrations_entries}}', 'integrationId'
+            ),
+            '{{%sproutforms_integrations_entries}}', 'integrationId',
+            '{{%sproutforms_integrations}}', 'id', 'CASCADE'
         );
     }
 
@@ -236,7 +314,7 @@ class Install extends Migration
 
         $projectConfig = Craft::$app->getProjectConfig();
         $pluginHandle = 'sprout-forms';
-        $currentSettings = $projectConfig->get(Plugins::CONFIG_PLUGINS_KEY . '.' . $pluginHandle . '.settings');
+        $currentSettings = $projectConfig->get(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings');
 
         $settings = new Settings();
         $settings->setAttributes($currentSettings);
@@ -244,18 +322,18 @@ class Install extends Migration
         $settings->templateFolderOverride = $currentSettings['templateFolderOverride'] ?? $accessible->getTemplateId();
 
         $settings->captchaSettings = $currentSettings['captchaSettings'] ?? [
-            'sproutforms-duplicatecaptcha' => [
-                'enabled' => 1
-            ],
-            'sproutforms-javascriptcaptcha' => [
-                'enabled' => 1
-            ],
-            'sproutforms-honeypotcaptcha' => [
-                'enabled' => 1,
-                'honeypotFieldName' => 'beesknees',
-                'honeypotScreenReaderMessage' => 'Leave this field blank'
-            ],
-        ];
+                'sproutforms-duplicatecaptcha' => [
+                    'enabled' => 1
+                ],
+                'sproutforms-javascriptcaptcha' => [
+                    'enabled' => 1
+                ],
+                'sproutforms-honeypotcaptcha' => [
+                    'enabled' => 1,
+                    'honeypotFieldName' => 'beesknees',
+                    'honeypotScreenReaderMessage' => 'Leave this field blank'
+                ],
+            ];
 
         $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings', $settings->toArray());
     }

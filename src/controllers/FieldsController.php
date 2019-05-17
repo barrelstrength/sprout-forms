@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\controllers;
 
 
+use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\elements\Form;
 use Craft;
 use craft\helpers\Json;
@@ -20,8 +21,9 @@ class FieldsController extends BaseController
      * This action allows to load the modal field template.
      *
      * @return Response
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      * @throws \yii\web\BadRequestHttpException
      */
     public function actionModalField(): Response
@@ -211,6 +213,7 @@ class FieldsController extends BaseController
         $type = $request->getRequiredBodyParam('type');
         $fieldId = $request->getBodyParam('fieldId');
 
+        /** @var Field $field */
         $field = $fieldsService->createField([
             'type' => $type,
             'id' => $fieldId,
@@ -254,7 +257,7 @@ class FieldsController extends BaseController
         // Save our field
         if (!$fieldsService->saveField($field)) {
             // Does not validate
-            SproutForms::error('Field does not validate.');
+            Craft::error('Field does not validate.', __METHOD__);
 
             $variables['tabId'] = $tabId;
             $variables['field'] = $field;
@@ -290,14 +293,14 @@ class FieldsController extends BaseController
         // Hand the field off to be saved in the
         // field layout of our Form Element
         if ($response) {
-            SproutForms::info('Field Saved');
+            Craft::info('Field Saved', __METHOD__);
 
             return $this->returnJson(true, $field, $form, $tabName, $tabId);
         }
 
         $variables['tabId'] = $tabId;
         $variables['field'] = $field;
-        SproutForms::error("Couldn't save field.");
+        Craft::error("Couldn't save field.", __METHOD__);
         Craft::$app->getSession()->setError(Craft::t('sprout-forms', 'Couldn’t save field.'));
 
         return $this->returnJson(false, $field, $form);
@@ -307,9 +310,11 @@ class FieldsController extends BaseController
      * Edits an existing field.
      *
      * @return Response
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      * @throws \yii\web\BadRequestHttpException
+     * @throws \yii\web\ForbiddenHttpException
      */
     public function actionEditField(): Response
     {
@@ -356,7 +361,7 @@ class FieldsController extends BaseController
         }
 
         $message = Craft::t('sprout-forms', 'The field requested to edit no longer exists.');
-        SproutForms::error($message);
+        Craft::error($message, __METHOD__);
 
         return $this->asJson([
             'success' => false,
@@ -410,7 +415,6 @@ class FieldsController extends BaseController
      *
      * @return Response
      * @throws \yii\base\Exception
-     * @throws \yii\db\Exception
      * @throws \yii\web\BadRequestHttpException
      * @throws \yii\web\ForbiddenHttpException
      */
@@ -437,11 +441,13 @@ class FieldsController extends BaseController
      * @param null $tabId
      *
      * @return Response
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     private function returnJson(bool $success, $field, Form $form, $tabName = null, $tabId = null): Response
     {
+        /** @var FormField $field */
         return $this->asJson([
             'success' => $success,
             'errors' => $field ? $field->getErrors() : null,

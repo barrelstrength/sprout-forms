@@ -97,30 +97,41 @@
     {% endif %}
 
     new Craft.AdminTable({
-        tableSelector: '#formFields',
-        noObjectsSelector: '#noFormfields',
-        sortable: true,
-        reorderAction: 'sprout-forms/fields/reorderFields',
-        deleteAction: 'sprout-forms/fields/deleteField'
+    tableSelector: '#formFields',
+    noObjectsSelector: '#noFormfields',
+    sortable: true,
+    reorderAction: 'sprout-forms/fields/reorderFields',
+    deleteAction: 'sprout-forms/fields/deleteField'
     });
 
     $(document).ready(function() {
 
     if (Craft.SproutFields != null) {
-        Craft.SproutFields.initFields($("#details"));
+    Craft.SproutFields.initFields($("#details"));
     }
 
     $("#maindiv").css("height","600px");
 
     $("input#display-form-code")
-        .focus(function() { $(this).select(); } )
-        .mouseup(function (e) {e.preventDefault(); });
+    .focus(function() { $(this).select(); } )
+    .mouseup(function (e) {e.preventDefault(); });
 
     var tabs = {{ fieldLayout.getTabs()|json_encode()|raw }};
 
     var continueEditing = "{{ ('sprout-forms/forms/edit/'~form.id)|hash }}";
 
     new Craft.SproutForms.FieldLayoutEditor(tabs, continueEditing);
+    new Craft.SproutForms.FormSettings();
 
     });
 {% endjs %}
+
+{% css %}
+    /* Integrations modal */
+    table.editable tbody tr td {
+    text-align:left;
+    }
+    table.editable tbody tr td.formField .select:not(.selectize):after {
+    content: "";
+    }
+{% endcss %}

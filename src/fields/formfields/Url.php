@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use Craft;
+use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\PreviewableFieldInterface;
@@ -61,8 +62,9 @@ class Url extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getSettingsHtml()
     {
@@ -81,8 +83,9 @@ class Url extends FormField implements PreviewableFieldInterface
      * @param ElementInterface|null $element
      *
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      * @throws \yii\base\InvalidConfigException
      */
     public function getInputHtml($value, ElementInterface $element = null): string
@@ -110,8 +113,10 @@ class Url extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getExampleInputHtml(): string
     {
@@ -127,10 +132,11 @@ class Url extends FormField implements PreviewableFieldInterface
      * @param array|null $renderingOptions
      *
      * @return \Twig_Markup
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup
     {
         $attributes = $this->getAttributes();
         $errorMessage = SproutBaseFields::$app->urlField->getErrorMessage($attributes['name'], $this);
@@ -182,6 +188,7 @@ class Url extends FormField implements PreviewableFieldInterface
      */
     public function validateUrl(ElementInterface $element)
     {
+        /** @var Element $element */
         $value = $element->getFieldValue($this->handle);
 
         if (!SproutBaseFields::$app->urlField->validate($value, $this)) {

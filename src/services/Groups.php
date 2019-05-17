@@ -108,7 +108,7 @@ class Groups extends Component
     /**
      * Get Forms by Group ID
      *
-     * @param  int $groupId
+     * @param int $groupId
      *
      * @return FormElement[]
      */

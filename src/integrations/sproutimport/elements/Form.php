@@ -25,9 +25,11 @@ class Form extends ElementImporter
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
+     *
+     * @throws \Throwable
      */
-    public function save()
+    public function save(): bool
     {
         return SproutForms::$app->forms->saveForm($this->model);
     }
@@ -60,7 +62,7 @@ class Form extends ElementImporter
      *
      * @throws \Throwable
      */
-    public function resolveNestedSettings($model, $settings)
+    public function resolveNestedSettings($model, $settings): bool
     {
         // Check to see if we have any Entry Types we should also save
         if (empty($settings['settings']['fieldLayout']) OR empty($model->id)) {
@@ -127,7 +129,7 @@ class Form extends ElementImporter
 
         if (!SproutForms::$app->forms->saveForm($model)) {
 
-            SproutForms::error($model->getErrors());
+            Craft::error($model->getErrors(), __METHOD__);
 
             return false;
         }

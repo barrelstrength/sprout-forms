@@ -15,6 +15,7 @@ use barrelstrength\sproutforms\base\FormField;
  * @property string $contentColumnType
  * @property string $svgIconPath
  * @property mixed  $settingsHtml
+ * @property array  $compatibleCraftFields
  * @property mixed  $exampleInputHtml
  */
 class CustomHtml extends FormField implements PreviewableFieldInterface
@@ -79,8 +80,9 @@ class CustomHtml extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getSettingsHtml()
     {
@@ -94,8 +96,13 @@ class CustomHtml extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @param                       $value
+     * @param ElementInterface|null $element
+     *
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -111,8 +118,10 @@ class CustomHtml extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getExampleInputHtml(): string
     {
@@ -128,10 +137,11 @@ class CustomHtml extends FormField implements PreviewableFieldInterface
      * @param array|null $renderingOptions
      *
      * @return \Twig_Markup
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup
     {
         $rendered = Craft::$app->getView()->renderTemplate(
             'customhtml/input',

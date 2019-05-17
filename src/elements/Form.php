@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\elements;
 
+use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\base\FormTemplates;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\validators\TemplateOverridesValidator;
@@ -25,6 +26,7 @@ use yii\base\Exception;
 /**
  * Form represents a form element.
  *
+ * @mixin FieldLayoutBehavior
  * @property \barrelstrength\sproutforms\base\FormTemplates $formTemplate
  * @property array                                          $fields
  */
@@ -50,7 +52,6 @@ class Form extends Element
     public $titleFormat;
     public $displaySectionTitles = false;
     public $redirectUri;
-    public $submitAction;
     public $submitButtonText;
     public $saveData = false;
     public $templateOverridesFolder;
@@ -274,8 +275,10 @@ class Form extends Element
     /**
      * @inheritdoc
      *
-     * @throws Exception
-     * @throws \Twig_Error_Loader
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getEditorHtml(): string
     {
@@ -319,7 +322,6 @@ class Form extends Element
         $record->displaySectionTitles = $this->displaySectionTitles;
         $record->groupId = $this->groupId;
         $record->redirectUri = $this->redirectUri;
-        $record->submitAction = $this->submitAction;
         $record->saveData = $this->saveData;
         $record->submitButtonText = $this->submitButtonText;
         $record->templateOverridesFolder = $this->templateOverridesFolder;
@@ -333,7 +335,7 @@ class Form extends Element
     /**
      * Returns the fields associated with this form.
      *
-     * @return array
+     * @return FormField[]
      */
     public function getFields(): array
     {

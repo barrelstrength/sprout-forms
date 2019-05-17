@@ -16,14 +16,15 @@ use yii\base\Exception;
 /**
  * Entry represents a entry element.
  *
- * @property array $payloadFields
- * @property array $fields
+ * @property array|\yii\db\ActiveRecord[] $entryIntegrationLogsRecords
+ * @property array                        $fields
  */
 class Entry extends Element
 {
     // Properties
     // =========================================================================
     private $form;
+    private $entryIntegrationLogs = [];
 
     public $id;
     public $formId;
@@ -136,7 +137,8 @@ class Entry extends Element
             // @todo - Why do we need to call populateElementContent?
             Craft::$app->getContent()->populateElementContent($this);
 
-            return $this->title ?: ((string)$this->id ?: static::class);
+            $string = (string)$this->id ?: static::class;
+            return $this->title ?: $string;
         } catch (\Exception $e) {
             // return empty to avoid errors when form is deleted
             return '';
@@ -178,24 +180,6 @@ class Entry extends Element
         }
 
         return $statusArray;
-    }
-
-    /**
-     * Returns an array of key/value pairs to send along in payload forwarding requests
-     *
-     * @return array
-     */
-    public function getPayloadFields(): array
-    {
-        $fields = [];
-
-        $content = $this->getAttributes();
-
-        foreach ($content as $field => $value) {
-            $fields[$field] = $value;
-        }
-
-        return $fields;
     }
 
     /**
@@ -428,5 +412,35 @@ class Entry extends Element
         $rules[] = [['formId'], 'required'];
 
         return $rules;
+    }
+
+    /**
+     * @param $integrationId
+     * @param $message
+     * @param $isValid
+     */
+    public function addEntryIntegrationLog($integrationId, $isValid, $message)
+    {
+        $this->entryIntegrationLogs[] = [
+            'integrationId' => $integrationId,
+            'message' => $message,
+            'isValid' => $isValid
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getEntryIntegrationLogs(): array
+    {
+        return $this->entryIntegrationLogs;
+    }
+
+    /**
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function getEntryIntegrationLogsRecords(): array
+    {
+        return SproutForms::$app->integrations->getEntryIntegrationLogsByEntryId($this->id);
     }
 }

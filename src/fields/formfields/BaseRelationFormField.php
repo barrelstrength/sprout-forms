@@ -208,8 +208,9 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getSettingsHtml()
     {
@@ -369,10 +370,15 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
     /**
      * @inheritdoc
      *
+     * @param                       $value
+     * @param ElementInterface|null $element
+     *
+     * @return string
      * @throws NotSupportedException
      * @throws SiteNotFoundException
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -405,8 +411,13 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @param                  $value
+     * @param ElementInterface $element
+     *
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getStaticHtml($value, ElementInterface $element): string
     {
@@ -440,8 +451,13 @@ JS;
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @param                  $value
+     * @param ElementInterface $element
+     *
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getTableAttributeHtml($value, ElementInterface $element): string
     {
@@ -605,7 +621,9 @@ JS;
      *
      * @return string|null
      * @throws NotSupportedException
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getTargetSiteFieldHtml()
     {
@@ -659,7 +677,9 @@ JS;
      * Returns the HTML for the View Mode setting.
      *
      * @return string|null
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getViewModeFieldHtml()
     {

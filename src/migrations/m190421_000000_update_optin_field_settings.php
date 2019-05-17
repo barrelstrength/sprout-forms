@@ -4,7 +4,6 @@ namespace barrelstrength\sproutforms\migrations;
 
 use barrelstrength\sproutforms\fields\formfields\OptIn;
 use craft\db\Migration;
-use barrelstrength\sproutbasereports\migrations\m190305_000002_update_record_to_element_types as BaseUpdateElements;
 use craft\db\Query;
 
 /**
@@ -15,9 +14,6 @@ class m190421_000000_update_optin_field_settings extends Migration
     /**
      * @return bool
      * @throws \Throwable
-     * @throws \craft\errors\ElementNotFoundException
-     * @throws \yii\base\Exception
-     * @throws \yii\db\Exception
      */
     public function safeUp(): bool
     {
@@ -28,7 +24,7 @@ class m190421_000000_update_optin_field_settings extends Migration
             ->all();
 
         foreach ($optinFields as $optinField) {
-            $settings = json_decode($optinField['settings']);
+            $settings = json_decode($optinField['settings'], false);
 
             if (!isset($settings->optInValueWhenTrue)) {
                 $settings->optInValueWhenTrue = 'Yes';

@@ -5,7 +5,8 @@ namespace barrelstrength\sproutforms\fields\formfields;
 use Craft;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\ElementInterface;
-use craft\fields\Dropdown as DropdownField;
+use craft\fields\Dropdown as CraftDropdown;
+use craft\fields\PlainText as CraftPlainText;
 
 /**
  * Class SproutFormsDropdownField
@@ -13,6 +14,7 @@ use craft\fields\Dropdown as DropdownField;
  *
  * @property string $modelName
  * @property string $svgIconPath
+ * @property array  $compatibleCraftFields
  * @property mixed  $exampleInputHtml
  */
 class Dropdown extends BaseOptionsFormField
@@ -27,7 +29,7 @@ class Dropdown extends BaseOptionsFormField
      */
     public function getModelName(): string
     {
-        return DropdownField::class;
+        return CraftDropdown::class;
     }
 
     /**
@@ -60,8 +62,13 @@ class Dropdown extends BaseOptionsFormField
      *
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @param                       $value
+     * @param ElementInterface|null $element
+     *
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -84,8 +91,10 @@ class Dropdown extends BaseOptionsFormField
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getExampleInputHtml(): string
     {
@@ -101,10 +110,11 @@ class Dropdown extends BaseOptionsFormField
      * @param array|null $renderingOptions
      *
      * @return \Twig_Markup
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup
     {
         $rendered = Craft::$app->getView()->renderTemplate(
             'dropdown/input',
@@ -117,5 +127,16 @@ class Dropdown extends BaseOptionsFormField
         );
 
         return TemplateHelper::raw($rendered);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleCraftFields(): array
+    {
+        return [
+            CraftPlainText::class,
+            CraftDropdown::class
+        ];
     }
 }

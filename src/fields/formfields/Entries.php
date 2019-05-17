@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use Craft;
+use craft\fields\Entries as CraftEntries;
 use craft\helpers\Template as TemplateHelper;
 use craft\elements\Entry;
 
@@ -13,6 +14,7 @@ use barrelstrength\sproutforms\SproutForms;
  *
  *
  * @property string $svgIconPath
+ * @property array  $compatibleCraftFields
  * @property mixed  $exampleInputHtml
  */
 class Entries extends BaseRelationFormField
@@ -58,8 +60,10 @@ class Entries extends BaseRelationFormField
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getExampleInputHtml(): string
     {
@@ -75,10 +79,11 @@ class Entries extends BaseRelationFormField
      * @param array|null $renderingOptions
      *
      * @return \Twig_Markup
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup
     {
         $entries = SproutForms::$app->frontEndFields->getFrontEndEntries($this->getSettings());
 
@@ -94,5 +99,15 @@ class Entries extends BaseRelationFormField
         );
 
         return TemplateHelper::raw($rendered);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleCraftFields(): array
+    {
+        return [
+            CraftEntries::class
+        ];
     }
 }

@@ -1,0 +1,181 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.selectField({
+    first: true,
+    required: true,
+    label: "Entry Type <span class='info'>Create an entry on this section</span>"|t('sprout-forms'),
+    id: 'entryTypeId',
+    name: 'entryTypeId',
+    options: sectionsOptions,
+    value: integration.entryTypeId
+}) }}
+
+{{ forms.elementSelectField({
+    label: "Default Author"|t('app'),
+    id: 'authorId',
+    name: 'authorId',
+    required: true,
+    elementType: integration.getUserElementType(),
+    selectionLabel: "Choose"|t('app'),
+    limit: 1,
+    elements: [integration.getAuthor()]
+}) }}
+
+{{ forms.lightswitchField({
+    label: "Set Author to Logged in User"|t('sprout-forms'),
+    instructions: "When enabled, Sprout Forms will assign the logged in User as the author and fallback to the Default Author."|t('sprout-forms'),
+    id: 'enableSetAuthorToLoggedInUser',
+    name: 'enableSetAuthorToLoggedInUser',
+    toggle: 'settings-save-author',
+    on: integration.enableSetAuthorToLoggedInUser,
+    onLabel: "Enable"|t('sprout-forms'),
+}) }}
+
+<script>
+    $(document).ready(function() {
+        init();
+        // We have 2 scenarios:
+        // 1.- on load (the init function should load current rows with proper dropdown)
+        // 2.- When user update the section dropdown (Update all rows field dropdown)
+
+        function init() {
+            // Init all empty field selects
+            updateAllFieldSelects();
+            // When the entry type is changed
+            $('#types-barrelstrength-sproutforms-integrationtypes-EntryElementIntegration-entryTypeId').change(function() {
+                var changed = $(this).val() != $(this).data('default');
+                if (changed) {
+                    updateAllFieldSelectsAndRemoveRows();
+                }
+            });
+
+            disableOptions();
+        }
+
+        function disableOptions() {
+            var $formFields = getCurrentRows('.formField');
+            $formFields.each(function(index) {
+                var $wrapperDiv = $(this).find('div.select');
+                var $select = $(this).find('select');
+
+                var selectedLabel = $select.find('option:selected').text();
+
+                $wrapperDiv.removeClass('select');
+                $wrapperDiv.removeClass('small');
+                $select.attr("disabled", false);
+                $select.attr("readonly", true);
+                $select.addClass("hidden");
+
+                $select.before(selectedLabel);
+            });
+
+            var $formEntryFields = getCurrentRows('.formEntryFields');
+            $formEntryFields.each(function(index) {
+                var $select = $(this).find('select');
+                $select.prop("disabled", false);
+            });
+        }
+
+        function updateAllFieldSelectsAndRemoveRows() {
+            var tableId = "#types-barrelstrength-sproutforms-integrationtypes-EntryElementIntegration-fieldMapping";
+            $(tableId + " tbody tr").remove();
+            var data = getEntryFieldsData();
+
+            Craft.postActionRequest('sprout-forms/integrations/get-element-entry-fields', data, $.proxy(function(response, textStatus) {
+                var statusSuccess = (textStatus === 'success');
+
+                if (statusSuccess && response.success) {
+                    var rows = response.fieldOptionsByRow;
+                    for (i = 0; i < rows.length; i++) {
+                        var field = rows[i];
+                        $(tableId + ' tbody').append('<tr data-id="' + i + '"> <td class="formField">' + field["label"] + '<input class="hidden" name="types[barrelstrength\\sproutforms\\integrationtypes\\EntryElementIntegration][fieldMapping][' + i + '][integrationField]" rows="1" readonly value="' + field["value"] + '">' + '</td> <td class="formEntryFields"><div class="select small"><select name="types[barrelstrength\\sproutforms\\integrationtypes\\EntryElementIntegration][fieldMapping][' + i + '][sproutFormField]"></select></div></td></tr>');
+                    }
+                    updateAllFieldSelects();
+                } else {
+                    Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to get the Entry fields'));
+                }
+
+                Craft.initUiElements();
+
+            }, this));
+        }
+
+        function updateAllFieldSelects() {
+            var $currentRows = getCurrentRows();
+            var data = getEntryFieldsData();
+            Craft.postActionRequest('sprout-forms/integrations/get-form-fields', data, $.proxy(function(response, textStatus) {
+                var statusSuccess = (textStatus === 'success');
+
+                if (statusSuccess && response.success) {
+                    var rows = response.fieldOptionsByRow;
+
+                    $currentRows.each(function(index) {
+                        var $select = $(this).find('select');
+                        var fields = rows[index];
+
+                        appendFieldsToSelect($select, fields);
+                    });
+                } else {
+                    Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to get the Form fields'));
+                }
+            }, this));
+
+        }
+
+        function getEntryFieldsData() {
+            var entryTypeId = $('#types-barrelstrength-sproutforms-integrationtypes-EntryElementIntegration-entryTypeId').val();
+            var integrationId = $('#integrationId').val();
+            var data = {
+                'entryTypeId': entryTypeId,
+                'integrationId': integrationId
+            };
+
+            return data;
+        }
+
+        function getCurrentRows(className = null) {
+            if (className === null) {
+                className = 'tbody .formEntryFields';
+            }
+            return $(className);
+        }
+
+        function appendFieldsToSelect($select, fields) {
+            $select.empty();
+
+            var dropdown = '';
+            var closeOptgroup = false;
+
+            for (i = 0; i < fields.length; i++) {
+                var field = fields[i];
+                var selectedCode = '';
+                var lastItem = i === (fields.length - 1);
+
+                if (!("optgroup" in field)) {
+                    if ("selected" in field) {
+                        selectedCode = 'selected';
+                    }
+                    dropdown += '<option ' + selectedCode + ' value="' + field['value'] + '">' + field['label'] + '</option>';
+                }
+
+                if (("optgroup" in field && closeOptgroup) || (lastItem && closeOptgroup)) {
+                    dropdown += '</optgroup>';
+                    closeOptgroup = false;
+                }
+
+                if ("optgroup" in field) {
+                    dropdown += '<optgroup label="' + field['optgroup'] + '">';
+                    closeOptgroup = true;
+                }
+            }
+
+            $select.append(dropdown)
+        }
+    });
+</script>
+{% js %}
+
+{% endjs %}
+
+
+

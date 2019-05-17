@@ -6,6 +6,7 @@ use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\base\VolumeInterface;
+use craft\fields\Assets as CraftAssets;
 use craft\helpers\Template as TemplateHelper;
 use craft\elements\Asset;
 use craft\elements\db\AssetQuery;
@@ -25,6 +26,7 @@ use craft\web\UploadedFile;
  * @property array  $fileKindOptions
  * @property string $svgIconPath
  * @property array  $sourceOptions
+ * @property array  $compatibleCraftFields
  * @property mixed  $exampleInputHtml
  */
 class FileUpload extends BaseRelationFormField
@@ -78,7 +80,9 @@ class FileUpload extends BaseRelationFormField
     private $_uploadedDataFiles;
 
     /**
-     * @inheritdoc
+     * @inheritDoc
+     *
+     * @throws \yii\base\InvalidConfigException
      */
     public function init()
     {
@@ -169,7 +173,13 @@ class FileUpload extends BaseRelationFormField
      * Adds support for edit field in the Entries section of SproutForms (Control
      * panel html)
      *
-     * @inheritdoc
+     * @inheritDoc
+     *
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     * @throws \craft\errors\SiteNotFoundException
+     * @throws \yii\base\NotSupportedException
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -193,8 +203,10 @@ class FileUpload extends BaseRelationFormField
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getExampleInputHtml(): string
     {
@@ -211,10 +223,11 @@ class FileUpload extends BaseRelationFormField
      * @param array|null $renderingOptions
      *
      * @return \Twig_Markup
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup
     {
         $rendered = Craft::$app->getView()->renderTemplate(
             'fileupload/input',
@@ -288,12 +301,12 @@ class FileUpload extends BaseRelationFormField
      */
     public function validateFileSize(ElementInterface $element)
     {
-
         $maxSize = AssetsHelper::getMaxUploadSize();
 
         $filenames = [];
 
         // Get any uploaded filenames
+        /** @var Element $element */
         $uploadedFiles = $this->_getUploadedFiles($element);
         foreach ($uploadedFiles as $file) {
             if ($file['type'] === 'data') {
@@ -395,6 +408,8 @@ class FileUpload extends BaseRelationFormField
     public function afterElementSave(ElementInterface $element, bool $isNew)
     {
         // Everything has been handled for propagating fields already.
+
+        /** @var Element $element */
         if (!$element->propagating) {
             // Were there any uploaded files?
             $uploadedFiles = $this->_getUploadedFiles($element);
@@ -636,11 +651,11 @@ class FileUpload extends BaseRelationFormField
      * @param ElementInterface|null $element
      * @param bool                  $createDynamicFolders whether missing folders should be created in the process
      *
-     * @throws InvalidVolumeException if the volume root folder doesn’t exist
+     * @return int
      * @throws InvalidSubpathException if the subpath cannot be parsed in full*@throws \craft\errors\VolumeException
      * @throws \craft\errors\VolumeException
      * @throws \craft\errors\VolumeException
-     * @return int
+     * @throws InvalidVolumeException if the volume root folder doesn’t exist
      */
     private function _resolveVolumePathToFolderId(string $uploadSource, string $subpath, ElementInterface $element = null, bool $createDynamicFolders = true): int
     {
@@ -807,6 +822,16 @@ class FileUpload extends BaseRelationFormField
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getCompatibleCraftFields(): array
+    {
+        return [
+            CraftAssets::class
+        ];
+    }
+
+    /**
      * Returns the target upload volume for the field.
      *
      * @return VolumeInterface|null
@@ -832,6 +857,7 @@ class FileUpload extends BaseRelationFormField
      * @param mixed $sourceKey
      *
      * @return string
+     * @throws \yii\base\InvalidConfigException
      */
     private function _folderSourceToVolumeSource($sourceKey): string
     {

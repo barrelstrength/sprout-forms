@@ -20,6 +20,7 @@ class ChartsController extends ElementIndexesController
      * @return Response
      * @throws \yii\base\Exception
      * @throws \yii\web\BadRequestHttpException
+     * @throws \Exception
      */
     public function actionGetEntriesData(): Response
     {

@@ -73,10 +73,12 @@ class RecentEntries extends Widget
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
-    public function getBodyHtml()
+    public function getBodyHtml(): string
     {
         $query = Entry::find();
 
@@ -94,10 +96,12 @@ class RecentEntries extends Widget
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
-    public function getSettingsHtml()
+    public function getSettingsHtml(): string
     {
         $forms = [
             0 => Craft::t('sprout-forms', 'All forms')

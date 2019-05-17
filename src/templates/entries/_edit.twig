@@ -78,8 +78,6 @@
             label: "Form Name"|t('sprout-forms'),
         }, formName) }}
 
-        {% set dateSubmitted = entry.dateCreated|date('F j, Y') %}
-
         {{ forms.selectField({
             label: "Entry Status"|t('sprout-forms'),
             id: 'statusId',
@@ -94,8 +92,32 @@
     <div class="meta read-only">
         <div class="data">
             <h5 class="heading">{{ "Submitted"|t('sprout-forms') }}</h5>
-            <div class="value">{{ dateSubmitted }}</div>
+            <div class="value">{{ entry.dateCreated|datetime('short') }}</div>
         </div>
+    </div>
+    <div class="meta read-only">
+        {% set entryIntegrations = entry.getEntryIntegrationLogsRecords() %}
+        {% if entryIntegrations %}
+            <h6 class="title">{{ "Integrations"|t('sprout-forms') }}</h6>
+            <hr>
+            {% for entryIntegration in entryIntegrations %}
+                <div class="data">
+                    {% set integration = craft.sproutForms.getIntegrationById(entryIntegration.integrationId) %}
+                    <h5 class="heading">{{ integration.name }}</h5>
+                    {% if entryIntegration.isValid %}
+                        <div class="value"><span class="status live "></span>
+                            Success
+                            <span class="info">{{ entryIntegration.message }}</span>
+                        </div>
+                    {% else %}
+                        <div class="value"><span class="status disabled"></span>
+                            Error
+                            <span class="info">{{ entryIntegration.message }}</span>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% endif %}
     </div>
 {% endblock %}
 

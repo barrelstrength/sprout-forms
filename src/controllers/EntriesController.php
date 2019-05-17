@@ -5,7 +5,6 @@ namespace barrelstrength\sproutforms\controllers;
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
 use Craft;
-use craft\base\ElementInterface;
 use craft\web\Controller as BaseController;
 use yii\base\Exception;
 use yii\web\ForbiddenHttpException;
@@ -56,8 +55,6 @@ class EntriesController extends BaseController
      * @throws \Exception
      * @throws \Throwable
      * @throws \yii\web\BadRequestHttpException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function actionSaveEntry()
     {
@@ -103,7 +100,7 @@ class EntriesController extends BaseController
         try {
             $entry->title = Craft::$app->getView()->renderObjectTemplate($this->form->titleFormat, $entry);
         } catch (\Exception $e) {
-            SproutForms::error('Title format error: '.$e->getMessage());
+            Craft::error('Title format error: '.$e->getMessage(), __METHOD__);
         }
 
         $event = new OnBeforeValidateEntryEvent([
@@ -115,19 +112,7 @@ class EntriesController extends BaseController
         $success = $entry->validate();
 
         if (!$success) {
-            SproutForms::error($entry->getErrors());
-            return $this->redirectWithErrors($entry);
-        }
-
-        /**
-         * Route our request to Craft or a third-party endpoint
-         *
-         * Payload forwarding is only available on front-end requests. Any
-         * data saved to the database after a forwarded request is editable
-         * in Craft as normal, but will not trigger any further calls to
-         * the third-party endpoint.
-         */
-        if ($this->form->submitAction && !$request->getIsCpRequest() && !SproutForms::$app->entries->forwardEntry($entry)) {
+            Craft::error($entry->getErrors(), __METHOD__);
             return $this->redirectWithErrors($entry);
         }
 
@@ -338,7 +323,7 @@ class EntriesController extends BaseController
             $_POST['redirect'] = Craft::$app->getRequest()->getBodyParam('redirectOnFailure');
         }
 
-        SproutForms::error($entry->getErrors());
+        Craft::error($entry->getErrors(), __METHOD__);
 
         // Send spam to the thank you page
         if (SproutForms::$app->entries->fakeIt) {

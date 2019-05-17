@@ -27,7 +27,6 @@ use barrelstrength\sproutforms\fields\formfields\CustomHtml;
 use barrelstrength\sproutforms\fields\formfields\SectionHeading;
 use barrelstrength\sproutforms\fields\formfields\Tags;
 use barrelstrength\sproutforms\fields\formfields\Url;
-use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\events\RegisterFieldsEvent;
 use Craft;
@@ -41,11 +40,11 @@ use craft\records\Field as FieldRecord;
 use barrelstrength\sproutforms\fields\formfields\SingleLine;
 use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
 use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
+use Throwable;
 use yii\base\Component;
 use yii\base\Exception;
 
 /**
- *
  * @property mixed $defaultTabName
  * @property array $registeredFieldsByGroup
  */
@@ -66,7 +65,6 @@ class Fields extends Component
      *
      * @return bool
      * @throws Exception
-     * @throws \yii\db\Exception
      */
     public function reorderFields($fieldIds): bool
     {
@@ -97,8 +95,8 @@ class Fields extends Component
     /**
      * @param int $fieldId
      *
-     * @throws Exception
      * @return FieldLayoutFieldRecord
+     * @throws Exception
      */
     protected function getFieldLayoutFieldRecordByFieldId($fieldId = null): FieldLayoutFieldRecord
     {
@@ -232,6 +230,36 @@ class Fields extends Component
     }
 
     /**
+     * Returns a integration type selection array grouped by category
+     *
+     * Categories
+     * - Standard integrations
+     * - Custom integrations that need to be registered using the Sprout Forms Integrations API
+     *
+     * @return array
+     */
+    public function prepareIntegrationTypeSelection(): array
+    {
+        $fields = $this->getRegisteredFields();
+        $standardFields = [];
+
+        if (count($fields)) {
+            // Loop through registered fields and add them to the standard group
+            foreach ($fields as $class => $field) {
+                $standardFields[$class] = $field::displayName();
+            }
+
+            // Sort fields alphabetically by name
+            asort($standardFields);
+
+            // Add the group label to the beginning of the standard group
+            $standardFields = $this->prependKeyValue($standardFields, 'standardFieldGroup', ['optgroup' => Craft::t('sprout-forms', 'Standard Fields')]);
+        }
+
+        return $standardFields;
+    }
+
+    /**
      * Returns the value of a given field
      *
      * @param string $field
@@ -239,7 +267,7 @@ class Fields extends Component
      *
      * @return FieldRecord
      */
-    public function getFieldValue($field, $value)
+    public function getFieldValue($field, $value): FieldRecord
     {
         return FieldRecord::findOne([
             $field => $value
@@ -289,7 +317,7 @@ class Fields extends Component
      * @param Field|FieldInterface|null $field
      *
      * @return null
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function addDefaultTab(Form $form, &$field = null)
     {
@@ -323,10 +351,10 @@ class Fields extends Component
             $postedFieldLayout[$tabName][] = $field->id;
         }
 
-        // Set the field layout
         $fieldLayout = Craft::$app->fields->assembleLayout($postedFieldLayout, $requiredFields);
 
         $fieldLayout->type = FormElement::class;
+
         // Set the tab to the form
         $form->setFieldLayout($fieldLayout);
 
@@ -340,7 +368,7 @@ class Fields extends Component
      * @param      $postFieldLayout
      *
      * @return \craft\models\FieldLayout|null
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function getDuplicateLayout(Form $form, FieldLayout $postFieldLayout)
     {
@@ -486,7 +514,7 @@ class Fields extends Component
 
                 $response = $fieldRecord->save(false);
             } else {
-                SproutForms::error('Unable to find the FieldLayoutFieldRecord');
+                Craft::error('Unable to find the FieldLayoutFieldRecord', __METHOD__);
             }
         }
 
@@ -506,10 +534,11 @@ class Fields extends Component
      * @param null $tabId
      *
      * @return array
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
-    public function getModalFieldTemplate($form, $field = null, $tabId = null): array
+    public function getModalFieldTemplate(Form $form, $field = null, $tabId = null): array
     {
         $fieldsService = Craft::$app->getFields();
         $request = Craft::$app->getRequest();
@@ -555,14 +584,15 @@ class Fields extends Component
      * @param $form
      *
      * @return \craft\base\FieldInterface
-     * @throws \Throwable
+     * @throws Throwable
      */
-    public function createDefaultField($type, $form): FieldInterface
+    public function createDefaultField($type, Form $form): FieldInterface
     {
+        /** @var FieldInterface $instanceField */
         $instanceField = new $type;
         $fieldsService = Craft::$app->getFields();
         // get the field name and remove spaces
-        $fieldName = preg_replace('/\s+/', '', $instanceField->displayName());
+        $fieldName = preg_replace('/\s+/', '', $instanceField::displayName());
         $handleName = StringHelper::toCamelCase(lcfirst($fieldName));
 
         $name = $this->getFieldAsNew('name', $fieldName);
@@ -639,15 +669,15 @@ class Fields extends Component
     /**
      * Prepends a key/value pair to an array
      *
-     * @see array_unshift()
-     *
      * @param array  $haystack
      * @param string $key
      * @param mixed  $value
      *
      * @return array
+     * @see array_unshift()
+     *
      */
-    protected function prependKeyValue(array $haystack, $key, $value): array
+    public function prependKeyValue(array $haystack, $key, $value): array
     {
         $haystack = array_reverse($haystack, true);
         $haystack[$key] = $value;

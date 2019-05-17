@@ -66,7 +66,6 @@ class FormsController extends BaseController
         $form->titleFormat = $request->getBodyParam('titleFormat');
         $form->displaySectionTitles = $request->getBodyParam('displaySectionTitles');
         $form->redirectUri = $request->getBodyParam('redirectUri');
-        $form->submitAction = $request->getBodyParam('submitAction');
         $form->saveData = $request->getBodyParam('saveData', 0);
         $form->submitButtonText = $request->getBodyParam('submitButtonText');
         $form->templateOverridesFolder = $request->getBodyParam('templateOverridesFolder');
@@ -194,6 +193,8 @@ class FormsController extends BaseController
         $variables['continueEditingUrl'] = 'sprout-forms/forms/edit/{id}';
 
         $variables['settings'] = Craft::$app->plugins->getPlugin('sprout-forms')->getSettings();
+
+        $variables['integrations'] = SproutForms::$app->integrations->getFormIntegrations($formId);
 
         return $this->renderTemplate('sprout-forms/forms/_editForm', $variables);
     }

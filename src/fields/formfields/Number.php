@@ -3,6 +3,8 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use Craft;
+use craft\fields\Number as CraftNumber;
+use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
@@ -19,6 +21,7 @@ use barrelstrength\sproutforms\base\FormField;
  * @property string      $contentColumnType
  * @property string      $svgIconPath
  * @property null|string $settingsHtml
+ * @property array       $compatibleCraftFields
  * @property mixed       $exampleInputHtml
  */
 class Number extends FormField implements PreviewableFieldInterface
@@ -120,8 +123,9 @@ class Number extends FormField implements PreviewableFieldInterface
 
     /**
      * @return null|string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getSettingsHtml()
     {
@@ -138,8 +142,13 @@ class Number extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @param                       $value
+     * @param ElementInterface|null $element
+     *
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -161,8 +170,10 @@ class Number extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getExampleInputHtml(): string
     {
@@ -178,10 +189,11 @@ class Number extends FormField implements PreviewableFieldInterface
      * @param array|null $renderingOptions
      *
      * @return \Twig_Markup
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup
     {
         $rendered = Craft::$app->getView()->renderTemplate(
             'number/input',
@@ -216,5 +228,16 @@ class Number extends FormField implements PreviewableFieldInterface
         }
 
         return $rules;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleCraftFields(): array
+    {
+        return [
+            CraftPlainText::class,
+            CraftNumber::class
+        ];
     }
 }

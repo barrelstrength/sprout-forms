@@ -58,11 +58,12 @@ class Forms extends Component
      *
      * Allows a user to add variables to an object that can be parsed by fields
      *
+     * @param array $variables
+     *
      * @example
      * {% do craft.sproutForms.addFieldVariables({ entryTitle: entry.title }) %}
      * {{ craft.sproutForms.displayForm('contact') }}
      *
-     * @param array $variables
      */
     public static function addFieldVariables(array $variables)
     {
@@ -91,18 +92,6 @@ class Forms extends Component
         }
 
         parent::__construct($formRecord);
-    }
-
-    /**
-     * Returns a criteria model for SproutForms_Form elements
-     *
-     * @param array $attributes
-     *
-     * @return mixed
-     */
-    public function getCriteria(array $attributes = [])
-    {
-        return Craft::$app->elements->getCriteria(FormElement::class, $attributes);
     }
 
     /**
@@ -147,7 +136,7 @@ class Forms extends Component
         $form->validate();
 
         if ($form->hasErrors()) {
-            SproutForms::error('Form has errors');
+            Craft::error('Form has errors', __METHOD__);
 
             return false;
         }
@@ -204,7 +193,7 @@ class Forms extends Component
             $success = Craft::$app->elements->saveElement($form, false);
 
             if (!$success) {
-                SproutForms::error('Couldn’t save Element on saveForm service.');
+                Craft::error('Couldn’t save Element on saveForm service.', __METHOD__);
 
                 return false;
             }
@@ -212,9 +201,9 @@ class Forms extends Component
             // FormRecord saved on afterSave form element
             $transaction->commit();
 
-            SproutForms::info('Form Saved!');
+            Craft::info('Form Saved!', __METHOD__);
         } catch (\Exception $e) {
-            SproutForms::error('Failed to save form: '.$e->getMessage());
+            Craft::error('Failed to save form: '.$e->getMessage(), __METHOD__);
             $transaction->rollBack();
 
             throw $e;
@@ -261,7 +250,7 @@ class Forms extends Component
 
             if (!$success) {
                 $transaction->rollBack();
-                SproutForms::error('Couldn’t delete Form on deleteForm service.');
+                Craft::error('Couldn’t delete Form on deleteForm service.', __METHOD__);
 
                 return false;
             }
@@ -498,7 +487,7 @@ class Forms extends Component
             if ($form) {
                 SproutForms::$app->forms->deleteForm($form);
             } else {
-                SproutForms::error("Can't delete the form with id: {$formElement->id}");
+                Craft::error("Can't delete the form with id: {$formElement->id}", __METHOD__);
             }
         }
 
@@ -525,7 +514,7 @@ class Forms extends Component
         $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
         $settings = $plugin->getSettings();
 
-        if ($settings->enableSaveData && $settings->enableSaveDataPerFormBasis) {
+        if ($settings->enableSaveData && $settings->enableIntegrationsPerFormBasis) {
             $form->saveData = $settings->saveDataByDefault;
         }
 
@@ -537,6 +526,8 @@ class Forms extends Component
             $form->templateOverridesFolder = $settings->templateFolderOverride;
         }
         // Set default tab
+
+        /** @var Field $field */
         $field = null;
         $form = SproutForms::$app->fields->addDefaultTab($form, $field);
 

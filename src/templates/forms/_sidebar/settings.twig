@@ -120,6 +120,7 @@
         id: 'displaySectionTitles',
         name: 'displaySectionTitles',
         on: form.displaySectionTitles,
+        small: true,
         onLabel: "Show"|t('sprout-forms'),
         offLabel: "Hide"|t('sprout-forms')
     }) }}
@@ -143,48 +144,56 @@
 
 </div>
 
-{% if (settings.enableSaveDataPerFormBasis and settings.enableSaveData) or form.submitAction %}
+{% if settings.enableIntegrationsPerFormBasis %}
 
     <hr>
     <div class="meta read-only sprout-meta-heading">
-        <h6>{{ "Data Storage"|t('sprout-forms') }}</h6>
+        <h6>{{ "Integrations"|t('sprout-forms') }}</h6>
     </div>
     <hr>
+    {% set integrationOptions = craft.sproutForms.getIntegrationOptions() %}
 
-    <div class="meta">
+    <div id="integrations-wrapper" class="meta">
 
-        {{ forms.lightswitchField({
-            label: "Save Data <span class='info'>Save Data submitted to this form to the Craft database</span>"|t('sprout-forms'),
-            id: 'saveData',
-            name: 'saveData',
-            on: form.saveData,
-            onLabel: "Show"|t('sprout-forms'),
-            offLabel: "Hide"|t('sprout-forms')
-        }) }}
+        {% if settings.enableSaveData %}
 
-    </div>
+            {{ forms.lightswitchField({
+                label: "Form Entries <span class='info'>Save submitted Sprout Form Entries for this form to the Craft database</span>"|t('sprout-forms'),
+                id: 'saveData',
+                fieldClass: 'sproutforms-integration-row',
+                name: 'saveData',
+                on: form.saveData,
+                small: true,
+                onLabel: "Show"|t('sprout-forms'),
+                offLabel: "Hide"|t('sprout-forms')
+            }) }}
 
-{% endif %}
+        {% endif %}
 
-{% if settings.enablePayloadForwarding or form.submitAction %}
+        {% for integration in integrations %}
+            <div class="field sproutforms-integration-row" id="sproutforms-integration-row-{{ integration.id }}">
+                <div class="heading">
+                    <a href="#" id="sproutform-integration-{{ integration.id }}" data-integrationid="{{ integration.id }}">{{ integration.name }}</a>
+                </div>
+                <div>
+                    {{ forms.lightswitch({
+                        on: integration.enabled,
+                        small: true,
+                        id: "integration-enabled-"~integration.id,
+                        onLabel: "Show"|t('sprout-forms'),
+                        offLabel: "Hide"|t('sprout-forms')
+                    }) }}
+                </div>
+            </div>
+        {% endfor %}
 
-    <hr>
-    <div class="meta read-only sprout-meta-heading">
-        <h6>{{ "Payload Forwarding"|t('sprout-forms') }}</h6>
-    </div>
-    <hr>
-
-    <div class="meta">
-
-        {{ forms.textField({
-            label: "Submit URL <span class='info'>Submit your form data to this URL, instead of directly to Sprout
-            Forms.</span>"|t('sprout-forms'),
-            name: 'submitAction',
-            placeholder: 'http://example.com/somewhere-else'|t('sprout-forms'),
-            value: (form is defined ? form.submitAction : null),
-            errors: (form is defined ? form.getErrors('submitAction') : null)
-        }) }}
-
+        <div class="field" style="padding-top:20px;">
+            {{ forms.select({
+                id: 'integrationsOptions',
+                name: 'integrationsOptions',
+                options: integrationOptions
+            }) }}
+        </div>
     </div>
 
 {% endif %}

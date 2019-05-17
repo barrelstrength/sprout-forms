@@ -31,6 +31,11 @@ class App extends Component
      */
     public $frontEndFields;
 
+    /**
+     * @var Integrations
+     */
+    public $integrations;
+
     public function init()
     {
         $this->groups = new Groups();
@@ -38,5 +43,6 @@ class App extends Component
         $this->fields = new Fields();
         $this->entries = new Entries();
         $this->frontEndFields = new FrontEndFields();
+        $this->integrations = new Integrations();
     }
 }

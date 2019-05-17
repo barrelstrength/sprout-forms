@@ -49,12 +49,11 @@ class SproutFormsVariable
      * @param            $formHandle
      * @param array|null $renderingOptions
      *
-     * @return \Twig_Markup
+     * @return \Twig\Markup
      * @throws \Exception
-     * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function displayForm($formHandle, array $renderingOptions = null): \Twig_Markup
+    public function displayForm($formHandle, array $renderingOptions = null): \Twig\Markup
     {
         /**
          * @var $form Form
@@ -94,9 +93,11 @@ class SproutFormsVariable
      * @param int        $tabId
      * @param array|null $renderingOptions
      *
-     * @return bool|\Twig_Markup
+     * @return bool|\Twig\Markup
      * @throws Exception
-     * @throws \Twig_Error_Loader
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function displayTab(Form $form, int $tabId, array $renderingOptions = null)
     {
@@ -155,12 +156,14 @@ class SproutFormsVariable
      * @param FormField  $field
      * @param array|null $renderingOptions
      *
-     * @return \Twig_Markup
+     * @return \Twig\Markup
      * @throws Exception
      * @throws \ReflectionException
-     * @throws \Twig_Error_Loader
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
-    public function displayField(Form $form, FormField $field, array $renderingOptions = null): \Twig_Markup
+    public function displayField(Form $form, FormField $field, array $renderingOptions = null): \Twig\Markup
     {
         if (!$form) {
             throw new Exception(Craft::t('sprout-forms', 'The displayField tag requires a Form model.'));
@@ -223,7 +226,7 @@ class SproutFormsVariable
     /**
      * Gets a specific form. If no form is found, returns null
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return mixed
      */
@@ -235,7 +238,7 @@ class SproutFormsVariable
     /**
      * Gets a specific form by handle. If no form is found, returns null
      *
-     * @param  string $formHandle
+     * @param string $formHandle
      *
      * @return mixed
      */
@@ -312,7 +315,7 @@ class SproutFormsVariable
     /**
      * Gets Form Groups
      *
-     * @param  int $id Group ID (optional)
+     * @param int $id Group ID (optional)
      *
      * @return array
      */
@@ -334,13 +337,23 @@ class SproutFormsVariable
     }
 
     /**
+     * @return array
      * @see SproutForms::$app->fields->prepareFieldTypeSelection()
      *
-     * @return array
      */
     public function prepareFieldTypeSelection(): array
     {
         return SproutForms::$app->fields->prepareFieldTypeSelection();
+    }
+
+    /**
+     * @return array
+     *
+     * @see SproutForms::$app->integrations->prepareIntegrationTypeSelection()
+     */
+    public function prepareIntegrationTypeSelection(): array
+    {
+        return SproutForms::$app->integrations->prepareIntegrationTypeSelection();
     }
 
     /**
@@ -365,9 +378,9 @@ class SproutFormsVariable
             Craft::$app->getSession()->remove('totalSteps');
         }
 
-        Craft::$app->getSession()->add('multiStepForm', true);
-        Craft::$app->getSession()->add('currentStep', $currentStep);
-        Craft::$app->getSession()->add('totalSteps', $totalSteps);
+        Craft::$app->getSession()->set('multiStepForm', true);
+        Craft::$app->getSession()->set('currentStep', $currentStep);
+        Craft::$app->getSession()->set('totalSteps', $totalSteps);
     }
 
     /**
@@ -391,7 +404,7 @@ class SproutFormsVariable
             ]
         );
 
-        SproutForms::error($message);
+        Craft::error($message, __METHOD__);
 
         if (Craft::$app->getConfig()->getGeneral()->devMode) {
             throw new Exception($message);
@@ -403,7 +416,7 @@ class SproutFormsVariable
      */
     public function getTemplatesPath()
     {
-        return Craft::$app->path->getTemplatesPath();
+        return Craft::$app->getView()->getTemplatesPath();
     }
 
     /**
@@ -577,6 +590,28 @@ class SproutFormsVariable
         return $query;
     }
 
+    /**
+     * @return array
+     */
+    public function getIntegrationOptions(): array
+    {
+        $integrations = SproutForms::$app->integrations->getAllIntegrations();
+
+        $options[] = [
+            'label' => Craft::t('sprout-forms', 'Add Integration...'),
+            'value' => ''
+        ];
+
+        foreach ($integrations as $integration) {
+            $options[] = [
+                'label' => $integration->getName(),
+                'value' => get_class($integration)
+            ];
+        }
+
+        return $options;
+    }
+
 
     /**
      * @param $field
@@ -596,6 +631,26 @@ class SproutFormsVariable
     public function getFieldClass($field)
     {
         return get_class($field);
+    }
+
+    /**
+     * @param $entryId
+     *
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function getEntryIntegrationLogsByEntryId($entryId): array
+    {
+        return SproutForms::$app->integrations->getEntryIntegrationLogsByEntryId($entryId);
+    }
+
+    /**
+     * @param $integrationId
+     *
+     * @return \barrelstrength\sproutforms\records\Integration|null
+     */
+    public function getIntegrationById($integrationId)
+    {
+        return SproutForms::$app->integrations->getFormIntegrationById($integrationId);
     }
 }
 

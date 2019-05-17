@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\fields\formfields;
 
 use Craft;
 use craft\base\Element;
+use craft\fields\Tags as CraftTags;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\ElementInterface;
 use craft\elements\Tag;
@@ -17,6 +18,7 @@ use barrelstrength\sproutforms\SproutForms;
  *
  *
  * @property string $svgIconPath
+ * @property array  $compatibleCraftFields
  * @property mixed  $exampleInputHtml
  */
 class Tags extends BaseRelationFormField
@@ -80,8 +82,10 @@ class Tags extends BaseRelationFormField
      * @param ElementInterface|null $element
      *
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     * @throws \craft\errors\SiteNotFoundException
      * @throws \yii\base\NotSupportedException
      */
     public function getInputHtml($value, ElementInterface $element = null): string
@@ -121,8 +125,10 @@ class Tags extends BaseRelationFormField
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getExampleInputHtml(): string
     {
@@ -138,10 +144,11 @@ class Tags extends BaseRelationFormField
      * @param array|null $renderingOptions
      *
      * @return \Twig_Markup
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup
     {
         $tags = SproutForms::$app->frontEndFields->getFrontEndTags($this->getSettings());
 
@@ -194,5 +201,15 @@ class Tags extends BaseRelationFormField
         }
 
         return $this->_tagGroupId = $matches[1];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleCraftFields(): array
+    {
+        return [
+            CraftTags::class
+        ];
     }
 }

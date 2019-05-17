@@ -80,8 +80,9 @@ class Name extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getSettingsHtml()
     {
@@ -94,8 +95,13 @@ class Name extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @param                       $value
+     * @param ElementInterface|null $element
+     *
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -157,8 +163,10 @@ class Name extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getExampleInputHtml(): string
     {
@@ -174,10 +182,11 @@ class Name extends FormField implements PreviewableFieldInterface
      * @param array|null $renderingOptions
      *
      * @return \Twig_Markup
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup
     {
         if ($this->displayMultipleFields) {
             $this->hasMultipleLabels = true;
@@ -199,12 +208,12 @@ class Name extends FormField implements PreviewableFieldInterface
     /**
      * Prepare our Name for use as an NameModel
      *
-     * @todo - move to helper as we can use this on both Sprout Forms and Sprout Fields
-     *
      * @param                       $value
      * @param ElementInterface|null $element
      *
      * @return NameModel|mixed
+     * @todo - move to helper as we can use this on both Sprout Forms and Sprout Fields
+     *
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
@@ -238,18 +247,19 @@ class Name extends FormField implements PreviewableFieldInterface
      *
      * Prepare the field value for the database.
      *
-     * @todo - move to helper as we can use this on both Sprout Forms and Sprout Fields
-     *
-     * We store the Name as JSON in the content column.
-     *
      * @param                       $value
      * @param ElementInterface|null $element
      *
      * @return array|bool|mixed|null|string
+     * @todo - move to helper as we can use this on both Sprout Forms and Sprout Fields
+     *
+     * We store the Name as JSON in the content column.
+     *
      */
     public function serializeValue($value, ElementInterface $element = null)
     {
-        if (empty($value)) {
+        /** @var NameModel $value */
+        if ($value === null) {
             return false;
         }
 

@@ -160,6 +160,7 @@ body.rtl .fieldlayoutform.sprout-field .newfieldbtn-container .btn.add {
 .target-field .body {
     clear: both;
 }
+
 .target-field h2 + code {
     opacity: 0;
     margin-left: 6px;
@@ -400,4 +401,12 @@ ul#sprout-forms-tabs {
 
 ul#sprout-forms-tabs li {
     display: inline-table;
+}
+
+.field.sproutforms-integration-row {
+    align-items: center;
+}
+
+.field.sproutforms-integration-row .heading {
+    flex: 0 0 80%;
 }

@@ -8,6 +8,8 @@ use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
+use craft\fields\Dropdown as CraftDropdown;
+use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Template as TemplateHelper;
 use yii\db\Schema;
 use barrelstrength\sproutforms\base\FormField;
@@ -18,6 +20,7 @@ use barrelstrength\sproutbasefields\models\Address as AddressModel;
  * @property array  $elementValidationRules
  * @property string $contentColumnType
  * @property string $svgIconPath
+ * @property array  $compatibleCraftFields
  * @property string $exampleInputHtml
  */
 class Address extends FormField implements PreviewableFieldInterface
@@ -63,8 +66,9 @@ class Address extends FormField implements PreviewableFieldInterface
 
     /**
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getExampleInputHtml(): string
     {
@@ -80,10 +84,13 @@ class Address extends FormField implements PreviewableFieldInterface
      * @param array|null $renderingOptions
      *
      * @return \Twig_Markup
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup
     {
         $name = $this->handle;
         $settings = $this->getSettings();
@@ -167,4 +174,14 @@ class Address extends FormField implements PreviewableFieldInterface
         return true;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleCraftFields(): array
+    {
+        return [
+            CraftPlainText::class,
+            CraftDropdown::class
+        ];
+    }
 }
