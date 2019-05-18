@@ -6,6 +6,7 @@ use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\base\VolumeInterface;
+use craft\base\VolumeTrait;
 use craft\fields\Assets as CraftAssets;
 use craft\helpers\Template as TemplateHelper;
 use craft\elements\Asset;
@@ -562,7 +563,9 @@ class FileUpload extends BaseRelationFormField
     {
         $variables = parent::inputTemplateVariables($value, $element);
         $variables['hideSidebar'] = (int)$this->useSingleFolder;
-        $variables['defaultFieldLayoutId'] = $this->_uploadVolume()->fieldLayoutId ?? null;
+
+        $volume = $this->_uploadVolume();
+        $variables['defaultFieldLayoutId'] = $volume->fieldLayoutId ?? null;
 
         return $variables;
     }
@@ -834,7 +837,7 @@ class FileUpload extends BaseRelationFormField
     /**
      * Returns the target upload volume for the field.
      *
-     * @return VolumeInterface|null
+     * @return VolumeInterface|VolumeTrait|null
      */
     private function _uploadVolume()
     {

@@ -17,7 +17,11 @@ class m190410_000000_add_payload_forwarding_to_integration extends Migration
     /**
      * @inheritDoc
      *
+     * @return bool
+     * @throws \yii\base\ErrorException
+     * @throws \yii\base\Exception
      * @throws \yii\base\NotSupportedException
+     * @throws \yii\web\ServerErrorHttpException
      */
     public function safeUp(): bool
     {

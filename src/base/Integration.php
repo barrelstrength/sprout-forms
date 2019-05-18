@@ -118,6 +118,7 @@ abstract class Integration extends Model
      * @param bool $addOptGroup
      *
      * @return array
+     * @throws \yii\base\InvalidConfigException
      */
     public function getFormFieldsAsMappingOptions($addOptGroup = false): array
     {

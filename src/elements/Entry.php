@@ -146,7 +146,8 @@ class Entry extends Element
     }
 
     /**
-     * @inheritdoc
+     * @return \craft\models\FieldLayout|null
+     * @throws \yii\base\InvalidConfigException
      */
     public function getFieldLayout()
     {
@@ -382,6 +383,7 @@ class Entry extends Element
      * Returns the fields associated with this form.
      *
      * @return array
+     * @throws \yii\base\InvalidConfigException
      */
     public function getFields(): array
     {

@@ -100,8 +100,10 @@ class Categories extends BaseRelationFormField
     /**
      * @inheritdoc
      *
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getExampleInputHtml(): string
     {
@@ -117,10 +119,11 @@ class Categories extends BaseRelationFormField
      * @param array|null $renderingOptions
      *
      * @return \Twig\Markup
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig_Markup
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup
     {
         $categories = SproutForms::$app->frontEndFields->getFrontEndCategories($this->getSettings());
 

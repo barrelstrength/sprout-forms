@@ -141,7 +141,7 @@ class Integrations extends Component
     {
         $data = [];
 
-        /** @var Integration $integration */
+        /** @var IntegrationRecord $integration */
         $data['integration'] = $integration;
         $data['integrationId'] = $integration->id;
 
