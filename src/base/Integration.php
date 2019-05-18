@@ -10,6 +10,7 @@ use craft\fields\Date as CraftDate;
 use craft\fields\Dropdown as CraftDropdown;
 use craft\fields\Number as CraftNumber;
 use craft\fields\PlainText as CraftPlainText;
+use yii\base\InvalidConfigException;
 
 /**
  * Class IntegrationType
@@ -118,7 +119,7 @@ abstract class Integration extends Model
      * @param bool $addOptGroup
      *
      * @return array
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function getFormFieldsAsMappingOptions($addOptGroup = false): array
     {
@@ -130,7 +131,7 @@ abstract class Integration extends Model
 
         $options = array_merge($options, [
             [
-                'label' => 'Form ID',
+                'label' => Craft::t('sprout-forms','Form ID'),
                 'value' => 'id',
                 'compatibleCraftFields' => [
                     CraftPlainText::class,
@@ -139,7 +140,7 @@ abstract class Integration extends Model
                 ]
             ],
             [
-                'label' => 'Title',
+                'label' => Craft::t('sprout-forms','Title'),
                 'value' => 'title',
                 'compatibleCraftFields' => [
                     CraftPlainText::class,
@@ -147,14 +148,14 @@ abstract class Integration extends Model
                 ]
             ],
             [
-                'label' => 'Date Created',
+                'label' => Craft::t('sprout-forms','Date Created'),
                 'value' => 'dateCreated',
                 'compatibleCraftFields' => [
                     CraftDate::class
                 ]
             ],
             [
-                'label' => 'IP Address',
+                'label' => Craft::t('sprout-forms','IP Address'),
                 'value' => 'ipAddress',
                 'compatibleCraftFields' => [
                     CraftPlainText::class,
@@ -162,7 +163,7 @@ abstract class Integration extends Model
                 ]
             ],
             [
-                'label' => 'User Agent',
+                'label' => Craft::t('sprout-forms','User Agent'),
                 'value' => 'userAgent',
                 'compatibleCraftFields' => [
                     CraftPlainText::class

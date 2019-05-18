@@ -311,9 +311,9 @@ if (typeof Craft.SproutForms === typeof undefined) {
             var $menu = $('<div class="menu" data-align="center"/>').insertAfter($editBtn),
                 $ul = $('<ul/>').appendTo($menu);
 
-            $('<li><a data-action="add" data-tab-id="' + tabId + '">' + Craft.t('app', 'Add Tab') + '</a></li>').appendTo($ul);
-            $('<li><a data-action="rename" data-tab-id="' + tabId + '">' + Craft.t('app', 'Rename') + '</a></li>').appendTo($ul);
-            $('<li><a id ="#delete-' + tabId + '" data-action="delete" data-tab-id="' + tabId + '">' + Craft.t('app', 'Delete') + '</a></li>').appendTo($ul);
+            $('<li><a data-action="add" data-tab-id="' + tabId + '">' + Craft.t('sprout-forms', 'Add Tab') + '</a></li>').appendTo($ul);
+            $('<li><a data-action="rename" data-tab-id="' + tabId + '">' + Craft.t('sprout-forms', 'Rename') + '</a></li>').appendTo($ul);
+            $('<li><a id ="#delete-' + tabId + '" data-action="delete" data-tab-id="' + tabId + '">' + Craft.t('sprout-forms', 'Delete') + '</a></li>').appendTo($ul);
 
             new Garnish.MenuBtn($editBtn, {
                 onOptionSelect: $.proxy(that, 'onTabOptionSelect')
@@ -396,7 +396,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
         renameTab: function(tabId) {
             var $labelSpan = $('#' + tabId + ' .tab-label'),
                 oldName = $labelSpan.text().trim(),
-                newName = prompt(Craft.t('app', 'Give your tab a name.'), oldName);
+                newName = prompt(Craft.t('sprout-forms', 'Give your tab a name.'), oldName);
             var response = true;
             var $tabs = $(".drag-tab");
             var formId = $("#formId").val();

@@ -14,7 +14,7 @@ use barrelstrength\sproutforms\base\Integration as IntegrationApi;
  * @property                                                   $name
  * @property                                                   $type
  * @property                                                   $settings
- * @property null|\barrelstrength\sproutforms\base\Integration $integrationApi
+ * @property null|IntegrationApi                               $integrationApi
  * @property                                                   $enabled
  */
 class Integration extends ActiveRecord

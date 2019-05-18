@@ -46,7 +46,7 @@
             {{ block('sourcesField') }}
 
             {{ forms.field({
-                label: "Default Upload Location"|t('app'),
+                label: "Default Upload Location"|t('sprout-forms'),
                 instructions: "Where should files be uploaded when they are dragged directly onto the field, or uploaded from the front end?"|t('sprout-forms') ~' '~ uploadLocationNote,
                 errors: field.getErrors('defaultUploadLocationSubpath')
             }, uploadLocationInput('defaultUploadLocation', field, sourceOptions)) }}

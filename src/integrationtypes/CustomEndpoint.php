@@ -6,6 +6,10 @@ use barrelstrength\sproutforms\base\Integration;
 use Craft;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use yii\base\InvalidConfigException;
 
 /**
  * Route our request to Craft or a third-party endpoint
@@ -35,9 +39,9 @@ class CustomEndpoint extends Integration
     /**
      * @inheritDoc
      *
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getSettingsHtml()
     {
@@ -117,11 +121,11 @@ class CustomEndpoint extends Integration
     }
 
     /**
-     * @inheritDoc
-     *
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @return string|null
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws InvalidConfigException
      */
     public function getFieldMappingSettingsHtml()
     {

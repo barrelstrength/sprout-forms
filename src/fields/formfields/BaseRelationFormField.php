@@ -424,7 +424,7 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
         $value = $this->_all($value)->all();
 
         if (empty($value)) {
-            return '<p class="light">'.Craft::t('app', 'Nothing selected.').'</p>';
+            return '<p class="light">'.Craft::t('sprout-forms', 'Nothing selected.').'</p>';
         }
 
         $view = Craft::$app->getView();
@@ -640,7 +640,7 @@ JS;
         $html = Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'checkboxField',
                 [
                     [
-                        'label' => Craft::t('app', 'Relate {type} from a specific site?', ['type' => $type]),
+                        'label' => Craft::t('sprout-forms', 'Relate {type} from a specific site?', ['type' => $type]),
                         'name' => 'useTargetSite',
                         'checked' => $showTargetSite,
                         'toggle' => 'target-site-container'
@@ -660,7 +660,7 @@ JS;
         $html .= Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'selectField',
             [
                 [
-                    'label' => Craft::t('app', 'Which site should {type} be related from?', ['type' => $type]),
+                    'label' => Craft::t('sprout-forms', 'Which site should {type} be related from?', ['type' => $type]),
                     'id' => 'targetSiteId',
                     'name' => 'targetSiteId',
                     'options' => $siteOptions,
@@ -697,8 +697,8 @@ JS;
 
         return Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'selectField', [
             [
-                'label' => Craft::t('app', 'View Mode'),
-                'instructions' => Craft::t('app', 'Choose how the field should look for authors.'),
+                'label' => Craft::t('sprout-forms', 'View Mode'),
+                'instructions' => Craft::t('sprout-forms', 'Choose how the field should look for authors.'),
                 'id' => 'viewMode',
                 'name' => 'viewMode',
                 'options' => $viewModeOptions,
@@ -816,11 +816,11 @@ JS;
     protected function supportedViewModes(): array
     {
         $viewModes = [
-            'list' => Craft::t('app', 'List'),
+            'list' => Craft::t('sprout-forms', 'List'),
         ];
 
         if ($this->allowLargeThumbsView) {
-            $viewModes['large'] = Craft::t('app', 'Large Thumbnails');
+            $viewModes['large'] = Craft::t('sprout-forms', 'Large Thumbnails');
         }
 
         return $viewModes;

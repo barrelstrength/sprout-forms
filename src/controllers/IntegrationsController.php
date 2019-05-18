@@ -9,6 +9,12 @@ use Craft;
 
 use craft\web\Controller as BaseController;
 use barrelstrength\sproutforms\SproutForms;
+use Throwable;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use yii\base\InvalidConfigException;
+use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
 class IntegrationsController extends BaseController
@@ -17,10 +23,10 @@ class IntegrationsController extends BaseController
      * Load the Integration modal field template
      *
      * @return Response
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
-     * @throws \yii\web\BadRequestHttpException
+     * @throws BadRequestHttpException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function actionModalIntegration(): Response
     {
@@ -35,8 +41,8 @@ class IntegrationsController extends BaseController
      * Create a default Integration of the given type
      *
      * @return Response
-     * @throws \Throwable
-     * @throws \yii\web\BadRequestHttpException
+     * @throws Throwable
+     * @throws BadRequestHttpException
      */
     public function actionCreateIntegration(): Response
     {
@@ -62,8 +68,8 @@ class IntegrationsController extends BaseController
      * Enable or disable an Integration
      *
      * @return Response
-     * @throws \Throwable
-     * @throws \yii\web\BadRequestHttpException
+     * @throws Throwable
+     * @throws BadRequestHttpException
      */
     public function actionEnableIntegration(): Response
     {
@@ -107,7 +113,7 @@ class IntegrationsController extends BaseController
      * Save an Integration
      *
      * @return Response
-     * @throws \yii\web\BadRequestHttpException
+     * @throws BadRequestHttpException
      */
     public function actionSaveIntegration(): Response
     {
@@ -140,10 +146,10 @@ class IntegrationsController extends BaseController
      * Edits an existing integration.
      *
      * @return Response
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
-     * @throws \yii\web\BadRequestHttpException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws BadRequestHttpException
      */
     public function actionEditIntegration(): Response
     {
@@ -179,8 +185,8 @@ class IntegrationsController extends BaseController
 
     /**
      * @return Response
-     * @throws \Throwable
-     * @throws \yii\web\BadRequestHttpException
+     * @throws Throwable
+     * @throws BadRequestHttpException
      */
     public function actionDeleteIntegration(): Response
     {
@@ -199,7 +205,7 @@ class IntegrationsController extends BaseController
 
     /**
      * @return Response
-     * @throws \yii\web\BadRequestHttpException
+     * @throws BadRequestHttpException
      */
     public function actionGetFormFields(): Response
     {
@@ -219,7 +225,7 @@ class IntegrationsController extends BaseController
 
     /**
      * @return Response
-     * @throws \yii\web\BadRequestHttpException
+     * @throws BadRequestHttpException
      */
     public function actionGetElementEntryFields(): Response
     {
@@ -242,10 +248,11 @@ class IntegrationsController extends BaseController
     }
 
     /**
-     * @param      $entryTypeId
-     * @param null $integrationId
+     * @param $entryTypeId
+     * @param $integrationId
      *
      * @return array
+     * @throws InvalidConfigException
      */
     private function getFieldsAsOptionsByRow($entryTypeId, $integrationId): array
     {
@@ -354,8 +361,8 @@ class IntegrationsController extends BaseController
     }
 
     /**
-     * @param bool $success
-     * @param      $integrationRecord IntegrationRecord
+     * @param bool              $success
+     * @param IntegrationRecord $integrationRecord
      *
      * @return Response
      */

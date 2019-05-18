@@ -8,14 +8,18 @@ use craft\elements\Entry;
 use craft\elements\User;
 use craft\fields\Date;
 use craft\fields\PlainText;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use yii\web\IdentityInterface;
 
 /**
  * Create a Craft Entry element
  *
- * @property string                                                     $userElementType
- * @property \yii\web\IdentityInterface|\craft\elements\User|null|false $author
- * @property array                                                      $defaultAttributes
- * @property array                                                      $sectionsAsOptions
+ * @property string                            $userElementType
+ * @property IdentityInterface|User|null|false $author
+ * @property array                             $defaultAttributes
+ * @property array                             $sectionsAsOptions
  */
 class EntryElementIntegration extends ElementIntegration
 {
@@ -31,15 +35,15 @@ class EntryElementIntegration extends ElementIntegration
      */
     public function getName(): string
     {
-        return Craft::t('sprout-forms', 'Craft Entries');
+        return Craft::t('sprout-forms', 'Entry Element (Craft)');
     }
 
     /**
      * @inheritDoc
      *
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getSettingsHtml()
     {
@@ -92,9 +96,9 @@ class EntryElementIntegration extends ElementIntegration
     /**
      * @inheritDoc
      *
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getFieldMappingSettingsHtml()
     {
@@ -151,25 +155,23 @@ class EntryElementIntegration extends ElementIntegration
      */
     public function getDefaultAttributes(): array
     {
-        $default = [
+        return [
             [
-                'label' => Craft::t('app', 'Title'),
+                'label' => Craft::t('sprout-forms', 'Title'),
                 'value' => 'title',
                 'class' => PlainText::class
             ],
             [
-                'label' => Craft::t('app', 'Slug'),
+                'label' => Craft::t('sprout-forms', 'Slug'),
                 'value' => 'slug',
                 'class' => PlainText::class
             ],
             [
-                'label' => Craft::t('app', 'Post Date'),
+                'label' => Craft::t('sprout-forms', 'Post Date'),
                 'value' => 'postDate',
                 'class' => Date::class
             ]
         ];
-
-        return $default;
     }
 
     /**
@@ -203,10 +205,13 @@ class EntryElementIntegration extends ElementIntegration
     {
         $fields = $this->resolveFieldMapping();
         $entryType = Craft::$app->getSections()->getEntryTypeById($this->entryTypeId);
+
         $entryElement = new Entry();
         $entryElement->typeId = $entryType->id;
         $entryElement->sectionId = $entryType->sectionId;
+
         $author = $this->getAuthor();
+
         if ($author) {
             $entryElement->authorId = $author->id;
         }
@@ -217,15 +222,20 @@ class EntryElementIntegration extends ElementIntegration
             if ($entryElement->validate()) {
                 $result = Craft::$app->getElements()->saveElement($entryElement);
                 if ($result) {
-                    $this->logResponse(true, Craft::t('sprout-forms', 'Craft Entry successfully created'));
-                    Craft::info(Craft::t('sprout-forms', 'Element Integration successfully saved: ').$entryElement->id, __METHOD__);
+                    $message = Craft::t('sprout-forms', 'Entry Element Integration created Entry ID: {id}.', [
+                        'entryId' => $entryElement->id
+                    ]);
+                    $this->logResponse(true, $message);
+                    Craft::info($message, __METHOD__);
                     return true;
                 }
 
-                $message = Craft::t('sprout-forms', 'Unable to create Entry via Element Integration');
+                $message = Craft::t('sprout-forms', 'Unable to create Entry via Entry Element Integration');
                 $this->logResponse(false, $entryElement->getErrors());
                 Craft::error($message, __METHOD__);
             } else {
+
+
                 $errors = json_encode($entryElement->getErrors());
                 $message = Craft::t('sprout-forms', 'Element Integration does not validate: '.$this->name.' - Errors: '.$errors);
                 Craft::error($message, __METHOD__);
