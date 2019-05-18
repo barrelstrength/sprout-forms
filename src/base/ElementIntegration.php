@@ -14,9 +14,19 @@ use Craft;
  */
 abstract class ElementIntegration extends Integration
 {
-    public $authorId;
+    /**
+     * The ID of default Author to use when creating an Entry Element
+     *
+     * @var int
+     */
+    public $defaultAuthorId;
 
-    public $enableSetAuthorToLoggedInUser = false;
+    /**
+     * Whether to use the logged in user as the Author of the Entry Element
+     *
+     * @var bool
+     */
+    public $setAuthorToLoggedInUser = false;
 
     /**
      * Returns a list of the Default Element Fields that can be mapped for this Element Type
@@ -27,7 +37,7 @@ abstract class ElementIntegration extends Integration
     {
         return [
             [
-                'label' => Craft::t('app', 'Title'),
+                'label' => Craft::t('sprout-forms', 'Title'),
                 'value' => 'title'
             ]
         ];

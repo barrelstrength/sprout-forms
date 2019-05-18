@@ -284,18 +284,20 @@ class EntryElementIntegration extends ElementIntegration
     }
 
     /**
-     * @return User|false|\yii\web\IdentityInterface|null
+     * Returns the author who will be used when creating an Entry
+     *
+     * @return User|false|IdentityInterface|null
      */
     public function getAuthor()
     {
         $author = Craft::$app->getUser()->getIdentity();
 
-        if ($this->enableSetAuthorToLoggedInUser) {
+        if ($this->setAuthorToLoggedInUser) {
             return $author;
         }
 
-        if ($this->authorId && is_array($this->authorId)) {
-            $user = Craft::$app->getUsers()->getUserById($this->authorId[0]);
+        if ($this->defaultAuthorId && is_array($this->defaultAuthorId)) {
+            $user = Craft::$app->getUsers()->getUserById($this->defaultAuthorId[0]);
             if ($user) {
                 $author = $user;
             }
