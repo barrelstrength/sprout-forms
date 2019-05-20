@@ -413,7 +413,10 @@ if (typeof Craft.SproutForms === typeof undefined) {
                 this.$loadSpinner.removeClass('hidden');
 
                 var formId = $("#formId").val();
-                var data = {'integrationId': id, 'formId': formId};
+                var data = {
+                    'integrationId': id,
+                    'formId': formId
+                };
 
                 Craft.postActionRequest('sprout-forms/integrations/edit-integration', data, $.proxy(function(response, textStatus) {
                     this.$loadSpinner.addClass('hidden');

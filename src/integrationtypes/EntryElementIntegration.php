@@ -30,10 +30,17 @@ class EntryElementIntegration extends ElementIntegration
      */
     public $entryTypeId;
 
+    /** returns action that runs to update the targetIntegrationFieldColumns
+     * This action should return an array of input fields that can be used to update the target columns
+     */
+    public function getUpdateTargetFieldsAction() {
+        return 'sprout-forms/integrations/get-element-entry-fields';
+    }
+
     /**
      * @inheritDoc
      */
-    public function getName(): string
+    public static function displayName(): string
     {
         return Craft::t('sprout-forms', 'Entry Element (Craft)');
     }
@@ -47,6 +54,8 @@ class EntryElementIntegration extends ElementIntegration
      */
     public function getSettingsHtml()
     {
+        $this->prepareFieldMapping();
+
         $sections = $this->getSectionsAsOptions();
 
         return Craft::$app->getView()->renderTemplate('sprout-forms/_components/integrationtypes/entryelement/settings',
@@ -74,23 +83,43 @@ class EntryElementIntegration extends ElementIntegration
     /**
      * @inheritDoc
      */
-    public function resolveFieldMapping()
+    public function resolveFieldMapping(): array
     {
         $fields = [];
         $entry = $this->entry;
 
         if ($this->fieldMapping) {
             foreach ($this->fieldMapping as $fieldMap) {
-                if (isset($entry->{$fieldMap['sproutFormField']}) && $fieldMap['integrationField']) {
-                    $fields[$fieldMap['integrationField']] = $entry->{$fieldMap['sproutFormField']};
-                } else if (empty($fieldMap['integrationField'])) {
-                    // Leave default handle is the integrationField is blank
-                    $fields[$fieldMap['sproutFormField']] = $entry->{$fieldMap['sproutFormField']};
+                if (isset($entry->{$fieldMap['sourceFormField']}) && $fieldMap['targetIntegrationField']) {
+                    $fields[$fieldMap['targetIntegrationField']] = $entry->{$fieldMap['sourceFormField']};
+                } else if (empty($fieldMap['targetIntegrationField'])) {
+                    // Leave default handle if the targetIntegrationField is blank
+                    $fields[$fieldMap['sourceFormField']] = $entry->{$fieldMap['sourceFormField']};
                 }
             }
         }
 
         return $fields;
+    }
+
+
+    public function getElementIntegrationFieldOptions()
+    {
+        $sourceFormFields = $this->getSourceFormFields();
+
+        $entryTypeId = $this->entryTypeId;
+
+        // If no Entry ID has been selected, select the first one in the list.
+        if ($entryTypeId === null || empty($entryTypeId)) {
+            $sections = $this->getSectionsAsOptions();
+            $entryTypeId = $sections[1]['value'] ?? null;
+        }
+
+        $targetElementFields = $this->getElementCustomFieldsAsOptions($entryTypeId);
+
+        return $targetElementFields;
+
+        \Craft::dd($sourceFormFields);
     }
 
     /**
@@ -102,52 +131,55 @@ class EntryElementIntegration extends ElementIntegration
      */
     public function getFieldMappingSettingsHtml()
     {
-        $this->fieldMapping = [];
-
-        $entryTypeId = $this->entryTypeId;
-
-        if ($entryTypeId === null || empty($entryTypeId)) {
-            $sections = $this->getSectionsAsOptions();
-            $entryTypeId = $sections[1]['value'] ?? null;
-        }
-
-        if ($entryTypeId !== null) {
-            foreach ($this->getElementCustomFieldsAsOptions($entryTypeId) as $elementFieldsAsOption) {
-                $this->fieldMapping[] = [
-                    'integrationField' => $elementFieldsAsOption['value'],
-                    'sproutFormField' => ''
-                ];
-            }
-        }
-
-        $rendered = Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'editableTableField',
-            [
-                [
-                    'label' => Craft::t('sprout-forms', 'Field Mapping'),
-                    'instructions' => Craft::t('sprout-forms', 'Define your field mapping.'),
-                    'id' => 'fieldMapping',
-                    'name' => 'fieldMapping',
-                    'addRowLabel' => Craft::t('sprout-forms', 'Add a field mapping'),
-                    'static' => true,
-                    'cols' => [
-                        'integrationField' => [
-                            'heading' => Craft::t('sprout-forms', 'Entry Field'),
-                            'type' => 'select',
-                            'class' => 'formField',
-                            'options' => $this->getElementCustomFieldsAsOptions($entryTypeId)
-                        ],
-                        'sproutFormField' => [
-                            'heading' => Craft::t('sprout-forms', 'Form Field'),
-                            'type' => 'select',
-                            'class' => 'formEntryFields',
-                            'options' => []
-                        ]
-                    ],
-                    'rows' => $this->fieldMapping
-                ]
-            ]);
-
-        return $rendered;
+//        $currentFields = $this->getFormFieldsAsMappingOptions();
+//
+//        $this->fieldMapping = [];
+//
+//        $entryTypeId = $this->entryTypeId;
+//
+//        if ($entryTypeId === null || empty($entryTypeId)) {
+//            $sections = $this->getSectionsAsOptions();
+//            $entryTypeId = $sections[1]['value'] ?? null;
+//        }
+//
+//        if ($entryTypeId !== null) {
+//            foreach ($this->getElementCustomFieldsAsOptions($entryTypeId) as $elementFieldsAsOption) {
+//                $this->fieldMapping[] = [
+//                    'targetIntegrationField' => $elementFieldsAsOption['value'],
+//                    'sourceFormField' => ''
+//                ];
+//            }
+//        }
+//
+//        $rendered = Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'editableTableField',
+//            [
+//                [
+//                    'label' => Craft::t('sprout-forms', 'Field Mapping'),
+//                    'instructions' => Craft::t('sprout-forms', 'Define your field mapping.'),
+//                    'id' => 'fieldMapping',
+//                    'name' => 'fieldMapping',
+//                    'addRowLabel' => Craft::t('sprout-forms', 'Add a field mapping'),
+//                    'static' => true,
+//                    'cols' => [
+//                        'sourceFormField' => [
+//                            'heading' => Craft::t('sprout-forms', 'Form Field'),
+//                            'type' => 'select',
+//                            'class' => 'formField',
+//                            'options' => $currentFields
+//                        ],
+//                        'targetIntegrationField' => [
+//                            'heading' => Craft::t('sprout-forms', 'Entry Field'),
+//                            'type' => 'select',
+//                            'class' => 'targetFields',
+////                            'options' => $this->getElementCustomFieldsAsOptions($entryTypeId)
+//                            'options' => []
+//                        ]
+//                    ],
+//                    'rows' => $this->fieldMapping
+//                ]
+//            ]);
+//
+//        return $rendered;
     }
 
     /**
@@ -155,7 +187,7 @@ class EntryElementIntegration extends ElementIntegration
      */
     public function getDefaultAttributes(): array
     {
-        return [
+        $targetElementFieldsData = [
             [
                 'label' => Craft::t('sprout-forms', 'Title'),
                 'value' => 'title',
@@ -172,6 +204,16 @@ class EntryElementIntegration extends ElementIntegration
                 'class' => Date::class
             ]
         ];
+
+        $defaultFields = [];
+        foreach ($targetElementFieldsData as $targetElementFieldData) {
+            $fieldInstance = new $targetElementFieldData['class']();
+            $fieldInstance->name = $targetElementFieldData['label'];
+            $fieldInstance->handle = $targetElementFieldData['value'];
+            $defaultFields[] = $fieldInstance;
+        }
+
+        return $defaultFields;
     }
 
     /**
@@ -187,11 +229,12 @@ class EntryElementIntegration extends ElementIntegration
         $options = $defaultEntryFields;
 
         foreach ($entryFields as $field) {
-            $options[] = [
-                'label' => $field->name,
-                'value' => $field->handle,
-                'class' => get_class($field)
-            ];
+            $options[] = $field;
+//            $options[] = [
+//                'label' => $field->name,
+//                'value' => $field->handle,
+//                'class' => get_class($field)
+//            ];
         }
 
         return $options;

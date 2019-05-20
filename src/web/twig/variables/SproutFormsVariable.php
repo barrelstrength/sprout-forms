@@ -6,9 +6,11 @@ use barrelstrength\sproutforms\elements\db\EntryQuery;
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
+use barrelstrength\sproutforms\records\Integration;
 use barrelstrength\sproutforms\services\Forms;
 use Craft;
 use craft\base\ElementInterface;
+use craft\fields\PlainText;
 use craft\helpers\Template as TemplateHelper;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
@@ -452,24 +454,6 @@ class SproutFormsVariable
     }
 
     /**
-     * @param $field
-     *
-     * @return null
-     */
-    public function getRegisteredFieldByModel($field)
-    {
-        $registeredFields = SproutForms::$app->fields->getRegisteredFields();
-
-        foreach ($registeredFields as $sproutFormfield) {
-            if ($sproutFormfield->getType() == get_class($field) && $field instanceof \craft\fields\PlainText) {
-                return $sproutFormfield;
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * @return array|FormField[]
      */
     public function getRegisteredFields(): array
@@ -604,7 +588,7 @@ class SproutFormsVariable
 
         foreach ($integrations as $integration) {
             $options[] = [
-                'label' => $integration->getName(),
+                'label' => $integration::displayName(),
                 'value' => get_class($integration)
             ];
         }
@@ -646,11 +630,11 @@ class SproutFormsVariable
     /**
      * @param $integrationId
      *
-     * @return \barrelstrength\sproutforms\records\Integration|null
+     * @return Integration|null
      */
     public function getIntegrationById($integrationId)
     {
-        return SproutForms::$app->integrations->getFormIntegrationById($integrationId);
+        return SproutForms::$app->integrations->getIntegrationById($integrationId);
     }
 }
 

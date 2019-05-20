@@ -9,40 +9,30 @@
     errors: integration.getErrors('submitAction') ?? null
 }) }}
 
-<script>
-    $(document).ready(function() {
-        init();
-
-        function init() {
-            disableOptions();
+{{ forms.editableTableField({
+    label: "Field Mapping"|t('sprout-forms'),
+    info: "The field in your form.",
+    id: 'fieldMapping',
+    name: 'fieldMapping',
+    minRows: integration.fieldMapping|length,
+    maxRows: integration.fieldMapping|length,
+    cols: {
+        sourceFormField: {
+            type: 'singleline',
+            heading: "Form Field"|t('sprout-forms'),
+            class: 'code formField'
+        },
+        targetIntegrationField: {
+            type: 'singleline',
+            heading: "API Field"|t('sprout-forms'),
+            placeholder: "Leave blank and no data will be mapped"|t('sprout-forms'),
+            class: 'code custom-endpoint'
         }
+    },
+    rows: integration.fieldMapping,
+    errors: []|unique
+}) }}
 
-        function disableOptions() {
-            var $formFields = getCurrentRows('.formField');
-            $formFields.each(function(index) {
-                var $wrapperDiv = $(this).find('div.select');
-                var $select = $(this).find('select');
-
-                var selectedLabel = $select.find('option:selected').text();
-
-                $wrapperDiv.removeClass('select');
-                $wrapperDiv.removeClass('small');
-                $select.attr("disabled", false);
-                $select.attr("readonly", true);
-                $select.addClass("hidden");
-
-                $select.before(selectedLabel);
-            });
-
-            var customEndpointFields = getCurrentRows('.custom-endpoint');
-            customEndpointFields.each(function(index) {
-                var $textarea = $(this).find('textarea');
-                $textarea.prop("disabled", false);
-            });
-        }
-
-        function getCurrentRows(className) {
-            return $(className);
-        }
-    });
-</script>
+{% js %}
+    new Craft.SproutForms.ElementIntegration();
+{% endjs %}

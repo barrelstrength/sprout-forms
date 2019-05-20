@@ -183,27 +183,7 @@ class SproutForms extends Plugin
         });
 
         Event::on(Entries::class, EntryElement::EVENT_AFTER_SAVE, function(OnSaveEntryEvent $event) {
-            if (Craft::$app->getRequest()->getIsSiteRequest() &&
-                $this->getSettings()->enableIntegrationsPerFormBasis) {
-
-                $entry = $event->entry;
-
-                SproutForms::$app->integrations->runEntryIntegrations($entry);
-
-                $integrationLogs = $entry->getEntryIntegrationLogs();
-
-                $entryId = $entry->id ?? null;
-                if ($integrationLogs) {
-                    foreach ($integrationLogs as $integrationLog) {
-                        SproutForms::$app->integrations->saveEntryIntegrationLog(
-                            $integrationLog['integrationId'],
-                            $entryId,
-                            $integrationLog['isValid'],
-                            $integrationLog['message']
-                        );
-                    }
-                }
-            }
+            SproutForms::$app->integrations->runEntryIntegrations($event->entry);
         });
 
         Craft::$app->view->hook('sproutForms.modifyForm', function() {
@@ -237,6 +217,7 @@ class SproutForms extends Plugin
 //            $event->types[] = SpecialFieldsBundle::class;
 //        });
 
+//        \Craft::dd(SproutForms::$app->integrations->getIntegrationById(18));
     }
 
     /**

@@ -41,8 +41,12 @@ use barrelstrength\sproutforms\fields\formfields\SingleLine;
 use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
 use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
 use Throwable;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 use yii\base\Component;
 use yii\base\Exception;
+use yii\base\InvalidConfigException;
 
 /**
  * @property mixed $defaultTabName
@@ -534,10 +538,10 @@ class Fields extends Component
      * @param null        $tabId
      *
      * @return array
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
-     * @throws \yii\base\InvalidConfigException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws InvalidConfigException
      */
     public function getModalFieldTemplate(Form $form, $field = null, $tabId = null): array
     {
@@ -584,7 +588,7 @@ class Fields extends Component
      * @param $type
      * @param $form
      *
-     * @return \craft\base\FieldInterface
+     * @return FieldInterface
      * @throws Throwable
      */
     public function createDefaultField($type, Form $form): FieldInterface
@@ -623,7 +627,7 @@ class Fields extends Component
      * @param FormElement $form
      *
      * @return FieldLayoutTabRecord
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function createNewTab($name, $sortOrder, FormElement $form): FieldLayoutTabRecord
     {
@@ -647,7 +651,7 @@ class Fields extends Component
      * @param FormElement $form
      *
      * @return bool
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function renameTab($name, $oldName, FormElement $form): bool
     {

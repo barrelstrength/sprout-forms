@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\base;
 
 use Craft;
+use craft\fields\PlainText;
 
 /**
  * Class ElementIntegration
@@ -35,12 +36,11 @@ abstract class ElementIntegration extends Integration
      */
     public function getDefaultAttributes(): array
     {
-        return [
-            [
-                'label' => Craft::t('sprout-forms', 'Title'),
-                'value' => 'title'
-            ]
-        ];
+        $fieldInstance = new PlainText();
+        $fieldInstance->name = Craft::t('sprout-forms', 'Title');
+        $fieldInstance->handle = 'title';
+
+        return [$fieldInstance];
     }
 
     /**
