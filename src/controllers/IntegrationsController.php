@@ -178,83 +178,6 @@ class IntegrationsController extends BaseController
         ]);
     }
 
-    public function actionGetEntryElementFields(): Response
-    {
-        $this->requirePostRequest();
-        $this->requireAcceptsJson();
-
-//        $entryTypeId = Craft::$app->request->getRequiredBodyParam('entryTypeId');
-        $integrationId = Craft::$app->request->getRequiredBodyParam('integrationId');
-
-        $fieldOptionsByRow = $this->getEntryFieldsAsOptionsByRow($integrationId);
-
-        return $this->asJson([
-            'success' => true,
-            'fieldOptionsByRow' => $fieldOptionsByRow
-        ]);
-    }
-
-    private function getEntryFieldsAsOptionsByRow($integrationId): array
-    {
-        /** @var EntryElementIntegration $integration */
-        $integration = SproutForms::$app->integrations->getIntegrationById($integrationId);
-
-        $firstRow = [
-            'name' => 'None',
-            'handle' => ''
-        ];
-        $sourceFormFields = $integration->getSourceFormFields();
-        array_unshift($sourceFormFields, $firstRow);
-
-        $targetElementFields = $integration->getElementCustomFieldsAsOptions($integration->entryTypeId);
-
-        $fieldMapping = $integration->fieldMapping;
-        $integrationSectionId = $integration->entryTypeId ?? null;
-
-        $rowPosition = 0;
-
-        $targetElementFieldOptions = [];
-        foreach ($sourceFormFields as $sourceFormField) {
-            $dropdownOptions = SproutForms::$app->integrations->getCompatibleTargetFields($sourceFormField, $targetElementFields);
-            $targetElementFieldOptions[$rowPosition] = $dropdownOptions;
-            $rowPosition++;
-        }
-
-        return $targetElementFieldOptions;
-
-//        $rowPosition = 0;
-//
-//        $allTargetElementFieldOptions = [];
-//
-//        foreach ($targetElementFields as $targetElementField) {
-//            $compatibleFields = $this->getCompatibleFields($sourceFormFields, $targetElementField);
-//            $integrationValue = $targetElementField['value'] ?? $targetElementField->handle;
-//            // We have rows stored and are for the same sectionType
-//            if ($fieldMapping && ($integrationSectionId == $entryTypeId) &&
-//                isset($fieldMapping[$rowPosition])) {
-//
-//                foreach ($compatibleFields as $key => $option) {
-//                    if (isset($option['optgroup'])) {
-//                        continue;
-//                    }
-//
-//                    if ($option['value'] == $fieldMapping[$rowPosition]['sourceFormField'] &&
-//                        $fieldMapping[$rowPosition]['targetIntegrationField'] == $integrationValue) {
-//                        $compatibleFields[$key]['selected'] = true;
-//                    }
-//                }
-//            }
-//
-//            $allTargetElementFieldOptions[$rowPosition] = $compatibleFields;
-//
-//            $rowPosition++;
-//        }
-
-//        $allTargetElementFieldOptions = $this->removeUnnecessaryOptgroups($allTargetElementFieldOptions);
-
-//        return $allTargetElementFieldOptions;
-    }
-
     /**
      * @return Response
      * @throws BadRequestHttpException
@@ -285,70 +208,85 @@ class IntegrationsController extends BaseController
         $this->requirePostRequest();
         $this->requireAcceptsJson();
 
+        $entryTypeId = Craft::$app->request->getRequiredBodyParam('entryTypeId');
         $integrationId = Craft::$app->request->getRequiredBodyParam('integrationId');
 
         $integration = SproutForms::$app->integrations->getIntegrationById($integrationId);
 
-        $entryFields = $integration->getElementCustomFieldsAsOptions($integration->entryTypeId);
+        $entryFields = $integration->getElementCustomFieldsAsOptions($entryTypeId);
+        $entryFieldsByRow = $this->getFieldsAsOptionsByRow($entryFields, $integration, $entryTypeId);
 
         return $this->asJson([
             'success' => true,
-            'fieldOptionsByRow' => $entryFields
+            'fieldOptionsByRow' => $entryFieldsByRow
         ]);
     }
 
     /**
+     * @param array entryFields
+     * @param Integration $integration
      * @param $entryTypeId
-     * @param $integrationId
-     *
      * @return array
-     * @throws InvalidConfigException
      */
-    private function getFieldsAsOptionsByRow($entryTypeId, $integrationId): array
+    private function getFieldsAsOptionsByRow($entryFields, $integration, $entryTypeId)
     {
-        /** @var ElementIntegration $integration */
-        $integration = SproutForms::$app->integrations->getIntegrationById($integrationId);
-        $targetElementFields = $integration->getElementCustomFieldsAsOptions($entryTypeId);
         $fieldMapping = $integration->fieldMapping;
         $integrationSectionId = $integration->entryTypeId ?? null;
-        $firstRow = [
-            'name' => 'None',
-            'handle' => ''
-        ];
-        $sourceFormFields = $integration->getFormFieldsAsMappingOptions(true);
-        array_unshift($sourceFormFields, $firstRow);
 
+        $formFields = $integration->getFormFieldsAsMappingOptions();
         $rowPosition = 0;
+        $finalOptions = [];
 
-        $allTargetElementFieldOptions = [];
-
-        foreach ($targetElementFields as $targetElementField) {
-            $compatibleFields = $this->getCompatibleFields($sourceFormFields, $targetElementField);
-            $integrationValue = $targetElementField['value'] ?? $targetElementField->handle;
+        foreach ($formFields as $formField) {
+            $optionsByRow = $this->getCompatibleFields($entryFields, $formField);
             // We have rows stored and are for the same sectionType
-            if ($fieldMapping && ($integrationSectionId == $entryTypeId) &&
-                isset($fieldMapping[$rowPosition])) {
-
-                foreach ($compatibleFields as $key => $option) {
-                    if (isset($option['optgroup'])) {
-                        continue;
-                    }
-
-                    if ($option['value'] == $fieldMapping[$rowPosition]['sourceFormField'] &&
-                        $fieldMapping[$rowPosition]['targetIntegrationField'] == $integrationValue) {
-                        $compatibleFields[$key]['selected'] = true;
+            if ($fieldMapping && ($integrationSectionId == $entryTypeId)){
+                if (isset($fieldMapping[$rowPosition])){
+                    foreach ($optionsByRow as $key => $option) {
+                        if ($option['value'] == $fieldMapping[$rowPosition]['targetIntegrationField'] &&
+                            $fieldMapping[$rowPosition]['sourceFormField'] == $formField['value']){
+                            $optionsByRow[$key]['selected'] = true;
+                        }
                     }
                 }
             }
 
-            $allTargetElementFieldOptions[$rowPosition] = $compatibleFields;
+            $finalOptions[$rowPosition] = $optionsByRow;
 
             $rowPosition++;
         }
 
-        $allTargetElementFieldOptions = $this->removeUnnecessaryOptgroups($allTargetElementFieldOptions);
+        return $finalOptions;
+    }
 
-        return $allTargetElementFieldOptions;
+    /**
+     * @param array $entryFields
+     * @param array $formField
+     * @return array
+     */
+    private function getCompatibleFields( array $entryFields, array $formField)
+    {
+        $compatibleFields = $formField['compatibleCraftFields'] ?? '*';
+        $finalOptions = [];
+
+        foreach ($entryFields as $field) {
+            $option =  [
+                'label' => $field->name.' ('.$field->handle.')',
+                'value' => $field->handle
+            ];
+
+            if (is_array($compatibleFields)){
+                if (!in_array(get_class($field), $compatibleFields)){
+                    $option = null;
+                }
+            }
+
+            if ($option){
+                $finalOptions[] = $option;
+            }
+        }
+
+        return $finalOptions;
     }
 
     /**
@@ -374,38 +312,6 @@ class IntegrationsController extends BaseController
         }
 
         return $aux;
-    }
-
-    /**
-     * @param array $formFields
-     * @param       $entryField
-     *
-     * @return array
-     */
-    private function getCompatibleFields(array $formFields, $entryField): array
-    {
-        $finalOptions = [];
-
-        foreach ($formFields as $pos => $field) {
-            if (isset($field['optgroup'])) {
-                $finalOptions[] = $field;
-                continue;
-            }
-            $compatibleFields = $field['compatibleCraftFields'] ?? '*';
-            // Check default attributes
-            if (isset($entryField['class'])) {
-                if (is_array($compatibleFields) &&
-                    !in_array($entryField['class'], $compatibleFields, true)) {
-                    $field = null;
-                }
-
-                if ($field) {
-                    $finalOptions[] = $field;
-                }
-            }
-        }
-
-        return $finalOptions;
     }
 
     /**
