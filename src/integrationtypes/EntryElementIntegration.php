@@ -121,67 +121,7 @@ class EntryElementIntegration extends ElementIntegration
 
         \Craft::dd($sourceFormFields);
     }
-
-    /**
-     * @inheritDoc
-     *
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     */
-    public function getFieldMappingSettingsHtml()
-    {
-//        $currentFields = $this->getFormFieldsAsMappingOptions();
-//
-//        $this->fieldMapping = [];
-//
-//        $entryTypeId = $this->entryTypeId;
-//
-//        if ($entryTypeId === null || empty($entryTypeId)) {
-//            $sections = $this->getSectionsAsOptions();
-//            $entryTypeId = $sections[1]['value'] ?? null;
-//        }
-//
-//        if ($entryTypeId !== null) {
-//            foreach ($this->getElementCustomFieldsAsOptions($entryTypeId) as $elementFieldsAsOption) {
-//                $this->fieldMapping[] = [
-//                    'targetIntegrationField' => $elementFieldsAsOption['value'],
-//                    'sourceFormField' => ''
-//                ];
-//            }
-//        }
-//
-//        $rendered = Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'editableTableField',
-//            [
-//                [
-//                    'label' => Craft::t('sprout-forms', 'Field Mapping'),
-//                    'instructions' => Craft::t('sprout-forms', 'Define your field mapping.'),
-//                    'id' => 'fieldMapping',
-//                    'name' => 'fieldMapping',
-//                    'addRowLabel' => Craft::t('sprout-forms', 'Add a field mapping'),
-//                    'static' => true,
-//                    'cols' => [
-//                        'sourceFormField' => [
-//                            'heading' => Craft::t('sprout-forms', 'Form Field'),
-//                            'type' => 'select',
-//                            'class' => 'formField',
-//                            'options' => $currentFields
-//                        ],
-//                        'targetIntegrationField' => [
-//                            'heading' => Craft::t('sprout-forms', 'Entry Field'),
-//                            'type' => 'select',
-//                            'class' => 'targetFields',
-////                            'options' => $this->getElementCustomFieldsAsOptions($entryTypeId)
-//                            'options' => []
-//                        ]
-//                    ],
-//                    'rows' => $this->fieldMapping
-//                ]
-//            ]);
-//
-//        return $rendered;
-    }
-
+    
     /**
      * @inheritDoc
      */
