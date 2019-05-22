@@ -2,16 +2,11 @@
 
 namespace barrelstrength\sproutforms\controllers;
 
-use barrelstrength\sproutforms\base\ElementIntegration;
 use barrelstrength\sproutforms\base\Integration;
-use barrelstrength\sproutforms\base\IntegrationInterface;
-use barrelstrength\sproutforms\integrationtypes\EntryElementIntegration;
 use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
 use Craft;
 
-use craft\base\WidgetInterface;
 use craft\errors\MissingComponentException;
-use craft\helpers\Component as ComponentHelper;
 use craft\web\Controller as BaseController;
 use barrelstrength\sproutforms\SproutForms;
 use Throwable;
@@ -120,10 +115,9 @@ class IntegrationsController extends BaseController
      * Edits an existing integration.
      *
      * @return Response
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
      * @throws BadRequestHttpException
+     * @throws InvalidConfigException
+     * @throws MissingComponentException
      */
     public function actionEditIntegration(): Response
     {
@@ -182,26 +176,7 @@ class IntegrationsController extends BaseController
      * @return Response
      * @throws BadRequestHttpException
      * @throws InvalidConfigException
-     */
-    public function actionGetFormFields(): Response
-    {
-        $this->requirePostRequest();
-        $this->requireAcceptsJson();
-
-        $entryTypeId = Craft::$app->request->getRequiredBodyParam('entryTypeId');
-        $integrationId = Craft::$app->request->getRequiredBodyParam('integrationId');
-
-        $fieldOptionsByRow = $this->getFieldsAsOptionsByRow($entryTypeId, $integrationId);
-
-        return $this->asJson([
-            'success' => true,
-            'fieldOptionsByRow' => $fieldOptionsByRow
-        ]);
-    }
-
-    /**
-     * @return Response
-     * @throws BadRequestHttpException
+     * @throws MissingComponentException
      */
     public function actionGetElementEntryFields(): Response
     {
@@ -223,10 +198,11 @@ class IntegrationsController extends BaseController
     }
 
     /**
-     * @param array entryFields
+     * @param $entryFields
      * @param Integration $integration
      * @param $entryTypeId
      * @return array
+     * @throws InvalidConfigException
      */
     private function getFieldsAsOptionsByRow($entryFields, $integration, $entryTypeId)
     {
@@ -287,31 +263,6 @@ class IntegrationsController extends BaseController
         }
 
         return $finalOptions;
-    }
-
-    /**
-     * @param $allTargetElementFieldOptions
-     *
-     * @return array
-     */
-    private function removeUnnecessaryOptgroups($allTargetElementFieldOptions): array
-    {
-        $aux = [];
-        // Removes optgroups with no fields
-        foreach ($allTargetElementFieldOptions as $rowIndex => $targetElementFieldOptions) {
-            foreach ($targetElementFieldOptions as $key => $dropdownOption) {
-                if (isset($dropdownOption['optgroup'])) {
-
-                    if (isset($targetElementFieldOptions[$key + 1]['value'])) {
-                        $aux[$rowIndex][] = $targetElementFieldOptions[$key];
-                    }
-                } else {
-                    $aux[$rowIndex][] = $dropdownOption;
-                }
-            }
-        }
-
-        return $aux;
     }
 
     /**
