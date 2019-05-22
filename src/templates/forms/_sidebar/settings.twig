@@ -130,7 +130,6 @@
         {{ forms.lightswitchField({
             label: "Save Data <span class='info'>Save submitted Sprout Form Entries for this form to the Craft database</span>"|t('sprout-forms'),
             id: 'saveData',
-            fieldClass: 'sproutforms-integration-row',
             name: 'saveData',
             on: form.saveData,
             small: true,
@@ -171,6 +170,7 @@
     <div id="integrations-wrapper" class="meta">
 
         {% for integration in integrations %}
+
             <div class="field sproutforms-integration-row" id="sproutforms-integration-row-{{ integration.id }}">
                 <div class="heading">
                     <a href="#" id="sproutform-integration-{{ integration.id }}" data-integrationid="{{ integration.id }}">{{ integration.name }}</a>

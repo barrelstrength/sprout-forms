@@ -14,7 +14,7 @@ use barrelstrength\sproutforms\base\Integration as IntegrationApi;
  * @property                                                   $name
  * @property                                                   $type
  * @property                                                   $settings
- * @property null|\barrelstrength\sproutforms\base\Integration $integrationApi
+ * @property null|IntegrationApi                               $integrationApi
  * @property                                                   $enabled
  */
 class Integration extends ActiveRecord
@@ -27,30 +27,5 @@ class Integration extends ActiveRecord
     public static function tableName(): string
     {
         return '{{%sproutforms_integrations}}';
-    }
-
-    /**
-     * @return null|IntegrationApi
-     */
-    public function getIntegrationApi()
-    {
-        /** @var IntegrationApi $integrationApi */
-        $integrationApi = null;
-
-        if ($this->type) {
-            $integrationApi = new $this->type;
-            $form = SproutForms::$app->forms->getFormById($this->formId);
-            $integrationApi->form = $form;
-            $integrationApi->name = $this->name;
-            $integrationApi->integrationId = $this->id;
-            $integrationApi->enabled = $this->enabled;
-
-            if ($this->settings) {
-                $settings = json_decode($this->settings, true);
-                $integrationApi->setAttributes($settings, false);
-            }
-        }
-
-        return $integrationApi;
     }
 }

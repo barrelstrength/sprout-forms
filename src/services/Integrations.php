@@ -3,19 +3,32 @@
 namespace barrelstrength\sproutforms\services;
 
 use barrelstrength\sproutforms\base\Integration;
+use barrelstrength\sproutforms\base\IntegrationInterface;
 use barrelstrength\sproutforms\elements\Entry;
+use barrelstrength\sproutforms\elements\Form;
+use barrelstrength\sproutforms\integrationtypes\MissingIntegration;
 use barrelstrength\sproutforms\records\EntryIntegrationLog;
 use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
 use barrelstrength\sproutforms\SproutForms;
 use craft\base\Component;
+use craft\base\Widget;
+use craft\base\WidgetInterface;
 use craft\db\Query;
+use craft\errors\MissingComponentException;
 use craft\events\RegisterComponentTypesEvent;
 use Craft;
+use craft\helpers\Component as ComponentHelper;
+use craft\widgets\MissingWidget;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use yii\base\InvalidConfigException;
+use yii\db\ActiveRecord;
 
 /**
  *
- * @property \barrelstrength\sproutforms\base\Integration[] $allIntegrations
- * @property mixed                                          $allIntegrationTypes
+ * @property Integration[] $allIntegrations
+ * @property mixed         $allIntegrationTypes
  */
 class Integrations extends Component
 {
@@ -35,29 +48,6 @@ class Integrations extends Component
         $this->trigger(self::EVENT_REGISTER_INTEGRATIONS, $event);
 
         return $event->types;
-    }
-
-    /**
-     * @param $type
-     * @param $form
-     * @param $name
-     *
-     * @return IntegrationRecord|null
-     */
-    public function createIntegration($type, $form, $name = null)
-    {
-        $integration = null;
-        $integrationRecord = new IntegrationRecord();
-        $integrationRecord->type = $type;
-        $integrationRecord->formId = $form->id;
-        $integrationRecord->name = $name ?? $integrationRecord->getIntegrationApi()->getName();
-        $integrationRecord->enabled = false;
-
-        if ($integrationRecord->save()) {
-            $integration = $integrationRecord;
-        }
-
-        return $integration;
     }
 
     /**
@@ -83,17 +73,114 @@ class Integrations extends Component
      */
     public function getFormIntegrations($formId): array
     {
-        return IntegrationRecord::findAll(['formId' => $formId]);
+        $results =  (new Query())
+            ->select([
+                'integrations.id',
+                'integrations.formId',
+                'integrations.name',
+                'integrations.type',
+                'integrations.settings',
+                'integrations.enabled'
+            ])
+            ->from(['{{%sproutforms_integrations}} integrations'])
+            ->where(['integrations.formId' => $formId])
+            ->all();
+
+        $integrations = [];
+
+        foreach ($results as $result) {
+            $integration = ComponentHelper::createComponent($result, IntegrationInterface::class);
+            $integrations[] = new $result['type']($integration);
+
+        }
+
+        return $integrations;
     }
 
     /**
      * @param $integrationId
      *
-     * @return IntegrationRecord|null
+     * @return Integration|null
+     * @throws InvalidConfigException
+     * @throws MissingComponentException
      */
-    public function getFormIntegrationById($integrationId)
+    public function getIntegrationById($integrationId)
     {
-        return IntegrationRecord::findOne(['id' => $integrationId]);
+        $result =  (new Query())
+            ->select([
+                'integrations.id',
+                'integrations.formId',
+                'integrations.name',
+                'integrations.type',
+                'integrations.settings',
+                'integrations.enabled'
+            ])
+            ->from(['{{%sproutforms_integrations}} integrations'])
+            ->where(['integrations.id' => $integrationId])
+            ->one();
+
+        if (!$result) {
+            return null;
+        }
+
+        $integration = ComponentHelper::createComponent($result, IntegrationInterface::class);
+
+        return new $result['type']($integration);
+    }
+
+    /**
+     * @param Integration $integration
+     *
+     * @return bool
+     */
+    public function saveIntegration(Integration $integration): bool
+    {
+        if ($integration->id) {
+            $integrationRecord = IntegrationRecord::findOne($integration->id);
+        } else {
+            $integrationRecord = new IntegrationRecord();
+        }
+
+        $integrationRecord->type = get_class($integration);
+        $integrationRecord->formId = $integration->formId;
+        $integrationRecord->name = $integration->name ?? $integration::displayName();
+        $integrationRecord->enabled = $integration->enabled;
+
+        $integrationRecord->settings = $integration->getSettings();
+
+        if ($integrationRecord->save()) {
+            $integration->id = $integrationRecord->id;
+            $integration->name = $integrationRecord->name;
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $config
+     *
+     * @return IntegrationInterface
+     * @throws InvalidConfigException
+     */
+    public function createIntegration($config): IntegrationInterface
+    {
+        if (is_string($config)) {
+            $config = ['type' => $config];
+        }
+
+        try {
+            /** @var Integration $integration */
+            $integration = ComponentHelper::createComponent($config, IntegrationInterface::class);
+        } catch (MissingComponentException $e) {
+            $config['errorMessage'] = $e->getMessage();
+            $config['expectedType'] = $config['type'];
+            unset($config['type']);
+
+            $integration = new MissingIntegration($config);
+        }
+
+        return $integration;
     }
 
     /**
@@ -113,7 +200,7 @@ class Integrations extends Component
         if (count($integrations)) {
             // Loop through registered integrations and add them to the standard group
             foreach ($integrations as $class => $integration) {
-                $standardIntegrations[get_class($integration)] = $integration->getName();
+                $standardIntegrations[get_class($integration)] = $integration::displayName();
             }
 
             // Sort fields alphabetically by name
@@ -126,29 +213,41 @@ class Integrations extends Component
         return $standardIntegrations;
     }
 
+    public function getCompatibleTargetFields($sourceFormField, $targetElementFields)
+    {
+        $fieldOptions = [];
+
+        foreach ($targetElementFields as $targetElementField)
+        {
+            if (in_array(get_class($targetElementField), $sourceFormField->getCompatibleCraftFields())) {
+                $fieldOptions[] = [
+                    'label' => $targetElementField->name,
+                    'value' => $targetElementField->handle
+                ];
+            }
+        }
+
+        return $fieldOptions;
+    }
+
     /**
      * Loads the sprout modal integration via ajax.
      *
-     * @param                  $form
-     * @param Integration|null $integration
+     * @param Integration $integration
      *
      * @return array
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function getModalIntegrationTemplate($form, $integration = null): array
+    public function getModalIntegrationTemplate(Integration $integration): array
     {
-        $data = [];
-
-        /** @var Integration $integration */
-        $data['integration'] = $integration;
-        $data['integrationId'] = $integration->id;
-
-        $data['form'] = $form;
         $view = Craft::$app->getView();
 
-        $html = $view->renderTemplate('sprout-forms/forms/_editIntegrationModal', $data);
+        $html = $view->renderTemplate('sprout-forms/forms/_editIntegrationModal', [
+            'integration' => $integration,
+        ]);
+
         $js = $view->getBodyHtml();
         $css = $view->getHeadHtml();
 
@@ -183,7 +282,7 @@ class Integrations extends Component
     /**
      * @param $entryId
      *
-     * @return array|\yii\db\ActiveRecord[]
+     * @return array|ActiveRecord[]
      */
     public function getEntryIntegrationLogsByEntryId($entryId): array
     {
@@ -197,19 +296,25 @@ class Integrations extends Component
     }
 
     /**
-     * Run all the integrations related to the Form Element. If at least one fails it will return false
+     * Run all the integrations related to the Form Element.
      *
      * @param Entry $entry
      */
     public function runEntryIntegrations(Entry $entry)
     {
-        $form = $entry->getForm();
-        $integrations = SproutForms::$app->integrations->getFormIntegrations($form->id);
+        if (!Craft::$app->getRequest()->getIsSiteRequest() &&
+            !$this->getSettings()->enableIntegrationsPerFormBasis) {
+            return;
+        }
 
-        foreach ($integrations as $integrationRecord) {
-            $integration = $integrationRecord->getIntegrationApi();
+        $form = $entry->getForm();
+        $integrations = $this->getFormIntegrations($form->id);
+
+        foreach ($integrations as $integration) {
             $integration->entry = $entry;
-            Craft::info('Running Sprout Forms integration: '.$integration->name, __METHOD__);
+            Craft::info(Craft::t('sprout-forms', 'Running Sprout Forms Integration: {integrationName}', [
+                'integrationName' => $integration->name
+            ]), __METHOD__);
 
             try {
                 if ($integration->enabled) {
@@ -219,6 +324,20 @@ class Integrations extends Component
                 $message = 'Submit Integration Api fails: '.$e->getMessage();
                 $integration->logResponse($message, $e->getTrace());
                 Craft::error($message, __METHOD__);
+            }
+        }
+
+        $integrationLogs = $entry->getEntryIntegrationLogs();
+
+        $entryId = $entry->id ?? null;
+        if ($integrationLogs) {
+            foreach ($integrationLogs as $integrationLog) {
+                SproutForms::$app->integrations->saveEntryIntegrationLog(
+                    $integrationLog['integrationId'],
+                    $entryId,
+                    $integrationLog['isValid'],
+                    $integrationLog['message']
+                );
             }
         }
     }

@@ -8,6 +8,10 @@ use craft\db\Migration;
 use craft\db\Query;
 use Craft;
 use craft\services\Plugins;
+use yii\base\ErrorException;
+use yii\base\Exception;
+use yii\base\NotSupportedException;
+use yii\web\ServerErrorHttpException;
 
 /**
  * m190410_000000_add_payload_forwarding_to_integration migration.
@@ -17,7 +21,11 @@ class m190410_000000_add_payload_forwarding_to_integration extends Migration
     /**
      * @inheritDoc
      *
-     * @throws \yii\base\NotSupportedException
+     * @return bool
+     * @throws ErrorException
+     * @throws Exception
+     * @throws NotSupportedException
+     * @throws ServerErrorHttpException
      */
     public function safeUp(): bool
     {
@@ -36,25 +44,25 @@ class m190410_000000_add_payload_forwarding_to_integration extends Migration
             $integrationRecord->type = $type;
             $integrationRecord->formId = $form['id'];
             $integrationRecord->enabled = true;
-            
-            /** @var CustomEndpoint $integrationApi */
-            $integrationApi = $integrationRecord->getIntegrationApi();
+
+            /** @var CustomEndpoint $integration */
+            $integration = new $type();
             $settings = [];
 
             if ($form['submitAction']) {
                 $enableIntegrations = true;
                 $settings['submitAction'] = $form['submitAction'];
-                $formFields = $integrationApi->getFormFieldsAsMappingOptions();
+                $formFields = $integration->getFormFieldsAsMappingOptions();
                 $fieldMapping = [];
                 foreach ($formFields as $formField) {
                     $fieldMapping[] = [
-                        'sproutFormField' => $formField['value'],
-                        'integrationField' => $formField['value']
+                        'sourceFormField' => $formField['value'],
+                        'targetIntegrationField' => $formField['value']
                     ];
                 }
                 $settings['fieldMapping'] = $fieldMapping;
-                
-                $integrationRecord->name = $integrationApi->getName();
+
+                $integrationRecord->name = $integration::displayName();
                 $integrationRecord->settings = json_encode($settings);
                 $integrationRecord->save();
             }

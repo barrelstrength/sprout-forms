@@ -26,9 +26,10 @@ use yii\base\Exception;
 /**
  * Form represents a form element.
  *
+ * @property FormTemplates $formTemplate
+ * @property array         $fields
+ *
  * @mixin FieldLayoutBehavior
- * @property \barrelstrength\sproutforms\base\FormTemplates $formTemplate
- * @property array                                          $fields
  */
 class Form extends Element
 {
@@ -133,11 +134,14 @@ class Form extends Element
     }
 
     /**
-     * @inheritdoc
+     * @return \craft\models\FieldLayout|null
+     * @throws \yii\base\InvalidConfigException
      */
     public function getFieldLayout()
     {
         $behaviors = $this->getBehaviors();
+
+        /** @var FieldLayoutBehavior $fieldLayout */
         $fieldLayout = $behaviors['fieldLayout'];
 
         return $fieldLayout->getFieldLayout();
@@ -336,6 +340,7 @@ class Form extends Element
      * Returns the fields associated with this form.
      *
      * @return FormField[]
+     * @throws \yii\base\InvalidConfigException
      */
     public function getFields(): array
     {
@@ -356,6 +361,7 @@ class Form extends Element
      * @param string $handle
      *
      * @return null|FieldInterface
+     * @throws \yii\base\InvalidConfigException
      */
     public function getField($handle)
     {

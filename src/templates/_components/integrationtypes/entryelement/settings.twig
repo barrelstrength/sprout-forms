@@ -11,26 +11,57 @@
 }) }}
 
 {{ forms.elementSelectField({
-    label: "Default Author"|t('app'),
-    id: 'authorId',
-    name: 'authorId',
+    label: "Default Author"|t('sprout-forms'),
+    instructions: "This author will be used for new Entries where no author is defined."|t('sprout-forms'),
+    id: 'defaultAuthorId',
+    name: 'defaultAuthorId',
     required: true,
     elementType: integration.getUserElementType(),
-    selectionLabel: "Choose"|t('app'),
+    selectionLabel: "Choose"|t('sprout-forms'),
     limit: 1,
     elements: [integration.getAuthor()]
 }) }}
 
 {{ forms.lightswitchField({
     label: "Set Author to Logged in User"|t('sprout-forms'),
-    instructions: "When enabled, Sprout Forms will assign the logged in User as the author and fallback to the Default Author."|t('sprout-forms'),
-    id: 'enableSetAuthorToLoggedInUser',
-    name: 'enableSetAuthorToLoggedInUser',
+    instructions: "Set the author of new Entries to the logged in user. Uses the Default Author if no user is logged in."|t('sprout-forms'),
+    id: 'setAuthorToLoggedInUser',
+    name: 'setAuthorToLoggedInUser',
     toggle: 'settings-save-author',
-    on: integration.enableSetAuthorToLoggedInUser,
+    on: integration.setAuthorToLoggedInUser,
     onLabel: "Enable"|t('sprout-forms'),
 }) }}
 
+{{ forms.editableTableField({
+    label: "Field Mapping"|t('sprout-forms'),
+    id: 'fieldMapping',
+    name: 'fieldMapping',
+    minRows: integration.fieldMapping|length,
+    maxRows: integration.fieldMapping|length,
+    cols: {
+        sourceFormField: {
+            type: 'singleline',
+            heading: "Form Field"|t('sprout-forms'),
+            class: 'code formField',
+        },
+        targetIntegrationField: {
+            type: 'select',
+            heading: "Entry Field"|t('sprout-forms'),
+            placeholder: "Leave blank and no data will be mapped"|t('sprout-forms'),
+            class: 'targetFields',
+            options: []
+        }
+    },
+    rows: integration.fieldMapping,
+    errors: []|unique
+}) }}
+
+{% js %}
+    new Craft.SproutForms.ElementIntegration({
+        updateTargetFieldsAction: '{{ integration.getUpdateTargetFieldsAction() }}'
+{% endjs %}
+{#options: integration.getElementCustomFieldsAsOptions(integration.entryTypeId)#}
+{#
 <script>
     $(document).ready(function() {
         init();
@@ -88,7 +119,7 @@
                     var rows = response.fieldOptionsByRow;
                     for (i = 0; i < rows.length; i++) {
                         var field = rows[i];
-                        $(tableId + ' tbody').append('<tr data-id="' + i + '"> <td class="formField">' + field["label"] + '<input class="hidden" name="types[barrelstrength\\sproutforms\\integrationtypes\\EntryElementIntegration][fieldMapping][' + i + '][integrationField]" rows="1" readonly value="' + field["value"] + '">' + '</td> <td class="formEntryFields"><div class="select small"><select name="types[barrelstrength\\sproutforms\\integrationtypes\\EntryElementIntegration][fieldMapping][' + i + '][sproutFormField]"></select></div></td></tr>');
+                        $(tableId + ' tbody').append('<tr data-id="' + i + '"> <td class="formField">' + field["label"] + '<input class="hidden" name="types[barrelstrength\\sproutforms\\integrationtypes\\EntryElementIntegration][fieldMapping][' + i + '][targetIntegrationField]" rows="1" readonly value="' + field["value"] + '">' + '</td> <td class="formEntryFields"><div class="select small"><select name="types[barrelstrength\\sproutforms\\integrationtypes\\EntryElementIntegration][fieldMapping][' + i + '][sourceFormField]"></select></div></td></tr>');
                     }
                     updateAllFieldSelects();
                 } else {
@@ -173,9 +204,4 @@
         }
     });
 </script>
-{% js %}
-
-{% endjs %}
-
-
-
+#}

@@ -41,8 +41,12 @@ use barrelstrength\sproutforms\fields\formfields\SingleLine;
 use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
 use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
 use Throwable;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 use yii\base\Component;
 use yii\base\Exception;
+use yii\base\InvalidConfigException;
 
 /**
  * @property mixed $defaultTabName
@@ -493,9 +497,9 @@ class Fields extends Component
     /**
      * This service allows update a field to a current FieldLayoutFieldRecord
      *
-     * @param FieldInterface $field
-     * @param FormElement    $form
-     * @param int            $tabId
+     * @param FieldRecord $field
+     * @param FormElement $form
+     * @param int         $tabId
      *
      * @return boolean
      */
@@ -529,14 +533,15 @@ class Fields extends Component
     /**
      * Loads the sprout modal field via ajax.
      *
-     * @param      $form
-     * @param null $field
-     * @param null $tabId
+     * @param FormElement $form
+     * @param null        $field
+     * @param null        $tabId
      *
      * @return array
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws InvalidConfigException
      */
     public function getModalFieldTemplate(Form $form, $field = null, $tabId = null): array
     {
@@ -583,7 +588,7 @@ class Fields extends Component
      * @param $type
      * @param $form
      *
-     * @return \craft\base\FieldInterface
+     * @return FieldInterface
      * @throws Throwable
      */
     public function createDefaultField($type, Form $form): FieldInterface
@@ -622,6 +627,7 @@ class Fields extends Component
      * @param FormElement $form
      *
      * @return FieldLayoutTabRecord
+     * @throws InvalidConfigException
      */
     public function createNewTab($name, $sortOrder, FormElement $form): FieldLayoutTabRecord
     {
@@ -640,11 +646,12 @@ class Fields extends Component
     /**
      * Renames tab of form layout
      *
-     * @param string      $name
-     * @param string      $oldName
+     * @param             $name
+     * @param             $oldName
      * @param FormElement $form
      *
      * @return bool
+     * @throws InvalidConfigException
      */
     public function renameTab($name, $oldName, FormElement $form): bool
     {

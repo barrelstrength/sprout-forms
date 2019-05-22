@@ -69,6 +69,7 @@ class Form extends ElementImporter
             return true;
         }
 
+        /** @var FormElement $model */
         Craft::$app->content->fieldContext = $model->fieldContext;
         Craft::$app->content->contentTable = $model->contentTable;
 

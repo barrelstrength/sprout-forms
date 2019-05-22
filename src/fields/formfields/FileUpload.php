@@ -6,6 +6,7 @@ use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\base\VolumeInterface;
+use craft\base\VolumeTrait;
 use craft\fields\Assets as CraftAssets;
 use craft\helpers\Template as TemplateHelper;
 use craft\elements\Asset;
@@ -188,7 +189,7 @@ class FileUpload extends BaseRelationFormField
         } catch (InvalidSubpathException $e) {
             return '<p class="warning">'.
                 '<span data-icon="alert"></span> '.
-                Craft::t('app', 'This field’s target subfolder path is invalid: {path}', [
+                Craft::t('sprout-forms', 'This field’s target subfolder path is invalid: {path}', [
                     'path' => '<code>'.$this->singleUploadLocationSubpath.'</code>'
                 ]).
                 '</p>';
@@ -287,7 +288,7 @@ class FileUpload extends BaseRelationFormField
         $allowedExtensions = $this->_getAllowedExtensions();
         foreach ($filenames as $filename) {
             if (!in_array(mb_strtolower(pathinfo($filename, PATHINFO_EXTENSION)), $allowedExtensions, true)) {
-                $element->addError($this->handle, Craft::t('app', '"{filename}" is not allowed in this field.', [
+                $element->addError($this->handle, Craft::t('sprout-forms', '"{filename}" is not allowed in this field.', [
                     'filename' => $filename
                 ]));
             }
@@ -319,7 +320,7 @@ class FileUpload extends BaseRelationFormField
         }
 
         foreach ($filenames as $filename) {
-            $element->addError($this->handle, Craft::t('app', '"{filename}" is too large.', [
+            $element->addError($this->handle, Craft::t('sprout-forms', '"{filename}" is too large.', [
                 'filename' => $filename
             ]));
         }
@@ -562,7 +563,9 @@ class FileUpload extends BaseRelationFormField
     {
         $variables = parent::inputTemplateVariables($value, $element);
         $variables['hideSidebar'] = (int)$this->useSingleFolder;
-        $variables['defaultFieldLayoutId'] = $this->_uploadVolume()->fieldLayoutId ?? null;
+
+        $volume = $this->_uploadVolume();
+        $variables['defaultFieldLayoutId'] = $volume->fieldLayoutId ?? null;
 
         return $variables;
     }
@@ -754,7 +757,7 @@ class FileUpload extends BaseRelationFormField
             }
             $folderId = $this->_resolveVolumePathToFolderId($uploadVolume, $subpath, $element, $createDynamicFolders);
         } catch (InvalidVolumeException $e) {
-            throw new InvalidVolumeException(Craft::t('app', 'The {field} field’s {setting} setting is set to an invalid volume.', [
+            throw new InvalidVolumeException(Craft::t('sprout-forms', 'The {field} field’s {setting} setting is set to an invalid volume.', [
                 'field' => $this->name,
                 'setting' => $settingName,
             ]), 0, $e);
@@ -767,7 +770,7 @@ class FileUpload extends BaseRelationFormField
                 $folderId = $userFolder->id;
             } else {
                 // Existing element, so this is just a bad subpath
-                throw new InvalidSubpathException($e->subpath, Craft::t('app', 'The {field} field’s {setting} setting has an invalid subpath (“{subpath}”).', [
+                throw new InvalidSubpathException($e->subpath, Craft::t('sprout-forms', 'The {field} field’s {setting} setting has an invalid subpath (“{subpath}”).', [
                     'field' => $this->name,
                     'setting' => $settingName,
                     'subpath' => $e->subpath,
@@ -834,7 +837,7 @@ class FileUpload extends BaseRelationFormField
     /**
      * Returns the target upload volume for the field.
      *
-     * @return VolumeInterface|null
+     * @return VolumeInterface|VolumeTrait|null
      */
     private function _uploadVolume()
     {

@@ -170,6 +170,7 @@ class EntriesController extends BaseController
      * @throws ForbiddenHttpException
      * @throws NotFoundHttpException
      * @throws \craft\errors\MissingComponentException
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionEditEntry(int $entryId = null, EntryElement $entry = null): Response
     {

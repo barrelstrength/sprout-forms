@@ -26,11 +26,19 @@ abstract class FormField extends Field
      */
     public $allowRequired = true;
 
+    public $compatibleCraftFields = [];
+
     /**
      * @var string
      */
     protected $originalTemplatesPath;
 
+    public function setCompatibleCraftFields(array $types = null)
+    {
+        if ($types) {
+            $this->compatibleCraftFields = array_merge($types, $this->compatibleCraftFields);
+        }
+    }
 
     /**
      * Return a list of compatible Craft Fields to associate on the Element Integration API

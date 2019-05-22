@@ -25,6 +25,7 @@ class FieldsController extends BaseController
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      * @throws \yii\web\BadRequestHttpException
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionModalField(): Response
     {
@@ -81,6 +82,7 @@ class FieldsController extends BaseController
      * @return Response
      * @throws \yii\web\BadRequestHttpException
      * @throws \yii\web\ForbiddenHttpException
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionAddTab(): Response
     {
@@ -155,6 +157,7 @@ class FieldsController extends BaseController
      * @return Response
      * @throws \yii\web\BadRequestHttpException
      * @throws \yii\web\ForbiddenHttpException
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionRenameTab(): Response
     {
@@ -246,12 +249,14 @@ class FieldsController extends BaseController
         Craft::$app->content->contentTable = $form->getContentTable();
 
         // Save a new field
-        if (!$field->id) {
+        if ($field->id) {
+            $isNewField = false;
+            /** @var Field $oldField */
+            $oldField = Craft::$app->fields->getFieldById($field->id);
+            $oldHandle = $oldField->handle;
+        } else {
             $isNewField = true;
             $oldHandle = null;
-        } else {
-            $isNewField = false;
-            $oldHandle = Craft::$app->fields->getFieldById($field->id)->handle;
         }
 
         // Save our field
@@ -315,6 +320,7 @@ class FieldsController extends BaseController
      * @throws \Twig\Error\SyntaxError
      * @throws \yii\web\BadRequestHttpException
      * @throws \yii\web\ForbiddenHttpException
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionEditField(): Response
     {
@@ -444,6 +450,7 @@ class FieldsController extends BaseController
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
+     * @throws \yii\base\InvalidConfigException
      */
     private function returnJson(bool $success, $field, Form $form, $tabName = null, $tabId = null): Response
     {

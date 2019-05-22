@@ -109,7 +109,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
             var data = {type: currentIntegration, formId: formId};
 
-            Craft.postActionRequest('sprout-forms/integrations/create-integration', data, $.proxy(function(response, textStatus) {
+            Craft.postActionRequest('sprout-forms/integrations/save-integration', data, $.proxy(function(response, textStatus) {
                 if (textStatus === 'success') {
                     var integration = response.integration;
 

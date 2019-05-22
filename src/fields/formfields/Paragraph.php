@@ -101,7 +101,7 @@ class Paragraph extends FormField implements PreviewableFieldInterface
             $columnTypeMax = Db::getTextualColumnStorageCapacity($this->columnType);
 
             if ($columnTypeMax && $columnTypeMax < $this->charLimit) {
-                $this->addError($attribute, Craft::t('app', 'Character Limit is too big for your chosen Column Type.'));
+                $this->addError($attribute, Craft::t('sprout-forms', 'Character Limit is too big for your chosen Column Type.'));
             }
         }
     }

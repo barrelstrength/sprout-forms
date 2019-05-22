@@ -3,7 +3,6 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use Craft;
-use craft\fields\Categories as CraftCategories;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\ElementInterface;
 use craft\elements\Category;
@@ -17,7 +16,6 @@ use barrelstrength\sproutforms\SproutForms;
  *
  *
  * @property string $svgIconPath
- * @property array  $compatibleCraftFields
  * @property mixed  $exampleInputHtml
  */
 class Categories extends BaseRelationFormField
@@ -120,7 +118,7 @@ class Categories extends BaseRelationFormField
      * @param mixed      $value
      * @param array|null $renderingOptions
      *
-     * @return \Twig_Markup
+     * @return \Twig\Markup
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
@@ -180,15 +178,5 @@ class Categories extends BaseRelationFormField
         $variables['branchLimit'] = $this->branchLimit;
 
         return $variables;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getCompatibleCraftFields(): array
-    {
-        return [
-            CraftCategories::class,
-        ];
     }
 }

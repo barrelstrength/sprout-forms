@@ -6,6 +6,10 @@ use barrelstrength\sproutforms\base\Integration;
 use Craft;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use yii\base\InvalidConfigException;
 
 /**
  * Route our request to Craft or a third-party endpoint
@@ -27,7 +31,7 @@ class CustomEndpoint extends Integration
     /**
      * @inheritDoc
      */
-    public function getName(): string
+    public static function displayName(): string
     {
         return Craft::t('sprout-forms', 'Custom Endpoint');
     }
@@ -35,12 +39,14 @@ class CustomEndpoint extends Integration
     /**
      * @inheritDoc
      *
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getSettingsHtml()
     {
+        $this->prepareFieldMapping();
+
         return Craft::$app->getView()->renderTemplate('sprout-forms/_components/integrationtypes/customendpoint/settings',
             [
                 'integration' => $this
@@ -63,15 +69,15 @@ class CustomEndpoint extends Integration
     /**
      * @inheritDoc
      */
-    public function resolveFieldMapping()
+    public function resolveFieldMapping(): array
     {
         $fields = [];
         $entry = $this->entry;
 
         if ($this->fieldMapping) {
             foreach ($this->fieldMapping as $fieldMap) {
-                if (isset($entry->{$fieldMap['sproutFormField']}) && $fieldMap['integrationField']) {
-                    $fields[$fieldMap['integrationField']] = $entry->{$fieldMap['sproutFormField']};
+                if (isset($entry->{$fieldMap['sourceFormField']}) && $fieldMap['targetIntegrationField']) {
+                    $fields[$fieldMap['targetIntegrationField']] = $entry->{$fieldMap['sourceFormField']};
                 }
             }
         }
@@ -114,75 +120,6 @@ class CustomEndpoint extends Integration
         }
 
         return true;
-    }
-
-    /**
-     * @inheritDoc
-     *
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
-     */
-    public function getFieldMappingSettingsHtml()
-    {
-        $currentFields = $this->getFormFieldsAsMappingOptions();
-
-        if (empty($this->fieldMapping)) {
-            // show all the form fields
-            foreach ($currentFields as $formField) {
-                $this->fieldMapping[] = [
-                    'sproutFormField' => $formField['value'],
-                    'integrationField' => ''
-                ];
-            }
-        } else {
-            $savedFieldMapping = $this->fieldMapping;
-            $this->fieldMapping = [];
-            foreach ($currentFields as $key => $formField) {
-
-                $fieldMap = [
-                    'sproutFormField' => $formField['value'],
-                    'integrationField' => ''
-                ];
-
-                foreach ($savedFieldMapping as $savedFieldMap) {
-                    if ($savedFieldMap['sproutFormField'] === $formField['value']) {
-                        $fieldMap['integrationField'] = $savedFieldMap['integrationField'];
-                    }
-                }
-
-                $this->fieldMapping[] = $fieldMap;
-            }
-        }
-
-        $rendered = Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'editableTableField',
-            [
-                [
-                    'label' => Craft::t('sprout-forms', 'Field Mapping'),
-                    'instructions' => Craft::t('sprout-forms', 'Define your field mapping.'),
-                    'id' => 'fieldMapping',
-                    'name' => 'fieldMapping',
-                    'addRowLabel' => Craft::t('sprout-forms', 'Add a field mapping'),
-                    'static' => true,
-                    'cols' => [
-                        'sproutFormField' => [
-                            'heading' => Craft::t('sprout-forms', 'Form Field'),
-                            'type' => 'select',
-                            'class' => 'formField',
-                            'options' => $currentFields
-                        ],
-                        'integrationField' => [
-                            'heading' => Craft::t('sprout-forms', 'API Field'),
-                            'type' => 'singleline',
-                            'class' => 'code custom-endpoint',
-                            'placeholder' => Craft::t('sprout-forms', 'Leave blank and no data will be mapped')
-                        ]
-                    ],
-                    'rows' => $this->fieldMapping
-                ]
-            ]);
-
-        return $rendered;
     }
 }
 

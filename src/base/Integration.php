@@ -3,13 +3,15 @@
 namespace barrelstrength\sproutforms\base;
 
 use barrelstrength\sproutforms\elements\Entry;
-use barrelstrength\sproutforms\elements\Form;
-use craft\base\Model;
+use barrelstrength\sproutforms\fields\formfields\SingleLine;
+use barrelstrength\sproutforms\SproutForms;
 use Craft;
+use craft\base\SavableComponent;
 use craft\fields\Date as CraftDate;
 use craft\fields\Dropdown as CraftDropdown;
 use craft\fields\Number as CraftNumber;
 use craft\fields\PlainText as CraftPlainText;
+use yii\base\InvalidConfigException;
 
 /**
  * Class IntegrationType
@@ -18,86 +20,77 @@ use craft\fields\PlainText as CraftPlainText;
  *
  * @property string $fieldMappingSettingsHtml
  * @property void   $settingsHtml
+ * @property array  $sourceFormFields
+ * @property void   $customSourceFormFields
  * @property string $type
  */
-abstract class Integration extends Model
+abstract class Integration extends SavableComponent implements IntegrationInterface
 {
-    /**
-     * The ID of the integration stored in the database
-     *
-     * @var int
-     */
-    public $integrationId;
+    // Traits
+    // =========================================================================
+
+    use IntegrationTrait;
 
     /**
-     * Whether this Integration will be processed when a form is submitted
-     *
-     * @var boolean
+     * @inheritdoc
      */
-    public $enabled = true;
+    public function settingsAttributes(): array
+    {
+        $attributes = parent::settingsAttributes();
+        $attributes[] = 'fieldMapping';
+
+        return $attributes;
+    }
 
     /**
-     * The Form Entry Element associated with an Integration
-     *
-     * @var Entry
-     */
-    public $entry;
-
-    /**
-     * The Form Element where the Integration is used
-     *
-     * @var Form
-     */
-    public $form;
-
-    /**
-     * @var array|null The fields mapped
-     */
-    public $fieldMapping;
-
-    /**
-     * The name the User gives an integration after it is created
-     *
-     * @var string
-     */
-    public $name;
-
-    /**
-     * Name of the Integration that displays as an option in the Form settings
-     *
-     * @return string
-     */
-    abstract public function getName(): string;
-
-    /**
-     * Send the submission to the desired endpoint
-     *
-     * @return bool
-     */
-    abstract public function submit(): bool;
-
-    /**
-     *
-     * Settings that help us customize the Field Mapping Table
-     *
-     * Each settings template will also call a Twig Field Mapping Table Macro to help with the field mapping (can we just have a Twig Macro that wraps the default Craft Table for this and outputs two columns?)
-     *
      * @return string|null
      */
-    public function getSettingsHtml()
+    public function getUpdateTargetFieldsAction()
     {
         return null;
     }
 
     /**
-     * Process the submission and field mapping settings to prepare the payload.
-     *
-     * In this context, $this->fieldMapping will be populated from the values
-     * saved via the settings defined in $this->getFieldMappingSettingsHtml()
-     *
-     * @return mixed
+     * @inheritDoc
      */
-    public function resolveFieldMapping()
+    public function submit(): bool
+    {
+        return false;
+    }
+
+    /**
+     * Prepares the $fieldMapping array based on the current form fields and any existing settings
+     */
+    public function prepareFieldMapping()
+    {
+        $indexedFieldMapping = [];
+        $oldFieldMapping = $this->fieldMapping;
+
+        // Update our stored settings to use the sourceFormField handle as the key of our array
+        if ($oldFieldMapping !== null) {
+            foreach ($oldFieldMapping as $oldFieldMap) {
+                $indexedFieldMapping[$oldFieldMap['sourceFormField']] = $oldFieldMap['targetIntegrationField'];
+            }
+        }
+
+        $newFieldMapping = [];
+        $sourceFormFields = $this->getSourceFormFields();
+
+        // Loop through the current list of form fields and match them to any existing fieldMapping settings
+        foreach ($sourceFormFields as $sourceFormField) {
+            $newFieldMapping[] = [
+                'sourceFormField' => $sourceFormField->handle,
+                'targetIntegrationField' => $indexedFieldMapping[$sourceFormField->handle] ?? ''
+            ];
+        }
+
+        $this->fieldMapping = $newFieldMapping;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function resolveFieldMapping(): array
     {
         return $this->fieldMapping ?? [];
     }
@@ -112,12 +105,92 @@ abstract class Integration extends Model
         return null;
     }
 
+    public function getSourceFormFields()
+    {
+        $sourceFormFieldsData = [
+            [
+                'name' => Craft::t('sprout-forms', 'Form ID'),
+                'handle' => 'id',
+                'compatibleCraftFields' => [
+                    CraftPlainText::class,
+                    CraftDropdown::class,
+                    CraftNumber::class
+                ],
+                'type' => SingleLine::class
+            ],
+            [
+                'name' => Craft::t('sprout-forms', 'Title'),
+                'handle' => 'title',
+                'compatibleCraftFields' => [
+                    CraftPlainText::class,
+                    CraftDropdown::class
+                ],
+                'type' => SingleLine::class
+            ],
+            [
+                'name' => Craft::t('sprout-forms', 'Date Created'),
+                'handle' => 'dateCreated',
+                'compatibleCraftFields' => [
+                    CraftDate::class
+                ],
+                'type' => SingleLine::class
+            ],
+            [
+                'name' => Craft::t('sprout-forms', 'IP Address'),
+                'handle' => 'ipAddress',
+                'compatibleCraftFields' => [
+                    CraftPlainText::class,
+                    CraftDropdown::class
+                ],
+                'type' => SingleLine::class
+            ],
+            [
+                'name' => Craft::t('sprout-forms', 'User Agent'),
+                'handle' => 'userAgent',
+                'compatibleCraftFields' => [
+                    CraftPlainText::class
+                ],
+                'type' => SingleLine::class
+            ]
+        ];
+
+        foreach ($sourceFormFieldsData as $sourceFormFieldData) {
+            $fieldInstance = new $sourceFormFieldData['type']();
+            $fieldInstance->name = $sourceFormFieldData['name'];
+            $fieldInstance->handle = $sourceFormFieldData['handle'];
+            $fieldInstance->setCompatibleCraftFields($sourceFormFieldData['compatibleCraftFields']);
+            $sourceFormFields[] = $fieldInstance;
+        }
+        $form = SproutForms::$app->forms->getFormById($this->formId);
+        $fields = $form->getFields();
+
+        if (count($fields)) {
+            foreach ($fields as $field) {
+                $sourceFormFields[] = $field;
+//                $sourceFormFields[] = [
+//                    'label' => $field->name,
+//                    'value' => $field->handle,
+//                    'compatibleCraftFields' => $field->getCompatibleCraftFields(),
+//                    'fieldType' => get_class($field)
+//                ];
+            }
+        }
+
+        return $sourceFormFields;
+    }
+
+    public function getCustomSourceFormFields()
+    {
+
+    }
+
     /**
      * Prepares a list of the Form Fields from the current form that a user can choose to map to an endpoint
      *
      * @param bool $addOptGroup
      *
      * @return array
+     * @throws InvalidConfigException
      */
     public function getFormFieldsAsMappingOptions($addOptGroup = false): array
     {
@@ -129,7 +202,7 @@ abstract class Integration extends Model
 
         $options = array_merge($options, [
             [
-                'label' => 'Form ID',
+                'label' => Craft::t('sprout-forms', 'Form ID'),
                 'value' => 'id',
                 'compatibleCraftFields' => [
                     CraftPlainText::class,
@@ -138,7 +211,7 @@ abstract class Integration extends Model
                 ]
             ],
             [
-                'label' => 'Title',
+                'label' => Craft::t('sprout-forms', 'Title'),
                 'value' => 'title',
                 'compatibleCraftFields' => [
                     CraftPlainText::class,
@@ -146,14 +219,14 @@ abstract class Integration extends Model
                 ]
             ],
             [
-                'label' => 'Date Created',
+                'label' => Craft::t('sprout-forms', 'Date Created'),
                 'value' => 'dateCreated',
                 'compatibleCraftFields' => [
                     CraftDate::class
                 ]
             ],
             [
-                'label' => 'IP Address',
+                'label' => Craft::t('sprout-forms', 'IP Address'),
                 'value' => 'ipAddress',
                 'compatibleCraftFields' => [
                     CraftPlainText::class,
@@ -161,7 +234,7 @@ abstract class Integration extends Model
                 ]
             ],
             [
-                'label' => 'User Agent',
+                'label' => Craft::t('sprout-forms', 'User Agent'),
                 'value' => 'userAgent',
                 'compatibleCraftFields' => [
                     CraftPlainText::class
@@ -169,7 +242,8 @@ abstract class Integration extends Model
             ]
         ]);
 
-        $fields = $this->form->getFields();
+        $form = SproutForms::$app->forms->getFormById($this->formId);
+        $fields = $form->getFields();
 
         if (count($fields)) {
             if ($addOptGroup) {
@@ -197,7 +271,7 @@ abstract class Integration extends Model
      */
     public function logResponse($isValid, $message)
     {
-        $this->entry->addEntryIntegrationLog($this->integrationId, $isValid, $message);
+        $this->entry->addEntryIntegrationLog($this->id, $isValid, $message);
     }
 }
 
