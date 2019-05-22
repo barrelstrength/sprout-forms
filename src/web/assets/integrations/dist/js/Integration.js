@@ -9,7 +9,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
         updateTargetFieldsAction: null,
 
         init: function(settings) {
-
+            var that = this;
             this.updateTargetFieldsAction = settings.updateTargetFieldsAction !== null
                 ? settings.updateTargetFieldsAction
                 : null;
@@ -18,6 +18,14 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
             // Init all empty field selects
             this.updateAllFieldSelects();
+
+            // When the entry type is changed
+            $('#settings-barrelstrength-sproutforms-integrationtypes-EntryElementIntegration-entryTypeId').change(function() {
+                var changed = $(this).val() != $(this).data('default');
+                if (changed){
+                    that.updateAllFieldSelects();
+                }
+            });
         },
 
         disableOptions: function() {

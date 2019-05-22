@@ -265,9 +265,7 @@ class EntryElementIntegration extends ElementIntegration
             if ($entryElement->validate()) {
                 $result = Craft::$app->getElements()->saveElement($entryElement);
                 if ($result) {
-                    $message = Craft::t('sprout-forms', 'Entry Element Integration created Entry ID: {id}.', [
-                        'entryId' => $entryElement->id
-                    ]);
+                    $message = Craft::t('sprout-forms', 'Entry Element Integration created.');
                     $this->logResponse(true, $message);
                     Craft::info($message, __METHOD__);
                     return true;
