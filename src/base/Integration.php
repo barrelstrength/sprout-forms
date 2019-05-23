@@ -59,6 +59,13 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
     }
 
     /**
+     * This action should return an form fields array
+     */
+    public function getUpdateSourceFieldsAction() {
+        return 'sprout-forms/integrations/get-form-fields';
+    }
+
+    /**
      * Prepares the $fieldMapping array based on the current form fields and any existing settings
      */
     public function prepareFieldMapping()

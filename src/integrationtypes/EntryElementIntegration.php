@@ -99,6 +99,8 @@ class EntryElementIntegration extends ElementIntegration
             }
         }
 
+        unset($fields['id']);
+
         return $fields;
     }
 
@@ -215,8 +217,6 @@ class EntryElementIntegration extends ElementIntegration
                 $this->logResponse(false, $entryElement->getErrors());
                 Craft::error($message, __METHOD__);
             } else {
-
-
                 $errors = json_encode($entryElement->getErrors());
                 $message = Craft::t('sprout-forms', 'Element Integration does not validate: '.$this->name.' - Errors: '.$errors);
                 Craft::error($message, __METHOD__);
@@ -224,7 +224,7 @@ class EntryElementIntegration extends ElementIntegration
             }
         } catch (\Exception $e) {
             Craft::error($e->getMessage(), __METHOD__);
-            $this->logResponse(false, $e->getTrace());
+            $this->logResponse(false, $e->getMessage());
         }
 
         return false;

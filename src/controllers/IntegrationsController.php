@@ -198,6 +198,27 @@ class IntegrationsController extends BaseController
     }
 
     /**
+     * @return Response
+     * @throws BadRequestHttpException
+     * @throws InvalidConfigException
+     * @throws MissingComponentException
+     */
+    public function actionGetFormFields()
+    {
+        $this->requirePostRequest();
+        $this->requireAcceptsJson();
+
+        $integrationId = Craft::$app->request->getRequiredBodyParam('integrationId');
+        $integration = SproutForms::$app->integrations->getIntegrationById($integrationId);
+        $formFields = $integration->getFormFieldsAsMappingOptions();
+
+        return $this->asJson([
+            'success' => true,
+            'formFields' => $formFields
+        ]);
+    }
+
+    /**
      * @param $entryFields
      * @param Integration $integration
      * @param $entryTypeId

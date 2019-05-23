@@ -7,11 +7,16 @@ if (typeof Craft.SproutForms === typeof undefined) {
     Craft.SproutForms.ElementIntegration = Garnish.Base.extend({
 
         updateTargetFieldsAction: null,
+        updateSourceFieldsAction: null,
 
         init: function(settings) {
             var that = this;
-            this.updateTargetFieldsAction = settings.updateTargetFieldsAction !== null
+            this.updateTargetFieldsAction = typeof settings.updateTargetFieldsAction !== 'undefined'
                 ? settings.updateTargetFieldsAction
+                : null;
+
+            this.updateSourceFieldsAction = typeof settings.updateSourceFieldsAction !== 'undefined'
+                ? settings.updateSourceFieldsAction
                 : null;
             // Make the sourceFormField read only
             this.disableOptions();
@@ -29,12 +34,34 @@ if (typeof Craft.SproutForms === typeof undefined) {
         },
 
         disableOptions: function() {
-            $('.formField').each(function() {
-                $(this).find('textarea').attr("readonly", true);
-            });
+            if (this.updateSourceFieldsAction !== null){
+                var data = this.getEntryFieldsData();
+                Craft.postActionRequest(this.updateSourceFieldsAction, data, $.proxy(function(response, textStatus) {
+                    var statusSuccess = (textStatus === 'success');
+                    if (statusSuccess && response.success) {
+                        var rows = response.formFields;
+                        $('tbody .formField').each(function(index) {
+                            let td = $(this);
+                            td.empty();
+                            let title = rows[index]["label"];
+                            let handle = rows[index]["value"];
+                            td.append('<div style="margin-left:8px; margin-top:4px;" class="select small"><select readonly name="settings[barrelstrength\\sproutforms\\integrationtypes\\EntryElementIntegration][fieldMapping]['+index+'][sourceFormField]"><option selected value="'+handle+'">'+title+'</option></select></div>');
+                        });
+                    } else {
+                        Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to get the Form fields'));
+                    }
+                }, this));
+            }else{
+                $('.formField').each(function(index) {
+                    $(this).find('textarea').attr("readonly", true);
+                });
+            }
         },
 
         updateAllFieldSelects: function() {
+            if (this.updateTargetFieldsAction === null){
+                return false;
+            }
             var $currentRows = this.getCurrentRows('tbody .targetFields');
             var data = this.getEntryFieldsData();
             var that = this;
