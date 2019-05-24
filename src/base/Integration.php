@@ -2,7 +2,6 @@
 
 namespace barrelstrength\sproutforms\base;
 
-use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\fields\formfields\SingleLine;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
@@ -18,11 +17,13 @@ use yii\base\InvalidConfigException;
  *
  * @package Craft
  *
- * @property string $fieldMappingSettingsHtml
- * @property void   $settingsHtml
- * @property array  $sourceFormFields
- * @property void   $customSourceFormFields
- * @property string $type
+ * @property string      $fieldMappingSettingsHtml
+ * @property void        $settingsHtml
+ * @property array       $sourceFormFields
+ * @property void        $customSourceFormFields
+ * @property null|string $updateTargetFieldsAction
+ * @property string      $updateSourceFieldsAction
+ * @property string      $type
  */
 abstract class Integration extends SavableComponent implements IntegrationInterface
 {

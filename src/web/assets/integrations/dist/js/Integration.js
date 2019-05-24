@@ -4,7 +4,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
 (function($) {
 
-    Craft.SproutForms.ElementIntegration = Garnish.Base.extend({
+    Craft.SproutForms.Integration = Garnish.Base.extend({
 
         updateTargetFieldsAction: null,
         updateSourceFieldsAction: null,
@@ -134,6 +134,6 @@ if (typeof Craft.SproutForms === typeof undefined) {
             $select.append(dropdown);
         }
 
-    }); // End Craft.SproutForms.ElementIntegration
+    }); // End Craft.SproutForms.Integration
 
 })(jQuery);
