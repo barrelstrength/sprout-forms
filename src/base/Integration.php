@@ -186,12 +186,6 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
         if (count($fields)) {
             foreach ($fields as $field) {
                 $sourceFormFields[] = $field;
-//                $sourceFormFields[] = [
-//                    'label' => $field->name,
-//                    'value' => $field->handle,
-//                    'compatibleCraftFields' => $field->getCompatibleCraftFields(),
-//                    'fieldType' => get_class($field)
-//                ];
             }
         }
 

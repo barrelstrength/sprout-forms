@@ -19,6 +19,7 @@ use yii\web\IdentityInterface;
  * @property string                            $userElementType
  * @property IdentityInterface|User|null|false $author
  * @property array                             $defaultAttributes
+ * @property array                             $elementIntegrationFieldOptions
  * @property array                             $sectionsAsOptions
  */
 class EntryElementIntegration extends ElementIntegration
@@ -107,8 +108,6 @@ class EntryElementIntegration extends ElementIntegration
 
     public function getElementIntegrationFieldOptions()
     {
-        $sourceFormFields = $this->getSourceFormFields();
-
         $entryTypeId = $this->entryTypeId;
 
         // If no Entry ID has been selected, select the first one in the list.
@@ -120,8 +119,6 @@ class EntryElementIntegration extends ElementIntegration
         $targetElementFields = $this->getElementCustomFieldsAsOptions($entryTypeId);
 
         return $targetElementFields;
-
-        \Craft::dd($sourceFormFields);
     }
     
     /**
@@ -172,11 +169,6 @@ class EntryElementIntegration extends ElementIntegration
 
         foreach ($entryFields as $field) {
             $options[] = $field;
-//            $options[] = [
-//                'label' => $field->name,
-//                'value' => $field->handle,
-//                'class' => get_class($field)
-//            ];
         }
 
         return $options;

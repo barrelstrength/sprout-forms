@@ -34,28 +34,30 @@ if (typeof Craft.SproutForms === typeof undefined) {
         },
 
         disableOptions: function() {
-            if (this.updateSourceFieldsAction !== null){
-                var data = this.getEntryFieldsData();
-                Craft.postActionRequest(this.updateSourceFieldsAction, data, $.proxy(function(response, textStatus) {
-                    var statusSuccess = (textStatus === 'success');
-                    if (statusSuccess && response.success) {
-                        var rows = response.formFields;
-                        $('tbody .formField').each(function(index) {
-                            let td = $(this);
-                            td.empty();
-                            let title = rows[index]["label"];
-                            let handle = rows[index]["value"];
-                            td.append('<div style="margin-left:8px; margin-top:4px;" class="select small"><select readonly name="settings[barrelstrength\\sproutforms\\integrationtypes\\EntryElementIntegration][fieldMapping]['+index+'][sourceFormField]"><option selected value="'+handle+'">'+title+'</option></select></div>');
-                        });
-                    } else {
-                        Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to get the Form fields'));
-                    }
-                }, this));
-            }else{
+            if (this.updateSourceFieldsAction === null) {
                 $('.formField').each(function(index) {
                     $(this).find('textarea').attr("readonly", true);
                 });
+
+                return null;
             }
+
+            var data = this.getEntryFieldsData();
+            Craft.postActionRequest(this.updateSourceFieldsAction, data, $.proxy(function(response, textStatus) {
+                var statusSuccess = (textStatus === 'success');
+                if (statusSuccess && response.success) {
+                    var rows = response.formFields;
+                    $('tbody .formField').each(function(index) {
+                        var td = $(this);
+                        td.empty();
+                        var title = rows[index]["label"];
+                        var handle = rows[index]["value"];
+                        td.append('<div style="margin-left:8px; margin-top:4px;" class="select small"><select readonly name="settings[barrelstrength\\sproutforms\\integrationtypes\\EntryElementIntegration][fieldMapping]['+index+'][sourceFormField]"><option selected value="'+handle+'">'+title+'</option></select></div>');
+                    });
+                } else {
+                    Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to get the Form fields'));
+                }
+            }, this));
         },
 
         updateAllFieldSelects: function() {
