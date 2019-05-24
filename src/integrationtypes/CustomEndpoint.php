@@ -77,7 +77,11 @@ class CustomEndpoint extends Integration
         if ($this->fieldMapping) {
             foreach ($this->fieldMapping as $fieldMap) {
                 if (isset($entry->{$fieldMap['sourceFormField']}) && $fieldMap['targetIntegrationField']) {
-                    $fields[$fieldMap['targetIntegrationField']] = $entry->{$fieldMap['sourceFormField']};
+                    if ($fieldMap['sourceFormField'] === 'entryId') {
+                        $fields[$fieldMap['targetIntegrationField']] = $entry->id;
+                    } else {
+                        $fields[$fieldMap['targetIntegrationField']] = $entry->{$fieldMap['sourceFormField']};
+                    }
                 }
             }
         }

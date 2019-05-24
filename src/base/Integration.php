@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\base;
 
+use barrelstrength\sproutforms\fields\formfields\Number;
 use barrelstrength\sproutforms\fields\formfields\SingleLine;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
@@ -124,7 +125,17 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
                     CraftDropdown::class,
                     CraftNumber::class
                 ],
-                'type' => SingleLine::class
+                'type' => Number::class
+            ],
+            [
+                'name' => Craft::t('sprout-forms', 'Entry ID'),
+                'handle' => 'entryId',
+                'compatibleCraftFields' => [
+                    CraftPlainText::class,
+                    CraftDropdown::class,
+                    CraftNumber::class
+                ],
+                'type' => Number::class
             ],
             [
                 'name' => Craft::t('sprout-forms', 'Title'),
@@ -212,6 +223,15 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
             [
                 'label' => Craft::t('sprout-forms', 'Form ID'),
                 'value' => 'id',
+                'compatibleCraftFields' => [
+                    CraftPlainText::class,
+                    CraftDropdown::class,
+                    CraftNumber::class
+                ]
+            ],
+            [
+                'label' => Craft::t('sprout-forms', 'Entry ID'),
+                'value' => 'entryId',
                 'compatibleCraftFields' => [
                     CraftPlainText::class,
                     CraftDropdown::class,
