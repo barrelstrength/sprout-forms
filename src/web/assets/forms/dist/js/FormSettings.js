@@ -99,7 +99,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
         createDefaultIntegration: function(type) {
 
             var that = this;
-            var integrationRows = $(".sproutforms-integration-row");
+            var integrationCreate = $("#sproutforms-integrations-create");
             var currentIntegration = $("#integrationsOptions").val();
             var formId = $("#formId").val();
 
@@ -113,7 +113,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
                 if (textStatus === 'success') {
                     var integration = response.integration;
 
-                    integrationRows.last().after('<div class="field sproutforms-integration-row" id ="sproutforms-integration-row-' + integration.id + '">' +
+                    integrationCreate.before('<div class="field sproutforms-integration-row" id ="sproutforms-integration-row-' + integration.id + '">' +
                         '<div class="heading">' +
                         '<a href="#" id ="sproutform-integration-' + integration.id + '" data-integrationid="' + integration.id + '">' + integration.name + '</a>' +
                         '</div>' +
