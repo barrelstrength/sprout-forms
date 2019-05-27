@@ -59,6 +59,7 @@
 {% js %}
     new Craft.SproutForms.Integration({
         updateTargetFieldsAction: '{{ integration.getUpdateTargetFieldsAction() }}',
-        updateSourceFieldsAction: '{{ integration.getUpdateSourceFieldsAction() }}'
+        updateSourceFieldsAction: '{{ integration.getUpdateSourceFieldsAction() }}',
+    integrationType: '{{ integration.getType() }}'
     });
 {% endjs %}

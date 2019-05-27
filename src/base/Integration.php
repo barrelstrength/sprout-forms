@@ -295,5 +295,13 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
     {
         $this->entry->addEntryIntegrationLog($this->id, $isValid, $message);
     }
+
+    /**
+     * @return string|null
+     */
+    public function getType()
+    {
+        return Addslashes(get_called_class());
+    }
 }
 

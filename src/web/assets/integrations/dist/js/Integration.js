@@ -8,9 +8,14 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
         updateTargetFieldsAction: null,
         updateSourceFieldsAction: null,
+        integrationType: null,
 
         init: function(settings) {
             var that = this;
+            this.integrationType = typeof settings.integrationType !== 'undefined'
+                ? settings.integrationType
+                : '';
+
             this.updateTargetFieldsAction = typeof settings.updateTargetFieldsAction !== 'undefined'
                 ? settings.updateTargetFieldsAction
                 : null;
@@ -43,6 +48,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
             }
 
             var data = this.getEntryFieldsData();
+            var that = this;
             Craft.postActionRequest(this.updateSourceFieldsAction, data, $.proxy(function(response, textStatus) {
                 var statusSuccess = (textStatus === 'success');
                 if (statusSuccess && response.success) {
@@ -52,7 +58,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
                         td.empty();
                         var title = rows[index]["label"];
                         var handle = rows[index]["value"];
-                        td.append('<div style="margin-left:8px; margin-top:4px;" class="select small"><select readonly name="settings[barrelstrength\\sproutforms\\integrationtypes\\EntryElementIntegration][fieldMapping]['+index+'][sourceFormField]"><option selected value="'+handle+'">'+title+'</option></select></div>');
+                        td.append('<div style="margin-left:8px; margin-top:4px;" class="select small"><select readonly name="settings['+that.integrationType+'][fieldMapping]['+index+'][sourceFormField]"><option selected value="'+handle+'">'+title+'</option></select></div>');
                     });
                 } else {
                     Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to get the Form fields'));

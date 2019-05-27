@@ -34,5 +34,8 @@
 }) }}
 
 {% js %}
-    new Craft.SproutForms.Integration({});
+    new Craft.SproutForms.Integration({
+    updateSourceFieldsAction: '{{ integration.getUpdateSourceFieldsAction() }}',
+    integrationType: '{{ integration.getType() }}'
+    });
 {% endjs %}
