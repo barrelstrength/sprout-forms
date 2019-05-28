@@ -322,7 +322,7 @@ class Integrations extends Component
                 }
             } catch (\Exception $e) {
                 $message = 'Submit Integration Api fails: '.$e->getMessage();
-                $integration->logResponse($message, $e->getTrace());
+                $integration->logResponse($message, $e->getMessage());
                 Craft::error($message, __METHOD__);
             }
         }
