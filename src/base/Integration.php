@@ -119,7 +119,7 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
         $sourceFormFieldsData = [
             [
                 'name' => Craft::t('sprout-forms', 'Form ID'),
-                'handle' => 'id',
+                'handle' => 'formId',
                 'compatibleCraftFields' => [
                     CraftPlainText::class,
                     CraftDropdown::class,
@@ -129,7 +129,7 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
             ],
             [
                 'name' => Craft::t('sprout-forms', 'Entry ID'),
-                'handle' => 'entryId',
+                'handle' => 'id',
                 'compatibleCraftFields' => [
                     CraftPlainText::class,
                     CraftDropdown::class,
@@ -216,7 +216,7 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
         $options = array_merge($options, [
             [
                 'label' => Craft::t('sprout-forms', 'Form ID'),
-                'value' => 'id',
+                'value' => 'formId',
                 'compatibleCraftFields' => [
                     CraftPlainText::class,
                     CraftDropdown::class,
@@ -225,7 +225,7 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
             ],
             [
                 'label' => Craft::t('sprout-forms', 'Entry ID'),
-                'value' => 'entryId',
+                'value' => 'id',
                 'compatibleCraftFields' => [
                     CraftPlainText::class,
                     CraftDropdown::class,
