@@ -297,11 +297,14 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
     }
 
     /**
+     * @todo - can we remove this and update how this happens to use javascript?
+     * https://stackoverflow.com/questions/2195568/how-do-i-add-slashes-to-a-string-in-javascript
+     *
      * @return string|null
      */
     public function getType()
     {
-        return Addslashes(get_called_class());
+        return addslashes(get_called_class());
     }
 }
 
