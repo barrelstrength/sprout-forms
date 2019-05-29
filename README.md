@@ -14,7 +14,7 @@ See the Sprout Forms documentation to learn more about Sprout Forms.
 
 ## Documentation
 
-See the [Sprout Website](https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs) for documentation, guides, and additional resources. 
+See the [Sprout Website](https://sprout.barrelstrengthdesign.com/docs/forms/) for documentation, guides, and additional resources. 
 
 ## Support
 
