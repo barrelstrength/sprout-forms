@@ -12,20 +12,31 @@
         first: true
     }) }}
 
-    {{ forms.dateTimeField({
-        label: "Start Date"|t('sprout-forms'),
-        id: 'startDate',
-        name: 'settings[startDate]',
-        value: (options.startDate is defined ? options.startDate : defaultStartDate)
-    }) }}
 
-    {{ forms.dateTimeField({
-        label: "End Date"|t('sprout-forms'),
-        id: 'endDate',
-        name: 'settings[endDate]',
-        value: (options.endDate is defined ? options.endDate : defaultEndDate)
+    {{ forms.selectField({
+        id: "dateRange",
+        name: "settings[dateRange]",
+        label: "Date Ranges",
+        fieldClass: 'field-border-top',
+        options: dateRanges,
+        value: options.dateRange is defined ? options.dateRange : 'customRange'
     }) }}
+    <div id="custom-date-range">
+        {{ forms.dateTimeField({
+            label: "Start Date"|t('sprout-forms'),
+            id: 'startDate',
+            name: 'settings[startDate]',
+            value: (options.startDate is defined ? options.startDate : defaultStartDate)
+        }) }}
 
+
+        {{ forms.dateTimeField({
+            label: "End Date"|t('sprout-forms'),
+            id: 'endDate',
+            name: 'settings[endDate]',
+            value: (options.endDate is defined ? options.endDate : defaultEndDate)
+        }) }}
+    </div>
 {% else %}
 
     {% set boxBody %}
@@ -41,3 +52,4 @@
 {% endif %}
 
 {% do view.registerAssetBundle("barrelstrength\\sproutbase\\web\\assets\\cp\\CpAsset") %}
+{% do view.registerAssetBundle("barrelstrength\\sproutbasereports\\web\\assets\\base\\SproutReportsAsset") %}

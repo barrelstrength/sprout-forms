@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\integrations\sproutreports\datasources;
 
+use barrelstrength\sproutbasereports\SproutBaseReports;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutbasereports\elements\Report;
@@ -218,10 +219,13 @@ class EntriesDataSource extends DataSource
             }
         }
 
+        $dateRanges = SproutBaseReports::$app->reports->getDateRanges();
+
         return Craft::$app->getView()->renderTemplate('sprout-forms/_integrations/sproutreports/datasources/EntriesDataSource/settings', [
             'formOptions' => $formOptions,
             'defaultStartDate' => new \DateTime($defaultStartDate),
             'defaultEndDate' => new \DateTime($defaultEndDate),
+            'dateRanges' => $dateRanges,
             'options' => $settings
         ]);
     }
