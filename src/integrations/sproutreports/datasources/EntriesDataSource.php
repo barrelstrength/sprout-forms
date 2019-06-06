@@ -21,6 +21,8 @@ use craft\elements\db\ElementQueryInterface;
  */
 class EntriesDataSource extends DataSource
 {
+    private $reportModel;
+
     /**
      * @return string
      */
@@ -48,38 +50,12 @@ class EntriesDataSource extends DataSource
         $endDate = null;
         $formId = null;
 
-        if (!empty($report->getSetting('startDate'))) {
-            $startDateValue = $report->getSetting('startDate');
-            $startDateValue = (array)$startDateValue;
-
-            $startDate = DateTimeHelper::toIso8601($startDateValue);
-
-            $startDate = DateTimeHelper::toDateTime($startDate);
-        }
-
-        if (!empty($report->getSetting('endDate'))) {
-            $endDateValue = $report->getSetting('endDate');
-            $endDateValue = (array)$endDateValue;
-
-            $endDate = DateTimeHelper::toIso8601($endDateValue);
-
-            $endDate = DateTimeHelper::toDateTime($endDate);
-        }
+        $startEndDate = $report->getStartEndDate();
+        $startDate = $startEndDate->getStartDate();
+        $endDate   = $startEndDate->getEndDate();
 
         if (!empty($report->getSetting('formId'))) {
             $formId = $report->getSetting('formId');
-        }
-
-        if (count($settings)) {
-            if (isset($settings['startDate'])) {
-                $startDate = DateTimeHelper::toDateTime($settings['startDate']);
-            }
-
-            if (isset($settings['endDate'])) {
-                $endDate = DateTimeHelper::toDateTime($settings['endDate']);
-            }
-
-            $formId = $settings['formId'];
         }
 
         $rows = [];
@@ -219,7 +195,7 @@ class EntriesDataSource extends DataSource
             }
         }
 
-        $dateRanges = SproutBaseReports::$app->reports->getDateRanges();
+        $dateRanges = SproutBaseReports::$app->reports->getDateRanges(false);
 
         return Craft::$app->getView()->renderTemplate('sprout-forms/_integrations/sproutreports/datasources/EntriesDataSource/settings', [
             'formOptions' => $formOptions,
