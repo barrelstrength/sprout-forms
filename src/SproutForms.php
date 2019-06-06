@@ -113,6 +113,7 @@ class SproutForms extends Plugin
 
         self::$app = $this->get('app');
 
+        Craft::setAlias('@sproutforms', $this->basePath);
         Craft::setAlias('@sproutformslib', dirname(__DIR__).'/lib');
 
         SproutBaseHelper::registerModule();

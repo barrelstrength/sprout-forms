@@ -1,0 +1,156 @@
+{% extends "_layouts/cp" %}
+
+{% set title = "Welcome to Sprout Forms"|t('sprout-forms') %}
+
+{% macro highlightPage(settings) %}
+    {% set heading = settings.heading ?? null %}
+    {% set message = settings.message ?? null %}
+    {% set primaryButtonText = settings.primaryButtonText ?? null %}
+    {% set primaryButtonLink = settings.primaryButtonLink ?? null %}
+    {% set secondaryButtonText = settings.secondaryButtonText ?? null %}
+    {% set secondaryButtonLink = settings.secondaryButtonLink ?? null %}
+    {% set imageUrl = settings.imageUrl ?? null %}
+    {% set vimeoVideoId = settings.vimeoVideoId ?? null %}
+
+    <div class="topbar">
+        {{ svg('@sproutbase/web/assets/cp/dist/images/sprout-icon.svg') }}
+    </div>
+
+    <header>
+        <h1>{{ settings.heading }}</h1>
+
+        {% if message %}
+            <p>{{ message|raw }}</p>
+        {% endif %}
+
+        <div class="buttons">
+            {% if primaryButtonText and primaryButtonLink %}
+                <a class="btn submit" href="{{ primaryButtonLink }}">
+                    <span class="get-started-icon">{{ settings.iconMask }}</span> {{ primaryButtonText }}
+                </a>
+            {% endif %}
+            {% if secondaryButtonText and secondaryButtonLink %}
+                <a class="btn" data-icon="world" href="{{ secondaryButtonText }}">{{ secondaryButtonText }}</a>
+            {% endif %}
+        </div>
+
+        {% if vimeoVideoId %}
+            <div id="video-wrapper">
+                <iframe id="video" class="video" data-vimeo-id="{{ vimeoVideoId }}" src="https://player.vimeo.com/video/{{ vimeoVideoId }}" width="870" height="489" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+            </div>
+        {% endif %}
+
+        {% if imageUrl %}
+            <img src="{{ imageUrl }}" width="870" height="489" />
+        {% endif %}
+    </header>
+
+{% endmacro %}
+
+{% import _self as sprout %}
+
+{% block content %}
+
+    {{ sprout.highlightPage({
+        heading: "Simple, Beautiful Forms. 100% control.",
+        message: "Sprout Forms <span class='sprout-pro'>Pro</span> makes it easy for content authors to manage complex forms while also giving a wonderful amount of control for designers and developers.",
+        iconMask: svg('@sproutforms/icon-mask.svg'),
+        primaryButtonText: "Get Started",
+        primaryButtonLink: cpUrl('sprout-forms/forms'),
+        secondaryButtonText: "Read the Docs",
+        secondaryButtonLink: "https://sprout.barrelstrengthdesign.com/docs/forms",
+        vimeoVideoId: '248062317'
+    }) }}
+{% endblock %}
+
+{% css %}
+    header#header h1 { display: none !important; }
+
+    @media only screen and (min-width: 1223px) {
+    header#header {
+    background-color: rgb(71, 182, 73) !important;
+    height: 5px !important;
+    padding: 0 !important;
+    }
+    }
+    .sprout-pro {
+    background-color: #333f4d;
+    border-radius:3px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 80%;
+    padding:3px 5px;
+    }
+
+    .topbar {
+    text-align: center;
+    }
+    .topbar svg {
+    height: 60px;
+    width: 60px;
+    }
+    #content h1,
+    #content p {
+    margin: 48px auto !important;
+    padding: 0 10%;
+    text-align: center;
+    }
+
+    #content .buttons {
+    margin-top: -24px;
+    margin-bottom: 48px !important;
+    align-items: center;
+    justify-content: center;
+    }
+
+    #content header h1 {
+    font-size: 40px;
+    }
+
+    #content header p {
+    font-size: 19px;
+    }
+
+    .get-started-icon svg {
+    fill:white;
+    width: 16px;
+    height: 16px;
+    vertical-align:text-bottom;
+    }
+
+    #content .screenshot,
+    #content #video-wrapper {
+    display: block;
+    margin: 48px auto;
+    }
+
+    #content .screenshot {
+    position: relative;
+    max-width: 100%;
+    width: 1000px;
+    }
+
+    #content .screenshot:after {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: $paneBorderRadius;
+    width: 100%;
+    height: 100%;
+    content: '.';
+    font-size: 0;
+    box-shadow: inset 0 0 0 1px $hairlineColorAlpha;
+    }
+
+    #content .screenshot img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: $paneBorderRadius;
+    }
+
+    #content #video-wrapper {
+    max-width: 870px;
+    }
+{% endcss %}
