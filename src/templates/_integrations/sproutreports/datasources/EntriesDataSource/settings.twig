@@ -12,23 +12,23 @@
         first: true
     }) }}
 
-
     {{ forms.selectField({
         id: "dateRange",
         name: "settings[dateRange]",
-        label: "Date Ranges",
+        label: "Date Range"|t('sprout-forms'),
+        instructions: "Select the date range for your report. Predefined options like 'Last Month' will always be determined based on when the report is run."|t('sprout-forms'),
         fieldClass: 'field-border-top',
         options: dateRanges,
         value: options.dateRange is defined ? options.dateRange : 'customRange'
     }) }}
-    <div id="custom-date-range">
+
+    <div id="custom-date-range" class="field">
         {{ forms.dateTimeField({
             label: "Start Date"|t('sprout-forms'),
             id: 'startDate',
             name: 'settings[startDate]',
             value: (options.startDate is defined ? options.startDate : defaultStartDate)
         }) }}
-
 
         {{ forms.dateTimeField({
             label: "End Date"|t('sprout-forms'),
