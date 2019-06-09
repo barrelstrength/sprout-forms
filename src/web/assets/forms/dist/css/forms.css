@@ -48,7 +48,7 @@ select[readonly] {
     pointer-events: none;
     touch-action: none;
 }
-/*.field.sproutforms-integration-row {*/
-/*    display: flex;*/
-/*    justify-content: space-between;*/
-/*}*/
+
+table.editable .custom-endpoint textarea {
+    font-size: 12px;
+}
