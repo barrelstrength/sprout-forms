@@ -231,17 +231,20 @@ class EntryElementIntegration extends ElementIntegration
         $options = [];
 
         foreach ($sections as $section) {
-            if ($section->type != 'single') {
-                $entryTypes = $section->getEntryTypes();
+            // Don't show Singles
+            if ($section->type === 'single') {
+                continue;
+            }
 
-                $options[] = ['optgroup' => $section->name];
+            $entryTypes = $section->getEntryTypes();
 
-                foreach ($entryTypes as $entryType) {
-                    $options[] = [
-                        'label' => $entryType->name,
-                        'value' => $entryType->id
-                    ];
-                }
+            $options[] = ['optgroup' => $section->name];
+
+            foreach ($entryTypes as $entryType) {
+                $options[] = [
+                    'label' => $entryType->name,
+                    'value' => $entryType->id
+                ];
             }
         }
 
