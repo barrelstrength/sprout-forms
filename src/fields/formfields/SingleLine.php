@@ -218,7 +218,7 @@ class SingleLine extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function getCompatibleCraftFields(): array
+    public function getCompatibleCraftFieldTypes(): array
     {
         return [
             CraftPlainText::class,

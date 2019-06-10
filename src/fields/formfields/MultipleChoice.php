@@ -130,7 +130,7 @@ class MultipleChoice extends BaseOptionsFormField
     /**
      * @inheritdoc
      */
-    public function getCompatibleCraftFields(): array
+    public function getCompatibleCraftFieldTypes(): array
     {
         return [
             CraftRadioButtons::class

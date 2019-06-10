@@ -278,7 +278,7 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
                 $options[] = [
                     'label' => $field->name,
                     'value' => $field->handle,
-                    'compatibleCraftFields' => $field->getCompatibleCraftFields(),
+                    'compatibleCraftFields' => $field->getCompatibleCraftFieldTypes(),
                     'fieldType' => get_class($field)
                 ];
             }

@@ -206,7 +206,7 @@ class Tags extends BaseRelationFormField
     /**
      * @inheritdoc
      */
-    public function getCompatibleCraftFields(): array
+    public function getCompatibleCraftFieldTypes(): array
     {
         return [
             CraftTags::class

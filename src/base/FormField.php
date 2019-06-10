@@ -41,11 +41,11 @@ abstract class FormField extends Field
     }
 
     /**
-     * Return a list of compatible Craft Fields to associate on the Element Integration API
+     * Return a list of compatible Craft Field Types to associate on the Element Integration API
      *
      * @return array
      */
-    public function getCompatibleCraftFields(): array
+    public function getCompatibleCraftFieldTypes(): array
     {
         return [
             CraftPlainText::class

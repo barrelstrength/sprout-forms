@@ -827,7 +827,7 @@ class FileUpload extends BaseRelationFormField
     /**
      * @inheritdoc
      */
-    public function getCompatibleCraftFields(): array
+    public function getCompatibleCraftFieldTypes(): array
     {
         return [
             CraftAssets::class

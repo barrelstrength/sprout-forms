@@ -275,7 +275,7 @@ class EmailDropdown extends BaseOptionsFormField
     /**
      * @inheritdoc
      */
-    public function getCompatibleCraftFields(): array
+    public function getCompatibleCraftFieldTypes(): array
     {
         return [
             CraftPlainText::class,
