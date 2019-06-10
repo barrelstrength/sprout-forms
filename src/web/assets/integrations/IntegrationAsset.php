@@ -7,7 +7,6 @@
 
 namespace barrelstrength\sproutforms\web\assets\integrations;
 
-use barrelstrength\sproutforms\web\assets\charts\ChartsAsset;
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
 

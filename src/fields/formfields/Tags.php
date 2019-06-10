@@ -19,6 +19,7 @@ use barrelstrength\sproutforms\SproutForms;
  *
  * @property string $svgIconPath
  * @property array  $compatibleCraftFields
+ * @property array  $compatibleCraftFieldTypes
  * @property mixed  $exampleInputHtml
  */
 class Tags extends BaseRelationFormField

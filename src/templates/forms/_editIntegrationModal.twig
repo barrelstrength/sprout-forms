@@ -27,8 +27,6 @@
 
     {% namespace 'settings['~className(integration)~']' %}
         {{ integration.getSettingsHtml()|raw }}
-
-{#        {{ integration.getFieldMappingSettingsHtml()|raw }}#}
     {% endnamespace %}
 
     {{ forms.selectField({

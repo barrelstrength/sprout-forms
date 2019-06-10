@@ -31,8 +31,8 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
             // When the entry type is changed
             $('#settings-barrelstrength-sproutforms-integrationtypes-EntryElementIntegration-entryTypeId').change(function() {
-                var changed = $(this).val() != $(this).data('default');
-                if (changed){
+                var changed = $(this).val() !== $(this).data('default');
+                if (changed) {
                     that.updateAllFieldSelects();
                 }
             });
@@ -58,7 +58,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
                         td.empty();
                         var title = rows[index]["label"];
                         var handle = rows[index]["value"];
-                        td.append('<div style="display:none;"><select readonly name="settings['+that.integrationType+'][fieldMapping]['+index+'][sourceFormField]"><option selected value="'+handle+'">'+title+'</option></select></div><div style="padding: 7px 10px;font-size: 12px;color:#8f98a3;">'+title+' <span class="code">('+handle+')</span></div>');
+                        td.append('<div style="display:none;"><select readonly name="settings[' + that.integrationType + '][fieldMapping][' + index + '][sourceFormField]"><option selected value="' + handle + '">' + title + '</option></select></div><div style="padding: 7px 10px;font-size: 12px;color:#8f98a3;">' + title + ' <span class="code">(' + handle + ')</span></div>');
                     });
                 } else {
                     Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to get the Form fields'));
@@ -68,12 +68,12 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
         updateAllFieldSelects: function() {
             var integrationIdBase = this.integrationType.replace(/\\/g, '-');
-            var mappingTableRows = 'table#settings-'+integrationIdBase+'-fieldMapping tr';
+            var mappingTableRows = 'table#settings-' + integrationIdBase + '-fieldMapping tr';
             $(mappingTableRows).find('td:eq(2),th:eq(2)').remove();
             $(mappingTableRows).find('td:eq(0),th:eq(0)').css('width', '50%');
             $(mappingTableRows).find('td:eq(1),th:eq(1)').css('width', '50%');
 
-            if (this.updateTargetFieldsAction === null){
+            if (this.updateTargetFieldsAction === null) {
                 return false;
             }
 
@@ -108,12 +108,11 @@ if (typeof Craft.SproutForms === typeof undefined) {
         getEntryFieldsData: function() {
             var entryTypeId = $('#settings-barrelstrength-sproutforms-integrationtypes-EntryElementIntegration-entryTypeId').val();
             var integrationId = $('#integrationId').val();
-            var data = {
+
+            return {
                 'entryTypeId': entryTypeId,
                 'integrationId': integrationId
             };
-
-            return data;
         },
 
         appendFieldsToSelect: function($select, fields) {
@@ -121,7 +120,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
             var dropdown = '';
             var closeOptgroup = false;
-            $select.append('<option value="">'+Craft.t('sprout-forms', 'None')+'</option>');
+            $select.append('<option value="">' + Craft.t('sprout-forms', 'None') + '</option>');
 
             for (i = 0; i < fields.length; i++) {
                 var field = fields[i];

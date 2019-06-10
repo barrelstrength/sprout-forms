@@ -21,6 +21,7 @@ use barrelstrength\sproutbasefields\models\Address as AddressModel;
  * @property string $contentColumnType
  * @property string $svgIconPath
  * @property array  $compatibleCraftFields
+ * @property array  $compatibleCraftFieldTypes
  * @property string $exampleInputHtml
  */
 class Address extends FormField implements PreviewableFieldInterface
@@ -87,8 +88,6 @@ class Address extends FormField implements PreviewableFieldInterface
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup
     {

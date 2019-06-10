@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\controllers;
 
+use barrelstrength\sproutforms\base\ElementIntegration;
 use barrelstrength\sproutforms\base\Integration;
 use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
 use Craft;
@@ -10,9 +11,6 @@ use craft\errors\MissingComponentException;
 use craft\web\Controller as BaseController;
 use barrelstrength\sproutforms\SproutForms;
 use Throwable;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
 use yii\base\InvalidConfigException;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
@@ -70,7 +68,6 @@ class IntegrationsController extends BaseController
      * @return Response
      * @throws BadRequestHttpException
      * @throws InvalidConfigException
-     * @throws MissingComponentException
      */
     public function actionSaveIntegration(): Response
     {
@@ -103,7 +100,7 @@ class IntegrationsController extends BaseController
 
         if (!SproutForms::$app->integrations->saveIntegration($integration)) {
             Craft::error('Unable to save integration.', __METHOD__);
-            return $this->returnJson(false, null);
+            return $this->returnJson(false);
         }
 
         Craft::info('Integration Saved', __METHOD__);
@@ -118,6 +115,9 @@ class IntegrationsController extends BaseController
      * @throws BadRequestHttpException
      * @throws InvalidConfigException
      * @throws MissingComponentException
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function actionEditIntegration(): Response
     {
@@ -186,6 +186,7 @@ class IntegrationsController extends BaseController
         $entryTypeId = Craft::$app->request->getRequiredBodyParam('entryTypeId');
         $integrationId = Craft::$app->request->getRequiredBodyParam('integrationId');
 
+        /** @var ElementIntegration $integration */
         $integration = SproutForms::$app->integrations->getIntegrationById($integrationId);
 
         $entryFields = $integration->getElementCustomFieldsAsOptions($entryTypeId);
@@ -203,7 +204,7 @@ class IntegrationsController extends BaseController
      * @throws InvalidConfigException
      * @throws MissingComponentException
      */
-    public function actionGetFormFields()
+    public function actionGetFormFields(): Response
     {
         $this->requirePostRequest();
         $this->requireAcceptsJson();
@@ -219,13 +220,14 @@ class IntegrationsController extends BaseController
     }
 
     /**
-     * @param $entryFields
+     * @param             $entryFields
      * @param Integration $integration
-     * @param $entryTypeId
+     * @param             $entryTypeId
+     *
      * @return array
      * @throws InvalidConfigException
      */
-    private function getFieldsAsOptionsByRow($entryFields, $integration, $entryTypeId)
+    private function getFieldsAsOptionsByRow($entryFields, $integration, $entryTypeId): array
     {
         $fieldMapping = $integration->fieldMapping;
         $integrationSectionId = $integration->entryTypeId ?? null;
@@ -237,13 +239,12 @@ class IntegrationsController extends BaseController
         foreach ($formFields as $formField) {
             $optionsByRow = $this->getCompatibleFields($entryFields, $formField);
             // We have rows stored and are for the same sectionType
-            if ($fieldMapping && ($integrationSectionId == $entryTypeId)){
-                if (isset($fieldMapping[$rowPosition])){
-                    foreach ($optionsByRow as $key => $option) {
-                        if ($option['value'] == $fieldMapping[$rowPosition]['targetIntegrationField'] &&
-                            $fieldMapping[$rowPosition]['sourceFormField'] == $formField['value']){
-                            $optionsByRow[$key]['selected'] = true;
-                        }
+            if ($fieldMapping && ($integrationSectionId == $entryTypeId) &&
+                isset($fieldMapping[$rowPosition])) {
+                foreach ($optionsByRow as $key => $option) {
+                    if ($option['value'] == $fieldMapping[$rowPosition]['targetIntegrationField'] &&
+                        $fieldMapping[$rowPosition]['sourceFormField'] == $formField['value']) {
+                        $optionsByRow[$key]['selected'] = true;
                     }
                 }
             }
@@ -259,26 +260,26 @@ class IntegrationsController extends BaseController
     /**
      * @param array $entryFields
      * @param array $formField
+     *
      * @return array
      */
-    private function getCompatibleFields( array $entryFields, array $formField)
+    private function getCompatibleFields(array $entryFields, array $formField): array
     {
         $compatibleFields = $formField['compatibleCraftFields'] ?? '*';
         $finalOptions = [];
 
         foreach ($entryFields as $field) {
-            $option =  [
+            $option = [
                 'label' => $field->name.' ('.$field->handle.')',
                 'value' => $field->handle
             ];
 
-            if (is_array($compatibleFields)){
-                if (!in_array(get_class($field), $compatibleFields)){
-                    $option = null;
-                }
+            if (is_array($compatibleFields) &&
+                !in_array(get_class($field), $compatibleFields, true)) {
+                $option = null;
             }
 
-            if ($option){
+            if ($option) {
                 $finalOptions[] = $option;
             }
         }

@@ -13,6 +13,7 @@ use craft\base\ElementInterface;
  *
  * @property string $svgIconPath
  * @property array  $compatibleCraftFields
+ * @property array  $compatibleCraftFieldTypes
  * @property mixed  $exampleInputHtml
  */
 class MultiSelect extends BaseOptionsFormField

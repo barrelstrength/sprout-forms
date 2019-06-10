@@ -15,6 +15,7 @@ use craft\fields\PlainText as CraftPlainText;
  * @property string $modelName
  * @property string $svgIconPath
  * @property array  $compatibleCraftFields
+ * @property array  $compatibleCraftFieldTypes
  * @property mixed  $exampleInputHtml
  */
 class Dropdown extends BaseOptionsFormField

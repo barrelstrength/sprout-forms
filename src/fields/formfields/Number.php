@@ -22,6 +22,7 @@ use barrelstrength\sproutforms\base\FormField;
  * @property string      $svgIconPath
  * @property null|string $settingsHtml
  * @property array       $compatibleCraftFields
+ * @property array       $compatibleCraftFieldTypes
  * @property mixed       $exampleInputHtml
  */
 class Number extends FormField implements PreviewableFieldInterface

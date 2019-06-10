@@ -34,7 +34,8 @@ class EntryElementIntegration extends ElementIntegration
     /** returns action that runs to update the targetIntegrationFieldColumns
      * This action should return an array of input fields that can be used to update the target columns
      */
-    public function getUpdateTargetFieldsAction() {
+    public function getUpdateTargetFieldsAction()
+    {
         return 'sprout-forms/integrations/get-element-entry-fields';
     }
 
@@ -105,8 +106,10 @@ class EntryElementIntegration extends ElementIntegration
         return $fields;
     }
 
-
-    public function getElementIntegrationFieldOptions()
+    /**
+     * @return array
+     */
+    public function getElementIntegrationFieldOptions(): array
     {
         $entryTypeId = $this->entryTypeId;
 
@@ -120,7 +123,7 @@ class EntryElementIntegration extends ElementIntegration
 
         return $targetElementFields;
     }
-    
+
     /**
      * @inheritDoc
      */

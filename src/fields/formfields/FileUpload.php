@@ -5,6 +5,7 @@ namespace barrelstrength\sproutforms\fields\formfields;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
+use craft\base\Volume;
 use craft\base\VolumeInterface;
 use craft\base\VolumeTrait;
 use craft\fields\Assets as CraftAssets;
@@ -28,6 +29,7 @@ use craft\web\UploadedFile;
  * @property string $svgIconPath
  * @property array  $sourceOptions
  * @property array  $compatibleCraftFields
+ * @property array  $compatibleCraftFieldTypes
  * @property mixed  $exampleInputHtml
  */
 class FileUpload extends BaseRelationFormField
@@ -819,6 +821,7 @@ class FileUpload extends BaseRelationFormField
             return null;
         }
 
+        /** @var Volume $volume */
         $volume = Craft::$app->getVolumes()->getVolumeByUid($parts[1]);
 
         return $volume ? $volume->id : null;
@@ -869,7 +872,9 @@ class FileUpload extends BaseRelationFormField
             $folder = Craft::$app->getAssets()->getFolderByUid($parts[1]);
 
             if ($folder) {
-                return 'volume:'.$folder->getVolume()->uid;
+                /** @var Volume $volume */
+                $volume = $folder->getVolume();
+                return 'volume:'.$volume->uid;
             }
         }
 
@@ -887,6 +892,8 @@ class FileUpload extends BaseRelationFormField
     {
         if ($sourceKey && is_string($sourceKey) && strpos($sourceKey, 'volume:') === 0) {
             $parts = explode(':', $sourceKey);
+
+            /** @var Volume $volume */
             $volume = Craft::$app->getVolumes()->getVolumeByUid($parts[1]);
 
             if ($volume && $folder = Craft::$app->getAssets()->getRootFolderByVolumeId($volume->id)) {

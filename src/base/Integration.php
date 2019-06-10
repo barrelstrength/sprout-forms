@@ -63,7 +63,8 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
     /**
      * This action should return an form fields array
      */
-    public function getUpdateSourceFieldsAction() {
+    public function getUpdateSourceFieldsAction()
+    {
         return 'sprout-forms/integrations/get-form-fields';
     }
 
@@ -173,7 +174,10 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
             ]
         ];
 
+        $sourceFormFields = [];
+
         foreach ($sourceFormFieldsData as $sourceFormFieldData) {
+            /** @var FormField $fieldInstance */
             $fieldInstance = new $sourceFormFieldData['type']();
             $fieldInstance->name = $sourceFormFieldData['name'];
             $fieldInstance->handle = $sourceFormFieldData['handle'];
@@ -297,14 +301,14 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
     }
 
     /**
-     * @todo - can we remove this and update how this happens to use javascript?
-     * https://stackoverflow.com/questions/2195568/how-do-i-add-slashes-to-a-string-in-javascript
-     *
      * @return string|null
+     * @todo - can we remove this and update how this happens to use javascript?
+     *       https://stackoverflow.com/questions/2195568/how-do-i-add-slashes-to-a-string-in-javascript
+     *
      */
     public function getType()
     {
-        return addslashes(get_called_class());
+        return addslashes(static::class);
     }
 }
 

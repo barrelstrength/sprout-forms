@@ -5,20 +5,16 @@ namespace barrelstrength\sproutforms\services;
 use barrelstrength\sproutforms\base\Integration;
 use barrelstrength\sproutforms\base\IntegrationInterface;
 use barrelstrength\sproutforms\elements\Entry;
-use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\integrationtypes\MissingIntegration;
 use barrelstrength\sproutforms\records\EntryIntegrationLog;
 use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
 use barrelstrength\sproutforms\SproutForms;
 use craft\base\Component;
-use craft\base\Widget;
-use craft\base\WidgetInterface;
 use craft\db\Query;
 use craft\errors\MissingComponentException;
 use craft\events\RegisterComponentTypesEvent;
 use Craft;
 use craft\helpers\Component as ComponentHelper;
-use craft\widgets\MissingWidget;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -70,10 +66,12 @@ class Integrations extends Component
      * @param $formId
      *
      * @return IntegrationRecord[]
+     * @throws InvalidConfigException
+     * @throws MissingComponentException
      */
     public function getFormIntegrations($formId): array
     {
-        $results =  (new Query())
+        $results = (new Query())
             ->select([
                 'integrations.id',
                 'integrations.formId',
@@ -91,7 +89,6 @@ class Integrations extends Component
         foreach ($results as $result) {
             $integration = ComponentHelper::createComponent($result, IntegrationInterface::class);
             $integrations[] = new $result['type']($integration);
-
         }
 
         return $integrations;
@@ -106,7 +103,7 @@ class Integrations extends Component
      */
     public function getIntegrationById($integrationId)
     {
-        $result =  (new Query())
+        $result = (new Query())
             ->select([
                 'integrations.id',
                 'integrations.formId',
@@ -213,23 +210,6 @@ class Integrations extends Component
         return $standardIntegrations;
     }
 
-    public function getCompatibleTargetFields($sourceFormField, $targetElementFields)
-    {
-        $fieldOptions = [];
-
-        foreach ($targetElementFields as $targetElementField)
-        {
-            if (in_array(get_class($targetElementField), $sourceFormField->getCompatibleCraftFields())) {
-                $fieldOptions[] = [
-                    'label' => $targetElementField->name,
-                    'value' => $targetElementField->handle
-                ];
-            }
-        }
-
-        return $fieldOptions;
-    }
-
     /**
      * Loads the sprout modal integration via ajax.
      *
@@ -299,6 +279,9 @@ class Integrations extends Component
      * Run all the integrations related to the Form Element.
      *
      * @param Entry $entry
+     *
+     * @throws InvalidConfigException
+     * @throws MissingComponentException
      */
     public function runEntryIntegrations(Entry $entry)
     {
