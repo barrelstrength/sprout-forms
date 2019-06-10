@@ -43,7 +43,12 @@
     margin: 5px 0 10px;
 }
 
-/*.field.sproutforms-integration-row {*/
-/*    display: flex;*/
-/*    justify-content: space-between;*/
-/*}*/
+select[readonly] {
+    background: #eeeeee;
+    pointer-events: none;
+    touch-action: none;
+}
+
+table.editable .custom-endpoint textarea {
+    font-size: 12px;
+}

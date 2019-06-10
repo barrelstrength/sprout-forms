@@ -534,7 +534,7 @@ class Fields extends Component
      * Loads the sprout modal field via ajax.
      *
      * @param FormElement $form
-     * @param null        $field
+     * @param FormField   $field
      * @param null        $tabId
      *
      * @return array

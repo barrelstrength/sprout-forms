@@ -23,6 +23,7 @@ use barrelstrength\sproutforms\base\FormField;
  * @property string $svgIconPath
  * @property mixed  $settingsHtml
  * @property array  $compatibleCraftFields
+ * @property array  $compatibleCraftFieldTypes
  * @property mixed  $exampleInputHtml
  */
 class SingleLine extends FormField implements PreviewableFieldInterface
@@ -218,7 +219,7 @@ class SingleLine extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function getCompatibleCraftFields(): array
+    public function getCompatibleCraftFieldTypes(): array
     {
         return [
             CraftPlainText::class,

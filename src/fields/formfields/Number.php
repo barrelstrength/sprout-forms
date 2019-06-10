@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use Craft;
+use craft\fields\Dropdown as CraftDropdown;
 use craft\fields\Number as CraftNumber;
 use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Template as TemplateHelper;
@@ -22,6 +23,7 @@ use barrelstrength\sproutforms\base\FormField;
  * @property string      $svgIconPath
  * @property null|string $settingsHtml
  * @property array       $compatibleCraftFields
+ * @property array       $compatibleCraftFieldTypes
  * @property mixed       $exampleInputHtml
  */
 class Number extends FormField implements PreviewableFieldInterface
@@ -233,10 +235,11 @@ class Number extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function getCompatibleCraftFields(): array
+    public function getCompatibleCraftFieldTypes(): array
     {
         return [
             CraftPlainText::class,
+            CraftDropdown::class,
             CraftNumber::class
         ];
     }

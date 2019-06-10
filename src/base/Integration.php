@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutforms\base;
 
-use barrelstrength\sproutforms\elements\Entry;
+use barrelstrength\sproutforms\fields\formfields\Number;
 use barrelstrength\sproutforms\fields\formfields\SingleLine;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
@@ -18,11 +18,13 @@ use yii\base\InvalidConfigException;
  *
  * @package Craft
  *
- * @property string $fieldMappingSettingsHtml
- * @property void   $settingsHtml
- * @property array  $sourceFormFields
- * @property void   $customSourceFormFields
- * @property string $type
+ * @property string      $fieldMappingSettingsHtml
+ * @property void        $settingsHtml
+ * @property array       $sourceFormFields
+ * @property void        $customSourceFormFields
+ * @property null|string $updateTargetFieldsAction
+ * @property string      $updateSourceFieldsAction
+ * @property string      $type
  */
 abstract class Integration extends SavableComponent implements IntegrationInterface
 {
@@ -56,6 +58,14 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
     public function submit(): bool
     {
         return false;
+    }
+
+    /**
+     * This action should return an form fields array
+     */
+    public function getUpdateSourceFieldsAction()
+    {
+        return 'sprout-forms/integrations/get-form-fields';
     }
 
     /**
@@ -110,13 +120,23 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
         $sourceFormFieldsData = [
             [
                 'name' => Craft::t('sprout-forms', 'Form ID'),
+                'handle' => 'formId',
+                'compatibleCraftFields' => [
+                    CraftPlainText::class,
+                    CraftDropdown::class,
+                    CraftNumber::class
+                ],
+                'type' => Number::class
+            ],
+            [
+                'name' => Craft::t('sprout-forms', 'Entry ID'),
                 'handle' => 'id',
                 'compatibleCraftFields' => [
                     CraftPlainText::class,
                     CraftDropdown::class,
                     CraftNumber::class
                 ],
-                'type' => SingleLine::class
+                'type' => Number::class
             ],
             [
                 'name' => Craft::t('sprout-forms', 'Title'),
@@ -154,7 +174,10 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
             ]
         ];
 
+        $sourceFormFields = [];
+
         foreach ($sourceFormFieldsData as $sourceFormFieldData) {
+            /** @var FormField $fieldInstance */
             $fieldInstance = new $sourceFormFieldData['type']();
             $fieldInstance->name = $sourceFormFieldData['name'];
             $fieldInstance->handle = $sourceFormFieldData['handle'];
@@ -167,12 +190,6 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
         if (count($fields)) {
             foreach ($fields as $field) {
                 $sourceFormFields[] = $field;
-//                $sourceFormFields[] = [
-//                    'label' => $field->name,
-//                    'value' => $field->handle,
-//                    'compatibleCraftFields' => $field->getCompatibleCraftFields(),
-//                    'fieldType' => get_class($field)
-//                ];
             }
         }
 
@@ -203,6 +220,15 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
         $options = array_merge($options, [
             [
                 'label' => Craft::t('sprout-forms', 'Form ID'),
+                'value' => 'formId',
+                'compatibleCraftFields' => [
+                    CraftPlainText::class,
+                    CraftDropdown::class,
+                    CraftNumber::class
+                ]
+            ],
+            [
+                'label' => Craft::t('sprout-forms', 'Entry ID'),
                 'value' => 'id',
                 'compatibleCraftFields' => [
                     CraftPlainText::class,
@@ -256,7 +282,7 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
                 $options[] = [
                     'label' => $field->name,
                     'value' => $field->handle,
-                    'compatibleCraftFields' => $field->getCompatibleCraftFields(),
+                    'compatibleCraftFields' => $field->getCompatibleCraftFieldTypes(),
                     'fieldType' => get_class($field)
                 ];
             }
@@ -272,6 +298,17 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
     public function logResponse($isValid, $message)
     {
         $this->entry->addEntryIntegrationLog($this->id, $isValid, $message);
+    }
+
+    /**
+     * @return string|null
+     * @todo - can we remove this and update how this happens to use javascript?
+     *       https://stackoverflow.com/questions/2195568/how-do-i-add-slashes-to-a-string-in-javascript
+     *
+     */
+    public function getType()
+    {
+        return addslashes(static::class);
     }
 }
 

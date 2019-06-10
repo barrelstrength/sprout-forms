@@ -4,44 +4,85 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
 (function($) {
 
-    Craft.SproutForms.ElementIntegration = Garnish.Modal.extend({
+    Craft.SproutForms.Integration = Garnish.Base.extend({
 
         updateTargetFieldsAction: null,
+        updateSourceFieldsAction: null,
+        integrationType: null,
 
         init: function(settings) {
+            var that = this;
+            this.integrationType = typeof settings.integrationType !== 'undefined'
+                ? settings.integrationType
+                : '';
 
-            this.updateTargetFieldsAction = settings.updateTargetFieldsAction !== null
+            this.updateTargetFieldsAction = typeof settings.updateTargetFieldsAction !== 'undefined'
                 ? settings.updateTargetFieldsAction
                 : null;
 
-console.log(this.updateTargetFieldsAction);
+            this.updateSourceFieldsAction = typeof settings.updateSourceFieldsAction !== 'undefined'
+                ? settings.updateSourceFieldsAction
+                : null;
             // Make the sourceFormField read only
             this.disableOptions();
 
             // Init all empty field selects
             this.updateAllFieldSelects();
-        },
 
-        disableOptions: function() {
-            $('.formField').each(function() {
-                $(this).find('textarea').attr("readonly", true);
+            // When the entry type is changed
+            $('#settings-barrelstrength-sproutforms-integrationtypes-EntryElementIntegration-entryTypeId').change(function() {
+                var changed = $(this).val() !== $(this).data('default');
+                if (changed) {
+                    that.updateAllFieldSelects();
+                }
             });
         },
 
-        updateAllFieldSelects: function() {
+        disableOptions: function() {
+            if (this.updateSourceFieldsAction === null) {
+                $('.formField').each(function(index) {
+                    $(this).find('textarea').attr("readonly", true);
+                });
 
-            var $currentRows = this.getCurrentRows();
+                return null;
+            }
+
             var data = this.getEntryFieldsData();
+            var that = this;
+            Craft.postActionRequest(this.updateSourceFieldsAction, data, $.proxy(function(response, textStatus) {
+                var statusSuccess = (textStatus === 'success');
+                if (statusSuccess && response.success) {
+                    var rows = response.formFields;
+                    $('tbody .formField').each(function(index) {
+                        var td = $(this);
+                        td.empty();
+                        var title = rows[index]["label"];
+                        var handle = rows[index]["value"];
+                        td.append('<div style="display:none;"><select readonly name="settings[' + that.integrationType + '][fieldMapping][' + index + '][sourceFormField]"><option selected value="' + handle + '">' + title + '</option></select></div><div style="padding: 7px 10px;font-size: 12px;color:#8f98a3;">' + title + ' <span class="code">(' + handle + ')</span></div>');
+                    });
+                } else {
+                    Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to get the Form fields'));
+                }
+            }, this));
+        },
 
-            // @todo - update this to use a variable we define when we instantiate the javascript
-            // so that different integrations can call the controller they need for their scenario
-            // new Craft.SproutForms.ElementIntegration({
-            //     updateTargetFieldsAction: integration.getUpdateTargetFieldsAction()
-            // });
-            // Where integration.getUpdateTargetFieldsAction() = 'sprout-forms/integrations/get-element-entry-fields'
+        updateAllFieldSelects: function() {
+            var integrationIdBase = this.integrationType.replace(/\\/g, '-');
+            var mappingTableRows = 'table#settings-' + integrationIdBase + '-fieldMapping tr';
+            $(mappingTableRows).find('td:eq(2),th:eq(2)').remove();
+            $(mappingTableRows).find('td:eq(0),th:eq(0)').css('width', '50%');
+            $(mappingTableRows).find('td:eq(1),th:eq(1)').css('width', '50%');
+
+            if (this.updateTargetFieldsAction === null) {
+                return false;
+            }
+
+            var $currentRows = this.getCurrentRows('tbody .targetFields');
+            var data = this.getEntryFieldsData();
+            var that = this;
+
             Craft.postActionRequest(this.updateTargetFieldsAction, data, $.proxy(function(response, textStatus) {
                 var statusSuccess = (textStatus === 'success');
-console.log(response);
                 if (statusSuccess && response.success) {
                     var rows = response.fieldOptionsByRow;
 
@@ -49,7 +90,7 @@ console.log(response);
                         var $select = $(this).find('select');
                         var fields = rows[index];
 
-                        appendFieldsToSelect($select, fields);
+                        that.appendFieldsToSelect($select, fields);
                     });
                 } else {
                     Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to get the Form fields'));
@@ -59,20 +100,19 @@ console.log(response);
 
         getCurrentRows: function(className = null) {
             if (className === null) {
-                className = 'tbody .formEntryFields';
+                className = 'tbody .formField';
             }
             return $(className);
         },
 
         getEntryFieldsData: function() {
-            var entryTypeId = $('#types-barrelstrength-sproutforms-integrationtypes-EntryElementIntegration-entryTypeId').val();
+            var entryTypeId = $('#settings-barrelstrength-sproutforms-integrationtypes-EntryElementIntegration-entryTypeId').val();
             var integrationId = $('#integrationId').val();
-            var data = {
+
+            return {
                 'entryTypeId': entryTypeId,
                 'integrationId': integrationId
             };
-
-            return data;
         },
 
         appendFieldsToSelect: function($select, fields) {
@@ -80,6 +120,7 @@ console.log(response);
 
             var dropdown = '';
             var closeOptgroup = false;
+            $select.append('<option value="">' + Craft.t('sprout-forms', 'None') + '</option>');
 
             for (i = 0; i < fields.length; i++) {
                 var field = fields[i];
@@ -107,6 +148,6 @@ console.log(response);
             $select.append(dropdown);
         }
 
-    }); // End Craft.SproutForms.ElementIntegration
+    }); // End Craft.SproutForms.Integration
 
 })(jQuery);

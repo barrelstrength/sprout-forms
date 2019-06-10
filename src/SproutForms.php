@@ -123,7 +123,7 @@ class SproutForms extends Plugin
         SproutBaseFieldsHelper::registerModule();
         SproutBaseReportsHelper::registerModule();
 
-        Event::on(Dashboard::class, Dashboard::EVENT_REGISTER_WIDGET_TYPES, function(RegisterComponentTypesEvent $event) {
+        Event::on(Dashboard::class, Dashboard::EVENT_REGISTER_WIDGET_TYPES, static function(RegisterComponentTypesEvent $event) {
             $event->types[] = RecentEntries::class;
         });
 
@@ -135,7 +135,7 @@ class SproutForms extends Plugin
             $event->permissions['Sprout Forms'] = $this->getUserPermissions();
         });
 
-        Event::on(SproutFormsFields::class, SproutFormsFields::EVENT_REGISTER_FIELDS, function(RegisterFieldsEvent $event) {
+        Event::on(SproutFormsFields::class, SproutFormsFields::EVENT_REGISTER_FIELDS, static function(RegisterFieldsEvent $event) {
             $fieldsByGroup = SproutForms::$app->fields->getRegisteredFieldsByGroup();
 
             foreach ($fieldsByGroup as $group) {
@@ -146,7 +146,7 @@ class SproutForms extends Plugin
         });
 
         // Register DataSources for sproutReports plugin integration
-        Event::on(DataSources::class, DataSources::EVENT_REGISTER_DATA_SOURCES, function(RegisterComponentTypesEvent $event) {
+        Event::on(DataSources::class, DataSources::EVENT_REGISTER_DATA_SOURCES, static function(RegisterComponentTypesEvent $event) {
             $event->types[] = EntriesDataSource::class;
         });
 
@@ -155,26 +155,26 @@ class SproutForms extends Plugin
             'sproutforms' => SproutFormsVariable::class
         ]);
 
-        Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function(Event $event) {
+        Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, static function(Event $event) {
             $event->sender->set('sproutForms', SproutFormsVariable::class);
         });
 
-        Event::on(Fields::class, Fields::EVENT_REGISTER_FIELD_TYPES, function(RegisterComponentTypesEvent $event) {
+        Event::on(Fields::class, Fields::EVENT_REGISTER_FIELD_TYPES, static function(RegisterComponentTypesEvent $event) {
             $event->types[] = FormsField::class;
             $event->types[] = FormEntriesField::class;
         });
 
-        Event::on(NotificationEmailEvents::class, NotificationEmailEvents::EVENT_REGISTER_EMAIL_EVENT_TYPES, function(NotificationEmailEvent $event) {
+        Event::on(NotificationEmailEvents::class, NotificationEmailEvents::EVENT_REGISTER_EMAIL_EVENT_TYPES, static function(NotificationEmailEvent $event) {
             $event->events[] = SaveEntryEvent::class;
         });
 
-        Event::on(Forms::class, Forms::EVENT_REGISTER_CAPTCHAS, function(RegisterComponentTypesEvent $event) {
+        Event::on(Forms::class, Forms::EVENT_REGISTER_CAPTCHAS, static function(RegisterComponentTypesEvent $event) {
             $event->types[] = DuplicateCaptcha::class;
             $event->types[] = JavascriptCaptcha::class;
             $event->types[] = HoneypotCaptcha::class;
         });
 
-        Event::on(Entries::class, EntryElement::EVENT_BEFORE_SAVE, function(OnBeforeSaveEntryEvent $event) {
+        Event::on(Entries::class, EntryElement::EVENT_BEFORE_SAVE, static function(OnBeforeSaveEntryEvent $event) {
             if (Craft::$app->getRequest()->getIsSiteRequest()) {
                 /** @var Captcha[] $captchas */
                 $captchas = SproutForms::$app->forms->getAllEnabledCaptchas();
@@ -185,30 +185,30 @@ class SproutForms extends Plugin
             }
         });
 
-        Event::on(Entries::class, EntryElement::EVENT_AFTER_SAVE, function(OnSaveEntryEvent $event) {
+        Event::on(Entries::class, EntryElement::EVENT_AFTER_SAVE, static function(OnSaveEntryEvent $event) {
             SproutForms::$app->integrations->runEntryIntegrations($event->entry);
         });
 
-        Craft::$app->view->hook('sproutForms.modifyForm', function() {
+        Craft::$app->view->hook('sproutForms.modifyForm', static function() {
             return SproutForms::$app->forms->getCaptchasHtml();
         });
 
-        Event::on(Integrations::class, Integrations::EVENT_REGISTER_INTEGRATIONS, function(RegisterComponentTypesEvent $event) {
+        Event::on(Integrations::class, Integrations::EVENT_REGISTER_INTEGRATIONS, static function(RegisterComponentTypesEvent $event) {
             $event->types[] = CustomEndpoint::class;
             $event->types[] = EntryElementIntegration::class;
         });
 
-        Event::on(Forms::class, Forms::EVENT_REGISTER_FORM_TEMPLATES, function(RegisterComponentTypesEvent $event) {
+        Event::on(Forms::class, Forms::EVENT_REGISTER_FORM_TEMPLATES, static function(RegisterComponentTypesEvent $event) {
             $event->types[] = BasicTemplates::class;
             $event->types[] = AccessibleTemplates::class;
         });
 
         // Register Sprout Email Templates
-        Event::on(EmailTemplates::class, EmailTemplates::EVENT_REGISTER_EMAIL_TEMPLATES, function(RegisterComponentTypesEvent $event) {
+        Event::on(EmailTemplates::class, EmailTemplates::EVENT_REGISTER_EMAIL_TEMPLATES, static function(RegisterComponentTypesEvent $event) {
             $event->types[] = BasicSproutFormsNotification::class;
         });
 
-        Event::on(Importers::class, Importers::EVENT_REGISTER_IMPORTER_TYPES, function(RegisterComponentTypesEvent $event) {
+        Event::on(Importers::class, Importers::EVENT_REGISTER_IMPORTER_TYPES, static function(RegisterComponentTypesEvent $event) {
             $event->types[] = FormElementImporter::class;
             $event->types[] = EntryElementImporter::class;
 //            $event->types[] = FormsFieldImporter::class;

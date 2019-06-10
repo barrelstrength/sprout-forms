@@ -3,11 +3,13 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutbasefields\SproutBaseFields;
+use barrelstrength\sproutfields\SproutFields;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
 
+use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Json;
 use craft\helpers\Template as TemplateHelper;
 
@@ -269,5 +271,15 @@ class Name extends FormField implements PreviewableFieldInterface
         }
 
         return $value;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCompatibleCraftFieldTypes(): array
+    {
+        return [
+            'barrelstrength\\sproutfields\\fields\\Name'
+        ];
     }
 }

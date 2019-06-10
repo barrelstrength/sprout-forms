@@ -8,6 +8,7 @@ use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
 use craft\fields\Dropdown as CraftDropdown;
+use craft\fields\Email as CraftEmail;
 use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Template as TemplateHelper;
 use barrelstrength\sproutforms\base\FormField;
@@ -21,6 +22,7 @@ use Twig\Error\SyntaxError;
  * @property string $svgIconPath
  * @property mixed  $settingsHtml
  * @property array  $compatibleCraftFields
+ * @property array  $compatibleCraftFieldTypes
  * @property mixed  $exampleInputHtml
  */
 class Email extends FormField implements PreviewableFieldInterface
@@ -213,10 +215,11 @@ class Email extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function getCompatibleCraftFields(): array
+    public function getCompatibleCraftFieldTypes(): array
     {
         return [
             CraftPlainText::class,
+            CraftEmail::class,
             CraftDropdown::class
         ];
     }

@@ -17,6 +17,7 @@ use craft\fields\PlainText as CraftPlainText;
  * @property string $namespace
  * @property string $svgIconPath
  * @property array  $compatibleCraftFields
+ * @property array  $compatibleCraftFieldTypes
  * @property string $exampleInputHtml
  */
 abstract class FormField extends Field
@@ -33,6 +34,9 @@ abstract class FormField extends Field
      */
     protected $originalTemplatesPath;
 
+    /**
+     * @param array|null $types
+     */
     public function setCompatibleCraftFields(array $types = null)
     {
         if ($types) {
@@ -41,15 +45,13 @@ abstract class FormField extends Field
     }
 
     /**
-     * Return a list of compatible Craft Fields to associate on the Element Integration API
+     * Return a list of compatible Craft Field Types to associate on the Element Integration API
      *
      * @return array
      */
-    public function getCompatibleCraftFields(): array
+    public function getCompatibleCraftFieldTypes(): array
     {
-        return [
-            CraftPlainText::class
-        ];
+        return [];
     }
 
     /**

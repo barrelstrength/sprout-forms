@@ -13,6 +13,7 @@ use craft\base\ElementInterface;
  *
  * @property string $svgIconPath
  * @property array  $compatibleCraftFields
+ * @property array  $compatibleCraftFieldTypes
  * @property mixed  $exampleInputHtml
  */
 class MultiSelect extends BaseOptionsFormField
@@ -127,7 +128,7 @@ class MultiSelect extends BaseOptionsFormField
     /**
      * @inheritdoc
      */
-    public function getCompatibleCraftFields(): array
+    public function getCompatibleCraftFieldTypes(): array
     {
         return [
             CraftMultiSelect::class

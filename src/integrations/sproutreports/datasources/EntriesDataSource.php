@@ -25,7 +25,7 @@ class EntriesDataSource extends DataSource
      */
     public function getName(): string
     {
-        return Craft::t('sprout-forms', 'Sprout Forms Entries');
+        return Craft::t('sprout-forms', 'Entries (Sprout Forms)');
     }
 
     /**

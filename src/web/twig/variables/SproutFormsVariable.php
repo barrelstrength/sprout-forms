@@ -10,7 +10,6 @@ use barrelstrength\sproutforms\records\Integration;
 use barrelstrength\sproutforms\services\Forms;
 use Craft;
 use craft\base\ElementInterface;
-use craft\fields\PlainText;
 use craft\helpers\Template as TemplateHelper;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
@@ -631,6 +630,8 @@ class SproutFormsVariable
      * @param $integrationId
      *
      * @return Integration|null
+     * @throws \craft\errors\MissingComponentException
+     * @throws \yii\base\InvalidConfigException
      */
     public function getIntegrationById($integrationId)
     {

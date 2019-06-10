@@ -15,6 +15,7 @@ use barrelstrength\sproutforms\SproutForms;
  *
  * @property string $svgIconPath
  * @property array  $compatibleCraftFields
+ * @property array  $compatibleCraftFieldTypes
  * @property mixed  $exampleInputHtml
  */
 class Entries extends BaseRelationFormField
@@ -104,7 +105,7 @@ class Entries extends BaseRelationFormField
     /**
      * @inheritdoc
      */
-    public function getCompatibleCraftFields(): array
+    public function getCompatibleCraftFieldTypes(): array
     {
         return [
             CraftEntries::class

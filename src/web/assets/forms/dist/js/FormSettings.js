@@ -58,7 +58,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
             var lightswitch = ev.currentTarget;
             var integrationId = lightswitch.id;
             var enabled = $(lightswitch).attr('aria-checked');
-            enabled = enabled == 'true' ? 1 : 0;
+            enabled = enabled === 'true' ? 1 : 0;
             var formId = $("#formId").val();
 
             var data = {integrationId: integrationId, enabled: enabled, formId: formId};
@@ -83,9 +83,9 @@ if (typeof Craft.SproutForms === typeof undefined) {
             var $integrationDiv = $("#sproutform-integration-" + integration.id);
 
             var $container = $("#integration-enabled-" + integration.id);
-            var currentValue = integration.enabled == 1 ? true : false;
+            var currentValue = integration.enabled === 1;
             var settingsValue = $container.attr('aria-checked');
-            if (currentValue != settingsValue) {
+            if (currentValue !== settingsValue) {
                 $container.attr('aria-checked', "" + currentValue);
                 if (currentValue) {
                     $container.addClass("on");
@@ -99,7 +99,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
         createDefaultIntegration: function(type) {
 
             var that = this;
-            var integrationRows = $(".sproutforms-integration-row");
+            var integrationCreate = $("#sproutforms-integrations-create");
             var currentIntegration = $("#integrationsOptions").val();
             var formId = $("#formId").val();
 
@@ -113,7 +113,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
                 if (textStatus === 'success') {
                     var integration = response.integration;
 
-                    integrationRows.last().after('<div class="field sproutforms-integration-row" id ="sproutforms-integration-row-' + integration.id + '">' +
+                    integrationCreate.before('<div class="field sproutforms-integration-row" id ="sproutforms-integration-row-' + integration.id + '">' +
                         '<div class="heading">' +
                         '<a href="#" id ="sproutform-integration-' + integration.id + '" data-integrationid="' + integration.id + '">' + integration.name + '</a>' +
                         '</div>' +

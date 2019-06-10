@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use Craft;
+use craft\fields\Categories as CraftCategories;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\ElementInterface;
 use craft\elements\Category;
@@ -178,5 +179,15 @@ class Categories extends BaseRelationFormField
         $variables['branchLimit'] = $this->branchLimit;
 
         return $variables;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleCraftFieldTypes(): array
+    {
+        return [
+            CraftCategories::class
+        ];
     }
 }

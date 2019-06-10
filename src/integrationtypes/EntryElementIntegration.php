@@ -19,6 +19,7 @@ use yii\web\IdentityInterface;
  * @property string                            $userElementType
  * @property IdentityInterface|User|null|false $author
  * @property array                             $defaultAttributes
+ * @property array                             $elementIntegrationFieldOptions
  * @property array                             $sectionsAsOptions
  */
 class EntryElementIntegration extends ElementIntegration
@@ -33,7 +34,8 @@ class EntryElementIntegration extends ElementIntegration
     /** returns action that runs to update the targetIntegrationFieldColumns
      * This action should return an array of input fields that can be used to update the target columns
      */
-    public function getUpdateTargetFieldsAction() {
+    public function getUpdateTargetFieldsAction()
+    {
         return 'sprout-forms/integrations/get-element-entry-fields';
     }
 
@@ -99,14 +101,16 @@ class EntryElementIntegration extends ElementIntegration
             }
         }
 
+        unset($fields['id']);
+
         return $fields;
     }
 
-
-    public function getElementIntegrationFieldOptions()
+    /**
+     * @return array
+     */
+    public function getElementIntegrationFieldOptions(): array
     {
-        $sourceFormFields = $this->getSourceFormFields();
-
         $entryTypeId = $this->entryTypeId;
 
         // If no Entry ID has been selected, select the first one in the list.
@@ -118,68 +122,6 @@ class EntryElementIntegration extends ElementIntegration
         $targetElementFields = $this->getElementCustomFieldsAsOptions($entryTypeId);
 
         return $targetElementFields;
-
-        \Craft::dd($sourceFormFields);
-    }
-
-    /**
-     * @inheritDoc
-     *
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     */
-    public function getFieldMappingSettingsHtml()
-    {
-//        $currentFields = $this->getFormFieldsAsMappingOptions();
-//
-//        $this->fieldMapping = [];
-//
-//        $entryTypeId = $this->entryTypeId;
-//
-//        if ($entryTypeId === null || empty($entryTypeId)) {
-//            $sections = $this->getSectionsAsOptions();
-//            $entryTypeId = $sections[1]['value'] ?? null;
-//        }
-//
-//        if ($entryTypeId !== null) {
-//            foreach ($this->getElementCustomFieldsAsOptions($entryTypeId) as $elementFieldsAsOption) {
-//                $this->fieldMapping[] = [
-//                    'targetIntegrationField' => $elementFieldsAsOption['value'],
-//                    'sourceFormField' => ''
-//                ];
-//            }
-//        }
-//
-//        $rendered = Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'editableTableField',
-//            [
-//                [
-//                    'label' => Craft::t('sprout-forms', 'Field Mapping'),
-//                    'instructions' => Craft::t('sprout-forms', 'Define your field mapping.'),
-//                    'id' => 'fieldMapping',
-//                    'name' => 'fieldMapping',
-//                    'addRowLabel' => Craft::t('sprout-forms', 'Add a field mapping'),
-//                    'static' => true,
-//                    'cols' => [
-//                        'sourceFormField' => [
-//                            'heading' => Craft::t('sprout-forms', 'Form Field'),
-//                            'type' => 'select',
-//                            'class' => 'formField',
-//                            'options' => $currentFields
-//                        ],
-//                        'targetIntegrationField' => [
-//                            'heading' => Craft::t('sprout-forms', 'Entry Field'),
-//                            'type' => 'select',
-//                            'class' => 'targetFields',
-////                            'options' => $this->getElementCustomFieldsAsOptions($entryTypeId)
-//                            'options' => []
-//                        ]
-//                    ],
-//                    'rows' => $this->fieldMapping
-//                ]
-//            ]);
-//
-//        return $rendered;
     }
 
     /**
@@ -230,11 +172,6 @@ class EntryElementIntegration extends ElementIntegration
 
         foreach ($entryFields as $field) {
             $options[] = $field;
-//            $options[] = [
-//                'label' => $field->name,
-//                'value' => $field->handle,
-//                'class' => get_class($field)
-//            ];
         }
 
         return $options;
@@ -265,9 +202,7 @@ class EntryElementIntegration extends ElementIntegration
             if ($entryElement->validate()) {
                 $result = Craft::$app->getElements()->saveElement($entryElement);
                 if ($result) {
-                    $message = Craft::t('sprout-forms', 'Entry Element Integration created Entry ID: {id}.', [
-                        'entryId' => $entryElement->id
-                    ]);
+                    $message = Craft::t('sprout-forms', 'Entry Element Integration created.');
                     $this->logResponse(true, $message);
                     Craft::info($message, __METHOD__);
                     return true;
@@ -277,8 +212,6 @@ class EntryElementIntegration extends ElementIntegration
                 $this->logResponse(false, $entryElement->getErrors());
                 Craft::error($message, __METHOD__);
             } else {
-
-
                 $errors = json_encode($entryElement->getErrors());
                 $message = Craft::t('sprout-forms', 'Element Integration does not validate: '.$this->name.' - Errors: '.$errors);
                 Craft::error($message, __METHOD__);
@@ -286,7 +219,7 @@ class EntryElementIntegration extends ElementIntegration
             }
         } catch (\Exception $e) {
             Craft::error($e->getMessage(), __METHOD__);
-            $this->logResponse(false, $e->getTrace());
+            $this->logResponse(false, $e->getMessage());
         }
 
         return false;
@@ -301,17 +234,20 @@ class EntryElementIntegration extends ElementIntegration
         $options = [];
 
         foreach ($sections as $section) {
-            if ($section->type != 'single') {
-                $entryTypes = $section->getEntryTypes();
+            // Don't show Singles
+            if ($section->type === 'single') {
+                continue;
+            }
 
-                $options[] = ['optgroup' => $section->name];
+            $entryTypes = $section->getEntryTypes();
 
-                foreach ($entryTypes as $entryType) {
-                    $options[] = [
-                        'label' => $entryType->name,
-                        'value' => $entryType->id
-                    ];
-                }
+            $options[] = ['optgroup' => $section->name];
+
+            foreach ($entryTypes as $entryType) {
+                $options[] = [
+                    'label' => $entryType->name,
+                    'value' => $entryType->id
+                ];
             }
         }
 

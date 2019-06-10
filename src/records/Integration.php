@@ -2,7 +2,6 @@
 
 namespace barrelstrength\sproutforms\records;
 
-use barrelstrength\sproutforms\SproutForms;
 use craft\db\ActiveRecord;
 use barrelstrength\sproutforms\base\Integration as IntegrationApi;
 

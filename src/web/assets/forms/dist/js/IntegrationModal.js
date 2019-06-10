@@ -105,7 +105,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
                     html: '',
                     js: '',
                     css: '',
-                }
+                };
                 this.initTemplate(response);
             },
 
