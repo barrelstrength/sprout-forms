@@ -179,8 +179,7 @@ class Address extends FormField implements PreviewableFieldInterface
     public function getCompatibleCraftFieldTypes(): array
     {
         return [
-            CraftPlainText::class,
-            CraftDropdown::class
+            'barrelstrength\\sproutfields\\fields\\Address'
         ];
     }
 }

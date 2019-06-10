@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use Craft;
+use craft\fields\Dropdown as CraftDropdown;
 use craft\fields\Number as CraftNumber;
 use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Template as TemplateHelper;
@@ -238,6 +239,7 @@ class Number extends FormField implements PreviewableFieldInterface
     {
         return [
             CraftPlainText::class,
+            CraftDropdown::class,
             CraftNumber::class
         ];
     }

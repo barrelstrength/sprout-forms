@@ -51,9 +51,7 @@ abstract class FormField extends Field
      */
     public function getCompatibleCraftFieldTypes(): array
     {
-        return [
-            CraftPlainText::class
-        ];
+        return [];
     }
 
     /**

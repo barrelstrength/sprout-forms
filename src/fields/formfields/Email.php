@@ -8,6 +8,7 @@ use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
 use craft\fields\Dropdown as CraftDropdown;
+use craft\fields\Email as CraftEmail;
 use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Template as TemplateHelper;
 use barrelstrength\sproutforms\base\FormField;
@@ -218,6 +219,7 @@ class Email extends FormField implements PreviewableFieldInterface
     {
         return [
             CraftPlainText::class,
+            CraftEmail::class,
             CraftDropdown::class
         ];
     }
