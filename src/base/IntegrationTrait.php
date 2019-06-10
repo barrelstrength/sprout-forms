@@ -20,11 +20,6 @@ trait IntegrationTrait
     /**
      * @var string
      */
-    public $type;
-
-    /**
-     * @var string
-     */
     public $name;
 
     /**
