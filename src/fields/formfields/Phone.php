@@ -265,4 +265,14 @@ class Phone extends FormField implements PreviewableFieldInterface
     {
         return SproutBaseFields::$app->phoneField->getCountries();
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleCraftFieldTypes(): array
+    {
+        return [
+            'barrelstrength\\sproutfields\\fields\\Phone'
+        ];
+    }
 }

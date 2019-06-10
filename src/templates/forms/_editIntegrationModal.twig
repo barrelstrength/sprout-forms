@@ -3,7 +3,7 @@
 <div id="sprout-content">
     {% set integrationTypeGroups = craft.sproutForms.prepareIntegrationTypeSelection() %}
 
-    <input type="hidden" name="formId" value="{{ form.id }}">
+    <input type="hidden" name="formId" value="{{ integration.formId }}">
 
     {% if integration.id %}
         <input type="hidden" id="integrationId" name="integrationId" value="{{ integration.id }}">
@@ -25,16 +25,14 @@
         required: true,
     }) }}
 
-    {% namespace 'types['~integration.type~']' %}
-        {{ integration.getIntegrationApi().getSettingsHtml()|raw }}
-
-        {{ integration.getIntegrationApi().getFieldMappingSettingsHtml()|raw }}
+    {% namespace 'settings['~className(integration)~']' %}
+        {{ integration.getSettingsHtml()|raw }}
     {% endnamespace %}
 
     {{ forms.selectField({
         label: "Integration Type <span class='info'>Create a new integration if you need to update your integration type. This value cannot be changed.</span>"|t('sprout-forms'),
         id: 'type',
-        name: 'slectType',
+        name: 'selectType',
         hasOptgroups: true,
         options: integrationTypeGroups,
         value: integration.type,
@@ -46,7 +44,7 @@
         id: 'type',
         name: 'type',
         type: 'hidden',
-        value: integration.type,
+        value: className(integration),
         errors: integration.getErrors('type') ?? null
     }) }}
 </div>

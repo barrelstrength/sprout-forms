@@ -6,6 +6,7 @@ use Craft;
 use craft\base\ElementInterface;
 use craft\web\Controller as BaseController;
 use craft\helpers\UrlHelper;
+use yii\web\BadRequestHttpException;
 use yii\web\Response;
 use yii\base\Exception;
 use yii\web\HttpException;
@@ -32,7 +33,7 @@ class FormsController extends BaseController
      * @throws NotFoundHttpException
      * @throws \Exception
      * @throws \Throwable
-     * @throws \yii\web\BadRequestHttpException
+     * @throws BadRequestHttpException
      */
     public function actionSaveForm()
     {
@@ -205,7 +206,7 @@ class FormsController extends BaseController
      * @return Response
      * @throws \Exception
      * @throws \Throwable
-     * @throws \yii\web\BadRequestHttpException
+     * @throws BadRequestHttpException
      */
     public function actionDeleteForm(): Response
     {

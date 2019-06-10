@@ -6,6 +6,8 @@ use barrelstrength\sproutbasefields\SproutBaseFields;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
+use craft\fields\PlainText as CraftPlainText;
+use craft\fields\Url as CraftUrl;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\PreviewableFieldInterface;
 
@@ -197,5 +199,17 @@ class Url extends FormField implements PreviewableFieldInterface
                 SproutBaseFields::$app->urlField->getErrorMessage($this->name, $this)
             );
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleCraftFieldTypes(): array
+    {
+        return [
+            CraftPlainText::class,
+            CraftUrl::class,
+            'barrelstrength\\sproutfields\\fields\\Url'
+        ];
     }
 }

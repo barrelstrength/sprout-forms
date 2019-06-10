@@ -6,6 +6,7 @@ use barrelstrength\sproutbasefields\SproutBaseFields;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
+use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\PreviewableFieldInterface;
 
@@ -184,5 +185,16 @@ class RegularExpression extends FormField implements PreviewableFieldInterface
                 SproutBaseFields::$app->regularExpressionField->getErrorMessage($this)
             );
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleCraftFieldTypes(): array
+    {
+        return [
+            CraftPlainText::class,
+            'barrelstrength\\sproutfields\\fields\\RegularExpression'
+        ];
     }
 }

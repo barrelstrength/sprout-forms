@@ -3,67 +3,20 @@
 namespace barrelstrength\sproutforms\controllers;
 
 use barrelstrength\sproutforms\base\ElementIntegration;
-use barrelstrength\sproutforms\integrationtypes\EntryElementIntegration;
+use barrelstrength\sproutforms\base\Integration;
 use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
 use Craft;
 
+use craft\errors\MissingComponentException;
 use craft\web\Controller as BaseController;
 use barrelstrength\sproutforms\SproutForms;
 use Throwable;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
 use yii\base\InvalidConfigException;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
 class IntegrationsController extends BaseController
 {
-    /**
-     * Load the Integration modal field template
-     *
-     * @return Response
-     * @throws BadRequestHttpException
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     */
-    public function actionModalIntegration(): Response
-    {
-        $this->requireAcceptsJson();
-        $formId = Craft::$app->getRequest()->getBodyParam('formId');
-        $form = SproutForms::$app->forms->getFormById($formId);
-
-        return $this->asJson(SproutForms::$app->integrations->getModalIntegrationTemplate($form));
-    }
-
-    /**
-     * Create a default Integration of the given type
-     *
-     * @return Response
-     * @throws Throwable
-     * @throws BadRequestHttpException
-     */
-    public function actionCreateIntegration(): Response
-    {
-        $this->requireAcceptsJson();
-
-        $request = Craft::$app->getRequest();
-        $type = $request->getBodyParam('type');
-        $formId = $request->getBodyParam('formId');
-        $form = SproutForms::$app->forms->getFormById($formId);
-
-        if ($type && $form) {
-            $integration = SproutForms::$app->integrations->createIntegration($type, $form);
-
-            if ($integration) {
-                return $this->returnJson(true, $integration);
-            }
-        }
-
-        return $this->returnJson(false, null);
-    }
-
     /**
      * Enable or disable an Integration
      *
@@ -95,10 +48,10 @@ class IntegrationsController extends BaseController
         $pieces = explode('-', $integrationId);
 
         if (count($pieces) == 3) {
-            $integration = SproutForms::$app->integrations->getFormIntegrationById($pieces[2]);
+            $integration = SproutForms::$app->integrations->getIntegrationById($pieces[2]);
             if ($integration) {
                 $integration->enabled = $enabled;
-                if ($integration->save()) {
+                if (SproutForms::$app->integrations->saveIntegration($integration)) {
                     return $this->returnJson(true, $integration);
                 }
             }
@@ -114,6 +67,7 @@ class IntegrationsController extends BaseController
      *
      * @return Response
      * @throws BadRequestHttpException
+     * @throws InvalidConfigException
      */
     public function actionSaveIntegration(): Response
     {
@@ -122,48 +76,63 @@ class IntegrationsController extends BaseController
         $request = Craft::$app->getRequest();
 
         $type = $request->getRequiredBodyParam('type');
-        $integrationId = $request->getBodyParam('integrationId');
-        $enabled = $request->getBodyParam('enabled');
-        $name = $request->getBodyParam('name');
-        $settings = $request->getBodyParam('types.'.$type);
-        $integration = SproutForms::$app->integrations->getFormIntegrationById($integrationId);
 
-        $integration->enabled = $enabled;
-        $integration->settings = json_encode($settings);
-        $integration->name = $name ?? $integration->name;
-        $result = $integration->save();
+        /** @var Integration $integration */
+        $integration = new $type();
 
-        if (!$result) {
-            Craft::error('Integration does not validate.', __METHOD__);
+        $integration->id = $request->getBodyParam('integrationId');
+        $integration->formId = $request->getBodyParam('formId');
+        $integration->name = $request->getBodyParam('name');
+        $integration->enabled = $request->getBodyParam('enabled');
+
+        $settings = $request->getBodyParam('settings.'.$type);
+
+        $integration = SproutForms::$app->integrations->createIntegration([
+            'id' => $integration->id,
+            'formId' => $integration->formId,
+            'name' => $integration->name,
+            'enabled' => $integration->enabled,
+            'type' => get_class($integration),
+            'settings' => $settings,
+        ]);
+
+        $integration = new $type($integration);
+
+        if (!SproutForms::$app->integrations->saveIntegration($integration)) {
+            Craft::error('Unable to save integration.', __METHOD__);
+            return $this->returnJson(false);
         }
 
         Craft::info('Integration Saved', __METHOD__);
 
-        return $this->returnJson($result, $integration);
+        return $this->returnJson(true, $integration);
     }
 
     /**
      * Edits an existing integration.
      *
      * @return Response
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
      * @throws BadRequestHttpException
+     * @throws InvalidConfigException
+     * @throws MissingComponentException
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function actionEditIntegration(): Response
     {
         $this->requireAcceptsJson();
         $request = Craft::$app->getRequest();
 
-        $id = $request->getBodyParam('integrationId');
-        $formId = $request->getBodyParam('formId');
-        $form = SproutForms::$app->forms->getFormById($formId);
+        $integrationId = $request->getBodyParam('integrationId');
 
-        $integration = IntegrationRecord::findOne($id);
+        $integration = SproutForms::$app->integrations->getIntegrationById($integrationId);
+        $integration->formId = $request->getBodyParam('formId');
 
         if ($integration === null) {
-            $message = Craft::t('sprout-forms', 'The integration requested to edit no longer exists.');
+            $message = Craft::t('sprout-forms', 'No integration found with id: {id}', [
+                'id' => $integrationId
+            ]);
             Craft::error($message, __METHOD__);
 
             return $this->asJson([
@@ -179,7 +148,7 @@ class IntegrationsController extends BaseController
                 'id' => $integration->id,
                 'name' => $integration->name
             ],
-            'template' => SproutForms::$app->integrations->getModalIntegrationTemplate($form, $integration),
+            'template' => SproutForms::$app->integrations->getModalIntegrationTemplate($integration),
         ]);
     }
 
@@ -206,26 +175,8 @@ class IntegrationsController extends BaseController
     /**
      * @return Response
      * @throws BadRequestHttpException
-     */
-    public function actionGetFormFields(): Response
-    {
-        $this->requirePostRequest();
-        $this->requireAcceptsJson();
-
-        $entryTypeId = Craft::$app->request->getRequiredBodyParam('entryTypeId');
-        $integrationId = Craft::$app->request->getRequiredBodyParam('integrationId');
-
-        $fieldOptionsByRow = $this->getFieldsAsOptionsByRow($entryTypeId, $integrationId);
-
-        return $this->asJson([
-            'success' => true,
-            'fieldOptionsByRow' => $fieldOptionsByRow
-        ]);
-    }
-
-    /**
-     * @return Response
-     * @throws BadRequestHttpException
+     * @throws InvalidConfigException
+     * @throws MissingComponentException
      */
     public function actionGetElementEntryFields(): Response
     {
@@ -234,126 +185,102 @@ class IntegrationsController extends BaseController
 
         $entryTypeId = Craft::$app->request->getRequiredBodyParam('entryTypeId');
         $integrationId = Craft::$app->request->getRequiredBodyParam('integrationId');
-        $integrationRecord = IntegrationRecord::findOne($integrationId);
 
-        /** @var EntryElementIntegration $integration */
-        $integration = $integrationRecord->getIntegrationApi();
+        /** @var ElementIntegration $integration */
+        $integration = SproutForms::$app->integrations->getIntegrationById($integrationId);
 
         $entryFields = $integration->getElementCustomFieldsAsOptions($entryTypeId);
+        $entryFieldsByRow = $this->getFieldsAsOptionsByRow($entryFields, $integration, $entryTypeId);
 
         return $this->asJson([
             'success' => true,
-            'fieldOptionsByRow' => $entryFields
+            'fieldOptionsByRow' => $entryFieldsByRow
         ]);
     }
 
     /**
-     * @param $entryTypeId
-     * @param $integrationId
+     * @return Response
+     * @throws BadRequestHttpException
+     * @throws InvalidConfigException
+     * @throws MissingComponentException
+     */
+    public function actionGetFormFields(): Response
+    {
+        $this->requirePostRequest();
+        $this->requireAcceptsJson();
+
+        $integrationId = Craft::$app->request->getRequiredBodyParam('integrationId');
+        $integration = SproutForms::$app->integrations->getIntegrationById($integrationId);
+        $formFields = $integration->getFormFieldsAsMappingOptions();
+
+        return $this->asJson([
+            'success' => true,
+            'formFields' => $formFields
+        ]);
+    }
+
+    /**
+     * @param             $entryFields
+     * @param Integration $integration
+     * @param             $entryTypeId
      *
      * @return array
      * @throws InvalidConfigException
      */
-    private function getFieldsAsOptionsByRow($entryTypeId, $integrationId): array
+    private function getFieldsAsOptionsByRow($entryFields, $integration, $entryTypeId): array
     {
-        $integrationRecord = IntegrationRecord::findOne($integrationId);
-
-        /** @var ElementIntegration $integration */
-        $integration = $integrationRecord->getIntegrationApi();
-        $targetElementFields = $integration->getElementCustomFieldsAsOptions($entryTypeId);
         $fieldMapping = $integration->fieldMapping;
         $integrationSectionId = $integration->entryTypeId ?? null;
-        $firstRow = [
-            'label' => 'None',
-            'value' => ''
-        ];
-        $sourceFormFields = $integration->getFormFieldsAsMappingOptions(true);
-        array_unshift($sourceFormFields, $firstRow);
 
+        $formFields = $integration->getFormFieldsAsMappingOptions();
         $rowPosition = 0;
+        $finalOptions = [];
 
-        $allTargetElementFieldOptions = [];
-
-        foreach ($targetElementFields as $targetElementField) {
-            $compatibleFields = $this->getCompatibleFields($sourceFormFields, $targetElementField);
-            $integrationValue = $targetElementField['value'] ?? $targetElementField->handle;
+        foreach ($formFields as $formField) {
+            $optionsByRow = $this->getCompatibleFields($entryFields, $formField);
             // We have rows stored and are for the same sectionType
             if ($fieldMapping && ($integrationSectionId == $entryTypeId) &&
                 isset($fieldMapping[$rowPosition])) {
-
-                foreach ($compatibleFields as $key => $option) {
-                    if (isset($option['optgroup'])) {
-                        continue;
-                    }
-
-                    if ($option['value'] == $fieldMapping[$rowPosition]['sproutFormField'] &&
-                        $fieldMapping[$rowPosition]['integrationField'] == $integrationValue) {
-                        $compatibleFields[$key]['selected'] = true;
+                foreach ($optionsByRow as $key => $option) {
+                    if ($option['value'] == $fieldMapping[$rowPosition]['targetIntegrationField'] &&
+                        $fieldMapping[$rowPosition]['sourceFormField'] == $formField['value']) {
+                        $optionsByRow[$key]['selected'] = true;
                     }
                 }
             }
 
-            $allTargetElementFieldOptions[$rowPosition] = $compatibleFields;
+            $finalOptions[$rowPosition] = $optionsByRow;
 
             $rowPosition++;
         }
 
-        $allTargetElementFieldOptions = $this->removeUnnecessaryOptgroups($allTargetElementFieldOptions);
-
-        return $allTargetElementFieldOptions;
+        return $finalOptions;
     }
 
     /**
-     * @param $allTargetElementFieldOptions
+     * @param array $entryFields
+     * @param array $formField
      *
      * @return array
      */
-    private function removeUnnecessaryOptgroups($allTargetElementFieldOptions): array
+    private function getCompatibleFields(array $entryFields, array $formField): array
     {
-        $aux = [];
-        // Removes optgroups with no fields
-        foreach ($allTargetElementFieldOptions as $rowIndex => $targetElementFieldOptions) {
-            foreach ($targetElementFieldOptions as $key => $dropdownOption) {
-                if (isset($dropdownOption['optgroup'])) {
-
-                    if (isset($targetElementFieldOptions[$key + 1]['value'])) {
-                        $aux[$rowIndex][] = $targetElementFieldOptions[$key];
-                    }
-                } else {
-                    $aux[$rowIndex][] = $dropdownOption;
-                }
-            }
-        }
-
-        return $aux;
-    }
-
-    /**
-     * @param array $formFields
-     * @param       $entryField
-     *
-     * @return array
-     */
-    private function getCompatibleFields(array $formFields, $entryField): array
-    {
+        $compatibleFields = $formField['compatibleCraftFields'] ?? '*';
         $finalOptions = [];
 
-        foreach ($formFields as $pos => $field) {
-            if (isset($field['optgroup'])) {
-                $finalOptions[] = $field;
-                continue;
-            }
-            $compatibleFields = $field['compatibleCraftFields'] ?? '*';
-            // Check default attributes
-            if (isset($entryField['class'])) {
-                if (is_array($compatibleFields) &&
-                    !in_array($entryField['class'], $compatibleFields, true)) {
-                    $field = null;
-                }
+        foreach ($entryFields as $field) {
+            $option = [
+                'label' => $field->name.' ('.$field->handle.')',
+                'value' => $field->handle
+            ];
 
-                if ($field) {
-                    $finalOptions[] = $field;
-                }
+            if (is_array($compatibleFields) &&
+                !in_array(get_class($field), $compatibleFields, true)) {
+                $option = null;
+            }
+
+            if ($option) {
+                $finalOptions[] = $option;
             }
         }
 
@@ -361,23 +288,23 @@ class IntegrationsController extends BaseController
     }
 
     /**
-     * @param bool              $success
-     * @param IntegrationRecord $integrationRecord
+     * @param bool             $success
+     * @param Integration|null $integration
      *
      * @return Response
      */
-    private function returnJson(bool $success, $integrationRecord): Response
+    private function returnJson(bool $success, Integration $integration = null): Response
     {
         // @todo how we should return errors to the edit integration modal? template response is disabled for now
         return $this->asJson([
             'success' => $success,
-            'errors' => $integrationRecord ? $integrationRecord->getErrors() : null,
+            'errors' => $integration ? $integration->getErrors() : null,
             'integration' => [
-                'id' => $integrationRecord->id,
-                'name' => $integrationRecord->name ?? null,
-                'enabled' => $integrationRecord->enabled
+                'id' => $integration->id,
+                'name' => $integration->name ?? null,
+                'enabled' => $integration->enabled
             ],
-            //'template' => $success ? false : SproutForms::$app->integrations->getModalIntegrationTemplate($form, $integration),
+            //'template' => $success ? false : SproutForms::$app->integrations->getModalIntegrationTemplate($integration),
         ]);
     }
 }

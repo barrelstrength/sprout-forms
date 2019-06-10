@@ -13,6 +13,7 @@ use craft\base\ElementInterface;
  *
  * @property string $svgIconPath
  * @property array  $compatibleCraftFields
+ * @property array  $compatibleCraftFieldTypes
  * @property mixed  $exampleInputHtml
  */
 class MultipleChoice extends BaseOptionsFormField
@@ -130,7 +131,7 @@ class MultipleChoice extends BaseOptionsFormField
     /**
      * @inheritdoc
      */
-    public function getCompatibleCraftFields(): array
+    public function getCompatibleCraftFieldTypes(): array
     {
         return [
             CraftRadioButtons::class

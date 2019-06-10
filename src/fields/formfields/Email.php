@@ -8,9 +8,13 @@ use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
 use craft\fields\Dropdown as CraftDropdown;
+use craft\fields\Email as CraftEmail;
 use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Template as TemplateHelper;
 use barrelstrength\sproutforms\base\FormField;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
  *
@@ -18,6 +22,7 @@ use barrelstrength\sproutforms\base\FormField;
  * @property string $svgIconPath
  * @property mixed  $settingsHtml
  * @property array  $compatibleCraftFields
+ * @property array  $compatibleCraftFieldTypes
  * @property mixed  $exampleInputHtml
  */
 class Email extends FormField implements PreviewableFieldInterface
@@ -61,9 +66,9 @@ class Email extends FormField implements PreviewableFieldInterface
      * @inheritdoc
      *
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getExampleInputHtml(): string
     {
@@ -85,9 +90,9 @@ class Email extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      *
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getSettingsHtml()
     {
@@ -104,9 +109,9 @@ class Email extends FormField implements PreviewableFieldInterface
      * @param ElementInterface|null $element
      *
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -142,9 +147,9 @@ class Email extends FormField implements PreviewableFieldInterface
      * @param array|null $renderingOptions
      *
      * @return \Twig_Markup
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup
     {
@@ -210,10 +215,11 @@ class Email extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function getCompatibleCraftFields(): array
+    public function getCompatibleCraftFieldTypes(): array
     {
         return [
             CraftPlainText::class,
+            CraftEmail::class,
             CraftDropdown::class
         ];
     }

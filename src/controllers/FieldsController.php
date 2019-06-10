@@ -12,6 +12,9 @@ use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
 use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
 use craft\base\Field;
 use barrelstrength\sproutforms\SproutForms;
+use yii\base\InvalidConfigException;
+use yii\web\BadRequestHttpException;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
@@ -24,8 +27,8 @@ class FieldsController extends BaseController
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
-     * @throws \yii\web\BadRequestHttpException
-     * @throws \yii\base\InvalidConfigException
+     * @throws BadRequestHttpException
+     * @throws InvalidConfigException
      */
     public function actionModalField(): Response
     {
@@ -41,7 +44,7 @@ class FieldsController extends BaseController
      *
      * @return Response
      * @throws \Throwable
-     * @throws \yii\web\BadRequestHttpException
+     * @throws BadRequestHttpException
      */
     public function actionCreateField(): Response
     {
@@ -80,9 +83,9 @@ class FieldsController extends BaseController
      * This action allows create a new Tab to current layout
      *
      * @return Response
-     * @throws \yii\web\BadRequestHttpException
-     * @throws \yii\web\ForbiddenHttpException
-     * @throws \yii\base\InvalidConfigException
+     * @throws BadRequestHttpException
+     * @throws ForbiddenHttpException
+     * @throws InvalidConfigException
      */
     public function actionAddTab(): Response
     {
@@ -123,7 +126,7 @@ class FieldsController extends BaseController
      * @return Response
      * @throws \Throwable
      * @throws \yii\db\StaleObjectException
-     * @throws \yii\web\BadRequestHttpException
+     * @throws BadRequestHttpException
      */
     public function actionDeleteTab(): Response
     {
@@ -147,7 +150,7 @@ class FieldsController extends BaseController
 
         return $this->asJson([
             'success' => false,
-            'errors' => $tabRecord->getErrors() ?? null
+            'errors' => $tabRecord->getErrors()
         ]);
     }
 
@@ -155,9 +158,9 @@ class FieldsController extends BaseController
      * This action allows rename a current Tab
      *
      * @return Response
-     * @throws \yii\web\BadRequestHttpException
-     * @throws \yii\web\ForbiddenHttpException
-     * @throws \yii\base\InvalidConfigException
+     * @throws BadRequestHttpException
+     * @throws ForbiddenHttpException
+     * @throws InvalidConfigException
      */
     public function actionRenameTab(): Response
     {
@@ -191,7 +194,7 @@ class FieldsController extends BaseController
      *
      * @return Response
      * @throws \Throwable
-     * @throws \yii\web\BadRequestHttpException
+     * @throws BadRequestHttpException
      */
     public function actionSaveField(): Response
     {
@@ -318,9 +321,9 @@ class FieldsController extends BaseController
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
-     * @throws \yii\web\BadRequestHttpException
-     * @throws \yii\web\ForbiddenHttpException
-     * @throws \yii\base\InvalidConfigException
+     * @throws BadRequestHttpException
+     * @throws ForbiddenHttpException
+     * @throws InvalidConfigException
      */
     public function actionEditField(): Response
     {
@@ -378,7 +381,7 @@ class FieldsController extends BaseController
     /**
      * @return Response
      * @throws \Throwable
-     * @throws \yii\web\BadRequestHttpException
+     * @throws BadRequestHttpException
      */
     public function actionDeleteField(): Response
     {
@@ -421,8 +424,8 @@ class FieldsController extends BaseController
      *
      * @return Response
      * @throws \yii\base\Exception
-     * @throws \yii\web\BadRequestHttpException
-     * @throws \yii\web\ForbiddenHttpException
+     * @throws BadRequestHttpException
+     * @throws ForbiddenHttpException
      */
     public function actionReorderFields(): Response
     {
@@ -450,7 +453,7 @@ class FieldsController extends BaseController
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     private function returnJson(bool $success, $field, Form $form, $tabName = null, $tabId = null): Response
     {

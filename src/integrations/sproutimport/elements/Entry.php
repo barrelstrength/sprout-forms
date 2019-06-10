@@ -132,7 +132,7 @@ class Entry extends ElementImporter
         return $saveIds;
     }
 
-    public function getFieldsWithMockData($fields)
+    public function getFieldsWithMockData($fields): array
     {
         $fieldsWithMockData = [];
 
@@ -160,7 +160,7 @@ class Entry extends ElementImporter
     /**
      * @return array
      */
-    public function getAllFieldHandles()
+    public function getAllFieldHandles(): array
     {
         $fields = $this->model->getFields();
 

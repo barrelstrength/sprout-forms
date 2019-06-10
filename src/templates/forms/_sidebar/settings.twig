@@ -167,7 +167,7 @@
     <hr>
     {% set integrationOptions = craft.sproutForms.getIntegrationOptions() %}
 
-    <div id="integrations-wrapper" class="meta">
+    <div id="sproutforms-integrations-wrapper" class="meta">
 
         {% for integration in integrations %}
             <div class="field sproutforms-integration-row" id="sproutforms-integration-row-{{ integration.id }}">
@@ -186,7 +186,7 @@
             </div>
         {% endfor %}
 
-        <div class="field" style="padding-top:20px;">
+        <div id="sproutforms-integrations-create" class="field" style="padding-top:20px;">
             {{ forms.select({
                 id: 'integrationsOptions',
                 name: 'integrationsOptions',
