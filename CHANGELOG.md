@@ -1,5 +1,21 @@
 # Changelog
 
+## 3.0.0 - 2019-06-10
+
+### Added
+- Added Date Range Report export setting
+- Added Markdown support for Notification Email Default Body field
+
+### Changed
+- Updated barrelstrength/sprout-base-email requirement to v1.0.9
+- Updated barrelstrength/sprout-base-reports requirement to v1.0.7
+
+### Fixed
+- Fixed bug where new Notifications could throw error if Notification Event was not set ([#285],[#283])
+
+[#283]: https://github.com/barrelstrength/craft-sprout-forms/issues/283
+[#285]: https://github.com/barrelstrength/craft-sprout-forms/issues/285
+
 ## 3.0.0-beta.57 - 2019-05-16
 
 ### Fixed
