@@ -71,7 +71,7 @@ class EntriesDataSource extends DataSource
         $formQuery = $query
             ->select('*')
             ->from($contentTable.' AS formcontenttable')
-            ->innerJoin('{{%elements}}', '[[formcontenttable.elementId]] = [[elements.id]]')
+            ->innerJoin('{{%elements}} elements', '[[formcontenttable.elementId]] = [[elements.id]]')
             ->where(['elements.dateDeleted' => null]);
 
         if ($startDate && $endDate) {
