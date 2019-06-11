@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\integrations\sproutreports\datasources;
 
 use barrelstrength\sproutbasereports\SproutBaseReports;
 use barrelstrength\sproutforms\elements\Form;
+use barrelstrength\sproutforms\fields\formfields\Checkboxes;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutbasereports\elements\Report;
 use Craft;
@@ -54,99 +55,99 @@ class EntriesDataSource extends DataSource
         $startDate = $startEndDate->getStartDate();
         $endDate   = $startEndDate->getEndDate();
 
-        if (!empty($report->getSetting('formId'))) {
-            $formId = $report->getSetting('formId');
+        $rows = [];
+
+        $formId = $report->getSetting('formId');
+        $form = SproutForms::$app->forms->getFormById($formId);
+
+        if (!$form) {
+            return null;
         }
 
-        $rows = [];
-        if ($formId) {
-            $form = SproutForms::$app->forms->getFormById($formId);
+        $contentTable = $form->contentTable;
 
-            if (!$form) {
-                return null;
+        $query = new Query();
+
+        $formQuery = $query
+            ->select('*')
+            ->from($contentTable.' AS formcontenttable')
+            ->innerJoin('{{%elements}}', '[[formcontenttable.elementId]] = [[elements.id]]')
+            ->where(['elements.dateDeleted' => null]);
+
+        if ($startDate && $endDate) {
+            $formQuery->andWhere('[[formcontenttable.dateCreated]] > :startDate', [
+                ':startDate' => $startDate->format('Y-m-d H:i:s')
+            ]);
+            $formQuery->andWhere('[[formcontenttable.dateCreated]] < :endDate', [
+                ':endDate' => $endDate->format('Y-m-d H:i:s')
+            ]);
+        }
+
+        $results = $formQuery->all();
+
+        if (!$results) {
+            return $rows;
+        }
+
+        foreach ($results as $key => $result) {
+
+            $elementId = $result['elementId'];
+            $rows[$key]['id']          = $result['id'];
+            $rows[$key]['elementId']   = $elementId;
+            $rows[$key]['siteId']      = $result['siteId'];
+            $rows[$key]['title']       = $result['title'];
+            $rows[$key]['dateCreated'] = $result['dateCreated'];
+            $rows[$key]['dateUpdated'] = $result['dateUpdated'];
+
+            $entry = Craft::$app->getElements()->getElementById($elementId, Entry::class);
+
+            if ($entry === null) {
+                $fields = [];
+            } else {
+                $fields = $entry->getFieldValues();
             }
 
-            $contentTable = $form->contentTable;
-
-            $query = new Query();
-
-            $formQuery = $query
-                ->select('*')
-                ->from($contentTable.' AS formcontenttable')
-                ->innerJoin('{{%elements}}', '[[formcontenttable.elementId]] = [[elements.id]]')
-                ->where(['elements.dateDeleted' => null]);
-
-            if ($startDate && $endDate) {
-                $formQuery->andWhere('[[formcontenttable.dateCreated]] > :startDate', [
-                    ':startDate' => $startDate->format('Y-m-d H:i:s')
-                ]);
-                $formQuery->andWhere('[[formcontenttable.dateCreated]] < :endDate', [
-                    ':endDate' => $endDate->format('Y-m-d H:i:s')
-                ]);
+            if (count($fields) <= 0) {
+                continue;
             }
 
-            $results = $formQuery->all();
+            foreach ($fields as $handle => $field) {
+                if ($field instanceof ElementQueryInterface) {
 
-            if ($results) {
-                foreach ($results as $key => $result) {
-
-                    $elementId = $result['elementId'];
-                    $rows[$key]['id']          = $result['id'];
-                    $rows[$key]['elementId']   = $elementId;
-                    $rows[$key]['siteId']      = $result['siteId'];
-                    $rows[$key]['title']       = $result['title'];
-                    $rows[$key]['dateCreated'] = $result['dateCreated'];
-                    $rows[$key]['dateUpdated'] = $result['dateUpdated'];
-
-                    $entry = Craft::$app->getElements()->getElementById($elementId, Entry::class);
-
-                    if ($entry === null) {
-                        $fields = [];
-                    } else {
-                        $fields = $entry->getFieldValues();
-                    }
-
-                    if (count($fields) > 0) {
-                        foreach ($fields as $handle => $field) {
-                            if ($field instanceof ElementQueryInterface) {
-
-                                $entries = $field->all();
-                                $titles = [];
-                                if (!empty($entries)) {
-                                    foreach ($entries as $entry) {
-                                        $titles[] = '"'.$entry->title.'"';
-                                    }
-                                }
-                                $value = '';
-
-                                if (!empty($titles)) {
-                                    $value = implode(', ', $titles);
-                                }
-                            } else if ($field instanceof MultiOptionsFieldData) {
-                                $options = $field->getOptions();
-
-                                $selectedOptions = [];
-                                foreach ($options AS $option)
-                                {
-                                    if ($option->selected) {
-                                        $selectedOptions[] = '"'.$option->selected.'"';
-                                    }
-                                }
-
-                                $value = '';
-
-                                if (count($selectedOptions)) {
-                                    $value = implode(', ', $selectedOptions);
-                                }
-                            } else {
-                                $value = $field;
-                            }
-
-                            $fieldHandleKey = 'field_' . $handle;
-                            $rows[$key][$fieldHandleKey] = $value;
+                    $entries = $field->all();
+                    $titles = [];
+                    if (!empty($entries)) {
+                        foreach ($entries as $entry) {
+                            $titles[] = '"'.$entry->title.'"';
                         }
                     }
+                    $value = '';
+
+                    if (!empty($titles)) {
+                        $value = implode(', ', $titles);
+                    }
+                } else if ($field instanceof MultiOptionsFieldData) {
+                    $options = $field->getOptions();
+
+                    $selectedOptions = [];
+                    foreach ($options as $option)
+                    {
+                        if ($option->selected) {
+                            $selectedOptions[] = '"'.$option->value.'"';
+                        }
+                    }
+
+                    $value = '';
+
+                    if (count($selectedOptions)) {
+                        $value = implode(', ', $selectedOptions);
+                    }
+                } else {
+                    $value = $field;
                 }
+
+                $fieldHandleKey = 'field_' . $handle;
+                $rows[$key][$fieldHandleKey] = $value;
             }
         }
 
