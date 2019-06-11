@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.0.2 - 2019-06-11
+
+### Fixed
+- Fixed bug where DB prefix was not properly supported in Entry Reports ([#288])
+
+[#288]: https://github.com/barrelstrength/craft-sprout-forms/issues/288
+
 ## 3.0.1 - 2019-06-11
 
 ### Changed
