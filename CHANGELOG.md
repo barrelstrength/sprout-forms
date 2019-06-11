@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.0.1 - 2019-06-11
+
+### Changed
+- Updated barrelstrength/sprout-base-email requirement to v1.1.0
+
+### Fixed
+- Fixed issue where some Notification Emails would not get triggered ([#238])
+
+[#238]: https://github.com/barrelstrength/craft-sprout-forms/issues/283
+
 ## 3.0.0 - 2019-06-10
 
 ### Added
