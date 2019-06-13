@@ -33,6 +33,11 @@ class Integrations extends Component
     const EVENT_REGISTER_INTEGRATIONS = 'registerIntegrations';
 
     /**
+     * @event OnAfterIntegrationSubmit The event that is triggered when the integration is submitted
+     */
+    const EVENT_AFTER_INTEGRATION_SUBMIT = 'afterIntegrationSubmit';
+
+    /**
      * Returns all registered Integration Types
      *
      * @return array
@@ -352,7 +357,7 @@ class Integrations extends Component
                 'entryIntegration' => $entryIntegration
             ]);
 
-            $this->trigger(EntryIntegration::EVENT_AFTER_INTEGRATION_SUBMIT, $event);
+            $this->trigger(self::EVENT_AFTER_INTEGRATION_SUBMIT, $event);
         }
     }
 }

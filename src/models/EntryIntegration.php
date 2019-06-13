@@ -9,11 +9,6 @@ use Craft;
 class EntryIntegration extends Model
 {
     /**
-     * @event OnAfterIntegrationSubmit The event that is triggered when the integration is submitted
-     */
-    const EVENT_AFTER_INTEGRATION_SUBMIT = 'afterIntegrationSubmit';
-
-    /**
      * @var int|null ID
      */
     public $id;

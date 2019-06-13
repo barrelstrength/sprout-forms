@@ -108,7 +108,7 @@ class EntryElementIntegration extends ElementIntegration
             $errors = json_encode($entryElement->getErrors());
             $message = Craft::t('sprout-forms', 'Element Integration does not validate: '.$this->name.' - Errors: '.$errors);
             Craft::error($message, __METHOD__);
-            $this->addError('global', $message);
+            $this->addError('global', $entryElement->getErrors());
         }
 
 
