@@ -33,6 +33,8 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
 
     use IntegrationTrait;
 
+    protected $successMessage = 'Success';
+
     /**
      * @inheritdoc
      */
@@ -58,6 +60,14 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
     public function submit(): bool
     {
         return false;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getSuccessMessage()
+    {
+        return $this->successMessage;
     }
 
     /**
@@ -289,15 +299,6 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
         }
 
         return $options;
-    }
-
-    /**
-     * @param $isValid
-     * @param $message
-     */
-    public function logResponse($isValid, $message)
-    {
-        $this->entry->addEntryIntegrationLog($this->id, $isValid, $message);
     }
 
     /**

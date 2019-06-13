@@ -295,32 +295,41 @@ class Integrations extends Component
 
         foreach ($integrations as $integration) {
             $integration->entry = $entry;
+            $entryId = $entry->id ?? null;
             Craft::info(Craft::t('sprout-forms', 'Running Sprout Forms Integration: {integrationName}', [
                 'integrationName' => $integration->name
             ]), __METHOD__);
 
             try {
                 if ($integration->enabled) {
-                    $integration->submit();
+                    $result = $integration->submit();
+                    // Success!
+                    if ($result) {
+                        SproutForms::$app->integrations->saveEntryIntegrationLog(
+                            $integration->id,
+                            $entryId,
+                            true,
+                            $integration->getSuccessMessage()
+                        );
+                    }
                 }
             } catch (\Exception $e) {
                 $message = 'Submit Integration Api fails: '.$e->getMessage();
-                $integration->logResponse($message, $e->getMessage());
+                $integration->addError('global', $message);
                 Craft::error($message, __METHOD__);
             }
-        }
 
-        $integrationLogs = $entry->getEntryIntegrationLogs();
-
-        $entryId = $entry->id ?? null;
-        if ($integrationLogs) {
-            foreach ($integrationLogs as $integrationLog) {
-                SproutForms::$app->integrations->saveEntryIntegrationLog(
-                    $integrationLog['integrationId'],
-                    $entryId,
-                    $integrationLog['isValid'],
-                    $integrationLog['message']
-                );
+            $integrationErrors = $integration->getErrors();
+            // Let's log erros
+            if ($integrationErrors) {
+                foreach ($integrationErrors as $integrationLog) {
+                    SproutForms::$app->integrations->saveEntryIntegrationLog(
+                        $integration->id,
+                        $entryId,
+                        false,
+                        $integrationLog
+                    );
+                }
             }
         }
     }

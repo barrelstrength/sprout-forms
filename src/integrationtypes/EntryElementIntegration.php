@@ -79,7 +79,40 @@ class EntryElementIntegration extends ElementIntegration
             return false;
         }
 
-        return $this->createEntry();
+        $fields = $this->resolveFieldMapping();
+        $entryType = Craft::$app->getSections()->getEntryTypeById($this->entryTypeId);
+
+        $entryElement = new Entry();
+        $entryElement->typeId = $entryType->id;
+        $entryElement->sectionId = $entryType->sectionId;
+
+        $author = $this->getAuthor();
+
+        if ($author) {
+            $entryElement->authorId = $author->id;
+        }
+
+        $entryElement->setAttributes($fields, false);
+
+        if ($entryElement->validate()) {
+            $result = Craft::$app->getElements()->saveElement($entryElement);
+            if ($result) {
+                $this->successMessage = Craft::t('sprout-forms', 'Entry Element Integration created.');
+                return true;
+            }
+
+            $message = Craft::t('sprout-forms', 'Unable to create Entry via Entry Element Integration');
+            $this->addError('global', $message);
+            Craft::error($message, __METHOD__);
+        } else {
+            $errors = json_encode($entryElement->getErrors());
+            $message = Craft::t('sprout-forms', 'Element Integration does not validate: '.$this->name.' - Errors: '.$errors);
+            Craft::error($message, __METHOD__);
+            $this->addError('global', $message);
+        }
+
+
+        return false;
     }
 
     /**
@@ -94,9 +127,6 @@ class EntryElementIntegration extends ElementIntegration
             foreach ($this->fieldMapping as $fieldMap) {
                 if (isset($entry->{$fieldMap['sourceFormField']}) && $fieldMap['targetIntegrationField']) {
                     $fields[$fieldMap['targetIntegrationField']] = $entry->{$fieldMap['sourceFormField']};
-                } else if (empty($fieldMap['targetIntegrationField'])) {
-                    // Leave default handle if the targetIntegrationField is blank
-                    $fields[$fieldMap['sourceFormField']] = $entry->{$fieldMap['sourceFormField']};
                 }
             }
         }
@@ -175,54 +205,6 @@ class EntryElementIntegration extends ElementIntegration
         }
 
         return $options;
-    }
-
-    /**
-     * @return bool
-     * @throws \Throwable
-     */
-    private function createEntry(): bool
-    {
-        $fields = $this->resolveFieldMapping();
-        $entryType = Craft::$app->getSections()->getEntryTypeById($this->entryTypeId);
-
-        $entryElement = new Entry();
-        $entryElement->typeId = $entryType->id;
-        $entryElement->sectionId = $entryType->sectionId;
-
-        $author = $this->getAuthor();
-
-        if ($author) {
-            $entryElement->authorId = $author->id;
-        }
-
-        $entryElement->setAttributes($fields, false);
-
-        try {
-            if ($entryElement->validate()) {
-                $result = Craft::$app->getElements()->saveElement($entryElement);
-                if ($result) {
-                    $message = Craft::t('sprout-forms', 'Entry Element Integration created.');
-                    $this->logResponse(true, $message);
-                    Craft::info($message, __METHOD__);
-                    return true;
-                }
-
-                $message = Craft::t('sprout-forms', 'Unable to create Entry via Entry Element Integration');
-                $this->logResponse(false, $entryElement->getErrors());
-                Craft::error($message, __METHOD__);
-            } else {
-                $errors = json_encode($entryElement->getErrors());
-                $message = Craft::t('sprout-forms', 'Element Integration does not validate: '.$this->name.' - Errors: '.$errors);
-                Craft::error($message, __METHOD__);
-                $this->logResponse(false, $message);
-            }
-        } catch (\Exception $e) {
-            Craft::error($e->getMessage(), __METHOD__);
-            $this->logResponse(false, $e->getMessage());
-        }
-
-        return false;
     }
 
     /**

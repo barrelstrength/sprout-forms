@@ -417,20 +417,6 @@ class Entry extends Element
     }
 
     /**
-     * @param $integrationId
-     * @param $message
-     * @param $isValid
-     */
-    public function addEntryIntegrationLog($integrationId, $isValid, $message)
-    {
-        $this->entryIntegrationLogs[] = [
-            'integrationId' => $integrationId,
-            'message' => $message,
-            'isValid' => $isValid
-        ];
-    }
-
-    /**
      * @return array
      */
     public function getEntryIntegrationLogs(): array
