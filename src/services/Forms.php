@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\services;
 
 use barrelstrength\sproutforms\base\FormTemplates;
+use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\SproutForms;
@@ -12,6 +13,7 @@ use barrelstrength\sproutforms\migrations\CreateFormContentTable;
 use Craft;
 use craft\base\ElementInterface;
 use craft\base\Field;
+use craft\db\Query;
 use craft\events\RegisterComponentTypesEvent;
 use yii\base\Component;
 use craft\helpers\StringHelper;
@@ -230,6 +232,16 @@ class Forms extends Component
             $contentTable = $this->getContentTableName($form);
             Craft::$app->content->contentTable = $contentTable;
 
+            //Delete all entries
+            $entries = (new Query())
+                ->select(['elementId'])
+                ->from([$contentTable])
+                ->all();
+
+            foreach ($entries as $entry) {
+                Craft::$app->elements->deleteElementById($entry['elementId']);
+            }
+
             // Delete form fields
             foreach ($form->getFields() as $field) {
                 Craft::$app->getFields()->deleteField($field);
@@ -245,8 +257,10 @@ class Forms extends Component
 
             Craft::$app->content->contentTable = $originalContentTable;
 
+
             // Delete the Element and Form
             $success = Craft::$app->elements->deleteElementById($form->id);
+
 
             if (!$success) {
                 $transaction->rollBack();
