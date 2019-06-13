@@ -5,7 +5,9 @@ namespace barrelstrength\sproutforms\services;
 use barrelstrength\sproutforms\base\Integration;
 use barrelstrength\sproutforms\base\IntegrationInterface;
 use barrelstrength\sproutforms\elements\Entry;
+use barrelstrength\sproutforms\events\OnAfterIntegrationSubmit;
 use barrelstrength\sproutforms\integrationtypes\MissingIntegration;
+use barrelstrength\sproutforms\models\EntryIntegration;
 use barrelstrength\sproutforms\records\EntryIntegrationLog;
 use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
 use barrelstrength\sproutforms\SproutForms;
@@ -239,24 +241,24 @@ class Integrations extends Component
     }
 
     /**
-     * @param       $integrationId
-     * @param       $entryId
-     * @param       $isValid
-     * @param array $message
-     *
-     * @return bool
+     * @param $entryIntegrationModel EntryIntegration
+     * @return EntryIntegration
      */
-    public function saveEntryIntegrationLog($integrationId, $entryId, $isValid, $message = []): bool
+    public function saveEntryIntegrationLog($entryIntegrationModel)
     {
         $entryIntegration = new EntryIntegrationLog();
-        $entryIntegration->entryId = $entryId;
-        $entryIntegration->integrationId = $integrationId;
-        $entryIntegration->isValid = $isValid;
-        if (is_array($message)) {
-            $message = json_encode($message);
+        $entryIntegration->entryId = $entryIntegrationModel->entryId;
+        $entryIntegration->integrationId = $entryIntegrationModel->integrationId;
+        $entryIntegration->isValid = $entryIntegrationModel->isValid;
+        if (is_array($entryIntegrationModel->message)) {
+            $entryIntegrationModel->message = json_encode($entryIntegrationModel->message);
         }
-        $entryIntegration->message = $message;
-        return $entryIntegration->save();
+        $entryIntegration->message = $entryIntegrationModel->message;
+        $entryIntegration->save();
+
+        $entryIntegrationModel->setAttributes($entryIntegration->getAttributes(), false);
+
+        return $entryIntegrationModel;
     }
 
     /**
@@ -300,17 +302,23 @@ class Integrations extends Component
                 'integrationName' => $integration->name
             ]), __METHOD__);
 
+            $entryIntegration = null;
+
             try {
                 if ($integration->enabled) {
                     $result = $integration->submit();
                     // Success!
                     if ($result) {
-                        SproutForms::$app->integrations->saveEntryIntegrationLog(
-                            $integration->id,
-                            $entryId,
-                            true,
-                            $integration->getSuccessMessage()
-                        );
+                        $entryIntegrationModel = new EntryIntegration();
+
+                        $entryIntegrationModel->setAttributes([
+                            'integrationId' => $integration->id,
+                            'entryId' => $entryId,
+                            'isValid' => true,
+                            'message' => $integration->getSuccessMessage()
+                        ], false);
+
+                        $entryIntegration = SproutForms::$app->integrations->saveEntryIntegrationLog($entryIntegrationModel);
                     }
                 }
             } catch (\Exception $e) {
@@ -320,17 +328,31 @@ class Integrations extends Component
             }
 
             $integrationErrors = $integration->getErrors();
-            // Let's log erros
+            // Let's log errors
             if ($integrationErrors) {
+                $errorMessages = [];
                 foreach ($integrationErrors as $integrationLog) {
-                    SproutForms::$app->integrations->saveEntryIntegrationLog(
-                        $integration->id,
-                        $entryId,
-                        false,
-                        $integrationLog
-                    );
+                    array_push($errorMessages, $integrationLog);
                 }
+
+                $entryIntegrationModel = new EntryIntegration();
+
+                $entryIntegrationModel->setAttributes([
+                    'integrationId' => $integration->id,
+                    'entryId' => $entryId,
+                    'isValid' => false,
+                    'message' => $errorMessages
+                ], false);
+
+                $entryIntegration = SproutForms::$app->integrations->saveEntryIntegrationLog($entryIntegrationModel
+                );
             }
+
+            $event = new OnAfterIntegrationSubmit([
+                'entryIntegration' => $entryIntegration
+            ]);
+
+            $this->trigger(EntryIntegration::EVENT_AFTER_INTEGRATION_SUBMIT, $event);
         }
     }
 }
