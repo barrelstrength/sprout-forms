@@ -15,11 +15,16 @@ class m190425_000000_add_integrations_entries extends Migration
      */
     public function safeUp(): bool
     {
-        $this->createTable('{{%sproutforms_integrations_entries}}', [
+        $this->createTable('{{%sproutforms_log}}', [
             'id' => $this->primaryKey(),
             'entryId' => $this->integer(),
             'integrationId' => $this->integer()->notNull(),
-            'isValid' => $this->boolean()->defaultValue(false),
+            'success' => $this->boolean()->defaultValue(false),
+            'status' => $this->enum('status',
+                [
+                    'pending', 'completed'
+                ])
+                ->notNull()->defaultValue('pending'),
             'message' => $this->text(),
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull(),
@@ -28,37 +33,37 @@ class m190425_000000_add_integrations_entries extends Migration
 
         $this->createIndex(
             $this->db->getIndexName(
-                '{{%sproutforms_integrations_entries}}',
+                '{{%sproutforms_log}}',
                 'entryId',
                 false, true
             ),
-            '{{%sproutforms_integrations_entries}}',
+            '{{%sproutforms_log}}',
             'entryId'
         );
 
         $this->createIndex(
             $this->db->getIndexName(
-                '{{%sproutforms_integrations_entries}}',
+                '{{%sproutforms_log}}',
                 'integrationId',
                 false, true
             ),
-            '{{%sproutforms_integrations_entries}}',
+            '{{%sproutforms_log}}',
             'integrationId'
         );
 
         $this->addForeignKey(
             $this->db->getForeignKeyName(
-                '{{%sproutforms_integrations_entries}}', 'entryId'
+                '{{%sproutforms_log}}', 'entryId'
             ),
-            '{{%sproutforms_integrations_entries}}', 'entryId',
+            '{{%sproutforms_log}}', 'entryId',
             '{{%sproutforms_entries}}', 'id', 'CASCADE'
         );
 
         $this->addForeignKey(
             $this->db->getForeignKeyName(
-                '{{%sproutforms_integrations_entries}}', 'integrationId'
+                '{{%sproutforms_log}}', 'integrationId'
             ),
-            '{{%sproutforms_integrations_entries}}', 'integrationId',
+            '{{%sproutforms_log}}', 'integrationId',
             '{{%sproutforms_integrations}}', 'id', 'CASCADE'
         );
 

@@ -26,7 +26,12 @@ class EntryIntegration extends Model
     /**
      * @var bool
      */
-    public $isValid;
+    public $success;
+
+    /**
+     * @var string
+     */
+    public $status;
 
     /**
      * @var string

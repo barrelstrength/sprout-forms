@@ -104,7 +104,7 @@
                 <div class="data">
                     {% set integration = craft.sproutForms.getIntegrationById(entryIntegration.integrationId) %}
                     <h5 class="heading">{{ integration.name }}</h5>
-                    {% if entryIntegration.isValid %}
+                    {% if entryIntegration.success %}
                         <div class="value"><span class="status live "></span>
                             Success
                             <span class="info">{{ entryIntegration.message }}</span>

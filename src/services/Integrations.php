@@ -20,6 +20,7 @@ use craft\helpers\Component as ComponentHelper;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use yii\base\Exception;
 use yii\base\InvalidConfigException;
 use yii\db\ActiveRecord;
 
@@ -36,6 +37,10 @@ class Integrations extends Component
      * @event OnAfterIntegrationSubmit The event that is triggered when the integration is submitted
      */
     const EVENT_AFTER_INTEGRATION_SUBMIT = 'afterIntegrationSubmit';
+
+    const ENTRY_INTEGRATION_PENDING_STATUS = 'pending';
+
+    const ENTRY_INTEGRATION_COMPLETED_STATUS = 'completed';
 
     /**
      * Returns all registered Integration Types
@@ -245,20 +250,30 @@ class Integrations extends Component
         ];
     }
 
+
     /**
      * @param $entryIntegrationModel EntryIntegration
-     * @return EntryIntegration
+     * @return mixed
+     * @throws Exception
      */
     public function saveEntryIntegrationLog($entryIntegrationModel)
     {
         $entryIntegration = new EntryIntegrationLog();
+        if ($entryIntegrationModel->id){
+            $entryIntegration = EntryIntegrationLog::findOne($entryIntegrationModel->id);
+            if (!$entryIntegration) {
+                throw new Exception(Craft::t('sprout-forms', 'No integration entry exists with id '.$entryIntegrationModel->id));
+            }
+        }
+
         $entryIntegration->entryId = $entryIntegrationModel->entryId;
         $entryIntegration->integrationId = $entryIntegrationModel->integrationId;
-        $entryIntegration->isValid = $entryIntegrationModel->isValid;
+        $entryIntegration->success = $entryIntegrationModel->success;
         if (is_array($entryIntegrationModel->message)) {
             $entryIntegrationModel->message = json_encode($entryIntegrationModel->message);
         }
         $entryIntegration->message = $entryIntegrationModel->message;
+        $entryIntegration->status = $entryIntegrationModel->status;
         $entryIntegration->save();
 
         $entryIntegrationModel->setAttributes($entryIntegration->getAttributes(), false);
@@ -275,7 +290,7 @@ class Integrations extends Component
     {
         $entryIntegrations = (new Query())
             ->select(['*'])
-            ->from(['{{%sproutforms_integrations_entries}}'])
+            ->from(['{{%sproutforms_log}}'])
             ->where(['entryId' => $entryId])
             ->all();
 
@@ -299,31 +314,52 @@ class Integrations extends Component
 
         $form = $entry->getForm();
         $integrations = $this->getFormIntegrations($form->id);
+        $entryIntegrations = [];
+        $entryId = $entry->id ?? null;
 
         foreach ($integrations as $integration) {
+            if ($integration->enabled) {
+                $entryIntegrationModel = new EntryIntegration();
+
+                $entryIntegrationModel->setAttributes([
+                    'integrationId' => $integration->id,
+                    'entryId' => $entryId,
+                    'success' => false,
+                    'status' => self::ENTRY_INTEGRATION_PENDING_STATUS,
+                    'message' => 'Pending'
+                ], false);
+
+                $entryIntegration = SproutForms::$app->integrations->saveEntryIntegrationLog($entryIntegrationModel
+                );
+
+                $entryIntegrations[] = [
+                    'integration' => $integration,
+                    'entryIntegrationModel' => $entryIntegration
+                ];
+            }
+        }
+
+        foreach ($entryIntegrations as $entryIntegration) {
+            $integration = $entryIntegration['integration'];
+            $entryIntegrationModel = $entryIntegration['entryIntegrationModel'];
+
             $integration->entry = $entry;
-            $entryId = $entry->id ?? null;
             Craft::info(Craft::t('sprout-forms', 'Running Sprout Forms Integration: {integrationName}', [
                 'integrationName' => $integration->name
             ]), __METHOD__);
-
-            $entryIntegration = null;
 
             try {
                 if ($integration->enabled) {
                     $result = $integration->submit();
                     // Success!
                     if ($result) {
-                        $entryIntegrationModel = new EntryIntegration();
-
                         $entryIntegrationModel->setAttributes([
-                            'integrationId' => $integration->id,
-                            'entryId' => $entryId,
-                            'isValid' => true,
+                            'success' => true,
+                            'status' => self::ENTRY_INTEGRATION_COMPLETED_STATUS,
                             'message' => $integration->getSuccessMessage()
                         ], false);
 
-                        $entryIntegration = SproutForms::$app->integrations->saveEntryIntegrationLog($entryIntegrationModel);
+                        $entryIntegrationModel = SproutForms::$app->integrations->saveEntryIntegrationLog($entryIntegrationModel);
                     }
                 }
             } catch (\Exception $e) {
@@ -340,21 +376,18 @@ class Integrations extends Component
                     array_push($errorMessages, $integrationLog);
                 }
 
-                $entryIntegrationModel = new EntryIntegration();
-
                 $entryIntegrationModel->setAttributes([
-                    'integrationId' => $integration->id,
-                    'entryId' => $entryId,
-                    'isValid' => false,
-                    'message' => $errorMessages
+                    'success' => false,
+                    'message' => $errorMessages,
+                    'status' => self::ENTRY_INTEGRATION_COMPLETED_STATUS
                 ], false);
 
-                $entryIntegration = SproutForms::$app->integrations->saveEntryIntegrationLog($entryIntegrationModel
+                $entryIntegrationModel = SproutForms::$app->integrations->saveEntryIntegrationLog($entryIntegrationModel
                 );
             }
 
             $event = new OnAfterIntegrationSubmit([
-                'entryIntegration' => $entryIntegration
+                'entryIntegration' => $entryIntegrationModel
             ]);
 
             $this->trigger(self::EVENT_AFTER_INTEGRATION_SUBMIT, $event);
