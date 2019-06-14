@@ -19,6 +19,8 @@ use craft\elements\db\ElementQueryInterface;
  * Class EntriesDataSource
  *
  * @package barrelstrength\sproutforms\integrations\sproutreports\datasources
+ *
+ * @property null|string $description
  */
 class EntriesDataSource extends DataSource
 {
@@ -27,7 +29,7 @@ class EntriesDataSource extends DataSource
     /**
      * @return string
      */
-    public function getName(): string
+    public static function displayName(): string
     {
         return Craft::t('sprout-forms', 'Entries (Sprout Forms)');
     }

@@ -56,6 +56,7 @@ class FormsController extends BaseController
             }
         } else {
             $form = SproutForms::$app->forms->getFormById($request->getBodyParam('id'));
+
             if (!$form) {
                 throw new NotFoundHttpException(Craft::t('sprout-forms', 'Form not found'));
             }

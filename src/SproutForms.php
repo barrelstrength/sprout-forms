@@ -5,7 +5,6 @@ namespace barrelstrength\sproutforms;
 use barrelstrength\sproutbaseemail\services\EmailTemplates;
 use barrelstrength\sproutbaseemail\SproutBaseEmailHelper;
 use barrelstrength\sproutbasefields\SproutBaseFieldsHelper;
-use barrelstrength\sproutbasereports\models\DataSource;
 use barrelstrength\sproutbaseemail\services\NotificationEmailEvents;
 use barrelstrength\sproutbasereports\services\DataSources;
 use barrelstrength\sproutbasereports\SproutBaseReports;
@@ -54,13 +53,15 @@ use barrelstrength\sproutforms\events\RegisterFieldsEvent;
 use barrelstrength\sproutforms\services\Fields as SproutFormsFields;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use craft\services\Dashboard;
+use yii\base\InvalidConfigException;
+use yii\web\Response;
 
 /**
  *
- * @property null|array                    $cpNavItem
- * @property array                         $cpUrlRules
- * @property $this|\yii\web\Response|mixed $settingsResponse
- * @property array                         $userPermissions
+ * @property null|array           $cpNavItem
+ * @property array                $cpUrlRules
+ * @property $this|Response|mixed $settingsResponse
+ * @property array                $userPermissions
  */
 class SproutForms extends Plugin
 {
@@ -101,7 +102,7 @@ class SproutForms extends Plugin
     public $minVersionRequired = '2.5.1';
 
     /**
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function init()
     {
@@ -146,7 +147,6 @@ class SproutForms extends Plugin
         Event::on(DataSources::class, DataSources::EVENT_REGISTER_DATA_SOURCES, static function(RegisterComponentTypesEvent $event) {
             $event->types[] = EntriesDataSource::class;
         });
-
 
         $this->setComponents([
             'sproutforms' => SproutFormsVariable::class
@@ -231,7 +231,7 @@ class SproutForms extends Plugin
     /**
      * Redirect to Sprout Forms settings
      *
-     * @return $this|mixed|\yii\web\Response
+     * @return $this|mixed|Response
      */
     public function getSettingsResponse()
     {
@@ -242,7 +242,6 @@ class SproutForms extends Plugin
 
     /**
      * @return array|null
-     * @throws \yii\db\Exception
      */
     public function getCpNavItem()
     {
@@ -274,18 +273,10 @@ class SproutForms extends Plugin
             ];
         }
 
-        $entriesDataSource = SproutBaseReports::$app->dataSources->getDataSourceByType(EntriesDataSource::class);
-
-        // If we don't find a dataSource we need to generate our Sprout Forms Data Source record and then query for it again.
-        if (!$entriesDataSource) {
-            SproutBaseReports::$app->dataSources->getAllDataSources();
-            $entriesDataSource = SproutBaseReports::$app->dataSources->getDataSourceByType(EntriesDataSource::class);
-        }
-
         if (Craft::$app->getUser()->checkPermission('sproutForms-viewReports')) {
             $parent['subnav']['reports'] = [
                 'label' => Craft::t('sprout-forms', 'Reports'),
-                'url' => 'sprout-forms/reports/'.$entriesDataSource->dataSourceId
+                'url' => 'sprout-forms/reports'
             ];
         }
 
@@ -328,6 +319,12 @@ class SproutForms extends Plugin
             '<pluginHandle:sprout-forms>/reports/view/<reportId:\d+>' =>
                 'sprout-base-reports/reports/results-index-template',
             '<pluginHandle:sprout-forms>/reports/<dataSourceId:\d+>' => [
+                'route' => 'sprout-base-reports/reports/reports-index-template',
+                'params' => [
+                    'hideSidebar' => true
+                ]
+            ],
+            '<pluginHandle:sprout-forms>/reports' => [
                 'route' => 'sprout-base-reports/reports/reports-index-template',
                 'params' => [
                     'hideSidebar' => true
@@ -403,20 +400,16 @@ class SproutForms extends Plugin
     }
 
     /**
-     * @throws \yii\db\Exception
+     * @inheritDoc
      */
     protected function afterInstall()
     {
-        // Add sprout reports data source integration
-        $dataSourceClass = EntriesDataSource::class;
+        // Add DataSource integrations so users don't have to install them manually
+        $dataSourceTypes = [
+            EntriesDataSource::class
+        ];
 
-        $dataSourceModel = new DataSource();
-        $dataSourceModel->type = $dataSourceClass;
-        $dataSourceModel->allowNew = 1;
-        // Set all pre-built class to sprout-reports $pluginHandle
-        $dataSourceModel->pluginHandle = 'sprout-forms';
-
-        SproutBaseReports::$app->dataSources->saveDataSource($dataSourceModel);
+        SproutBaseReports::$app->dataSources->installDataSources($dataSourceTypes);
     }
 
     /**
