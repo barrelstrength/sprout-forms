@@ -62,11 +62,10 @@ class LogDataSource extends DataSource
         $query = new Query();
 
         $formQuery = $query
-            ->select('log.id id, log.dateCreated dateCreated, log.dateUpdated dateUpdated, forms.name formName, integrations.message message, integrations.success success, integrations.status status')
+            ->select('log.id id, log.dateCreated dateCreated, log.dateUpdated dateUpdated, log.entryId entryId, integrations.name integrationName, forms.name formName, log.message message, log.success success, log.status status')
             ->from('{{%sproutforms_log}} AS log')
             ->innerJoin('{{%sproutforms_integrations}} integrations', '[[log.integrationId]] = [[integrations.id]]')
-            ->innerJoin('{{%sproutforms_forms}} forms', '[[integrations.formId]] = [[forms.id]]')
-            ->where(['elements.dateDeleted' => null]);
+            ->innerJoin('{{%sproutforms_forms}} forms', '[[integrations.formId]] = [[forms.id]]');
 
         if ($formId != '*'){
             $formQuery->andWhere(['[[integrations.formId]]' => $formId]);
@@ -88,11 +87,19 @@ class LogDataSource extends DataSource
         }
 
         foreach ($results as $key => $result) {
+            $message = $result['message'];
+
+            if (strlen($result['message']) > 255 ){
+                $message = substr($result['message'],0,255). ' ...(truncated)';
+            }
+
             $rows[$key]['id']          = $result['id'];
+            $rows[$key]['entryId']    = $result['entryId'];
             $rows[$key]['formName']    = $result['formName'];
-            $rows[$key]['message']     = $result['message'];
+            $rows[$key]['integrationName'] = $result['integrationName'];
+            $rows[$key]['message']     = $string = $message;
             $rows[$key]['status']      = $result['status'];
-            $rows[$key]['success']     = $result['success'];
+            $rows[$key]['success']     = $result['success'] ? 'true' : 'false';
             $rows[$key]['dateCreated'] = $result['dateCreated'];
             $rows[$key]['dateUpdated'] = $result['dateUpdated'];
         }
@@ -117,7 +124,7 @@ class LogDataSource extends DataSource
             $settings = (array)$this->report->getSettings();
         }
 
-        $formOptions = ['label' => 'All', 'value' => '*'];
+        $formOptions[] = ['label' => 'All', 'value' => '*'];
 
         foreach ($forms as $form) {
             $formOptions[] = [
@@ -146,7 +153,7 @@ class LogDataSource extends DataSource
 
         $dateRanges = SproutBaseReports::$app->reports->getDateRanges(false);
 
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_integrations/sproutreports/datasources/LogDataSource/settings', [
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_integrations/sproutreports/datasources/LogsDataSource/settings', [
             'formOptions' => $formOptions,
             'defaultStartDate' => new \DateTime($defaultStartDate),
             'defaultEndDate' => new \DateTime($defaultEndDate),
