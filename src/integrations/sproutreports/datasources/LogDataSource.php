@@ -27,7 +27,7 @@ class LogDataSource extends DataSource
     /**
      * @return string
      */
-    public function getName(): string
+    public static function displayName(): string
     {
         return Craft::t('sprout-forms', 'Integrations (Sprout Forms)');
     }
