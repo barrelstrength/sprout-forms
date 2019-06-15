@@ -4,7 +4,6 @@ namespace barrelstrength\sproutforms\integrations\sproutreports\datasources;
 
 use barrelstrength\sproutbasereports\SproutBaseReports;
 use barrelstrength\sproutforms\elements\Form;
-use barrelstrength\sproutforms\fields\formfields\Checkboxes;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutbasereports\elements\Report;
 use Craft;
@@ -24,8 +23,6 @@ use craft\elements\db\ElementQueryInterface;
  */
 class EntriesDataSource extends DataSource
 {
-    private $reportModel;
-
     /**
      * @return string
      */

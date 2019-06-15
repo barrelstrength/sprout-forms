@@ -3,7 +3,6 @@
 namespace barrelstrength\sproutforms\services;
 
 use barrelstrength\sproutforms\base\FormTemplates;
-use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\SproutForms;

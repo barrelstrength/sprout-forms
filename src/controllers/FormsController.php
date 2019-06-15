@@ -19,6 +19,7 @@ class FormsController extends BaseController
 {
     /**
      * @throws HttpException
+     * @throws \yii\base\InvalidConfigException
      */
     public function init()
     {

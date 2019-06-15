@@ -10,6 +10,9 @@ use Craft;
 use craft\base\Element;
 use craft\base\FieldInterface;
 use craft\elements\db\ElementQueryInterface;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 use yii\base\ErrorHandler;
 use craft\db\Query;
 use craft\helpers\UrlHelper;
@@ -280,9 +283,9 @@ class Form extends Element
      * @inheritdoc
      *
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getEditorHtml(): string
     {

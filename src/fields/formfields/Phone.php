@@ -271,6 +271,7 @@ class Phone extends FormField implements PreviewableFieldInterface
      */
     public function getCompatibleCraftFieldTypes(): array
     {
+        /** @noinspection ClassConstantCanBeUsedInspection */
         return [
             'barrelstrength\\sproutfields\\fields\\Phone'
         ];

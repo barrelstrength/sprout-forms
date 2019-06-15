@@ -8,8 +8,6 @@ use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
-use craft\fields\Dropdown as CraftDropdown;
-use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Template as TemplateHelper;
 use yii\db\Schema;
 use barrelstrength\sproutforms\base\FormField;
@@ -178,6 +176,7 @@ class Address extends FormField implements PreviewableFieldInterface
      */
     public function getCompatibleCraftFieldTypes(): array
     {
+        /** @noinspection ClassConstantCanBeUsedInspection */
         return [
             'barrelstrength\\sproutfields\\fields\\Address'
         ];

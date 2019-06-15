@@ -152,9 +152,7 @@ class EntryElementIntegration extends ElementIntegration
             $entryTypeId = $sections[1]['value'] ?? null;
         }
 
-        $targetElementFields = $this->getElementCustomFieldsAsOptions($entryTypeId);
-
-        return $targetElementFields;
+        return $this->getElementCustomFieldsAsOptions($entryTypeId);
     }
 
     /**
