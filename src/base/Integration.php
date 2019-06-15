@@ -19,14 +19,14 @@ use yii\base\InvalidConfigException;
  *
  * @package Craft
  *
- * @property string                                    $fieldMappingSettingsHtml
- * @property void                                      $settingsHtml
- * @property array                                     $sourceFormFields
- * @property void                                      $customSourceFormFields
- * @property null|string                               $updateTargetFieldsAction
- * @property string                                    $updateSourceFieldsAction
- * @property \barrelstrength\sproutforms\elements\Form $form
- * @property string                                    $type
+ * @property string      $fieldMappingSettingsHtml
+ * @property void        $settingsHtml
+ * @property array       $sourceFormFields
+ * @property void        $customSourceFormFields
+ * @property null|string $updateTargetFieldsAction
+ * @property string      $updateSourceFieldsAction
+ * @property Form        $form
+ * @property string      $type
  */
 abstract class Integration extends SavableComponent implements IntegrationInterface
 {
@@ -44,6 +44,7 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
     {
         return SproutForms::$app->forms->getFormById($this->formId);
     }
+
     /**
      * @inheritdoc
      */
@@ -313,17 +314,6 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
         }
 
         return $options;
-    }
-
-    /**
-     * @return string|null
-     * @todo - can we remove this and update how this happens to use javascript?
-     *       https://stackoverflow.com/questions/2195568/how-do-i-add-slashes-to-a-string-in-javascript
-     *
-     */
-    public function getType()
-    {
-        return addslashes(static::class);
     }
 }
 

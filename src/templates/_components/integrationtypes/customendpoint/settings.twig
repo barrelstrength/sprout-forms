@@ -36,6 +36,6 @@
 {% js %}
     new Craft.SproutForms.Integration({
     updateSourceFieldsAction: '{{ integration.getUpdateSourceFieldsAction() }}',
-    integrationType: '{{ integration.getType() }}'
+    integrationType: '{{ className(integration)|e('js') }}'
     });
 {% endjs %}
