@@ -8,6 +8,7 @@ use craft\elements\db\ElementQuery;
 use craft\helpers\Db;
 
 use barrelstrength\sproutforms\SproutForms;
+use yii\base\InvalidConfigException;
 
 class EntryQuery extends ElementQuery
 {
@@ -228,7 +229,9 @@ class EntryQuery extends ElementQuery
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
+     *
+     * @throws InvalidConfigException
      */
     protected function customFields(): array
     {

@@ -105,20 +105,26 @@ class Fields extends Component
     protected function getFieldLayoutFieldRecordByFieldId($fieldId = null): FieldLayoutFieldRecord
     {
         if ($fieldId) {
-            $record = FieldLayoutFieldRecord::find('fieldId=:fieldId', [':fieldId' => $fieldId]);
+            /** @var FieldLayoutFieldRecord $fieldLayoutFieldRecord */
+            $fieldLayoutFieldRecord = FieldLayoutFieldRecord::find()
+                ->where('fieldId=:fieldId', [
+                    ':fieldId' => $fieldId
+                ]);
 
-            if (!$record) {
-                throw new Exception(Craft::t('sprout-forms', 'No field exists with the ID “{id}”', ['id' => $fieldId]));
+            if (!$fieldLayoutFieldRecord) {
+                throw new Exception(Craft::t('sprout-forms', 'No field exists with the ID “{id}”', [
+                    'id' => $fieldId
+                ]));
             }
-        } else {
-            $record = new FieldLayoutFieldRecord();
+
+            return $fieldLayoutFieldRecord;
         }
 
-        return $record;
+        return new FieldLayoutFieldRecord();
     }
 
     /**
-     * @return array|FormField[]
+     * @return FormField[]|array
      */
     public function getRegisteredFields(): array
     {
@@ -190,7 +196,7 @@ class Fields extends Component
     /**
      * @param $type
      *
-     * @return FormField|mixed
+     * @return FormField|null
      */
     public function getRegisteredField($type)
     {
@@ -201,6 +207,8 @@ class Fields extends Component
                 return $field;
             }
         }
+
+        return null;
     }
 
     /**
@@ -497,7 +505,7 @@ class Fields extends Component
     /**
      * This service allows update a field to a current FieldLayoutFieldRecord
      *
-     * @param FieldRecord $field
+     * @param Field $field
      * @param FormElement $form
      * @param int         $tabId
      *

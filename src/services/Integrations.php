@@ -308,8 +308,11 @@ class Integrations extends Component
      */
     public function runFormIntegrations(Entry $entry)
     {
+        /** @var SproutForms $plugin */
+        $plugin = SproutForms::getInstance();
+
         if (!Craft::$app->getRequest()->getIsSiteRequest() &&
-            !SproutForms::getInstance()->getSettings()->enableIntegrationsPerFormBasis) {
+            !$plugin->getSettings()->enableIntegrationsPerFormBasis) {
             return;
         }
 

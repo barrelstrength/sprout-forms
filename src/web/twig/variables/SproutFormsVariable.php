@@ -15,6 +15,10 @@ use craft\helpers\Template as TemplateHelper;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\base\FormField;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use Twig\Markup;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
 
@@ -52,11 +56,11 @@ class SproutFormsVariable
      * @param            $formHandle
      * @param array|null $renderingOptions
      *
-     * @return \Twig\Markup
+     * @return Markup
      * @throws \Exception
      * @throws \yii\base\Exception
      */
-    public function displayForm($formHandle, array $renderingOptions = null): \Twig\Markup
+    public function displayForm($formHandle, array $renderingOptions = null): Markup
     {
         /**
          * @var $form Form
@@ -96,11 +100,11 @@ class SproutFormsVariable
      * @param int        $tabId
      * @param array|null $renderingOptions
      *
-     * @return bool|\Twig\Markup
+     * @return bool|Markup
      * @throws Exception
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function displayTab(Form $form, int $tabId, array $renderingOptions = null)
     {
@@ -159,14 +163,14 @@ class SproutFormsVariable
      * @param FormField  $field
      * @param array|null $renderingOptions
      *
-     * @return \Twig\Markup
+     * @return Markup
      * @throws Exception
      * @throws \ReflectionException
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function displayField(Form $form, FormField $field, array $renderingOptions = null): \Twig\Markup
+    public function displayField(Form $form, FormField $field, array $renderingOptions = null): Markup
     {
         if (!$form) {
             throw new Exception(Craft::t('sprout-forms', 'The displayField tag requires a Form model.'));
@@ -389,8 +393,8 @@ class SproutFormsVariable
     /**
      * @param $type
      *
-     * @return mixed
-     * @throws \Exception
+     * @return FormField|mixed|null
+     * @throws Exception
      */
     public function getRegisteredField($type)
     {
@@ -412,6 +416,8 @@ class SproutFormsVariable
         if (Craft::$app->getConfig()->getGeneral()->devMode) {
             throw new Exception($message);
         }
+
+        return null;
     }
 
     /**

@@ -53,6 +53,7 @@ class EntryElementIntegration extends ElementIntegration
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\InvalidConfigException
      */
     public function getSettingsHtml()
     {

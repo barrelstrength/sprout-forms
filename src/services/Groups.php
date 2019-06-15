@@ -27,6 +27,11 @@ class Groups extends Component
     public function saveGroup(FormGroupModel $group): bool
     {
         $groupRecord = $this->_getGroupRecord($group);
+
+        if (!$groupRecord) {
+            return false;
+        }
+
         $groupRecord->name = $group->name;
 
         if ($groupRecord->validate()) {
@@ -133,7 +138,7 @@ class Groups extends Component
      *
      * @param FormGroupModel $group
      *
-     * @return FormGroupRecord|null|static
+     * @return FormGroupRecord|null
      * @throws Exception
      */
     private function _getGroupRecord(FormGroupModel $group)
@@ -142,16 +147,14 @@ class Groups extends Component
             $groupRecord = FormGroupRecord::findOne($group->id);
 
             if (!$groupRecord) {
-                throw new Exception(
-                    Craft::t('sprout-forms',
-                        'No field group exists with the ID '.$group->id
-                    )
-                );
+                throw new Exception(Craft::t('sprout-forms', 'No field group exists with the ID {groupId}', [
+                    'groupId' => $group->id
+                ]));
             }
-        } else {
-            $groupRecord = new FormGroupRecord();
+
+            return $groupRecord;
         }
 
-        return $groupRecord;
+        return new FormGroupRecord();
     }
 }

@@ -9,6 +9,7 @@ use GuzzleHttp\RequestOptions;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use yii\base\InvalidConfigException;
 
 /**
  * Route our request to Craft or a third-party endpoint
@@ -38,6 +39,7 @@ class CustomEndpoint extends Integration
     /**
      * @inheritDoc
      *
+     * @throws InvalidConfigException
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError

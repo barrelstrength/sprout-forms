@@ -103,7 +103,7 @@ class Phone extends FormField implements PreviewableFieldInterface
     {
         $phoneInfo = [];
 
-        if (is_array($value)) {
+        if (is_array($value) && $element) {
             $namespace = $element->getFieldParamNamespace();
             $namespace = $namespace.'.'.$this->handle;
             $phoneInfo = Craft::$app->getRequest()->getBodyParam($namespace);

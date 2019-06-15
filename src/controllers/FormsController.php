@@ -158,8 +158,10 @@ class FormsController extends BaseController
      */
     public function actionEditFormTemplate(int $formId = null, FormElement $form = null): Response
     {
+        $newForm = !$formId;
+
         // Immediately create a new Form
-        if (Craft::$app->request->getSegment(3) == 'new') {
+        if ($newForm) {
             $form = SproutForms::$app->forms->createNewForm();
 
             if ($form) {
@@ -167,39 +169,28 @@ class FormsController extends BaseController
                 return $this->redirect($url);
             }
 
-            throw new Exception(Craft::t('sprout-forms', 'Error creating Form'));
+            throw new Exception(Craft::t('sprout-forms', 'Unable to create new Form'));
         }
 
-        if ($formId !== null) {
-            $variables['formId'] = $formId;
+        if ($form === null && $formId !== null) {
+            $form = SproutForms::$app->forms->getFormById($formId);
 
-            if ($form === null) {
-                $variables['brandNewForm'] = false;
-
-                $variables['groups'] = SproutForms::$app->groups->getAllFormGroups();
-                $variables['groupId'] = '';
-
-                // Get the Form
-                $form = SproutForms::$app->forms->getFormById($formId);
-
-                if (!$form) {
-                    throw new NotFoundHttpException(Craft::t('sprout-forms', 'Form not found'));
-                }
+            if (!$form) {
+                throw new NotFoundHttpException(Craft::t('sprout-forms', 'Form not found'));
             }
         }
 
-        $variables['form'] = $form;
-        $variables['title'] = $form->name;
-        $variables['groupId'] = $form->groupId;
+        /** @var SproutForms $plugin */
+        $plugin = Craft::$app->plugins->getPlugin('sprout-forms');
 
-        // Set the "Continue Editing" URL
-        $variables['continueEditingUrl'] = 'sprout-forms/forms/edit/{id}';
-
-        $variables['settings'] = Craft::$app->plugins->getPlugin('sprout-forms')->getSettings();
-
-        $variables['integrations'] = SproutForms::$app->integrations->getFormIntegrations($formId);
-
-        return $this->renderTemplate('sprout-forms/forms/_editForm', $variables);
+        return $this->renderTemplate('sprout-forms/forms/_editForm', [
+            'form' => $form,
+            'groupId' => $form->groupId ?? '',
+            'groups' => SproutForms::$app->groups->getAllFormGroups(),
+            'integrations' => SproutForms::$app->integrations->getFormIntegrations($formId),
+            'settings' => $plugin->getSettings(),
+            'continueEditingUrl' => 'sprout-forms/forms/edit/{id}'
+        ]);
     }
 
     /**
@@ -220,7 +211,10 @@ class FormsController extends BaseController
         $formId = $request->getRequiredBodyParam('id');
         $form = SproutForms::$app->forms->getFormById($formId);
 
-        // @todo - handle errors/rollBack
+        if (!$form) {
+            throw new NotFoundHttpException(Craft::t('sprout-forms', 'Form not found'));
+        }
+
         SproutForms::$app->forms->deleteForm($form);
 
         return $this->redirectToPostedUrl($form);

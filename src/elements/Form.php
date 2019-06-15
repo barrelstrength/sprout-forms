@@ -10,9 +10,7 @@ use Craft;
 use craft\base\Element;
 use craft\base\FieldInterface;
 use craft\elements\db\ElementQueryInterface;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
+use craft\models\FieldLayout;
 use yii\base\ErrorHandler;
 use craft\db\Query;
 use craft\helpers\UrlHelper;
@@ -25,6 +23,7 @@ use barrelstrength\sproutforms\records\Form as FormRecord;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\actions\Delete;
 use yii\base\Exception;
+use yii\base\InvalidConfigException;
 
 /**
  * Form represents a form element.
@@ -126,7 +125,6 @@ class Form extends Element
      *
      * @return string
      */
-    /** @noinspection PhpInconsistentReturnPointsInspection */
     public function __toString()
     {
         try {
@@ -137,10 +135,10 @@ class Form extends Element
     }
 
     /**
-     * @return \craft\models\FieldLayout|null
-     * @throws \yii\base\InvalidConfigException
+     * @return FieldLayout
+     * @throws InvalidConfigException
      */
-    public function getFieldLayout()
+    public function getFieldLayout(): FieldLayout
     {
         $behaviors = $this->getBehaviors();
 
@@ -281,31 +279,6 @@ class Form extends Element
 
     /**
      * @inheritdoc
-     *
-     * @return string
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     */
-    public function getEditorHtml(): string
-    {
-        $html = '';
-
-        if ($this->getType()->hasTitleField) {
-            $html = Craft::$app->getView()->renderTemplate('forms/_hud/titlefield',
-                [
-                    'entry' => $this
-                ]
-            );
-        }
-
-        $html .= parent::getEditorHtml();
-
-        return $html;
-    }
-
-    /**
-     * @inheritdoc
      * @throws Exception
      */
     public function afterSave(bool $isNew)
@@ -343,7 +316,7 @@ class Form extends Element
      * Returns the fields associated with this form.
      *
      * @return FormField[]
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function getFields(): array
     {
@@ -363,8 +336,8 @@ class Form extends Element
     /**
      * @param string $handle
      *
-     * @return null|FieldInterface
-     * @throws \yii\base\InvalidConfigException
+     * @return FieldInterface|null
+     * @throws InvalidConfigException
      */
     public function getField($handle)
     {
@@ -373,6 +346,8 @@ class Form extends Element
         if (is_string($handle) && !empty($handle)) {
             return $fields[$handle] ?? null;
         }
+
+        return null;
     }
 
     /**

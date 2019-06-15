@@ -11,6 +11,9 @@ use craft\errors\MissingComponentException;
 use craft\web\Controller as BaseController;
 use barrelstrength\sproutforms\SproutForms;
 use Throwable;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 use yii\base\InvalidConfigException;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
@@ -115,9 +118,9 @@ class IntegrationsController extends BaseController
      * @throws BadRequestHttpException
      * @throws InvalidConfigException
      * @throws MissingComponentException
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function actionEditIntegration(): Response
     {
@@ -127,7 +130,6 @@ class IntegrationsController extends BaseController
         $integrationId = $request->getBodyParam('integrationId');
 
         $integration = SproutForms::$app->integrations->getIntegrationById($integrationId);
-        $integration->formId = $request->getBodyParam('formId');
 
         if ($integration === null) {
             $message = Craft::t('sprout-forms', 'No integration found with id: {id}', [
@@ -140,6 +142,8 @@ class IntegrationsController extends BaseController
                 'error' => $message,
             ]);
         }
+
+        $integration->formId = $request->getBodyParam('formId');
 
         return $this->asJson([
             'success' => true,
@@ -161,11 +165,14 @@ class IntegrationsController extends BaseController
     {
         $this->requirePostRequest();
         $this->requireAcceptsJson();
+        $response = false;
 
         $integrationId = Craft::$app->request->getRequiredBodyParam('integrationId');
         $integration = IntegrationRecord::findOne($integrationId);
 
-        $response = $integration->delete();
+        if ($integration) {
+            $response = $integration->delete();
+        }
 
         return $this->asJson([
             'success' => $response
@@ -211,6 +218,14 @@ class IntegrationsController extends BaseController
 
         $integrationId = Craft::$app->request->getRequiredBodyParam('integrationId');
         $integration = SproutForms::$app->integrations->getIntegrationById($integrationId);
+
+        if (!$integration) {
+            return $this->asJson([
+                'success' => false,
+                'formFields' => []
+            ]);
+        }
+
         $formFields = $integration->getFormFieldsAsMappingOptions();
 
         return $this->asJson([

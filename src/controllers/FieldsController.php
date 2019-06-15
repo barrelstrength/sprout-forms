@@ -6,12 +6,17 @@ namespace barrelstrength\sproutforms\controllers;
 use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\elements\Form;
 use Craft;
+use craft\errors\ElementNotFoundException;
 use craft\helpers\Json;
 use craft\web\Controller as BaseController;
 use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
 use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
 use craft\base\Field;
 use barrelstrength\sproutforms\SproutForms;
+use Throwable;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 use yii\base\InvalidConfigException;
 use yii\web\BadRequestHttpException;
 use yii\web\ForbiddenHttpException;
@@ -24,17 +29,22 @@ class FieldsController extends BaseController
      * This action allows to load the modal field template.
      *
      * @return Response
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
      * @throws BadRequestHttpException
+     * @throws ElementNotFoundException
      * @throws InvalidConfigException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function actionModalField(): Response
     {
         $this->requireAcceptsJson();
         $formId = Craft::$app->getRequest()->getBodyParam('formId');
         $form = SproutForms::$app->forms->getFormById($formId);
+
+        if (!$form) {
+            throw new ElementNotFoundException(Craft::t('sprout-forms', 'Form not found.'));
+        }
 
         return $this->asJson(SproutForms::$app->fields->getModalFieldTemplate($form));
     }
@@ -43,7 +53,7 @@ class FieldsController extends BaseController
      * This action allows create a default field given a type.
      *
      * @return Response
-     * @throws \Throwable
+     * @throws Throwable
      * @throws BadRequestHttpException
      */
     public function actionCreateField(): Response
@@ -54,12 +64,15 @@ class FieldsController extends BaseController
         $request = Craft::$app->getRequest();
         $type = $request->getBodyParam('type');
         $tabId = $request->getBodyParam('tabId');
+
         $tab = FieldLayoutTabRecord::findOne($tabId);
         $formId = $request->getBodyParam('formId');
         $nextId = $request->getBodyParam('nextId');
+
         $form = SproutForms::$app->forms->getFormById($formId);
 
         if ($type && $form && $tab) {
+            /** @var Field $field */
             $field = SproutForms::$app->fields->createDefaultField($type, $form);
 
             if ($field) {
@@ -124,7 +137,7 @@ class FieldsController extends BaseController
      * This action allows delete a Tab of the current layout
      *
      * @return Response
-     * @throws \Throwable
+     * @throws Throwable
      * @throws \yii\db\StaleObjectException
      * @throws BadRequestHttpException
      */
@@ -193,7 +206,7 @@ class FieldsController extends BaseController
      * Save a field.
      *
      * @return Response
-     * @throws \Throwable
+     * @throws Throwable
      * @throws BadRequestHttpException
      */
     public function actionSaveField(): Response
@@ -318,9 +331,9 @@ class FieldsController extends BaseController
      * Edits an existing field.
      *
      * @return Response
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      * @throws BadRequestHttpException
      * @throws ForbiddenHttpException
      * @throws InvalidConfigException
@@ -334,11 +347,10 @@ class FieldsController extends BaseController
 
         $id = $request->getBodyParam('fieldId');
         $formId = $request->getBodyParam('formId');
-        $form = SproutForms::$app->forms->getFormById($formId);
 
-        /**
-         * @var Field $field
-         */
+        /** @var Form $form */
+        $form = SproutForms::$app->forms->getFormById($formId);
+        /** @var Field $field */
         $field = Craft::$app->fields->getFieldById($id);
 
         if ($field) {
@@ -380,7 +392,7 @@ class FieldsController extends BaseController
 
     /**
      * @return Response
-     * @throws \Throwable
+     * @throws Throwable
      * @throws BadRequestHttpException
      */
     public function actionDeleteField(): Response
@@ -450,9 +462,9 @@ class FieldsController extends BaseController
      * @param null $tabId
      *
      * @return Response
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      * @throws InvalidConfigException
      */
     private function returnJson(bool $success, $field, Form $form, $tabName = null, $tabId = null): Response

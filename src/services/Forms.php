@@ -263,7 +263,7 @@ class Forms extends Component
 
             if (!$success) {
                 $transaction->rollBack();
-                Craft::error('Couldn’t delete Form on deleteForm service.', __METHOD__);
+                Craft::error('Couldn’t delete Form', __METHOD__);
 
                 return false;
             }
@@ -598,12 +598,12 @@ class Forms extends Component
     }
 
     /**
-     * @param FormElement|null $form
+     * @param FormElement $form
      *
      * @return array
      * @throws Exception
      */
-    public function getFormTemplatePaths(FormElement $form = null): array
+    public function getFormTemplatePaths(FormElement $form): array
     {
         /** @var SproutForms $plugin */
         $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');

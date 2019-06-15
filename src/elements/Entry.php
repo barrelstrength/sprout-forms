@@ -10,7 +10,9 @@ use craft\elements\actions\Delete;
 use barrelstrength\sproutforms\elements\db\EntryQuery;
 use barrelstrength\sproutforms\records\Entry as EntryRecord;
 use barrelstrength\sproutforms\SproutForms;
+use craft\models\FieldLayout;
 use yii\base\Exception;
+use yii\base\InvalidConfigException;
 use yii\db\ActiveRecord;
 
 /**
@@ -146,10 +148,10 @@ class Entry extends Element
     }
 
     /**
-     * @return \craft\models\FieldLayout|null
-     * @throws \yii\base\InvalidConfigException
+     * @return FieldLayout
+     * @throws InvalidConfigException
      */
-    public function getFieldLayout()
+    public function getFieldLayout(): FieldLayout
     {
         return $this->getForm()->getFieldLayout();
     }
@@ -383,7 +385,7 @@ class Entry extends Element
      * Returns the fields associated with this form.
      *
      * @return array
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function getFields(): array
     {
@@ -393,9 +395,9 @@ class Entry extends Element
     /**
      * Returns the form element associated with this entry
      *
-     * @return Form|null
+     * @return Form
      */
-    public function getForm()
+    public function getForm(): Form
     {
         if ($this->form === null) {
             $this->form = SproutForms::$app->forms->getFormById($this->formId);
@@ -406,7 +408,7 @@ class Entry extends Element
 
     /**
      * @inheritdoc
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function rules(): array
     {

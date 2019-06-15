@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\base;
 
 use barrelstrength\sproutforms\fields\formfields\Number;
 use barrelstrength\sproutforms\fields\formfields\SingleLine;
+use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\base\SavableComponent;
@@ -18,13 +19,14 @@ use yii\base\InvalidConfigException;
  *
  * @package Craft
  *
- * @property string      $fieldMappingSettingsHtml
- * @property void        $settingsHtml
- * @property array       $sourceFormFields
- * @property void        $customSourceFormFields
- * @property null|string $updateTargetFieldsAction
- * @property string      $updateSourceFieldsAction
- * @property string      $type
+ * @property string                                    $fieldMappingSettingsHtml
+ * @property void                                      $settingsHtml
+ * @property array                                     $sourceFormFields
+ * @property void                                      $customSourceFormFields
+ * @property null|string                               $updateTargetFieldsAction
+ * @property string                                    $updateSourceFieldsAction
+ * @property \barrelstrength\sproutforms\elements\Form $form
+ * @property string                                    $type
  */
 abstract class Integration extends SavableComponent implements IntegrationInterface
 {
@@ -35,6 +37,13 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
 
     protected $successMessage = 'Success';
 
+    /**
+     * @return Form
+     */
+    public function getForm(): Form
+    {
+        return SproutForms::$app->forms->getFormById($this->formId);
+    }
     /**
      * @inheritdoc
      */
@@ -80,6 +89,8 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
 
     /**
      * Prepares the $fieldMapping array based on the current form fields and any existing settings
+     *
+     * @throws InvalidConfigException
      */
     public function prepareFieldMapping()
     {
@@ -125,7 +136,11 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
         return null;
     }
 
-    public function getSourceFormFields()
+    /**
+     * @return array
+     * @throws InvalidConfigException
+     */
+    public function getSourceFormFields(): array
     {
         $sourceFormFieldsData = [
             [
@@ -194,8 +209,8 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
             $fieldInstance->setCompatibleCraftFields($sourceFormFieldData['compatibleCraftFields']);
             $sourceFormFields[] = $fieldInstance;
         }
-        $form = SproutForms::$app->forms->getFormById($this->formId);
-        $fields = $form->getFields();
+
+        $fields = $this->getForm()->getFields();
 
         if (count($fields)) {
             foreach ($fields as $field) {
@@ -278,8 +293,7 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
             ]
         ]);
 
-        $form = SproutForms::$app->forms->getFormById($this->formId);
-        $fields = $form->getFields();
+        $fields = $this->getForm()->getFields();
 
         if (count($fields)) {
             if ($addOptGroup) {

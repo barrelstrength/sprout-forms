@@ -213,14 +213,11 @@ if (typeof Craft.SproutForms === typeof undefined) {
             target.innerHTML += ' [click!]';
 
             setTimeout(function() {
-                target.innerHTML = target.innerHTML.replace(/ \[click!\]/g, '');
+                target.innerHTML = target.innerHTML.replace(/ \[click!]/g, '');
             }, 500);
         },
 
         createDefaultField: function(type, tabId, tabName, el) {
-            var that = this;
-            //this.$saveFormButton.addClass('disabled').siblings('.spinner').removeClass('hidden');
-
             $(el).removeClass('source-field');
             $(el).addClass('target-field');
             $(el).find('.source-field-header').remove();

@@ -19,6 +19,9 @@ use craft\helpers\Html;
 use craft\helpers\StringHelper;
 use craft\queue\jobs\LocalizeRelations;
 use craft\validators\ArrayValidator;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 use yii\base\NotSupportedException;
 
 use barrelstrength\sproutforms\base\FormField;
@@ -208,9 +211,9 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
     /**
      * @inheritdoc
      *
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getSettingsHtml()
     {
@@ -368,7 +371,7 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      *
      * @param                       $value
      * @param ElementInterface|null $element
@@ -376,9 +379,9 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
      * @return string
      * @throws NotSupportedException
      * @throws SiteNotFoundException
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -415,9 +418,9 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
      * @param ElementInterface $element
      *
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getStaticHtml($value, ElementInterface $element): string
     {
@@ -455,9 +458,9 @@ JS;
      * @param ElementInterface $element
      *
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getTableAttributeHtml($value, ElementInterface $element): string
     {
@@ -621,9 +624,9 @@ JS;
      *
      * @return string|null
      * @throws NotSupportedException
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getTargetSiteFieldHtml()
     {
@@ -677,9 +680,9 @@ JS;
      * Returns the HTML for the View Mode setting.
      *
      * @return string|null
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getViewModeFieldHtml()
     {
@@ -734,6 +737,9 @@ JS;
         $selectionCriteria['enabledForSite'] = null;
         $selectionCriteria['siteId'] = $this->targetSiteId($element);
 
+        /** @var Element $element */
+        $elementId = $element && $element->id ? $element->id : null;
+
         return [
             'jsClass' => $this->inputJsClass,
             'elementType' => static::elementType(),
@@ -744,7 +750,7 @@ JS;
             'elements' => $value,
             'sources' => $this->inputSources($element),
             'criteria' => $selectionCriteria,
-            'sourceElementId' => !empty($element->id) ? $element->id : null,
+            'sourceElementId' => $elementId,
             'limit' => $this->allowLimit ? $this->limit : null,
             'viewMode' => $this->viewMode(),
             'selectionLabel' => $this->selectionLabel ? Craft::t('site', $this->selectionLabel) : static::defaultSelectionLabel(),

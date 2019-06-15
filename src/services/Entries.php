@@ -205,8 +205,11 @@ class Entries extends Component
         try {
             foreach ($entryStatusIds as $entryStatus => $entryStatusId) {
                 $entryStatusRecord = $this->getEntryStatusRecordById($entryStatusId);
-                $entryStatusRecord->sortOrder = $entryStatus + 1;
-                $entryStatusRecord->save();
+
+                if ($entryStatusRecord) {
+                    $entryStatusRecord->sortOrder = $entryStatus + 1;
+                    $entryStatusRecord->save();
+                }
             }
 
             $transaction->commit();
