@@ -19,7 +19,7 @@ use barrelstrength\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbaseemail\events\NotificationEmailEvent;
 use barrelstrength\sproutforms\fields\Forms as FormsField;
 use barrelstrength\sproutforms\fields\Entries as FormEntriesField;
-use barrelstrength\sproutforms\integrations\sproutreports\datasources\LogDataSource;
+use barrelstrength\sproutforms\integrations\sproutreports\datasources\SubmissionLogDataSource;
 use barrelstrength\sproutforms\integrationtypes\EntryElementIntegration;
 use barrelstrength\sproutforms\integrationtypes\CustomEndpoint;
 use barrelstrength\sproutforms\services\Integrations;
@@ -147,7 +147,7 @@ class SproutForms extends Plugin
         // Register DataSources for sproutReports plugin integration
         Event::on(DataSources::class, DataSources::EVENT_REGISTER_DATA_SOURCES, static function(RegisterComponentTypesEvent $event) {
             $event->types[] = EntriesDataSource::class;
-            $event->types[] = LogDataSource::class;
+            $event->types[] = SubmissionLogDataSource::class;
         });
 
         $this->setComponents([
@@ -409,7 +409,7 @@ class SproutForms extends Plugin
         // Add DataSource integrations so users don't have to install them manually
         $dataSourceTypes = [
             EntriesDataSource::class,
-            LogDataSource::class
+            SubmissionLogDataSource::class
         ];
 
         SproutBaseReports::$app->dataSources->installDataSources($dataSourceTypes);

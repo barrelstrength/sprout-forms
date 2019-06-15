@@ -4,26 +4,19 @@ namespace barrelstrength\sproutforms\integrations\sproutreports\datasources;
 
 use barrelstrength\sproutbasereports\SproutBaseReports;
 use barrelstrength\sproutforms\elements\Form;
-use barrelstrength\sproutforms\fields\formfields\Checkboxes;
-use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutbasereports\elements\Report;
 use Craft;
 use barrelstrength\sproutbasereports\base\DataSource;
 use craft\db\Query;
-use craft\fields\data\MultiOptionsFieldData;
 use craft\helpers\DateTimeHelper;
-use barrelstrength\sproutforms\elements\Entry;
-use craft\elements\db\ElementQueryInterface;
 
 /**
  * Class LogDataSource
  *
  * @package barrelstrength\sproutforms\integrations\sproutreports\datasources
  */
-class LogDataSource extends DataSource
+class SubmissionLogDataSource extends DataSource
 {
-    private $reportModel;
-
     /**
      * @return string
      */
@@ -90,14 +83,14 @@ class LogDataSource extends DataSource
             $message = $result['message'];
 
             if (strlen($result['message']) > 255) {
-                $message = substr($result['message'], 0, 255).' ...(truncated)';
+                $message = substr($result['message'], 0, 255).' ...';
             }
 
             $rows[$key]['id'] = $result['id'];
             $rows[$key]['entryId'] = $result['entryId'];
             $rows[$key]['formName'] = $result['formName'];
             $rows[$key]['integrationName'] = $result['integrationName'];
-            $rows[$key]['message'] = $string = $message;
+            $rows[$key]['message'] = $message;
             $rows[$key]['status'] = $result['status'];
             $rows[$key]['success'] = $result['success'] ? 'true' : 'false';
             $rows[$key]['dateCreated'] = $result['dateCreated'];
