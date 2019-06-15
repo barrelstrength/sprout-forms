@@ -2,11 +2,18 @@
 
 namespace barrelstrength\sproutforms\models;
 
+use barrelstrength\sproutforms\base\Integration;
 use barrelstrength\sproutforms\SproutForms;
 use craft\base\Model;
 use Craft;
+use craft\errors\MissingComponentException;
+use yii\base\InvalidConfigException;
 
-class EntryIntegration extends Model
+/**
+ *
+ * @property Integration|null $integration
+ */
+class SubmissionLog extends Model
 {
     /**
      * @var int|null ID
@@ -64,14 +71,12 @@ class EntryIntegration extends Model
     }
 
     /**
-     * @return \barrelstrength\sproutforms\base\Integration|null
-     * @throws \craft\errors\MissingComponentException
-     * @throws \yii\base\InvalidConfigException
+     * @return Integration|null
+     * @throws MissingComponentException
+     * @throws InvalidConfigException
      */
     public function getIntegration()
     {
-        $integration = SproutForms::$app->integrations->getIntegrationById($this->integrationId);
-
-        return $integration;
+        return SproutForms::$app->integrations->getIntegrationById($this->integrationId);
     }
 }

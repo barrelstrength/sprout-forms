@@ -185,7 +185,7 @@ class SproutForms extends Plugin
         });
 
         Event::on(Entries::class, EntryElement::EVENT_AFTER_SAVE, static function(OnSaveEntryEvent $event) {
-            SproutForms::$app->integrations->runEntryIntegrations($event->entry);
+            SproutForms::$app->integrations->runFormIntegrations($event->entry);
         });
 
         Craft::$app->view->hook('sproutForms.modifyForm', static function() {
@@ -408,7 +408,8 @@ class SproutForms extends Plugin
     {
         // Add DataSource integrations so users don't have to install them manually
         $dataSourceTypes = [
-            EntriesDataSource::class
+            EntriesDataSource::class,
+            LogDataSource::class
         ];
 
         SproutBaseReports::$app->dataSources->installDataSources($dataSourceTypes);

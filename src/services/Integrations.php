@@ -7,8 +7,8 @@ use barrelstrength\sproutforms\base\IntegrationInterface;
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\events\OnAfterIntegrationSubmit;
 use barrelstrength\sproutforms\integrationtypes\MissingIntegration;
-use barrelstrength\sproutforms\models\EntryIntegration;
-use barrelstrength\sproutforms\records\EntryIntegrationLog;
+use barrelstrength\sproutforms\models\SubmissionLog;
+use barrelstrength\sproutforms\records\SubmissionLog as SubmissionLogRecord;
 use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
 use barrelstrength\sproutforms\SproutForms;
 use craft\base\Component;
@@ -39,7 +39,6 @@ class Integrations extends Component
     const EVENT_AFTER_INTEGRATION_SUBMIT = 'afterIntegrationSubmit';
 
     const ENTRY_INTEGRATION_PENDING_STATUS = 'pending';
-
     const ENTRY_INTEGRATION_COMPLETED_STATUS = 'completed';
 
     /**
@@ -252,33 +251,34 @@ class Integrations extends Component
 
 
     /**
-     * @param $entryIntegrationModel EntryIntegration
+     * @param $submissionLog SubmissionLog
+     *
      * @return mixed
      * @throws Exception
      */
-    public function saveEntryIntegrationLog($entryIntegrationModel)
+    public function logSubmission(SubmissionLog $submissionLog)
     {
-        $entryIntegration = new EntryIntegrationLog();
-        if ($entryIntegrationModel->id){
-            $entryIntegration = EntryIntegrationLog::findOne($entryIntegrationModel->id);
-            if (!$entryIntegration) {
-                throw new Exception(Craft::t('sprout-forms', 'No integration entry exists with id '.$entryIntegrationModel->id));
+        $submissionLogRecord = new SubmissionLogRecord();
+        if ($submissionLog->id){
+            $submissionLogRecord = SubmissionLogRecord::findOne($submissionLog->id);
+            if (!$submissionLogRecord) {
+                throw new Exception(Craft::t('sprout-forms', 'No integration entry exists with id '.$submissionLog->id));
             }
         }
 
-        $entryIntegration->entryId = $entryIntegrationModel->entryId;
-        $entryIntegration->integrationId = $entryIntegrationModel->integrationId;
-        $entryIntegration->success = $entryIntegrationModel->success;
-        if (is_array($entryIntegrationModel->message)) {
-            $entryIntegrationModel->message = json_encode($entryIntegrationModel->message);
+        $submissionLogRecord->entryId = $submissionLog->entryId;
+        $submissionLogRecord->integrationId = $submissionLog->integrationId;
+        $submissionLogRecord->success = $submissionLog->success;
+        if (is_array($submissionLog->message)) {
+            $submissionLog->message = json_encode($submissionLog->message);
         }
-        $entryIntegration->message = $entryIntegrationModel->message;
-        $entryIntegration->status = $entryIntegrationModel->status;
-        $entryIntegration->save();
+        $submissionLogRecord->message = $submissionLog->message;
+        $submissionLogRecord->status = $submissionLog->status;
+        $submissionLogRecord->save();
 
-        $entryIntegrationModel->setAttributes($entryIntegration->getAttributes(), false);
+        $submissionLog->setAttributes($submissionLogRecord->getAttributes(), false);
 
-        return $entryIntegrationModel;
+        return $submissionLog;
     }
 
     /**
@@ -286,15 +286,15 @@ class Integrations extends Component
      *
      * @return array|ActiveRecord[]
      */
-    public function getEntryIntegrationLogsByEntryId($entryId): array
+    public function getSubmissionLogsByEntryId($entryId): array
     {
-        $entryIntegrations = (new Query())
+        $submissionLogs = (new Query())
             ->select(['*'])
             ->from(['{{%sproutforms_log}}'])
             ->where(['entryId' => $entryId])
             ->all();
 
-        return $entryIntegrations;
+        return $submissionLogs;
     }
 
     /**
@@ -302,26 +302,27 @@ class Integrations extends Component
      *
      * @param Entry $entry
      *
+     * @throws Exception
      * @throws InvalidConfigException
      * @throws MissingComponentException
      */
-    public function runEntryIntegrations(Entry $entry)
+    public function runFormIntegrations(Entry $entry)
     {
         if (!Craft::$app->getRequest()->getIsSiteRequest() &&
-            !$this->getSettings()->enableIntegrationsPerFormBasis) {
+            !SproutForms::getInstance()->getSettings()->enableIntegrationsPerFormBasis) {
             return;
         }
 
         $form = $entry->getForm();
         $integrations = $this->getFormIntegrations($form->id);
-        $entryIntegrations = [];
+        $submissionLogs = [];
         $entryId = $entry->id ?? null;
 
         foreach ($integrations as $integration) {
             if ($integration->enabled) {
-                $entryIntegrationModel = new EntryIntegration();
+                $submissionLog = new SubmissionLog();
 
-                $entryIntegrationModel->setAttributes([
+                $submissionLog->setAttributes([
                     'integrationId' => $integration->id,
                     'entryId' => $entryId,
                     'success' => false,
@@ -329,19 +330,21 @@ class Integrations extends Component
                     'message' => 'Pending'
                 ], false);
 
-                $entryIntegration = SproutForms::$app->integrations->saveEntryIntegrationLog($entryIntegrationModel
+                $submissionLog = SproutForms::$app->integrations->logSubmission($submissionLog
                 );
 
-                $entryIntegrations[] = [
+                $submissionLogs[] = [
                     'integration' => $integration,
-                    'entryIntegrationModel' => $entryIntegration
+                    'submissionLog' => $submissionLog
                 ];
             }
         }
 
-        foreach ($entryIntegrations as $entryIntegration) {
-            $integration = $entryIntegration['integration'];
-            $entryIntegrationModel = $entryIntegration['entryIntegrationModel'];
+        foreach ($submissionLogs as $submissionLog) {
+            /** @var Integration $integration */
+            $integration = $submissionLog['integration'];
+            /** @var SubmissionLog $submissionLog */
+            $submissionLog = $submissionLog['submissionLog'];
 
             $integration->entry = $entry;
             Craft::info(Craft::t('sprout-forms', 'Running Sprout Forms Integration: {integrationName}', [
@@ -353,17 +356,19 @@ class Integrations extends Component
                     $result = $integration->submit();
                     // Success!
                     if ($result) {
-                        $entryIntegrationModel->setAttributes([
+                        $submissionLog->setAttributes([
                             'success' => true,
                             'status' => self::ENTRY_INTEGRATION_COMPLETED_STATUS,
                             'message' => $integration->getSuccessMessage()
                         ], false);
 
-                        $entryIntegrationModel = SproutForms::$app->integrations->saveEntryIntegrationLog($entryIntegrationModel);
+                        $submissionLog = SproutForms::$app->integrations->logSubmission($submissionLog);
                     }
                 }
             } catch (\Exception $e) {
-                $message = 'Submit Integration Api fails: '.$e->getMessage();
+                $message = Craft::t('sprout-forms', 'Integration failed to submit: {message}', [
+                    'message' => $e->getMessage()
+                ]);
                 $integration->addError('global', $message);
                 Craft::error($message, __METHOD__);
             }
@@ -372,22 +377,22 @@ class Integrations extends Component
             // Let's log errors
             if ($integrationErrors) {
                 $errorMessages = [];
-                foreach ($integrationErrors as $integrationLog) {
-                    array_push($errorMessages, $integrationLog);
+                foreach ($integrationErrors as $integrationError) {
+                    $errorMessages[] = $integrationError;
                 }
 
-                $entryIntegrationModel->setAttributes([
+                $submissionLog->setAttributes([
                     'success' => false,
                     'message' => $errorMessages,
                     'status' => self::ENTRY_INTEGRATION_COMPLETED_STATUS
                 ], false);
 
-                $entryIntegrationModel = SproutForms::$app->integrations->saveEntryIntegrationLog($entryIntegrationModel
+                $submissionLog = SproutForms::$app->integrations->logSubmission($submissionLog
                 );
             }
 
             $event = new OnAfterIntegrationSubmit([
-                'entryIntegration' => $entryIntegrationModel
+                'submissionLog' => $submissionLog
             ]);
 
             $this->trigger(self::EVENT_AFTER_INTEGRATION_SUBMIT, $event);

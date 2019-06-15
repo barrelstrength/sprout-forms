@@ -95,29 +95,30 @@
             <div class="value">{{ entry.dateCreated|datetime('short') }}</div>
         </div>
     </div>
-    <div class="meta read-only">
-        {% set entryIntegrations = entry.getEntryIntegrationLogsRecords() %}
-        {% if entryIntegrations %}
+
+    {% set submissionLogs = entry.submissionLog() %}
+    {% if submissionLogs %}
+        <div class="meta read-only">
             <h6 class="title">{{ "Integrations"|t('sprout-forms') }}</h6>
             <hr>
-            {% for entryIntegration in entryIntegrations %}
+            {% for submissionLog in submissionLogs %}
                 <div class="data">
-                    {% set integration = craft.sproutForms.getIntegrationById(entryIntegration.integrationId) %}
+                    {% set integration = craft.sproutForms.getIntegrationById(submissionLog.integrationId) %}
                     <h5 class="heading">{{ integration.name }}</h5>
-                    {% if entryIntegration.success %}
+                    {% if submissionLog.success %}
                         <div class="value"><span class="status live "></span>
-                            Success
-                            <span class="info">{{ entryIntegration.message }}</span>
+                            {{ "Success"|t('sprout-forms') }}
+                            <span class="info">{{ submissionLog.message }}</span>
                         </div>
                     {% else %}
                         <div class="value"><span class="status disabled"></span>
-                            Error
-                            <span class="info">{{ entryIntegration.message }}</span>
+                            {{ "Error"|t('sprout-forms') }}
+                            <span class="info">{{ submissionLog.message }}</span>
                         </div>
                     {% endif %}
                 </div>
             {% endfor %}
-        {% endif %}
-    </div>
+        </div>
+    {% endif %}
 {% endblock %}
 

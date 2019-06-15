@@ -14,7 +14,7 @@ use craft\db\ActiveRecord;
  * @property $success
  * @property $status
  */
-class EntryIntegrationLog extends ActiveRecord
+class SubmissionLog extends ActiveRecord
 {
     /**
      * @inheritdoc

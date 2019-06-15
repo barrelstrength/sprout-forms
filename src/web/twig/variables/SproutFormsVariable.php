@@ -2,19 +2,21 @@
 
 namespace barrelstrength\sproutforms\web\twig\variables;
 
+use barrelstrength\sproutforms\base\Integration;
 use barrelstrength\sproutforms\elements\db\EntryQuery;
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
-use barrelstrength\sproutforms\records\Integration;
 use barrelstrength\sproutforms\services\Forms;
 use Craft;
 use craft\base\ElementInterface;
+use craft\errors\MissingComponentException;
 use craft\helpers\Template as TemplateHelper;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\base\FormField;
 use yii\base\Exception;
+use yii\base\InvalidConfigException;
 
 /**
  * SproutForms provides an API for accessing information about forms. It is accessible from templates via `craft.sproutForms`.
@@ -299,7 +301,7 @@ class SproutFormsVariable
      * Gets last entry submitted
      *
      * @return array|ElementInterface|null
-     * @throws \craft\errors\MissingComponentException
+     * @throws MissingComponentException
      */
     public function getLastEntry()
     {
@@ -360,7 +362,7 @@ class SproutFormsVariable
     /**
      * @param $settings
      *
-     * @throws \craft\errors\MissingComponentException
+     * @throws MissingComponentException
      */
     public function multiStepForm($settings)
     {
@@ -617,21 +619,11 @@ class SproutFormsVariable
     }
 
     /**
-     * @param $entryId
-     *
-     * @return array|\yii\db\ActiveRecord[]
-     */
-    public function getEntryIntegrationLogsByEntryId($entryId): array
-    {
-        return SproutForms::$app->integrations->getEntryIntegrationLogsByEntryId($entryId);
-    }
-
-    /**
      * @param $integrationId
      *
      * @return Integration|null
-     * @throws \craft\errors\MissingComponentException
-     * @throws \yii\base\InvalidConfigException
+     * @throws MissingComponentException
+     * @throws InvalidConfigException
      */
     public function getIntegrationById($integrationId)
     {

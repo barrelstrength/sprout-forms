@@ -7,24 +7,24 @@ use craft\base\Element;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\UrlHelper;
 use craft\elements\actions\Delete;
-
 use barrelstrength\sproutforms\elements\db\EntryQuery;
 use barrelstrength\sproutforms\records\Entry as EntryRecord;
 use barrelstrength\sproutforms\SproutForms;
 use yii\base\Exception;
+use yii\db\ActiveRecord;
 
 /**
  * Entry represents a entry element.
  *
- * @property array|\yii\db\ActiveRecord[] $entryIntegrationLogsRecords
- * @property array                        $fields
+ * @property array|ActiveRecord[] $submissionLog
+ * @property array                $fields
  */
 class Entry extends Element
 {
     // Properties
     // =========================================================================
     private $form;
-    private $entryIntegrationLogs = [];
+    private $submissionLogs = [];
 
     public $id;
     public $formId;
@@ -419,16 +419,16 @@ class Entry extends Element
     /**
      * @return array
      */
-    public function getEntryIntegrationLogs(): array
+    public function getSubmissionLogs(): array
     {
-        return $this->entryIntegrationLogs;
+        return $this->submissionLogs;
     }
 
     /**
-     * @return array|\yii\db\ActiveRecord[]
+     * @return array|ActiveRecord[]
      */
-    public function getEntryIntegrationLogsRecords(): array
+    public function getSubmissionLog(): array
     {
-        return SproutForms::$app->integrations->getEntryIntegrationLogsByEntryId($this->id);
+        return SproutForms::$app->integrations->getSubmissionLogsByEntryId($this->id);
     }
 }
