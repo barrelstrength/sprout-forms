@@ -27,13 +27,13 @@
             {%- set optionValue = key -%}
 
             <option value="{{ optionValue }}"
-                    {% if optionValue == country %}selected{% endif %}>{{ optionLabel }}</option>
+                {% if optionValue == country %}selected{% endif %}>{{ optionLabel }}</option>
         {% endfor %}
     </select>
     {%- if field.limitToSingleCountry %}
         <input type="hidden"
-               name="{% if name %}{{ name~'[country]' }}{% endif %}"
-               value="{{ country }}">
+            name="{% if name %}{{ name~'[country]' }}{% endif %}"
+            value="{{ country }}">
     {% endif %}
 
     <input type="tel" autocomplete="tel"

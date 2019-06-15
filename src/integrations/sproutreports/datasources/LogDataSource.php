@@ -53,7 +53,7 @@ class LogDataSource extends DataSource
 
         $startEndDate = $report->getStartEndDate();
         $startDate = $startEndDate->getStartDate();
-        $endDate   = $startEndDate->getEndDate();
+        $endDate = $startEndDate->getEndDate();
 
         $rows = [];
 
@@ -67,7 +67,7 @@ class LogDataSource extends DataSource
             ->innerJoin('{{%sproutforms_integrations}} integrations', '[[log.integrationId]] = [[integrations.id]]')
             ->innerJoin('{{%sproutforms_forms}} forms', '[[integrations.formId]] = [[forms.id]]');
 
-        if ($formId != '*'){
+        if ($formId != '*') {
             $formQuery->andWhere(['[[integrations.formId]]' => $formId]);
         }
 
@@ -89,17 +89,17 @@ class LogDataSource extends DataSource
         foreach ($results as $key => $result) {
             $message = $result['message'];
 
-            if (strlen($result['message']) > 255 ){
-                $message = substr($result['message'],0,255). ' ...(truncated)';
+            if (strlen($result['message']) > 255) {
+                $message = substr($result['message'], 0, 255).' ...(truncated)';
             }
 
-            $rows[$key]['id']          = $result['id'];
-            $rows[$key]['entryId']    = $result['entryId'];
-            $rows[$key]['formName']    = $result['formName'];
+            $rows[$key]['id'] = $result['id'];
+            $rows[$key]['entryId'] = $result['entryId'];
+            $rows[$key]['formName'] = $result['formName'];
             $rows[$key]['integrationName'] = $result['integrationName'];
-            $rows[$key]['message']     = $string = $message;
-            $rows[$key]['status']      = $result['status'];
-            $rows[$key]['success']     = $result['success'] ? 'true' : 'false';
+            $rows[$key]['message'] = $string = $message;
+            $rows[$key]['status'] = $result['status'];
+            $rows[$key]['success'] = $result['success'] ? 'true' : 'false';
             $rows[$key]['dateCreated'] = $result['dateCreated'];
             $rows[$key]['dateUpdated'] = $result['dateUpdated'];
         }

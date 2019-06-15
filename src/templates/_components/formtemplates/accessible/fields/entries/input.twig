@@ -37,7 +37,7 @@
                 {%- set optionValue =  option.id -%}
 
                 <option value="{{ optionValue }}"
-                        {% if optionValue in value %}selected{% endif %}>{{ optionLabel }}</option>
+                    {% if optionValue in value %}selected{% endif %}>{{ optionLabel }}</option>
 
             {% endfor %}
             {% if hasTitle %}

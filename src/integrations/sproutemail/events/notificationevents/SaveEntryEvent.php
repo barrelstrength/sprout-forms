@@ -66,6 +66,7 @@ class SaveEntryEvent extends NotificationEvent
         return Craft::t('sprout-forms', 'When a form entry is saved (Sprout Forms)');
     }
 
+
     /**
      * @inheritdoc
      *

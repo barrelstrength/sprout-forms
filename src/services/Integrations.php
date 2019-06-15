@@ -259,7 +259,7 @@ class Integrations extends Component
     public function logSubmission(SubmissionLog $submissionLog)
     {
         $submissionLogRecord = new SubmissionLogRecord();
-        if ($submissionLog->id){
+        if ($submissionLog->id) {
             $submissionLogRecord = SubmissionLogRecord::findOne($submissionLog->id);
             if (!$submissionLogRecord) {
                 throw new Exception(Craft::t('sprout-forms', 'No integration entry exists with id '.$submissionLog->id));
