@@ -2,22 +2,22 @@
 {%- set form = entry.getForm() ?? null -%}
 
 <!doctype html>
-<html>
+<html lang="{{ craft.app.language }}">
 <head>
     <title>{{ siteName }}</title>
 </head>
-<body marginwidth="0" marginheight="0" topmargin="0" leftmargin="0" offset="0">
-<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+<body>
+<table>
     <tr>
-        <td valign="top">
+        <td>
             <table>
                 <tr>
-                    <td valign="top" style="width:600px;">
+                    <td style="width:600px;">
 
                         {% if email.defaultBody|length %}
                             <table>
                                 <tr>
-                                    <td valign="top" style="width:600px;">
+                                    <td style="width:600px;">
 
                                         <p>{{ email.defaultBody|markdown }}</p>
 

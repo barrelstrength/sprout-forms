@@ -11,9 +11,10 @@ use craft\db\ActiveRecord;
  * @property $entryId
  * @property $integrationId
  * @property $message
- * @property $isValid
+ * @property $success
+ * @property $status
  */
-class EntryIntegrationLog extends ActiveRecord
+class SubmissionLog extends ActiveRecord
 {
     /**
      * @inheritdoc
@@ -22,6 +23,6 @@ class EntryIntegrationLog extends ActiveRecord
      */
     public static function tableName(): string
     {
-        return '{{%sproutforms_integrations_entries}}';
+        return '{{%sproutforms_log}}';
     }
 }

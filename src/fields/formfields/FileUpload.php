@@ -8,6 +8,7 @@ use craft\base\ElementInterface;
 use craft\base\Volume;
 use craft\base\VolumeInterface;
 use craft\base\VolumeTrait;
+use craft\errors\SiteNotFoundException;
 use craft\fields\Assets as CraftAssets;
 use craft\helpers\Template as TemplateHelper;
 use craft\elements\Asset;
@@ -18,6 +19,10 @@ use craft\errors\InvalidVolumeException;
 use craft\helpers\Assets as AssetsHelper;
 use craft\helpers\FileHelper;
 use craft\web\UploadedFile;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use yii\base\NotSupportedException;
 
 /**
  * Class SproutFormsAssetsField
@@ -178,11 +183,11 @@ class FileUpload extends BaseRelationFormField
      *
      * @inheritDoc
      *
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
-     * @throws \craft\errors\SiteNotFoundException
-     * @throws \yii\base\NotSupportedException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws SiteNotFoundException
+     * @throws NotSupportedException
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -207,9 +212,9 @@ class FileUpload extends BaseRelationFormField
      * @inheritdoc
      *
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getExampleInputHtml(): string
     {
@@ -226,9 +231,9 @@ class FileUpload extends BaseRelationFormField
      * @param array|null $renderingOptions
      *
      * @return \Twig_Markup
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup
     {
@@ -330,8 +335,8 @@ class FileUpload extends BaseRelationFormField
 
     /**
      * @inheritdoc
-     * @throws \yii\base\NotSupportedException
-     * @throws \craft\errors\SiteNotFoundException
+     * @throws NotSupportedException
+     * @throws SiteNotFoundException
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
@@ -402,11 +407,11 @@ class FileUpload extends BaseRelationFormField
      * @throws \Throwable
      * @throws \craft\errors\AssetLogicException
      * @throws \craft\errors\ElementNotFoundException
-     * @throws \craft\errors\SiteNotFoundException
+     * @throws SiteNotFoundException
      * @throws \craft\errors\VolumeException
      * @throws \yii\base\ErrorException
      * @throws \yii\base\Exception
-     * @throws \yii\base\NotSupportedException
+     * @throws NotSupportedException
      */
     public function afterElementSave(ElementInterface $element, bool $isNew)
     {
@@ -717,6 +722,7 @@ class FileUpload extends BaseRelationFormField
                     throw new InvalidSubpathException($subpath);
                 }
 
+                /** @var Volume $volume */
                 $volume = Craft::$app->getVolumes()->getVolumeById($volumeId);
                 $folderId = $assetsService->ensureFolderByFullPathAndVolume($subpath, $volume);
             } else {

@@ -5,9 +5,7 @@
 {% elseif currentUser.can('sproutForms-viewNotifications') %}
     {% redirect 'sprout-forms/notifications' %}
 {% elseif currentUser.can('sproutForms-viewReports') %}
-    {% set dataSources = craft.app.getModule('sprout-base-reports').app.dataSources.getAllDataSources() %}
-    {% set entriesDataSource = craft.app.getModule('sprout-base-reports').app.dataSources.getDataSourceByType('barrelstrength\\sproutforms\\integrations\\sproutreports\\datasources\\EntriesDataSource') %}
-    {% redirect 'sprout-forms/reports/' ~ entriesDataSource.dataSourceId %}
+    {% redirect 'sprout-forms/reports' %}
 {% else %}
     {% redirect 'sprout-forms/settings/general' %}
 {% endif %}

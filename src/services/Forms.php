@@ -12,6 +12,7 @@ use barrelstrength\sproutforms\migrations\CreateFormContentTable;
 use Craft;
 use craft\base\ElementInterface;
 use craft\base\Field;
+use craft\db\Query;
 use craft\events\RegisterComponentTypesEvent;
 use yii\base\Component;
 use craft\helpers\StringHelper;
@@ -230,6 +231,16 @@ class Forms extends Component
             $contentTable = $this->getContentTableName($form);
             Craft::$app->content->contentTable = $contentTable;
 
+            //Delete all entries
+            $entries = (new Query())
+                ->select(['elementId'])
+                ->from([$contentTable])
+                ->all();
+
+            foreach ($entries as $entry) {
+                Craft::$app->elements->deleteElementById($entry['elementId']);
+            }
+
             // Delete form fields
             foreach ($form->getFields() as $field) {
                 Craft::$app->getFields()->deleteField($field);
@@ -245,12 +256,14 @@ class Forms extends Component
 
             Craft::$app->content->contentTable = $originalContentTable;
 
+
             // Delete the Element and Form
             $success = Craft::$app->elements->deleteElementById($form->id);
 
+
             if (!$success) {
                 $transaction->rollBack();
-                Craft::error('Couldn’t delete Form on deleteForm service.', __METHOD__);
+                Craft::error('Couldn’t delete Form', __METHOD__);
 
                 return false;
             }
@@ -585,12 +598,12 @@ class Forms extends Component
     }
 
     /**
-     * @param FormElement|null $form
+     * @param FormElement $form
      *
      * @return array
      * @throws Exception
      */
-    public function getFormTemplatePaths(FormElement $form = null): array
+    public function getFormTemplatePaths(FormElement $form): array
     {
         /** @var SproutForms $plugin */
         $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');

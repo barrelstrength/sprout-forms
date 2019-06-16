@@ -22,7 +22,7 @@
             }) }}
 
             <div id="settings-savedatadetails"
-                 class="{{ not settings.enableSaveData ? "hidden" : '' }}">
+                class="{{ not settings.enableSaveData ? "hidden" : '' }}">
 
                 {{ forms.lightswitchField({
                     label: "Enable Save Data settings on a per-form basis"|t('sprout-forms'),
@@ -35,7 +35,7 @@
                 }) }}
 
                 <div id="settings-savedatadefault"
-                     class="{{ not settings.enableSaveDataPerFormBasis ? "hidden" : '' }}">
+                    class="{{ not settings.enableSaveDataPerFormBasis ? "hidden" : '' }}">
 
                     {{ forms.lightswitchField({
                         label: "Enable Save Data by default"|t('sprout-forms'),

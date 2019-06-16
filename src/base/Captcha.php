@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\base;
 
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
+use barrelstrength\sproutforms\SproutForms;
 use Craft;
 
 /**
@@ -64,7 +65,9 @@ abstract class Captcha
      */
     public function getSettings()
     {
-        $sproutFormsSettings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
+        /** @var SproutForms $plugin */
+        $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
+        $sproutFormsSettings = $plugin->getSettings();
 
         return $sproutFormsSettings->captchaSettings[$this->getCaptchaId()] ?? null;
     }

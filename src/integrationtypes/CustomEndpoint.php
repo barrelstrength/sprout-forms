@@ -9,6 +9,7 @@ use GuzzleHttp\RequestOptions;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use yii\base\InvalidConfigException;
 
 /**
  * Route our request to Craft or a third-party endpoint
@@ -38,6 +39,7 @@ class CustomEndpoint extends Integration
     /**
      * @inheritDoc
      *
+     * @throws InvalidConfigException
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
@@ -62,7 +64,32 @@ class CustomEndpoint extends Integration
             return false;
         }
 
-        return $this->forwardEntry();
+        $entry = $this->entry;
+        $fields = $this->resolveFieldMapping();
+        $endpoint = $this->submitAction;
+
+        if (!filter_var($endpoint, FILTER_VALIDATE_URL)) {
+            $message = $entry->formName.' submit action is an invalid URL: '.$endpoint;
+            $this->addError('global', $message);
+            Craft::error($message, __METHOD__);
+
+            return false;
+        }
+
+        $client = new Client();
+
+        Craft::info($fields, __METHOD__);
+
+        $response = $client->post($endpoint, [
+            RequestOptions::JSON => $fields
+        ]);
+
+        $res = $response->getBody()->getContents();
+        $resAsString = is_array($res) ? json_encode($res) : $res;
+        $this->successMessage = $resAsString;
+        Craft::info($res, __METHOD__);
+
+        return true;
     }
 
     /**
@@ -82,43 +109,6 @@ class CustomEndpoint extends Integration
         }
 
         return $fields;
-    }
-
-    /**
-     * @return bool
-     */
-    private function forwardEntry(): bool
-    {
-        $entry = $this->entry;
-        $fields = $this->resolveFieldMapping();
-        $endpoint = $this->submitAction;
-
-        if (!filter_var($endpoint, FILTER_VALIDATE_URL)) {
-            $message = $entry->formName.' submit action is an invalid URL: '.$endpoint;
-            $this->logResponse(false, $message);
-            Craft::error($message, __METHOD__);
-
-            return false;
-        }
-
-        $client = new Client();
-
-        try {
-            Craft::info($fields, __METHOD__);
-
-            $response = $client->post($endpoint, [
-                RequestOptions::JSON => $fields
-            ]);
-
-            $this->logResponse(true, $response->getBody()->getContents());
-            Craft::info($response->getBody()->getContents(), __METHOD__);
-        } catch (\Exception $e) {
-            Craft::error($e->getMessage(), __METHOD__);
-            $this->logResponse(false, $e->getMessage());
-            return false;
-        }
-
-        return true;
     }
 }
 

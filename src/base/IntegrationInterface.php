@@ -34,4 +34,11 @@ interface IntegrationInterface extends SavableComponentInterface
      * @return bool
      */
     public function submit(): bool;
+
+    /**
+     * Message for when submit() is true
+     *
+     * @return string|null
+     */
+    public function getSuccessMessage();
 }

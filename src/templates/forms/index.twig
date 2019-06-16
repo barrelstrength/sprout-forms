@@ -10,7 +10,7 @@
 {% block actionButton %}
     <div class="buttons">
         <a class="btn submit add icon"
-           href="{{ url('sprout-forms/forms/new') }}">{{ "New Form"|t('sprout-forms') }}</a>
+            href="{{ url('sprout-forms/forms/new') }}">{{ "New Form"|t('sprout-forms') }}</a>
     </div>
 {% endblock %}
 
@@ -22,18 +22,18 @@
 
     <div class="buttons">
         <div id="newgroupbtn"
-             class="btn add icon">{{ "New Group"|t('sprout-forms') }}</div>
+            class="btn add icon">{{ "New Group"|t('sprout-forms') }}</div>
 
         {% if groupId is defined %}
             <div id="groupsettingsbtn" class="btn settings icon menubtn"
-                 title="{{ 'Settings' }}"></div>
+                title="{{ 'Settings' }}"></div>
             <div class="menu">
                 <ul>
                     <li><a data-action="rename"
-                           role="button">{{ "Rename selected group"|t('sprout-forms') }}</a>
+                            role="button">{{ "Rename selected group"|t('sprout-forms') }}</a>
                     </li>
                     <li><a data-action="delete"
-                           role="button">{{ "Delete selected group"|t('sprout-forms') }}</a>
+                            role="button">{{ "Delete selected group"|t('sprout-forms') }}</a>
                     </li>
                 </ul>
             </div>

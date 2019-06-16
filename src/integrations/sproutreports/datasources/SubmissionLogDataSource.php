@@ -4,31 +4,25 @@ namespace barrelstrength\sproutforms\integrations\sproutreports\datasources;
 
 use barrelstrength\sproutbasereports\SproutBaseReports;
 use barrelstrength\sproutforms\elements\Form;
-use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutbasereports\elements\Report;
 use Craft;
 use barrelstrength\sproutbasereports\base\DataSource;
 use craft\db\Query;
-use craft\fields\data\MultiOptionsFieldData;
 use craft\helpers\DateTimeHelper;
-use barrelstrength\sproutforms\elements\Entry;
-use craft\elements\db\ElementQueryInterface;
 
 /**
- * Class EntriesDataSource
+ * Class LogDataSource
  *
  * @package barrelstrength\sproutforms\integrations\sproutreports\datasources
- *
- * @property null|string $description
  */
-class EntriesDataSource extends DataSource
+class SubmissionLogDataSource extends DataSource
 {
     /**
      * @return string
      */
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms', 'Entries (Sprout Forms)');
+        return Craft::t('sprout-forms', 'Submission Log (Sprout Forms)');
     }
 
     /**
@@ -36,7 +30,7 @@ class EntriesDataSource extends DataSource
      */
     public function getDescription(): string
     {
-        return Craft::t('sprout-forms', 'Query form entries');
+        return Craft::t('sprout-forms', 'Query form entry integrations results');
     }
 
     /**
@@ -57,27 +51,24 @@ class EntriesDataSource extends DataSource
         $rows = [];
 
         $formId = $report->getSetting('formId');
-        $form = SproutForms::$app->forms->getFormById($formId);
-
-        if (!$form) {
-            return null;
-        }
-
-        $contentTable = $form->contentTable;
 
         $query = new Query();
 
         $formQuery = $query
-            ->select('*')
-            ->from($contentTable.' AS formcontenttable')
-            ->innerJoin('{{%elements}} elements', '[[formcontenttable.elementId]] = [[elements.id]]')
-            ->where(['elements.dateDeleted' => null]);
+            ->select('log.id id, log.dateCreated dateCreated, log.dateUpdated dateUpdated, log.entryId entryId, integrations.name integrationName, forms.name formName, log.message message, log.success success, log.status status')
+            ->from('{{%sproutforms_log}} AS log')
+            ->innerJoin('{{%sproutforms_integrations}} integrations', '[[log.integrationId]] = [[integrations.id]]')
+            ->innerJoin('{{%sproutforms_forms}} forms', '[[integrations.formId]] = [[forms.id]]');
+
+        if ($formId != '*') {
+            $formQuery->andWhere(['[[integrations.formId]]' => $formId]);
+        }
 
         if ($startDate && $endDate) {
-            $formQuery->andWhere('[[formcontenttable.dateCreated]] > :startDate', [
+            $formQuery->andWhere('[[log.dateCreated]] > :startDate', [
                 ':startDate' => $startDate->format('Y-m-d H:i:s')
             ]);
-            $formQuery->andWhere('[[formcontenttable.dateCreated]] < :endDate', [
+            $formQuery->andWhere('[[log.dateCreated]] < :endDate', [
                 ':endDate' => $endDate->format('Y-m-d H:i:s')
             ]);
         }
@@ -89,64 +80,21 @@ class EntriesDataSource extends DataSource
         }
 
         foreach ($results as $key => $result) {
+            $message = $result['message'];
 
-            $elementId = $result['elementId'];
+            if (strlen($result['message']) > 255) {
+                $message = substr($result['message'], 0, 255).' ...';
+            }
+
             $rows[$key]['id'] = $result['id'];
-            $rows[$key]['elementId'] = $elementId;
-            $rows[$key]['siteId'] = $result['siteId'];
-            $rows[$key]['title'] = $result['title'];
+            $rows[$key]['entryId'] = $result['entryId'];
+            $rows[$key]['formName'] = $result['formName'];
+            $rows[$key]['integrationName'] = $result['integrationName'];
+            $rows[$key]['message'] = $message;
+            $rows[$key]['status'] = $result['status'];
+            $rows[$key]['success'] = $result['success'] ? 'true' : 'false';
             $rows[$key]['dateCreated'] = $result['dateCreated'];
             $rows[$key]['dateUpdated'] = $result['dateUpdated'];
-
-            $entry = Craft::$app->getElements()->getElementById($elementId, Entry::class);
-
-            if ($entry === null) {
-                $fields = [];
-            } else {
-                $fields = $entry->getFieldValues();
-            }
-
-            if (count($fields) <= 0) {
-                continue;
-            }
-
-            foreach ($fields as $handle => $field) {
-                if ($field instanceof ElementQueryInterface) {
-
-                    $entries = $field->all();
-                    $titles = [];
-                    if (!empty($entries)) {
-                        foreach ($entries as $entry) {
-                            $titles[] = '"'.$entry->title.'"';
-                        }
-                    }
-                    $value = '';
-
-                    if (!empty($titles)) {
-                        $value = implode(', ', $titles);
-                    }
-                } else if ($field instanceof MultiOptionsFieldData) {
-                    $options = $field->getOptions();
-
-                    $selectedOptions = [];
-                    foreach ($options as $option) {
-                        if ($option->selected) {
-                            $selectedOptions[] = '"'.$option->value.'"';
-                        }
-                    }
-
-                    $value = '';
-
-                    if (count($selectedOptions)) {
-                        $value = implode(', ', $selectedOptions);
-                    }
-                } else {
-                    $value = $field;
-                }
-
-                $fieldHandleKey = 'field_'.$handle;
-                $rows[$key][$fieldHandleKey] = $value;
-            }
         }
 
         return $rows;
@@ -169,7 +117,7 @@ class EntriesDataSource extends DataSource
             $settings = (array)$this->report->getSettings();
         }
 
-        $formOptions = [];
+        $formOptions[] = ['label' => 'All', 'value' => '*'];
 
         foreach ($forms as $form) {
             $formOptions[] = [
@@ -198,7 +146,7 @@ class EntriesDataSource extends DataSource
 
         $dateRanges = SproutBaseReports::$app->reports->getDateRanges(false);
 
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_integrations/sproutreports/datasources/EntriesDataSource/settings', [
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_integrations/sproutreports/datasources/LogsDataSource/settings', [
             'formOptions' => $formOptions,
             'defaultStartDate' => new \DateTime($defaultStartDate),
             'defaultEndDate' => new \DateTime($defaultEndDate),

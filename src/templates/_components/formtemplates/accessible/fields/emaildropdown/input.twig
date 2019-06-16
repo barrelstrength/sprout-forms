@@ -33,7 +33,7 @@
             {% endif %}
 
             <option value="{{ optionValue }}"
-                    {% if selected %}selected{% endif %}>{{ optionLabel }}</option>
+                {% if selected %}selected{% endif %}>{{ optionLabel }}</option>
         {% endfor %}
     </select>
 {% endspaceless %}

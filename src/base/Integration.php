@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\base;
 
 use barrelstrength\sproutforms\fields\formfields\Number;
 use barrelstrength\sproutforms\fields\formfields\SingleLine;
+use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\base\SavableComponent;
@@ -24,6 +25,7 @@ use yii\base\InvalidConfigException;
  * @property void        $customSourceFormFields
  * @property null|string $updateTargetFieldsAction
  * @property string      $updateSourceFieldsAction
+ * @property Form        $form
  * @property string      $type
  */
 abstract class Integration extends SavableComponent implements IntegrationInterface
@@ -32,6 +34,16 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
     // =========================================================================
 
     use IntegrationTrait;
+
+    protected $successMessage = 'Success';
+
+    /**
+     * @return Form
+     */
+    public function getForm(): Form
+    {
+        return SproutForms::$app->forms->getFormById($this->formId);
+    }
 
     /**
      * @inheritdoc
@@ -61,6 +73,14 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getSuccessMessage()
+    {
+        return $this->successMessage;
+    }
+
+    /**
      * This action should return an form fields array
      */
     public function getUpdateSourceFieldsAction()
@@ -70,6 +90,8 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
 
     /**
      * Prepares the $fieldMapping array based on the current form fields and any existing settings
+     *
+     * @throws InvalidConfigException
      */
     public function prepareFieldMapping()
     {
@@ -115,7 +137,11 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
         return null;
     }
 
-    public function getSourceFormFields()
+    /**
+     * @return array
+     * @throws InvalidConfigException
+     */
+    public function getSourceFormFields(): array
     {
         $sourceFormFieldsData = [
             [
@@ -184,8 +210,8 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
             $fieldInstance->setCompatibleCraftFields($sourceFormFieldData['compatibleCraftFields']);
             $sourceFormFields[] = $fieldInstance;
         }
-        $form = SproutForms::$app->forms->getFormById($this->formId);
-        $fields = $form->getFields();
+
+        $fields = $this->getForm()->getFields();
 
         if (count($fields)) {
             foreach ($fields as $field) {
@@ -268,8 +294,7 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
             ]
         ]);
 
-        $form = SproutForms::$app->forms->getFormById($this->formId);
-        $fields = $form->getFields();
+        $fields = $this->getForm()->getFields();
 
         if (count($fields)) {
             if ($addOptGroup) {
@@ -289,26 +314,6 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
         }
 
         return $options;
-    }
-
-    /**
-     * @param $isValid
-     * @param $message
-     */
-    public function logResponse($isValid, $message)
-    {
-        $this->entry->addEntryIntegrationLog($this->id, $isValid, $message);
-    }
-
-    /**
-     * @return string|null
-     * @todo - can we remove this and update how this happens to use javascript?
-     *       https://stackoverflow.com/questions/2195568/how-do-i-add-slashes-to-a-string-in-javascript
-     *
-     */
-    public function getType()
-    {
-        return addslashes(static::class);
     }
 }
 

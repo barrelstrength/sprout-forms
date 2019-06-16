@@ -2,19 +2,25 @@
 
 namespace barrelstrength\sproutforms\web\twig\variables;
 
+use barrelstrength\sproutforms\base\Integration;
 use barrelstrength\sproutforms\elements\db\EntryQuery;
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
-use barrelstrength\sproutforms\records\Integration;
 use barrelstrength\sproutforms\services\Forms;
 use Craft;
 use craft\base\ElementInterface;
+use craft\errors\MissingComponentException;
 use craft\helpers\Template as TemplateHelper;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\base\FormField;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use Twig\Markup;
 use yii\base\Exception;
+use yii\base\InvalidConfigException;
 
 /**
  * SproutForms provides an API for accessing information about forms. It is accessible from templates via `craft.sproutForms`.
@@ -50,11 +56,11 @@ class SproutFormsVariable
      * @param            $formHandle
      * @param array|null $renderingOptions
      *
-     * @return \Twig\Markup
+     * @return Markup
      * @throws \Exception
      * @throws \yii\base\Exception
      */
-    public function displayForm($formHandle, array $renderingOptions = null): \Twig\Markup
+    public function displayForm($formHandle, array $renderingOptions = null): Markup
     {
         /**
          * @var $form Form
@@ -94,11 +100,11 @@ class SproutFormsVariable
      * @param int        $tabId
      * @param array|null $renderingOptions
      *
-     * @return bool|\Twig\Markup
+     * @return bool|Markup
      * @throws Exception
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function displayTab(Form $form, int $tabId, array $renderingOptions = null)
     {
@@ -157,14 +163,14 @@ class SproutFormsVariable
      * @param FormField  $field
      * @param array|null $renderingOptions
      *
-     * @return \Twig\Markup
+     * @return Markup
      * @throws Exception
      * @throws \ReflectionException
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function displayField(Form $form, FormField $field, array $renderingOptions = null): \Twig\Markup
+    public function displayField(Form $form, FormField $field, array $renderingOptions = null): Markup
     {
         if (!$form) {
             throw new Exception(Craft::t('sprout-forms', 'The displayField tag requires a Form model.'));
@@ -299,7 +305,7 @@ class SproutFormsVariable
      * Gets last entry submitted
      *
      * @return array|ElementInterface|null
-     * @throws \craft\errors\MissingComponentException
+     * @throws MissingComponentException
      */
     public function getLastEntry()
     {
@@ -360,7 +366,7 @@ class SproutFormsVariable
     /**
      * @param $settings
      *
-     * @throws \craft\errors\MissingComponentException
+     * @throws MissingComponentException
      */
     public function multiStepForm($settings)
     {
@@ -387,8 +393,8 @@ class SproutFormsVariable
     /**
      * @param $type
      *
-     * @return mixed
-     * @throws \Exception
+     * @return FormField|mixed|null
+     * @throws Exception
      */
     public function getRegisteredField($type)
     {
@@ -410,6 +416,8 @@ class SproutFormsVariable
         if (Craft::$app->getConfig()->getGeneral()->devMode) {
             throw new Exception($message);
         }
+
+        return null;
     }
 
     /**
@@ -617,21 +625,11 @@ class SproutFormsVariable
     }
 
     /**
-     * @param $entryId
-     *
-     * @return array|\yii\db\ActiveRecord[]
-     */
-    public function getEntryIntegrationLogsByEntryId($entryId): array
-    {
-        return SproutForms::$app->integrations->getEntryIntegrationLogsByEntryId($entryId);
-    }
-
-    /**
      * @param $integrationId
      *
      * @return Integration|null
-     * @throws \craft\errors\MissingComponentException
-     * @throws \yii\base\InvalidConfigException
+     * @throws MissingComponentException
+     * @throws InvalidConfigException
      */
     public function getIntegrationById($integrationId)
     {

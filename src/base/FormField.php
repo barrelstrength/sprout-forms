@@ -5,7 +5,6 @@ namespace barrelstrength\sproutforms\base;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use Craft;
 use craft\base\Field;
-use craft\fields\PlainText as CraftPlainText;
 
 /**
  * Class FormField

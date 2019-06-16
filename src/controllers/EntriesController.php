@@ -7,6 +7,7 @@ use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
 use Craft;
 use craft\web\Controller as BaseController;
 use yii\base\Exception;
+use yii\web\BadRequestHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 
@@ -54,7 +55,7 @@ class EntriesController extends BaseController
      * @throws ForbiddenHttpException
      * @throws \Exception
      * @throws \Throwable
-     * @throws \yii\web\BadRequestHttpException
+     * @throws BadRequestHttpException
      */
     public function actionSaveEntry()
     {
@@ -126,7 +127,7 @@ class EntriesController extends BaseController
      * @throws Exception
      * @throws \Exception
      * @throws \Throwable
-     * @throws \yii\web\BadRequestHttpException
+     * @throws BadRequestHttpException
      */
     private function saveEntryInCraft(Entry $entry)
     {
@@ -235,7 +236,7 @@ class EntriesController extends BaseController
     /**
      * @return Response
      * @throws \Throwable
-     * @throws \yii\web\BadRequestHttpException
+     * @throws BadRequestHttpException
      */
     public function actionDeleteEntry(): Response
     {
@@ -278,10 +279,10 @@ class EntriesController extends BaseController
     /**
      * Fetch or create a EntryElement class
      *
-     * @return EntryElement|null
+     * @return EntryElement
      * @throws Exception
      */
-    private function getEntryModel()
+    private function getEntryModel(): EntryElement
     {
         $entryId = null;
         $request = Craft::$app->getRequest();
@@ -301,9 +302,9 @@ class EntriesController extends BaseController
         $entry = SproutForms::$app->entries->getEntryById($entryId);
 
         if (!$entry) {
-
-            $message = Craft::t('sprout-forms', 'No form entry exists with the given ID: '.$entryId);
-
+            $message = Craft::t('sprout-forms', 'No form entry exists with the given ID: {id}', [
+                'entryId' => $entryId
+            ]);
             throw new Exception($message);
         }
 
@@ -314,7 +315,7 @@ class EntriesController extends BaseController
      * @param EntryElement $entry
      *
      * @return null|Response
-     * @throws \yii\web\BadRequestHttpException
+     * @throws BadRequestHttpException
      * @throws \craft\errors\MissingComponentException
      */
     private function redirectWithErrors(Entry $entry)

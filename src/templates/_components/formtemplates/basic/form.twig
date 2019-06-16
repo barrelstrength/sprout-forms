@@ -22,7 +22,7 @@
 >
     {{ csrfInput() }}
     <input type="hidden" aria-hidden="true" name="action"
-           value="sprout-forms/entries/save-entry">
+        value="sprout-forms/entries/save-entry">
     <input type="hidden" name="handle" value="{{ form.handle }}">
     {% if redirectUri is not empty -%}
         {% if redirectUri|slice(0, 1)|lower == '?' %}
@@ -42,7 +42,7 @@
 
     <div class="submit">
         <input type="submit"
-               value="{{ form.submitButtonText is not empty ? form.submitButtonText : 'Submit'|t('site') }}">
+            value="{{ form.submitButtonText is not empty ? form.submitButtonText : 'Submit'|t('site') }}">
     </div>
 </form>
 

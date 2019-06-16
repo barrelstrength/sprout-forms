@@ -16,7 +16,7 @@
 }) }}
 
 <div id="sprouturlfield-custom-validation-pattern"
-     {% if not field.customPatternToggle %}class="hidden"{% endif %}>
+    {% if not field.customPatternToggle %}class="hidden"{% endif %}>
     {{ forms.textField({
         label: 'Validation Pattern'|t('sprout-forms'),
         instructions: 'Validate URLs using this regular expression.'|t('sprout-forms'),
