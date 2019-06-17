@@ -419,7 +419,12 @@ class SproutForms extends Plugin
         $pluginHandle = 'sprout-forms';
         $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.enabled', true);
 
-        SproutBaseReports::$app->dataSources->installDataSources($dataSourceTypes);
+        foreach ($dataSourceTypes as $dataSourceClass) {
+            /** @var DataSource $dataSource */
+            $dataSource = new $dataSourceClass();
+            $dataSource->pluginHandle = 'sprout-forms';
+            SproutBaseReports::$app->dataSources->saveDataSource($dataSource);
+        }
 
         // Redirect to welcome page
         if (Craft::$app->getRequest()->getIsConsoleRequest()) {
