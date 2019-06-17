@@ -43,6 +43,7 @@ use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
 use craft\helpers\UrlHelper;
 use craft\services\Fields;
+use craft\services\Plugins;
 use craft\web\UrlManager;
 use craft\services\UserPermissions;
 use yii\base\Event;
@@ -412,6 +413,11 @@ class SproutForms extends Plugin
             EntriesDataSource::class,
             SubmissionLogDataSource::class
         ];
+
+        // @todo research why the plugin is not enabled after install
+        $projectConfig = Craft::$app->getProjectConfig();
+        $pluginHandle = 'sprout-forms';
+        $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.enabled', true);
 
         SproutBaseReports::$app->dataSources->installDataSources($dataSourceTypes);
 
