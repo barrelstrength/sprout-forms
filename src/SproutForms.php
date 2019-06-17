@@ -414,6 +414,13 @@ class SproutForms extends Plugin
         ];
 
         SproutBaseReports::$app->dataSources->installDataSources($dataSourceTypes);
+
+        // Redirect to welcome page
+        if (Craft::$app->getRequest()->getIsConsoleRequest()) {
+            return;
+        }
+
+        Craft::$app->controller->redirect(UrlHelper::cpUrl('sprout-forms/welcome'))->send();
     }
 
     /**
