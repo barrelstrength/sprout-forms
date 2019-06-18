@@ -1,5 +1,24 @@
 # Changelog
 
+## 3.1.0 - 2019-06-17
+
+> {note} New Form Integrations feature provides extensible, user-friendly interface to send Form data to custom endpoints (CRM, Mailing List, etc.) or create Elements within Craft. Add multiple Integrations to a single form, log success and failure messages, and monitor your form submissions with Reports or Notifications.  
+
+### Added
+- Added Integration API
+- Added Custom Endpoint Integration
+- Added Entry Element Integration
+	
+### Changed
+- Improved Data Source management and registration
+- Updated barrelstrength/sprout-base-reports requirement v1.2.0
+- Updated barrelstrength/sprout-base-fields requirement v1.0.7
+- Updated barrelstrength/sprout-base requirement to v5.0.1
+- Removed Payload Forwarding in favor of Custom Endpoint Integration
+
+### Fixed
+- Fixed bug where deleting a form does not delete entries
+
 ## 3.0.2 - 2019-06-11
 
 ### Fixed
