@@ -176,7 +176,7 @@ class SproutForms extends Plugin
                     $captcha->verifySubmission($event);
                 }
             }
-        });
+        }, null, false);
 
         Craft::$app->view->hook('sproutForms.modifyForm', function(&$context) {
             return SproutForms::$app->forms->getCaptchasHtml();
