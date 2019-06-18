@@ -12,6 +12,7 @@ use barrelstrength\sproutbasereports\SproutBaseReportsHelper;
 use barrelstrength\sproutforms\base\Captcha;
 use barrelstrength\sproutforms\events\OnSaveEntryEvent;
 use barrelstrength\sproutforms\integrations\sproutemail\emailtemplates\basic\BasicSproutFormsNotification;
+use barrelstrength\sproutforms\integrations\sproutemail\events\notificationevents\LogEvent;
 use barrelstrength\sproutforms\integrations\sproutemail\events\notificationevents\SaveEntryEvent;
 use barrelstrength\sproutforms\integrations\sproutimport\elements\Form as FormElementImporter;
 use barrelstrength\sproutforms\integrations\sproutimport\elements\Entry as EntryElementImporter;
@@ -167,6 +168,7 @@ class SproutForms extends Plugin
 
         Event::on(NotificationEmailEvents::class, NotificationEmailEvents::EVENT_REGISTER_EMAIL_EVENT_TYPES, static function(NotificationEmailEvent $event) {
             $event->events[] = SaveEntryEvent::class;
+            $event->events[] = LogEvent::class;
         });
 
         Event::on(Forms::class, Forms::EVENT_REGISTER_CAPTCHAS, static function(RegisterComponentTypesEvent $event) {

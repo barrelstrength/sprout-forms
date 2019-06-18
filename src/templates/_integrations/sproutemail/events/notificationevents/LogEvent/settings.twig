@@ -1,0 +1,7 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.checkboxField({
+    label: "When integrations are submitted?"|t('sprout-forms'),
+    name: "whenSubmit",
+    checked: event.whenSubmit
+}) }}
