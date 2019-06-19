@@ -1,0 +1,78 @@
+{%- set integrationLog = object -%}
+{%- set integration = integrationLog.getIntegration() -%}
+{%- set form = integration.getForm() -%}
+<!doctype html>
+<html lang="{{ craft.app.language }}">
+<head>
+    <title>{{ siteName }}</title>
+</head>
+<body>
+<table>
+    <tr>
+        <td>
+            <table>
+                <tr>
+                    <td style="width:600px;">
+
+                        {% if email.defaultBody|length %}
+                            <table>
+                                <tr>
+                                    <td style="width:600px;">
+
+                                        <p>{{ email.defaultBody|markdown }}</p>
+
+                                    </td>
+                                </tr>
+                            </table>
+                        {% endif %}
+
+                        <table>
+                            <tr>
+                                <td style="border-top:1px solid #eee;border-bottom:1px solid #eee;background-color:#fefefe;width:600px;">
+
+                                    {% if integrationLog %}
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <p>
+                                                        <em>{{ "Form Name: "|t('site') }}</em> <span style="text-transform: uppercase;"><strong>{{ form.name }}</strong></span>
+                                                    </p>
+                                                    <p>
+                                                        <em>{{ "Integration: "|t('site') }} {{ integration.name }}</em>
+                                                    </p>
+                                                    <p>
+                                                        <em>{{ "Form Entry Id: "|t('site') }} {{ integrationLog.entryId }}</em>
+                                                    </p>
+
+                                                    <p>
+                                                        <em>{{ "Status: "|t('site') }} {{ integrationLog.status }}</em>
+                                                    </p>
+                                                    <p>
+                                                        <em>{{ "Message:"|t('site') }} <br> {{ integrationLog.message|raw }}</em>
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="border-top:1px solid #eee;background-color:#fefefe; width:600px;">
+
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    {% else %}
+                                        <p>{{ "No Integration found." }}</p>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </table>
+
+                    </td>
+                </tr>
+            </table>
+
+            <!-- END TEMPLATE CONTAINER -->
+
+        </td>
+    </tr>
+</table>
+</body>
+</html>

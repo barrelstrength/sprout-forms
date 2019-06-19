@@ -93,7 +93,7 @@ class LogEvent extends NotificationEvent
          */
         $event = $this->event ?? null;
 
-        return $event->entry ?? null;
+        return $event->submissionLog ?? null;
     }
 
     /**

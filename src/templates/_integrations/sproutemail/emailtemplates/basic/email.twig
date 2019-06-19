@@ -1,6 +1,5 @@
 {%- set entry = object -%}
 {%- set form = entry.getForm() ?? null -%}
-
 <!doctype html>
 <html lang="{{ craft.app.language }}">
 <head>
@@ -160,10 +159,6 @@
                                             </table>
 
                                         {% endfor %}
-
-                                    {% elseif submissionLog %}
-                                        <h2>HELLO</h2>
-                                        {{ submissionLog.message }}
                                     {% else %}
                                         <p>{{ "No Form Entry found." }}</p>
                                     {% endif %}
