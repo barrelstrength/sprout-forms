@@ -21,7 +21,7 @@
     "email": "sprout@barrelstrengthdesign.com",
     "issues": "https://github.com/barrelstrength/sprout-forms/issues?state=open",
     "source": "https://github.com/barrelstrength/sprout-forms",
-    "docs": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms/docs",
+    "docs": "https://sprout.barrelstrengthdesign.com/docs/forms",
     "rss": "https://github.com/barrelstrength/sprout-forms/commits/v2.atom"
   },
   "require": {
@@ -41,10 +41,7 @@
     "name": "Sprout Forms",
     "handle": "sprout-forms",
     "developer": "Barrel Strength",
-    "developerUrl": "https://barrelstrengthdesign.com",
-    "documentationUrl": "https://sprout.barrelstrengthdesign.com/craft-plugins/forms",
-    "changelogUrl": "https://raw.githubusercontent.com/BarrelStrength/sprout-forms/master/CHANGELOG.md",
-    "downloadUrl": "https://github.com/BarrelStrength/sprout-forms/archive/master.zip",
+    "documentationUrl": "https://sprout.barrelstrengthdesign.com/docs/forms",
     "class": "barrelstrength\\sproutforms\\SproutForms"
   }
 }
