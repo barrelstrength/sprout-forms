@@ -184,7 +184,7 @@ class SproutForms extends Plugin
                     $captcha->verifySubmission($event);
                 }
             }
-        });
+        }, null, false);
 
         Event::on(Entries::class, EntryElement::EVENT_AFTER_SAVE, static function(OnSaveEntryEvent $event) {
             SproutForms::$app->integrations->runFormIntegrations($event->entry);
