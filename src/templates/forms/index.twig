@@ -1,16 +1,24 @@
 {% requirePermission "sproutForms-editForms" %}
 
 {% extends "sprout-forms/_layouts/elementindex" %}
+{% import 'sprout-base/_includes/sproutcp' as sprout %}
 {% set title = "Forms"|t('sprout-forms') %}
 {% set elementType = 'barrelstrength\\sproutforms\\elements\\Form' %}
+{% set canCreateForm = craft.app.getModule('sprout-forms').app.forms.canCreateForm() %}
 
 {% set groupId = null %}
 {% set groups = craft.sproutForms.getAllFormGroups('id') %}
 
 {% block actionButton %}
     <div class="buttons">
-        <a class="btn submit add icon"
-            href="{{ url('sprout-forms/forms/new') }}">{{ "New Form"|t('sprout-forms') }}</a>
+        <a id="create-new-form" class="btn submit add icon {% if not canCreateForm %}isDisabled{% endif %}"
+           href="{{ url('sprout-forms/forms/new') }}">{{ "New Form"|t('sprout-forms') }}</a>
+
+        {% if not canCreateForm %}
+            {{ sprout.upgradeToProButton({
+                url: cpUrl('plugin-store/sprout-forms')
+            }) }}
+        {% endif %}
     </div>
 {% endblock %}
 
@@ -42,9 +50,16 @@
 
 {% endblock %}
 
+{% do view.registerAssetBundle("barrelstrength\\sproutbase\\web\\assets\\cp\\CpAsset") %}
 {% do view.registerAssetBundle("barrelstrength\\sproutbase\\web\\assets\\groups\\GroupsAsset") %}
 
 {% js %}
+    {% if not canCreateForm %}
+        $('#create-new-form').click(function(e){
+            e.preventDefault();
+        })
+    {% endif %}
+
     new Craft.SproutBase.GroupsAdmin({
     groupsSelector: '#sidebar nav ul',
     newGroupButtonSelector: '#newgroupbtn',
@@ -66,3 +81,17 @@
     deleteGroupOnErrorMessage: Craft.t('sprout-forms', 'Could not delete the group.'),
     });
 {% endjs %}
+
+{% css %}
+    .isDisabled {
+    color: currentColor;
+    cursor: not-allowed;
+    opacity: 0.5;
+    text-decoration: none;
+    }
+    .element.small.hasstatus
+    {
+    word-break: break-all;
+    hyphens: auto;
+    }
+{% endcss %}

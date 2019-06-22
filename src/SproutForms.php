@@ -103,6 +103,9 @@ class SproutForms extends Plugin
      */
     public $minVersionRequired = '2.5.1';
 
+    const EDITION_LITE = 'lite';
+    const EDITION_PRO = 'pro';
+
     /**
      * @throws InvalidConfigException
      */
@@ -222,6 +225,17 @@ class SproutForms extends Plugin
 //        });
 
 //        \Craft::dd(SproutForms::$app->integrations->getIntegrationById(18));
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function editions(): array
+    {
+        return [
+            self::EDITION_LITE,
+            self::EDITION_PRO,
+        ];
     }
 
     /**

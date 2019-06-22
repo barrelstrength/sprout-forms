@@ -777,4 +777,33 @@ class Forms extends Component
 
         return $captchaHtml;
     }
+
+    /**
+     * @return bool
+     */
+    public function isPro()
+    {
+        $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
+        $sproutFormsIsPro = $plugin !== null ? $plugin->is(SproutForms::EDITION_PRO) : false;
+
+        return $sproutFormsIsPro;
+    }
+
+    /**
+     * @return bool
+     */
+    public function canCreateForm()
+    {
+        $isPro = $this->isPro();
+
+        if (!$isPro) {
+            $forms = $this->getAllForms();
+
+            if (count($forms) >= 1) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

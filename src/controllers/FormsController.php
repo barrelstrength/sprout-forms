@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\controllers;
 
 use Craft;
 use craft\base\ElementInterface;
+use craft\errors\WrongEditionException;
 use craft\web\Controller as BaseController;
 use craft\helpers\UrlHelper;
 use yii\web\BadRequestHttpException;
@@ -162,6 +163,8 @@ class FormsController extends BaseController
 
         // Immediately create a new Form
         if ($newForm) {
+            $this->validateEdition();
+
             $form = SproutForms::$app->forms->createNewForm();
 
             if ($form) {
@@ -218,5 +221,17 @@ class FormsController extends BaseController
         SproutForms::$app->forms->deleteForm($form);
 
         return $this->redirectToPostedUrl($form);
+    }
+
+    /**
+     * @throws WrongEditionException
+     */
+    private function validateEdition()
+    {
+        $canCreate = SproutForms::$app->forms->canCreateForm();
+
+        if (!$canCreate){
+            throw new WrongEditionException(Craft::t('sprout-forms', 'Please upgrade to Sprout Forms Pro Edition to create more forms.'));
+        }
     }
 }
