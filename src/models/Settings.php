@@ -34,7 +34,7 @@ class Settings extends Model implements SproutSettingsInterface
         // 'actionUrl' => 'sprout/settings/save-settings'
         $variables['entryStatuses'] = SproutForms::$app->entries->getAllEntryStatuses();
 
-        return [
+        $navItems = [
             'general' => [
                 'label' => Craft::t('sprout-forms', 'General'),
                 'url' => 'sprout-forms/settings/general',
@@ -72,7 +72,18 @@ class Settings extends Model implements SproutSettingsInterface
                 'template' => 'sprout-forms/settings/advanced'
             ]
         ];
-    }
+
+        if (!SproutForms::$app->forms->isPro()) {
+            $navItems['upgrade'] = [
+                'label' => Craft::t('sprout-forms', 'Upgrade to Pro'),
+                'url' => 'sprout-forms/settings/upgrade',
+                'selected' => 'upgrade',
+                'template' => 'sprout-forms/settings/upgrade'
+            ];
+        }
+
+        return $navItems;
+     }
 
     public function rules(): array
     {

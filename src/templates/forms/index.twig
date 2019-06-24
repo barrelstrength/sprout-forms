@@ -11,12 +11,13 @@
 
 {% block actionButton %}
     <div class="buttons">
-        <a id="create-new-form" class="btn submit add icon {% if not canCreateForm %}isDisabled{% endif %}"
+        <a id="create-new-form" class="btn submit add icon {% if not canCreateForm %}sprout-disabled{% endif %}"
            href="{{ url('sprout-forms/forms/new') }}">{{ "New Form"|t('sprout-forms') }}</a>
 
         {% if not canCreateForm %}
             {{ sprout.upgradeToProButton({
-                url: cpUrl('plugin-store/sprout-forms')
+                url: cpUrl('sprout-forms/upgrade'),
+                title: "Upgrade to Sprout Forms PRO to manage Unlimited Forms"|t('sprout-forms')
             }) }}
         {% endif %}
     </div>
@@ -83,12 +84,6 @@
 {% endjs %}
 
 {% css %}
-    .isDisabled {
-    color: currentColor;
-    cursor: not-allowed;
-    opacity: 0.5;
-    text-decoration: none;
-    }
     .element.small.hasstatus
     {
     word-break: break-all;
