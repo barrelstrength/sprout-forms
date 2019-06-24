@@ -232,7 +232,7 @@ class FormsController extends BaseController
         $canCreate = SproutForms::$app->forms->canCreateForm();
 
         if (!$canCreate){
-            throw new WrongEditionException(Craft::t('sprout-forms', 'Please upgrade to Sprout Forms Pro Edition to create more forms.'));
+            throw new WrongEditionException(Craft::t('sprout-forms', 'Please upgrade to Sprout Forms Pro Edition to create unlimited forms.'));
         }
     }
 }
