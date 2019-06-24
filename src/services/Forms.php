@@ -781,9 +781,10 @@ class Forms extends Component
     /**
      * @return bool
      */
-    public function isPro()
+    public function isPro(): bool
     {
-        $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
+        /** @var SproutForms $plugin */
+        $plugin = SproutForms::getInstance();
         $sproutFormsIsPro = $plugin !== null ? $plugin->is(SproutForms::EDITION_PRO) : false;
 
         return $sproutFormsIsPro;
