@@ -86,7 +86,7 @@ class Settings extends Model implements SproutSettingsInterface
         }
 
         return $navItems;
-     }
+    }
 
     public function rules(): array
     {

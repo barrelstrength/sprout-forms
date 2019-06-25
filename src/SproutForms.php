@@ -38,7 +38,6 @@ use barrelstrength\sproutforms\services\Entries;
 use barrelstrength\sproutforms\services\Forms;
 use barrelstrength\sproutbaseimport\services\Importers;
 use Craft;
-use craft\base\Model;
 use craft\base\Plugin;
 
 use craft\events\RegisterComponentTypesEvent;
@@ -247,7 +246,7 @@ class SproutForms extends Plugin implements SproutEditionsInterface
      */
     public function getUpgradeUrl()
     {
-        if (!SproutBase::$app->settings->isEdition('sprout-forms', SproutForms::EDITION_PRO)) {
+        if (!SproutBase::$app->settings->isEdition('sprout-forms', self::EDITION_PRO)) {
             return UrlHelper::cpUrl('sprout-forms/upgrade');
         }
 
