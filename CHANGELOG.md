@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.2.1 - 2019-06-25
+
+### Changed
+- Added fieldtype class to base integration
+- Updated upgrade messaging and buttons
+
+### Changed
+- Updated barrelstrength/sprout-base requirement to v5.0.4
+
 ## 3.2.0 - 2019-06-24
 
 ### Added
