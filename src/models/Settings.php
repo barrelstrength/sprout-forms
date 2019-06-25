@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\models;
 
 use barrelstrength\sproutbase\base\SproutSettingsInterface;
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\SproutForms;
 use craft\base\Model;
 use Craft;
@@ -73,7 +74,9 @@ class Settings extends Model implements SproutSettingsInterface
             ]
         ];
 
-        if (!SproutForms::$app->forms->isPro()) {
+        $isPro = SproutBase::$app->settings->isEdition('sprout-forms', SproutForms::EDITION_PRO);
+
+        if (!$isPro) {
             $navItems['upgrade'] = [
                 'label' => Craft::t('sprout-forms', 'Upgrade to Pro'),
                 'url' => 'sprout-forms/settings/upgrade',
@@ -83,7 +86,7 @@ class Settings extends Model implements SproutSettingsInterface
         }
 
         return $navItems;
-     }
+    }
 
     public function rules(): array
     {
