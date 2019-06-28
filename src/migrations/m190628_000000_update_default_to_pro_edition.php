@@ -2,15 +2,14 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutbasereports\migrations\m190628_000000_fix_data_sources;
 use Craft;
 use craft\db\Migration;
 use craft\services\Plugins;
 
 /**
- * m190628_000000_add_default_to_pro_and_fix_data_sources migration.
+ * m190628_000000_update_default_to_pro_edition migration.
  */
-class m190628_000000_add_default_to_pro_and_fix_data_sources extends Migration
+class m190628_000000_update_default_to_pro_edition extends Migration
 {
     /**
      * @return bool
@@ -22,12 +21,6 @@ class m190628_000000_add_default_to_pro_and_fix_data_sources extends Migration
         $pluginHandle = 'sprout-forms';
         $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.edition', 'pro');
 
-        $migration = new m190628_000000_fix_data_sources();
-
-        ob_start();
-        $migration->safeUp();
-        ob_end_clean();
-
         return true;
     }
 
@@ -36,7 +29,7 @@ class m190628_000000_add_default_to_pro_and_fix_data_sources extends Migration
      */
     public function safeDown(): bool
     {
-        echo "m190628_000000_add_default_to_pro_and_fix_data_sources cannot be reverted.\n";
+        echo "m190628_000000_update_default_to_pro_edition cannot be reverted.\n";
         return false;
     }
 }
