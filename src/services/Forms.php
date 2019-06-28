@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\services;
 
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\base\FormTemplates;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
@@ -779,22 +780,13 @@ class Forms extends Component
     }
 
     /**
+     * Checks if the current plugin edition allows a user to create a Form
+     *
      * @return bool
      */
-    public function isPro()
+    public function canCreateForm(): bool
     {
-        $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
-        $sproutFormsIsPro = $plugin !== null ? $plugin->is(SproutForms::EDITION_PRO) : false;
-
-        return $sproutFormsIsPro;
-    }
-
-    /**
-     * @return bool
-     */
-    public function canCreateForm()
-    {
-        $isPro = $this->isPro();
+        $isPro = SproutBase::$app->settings->isEdition('sprout-forms', SproutForms::EDITION_PRO);
 
         if (!$isPro) {
             $forms = $this->getAllForms();

@@ -2,6 +2,8 @@
 
 namespace barrelstrength\sproutforms;
 
+use barrelstrength\sproutbase\base\SproutEditionsInterface;
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutbaseemail\services\EmailTemplates;
 use barrelstrength\sproutbaseemail\SproutBaseEmailHelper;
 use barrelstrength\sproutbasefields\SproutBaseFieldsHelper;
@@ -63,9 +65,10 @@ use yii\web\Response;
  * @property null|array           $cpNavItem
  * @property array                $cpUrlRules
  * @property $this|Response|mixed $settingsResponse
+ * @property null|string          $upgradeUrl
  * @property array                $userPermissions
  */
-class SproutForms extends Plugin
+class SproutForms extends Plugin implements SproutEditionsInterface
 {
     use BaseSproutTrait;
 
@@ -228,7 +231,7 @@ class SproutForms extends Plugin
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public static function editions(): array
     {
@@ -239,7 +242,19 @@ class SproutForms extends Plugin
     }
 
     /**
-     * @return Settings|\craft\base\Model|null
+     * @inheritDoc
+     */
+    public function getUpgradeUrl()
+    {
+        if (!SproutBase::$app->settings->isEdition('sprout-forms', self::EDITION_PRO)) {
+            return UrlHelper::cpUrl('sprout-forms/upgrade');
+        }
+
+        return null;
+    }
+
+    /**
+     * @inheritDoc
      */
     protected function createSettingsModel()
     {

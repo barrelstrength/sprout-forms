@@ -164,7 +164,11 @@ class FormsController extends BaseController
 
         // Immediately create a new Form
         if ($newForm) {
-            $this->validateEdition();
+
+            // Make sure Pro is installed before we create a new form
+            if (!SproutForms::$app->forms->canCreateForm()) {
+                throw new WrongEditionException(Craft::t('sprout-forms', 'Please upgrade to Sprout Forms Pro Edition to create unlimited forms.'));
+            }
 
             $form = SproutForms::$app->forms->createNewForm();
 
@@ -222,17 +226,5 @@ class FormsController extends BaseController
         SproutForms::$app->forms->deleteForm($form);
 
         return $this->redirectToPostedUrl($form);
-    }
-
-    /**
-     * @throws WrongEditionException
-     */
-    private function validateEdition()
-    {
-        $canCreate = SproutForms::$app->forms->canCreateForm();
-
-        if (!$canCreate){
-            throw new WrongEditionException(Craft::t('sprout-forms', 'Please upgrade to Sprout Forms Pro Edition to create more forms.'));
-        }
     }
 }

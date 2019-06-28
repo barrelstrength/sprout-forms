@@ -1,5 +1,26 @@
 # Changelog
 
+## 3.2.1 - 2019-06-25
+
+### Changed
+- Added fieldtype class to base integration
+- Updated upgrade messaging and buttons
+
+### Changed
+- Updated barrelstrength/sprout-base requirement to v5.0.4
+
+## 3.2.0 - 2019-06-24
+
+### Added
+- Added support for full-featured, single form, Lite Edition
+
+### Changed
+- Updated Captcha checks to take place before other event handles for `barrelstrength\sproutforms\elements\Entry::EVENT_BEFORE_SAVE` Event ([#295], [#298])
+- Updated barrelstrength/sprout-base requirement to v5.0.3
+
+[#295]: https://github.com/barrelstrength/craft-sprout-forms/pull/295
+[#298]: https://github.com/barrelstrength/craft-sprout-forms/issues/298
+
 ## 3.1.0 - 2019-06-17
 
 > {note} New Form Integrations feature provides extensible, user-friendly interface to send Form data to custom endpoints (CRM, Mailing List, etc.) or create Elements within Craft. Add multiple Integrations to a single form, log success and failure messages, and monitor your form submissions with Reports or Notifications.  
