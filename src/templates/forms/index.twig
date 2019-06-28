@@ -5,6 +5,7 @@
 {% set title = "Forms"|t('sprout-forms') %}
 {% set elementType = 'barrelstrength\\sproutforms\\elements\\Form' %}
 {% set canCreateForm = craft.app.getModule('sprout-forms').app.forms.canCreateForm() %}
+{% set isPro = craft.app.getModule('sprout-forms').is('pro') %}
 
 {% set groupId = null %}
 {% set groups = craft.sproutForms.getAllFormGroups('id') %}
@@ -14,7 +15,7 @@
         <a id="create-new-form" class="btn submit add icon {% if not canCreateForm %}sprout-disabled{% endif %}"
             href="{{ url('sprout-forms/forms/new') }}">{{ "New Form"|t('sprout-forms') }}</a>
 
-        {% if not canCreateForm %}
+        {% if not isPro %}
             {{ sprout.upgradeToProButton({
                 url: cpUrl('sprout-forms/upgrade'),
                 title: "Upgrade to Sprout Forms PRO to manage Unlimited Forms"|t('sprout-forms')
