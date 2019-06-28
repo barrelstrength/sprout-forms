@@ -37,7 +37,7 @@ class m180314_161522_sproutforms_plaintext_fields extends Migration
             $settings = Json::decode($plainTextField['settings']);
             $newType = SingleLine::class;
 
-            if ($settings['multiline']) {
+            if (isset($settings['multiline']) && $settings['multiline']) {
                 $newType = Paragraph::class;
                 $newSettings['columnType'] = 'text';
                 $newSettings['initialRows'] = $settings['initialRows'];
