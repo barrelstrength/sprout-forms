@@ -1,5 +1,23 @@
 # Changelog
 
+## 3.2.2 - 2019-06-28
+
+### Changed
+- Updated barrelstrength/sprout-base-email requirement to v1.1.1
+- Updated barrelstrength/sprout-base-reports requirement to 1.2.1
+
+### Fixed
+- Fixed bug where Edition setting was incorrect after updating to Sprout Forms 3.2 ([#286], [301])
+- Fixed bug where Data Source grouping could cause reports to disappear from the UI ([#297], [#286])
+- Fixed bug when previewing a Notification Email ([#119][#119-sproutemail])
+- Fixed bug where deleting notification redirected to incorrect URL ([#294])
+
+[#119-sproutemail]: https://github.com/barrelstrength/craft-sprout-email/issues/119
+[#286]: https://github.com/barrelstrength/craft-sprout-forms/issues/286
+[#294]: https://github.com/barrelstrength/craft-sprout-forms/issues/294
+[#297]: https://github.com/barrelstrength/craft-sprout-forms/issues/297
+[#301]: https://github.com/barrelstrength/craft-sprout-forms/issues/301
+
 ## 3.2.1 - 2019-06-25
 
 ### Changed
