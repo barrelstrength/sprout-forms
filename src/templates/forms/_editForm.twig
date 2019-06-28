@@ -5,7 +5,7 @@
 {% import "_includes/forms" as forms %}
 {% import "sprout-forms/_includes/formbuilder" as formBuilder %}
 
-{% set canCreateForm = craft.app.getModule('sprout-forms').app.forms.canCreateForm() %}
+{% set isPro = craft.app.getModule('sprout-forms').is('pro') %}
 
 {% set crumbs = [
     { label: "Forms"|t('sprout-forms'), url: cpUrl('sprout-forms/forms') }
@@ -62,7 +62,7 @@
             {% endif %}
         </div>
 
-        {% if not canCreateForm %}
+        {% if not isPro %}
             {{ sprout.upgradeToProButton({
                 url: cpUrl('sprout-forms/upgrade'),
                 title: "Upgrade to Sprout Forms PRO to manage Unlimited Forms"|t('sprout-forms')
