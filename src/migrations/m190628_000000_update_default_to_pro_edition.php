@@ -17,6 +17,13 @@ class m190628_000000_update_default_to_pro_edition extends Migration
      */
     public function safeUp(): bool
     {
+        // Don't make the same config changes twice
+        $projectConfig = Craft::$app->getProjectConfig();
+        $schemaVersion = $projectConfig->get('plugins.sprout-forms.schemaVersion', true);
+        if (version_compare($schemaVersion, '3.2.1', '>=')) {
+            return;
+        }
+
         Craft::$app->getPlugins()->switchEdition('sprout-forms', SproutForms::EDITION_PRO);
 
         return true;
