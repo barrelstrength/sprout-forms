@@ -32,7 +32,7 @@ class EntriesController extends BaseController
      * @var string[]
      */
     protected $allowAnonymous = [
-        'save-entry'
+        'save-entry' => self::ALLOW_ANONYMOUS_LIVE
     ];
 
     /**
