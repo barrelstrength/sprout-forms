@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.2.3 - 2019-07-01
+
+### Changed
+- Updated Editions migration ([#307])
+
+[#307]: https://github.com/barrelstrength/craft-sprout-forms/pull/307
+
 ## 3.2.2 - 2019-06-28
 
 ### Changed
