@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.2.4 - 2019-07-01
+
+### Fixed
+- Fixed Editions migration ([#307])
+
 ## 3.2.3 - 2019-07-01
 
 ### Changed
