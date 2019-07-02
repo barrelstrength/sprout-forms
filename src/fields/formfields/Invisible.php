@@ -152,9 +152,19 @@ class Invisible extends FormField implements PreviewableFieldInterface
      * @throws \craft\errors\MissingComponentException
      * @throws \yii\base\Exception
      */
-    public function normalizeValue($value, ElementInterface $element = null): string
+    public function normalizeValue($value, ElementInterface $element = null)
     {
-        return Craft::$app->getSession()->get($this->handle) ?? '';
+        $invisibleValue = Craft::$app->getSession()->get($this->handle);
+
+        // If we have have a value stored in the session for the Invisible Field, use it
+        if ($invisibleValue) {
+            $value = $invisibleValue;
+        }
+
+        // Clean up so the session value doesn't persist
+        Craft::$app->getSession()->set($this->handle, null);
+
+        return parent::normalizeValue($value, $element);
     }
 
     /**
@@ -164,7 +174,7 @@ class Invisible extends FormField implements PreviewableFieldInterface
     {
         $hiddenValue = '';
 
-        if ($value != '') {
+        if ($value !== '' && $value !== null) {
             $hiddenValue = $this->hideValue ? '&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;' : $value;
         }
 
