@@ -394,10 +394,10 @@ class Entry extends Element
 
     /**
      * Returns the form element associated with this entry
-     *
-     * @return Form
+     * Due to soft delete, deleted forms leaves entries with not forms
+     * @return Form|null
      */
-    public function getForm(): Form
+    public function getForm()
     {
         if ($this->form === null) {
             $this->form = SproutForms::$app->forms->getFormById($this->formId);
