@@ -1,5 +1,23 @@
 # Changelog
 
+## 3.3.0 - 2019-07-03
+
+> {note} This release adds a new, interactive results page for your reports including search, ordering columns, and pagination. Enjoy!
+
+### Added
+- Added support for search, ordering columns, and pagination on results pages
+
+### Changed
+- Updated barrelstrength/sprout-base-reports requirement to 1.3.0
+
+### Fixed
+- Fixed bug when retrieving values from the database for the Invisible field. ([#304])
+- Fixed bug where `Entry::getForm()` could return null ([#306])
+- Fixed bug where Form ID was not being set on Custom Endpoint Integration migration
+
+[#304]: https://github.com/barrelstrength/craft-sprout-forms/issues/304
+[#306]: https://github.com/barrelstrength/craft-sprout-forms/issues/306
+
 ## 3.2.4 - 2019-07-01
 
 ### Fixed
