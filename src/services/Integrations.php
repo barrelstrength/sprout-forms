@@ -89,6 +89,7 @@ class Integrations extends Component
                 'integrations.name',
                 'integrations.type',
                 'integrations.settings',
+                'integrations.confirmation',
                 'integrations.enabled'
             ])
             ->from(['{{%sproutforms_integrations}} integrations'])
@@ -121,7 +122,8 @@ class Integrations extends Component
                 'integrations.name',
                 'integrations.type',
                 'integrations.settings',
-                'integrations.enabled'
+                'integrations.enabled',
+                'integrations.confirmation'
             ])
             ->from(['{{%sproutforms_integrations}} integrations'])
             ->where(['integrations.id' => $integrationId])
@@ -153,6 +155,7 @@ class Integrations extends Component
         $integrationRecord->formId = $integration->formId;
         $integrationRecord->name = $integration->name ?? $integration::displayName();
         $integrationRecord->enabled = $integration->enabled;
+        $integrationRecord->confirmation = $integration->confirmation;
 
         $integrationRecord->settings = $integration->getSettings();
 
@@ -322,6 +325,26 @@ class Integrations extends Component
         $entryId = $entry->id ?? null;
 
         foreach ($integrations as $integration) {
+            if ($integration->confirmation){
+                // it's a opt-in field
+                if (isset($entry->{$integration->confirmation})){
+                    if (!$entry->{$integration->confirmation}){
+                        // skip this integration
+                        continue;
+                    }
+                }else{
+                    // its a custom confirmation
+                    try {
+                        $value = trim(Craft::$app->view->renderObjectTemplate($integration->confirmation, $entry));
+                        if (!filter_var($value, FILTER_VALIDATE_BOOLEAN)){
+                            continue;
+                        }
+                    } catch (\Exception $e) {
+                        Craft::error($e->getMessage(), __METHOD__);
+                    }
+                }
+            }
+
             if ($integration->enabled) {
                 $submissionLog = new SubmissionLog();
 
