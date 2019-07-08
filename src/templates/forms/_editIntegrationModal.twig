@@ -34,7 +34,7 @@
         name: 'confirmation',
         options: integration.getConfirmationOptions(),
         value: integration.confirmation ?? null,
-        otherPlaceholderText: "(object.optIn && object.fieldHandle == 'cat')"|t('sprout-forms'),
+        otherPlaceholderText: "{% if fieldHandle == 'cat' %}true{% else %}false{% endif %}"|t('sprout-forms'),
     })) }}
 
     {% namespace 'settings['~className(integration)~']' %}
