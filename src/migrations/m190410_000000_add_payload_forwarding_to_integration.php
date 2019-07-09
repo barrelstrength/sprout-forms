@@ -50,6 +50,7 @@ class m190410_000000_add_payload_forwarding_to_integration extends Migration
             $settings = [];
 
             if ($form['submitAction']) {
+                $integration->formId = $form['id'];
                 $enableIntegrations = true;
                 $settings['submitAction'] = $form['submitAction'];
                 $formFields = $integration->getFormFieldsAsMappingOptions();

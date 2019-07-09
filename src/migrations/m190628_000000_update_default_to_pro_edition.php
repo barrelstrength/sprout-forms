@@ -2,9 +2,9 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
+use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\db\Migration;
-use craft\services\Plugins;
 
 /**
  * m190628_000000_update_default_to_pro_edition migration.
@@ -17,9 +17,14 @@ class m190628_000000_update_default_to_pro_edition extends Migration
      */
     public function safeUp(): bool
     {
+        // Don't make the same config changes twice
         $projectConfig = Craft::$app->getProjectConfig();
-        $pluginHandle = 'sprout-forms';
-        $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.edition', 'pro');
+        $schemaVersion = $projectConfig->get('plugins.sprout-forms.schemaVersion', true);
+        if (version_compare($schemaVersion, '3.2.1', '>=')) {
+            return true;
+        }
+
+        Craft::$app->getPlugins()->switchEdition('sprout-forms', SproutForms::EDITION_PRO);
 
         return true;
     }
