@@ -226,8 +226,6 @@ class SproutForms extends Plugin implements SproutEditionsInterface
 //            $event->types[] = BasicFieldsBundle::class;
 //            $event->types[] = SpecialFieldsBundle::class;
 //        });
-
-//        \Craft::dd(SproutForms::$app->integrations->getIntegrationById(18));
     }
 
     /**

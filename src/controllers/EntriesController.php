@@ -5,8 +5,11 @@ namespace barrelstrength\sproutforms\controllers;
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
 use Craft;
+use craft\errors\MissingComponentException;
 use craft\web\Controller as BaseController;
+use Throwable;
 use yii\base\Exception;
+use yii\base\InvalidConfigException;
 use yii\web\BadRequestHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
@@ -19,7 +22,7 @@ use yii\web\Response;
 
 /**
  *
- * @property null|\barrelstrength\sproutforms\elements\Entry $entryModel
+ * @property null|EntryElement $entryModel
  */
 class EntriesController extends BaseController
 {
@@ -32,7 +35,7 @@ class EntriesController extends BaseController
      * @var string[]
      */
     protected $allowAnonymous = [
-        'save-entry'
+        'save-entry' => self::ALLOW_ANONYMOUS_LIVE
     ];
 
     /**
@@ -54,7 +57,7 @@ class EntriesController extends BaseController
      * @throws Exception
      * @throws ForbiddenHttpException
      * @throws \Exception
-     * @throws \Throwable
+     * @throws Throwable
      * @throws BadRequestHttpException
      */
     public function actionSaveEntry()
@@ -126,7 +129,7 @@ class EntriesController extends BaseController
      * @return null|Response
      * @throws Exception
      * @throws \Exception
-     * @throws \Throwable
+     * @throws Throwable
      * @throws BadRequestHttpException
      */
     private function saveEntryInCraft(Entry $entry)
@@ -170,8 +173,8 @@ class EntriesController extends BaseController
      * @return Response
      * @throws ForbiddenHttpException
      * @throws NotFoundHttpException
-     * @throws \craft\errors\MissingComponentException
-     * @throws \yii\base\InvalidConfigException
+     * @throws MissingComponentException
+     * @throws InvalidConfigException
      */
     public function actionEditEntry(int $entryId = null, EntryElement $entry = null): Response
     {
@@ -235,7 +238,7 @@ class EntriesController extends BaseController
 
     /**
      * @return Response
-     * @throws \Throwable
+     * @throws Throwable
      * @throws BadRequestHttpException
      */
     public function actionDeleteEntry(): Response
@@ -316,7 +319,7 @@ class EntriesController extends BaseController
      *
      * @return null|Response
      * @throws BadRequestHttpException
-     * @throws \craft\errors\MissingComponentException
+     * @throws MissingComponentException
      */
     private function redirectWithErrors(Entry $entry)
     {
@@ -373,7 +376,7 @@ class EntriesController extends BaseController
     /**
      * @param $entry
      *
-     * @throws \craft\errors\MissingComponentException
+     * @throws MissingComponentException
      */
     private function createLastEntryId($entry)
     {
