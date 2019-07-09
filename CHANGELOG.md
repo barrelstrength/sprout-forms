@@ -6,6 +6,7 @@
 - Added support for Craft 3.2 allowAnonymous updates
 
 ### Changed
+- Updated craftcms/cms requirement to v3.2.0
 - Updated barrelstrength/sprout-base-fields requirement to 1.0.8
 
 ## 3.3.0 - 2019-07-03
