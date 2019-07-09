@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.3.1 - 2019-07-09
+
+### Added
+- Added support for Craft 3.2 allowAnonymous updates
+
+### Changed
+- Updated barrelstrength/sprout-base-fields requirement to 1.0.8
+
 ## 3.3.0 - 2019-07-03
 
 > {tip} This release adds a new, interactive results page for your reports including search, ordering columns, and pagination. Enjoy!
@@ -71,7 +79,7 @@
 
 ## 3.1.0 - 2019-06-17
 
-> {note} New Form Integrations feature provides extensible, user-friendly interface to send Form data to custom endpoints (CRM, Mailing List, etc.) or create Elements within Craft. Add multiple Integrations to a single form, log success and failure messages, and monitor your form submissions with Reports or Notifications.  
+> {tip} New Form Integrations feature provides extensible, user-friendly interface to send Form data to custom endpoints (CRM, Mailing List, etc.) or create Elements within Craft. Add multiple Integrations to a single form, log success and failure messages, and monitor your form submissions with Reports or Notifications.  
 
 ### Added
 - Added Integration API
@@ -273,7 +281,7 @@
 
 ## 3.0.0-beta.44 - 2019-02-18
 
-> {note} This release includes updates to the default Notification Email Templates and updates to what variables are defined by default for the Hidden and Invisible Fields. Please be sure to review your custom Form implementations if you use these features and ensure everything is working as you'd like.
+> {warning} This release includes updates to the default Notification Email Templates and updates to what variables are defined by default for the Hidden and Invisible Fields. Please be sure to review your custom Form implementations if you use these features and ensure everything is working as you'd like.
  
 ### Added
 - Added support for Markdown and custom true/false values for Opt-in Field ([#216])
