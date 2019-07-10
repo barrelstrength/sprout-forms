@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.3.2 - 2019-07-09
+
+### Changed
+- Updated Report Name to be dynamic
+- Updated barrelstrength/sprout-base-reports requirement to 1.3.1
+
+### Fixed
+- Fixed display bug where Report column headers could be incorrect width
+- Fixed display bug where Report column header order arrow would repeat in Safari
+
 ## 3.3.1 - 2019-07-09
 
 ### Added
