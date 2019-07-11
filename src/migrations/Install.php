@@ -131,7 +131,6 @@ class Install extends Migration
             'formId' => $this->integer()->notNull(),
             'name' => $this->string()->notNull(),
             'type' => $this->string()->notNull(),
-            'confirmation' => $this->string(),
             'settings' => $this->text(),
             'enabled' => $this->boolean()->defaultValue(false),
             'dateCreated' => $this->dateTime()->notNull(),
