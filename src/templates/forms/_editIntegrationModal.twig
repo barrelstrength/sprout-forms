@@ -1,4 +1,5 @@
 {% import "_includes/forms" as forms %}
+{% import "sprout-base-fields/_includes/forms" as sproutFields %}
 
 <div id="sprout-content">
     {% set integrationTypeGroups = craft.sproutForms.prepareIntegrationTypeSelection() %}
@@ -25,6 +26,17 @@
         required: true,
     }) }}
 
+    {{ forms.field({
+        label: "Confirmation <span class='info'>Evalutes whether a form submission has successfully opt-ed in to send the Integration request to the API. If true, we send the request, if false, we don't.</span>"|t('sprout-forms'),
+        required: true,
+        errors: (form is defined ? form.getErrors('confirmation') : null)
+    }, sproutFields.selectOther({
+        name: 'confirmation',
+        options: integration.getConfirmationOptions(),
+        value: integration.confirmation ?? null,
+        otherPlaceholderText: "{% if fieldHandle == 'cat' %}true{% else %}false{% endif %}"|t('sprout-forms'),
+    })) }}
+
     {% namespace 'settings['~className(integration)~']' %}
         {{ integration.getSettingsHtml()|raw }}
     {% endnamespace %}
@@ -48,3 +60,11 @@
         errors: integration.getErrors('type') ?? null
     }) }}
 </div>
+
+{% js %}
+    $(document).ready(function() {
+        if (Craft.SproutFields != null) {
+            Craft.SproutFields.initFields($(".field"));
+        }
+    });
+{% endjs %}

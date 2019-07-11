@@ -87,6 +87,7 @@ class IntegrationsController extends BaseController
         $integration->formId = $request->getBodyParam('formId');
         $integration->name = $request->getBodyParam('name');
         $integration->enabled = $request->getBodyParam('enabled');
+        $integration->confirmation = $request->getBodyParam('confirmation');
 
         $settings = $request->getBodyParam('settings.'.$type);
 
@@ -95,6 +96,7 @@ class IntegrationsController extends BaseController
             'formId' => $integration->formId,
             'name' => $integration->name,
             'enabled' => $integration->enabled,
+            'confirmation' => $integration->confirmation,
             'type' => get_class($integration),
             'settings' => $settings,
         ]);
@@ -135,6 +137,7 @@ class IntegrationsController extends BaseController
             $message = Craft::t('sprout-forms', 'No integration found with id: {id}', [
                 'id' => $integrationId
             ]);
+
             Craft::error($message, __METHOD__);
 
             return $this->asJson([

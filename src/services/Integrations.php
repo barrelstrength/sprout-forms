@@ -89,6 +89,7 @@ class Integrations extends Component
                 'integrations.name',
                 'integrations.type',
                 'integrations.settings',
+                'integrations.confirmation',
                 'integrations.enabled'
             ])
             ->from(['{{%sproutforms_integrations}} integrations'])
@@ -121,7 +122,8 @@ class Integrations extends Component
                 'integrations.name',
                 'integrations.type',
                 'integrations.settings',
-                'integrations.enabled'
+                'integrations.enabled',
+                'integrations.confirmation'
             ])
             ->from(['{{%sproutforms_integrations}} integrations'])
             ->where(['integrations.id' => $integrationId])
@@ -153,6 +155,7 @@ class Integrations extends Component
         $integrationRecord->formId = $integration->formId;
         $integrationRecord->name = $integration->name ?? $integration::displayName();
         $integrationRecord->enabled = $integration->enabled;
+        $integrationRecord->confirmation = $integration->confirmation;
 
         $integrationRecord->settings = $integration->getSettings();
 
@@ -305,6 +308,7 @@ class Integrations extends Component
      * @throws Exception
      * @throws InvalidConfigException
      * @throws MissingComponentException
+     * @throws \Throwable
      */
     public function runFormIntegrations(Entry $entry)
     {
@@ -322,6 +326,10 @@ class Integrations extends Component
         $entryId = $entry->id ?? null;
 
         foreach ($integrations as $integration) {
+            if ($this->skipIntegration($integration, $entry)){
+                continue;
+            }
+
             if ($integration->enabled) {
                 $submissionLog = new SubmissionLog();
 
@@ -400,5 +408,38 @@ class Integrations extends Component
 
             $this->trigger(self::EVENT_AFTER_INTEGRATION_SUBMIT, $event);
         }
+    }
+
+    /**
+     * @param $integration
+     * @param $entry
+     * @return bool
+     * @throws \Throwable
+     */
+    private function skipIntegration($integration, $entry)
+    {
+        // By default is always
+        if (empty($integration->confirmation)){
+            return false;
+        }
+
+        // it's a opt-in field
+        if (isset($entry->{$integration->confirmation})){
+            if (!$entry->{$integration->confirmation}){
+                // skip this integration
+                return true;
+            }
+        }else{// its a custom confirmation
+            try {
+                $value = trim(Craft::$app->view->renderObjectTemplate($integration->confirmation, $entry));
+                if (!filter_var($value, FILTER_VALIDATE_BOOLEAN)){
+                    return true;
+                }
+            } catch (\Exception $e) {
+                Craft::error($e->getMessage(), __METHOD__);
+            }
+        }
+
+        return false;
     }
 }
