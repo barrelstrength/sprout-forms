@@ -136,3 +136,18 @@
     {% endif %}
 {% endblock %}
 
+{% css %}
+    #content-container #tabs ul{
+    width: 100% !important;
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    }
+
+    #content-container #tabs ul li {
+    display: inline-table;
+    }
+
+{% endcss %}
+
