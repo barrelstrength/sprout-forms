@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.3.3 - 2019-07-09
+
+### Fixed
+- Fixed display bug where large numbers of Tabs on Entries Edit page did not scroll ([#309])
+- Fixed issue where users could not edit fields with Edit Forms permission ([#310])
+
+[#309]: https://github.com/barrelstrength/craft-sprout-forms/issues/309
+[#310]: https://github.com/barrelstrength/craft-sprout-forms/issues/310
+
 ## 3.3.2 - 2019-07-09
 
 ### Changed
