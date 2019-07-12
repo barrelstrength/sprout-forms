@@ -505,7 +505,7 @@ class Fields extends Component
     /**
      * This service allows update a field to a current FieldLayoutFieldRecord
      *
-     * @param Field $field
+     * @param Field       $field
      * @param FormElement $form
      * @param int         $tabId
      *

@@ -1,8 +1,105 @@
 # Changelog
 
+## 3.3.3 - 2019-07-09
+
+### Fixed
+- Fixed display bug where large numbers of Tabs on Entries Edit page did not scroll ([#309])
+- Fixed issue where users could not edit fields with Edit Forms permission ([#310])
+
+[#309]: https://github.com/barrelstrength/craft-sprout-forms/issues/309
+[#310]: https://github.com/barrelstrength/craft-sprout-forms/issues/310
+
+## 3.3.2 - 2019-07-09
+
+### Changed
+- Updated Report Name to be dynamic
+- Updated barrelstrength/sprout-base-reports requirement to 1.3.1
+
+### Fixed
+- Fixed display bug where Report column headers could be incorrect width
+- Fixed display bug where Report column header order arrow would repeat in Safari
+
+## 3.3.1 - 2019-07-09
+
+### Added
+- Added support for Craft 3.2 allowAnonymous updates
+
+### Changed
+- Updated craftcms/cms requirement to v3.2.0
+- Updated barrelstrength/sprout-base-fields requirement to 1.0.8
+
+## 3.3.0 - 2019-07-03
+
+> {tip} This release adds a new, interactive results page for your reports including search, ordering columns, and pagination. Enjoy!
+
+### Added
+- Added support for search, ordering columns, and pagination on results pages
+
+### Changed
+- Updated barrelstrength/sprout-base-reports requirement to 1.3.0
+
+### Fixed
+- Fixed bug when retrieving values from the database for the Invisible field. ([#304])
+- Fixed bug where `Entry::getForm()` could return null ([#306])
+- Fixed bug where Form ID was not being set on Custom Endpoint Integration migration
+
+[#304]: https://github.com/barrelstrength/craft-sprout-forms/issues/304
+[#306]: https://github.com/barrelstrength/craft-sprout-forms/issues/306
+
+## 3.2.4 - 2019-07-01
+
+### Fixed
+- Fixed Editions migration ([#307])
+
+## 3.2.3 - 2019-07-01
+
+### Changed
+- Updated Editions migration ([#307])
+
+[#307]: https://github.com/barrelstrength/craft-sprout-forms/pull/307
+
+## 3.2.2 - 2019-06-28
+
+### Changed
+- Updated barrelstrength/sprout-base-email requirement to v1.1.1
+- Updated barrelstrength/sprout-base-reports requirement to 1.2.1
+
+### Fixed
+- Fixed bug where Edition setting was incorrect after updating to Sprout Forms 3.2 ([#286], [301])
+- Fixed bug where Data Source grouping could cause reports to disappear from the UI ([#297], [#286])
+- Fixed bug when previewing a Notification Email ([#119][#119-sproutemail])
+- Fixed bug where deleting notification redirected to incorrect URL ([#294])
+
+[#119-sproutemail]: https://github.com/barrelstrength/craft-sprout-email/issues/119
+[#286]: https://github.com/barrelstrength/craft-sprout-forms/issues/286
+[#294]: https://github.com/barrelstrength/craft-sprout-forms/issues/294
+[#297]: https://github.com/barrelstrength/craft-sprout-forms/issues/297
+[#301]: https://github.com/barrelstrength/craft-sprout-forms/issues/301
+
+## 3.2.1 - 2019-06-25
+
+### Changed
+- Added fieldtype class to base integration
+- Updated upgrade messaging and buttons
+
+### Changed
+- Updated barrelstrength/sprout-base requirement to v5.0.4
+
+## 3.2.0 - 2019-06-24
+
+### Added
+- Added support for full-featured, single form, Lite Edition
+
+### Changed
+- Updated Captcha checks to take place before other event handles for `barrelstrength\sproutforms\elements\Entry::EVENT_BEFORE_SAVE` Event ([#295], [#298])
+- Updated barrelstrength/sprout-base requirement to v5.0.3
+
+[#295]: https://github.com/barrelstrength/craft-sprout-forms/pull/295
+[#298]: https://github.com/barrelstrength/craft-sprout-forms/issues/298
+
 ## 3.1.0 - 2019-06-17
 
-> {note} New Form Integrations feature provides extensible, user-friendly interface to send Form data to custom endpoints (CRM, Mailing List, etc.) or create Elements within Craft. Add multiple Integrations to a single form, log success and failure messages, and monitor your form submissions with Reports or Notifications.  
+> {tip} New Form Integrations feature provides extensible, user-friendly interface to send Form data to custom endpoints (CRM, Mailing List, etc.) or create Elements within Craft. Add multiple Integrations to a single form, log success and failure messages, and monitor your form submissions with Reports or Notifications.  
 
 ### Added
 - Added Integration API
@@ -204,7 +301,7 @@
 
 ## 3.0.0-beta.44 - 2019-02-18
 
-> {note} This release includes updates to the default Notification Email Templates and updates to what variables are defined by default for the Hidden and Invisible Fields. Please be sure to review your custom Form implementations if you use these features and ensure everything is working as you'd like.
+> {warning} This release includes updates to the default Notification Email Templates and updates to what variables are defined by default for the Hidden and Invisible Fields. Please be sure to review your custom Form implementations if you use these features and ensure everything is working as you'd like.
  
 ### Added
 - Added support for Markdown and custom true/false values for Opt-in Field ([#216])

@@ -2,6 +2,8 @@
 
 namespace barrelstrength\sproutforms;
 
+use barrelstrength\sproutbase\base\SproutEditionsInterface;
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutbaseemail\services\EmailTemplates;
 use barrelstrength\sproutbaseemail\SproutBaseEmailHelper;
 use barrelstrength\sproutbasefields\SproutBaseFieldsHelper;
@@ -65,9 +67,10 @@ use yii\web\Response;
  * @property null|array           $cpNavItem
  * @property array                $cpUrlRules
  * @property $this|Response|mixed $settingsResponse
+ * @property null|string          $upgradeUrl
  * @property array                $userPermissions
  */
-class SproutForms extends Plugin
+class SproutForms extends Plugin implements SproutEditionsInterface
 {
     use BaseSproutTrait;
 
@@ -98,12 +101,15 @@ class SproutForms extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '3.0.20';
+    public $schemaVersion = '3.2.1';
 
     /**
      * @var string
      */
     public $minVersionRequired = '2.5.1';
+
+    const EDITION_LITE = 'lite';
+    const EDITION_PRO = 'pro';
 
     /**
      * @throws InvalidConfigException
@@ -187,7 +193,7 @@ class SproutForms extends Plugin
                     $captcha->verifySubmission($event);
                 }
             }
-        });
+        }, null, false);
 
         Event::on(Entries::class, EntryElement::EVENT_AFTER_SAVE, static function(OnSaveEntryEvent $event) {
             SproutForms::$app->integrations->runFormIntegrations($event->entry);
@@ -224,12 +230,33 @@ class SproutForms extends Plugin
 //            $event->types[] = BasicFieldsBundle::class;
 //            $event->types[] = SpecialFieldsBundle::class;
 //        });
-
-//        \Craft::dd(SproutForms::$app->integrations->getIntegrationById(18));
     }
 
     /**
-     * @return Settings|\craft\base\Model|null
+     * @inheritDoc
+     */
+    public static function editions(): array
+    {
+        return [
+            self::EDITION_LITE,
+            self::EDITION_PRO,
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getUpgradeUrl()
+    {
+        if (!SproutBase::$app->settings->isEdition('sprout-forms', self::EDITION_PRO)) {
+            return UrlHelper::cpUrl('sprout-forms/upgrade');
+        }
+
+        return null;
+    }
+
+    /**
+     * @inheritDoc
      */
     protected function createSettingsModel()
     {

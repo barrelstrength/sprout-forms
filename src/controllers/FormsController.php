@@ -4,8 +4,10 @@ namespace barrelstrength\sproutforms\controllers;
 
 use Craft;
 use craft\base\ElementInterface;
+use craft\errors\WrongEditionException;
 use craft\web\Controller as BaseController;
 use craft\helpers\UrlHelper;
+use yii\base\InvalidConfigException;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 use yii\base\Exception;
@@ -19,7 +21,7 @@ class FormsController extends BaseController
 {
     /**
      * @throws HttpException
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function init()
     {
@@ -30,7 +32,7 @@ class FormsController extends BaseController
     /**
      * Save a form
      *
-     * @return null|\yii\web\Response
+     * @return null|Response
      * @throws NotFoundHttpException
      * @throws \Exception
      * @throws \Throwable
@@ -162,6 +164,12 @@ class FormsController extends BaseController
 
         // Immediately create a new Form
         if ($newForm) {
+
+            // Make sure Pro is installed before we create a new form
+            if (!SproutForms::$app->forms->canCreateForm()) {
+                throw new WrongEditionException(Craft::t('sprout-forms', 'Please upgrade to Sprout Forms Pro Edition to create unlimited forms.'));
+            }
+
             $form = SproutForms::$app->forms->createNewForm();
 
             if ($form) {

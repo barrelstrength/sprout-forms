@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\services;
 
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\base\FormTemplates;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
@@ -776,5 +777,25 @@ class Forms extends Component
         }
 
         return $captchaHtml;
+    }
+
+    /**
+     * Checks if the current plugin edition allows a user to create a Form
+     *
+     * @return bool
+     */
+    public function canCreateForm(): bool
+    {
+        $isPro = SproutBase::$app->settings->isEdition('sprout-forms', SproutForms::EDITION_PRO);
+
+        if (!$isPro) {
+            $forms = $this->getAllForms();
+
+            if (count($forms) >= 1) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

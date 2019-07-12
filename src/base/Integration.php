@@ -251,7 +251,8 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
                     CraftPlainText::class,
                     CraftDropdown::class,
                     CraftNumber::class
-                ]
+                ],
+                'fieldType' => SingleLine::class
             ],
             [
                 'label' => Craft::t('sprout-forms', 'Entry ID'),
@@ -260,7 +261,8 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
                     CraftPlainText::class,
                     CraftDropdown::class,
                     CraftNumber::class
-                ]
+                ],
+                'fieldType' => SingleLine::class
             ],
             [
                 'label' => Craft::t('sprout-forms', 'Title'),
@@ -268,14 +270,16 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
                 'compatibleCraftFields' => [
                     CraftPlainText::class,
                     CraftDropdown::class
-                ]
+                ],
+                'fieldType' => SingleLine::class
             ],
             [
                 'label' => Craft::t('sprout-forms', 'Date Created'),
                 'value' => 'dateCreated',
                 'compatibleCraftFields' => [
                     CraftDate::class
-                ]
+                ],
+                'fieldType' => SingleLine::class
             ],
             [
                 'label' => Craft::t('sprout-forms', 'IP Address'),
@@ -283,14 +287,16 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
                 'compatibleCraftFields' => [
                     CraftPlainText::class,
                     CraftDropdown::class
-                ]
+                ],
+                'fieldType' => SingleLine::class
             ],
             [
                 'label' => Craft::t('sprout-forms', 'User Agent'),
                 'value' => 'userAgent',
                 'compatibleCraftFields' => [
                     CraftPlainText::class
-                ]
+                ],
+                'fieldType' => SingleLine::class
             ]
         ]);
 

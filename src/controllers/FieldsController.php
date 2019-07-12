@@ -212,7 +212,7 @@ class FieldsController extends BaseController
     public function actionSaveField(): Response
     {
         $this->requirePostRequest();
-        $this->requirePermission('sproutForms-editEntries');
+        $this->requirePermission('sproutForms-editForms');
 
         $request = Craft::$app->getRequest();
         $fieldsService = Craft::$app->getFields();
@@ -341,7 +341,7 @@ class FieldsController extends BaseController
     public function actionEditField(): Response
     {
         $this->requireAcceptsJson();
-        $this->requirePermission('sproutForms-editEntries');
+        $this->requirePermission('sproutForms-editForms');
 
         $request = Craft::$app->getRequest();
 
