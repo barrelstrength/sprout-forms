@@ -42,4 +42,11 @@ trait IntegrationTrait
      * @var array|null
      */
     public $fieldMapping;
+
+    /**
+     * Whether this Integration will be submitted
+     *
+     * @var boolean
+     */
+    public $confirmation;
 }

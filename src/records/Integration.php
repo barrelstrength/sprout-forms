@@ -12,6 +12,7 @@ use barrelstrength\sproutforms\base\Integration as IntegrationApi;
  * @property                                                   $formId
  * @property                                                   $name
  * @property                                                   $type
+ * @property                                                   $confirmation
  * @property                                                   $settings
  * @property null|IntegrationApi                               $integrationApi
  * @property                                                   $enabled

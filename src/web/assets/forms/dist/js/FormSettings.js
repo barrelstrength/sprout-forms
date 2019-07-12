@@ -83,8 +83,8 @@ if (typeof Craft.SproutForms === typeof undefined) {
             var $integrationDiv = $("#sproutform-integration-" + integration.id);
 
             var $container = $("#integration-enabled-" + integration.id);
-            var currentValue = integration.enabled === 1;
-            var settingsValue = $container.attr('aria-checked');
+            var currentValue = integration.enabled === '1' ? true : false;
+            var settingsValue = $container.attr('aria-checked') === 'true' ? true : false;
             if (currentValue !== settingsValue) {
                 $container.attr('aria-checked', "" + currentValue);
                 if (currentValue) {

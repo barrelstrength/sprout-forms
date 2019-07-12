@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\base;
 
 use barrelstrength\sproutforms\fields\formfields\Number;
+use barrelstrength\sproutforms\fields\formfields\OptIn;
 use barrelstrength\sproutforms\fields\formfields\SingleLine;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\SproutForms;
@@ -318,6 +319,56 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
                 ];
             }
         }
+
+        return $options;
+    }
+
+    /**
+     * @return array
+     * @throws InvalidConfigException
+     */
+    public function getConfirmationOptions(): array
+    {
+        $fields = $this->getForm()->getFields();
+        $optIns = [];
+        $fieldHandles = [];
+
+        foreach ($fields as $field) {
+            if (get_class($field) == OptIn::class){
+                $optIns[] = [
+                    'label' => $field->name.' ('.$field->handle.')',
+                    'value' => $field->handle,
+                ];
+                $fieldHandles[] = $field->handle;
+            }
+        }
+
+        $options = [
+            [
+                'label' => Craft::t('sprout-forms', 'Always'),
+                'value' => ''
+            ]
+        ];
+
+        $options = array_merge($options, $optIns);
+
+        $customConfirmation = $this->confirmation;
+
+        $options[] = [
+            'optgroup' => Craft::t('sprout-forms', 'Custom Template Folder')
+        ];
+
+        if (!in_array($this->confirmation, $fieldHandles, false) && $customConfirmation != '') {
+            $options[] = [
+                'label' => $customConfirmation,
+                'value' => $customConfirmation
+            ];
+        }
+
+        $options[] = [
+            'label' => Craft::t('sprout-forms', 'Add Custom'),
+            'value' => 'custom'
+        ];
 
         return $options;
     }
