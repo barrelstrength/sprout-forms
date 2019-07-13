@@ -5,11 +5,18 @@ namespace barrelstrength\sproutforms\fields\formfields;
 use barrelstrength\sproutforms\services\Forms;
 use Craft;
 use craft\base\ElementInterface;
+use craft\errors\MissingComponentException;
 use craft\fields\Dropdown as CraftDropdown;
 use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\PreviewableFieldInterface;
 use barrelstrength\sproutforms\base\FormField;
+use Exception;
+use Throwable;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use Twig\Markup;
 
 /**
  *
@@ -65,9 +72,9 @@ class Invisible extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      *
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getSettingsHtml()
     {
@@ -86,9 +93,9 @@ class Invisible extends FormField implements PreviewableFieldInterface
      * @param ElementInterface|null $element
      *
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -110,9 +117,9 @@ class Invisible extends FormField implements PreviewableFieldInterface
      * @inheritdoc
      *
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getExampleInputHtml(): string
     {
@@ -130,9 +137,9 @@ class Invisible extends FormField implements PreviewableFieldInterface
      * @param array|null $renderingOptions
      *
      * @return string
-     * @throws \Throwable
+     * @throws Throwable
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
         $this->preProcessInvisibleValue();
 
@@ -148,8 +155,8 @@ class Invisible extends FormField implements PreviewableFieldInterface
      * @param ElementInterface|null $element
      *
      * @return string
-     * @throws \Throwable
-     * @throws \craft\errors\MissingComponentException
+     * @throws Throwable
+     * @throws MissingComponentException
      * @throws \yii\base\Exception
      */
     public function normalizeValue($value, ElementInterface $element = null)
@@ -183,7 +190,7 @@ class Invisible extends FormField implements PreviewableFieldInterface
 
     /**
      * @return string
-     * @throws \Throwable
+     * @throws Throwable
      */
     private function preProcessInvisibleValue(): string
     {
@@ -193,7 +200,7 @@ class Invisible extends FormField implements PreviewableFieldInterface
             try {
                 $value = Craft::$app->view->renderObjectTemplate($this->value, Forms::getFieldVariables());
                 Craft::$app->getSession()->set($this->handle, $value);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 Craft::error($e->getMessage(), __METHOD__);
             }
         }

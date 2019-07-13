@@ -15,6 +15,8 @@ use barrelstrength\sproutforms\base\FormField;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use Twig\Markup;
+use Twig_Markup;
 
 /**
  *
@@ -146,12 +148,12 @@ class Email extends FormField implements PreviewableFieldInterface
      * @param mixed      $value
      * @param array|null $renderingOptions
      *
-     * @return \Twig_Markup
+     * @return Twig_Markup
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
         $attributes = $this->getAttributes();
         $errorMessage = SproutBaseFields::$app->emailField->getErrorMessage($attributes['name'], $this);

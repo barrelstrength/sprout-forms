@@ -5,6 +5,10 @@ namespace barrelstrength\sproutforms\base;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use Craft;
 use craft\base\Field;
+use ReflectionClass;
+use ReflectionException;
+use Twig\Markup;
+use Twig_Markup;
 
 /**
  * Class FormField
@@ -162,7 +166,7 @@ abstract class FormField extends Field
      * the folder is expected to use the Field Class short name.
      *
      * @return string
-     * @throws \ReflectionException
+     * @throws ReflectionException
      * @example
      * The PlainText Field Class would look for it's respective input HTML in the `plaintext/input.html`
      * file within the folder returned by getTemplatesPath()
@@ -170,7 +174,7 @@ abstract class FormField extends Field
      */
     public function getFieldInputFolder(): string
     {
-        $fieldClassReflection = new \ReflectionClass($this);
+        $fieldClassReflection = new ReflectionClass($this);
 
         return strtolower($fieldClassReflection->getShortName());
     }
@@ -188,7 +192,7 @@ abstract class FormField extends Field
      * @param mixed $value
      * @param array $renderingOptions
      *
-     * @return \Twig_Markup
+     * @return Twig_Markup
      */
-    abstract public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup;
+    abstract public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup;
 }

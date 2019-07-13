@@ -13,6 +13,11 @@ use craft\fields\data\MultiOptionsFieldData;
 use craft\helpers\DateTimeHelper;
 use barrelstrength\sproutforms\elements\Entry;
 use craft\elements\db\ElementQueryInterface;
+use DateTime;
+use Exception;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
  * Class EntriesDataSource
@@ -42,7 +47,7 @@ class EntriesDataSource extends DataSource
     /**
      * @inheritdoc
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getResults(Report $report, array $settings = []): array
     {
@@ -155,10 +160,10 @@ class EntriesDataSource extends DataSource
     /**
      * @inheritDoc
      *
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
-     * @throws \Exception
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws Exception
      */
     public function getSettingsHtml(array $settings = [])
     {
@@ -200,8 +205,8 @@ class EntriesDataSource extends DataSource
 
         return Craft::$app->getView()->renderTemplate('sprout-forms/_integrations/sproutreports/datasources/EntriesDataSource/settings', [
             'formOptions' => $formOptions,
-            'defaultStartDate' => new \DateTime($defaultStartDate),
-            'defaultEndDate' => new \DateTime($defaultEndDate),
+            'defaultStartDate' => new DateTime($defaultStartDate),
+            'defaultEndDate' => new DateTime($defaultEndDate),
             'dateRanges' => $dateRanges,
             'options' => $settings
         ]);
@@ -210,7 +215,7 @@ class EntriesDataSource extends DataSource
     /**
      * @inheritdoc
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function prepSettings(array $settings)
     {

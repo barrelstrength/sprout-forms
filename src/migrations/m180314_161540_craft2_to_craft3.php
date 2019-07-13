@@ -7,6 +7,7 @@ use craft\db\Migration;
 use craft\db\Query;
 
 use Craft;
+use craft\errors\SiteNotFoundException;
 use craft\helpers\Json;
 use craft\helpers\MigrationHelper;
 use barrelstrength\sproutbaseemail\elements\NotificationEmail;
@@ -15,6 +16,8 @@ use barrelstrength\sproutbaseemail\migrations\m180501_000002_rename_notification
 use barrelstrength\sproutbaseemail\migrations\m180501_000003_add_notification_columns;
 use barrelstrength\sproutbaseemail\migrations\m180515_000000_rename_notification_pluginId_column;
 use barrelstrength\sproutbaseemail\migrations\Install as SproutBaseNotificationInstall;
+use Throwable;
+use yii\base\NotSupportedException;
 
 /**
  * m180314_161540_craft2_to_craft3 migration.
@@ -24,9 +27,9 @@ class m180314_161540_craft2_to_craft3 extends Migration
     /**
      * @inheritdoc
      * @return bool
-     * @throws \Throwable
-     * @throws \craft\errors\SiteNotFoundException
-     * @throws \yii\base\NotSupportedException
+     * @throws Throwable
+     * @throws SiteNotFoundException
+     * @throws NotSupportedException
      */
     public function safeUp(): bool
     {

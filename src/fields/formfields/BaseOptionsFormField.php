@@ -10,6 +10,10 @@ use craft\fields\data\OptionData;
 use craft\fields\data\SingleOptionFieldData;
 use craft\helpers\Db;
 use craft\helpers\Json;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use yii\base\Exception;
 use yii\db\Schema;
 
 use barrelstrength\sproutforms\base\FormField;
@@ -82,7 +86,7 @@ abstract class BaseOptionsFormField extends FormField implements PreviewableFiel
 
     /**
      * @inheritdoc
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getContentColumnType(): string
     {
@@ -107,9 +111,9 @@ abstract class BaseOptionsFormField extends FormField implements PreviewableFiel
     /**
      * @inheritdoc
      *
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getSettingsHtml()
     {

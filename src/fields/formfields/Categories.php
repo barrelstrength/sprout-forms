@@ -11,6 +11,11 @@ use craft\helpers\ArrayHelper;
 use craft\helpers\ElementHelper;
 
 use barrelstrength\sproutforms\SproutForms;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use Twig\Markup;
+use yii\base\NotSupportedException;
 
 /**
  * Class SproutFormsCategoriesField
@@ -82,7 +87,7 @@ class Categories extends BaseRelationFormField
 
     /**
      * @inheritdoc
-     * @throws \yii\base\NotSupportedException
+     * @throws NotSupportedException
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -102,9 +107,9 @@ class Categories extends BaseRelationFormField
      * @inheritdoc
      *
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getExampleInputHtml(): string
     {
@@ -119,12 +124,12 @@ class Categories extends BaseRelationFormField
      * @param mixed      $value
      * @param array|null $renderingOptions
      *
-     * @return \Twig\Markup
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @return Markup
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
         $categories = SproutForms::$app->frontEndFields->getFrontEndCategories($this->getSettings());
 

@@ -6,6 +6,7 @@ use barrelstrength\sproutforms\fields\formfields\Paragraph;
 use barrelstrength\sproutforms\fields\formfields\SingleLine;
 use craft\db\Migration;
 use craft\db\Query;
+use yii\base\NotSupportedException;
 
 /**
  * m180611_000000_paragraph_column_type migration.
@@ -14,7 +15,7 @@ class m180611_000000_paragraph_column_type extends Migration
 {
     /**
      * @inheritdoc
-     * @throws \yii\base\NotSupportedException
+     * @throws NotSupportedException
      */
     public function safeUp(): bool
     {

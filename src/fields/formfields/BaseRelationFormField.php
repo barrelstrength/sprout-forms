@@ -19,6 +19,7 @@ use craft\helpers\Html;
 use craft\helpers\StringHelper;
 use craft\queue\jobs\LocalizeRelations;
 use craft\validators\ArrayValidator;
+use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -567,7 +568,7 @@ JS;
     /**
      * @inheritdoc
      *
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function afterElementSave(ElementInterface $element, bool $isNew)
     {

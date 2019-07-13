@@ -7,6 +7,7 @@ use craft\base\ElementAction;
 use craft\elements\db\ElementQueryInterface;
 
 use barrelstrength\sproutforms\SproutForms;
+use Throwable;
 
 /**
  *
@@ -59,7 +60,7 @@ class Delete extends ElementAction
 
     /**
      * @inheritdoc
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function performAction(ElementQueryInterface $query): bool
     {

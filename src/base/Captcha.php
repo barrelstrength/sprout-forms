@@ -5,6 +5,8 @@ namespace barrelstrength\sproutforms\base;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
+use ReflectionClass;
+use ReflectionException;
 
 /**
  * Class Captcha
@@ -25,7 +27,7 @@ abstract class Captcha
      * Generates the Captcha ID
      *
      * @return string
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function getCaptchaId(): string
     {
@@ -34,7 +36,7 @@ abstract class Captcha
         // Build $captchaId: pluginhandle-captchaclassname
         $pluginHandleWithoutSpaces = str_replace('-', '', $pluginHandle);
 
-        $captchaClass = (new \ReflectionClass($this))->getShortName();
+        $captchaClass = (new ReflectionClass($this))->getShortName();
 
         $captchaId = $pluginHandleWithoutSpaces.'-'.$captchaClass;
 
@@ -61,7 +63,7 @@ abstract class Captcha
      * Returns any values saved as settings for this captcha
      *
      * @return null
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function getSettings()
     {

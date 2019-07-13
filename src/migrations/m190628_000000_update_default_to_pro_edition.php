@@ -5,6 +5,7 @@ namespace barrelstrength\sproutforms\migrations;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\db\Migration;
+use Throwable;
 
 /**
  * m190628_000000_update_default_to_pro_edition migration.
@@ -13,7 +14,7 @@ class m190628_000000_update_default_to_pro_edition extends Migration
 {
     /**
      * @return bool
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function safeUp(): bool
     {

@@ -5,6 +5,7 @@ namespace barrelstrength\sproutforms\captchas;
 use barrelstrength\sproutforms\base\Captcha;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use Craft;
+use craft\errors\MissingComponentException;
 
 /**
  * Class InvisibleCaptcha
@@ -34,7 +35,7 @@ class JavascriptCaptcha extends Captcha
 
     /**
      * @inheritdoc
-     * @throws \craft\errors\MissingComponentException
+     * @throws MissingComponentException
      */
     public function getCaptchaHtml(): string
     {
@@ -55,7 +56,7 @@ class JavascriptCaptcha extends Captcha
 
     /**
      * @inheritdoc
-     * @throws \craft\errors\MissingComponentException
+     * @throws MissingComponentException
      */
     public function verifySubmission(OnBeforeSaveEntryEvent $event): bool
     {

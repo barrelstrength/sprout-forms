@@ -12,6 +12,11 @@ use barrelstrength\sproutforms\models\Settings;
 use craft\db\Migration;
 use Craft;
 use craft\services\Plugins;
+use ReflectionException;
+use yii\base\ErrorException;
+use yii\base\NotSupportedException;
+use yii\db\Exception;
+use yii\web\ServerErrorHttpException;
 
 /**
  * Installation Migration
@@ -21,12 +26,12 @@ class Install extends Migration
     /**
      * @inheritdoc
      *
-     * @throws \ReflectionException
-     * @throws \yii\base\ErrorException
+     * @throws ReflectionException
+     * @throws ErrorException
      * @throws \yii\base\Exception
-     * @throws \yii\base\NotSupportedException
-     * @throws \yii\db\Exception
-     * @throws \yii\web\ServerErrorHttpException
+     * @throws NotSupportedException
+     * @throws Exception
+     * @throws ServerErrorHttpException
      */
     public function safeUp(): bool
     {
@@ -48,7 +53,7 @@ class Install extends Migration
 
     /**
      * @inheritdoc
-     * @throws \yii\db\Exception
+     * @throws Exception
      */
     public function safeDown(): bool
     {
@@ -280,12 +285,12 @@ class Install extends Migration
     /**
      * Populates the DB with the default data.
      *
-     * @throws \ReflectionException
-     * @throws \yii\base\ErrorException
+     * @throws ReflectionException
+     * @throws ErrorException
      * @throws \yii\base\Exception
-     * @throws \yii\base\NotSupportedException
-     * @throws \yii\db\Exception
-     * @throws \yii\web\ServerErrorHttpException
+     * @throws NotSupportedException
+     * @throws Exception
+     * @throws ServerErrorHttpException
      */
     protected function insertDefaultData()
     {
