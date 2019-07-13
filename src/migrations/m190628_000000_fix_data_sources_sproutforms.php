@@ -3,9 +3,7 @@
 namespace barrelstrength\sproutforms\migrations;
 
 use barrelstrength\sproutbasereports\migrations\m190628_000000_fix_data_sources;
-use Craft;
 use craft\db\Migration;
-use craft\services\Plugins;
 use Throwable;
 
 /**

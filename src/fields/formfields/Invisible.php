@@ -149,15 +149,11 @@ class Invisible extends FormField implements PreviewableFieldInterface
     }
 
     /**
-     * @inheritdoc
-     *
      * @param                       $value
      * @param ElementInterface|null $element
      *
-     * @return string
-     * @throws Throwable
+     * @return mixed
      * @throws MissingComponentException
-     * @throws \yii\base\Exception
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
