@@ -6,6 +6,7 @@ use barrelstrength\sproutforms\fields\formfields\Checkboxes;
 use craft\db\Migration;
 use craft\db\Query;
 use craft\helpers\Json;
+use yii\base\NotSupportedException;
 
 /**
  * m180712_000000_checkboxes_serialize migration.
@@ -14,7 +15,7 @@ class m180712_000000_checkboxes_serialize extends Migration
 {
     /**
      * @inheritdoc
-     * @throws \yii\base\NotSupportedException
+     * @throws NotSupportedException
      */
     public function safeUp(): bool
     {

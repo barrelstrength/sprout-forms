@@ -14,6 +14,12 @@ use craft\helpers\Localization;
 use craft\i18n\Locale;
 
 use barrelstrength\sproutforms\base\FormField;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use Twig\Markup;
+use Twig_Markup;
+use yii\base\Exception;
 
 /**
  * Class SproutFormsNumberField
@@ -100,7 +106,7 @@ class Number extends FormField implements PreviewableFieldInterface
 
     /**
      * @inheritdoc
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getContentColumnType(): string
     {
@@ -125,9 +131,9 @@ class Number extends FormField implements PreviewableFieldInterface
 
     /**
      * @return null|string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getSettingsHtml()
     {
@@ -148,9 +154,9 @@ class Number extends FormField implements PreviewableFieldInterface
      * @param ElementInterface|null $element
      *
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -173,9 +179,9 @@ class Number extends FormField implements PreviewableFieldInterface
      * @inheritdoc
      *
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getExampleInputHtml(): string
     {
@@ -190,12 +196,12 @@ class Number extends FormField implements PreviewableFieldInterface
      * @param mixed      $value
      * @param array|null $renderingOptions
      *
-     * @return \Twig_Markup
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @return Twig_Markup
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
         $rendered = Craft::$app->getView()->renderTemplate(
             'number/input',

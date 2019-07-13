@@ -50,6 +50,8 @@ use craft\services\Fields;
 use craft\services\Plugins;
 use craft\web\UrlManager;
 use craft\services\UserPermissions;
+use Exception;
+use Throwable;
 use yii\base\Event;
 use craft\web\twig\variables\CraftVariable;
 use barrelstrength\sproutbase\SproutBaseHelper;
@@ -467,8 +469,8 @@ class SproutForms extends Plugin implements SproutEditionsInterface
 
     /**
      * @return bool
-     * @throws \Exception
-     * @throws \Throwable
+     * @throws Exception
+     * @throws Throwable
      */
     public function beforeUninstall(): bool
     {

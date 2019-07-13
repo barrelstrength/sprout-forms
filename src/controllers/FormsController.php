@@ -7,6 +7,7 @@ use craft\base\ElementInterface;
 use craft\errors\WrongEditionException;
 use craft\web\Controller as BaseController;
 use craft\helpers\UrlHelper;
+use Throwable;
 use yii\base\InvalidConfigException;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
@@ -35,7 +36,7 @@ class FormsController extends BaseController
      * @return null|Response
      * @throws NotFoundHttpException
      * @throws \Exception
-     * @throws \Throwable
+     * @throws Throwable
      * @throws BadRequestHttpException
      */
     public function actionSaveForm()
@@ -156,7 +157,7 @@ class FormsController extends BaseController
      * @return Response
      * @throws NotFoundHttpException
      * @throws \Exception
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function actionEditFormTemplate(int $formId = null, FormElement $form = null): Response
     {
@@ -206,7 +207,7 @@ class FormsController extends BaseController
      *
      * @return Response
      * @throws \Exception
-     * @throws \Throwable
+     * @throws Throwable
      * @throws BadRequestHttpException
      */
     public function actionDeleteForm(): Response

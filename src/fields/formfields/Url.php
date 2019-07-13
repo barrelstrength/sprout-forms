@@ -13,6 +13,12 @@ use craft\base\PreviewableFieldInterface;
 
 use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutbasefields\web\assets\url\UrlFieldAsset;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use Twig\Markup;
+use Twig_Markup;
+use yii\base\InvalidConfigException;
 
 /**
  *
@@ -64,9 +70,9 @@ class Url extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      *
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getSettingsHtml()
     {
@@ -85,10 +91,10 @@ class Url extends FormField implements PreviewableFieldInterface
      * @param ElementInterface|null $element
      *
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
-     * @throws \yii\base\InvalidConfigException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws InvalidConfigException
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -116,9 +122,9 @@ class Url extends FormField implements PreviewableFieldInterface
      * @inheritdoc
      *
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getExampleInputHtml(): string
     {
@@ -133,12 +139,12 @@ class Url extends FormField implements PreviewableFieldInterface
      * @param mixed      $value
      * @param array|null $renderingOptions
      *
-     * @return \Twig_Markup
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @return Twig_Markup
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
         $attributes = $this->getAttributes();
         $errorMessage = SproutBaseFields::$app->urlField->getErrorMessage($attributes['name'], $this);

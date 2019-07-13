@@ -5,6 +5,7 @@ namespace barrelstrength\sproutforms\integrations\sproutimport\fields;
 use barrelstrength\sproutbaseimport\base\FieldImporter;
 use barrelstrength\sproutbaseimport\SproutBaseImport;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
+use Exception;
 
 class Entries extends FieldImporter
 {
@@ -18,7 +19,7 @@ class Entries extends FieldImporter
 
     /**
      * @inheritdoc
-     * @throws \Exception
+     * @throws Exception
      */
     public function getMockData()
     {

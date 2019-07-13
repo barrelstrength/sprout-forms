@@ -379,7 +379,7 @@ class Fields extends Component
      * @param Form $form
      * @param      $postFieldLayout
      *
-     * @return \craft\models\FieldLayout|null
+     * @return FieldLayout|null
      * @throws Throwable
      */
     public function getDuplicateLayout(Form $form, FieldLayout $postFieldLayout)

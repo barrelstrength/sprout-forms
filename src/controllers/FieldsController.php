@@ -17,7 +17,9 @@ use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use yii\base\Exception;
 use yii\base\InvalidConfigException;
+use yii\db\StaleObjectException;
 use yii\web\BadRequestHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
@@ -138,7 +140,7 @@ class FieldsController extends BaseController
      *
      * @return Response
      * @throws Throwable
-     * @throws \yii\db\StaleObjectException
+     * @throws StaleObjectException
      * @throws BadRequestHttpException
      */
     public function actionDeleteTab(): Response
@@ -435,7 +437,7 @@ class FieldsController extends BaseController
      * Reorder a field
      *
      * @return Response
-     * @throws \yii\base\Exception
+     * @throws Exception
      * @throws BadRequestHttpException
      * @throws ForbiddenHttpException
      */

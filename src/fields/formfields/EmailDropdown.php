@@ -10,6 +10,11 @@ use craft\fields\data\SingleOptionFieldData;
 use craft\fields\Dropdown as CraftDropdown;
 use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Template as TemplateHelper;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use Twig\Markup;
+use Twig_Markup;
 use yii\db\Schema;
 use craft\helpers\StringHelper;
 
@@ -76,9 +81,9 @@ class EmailDropdown extends BaseOptionsFormField
     /**
      * @inheritdoc
      *
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getSettingsHtml()
     {
@@ -127,9 +132,9 @@ class EmailDropdown extends BaseOptionsFormField
      * @param ElementInterface|null $element
      *
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -162,9 +167,9 @@ class EmailDropdown extends BaseOptionsFormField
      * @inheritdoc
      *
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getExampleInputHtml(): string
     {
@@ -179,12 +184,12 @@ class EmailDropdown extends BaseOptionsFormField
      * @param mixed      $value
      * @param array|null $renderingOptions
      *
-     * @return \Twig_Markup
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @return Twig_Markup
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
         $selectedValue = $value->value ?? null;
 

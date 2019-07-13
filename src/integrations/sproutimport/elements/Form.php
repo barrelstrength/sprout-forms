@@ -7,6 +7,7 @@ use barrelstrength\sproutbaseimport\SproutBaseImport;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
+use Throwable;
 
 
 class Form extends ElementImporter
@@ -27,7 +28,7 @@ class Form extends ElementImporter
     /**
      * @inheritDoc
      *
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function save(): bool
     {
@@ -60,7 +61,7 @@ class Form extends ElementImporter
     /**
      * @inheritdoc
      *
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function resolveNestedSettings($model, $settings): bool
     {

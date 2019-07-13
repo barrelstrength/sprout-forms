@@ -7,7 +7,9 @@ use Craft;
 use craft\controllers\ElementIndexesController;
 use craft\helpers\ChartHelper;
 use craft\helpers\DateTimeHelper;
+use Exception;
 use yii\base\Response;
+use yii\web\BadRequestHttpException;
 
 /**
  * Class ChartsController
@@ -19,8 +21,8 @@ class ChartsController extends ElementIndexesController
      *
      * @return Response
      * @throws \yii\base\Exception
-     * @throws \yii\web\BadRequestHttpException
-     * @throws \Exception
+     * @throws BadRequestHttpException
+     * @throws Exception
      */
     public function actionGetEntriesData(): Response
     {

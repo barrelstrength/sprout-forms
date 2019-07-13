@@ -8,7 +8,11 @@ use craft\base\ElementInterface;
 use craft\base\Volume;
 use craft\base\VolumeInterface;
 use craft\base\VolumeTrait;
+use craft\errors\AssetLogicException;
+use craft\errors\ElementNotFoundException;
+use craft\errors\MissingComponentException;
 use craft\errors\SiteNotFoundException;
+use craft\errors\VolumeException;
 use craft\fields\Assets as CraftAssets;
 use craft\helpers\Template as TemplateHelper;
 use craft\elements\Asset;
@@ -19,9 +23,16 @@ use craft\errors\InvalidVolumeException;
 use craft\helpers\Assets as AssetsHelper;
 use craft\helpers\FileHelper;
 use craft\web\UploadedFile;
+use function is_array;
+use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use Twig\Markup;
+use Twig_Markup;
+use yii\base\ErrorException;
+use yii\base\Exception;
+use yii\base\InvalidConfigException;
 use yii\base\NotSupportedException;
 
 /**
@@ -90,7 +101,7 @@ class FileUpload extends BaseRelationFormField
     /**
      * @inheritDoc
      *
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function init()
     {
@@ -230,12 +241,12 @@ class FileUpload extends BaseRelationFormField
      * @param mixed      $value
      * @param array|null $renderingOptions
      *
-     * @return \Twig_Markup
+     * @return Twig_Markup
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
         $rendered = Craft::$app->getView()->renderTemplate(
             'fileupload/input',
@@ -386,7 +397,7 @@ class FileUpload extends BaseRelationFormField
      * @return int
      * @throws InvalidSubpathException
      * @throws InvalidVolumeException
-     * @throws \craft\errors\VolumeException
+     * @throws VolumeException
      */
     public function resolveDynamicPathToFolderId(ElementInterface $element = null): int
     {
@@ -404,13 +415,13 @@ class FileUpload extends BaseRelationFormField
      *
      * @throws InvalidSubpathException
      * @throws InvalidVolumeException
-     * @throws \Throwable
-     * @throws \craft\errors\AssetLogicException
-     * @throws \craft\errors\ElementNotFoundException
+     * @throws Throwable
+     * @throws AssetLogicException
+     * @throws ElementNotFoundException
      * @throws SiteNotFoundException
-     * @throws \craft\errors\VolumeException
-     * @throws \yii\base\ErrorException
-     * @throws \yii\base\Exception
+     * @throws VolumeException
+     * @throws ErrorException
+     * @throws Exception
      * @throws NotSupportedException
      */
     public function afterElementSave(ElementInterface $element, bool $isNew)
@@ -453,7 +464,7 @@ class FileUpload extends BaseRelationFormField
                 }
 
                 // Add the with newly uploaded IDs to the mix.
-                if (\is_array($query->id)) {
+                if (is_array($query->id)) {
                     $query = $this->normalizeValue(array_merge($query->id, $assetIds), $element);
                 } else {
                     $query = $this->normalizeValue($assetIds, $element);
@@ -523,8 +534,8 @@ class FileUpload extends BaseRelationFormField
      * @return array|string
      * @throws InvalidSubpathException
      * @throws InvalidVolumeException
-     * @throws \craft\errors\MissingComponentException
-     * @throws \craft\errors\VolumeException
+     * @throws MissingComponentException
+     * @throws VolumeException
      */
     protected function inputSources(ElementInterface $element = null)
     {
@@ -663,8 +674,8 @@ class FileUpload extends BaseRelationFormField
      *
      * @return int
      * @throws InvalidSubpathException if the subpath cannot be parsed in full*@throws \craft\errors\VolumeException
-     * @throws \craft\errors\VolumeException
-     * @throws \craft\errors\VolumeException
+     * @throws VolumeException
+     * @throws VolumeException
      * @throws InvalidVolumeException if the volume root folder doesn’t exist
      */
     private function _resolveVolumePathToFolderId(string $uploadSource, string $subpath, ElementInterface $element = null, bool $createDynamicFolders = true): int
@@ -688,7 +699,7 @@ class FileUpload extends BaseRelationFormField
             // Prepare the path by parsing tokens and normalizing slashes.
             try {
                 $renderedSubpath = Craft::$app->getView()->renderObjectTemplate($subpath, $element);
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 throw new InvalidSubpathException($subpath, null, 0, $e);
             }
 
@@ -742,7 +753,7 @@ class FileUpload extends BaseRelationFormField
      * @return int
      * @throws InvalidSubpathException if the folder subpath is not valid
      * @throws InvalidVolumeException if there's a problem with the field's volume configuration
-     * @throws \craft\errors\VolumeException
+     * @throws VolumeException
      */
     private function _determineUploadFolderId(ElementInterface $element = null, bool $createDynamicFolders = true): int
     {
@@ -869,7 +880,7 @@ class FileUpload extends BaseRelationFormField
      * @param mixed $sourceKey
      *
      * @return string
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     private function _folderSourceToVolumeSource($sourceKey): string
     {

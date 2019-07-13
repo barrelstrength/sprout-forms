@@ -4,6 +4,9 @@ namespace barrelstrength\sproutforms\migrations;
 
 use craft\db\Migration;
 use barrelstrength\sproutbasereports\migrations\m190305_000002_update_record_to_element_types as BaseUpdateElements;
+use craft\errors\ElementNotFoundException;
+use Throwable;
+use yii\db\Exception;
 
 /**
  * m190318_000001_update_record_to_element_types_sproutforms migration.
@@ -12,10 +15,10 @@ class m190318_000001_update_record_to_element_types_sproutforms extends Migratio
 {
     /**
      * @return bool
-     * @throws \Throwable
-     * @throws \craft\errors\ElementNotFoundException
+     * @throws Throwable
+     * @throws ElementNotFoundException
      * @throws \yii\base\Exception
-     * @throws \yii\db\Exception
+     * @throws Exception
      */
     public function safeUp(): bool
     {

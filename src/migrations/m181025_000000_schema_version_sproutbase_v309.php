@@ -12,6 +12,7 @@ use barrelstrength\sproutbaseemail\migrations\m180515_000003_update_notification
 use barrelstrength\sproutbaseemail\migrations\m181026_000000_update_notification_data;
 use barrelstrength\sproutbasereports\migrations\m180515_000002_update_report_element_types;
 use craft\db\Migration;
+use yii\base\NotSupportedException;
 
 /**
  * m180515_000000_schema_version_v302 migration.
@@ -20,9 +21,9 @@ class m181025_000000_schema_version_sproutbase_v309 extends Migration
 {
     /**
      * @inheritdoc
-     * @throws \yii\base\NotSupportedException
-     * @throws \yii\base\NotSupportedException
-     * @throws \yii\base\NotSupportedException
+     * @throws NotSupportedException
+     * @throws NotSupportedException
+     * @throws NotSupportedException
      */
     public function safeUp(): bool
     {

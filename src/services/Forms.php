@@ -15,6 +15,7 @@ use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\db\Query;
 use craft\events\RegisterComponentTypesEvent;
+use Throwable;
 use yii\base\Component;
 use craft\helpers\StringHelper;
 use craft\helpers\MigrationHelper;
@@ -101,7 +102,7 @@ class Forms extends Component
      *
      * @return bool
      * @throws \Exception
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function saveForm(FormElement $form): bool
     {
@@ -221,7 +222,7 @@ class Forms extends Component
      *
      * @return bool
      * @throws \Exception
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function deleteForm(FormElement $form): bool
     {
@@ -383,7 +384,7 @@ class Forms extends Component
      *
      * @param $name
      *
-     * @throws \Throwable
+     * @throws Throwable
      */
     private function _createContentTable($name)
     {
@@ -491,7 +492,7 @@ class Forms extends Component
      *
      * @return bool
      * @throws \Exception
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function deleteForms($formElements): bool
     {
@@ -516,7 +517,7 @@ class Forms extends Component
      *
      * @return FormElement|null
      * @throws \Exception
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function createNewForm($name = null, $handle = null)
     {
@@ -707,7 +708,7 @@ class Forms extends Component
      * @param $path
      *
      * @return string
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     private function getSitePath($path): string
     {

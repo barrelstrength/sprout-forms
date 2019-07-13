@@ -15,8 +15,10 @@ use barrelstrength\sproutforms\models\EntryStatus;
 use barrelstrength\sproutforms\records\Entry as EntryRecord;
 use barrelstrength\sproutforms\records\EntryStatus as EntryStatusRecord;
 use craft\base\Element;
+use Throwable;
 use yii\base\Component;
 use yii\base\Exception;
+use yii\db\StaleObjectException;
 
 /**
  *
@@ -165,8 +167,8 @@ class Entries extends Component
      *
      * @return bool
      * @throws \Exception
-     * @throws \Throwable
-     * @throws \yii\db\StaleObjectException
+     * @throws Throwable
+     * @throws StaleObjectException
      */
     public function deleteEntryStatusById($id): bool
     {
@@ -260,7 +262,7 @@ class Entries extends Component
      *
      * @return bool
      * @throws Exception
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function saveEntry(EntryElement $entry): bool
     {
@@ -350,7 +352,7 @@ class Entries extends Component
      * @param array                 $targetIds
      *
      * @return void
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function saveRelations(BaseRelationFormField $field, Element $source, array $targetIds)
     {
@@ -418,7 +420,7 @@ class Entries extends Component
             }
 
             $transaction->commit();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $transaction->rollBack();
 
             throw $e;

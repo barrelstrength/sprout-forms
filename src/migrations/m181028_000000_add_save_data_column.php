@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\migrations;
 
 use craft\db\Migration;
+use yii\base\NotSupportedException;
 
 /**
  * m181028_000000_add_save_data_column migration.
@@ -11,7 +12,7 @@ class m181028_000000_add_save_data_column extends Migration
 {
     /**
      * @return bool
-     * @throws \yii\base\NotSupportedException
+     * @throws NotSupportedException
      */
     public function safeUp(): bool
     {
