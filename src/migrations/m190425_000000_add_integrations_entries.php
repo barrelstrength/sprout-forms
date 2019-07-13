@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\migrations;
 
 use craft\db\Migration;
+use Throwable;
 
 /**
  * m190425_000000_add_integrations_entries migration.
@@ -11,7 +12,7 @@ class m190425_000000_add_integrations_entries extends Migration
 {
     /**
      * @return bool
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function safeUp(): bool
     {

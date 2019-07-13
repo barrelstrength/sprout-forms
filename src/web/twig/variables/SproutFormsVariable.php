@@ -15,6 +15,7 @@ use craft\helpers\Template as TemplateHelper;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\base\FormField;
+use ReflectionException;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -58,7 +59,7 @@ class SproutFormsVariable
      *
      * @return Markup
      * @throws \Exception
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function displayForm($formHandle, array $renderingOptions = null): Markup
     {
@@ -165,7 +166,7 @@ class SproutFormsVariable
      *
      * @return Markup
      * @throws Exception
-     * @throws \ReflectionException
+     * @throws ReflectionException
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError

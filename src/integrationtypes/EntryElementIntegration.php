@@ -8,9 +8,11 @@ use craft\elements\Entry;
 use craft\elements\User;
 use craft\fields\Date;
 use craft\fields\PlainText;
+use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use yii\base\InvalidConfigException;
 use yii\web\IdentityInterface;
 
 /**
@@ -53,7 +55,7 @@ class EntryElementIntegration extends ElementIntegration
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function getSettingsHtml()
     {
@@ -72,7 +74,7 @@ class EntryElementIntegration extends ElementIntegration
     /**
      * @inheritDoc
      *
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function submit(): bool
     {

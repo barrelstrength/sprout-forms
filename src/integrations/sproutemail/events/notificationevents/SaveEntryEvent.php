@@ -12,6 +12,9 @@ use barrelstrength\sproutforms\SproutForms;
 use craft\events\ModelEvent;
 use craft\events\ElementEvent;
 use Craft;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 
 /**
@@ -19,13 +22,13 @@ use Craft;
  *
  * @package barrelstrength\sproutforms\integrations\sproutemail\events\notificationevents
  *
- * @property string                                     $eventHandlerClassName
- * @property array                                      $allForms
- * @property \barrelstrength\sproutforms\elements\Entry $mockEventObject
- * @property null                                       $eventObject
- * @property mixed                                      $name
- * @property mixed                                      $eventName
- * @property string                                     $eventClassName
+ * @property string $eventHandlerClassName
+ * @property array  $allForms
+ * @property Entry  $mockEventObject
+ * @property null   $eventObject
+ * @property mixed  $name
+ * @property mixed  $eventName
+ * @property string $eventClassName
  */
 class SaveEntryEvent extends NotificationEvent
 {
@@ -73,9 +76,9 @@ class SaveEntryEvent extends NotificationEvent
      * @param array $context
      *
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getSettingsHtml($context = []): string
     {

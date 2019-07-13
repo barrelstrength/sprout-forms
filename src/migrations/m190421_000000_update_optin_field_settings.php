@@ -5,6 +5,7 @@ namespace barrelstrength\sproutforms\migrations;
 use barrelstrength\sproutforms\fields\formfields\OptIn;
 use craft\db\Migration;
 use craft\db\Query;
+use Throwable;
 
 /**
  * m190421_000000_update_optin_field_settings migration.
@@ -13,7 +14,7 @@ class m190421_000000_update_optin_field_settings extends Migration
 {
     /**
      * @return bool
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function safeUp(): bool
     {

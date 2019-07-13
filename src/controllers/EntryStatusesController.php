@@ -7,6 +7,11 @@ use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\models\EntryStatus;
 use craft\helpers\Json;
 use craft\web\Controller as BaseController;
+use Exception;
+use Throwable;
+use yii\db\StaleObjectException;
+use yii\web\BadRequestHttpException;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
@@ -18,7 +23,7 @@ class EntryStatusesController extends BaseController
      *
      * @return Response
      * @throws NotFoundHttpException
-     * @throws \yii\web\ForbiddenHttpException
+     * @throws ForbiddenHttpException
      */
     public function actionEdit(int $entryStatusId = null, EntryStatus $entryStatus = null): Response
     {
@@ -45,7 +50,7 @@ class EntryStatusesController extends BaseController
     /**
      * @return null|Response
      * @throws \yii\base\Exception
-     * @throws \yii\web\BadRequestHttpException
+     * @throws BadRequestHttpException
      */
     public function actionSave()
     {
@@ -77,8 +82,8 @@ class EntryStatusesController extends BaseController
 
     /**
      * @return Response
-     * @throws \Exception
-     * @throws \yii\web\BadRequestHttpException
+     * @throws Exception
+     * @throws BadRequestHttpException
      */
     public function actionReorder(): Response
     {
@@ -96,10 +101,10 @@ class EntryStatusesController extends BaseController
 
     /**
      * @return Response
-     * @throws \Exception
-     * @throws \Throwable
-     * @throws \yii\db\StaleObjectException
-     * @throws \yii\web\BadRequestHttpException
+     * @throws Exception
+     * @throws Throwable
+     * @throws StaleObjectException
+     * @throws BadRequestHttpException
      */
     public function actionDelete(): Response
     {

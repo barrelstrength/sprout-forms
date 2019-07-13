@@ -5,6 +5,14 @@ namespace barrelstrength\sproutforms\fields\formfields;
 use Craft;
 use craft\base\ElementInterface;
 use craft\helpers\Template as TemplateHelper;
+use ReflectionClass;
+use ReflectionException;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use Twig\Markup;
+use Twig_Markup;
+use yii\base\InvalidConfigException;
 use yii\db\Schema;
 
 use barrelstrength\sproutforms\base\FormField;
@@ -91,15 +99,15 @@ class SectionHeading extends FormField
     /**
      * @inheritdoc
      * @return string
-     * @throws \ReflectionException
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
-     * @throws \yii\base\InvalidConfigException
+     * @throws ReflectionException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws InvalidConfigException
      */
     public function getSettingsHtml(): string
     {
-        $reflect = new \ReflectionClass($this);
+        $reflect = new ReflectionClass($this);
         $name = $reflect->getShortName();
 
         $inputId = Craft::$app->getView()->formatInputId($name);
@@ -132,9 +140,9 @@ class SectionHeading extends FormField
      * @param ElementInterface|null $element
      *
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -160,9 +168,9 @@ class SectionHeading extends FormField
      * @inheritdoc
      *
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getExampleInputHtml(): string
     {
@@ -177,12 +185,12 @@ class SectionHeading extends FormField
      * @param mixed      $value
      * @param array|null $renderingOptions
      *
-     * @return \Twig_Markup
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @return Twig_Markup
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): \Twig\Markup
+    public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
         $name = $this->handle;
         $namespaceInputId = $this->getNamespace().'-'.$name;

@@ -10,6 +10,11 @@ use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\SproutForms;
 
 use Craft;
+use Throwable;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use yii\base\Exception;
 
 class Entry extends ElementImporter
 {
@@ -54,9 +59,9 @@ class Entry extends ElementImporter
      * @param SeedJob $seedJob
      *
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getSeedSettingsHtml(SeedJob $seedJob): string
     {
@@ -91,8 +96,8 @@ class Entry extends ElementImporter
     /**
      * @inheritdoc
      *
-     * @throws \Throwable
-     * @throws \yii\base\Exception
+     * @throws Throwable
+     * @throws Exception
      */
     public function getMockData($quantity, $settings)
     {

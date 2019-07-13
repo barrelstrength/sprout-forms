@@ -9,6 +9,11 @@ use Craft;
 use barrelstrength\sproutbasereports\base\DataSource;
 use craft\db\Query;
 use craft\helpers\DateTimeHelper;
+use DateTime;
+use Exception;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
  * Class LogDataSource
@@ -36,7 +41,7 @@ class SubmissionLogDataSource extends DataSource
     /**
      * @inheritdoc
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getResults(Report $report, array $settings = []): array
     {
@@ -103,10 +108,10 @@ class SubmissionLogDataSource extends DataSource
     /**
      * @inheritDoc
      *
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
-     * @throws \Exception
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws Exception
      */
     public function getSettingsHtml(array $settings = [])
     {
@@ -148,8 +153,8 @@ class SubmissionLogDataSource extends DataSource
 
         return Craft::$app->getView()->renderTemplate('sprout-forms/_integrations/sproutreports/datasources/LogsDataSource/settings', [
             'formOptions' => $formOptions,
-            'defaultStartDate' => new \DateTime($defaultStartDate),
-            'defaultEndDate' => new \DateTime($defaultEndDate),
+            'defaultStartDate' => new DateTime($defaultStartDate),
+            'defaultEndDate' => new DateTime($defaultEndDate),
             'dateRanges' => $dateRanges,
             'options' => $settings
         ]);
@@ -158,7 +163,7 @@ class SubmissionLogDataSource extends DataSource
     /**
      * @inheritdoc
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function prepSettings(array $settings)
     {

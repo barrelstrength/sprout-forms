@@ -3,6 +3,8 @@
 namespace barrelstrength\sproutforms\base;
 
 use Craft;
+use ReflectionClass;
+use ReflectionException;
 
 /**
  * Class FormTemplates
@@ -24,7 +26,7 @@ abstract class FormTemplates
      * Generates the Template ID
      *
      * @return string
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function getTemplateId(): string
     {
@@ -33,7 +35,7 @@ abstract class FormTemplates
         // Build $templateId: pluginhandle-formtemplateclassname
         $pluginHandleWithoutSpaces = str_replace('-', '', $pluginHandle);
 
-        $captchaClass = (new \ReflectionClass($this))->getShortName();
+        $captchaClass = (new ReflectionClass($this))->getShortName();
 
         $templateId = $pluginHandleWithoutSpaces.'-'.$captchaClass;
 
