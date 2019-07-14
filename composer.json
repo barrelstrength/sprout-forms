@@ -28,8 +28,8 @@
     "craftcms/cms": "^3.2.0",
     "barrelstrength/sprout-base": "^5.0.4",
     "barrelstrength/sprout-base-email": "^1.1.1",
-    "barrelstrength/sprout-base-fields": "^1.0.8",
-    "barrelstrength/sprout-base-reports": "^1.3.1",
+    "barrelstrength/sprout-base-fields": "^1.0.9",
+    "barrelstrength/sprout-base-reports": "^1.3.2",
     "barrelstrength/sprout-base-import": "^1.0.5"
   },
   "autoload": {

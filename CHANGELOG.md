@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.3.4 - 2019-07-14
+
+### Added
+- Added Integration Send Rule setting for fine-grained control over opt-in logic
+
+### Changed
+- Updated barrelstrength/sprout-base-fields requirement v1.0.9
+- Updated barrelstrength/sprout-base-import requirement v1.0.5
+- Updated barrelstrength/sprout-base-reports requirement to 1.3.2
+
 ## 3.3.3 - 2019-07-09
 
 ### Fixed
@@ -105,7 +115,7 @@
 - Added Integration API
 - Added Custom Endpoint Integration
 - Added Entry Element Integration
-	
+
 ### Changed
 - Improved Data Source management and registration
 - Updated barrelstrength/sprout-base-reports requirement v1.2.0
@@ -302,7 +312,7 @@
 ## 3.0.0-beta.44 - 2019-02-18
 
 > {warning} This release includes updates to the default Notification Email Templates and updates to what variables are defined by default for the Hidden and Invisible Fields. Please be sure to review your custom Form implementations if you use these features and ensure everything is working as you'd like.
- 
+
 ### Added
 - Added support for Markdown and custom true/false values for Opt-in Field ([#216])
 - Added support for Opt-in Field in Basic Form Template
@@ -448,7 +458,7 @@
 
 ### Changed
 - Improved migration for Notification Emails ([#189])
-	
+
 ### Fixed
 - Fixed various Deprecation Warnings ([#184])
 
@@ -502,18 +512,18 @@
 - Improved front-end form editing the `entry` variable is managed in Form Templates when using the displayForm tag
 
 ## 3.0.0-beta.26 - 2018-09-10
-	
+
 ### Fixed
 - Fixed Changelog link format
 
 ## 3.0.0-beta.25 - 2018-09-10
-	
+
 ### Changed
 - Improved support in PHP 7.2 ([#144])
 - Improved Postgres support ([#137], [#158])
 - Improved error messaging if Title Format setting includes an incorrect field handle ([#96])
 - Updated Sprout Base requirement to v3.0.4
-	
+
 ### Fixed
 - Fixed Email Dropdown field bug where front-end submissions would save incorrect value in database ([#63])
 
@@ -624,7 +634,7 @@
 ### Fixed
 - Added support for tab scrolling when Forms have a large number of tabs ([#97])
 - Fixed bug where File Upload field did not upload files if the filename already existed ([#101])
- 
+
 [#85]: https://github.com/barrelstrength/craft-sprout-forms/issues/85
 [#97]: https://github.com/barrelstrength/craft-sprout-forms/issues/97
 [#101]: https://github.com/barrelstrength/craft-sprout-forms/issues/101
