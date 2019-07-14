@@ -395,6 +395,7 @@ class Entry extends Element
     /**
      * Returns the form element associated with this entry
      * Due to soft delete, deleted forms leaves entries with not forms
+     *
      * @return Form|null
      */
     public function getForm()

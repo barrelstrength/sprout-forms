@@ -335,7 +335,7 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
         $fieldHandles = [];
 
         foreach ($fields as $field) {
-            if (get_class($field) == OptIn::class){
+            if (get_class($field) == OptIn::class) {
                 $optIns[] = [
                     'label' => $field->name.' ('.$field->handle.')',
                     'value' => $field->handle,
