@@ -107,7 +107,11 @@ if (typeof Craft.SproutForms === typeof undefined) {
                 return;
             }
 
-            var data = {type: currentIntegration, formId: formId};
+            var data = {
+                type: currentIntegration,
+                formId: formId,
+                sendRule: '*'
+            };
 
             Craft.postActionRequest('sprout-forms/integrations/save-integration', data, $.proxy(function(response, textStatus) {
                 if (textStatus === 'success') {

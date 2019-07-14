@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\migrations;
 
 use craft\db\Migration;
+use craft\db\Query;
 use yii\base\NotSupportedException;
 
 /**
@@ -21,6 +22,16 @@ class m190708_000000_add_sendRule_column extends Migration
         if (!$this->db->columnExists($table, 'sendRule')) {
             $this->addColumn($table, 'sendRule', $this->text()->after('type'));
         }
+
+        $integrations = (new Query())
+            ->select(['id'])
+            ->from(['{{%sproutforms_integrations}}'])
+            ->all();
+
+        foreach ($integrations as $integration) {
+            $this->update('{{%sproutforms_integrations}}', ['sendRule' => '*'], ['id' => $integration['id']], [], false);
+        }
+
         return true;
     }
 
