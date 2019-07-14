@@ -38,7 +38,7 @@ class Form extends ElementImporter
     /**
      * @inheritdoc
      */
-    public function deleteById($id)
+    public function deleteById($id): bool
     {
         $form = SproutForms::$app->forms->getFormById($id);
 
