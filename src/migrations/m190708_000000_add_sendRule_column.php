@@ -1,0 +1,35 @@
+<?php
+
+namespace barrelstrength\sproutforms\migrations;
+
+use craft\db\Migration;
+use yii\base\NotSupportedException;
+
+/**
+ * m190708_000000_add_sendRule_column migration.
+ */
+class m190708_000000_add_sendRule_column extends Migration
+{
+    /**
+     * @return bool
+     * @throws NotSupportedException
+     */
+    public function safeUp(): bool
+    {
+        $table = '{{%sproutforms_integrations}}';
+
+        if (!$this->db->columnExists($table, 'sendRule')) {
+            $this->addColumn($table, 'sendRule', $this->text()->after('type'));
+        }
+        return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function safeDown(): bool
+    {
+        echo "m190708_000000_add_sendRule_column cannot be reverted.\n";
+        return false;
+    }
+}

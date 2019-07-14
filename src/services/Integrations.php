@@ -17,6 +17,7 @@ use craft\errors\MissingComponentException;
 use craft\events\RegisterComponentTypesEvent;
 use Craft;
 use craft\helpers\Component as ComponentHelper;
+use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -39,6 +40,7 @@ class Integrations extends Component
     const EVENT_AFTER_INTEGRATION_SUBMIT = 'afterIntegrationSubmit';
 
     const ENTRY_INTEGRATION_PENDING_STATUS = 'pending';
+    const ENTRY_INTEGRATION_NOT_SENT_STATUS = 'notsent';
     const ENTRY_INTEGRATION_COMPLETED_STATUS = 'completed';
 
     /**
@@ -88,8 +90,8 @@ class Integrations extends Component
                 'integrations.formId',
                 'integrations.name',
                 'integrations.type',
+                'integrations.sendRule',
                 'integrations.settings',
-                'integrations.confirmation',
                 'integrations.enabled'
             ])
             ->from(['{{%sproutforms_integrations}} integrations'])
@@ -121,9 +123,9 @@ class Integrations extends Component
                 'integrations.formId',
                 'integrations.name',
                 'integrations.type',
+                'integrations.sendRule',
                 'integrations.settings',
-                'integrations.enabled',
-                'integrations.confirmation'
+                'integrations.enabled'
             ])
             ->from(['{{%sproutforms_integrations}} integrations'])
             ->where(['integrations.id' => $integrationId])
@@ -155,7 +157,7 @@ class Integrations extends Component
         $integrationRecord->formId = $integration->formId;
         $integrationRecord->name = $integration->name ?? $integration::displayName();
         $integrationRecord->enabled = $integration->enabled;
-        $integrationRecord->confirmation = $integration->confirmation;
+        $integrationRecord->sendRule = $integration->sendRule;
 
         $integrationRecord->settings = $integration->getSettings();
 
@@ -308,7 +310,7 @@ class Integrations extends Component
      * @throws Exception
      * @throws InvalidConfigException
      * @throws MissingComponentException
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function runFormIntegrations(Entry $entry)
     {
@@ -325,11 +327,8 @@ class Integrations extends Component
         $submissionLogs = [];
         $entryId = $entry->id ?? null;
 
+        // Add all enabled Integrations to the log as 'Pending'
         foreach ($integrations as $integration) {
-            if ($this->skipIntegration($integration, $entry)){
-                continue;
-            }
-
             if ($integration->enabled) {
                 $submissionLog = new SubmissionLog();
 
@@ -351,6 +350,7 @@ class Integrations extends Component
             }
         }
 
+        // Process and Send Integrations one by one
         foreach ($submissionLogs as $submissionLog) {
             /** @var Integration $integration */
             $integration = $submissionLog['integration'];
@@ -358,9 +358,27 @@ class Integrations extends Component
             $submissionLog = $submissionLog['submissionLog'];
 
             $integration->entry = $entry;
-            Craft::info(Craft::t('sprout-forms', 'Running Sprout Forms Integration: {integrationName}', [
-                'integrationName' => $integration->name
+
+            Craft::info(Craft::t('sprout-forms', 'Running Integration: {integrationName} for Form Entry {entryId}', [
+                'integrationName' => $integration->name,
+                'entryId' => $entryId
             ]), __METHOD__);
+
+            if (!$this->sendRuleIsTrue($integration, $entry)) {
+                $integrationNotSentMessage = Craft::t('sprout-forms', 'Integration not sent. Send Rule setting did not evaluate to true.');
+
+                Craft::info($integrationNotSentMessage, __METHOD__);
+
+                $submissionLog->setAttributes([
+                    'success' => true,
+                    'status' => self::ENTRY_INTEGRATION_NOT_SENT_STATUS,
+                    'message' => $integrationNotSentMessage
+                ], false);
+
+                SproutForms::$app->integrations->logSubmission($submissionLog);
+
+                continue;
+            }
 
             try {
                 if ($integration->enabled) {
@@ -413,31 +431,31 @@ class Integrations extends Component
     /**
      * @param $integration
      * @param $entry
+     *
      * @return bool
-     * @throws \Throwable
+     * @throws Throwable
      */
-    private function skipIntegration($integration, $entry)
+    private function sendRuleIsTrue(Integration $integration, $entry): bool
     {
-        // By default is always
-        if (empty($integration->confirmation)){
-            return false;
+        // Default setting: Always = *
+        if ($integration->sendRule === '*') {
+            return true;
         }
 
-        // it's a opt-in field
-        if (isset($entry->{$integration->confirmation})){
-            if (!$entry->{$integration->confirmation}){
-                // skip this integration
+        // If the rule name matches an Opt-in field handle, see if the Opt-in field is checked
+        if (isset($entry->{$integration->sendRule}) && $entry->{$integration->sendRule}) {
+            return true;
+        }
+
+        // Custom Send Rule
+        try {
+            $resultTemplate = Craft::$app->view->renderObjectTemplate($integration->sendRule, $entry);
+            $value = trim($resultTemplate);
+            if (filter_var($value, FILTER_VALIDATE_BOOLEAN)) {
                 return true;
             }
-        }else{// its a custom confirmation
-            try {
-                $value = trim(Craft::$app->view->renderObjectTemplate($integration->confirmation, $entry));
-                if (!filter_var($value, FILTER_VALIDATE_BOOLEAN)){
-                    return true;
-                }
-            } catch (\Exception $e) {
-                Craft::error($e->getMessage(), __METHOD__);
-            }
+        } catch (\Exception $e) {
+            Craft::error($e->getMessage(), __METHOD__);
         }
 
         return false;

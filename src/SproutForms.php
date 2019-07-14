@@ -39,7 +39,6 @@ use barrelstrength\sproutforms\services\Forms;
 use barrelstrength\sproutbaseimport\services\Importers;
 use Craft;
 use craft\base\Plugin;
-
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
@@ -60,6 +59,7 @@ use barrelstrength\sproutforms\services\Fields as SproutFormsFields;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use craft\services\Dashboard;
 use yii\base\InvalidConfigException;
+use craft\db\Migration;
 use yii\web\Response;
 
 /**
@@ -101,7 +101,7 @@ class SproutForms extends Plugin implements SproutEditionsInterface
     /**
      * @var string
      */
-    public $schemaVersion = '3.2.2';
+    public $schemaVersion = '3.2.3';
 
     /**
      * @var string

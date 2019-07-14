@@ -120,15 +120,29 @@
                     {% set integration = craft.sproutForms.getIntegrationById(submissionLog.integrationId) %}
                     <h5 class="heading">{{ integration.name }}</h5>
                     {% if submissionLog.success %}
-                        <div class="value"><span class="status live "></span>
-                            {{ "Success"|t('sprout-forms') }}
-                            <span class="info">{{ submissionLog.message }}</span>
-                        </div>
+                        {% if submissionLog.status == 'notsent' %}
+                            <div class="value"><span class="status pending"></span>
+                                {{ "Not Sent"|t('sprout-forms') }}
+                                <span class="info">{{ submissionLog.message }}</span>
+                            </div>
+                        {% else %}
+                            <div class="value"><span class="status live"></span>
+                                {{ "Success"|t('sprout-forms') }}
+                                <span class="info">{{ submissionLog.message }}</span>
+                            </div>
+                        {% endif %}
                     {% else %}
-                        <div class="value"><span class="status disabled"></span>
-                            {{ "Error"|t('sprout-forms') }}
-                            <span class="info">{{ submissionLog.message }}</span>
-                        </div>
+                        {% if submissionLog.status == 'pending' %}
+                            <div class="value"><span class="status pending"></span>
+                                {{ "Pending"|t('sprout-forms') }}
+                                <span class="info">{{ submissionLog.message }}</span>
+                            </div>
+                        {% else %}
+                            <div class="value"><span class="status disabled"></span>
+                                {{ "Error"|t('sprout-forms') }}
+                                <span class="info">{{ submissionLog.message }}</span>
+                            </div>
+                        {% endif %}
                     {% endif %}
                 </div>
             {% endfor %}

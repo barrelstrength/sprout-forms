@@ -26,20 +26,20 @@
         required: true,
     }) }}
 
-    {{ forms.field({
-        label: "Confirmation <span class='info'>Evalutes whether a form submission has successfully opt-ed in to send the Integration request to the API. If true, we send the request, if false, we don't.</span>"|t('sprout-forms'),
-        required: true,
-        errors: (form is defined ? form.getErrors('confirmation') : null)
-    }, sproutFields.selectOther({
-        name: 'confirmation',
-        options: integration.getConfirmationOptions(),
-        value: integration.confirmation ?? null,
-        otherPlaceholderText: "{% if fieldHandle == 'cat' %}true{% else %}false{% endif %}"|t('sprout-forms'),
-    })) }}
-
     {% namespace 'settings['~className(integration)~']' %}
         {{ integration.getSettingsHtml()|raw }}
     {% endnamespace %}
+
+    {{ forms.field({
+        label: "Send Rule <span class='info'>Defines how to check a form submission to determine if a user has opted in to have data sent to this Integration. The Integration will be sent if the setting is set to 'Always'; if an Opt-in field is selected and a user confirms they wish to opt-in; or if the Custom Rule is used and evaluates to '1', 'true', 'on', or 'yes'. If none of those conditions are met, the Integration will not be sent.</span>"|t('sprout-forms'),
+        required: true,
+        errors: (form is defined ? form.getErrors('confirmation') : null)
+    }, sproutFields.selectOther({
+        name: 'sendRule',
+        options: integration.getSendRuleOptions(),
+        value: integration.sendRule ?? '*',
+        otherPlaceholderText: "{% if object.customFieldHandle == 'send' %}true{% else %}false{% endif %}"|t('sprout-forms'),
+    })) }}
 
     {{ forms.selectField({
         label: "Integration Type <span class='info'>Create a new integration if you need to update your integration type. This value cannot be changed.</span>"|t('sprout-forms'),

@@ -27,6 +27,7 @@ use yii\base\InvalidConfigException;
  * @property null|string $updateTargetFieldsAction
  * @property string      $updateSourceFieldsAction
  * @property Form        $form
+ * @property array       $sendRuleOptions
  * @property string      $type
  */
 abstract class Integration extends SavableComponent implements IntegrationInterface
@@ -327,7 +328,7 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
      * @return array
      * @throws InvalidConfigException
      */
-    public function getConfirmationOptions(): array
+    final public function getSendRuleOptions(): array
     {
         $fields = $this->getForm()->getFields();
         $optIns = [];
@@ -346,22 +347,22 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
         $options = [
             [
                 'label' => Craft::t('sprout-forms', 'Always'),
-                'value' => ''
+                'value' => '*'
             ]
         ];
 
         $options = array_merge($options, $optIns);
 
-        $customConfirmation = $this->confirmation;
+        $customSendRule = $this->sendRule;
 
         $options[] = [
-            'optgroup' => Craft::t('sprout-forms', 'Custom Template Folder')
+            'optgroup' => Craft::t('sprout-forms', 'Custom Rule')
         ];
 
-        if (!in_array($this->confirmation, $fieldHandles, false) && $customConfirmation != '') {
+        if (!in_array($this->sendRule, $fieldHandles, false) && $customSendRule != '*') {
             $options[] = [
-                'label' => $customConfirmation,
-                'value' => $customConfirmation
+                'label' => $customSendRule,
+                'value' => $customSendRule
             ];
         }
 

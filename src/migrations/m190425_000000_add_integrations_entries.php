@@ -23,7 +23,7 @@ class m190425_000000_add_integrations_entries extends Migration
             'success' => $this->boolean()->defaultValue(false),
             'status' => $this->enum('status',
                 [
-                    'pending', 'completed'
+                    'pending', 'notsent', 'completed'
                 ])
                 ->notNull()->defaultValue('pending'),
             'message' => $this->text(),

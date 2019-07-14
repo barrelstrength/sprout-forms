@@ -136,7 +136,7 @@ class Install extends Migration
             'formId' => $this->integer()->notNull(),
             'name' => $this->string()->notNull(),
             'type' => $this->string()->notNull(),
-            'confirmation' => $this->string(),
+            'sendRule' => $this->text(),
             'settings' => $this->text(),
             'enabled' => $this->boolean()->defaultValue(false),
             'dateCreated' => $this->dateTime()->notNull(),
@@ -151,7 +151,7 @@ class Install extends Migration
             'success' => $this->boolean()->defaultValue(false),
             'status' => $this->enum('status',
                 [
-                    'pending', 'completed'
+                    'pending', 'notsent', 'completed'
                 ])
                 ->notNull()->defaultValue('pending'),
             'message' => $this->text(),

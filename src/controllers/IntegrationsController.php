@@ -87,7 +87,7 @@ class IntegrationsController extends BaseController
         $integration->formId = $request->getBodyParam('formId');
         $integration->name = $request->getBodyParam('name');
         $integration->enabled = $request->getBodyParam('enabled');
-        $integration->confirmation = $request->getBodyParam('confirmation');
+        $integration->sendRule = $request->getBodyParam('sendRule');
 
         $settings = $request->getBodyParam('settings.'.$type);
 
@@ -96,7 +96,7 @@ class IntegrationsController extends BaseController
             'formId' => $integration->formId,
             'name' => $integration->name,
             'enabled' => $integration->enabled,
-            'confirmation' => $integration->confirmation,
+            'sendRule' => $integration->sendRule,
             'type' => get_class($integration),
             'settings' => $settings,
         ]);
