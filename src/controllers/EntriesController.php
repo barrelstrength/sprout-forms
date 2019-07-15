@@ -35,7 +35,7 @@ class EntriesController extends BaseController
      * @var string[]
      */
     protected $allowAnonymous = [
-        'save-entry' => self::ALLOW_ANONYMOUS_LIVE
+        'save-entry'
     ];
 
     /**
@@ -45,6 +45,8 @@ class EntriesController extends BaseController
 
     public function init()
     {
+        parent::init();
+
         $response = Craft::$app->getResponse();
         $headers = $response->getHeaders();
         $headers->set('Cache-Control', 'private');
