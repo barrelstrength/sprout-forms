@@ -386,29 +386,31 @@ class SproutForms extends Plugin implements SproutEditionsInterface
             ],
 
             // Notifications
-            '<pluginHandle:sprout-forms>/notifications' => [
-                'route' => 'sprout-base-email/notifications/index',
+            'sprout-forms/notifications' => [
+                'route' => 'sprout-base-email/notifications/notifications-index-template',
                 'params' => [
+                    'viewContext' => 'sprout-forms',
                     'hideSidebar' => true
                 ]
             ],
-            '<pluginHandle:sprout-forms>/notifications/edit/<emailId:\d+|new>' => [
+            'sprout-forms/notifications/edit/<emailId:\d+|new>' => [
                 'route' => 'sprout-base-email/notifications/edit-notification-email-template',
                 'params' => [
+                    'viewContext' => 'sprout-forms',
                     'defaultEmailTemplate' => BasicSproutFormsNotification::class
                 ]
             ],
-            '<pluginHandle:sprout-forms>/preview/<emailType:notification>/<emailId:\d+>' => [
-                'route' => 'sprout-base-email/notifications/preview'
-            ],
-            '<pluginHandle:sprout-forms>/settings/notifications/edit/<emailId:\d+|new>' => [
+            'sprout-forms/notifications/settings/edit/<emailId:\d+|new>' => [
                 'route' => 'sprout-base-email/notifications/edit-notification-email-settings-template'
+            ],
+            'sprout-forms/notifications/preview/<emailType:notification>/<emailId:\d+>' => [
+                'route' => 'sprout-base-email/notifications/preview'
             ],
 
             // Settings
-            'sprout-forms/settings' =>
-                'sprout/settings/edit-settings',
             'sprout-forms/settings/<settingsSectionHandle:.*>' =>
+                'sprout/settings/edit-settings',
+            'sprout-forms/settings' =>
                 'sprout/settings/edit-settings'
         ];
     }

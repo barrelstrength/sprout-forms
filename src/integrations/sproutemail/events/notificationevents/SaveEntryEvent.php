@@ -40,6 +40,8 @@ class SaveEntryEvent extends NotificationEvent
 
     public $formIds = [];
 
+    public $viewContext = 'sprout-forms';
+
     /**
      * @inheritdoc
      */
