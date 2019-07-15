@@ -8,6 +8,7 @@ use barrelstrength\sproutbaseemail\services\EmailTemplates;
 use barrelstrength\sproutbaseemail\SproutBaseEmailHelper;
 use barrelstrength\sproutbasefields\SproutBaseFieldsHelper;
 use barrelstrength\sproutbaseemail\services\NotificationEmailEvents;
+use barrelstrength\sproutbasereports\base\DataSource;
 use barrelstrength\sproutbasereports\services\DataSources;
 use barrelstrength\sproutbasereports\SproutBaseReports;
 use barrelstrength\sproutbasereports\SproutBaseReportsHelper;
@@ -49,6 +50,7 @@ use craft\web\UrlManager;
 use craft\services\UserPermissions;
 use Exception;
 use Throwable;
+use yii\base\ErrorException;
 use yii\base\Event;
 use craft\web\twig\variables\CraftVariable;
 use barrelstrength\sproutbase\SproutBaseHelper;
@@ -60,7 +62,9 @@ use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use craft\services\Dashboard;
 use yii\base\InvalidConfigException;
 use craft\db\Migration;
+use yii\base\NotSupportedException;
 use yii\web\Response;
+use yii\web\ServerErrorHttpException;
 
 /**
  *
@@ -345,21 +349,38 @@ class SproutForms extends Plugin implements SproutEditionsInterface
                 'sprout-forms/forms',
 
             // Reports
-            '<pluginHandle:sprout-forms>/reports/<dataSourceId:\d+>/new' =>
-                'sprout-base-reports/reports/edit-report-template',
-            '<pluginHandle:sprout-forms>/reports/<dataSourceId:\d+>/edit/<reportId:\d+>' =>
-                'sprout-base-reports/reports/edit-report-template',
-            '<pluginHandle:sprout-forms>/reports/view/<reportId:\d+>' =>
-                'sprout-base-reports/reports/results-index-template',
-            '<pluginHandle:sprout-forms>/reports/<dataSourceId:\d+>' => [
+            'sprout-forms/reports/<dataSourceId:\d+>/new' => [
+                'route' => 'sprout-base-reports/reports/edit-report-template',
+                'params' => [
+                    'viewContext' => 'sprout-forms'
+                ]
+            ],
+            'sprout-forms/reports/<dataSourceId:\d+>/edit/<reportId:\d+>' => [
+                'route' => 'sprout-base-reports/reports/edit-report-template',
+                'params' => [
+                    'viewContext' => 'sprout-forms'
+                ]
+            ],
+            'sprout-forms/reports/view/<reportId:\d+>' => [
+                'route' => 'sprout-base-reports/reports/results-index-template',
+                'params' => [
+                    'permissionContext' => 'sprout-forms',
+                    'viewContext' => 'sprout-forms'
+                ]
+            ],
+            'sprout-forms/reports/<dataSourceId:\d+>' => [
                 'route' => 'sprout-base-reports/reports/reports-index-template',
                 'params' => [
+                    'permissionContext' => 'sprout-forms',
+                    'viewContext' => 'sprout-forms',
                     'hideSidebar' => true
                 ]
             ],
-            '<pluginHandle:sprout-forms>/reports' => [
+            'sprout-forms/reports' => [
                 'route' => 'sprout-base-reports/reports/reports-index-template',
                 'params' => [
+                    'permissionContext' => 'sprout-forms',
+                    'viewContext' => 'sprout-forms',
                     'hideSidebar' => true
                 ]
             ],
@@ -433,7 +454,10 @@ class SproutForms extends Plugin implements SproutEditionsInterface
     }
 
     /**
-     * @inheritDoc
+     * @throws ErrorException
+     * @throws \yii\base\Exception
+     * @throws NotSupportedException
+     * @throws ServerErrorHttpException
      */
     protected function afterInstall()
     {
@@ -451,7 +475,7 @@ class SproutForms extends Plugin implements SproutEditionsInterface
         foreach ($dataSourceTypes as $dataSourceClass) {
             /** @var DataSource $dataSource */
             $dataSource = new $dataSourceClass();
-            $dataSource->pluginHandle = 'sprout-forms';
+            $dataSource->viewContext = 'sprout-forms';
             SproutBaseReports::$app->dataSources->saveDataSource($dataSource);
         }
 
