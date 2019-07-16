@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.3.5 - 2019-07-16
+
+### Added
+- Added Integration Send Rule setting for fine-grained control over Notification Email logic
+
+### Changed
+- Improves Notification Email integration support
+- Improves Data Source integration support
+- Updated barrelstrength/sprout-base-email requirement v1.1.2
+- Updated barrelstrength/sprout-base-reports requirement to 1.3.4
+
 ## 3.3.4 - 2019-07-14
 
 ### Added
