@@ -33,7 +33,7 @@
     {{ forms.field({
         label: "Send Rule <span class='info'>Defines how to check a form submission to determine if a user has opted in to have data sent to this Integration. The Integration will be sent if the setting is set to 'Always'; if an Opt-in field is selected and a user confirms they wish to opt-in; or if the Custom Rule is used and evaluates to '1', 'true', 'on', or 'yes'. If none of those conditions are met, the Integration will not be sent.</span>"|t('sprout-forms'),
         required: true,
-        errors: (form is defined ? form.getErrors('confirmation') : null)
+        errors: (integration is defined ? integration.getErrors('sendRule') : null)
     }, sproutFields.selectOther({
         name: 'sendRule',
         options: integration.getSendRuleOptions(),
