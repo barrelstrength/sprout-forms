@@ -1,5 +1,17 @@
 # Changelog
 
+## 3.3.5 - 2019-07-17
+
+### Changed
+- Updated barrelstrength/sprout-base-email requirement v1.1.3
+
+### Fixed
+- Fixed bug where `pluginHandle` not found in C2 to C3 Notification Email Element migration ([#318])
+- Fixed bug where Save as New Form threw an error ([#313])
+
+[#313]: https://github.com/barrelstrength/craft-sprout-forms/issues/313
+[#318]: https://github.com/barrelstrength/craft-sprout-forms/issues/318
+
 ## 3.3.5 - 2019-07-16
 
 ### Added
