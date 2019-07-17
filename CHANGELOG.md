@@ -1,6 +1,11 @@
 # Changelog
 
-## 3.3.5 - 2019-07-17
+## 3.3.7 - 2019-07-17
+
+### Fixed
+- Fixed bug in C2 to C3 Notification Email Element migration ([#318])
+
+## 3.3.6 - 2019-07-17
 
 ### Changed
 - Updated barrelstrength/sprout-base-email requirement v1.1.3
