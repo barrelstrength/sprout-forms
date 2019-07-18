@@ -112,9 +112,7 @@ class Fields extends Component
                 ]);
 
             if (!$fieldLayoutFieldRecord) {
-                throw new Exception(Craft::t('sprout-forms', 'No field exists with the ID “{id}”', [
-                    'id' => $fieldId
-                ]));
+                throw new Exception('No field exists with the ID '.$fieldId);
             }
 
             return $fieldLayoutFieldRecord;

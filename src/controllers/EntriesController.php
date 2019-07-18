@@ -76,7 +76,7 @@ class EntriesController extends BaseController
         $this->form = SproutForms::$app->forms->getFormByHandle($formHandle);
 
         if ($this->form === null) {
-            throw new Exception(Craft::t('sprout-forms', 'No form exists with the handle '.$formHandle));
+            throw new Exception('No form exists with the handle '.$formHandle);
         }
 
         $event = new OnBeforePopulateEntryEvent([
@@ -190,7 +190,7 @@ class EntriesController extends BaseController
             }
 
             if (!$entry) {
-                throw new NotFoundHttpException(Craft::t('sprout-forms', 'Entry not found'));
+                throw new NotFoundHttpException('Entry not found');
             }
 
             Craft::$app->getContent()->populateElementContent($entry);

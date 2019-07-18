@@ -147,9 +147,7 @@ class Groups extends Component
             $groupRecord = FormGroupRecord::findOne($group->id);
 
             if (!$groupRecord) {
-                throw new Exception(Craft::t('sprout-forms', 'No field group exists with the ID {groupId}', [
-                    'groupId' => $group->id
-                ]));
+                throw new Exception('No field group exists with the ID: '. $group->id);
             }
 
             return $groupRecord;

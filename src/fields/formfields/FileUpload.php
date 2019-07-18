@@ -686,7 +686,7 @@ class FileUpload extends BaseRelationFormField
 
         // Make sure the volume and root folder actually exists
         if ($volumeId === null || ($rootFolder = $assetsService->getRootFolderByVolumeId($volumeId)) === null) {
-            throw new InvalidVolumeException(Craft::t('sprout-forms', 'Invalid volume.'));
+            throw new InvalidVolumeException('Invalid volume.');
         }
 
         // Are we looking for a subfolder?
@@ -772,7 +772,7 @@ class FileUpload extends BaseRelationFormField
 
         try {
             if (!$uploadVolume) {
-                throw new InvalidVolumeException(Craft::t('sprout-forms', 'Invalid volume.'));
+                throw new InvalidVolumeException('Invalid volume.');
             }
             $folderId = $this->_resolveVolumePathToFolderId($uploadVolume, $subpath, $element, $createDynamicFolders);
         } catch (InvalidVolumeException $e) {

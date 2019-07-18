@@ -45,7 +45,7 @@ class FieldsController extends BaseController
         $form = SproutForms::$app->forms->getFormById($formId);
 
         if (!$form) {
-            throw new ElementNotFoundException(Craft::t('sprout-forms', 'Form not found.'));
+            throw new ElementNotFoundException('Form not found.');
         }
 
         return $this->asJson(SproutForms::$app->fields->getModalFieldTemplate($form));
@@ -228,7 +228,7 @@ class FieldsController extends BaseController
         $form = SproutForms::$app->forms->getFormById($formId);
 
         if (!$form) {
-            throw new NotFoundHttpException(Craft::t('sprout-forms', 'Form not found.'));
+            throw new NotFoundHttpException('Form not found.');
         }
 
         $type = $request->getRequiredBodyParam('type');
