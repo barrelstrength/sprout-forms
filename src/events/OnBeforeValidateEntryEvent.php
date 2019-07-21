@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\events;
 
+use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Form;
 use yii\base\Event;
 
@@ -14,6 +15,11 @@ class OnBeforeValidateEntryEvent extends Event
      * @var Form
      */
     public $form;
+
+    /**
+     * @var Entry
+     */
+    public $entry;
 
     /**
      * @var bool

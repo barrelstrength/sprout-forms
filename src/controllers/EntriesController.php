@@ -79,13 +79,14 @@ class EntriesController extends BaseController
             throw new Exception(Craft::t('sprout-forms', 'No form exists with the handle '.$formHandle));
         }
 
+        $entry = $this->getEntryModel();
+
         $event = new OnBeforePopulateEntryEvent([
-            'form' => $this->form
+            'form' => $this->form,
+            'entry' => $entry
         ]);
 
         $this->trigger(self::EVENT_BEFORE_POPULATE, $event);
-
-        $entry = $this->getEntryModel();
 
         Craft::$app->getContent()->populateElementContent($entry);
 
@@ -110,7 +111,8 @@ class EntriesController extends BaseController
         }
 
         $event = new OnBeforeValidateEntryEvent([
-            'form' => $this->form
+            'form' => $this->form,
+            'entry' => $entry
         ]);
 
         $this->trigger(self::EVENT_BEFORE_VALIDATE, $event);
