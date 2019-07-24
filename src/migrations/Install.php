@@ -61,6 +61,7 @@ class Install extends Migration
 
         $this->dropTable('{{%sproutforms_log}}');
         $this->dropTable('{{%sproutforms_integrations}}');
+        $this->dropTable('{{%sproutforms_conditional_logic}}');
         $this->dropTable('{{%sproutforms_entries}}');
         $this->dropTable('{{%sproutforms_forms}}');
         $this->dropTable('{{%sproutforms_formgroups}}');
@@ -144,6 +145,19 @@ class Install extends Migration
             'uid' => $this->uid(),
         ]);
 
+        $this->createTable('{{%sproutforms_conditional_logic}}', [
+            'id' => $this->primaryKey(),
+            'formId' => $this->integer()->notNull(),
+            'name' => $this->string()->notNull(),
+            'type' => $this->string()->notNull(),
+            'rule' => $this->text(),
+            'settings' => $this->text(),
+            'enabled' => $this->boolean()->defaultValue(false),
+            'dateCreated' => $this->dateTime()->notNull(),
+            'dateUpdated' => $this->dateTime()->notNull(),
+            'uid' => $this->uid(),
+        ]);
+
         $this->createTable('{{%sproutforms_log}}', [
             'id' => $this->primaryKey(),
             'entryId' => $this->integer(),
@@ -195,6 +209,16 @@ class Install extends Migration
                 false, true
             ),
             '{{%sproutforms_integrations}}',
+            'formId'
+        );
+
+        $this->createIndex(
+            $this->db->getIndexName(
+                '{{%sproutforms_conditional_logic}}',
+                'formId',
+                false, true
+            ),
+            '{{%sproutforms_conditional_logic}}',
             'formId'
         );
 
@@ -263,6 +287,14 @@ class Install extends Migration
                 '{{%sproutforms_integrations}}', 'formId'
             ),
             '{{%sproutforms_integrations}}', 'formId',
+            '{{%sproutforms_forms}}', 'id', 'CASCADE'
+        );
+
+        $this->addForeignKey(
+            $this->db->getForeignKeyName(
+                '{{%sproutforms_conditional_logic}}', 'formId'
+            ),
+            '{{%sproutforms_conditional_logic}}', 'formId',
             '{{%sproutforms_forms}}', 'id', 'CASCADE'
         );
 

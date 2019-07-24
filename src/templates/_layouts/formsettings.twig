@@ -1,7 +1,8 @@
 {% extends "_layouts/cp" %}
 
-{% set title  = "Settings"|t('sprout-forms') %}
+{% set title  = form.name~" - Settings"|t('sprout-forms') %}
 {% set bodyClass = craft.app.request.getSegments()|slice(0, 3)|join(' ') %}
+{% set fullPageForm = true %}
 
 {% set selectedSubnavItem = craft.app.request.getSegment(2) %}
 {% set selectedSidebarItem = craft.app.request.getSegment(5) %}
@@ -22,5 +23,3 @@
     </nav>
 
 {% endset %}
-
-{% includeCssResource 'sprout-forms/css/sproutforms.css' %}
