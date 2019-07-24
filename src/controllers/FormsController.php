@@ -31,6 +31,20 @@ class FormsController extends BaseController
     }
 
     /**
+     * @param int|null $formId
+     * @param null $settingsSectionHandle
+     * @return Response
+     */
+    public function actionSettings(int $formId = null, $settingsSectionHandle = null)
+    {
+        $form = SproutForms::$app->forms->getFormById($formId);
+
+        return $this->renderTemplate('sprout-forms/forms/_settings/'.$settingsSectionHandle, [
+            'form' => $form
+        ]);
+    }
+
+    /**
      * Save a form
      *
      * @return null|Response

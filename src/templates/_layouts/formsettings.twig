@@ -1,0 +1,26 @@
+{% extends "_layouts/cp" %}
+
+{% set title  = "Settings"|t('sprout-forms') %}
+{% set bodyClass = craft.app.request.getSegments()|slice(0, 3)|join(' ') %}
+
+{% set selectedSubnavItem = craft.app.request.getSegment(2) %}
+{% set selectedSidebarItem = craft.app.request.getSegment(5) %}
+{% set baseUrl = 'sprout-forms/forms/'~form.id~'/settings/' %}
+
+{% set sidebar %}
+
+    <nav class="last">
+        <ul>
+            <li><a href="{{ cpUrl(baseUrl~'general') }}"
+                   {% if selectedSidebarItem == 'general' %}class="sel"{% endif %}>{{ "General"|t('sprout-forms') }}</a>
+            </li>
+
+            <li><a href="{{ cpUrl(baseUrl~'rules') }}"
+                   {% if selectedSidebarItem == 'rules' %}class="sel"{% endif %}>{{ "Conditional Logic"|t('sprout-forms') }}</a>
+            </li>
+        </ul>
+    </nav>
+
+{% endset %}
+
+{% includeCssResource 'sprout-forms/css/sproutforms.css' %}

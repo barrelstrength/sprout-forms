@@ -347,6 +347,8 @@ class SproutForms extends Plugin implements SproutEditionsInterface
                 'sprout-forms/entry-statuses/edit',
             'sprout-forms/forms/<groupId:\d+>' =>
                 'sprout-forms/forms',
+            'sprout-forms/forms/<formId:\d+>/settings/<settingsSectionHandle:.*>' =>
+                'sprout-forms/forms/settings',
 
             // Reports
             'sprout-forms/reports/<dataSourceId:\d+>/new' => [
