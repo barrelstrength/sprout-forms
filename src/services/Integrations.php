@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\services;
 
+use barrelstrength\sproutforms\base\ConditionalInterface;
 use barrelstrength\sproutforms\base\Integration;
 use barrelstrength\sproutforms\base\IntegrationInterface;
 use barrelstrength\sproutforms\elements\Entry;
@@ -106,6 +107,39 @@ class Integrations extends Component
         }
 
         return $integrations;
+    }
+
+    /**
+     * @param $formId
+     *
+     * @return IntegrationRecord[]
+     * @throws InvalidConfigException
+     * @throws MissingComponentException
+     */
+    public function getFormConditionals($formId): array
+    {
+        $results = (new Query())
+            ->select([
+                'integrations.id',
+                'integrations.formId',
+                'integrations.name',
+                'integrations.type',
+                'integrations.rule',
+                'integrations.settings',
+                'integrations.enabled'
+            ])
+            ->from(['{{%sproutforms_conditional_logic}} conditionals'])
+            ->where(['integrations.formId' => $formId])
+            ->all();
+
+        $conditionals = [];
+
+        foreach ($results as $result) {
+            $integration = ComponentHelper::createComponent($result, ConditionalInterface::class);
+            $conditionals[] = new $result['type']($integration);
+        }
+
+        return $conditionals;
     }
 
     /**

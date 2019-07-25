@@ -150,7 +150,7 @@ class Install extends Migration
             'formId' => $this->integer()->notNull(),
             'name' => $this->string()->notNull(),
             'type' => $this->string()->notNull(),
-            'rule' => $this->text(),
+            'rules' => $this->text(),
             'settings' => $this->text(),
             'enabled' => $this->boolean()->defaultValue(false),
             'dateCreated' => $this->dateTime()->notNull(),

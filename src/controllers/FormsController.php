@@ -38,6 +38,7 @@ class FormsController extends BaseController
     public function actionSettings(int $formId = null, $settingsSectionHandle = null)
     {
         $form = SproutForms::$app->forms->getFormById($formId);
+        $conditionals = SproutForms::$app->integrations->getFormIntegrations($formId);
 
         return $this->renderTemplate('sprout-forms/forms/_settings/'.$settingsSectionHandle, [
             'form' => $form
