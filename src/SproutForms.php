@@ -13,6 +13,7 @@ use barrelstrength\sproutbasereports\services\DataSources;
 use barrelstrength\sproutbasereports\SproutBaseReports;
 use barrelstrength\sproutbasereports\SproutBaseReportsHelper;
 use barrelstrength\sproutforms\base\Captcha;
+use barrelstrength\sproutforms\conditionallogictypes\FieldRule;
 use barrelstrength\sproutforms\events\OnSaveEntryEvent;
 use barrelstrength\sproutforms\integrations\sproutemail\emailtemplates\basic\BasicSproutFormsNotification;
 use barrelstrength\sproutforms\integrations\sproutemail\events\notificationevents\SaveEntryEvent;
@@ -25,6 +26,7 @@ use barrelstrength\sproutforms\fields\Entries as FormEntriesField;
 use barrelstrength\sproutforms\integrations\sproutreports\datasources\SubmissionLogDataSource;
 use barrelstrength\sproutforms\integrationtypes\EntryElementIntegration;
 use barrelstrength\sproutforms\integrationtypes\CustomEndpoint;
+use barrelstrength\sproutforms\services\Conditionals;
 use barrelstrength\sproutforms\services\Integrations;
 use barrelstrength\sproutforms\widgets\RecentEntries;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
@@ -209,6 +211,10 @@ class SproutForms extends Plugin implements SproutEditionsInterface
         Event::on(Integrations::class, Integrations::EVENT_REGISTER_INTEGRATIONS, static function(RegisterComponentTypesEvent $event) {
             $event->types[] = CustomEndpoint::class;
             $event->types[] = EntryElementIntegration::class;
+        });
+
+        Event::on(Conditionals::class, Conditionals::EVENT_REGISTER_CONDITIONALS, static function(RegisterComponentTypesEvent $event) {
+            $event->types[] = FieldRule::class;
         });
 
         Event::on(Forms::class, Forms::EVENT_REGISTER_FORM_TEMPLATES, static function(RegisterComponentTypesEvent $event) {

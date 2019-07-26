@@ -36,6 +36,11 @@ class App extends Component
      */
     public $integrations;
 
+    /**
+     * @var Conditionals
+     */
+    public $conditionals;
+
     public function init()
     {
         $this->groups = new Groups();
@@ -44,5 +49,6 @@ class App extends Component
         $this->entries = new Entries();
         $this->frontEndFields = new FrontEndFields();
         $this->integrations = new Integrations();
+        $this->conditionals = new Conditionals();
     }
 }

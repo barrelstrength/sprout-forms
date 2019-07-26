@@ -6,6 +6,7 @@ use barrelstrength\sproutforms\base\ConditionalInterface;
 use barrelstrength\sproutforms\base\ConditionalLogic;
 use barrelstrength\sproutforms\conditionallogictypes\MissingIntegration;
 use barrelstrength\sproutforms\records\ConditionalLogic as ConditionalLogicRecord;
+use barrelstrength\sproutforms\SproutForms;
 use craft\base\Component;
 use craft\db\Query;
 use craft\errors\MissingComponentException;
@@ -39,6 +40,32 @@ class Conditionals extends Component
     }
 
     /**
+     * @param $config
+     *
+     * @return ConditionalInterface
+     * @throws InvalidConfigException
+     */
+    public function createIntegration($config): ConditionalInterface
+    {
+        if (is_string($config)) {
+            $config = ['type' => $config];
+        }
+
+        try {
+            /** @var ConditionalLogic $conditional */
+            $conditional = ComponentHelper::createComponent($config, ConditionalInterface::class);
+        } catch (MissingComponentException $e) {
+            $config['errorMessage'] = $e->getMessage();
+            $config['expectedType'] = $config['type'];
+            unset($config['type']);
+
+            $conditional = new MissingIntegration($config);
+        }
+
+        return $conditional;
+    }
+
+    /**
      * @return ConditionalLogic[]
      */
     public function getAllConditionals(): array
@@ -52,6 +79,28 @@ class Conditionals extends Component
         }
 
         return $conditionals;
+    }
+
+    /**
+     * @return array
+     */
+    public function getIntegrationOptions(): array
+    {
+        $conditionals = $this->getAllConditionals();
+
+        $options[] = [
+            'label' => Craft::t('sprout-forms', 'Add Rule...'),
+            'value' => ''
+        ];
+
+        foreach ($conditionals as $conditional) {
+            $options[] = [
+                'label' => $conditional::displayName(),
+                'value' => get_class($conditional)
+            ];
+        }
+
+        return $options;
     }
 
     /**
@@ -162,7 +211,7 @@ class Conditionals extends Component
         }
 
         try {
-            /** @var ConditionalLogic $integration */
+            /** @var ConditionalLogic $conditional */
             $conditional = ComponentHelper::createComponent($config, ConditionalInterface::class);
         } catch (MissingComponentException $e) {
             $config['errorMessage'] = $e->getMessage();

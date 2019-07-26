@@ -38,6 +38,7 @@ class FormsAsset extends AssetBundle
             'js/FieldModal.js',
             'js/FormSettings.js',
             'js/IntegrationModal.js',
+            'js/ConditionalModal.js'
         ];
 
         parent::init();

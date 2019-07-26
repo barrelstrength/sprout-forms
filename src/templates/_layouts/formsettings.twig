@@ -23,3 +23,15 @@
     </nav>
 
 {% endset %}
+
+{% do view.registerAssetBundle("barrelstrength\\sproutforms\\web\\assets\\forms\\FormsAsset") %}
+
+{% js %}
+
+    $(document).ready(function() {
+
+    $("#maindiv").css("height","600px");
+    new Craft.SproutForms.FormSettings();
+
+    });
+{% endjs %}

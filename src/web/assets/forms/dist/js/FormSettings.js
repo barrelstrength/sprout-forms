@@ -14,6 +14,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
         options: null,
         modal: null,
+        conditionalModal: null,
         $lightswitches: null,
 
         /**
@@ -51,7 +52,16 @@ if (typeof Craft.SproutForms === typeof undefined) {
                 this.resetIntegration(integration);
             }, this));
 
+            this.conditionalModal = Craft.SproutForms.IntegrationModal.getInstance();
+
+            this.conditionalModal.on('saveConditional', $.proxy(function(e) {
+                var integration = e.integration;
+                // Let's update the name if the conditional is updated
+                this.resetConditional(integration);
+            }, this));
+
             this.addListener($("#integrationsOptions"), 'change', 'createDefaultIntegration');
+            this.addListener($("#conditionalsOptions"), 'change', 'createDefaultConditional');
         },
 
         onChange: function(ev) {
@@ -94,6 +104,29 @@ if (typeof Craft.SproutForms === typeof undefined) {
                 }
             }
             $integrationDiv.html(integration.name);
+        },
+
+        /**
+         * Renames | update icon |
+         * of an existing conditional after edit it
+         *
+         * @param integration
+         */
+        resetConditional: function(integration) {
+            var $conditionalDiv = $("#sproutform-conditional-" + conditional.id);
+
+            var $container = $("#conditional-enabled-" + conditional.id);
+            var currentValue = conditional.enabled === '1' ? true : false;
+            var settingsValue = $container.attr('aria-checked') === 'true' ? true : false;
+            if (currentValue !== settingsValue) {
+                $container.attr('aria-checked', "" + currentValue);
+                if (currentValue) {
+                    $container.addClass("on");
+                } else {
+                    $container.removeClass("on");
+                }
+            }
+            $conditionalDiv.html(conditional.name);
         },
 
         createDefaultIntegration: function(type) {
@@ -144,6 +177,65 @@ if (typeof Craft.SproutForms === typeof undefined) {
                 }
             }, this));
 
+        },
+
+        createDefaultConditional: function(type) {
+            var that = this;
+            var conditionalCreate = $("#sproutforms-conditionals-create");
+            var currentConditional = $("#conditionalsOptions").val();
+            var formId = $("#formId").val();
+
+            if (currentConditional === '') {
+                return;
+            }
+
+            var data = {
+                type: currentConditional,
+                formId: formId
+            };
+
+            Craft.postActionRequest('sprout-forms/conditionals/save-conditional', data, $.proxy(function(response, textStatus) {
+                if (textStatus === 'success') {
+                    var conditional = response.conditional;
+
+                    conditionalCreate.before('<div class="field sproutforms-conditional-row" id ="sproutforms-conditional-row-' + conditional.id + '">' +
+                        '<div class="heading">' +
+                        '<a href="#" id ="sproutform-conditional-' + conditional.id + '" data-conditionalid="' + conditional.id + '">' + conditional.name + '</a>' +
+                        '</div>' +
+                        '<div>' +
+                        '<div class="lightswitch small" tabindex="0" data-value="1" role="checkbox" aria-checked="false" id ="conditional-enabled-' + conditional.id + '">' +
+                        '<div class="lightswitch-container">' +
+                        '<div class="label on"></div>' +
+                        '<div class="handle"></div>' +
+                        '<div class="label off"></div>' +
+                        '</div>' +
+                        '<input type="hidden" name="" value="">' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>');
+
+                    that.addListener($("#sproutform-conditional-" + conditional.id), 'activate', 'editConditional');
+
+                    $('#conditionalsOptions').val('');
+                    var $container = $("#conditional-enabled-" + conditional.id);
+                    $container.lightswitch();
+                    that.addListener($container, 'click', 'onChange');
+                } else {
+                    // something went wrong
+                }
+            }, this));
+
+        },
+
+        editConditional: function(option) {
+            var option = option.currentTarget;
+
+            var integrationId = $(option).data('integrationid');
+            // Make our field available to our parent function
+            //this.$field = $(option);
+            this.base($(option));
+
+            this.modal.editConditional(integrationId);
         },
 
         editIntegration: function(option) {

@@ -34,14 +34,17 @@ class FormsController extends BaseController
      * @param int|null $formId
      * @param null $settingsSectionHandle
      * @return Response
+     * @throws InvalidConfigException
+     * @throws \craft\errors\MissingComponentException
      */
     public function actionSettings(int $formId = null, $settingsSectionHandle = null)
     {
         $form = SproutForms::$app->forms->getFormById($formId);
-        $conditionals = SproutForms::$app->integrations->getFormIntegrations($formId);
 
         return $this->renderTemplate('sprout-forms/forms/_settings/'.$settingsSectionHandle, [
-            'form' => $form
+            'form' => $form,
+            'conditionals' => SproutForms::$app->conditionals->getFormConditionals($formId),
+            'conditionalOptions' => SproutForms::$app->conditionals->getIntegrationOptions(),
         ]);
     }
 

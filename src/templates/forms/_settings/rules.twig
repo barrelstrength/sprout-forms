@@ -2,5 +2,29 @@
 {% import "_includes/forms" as forms %}
 
 {% set content %}
-    <h2>Conditional logic</h2>
+    <input type="hidden" id="formId" value="{{ form.id }}">
+    {% for conditional in conditionals %}
+        <div class="field sproutforms-conditional-row" id="sproutforms-conditional-row-{{ conditional.id }}">
+            <div class="heading">
+                <a href="#" id="sproutform-conditional-{{ conditional.id }}" data-conditionalid="{{ conditional.id }}">{{ conditional.name }}</a>
+            </div>
+            <div>
+                {{ forms.lightswitch({
+                    on: conditional.enabled,
+                    small: true,
+                    id: "conditional-enabled-"~conditional.id,
+                    onLabel: "Show"|t('sprout-forms'),
+                    offLabel: "Hide"|t('sprout-forms')
+                }) }}
+            </div>
+        </div>
+    {% endfor %}
+
+    <div id="sproutforms-conditionals-create" class="field" style="padding-top:20px;">
+        {{ forms.select({
+            id: 'conditionalsOptions',
+            name: 'conditionalsOptions',
+            options: conditionalOptions
+        }) }}
+    </div>
 {% endset %}
