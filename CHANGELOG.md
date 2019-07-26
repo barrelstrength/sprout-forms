@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.3.9 - 2019-07-26
+
+### Changed
+- Updated barrelstrength/sprout-base-reports requirement v1.3.5
+
 ## 3.3.8 - 2019-07-26
 
 ### Fixed
