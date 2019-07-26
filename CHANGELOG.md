@@ -1,9 +1,16 @@
 # Changelog
 
+## 3.3.8 - 2019-07-26
+
+### Fixed
+- Fixed bug in C2 to C3 Notification Email Element migration ([#318])
+[#318]: https://github.com/barrelstrength/craft-sprout-forms/issues/318
+
 ## 3.3.7 - 2019-07-17
 
 ### Fixed
 - Fixed bug in C2 to C3 Notification Email Element migration ([#318])
+[#318]: https://github.com/barrelstrength/craft-sprout-forms/issues/318
 
 ## 3.3.6 - 2019-07-17
 
