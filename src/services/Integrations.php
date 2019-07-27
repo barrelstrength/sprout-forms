@@ -128,7 +128,7 @@ class Integrations extends Component
                 'integrations.settings',
                 'integrations.enabled'
             ])
-            ->from(['{{%sproutforms_conditional_logic}} conditionals'])
+            ->from(['{{%sproutforms_conditionals}} conditionals'])
             ->where(['integrations.formId' => $formId])
             ->all();
 

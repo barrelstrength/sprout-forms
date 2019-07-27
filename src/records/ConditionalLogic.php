@@ -25,6 +25,6 @@ class ConditionalLogic extends ActiveRecord
      */
     public static function tableName(): string
     {
-        return '{{%sproutforms_conditional_logic}}';
+        return '{{%sproutforms_conditionals}}';
     }
 }

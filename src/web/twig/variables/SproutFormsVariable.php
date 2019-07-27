@@ -365,6 +365,16 @@ class SproutFormsVariable
     }
 
     /**
+     * @return array
+     *
+     * @see SproutForms::$app->conditionals->prepareConditionalTypeSelection()
+     */
+    public function prepareConditionalTypeSelection(): array
+    {
+        return SproutForms::$app->conditionals->prepareConditionalTypeSelection();
+    }
+
+    /**
      * @param $settings
      *
      * @throws MissingComponentException

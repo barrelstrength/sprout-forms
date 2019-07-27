@@ -40,6 +40,15 @@ if (typeof Craft.SproutForms === typeof undefined) {
                 }
             });
 
+            // Add listeners to all conditionals
+            $("a[id^='sproutform-conditional']").each(function(i, el) {
+                var conditionalId = $(el).data('conditionalid');
+
+                if (conditionalId) {
+                    that.addListener($("#sproutform-conditional-" + conditionalId), 'activate', 'editConditional');
+                }
+            });
+
             this.$lightswitches = $('.sproutforms-integration-row .lightswitch');
 
             this.addListener(this.$lightswitches, 'click', 'onChange');
@@ -52,7 +61,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
                 this.resetIntegration(integration);
             }, this));
 
-            this.conditionalModal = Craft.SproutForms.IntegrationModal.getInstance();
+            this.conditionalModal = Craft.SproutForms.ConditionalModal.getInstance();
 
             this.conditionalModal.on('saveConditional', $.proxy(function(e) {
                 var integration = e.integration;
@@ -229,13 +238,13 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
         editConditional: function(option) {
             var option = option.currentTarget;
-
-            var integrationId = $(option).data('integrationid');
+            var conditionalId = $(option).data('conditionalid');
+            console.log(conditionalId);
             // Make our field available to our parent function
             //this.$field = $(option);
             this.base($(option));
 
-            this.modal.editConditional(integrationId);
+            this.conditionalModal.editConditional(conditionalId);
         },
 
         editIntegration: function(option) {

@@ -122,7 +122,7 @@ class Conditionals extends Component
                 'conditional.settings',
                 'conditional.enabled'
             ])
-            ->from(['{{%sproutforms_conditional_logic}} conditional'])
+            ->from(['{{%sproutforms_conditionals}} conditional'])
             ->where(['conditional.formId' => $formId])
             ->all();
 
@@ -155,7 +155,7 @@ class Conditionals extends Component
                 'conditional.settings',
                 'conditional.enabled'
             ])
-            ->from(['{{%sproutforms_integrations}} conditional'])
+            ->from(['{{%sproutforms_conditionals}} conditional'])
             ->where(['conditional.id' => $conditionalId])
             ->one();
 
@@ -250,6 +250,36 @@ class Conditionals extends Component
             'js' => $js,
             'css' => $css
         ];
+    }
+
+    /**
+     * Returns a conditional type selection array grouped by category
+     *
+     * Categories
+     * - Standard conditional
+     * - Custom conditionals that need to be registered using the Sprout Forms Conditional API
+     *
+     * @return array
+     */
+    public function prepareConditionalTypeSelection(): array
+    {
+        $conditionals = $this->getAllConditionals();
+        $standardConditionals = [];
+
+        if (count($conditionals)) {
+            // Loop through registered conditionals and add them to the standard group
+            foreach ($conditionals as $class => $integration) {
+                $standardConditionals[get_class($integration)] = $integration::displayName();
+            }
+
+            // Sort fields alphabetically by name
+            asort($standardConditionals);
+
+            // Add the group label to the beginning of the standard group
+            $standardConditionals = SproutForms::$app->fields->prependKeyValue($standardConditionals, 'standardConditionalsGroup', ['optgroup' => Craft::t('sprout-forms', 'Standard Rules')]);
+        }
+
+        return $standardConditionals;
     }
 
 }
