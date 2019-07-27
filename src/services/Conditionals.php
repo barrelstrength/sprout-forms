@@ -152,6 +152,8 @@ class Conditionals extends Component
                 'conditional.name',
                 'conditional.type',
                 'conditional.rules',
+                'conditional.behaviorAction',
+                'conditional.behaviorTarget',
                 'conditional.settings',
                 'conditional.enabled'
             ])
@@ -186,6 +188,8 @@ class Conditionals extends Component
         $conditionalRecord->name = $conditionalLogic->name ?? $conditionalLogic::displayName();
         $conditionalRecord->enabled = $conditionalLogic->enabled;
         $conditionalRecord->rules = $conditionalLogic->rules;
+        $conditionalRecord->behaviorAction = $conditionalLogic->behaviorAction;
+        $conditionalRecord->behaviorTarget = $conditionalLogic->behaviorTarget;
 
         $conditionalRecord->settings = $conditionalLogic->getSettings();
 

@@ -13,6 +13,8 @@ use barrelstrength\sproutforms\base\Integration as IntegrationApi;
  * @property                                                   $name
  * @property                                                   $type
  * @property                                                   $rules
+ * @property                                                   $behaviorAction
+ * @property                                                   $behaviorTarget
  * @property                                                   $settings
  * @property                                                   $enabled
  */

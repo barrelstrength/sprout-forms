@@ -75,6 +75,8 @@ class ConditionalsController extends BaseController
         $conditional->name = $request->getBodyParam('name');
         $conditional->enabled = $request->getBodyParam('enabled');
         $conditional->rules = $request->getBodyParam('rules');
+        $conditional->behaviorAction = $request->getBodyParam('behaviorAction');
+        $conditional->behaviorTarget = $request->getBodyParam('behaviorTarget');
 
         $settings = $request->getBodyParam('settings.'.$type);
 
@@ -84,6 +86,8 @@ class ConditionalsController extends BaseController
             'name' => $conditional->name,
             'enabled' => $conditional->enabled,
             'rules' => $conditional->rules,
+            'behaviorAction' => $conditional->behaviorAction,
+            'behaviorTarget' => $conditional->behaviorTarget,
             'type' => get_class($conditional),
             'settings' => $settings,
         ]);

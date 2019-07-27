@@ -153,6 +153,8 @@ class Install extends Migration
             'rules' => $this->text(),
             'settings' => $this->text(),
             'enabled' => $this->boolean()->defaultValue(false),
+            'behaviorAction' => $this->string(),
+            'behaviorTarget' => $this->string(),
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull(),
             'uid' => $this->uid(),
