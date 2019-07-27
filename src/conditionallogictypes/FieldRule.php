@@ -20,5 +20,17 @@ class FieldRule extends ConditionalLogic
     {
         return Craft::t('sprout-forms', 'Field Rule');
     }
+
+    /**
+     * @return string|null
+     */
+    public function getSettingsHtml()
+    {
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/conditionallogictypes/fieldrule/settings',
+            [
+                'conditional' => $this
+            ]
+        );
+    }
 }
 

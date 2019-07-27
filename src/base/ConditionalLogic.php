@@ -26,6 +26,25 @@ abstract class ConditionalLogic extends SavableComponent implements ConditionalI
     }
 
     /**
+     * @return array
+     * @throws \yii\base\InvalidConfigException
+     */
+    final public function getFormFieldsAsOptions(): array
+    {
+        $fields = $this->getForm()->getFields();
+        $fieldOptions = [];
+
+        foreach ($fields as $field) {
+            $fieldOptions[] = [
+                'label' => $field->name.' ('.$field->handle.')',
+                'value' => $field->handle,
+            ];
+        }
+
+        return $fieldOptions;
+    }
+
+    /**
      * @inheritdoc
      */
     public function settingsAttributes(): array
