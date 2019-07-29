@@ -1,5 +1,14 @@
-{# Empty for now #}
-
+{% set cols = [
+    {
+        type: 'textual'
+    },
+    {
+        type: 'textual'
+    },
+    {
+        type: 'textual'
+    }
+] %}
 
 {% for rule in conditional.rules %}
     <table id="sproutforms-rules-{{ loop.index }}" class="data fullwidth">
@@ -43,20 +52,24 @@
     </table>
 {% endfor %}
 
-<div class="buttons">
+<div class="buttons fullwidth" id="and-add-wrapper">
     <div id="add-and-rules" class="btn add icon small" tabindex="0"> AND
     </div>
 </div>
 
 <script>
     $( document ).ready(function() {
-        var addTableButton = $("#add-and-rules");
+        var addTableButton = $("#settings-barrelstrength-sproutforms-conditionallogictypes-FieldRule-add-and-rules");
         var rules = {{ conditional.rules|json_encode|raw }};
 
         if (rules == null)
         {
             addTableButton.trigger('click');
         }
+
+        addTableButton.click(function() {
+            addTable();
+        });
 
 
         var tableId = 'sproutseo-schema-contacts';
@@ -66,24 +79,19 @@
 
         //new Craft.SproutSeo.EditableTable(tableId, baseName, columns, settings);
         function addTable(){
-            var currentIndex = rules.length();
+            var currentIndex = rules != null ? rules.length() : 0;
             var nextIndex = currentIndex + 1;
 
-            addTableButton.before('<table id="sproutforms-rules-'+nextIndex+'" class="data fullwidth">' +
-                '<div class="heading">' +
-                '<a href="#" id ="sproutform-conditional-' + conditional.id + '" data-conditionalid="' + conditional.id + '">' + conditional.name + '</a>' +
-                '</div>' +
-                '<div>' +
-                '<div class="lightswitch small" tabindex="0" data-value="1" role="checkbox" aria-checked="false" id ="conditional-enabled-' + conditional.id + '">' +
-                '<div class="lightswitch-container">' +
-                '<div class="label on"></div>' +
-                '<div class="handle"></div>' +
-                '<div class="label off"></div>' +
-                '</div>' +
-                '<input type="hidden" name="" value="">' +
-                '</div>' +
-                '</div>' +
-                '</div>');
+            $("#settings-barrelstrength-sproutforms-conditionallogictypes-FieldRule-and-add-wrapper").before('<table id="sproutforms-rules-'+nextIndex+'" class="data fullwidth">' +
+                '<thead><tr>' +
+                '<th>Form Field</th>' +
+                '<th>Rule</th>' +
+                '<th>Value</th>' +
+                '<th>Value</th>' +
+                '<th><div class="buttons"><div id="add-rule'+nextIndex+'" class="btn add icon small" tabindex="0">OR</div></div></th>' +
+                '<tbody>' +
+                '</tbody>' +
+                '</table>');
         }
     });
 
