@@ -11,7 +11,7 @@
 ] %}
 
 {% for rule in conditional.rules %}
-    <table id="sproutforms-rules-{{ loop.index }}" class="data fullwidth">
+    <table id="sproutforms-rules-{{ loop.index }}" class="data rules-table fullwidth">
         <thead>
         <tr>
             <th>{{ "Field"|t }}</th>
@@ -73,25 +73,29 @@
 
 
         var tableId = 'sproutseo-schema-contacts';
-        var baseName = 'sproutseo[globals][contacts]';
+        var baseName = 'sproutforms[globals][contacts]';
         var columns = {{ cols|json_encode|raw }};
         var settings = {};
 
         //new Craft.SproutSeo.EditableTable(tableId, baseName, columns, settings);
         function addTable(){
-            var currentIndex = rules != null ? rules.length() : 0;
+            var tables = $(".rules-table");
+            var currentIndex = tables.length ? tables.length : 0;
             var nextIndex = currentIndex + 1;
+            var tableId = 'sproutforms-rules-'+nextIndex;
+            var baseName = 'sproutforms['+nextIndex+'][rules]';
 
-            $("#settings-barrelstrength-sproutforms-conditionallogictypes-FieldRule-and-add-wrapper").before('<table id="sproutforms-rules-'+nextIndex+'" class="data fullwidth">' +
+            $("#settings-barrelstrength-sproutforms-conditionallogictypes-FieldRule-and-add-wrapper").before('<table id="'+tableId+'" class="data rules-table fullwidth">' +
                 '<thead><tr>' +
                 '<th>Form Field</th>' +
                 '<th>Rule</th>' +
-                '<th>Value</th>' +
                 '<th>Value</th>' +
                 '<th><div class="buttons"><div id="add-rule'+nextIndex+'" class="btn add icon small" tabindex="0">OR</div></div></th>' +
                 '<tbody>' +
                 '</tbody>' +
                 '</table>');
+
+            new Craft.SproutForms.EditableTable(tableId, baseName, columns, settings);
         }
     });
 
