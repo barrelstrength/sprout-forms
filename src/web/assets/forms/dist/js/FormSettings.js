@@ -119,9 +119,9 @@ if (typeof Craft.SproutForms === typeof undefined) {
          * Renames | update icon |
          * of an existing conditional after edit it
          *
-         * @param integration
+         * @param conditional
          */
-        resetConditional: function(integration) {
+        resetConditional: function(conditional) {
             var $conditionalDiv = $("#sproutform-conditional-" + conditional.id);
 
             var $container = $("#conditional-enabled-" + conditional.id);

@@ -165,7 +165,9 @@ class Conditionals extends Component
             return null;
         }
 
+        /** @var ConditionalLogic $conditional **/
         $conditional = ComponentHelper::createComponent($result, ConditionalInterface::class);
+        $conditional->rules = json_decode($conditional->rules, true);
 
         return new $result['type']($conditional);
     }
@@ -187,7 +189,7 @@ class Conditionals extends Component
         $conditionalRecord->formId = $conditionalLogic->formId;
         $conditionalRecord->name = $conditionalLogic->name ?? $conditionalLogic::displayName();
         $conditionalRecord->enabled = $conditionalLogic->enabled;
-        $conditionalRecord->rules = $conditionalLogic->rules;
+        $conditionalRecord->rules = is_array($conditionalLogic->rules) ? json_encode($conditionalLogic->rules) : $conditionalLogic->rules;
         $conditionalRecord->behaviorAction = $conditionalLogic->behaviorAction;
         $conditionalRecord->behaviorTarget = $conditionalLogic->behaviorTarget;
 

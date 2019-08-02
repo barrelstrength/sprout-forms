@@ -1,3 +1,4 @@
+{% import "_includes/forms" as forms %}
 {% set cols = [
     {
         type: 'textual'
@@ -11,6 +12,7 @@
 ] %}
 
 {% for rule in conditional.rules %}
+    {% set mainIndex = loop.index %}
     <table id="sproutforms-rules-{{ loop.index }}" class="data rules-table fullwidth">
         <thead>
         <tr>
@@ -22,32 +24,35 @@
         </tr>
         </thead>
         <tbody>
-            {% for row in rule.rows %}
+            {% for rows in rule.rules %}
             <tr data-id="{{ loop.index }}">
-                <td>
-                    <select id="rules[field]" name="rules[field][{{ loop.index }}]" disabled="">
-                        <optgroup label="Standard Rules">
-                            <option value="" selected="">None</option>
-                        </optgroup>
-                    </select>
-                </td>
+                {% for row in rows %}
                 <td>
                     {{ forms.text({
-                        name: 'rules[value][' ~ loop.index ~ ']',
-                        value: row.value,
+                        name: 'sproutformsrules[' ~ mainIndex ~ '][rules][' ~ loop.index ~ ']',
+                        value: row,
                         errors: ''
                     }) }}
                 </td>
-                <td class="thin action">
-                    <div class="buttons">
-                        <div id="add-rule-{{ loop.index }}" class="btn add icon small" tabindex="0"> +Add
-                        </div>
-                    </div></td>
+                <td>
+                    {{ forms.text({
+                        name: 'sproutformsrules[' ~ mainIndex ~ '][rules][' ~ loop.index ~ ']',
+                        value: row,
+                        errors: ''
+                    }) }}
+                </td>
+                <td>
+                    {{ forms.text({
+                        name: 'sproutformsrules[' ~ mainIndex ~ '][rules][' ~ loop.index ~ ']',
+                        value: row,
+                        errors: ''
+                    }) }}
+                </td>
                 <td class="thin action"><a class="delete icon"
                                            title="Delete"></a></td>
+                {% endfor %}
             </tr>
             {% endfor %}
-
         </tbody>
     </table>
 {% endfor %}
@@ -83,7 +88,7 @@
             var currentIndex = tables.length ? tables.length : 0;
             var nextIndex = currentIndex + 1;
             var tableId = 'sproutforms-rules-'+nextIndex;
-            var baseName = 'sproutforms['+nextIndex+'][rules]';
+            var baseName = 'sproutformsrules['+nextIndex+'][rules]';
 
             $("#settings-barrelstrength-sproutforms-conditionallogictypes-FieldRule-and-add-wrapper").before('<table id="'+tableId+'" class="data rules-table fullwidth">' +
                 '<thead><tr>' +
@@ -96,7 +101,16 @@
                 '</table>');
 
             new Craft.SproutForms.EditableTable(tableId, baseName, columns, settings);
+
+            $('#add-rule'+nextIndex).trigger('click');
         }
+
+        $('.rules-table').each(function() {
+            var tableId = this.id;
+            console.log(tableId);
+            var baseName = 'sproutformsrules['+this.id+'][rules]';
+            new Craft.SproutForms.EditableTable(tableId, baseName, columns, settings);
+        });
     });
 
 </script>

@@ -74,7 +74,7 @@ class ConditionalsController extends BaseController
         $conditional->formId = $request->getBodyParam('formId');
         $conditional->name = $request->getBodyParam('name');
         $conditional->enabled = $request->getBodyParam('enabled');
-        $conditional->rules = $request->getBodyParam('rules');
+        $conditional->rules = $request->getBodyParam('sproutformsrules');
         $conditional->behaviorAction = $request->getBodyParam('behaviorAction');
         $conditional->behaviorTarget = $request->getBodyParam('behaviorTarget');
 
