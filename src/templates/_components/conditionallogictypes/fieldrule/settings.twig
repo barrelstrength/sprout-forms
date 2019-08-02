@@ -25,7 +25,8 @@
         </thead>
         <tbody>
             {% for rows in rule.rules %}
-            <tr data-id="{{ loop.index }}">
+
+            <tr data-id="{{ mainIndex }}-{{ loop.index }}">
                 {% for row in rows %}
                 <td>
                     {{ forms.text({
@@ -34,23 +35,12 @@
                         errors: ''
                     }) }}
                 </td>
-                <td>
-                    {{ forms.text({
-                        name: 'sproutformsrules[' ~ mainIndex ~ '][rules][' ~ loop.index ~ ']',
-                        value: row,
-                        errors: ''
-                    }) }}
-                </td>
-                <td>
-                    {{ forms.text({
-                        name: 'sproutformsrules[' ~ mainIndex ~ '][rules][' ~ loop.index ~ ']',
-                        value: row,
-                        errors: ''
-                    }) }}
-                </td>
+                {% endfor %}
+
+                <td class="thin action"><a class="move icon"
+                                           title="Reorder"></a></td>
                 <td class="thin action"><a class="delete icon"
                                            title="Delete"></a></td>
-                {% endfor %}
             </tr>
             {% endfor %}
         </tbody>
@@ -105,10 +95,10 @@
             $('#add-rule'+nextIndex).trigger('click');
         }
 
-        $('.rules-table').each(function() {
+        $('.rules-table').each(function(index) {
             var tableId = this.id;
             console.log(tableId);
-            var baseName = 'sproutformsrules['+this.id+'][rules]';
+            var baseName = 'sproutformsrules['+index+'][rules]';
             new Craft.SproutForms.EditableTable(tableId, baseName, columns, settings);
         });
     });
