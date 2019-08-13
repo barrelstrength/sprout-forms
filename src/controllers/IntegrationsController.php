@@ -18,7 +18,7 @@ use yii\base\InvalidConfigException;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
-class sIntegrationsController extends BaseController
+class IntegrationsController extends BaseController
 {
     /**
      * Enable or disable an Integration

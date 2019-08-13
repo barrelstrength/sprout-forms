@@ -32,5 +32,32 @@ class FieldRule extends ConditionalLogic
             ]
         );
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getBehaviorActions(): array
+    {
+        return [
+            'show',
+            'hide'
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getBehaviorActionsAsOptions(): array
+    {
+        $options = [];
+        foreach ($this->getBehaviorActions() as $behaviorAction) {
+            $options[] = [
+                'label' => $behaviorAction,
+                'value' => $behaviorAction
+            ];
+        }
+
+        return $options;
+    }
 }
 

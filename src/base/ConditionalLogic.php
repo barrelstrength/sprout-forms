@@ -61,5 +61,13 @@ abstract class ConditionalLogic extends SavableComponent implements ConditionalI
     {
         return false;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getBehaviorActions(): array
+    {
+        return [];
+    }
 }
 

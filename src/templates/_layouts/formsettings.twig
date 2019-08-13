@@ -1,4 +1,5 @@
-{% extends "_layouts/cp" %}
+{% extends "sprout-forms/_layouts/base" %}
+{% do view.registerAssetBundle("barrelstrength\\sproutforms\\web\\assets\\forms\\FormsAsset") %}
 
 {% set title  = form.name~" - Settings"|t('sprout-forms') %}
 {% set bodyClass = craft.app.request.getSegments()|slice(0, 3)|join(' ') %}
@@ -23,8 +24,6 @@
     </nav>
 
 {% endset %}
-
-{% do view.registerAssetBundle("barrelstrength\\sproutforms\\web\\assets\\forms\\FormsAsset") %}
 
 {% js %}
 

@@ -17,4 +17,11 @@ interface ConditionalInterface extends SavableComponentInterface
      * @return bool
      */
     public function validateRules($fields): bool;
+
+    /**
+     * Behaviors actions
+     *
+     * @return array
+     */
+    public function getBehaviorActions(): array;
 }

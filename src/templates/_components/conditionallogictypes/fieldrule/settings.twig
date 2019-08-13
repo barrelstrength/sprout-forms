@@ -19,8 +19,7 @@
             <th>{{ "Field"|t }}</th>
             <th>{{ "Rule"|t }}</th>
             <th>{{ "value"|t }}</th>
-            <th class="thin"></th>
-            <th class="thin"></th>
+            <th><div class="buttons"><div id="add-rule{{ mainIndex }}" class="btn add icon small" tabindex="0">OR</div></div></th>
         </tr>
         </thead>
         <tbody>
@@ -51,7 +50,38 @@
     <div id="add-and-rules" class="btn add icon small" tabindex="0"> AND
     </div>
 </div>
-
+<hr>
+<div class="field" id="settings-barrelstrength-sproutforms-conditionallogictypes-FieldRule-type-field">
+    <div class="heading">
+        <label id="settings-barrelstrength-sproutforms-conditionallogictypes-FieldRule-type-label" for="settings-barrelstrength-sproutforms-conditionallogictypes-FieldRule-type">{{ "Behavior"|t('sprout-forms') }}</label>
+        <div class="instructions"><p>{{ "When the rules are met, this behavior will happen"|t('sprout-forms') }}</p>
+        </div>
+    </div>
+</div>
+<table id="sproutforms-behaviors" class="data behavior-table fullwidth">
+    <thead>
+    <tr>
+        <th>{{ forms.select({
+                id: 'type',
+                name: 'behaviorAction',
+                hasOptgroups: true,
+                options: conditional.getBehaviorActionsAsOptions(),
+                value: conditional.behaviorAction,
+                errors: conditional.getErrors('behaviorAction') ?? null
+            }) }}</th>
+        <th>{{ forms.select({
+                id: 'type',
+                name: 'behaviorTarget',
+                hasOptgroups: true,
+                options: conditional.getFormFieldsAsOptions(),
+                value: conditional.behaviorTarget,
+                errors: conditional.getErrors('behaviorTarget') ?? null
+            }) }}</th>
+    </tr>
+    </thead>
+</table>
+<hr>
+<h1>{{ namespace }}</h1>
 <script>
     $( document ).ready(function() {
         var addTableButton = $("#settings-barrelstrength-sproutforms-conditionallogictypes-FieldRule-add-and-rules");
