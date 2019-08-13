@@ -50,6 +50,7 @@ abstract class ConditionalLogic extends SavableComponent implements ConditionalI
     public function settingsAttributes(): array
     {
         $attributes = parent::settingsAttributes();
+        $attributes[] = 'conditionalRules';
 
         return $attributes;
     }

@@ -11,7 +11,7 @@
     }
 ] %}
 
-{% for rule in conditional.rules %}
+{% for rule in conditional.conditionalRules %}
     {% set mainIndex = loop.index %}
     <table id="sproutforms-rules-{{ loop.index }}" class="data rules-table fullwidth">
         <thead>
@@ -24,12 +24,12 @@
         </thead>
         <tbody>
             {% for rows in rule.rules %}
-
-            <tr data-id="{{ mainIndex }}-{{ loop.index }}">
+             {% set secondIndex = loop.index %}
+            <tr data-id="{{ mainIndex }}-{{ secondIndex }}">
                 {% for row in rows %}
                 <td>
                     {{ forms.text({
-                        name: 'sproutformsrules[' ~ mainIndex ~ '][rules][' ~ loop.index ~ ']',
+                        name: 'conditionalRules[' ~ mainIndex ~ '][rules][' ~ secondIndex ~ '][' ~ loop.index ~ ']',
                         value: row,
                         errors: ''
                     }) }}
@@ -50,42 +50,12 @@
     <div id="add-and-rules" class="btn add icon small" tabindex="0"> AND
     </div>
 </div>
-<hr>
-<div class="field" id="settings-barrelstrength-sproutforms-conditionallogictypes-FieldRule-type-field">
-    <div class="heading">
-        <label id="settings-barrelstrength-sproutforms-conditionallogictypes-FieldRule-type-label" for="settings-barrelstrength-sproutforms-conditionallogictypes-FieldRule-type">{{ "Behavior"|t('sprout-forms') }}</label>
-        <div class="instructions"><p>{{ "When the rules are met, this behavior will happen"|t('sprout-forms') }}</p>
-        </div>
-    </div>
-</div>
-<table id="sproutforms-behaviors" class="data behavior-table fullwidth">
-    <thead>
-    <tr>
-        <th>{{ forms.select({
-                id: 'type',
-                name: 'behaviorAction',
-                hasOptgroups: true,
-                options: conditional.getBehaviorActionsAsOptions(),
-                value: conditional.behaviorAction,
-                errors: conditional.getErrors('behaviorAction') ?? null
-            }) }}</th>
-        <th>{{ forms.select({
-                id: 'type',
-                name: 'behaviorTarget',
-                hasOptgroups: true,
-                options: conditional.getFormFieldsAsOptions(),
-                value: conditional.behaviorTarget,
-                errors: conditional.getErrors('behaviorTarget') ?? null
-            }) }}</th>
-    </tr>
-    </thead>
-</table>
-<hr>
-<h1>{{ namespace }}</h1>
+
 <script>
     $( document ).ready(function() {
         var addTableButton = $("#settings-barrelstrength-sproutforms-conditionallogictypes-FieldRule-add-and-rules");
-        var rules = {{ conditional.rules|json_encode|raw }};
+        var rules = {{ conditional.conditionalRules|json_encode|raw }};
+        var namespace = "settings[{{ className(conditional)|e('js') }}]";
 
         if (rules == null)
         {
@@ -96,19 +66,15 @@
             addTable();
         });
 
-
-        var tableId = 'sproutseo-schema-contacts';
-        var baseName = 'sproutforms[globals][contacts]';
         var columns = {{ cols|json_encode|raw }};
         var settings = {};
 
-        //new Craft.SproutSeo.EditableTable(tableId, baseName, columns, settings);
         function addTable(){
             var tables = $(".rules-table");
             var currentIndex = tables.length ? tables.length : 0;
             var nextIndex = currentIndex + 1;
             var tableId = 'sproutforms-rules-'+nextIndex;
-            var baseName = 'sproutformsrules['+nextIndex+'][rules]';
+            var baseName = namespace+'[conditionalRules]['+nextIndex+'][rules]';
 
             $("#settings-barrelstrength-sproutforms-conditionallogictypes-FieldRule-and-add-wrapper").before('<table id="'+tableId+'" class="data rules-table fullwidth">' +
                 '<thead><tr>' +
@@ -128,7 +94,7 @@
         $('.rules-table').each(function(index) {
             var tableId = this.id;
             console.log(tableId);
-            var baseName = 'sproutformsrules['+index+'][rules]';
+            var baseName = namespace+'[conditionalRules]['+index+'][rules]';
             new Craft.SproutForms.EditableTable(tableId, baseName, columns, settings);
         });
     });

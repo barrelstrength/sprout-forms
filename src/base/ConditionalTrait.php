@@ -28,11 +28,11 @@ trait ConditionalTrait
     public $enabled = true;
 
     /**
-     * The rules
+     * The Conditional Rules
      *
      * @var array|null
      */
-    public $rules;
+    public $conditionalRules;
 
     /**
      * @var string

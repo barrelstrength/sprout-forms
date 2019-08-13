@@ -64,13 +64,13 @@ if (typeof Craft.SproutForms === typeof undefined) {
             this.conditionalModal = Craft.SproutForms.ConditionalModal.getInstance();
 
             this.conditionalModal.on('saveConditional', $.proxy(function(e) {
-                var integration = e.integration;
+                var conditional = e.conditional;
                 // Let's update the name if the conditional is updated
-                this.resetConditional(integration);
+                this.resetConditional(conditional);
             }, this));
 
             this.addListener($("#integrationsOptions"), 'change', 'createDefaultIntegration');
-            this.addListener($("#conditionalsOptions"), 'change', 'createDefaultConditional');
+            this.addListener($("#conditionalOptions"), 'change', 'createDefaultConditional');
         },
 
         onChange: function(ev) {
@@ -191,7 +191,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
         createDefaultConditional: function(type) {
             var that = this;
             var conditionalCreate = $("#sproutforms-conditionals-create");
-            var currentConditional = $("#conditionalsOptions").val();
+            var currentConditional = $("#conditionalOptions").val();
             var formId = $("#formId").val();
 
             if (currentConditional === '') {
@@ -225,7 +225,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
                     that.addListener($("#sproutform-conditional-" + conditional.id), 'activate', 'editConditional');
 
-                    $('#conditionalsOptions').val('');
+                    $('#conditionalOptions').val('');
                     var $container = $("#conditional-enabled-" + conditional.id);
                     $container.lightswitch();
                     that.addListener($container, 'click', 'onChange');
