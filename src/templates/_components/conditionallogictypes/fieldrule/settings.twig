@@ -1,7 +1,8 @@
 {% import "_includes/forms" as forms %}
 {% set cols = [
     {
-        type: 'textual'
+        type: 'select',
+        options: conditional.getFormFieldsAsOptions()
     },
     {
         type: 'textual'
@@ -28,11 +29,21 @@
             <tr data-id="{{ mainIndex }}-{{ secondIndex }}">
                 {% for row in rows %}
                 <td>
-                    {{ forms.text({
-                        name: 'conditionalRules[' ~ mainIndex ~ '][rules][' ~ secondIndex ~ '][' ~ loop.index ~ ']',
-                        value: row,
-                        errors: ''
-                    }) }}
+                    {% set rowName = 'conditionalRules[' ~ mainIndex ~ '][rules][' ~ secondIndex ~ '][' ~ loop.index ~ ']' %}
+                    {% if loop.index == 1 %}
+                        {{ forms.select({
+                            name: rowName,
+                            hasOptgroups: true,
+                            options: conditional.getFormFieldsAsOptions(),
+                            value: row
+                        }) }}
+                    {% else %}
+                        {{ forms.text({
+                            name: rowName,
+                            value: row,
+                            errors: ''
+                        }) }}
+                    {% endif %}
                 </td>
                 {% endfor %}
 
@@ -93,7 +104,6 @@
 
         $('.rules-table').each(function(index) {
             var tableId = this.id;
-            console.log(tableId);
             var baseName = namespace+'[conditionalRules]['+index+'][rules]';
             new Craft.SproutForms.EditableTable(tableId, baseName, columns, settings);
         });

@@ -114,17 +114,12 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
                     '>';
 
                 switch (col.type) {
-                    case 'selectOther': {
-                        var isOwnership = baseName.indexOf('ownership') > -1;
-                        if (isOwnership) {
-                            rowHtml += '<div class="field sprout-selectother"><div class="select sprout-selectotherdropdown"><select onchange="setDefault(this)" name="' + name + '">';
-                        } else {
-                            rowHtml += '<div class="field sprout-selectother"><div class="select sprout-selectotherdropdown"><select name="' + name + '">';
-                        }
+                    case 'select': {
+                        rowHtml += '<div class="select"><select onchange="onUpdateField(this)" name="' + name + '">';
 
                         var hasOptgroups = false;
 
-                        var firstRow = 'disabled selected';
+                        var firstRow = 'selected';
 
                         for (var key in col.options) {
                             var option = col.options[key];
@@ -153,10 +148,6 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
                         }
 
                         rowHtml += '</select></div>';
-
-                        rowHtml += '<div class="texticon clearable sprout-selectothertext hidden"><input class="text fullwidth" type="text" name="' + name + '" value="" autocomplete="off"><div class="clear" title="Clear"></div></div>';
-
-                        rowHtml += '</div>';
 
                         break;
                     }
