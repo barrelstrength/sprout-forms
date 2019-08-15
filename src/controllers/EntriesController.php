@@ -138,7 +138,7 @@ class EntriesController extends BaseController
     {
         $success = true;
 
-        $saveData = SproutForms::$app->entries->isDataSaved($this->form);
+        $saveData = SproutForms::$app->entries->isSaveDataEnabled($this->form);
 
         // Save Data and Trigger the onSaveEntryEvent
         if ($saveData) {
@@ -198,7 +198,7 @@ class EntriesController extends BaseController
 
         $form = SproutForms::$app->forms->getFormById($entry->formId);
 
-        $saveData = SproutForms::$app->entries->isDataSaved($form);
+        $saveData = SproutForms::$app->entries->isSaveDataEnabled($form);
 
         if (!$saveData) {
             Craft::$app->getSession()->setError(Craft::t('sprout-forms', "Unable to edit entry. Enable the 'Save Data' for this form to view, edit, or delete content."));

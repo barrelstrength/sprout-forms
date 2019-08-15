@@ -125,7 +125,7 @@
         offLabel: "Hide"|t('sprout-forms')
     }) }}
 
-    {% if settings.enableSaveData %}
+    {% if settings.enableSaveData and settings.enableSaveDataPerFormBasis %}
 
         {{ forms.lightswitchField({
             label: "Save Data <span class='info'>Save submitted Sprout Form Entries for this form to the Craft database</span>"|t('sprout-forms'),
