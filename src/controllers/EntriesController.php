@@ -110,7 +110,8 @@ class EntriesController extends BaseController
         }
 
         $event = new OnBeforeValidateEntryEvent([
-            'form' => $this->form
+            'form' => $this->form,
+            'entry' => $entry
         ]);
 
         $this->trigger(self::EVENT_BEFORE_VALIDATE, $event);
