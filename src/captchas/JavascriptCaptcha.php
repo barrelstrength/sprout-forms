@@ -46,10 +46,11 @@ class JavascriptCaptcha extends Captcha
 
         // Set a hidden field with no value and use javascript to set it.
         $output = '
-    <input type="hidden" id="'.$uniqueId.'" name="'.$uniqueId.'" />
-    <script type="text/javascript">
-        document.getElementById("'.$uniqueId.'").value = "'.$uniqueId.'";
-    </script>';
+<input type="hidden" id="'.$uniqueId.'" name="'.$uniqueId.'" />';
+
+        $js = 'document.getElementById("'.$uniqueId.'").value = "'.$uniqueId.'";';
+
+        Craft::$app->getView()->registerJs($js);
 
         return $output;
     }
