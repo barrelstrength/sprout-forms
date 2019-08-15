@@ -18,6 +18,7 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
         id: null,
         baseName: null,
         columns: null,
+        conditionalTypes: null,
         sorter: null,
         biggestId: -1,
 
@@ -25,10 +26,11 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
         $tbody: null,
         $addRowBtn: null,
 
-        init: function(id, baseName, columns, settings) {
+        init: function(id, baseName, columns, settings, conditionalTypes) {
             this.id = id;
             this.baseName = baseName;
             this.columns = columns;
+            this.conditionalTypes = conditionalTypes;
             this.setSettings(settings, Craft.SproutForms.EditableTable.defaults);
 
             this.$table = $('#' + id);

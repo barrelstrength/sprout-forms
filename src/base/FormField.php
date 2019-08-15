@@ -58,6 +58,16 @@ abstract class FormField extends Field
     }
 
     /**
+     * Return the condition type to associate on the Conditional Logic API
+     *
+     * @return string
+     */
+    public function getCompatibleConditional(): string
+    {
+        return '';
+    }
+
+    /**
      * The name of your form field
      *
      * @return string

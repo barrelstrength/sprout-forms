@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutbasefields\SproutBaseFields;
+use barrelstrength\sproutforms\base\ConditionalLogic;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
@@ -287,5 +288,13 @@ class EmailDropdown extends BaseOptionsFormField
             CraftPlainText::class,
             CraftDropdown::class
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleConditional(): string
+    {
+        return ConditionalLogic::CONDITIONAL_TYPE_TEXT;
     }
 }

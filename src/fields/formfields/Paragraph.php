@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\base\ConditionalLogic;
 use Craft;
 use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Db;
@@ -232,5 +233,13 @@ class Paragraph extends FormField implements PreviewableFieldInterface
         return [
             CraftPlainText::class
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleConditional(): string
+    {
+        return ConditionalLogic::CONDITIONAL_TYPE_TEXT;
     }
 }

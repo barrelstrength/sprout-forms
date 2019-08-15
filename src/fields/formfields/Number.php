@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\base\ConditionalLogic;
 use Craft;
 use craft\fields\Dropdown as CraftDropdown;
 use craft\fields\Number as CraftNumber;
@@ -248,5 +249,13 @@ class Number extends FormField implements PreviewableFieldInterface
             CraftDropdown::class,
             CraftNumber::class
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleConditional(): string
+    {
+        return ConditionalLogic::CONDITIONAL_TYPE_TEXT;
     }
 }

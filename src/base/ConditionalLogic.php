@@ -12,9 +12,11 @@ use craft\base\SavableComponent;
  */
 abstract class ConditionalLogic extends SavableComponent implements ConditionalInterface
 {
+    const CONDITIONAL_TYPE_TEXT = 'text';
+    const CONDITIONAL_TYPE_DATE = 'date';
+
     // Traits
     // =========================================================================
-
     use ConditionalTrait;
 
     /**
@@ -35,10 +37,12 @@ abstract class ConditionalLogic extends SavableComponent implements ConditionalI
         $fieldOptions = [];
 
         foreach ($fields as $field) {
-            $fieldOptions[] = [
-                'label' => $field->name.' ('.$field->handle.')',
-                'value' => $field->handle,
-            ];
+            if ($field->getCompatibleConditional()){
+                $fieldOptions[] = [
+                    'label' => $field->name.' ('.$field->handle.')',
+                    'value' => $field->handle,
+                ];
+            }
         }
 
         return $fieldOptions;
@@ -69,6 +73,30 @@ abstract class ConditionalLogic extends SavableComponent implements ConditionalI
     public function getBehaviorActions(): array
     {
         return [];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getConditionTypes(): array
+    {
+        return [
+            self::CONDITIONAL_TYPE_TEXT => [
+                ['value' => 'is' , 'label' => 'is'],
+                ['value' => 'isNot' , 'label' => 'is not'],
+                ['value' => 'contains' , 'label' => 'contains'],
+                ['value' => 'doesNotContains' , 'label' => 'does not contains'],
+                ['value' => 'startsWith' , 'label' => 'starts with'],
+                ['value' => 'doesNotStartWith' , 'label' => 'does not start with'],
+                ['value' => 'endsWith' , 'label' => 'ends with'],
+                ['value' => 'doesNotEndsWith' , 'label' => 'does not ends with'],
+            ],
+            self::CONDITIONAL_TYPE_DATE => [
+                ['value' => 'isOn' ,'label' => 'is on'],
+                ['value' => 'isBefore' ,'label' => 'is before'],
+                ['value' => 'isAfter' ,'label' => 'is after']
+            ]
+        ];
     }
 }
 

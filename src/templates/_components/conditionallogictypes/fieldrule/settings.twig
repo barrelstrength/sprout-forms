@@ -12,6 +12,8 @@
     }
 ] %}
 
+{% set conditionTypes = conditional.getConditionTypes() %}
+
 {% for rule in conditional.conditionalRules %}
     {% set mainIndex = loop.index %}
     <table id="sproutforms-rules-{{ loop.index }}" class="data rules-table fullwidth">
@@ -37,11 +39,17 @@
                             options: conditional.getFormFieldsAsOptions(),
                             value: row
                         }) }}
+                    {% elseif loop.index == 2 %}
+                        {{ forms.select({
+                            name: rowName,
+                            hasOptgroups: true,
+                            options: conditionTypes.text,
+                            value: row
+                        }) }}
                     {% else %}
                         {{ forms.text({
                             name: rowName,
-                            value: row,
-                            errors: ''
+                            value: row
                         }) }}
                     {% endif %}
                 </td>
@@ -78,6 +86,7 @@
         });
 
         var columns = {{ cols|json_encode|raw }};
+        var conditionalTypes = {{ conditionTypes|json_encode|raw }};
         var settings = {};
 
         function addTable(){
@@ -97,7 +106,7 @@
                 '</tbody>' +
                 '</table>');
 
-            new Craft.SproutForms.EditableTable(tableId, baseName, columns, settings);
+            new Craft.SproutForms.EditableTable(tableId, baseName, columns, settings, conditionalTypes);
 
             $('#add-rule'+nextIndex).trigger('click');
         }
@@ -105,7 +114,7 @@
         $('.rules-table').each(function(index) {
             var tableId = this.id;
             var baseName = namespace+'[conditionalRules]['+index+'][rules]';
-            new Craft.SproutForms.EditableTable(tableId, baseName, columns, settings);
+            new Craft.SproutForms.EditableTable(tableId, baseName, columns, settings, conditionalTypes);
         });
     });
 

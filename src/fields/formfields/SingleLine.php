@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\base\ConditionalLogic;
 use Craft;
 use craft\fields\PlainText as CraftPlainText;
 use craft\fields\Dropdown as CraftDropdown;
@@ -230,5 +231,13 @@ class SingleLine extends FormField implements PreviewableFieldInterface
             CraftPlainText::class,
             CraftDropdown::class
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleConditional(): string
+    {
+        return ConditionalLogic::CONDITIONAL_TYPE_TEXT;
     }
 }
