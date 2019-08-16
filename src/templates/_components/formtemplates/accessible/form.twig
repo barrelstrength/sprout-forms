@@ -80,6 +80,7 @@
             formId: null,
             form: null,
             allRules: {},
+            fieldsToListen: {},
 
             init: function(id, fieldConditionalRules) {
                 this.formId = id;
@@ -94,6 +95,7 @@
                             var ruleObject = {};
                             for (var posRule in conditional['conditionalRules'][key][pos]) {
                                 var rule = conditional['conditionalRules'][key][pos][posRule];
+                                this.fieldsToListen[rule[0]] = 1;
                                 ruleObject[posRule] = {
                                     'fieldHandle' : rule[0],
                                     'condition' : rule[1],
@@ -103,9 +105,66 @@
                             rules[key] = ruleObject;
                         }
                     }
-                    this.allRules[targetHandle] = rules;
+                    this.allRules[targetHandle] = {
+                        "rules": rules,
+                        "action": conditional.behaviorAction
+                    };
+                }
+
+                // Enable events
+                for (var fieldToListen in this.fieldsToListen) {
+                    var fieldId = this.getFieldId(fieldToListen);
+                    var inputField = document.getElementById(fieldId)
+                    inputField.addEventListener("change", function(event) {
+                        this.runConditionalRules(event);
+                    }.bind(this), false);
                 }
             },
+
+            runConditionalRules: function(event) {
+                for (var targetField in this.allRules) {
+                    var conditional = this.allRules[targetField];
+                    var result = false;
+                    var andResult = true;
+                    for (var andPos in conditional.rules) {
+                        var andRule = conditional.rules[andPos];
+                        var orResult = {};
+                        for (var orPos in andRule) {
+                            var rule = andRule[orPos];
+                            var fieldId = this.getFieldId(rule.fieldHandle);
+                            var inputField = document.getElementById(fieldId);
+                            var inputValue = inputField.value;
+
+                            switch(rule.condition) {
+                                case "contains":
+                                    if (inputValue.indexOf(rule.value) > -1){
+                                        orResult[1] = true;
+                                    }
+                                    break;
+                                case "is":
+                                    if (inputValue === rule.value){
+                                        orResult[1] = true;
+                                    }
+                                    break;
+                                default:
+                                    orResult[0] = false;
+                            }
+                        }
+
+                        if (!(1 in orResult)){
+                            andResult = false;
+                        }
+                    }
+
+                    if (andResult){
+                        console.log("success");
+                    }
+                }
+            },
+
+            getFieldId: function(fieldHandle) {
+                return "fields-"+fieldHandle;
+            }
 
         };
 
