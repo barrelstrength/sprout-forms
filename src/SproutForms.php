@@ -349,61 +349,58 @@ class SproutForms extends Plugin implements SproutEditionsInterface
                 'sprout-forms/forms',
 
             // Reports
-            'sprout-forms/reports/<dataSourceId:\d+>/new' => [
+            '<pluginHandle:sprout-forms>/reports/<dataSourceId:\d+>/new' => [
                 'route' => 'sprout-base-reports/reports/edit-report-template',
                 'params' => [
                     'viewContext' => 'sprout-forms'
                 ]
             ],
-            'sprout-forms/reports/<dataSourceId:\d+>/edit/<reportId:\d+>' => [
+            '<pluginHandle:sprout-forms>/reports/<dataSourceId:\d+>/edit/<reportId:\d+>' => [
                 'route' => 'sprout-base-reports/reports/edit-report-template',
                 'params' => [
                     'viewContext' => 'sprout-forms'
                 ]
             ],
-            'sprout-forms/reports/view/<reportId:\d+>' => [
+            '<pluginHandle:sprout-forms>/reports/view/<reportId:\d+>' => [
                 'route' => 'sprout-base-reports/reports/results-index-template',
                 'params' => [
-                    'permissionContext' => 'sprout-forms',
                     'viewContext' => 'sprout-forms'
                 ]
             ],
-            'sprout-forms/reports/<dataSourceId:\d+>' => [
+            '<pluginHandle:sprout-forms>/reports/<dataSourceId:\d+>' => [
                 'route' => 'sprout-base-reports/reports/reports-index-template',
                 'params' => [
-                    'permissionContext' => 'sprout-forms',
                     'viewContext' => 'sprout-forms',
                     'hideSidebar' => true
                 ]
             ],
-            'sprout-forms/reports' => [
+            '<pluginHandle:sprout-forms>/reports' => [
                 'route' => 'sprout-base-reports/reports/reports-index-template',
                 'params' => [
-                    'permissionContext' => 'sprout-forms',
                     'viewContext' => 'sprout-forms',
                     'hideSidebar' => true
                 ]
             ],
 
             // Notifications
-            'sprout-forms/notifications' => [
+            '<pluginHandle:sprout-forms>/notifications' => [
                 'route' => 'sprout-base-email/notifications/notifications-index-template',
                 'params' => [
                     'viewContext' => 'sprout-forms',
                     'hideSidebar' => true
                 ]
             ],
-            'sprout-forms/notifications/edit/<emailId:\d+|new>' => [
+            '<pluginHandle:sprout-forms>/notifications/edit/<emailId:\d+|new>' => [
                 'route' => 'sprout-base-email/notifications/edit-notification-email-template',
                 'params' => [
                     'viewContext' => 'sprout-forms',
                     'defaultEmailTemplate' => BasicSproutFormsNotification::class
                 ]
             ],
-            'sprout-forms/notifications/settings/edit/<emailId:\d+|new>' => [
+            '<pluginHandle:sprout-forms>/notifications/settings/edit/<emailId:\d+|new>' => [
                 'route' => 'sprout-base-email/notifications/edit-notification-email-settings-template'
             ],
-            'sprout-forms/notifications/preview/<emailType:notification>/<emailId:\d+>' => [
+            '<pluginHandle:sprout-forms>/notifications/preview/<emailType:notification>/<emailId:\d+>' => [
                 'route' => 'sprout-base-email/notifications/preview'
             ],
 
