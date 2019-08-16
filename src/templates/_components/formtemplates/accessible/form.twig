@@ -81,6 +81,7 @@
             form: null,
             allRules: {},
             fieldsToListen: {},
+            targetFieldsHtml: {},
 
             init: function(id, fieldConditionalRules) {
                 this.formId = id;
@@ -111,6 +112,14 @@
                     };
                 }
 
+                for (var targetField in this.allRules) {
+                    // This is the wrapper id
+                    // if the user uses template overrides they may need to update this code
+                    var wrapperId = "fields-"+targetField+"-field";
+                    var wrapper = document.getElementById(wrapperId);
+                    this.targetFieldsHtml[targetField] = wrapper.innerHTML;
+                }
+
                 // Enable events
                 for (var fieldToListen in this.fieldsToListen) {
                     var fieldId = this.getFieldId(fieldToListen);
@@ -123,6 +132,9 @@
 
             runConditionalRules: function(event) {
                 for (var targetField in this.allRules) {
+                    var wrapperId = "fields-"+targetField+"-field";
+                    var wrapper = document.getElementById(wrapperId);
+
                     var conditional = this.allRules[targetField];
                     var result = false;
                     var andResult = true;
@@ -157,7 +169,13 @@
                     }
 
                     if (andResult){
-                        console.log("success");
+                        if (conditional.action == 'hide'){
+                            wrapper.innerHTML = "";
+                        }else{
+                            wrapper.innerHTML = this.targetFieldsHtml[targetField];
+                        }
+                    }else{
+                        wrapper.innerHTML = this.targetFieldsHtml[targetField];
                     }
                 }
             },
