@@ -1,5 +1,31 @@
 # Changelog
 
+## 3.4.0 - 2019-08-24
+
+### Changed
+- Updated form templates and Javascript Captcha to use Craft-supported js tags ([#327])
+- Updated OnBeforeValidateEntryEvent to include Form Entry model ([#324])
+- Updated barrelstrength/sprout-base requirement 5.0.7
+- Updated barrelstrength/sprout-base-email requirement v1.1.5
+- Updated barrelstrength/sprout-base-fields requirement v1.1.0
+- Updated barrelstrength/sprout-base-reports requirement v1.3.7
+
+### Fixed
+- Fixed issue when running migrations via console command ([#321])
+- Fixed bug where `pluginHandle` column may not be found in Data Sources migration ([#315], [#318])
+- Fixed bug where unique email field setting did not exclude soft deleted entries ([#328])
+- Fixed bug where Save Data setting appears when it should not ([#323])
+- Fixed bug where 'View Reports' permission did not allow a user to export reports ([#325])
+
+[#315]: https://github.com/barrelstrength/craft-sprout-forms/issues/315
+[#318]: https://github.com/barrelstrength/craft-sprout-forms/issues/318
+[#321]: https://github.com/barrelstrength/craft-sprout-forms/issues/321
+[#323]: https://github.com/barrelstrength/craft-sprout-forms/issues/323
+[#324]: https://github.com/barrelstrength/craft-sprout-forms/issues/324
+[#325]: https://github.com/barrelstrength/craft-sprout-forms/issues/325
+[#327]: https://github.com/barrelstrength/craft-sprout-forms/issues/327
+[#328]: https://github.com/barrelstrength/craft-sprout-forms/issues/328
+
 ## 3.3.9 - 2019-07-26
 
 ### Changed
@@ -9,12 +35,14 @@
 
 ### Fixed
 - Fixed bug in C2 to C3 Notification Email Element migration ([#318])
+
 [#318]: https://github.com/barrelstrength/craft-sprout-forms/issues/318
 
 ## 3.3.7 - 2019-07-17
 
 ### Fixed
 - Fixed bug in C2 to C3 Notification Email Element migration ([#318])
+
 [#318]: https://github.com/barrelstrength/craft-sprout-forms/issues/318
 
 ## 3.3.6 - 2019-07-17
