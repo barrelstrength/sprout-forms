@@ -1,22 +1,24 @@
 {% import "_includes/forms" as forms %}
+
+{% set conditionTypes = conditional.getConditionTypes() %}
+
 {% set cols = [
     {
         type: 'select',
-        options: conditional.getFormFieldsAsOptions()
+        options: conditional.getFormFieldsAsOptions(true)
     },
     {
-        type: 'textual'
+        type: 'select',
+        options: conditionTypes.text
     },
     {
         type: 'textual'
     }
 ] %}
 
-{% set conditionTypes = conditional.getConditionTypes() %}
-
 {% for rule in conditional.conditionalRules %}
-    {% set mainIndex = loop.index %}
-    <table id="sproutforms-rules-{{ loop.index }}" class="data rules-table fullwidth">
+    {% set mainIndex = loop.index0 %}
+    <table id="sproutforms-rules-{{ mainIndex }}" class="data rules-table fullwidth">
         <thead>
         <tr>
             <th>{{ "Field"|t }}</th>
@@ -27,19 +29,19 @@
         </thead>
         <tbody>
             {% for rows in rule.rules %}
-             {% set secondIndex = loop.index %}
-            <tr data-id="{{ mainIndex }}-{{ secondIndex }}">
+             {% set secondIndex = loop.index0 %}
+            <tr data-id="{{ secondIndex }}">
                 {% for row in rows %}
                 <td>
-                    {% set rowName = 'conditionalRules[' ~ mainIndex ~ '][rules][' ~ secondIndex ~ '][' ~ loop.index ~ ']' %}
-                    {% if loop.index == 1 %}
+                    {% set rowName = 'conditionalRules[' ~ mainIndex ~ '][rules][' ~ secondIndex ~ '][' ~ loop.index0 ~ ']' %}
+                    {% if loop.index0 == 0 %}
                         {{ forms.select({
                             name: rowName,
                             hasOptgroups: true,
-                            options: conditional.getFormFieldsAsOptions(),
+                            options: conditional.getFormFieldsAsOptions(true),
                             value: row
                         }) }}
-                    {% elseif loop.index == 2 %}
+                    {% elseif loop.index0 == 1 %}
                         {{ forms.select({
                             name: rowName,
                             hasOptgroups: true,

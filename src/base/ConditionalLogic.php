@@ -28,21 +28,32 @@ abstract class ConditionalLogic extends SavableComponent implements ConditionalI
     }
 
     /**
+     * @param bool $checkCompatibleConditional
      * @return array
      * @throws \yii\base\InvalidConfigException
      */
-    final public function getFormFieldsAsOptions(): array
+    final public function getFormFieldsAsOptions($checkCompatibleConditional = false): array
     {
         $fields = $this->getForm()->getFields();
         $fieldOptions = [];
 
         foreach ($fields as $field) {
-            if ($field->getCompatibleConditional()){
-                $fieldOptions[] = [
-                    'label' => $field->name.' ('.$field->handle.')',
-                    'value' => $field->handle,
-                ];
+            $row = [
+                'label' => $field->name.' ('.$field->handle.')',
+                'value' => $field->handle,
+            ];
+
+            if ($checkCompatibleConditional){
+                $compatibleConditional = $field->getCompatibleConditional();
+                if ($compatibleConditional === '' || $compatibleConditional === null){
+                    $row = [];
+                }
             }
+
+            if ($row){
+                $fieldOptions[] = $row;
+            }
+
         }
 
         return $fieldOptions;

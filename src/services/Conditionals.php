@@ -105,14 +105,15 @@ class Conditionals extends Component
 
     /**
      * @param $formId
+     * @param $type
      *
      * @return array
      * @throws InvalidConfigException
      * @throws MissingComponentException
      */
-    public function getFormConditionals($formId): array
+    public function getFormConditionals($formId, $type = null): array
     {
-        $results = (new Query())
+        $query = (new Query())
             ->select([
                 'conditional.id',
                 'conditional.formId',
@@ -124,8 +125,13 @@ class Conditionals extends Component
                 'conditional.enabled'
             ])
             ->from(['{{%sproutforms_conditionals}} conditional'])
-            ->where(['conditional.formId' => $formId])
-            ->all();
+            ->where(['conditional.formId' => $formId]);
+
+        if ($type !== null){
+            $query->andWhere('conditional.type = :type',[':type' => $type]);
+        }
+
+        $results = $query->all();
 
         $conditionals = [];
 

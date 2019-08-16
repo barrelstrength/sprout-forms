@@ -15,6 +15,7 @@
 {%- set id          = renderingOptions.id is defined ? renderingOptions.id : form.handle ~ '-form' -%}
 {%- set class       = renderingOptions.class is defined ? renderingOptions.class : form.handle ~ '-form' -%}
 {%- set redirectUri = form.redirectUri -%}
+{% set fieldConditionalRules = form.getFieldConditionalRules() %}
 
 <form method="post" accept-charset="utf-8" enctype="multipart/form-data"
     {%- if id %} id="{{ id }}"{% endif -%}
@@ -70,6 +71,45 @@
         var SproutForms = SproutForms || {};
         SproutForms.CheckableInputs = SproutForms.CheckableInputs || {};
         SproutForms.AddressFields = SproutForms.AddressFields || {};
+
+        var fieldConditionalRules = {{ fieldConditionalRules|json_encode|raw }};
+
+        // Manage field conditional logic
+        SproutForms.FieldConditionalLogic = {
+
+            formId: null,
+            form: null,
+            allRules: {},
+
+            init: function(id, fieldConditionalRules) {
+                this.formId = id;
+                this.form = document.getElementById(this.formId);
+                for (var i = 0; i < fieldConditionalRules.length; i++) {
+                    var conditional = fieldConditionalRules[i];
+                    var targetHandle = conditional.behaviorTarget;
+                    var fieldWrapper = document.getElementById("fields-"+targetHandle+"-field");
+                    var rules = {};
+                    for (var key in conditional['conditionalRules']) {
+                        for (var pos in conditional['conditionalRules'][key]) {
+                            var ruleObject = {};
+                            for (var posRule in conditional['conditionalRules'][key][pos]) {
+                                var rule = conditional['conditionalRules'][key][pos][posRule];
+                                ruleObject[posRule] = {
+                                    'fieldHandle' : rule[0],
+                                    'condition' : rule[1],
+                                    'value' : rule[2]
+                                };
+                            }
+                            rules[key] = ruleObject;
+                        }
+                    }
+                    this.allRules[targetHandle] = rules;
+                }
+            },
+
+        };
+
+        SproutForms.FieldConditionalLogic.init('{{ id }}', fieldConditionalRules);
 
         // Manage aria-checked values on Checkbox and Radio Button inputs
         SproutForms.CheckableInputs = {

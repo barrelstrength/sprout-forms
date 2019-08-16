@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\elements;
 
 use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\base\FormTemplates;
+use barrelstrength\sproutforms\conditionallogictypes\FieldRule;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\validators\TemplateOverridesValidator;
 use Craft;
@@ -432,5 +433,15 @@ class Form extends Element
         }
 
         return $defaultFormTemplates;
+    }
+
+    /**
+     * @return array
+     * @throws InvalidConfigException
+     * @throws \craft\errors\MissingComponentException
+     */
+    public function getFieldConditionalRules()
+    {
+        return SproutForms::$app->conditionals->getFormConditionals($this->id, FieldRule::class);
     }
 }
