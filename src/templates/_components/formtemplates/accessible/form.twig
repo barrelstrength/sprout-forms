@@ -146,6 +146,10 @@
                             var fieldId = this.getFieldId(rule.fieldHandle);
                             var inputField = document.getElementById(fieldId);
                             var inputValue = inputField.value;
+                            // @todo - should we ignore empty values?
+                            if (inputValue == ''){
+                                continue;
+                            }
 
                             switch(rule.condition) {
                                 case "contains":
@@ -153,8 +157,18 @@
                                         orResult[1] = true;
                                     }
                                     break;
+                                case "doesNotContains":
+                                    if (!(inputValue.indexOf(rule.value) > -1)){
+                                        orResult[1] = true;
+                                    }
+                                    break;
                                 case "is":
                                     if (inputValue === rule.value){
+                                        orResult[1] = true;
+                                    }
+                                    break;
+                                case "isNot":
+                                    if (inputValue !== rule.value){
                                         orResult[1] = true;
                                     }
                                     break;
