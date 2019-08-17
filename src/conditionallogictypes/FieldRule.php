@@ -10,6 +10,10 @@ use Twig\Error\SyntaxError;
 
 /**
  * Add a conditional logic to show or hide a Form field
+ *
+ * @property array       $behaviorActions
+ * @property array       $behaviorActionsAsOptions
+ * @property null|string $settingsHtml
  */
 class FieldRule extends ConditionalLogic
 {
@@ -23,6 +27,9 @@ class FieldRule extends ConditionalLogic
 
     /**
      * @return string|null
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getSettingsHtml()
     {

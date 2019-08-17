@@ -26,11 +26,20 @@
         required: true,
     }) }}
 
+    <div class="field">
+        <div class="heading">
+            <label for="rules-section">{{ "Rules"|t('sprout-forms') }}</label>
+            <div class="instructions"><p>{{ "The rules that will be applied to this field."|t('sprout-forms') }}</p>
+            </div>
+        </div>
+    </div>
+
     {% namespace 'settings['~className(conditional)~']' %}
         {{ conditional.getSettingsHtml()|raw }}
     {% endnamespace %}
 
     <hr>
+
     <div class="field" id="settings-barrelstrength-sproutforms-conditionallogictypes-FieldRule-type-field">
         <div class="heading">
             <label id="settings-barrelstrength-sproutforms-conditionallogictypes-FieldRule-type-label" for="settings-barrelstrength-sproutforms-conditionallogictypes-FieldRule-type">{{ "Behavior"|t('sprout-forms') }}</label>
@@ -38,6 +47,7 @@
             </div>
         </div>
     </div>
+
     <table id="sproutforms-behaviors" class="data behavior-table fullwidth">
         <thead>
         <tr>
@@ -60,6 +70,7 @@
         </tr>
         </thead>
     </table>
+
     <hr>
 
     {{ forms.selectField({
