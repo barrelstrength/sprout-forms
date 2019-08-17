@@ -3,22 +3,34 @@
 
 {% set content %}
     <input type="hidden" id="formId" value="{{ form.id }}">
-    {% for conditional in conditionals %}
-        <div class="field sproutforms-conditional-row" id="sproutforms-conditional-row-{{ conditional.id }}">
-            <div class="heading">
-                <a href="#" id="sproutform-conditional-{{ conditional.id }}" data-conditionalid="{{ conditional.id }}">{{ conditional.name }}</a>
-            </div>
-            <div>
-                {{ forms.lightswitch({
-                    on: conditional.enabled,
-                    small: true,
-                    id: "conditional-enabled-"~conditional.id,
-                    onLabel: "Show"|t('sprout-forms'),
-                    offLabel: "Hide"|t('sprout-forms')
-                }) }}
-            </div>
-        </div>
-    {% endfor %}
+    <table class="data fullwidth" id="sproutforms-conditionalrules-table">
+        <thead>
+        <tr>
+            <th>{{ "Field Rule"|t('sprout-forms') }}</th>
+            <th class="thin">{{ "Enabled"|t('sprout-forms') }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for conditional in conditionals %}
+            <tr id="sproutforms-conditional-row-{{ conditional.id }}" class="sproutforms-conditional-row">
+                <td>
+                    <a href="#" id="sproutform-conditional-{{ conditional.id }}" data-conditionalid="{{ conditional.id }}">
+                        {{ conditional.name }}
+                    </a>
+                </td>
+                <td>
+                    {{ forms.lightswitch({
+                        on: conditional.enabled,
+                        small: true,
+                        id: "conditional-enabled-"~conditional.id,
+                        onLabel: "Show"|t('sprout-forms'),
+                        offLabel: "Hide"|t('sprout-forms')
+                    }) }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
     <div id="sproutforms-conditionals-create" class="field" style="padding-top:20px;">
         {{ forms.select({

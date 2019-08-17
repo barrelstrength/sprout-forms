@@ -190,7 +190,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
         createDefaultConditional: function(type) {
             var that = this;
-            var conditionalCreate = $("#sproutforms-conditionals-create");
+            var conditionalCreate = $("#sproutforms-conditionalrules-table tr").last();
             var currentConditional = $("#conditionalOptions").val();
             var formId = $("#formId").val();
 
@@ -207,11 +207,11 @@ if (typeof Craft.SproutForms === typeof undefined) {
                 if (textStatus === 'success') {
                     var conditional = response.conditional;
 
-                    conditionalCreate.before('<div class="field sproutforms-conditional-row" id ="sproutforms-conditional-row-' + conditional.id + '">' +
-                        '<div class="heading">' +
+                    conditionalCreate.before('<tr id ="sproutforms-conditional-row-' + conditional.id + '" class="field sproutforms-conditional-row">' +
+                        '<td>' +
                         '<a href="#" id ="sproutform-conditional-' + conditional.id + '" data-conditionalid="' + conditional.id + '">' + conditional.name + '</a>' +
-                        '</div>' +
-                        '<div>' +
+                        '</td>' +
+                        '<td>' +
                         '<div class="lightswitch small" tabindex="0" data-value="1" role="checkbox" aria-checked="false" id ="conditional-enabled-' + conditional.id + '">' +
                         '<div class="lightswitch-container">' +
                         '<div class="label on"></div>' +
@@ -220,8 +220,8 @@ if (typeof Craft.SproutForms === typeof undefined) {
                         '</div>' +
                         '<input type="hidden" name="" value="">' +
                         '</div>' +
-                        '</div>' +
-                        '</div>');
+                        '</td>' +
+                        '</tr>');
 
                     that.addListener($("#sproutform-conditional-" + conditional.id), 'activate', 'editConditional');
 
