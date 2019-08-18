@@ -45,6 +45,22 @@ class EntriesDataSource extends DataSource
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getViewContext(): string
+    {
+        return 'sprout-forms';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getViewContextLabel(): string
+    {
+        return 'Forms Reports';
+    }
+
+    /**
      * @inheritdoc
      *
      * @throws Exception
