@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\controllers;
 
 use Craft;
 use craft\base\ElementInterface;
+use craft\errors\MissingComponentException;
 use craft\errors\WrongEditionException;
 use craft\web\Controller as BaseController;
 use craft\helpers\UrlHelper;
@@ -35,9 +36,9 @@ class FormsController extends BaseController
      * @param null $settingsSectionHandle
      * @return Response
      * @throws InvalidConfigException
-     * @throws \craft\errors\MissingComponentException
+     * @throws MissingComponentException
      */
-    public function actionSettings(int $formId = null, $settingsSectionHandle = null)
+    public function actionSettings(int $formId = null, $settingsSectionHandle = null): Response
     {
         $form = SproutForms::$app->forms->getFormById($formId);
 
