@@ -41,10 +41,15 @@ class FormsController extends BaseController
     {
         $form = SproutForms::$app->forms->getFormById($formId);
 
+        /** @var SproutForms $plugin */
+        $plugin = Craft::$app->plugins->getPlugin('sprout-forms');
+
         return $this->renderTemplate('sprout-forms/forms/_settings/'.$settingsSectionHandle, [
             'form' => $form,
+            'settings' => $plugin->getSettings(),
             'conditionals' => SproutForms::$app->conditionals->getFormConditionals($formId),
             'conditionalOptions' => SproutForms::$app->conditionals->getIntegrationOptions(),
+            'integrations' => SproutForms::$app->integrations->getFormIntegrations($formId),
         ]);
     }
 

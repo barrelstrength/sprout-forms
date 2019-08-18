@@ -9,6 +9,39 @@
 {% set selectedSidebarItem = craft.app.request.getSegment(5) %}
 {% set baseUrl = 'sprout-forms/forms/'~form.id~'/settings/' %}
 
+{% block actionButton %}
+<div class="buttons">
+    <div id="save-form-button" class="btngroup submit first">
+        <input type="submit" class="btn submit"
+            value="{{ 'Save & Edit Form'|t('sprout-forms') }}">
+        {% if form.id != null %}
+            <div class="btn submit menubtn"></div>
+            <div class="menu">
+                <ul>
+                    <li><a class="formsubmit"
+                            data-redirect="{{ ('sprout-forms/forms/edit/'~form.id)|hash }}">{{ 'Save and continue editing'|t('sprout-forms') }}
+                            <span class="shortcut">⌘S</span></a></li>
+                </ul>
+                <hr>
+                <ul>
+                    <li><a class="formsubmit error"
+                            data-action="sprout-forms/forms/delete-form"
+                            data-confirm="{{ 'Are you sure you want to delete this form?'|t('sprout-forms') }}"
+                            data-redirect="{{ 'sprout-forms/forms'|hash }}">{{ "Delete"|t('sprout-forms') }}</a>
+                    </li>
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+{#    {% if not isPro %}#}
+{#        {{ sprout.upgradeToProButton({#}
+{#            url: cpUrl('sprout-forms/upgrade'),#}
+{#            title: "Upgrade to Sprout Forms PRO to manage Unlimited Forms"|t('sprout-forms')#}
+{#        }) }}#}
+{#    {% endif %}#}
+</div>
+{% endblock %}
+
 {% set sidebar %}
 
     <nav class="last">
@@ -16,9 +49,11 @@
             <li><a href="{{ cpUrl(baseUrl~'general') }}"
                    {% if selectedSidebarItem == 'general' %}class="sel"{% endif %}>{{ "General"|t('sprout-forms') }}</a>
             </li>
-
             <li><a href="{{ cpUrl(baseUrl~'rules') }}"
-                   {% if selectedSidebarItem == 'rules' %}class="sel"{% endif %}>{{ "Conditional Logic"|t('sprout-forms') }}</a>
+                   {% if selectedSidebarItem == 'rules' %}class="sel"{% endif %}>{{ "Rules"|t('sprout-forms') }}</a>
+            </li>
+            <li><a href="{{ cpUrl(baseUrl~'integrations') }}"
+                    {% if selectedSidebarItem == 'integrations' %}class="sel"{% endif %}>{{ "Integrations"|t('sprout-forms') }}</a>
             </li>
         </ul>
     </nav>

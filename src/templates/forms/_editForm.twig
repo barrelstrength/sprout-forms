@@ -103,7 +103,6 @@
 {% do view.registerAssetBundle("craft\\web\\assets\\fields\\FieldsAsset") %}
 {% do view.registerAssetBundle("barrelstrength\\sproutforms\\web\\assets\\forms\\FormsAsset") %}
 {% do view.registerAssetBundle("barrelstrength\\sproutforms\\web\\assets\\dragula\\DragulaAsset") %}
-{% do view.registerAssetBundle("barrelstrength\\sproutforms\\web\\assets\\integrations\\IntegrationAsset") %}
 
 {% js %}
     {% if not form.handle %}
@@ -139,13 +138,3 @@
 
     });
 {% endjs %}
-
-{% css %}
-    /* Integrations modal */
-    table.editable tbody tr td {
-    text-align:left;
-    }
-    table.editable tbody tr td.formField .select:not(.selectize):after {
-    content: "";
-    }
-{% endcss %}

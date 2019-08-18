@@ -1,0 +1,57 @@
+{% extends "sprout-forms/_layouts/formsettings" %}
+{% import "_includes/forms" as forms %}
+
+{% do view.registerAssetBundle("barrelstrength\\sproutforms\\web\\assets\\integrations\\IntegrationAsset") %}
+
+{% set content %}
+
+    {% if settings.enableIntegrationsPerFormBasis %}
+
+        <hr>
+        <div class="meta read-only sprout-meta-heading">
+            <h6>{{ "Integrations"|t('sprout-forms') }}</h6>
+        </div>
+        <hr>
+        {% set integrationOptions = craft.sproutForms.getIntegrationOptions() %}
+
+        <div id="sproutforms-integrations-wrapper" class="meta">
+
+            {% for integration in integrations %}
+                <div class="field sproutforms-integration-row" id="sproutforms-integration-row-{{ integration.id }}">
+                    <div class="heading">
+                        <a href="#" id="sproutform-integration-{{ integration.id }}" data-integrationid="{{ integration.id }}">{{ integration.name }}</a>
+                    </div>
+                    <div>
+                        {{ forms.lightswitch({
+                            on: integration.enabled,
+                            small: true,
+                            id: "integration-enabled-"~integration.id,
+                            onLabel: "Show"|t('sprout-forms'),
+                            offLabel: "Hide"|t('sprout-forms')
+                        }) }}
+                    </div>
+                </div>
+            {% endfor %}
+
+            <div id="sproutforms-integrations-create" class="field" style="padding-top:20px;">
+                {{ forms.select({
+                    id: 'integrationsOptions',
+                    name: 'integrationsOptions',
+                    options: integrationOptions
+                }) }}
+            </div>
+        </div>
+
+    {% endif %}
+
+{% endset %}
+
+{% css %}
+    /* Integrations modal */
+    table.editable tbody tr td {
+    text-align:left;
+    }
+    table.editable tbody tr td.formField .select:not(.selectize):after {
+    content: "";
+    }
+{% endcss %}
