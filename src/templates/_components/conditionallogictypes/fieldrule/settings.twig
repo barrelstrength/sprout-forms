@@ -21,9 +21,9 @@
     <table id="sproutforms-rules-{{ mainIndex }}" class="data fullwidth rules-table">
         <thead>
         <tr>
-            <th>{{ "Field"|t }}</th>
-            <th>{{ "Rule"|t }}</th>
-            <th>{{ "value"|t }}</th>
+            <th>{{ "Field"|t('sprout-forms') }}</th>
+            <th>{{ "Conditional"|t('sprout-forms') }}</th>
+            <th>{{ "Value"|t('sprout-forms') }}</th>
             <th><div class="buttons"><div id="add-rule{{ mainIndex }}" class="btn add icon small" tabindex="0">OR</div></div></th>
         </tr>
         </thead>
@@ -101,7 +101,7 @@
             $("#settings-barrelstrength-sproutforms-conditionallogictypes-FieldRule-and-add-wrapper").before('<table id="'+tableId+'" class="data rules-table fullwidth">' +
                 '<thead><tr>' +
                 '<th>Form Field</th>' +
-                '<th>Rule</th>' +
+                '<th>Condition</th>' +
                 '<th>Value</th>' +
                 '<th><div class="buttons"><div id="add-rule'+nextIndex+'" class="btn add icon small" tabindex="0">OR</div></div></th>' +
                 '<tbody>' +

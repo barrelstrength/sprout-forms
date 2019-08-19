@@ -8,7 +8,7 @@ use craft\base\SavableComponentInterface;
  * ConditionalInterface defines the common interface to be implemented by conditional classes.
  * A class implementing this interface should also use [[SavableComponentTrait]] and [[ConditionalTrait]].
  */
-interface ConditionalInterface extends SavableComponentInterface
+interface RuleInterface extends SavableComponentInterface
 {
     /**
      * Validate if the rules are meet

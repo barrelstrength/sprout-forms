@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\conditionallogictypes;
 
+use barrelstrength\sproutforms\base\Rule;
 use barrelstrength\sproutforms\base\ConditionalLogic;
 use Craft;
 use Twig\Error\LoaderError;
@@ -15,7 +16,7 @@ use Twig\Error\SyntaxError;
  * @property array       $behaviorActionsAsOptions
  * @property null|string $settingsHtml
  */
-class FieldRule extends ConditionalLogic
+class BaseFieldRule extends Rule
 {
     /**
      * @inheritDoc

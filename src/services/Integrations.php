@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutforms\services;
 
-use barrelstrength\sproutforms\base\ConditionalInterface;
+use barrelstrength\sproutforms\base\RuleInterface;
 use barrelstrength\sproutforms\base\Integration;
 use barrelstrength\sproutforms\base\IntegrationInterface;
 use barrelstrength\sproutforms\elements\Entry;
@@ -135,7 +135,7 @@ class Integrations extends Component
         $conditionals = [];
 
         foreach ($results as $result) {
-            $integration = ComponentHelper::createComponent($result, ConditionalInterface::class);
+            $integration = ComponentHelper::createComponent($result, RuleInterface::class);
             $conditionals[] = new $result['type']($integration);
         }
 

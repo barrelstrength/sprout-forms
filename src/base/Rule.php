@@ -10,11 +10,8 @@ use craft\base\SavableComponent;
 /**
  * Class ConditionalLogic
  */
-abstract class ConditionalLogic extends SavableComponent implements ConditionalInterface
+abstract class Rule extends SavableComponent implements RuleInterface
 {
-    const CONDITIONAL_TYPE_TEXT = 'text';
-    const CONDITIONAL_TYPE_DATE = 'date';
-
     // Traits
     // =========================================================================
     use ConditionalTrait;

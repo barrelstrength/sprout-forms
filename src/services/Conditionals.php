@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutforms\services;
 
-use barrelstrength\sproutforms\base\ConditionalInterface;
+use barrelstrength\sproutforms\base\RuleInterface;
 use barrelstrength\sproutforms\base\ConditionalLogic;
 use barrelstrength\sproutforms\conditionallogictypes\MissingIntegration;
 use barrelstrength\sproutforms\records\ConditionalLogic as ConditionalLogicRecord;
@@ -42,10 +42,10 @@ class Conditionals extends Component
     /**
      * @param $config
      *
-     * @return ConditionalInterface
+     * @return RuleInterface
      * @throws InvalidConfigException
      */
-    public function createIntegration($config): ConditionalInterface
+    public function createIntegration($config): RuleInterface
     {
         if (is_string($config)) {
             $config = ['type' => $config];
@@ -53,7 +53,7 @@ class Conditionals extends Component
 
         try {
             /** @var ConditionalLogic $conditional */
-            $conditional = ComponentHelper::createComponent($config, ConditionalInterface::class);
+            $conditional = ComponentHelper::createComponent($config, RuleInterface::class);
         } catch (MissingComponentException $e) {
             $config['errorMessage'] = $e->getMessage();
             $config['expectedType'] = $config['type'];
@@ -136,7 +136,7 @@ class Conditionals extends Component
         $conditionals = [];
 
         foreach ($results as $result) {
-            $conditional = ComponentHelper::createComponent($result, ConditionalInterface::class);
+            $conditional = ComponentHelper::createComponent($result, RuleInterface::class);
             $conditionals[] = new $result['type']($conditional);
         }
 
@@ -172,7 +172,7 @@ class Conditionals extends Component
         }
 
         /** @var ConditionalLogic $conditional **/
-        $conditional = ComponentHelper::createComponent($result, ConditionalInterface::class);
+        $conditional = ComponentHelper::createComponent($result, RuleInterface::class);
 
         return new $result['type']($conditional);
     }
@@ -211,10 +211,10 @@ class Conditionals extends Component
     /**
      * @param $config
      *
-     * @return ConditionalInterface
+     * @return RuleInterface
      * @throws InvalidConfigException
      */
-    public function createConditional($config): ConditionalInterface
+    public function createConditional($config): RuleInterface
     {
         if (is_string($config)) {
             $config = ['type' => $config];
@@ -222,7 +222,7 @@ class Conditionals extends Component
 
         try {
             /** @var ConditionalLogic $conditional */
-            $conditional = ComponentHelper::createComponent($config, ConditionalInterface::class);
+            $conditional = ComponentHelper::createComponent($config, RuleInterface::class);
         } catch (MissingComponentException $e) {
             $config['errorMessage'] = $e->getMessage();
             $config['expectedType'] = $config['type'];
