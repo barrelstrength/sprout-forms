@@ -86,25 +86,9 @@ abstract class Rule extends SavableComponent implements RuleInterface
     /**
      * @inheritDoc
      */
-    public function getConditionTypes(): array
+    public function getConditionRules(): array
     {
-        return [
-            self::CONDITIONAL_TYPE_TEXT => [
-                ['value' => 'is' , 'label' => 'is'],
-                ['value' => 'isNot' , 'label' => 'is not'],
-                ['value' => 'contains' , 'label' => 'contains'],
-                ['value' => 'doesNotContains' , 'label' => 'does not contains'],
-                ['value' => 'startsWith' , 'label' => 'starts with'],
-                ['value' => 'doesNotStartWith' , 'label' => 'does not start with'],
-                ['value' => 'endsWith' , 'label' => 'ends with'],
-                ['value' => 'doesNotEndsWith' , 'label' => 'does not ends with'],
-            ],
-            self::CONDITIONAL_TYPE_DATE => [
-                ['value' => 'isOn' ,'label' => 'is on'],
-                ['value' => 'isBefore' ,'label' => 'is before'],
-                ['value' => 'isAfter' ,'label' => 'is after']
-            ]
-        ];
+        return [];
     }
 }
 

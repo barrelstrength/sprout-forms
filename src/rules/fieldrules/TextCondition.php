@@ -4,18 +4,18 @@ namespace barrelstrength\sproutforms\conditionallogictypes\fieldrules;
 
 use barrelstrength\sproutforms\conditionallogictypes\conditions\IsCondition;
 
-class DropdownRule extends BaseSomething
+class TextCondition extends BaseSomething
 {
     public function getType(): string
     {
-        return 'dropdown';
+        return 'text';
     }
 
-    public function getRules(): array
+    public static function getRules(): array
     {
         return [
-            ['value' => IsCondition::getValue(), 'label' => IsCondition::getLabel(), 'inputMethod' => 'getDropdownInputHtml'],
-            ['value' => 'isNot', 'label' => 'is not', 'inputMethod' => 'getDropdownInputHtml'],
+            ['value' => IsCondition::getValue(), 'label' => IsCondition::getLabel(), 'inputMethod' => 'getTextInputHtml'],
+            ['value' => 'isNot', 'label' => 'is not', 'inputMethod' => 'getTextInputHtml'],
             ['value' => 'contains', 'label' => 'contains', 'inputMethod' => 'getTextInputHtml'],
             ['value' => 'doesNotContains', 'label' => 'does not contains', 'inputMethod' => 'getTextInputHtml'],
             ['value' => 'startsWith', 'label' => 'starts with', 'inputMethod' => 'getTextInputHtml'],
@@ -25,13 +25,8 @@ class DropdownRule extends BaseSomething
         ];
     }
 
-    protected function getTextInputHtml()
+    protected function getTextInputHtml($data)
     {
         return '<input class="text fullwidth" type="text" name="settings[barrelstrength\sproutforms\conditionallogictypes\FieldRule][conditionalRules][1][rules][0][2]" value="">';
-    }
-
-    protected function getDropdownInputHtml()
-    {
-        return '';
     }
 }

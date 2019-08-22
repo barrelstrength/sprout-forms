@@ -4,6 +4,8 @@ namespace barrelstrength\sproutforms\rules\fieldrules;
 
 use barrelstrength\sproutforms\base\Rule;
 use barrelstrength\sproutforms\base\ConditionalLogic;
+use barrelstrength\sproutforms\conditionallogictypes\fieldrules\DropdownCondition;
+use barrelstrength\sproutforms\conditionallogictypes\fieldrules\TextCondition;
 use Craft;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -16,7 +18,7 @@ use Twig\Error\SyntaxError;
  * @property array       $behaviorActionsAsOptions
  * @property null|string $settingsHtml
  */
-class BaseFieldRule extends Rule
+class FieldRule extends Rule
 {
     /**
      * @inheritDoc
@@ -66,6 +68,21 @@ class BaseFieldRule extends Rule
         }
 
         return $options;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getConditionRules(): array
+    {
+        return [
+            TextCondition::class => TextCondition::getRules(),
+            DropdownCondition::class => [
+                ['value' => 'isOn' ,'label' => 'is on'],
+                ['value' => 'isBefore' ,'label' => 'is before'],
+                ['value' => 'isAfter' ,'label' => 'is after']
+            ]
+        ];
     }
 }
 

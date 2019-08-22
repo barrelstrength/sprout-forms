@@ -1,6 +1,6 @@
 {% import "_includes/forms" as forms %}
 
-{% set conditionTypes = conditional.getConditionTypes() %}
+{% set conditionRules = conditional.getConditionRules() %}
 
 {% set cols = [
     {
@@ -9,7 +9,7 @@
     },
     {
         type: 'select',
-        options: conditionTypes.text
+        options: conditionRules.text
     },
     {
         type: 'textual'
@@ -45,7 +45,7 @@
                         {{ forms.select({
                             name: rowName,
                             hasOptgroups: true,
-                            options: conditionTypes.text,
+                            options: conditionRules.text,
                             value: row
                         }) }}
                     {% else %}
@@ -88,7 +88,7 @@
         });
 
         var columns = {{ cols|json_encode|raw }};
-        var conditionalTypes = {{ conditionTypes|json_encode|raw }};
+        var conditionalTypes = {{ conditionRules|json_encode|raw }};
         var settings = {};
 
         function addTable(){

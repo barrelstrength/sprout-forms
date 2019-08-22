@@ -13,7 +13,7 @@ use barrelstrength\sproutbasereports\services\DataSources;
 use barrelstrength\sproutbasereports\SproutBaseReports;
 use barrelstrength\sproutbasereports\SproutBaseReportsHelper;
 use barrelstrength\sproutforms\base\Captcha;
-use barrelstrength\sproutforms\rules\fieldrules\BaseFieldRule;
+use barrelstrength\sproutforms\rules\fieldrules\FieldRule;
 use barrelstrength\sproutforms\events\OnSaveEntryEvent;
 use barrelstrength\sproutforms\integrations\sproutemail\emailtemplates\basic\BasicSproutFormsNotification;
 use barrelstrength\sproutforms\integrations\sproutemail\events\notificationevents\SaveEntryEvent;
@@ -214,7 +214,7 @@ class SproutForms extends Plugin implements SproutEditionsInterface
         });
 
         Event::on(Conditionals::class, Conditionals::EVENT_REGISTER_CONDITIONALS, static function(RegisterComponentTypesEvent $event) {
-            $event->types[] = BaseFieldRule::class;
+            $event->types[] = FieldRule::class;
         });
 
         Event::on(Forms::class, Forms::EVENT_REGISTER_FORM_TEMPLATES, static function(RegisterComponentTypesEvent $event) {

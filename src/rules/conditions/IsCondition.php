@@ -2,7 +2,9 @@
 
 namespace barrelstrength\sproutforms\conditionallogictypes\conditions;
 
-class IsCondition extends BaseSomethingElse
+use barrelstrength\sproutforms\base\BaseCondition;
+
+class IsCondition extends BaseCondition
 {
     public $fieldRule; // Dropdown
 
