@@ -58,8 +58,9 @@
 
 {% js %}
     new Craft.SproutForms.Integration({
-    updateTargetFieldsAction: '{{ integration.getUpdateTargetFieldsAction() }}',
-    updateSourceFieldsAction: '{{ integration.getUpdateSourceFieldsAction() }}',
-    integrationType: '{{ className(integration)|e('js') }}'
+    integrationType: '{{ className(integration)|e('js') }}',
+    updateTargetFieldsOnChange: [
+        '#settings-barrelstrength-sproutforms-integrationtypes-EntryElementIntegration-entryTypeId'
+    ]
     });
 {% endjs %}
