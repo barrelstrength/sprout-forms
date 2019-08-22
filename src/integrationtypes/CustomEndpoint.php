@@ -64,7 +64,7 @@ class CustomEndpoint extends Integration
             return false;
         }
 
-        $entry = $this->entry;
+        $entry = $this->formEntry;
         $fields = $this->resolveFieldMapping();
         $endpoint = $this->submitAction;
 
@@ -98,7 +98,7 @@ class CustomEndpoint extends Integration
     public function resolveFieldMapping(): array
     {
         $fields = [];
-        $entry = $this->entry;
+        $entry = $this->formEntry;
 
         if ($this->fieldMapping) {
             foreach ($this->fieldMapping as $fieldMap) {

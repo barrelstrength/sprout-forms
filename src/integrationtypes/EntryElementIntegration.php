@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\integrationtypes;
 
 use barrelstrength\sproutforms\base\ElementIntegration;
+use barrelstrength\sproutforms\base\Integration;
 use Craft;
 use craft\elements\Entry;
 use craft\elements\User;
@@ -32,14 +33,6 @@ class EntryElementIntegration extends ElementIntegration
      * @var int
      */
     public $entryTypeId;
-
-    /** returns action that runs to update the targetIntegrationFieldColumns
-     * This action should return an array of input fields that can be used to update the target columns
-     */
-    public function getUpdateTargetFieldsAction()
-    {
-        return 'sprout-forms/integrations/get-element-entry-fields';
-    }
 
     /**
      * @inheritDoc
@@ -123,16 +116,93 @@ class EntryElementIntegration extends ElementIntegration
 
     /**
      * @inheritDoc
+     *
+     * @throws InvalidConfigException
+     */
+    public function getTargetIntegrationFieldsAsMappingOptions(): array
+    {
+        $entryFields = $this->getElementCustomFieldsAsOptions($this->entryTypeId);
+
+        return $this->getFieldsAsOptionsByRow($entryFields);
+    }
+
+    /**
+     * @param $entryFields
+     *
+     * @return array
+     * @throws InvalidConfigException
+     */
+    public function getFieldsAsOptionsByRow($entryFields): array
+    {
+        $fieldMapping = $this->fieldMapping;
+        $integrationSectionId = $this->entryTypeId ?? null;
+
+        $formFields = $this->getSourceFormFieldsAsMappingOptions();
+        $rowPosition = 0;
+        $finalOptions = [];
+
+        foreach ($formFields as $formField) {
+            $optionsByRow = $this->getCompatibleFields($entryFields, $formField);
+            // We have rows stored and are for the same sectionType
+            if ($fieldMapping && ($integrationSectionId == $this->entryTypeId) &&
+                isset($fieldMapping[$rowPosition])) {
+                foreach ($optionsByRow as $key => $option) {
+                    if ($option['value'] == $fieldMapping[$rowPosition]['targetIntegrationField'] &&
+                        $fieldMapping[$rowPosition]['sourceFormField'] == $formField['value']) {
+                        $optionsByRow[$key]['selected'] = true;
+                    }
+                }
+            }
+
+            $finalOptions[$rowPosition] = $optionsByRow;
+
+            $rowPosition++;
+        }
+
+        return $finalOptions;
+    }
+
+    /**
+     * @param array $entryFields
+     * @param array $formField
+     *
+     * @return array
+     */
+    public function getCompatibleFields(array $entryFields, array $formField): array
+    {
+        $compatibleFields = $formField['compatibleCraftFields'] ?? '*';
+        $finalOptions = [];
+
+        foreach ($entryFields as $field) {
+            $option = [
+                'label' => $field->name.' ('.$field->handle.')',
+                'value' => $field->handle
+            ];
+
+            if (is_array($compatibleFields) &&
+                !in_array(get_class($field), $compatibleFields, true)) {
+                $option = null;
+            }
+
+            if ($option) {
+                $finalOptions[] = $option;
+            }
+        }
+
+        return $finalOptions;
+    }
+    /**
+     * @inheritDoc
      */
     public function resolveFieldMapping(): array
     {
         $fields = [];
-        $entry = $this->entry;
+        $formEntry = $this->formEntry;
 
         if ($this->fieldMapping) {
             foreach ($this->fieldMapping as $fieldMap) {
-                if (isset($entry->{$fieldMap['sourceFormField']}) && $fieldMap['targetIntegrationField']) {
-                    $fields[$fieldMap['targetIntegrationField']] = $entry->{$fieldMap['sourceFormField']};
+                if (isset($formEntry->{$fieldMap['sourceFormField']}) && $fieldMap['targetIntegrationField']) {
+                    $fields[$fieldMap['targetIntegrationField']] = $formEntry->{$fieldMap['sourceFormField']};
                 }
             }
         }
@@ -271,4 +341,3 @@ class EntryElementIntegration extends ElementIntegration
         return $author;
     }
 }
-

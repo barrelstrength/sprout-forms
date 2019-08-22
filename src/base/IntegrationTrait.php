@@ -34,7 +34,7 @@ trait IntegrationTrait
      *
      * @var Entry
      */
-    public $entry;
+    public $formEntry;
 
     /**
      * The mapped fields

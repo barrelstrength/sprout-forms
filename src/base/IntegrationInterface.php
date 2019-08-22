@@ -11,34 +11,59 @@ use craft\base\SavableComponentInterface;
 interface IntegrationInterface extends SavableComponentInterface
 {
     /**
-     * Returns action URL that runs to update the targetIntegrationFieldColumns. This will be used in the
-     * This action should return an array of input fields that can be used to update the target columns
+     * Message to display when the submit() action is successful
      *
      * @return string|null
      */
-    public function getUpdateTargetFieldsAction();
+    public function getSuccessMessage();
 
     /**
-     * Process the submission and field mapping settings to prepare the payload.
-     *
-     * In this context, $this->fieldMapping will be populated from the values
-     * saved via the settings defined in $this->getFieldMappingSettingsHtml()
-     *
-     * @return array
-     */
-    public function resolveFieldMapping(): array;
-
-    /**
-     * Send the submission to the desired endpoint
+     * Prepare and send the submission to the desired endpoint
      *
      * @return bool
      */
     public function submit(): bool;
 
     /**
-     * Message for when submit() is true
+     * Returns an array of fields to be used for the dropdown of each row of the mapping.
+     * Integrations will display a plain text field by default.
      *
-     * @return string|null
+     * @example
+     * return [
+     *   0 => [
+     *     0 => [
+     *       'label' => 'Title',
+     *       'value' => 'title'
+     *     ],
+     *     1 => [
+     *       'label' => 'Slug',
+     *       'value' => 'slug'
+     *     ]
+     *   ],
+     *   1 => [
+     *     0 => [
+     *       'label' => 'Title',
+     *       'value' => 'title'
+     *     ],
+     *     1 => [
+     *       'label' => 'Slug',
+     *       'value' => 'slug'
+     *     ]
+     *   ]
+     * ];
+     *
+     * @return array
      */
-    public function getSuccessMessage();
+    public function getTargetIntegrationFieldsAsMappingOptions(): array;
+
+    /**
+     * Returns an array that represents the field mapping
+     *
+     * The $this->fieldMapping property will be populated from the values
+     * saved via the settings defined in an Integrations
+     * $this->getFieldMappingSettingsHtml() method
+     *
+     * @return array
+     */
+    public function resolveFieldMapping(): array;
 }

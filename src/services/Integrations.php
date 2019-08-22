@@ -357,7 +357,7 @@ class Integrations extends Component
             /** @var SubmissionLog $submissionLog */
             $submissionLog = $submissionLog['submissionLog'];
 
-            $integration->entry = $entry;
+            $integration->formEntry = $entry;
 
             Craft::info(Craft::t('sprout-forms', 'Running Integration: {integrationName} for Form Entry {entryId}', [
                 'integrationName' => $integration->name,
