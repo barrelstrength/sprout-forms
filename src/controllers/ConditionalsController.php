@@ -65,8 +65,6 @@ class ConditionalsController extends BaseController
 
         $request = Craft::$app->getRequest();
 
-        #Craft::dd($_POST);
-
         $type = $request->getRequiredBodyParam('type');
 
         /** @var Conditional $conditional */
