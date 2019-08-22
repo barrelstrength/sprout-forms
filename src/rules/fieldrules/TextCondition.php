@@ -2,9 +2,10 @@
 
 namespace barrelstrength\sproutforms\conditionallogictypes\fieldrules;
 
+use barrelstrength\sproutforms\base\BaseCondition;
 use barrelstrength\sproutforms\conditionallogictypes\conditions\IsCondition;
 
-class TextCondition extends BaseSomething
+class TextCondition extends BaseCondition
 {
     public function getType(): string
     {
@@ -14,7 +15,7 @@ class TextCondition extends BaseSomething
     public static function getRules(): array
     {
         return [
-            ['value' => IsCondition::getValue(), 'label' => IsCondition::getLabel(), 'inputMethod' => 'getTextInputHtml'],
+            IsCondition::class,
             ['value' => 'isNot', 'label' => 'is not', 'inputMethod' => 'getTextInputHtml'],
             ['value' => 'contains', 'label' => 'contains', 'inputMethod' => 'getTextInputHtml'],
             ['value' => 'doesNotContains', 'label' => 'does not contains', 'inputMethod' => 'getTextInputHtml'],

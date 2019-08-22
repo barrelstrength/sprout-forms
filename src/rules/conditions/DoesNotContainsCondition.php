@@ -4,18 +4,18 @@ namespace barrelstrength\sproutforms\conditionallogictypes\conditions;
 
 use barrelstrength\sproutforms\base\BaseCondition;
 
-class IsCondition extends BaseCondition
+class DoesNotContainsCondition extends BaseCondition
 {
     public $fieldRule;
 
     public static function getLabel(): string
     {
-        return 'is';
+        return 'does not contains';
     }
 
     public static function getValue(): string
     {
-        return 'is';
+        return 'doesNotContains';
     }
 
     public function getValueInputHtml($name)

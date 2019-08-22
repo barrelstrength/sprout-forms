@@ -12,7 +12,7 @@ class DropdownCondition extends BaseCondition
         return 'dropdown';
     }
 
-    public function getRules(): array
+    public static function getRules(): array
     {
         return [
             ['value' => IsCondition::getValue(), 'label' => IsCondition::getLabel(), 'inputMethod' => 'getDropdownInputHtml'],

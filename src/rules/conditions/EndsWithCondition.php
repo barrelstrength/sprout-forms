@@ -4,18 +4,18 @@ namespace barrelstrength\sproutforms\conditionallogictypes\conditions;
 
 use barrelstrength\sproutforms\base\BaseCondition;
 
-class IsCondition extends BaseCondition
+class EndsWithCondition extends BaseCondition
 {
     public $fieldRule;
 
     public static function getLabel(): string
     {
-        return 'is';
+        return 'ends with';
     }
 
     public static function getValue(): string
     {
-        return 'is';
+        return 'endsWith';
     }
 
     public function getValueInputHtml($name)

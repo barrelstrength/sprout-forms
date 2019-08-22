@@ -13,5 +13,5 @@ interface ConditionInterface extends SavableComponentInterface
     /**
      * @return array
      */
-    public function getRules(): array;
+    public static function getRules(): array;
 }

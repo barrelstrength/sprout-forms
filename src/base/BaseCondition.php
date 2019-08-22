@@ -17,7 +17,7 @@ abstract class BaseCondition extends SavableComponent implements ConditionInterf
     /**
      * @inheritDoc
      */
-    public function getRules(): array
+    public static function getRules(): array
     {
         return [];
     }
