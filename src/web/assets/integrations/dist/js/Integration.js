@@ -35,22 +35,6 @@ if (typeof Craft.SproutForms === typeof undefined) {
         },
 
         disableOptions: function() {
-            // var that = this;
-            //
-            // $('tbody .formField').each(function(index) {
-            //     var td = $(this);
-            //     var textarea = td.find('textarea');
-            //
-            //     var title = textarea.val();
-            //     var handle = rows[index]["value"];
-            //     td.empty();
-            //
-            //     td.append('<div style="display:none;"><select readonly name="settings[' + that.integrationType + '][fieldMapping][' + index + '][sourceFormField]"><option selected value="' + handle + '">' + title + '</option></select></div><div style="padding: 7px 10px;font-size: 12px;color:#8f98a3;">' + title + ' <span class="code">(' + handle + ')</span></div>');
-            // });
-
-            // $('.formField').each(function() {
-            //     $(this).find('textarea').attr("readonly", true);
-            // });
 
             var that = this;
 
@@ -63,7 +47,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
             Craft.postActionRequest('sprout-forms/integrations/get-source-form-fields', data, $.proxy(function(response, textStatus) {
                 var statusSuccess = (textStatus === 'success');
                 if (statusSuccess && response.success) {
-                    var rows = response.formFields;
+                    var rows = response.sourceFormFields;
                     $('tbody .formField').each(function(index) {
                         var td = $(this);
                         td.empty();
@@ -122,16 +106,6 @@ if (typeof Craft.SproutForms === typeof undefined) {
             }
             return $(className);
         },
-
-        // getEntryFieldsData: function() {
-        //     var entryTypeId = $('#settings-barrelstrength-sproutforms-integrationtypes-EntryElementIntegration-entryTypeId').val();
-        //
-        //
-        //     return {
-        //         'entryTypeId': entryTypeId,
-        //         'integrationId': integrationId
-        //     };
-        // },
 
         appendFieldsToSelect: function($select, fields) {
             $select.empty();
