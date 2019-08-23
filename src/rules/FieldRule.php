@@ -1,6 +1,6 @@
 <?php
 
-namespace barrelstrength\sproutforms\rules\fieldrules;
+namespace barrelstrength\sproutforms\rules;
 
 use barrelstrength\sproutforms\base\Rule;
 use barrelstrength\sproutforms\base\ConditionalLogic;
@@ -68,21 +68,6 @@ class FieldRule extends Rule
         }
 
         return $options;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getConditionRules(): array
-    {
-        return [
-            TextCondition::class => TextCondition::getRules(),
-            DropdownCondition::class => [
-                ['value' => 'isOn' ,'label' => 'is on'],
-                ['value' => 'isBefore' ,'label' => 'is before'],
-                ['value' => 'isAfter' ,'label' => 'is after']
-            ]
-        ];
     }
 }
 

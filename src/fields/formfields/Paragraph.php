@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutforms\base\ConditionalLogic;
+use barrelstrength\sproutforms\rules\fieldrules\TextCondition;
 use Craft;
 use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Db;
@@ -235,11 +236,9 @@ class Paragraph extends FormField implements PreviewableFieldInterface
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getCompatibleConditional(): string
-    {
-        return ConditionalLogic::CONDITIONAL_TYPE_TEXT;
-    }
+	public function getCompatibleConditional()
+	{
+		$textCondition = new TextCondition(['formField' => $this]);
+		return $textCondition;
+	}
 }

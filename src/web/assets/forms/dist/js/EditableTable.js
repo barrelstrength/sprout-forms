@@ -103,7 +103,6 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
         },
 
         getRowHtml: function(rowId, columns, baseName, values) {
-
             var rowHtml = '<tr data-id="' + rowId + '">';
             for (var colId in columns) {
                 var col = columns[colId],

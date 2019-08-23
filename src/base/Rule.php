@@ -42,7 +42,7 @@ abstract class Rule extends SavableComponent implements RuleInterface
 
             if ($checkCompatibleConditional){
                 $compatibleConditional = $field->getCompatibleConditional();
-                if ($compatibleConditional === '' || $compatibleConditional === null){
+                if ($compatibleConditional === null){
                     $row = [];
                 }
             }

@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use barrelstrength\sproutforms\base\ConditionalLogic;
+use barrelstrength\sproutforms\rules\fieldrules\TextCondition;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
@@ -290,11 +291,9 @@ class EmailDropdown extends BaseOptionsFormField
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getCompatibleConditional(): string
-    {
-        return ConditionalLogic::CONDITIONAL_TYPE_TEXT;
-    }
+	public function getCompatibleConditional()
+	{
+		$textCondition = new TextCondition(['formField' => $this]);
+		return $textCondition;
+	}
 }

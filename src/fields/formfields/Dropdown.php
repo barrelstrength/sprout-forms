@@ -2,7 +2,9 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\base\BaseCondition;
 use barrelstrength\sproutforms\base\ConditionalLogic;
+use barrelstrength\sproutforms\rules\fieldrules\TextCondition;
 use Craft;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\ElementInterface;
@@ -147,11 +149,12 @@ class Dropdown extends BaseOptionsFormField
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getCompatibleConditional(): string
-    {
-        return ConditionalLogic::CONDITIONAL_TYPE_TEXT;
-    }
+	/**
+	 * @inheritdoc
+	 */
+	public function getCompatibleConditional()
+	{
+		$textCondition = new TextCondition(['formField' => $this]);
+		return $textCondition;
+	}
 }

@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\web\twig\variables;
 
+use barrelstrength\sproutforms\base\BaseCondition;
 use barrelstrength\sproutforms\base\Integration;
 use barrelstrength\sproutforms\elements\db\EntryQuery;
 use barrelstrength\sproutforms\elements\Entry;
@@ -646,5 +647,23 @@ class SproutFormsVariable
     {
         return SproutForms::$app->integrations->getIntegrationById($integrationId);
     }
+
+    public function getFormField($formField)
+    {
+    	return new $formField();
+    }
+
+	/**
+	 * @param $conditionClass
+	 * @param $formField
+	 *
+	 * @return BaseCondition
+	 */
+	public function getFieldCondition($conditionClass, $formField)
+	{
+		$condition = new $conditionClass(['formField' => $formField]);
+
+		return $condition;
+	}
 }
 

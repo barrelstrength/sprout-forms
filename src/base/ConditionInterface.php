@@ -11,7 +11,19 @@ use craft\base\SavableComponentInterface;
 interface ConditionInterface extends SavableComponentInterface
 {
     /**
-     * @return array
+     * @return string
      */
-    public static function getRules(): array;
+    public function getLabel(): string;
+
+	/**
+	 * @return string
+	 */
+	public function getValue(): string;
+
+	/**
+	 * @param $name
+	 *
+	 * @return string
+	 */
+	public function getTextInputHtml($name): string;
 }

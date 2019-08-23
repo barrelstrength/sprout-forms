@@ -1,33 +1,39 @@
 <?php
 
-namespace barrelstrength\sproutforms\conditionallogictypes\fieldrules;
+namespace barrelstrength\sproutforms\rules\fieldrules;
 
 use barrelstrength\sproutforms\base\BaseCondition;
-use barrelstrength\sproutforms\conditionallogictypes\conditions\IsCondition;
+use barrelstrength\sproutforms\base\ConditionalType;
+use barrelstrength\sproutforms\rules\conditions\ContainsCondition;
+use barrelstrength\sproutforms\rules\conditions\DoesNotContainsCondition;
+use barrelstrength\sproutforms\rules\conditions\DoesNotEndsWithCondition;
+use barrelstrength\sproutforms\rules\conditions\DoesNotStartWithCondition;
+use barrelstrength\sproutforms\rules\conditions\EndsWithCondition;
+use barrelstrength\sproutforms\rules\conditions\IsCondition;
+use barrelstrength\sproutforms\rules\conditions\IsNotCondition;
+use barrelstrength\sproutforms\rules\conditions\StarsWithCondition;
 
-class TextCondition extends BaseCondition
+class TextCondition extends ConditionalType
 {
     public function getType(): string
     {
         return 'text';
     }
 
-    public static function getRules(): array
+	/**
+	 * @return BaseCondition[]
+	 */
+	public function getRules(): array
     {
         return [
-            IsCondition::class,
-            ['value' => 'isNot', 'label' => 'is not', 'inputMethod' => 'getTextInputHtml'],
-            ['value' => 'contains', 'label' => 'contains', 'inputMethod' => 'getTextInputHtml'],
-            ['value' => 'doesNotContains', 'label' => 'does not contains', 'inputMethod' => 'getTextInputHtml'],
-            ['value' => 'startsWith', 'label' => 'starts with', 'inputMethod' => 'getTextInputHtml'],
-            ['value' => 'doesNotStartWith', 'label' => 'does not start with', 'inputMethod' => 'getTextInputHtml'],
-            ['value' => 'endsWith', 'label' => 'ends with', 'inputMethod' => 'getTextInputHtml'],
-            ['value' => 'doesNotEndsWith', 'label' => 'does not ends with', 'inputMethod' => 'getTextInputHtml'],
+            new IsCondition(['formField' => $this->formField]),
+	        new IsNotCondition(['formField' => $this->formField]),
+	        new ContainsCondition(['formField' => $this->formField]),
+	        new DoesNotContainsCondition(['formField' => $this->formField]),
+	        new StarsWithCondition(['formField' => $this->formField]),
+	        new DoesNotStartWithCondition(['formField' => $this->formField]),
+	        new EndsWithCondition(['formField' => $this->formField]),
+	        new DoesNotEndsWithCondition(['formField' => $this->formField])
         ];
-    }
-
-    protected function getTextInputHtml($data)
-    {
-        return '<input class="text fullwidth" type="text" name="settings[barrelstrength\sproutforms\conditionallogictypes\FieldRule][conditionalRules][1][rules][0][2]" value="">';
     }
 }

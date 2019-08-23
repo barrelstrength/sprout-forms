@@ -34,7 +34,11 @@
                 {% for row in rows %}
                 <td>
                     {% set rowName = 'conditionalRules[' ~ mainIndex ~ '][rules][' ~ secondIndex ~ '][' ~ loop.index0 ~ ']' %}
+
+                    {% set formFieldClass = "" %}
+                    {% set conditionClass = "" %}
                     {% if loop.index0 == 0 %}
+                        {% set formFieldClass = row %}
                         {{ forms.select({
                             name: rowName,
                             hasOptgroups: true,
@@ -42,17 +46,18 @@
                             value: row
                         }) }}
                     {% elseif loop.index0 == 1 %}
+                        {% set formField = craft.sproutForms.getFormField(formFieldClass) %}
+                        {% set rulesAsOptions = formField.getCompatibleConditional().getRulesAsOptions() %}
                         {{ forms.select({
                             name: rowName,
                             hasOptgroups: true,
-                            options: conditionRules.text,
+                            options: rulesAsOptions,
                             value: row
                         }) }}
+                        {% set conditionClass = row != '' ? row : rulesAsOptions[0].value %}
                     {% else %}
-                        {{ forms.text({
-                            name: rowName,
-                            value: row
-                        }) }}
+                        {% set fieldCondition = craft.sproutForms.getFieldCondition(conditionClass, formField) %}
+                        {{ fieldCondition.getTextInputHtml() }}
                     {% endif %}
                 </td>
                 {% endfor %}

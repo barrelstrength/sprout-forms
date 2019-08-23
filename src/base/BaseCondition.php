@@ -17,13 +17,24 @@ abstract class BaseCondition extends SavableComponent implements ConditionInterf
     /**
      * @inheritDoc
      */
-    public static function getRules(): array
+    public function getLabel(): string
     {
-        return [];
+        return "";
     }
 
-    public function setFormField(FormField $formField)
-    {
-        $this->formField = $formField;
-    }
+	/**
+	 * @inheritDoc
+	 */
+	public function getValue(): string
+	{
+		return self::class;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getTextInputHtml($name): string
+	{
+		return "";
+	}
 }

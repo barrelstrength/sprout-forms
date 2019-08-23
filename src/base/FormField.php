@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\base;
 
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
+use barrelstrength\sproutforms\rules\fieldrules\TextCondition;
 use Craft;
 use craft\base\Field;
 use ReflectionClass;
@@ -59,12 +60,13 @@ abstract class FormField extends Field
 
     /**
      * Return the condition type to associate on the Conditional Logic API
+     * By default let's return the Text condition as is the most common
      *
-     * @return string
+     * @return BaseCondition|null
      */
-    public function getCompatibleConditional(): string
+    public function getCompatibleConditional()
     {
-        return '';
+        return null;
     }
 
     /**

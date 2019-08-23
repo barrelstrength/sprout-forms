@@ -1,6 +1,6 @@
 <?php
 
-namespace barrelstrength\sproutforms\conditionallogictypes\conditions;
+namespace barrelstrength\sproutforms\rules\conditions;
 
 use barrelstrength\sproutforms\base\BaseCondition;
 
