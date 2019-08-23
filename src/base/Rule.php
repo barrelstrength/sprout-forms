@@ -8,7 +8,7 @@ use Craft;
 use craft\base\SavableComponent;
 
 /**
- * Class ConditionalLogic
+ * Class Rule
  */
 abstract class Rule extends SavableComponent implements RuleInterface
 {

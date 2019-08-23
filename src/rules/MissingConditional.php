@@ -1,6 +1,6 @@
 <?php
 
-namespace barrelstrength\sproutforms\conditionallogictypes;
+namespace barrelstrength\sproutforms\rules;
 
 use barrelstrength\sproutforms\base\Integration;
 use Craft;

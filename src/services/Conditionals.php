@@ -238,14 +238,14 @@ class Conditionals extends Component
     /**
      * Loads the sprout modal conditional via ajax.
      *
-     * @param ConditionalLogic $conditional
+     * @param Rule $conditional
      *
      * @return array
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function getModalConditionalTemplate(ConditionalLogic $conditional): array
+    public function getModalConditionalTemplate(Rule $conditional): array
     {
         $view = Craft::$app->getView();
 
