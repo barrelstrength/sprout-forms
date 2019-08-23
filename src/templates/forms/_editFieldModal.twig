@@ -12,7 +12,6 @@
     {% endif %}
 
     {% set fieldTypes = craft.sproutForms.getRegisteredFields() %}
-    {% set fieldTypeGroups = craft.sproutForms.prepareFieldTypeSelection() %}
 
     <input type="hidden" name="formId" value="{{ form.id }}">
 
@@ -133,7 +132,12 @@
         id: 'type',
         name: 'selectType',
         hasOptgroups: true,
-        options: fieldTypeGroups,
+        options: [
+            {
+                label: field.name,
+                value: className(field)
+            }
+        ],
         value: className(field),
         errors: field.getErrors('type') ?? null,
         disabled: true

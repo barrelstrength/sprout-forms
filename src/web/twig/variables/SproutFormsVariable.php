@@ -343,26 +343,6 @@ class SproutFormsVariable
     }
 
     /**
-     * @return array
-     * @see SproutForms::$app->fields->prepareFieldTypeSelection()
-     *
-     */
-    public function prepareFieldTypeSelection(): array
-    {
-        return SproutForms::$app->fields->prepareFieldTypeSelection();
-    }
-
-    /**
-     * @return array
-     *
-     * @see SproutForms::$app->integrations->prepareIntegrationTypeSelection()
-     */
-    public function prepareIntegrationTypeSelection(): array
-    {
-        return SproutForms::$app->integrations->prepareIntegrationTypeSelection();
-    }
-
-    /**
      * @param $settings
      *
      * @throws MissingComponentException
