@@ -13,7 +13,7 @@ use barrelstrength\sproutbasereports\services\DataSources;
 use barrelstrength\sproutbasereports\SproutBaseReports;
 use barrelstrength\sproutbasereports\SproutBaseReportsHelper;
 use barrelstrength\sproutforms\base\Captcha;
-use barrelstrength\sproutforms\rules\fieldrules\FieldRule;
+use barrelstrength\sproutforms\rules\FieldRule;
 use barrelstrength\sproutforms\events\OnSaveEntryEvent;
 use barrelstrength\sproutforms\integrations\sproutemail\emailtemplates\basic\BasicSproutFormsNotification;
 use barrelstrength\sproutforms\integrations\sproutemail\events\notificationevents\SaveEntryEvent;

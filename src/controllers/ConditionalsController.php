@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\controllers;
 
 use barrelstrength\sproutforms\base\ConditionalLogic;
+use barrelstrength\sproutforms\base\Rule;
 use barrelstrength\sproutforms\records\ConditionalLogic as ConditionalLogicRecord;
 use Craft;
 
@@ -173,11 +174,11 @@ class ConditionalsController extends BaseController
 
     /**
      * @param bool             $success
-     * @param ConditionalLogic|null $conditional
+     * @param Rule|null $conditional
      *
      * @return Response
      */
-    private function returnJson(bool $success, ConditionalLogic $conditional = null): Response
+    private function returnJson(bool $success, Rule $conditional = null): Response
     {
         // @todo how we should return errors to the edit conditional modal? template response is disabled for now
         return $this->asJson([

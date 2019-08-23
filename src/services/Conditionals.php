@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\services;
 
+use barrelstrength\sproutforms\base\Rule;
 use barrelstrength\sproutforms\base\RuleInterface;
 use barrelstrength\sproutforms\base\ConditionalLogic;
 use barrelstrength\sproutforms\conditionallogictypes\MissingIntegration;
@@ -52,7 +53,7 @@ class Conditionals extends Component
         }
 
         try {
-            /** @var ConditionalLogic $conditional */
+            /** @var Rule $conditional */
             $conditional = ComponentHelper::createComponent($config, RuleInterface::class);
         } catch (MissingComponentException $e) {
             $config['errorMessage'] = $e->getMessage();
@@ -66,7 +67,7 @@ class Conditionals extends Component
     }
 
     /**
-     * @return ConditionalLogic[]
+     * @return Rule[]
      */
     public function getAllConditionals(): array
     {
@@ -146,7 +147,7 @@ class Conditionals extends Component
     /**
      * @param $conditionalId
      *
-     * @return ConditionalLogic|null
+     * @return Rule|null
      * @throws InvalidConfigException
      * @throws MissingComponentException
      */
@@ -171,18 +172,18 @@ class Conditionals extends Component
             return null;
         }
 
-        /** @var ConditionalLogic $conditional **/
+        /** @var Rule $conditional **/
         $conditional = ComponentHelper::createComponent($result, RuleInterface::class);
 
         return new $result['type']($conditional);
     }
 
     /**
-     * @param ConditionalLogic $conditionalLogic
+     * @param Rule $conditionalLogic
      *
      * @return bool
      */
-    public function saveConditional(ConditionalLogic $conditionalLogic): bool
+    public function saveConditional(Rule $conditionalLogic): bool
     {
         if ($conditionalLogic->id) {
             $conditionalRecord = ConditionalLogicRecord::findOne($conditionalLogic->id);
