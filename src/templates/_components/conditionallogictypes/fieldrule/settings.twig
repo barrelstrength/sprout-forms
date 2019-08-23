@@ -8,8 +8,8 @@
         options: conditional.getFormFieldsAsOptions(true)
     },
     {
-        type: 'select',
-        options: conditionRules.text
+        type: 'selectCondition',
+        options: []
     },
     {
         type: 'textual'
@@ -79,7 +79,7 @@
 
 <script>
     $( document ).ready(function() {
-        var addTableButton = $("#settings-barrelstrength-sproutforms-conditionallogictypes-FieldRule-add-and-rules");
+        var addTableButton = $("#settings-barrelstrength-sproutforms-rules-FieldRule-add-and-rules");
         var rules = {{ conditional.conditionalRules|json_encode|raw }};
         var namespace = "settings[{{ className(conditional)|e('js') }}]";
 
@@ -103,7 +103,7 @@
             var tableId = 'sproutforms-rules-'+nextIndex;
             var baseName = namespace+'[conditionalRules]['+nextIndex+'][rules]';
 
-            $("#settings-barrelstrength-sproutforms-conditionallogictypes-FieldRule-and-add-wrapper").before('<table id="'+tableId+'" class="data rules-table fullwidth">' +
+            $("#settings-barrelstrength-sproutforms-rules-FieldRule-and-add-wrapper").before('<table id="'+tableId+'" class="data rules-table fullwidth">' +
                 '<thead><tr>' +
                 '<th>Form Field</th>' +
                 '<th>Condition</th>' +

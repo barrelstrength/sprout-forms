@@ -104,11 +104,16 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
 
         getRowHtml: function(rowId, columns, baseName, values) {
             var rowHtml = '<tr data-id="' + rowId + '">';
+            var formFieldName = "";
             for (var colId in columns) {
                 var col = columns[colId],
                     name = baseName + '[' + rowId + '][' + colId + ']',
                     value = (typeof values[colId] !== 'undefined' ? values[colId] : ''),
                     textual = Craft.inArray(col.type, Craft.SproutForms.EditableTable.textualColTypes);
+
+                if (colId == 0){
+                    formFieldName = name;
+                }
 
                 rowHtml += '<td class="' + (textual ? 'textual' : '') + ' ' + (typeof col['class'] !== 'undefined' ? col['class'] : '') + '"' +
                     (typeof col['width'] !== 'undefined' ? ' width="' + col['width'] + '"' : '') +
@@ -121,6 +126,63 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
                         var hasOptgroups = false;
 
                         var firstRow = 'selected';
+
+                        for (var key in col.options) {
+                            var option = col.options[key];
+
+                            if (typeof option.optgroup !== 'undefined') {
+                                if (hasOptgroups) {
+                                    rowHtml += '</optgroup>';
+                                } else {
+                                    hasOptgroups = true;
+                                }
+
+                                rowHtml += '<optgroup label="' + option.optgroup + '">';
+                            } else {
+                                var optionLabel = (typeof option.label !== 'undefined' ? option.label : option),
+                                    optionValue = (typeof option.value !== 'undefined' ? option.value : key),
+                                    optionDisabled = (typeof option.disabled !== 'undefined' ? option.disabled : false);
+
+                                rowHtml += '<option ' + firstRow + ' value="' + optionValue + '"' + (optionValue == value ? ' selected' : '') + (optionDisabled ? ' disabled' : '') + '>' + optionLabel + '</option>';
+                            }
+
+                            firstRow = '';
+                        }
+
+                        if (hasOptgroups) {
+                            rowHtml += '</optgroup>';
+                        }
+
+                        rowHtml += '</select></div>';
+
+                        break;
+                    }
+
+                    case 'selectCondition': {
+                        rowHtml += '<div class="select"><select onchange="onUpdateField(this)" name="' + name + '">';
+                        console.log(formFieldName);
+                        console.log($("input[name='"+formFieldName+"']").selected);
+                        var hasOptgroups = false;
+
+                        var firstRow = 'selected';
+                        /*
+                        Craft.postActionRequest(this.updateSourceFieldsAction, data, $.proxy(function(response, textStatus) {
+                            var statusSuccess = (textStatus === 'success');
+                            if (statusSuccess && response.success) {
+                                var rows = response.formFields;
+                                $('tbody .formField').each(function(index) {
+                                    var td = $(this);
+                                    td.empty();
+                                    var title = rows[index]["label"];
+                                    var handle = rows[index]["value"];
+                                    td.append('<div style="display:none;"><select readonly name="settings[' + that.integrationType + '][fieldMapping][' + index + '][sourceFormField]"><option selected value="' + handle + '">' + title + '</option></select></div><div style="padding: 7px 10px;font-size: 12px;color:#8f98a3;">' + title + ' <span class="code">(' + handle + ')</span></div>');
+                                });
+                            } else {
+                                Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to get the Form fields'));
+                            }
+                        }, this));
+
+                         */
 
                         for (var key in col.options) {
                             var option = col.options[key];
