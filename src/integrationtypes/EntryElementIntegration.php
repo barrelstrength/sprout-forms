@@ -9,6 +9,7 @@ use craft\elements\Entry;
 use craft\elements\User;
 use craft\fields\Date;
 use craft\fields\PlainText;
+use craft\models\EntryType;
 use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -48,12 +49,9 @@ class EntryElementIntegration extends ElementIntegration
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws InvalidConfigException
      */
     public function getSettingsHtml()
     {
-        $this->prepareFieldMapping();
-
         $sections = $this->getSectionsAsOptions();
 
         return Craft::$app->getView()->renderTemplate('sprout-forms/_components/integrationtypes/entryelement/settings',
@@ -75,7 +73,9 @@ class EntryElementIntegration extends ElementIntegration
             return false;
         }
 
-        $fields = $this->resolveFieldMapping();
+        $fieldMapping = $this->resolveFieldMapping();
+
+        /** @var EntryType $entryType */
         $entryType = Craft::$app->getSections()->getEntryTypeById($this->entryTypeId);
 
         $entryElement = new Entry();
@@ -88,7 +88,12 @@ class EntryElementIntegration extends ElementIntegration
             $entryElement->authorId = $author->id;
         }
 
-        $entryElement->setAttributes($fields, false);
+        // @todo - why do we need to unset the id from the field mapping for this
+        // Element Integration and not others? Consider refactoring the underlying
+        // reason that causes the need to do this
+        unset($fieldMapping['id']);
+
+        $entryElement->setAttributes($fieldMapping, false);
 
         if ($entryElement->validate()) {
             $result = Craft::$app->getElements()->saveElement($entryElement);
@@ -190,26 +195,6 @@ class EntryElementIntegration extends ElementIntegration
         }
 
         return $finalOptions;
-    }
-    /**
-     * @inheritDoc
-     */
-    public function resolveFieldMapping(): array
-    {
-        $fields = [];
-        $formEntry = $this->formEntry;
-
-        if ($this->fieldMapping) {
-            foreach ($this->fieldMapping as $fieldMap) {
-                if (isset($formEntry->{$fieldMap['sourceFormField']}) && $fieldMap['targetIntegrationField']) {
-                    $fields[$fieldMap['targetIntegrationField']] = $formEntry->{$fieldMap['sourceFormField']};
-                }
-            }
-        }
-
-        unset($fields['id']);
-
-        return $fields;
     }
 
     /**

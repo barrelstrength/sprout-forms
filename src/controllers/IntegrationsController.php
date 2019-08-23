@@ -81,24 +81,14 @@ class IntegrationsController extends BaseController
         $type = $request->getRequiredBodyParam('type');
 
         /** @var Integration $integration */
-        $integration = new $type();
-
-        $integration->id = $request->getBodyParam('integrationId');
-        $integration->formId = $request->getBodyParam('formId');
-        $integration->name = $request->getBodyParam('name');
-        $integration->enabled = $request->getBodyParam('enabled');
-        $integration->sendRule = $request->getBodyParam('sendRule');
-
-        $settings = $request->getBodyParam('settings.'.$type);
-
         $integration = SproutForms::$app->integrations->createIntegration([
-            'id' => $integration->id,
-            'formId' => $integration->formId,
-            'name' => $integration->name,
-            'enabled' => $integration->enabled,
-            'sendRule' => $integration->sendRule,
-            'type' => get_class($integration),
-            'settings' => $settings,
+            'id' => $request->getBodyParam('integrationId'),
+            'formId' => $request->getBodyParam('formId'),
+            'name' => $request->getBodyParam('name'),
+            'enabled' => $request->getBodyParam('enabled'),
+            'sendRule' => $request->getBodyParam('sendRule'),
+            'type' => $type,
+            'settings' => $request->getBodyParam('settings.'.$type)
         ]);
 
         $integration = new $type($integration);

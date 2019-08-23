@@ -40,6 +40,24 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
     protected $successMessage;
 
     /**
+     * @return array|void|null
+     * @throws InvalidConfigException
+     */
+    public function init() {
+        parent::init();
+
+        /**
+         * 1. Make sure we have a formId, if not, we're just instantiating a
+         *    generic element and will add it shortly. We need the Form ID
+         *    to properly prepare the fieldMapping.
+         * 2. If we already prepared our fieldMapping during this request, use it.
+         */
+        if ($this->formId && !$this->fieldMapping) {
+            $this->prepareFieldMapping();
+        }
+    }
+
+    /**
      * @return Form
      */
     public function getForm(): Form
@@ -278,24 +296,20 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
      */
     public function prepareFieldMapping()
     {
-        $indexedFieldMapping = [];
-        $oldFieldMapping = $this->fieldMapping;
-
-        // Update our stored settings to use the sourceFormField handle as the key of our array
-        if ($oldFieldMapping !== null) {
-            foreach ($oldFieldMapping as $oldFieldMap) {
-                $indexedFieldMapping[$oldFieldMap['sourceFormField']] = $oldFieldMap['targetIntegrationField'];
-            }
-        }
-
+        $oldFieldMapping = $this->resolveFieldMapping();
         $newFieldMapping = [];
+
         $sourceFormFields = $this->getSourceFormFields();
 
         // Loop through the current list of form fields and match them to any existing fieldMapping settings
         foreach ($sourceFormFields as $sourceFormField) {
+            // If the handle exists in our old field mapping (a field that was just
+            // added to the form may not exist yet) use that value. Default to empty string.
+            $targetIntegrationField = $oldFieldMapping[$sourceFormField->handle] ?? '';
+
             $newFieldMapping[] = [
                 'sourceFormField' => $sourceFormField->handle,
-                'targetIntegrationField' => $indexedFieldMapping[$sourceFormField->handle] ?? ''
+                'targetIntegrationField' => $targetIntegrationField
             ];
         }
 
@@ -307,7 +321,18 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
      */
     public function resolveFieldMapping(): array
     {
-        return $this->fieldMapping ?? [];
+        $fields = [];
+        $formEntry = $this->formEntry;
+
+        if ($this->fieldMapping) {
+            foreach ($this->fieldMapping as $fieldMap) {
+                if (isset($formEntry->{$fieldMap['sourceFormField']}) && $fieldMap['targetIntegrationField']) {
+                    $fields[$fieldMap['targetIntegrationField']] = $formEntry->{$fieldMap['sourceFormField']};
+                }
+            }
+        }
+
+        return $fields;
     }
 
     /**

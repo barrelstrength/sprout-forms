@@ -39,15 +39,12 @@ class CustomEndpoint extends Integration
     /**
      * @inheritDoc
      *
-     * @throws InvalidConfigException
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
      */
     public function getSettingsHtml()
     {
-        $this->prepareFieldMapping();
-
         return Craft::$app->getView()->renderTemplate('sprout-forms/_components/integrationtypes/customendpoint/settings',
             [
                 'integration' => $this
@@ -90,25 +87,6 @@ class CustomEndpoint extends Integration
         Craft::info($res, __METHOD__);
 
         return true;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function resolveFieldMapping(): array
-    {
-        $fields = [];
-        $entry = $this->formEntry;
-
-        if ($this->fieldMapping) {
-            foreach ($this->fieldMapping as $fieldMap) {
-                if (isset($entry->{$fieldMap['sourceFormField']}) && $fieldMap['targetIntegrationField']) {
-                    $fields[$fieldMap['targetIntegrationField']] = $entry->{$fieldMap['sourceFormField']};
-                }
-            }
-        }
-
-        return $fields;
     }
 }
 
