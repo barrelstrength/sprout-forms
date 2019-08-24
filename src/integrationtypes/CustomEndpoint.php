@@ -62,7 +62,7 @@ class CustomEndpoint extends Integration
         }
 
         $entry = $this->formEntry;
-        $fields = $this->resolveFieldMapping();
+        $targetIntegrationFieldValues = $this->getTargetIntegrationFieldValues();
         $endpoint = $this->submitAction;
 
         if (!filter_var($endpoint, FILTER_VALIDATE_URL)) {
@@ -75,10 +75,10 @@ class CustomEndpoint extends Integration
 
         $client = new Client();
 
-        Craft::info($fields, __METHOD__);
+        Craft::info($targetIntegrationFieldValues, __METHOD__);
 
         $response = $client->post($endpoint, [
-            RequestOptions::JSON => $fields
+            RequestOptions::JSON => $targetIntegrationFieldValues
         ]);
 
         $res = $response->getBody()->getContents();

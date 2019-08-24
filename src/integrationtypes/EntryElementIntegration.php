@@ -73,7 +73,7 @@ class EntryElementIntegration extends ElementIntegration
             return false;
         }
 
-        $fieldMapping = $this->resolveFieldMapping();
+        $targetIntegrationFieldValues = $this->getTargetIntegrationFieldValues();
 
         /** @var EntryType $entryType */
         $entryType = Craft::$app->getSections()->getEntryTypeById($this->entryTypeId);
@@ -91,9 +91,9 @@ class EntryElementIntegration extends ElementIntegration
         // @todo - why do we need to unset the id from the field mapping for this
         // Element Integration and not others? Consider refactoring the underlying
         // reason that causes the need to do this
-        unset($fieldMapping['id']);
+        unset($targetIntegrationFieldValues['id']);
 
-        $entryElement->setAttributes($fieldMapping, false);
+        $entryElement->setAttributes($targetIntegrationFieldValues, false);
 
         if ($entryElement->validate()) {
             $result = Craft::$app->getElements()->saveElement($entryElement);

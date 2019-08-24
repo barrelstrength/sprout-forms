@@ -121,10 +121,8 @@
             resetRadioGroup: function(selectedRadioInput) {
 
                 var radioInputName = selectedRadioInput.getAttribute("name");
-
-                console.log(radioInputName);
                 var allRadioInputs = document.querySelectorAll('#' + this.formId + ' [name="' + radioInputName + '"] ');
-                console.log(allRadioInputs);
+
                 for (var i = 0; i < allRadioInputs.length; i += 1) {
                     allRadioInputs[i].setAttribute("aria-checked", false);
                 }

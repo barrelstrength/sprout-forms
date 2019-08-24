@@ -13,11 +13,6 @@ trait IntegrationTrait
     // =========================================================================
 
     /**
-     * @var int
-     */
-    public $formId;
-
-    /**
      * @var string
      */
     public $name;
@@ -30,19 +25,45 @@ trait IntegrationTrait
     public $enabled = true;
 
     /**
+     * The ID of the Form where an Integration exists
+     *
+     * @var int
+     */
+    public $formId;
+
+    /**
+     * @var The Form Element associated with an Integration
+     */
+    protected $form;
+
+    /**
      * The Form Entry Element associated with an Integration
      *
      * @var Entry
      */
-    public $formEntry;
+    protected $formEntry;
 
     /**
-     * The mapped fields
+     * The Field Mapping settings
+     *
+     * This data is saved to the database as JSON in the settings column and populated
+     * as an array when an Integration Component is created
+     *
+     * [
+     *   [
+     *     'sourceFormField' => 'title',
+     *     'targetIntegrationField' => 'title'
+     *   ],
+     *   [
+     *     'sourceFormField' => 'customFormFieldHandle',
+     *     'targetIntegrationField' => 'customTargetFieldHandle'
+     *   ]
+     * ]
      *
      * @var array|null
      */
     public $fieldMapping;
-
+    
     /**
      * Statement that gets evaluated to true/false to determine this Integration will be submitted
      *

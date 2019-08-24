@@ -57,13 +57,18 @@ interface IntegrationInterface extends SavableComponentInterface
     public function getTargetIntegrationFieldsAsMappingOptions(): array;
 
     /**
-     * Returns an array that represents the field mapping
+     * Returns an array that represents the Target Integration field values
      *
      * The $this->fieldMapping property will be populated from the values
      * saved via the settings defined in an Integrations
      * $this->getFieldMappingSettingsHtml() method
      *
+     * [
+     *   'title' => 'Title of Form Entry',
+     *   'customTargetFieldHandle' => 'Value of Custom Field'
+     * ]
+     *
      * @return array
      */
-    public function resolveFieldMapping(): array;
+    public function getTargetIntegrationFieldValues(): array;
 }

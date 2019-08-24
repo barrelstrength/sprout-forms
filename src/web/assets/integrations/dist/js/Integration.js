@@ -61,7 +61,6 @@ if (typeof Craft.SproutForms === typeof undefined) {
             }, this));
 
             return null;
-
         },
 
         updateAllFieldSelects: function() {
