@@ -52,10 +52,10 @@
         {%- if loop.first %}
             {%- js at endBody %}
                 (function() {
-                    var field = document.getElementById('fields-' + '{{ labelId }}');
-                    if (field) {
-                        field.focus();
-                    }
+                var field = document.getElementById('fields-' + '{{ labelId }}');
+                if (field) {
+                field.focus();
+                }
                 })();
             {% endjs -%}
         {%- endif %}

@@ -147,7 +147,7 @@ class Groups extends Component
             $groupRecord = FormGroupRecord::findOne($group->id);
 
             if (!$groupRecord) {
-                throw new Exception('No field group exists with the ID: '. $group->id);
+                throw new Exception('No field group exists with the ID: '.$group->id);
             }
 
             return $groupRecord;

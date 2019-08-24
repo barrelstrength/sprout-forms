@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\base;
 
 use barrelstrength\sproutforms\elements\Entry;
+use barrelstrength\sproutforms\elements\Form;
 
 /**
  * IntegrationTrait implements the common methods and properties for Integration classes.
@@ -32,7 +33,7 @@ trait IntegrationTrait
     public $formId;
 
     /**
-     * @var The Form Element associated with an Integration
+     * @var Form The Form Element associated with an Integration
      */
     protected $form;
 
@@ -63,7 +64,7 @@ trait IntegrationTrait
      * @var array|null
      */
     public $fieldMapping;
-    
+
     /**
      * Statement that gets evaluated to true/false to determine this Integration will be submitted
      *

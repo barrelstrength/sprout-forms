@@ -115,7 +115,7 @@ class Forms extends Component
             $formRecord = FormRecord::findOne($form->id);
 
             if (!$formRecord) {
-                throw new Exception('No form exists with the ID: '. $form->id);
+                throw new Exception('No form exists with the ID: '.$form->id);
             }
 
             $oldForm = $formRecord;

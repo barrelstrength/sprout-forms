@@ -209,7 +209,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
                 if (filesCount > 0) {
                     for (var i = 0; i < files.length; i++) {
                         var src = files[i];
-                        
+
                         // Fixes Double-instantiating bug
                         if ((src.indexOf('MatrixConfigurator') >= 0) ||
                             (src.indexOf('TableFieldSettings.min.js') >= 0) ||

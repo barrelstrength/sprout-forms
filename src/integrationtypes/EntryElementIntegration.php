@@ -3,7 +3,6 @@
 namespace barrelstrength\sproutforms\integrationtypes;
 
 use barrelstrength\sproutforms\base\ElementIntegration;
-use barrelstrength\sproutforms\base\Integration;
 use Craft;
 use craft\elements\Entry;
 use craft\elements\User;

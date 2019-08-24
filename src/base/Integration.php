@@ -28,6 +28,8 @@ use yii\base\InvalidConfigException;
  * @property array  $sendRuleOptions
  * @property array  $targetIntegrationFields
  * @property array  $targetIntegrationFieldsAsMappingOptions
+ * @property array  $targetIntegrationFieldValues
+ * @property array  $indexedFieldMapping
  * @property string $type
  */
 abstract class Integration extends SavableComponent implements IntegrationInterface
@@ -302,6 +304,7 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
      *   'customFormFieldHandle' => 'customTargetFieldHandle'
      * ]
      *
+     * @return array
      * @var array
      */
     public function getIndexedFieldMapping(): array

@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\integrations\sproutimport\elements;
 
 use barrelstrength\sproutbaseimport\base\ElementImporter;
+use barrelstrength\sproutbaseimport\base\FieldImporter;
 use barrelstrength\sproutbaseimport\models\jobs\SeedJob;
 use barrelstrength\sproutbaseimport\SproutBaseImport;
 use barrelstrength\sproutforms\elements\Entry as FormElement;
@@ -119,11 +120,10 @@ class Entry extends ElementImporter
                 $formEntry->dateCreated = date('Y-m-d H:i:s', $fakerDate->getTimestamp());
                 $formEntry->dateUpdated = date('Y-m-d H:i:s', $fakerDate->getTimestamp());
 
-                $fieldTypes = $form->getFields();
-
-                $fields = $this->getFieldsWithMockData($fieldTypes);
-
-                $formEntry->setContentFromPost($fields);
+                // @todo - Need to refactor for C3
+                // $fieldTypes = $form->getFields();
+                // $fields = $this->getFieldsWithMockData($fieldTypes);
+                // $formEntry->setContentFromPost($fields);
 
                 SproutForms::$app->entries->saveEntry($formEntry);
 
@@ -149,6 +149,7 @@ class Entry extends ElementImporter
 
                 $fieldType = get_class($field);
 
+                /** @var FieldImporter $fieldImporterClass */
                 $fieldImporterClass = SproutBaseImport::$app->importers->getFieldImporterClassByType($fieldType);
 
                 if ($fieldImporterClass != null) {

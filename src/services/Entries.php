@@ -439,7 +439,7 @@ class Entries extends Component
             $entryStatusRecord = EntryStatusRecord::findOne($entryStatusId);
 
             if (!$entryStatusRecord) {
-                throw new Exception('No Entry Status exists with the ID: ' . $entryStatusId);
+                throw new Exception('No Entry Status exists with the ID: '.$entryStatusId);
             }
         } else {
             $entryStatusRecord = new EntryStatusRecord();
