@@ -17,7 +17,6 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Markup;
-use Twig_Markup;
 
 /**
  *
@@ -126,7 +125,7 @@ class Hidden extends FormField implements PreviewableFieldInterface
      * @param mixed      $value
      * @param array|null $renderingOptions
      *
-     * @return Twig_Markup
+     * @return Markup
      * @throws Throwable
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup

@@ -9,7 +9,6 @@ use GuzzleHttp\RequestOptions;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
-use yii\base\InvalidConfigException;
 
 /**
  * Route our request to Craft or a third-party endpoint
@@ -39,15 +38,12 @@ class CustomEndpoint extends Integration
     /**
      * @inheritDoc
      *
-     * @throws InvalidConfigException
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
      */
     public function getSettingsHtml()
     {
-        $this->prepareFieldMapping();
-
         return Craft::$app->getView()->renderTemplate('sprout-forms/_components/integrationtypes/customendpoint/settings',
             [
                 'integration' => $this
@@ -64,8 +60,8 @@ class CustomEndpoint extends Integration
             return false;
         }
 
-        $entry = $this->entry;
-        $fields = $this->resolveFieldMapping();
+        $entry = $this->formEntry;
+        $targetIntegrationFieldValues = $this->getTargetIntegrationFieldValues();
         $endpoint = $this->submitAction;
 
         if (!filter_var($endpoint, FILTER_VALIDATE_URL)) {
@@ -78,10 +74,10 @@ class CustomEndpoint extends Integration
 
         $client = new Client();
 
-        Craft::info($fields, __METHOD__);
+        Craft::info($targetIntegrationFieldValues, __METHOD__);
 
         $response = $client->post($endpoint, [
-            RequestOptions::JSON => $fields
+            RequestOptions::JSON => $targetIntegrationFieldValues
         ]);
 
         $res = $response->getBody()->getContents();
@@ -90,25 +86,6 @@ class CustomEndpoint extends Integration
         Craft::info($res, __METHOD__);
 
         return true;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function resolveFieldMapping(): array
-    {
-        $fields = [];
-        $entry = $this->entry;
-
-        if ($this->fieldMapping) {
-            foreach ($this->fieldMapping as $fieldMap) {
-                if (isset($entry->{$fieldMap['sourceFormField']}) && $fieldMap['targetIntegrationField']) {
-                    $fields[$fieldMap['targetIntegrationField']] = $entry->{$fieldMap['sourceFormField']};
-                }
-            }
-        }
-
-        return $fields;
     }
 }
 

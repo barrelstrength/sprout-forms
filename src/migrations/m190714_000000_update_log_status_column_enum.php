@@ -3,7 +3,6 @@
 namespace barrelstrength\sproutforms\migrations;
 
 use craft\db\Migration;
-use yii\base\NotSupportedException;
 
 /**
  * m190714_000000_update_log_status_column_enum migration.

@@ -2,7 +2,6 @@
 {% import "sprout-base-fields/_includes/forms" as sproutFields %}
 
 <div id="sprout-content">
-    {% set integrationTypeGroups = craft.sproutForms.prepareIntegrationTypeSelection() %}
 
     <input type="hidden" name="formId" value="{{ integration.formId }}">
 
@@ -46,7 +45,12 @@
         id: 'type',
         name: 'selectType',
         hasOptgroups: true,
-        options: integrationTypeGroups,
+        options: [
+            {
+                label: integration.name,
+                value: className(integration)
+            }
+        ],
         value: className(integration)|e('html'),
         errors: integration.getErrors('type') ?? null,
         disabled: true

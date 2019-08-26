@@ -67,154 +67,152 @@
 
     (function() {
 
-        var SproutForms = SproutForms || {};
-        SproutForms.CheckableInputs = SproutForms.CheckableInputs || {};
-        SproutForms.AddressFields = SproutForms.AddressFields || {};
+    var SproutForms = SproutForms || {};
+    SproutForms.CheckableInputs = SproutForms.CheckableInputs || {};
+    SproutForms.AddressFields = SproutForms.AddressFields || {};
 
-        // Manage aria-checked values on Checkbox and Radio Button inputs
-        SproutForms.CheckableInputs = {
+    // Manage aria-checked values on Checkbox and Radio Button inputs
+    SproutForms.CheckableInputs = {
 
-            formId: null,
-            form: null,
-            checkableInputs: null,
+    formId: null,
+    form: null,
+    checkableInputs: null,
 
-            init: function(id) {
-                this.formId = id;
-                this.form = document.getElementById(this.formId);
-                this.checkableInputs = this.form.querySelectorAll('[type=checkbox], [type=radio]');
+    init: function(id) {
+    this.formId = id;
+    this.form = document.getElementById(this.formId);
+    this.checkableInputs = this.form.querySelectorAll('[type=checkbox], [type=radio]');
 
-                this.setAriaCheckedAttributes();
-                this.addCheckableInputsEventListeners();
-            },
+    this.setAriaCheckedAttributes();
+    this.addCheckableInputsEventListeners();
+    },
 
-            setAriaCheckedAttributes: function() {
-                for (var i = 0; i < this.checkableInputs.length; i += 1) {
-                    if (this.checkableInputs[i].checked) {
-                        this.checkableInputs[i].setAttribute("aria-checked", true);
-                    }
-                }
-            },
+    setAriaCheckedAttributes: function() {
+    for (var i = 0; i < this.checkableInputs.length; i += 1) {
+    if (this.checkableInputs[i].checked) {
+    this.checkableInputs[i].setAttribute("aria-checked", true);
+    }
+    }
+    },
 
-            addCheckableInputsEventListeners: function() {
-                for (var i = 0; i < this.checkableInputs.length; i += 1) {
-                    this.checkableInputs[i].addEventListener("click", function(event) {
-                        this.onCheckableInputChange(event);
-                    }.bind(this), false);
-                }
-            },
+    addCheckableInputsEventListeners: function() {
+    for (var i = 0; i < this.checkableInputs.length; i += 1) {
+    this.checkableInputs[i].addEventListener("click", function(event) {
+    this.onCheckableInputChange(event);
+    }.bind(this), false);
+    }
+    },
 
-            onCheckableInputChange: function(event) {
+    onCheckableInputChange: function(event) {
 
-                if (event.target.checked) {
+    if (event.target.checked) {
 
-                    // Resets all buttons in radio group to false
-                    if (event.target.getAttribute("type") === "radio") {
-                        this.resetRadioGroup(event.target);
-                    }
+    // Resets all buttons in radio group to false
+    if (event.target.getAttribute("type") === "radio") {
+    this.resetRadioGroup(event.target);
+    }
 
-                    event.target.setAttribute("aria-checked", true);
-                } else {
-                    event.target.setAttribute("aria-checked", false);
-                }
-            },
+    event.target.setAttribute("aria-checked", true);
+    } else {
+    event.target.setAttribute("aria-checked", false);
+    }
+    },
 
-            resetRadioGroup: function(selectedRadioInput) {
+    resetRadioGroup: function(selectedRadioInput) {
 
-                var radioInputName = selectedRadioInput.getAttribute("name");
+    var radioInputName = selectedRadioInput.getAttribute("name");
+    var allRadioInputs = document.querySelectorAll('#' + this.formId + ' [name="' + radioInputName + '"] ');
 
-                console.log(radioInputName);
-                var allRadioInputs = document.querySelectorAll('#' + this.formId + ' [name="' + radioInputName + '"] ');
-                console.log(allRadioInputs);
-                for (var i = 0; i < allRadioInputs.length; i += 1) {
-                    allRadioInputs[i].setAttribute("aria-checked", false);
-                }
-            }
+    for (var i = 0; i < allRadioInputs.length; i += 1) {
+    allRadioInputs[i].setAttribute("aria-checked", false);
+    }
+    }
 
-        };
+    };
 
-        SproutForms.CheckableInputs.init('{{ id }}');
+    SproutForms.CheckableInputs.init('{{ id }}');
 
-        SproutForms.AddressFields = {
+    SproutForms.AddressFields = {
 
-            formId: null,
-            addressFields: null,
-            countrySelectFields: null,
-            namespace: null,
+    formId: null,
+    addressFields: null,
+    countrySelectFields: null,
+    namespace: null,
 
-            init: function(id) {
-                this.formId = id;
-                this.form = document.getElementById(this.formId);
-                this.addressFields = document.querySelectorAll('.sproutfields-address-formfields');
-                this.countrySelectFields = document.querySelectorAll('.sprout-address-country-select');
-                this.getNamespace();
-                this.initCountrySelectFields();
-            },
-            getNamespace: function() {
-                if (this.addressFields.length) {
-                    this.namespace = this.addressFields[0].dataset.namespace;
-                }
-            },
-            initCountrySelectFields: function() {
-                self = this;
-                for (var i = 0; i < this.countrySelectFields.length; i++) {
-                    this.countrySelectFields[i].addEventListener('change', function(event) {
-                        self.updateFormFields(this);
-                    });
-                }
-            },
-            updateFormFields: function(el) {
-                self = this;
-                var oForm = el.closest('form');
-                var csrfValue = oForm.elements["{{ craft.app.getConfig().getGeneral().csrfTokenName }}"].value;
-                var data = {
-                    namespace: this.namespace,
-                    countryCode: el.value,
-                    overrideTemplatePaths: true
-                };
-                var params = typeof data == 'string' ? data : Object.keys(data).map(
-                    function(k) {
-                        return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
-                    }
-                ).join('&');
+    init: function(id) {
+    this.formId = id;
+    this.form = document.getElementById(this.formId);
+    this.addressFields = document.querySelectorAll('.sproutfields-address-formfields');
+    this.countrySelectFields = document.querySelectorAll('.sprout-address-country-select');
+    this.getNamespace();
+    this.initCountrySelectFields();
+    },
+    getNamespace: function() {
+    if (this.addressFields.length) {
+    this.namespace = this.addressFields[0].dataset.namespace;
+    }
+    },
+    initCountrySelectFields: function() {
+    self = this;
+    for (var i = 0; i < this.countrySelectFields.length; i++) {
+    this.countrySelectFields[i].addEventListener('change', function(event) {
+    self.updateFormFields(this);
+    });
+    }
+    },
+    updateFormFields: function(el) {
+    self = this;
+    var oForm = el.closest('form');
+    var csrfValue = oForm.elements["{{ craft.app.getConfig().getGeneral().csrfTokenName }}"].value;
+    var data = {
+    namespace: this.namespace,
+    countryCode: el.value,
+    overrideTemplatePaths: true
+    };
+    var params = typeof data == 'string' ? data : Object.keys(data).map(
+    function(k) {
+    return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
+    }
+    ).join('&');
 
-                var http = new XMLHttpRequest();
+    var http = new XMLHttpRequest();
 
-                http.open('POST', '{{ actionUrl('sprout-base-fields/fields-address/update-address-form-html') }}', true);
-                http.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-                http.onreadystatechange = function() {
+    http.open('POST', '{{ actionUrl('sprout-base-fields/fields-address/update-address-form-html') }}', true);
+    http.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    http.onreadystatechange = function() {
 
-                    //Call a function when the state changes.
-                    if (http.readyState === 4 && http.status === 200) {
+    //Call a function when the state changes.
+    if (http.readyState === 4 && http.status === 200) {
 
-                        self.removeElements('.sprout-address-onchange-country', oForm);
-                        var response = JSON.parse(http.response);
-                        var countrySpecificFields = oForm.querySelector('.sprout-address-country-fields');
+    self.removeElements('.sprout-address-onchange-country', oForm);
+    var response = JSON.parse(http.response);
+    var countrySpecificFields = oForm.querySelector('.sprout-address-country-fields');
 
-                        countrySpecificFields.innerHTML = response.html;
-                    }
-                };
+    countrySpecificFields.innerHTML = response.html;
+    }
+    };
 
-                http.setRequestHeader('X-CSRF-Token', csrfValue);
-                http.setRequestHeader('Accept', 'application/json; charset=utf-8');
-                http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
+    http.setRequestHeader('X-CSRF-Token', csrfValue);
+    http.setRequestHeader('Accept', 'application/json; charset=utf-8');
+    http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
 
-                http.send(params);
-            },
+    http.send(params);
+    },
 
-            removeElements: function(classes, oForm) {
-                var inputs = oForm.querySelectorAll(classes);
+    removeElements: function(classes, oForm) {
+    var inputs = oForm.querySelectorAll(classes);
 
-                for (var key in inputs) {
-                    var elem = inputs[key];
+    for (var key in inputs) {
+    var elem = inputs[key];
 
-                    if (typeof elem.parentNode !== 'undefined') {
-                        elem.parentNode.removeChild(elem);
-                    }
-                }
-            }
-        };
+    if (typeof elem.parentNode !== 'undefined') {
+    elem.parentNode.removeChild(elem);
+    }
+    }
+    }
+    };
 
-        SproutForms.AddressFields.init('{{ id }}');
+    SproutForms.AddressFields.init('{{ id }}');
 
     })();
 

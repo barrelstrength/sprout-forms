@@ -61,7 +61,6 @@ use barrelstrength\sproutforms\services\Fields as SproutFormsFields;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use craft\services\Dashboard;
 use yii\base\InvalidConfigException;
-use craft\db\Migration;
 use yii\base\NotSupportedException;
 use yii\web\Response;
 use yii\web\ServerErrorHttpException;

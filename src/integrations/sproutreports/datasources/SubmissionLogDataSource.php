@@ -184,8 +184,8 @@ class SubmissionLogDataSource extends DataSource
     public function prepSettings(array $settings)
     {
         // Convert date strings to DateTime
-        $settings['startDate'] = DateTimeHelper::toDateTime($settings['startDate']) ?? null;
-        $settings['endDate'] = DateTimeHelper::toDateTime($settings['endDate']) ?? null;
+        $settings['startDate'] = DateTimeHelper::toDateTime($settings['startDate']) ?: null;
+        $settings['endDate'] = DateTimeHelper::toDateTime($settings['endDate']) ?: null;
 
         return $settings;
     }

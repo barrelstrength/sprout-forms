@@ -6,6 +6,7 @@ use barrelstrength\sproutforms\base\Captcha;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use Craft;
 use craft\errors\MissingComponentException;
+use craft\web\View;
 
 /**
  * Class InvisibleCaptcha
@@ -50,7 +51,7 @@ class JavascriptCaptcha extends Captcha
 
         $js = 'document.getElementById("'.$uniqueId.'").value = "'.$uniqueId.'";';
 
-        Craft::$app->getView()->registerJs($js);
+        Craft::$app->getView()->registerJs($js, View::POS_END);
 
         return $output;
     }
