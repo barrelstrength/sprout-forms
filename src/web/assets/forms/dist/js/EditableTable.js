@@ -301,7 +301,6 @@ Craft.SproutForms.EditableTable.Row = Garnish.Base.extend(
 
             /* We already generate the depending dropdowns when load */
             var needCheck = this.$tr.find("td:eq(1)").find("select").data("check-value-html");
-            console.log(needCheck);
 
             if (needCheck == true){
                 var data = {
