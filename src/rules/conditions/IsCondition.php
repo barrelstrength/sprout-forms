@@ -26,4 +26,26 @@ class IsCondition extends BaseCondition
 
 		return $html;
 	}
+
+	/**
+	 * @return array
+	 */
+	public function getInputType(): array
+	{
+		$inputType = [
+			'text'
+		];
+
+		if ( $this->fieldRule instanceof BaseOptionsFormField ) {
+			$inputType = [
+				'type'    => 'select',
+				'options' => [
+					'label' => 'Test',
+					'value' => 'test'
+				]
+			];
+		}
+
+		return $inputType;
+	}
 }

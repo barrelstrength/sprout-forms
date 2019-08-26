@@ -37,4 +37,16 @@ abstract class BaseCondition extends SavableComponent implements ConditionInterf
 	{
 		return "";
 	}
+
+	/**
+	 * @return array
+	 */
+	public function getInputType(): array
+	{
+		$inputType = [
+			'type' => 'text'
+		];
+
+		return $inputType;
+	}
 }

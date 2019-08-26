@@ -69,5 +69,26 @@ class FieldRule extends Rule
 
         return $options;
     }
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getConditionRules(): array
+	{
+		$fields = $this->getForm()->getFields();
+		$rules = [];
+
+		foreach ($fields as $field) {
+			$compatibleConditional = $field->getCompatibleConditional();
+			if ($compatibleConditional !== null){
+				$rules[$field->handle]['rulesAsOptions'] = $compatibleConditional->getRulesAsOptions();
+				foreach ($compatibleConditional->getRules() as $rule) {
+					$rules[$field->handle]['rules'][get_class($rule)]['inputValueType'] = $rule->getInputType();
+				}
+			}
+		}
+
+		return $rules;
+	}
 }
 

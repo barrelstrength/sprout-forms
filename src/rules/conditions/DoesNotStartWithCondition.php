@@ -8,12 +8,12 @@ class DoesNotStartWithCondition extends BaseCondition
 {
     public $fieldRule;
 
-    public static function getLabel(): string
+    public function getLabel(): string
     {
         return 'does not starts with';
     }
 
-    public static function getValue(): string
+    public function getValue(): string
     {
         return 'doesNotStartsWith';
     }

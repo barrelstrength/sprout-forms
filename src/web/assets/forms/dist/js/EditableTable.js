@@ -79,7 +79,7 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
 
         addRow: function() {
             var rowId = this.settings.rowIdPrefix + (this.biggestId + 1),
-                rowHtml = Craft.SproutForms.EditableTable.getRowHtml(rowId, this.columns, this.baseName, {}),
+                rowHtml = Craft.SproutForms.EditableTable.getRowHtml(rowId, this.columns, this.baseName, {}, this.conditionalTypes),
                 $tr = $(rowHtml).appendTo(this.$tbody);
 
             new Craft.SproutForms.EditableTable.Row(this, $tr);
@@ -102,9 +102,10 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
             onDeleteRow: $.noop
         },
 
-        getRowHtml: function(rowId, columns, baseName, values) {
+        getRowHtml: function(rowId, columns, baseName, values, conditionalTypes) {
             var rowHtml = '<tr data-id="' + rowId + '">';
             var formFieldName = "";
+            var formFieldValue = "";
             for (var colId in columns) {
                 var col = columns[colId],
                     name = baseName + '[' + rowId + '][' + colId + ']',
@@ -113,6 +114,7 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
 
                 if (colId == 0){
                     formFieldName = name;
+                    formFieldValue = value != '' ? value : col.options[0].value;
                 }
 
                 rowHtml += '<td class="' + (textual ? 'textual' : '') + ' ' + (typeof col['class'] !== 'undefined' ? col['class'] : '') + '"' +
@@ -160,29 +162,11 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
 
                     case 'selectCondition': {
                         rowHtml += '<div class="select"><select onchange="onUpdateField(this)" name="' + name + '">';
-                        console.log(formFieldName);
-                        console.log($("input[name='"+formFieldName+"']").selected);
+                        console.log(conditionalTypes[formFieldValue]);
+                        col.options = conditionalTypes[formFieldValue]['rulesAsOptions'];
                         var hasOptgroups = false;
 
                         var firstRow = 'selected';
-                        /*
-                        Craft.postActionRequest(this.updateSourceFieldsAction, data, $.proxy(function(response, textStatus) {
-                            var statusSuccess = (textStatus === 'success');
-                            if (statusSuccess && response.success) {
-                                var rows = response.formFields;
-                                $('tbody .formField').each(function(index) {
-                                    var td = $(this);
-                                    td.empty();
-                                    var title = rows[index]["label"];
-                                    var handle = rows[index]["value"];
-                                    td.append('<div style="display:none;"><select readonly name="settings[' + that.integrationType + '][fieldMapping][' + index + '][sourceFormField]"><option selected value="' + handle + '">' + title + '</option></select></div><div style="padding: 7px 10px;font-size: 12px;color:#8f98a3;">' + title + ' <span class="code">(' + handle + ')</span></div>');
-                                });
-                            } else {
-                                Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to get the Form fields'));
-                            }
-                        }, this));
-
-                         */
 
                         for (var key in col.options) {
                             var option = col.options[key];

@@ -8,12 +8,12 @@ class ContainsCondition extends BaseCondition
 {
     public $fieldRule;
 
-    public static function getLabel(): string
+    public function getLabel(): string
     {
         return 'contains';
     }
 
-    public static function getValue(): string
+    public function getValue(): string
     {
         return 'contains';
     }

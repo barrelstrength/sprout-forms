@@ -8,12 +8,12 @@ class DoesNotEndsWithCondition extends BaseCondition
 {
     public $fieldRule;
 
-    public static function getLabel(): string
+    public function getLabel(): string
     {
         return 'does not ends with';
     }
 
-    public static function getValue(): string
+    public function getValue(): string
     {
         return 'doesNotEndsWith';
     }

@@ -8,12 +8,12 @@ class DoesNotContainsCondition extends BaseCondition
 {
     public $fieldRule;
 
-    public static function getLabel(): string
+    public function getLabel(): string
     {
         return 'does not contains';
     }
 
-    public static function getValue(): string
+    public function getValue(): string
     {
         return 'doesNotContains';
     }

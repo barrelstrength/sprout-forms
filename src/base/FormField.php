@@ -62,7 +62,7 @@ abstract class FormField extends Field
      * Return the condition type to associate on the Conditional Logic API
      * By default let's return the Text condition as is the most common
      *
-     * @return BaseCondition|null
+     * @return ConditionalType|null
      */
     public function getCompatibleConditional()
     {
