@@ -8,9 +8,6 @@ use barrelstrength\sproutforms\fields\formfields\BaseOptionsFormField;
 
 class IsCondition extends BaseCondition
 {
-	/** @var FormField */
-    public $fieldRule;
-
     public function getLabel(): string
     {
         return 'is';
@@ -24,11 +21,11 @@ class IsCondition extends BaseCondition
 		return self::class;
 	}
 
-	public function getTextInputHtml($name , $value): string
+	public function getValueInputHtml($name , $value): string
 	{
 		$html = '<input class="text fullwidth" type="text" name="'.$name.'" value="'.$value.'">';
 
-		if ($this->fieldRule instanceof BaseOptionsFormField){
+		if ($this->formField instanceof BaseOptionsFormField){
 			$html = "Is Dropdown";
 		}
 

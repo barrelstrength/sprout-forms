@@ -218,7 +218,7 @@ class ConditionalsController extends BaseController
 
 		foreach ($conditional->getRules() as $rule){
 			if (get_class($rule) == $condition){
-				$html = $rule->getTextInputHtml($inputName, $inputValue);
+				$html = $rule->getValueInputHtml($inputName, $inputValue);
 			}
 		}
 

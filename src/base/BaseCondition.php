@@ -12,6 +12,7 @@ use craft\base\SavableComponent;
  */
 abstract class BaseCondition extends SavableComponent implements ConditionInterface
 {
+	/** @var FormField */
     public $formField;
 
     /**
@@ -33,8 +34,10 @@ abstract class BaseCondition extends SavableComponent implements ConditionInterf
 	/**
 	 * @inheritDoc
 	 */
-	public function getTextInputHtml($name, $value): string
+	public function getValueInputHtml($name, $value): string
 	{
-		return "";
+		$html = '<input class="text fullwidth" type="text" name="'.$name.'" value="'.$value.'">';
+
+		return $html;
 	}
 }

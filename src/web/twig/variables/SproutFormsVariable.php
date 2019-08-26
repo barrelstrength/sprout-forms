@@ -648,9 +648,19 @@ class SproutFormsVariable
         return SproutForms::$app->integrations->getIntegrationById($integrationId);
     }
 
-    public function getFormField($formField)
+	/**
+	 * @param $formFieldHandle
+	 * @param $formId
+	 *
+	 * @return \craft\base\FieldInterface|null
+	 * @throws InvalidConfigException
+	 */
+	public function getFormField($formFieldHandle, $formId)
     {
-    	return new $formField();
+	    $form = SproutForms::$app->forms->getFormById($formId);
+	    $formField = $form->getField($formFieldHandle);
+
+	    return $formField;
     }
 
 	/**

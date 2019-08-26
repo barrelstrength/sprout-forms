@@ -6,8 +6,6 @@ use barrelstrength\sproutforms\base\BaseCondition;
 
 class ContainsCondition extends BaseCondition
 {
-    public $fieldRule;
-
     public function getLabel(): string
     {
         return 'contains';
@@ -20,15 +18,4 @@ class ContainsCondition extends BaseCondition
 	{
 		return self::class;
 	}
-
-    public function getValueInputHtml($name)
-    {
-        if ($this->fieldRule instanceof BaseCondition){
-
-        }else{
-
-        }
-
-        return "";
-    }
 }

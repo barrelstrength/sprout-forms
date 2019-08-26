@@ -6,8 +6,6 @@ use barrelstrength\sproutforms\base\BaseCondition;
 
 class DoesNotStartWithCondition extends BaseCondition
 {
-    public $fieldRule;
-
     public function getLabel(): string
     {
         return 'does not starts with';
@@ -21,14 +19,10 @@ class DoesNotStartWithCondition extends BaseCondition
 		return self::class;
 	}
 
-    public function getValueInputHtml($name)
-    {
-        if ($this->fieldRule instanceof BaseCondition){
+	public function getValueInputHtml($name, $value): string
+	{
+		$html = '<input class="text fullwidth" type="text" name="'.$name.'" value="'.$value.'">';
 
-        }else{
-
-        }
-
-        return "";
-    }
+		return $html;
+	}
 }

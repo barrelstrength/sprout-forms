@@ -6,8 +6,6 @@ use barrelstrength\sproutforms\base\BaseCondition;
 
 class StarsWithCondition extends BaseCondition
 {
-    public $fieldRule;
-
     public function getLabel(): string
     {
         return 'starts with';
@@ -20,15 +18,4 @@ class StarsWithCondition extends BaseCondition
 	{
 		return self::class;
 	}
-
-    public function getValueInputHtml($name)
-    {
-        if ($this->fieldRule instanceof BaseCondition){
-
-        }else{
-
-        }
-
-        return "";
-    }
 }

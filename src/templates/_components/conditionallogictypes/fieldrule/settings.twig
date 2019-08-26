@@ -28,6 +28,10 @@
         </tr>
         </thead>
         <tbody>
+
+            {% set formFieldHandle = "" %}
+            {% set conditionClass = "" %}
+            {% set formFieldsAsOptions = conditional.getFormFieldsAsOptions(true) %}
             {% for rows in rule.rules %}
              {% set secondIndex = loop.index0 %}
             <tr data-id="{{ secondIndex }}">
@@ -35,10 +39,11 @@
                 <td>
                     {% set rowName = 'conditionalRules[' ~ mainIndex ~ '][rules][' ~ secondIndex ~ '][' ~ loop.index0 ~ ']' %}
 
-                    {% set formFieldClass = "" %}
-                    {% set conditionClass = "" %}
                     {% if loop.index0 == 0 %}
-                        {% set formFieldClass = row %}
+                        {% set formFieldHandle = row %}
+                        {% if formFieldHandle is empty %}
+                            {% set formFieldHandle = formFieldsAsOptions[0].value %}
+                        {% endif %}
                         {{ forms.select({
                             name: rowName,
                             hasOptgroups: true,
@@ -46,7 +51,7 @@
                             value: row
                         }) }}
                     {% elseif loop.index0 == 1 %}
-                        {% set formField = craft.sproutForms.getFormField(formFieldClass) %}
+                        {% set formField = craft.sproutForms.getFormField(formFieldHandle, conditional.formId) %}
                         {% set rulesAsOptions = formField.getCompatibleConditional().getRulesAsOptions() %}
                         {{ forms.select({
                             name: rowName,
@@ -57,7 +62,7 @@
                         {% set conditionClass = row != '' ? row : rulesAsOptions[0].value %}
                     {% else %}
                         {% set fieldCondition = craft.sproutForms.getFieldCondition(conditionClass, formField) %}
-                        {{ fieldCondition.getTextInputHtml(rowName, row) }}
+                        {{ fieldCondition.getValueInputHtml(rowName, row)|raw }}
                     {% endif %}
                 </td>
                 {% endfor %}

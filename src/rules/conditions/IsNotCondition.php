@@ -3,11 +3,10 @@
 namespace barrelstrength\sproutforms\rules\conditions;
 
 use barrelstrength\sproutforms\base\BaseCondition;
+use barrelstrength\sproutforms\fields\formfields\BaseOptionsFormField;
 
 class IsNotCondition extends BaseCondition
 {
-    public $fieldRule;
-
     public function getLabel(): string
     {
         return 'is not';
@@ -21,14 +20,14 @@ class IsNotCondition extends BaseCondition
 		return self::class;
 	}
 
-    public function getValueInputHtml($name)
-    {
-        if ($this->fieldRule instanceof BaseCondition){
+	public function getValueInputHtml($name , $value): string
+	{
+		$html = '<input class="text fullwidth" type="text" name="'.$name.'" value="'.$value.'">';
 
-        }else{
+		if ($this->formField instanceof BaseOptionsFormField){
+			$html = "Is Dropdown";
+		}
 
-        }
-
-        return "";
-    }
+		return $html;
+	}
 }
