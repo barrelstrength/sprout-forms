@@ -16,36 +16,22 @@ class IsCondition extends BaseCondition
         return 'is';
     }
 
-	public function getTextInputHtml($name): string
+	/**
+	 * @inheritDoc
+	 */
+	public function getValue(): string
 	{
-		$html = '<input class="text fullwidth" type="text" name="'.$name.'" value="">';
+		return self::class;
+	}
+
+	public function getTextInputHtml($name , $value): string
+	{
+		$html = '<input class="text fullwidth" type="text" name="'.$name.'" value="'.$value.'">';
 
 		if ($this->fieldRule instanceof BaseOptionsFormField){
 			$html = "Is Dropdown";
 		}
 
 		return $html;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getInputType(): array
-	{
-		$inputType = [
-			'text'
-		];
-
-		if ( $this->fieldRule instanceof BaseOptionsFormField ) {
-			$inputType = [
-				'type'    => 'select',
-				'options' => [
-					'label' => 'Test',
-					'value' => 'test'
-				]
-			];
-		}
-
-		return $inputType;
 	}
 }

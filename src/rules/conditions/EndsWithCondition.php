@@ -13,10 +13,13 @@ class EndsWithCondition extends BaseCondition
         return 'ends with';
     }
 
-    public function getValue(): string
-    {
-        return 'endsWith';
-    }
+	/**
+	 * @inheritDoc
+	 */
+	public function getValue(): string
+	{
+		return self::class;
+	}
 
     public function getValueInputHtml($name)
     {

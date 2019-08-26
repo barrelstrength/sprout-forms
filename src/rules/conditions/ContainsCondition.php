@@ -13,10 +13,13 @@ class ContainsCondition extends BaseCondition
         return 'contains';
     }
 
-    public function getValue(): string
-    {
-        return 'contains';
-    }
+	/**
+	 * @inheritDoc
+	 */
+	public function getValue(): string
+	{
+		return self::class;
+	}
 
     public function getValueInputHtml($name)
     {

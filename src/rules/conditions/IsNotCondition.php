@@ -13,10 +13,13 @@ class IsNotCondition extends BaseCondition
         return 'is not';
     }
 
-    public function getValue(): string
-    {
-        return 'isNot';
-    }
+	/**
+	 * @inheritDoc
+	 */
+	public function getValue(): string
+	{
+		return self::class;
+	}
 
     public function getValueInputHtml($name)
     {

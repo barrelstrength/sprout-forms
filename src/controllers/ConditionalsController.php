@@ -192,4 +192,39 @@ class ConditionalsController extends BaseController
             //'template' => $success ? false : SproutForms::$app->conditionals->getModalConditionalTemplate($conditional),
         ]);
     }
+
+	/**
+	 * @return Response
+	 * @throws Throwable
+	 * @throws BadRequestHttpException
+	 */
+	public function actionGetConditionInputHtml(): Response
+	{
+		$this->requireAcceptsJson();
+
+		$request = Craft::$app->getRequest();
+		$formId = $request->getBodyParam('formId');
+		$condition = $request->getBodyParam('condition');
+		$inputName = $request->getBodyParam('inputName');
+		$inputValue = $request->getBodyParam('inputValue');
+		$formFieldHandle = $request->getBodyParam('formFieldHandle');
+
+		$form = SproutForms::$app->forms->getFormById($formId);
+		$formField = $form->getField($formFieldHandle);
+
+		$conditional = $formField->getCompatibleConditional();
+
+		$html = "";
+
+		foreach ($conditional->getRules() as $rule){
+			if (get_class($rule) == $condition){
+				$html = $rule->getTextInputHtml($inputName, $inputValue);
+			}
+		}
+
+		return $this->asJson([
+			'success' => true,
+			'html' => $html
+		]);
+	}
 }

@@ -57,7 +57,7 @@
                         {% set conditionClass = row != '' ? row : rulesAsOptions[0].value %}
                     {% else %}
                         {% set fieldCondition = craft.sproutForms.getFieldCondition(conditionClass, formField) %}
-                        {{ fieldCondition.getTextInputHtml(rowName) }}
+                        {{ fieldCondition.getTextInputHtml(rowName, row) }}
                     {% endif %}
                 </td>
                 {% endfor %}

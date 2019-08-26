@@ -13,10 +13,13 @@ class StarsWithCondition extends BaseCondition
         return 'starts with';
     }
 
-    public function getValue(): string
-    {
-        return 'startsWith';
-    }
+	/**
+	 * @inheritDoc
+	 */
+	public function getValue(): string
+	{
+		return self::class;
+	}
 
     public function getValueInputHtml($name)
     {

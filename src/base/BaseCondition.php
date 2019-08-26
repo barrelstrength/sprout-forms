@@ -27,26 +27,14 @@ abstract class BaseCondition extends SavableComponent implements ConditionInterf
 	 */
 	public function getValue(): string
 	{
-		return self::class;
+		return "";
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function getTextInputHtml($name): string
+	public function getTextInputHtml($name, $value): string
 	{
 		return "";
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getInputType(): array
-	{
-		$inputType = [
-			'type' => 'text'
-		];
-
-		return $inputType;
 	}
 }

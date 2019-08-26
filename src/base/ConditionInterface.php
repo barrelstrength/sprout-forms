@@ -22,8 +22,9 @@ interface ConditionInterface extends SavableComponentInterface
 
 	/**
 	 * @param $name
+	 * @param $value
 	 *
 	 * @return string
 	 */
-	public function getTextInputHtml($name): string;
+	public function getTextInputHtml($name, $value): string;
 }

@@ -13,10 +13,13 @@ class DoesNotContainsCondition extends BaseCondition
         return 'does not contains';
     }
 
-    public function getValue(): string
-    {
-        return 'doesNotContains';
-    }
+	/**
+	 * @inheritDoc
+	 */
+	public function getValue(): string
+	{
+		return self::class;
+	}
 
     public function getValueInputHtml($name)
     {

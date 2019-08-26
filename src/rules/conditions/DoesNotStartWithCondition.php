@@ -13,10 +13,13 @@ class DoesNotStartWithCondition extends BaseCondition
         return 'does not starts with';
     }
 
-    public function getValue(): string
-    {
-        return 'doesNotStartsWith';
-    }
+	/**
+	 * @inheritDoc
+	 */
+	public function getValue(): string
+	{
+		return self::class;
+	}
 
     public function getValueInputHtml($name)
     {

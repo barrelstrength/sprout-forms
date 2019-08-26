@@ -106,6 +106,8 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
             var rowHtml = '<tr data-id="' + rowId + '">';
             var formFieldName = "";
             var formFieldValue = "";
+            var conditionFieldName = "";
+            var conditionFieldValue = "";
             for (var colId in columns) {
                 var col = columns[colId],
                     name = baseName + '[' + rowId + '][' + colId + ']',
@@ -166,6 +168,9 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
                         col.options = conditionalTypes[formFieldValue]['rulesAsOptions'];
                         var hasOptgroups = false;
 
+                        conditionFieldName = name;
+                        conditionFieldValue = value != '' ? value : col.options[0].value;
+
                         var firstRow = 'selected';
 
                         for (var key in col.options) {
@@ -207,7 +212,24 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
                     }
 
                     default: {
-                        rowHtml += '<input class="text fullwidth" type="text" name="' + name + '" value="' + value + '">';
+                        var data = {
+                          'formFieldHandle' : formFieldValue,
+                          'condition' : conditionFieldValue,
+                          'inputName' : name,
+                          'inputValue' : value,
+                          'formId' : $("#formId").val()
+                        };
+
+                        Craft.postActionRequest("sprout-forms/conditionals/get-condition-input-html", data, $.proxy(function(response, textStatus) {
+                            var statusSuccess = (textStatus === 'success');
+                            if (statusSuccess && response.success) {
+
+                                rowHtml += response.html;
+                                console.log(rowHtml);
+                            } else {
+                                Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to get the input html'));
+                            }
+                        }, this));
                     }
                 }
 
