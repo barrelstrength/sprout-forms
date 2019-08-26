@@ -35,14 +35,14 @@ trait IntegrationTrait
     /**
      * @var Form The Form Element associated with an Integration
      */
-    protected $form;
+    public $form;
 
     /**
      * The Form Entry Element associated with an Integration
      *
      * @var Entry
      */
-    protected $formEntry;
+    public $formEntry;
 
     /**
      * The Field Mapping settings
