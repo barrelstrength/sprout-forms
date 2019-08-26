@@ -212,24 +212,8 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
                     }
 
                     default: {
-                        var data = {
-                          'formFieldHandle' : formFieldValue,
-                          'condition' : conditionFieldValue,
-                          'inputName' : name,
-                          'inputValue' : value,
-                          'formId' : $("#formId").val()
-                        };
+                        rowHtml += '<input class="text fullwidth" type="text" name="' + name + '" value="' + value + '">';
 
-                        Craft.postActionRequest("sprout-forms/conditionals/get-condition-input-html", data, $.proxy(function(response, textStatus) {
-                            var statusSuccess = (textStatus === 'success');
-                            if (statusSuccess && response.success) {
-
-                                rowHtml += response.html;
-                                console.log(rowHtml);
-                            } else {
-                                Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to get the input html'));
-                            }
-                        }, this));
                     }
                 }
 
@@ -315,6 +299,25 @@ Craft.SproutForms.EditableTable.Row = Garnish.Base.extend(
                     new Craft.HandleGenerator(textareasByColId[colId], textareasByColId[col.autopopulate]);
                 }
             }
+
+            var data = {
+                'formFieldHandle' : this.$tr.find("td:eq(0)").find("select").val(),
+                'condition' : this.$tr.find("td:eq(1)").find("select").val(),
+                'inputName' : this.$tr.find("td:eq(2)").find("input").attr("name"),
+                'inputValue' : this.$tr.find("td:eq(2)").find("input").val(),
+                'formId' : $("#formId").val()
+            };
+
+            var that = this;
+
+            Craft.postActionRequest("sprout-forms/conditionals/get-condition-input-html", data, $.proxy(function(response, textStatus) {
+                var statusSuccess = (textStatus === 'success');
+                if (statusSuccess && response.success) {
+                    that.$tr.find("td:eq(2)").html(response.html);
+                } else {
+                    Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to get the input html'));
+                }
+            }, this));
 
             var $deleteBtn = this.$tr.children().last().find('.delete');
             this.addListener($deleteBtn, 'click', 'deleteRow');
