@@ -1,5 +1,27 @@
 # Changelog
 
+## 3.4.1 - 2019-08-26
+
+> {note} This release updates the Integrations API. Users with Custom Integrations will want to be sure to read the release notes as some updates may be required to existing Integration classes.
+
+### Changed
+- Refactored Integrations API for additional flexibility
+- Improved performance of Form element retrieval
+- Added base Integration `getIndexedFieldMapping` method
+- Updated Craft.SproutForms.Integration to handle more custom integration scenarios
+- Updated base Integration `successMessage` to be translatable
+- Moved `getFieldsAsOptionsByRow`, `getCompatibleFields`, and `getTargetIntegrationFieldsAsMappingOptions` from `IntegrationsController` to `EntryElementIntegration` class
+- Renamed `getFormFieldsAsMappingOptions` => `getSourceFormFieldsAsMappingOptions`
+- Renamed `actionGetElementEntryFields` => `actionGetTargetIntegrationFields` and updated it to instantiate and populate an Integration dynamically and trigger the `getTargetIntegrationFieldsAsMappingOptions` on a given Integration
+- Renamed `prepareFieldMapping` => `refreshFieldMapping` and moved to base Integration class init method
+- Renamed `resolveFieldMapping` => `getTargetIntegrationFieldValues` and moved to base Base Integration class
+- Renamed IntegrationTrait `entry` => `formEntry`
+- Removed `prepareFieldTypeSelection` and `prepareIntegrationTypeSelection` variables and methods and simplified how Integration Types field is populated in modal templates
+- Removed base Integration `updateTargetFieldsAction` and `updateSourceFieldsAction` dependencies in favor of `updateTargetFieldsOnChange` to allow Integrations to dynamically target fields to watch for changes
+
+### Fixed
+- Fixed bug loading Javascript Captcha on the front-end
+
 ## 3.4.0 - 2019-08-24
 
 ### Changed
