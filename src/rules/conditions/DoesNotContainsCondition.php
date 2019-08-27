@@ -10,12 +10,4 @@ class DoesNotContainsCondition extends BaseCondition
     {
         return 'does not contains';
     }
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getValue(): string
-	{
-		return self::class;
-	}
 }

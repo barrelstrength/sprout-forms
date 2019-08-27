@@ -32,7 +32,7 @@ abstract class ConditionalType extends SavableComponent implements ConditionalTy
 			foreach ($rules as $rule){
 				$options[] = [
 					'label' => $rule->getLabel(),
-					'value' => $rule->getValue()
+					'value' => get_class($rule)
 				];
 			}
 		}

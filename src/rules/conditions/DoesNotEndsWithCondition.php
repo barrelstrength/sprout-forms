@@ -10,12 +10,4 @@ class DoesNotEndsWithCondition extends BaseCondition
     {
         return 'does not ends with';
     }
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getValue(): string
-	{
-		return self::class;
-	}
 }

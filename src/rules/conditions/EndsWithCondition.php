@@ -10,12 +10,4 @@ class EndsWithCondition extends BaseCondition
     {
         return 'ends with';
     }
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getValue(): string
-	{
-		return self::class;
-	}
 }

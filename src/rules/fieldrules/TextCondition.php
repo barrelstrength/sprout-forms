@@ -11,7 +11,7 @@ use barrelstrength\sproutforms\rules\conditions\DoesNotStartWithCondition;
 use barrelstrength\sproutforms\rules\conditions\EndsWithCondition;
 use barrelstrength\sproutforms\rules\conditions\IsCondition;
 use barrelstrength\sproutforms\rules\conditions\IsNotCondition;
-use barrelstrength\sproutforms\rules\conditions\StarsWithCondition;
+use barrelstrength\sproutforms\rules\conditions\StartsWithCondition;
 
 class TextCondition extends ConditionalType
 {
@@ -30,7 +30,7 @@ class TextCondition extends ConditionalType
 	        new IsNotCondition(['formField' => $this->formField]),
 	        new ContainsCondition(['formField' => $this->formField]),
 	        new DoesNotContainsCondition(['formField' => $this->formField]),
-	        new StarsWithCondition(['formField' => $this->formField]),
+	        new StartsWithCondition(['formField' => $this->formField]),
 	        new DoesNotStartWithCondition(['formField' => $this->formField]),
 	        new EndsWithCondition(['formField' => $this->formField]),
 	        new DoesNotEndsWithCondition(['formField' => $this->formField])

@@ -10,12 +10,4 @@ class ContainsCondition extends BaseCondition
     {
         return 'contains';
     }
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getValue(): string
-	{
-		return self::class;
-	}
 }
