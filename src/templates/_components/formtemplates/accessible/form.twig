@@ -150,24 +150,23 @@
                             if (inputValue == ''){
                                 continue;
                             }
-
                             switch(rule.condition) {
-                                case "contains":
+                                case "barrelstrength\\sproutforms\\rules\\conditions\\ContainsCondition":
                                     if (inputValue.indexOf(rule.value) > -1){
                                         orResult[1] = true;
                                     }
                                     break;
-                                case "doesNotContains":
+                                case "barrelstrength\\sproutforms\\rules\\conditions\\DoesNotContainsCondition":
                                     if (!(inputValue.indexOf(rule.value) > -1)){
                                         orResult[1] = true;
                                     }
                                     break;
-                                case "is":
+                                case "barrelstrength\\sproutforms\\rules\\conditions\\IsCondition":
                                     if (inputValue === rule.value){
                                         orResult[1] = true;
                                     }
                                     break;
-                                case "isNot":
+                                case "barrelstrength\\sproutforms\\rules\\conditions\\IsNotCondition":
                                     if (inputValue !== rule.value){
                                         orResult[1] = true;
                                     }
