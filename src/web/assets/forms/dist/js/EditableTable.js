@@ -42,7 +42,7 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
             });
 
             if (this.isVisible()) {
-                this.initialize();
+                this.initialize(this.conditionalTypes);
             } else {
                 this.addListener(Garnish.$win, 'resize', 'initializeIfVisible');
             }
@@ -52,7 +52,7 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
             return (this.$table.height() > 0);
         },
 
-        initialize: function() {
+        initialize: function(conditionalTypes) {
             if (this.initialized) {
                 return;
             }
@@ -63,7 +63,7 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
             var $rows = this.$tbody.children();
 
             for (var i = 0; i < $rows.length; i++) {
-                new Craft.SproutForms.EditableTable.Row(this, $rows[i]);
+                new Craft.SproutForms.EditableTable.Row(this, $rows[i], conditionalTypes);
             }
 
             this.$addRowBtn = this.$table.find('.buttons').children('.add');
@@ -82,7 +82,7 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
                 rowHtml = Craft.SproutForms.EditableTable.getRowHtml(rowId, this.columns, this.baseName, {}, this.conditionalTypes),
                 $tr = $(rowHtml).appendTo(this.$tbody);
 
-            new Craft.SproutForms.EditableTable.Row(this, $tr);
+            new Craft.SproutForms.EditableTable.Row(this, $tr, this.conditionalTypes);
 
             var $container = $tr.find('.sprout-selectother');
 
@@ -125,7 +125,7 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
 
                 switch (col.type) {
                     case 'select': {
-                        rowHtml += '<div class="select"><select onchange="onUpdateField(this)" name="' + name + '">';
+                        rowHtml += '<div class="select"><select name="' + name + '">';
 
                         var hasOptgroups = false;
 
@@ -163,12 +163,13 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
                     }
 
                     case 'selectCondition': {
-                        rowHtml += '<div class="select"><select data-check-value-html="true" onchange="onUpdateField(this)" name="' + name + '">';
+                        conditionFieldName = name;
+                        var colVal = typeof col.options[0] !== 'undefined' ? col.options[0].value : '';
+                        conditionFieldValue = value != '' ? value : colVal;
+
+                        rowHtml += '<div class="select"><select data-check-value-html="true" name="' + name + '">';
                         col.options = conditionalTypes[formFieldValue]['rulesAsOptions'];
                         var hasOptgroups = false;
-
-                        conditionFieldName = name;
-                        conditionFieldValue = value != '' ? value : col.options[0].value;
 
                         var firstRow = 'selected';
 
@@ -241,11 +242,13 @@ Craft.SproutForms.EditableTable.Row = Garnish.Base.extend(
         $tds: null,
         $textareas: null,
         $deleteBtn: null,
+        conditionalTypes: null,
 
-        init: function(table, tr) {
+        init: function(table, tr, conditionalTypes) {
             this.table = table;
             this.$tr = $(tr);
             this.$tds = this.$tr.children();
+            this.conditionalTypes = conditionalTypes;
 
             // Get the row ID, sans prefix
             var id = parseInt(this.$tr.attr('data-id').substr(this.table.settings.rowIdPrefix.length));
@@ -257,6 +260,7 @@ Craft.SproutForms.EditableTable.Row = Garnish.Base.extend(
             this.$textareas = $();
             this.niceTexts = [];
             var textareasByColId = {};
+            var that = this;
 
             var i = 0;
 
@@ -301,30 +305,85 @@ Craft.SproutForms.EditableTable.Row = Garnish.Base.extend(
 
             /* We already generate the depending dropdowns when load */
             var needCheck = this.$tr.find("td:eq(1)").find("select").data("check-value-html");
+            var $formFieldInput = this.$tr.find("td:eq(0)").find("select");
+            var $conditionalInput = this.$tr.find("td:eq(1)").find("select");
+
+            $formFieldInput.change({row: this},  function(event) {
+                var conditionSelectHtml = '';
+                conditionSelectHtml += '<div class="select"><select data-check-value-html="true" name="' + name + '">';
+                var col = {};
+                col['options'] = that.conditionalTypes[$formFieldInput.val()]['rulesAsOptions'];
+                var value = $conditionalInput.val();
+                var hasOptgroups = false;
+
+                var firstRow = 'selected';
+
+                for (var key in col.options) {
+                    var option = col.options[key];
+
+                    if (typeof option.optgroup !== 'undefined') {
+                        if (hasOptgroups) {
+                            conditionSelectHtml += '</optgroup>';
+                        } else {
+                            hasOptgroups = true;
+                        }
+
+                        conditionSelectHtml += '<optgroup label="' + option.optgroup + '">';
+                    } else {
+                        var optionLabel = (typeof option.label !== 'undefined' ? option.label : option),
+                            optionValue = (typeof option.value !== 'undefined' ? option.value : key),
+                            optionDisabled = (typeof option.disabled !== 'undefined' ? option.disabled : false);
+
+                        conditionSelectHtml += '<option ' + firstRow + ' value="' + optionValue + '"' + (optionValue == value ? ' selected' : '') + (optionDisabled ? ' disabled' : '') + '>' + optionLabel + '</option>';
+                    }
+
+                    firstRow = '';
+                }
+
+                if (hasOptgroups) {
+                    conditionSelectHtml += '</optgroup>';
+                }
+
+                conditionSelectHtml += '</select></div>';
+                $conditionalInput.html(conditionSelectHtml);
+                that.addValueInputHtml(that);
+            });
+
+            $conditionalInput.change({row: this},  function(event) {
+                that.addValueInputHtml(that);
+            });
+
+            $conditionalInput.change({row: this},  function(event) {
+                console.log( event.data.row.$tr.find("td:eq(0)").find("select").val());
+            });
 
             if (needCheck == true){
-                var data = {
-                    'formFieldHandle' : this.$tr.find("td:eq(0)").find("select").val(),
-                    'condition' : this.$tr.find("td:eq(1)").find("select").val(),
-                    'inputName' : this.$tr.find("td:eq(2)").find("input").attr("name"),
-                    'inputValue' : this.$tr.find("td:eq(2)").find("input").val(),
-                    'formId' : $("#formId").val()
-                };
-
-                var that = this;
-
-                Craft.postActionRequest("sprout-forms/conditionals/get-condition-input-html", data, $.proxy(function(response, textStatus) {
-                    var statusSuccess = (textStatus === 'success');
-                    if (statusSuccess && response.success) {
-                        that.$tr.find("td:eq(2)").html(response.html);
-                    } else {
-                        Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to get the input html'));
-                    }
-                }, this));
+                this.addValueInputHtml();
             }
 
             var $deleteBtn = this.$tr.children().last().find('.delete');
             this.addListener($deleteBtn, 'click', 'deleteRow');
+        },
+
+        addValueInputHtml(that = null)
+        {
+            var that = that == null ? this : that;
+            var data = {
+                'formFieldHandle' : this.$tr.find("td:eq(0)").find("select").val(),
+                'condition' : this.$tr.find("td:eq(1)").find("select").val(),
+                'inputName' : this.$tr.find("td:eq(2)").find("input").attr("name"),
+                'inputValue' : this.$tr.find("td:eq(2)").find("input").val(),
+                'formId' : $("#formId").val()
+            };
+
+            Craft.postActionRequest("sprout-forms/conditionals/get-condition-input-html", data, $.proxy(function(response, textStatus) {
+                var statusSuccess = (textStatus === 'success');
+                if (statusSuccess && response.success) {
+                    that.$tr.find("td:eq(2)").html(response.html);
+                } else {
+                    Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to get the input html'));
+                }
+            }, this));
         },
 
         initSproutFields: function() {

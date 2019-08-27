@@ -25,8 +25,17 @@ class IsNotCondition extends BaseCondition
 		$html = '<input class="text fullwidth" type="text" name="'.$name.'" value="'.$value.'">';
 
 		if ($this->formField instanceof BaseOptionsFormField){
-			$html = "Is Dropdown";
+		$html = '<div class="select"><select name="' . $name . '">';
+		$firstRow = 'selected';
+		foreach ( $this->formField->options as $option ) {
+			$rowValue = $option['value'];
+			$label = $option['label'];
+			$isSelected = $rowValue == $value ? 'selected' : '';
+			$html .= '<option ' . $firstRow . ' value="' . $rowValue . '" ' . $isSelected. '>' . $label . '</option>';
+			$firstRow = '';
 		}
+		$html .= '</select></div>';
+	}
 
 		return $html;
 	}
