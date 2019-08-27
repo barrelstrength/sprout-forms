@@ -112,9 +112,7 @@ class Fields extends Component
                 ]);
 
             if (!$fieldLayoutFieldRecord) {
-                throw new Exception(Craft::t('sprout-forms', 'No field exists with the ID “{id}”', [
-                    'id' => $fieldId
-                ]));
+                throw new Exception('No field exists with the ID '.$fieldId);
             }
 
             return $fieldLayoutFieldRecord;
@@ -209,66 +207,6 @@ class Fields extends Component
         }
 
         return null;
-    }
-
-    /**
-     * Returns a field type selection array grouped by category
-     *
-     * Categories
-     * - Standard fields with front end rendering support
-     * - Custom fields that need to be registered using the Sprout Forms Field API
-     *
-     * @return array
-     */
-    public function prepareFieldTypeSelection(): array
-    {
-        $fields = $this->getRegisteredFields();
-        $standardFields = [];
-
-        if (count($fields)) {
-            // Loop through registered fields and add them to the standard group
-            foreach ($fields as $class => $field) {
-                $standardFields[$class] = $field::displayName();
-            }
-
-            // Sort fields alphabetically by name
-            asort($standardFields);
-
-            // Add the group label to the beginning of the standard group
-            $standardFields = $this->prependKeyValue($standardFields, 'standardFieldGroup', ['optgroup' => Craft::t('sprout-forms', 'Standard Fields')]);
-        }
-
-        return $standardFields;
-    }
-
-    /**
-     * Returns a integration type selection array grouped by category
-     *
-     * Categories
-     * - Standard integrations
-     * - Custom integrations that need to be registered using the Sprout Forms Integrations API
-     *
-     * @return array
-     */
-    public function prepareIntegrationTypeSelection(): array
-    {
-        $fields = $this->getRegisteredFields();
-        $standardFields = [];
-
-        if (count($fields)) {
-            // Loop through registered fields and add them to the standard group
-            foreach ($fields as $class => $field) {
-                $standardFields[$class] = $field::displayName();
-            }
-
-            // Sort fields alphabetically by name
-            asort($standardFields);
-
-            // Add the group label to the beginning of the standard group
-            $standardFields = $this->prependKeyValue($standardFields, 'standardFieldGroup', ['optgroup' => Craft::t('sprout-forms', 'Standard Fields')]);
-        }
-
-        return $standardFields;
     }
 
     /**

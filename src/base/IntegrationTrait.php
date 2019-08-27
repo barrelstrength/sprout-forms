@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\base;
 
 use barrelstrength\sproutforms\elements\Entry;
+use barrelstrength\sproutforms\elements\Form;
 
 /**
  * IntegrationTrait implements the common methods and properties for Integration classes.
@@ -11,11 +12,6 @@ trait IntegrationTrait
 {
     // Properties
     // =========================================================================
-
-    /**
-     * @var int
-     */
-    public $formId;
 
     /**
      * @var string
@@ -30,14 +26,40 @@ trait IntegrationTrait
     public $enabled = true;
 
     /**
+     * The ID of the Form where an Integration exists
+     *
+     * @var int
+     */
+    public $formId;
+
+    /**
+     * @var Form The Form Element associated with an Integration
+     */
+    public $form;
+
+    /**
      * The Form Entry Element associated with an Integration
      *
      * @var Entry
      */
-    public $entry;
+    public $formEntry;
 
     /**
-     * The mapped fields
+     * The Field Mapping settings
+     *
+     * This data is saved to the database as JSON in the settings column and populated
+     * as an array when an Integration Component is created
+     *
+     * [
+     *   [
+     *     'sourceFormField' => 'title',
+     *     'targetIntegrationField' => 'title'
+     *   ],
+     *   [
+     *     'sourceFormField' => 'customFormFieldHandle',
+     *     'targetIntegrationField' => 'customTargetFieldHandle'
+     *   ]
+     * ]
      *
      * @var array|null
      */

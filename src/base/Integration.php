@@ -20,15 +20,17 @@ use yii\base\InvalidConfigException;
  *
  * @package Craft
  *
- * @property string      $fieldMappingSettingsHtml
- * @property void        $settingsHtml
- * @property array       $sourceFormFields
- * @property void        $customSourceFormFields
- * @property null|string $updateTargetFieldsAction
- * @property string      $updateSourceFieldsAction
- * @property Form        $form
- * @property array       $sendRuleOptions
- * @property string      $type
+ * @property string $fieldMappingSettingsHtml
+ * @property void   $settingsHtml
+ * @property array  $sourceFormFields
+ * @property void   $customSourceFormFields
+ * @property Form   $form
+ * @property array  $sendRuleOptions
+ * @property array  $targetIntegrationFields
+ * @property array  $targetIntegrationFieldsAsMappingOptions
+ * @property array  $targetIntegrationFieldValues
+ * @property array  $indexedFieldMapping
+ * @property string $type
  */
 abstract class Integration extends SavableComponent implements IntegrationInterface
 {
@@ -37,14 +39,36 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
 
     use IntegrationTrait;
 
-    protected $successMessage = 'Success';
+    protected $successMessage;
+
+    /**
+     * @return array|void|null
+     * @throws InvalidConfigException
+     */
+    public function init()
+    {
+        parent::init();
+
+        /**
+         * Make sure we have a formId, if not, we're just instantiating a
+         *    generic element and should add it shortly. We need the Form ID
+         *    to properly prepare the fieldMapping.
+         */
+        if ($this->formId) {
+            $this->refreshFieldMapping();
+        }
+    }
 
     /**
      * @return Form
      */
     public function getForm(): Form
     {
-        return SproutForms::$app->forms->getFormById($this->formId);
+        if (!$this->form) {
+            $this->form = SproutForms::$app->forms->getFormById($this->formId);
+        }
+
+        return $this->form;
     }
 
     /**
@@ -59,11 +83,15 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
     }
 
     /**
-     * @return string|null
+     * @inheritDoc
      */
-    public function getUpdateTargetFieldsAction()
+    public function getSuccessMessage()
     {
-        return null;
+        if ($this->successMessage !== null) {
+            return $this->successMessage;
+        }
+
+        return Craft::t('sprout-forms', 'Success');
     }
 
     /**
@@ -75,71 +103,10 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
     }
 
     /**
-     * @inheritDoc
-     */
-    public function getSuccessMessage()
-    {
-        return $this->successMessage;
-    }
-
-    /**
-     * This action should return an form fields array
-     */
-    public function getUpdateSourceFieldsAction()
-    {
-        return 'sprout-forms/integrations/get-form-fields';
-    }
-
-    /**
-     * Prepares the $fieldMapping array based on the current form fields and any existing settings
+     * Returns a list of Source Form Fields as Field Instances
      *
-     * @throws InvalidConfigException
-     */
-    public function prepareFieldMapping()
-    {
-        $indexedFieldMapping = [];
-        $oldFieldMapping = $this->fieldMapping;
-
-        // Update our stored settings to use the sourceFormField handle as the key of our array
-        if ($oldFieldMapping !== null) {
-            foreach ($oldFieldMapping as $oldFieldMap) {
-                $indexedFieldMapping[$oldFieldMap['sourceFormField']] = $oldFieldMap['targetIntegrationField'];
-            }
-        }
-
-        $newFieldMapping = [];
-        $sourceFormFields = $this->getSourceFormFields();
-
-        // Loop through the current list of form fields and match them to any existing fieldMapping settings
-        foreach ($sourceFormFields as $sourceFormField) {
-            $newFieldMapping[] = [
-                'sourceFormField' => $sourceFormField->handle,
-                'targetIntegrationField' => $indexedFieldMapping[$sourceFormField->handle] ?? ''
-            ];
-        }
-
-        $this->fieldMapping = $newFieldMapping;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function resolveFieldMapping(): array
-    {
-        return $this->fieldMapping ?? [];
-    }
-
-    /**
-     * Returns the HTML where a user will prepare a field mapping
+     * Field Instances will be used to help create the fieldMapping using field handles.
      *
-     * @return string|null
-     */
-    public function getFieldMappingSettingsHtml()
-    {
-        return null;
-    }
-
-    /**
      * @return array
      * @throws InvalidConfigException
      */
@@ -224,20 +191,16 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
         return $sourceFormFields;
     }
 
-    public function getCustomSourceFormFields()
-    {
-
-    }
-
     /**
-     * Prepares a list of the Form Fields from the current form that a user can choose to map to an endpoint
+     * Prepares a list of the Form Fields from the current form that a user can choose
+     * to map to an endpoint. Fields are returned in a Select dropdown compatible format.
      *
      * @param bool $addOptGroup
      *
      * @return array
      * @throws InvalidConfigException
      */
-    public function getFormFieldsAsMappingOptions($addOptGroup = false): array
+    public function getSourceFormFieldsAsMappingOptions($addOptGroup = false): array
     {
         $options = [];
 
@@ -325,6 +288,100 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getTargetIntegrationFieldsAsMappingOptions(): array
+    {
+        return [];
+    }
+
+    /**
+     * Represents a Field Mapping as a one-dimensional array where the
+     * key is the sourceFormFieldHandle and the value is the targetIntegrationField handle
+     *
+     * [
+     *   'title' => 'title',
+     *   'customFormFieldHandle' => 'customTargetFieldHandle'
+     * ]
+     *
+     * @return array
+     * @var array
+     */
+    public function getIndexedFieldMapping(): array
+    {
+        if ($this->fieldMapping === null) {
+            return [];
+        }
+
+        $indexedFieldMapping = [];
+
+        // Update our stored settings to use the sourceFormField handle as the key of our array
+        foreach ($this->fieldMapping as $fieldMap) {
+            $indexedFieldMapping[$fieldMap['sourceFormField']] = $fieldMap['targetIntegrationField'];
+        }
+
+        return $indexedFieldMapping;
+    }
+
+    /**
+     * Updates the Field Mapping with any fields that have been added
+     * to the Field Layout for a given form
+     *
+     * @throws InvalidConfigException
+     */
+    public function refreshFieldMapping()
+    {
+        $newFieldMapping = [];
+        $sourceFormFields = $this->getSourceFormFields();
+        $indexedFieldMapping = $this->getIndexedFieldMapping();
+
+        // Loop through the current list of form fields and match them to any existing fieldMapping settings
+        foreach ($sourceFormFields as $sourceFormField) {
+            // If the handle exists in our old field mapping (a field that was just
+            // added to the form may not exist yet) use that value. Default to empty string.
+            $targetIntegrationField = $indexedFieldMapping[$sourceFormField->handle] ?? '';
+
+            $newFieldMapping[] = [
+                'sourceFormField' => $sourceFormField->handle,
+                'targetIntegrationField' => $targetIntegrationField
+            ];
+        }
+
+        $this->fieldMapping = $newFieldMapping;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getTargetIntegrationFieldValues(): array
+    {
+        if (!$this->fieldMapping) {
+            return null;
+        }
+
+        $fields = [];
+        $formEntry = $this->formEntry;
+
+        foreach ($this->fieldMapping as $fieldMap) {
+            if (isset($formEntry->{$fieldMap['sourceFormField']}) && $fieldMap['targetIntegrationField']) {
+                $fields[$fieldMap['targetIntegrationField']] = $formEntry->{$fieldMap['sourceFormField']};
+            }
+        }
+
+        return $fields;
+    }
+
+    /**
+     * Returns the HTML where a user will prepare a field mapping
+     *
+     * @return string|null
+     */
+    public function getFieldMappingSettingsHtml()
+    {
+        return null;
+    }
+
+    /**
      * @return array
      * @throws InvalidConfigException
      */
@@ -374,4 +431,3 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
         return $options;
     }
 }
-

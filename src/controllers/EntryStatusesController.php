@@ -34,7 +34,7 @@ class EntryStatusesController extends BaseController
                 $entryStatus = SproutForms::$app->entries->getEntryStatusById($entryStatusId);
 
                 if (!$entryStatus->id) {
-                    throw new NotFoundHttpException(Craft::t('sprout-forms', 'Entry Status not found'));
+                    throw new NotFoundHttpException('Entry Status not found');
                 }
             } else {
                 $entryStatus = new EntryStatus();

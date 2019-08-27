@@ -8,6 +8,7 @@ use craft\elements\Entry;
 use craft\elements\User;
 use craft\fields\Date;
 use craft\fields\PlainText;
+use craft\models\EntryType;
 use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -33,14 +34,6 @@ class EntryElementIntegration extends ElementIntegration
      */
     public $entryTypeId;
 
-    /** returns action that runs to update the targetIntegrationFieldColumns
-     * This action should return an array of input fields that can be used to update the target columns
-     */
-    public function getUpdateTargetFieldsAction()
-    {
-        return 'sprout-forms/integrations/get-element-entry-fields';
-    }
-
     /**
      * @inheritDoc
      */
@@ -55,12 +48,9 @@ class EntryElementIntegration extends ElementIntegration
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws InvalidConfigException
      */
     public function getSettingsHtml()
     {
-        $this->prepareFieldMapping();
-
         $sections = $this->getSectionsAsOptions();
 
         return Craft::$app->getView()->renderTemplate('sprout-forms/_components/integrationtypes/entryelement/settings',
@@ -82,7 +72,9 @@ class EntryElementIntegration extends ElementIntegration
             return false;
         }
 
-        $fields = $this->resolveFieldMapping();
+        $targetIntegrationFieldValues = $this->getTargetIntegrationFieldValues();
+
+        /** @var EntryType $entryType */
         $entryType = Craft::$app->getSections()->getEntryTypeById($this->entryTypeId);
 
         $entryElement = new Entry();
@@ -95,7 +87,12 @@ class EntryElementIntegration extends ElementIntegration
             $entryElement->authorId = $author->id;
         }
 
-        $entryElement->setAttributes($fields, false);
+        // @todo - why do we need to unset the id from the field mapping for this
+        // Element Integration and not others? Consider refactoring the underlying
+        // reason that causes the need to do this
+        unset($targetIntegrationFieldValues['id']);
+
+        $entryElement->setAttributes($targetIntegrationFieldValues, false);
 
         if ($entryElement->validate()) {
             $result = Craft::$app->getElements()->saveElement($entryElement);
@@ -123,23 +120,80 @@ class EntryElementIntegration extends ElementIntegration
 
     /**
      * @inheritDoc
+     *
+     * @throws InvalidConfigException
      */
-    public function resolveFieldMapping(): array
+    public function getTargetIntegrationFieldsAsMappingOptions(): array
     {
-        $fields = [];
-        $entry = $this->entry;
+        $entryFields = $this->getElementCustomFieldsAsOptions($this->entryTypeId);
 
-        if ($this->fieldMapping) {
-            foreach ($this->fieldMapping as $fieldMap) {
-                if (isset($entry->{$fieldMap['sourceFormField']}) && $fieldMap['targetIntegrationField']) {
-                    $fields[$fieldMap['targetIntegrationField']] = $entry->{$fieldMap['sourceFormField']};
+        return $this->getFieldsAsOptionsByRow($entryFields);
+    }
+
+    /**
+     * @param $entryFields
+     *
+     * @return array
+     * @throws InvalidConfigException
+     */
+    public function getFieldsAsOptionsByRow($entryFields): array
+    {
+        $fieldMapping = $this->fieldMapping;
+        $integrationSectionId = $this->entryTypeId ?? null;
+
+        $formFields = $this->getSourceFormFieldsAsMappingOptions();
+        $rowPosition = 0;
+        $finalOptions = [];
+
+        foreach ($formFields as $formField) {
+            $optionsByRow = $this->getCompatibleFields($entryFields, $formField);
+            // We have rows stored and are for the same sectionType
+            if ($fieldMapping && ($integrationSectionId == $this->entryTypeId) &&
+                isset($fieldMapping[$rowPosition])) {
+                foreach ($optionsByRow as $key => $option) {
+                    if ($option['value'] == $fieldMapping[$rowPosition]['targetIntegrationField'] &&
+                        $fieldMapping[$rowPosition]['sourceFormField'] == $formField['value']) {
+                        $optionsByRow[$key]['selected'] = true;
+                    }
                 }
+            }
+
+            $finalOptions[$rowPosition] = $optionsByRow;
+
+            $rowPosition++;
+        }
+
+        return $finalOptions;
+    }
+
+    /**
+     * @param array $entryFields
+     * @param array $formField
+     *
+     * @return array
+     */
+    public function getCompatibleFields(array $entryFields, array $formField): array
+    {
+        $compatibleFields = $formField['compatibleCraftFields'] ?? '*';
+        $finalOptions = [];
+
+        foreach ($entryFields as $field) {
+            $option = [
+                'label' => $field->name.' ('.$field->handle.')',
+                'value' => $field->handle
+            ];
+
+            if (is_array($compatibleFields) &&
+                !in_array(get_class($field), $compatibleFields, true)) {
+                $option = null;
+            }
+
+            if ($option) {
+                $finalOptions[] = $option;
             }
         }
 
-        unset($fields['id']);
-
-        return $fields;
+        return $finalOptions;
     }
 
     /**
@@ -271,4 +325,3 @@ class EntryElementIntegration extends ElementIntegration
         return $author;
     }
 }
-

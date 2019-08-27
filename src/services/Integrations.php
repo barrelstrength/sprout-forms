@@ -231,36 +231,6 @@ class Integrations extends Component
     }
 
     /**
-     * Returns a integration type selection array grouped by category
-     *
-     * Categories
-     * - Standard integrations
-     * - Custom integrations that need to be registered using the Sprout Forms Integrations API
-     *
-     * @return array
-     */
-    public function prepareIntegrationTypeSelection(): array
-    {
-        $integrations = $this->getAllIntegrations();
-        $standardIntegrations = [];
-
-        if (count($integrations)) {
-            // Loop through registered integrations and add them to the standard group
-            foreach ($integrations as $class => $integration) {
-                $standardIntegrations[get_class($integration)] = $integration::displayName();
-            }
-
-            // Sort fields alphabetically by name
-            asort($standardIntegrations);
-
-            // Add the group label to the beginning of the standard group
-            $standardIntegrations = SproutForms::$app->fields->prependKeyValue($standardIntegrations, 'standardIntegrationsGroup', ['optgroup' => Craft::t('sprout-forms', 'Standard Integrations')]);
-        }
-
-        return $standardIntegrations;
-    }
-
-    /**
      * Loads the sprout modal integration via ajax.
      *
      * @param Integration $integration
@@ -301,7 +271,7 @@ class Integrations extends Component
         if ($submissionLog->id) {
             $submissionLogRecord = SubmissionLogRecord::findOne($submissionLog->id);
             if (!$submissionLogRecord) {
-                throw new Exception(Craft::t('sprout-forms', 'No integration entry exists with id '.$submissionLog->id));
+                throw new Exception('No integration entry exists with id '.$submissionLog->id);
             }
         }
 
@@ -391,7 +361,7 @@ class Integrations extends Component
             /** @var SubmissionLog $submissionLog */
             $submissionLog = $submissionLog['submissionLog'];
 
-            $integration->entry = $entry;
+            $integration->formEntry = $entry;
 
             Craft::info(Craft::t('sprout-forms', 'Running Integration: {integrationName} for Form Entry {entryId}', [
                 'integrationName' => $integration->name,

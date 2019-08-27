@@ -1,5 +1,53 @@
 # Changelog
 
+## 3.4.1 - 2019-08-26
+
+> {note} This release updates the Integrations API. Users with Custom Integrations will want to be sure to read the [upgrade notes](https://sprout.barrelstrengthdesign.com/docs/forms/installing-and-updating-craft-3.html#upgrading-to-forms-3-4-1) as some updates may be required to existing Integration classes.
+
+### Changed
+- Refactored Integrations API for additional flexibility
+- Improved performance of Form element retrieval
+- Added base Integration `getIndexedFieldMapping` method
+- Updated Craft.SproutForms.Integration to handle more custom integration scenarios
+- Updated base Integration `successMessage` to be translatable
+- Moved `getFieldsAsOptionsByRow`, `getCompatibleFields`, and `getTargetIntegrationFieldsAsMappingOptions` from `IntegrationsController` to `EntryElementIntegration` class
+- Renamed `getFormFieldsAsMappingOptions` => `getSourceFormFieldsAsMappingOptions`
+- Renamed `actionGetElementEntryFields` => `actionGetTargetIntegrationFields` and updated it to instantiate and populate an Integration dynamically and trigger the `getTargetIntegrationFieldsAsMappingOptions` on a given Integration
+- Renamed `prepareFieldMapping` => `refreshFieldMapping` and moved to base Integration class init method
+- Renamed `resolveFieldMapping` => `getTargetIntegrationFieldValues` and moved to base Base Integration class
+- Renamed IntegrationTrait `entry` => `formEntry`
+- Removed `prepareFieldTypeSelection` and `prepareIntegrationTypeSelection` variables and methods and simplified how Integration Types field is populated in modal templates
+- Removed base Integration `updateTargetFieldsAction` and `updateSourceFieldsAction` dependencies in favor of `updateTargetFieldsOnChange` to allow Integrations to dynamically target fields to watch for changes
+
+### Fixed
+- Fixed bug loading Javascript Captcha on the front-end
+
+## 3.4.0 - 2019-08-24
+
+### Changed
+- Updated form templates and Javascript Captcha to use Craft-supported js tags ([#327])
+- Updated OnBeforeValidateEntryEvent to include Form Entry model ([#324])
+- Updated barrelstrength/sprout-base requirement 5.0.7
+- Updated barrelstrength/sprout-base-email requirement v1.1.5
+- Updated barrelstrength/sprout-base-fields requirement v1.1.0
+- Updated barrelstrength/sprout-base-reports requirement v1.3.7
+
+### Fixed
+- Fixed issue when running migrations via console command ([#321])
+- Fixed bug where `pluginHandle` column may not be found in Data Sources migration ([#315], [#318])
+- Fixed bug where unique email field setting did not exclude soft deleted entries ([#328])
+- Fixed bug where Save Data setting appears when it should not ([#323])
+- Fixed bug where 'View Reports' permission did not allow a user to export reports ([#325])
+
+[#315]: https://github.com/barrelstrength/craft-sprout-forms/issues/315
+[#318]: https://github.com/barrelstrength/craft-sprout-forms/issues/318
+[#321]: https://github.com/barrelstrength/craft-sprout-forms/issues/321
+[#323]: https://github.com/barrelstrength/craft-sprout-forms/issues/323
+[#324]: https://github.com/barrelstrength/craft-sprout-forms/issues/324
+[#325]: https://github.com/barrelstrength/craft-sprout-forms/issues/325
+[#327]: https://github.com/barrelstrength/craft-sprout-forms/issues/327
+[#328]: https://github.com/barrelstrength/craft-sprout-forms/issues/328
+
 ## 3.3.9 - 2019-07-26
 
 ### Changed
@@ -9,12 +57,14 @@
 
 ### Fixed
 - Fixed bug in C2 to C3 Notification Email Element migration ([#318])
+
 [#318]: https://github.com/barrelstrength/craft-sprout-forms/issues/318
 
 ## 3.3.7 - 2019-07-17
 
 ### Fixed
 - Fixed bug in C2 to C3 Notification Email Element migration ([#318])
+
 [#318]: https://github.com/barrelstrength/craft-sprout-forms/issues/318
 
 ## 3.3.6 - 2019-07-17

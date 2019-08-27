@@ -50,14 +50,14 @@
 {% if errors -%}
     {%- for labelId, error in errors %}
         {%- if loop.first %}
-            <script>
+            {%- js at endBody %}
                 (function() {
-                    var field = document.getElementById('fields-' + '{{ labelId }}');
-                    if (field) {
-                        field.focus();
-                    }
+                var field = document.getElementById('fields-' + '{{ labelId }}');
+                if (field) {
+                field.focus();
+                }
                 })();
-            </script>
+            {% endjs -%}
         {%- endif %}
     {%- endfor %}
 {%- endif %}

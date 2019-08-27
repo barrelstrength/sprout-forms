@@ -53,7 +53,7 @@ class m190410_000000_add_payload_forwarding_to_integration extends Migration
                 $integration->formId = $form['id'];
                 $enableIntegrations = true;
                 $settings['submitAction'] = $form['submitAction'];
-                $formFields = $integration->getFormFieldsAsMappingOptions();
+                $formFields = $integration->getSourceFormFieldsAsMappingOptions();
                 $fieldMapping = [];
                 foreach ($formFields as $formField) {
                     $fieldMapping[] = [
@@ -69,12 +69,19 @@ class m190410_000000_add_payload_forwarding_to_integration extends Migration
             }
         }
 
-        // Add enableIntegrationsPerFormBasis setting
         $projectConfig = Craft::$app->getProjectConfig();
         $pluginHandle = 'sprout-forms';
-        $currentSettings = $projectConfig->get(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings');
-        $currentSettings['enableIntegrationsPerFormBasis'] = $enableIntegrations;
-        $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings', $currentSettings);
+
+        // Don't make the same config changes twice
+        $schemaVersion = Craft::$app->projectConfig
+            ->get('plugins.'.$pluginHandle.'.schemaVersion', true);
+
+        if (version_compare($schemaVersion, '3.0.20', '<')) {
+            // Add enableIntegrationsPerFormBasis setting
+            $currentSettings = $projectConfig->get(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings');
+            $currentSettings['enableIntegrationsPerFormBasis'] = $enableIntegrations;
+            $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings', $currentSettings);
+        }
 
         // Cleanup
         if ($this->db->columnExists('{{%sproutforms_forms}}', 'submitAction')) {

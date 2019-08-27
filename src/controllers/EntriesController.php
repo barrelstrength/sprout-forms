@@ -76,7 +76,7 @@ class EntriesController extends BaseController
         $this->form = SproutForms::$app->forms->getFormByHandle($formHandle);
 
         if ($this->form === null) {
-            throw new Exception(Craft::t('sprout-forms', 'No form exists with the handle '.$formHandle));
+            throw new Exception('No form exists with the handle '.$formHandle);
         }
 
         $event = new OnBeforePopulateEntryEvent([
@@ -110,7 +110,8 @@ class EntriesController extends BaseController
         }
 
         $event = new OnBeforeValidateEntryEvent([
-            'form' => $this->form
+            'form' => $this->form,
+            'entry' => $entry
         ]);
 
         $this->trigger(self::EVENT_BEFORE_VALIDATE, $event);
@@ -138,7 +139,7 @@ class EntriesController extends BaseController
     {
         $success = true;
 
-        $saveData = SproutForms::$app->entries->isDataSaved($this->form);
+        $saveData = SproutForms::$app->entries->isSaveDataEnabled($this->form);
 
         // Save Data and Trigger the onSaveEntryEvent
         if ($saveData) {
@@ -190,7 +191,7 @@ class EntriesController extends BaseController
             }
 
             if (!$entry) {
-                throw new NotFoundHttpException(Craft::t('sprout-forms', 'Entry not found'));
+                throw new NotFoundHttpException('Entry not found');
             }
 
             Craft::$app->getContent()->populateElementContent($entry);
@@ -198,7 +199,7 @@ class EntriesController extends BaseController
 
         $form = SproutForms::$app->forms->getFormById($entry->formId);
 
-        $saveData = SproutForms::$app->entries->isDataSaved($form);
+        $saveData = SproutForms::$app->entries->isSaveDataEnabled($form);
 
         if (!$saveData) {
             Craft::$app->getSession()->setError(Craft::t('sprout-forms', "Unable to edit entry. Enable the 'Save Data' for this form to view, edit, or delete content."));

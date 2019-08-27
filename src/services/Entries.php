@@ -123,9 +123,7 @@ class Entries extends Component
             $record = EntryStatusRecord::findOne($entryStatus->id);
 
             if (!$record) {
-                throw new Exception(Craft::t('sprout-forms', 'No Entry Status exists with the id of “{id}”', [
-                    'id' => $entryStatus->id
-                ]));
+                throw new Exception('No Entry Status exists with the ID: '.$entryStatus->id);
             }
         }
 
@@ -272,7 +270,7 @@ class Entries extends Component
             $entryRecord = EntryRecord::findOne($entry->id);
 
             if (!$entryRecord) {
-                throw new Exception(Craft::t('sprout-forms', 'No entry exists with id '.$entry->id));
+                throw new Exception('No entry exists with id '.$entry->id);
             }
         }
 
@@ -441,10 +439,7 @@ class Entries extends Component
             $entryStatusRecord = EntryStatusRecord::findOne($entryStatusId);
 
             if (!$entryStatusRecord) {
-                throw new Exception(Craft::t('sprout-forms', 'No Entry Status exists with the ID “{id}”.',
-                    ['id' => $entryStatusId]
-                )
-                );
+                throw new Exception('No Entry Status exists with the ID: '.$entryStatusId);
             }
         } else {
             $entryStatusRecord = new EntryStatusRecord();
@@ -453,7 +448,12 @@ class Entries extends Component
         return $entryStatusRecord;
     }
 
-    public function isDataSaved($form)
+    /**
+     * @param $form
+     *
+     * @return mixed
+     */
+    public function isSaveDataEnabled($form)
     {
         /** @var SproutForms $plugin */
         $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');

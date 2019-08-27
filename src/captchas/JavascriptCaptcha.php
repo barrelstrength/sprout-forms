@@ -6,6 +6,7 @@ use barrelstrength\sproutforms\base\Captcha;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use Craft;
 use craft\errors\MissingComponentException;
+use craft\web\View;
 
 /**
  * Class InvisibleCaptcha
@@ -46,10 +47,11 @@ class JavascriptCaptcha extends Captcha
 
         // Set a hidden field with no value and use javascript to set it.
         $output = '
-    <input type="hidden" id="'.$uniqueId.'" name="'.$uniqueId.'" />
-    <script type="text/javascript">
-        document.getElementById("'.$uniqueId.'").value = "'.$uniqueId.'";
-    </script>';
+<input type="hidden" id="'.$uniqueId.'" name="'.$uniqueId.'" />';
+
+        $js = 'document.getElementById("'.$uniqueId.'").value = "'.$uniqueId.'";';
+
+        Craft::$app->getView()->registerJs($js, View::POS_END);
 
         return $output;
     }

@@ -15,7 +15,6 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Markup;
-use Twig_Markup;
 use yii\db\Schema;
 use craft\helpers\StringHelper;
 
@@ -185,7 +184,7 @@ class EmailDropdown extends BaseOptionsFormField
      * @param mixed      $value
      * @param array|null $renderingOptions
      *
-     * @return Twig_Markup
+     * @return Markup
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError

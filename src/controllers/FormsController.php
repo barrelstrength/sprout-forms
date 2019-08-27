@@ -81,13 +81,13 @@ class FormsController extends BaseController
                 $form->id = $duplicateForm->id;
                 $form->uid = $duplicateForm->uid;
             } else {
-                throw new Exception(Craft::t('sprout-forms', 'Error creating Form'));
+                throw new Exception('Error creating Form');
             }
         } else {
             $form = SproutForms::$app->forms->getFormById($request->getBodyParam('id'));
 
             if (!$form) {
-                throw new NotFoundHttpException(Craft::t('sprout-forms', 'Form not found'));
+                throw new NotFoundHttpException('Form not found');
             }
         }
 
@@ -193,7 +193,7 @@ class FormsController extends BaseController
 
             // Make sure Pro is installed before we create a new form
             if (!SproutForms::$app->forms->canCreateForm()) {
-                throw new WrongEditionException(Craft::t('sprout-forms', 'Please upgrade to Sprout Forms Pro Edition to create unlimited forms.'));
+                throw new WrongEditionException('Please upgrade to Sprout Forms Pro Edition to create unlimited forms.');
             }
 
             $form = SproutForms::$app->forms->createNewForm();
@@ -203,14 +203,14 @@ class FormsController extends BaseController
                 return $this->redirect($url);
             }
 
-            throw new Exception(Craft::t('sprout-forms', 'Unable to create new Form'));
+            throw new Exception('Unable to create new Form');
         }
 
         if ($form === null && $formId !== null) {
             $form = SproutForms::$app->forms->getFormById($formId);
 
             if (!$form) {
-                throw new NotFoundHttpException(Craft::t('sprout-forms', 'Form not found'));
+                throw new NotFoundHttpException('Form not found');
             }
         }
 
@@ -246,7 +246,7 @@ class FormsController extends BaseController
         $form = SproutForms::$app->forms->getFormById($formId);
 
         if (!$form) {
-            throw new NotFoundHttpException(Craft::t('sprout-forms', 'Form not found'));
+            throw new NotFoundHttpException('Form not found');
         }
 
         SproutForms::$app->forms->deleteForm($form);

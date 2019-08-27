@@ -9,7 +9,6 @@ use craft\base\Field;
 use ReflectionClass;
 use ReflectionException;
 use Twig\Markup;
-use Twig_Markup;
 
 /**
  * Class FormField
@@ -204,7 +203,7 @@ abstract class FormField extends Field
      * @param mixed $value
      * @param array $renderingOptions
      *
-     * @return Twig_Markup
+     * @return Markup
      */
     abstract public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup;
 }

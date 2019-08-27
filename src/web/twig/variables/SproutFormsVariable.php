@@ -70,9 +70,7 @@ class SproutFormsVariable
         $form = SproutForms::$app->forms->getFormByHandle($formHandle);
 
         if (!$form) {
-            throw new Exception(Craft::t('sprout-forms', 'Unable to find form with the handle `{handle}`', [
-                'handle' => $formHandle
-            ]));
+            throw new Exception('Unable to find form with the handle: '.$formHandle);
         }
 
         $view = Craft::$app->getView();
@@ -111,11 +109,11 @@ class SproutFormsVariable
     public function displayTab(Form $form, int $tabId, array $renderingOptions = null)
     {
         if (!$form) {
-            throw new Exception(Craft::t('sprout-forms', 'The displayTab tag requires a Form model.'));
+            throw new Exception('The displayTab tag requires a Form model.');
         }
 
         if (!$tabId) {
-            throw new Exception(Craft::t('sprout-forms', 'The displayTab tag requires a Tab ID.'));
+            throw new Exception('The displayTab tag requires a Tab ID.');
         }
 
         $view = Craft::$app->getView();
@@ -175,11 +173,11 @@ class SproutFormsVariable
     public function displayField(Form $form, FormField $field, array $renderingOptions = null): Markup
     {
         if (!$form) {
-            throw new Exception(Craft::t('sprout-forms', 'The displayField tag requires a Form model.'));
+            throw new Exception('The displayField tag requires a Form model.');
         }
 
         if (!$field) {
-            throw new Exception(Craft::t('sprout-forms', 'The displayField tag requires a Field model.'));
+            throw new Exception('The displayField tag requires a Field model.');
         }
 
         if ($renderingOptions !== null) {
