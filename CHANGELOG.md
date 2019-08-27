@@ -2,7 +2,7 @@
 
 ## 3.4.1 - 2019-08-26
 
-> {note} This release updates the Integrations API. Users with Custom Integrations will want to be sure to read the release notes as some updates may be required to existing Integration classes.
+> {note} This release updates the Integrations API. Users with Custom Integrations will want to be sure to read the [upgrade notes](https://sprout.barrelstrengthdesign.com/docs/forms/installing-and-updating-craft-3.html#upgrading-to-forms-3-4-1) as some updates may be required to existing Integration classes.
 
 ### Changed
 - Refactored Integrations API for additional flexibility
