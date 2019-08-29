@@ -25,7 +25,7 @@ SproutForms.FieldConditionalLogic = {
         this.xhr.open('POST', '/');
         this.xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         var that = this;
-        
+
         this.xhr.onload = function() {
             if (that.xhr.status === 200) {
                 console.log(that.xhr);
@@ -113,31 +113,12 @@ SproutForms.FieldConditionalLogic = {
                     if (inputValue == '') {
                         continue;
                     }
-                    switch (rule.condition) {
-                        case "barrelstrength\\sproutforms\\rules\\conditions\\ContainsCondition":
-                            if (inputValue.indexOf(rule.value) > -1) {
-                                orResult[1] = true;
-                            }
-                            break;
-                        case "barrelstrength\\sproutforms\\rules\\conditions\\DoesNotContainsCondition":
-                            if (!(inputValue.indexOf(rule.value) > -1)) {
-                                orResult[1] = true;
-                            }
-                            break;
-                        case "barrelstrength\\sproutforms\\rules\\conditions\\IsCondition":
-                            this.callAjax({});
-                            if (inputValue === rule.value) {
-                                orResult[1] = true;
-                            }
-                            break;
-                        case "barrelstrength\\sproutforms\\rules\\conditions\\IsNotCondition":
-                            if (inputValue !== rule.value) {
-                                orResult[1] = true;
-                            }
-                            break;
-                        default:
-                            orResult[0] = false;
-                    }
+                    var data = {
+                        condition: rule.condition,
+                        inputValue: inputValue,
+                        ruleValue: rule.value
+                    };
+                    this.callAjax(data);
                 }
 
                 if (!(1 in orResult)) {

@@ -190,6 +190,23 @@ abstract class FormField extends Field
         return strtolower($fieldClassReflection->getShortName());
     }
 
+
+	/**
+	 * This add support for the field rule condition api return a prover value input html depending of the condition
+	 *
+	 * @param ConditionInterface $condition
+	 * @param $fieldName
+	 * @param $fieldValue
+	 *
+	 * @return string
+	 */
+	public function getValueConditionHtml(ConditionInterface $condition, $fieldName, $fieldValue): string
+    {
+	    $html = '<input class="text fullwidth" type="text" name="'.$fieldName.'" value="'.$fieldValue.'">';
+
+	    return $html;
+    }
+
     /**
      * The example HTML input field that displays in the UI when a field is dragged to the form layout editor
      *

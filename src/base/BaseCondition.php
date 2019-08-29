@@ -36,7 +36,7 @@ abstract class BaseCondition extends SavableComponent implements ConditionInterf
 	 */
 	public function getValueInputHtml($name, $value): string
 	{
-		$html = '<input class="text fullwidth" type="text" name="'.$name.'" value="'.$value.'">';
+		$html = $this->formField->getValueConditionHtml($this, $name, $value);
 
 		return $html;
 	}
