@@ -14,9 +14,6 @@ SproutForms.FieldConditionalLogic = {
     fieldConditionalRules: {},
 
     init: function(settings) {
-
-        var self = this;
-
         this.formId = settings.id;
         this.allRules = {};
         this.fieldsToListen = {};
@@ -52,7 +49,7 @@ SproutForms.FieldConditionalLogic = {
             };
         }
 
-        for (var targetField in self.allRules) {
+        for (var targetField in this.allRules) {
             // This is the wrapper id
             // if the user uses template overrides they may need to update this code
             var wrapperId = "fields-" + targetField + "-field";
@@ -62,22 +59,20 @@ SproutForms.FieldConditionalLogic = {
 
         // Enable events
         for (var fieldToListen in this.fieldsToListen) {
-console.log(this);
-            var fieldId = SproutForms.FieldConditionalLogic.getFieldId(fieldToListen);
+            var fieldId = this.getFieldId(fieldToListen);
             var inputField = document.getElementById(fieldId);
             inputField.addEventListener("change", function(event) {
-                SproutForms.FieldConditionalLogic.runConditionalRules(event);
+                this.runConditionalRules(event);
             }.bind(this), false);
         }
     },
 
     runConditionalRules: function(event) {
-        self = this;
-        for (var targetField in self.allRules) {
+        for (var targetField in this.allRules) {
             var wrapperId = "fields-" + targetField + "-field";
             var wrapper = document.getElementById(wrapperId);
 
-            var conditional = self.allRules[targetField];
+            var conditional = this.allRules[targetField];
             var result = false;
             var andResult = true;
             for (var andPos in conditional.rules) {
@@ -85,7 +80,7 @@ console.log(this);
                 var orResult = {};
                 for (var orPos in andRule) {
                     var rule = andRule[orPos];
-                    var fieldId = self.getFieldId(rule.fieldHandle);
+                    var fieldId = this.getFieldId(rule.fieldHandle);
                     var inputField = document.getElementById(fieldId);
                     var inputValue = inputField.value;
                     // @todo - should we ignore empty values?
@@ -127,10 +122,10 @@ console.log(this);
                 if (conditional.action == 'hide') {
                     wrapper.innerHTML = "";
                 } else {
-                    wrapper.innerHTML = self.targetFieldsHtml[targetField];
+                    wrapper.innerHTML = this.targetFieldsHtml[targetField];
                 }
             } else {
-                wrapper.innerHTML = self.targetFieldsHtml[targetField];
+                wrapper.innerHTML = this.targetFieldsHtml[targetField];
             }
         }
     },

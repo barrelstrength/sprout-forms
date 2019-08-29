@@ -67,6 +67,12 @@
 {% set jsUrl = view.getAssetManager().getPublishedUrl('@sproutforms/web/assets/rules/dist/js/rules.js', true) -%}
 {% do view.registerJsFile(jsUrl) %}
 
+{% css %}
+    .hidden{
+        display: none !important;
+    }
+{% endcss %}
+
 {% js at endBody %}
 
     var SproutForms = SproutForms || {};
@@ -218,7 +224,7 @@
 
 
     // CONDITIONAL LOGIC
-    new SproutForms.FieldConditionalLogic.init({
+    SproutForms.FieldConditionalLogic.init({
         formId: '{{ id }}',
         fieldConditionalRules: {{ fieldConditionalRules|json_encode|raw }}
     });
