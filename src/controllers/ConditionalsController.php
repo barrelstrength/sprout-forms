@@ -20,6 +20,25 @@ use yii\web\Response;
 
 class ConditionalsController extends BaseController
 {
+	protected $allowAnonymous = [
+		'validate-condition'
+	];
+
+	/**
+	 * @return Response
+	 * @throws BadRequestHttpException
+	 */
+	public function actionValidateCondition(): Response
+	{
+		$this->requirePostRequest();
+		$result = false;
+
+		return $this->asJson([
+			'success' => true,
+			'result' => $result
+		]);
+	}
+
     /**
      * Enable or disable an Conditional
      *

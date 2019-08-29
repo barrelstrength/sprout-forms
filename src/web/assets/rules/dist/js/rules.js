@@ -12,6 +12,7 @@ SproutForms.FieldConditionalLogic = {
     fieldsToListen: {},
     targetFieldsHtml: {},
     fieldConditionalRules: {},
+    xhr: {},
 
     init: function(settings) {
         this.formId = settings.id;
@@ -19,8 +20,19 @@ SproutForms.FieldConditionalLogic = {
         this.fieldsToListen = {};
         this.targetFieldsHtml= {};
         this.fieldConditionalRules = settings.fieldConditionalRules;
-
         this.form = document.getElementById(this.formId);
+        this.xhr = new XMLHttpRequest();
+        this.xhr.open('POST', '/');
+        this.xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        var that = this;
+        
+        this.xhr.onload = function() {
+            if (that.xhr.status === 200) {
+                console.log(that.xhr);
+            }else{
+                console.error("Something went wrong");
+            }
+        };
 
         for (var i = 0; i < this.fieldConditionalRules.length; i++) {
             var conditional = this.fieldConditionalRules[i];
@@ -67,6 +79,19 @@ SproutForms.FieldConditionalLogic = {
         }
     },
 
+    callAjax: function(data, action = 'sprout-forms/conditionals/validate-condition')
+    {
+        data['action'] = action;
+        var str = [];
+        for (var key in data) {
+            if (data.hasOwnProperty(key)) {
+                str.push(encodeURIComponent(key) + "=" + encodeURIComponent(data[key]));
+            }
+        }
+
+        this.xhr.send(str.join("&"));
+    },
+
     runConditionalRules: function(event) {
         for (var targetField in this.allRules) {
             var wrapperId = "fields-" + targetField + "-field";
@@ -83,6 +108,7 @@ SproutForms.FieldConditionalLogic = {
                     var fieldId = this.getFieldId(rule.fieldHandle);
                     var inputField = document.getElementById(fieldId);
                     var inputValue = inputField.value;
+
                     // @todo - should we ignore empty values?
                     if (inputValue == '') {
                         continue;
@@ -99,6 +125,7 @@ SproutForms.FieldConditionalLogic = {
                             }
                             break;
                         case "barrelstrength\\sproutforms\\rules\\conditions\\IsCondition":
+                            this.callAjax({});
                             if (inputValue === rule.value) {
                                 orResult[1] = true;
                             }
