@@ -21,18 +21,8 @@ SproutForms.FieldConditionalLogic = {
         this.targetFieldsHtml= {};
         this.fieldConditionalRules = settings.fieldConditionalRules;
         this.form = document.getElementById(this.formId);
-        this.xhr = new XMLHttpRequest();
-        this.xhr.open('POST', '/');
-        this.xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        var that = this;
 
-        this.xhr.onload = function() {
-            if (that.xhr.status === 200) {
-                console.log(that.xhr);
-            }else{
-                console.error("Something went wrong");
-            }
-        };
+        var that = this;
 
         for (var i = 0; i < this.fieldConditionalRules.length; i++) {
             var conditional = this.fieldConditionalRules[i];
@@ -81,6 +71,18 @@ SproutForms.FieldConditionalLogic = {
 
     callAjax: function(data, action = 'sprout-forms/conditionals/validate-condition')
     {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/');
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        var that = this;
+        xhr.onload = function() {
+            if (this.status === 200) {
+                console.log(this);
+            }else{
+                console.error("Something went wrong");
+            }
+        };
+
         data['action'] = action;
         var str = [];
         for (var key in data) {
@@ -89,7 +91,7 @@ SproutForms.FieldConditionalLogic = {
             }
         }
 
-        this.xhr.send(str.join("&"));
+        xhr.send(str.join("&"));
     },
 
     runConditionalRules: function(event) {
