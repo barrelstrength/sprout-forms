@@ -31,6 +31,14 @@ abstract class BaseCondition extends SavableComponent implements ConditionInterf
 		return "";
 	}
 
+    /**
+     * @inheritDoc
+     */
+    public static function runValidation($inputValue, $ruleValue = null): bool
+    {
+        return false;
+    }
+
 	/**
 	 * @inheritDoc
 	 */

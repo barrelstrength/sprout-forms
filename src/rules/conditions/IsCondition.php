@@ -3,13 +3,22 @@
 namespace barrelstrength\sproutforms\rules\conditions;
 
 use barrelstrength\sproutforms\base\BaseCondition;
-use barrelstrength\sproutforms\base\FormField;
-use barrelstrength\sproutforms\fields\formfields\BaseOptionsFormField;
 
 class IsCondition extends BaseCondition
 {
+    /**
+     * @inheritDoc
+     */
     public function getLabel(): string
     {
         return 'is';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function runValidation($inputValue, $ruleValue = null): bool
+    {
+        return $inputValue === $ruleValue;
     }
 }

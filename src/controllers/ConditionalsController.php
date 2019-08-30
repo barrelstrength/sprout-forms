@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\controllers;
 
 use barrelstrength\sproutforms\base\ConditionalLogic;
+use barrelstrength\sproutforms\base\ConditionInterface;
 use barrelstrength\sproutforms\base\Rule;
 use barrelstrength\sproutforms\records\ConditionalLogic as ConditionalLogicRecord;
 use Craft;
@@ -31,7 +32,13 @@ class ConditionalsController extends BaseController
 	public function actionValidateCondition(): Response
 	{
 		$this->requirePostRequest();
-		$result = false;
+        $request = Craft::$app->getRequest();
+        /** @var ConditionInterface $condition */
+		$condition = $request->getBodyParam("condition");
+        $inputValue = $request->getBodyParam("inputValue");
+        $ruleValue = $request->getBodyParam("ruleValue");
+
+        $result = $condition::runValidation($inputValue, $ruleValue);
 
 		return $this->asJson([
 			'success' => true,

@@ -20,6 +20,13 @@ interface ConditionInterface extends SavableComponentInterface
 	 */
 	public function getValue(): string;
 
+    /**
+     * @param $inputValue
+     * @param null $ruleValue
+     * @return bool
+     */
+    public static function runValidation($inputValue, $ruleValue = null): bool;
+
 	/**
 	 * @param $name
 	 * @param $value
