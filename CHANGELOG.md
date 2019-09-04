@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.4.2 - 2019-09-04
+
+### Changed
+- Updated barrelstrength/sprout-base-reports requirement v1.3.8
+
+### Fixed
+- Fixed bug where field classes did not display in Basic Form Templates ([#335])
+- Fixed migration bug where `viewContext` column may not be found 
+
+[#335]: https://github.com/barrelstrength/craft-sprout-forms/issues/335
+
 ## 3.4.1 - 2019-08-26
 
 > {note} This release updates the Integrations API. Users with Custom Integrations will want to be sure to read the [upgrade notes](https://sprout.barrelstrengthdesign.com/docs/forms/installing-and-updating-craft-3.html#upgrading-to-forms-3-4-1) as some updates may be required to existing Integration classes.
