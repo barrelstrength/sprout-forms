@@ -45,6 +45,7 @@ SproutForms.FieldConditionalLogic = {
                     rules[key] = ruleObject;
                 }
             }
+
             this.allRules[targetHandle] = {
                 "rules": rules,
                 "action": conditional.behaviorAction
@@ -56,6 +57,7 @@ SproutForms.FieldConditionalLogic = {
             // if the user uses template overrides they may need to update this code
             var wrapperId = "fields-" + targetField + "-field";
             var wrapper = document.getElementById(wrapperId);
+            // @todo - here we should hide all show targets
             this.targetFieldsHtml[targetField] = wrapper.innerHTML;
         }
 
@@ -64,14 +66,15 @@ SproutForms.FieldConditionalLogic = {
             var fieldId = this.getFieldId(fieldToListen);
             var inputField = document.getElementById(fieldId);
             inputField.addEventListener("change", function(event) {
-                this.runConditionalRules(event);
-            }.bind(this), false);
+                that.runConditionalRulesForInput(this);
+            }, false);
         }
     },
 
     callAjax: function(data, action = 'sprout-forms/conditionals/validate-condition')
     {
         var xhr = new XMLHttpRequest();
+        var postData = {};
         xhr.open('POST', '/');
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         var that = this;
@@ -83,18 +86,24 @@ SproutForms.FieldConditionalLogic = {
             }
         };
 
-        data['action'] = action;
+        postData['action'] = action;
+        postData['rules'] = JSON.stringify(data);
         var str = [];
-        for (var key in data) {
-            if (data.hasOwnProperty(key)) {
-                str.push(encodeURIComponent(key) + "=" + encodeURIComponent(data[key]));
+        for (var key in postData) {
+            if (postData.hasOwnProperty(key)) {
+                str.push(encodeURIComponent(key) + "=" + encodeURIComponent(postData[key]));
             }
         }
 
         xhr.send(str.join("&"));
     },
-
-    runConditionalRules: function(event) {
+    /**
+     * Run all rules where this input is involved
+     * prepare all the info to run the validation in the backend
+     **/
+    runConditionalRulesForInput: function(input) {
+        var inputFieldHandle = input.id.replace('fields-','');
+        var postData = {};
         for (var targetField in this.allRules) {
             var wrapperId = "fields-" + targetField + "-field";
             var wrapper = document.getElementById(wrapperId);
@@ -102,42 +111,31 @@ SproutForms.FieldConditionalLogic = {
             var conditional = this.allRules[targetField];
             var result = false;
             var andResult = true;
+            var i = 0;
+            var data = {};
             for (var andPos in conditional.rules) {
                 var andRule = conditional.rules[andPos];
                 var orResult = {};
+                var orConditions = [];
                 for (var orPos in andRule) {
                     var rule = andRule[orPos];
                     var fieldId = this.getFieldId(rule.fieldHandle);
                     var inputField = document.getElementById(fieldId);
                     var inputValue = inputField.value;
-
-                    // @todo - should we ignore empty values?
-                    if (inputValue == '') {
-                        continue;
-                    }
-                    var data = {
+                    orConditions.push({
                         condition: rule.condition,
                         inputValue: inputValue,
                         ruleValue: rule.value
-                    };
-                    this.callAjax(data);
-                }
+                    });
 
-                if (!(1 in orResult)) {
-                    andResult = false;
                 }
+                data[i] = orConditions;
+                i++;
             }
-
-            if (andResult) {
-                if (conditional.action == 'hide') {
-                    wrapper.innerHTML = "";
-                } else {
-                    wrapper.innerHTML = this.targetFieldsHtml[targetField];
-                }
-            } else {
-                wrapper.innerHTML = this.targetFieldsHtml[targetField];
-            }
+            postData[targetField] = data;
         }
+        //console.log(postData);
+        this.callAjax({data: postData});
     },
 
     getFieldId: function(fieldHandle) {

@@ -21,30 +21,46 @@ use yii\web\Response;
 
 class ConditionalsController extends BaseController
 {
-	protected $allowAnonymous = [
-		'validate-condition'
-	];
+    protected $allowAnonymous = [
+        'validate-condition'
+    ];
 
-	/**
-	 * @return Response
-	 * @throws BadRequestHttpException
-	 */
-	public function actionValidateCondition(): Response
-	{
-		$this->requirePostRequest();
+    /**
+     * @return Response
+     * @throws BadRequestHttpException
+     */
+    public function actionValidateCondition(): Response
+    {
+        $this->requirePostRequest();
         $request = Craft::$app->getRequest();
-        /** @var ConditionInterface $condition */
-		$condition = $request->getBodyParam("condition");
-        $inputValue = $request->getBodyParam("inputValue");
-        $ruleValue = $request->getBodyParam("ruleValue");
+        $results = [];
 
-        $result = $condition::runValidation($inputValue, $ruleValue);
+        $rules = json_decode($request->getBodyParam("rules"), true);
 
-		return $this->asJson([
-			'success' => true,
-			'result' => $result
-		]);
-	}
+        foreach ($rules['data'] as $targetField => $andRules) {
+            $andResult = true;
+            foreach ($andRules as $orRules) {
+                $orResult = false;
+                foreach ($orRules as $orRule) {
+                    $condition = $orRule["condition"];
+                    $inputValue = $orRule["inputValue"];
+                    $ruleValue = $orRule["ruleValue"];
+                    /** @var ConditionInterface $condition */
+                    $result = $condition::runValidation($inputValue, $ruleValue);
+                    if ($result){
+                        $orResult = true;
+                    }
+                }
+                $andResult = $andResult && $orResult;
+            }
+            $results[$targetField] = $andResult;
+        }
+
+        return $this->asJson([
+            'success' => true,
+            'result' => $results
+        ]);
+    }
 
     /**
      * Enable or disable an Conditional
@@ -101,10 +117,10 @@ class ConditionalsController extends BaseController
         $conditional->formId = $request->getBodyParam('formId');
         $conditional->name = $request->getBodyParam('name');
         $conditional->enabled = $request->getBodyParam('enabled');
-        $conditional->behaviorAction =  $request->getBodyParam('behaviorAction');
-        $conditional->behaviorTarget =  $request->getBodyParam('behaviorTarget');
+        $conditional->behaviorAction = $request->getBodyParam('behaviorAction');
+        $conditional->behaviorTarget = $request->getBodyParam('behaviorTarget');
 
-        $settings = $request->getBodyParam('settings.'.$type);
+        $settings = $request->getBodyParam('settings.' . $type);
 
         $conditional = SproutForms::$app->conditionals->createConditional([
             'id' => $conditional->id,
@@ -199,7 +215,7 @@ class ConditionalsController extends BaseController
     }
 
     /**
-     * @param bool             $success
+     * @param bool $success
      * @param Rule|null $conditional
      *
      * @return Response
@@ -219,38 +235,38 @@ class ConditionalsController extends BaseController
         ]);
     }
 
-	/**
-	 * @return Response
-	 * @throws Throwable
-	 * @throws BadRequestHttpException
-	 */
-	public function actionGetConditionInputHtml(): Response
-	{
-		$this->requireAcceptsJson();
+    /**
+     * @return Response
+     * @throws Throwable
+     * @throws BadRequestHttpException
+     */
+    public function actionGetConditionInputHtml(): Response
+    {
+        $this->requireAcceptsJson();
 
-		$request = Craft::$app->getRequest();
-		$formId = $request->getBodyParam('formId');
-		$condition = $request->getBodyParam('condition');
-		$inputName = $request->getBodyParam('inputName');
-		$inputValue = $request->getBodyParam('inputValue');
-		$formFieldHandle = $request->getBodyParam('formFieldHandle');
+        $request = Craft::$app->getRequest();
+        $formId = $request->getBodyParam('formId');
+        $condition = $request->getBodyParam('condition');
+        $inputName = $request->getBodyParam('inputName');
+        $inputValue = $request->getBodyParam('inputValue');
+        $formFieldHandle = $request->getBodyParam('formFieldHandle');
 
-		$form = SproutForms::$app->forms->getFormById($formId);
-		$formField = $form->getField($formFieldHandle);
+        $form = SproutForms::$app->forms->getFormById($formId);
+        $formField = $form->getField($formFieldHandle);
 
-		$conditional = $formField->getCompatibleConditional();
+        $conditional = $formField->getCompatibleConditional();
 
-		$html = "";
+        $html = "";
 
-		foreach ($conditional->getRules() as $rule){
-			if (get_class($rule) == $condition){
-				$html = $rule->getValueInputHtml($inputName, $inputValue);
-			}
-		}
+        foreach ($conditional->getRules() as $rule) {
+            if (get_class($rule) == $condition) {
+                $html = $rule->getValueInputHtml($inputName, $inputValue);
+            }
+        }
 
-		return $this->asJson([
-			'success' => true,
-			'html' => $html
-		]);
-	}
+        return $this->asJson([
+            'success' => true,
+            'html' => $html
+        ]);
+    }
 }
