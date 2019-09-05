@@ -45,6 +45,12 @@ SproutForms.FieldConditionalLogic = {
                 }
             }
 
+            var wrapperId = "fields-" + targetHandle + "-field";
+            var wrapper = document.getElementById(wrapperId);
+            if (conditional.behaviorAction == 'show'){
+                this.hideField(wrapper);
+            }
+
             this.allRules[targetHandle] = {
                 "rules": rules,
                 "action": conditional.behaviorAction
@@ -78,15 +84,15 @@ SproutForms.FieldConditionalLogic = {
                     var rule = that.allRules[targetField];
                     if (response.result[targetField] == true){
                         if (rule.action == 'hide'){
-                            wrapper.className+=' hidden';
+                            that.hideField(wrapper);
                         }else{
-                            wrapper.className.replace('hidden', '');
+                            that.showField(wrapper);
                         }
                     }else{
                         if (rule.action == 'hide'){
-                            wrapper.classList.remove('hidden');
+                            that.showField(wrapper);
                         }else{
-                            wrapper.className+=' hidden';
+                            that.hideField(wrapper);
                         }
                     }
                 }
@@ -106,6 +112,14 @@ SproutForms.FieldConditionalLogic = {
 
         xhr.send(str.join("&"));
     },
+    hideField: function(element)
+    {
+        element.className+=' hidden';
+    },
+    showField: function(element)
+    {
+        element.classList.remove('hidden');
+    },
     /**
      * Run all rules where this input is involved
      * prepare all the info to run the validation in the backend
@@ -124,7 +138,6 @@ SproutForms.FieldConditionalLogic = {
             var data = {};
             for (var andPos in conditional.rules) {
                 var andRule = conditional.rules[andPos];
-                var orResult = {};
                 var orConditions = [];
                 for (var orPos in andRule) {
                     var rule = andRule[orPos];
