@@ -18,7 +18,6 @@ SproutForms.FieldConditionalLogic = {
         this.formId = settings.id;
         this.allRules = {};
         this.fieldsToListen = {};
-        this.targetFieldsHtml= {};
         this.fieldConditionalRules = settings.fieldConditionalRules;
         this.form = document.getElementById(this.formId);
 
@@ -52,15 +51,6 @@ SproutForms.FieldConditionalLogic = {
             };
         }
 
-        for (var targetField in this.allRules) {
-            // This is the wrapper id
-            // if the user uses template overrides they may need to update this code
-            var wrapperId = "fields-" + targetField + "-field";
-            var wrapper = document.getElementById(wrapperId);
-            // @todo - here we should hide all show targets
-            this.targetFieldsHtml[targetField] = wrapper.innerHTML;
-        }
-
         // Enable events
         for (var fieldToListen in this.fieldsToListen) {
             var fieldId = this.getFieldId(fieldToListen);
@@ -79,8 +69,27 @@ SproutForms.FieldConditionalLogic = {
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         var that = this;
         xhr.onload = function() {
-            if (this.status === 200) {
-                console.log(this);
+            var response = JSON.parse(this.response);
+            if (this.status === 200 && response.success == true) {
+                // apply rules
+                for (var targetField in response.result) {
+                    var wrapperId = "fields-" + targetField + "-field";
+                    var wrapper = document.getElementById(wrapperId);
+                    var rule = that.allRules[targetField];
+                    if (response.result[targetField] == true){
+                        if (rule.action == 'hide'){
+                            wrapper.className+=' hidden';
+                        }else{
+                            wrapper.className.replace('hidden', '');
+                        }
+                    }else{
+                        if (rule.action == 'hide'){
+                            wrapper.classList.remove('hidden');
+                        }else{
+                            wrapper.className+=' hidden';
+                        }
+                    }
+                }
             }else{
                 console.error("Something went wrong");
             }
