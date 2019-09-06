@@ -15,7 +15,7 @@ SproutForms.FieldConditionalLogic = {
     xhr: {},
 
     init: function(settings) {
-        this.formId = settings.id;
+        this.formId = settings.formId;
         this.allRules = {};
         this.fieldsToListen = {};
         this.fieldConditionalRules = settings.fieldConditionalRules;
@@ -75,6 +75,9 @@ SproutForms.FieldConditionalLogic = {
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         var that = this;
         xhr.onload = function() {
+            var conditionalLogicResults = that.form.querySelectorAll('[name="conditionalLogicResults"]');
+
+            conditionalLogicResults[0].value = this.response;
             var response = JSON.parse(this.response);
             if (this.status === 200 && response.success == true) {
                 // apply rules

@@ -107,12 +107,13 @@ class Conditionals extends Component
     /**
      * @param $formId
      * @param $type
+     * @param $enabled
      *
      * @return array
      * @throws InvalidConfigException
      * @throws MissingComponentException
      */
-    public function getFormConditionals($formId, $type = null): array
+    public function getFormConditionals($formId, $type = null, $enabled = null): array
     {
         $query = (new Query())
             ->select([
@@ -130,6 +131,10 @@ class Conditionals extends Component
 
         if ($type !== null){
             $query->andWhere('conditional.type = :type',[':type' => $type]);
+        }
+
+        if ($enabled !== null){
+            $query->andWhere('conditional.enabled = :enabled',[':enabled' => $enabled]);
         }
 
         $results = $query->all();

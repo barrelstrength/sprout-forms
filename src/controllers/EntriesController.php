@@ -73,7 +73,7 @@ class EntriesController extends BaseController
         }
 
         $formHandle = $request->getRequiredBodyParam('handle');
-        $this->form = SproutForms::$app->forms->getFormByHandle($formHandle);
+        $this->form = $this->form == null ? SproutForms::$app->forms->getFormByHandle($formHandle): $this->form;
 
         if ($this->form === null) {
             throw new Exception('No form exists with the handle '.$formHandle);
@@ -97,6 +97,8 @@ class EntriesController extends BaseController
 
         // Populate the entry with post data
         $this->populateEntryModel($entry);
+        // Remove any hidden values from the field conditional logic
+        $this->runFieldConditionalRules($entry);
 
         $entry->statusId = $entry->statusId != null
             ? $entry->statusId
@@ -124,6 +126,48 @@ class EntriesController extends BaseController
         }
 
         return $this->saveEntryInCraft($entry);
+    }
+
+    /**
+     * @param EntryElement $entry
+     * @return bool
+     * @throws InvalidConfigException
+     * @throws MissingComponentException
+     */
+    private function runFieldConditionalRules(EntryElement $entry)
+    {
+        if ($this->form === null){
+            return false;
+        }
+
+        $rules = $this->form ->getFieldConditionalRules();
+        $fieldRules = [];
+        foreach ($rules as $rule) {
+            $fieldRules[$rule['behaviorTarget']] = [
+                'action' => $rule['behaviorAction']
+            ];
+        }
+
+        $conditionalLogicResults = $_POST['conditionalLogicResults'] ?? null;
+
+        if ($conditionalLogicResults !== null){
+            $conditionalLogicResults = json_decode($conditionalLogicResults, true);
+            $conditionalLogicResults = $conditionalLogicResults['result'] ?? [];
+            foreach ($conditionalLogicResults as $fieldHandle => $result){
+                $rule = $fieldRules[$fieldHandle];
+                if ($result == true){
+                    if ($rule['action'] == 'hide'){
+                        $entry->{$fieldHandle} = '';
+                    }
+                }else{
+                    if ($rule['action'] == 'show'){
+                        $entry->{$fieldHandle} = '';
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 
     /**
