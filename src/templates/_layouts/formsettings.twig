@@ -70,9 +70,10 @@
 
 {% js %}
 
-    $(document).ready(function() {
+    (function() {
     $("#maindiv").css("height","600px");
+
     new Craft.SproutForms.FormSettings();
-    });
+    })();
 
 {% endjs %}

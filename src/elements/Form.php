@@ -30,6 +30,7 @@ use yii\base\InvalidConfigException;
  * Form represents a form element.
  *
  * @property FormTemplates $formTemplate
+ * @property array         $fieldConditionalRules
  * @property array         $fields
  *
  * @mixin FieldLayoutBehavior
@@ -250,29 +251,29 @@ class Form extends Element
         switch ($attribute) {
 
             case 'handle':
-                {
-                    return '<code>'.$this->handle.'</code>';
-                }
+            {
+                return '<code>'.$this->handle.'</code>';
+            }
             case 'numberOfFields':
-                {
-                    $totalFields = (new Query())
-                        ->select('COUNT(*)')
-                        ->from('{{%fieldlayoutfields}}')
-                        ->where(['layoutId' => $this->fieldLayoutId])
-                        ->scalar();
+            {
+                $totalFields = (new Query())
+                    ->select('COUNT(*)')
+                    ->from('{{%fieldlayoutfields}}')
+                    ->where(['layoutId' => $this->fieldLayoutId])
+                    ->scalar();
 
-                    return $totalFields;
-                }
+                return $totalFields;
+            }
             case 'totalEntries':
-                {
-                    $totalEntries = (new Query())
-                        ->select('COUNT(*)')
-                        ->from('{{%sproutforms_entries}}')
-                        ->where(['formId' => $this->id])
-                        ->scalar();
+            {
+                $totalEntries = (new Query())
+                    ->select('COUNT(*)')
+                    ->from('{{%sproutforms_entries}}')
+                    ->where(['formId' => $this->id])
+                    ->scalar();
 
-                    return $totalEntries;
-                }
+                return $totalEntries;
+            }
         }
 
         return parent::tableAttributeHtml($attribute);
@@ -364,7 +365,6 @@ class Form extends Element
                 HandleValidator::class,
                 'reservedWords' => ['id', 'dateCreated', 'dateUpdated', 'uid', 'title']
             ],
-
             [
                 ['templateOverridesFolder'],
                 TemplateOverridesValidator::class

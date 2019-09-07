@@ -1,8 +1,4 @@
-/*
- * @link      https://sprout.barrelstrengthdesign.com/
- * @copyright Copyright (c) Barrel Strength Design LLC
- * @license   http://sprout.barrelstrengthdesign.com/license
- */
+/* global Craft */
 
 if (typeof Craft.SproutForms === typeof undefined) {
     Craft.SproutForms = {};

@@ -1,3 +1,5 @@
+/* global Craft */
+
 if (typeof Craft.SproutForms === typeof undefined) {
     Craft.SproutForms = {};
 }
