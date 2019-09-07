@@ -9,6 +9,8 @@
 
         {% set integrationOptions = craft.sproutForms.getIntegrationOptions() %}
 
+        <input id="formId" type="hidden" name="formId" value="{{ form.id }}">
+
         <div id="sproutforms-integrations-wrapper">
 
             <table class="data fullwidth" id="sproutforms-conditionalrules-table">
