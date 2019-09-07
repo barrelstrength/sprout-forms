@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\controllers;
 
+use barrelstrength\sproutbase\SproutBase;
 use Craft;
 use craft\base\ElementInterface;
 use craft\errors\MissingComponentException;
@@ -45,12 +46,15 @@ class FormsController extends BaseController
         /** @var SproutForms $plugin */
         $plugin = Craft::$app->plugins->getPlugin('sprout-forms');
 
+        $isPro = SproutBase::$app->settings->isEdition('sprout-forms', SproutForms::EDITION_PRO);
+
         return $this->renderTemplate('sprout-forms/forms/_settings/'.$settingsSectionHandle, [
             'form' => $form,
             'settings' => $plugin->getSettings(),
             'conditionals' => SproutForms::$app->conditionals->getFormConditionals($formId),
             'conditionalOptions' => SproutForms::$app->conditionals->getIntegrationOptions(),
             'integrations' => SproutForms::$app->integrations->getFormIntegrations($formId),
+            'isPro' => $isPro
         ]);
     }
 

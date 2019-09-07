@@ -38,12 +38,12 @@
                 </div>
             {% endif %}
         </div>
-        {#    {% if not isPro %}#}
-        {#        {{ sprout.upgradeToProButton({#}
-        {#            url: cpUrl('sprout-forms/upgrade'),#}
-        {#            title: "Upgrade to Sprout Forms PRO to manage Unlimited Forms"|t('sprout-forms')#}
-        {#        }) }}#}
-        {#    {% endif %}#}
+        {% if not isPro %}
+            {{ sprout.upgradeToProButton({
+                url: cpUrl('sprout-forms/upgrade'),
+                title: "Upgrade to Sprout Forms PRO to manage Unlimited Forms"|t('sprout-forms')
+            }) }}
+        {% endif %}
     </div>
 {% endblock %}
 
