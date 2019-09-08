@@ -3,10 +3,17 @@
 namespace barrelstrength\sproutforms\controllers;
 
 use barrelstrength\sproutbase\SproutBase;
+use barrelstrength\sproutforms\elements\Form;
+use barrelstrength\sproutforms\elements\Form as FormElement;
+use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
+use barrelstrength\sproutforms\models\Settings;
 use Craft;
 use craft\base\ElementInterface;
+use craft\elements\Entry;
+use craft\errors\InvalidElementException;
 use craft\errors\MissingComponentException;
 use craft\errors\WrongEditionException;
+use craft\models\FieldLayout;
 use craft\web\Controller as BaseController;
 use craft\helpers\UrlHelper;
 use Throwable;
@@ -16,9 +23,8 @@ use yii\web\Response;
 use yii\base\Exception;
 use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
-
 use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutforms\elements\Form as FormElement;
+use yii\web\ServerErrorHttpException;
 
 class FormsController extends BaseController
 {
@@ -34,7 +40,8 @@ class FormsController extends BaseController
 
     /**
      * @param int|null $formId
-     * @param null $settingsSectionHandle
+     * @param null     $settingsSectionHandle
+     *
      * @return Response
      * @throws InvalidConfigException
      * @throws MissingComponentException
@@ -50,6 +57,8 @@ class FormsController extends BaseController
 
         return $this->renderTemplate('sprout-forms/forms/_settings/'.$settingsSectionHandle, [
             'form' => $form,
+            'groupId' => $form->groupId ?? null,
+            'groups' => SproutForms::$app->groups->getAllFormGroups(),
             'settings' => $plugin->getSettings(),
             'conditionals' => SproutForms::$app->conditionals->getFormConditionals($formId),
             'conditionalOptions' => SproutForms::$app->conditionals->getIntegrationOptions(),
@@ -59,107 +68,74 @@ class FormsController extends BaseController
     }
 
     /**
+     * Duplicates an entry.
+     *
+     * @return FormsController|mixed
+     * @throws \yii\base\InvalidRouteException
+     */
+    public function actionDuplicateForm()
+    {
+        return $this->runAction('save-form', ['duplicate' => true]);
+    }
+
+    /**
      * Save a form
      *
-     * @return null|Response
-     * @throws NotFoundHttpException
-     * @throws \Exception
-     * @throws Throwable
+     * @param bool $duplicate
+     *
+     * @return Response|null
      * @throws BadRequestHttpException
+     * @throws Exception
+     * @throws MissingComponentException
+     * @throws NotFoundHttpException
+     * @throws Throwable
+     * @throws \craft\errors\ElementNotFoundException
      */
-    public function actionSaveForm()
+    public function actionSaveForm(bool $duplicate = false)
     {
         $this->requirePostRequest();
         $request = Craft::$app->getRequest();
-        $form = new FormElement();
-        $duplicateForm = null;
 
-        if ($request->getBodyParam('saveAsNew')) {
-            $form->saveAsNew = true;
-            $duplicateForm = SproutForms::$app->forms->createNewForm(
-                $request->getBodyParam('name'),
-                $request->getBodyParam('handle')
-            );
+        $form = $this->_getFormModel();
 
-            if ($duplicateForm) {
-                $form->id = $duplicateForm->id;
-                $form->uid = $duplicateForm->uid;
-            } else {
-                throw new Exception('Error creating Form');
-            }
-        } else {
-            $form = SproutForms::$app->forms->getFormById($request->getBodyParam('id'));
+        // If we're duplicating the form, swap $form with the duplicate
+        if ($duplicate) {
+            try {
+                $form = Craft::$app->getElements()->duplicateElement($form, [
+                    'name' => SproutForms::$app->forms->getFieldAsNew('name', $form->name),
+                    'handle' => SproutForms::$app->forms->getFieldAsNew('handle', $form->handle),
+                    'oldHandle' => null
+                ]);
+            } catch (InvalidElementException $e) {
+                /** @var Entry $clone */
+                $clone = $e->element;
 
-            if (!$form) {
-                throw new NotFoundHttpException('Form not found');
-            }
-        }
+                if ($request->getAcceptsJson()) {
+                    return $this->asJson([
+                        'success' => false,
+                        'errors' => $clone->getErrors(),
+                    ]);
+                }
 
-        $form->groupId = $request->getBodyParam('groupId');
-        $form->name = $request->getBodyParam('name');
-        $form->handle = $request->getBodyParam('handle');
-        $form->titleFormat = $request->getBodyParam('titleFormat');
-        $form->displaySectionTitles = $request->getBodyParam('displaySectionTitles');
-        $form->redirectUri = $request->getBodyParam('redirectUri');
-        $form->saveData = $request->getBodyParam('saveData', 0);
-        $form->submitButtonText = $request->getBodyParam('submitButtonText');
-        $form->templateOverridesFolder = $request->getBodyParam('templateOverridesFolder');
-        $form->enableFileAttachments = $request->getBodyParam('enableFileAttachments');
+                Craft::$app->getSession()->setError(Craft::t('app', 'Couldn’t duplicate form.'));
 
-        // Set the field layout
-        $fieldLayout = Craft::$app->getFields()->assembleLayoutFromPost();
-
-        if ($form->saveAsNew) {
-            $fieldLayout = SproutForms::$app->fields->getDuplicateLayout($duplicateForm, $fieldLayout);
-        }
-
-        $fieldLayout->type = FormElement::class;
-
-        if (count($fieldLayout->getFields()) == 0) {
-            Craft::$app->getSession()->setError(Craft::t('sprout-forms', 'The form needs at least have one field'));
-
-            Craft::$app->getUrlManager()->setRouteParams([
+                // Send the original entry back to the template, with any validation errors on the clone
+                $form->addErrors($clone->getErrors());
+                Craft::$app->getUrlManager()->setRouteParams([
                     'form' => $form
-                ]
-            );
+                ]);
 
-            return null;
+                return null;
+            } catch (\Throwable $e) {
+                throw new ServerErrorHttpException(Craft::t('app', 'An error occurred when duplicating the form.'), 0, $e);
+            }
         }
 
-        $form->setFieldLayout($fieldLayout);
-
-        // Delete any fields removed from the layout
-        $deletedFields = $request->getBodyParam('deletedFields', []);
-
-        if (count($deletedFields) > 0) {
-            // Backup our field context and content table
-            $oldFieldContext = Craft::$app->content->fieldContext;
-            $oldContentTable = Craft::$app->content->contentTable;
-
-            // Set our field content and content table to work with our form output
-            Craft::$app->content->fieldContext = $form->getFieldContext();
-            Craft::$app->content->contentTable = $form->getContentTable();
-
-            $currentTitleFormat = null;
-
-            foreach ($deletedFields as $fieldId) {
-                // Each field deleted will be update the titleFormat
-                $currentTitleFormat = SproutForms::$app->forms->cleanTitleFormat($fieldId);
-                Craft::$app->fields->deleteFieldById($fieldId);
-            }
-
-            if ($currentTitleFormat) {
-                // update the titleFormat
-                $form->titleFormat = $currentTitleFormat;
-            }
-
-            // Reset our field context and content table to what they were previously
-            Craft::$app->content->fieldContext = $oldFieldContext;
-            Craft::$app->content->contentTable = $oldContentTable;
-        }
+        $this->_populateEntryModel($form);
+        $this->prepareFieldLayout($form);
 
         // Save it
-        if (!SproutForms::$app->forms->saveForm($form)) {
+        if (!SproutForms::$app->forms->saveForm($form, $duplicate)) {
 
             Craft::$app->getSession()->setError(Craft::t('sprout-forms', 'Couldn’t save form.'));
 
@@ -190,10 +166,10 @@ class FormsController extends BaseController
      */
     public function actionEditFormTemplate(int $formId = null, FormElement $form = null): Response
     {
-        $newForm = !$formId;
+        $isNew = !$formId;
 
         // Immediately create a new Form
-        if ($newForm) {
+        if ($isNew) {
 
             // Make sure Pro is installed before we create a new form
             if (!SproutForms::$app->forms->canCreateForm()) {
@@ -223,9 +199,6 @@ class FormsController extends BaseController
 
         return $this->renderTemplate('sprout-forms/forms/_editForm', [
             'form' => $form,
-            'groupId' => $form->groupId ?? '',
-            'groups' => SproutForms::$app->groups->getAllFormGroups(),
-            'integrations' => SproutForms::$app->integrations->getFormIntegrations($formId),
             'settings' => $plugin->getSettings(),
             'continueEditingUrl' => 'sprout-forms/forms/edit/{id}'
         ]);
@@ -246,7 +219,7 @@ class FormsController extends BaseController
         $request = Craft::$app->getRequest();
 
         // Get the Form these fields are related to
-        $formId = $request->getRequiredBodyParam('id');
+        $formId = $request->getRequiredBodyParam('formId');
         $form = SproutForms::$app->forms->getFormById($formId);
 
         if (!$form) {
@@ -256,5 +229,122 @@ class FormsController extends BaseController
         SproutForms::$app->forms->deleteForm($form);
 
         return $this->redirectToPostedUrl($form);
+    }
+
+    /**
+     * @param FormElement $form
+     *
+     * @throws Throwable
+     */
+    public function prepareFieldLayout(FormElement $form)
+    {
+        // Set the field layout
+        $fieldLayout = Craft::$app->getFields()->assembleLayoutFromPost();
+
+        // Make sure we have a layout if:
+        // 1. Form fails validation due to no fields existing
+        // 2. We are saving General Settings and no Layout exists
+        if (count($fieldLayout->getFields()) === 0) {
+            $fieldLayout = $form->getFieldLayout();
+        }
+
+        $fieldLayout->type = FormElement::class;
+
+        $form->setFieldLayout($fieldLayout);
+
+        // Delete any fields removed from the layout
+        $deletedFields = Craft::$app->getRequest()->getBodyParam('deletedFields', []);
+
+        if (count($deletedFields) > 0) {
+            // Backup our field context and content table
+            $oldFieldContext = Craft::$app->content->fieldContext;
+            $oldContentTable = Craft::$app->content->contentTable;
+
+            // Set our field content and content table to work with our form output
+            Craft::$app->content->fieldContext = $form->getFieldContext();
+            Craft::$app->content->contentTable = $form->getContentTable();
+
+            $currentTitleFormat = null;
+
+            foreach ($deletedFields as $fieldId) {
+                // If a deleted field is used in the titleFormat setting, update it
+                $currentTitleFormat = SproutForms::$app->forms->cleanTitleFormat($fieldId);
+                Craft::$app->fields->deleteFieldById($fieldId);
+            }
+
+            if ($currentTitleFormat) {
+                // update the titleFormat
+                $form->titleFormat = $currentTitleFormat;
+            }
+
+            // Reset our field context and content table to what they were previously
+            Craft::$app->content->fieldContext = $oldFieldContext;
+            Craft::$app->content->contentTable = $oldContentTable;
+        }
+//        return $fieldLayout;
+    }
+
+    /**
+     * @return FormElement
+     * @throws NotFoundHttpException
+     */
+    private function _getFormModel(): FormElement
+    {
+        $request = Craft::$app->getRequest();
+        $formId = $request->getBodyParam('formId');
+        $siteId = $request->getBodyParam('siteId');
+
+        if ($formId) {
+            $form = SproutForms::$app->forms->getFormById($formId, $siteId);
+
+            if (!$form) {
+                throw new NotFoundHttpException('Form not found');
+            }
+
+            // Set oldHandle to the value from the db so we can
+            // determine if we need to rename the content table
+            $form->oldHandle = $form->handle;
+        } else {
+            $form = new FormElement();
+
+            if ($siteId) {
+                $form->siteId = $siteId;
+            }
+        }
+
+        return $form;
+    }
+
+    private function _populateEntryModel(FormElement $form)
+    {
+        /** @var SproutForms $plugin */
+        $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
+
+        /** @var Settings $settings */
+        $settings = $plugin->getSettings();
+
+        $request = Craft::$app->getRequest();
+
+        // Set the form attributes, defaulting to the existing values for whatever is missing from the post data
+        $form->groupId = $request->getBodyParam('groupId', $form->groupId);
+        $form->name = $request->getBodyParam('name', $form->name);
+        $form->handle = $request->getBodyParam('handle', $form->handle);
+        $form->displaySectionTitles = $request->getBodyParam('displaySectionTitles', $form->displaySectionTitles);
+        $form->redirectUri = $request->getBodyParam('redirectUri', $form->redirectUri);
+        $form->saveData = $request->getBodyParam('saveData', $form->saveData);
+        $form->submitButtonText = $request->getBodyParam('submitButtonText', $form->submitButtonText);
+        $form->enableFileAttachments = $request->getBodyParam('enableFileAttachments', $form->enableFileAttachments);
+
+        $form->titleFormat = $request->getBodyParam('titleFormat', $form->titleFormat);
+        if (!$form->titleFormat) {
+            $form->titleFormat = "{dateCreated|date('D, d M Y H:i:s')}";
+        }
+
+        $form->templateOverridesFolder = $request->getBodyParam('templateOverridesFolder', $form->templateOverridesFolder);
+        if ($settings->enablePerFormTemplateFolderOverride) {
+            $form->templateOverridesFolder = $settings->templateFolderOverride ?? AccessibleTemplates::class;
+        }
+
+
     }
 }

@@ -6,6 +6,7 @@ use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\base\FormTemplates;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\rules\FieldRule;
+use barrelstrength\sproutforms\validators\FieldLayoutValidator;
 use barrelstrength\sproutforms\validators\TemplateOverridesValidator;
 use Craft;
 use craft\base\Element;
@@ -353,24 +354,35 @@ class Form extends Element
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
+     *
+     * @throws InvalidConfigException
      */
     public function rules(): array
     {
-        return [
-            [['name', 'handle'], 'required'],
-            [['name', 'handle'], 'string', 'max' => 255],
-            [
-                ['handle'],
-                HandleValidator::class,
-                'reservedWords' => ['id', 'dateCreated', 'dateUpdated', 'uid', 'title']
-            ],
-            [
-                ['templateOverridesFolder'],
-                TemplateOverridesValidator::class
-            ],
-            [['name', 'handle'], UniqueValidator::class, 'targetClass' => FormRecord::class]
+        $rules = parent::rules();
+        $rules[] = [['name', 'handle'], 'required'];
+        $rules[] = [['name', 'handle'], 'string', 'max' => 255];
+        $rules[] = [
+            ['handle'],
+            HandleValidator::class,
+            'reservedWords' => ['id', 'dateCreated', 'dateUpdated', 'uid', 'title']
         ];
+        $rules[] = [
+            ['name', 'handle'],
+            UniqueValidator::class,
+            'targetClass' => FormRecord::class
+        ];
+        $rules[] = [
+            ['templateOverridesFolder'],
+            TemplateOverridesValidator::class
+        ];
+        $rules[] = [
+            ['fieldLayoutId'],
+            FieldLayoutValidator::class
+        ];
+
+        return $rules;
     }
 
     /**

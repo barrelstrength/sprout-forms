@@ -6,6 +6,7 @@ use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\base\FormTemplates;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
+use barrelstrength\sproutforms\models\Settings;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\records\Form as FormRecord;
@@ -20,6 +21,8 @@ use yii\base\Component;
 use craft\helpers\StringHelper;
 use craft\helpers\MigrationHelper;
 use yii\base\Exception;
+use yii\base\ExitException;
+use yii\base\InvalidConfigException;
 
 
 /**
@@ -99,86 +102,59 @@ class Forms extends Component
 
     /**
      * @param FormElement $form
+     * @param bool        $duplicate
      *
      * @return bool
-     * @throws \Exception
      * @throws Throwable
+     * @throws ExitException
+     * @throws InvalidConfigException
      */
-    public function saveForm(FormElement $form): bool
+    public function saveForm(FormElement $form, bool $duplicate = false): bool
     {
-        $isNewForm = true;
-        $hasLayout = null;
-        $oldForm = null;
-
-        if ($form->id) {
-            /** @var FormRecord $formRecord */
-            $formRecord = FormRecord::findOne($form->id);
-
-            if (!$formRecord) {
-                throw new Exception('No form exists with the ID: '.$form->id);
-            }
-
-            $oldForm = $formRecord;
-            $isNewForm = false;
-
-            $hasLayout = count($form->getFieldLayout()->getFields()) > 0;
-
-            // Add the oldHandle to our model so we can determine if we
-            // need to rename the content table
-            $form->oldHandle = $formRecord->getOldHandle();
-
-            if ($form->saveAsNew) {
-                $form->name = $oldForm->name;
-                $form->handle = $oldForm->handle;
-                $form->oldHandle = null;
-            }
-        }
-
-        $form->titleFormat = ($form->titleFormat ?: "{dateCreated|date('D, d M Y H:i:s')}");
+        $isNew = !$form->id;
+        $hasLayout = count($form->getFieldLayout()->getFields()) > 0;
 
         $form->validate();
 
         if ($form->hasErrors()) {
-            Craft::error('Form has errors', __METHOD__);
-
+            Craft::error($form->getErrors(), __METHOD__);
             return false;
         }
 
         $transaction = Craft::$app->db->beginTransaction();
 
         try {
-            // Set the field context
-            Craft::$app->content->fieldContext = $form->getFieldContext();
-            Craft::$app->content->contentTable = $form->getContentTable();
-
-            if ($isNewForm) {
+            if ($isNew) {
                 $fieldLayout = $form->getFieldLayout();
 
                 // Save the field layout
                 Craft::$app->getFields()->saveLayout($fieldLayout);
 
-                // Assign our new layout id info to our form model and records
+                // Assign our new layout id info to our form model and record
                 $form->fieldLayoutId = $fieldLayout->id;
                 $form->setFieldLayout($fieldLayout);
-                $form->fieldLayoutId = $fieldLayout->id;
             } else if ($hasLayout) {
-                // Delete our previous record
-                Craft::$app->getFields()->deleteLayoutById($oldForm->fieldLayoutId);
+                // Delete our previous record, unless duplicating an entry
+                if (!$duplicate) {
+                    Craft::$app->getFields()->deleteLayoutById($form->fieldLayoutId);
+                }
 
                 $fieldLayout = $form->getFieldLayout();
 
                 // Save the field layout
                 Craft::$app->getFields()->saveLayout($fieldLayout);
 
-                // Assign our new layout id info to our
-                // form model and records
+                // Assign our new layout id info to our form model
                 $form->fieldLayoutId = $fieldLayout->id;
                 $form->setFieldLayout($fieldLayout);
-                $form->fieldLayoutId = $fieldLayout->id;
             } else {
                 // We don't have a field layout right now
                 $form->fieldLayoutId = null;
             }
+
+            // Set the field context
+            Craft::$app->content->fieldContext = $form->getFieldContext();
+            Craft::$app->content->contentTable = $form->getContentTable();
 
             // Create the content table first since the form will need it
             $oldContentTable = $this->getContentTableName($form, true);
@@ -193,10 +169,9 @@ class Forms extends Component
                 }
             }
 
-            $success = Craft::$app->elements->saveElement($form, false);
-
-            if (!$success) {
-                Craft::error('Couldn’t save Element on saveForm service.', __METHOD__);
+            // Save the Form
+            if (!Craft::$app->elements->saveElement($form)) {
+                Craft::error('Couldn’t save Element.', __METHOD__);
 
                 return false;
             }
@@ -204,9 +179,9 @@ class Forms extends Component
             // FormRecord saved on afterSave form element
             $transaction->commit();
 
-            Craft::info('Form Saved!', __METHOD__);
+            Craft::info('Form Saved.', __METHOD__);
         } catch (\Exception $e) {
-            Craft::error('Failed to save form: '.$e->getMessage(), __METHOD__);
+            Craft::error('Unable to save form: '.$e->getMessage(), __METHOD__);
             $transaction->rollBack();
 
             throw $e;
@@ -535,6 +510,7 @@ class Forms extends Component
 
         $form->name = $this->getFieldAsNew('name', $name);
         $form->handle = $this->getFieldAsNew('handle', $handle);
+        $form->titleFormat = "{dateCreated|date('D, d M Y H:i:s')}";
         $accessible = new AccessibleTemplates();
         $form->templateOverridesFolder = $settings->templateFolderOverride ?? $accessible->getTemplateId();
         if ($settings->enablePerFormTemplateFolderOverride && $settings->templateFolderOverride) {

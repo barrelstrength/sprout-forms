@@ -2,10 +2,16 @@
 {% import "_includes/forms" as forms %}
 {% import "sprout-base-fields/_includes/forms" as sproutFields %}
 
+{% set fullPageForm = true %}
+
 {% set content %}
 
+    <input type="hidden" name="action" value="sprout-forms/forms/save-form">
+    {{ redirectInput('sprout-forms/forms/'~form.id~'/settings/general') }}
+    <input type="hidden" id="formId" name="formId" value="{{ form.id }}">
+
     {{ forms.textField({
-        first: (groups is defined and groups|length ? false : true),
+        first: true,
         label: "Name"|t('sprout-forms'),
         instructions: "What this form will be called in the CP."|t('sprout-forms'),
         id: 'name',
@@ -55,34 +61,12 @@
         errors: (form is defined ? form.getErrors('submitButtonText') : null)
     }) }}
 
-    {% if groups is defined and groups|length %}
-
-        {% set groupOptions = [
-            { label: 'All Forms'|t('sprout-forms') , value: '*' }
-        ] %}
-        {% for group in groups %}
-            {% set groupOptions = groupOptions|merge([{ label: group.name, value: group.id }]) %}
-        {% endfor %}
-
-        {{ forms.selectField({
-            first: true,
-            label: "Group"|t('sprout-forms'),
-            instructions: "Which group should this form be displayed in?"|t('sprout-forms'),
-            id: 'groupId',
-            name: 'groupId',
-            options: groupOptions,
-            value: groupId
-        }) }}
-
-    {% endif %}
-
     {{ forms.lightswitchField({
         label: "Page Titles"|t('sprout-forms'),
         instructions: "Display Page Titles on Forms"|t('sprout-forms'),
         id: 'displaySectionTitles',
         name: 'displaySectionTitles',
         on: form.displaySectionTitles,
-        small: true,
         onLabel: "Show"|t('sprout-forms'),
         offLabel: "Hide"|t('sprout-forms')
     }) }}
@@ -95,7 +79,6 @@
             id: 'saveData',
             name: 'saveData',
             on: form.saveData,
-            small: true,
             onLabel: "Show"|t('sprout-forms'),
             offLabel: "Hide"|t('sprout-forms')
         }) }}
@@ -117,6 +100,27 @@
             value: form.templateOverridesFolder ?? null,
             otherPlaceholderText: '_forms/formHandle'|t('sprout-forms'),
         })) }}
+
+    {% endif %}
+
+    {% if groups is defined and groups|length %}
+
+        {% set groupOptions = [
+            { label: 'All Forms'|t('sprout-forms') , value: '*' }
+        ] %}
+        {% for group in groups %}
+            {% set groupOptions = groupOptions|merge([{ label: group.name, value: group.id }]) %}
+        {% endfor %}
+
+        {{ forms.selectField({
+            first: true,
+            label: "Group"|t('sprout-forms'),
+            instructions: "Which group should this form be displayed in?"|t('sprout-forms'),
+            id: 'groupId',
+            name: 'groupId',
+            options: groupOptions,
+            value: groupId
+        }) }}
 
     {% endif %}
 

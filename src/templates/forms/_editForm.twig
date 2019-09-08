@@ -30,8 +30,7 @@
 {% block actionButton %}
     <input type="hidden" name="action" value="sprout-forms/forms/save-form">
     {{ redirectInput('sprout-forms/forms') }}
-    <input type="hidden" id="formId" name="id"
-        value="{{ form.id is defined ? form.id : '' }}">
+    <input type="hidden" id="formId" name="formId" value="{{ form.id is defined ? form.id : '' }}">
 
     <div class="buttons">
         <div id="save-form-button" class="btngroup submit first">
@@ -45,6 +44,7 @@
                                 data-redirect="{{ ('sprout-forms/forms/edit/'~form.id)|hash }}">{{ 'Save and continue editing'|t('sprout-forms') }}
                                 <span class="shortcut">⌘S</span></a></li>
                         <li><a class="formsubmit"
+                                data-action="sprout-forms/forms/duplicate-form"
                                 data-redirect="{{ 'sprout-forms/forms/edit/{id}'|hash }}"
                                 data-param='saveAsNew'
                                 data-value="true">{{ "Save as a new form"|t('sprout-forms') }}</a>
@@ -63,7 +63,7 @@
         </div>
 
         <a href="{{ cpUrl('sprout-forms/forms/'~ form.id ~'/settings/general/') }}"
-           data-icon="settings" class="btn"></a>
+            data-icon="settings" class="btn"></a>
         {% if not isPro %}
             {{ sprout.upgradeToProButton({
                 url: cpUrl('sprout-forms/upgrade'),
@@ -82,6 +82,10 @@
 {% block content %}
     {# When we add tabs we need add a for loop here #}
     <div id="sproutforms-fieldlayout-container">
+
+        {% if form.getError('fieldLayoutId') %}
+            {{ forms.errorList(form.getErrors('fieldLayoutId')) }}
+        {% endif %}
 
         {# let's add the tabs and fields to the dropped divs #}
         {% if fieldLayout %}
