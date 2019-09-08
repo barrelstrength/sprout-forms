@@ -137,7 +137,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
         createDefaultIntegration: function(type) {
 
             var that = this;
-            var integrationCreate = $("#sproutforms-integrations-create");
+            var integrationTableBody = $('#sproutforms-integrations-table tbody');
             var currentIntegration = $("#integrationsOptions").val();
             var formId = $("#formId").val();
 
@@ -155,11 +155,11 @@ if (typeof Craft.SproutForms === typeof undefined) {
                 if (textStatus === 'success') {
                     var integration = response.integration;
 
-                    integrationCreate.before('<div class="field sproutforms-integration-row" id ="sproutforms-integration-row-' + integration.id + '">' +
-                        '<div class="heading">' +
+                    integrationTableBody.append('<tr class="field sproutforms-integration-row" id ="sproutforms-integration-row-' + integration.id + '">' +
+                        '<td class="heading">' +
                         '<a href="#" id ="sproutform-integration-' + integration.id + '" data-integrationid="' + integration.id + '">' + integration.name + '</a>' +
-                        '</div>' +
-                        '<div>' +
+                        '</td>' +
+                        '<td>' +
                         '<div class="lightswitch small" tabindex="0" data-value="1" role="checkbox" aria-checked="false" id ="integration-enabled-' + integration.id + '">' +
                         '<div class="lightswitch-container">' +
                         '<div class="label on"></div>' +
@@ -168,8 +168,8 @@ if (typeof Craft.SproutForms === typeof undefined) {
                         '</div>' +
                         '<input type="hidden" name="" value="">' +
                         '</div>' +
-                        '</div>' +
-                        '</div>');
+                        '</td>' +
+                        '</tr>');
 
                     that.addListener($("#sproutform-integration-" + integration.id), 'activate', 'editIntegration');
 
