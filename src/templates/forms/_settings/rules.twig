@@ -12,24 +12,30 @@
         </tr>
         </thead>
         <tbody>
-        {% for conditional in conditionals %}
-            <tr id="sproutforms-conditional-row-{{ conditional.id }}" class="sproutforms-conditional-row">
-                <td>
-                    <a href="#" id="sproutform-conditional-{{ conditional.id }}" data-conditionalid="{{ conditional.id }}">
-                        {{ conditional.name }}
-                    </a>
-                </td>
-                <td>
-                    {{ forms.lightswitch({
-                        on: conditional.enabled,
-                        small: true,
-                        id: "conditional-enabled-"~conditional.id,
-                        onLabel: "Show"|t('sprout-forms'),
-                        offLabel: "Hide"|t('sprout-forms')
-                    }) }}
-                </td>
+        {% if conditionals|length %}
+            {% for conditional in conditionals %}
+                <tr id="sproutforms-conditional-row-{{ conditional.id }}" class="sproutforms-conditional-row">
+                    <td>
+                        <a href="#" id="sproutform-conditional-{{ conditional.id }}" data-conditionalid="{{ conditional.id }}">
+                            {{ conditional.name }}
+                        </a>
+                    </td>
+                    <td>
+                        {{ forms.lightswitch({
+                            on: conditional.enabled,
+                            small: true,
+                            id: "conditional-enabled-"~conditional.id,
+                            onLabel: "Show"|t('sprout-forms'),
+                            offLabel: "Hide"|t('sprout-forms')
+                        }) }}
+                    </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="2">{{ "Add a rule using the dropdown below."|t('sprout-forms') }}</td>
             </tr>
-        {% endfor %}
+        {% endif %}
         </tbody>
     </table>
 

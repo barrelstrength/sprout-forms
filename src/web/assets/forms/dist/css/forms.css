@@ -52,3 +52,10 @@ select[readonly] {
 table.editable .custom-endpoint textarea {
     font-size: 12px;
 }
+
+table.rules-table {
+    margin-top: 24px;
+}
+table.behavior-table .behavior-action {
+    padding-right: 12px;
+}

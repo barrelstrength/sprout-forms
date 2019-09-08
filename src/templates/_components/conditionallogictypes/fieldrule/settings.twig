@@ -22,9 +22,11 @@
         <thead>
         <tr>
             <th>{{ "Field"|t('sprout-forms') }}</th>
-            <th>{{ "Conditional"|t('sprout-forms') }}</th>
+            <th>{{ "Condition"|t('sprout-forms') }}</th>
             <th>{{ "Value"|t('sprout-forms') }}</th>
-            <th><div class="buttons"><div id="add-rule{{ mainIndex }}" class="btn add icon small" tabindex="0">OR</div></div></th>
+            <th class="thin"></th>
+            <th class="thin"></th>
+            <th class="thin"></th>
         </tr>
         </thead>
         <tbody>
@@ -67,10 +69,17 @@
                 </td>
                 {% endfor %}
 
-                <td class="thin action"><a class="move icon"
-                                           title="Reorder"></a></td>
-                <td class="thin action"><a class="delete icon"
-                                           title="Delete"></a></td>
+                <td class="thin action">
+                    <div class="buttons">
+                        <div id="add-rule{{ mainIndex }}" class="btn add icon small" tabindex="0">OR</div>
+                    </div>
+                </td>
+                <td class="thin action">
+                    <a class="move icon" title="{{ "Reorder"|t('sprout-forms') }}"></a>
+                </td>
+                <td class="thin action">
+                    <a class="delete icon" title="{{ "Delete"|t('sprout-forms') }}"></a>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
@@ -83,7 +92,8 @@
 </div>
 
 <script>
-    $( document ).ready(function() {
+
+    (function() {
         var addTableButton = $("#settings-barrelstrength-sproutforms-rules-FieldRule-add-and-rules");
         var rules = {{ conditional.conditionalRules|json_encode|raw }};
         var namespace = "settings[{{ className(conditional)|e('js') }}]";
@@ -93,7 +103,7 @@
             addTableButton.trigger('click');
         }
 
-        addTableButton.click(function() {
+        addTableButton.on('click', function() {
             addTable();
         });
 
@@ -110,10 +120,12 @@
 
             $("#settings-barrelstrength-sproutforms-rules-FieldRule-and-add-wrapper").before('<table id="'+tableId+'" class="data rules-table fullwidth">' +
                 '<thead><tr>' +
-                '<th>Form Field</th>' +
-                '<th>Condition</th>' +
-                '<th>Value</th>' +
-                '<th><div class="buttons"><div id="add-rule'+nextIndex+'" class="btn add icon small" tabindex="0">OR</div></div></th>' +
+                '<th>{{ "Field"|t('sprout-forms') }}</th>' +
+                '<th>{{ "Condition"|t('sprout-forms') }}</th>' +
+                '<th>{{ "Value"|t('sprout-forms') }}</th>' +
+                '<th class="thin"></th>' +
+                '<th class="thin"></th>' +
+                '<th class="thin"></th>' +
                 '<tbody>' +
                 '</tbody>' +
                 '</table>');
@@ -128,7 +140,7 @@
             var baseName = namespace+'[conditionalRules]['+index+'][rules]';
             new Craft.SproutForms.EditableTable(tableId, baseName, columns, settings, conditionalTypes);
         });
-    });
+    })();
 
 </script>
 

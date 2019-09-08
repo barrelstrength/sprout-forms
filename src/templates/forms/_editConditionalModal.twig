@@ -29,7 +29,7 @@
     <div class="field">
         <div class="heading">
             <label for="rules-section">{{ "Rules"|t('sprout-forms') }}</label>
-            <div class="instructions"><p>{{ "The rules that will be applied to this field."|t('sprout-forms') }}</p>
+            <div class="instructions"><p>{{ "The rules that will be evaluated to determine if the behavior defined below should happen."|t('sprout-forms') }}</p>
             </div>
         </div>
     </div>
@@ -43,32 +43,32 @@
     <div class="field" id="settings-barrelstrength-sproutforms-conditionallogictypes-FieldRule-type-field">
         <div class="heading">
             <label id="settings-barrelstrength-sproutforms-conditionallogictypes-FieldRule-type-label" for="settings-barrelstrength-sproutforms-conditionallogictypes-FieldRule-type">{{ "Behavior"|t('sprout-forms') }}</label>
-            <div class="instructions"><p>{{ "When the rules are met, this behavior will happen"|t('sprout-forms') }}</p>
+            <div class="instructions"><p>{{ "When the rules above are true, show or hide this field."|t('sprout-forms') }}</p>
             </div>
         </div>
     </div>
 
-    <table id="sproutforms-behaviors" class="data behavior-table fullwidth">
-        <thead>
+    <table id="sproutforms-behaviors" class="behavior-table">
         <tr>
-            <th>{{ forms.select({
-                    id: 'type',
+            <td class="behavior-action">
+                {{ forms.select({
                     name: 'behaviorAction',
                     hasOptgroups: true,
                     options: conditional.getBehaviorActionsAsOptions(),
                     value: conditional.behaviorAction,
                     errors: conditional.getErrors('behaviorAction') ?? null
-                }) }}</th>
-            <th>{{ forms.select({
-                    id: 'type',
+                }) }}
+            </td>
+            <td>
+                {{ forms.select({
                     name: 'behaviorTarget',
                     hasOptgroups: true,
                     options: conditional.getFormFieldsAsOptions(),
                     value: conditional.behaviorTarget,
                     errors: conditional.getErrors('behaviorTarget') ?? null
-                }) }}</th>
+                }) }}
+            </td>
         </tr>
-        </thead>
     </table>
 
     <hr>

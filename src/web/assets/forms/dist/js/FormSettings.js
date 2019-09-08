@@ -186,7 +186,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
         createDefaultConditional: function(type) {
             var that = this;
-            var conditionalCreate = $("#sproutforms-conditionalrules-table tr").last();
+            var conditionalTableBody = $("#sproutforms-conditionalrules-table tbody");
             var currentConditional = $("#conditionalOptions").val();
             var formId = $("#formId").val();
 
@@ -203,7 +203,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
                 if (textStatus === 'success') {
                     var conditional = response.conditional;
 
-                    conditionalCreate.before('<tr id ="sproutforms-conditional-row-' + conditional.id + '" class="field sproutforms-conditional-row">' +
+                    conditionalTableBody.append('<tr id ="sproutforms-conditional-row-' + conditional.id + '" class="field sproutforms-conditional-row">' +
                         '<td>' +
                         '<a href="#" id ="sproutform-conditional-' + conditional.id + '" data-conditionalid="' + conditional.id + '">' + conditional.name + '</a>' +
                         '</td>' +

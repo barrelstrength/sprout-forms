@@ -49,8 +49,8 @@ class FieldRule extends Rule
     public function getBehaviorActions(): array
     {
         return [
-            'show',
-            'hide'
+            'Show',
+            'Hide'
         ];
     }
 
@@ -63,7 +63,7 @@ class FieldRule extends Rule
         foreach ($this->getBehaviorActions() as $behaviorAction) {
             $options[] = [
                 'label' => $behaviorAction,
-                'value' => $behaviorAction
+                'value' => strtolower($behaviorAction)
             ];
         }
 
