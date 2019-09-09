@@ -95,10 +95,11 @@ class EntriesController extends BaseController
             $entry->statusId = $statusId;
         }
 
-        // Populate the entry with post data
-        $this->populateEntryModel($entry);
         // Remove any hidden values from the field conditional logic
         $this->runFieldConditionalRules($entry);
+        $request->setBodyParams($_POST);
+        // Populate the entry with post data
+        $this->populateEntryModel($entry);
 
         $entry->statusId = $entry->statusId != null
             ? $entry->statusId
@@ -155,13 +156,14 @@ class EntriesController extends BaseController
             $conditionalLogicResults = $conditionalLogicResults['result'] ?? [];
             foreach ($conditionalLogicResults as $fieldHandle => $result){
                 $rule = $fieldRules[$fieldHandle];
-                if ($result == true){
-                    if ($rule['action'] == 'hide'){
-                        $entry->{$fieldHandle} = '';
+                if ($result === true){
+                    if ($rule['action'] === 'hide'){
+                        // @todo make sure what should be the default value for other fields
+                        $_POST['fields'][$fieldHandle] = '';
                     }
                 }else{
-                    if ($rule['action'] == 'show'){
-                        $entry->{$fieldHandle} = '';
+                    if ($rule['action'] === 'show'){
+                        $_POST['fields'][$fieldHandle] = '';
                     }
                 }
             }
