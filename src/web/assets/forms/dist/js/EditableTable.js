@@ -92,6 +92,9 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
             $tr.find('input,textarea,select').first().focus();
 
             this.settings.onAddRow($tr);
+            this.$addRowBtn = $tr.find('.buttons').children('.add');
+
+            this.addListener(this.$addRowBtn, 'activate', 'addRow');
         }
     },
     {
@@ -220,7 +223,7 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
                 rowHtml += '</td>';
             }
 
-            rowHtml += '<td class="thin action"><a class="move icon" title="' + Craft.t('sprout-seo', 'Reorder') + '"></a></td>' +
+            rowHtml += '<td class="thin action"><div class="buttons"> <div id="add-rule" class="btn add icon small" tabindex="0">OR</div> </div></td>'+'<td class="thin action"><a class="move icon" title="' + Craft.t('sprout-seo', 'Reorder') + '"></a></td>' +
                 '<td class="thin action"><a class="delete icon" title="' + Craft.t('sprout-seo', 'Delete') + '"></a></td>' +
                 '</tr>';
 
