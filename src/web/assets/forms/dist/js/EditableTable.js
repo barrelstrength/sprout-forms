@@ -67,8 +67,11 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
             }
 
             this.$addRowBtn = this.$table.find('.buttons').children('.add');
-
             this.addListener(this.$addRowBtn, 'activate', 'addRow');
+
+            if ($rows.length == 0){
+                this.addRow();
+            }
         },
 
         initializeIfVisible: function() {
@@ -92,8 +95,7 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
             $tr.find('input,textarea,select').first().focus();
 
             this.settings.onAddRow($tr);
-            this.$addRowBtn = $tr.find('.buttons').children('.add');
-
+            this.$addRowBtn = $tr.find('#add-rule');
             this.addListener(this.$addRowBtn, 'activate', 'addRow');
         }
     },
