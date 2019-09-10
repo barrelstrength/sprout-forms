@@ -158,7 +158,6 @@ class EntriesController extends BaseController
                 $rule = $fieldRules[$fieldHandle];
                 if ($result === true){
                     if ($rule['action'] === 'hide'){
-                        // @todo make sure what should be the default value for other fields
                         $_POST['fields'][$fieldHandle] = '';
                     }
                 }else{
