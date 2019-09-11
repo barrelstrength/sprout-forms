@@ -1,51 +1,53 @@
-let mix = require('laravel-mix');
+const mix = require('laravel-mix');
 
 mix
-    // Base
-    .sass(
-        'src/web/assets/base/src/scss/sproutforms.scss',
-        'src/web/assets/base/dist/css/sproutforms.css'
-    )
+  // Base
+  .sass(
+    'src/web/assets/base/src/scss/sproutforms.scss',
+    'src/web/assets/base/dist/css/sproutforms.css',
+  )
+  .copy('src/web/assets/base/src/images',
+    'src/web/assets/base/dist/images')
 
-    // Base
-    .sass(
-      'src/web/assets/charts/src/scss/charts-explorer.scss',
-      'src/web/assets/charts/dist/css/charts-explorer.css'
-    )
+  // Base
+  .sass(
+    'src/web/assets/charts/src/scss/charts-explorer.scss',
+    'src/web/assets/charts/dist/css/charts-explorer.css',
+  )
 
-    // Entries
-    .js([
-        'src/web/assets/entries/src/js/SproutFormsEntriesIndex.js',
-        'src/web/assets/entries/src/js/SproutFormsEntriesTableView.js'
-    ], 'src/web/assets/entries/dist/js/entries.js')
+  // Entries
+  .js([
+    'src/web/assets/entries/src/js/SproutFormsEntriesIndex.js',
+    'src/web/assets/entries/src/js/SproutFormsEntriesTableView.js',
+  ], 'src/web/assets/entries/dist/js/entries.js')
 
-    // Forms
-    .js([
-        'src/web/assets/forms/src/js/ConditionalModal.js',
-        'src/web/assets/forms/src/js/EditableTable.js',
-        'src/web/assets/forms/src/js/FieldLayoutEditor.js',
-        'src/web/assets/forms/src/js/FieldModal.js',
-        'src/web/assets/forms/src/js/FormSettings.js',
-        'src/web/assets/forms/src/js/IntegrationModal.js',
-    ], 'src/web/assets/forms/dist/js/forms.js')
-    .sass(
-        'src/web/assets/forms/src/scss/forms.scss',
-        'src/web/assets/forms/dist/css/forms.css'
-    )
+  // Forms
+  .js([
+    'src/web/assets/forms/src/js/ConditionalModal.js',
+    'src/web/assets/forms/src/js/EditableTable.js',
+    'src/web/assets/forms/src/js/FieldLayoutEditor.js',
+    'src/web/assets/forms/src/js/FieldModal.js',
+    'src/web/assets/forms/src/js/FormSettings.js',
+    'src/web/assets/forms/src/js/IntegrationModal.js',
+  ], 'src/web/assets/forms/dist/js/forms.js')
+  .sass(
+    'src/web/assets/forms/src/scss/forms.scss',
+    'src/web/assets/forms/dist/css/forms.css',
+  )
 
-    // Integrations
-    .js([
-        'src/web/assets/integrations/src/js/Integration.js',
-    ], 'src/web/assets/integrations/dist/js/integration.js')
-      .sass(
-        'src/web/assets/integrations/src/scss/integrations.scss',
-        'src/web/assets/integrations/dist/css/integrations.css'
-      )
+  // Integrations
+  .js([
+    'src/web/assets/integrations/src/js/Integration.js',
+  ], 'src/web/assets/integrations/dist/js/integration.js')
+  .sass(
+    'src/web/assets/integrations/src/scss/integrations.scss',
+    'src/web/assets/integrations/dist/css/integrations.css',
+  )
 
-    // URL
-    .js([
-        'src/web/assets/rules/src/js/rules.js',
-    ], 'src/web/assets/rules/dist/js/rules.js');
+  // URL
+  .js([
+    'src/web/assets/rules/src/js/rules.js',
+  ], 'src/web/assets/rules/dist/js/rules.js');
 
 // Full API
 // mix.js(src, output);
