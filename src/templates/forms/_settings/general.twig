@@ -23,6 +23,16 @@
     }) }}
 
     {{ forms.textField({
+        label: "Title Format"|t('sprout-forms'),
+        instructions: "Entry Titles are auto-generated based on the Title Format you enter here. All information contained in the Title will also be searchable. You may use the same syntax here as you would with Dynamic Titles in your Sections. (i.e. {dateCreated|date('Ymd')} {fullName})"|t('sprout-forms'),
+        id: 'titleFormat',
+        name: 'titleFormat',
+        value: form.titleFormat,
+        errors: form.getErrors('titleFormat'),
+        required: true
+    }) }}
+
+    {{ forms.textField({
         label: "Handle"|t('sprout-forms'),
         instructions: "How you’ll refer to this form in the templates."|t('sprout-forms'),
         id: 'handle',
@@ -31,34 +41,6 @@
         value: form.handle,
         errors: form.getErrors('handle'),
         required: true
-    }) }}
-
-    {{ forms.textField({
-        label: "Title Format"|t('sprout-forms'),
-        instructions: "Entry Titles are auto-generated based on the Title Format you enter here. All information contained in the Title will also be searchable. You may use the same syntax here as you would with Dynamic Titles in your Sections. (i.e. {dateCreated|date('Ymd')} {fullName})"|t('sprout-forms'),
-        id: 'titleFormat',
-        name: 'titleFormat',
-        value: form.titleFormat,
-        errors: form.getErrors('titleFormat')
-    }) }}
-
-    {{ forms.textField({
-        label: "Redirect"|t('sprout-forms'),
-        instructions: "Where should the user be redirected upon form submission? Leaving blank will redirect user back to the form."|t('sprout-forms'),
-        name: 'redirectUri',
-        placeholder: siteUrl,
-        value: (form is defined ? form.redirectUri : null),
-        errors: (form is defined ? form.getErrors('redirectUri') : null)
-    }) }}
-
-    {{ forms.textField({
-        label: "Button"|t('sprout-forms'),
-        instructions: "What the text in the submit button should be."|t('sprout-forms'),
-        name: 'submitButtonText',
-        placeholder: 'Submit',
-        value: (form is defined ? form.submitButtonText : null),
-        required: false,
-        errors: (form is defined ? form.getErrors('submitButtonText') : null)
     }) }}
 
     {{ forms.lightswitchField({
@@ -100,27 +82,6 @@
             value: form.templateOverridesFolder ?? null,
             otherPlaceholderText: '_forms/formHandle'|t('sprout-forms'),
         })) }}
-
-    {% endif %}
-
-    {% if groups is defined and groups|length %}
-
-        {% set groupOptions = [
-            { label: 'All Forms'|t('sprout-forms') , value: '*' }
-        ] %}
-        {% for group in groups %}
-            {% set groupOptions = groupOptions|merge([{ label: group.name, value: group.id }]) %}
-        {% endfor %}
-
-        {{ forms.selectField({
-            first: true,
-            label: "Group"|t('sprout-forms'),
-            instructions: "Which group should this form be displayed in?"|t('sprout-forms'),
-            id: 'groupId',
-            name: 'groupId',
-            options: groupOptions,
-            value: groupId
-        }) }}
 
     {% endif %}
 
