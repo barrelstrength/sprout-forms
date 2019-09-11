@@ -38,12 +38,60 @@
 
 <div class="meta">
 
+    {% if groups is defined and groups|length %}
+
+        {% set groupOptions = [
+            { label: 'All Forms'|t('sprout-forms') , value: '*' }
+        ] %}
+        {% for group in groups %}
+            {% set groupOptions = groupOptions|merge([{ label: group.name, value: group.id }]) %}
+        {% endfor %}
+
+        {{ forms.selectField({
+            first: true,
+            label: "Group <span class='info'>Which group should this form be displayed in?</span>"|t('sprout-forms'),
+            id: 'groupId',
+            name: 'groupId',
+            options: groupOptions,
+            value: groupId
+        }) }}
+
+    {% endif %}
+
+        {{ forms.textField({
+            label: "Redirect <span class='info'>Where should the user be redirected upon form submission? Leaving blank will redirect user back to the form.</span>"|t('sprout-forms'),
+            name: 'redirectUri',
+            placeholder: siteUrl,
+            value: (form is defined ? form.redirectUri : null),
+            errors: (form is defined ? form.getErrors('redirectUri') : null)
+        }) }}
+
+        {{ forms.textField({
+            label: "Button <span class='info'>What the text in the submit button should be.</span>"|t('sprout-forms'),
+            name: 'submitButtonText',
+            placeholder: 'Submit',
+            value: (form is defined ? form.submitButtonText : null),
+            required: false,
+            errors: (form is defined ? form.getErrors('submitButtonText') : null)
+        }) }}
+
+</div>
+
+<hr>
+
+<div class="meta read-only sprout-meta-heading">
+    <h6>{{ "Additional Settings"|t('sprout-forms') }}</h6>
+</div>
+<hr>
+
+<div class="meta">
+
     <nav>
         <ul>
-            <li><a href="{{ cpUrl('sprout-forms/forms/'~form.id~'settings/general') }}">{{ "General"|t('sprout-forms') }}</a></li>
-            <li><a href="{{ cpUrl('sprout-forms/forms/'~form.id~'settings/notifications') }}">{{ "Notifications"|t('sprout-forms') }}</a></li>
-            <li><a href="{{ cpUrl('sprout-forms/forms/'~form.id~'settings/rules') }}">{{ "Rules"|t('sprout-forms') }}</a></li>
-            <li><a href="{{ cpUrl('sprout-forms/forms/'~form.id~'settings/integrations') }}">{{ "Integrations"|t('sprout-forms') }}</a></li>
+            <li><a href="{{ cpUrl('sprout-forms/forms/'~form.id~'/settings/general') }}">{{ "General"|t('sprout-forms') }}</a></li>
+{#            <li><a href="{{ cpUrl('sprout-forms/forms/'~form.id~'/settings/notifications') }}">{{ "Notifications"|t('sprout-forms') }}</a></li>#}
+            <li><a href="{{ cpUrl('sprout-forms/forms/'~form.id~'/settings/rules') }}">{{ "Rules"|t('sprout-forms') }}</a></li>
+            <li><a href="{{ cpUrl('sprout-forms/forms/'~form.id~'/settings/integrations') }}">{{ "Integrations"|t('sprout-forms') }}</a></li>
         </ul>
     </nav>
 </div>

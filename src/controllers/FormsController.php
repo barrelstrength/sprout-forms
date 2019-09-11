@@ -57,8 +57,6 @@ class FormsController extends BaseController
 
         return $this->renderTemplate('sprout-forms/forms/_settings/'.$settingsSectionHandle, [
             'form' => $form,
-            'groupId' => $form->groupId ?? null,
-            'groups' => SproutForms::$app->groups->getAllFormGroups(),
             'settings' => $plugin->getSettings(),
             'conditionals' => SproutForms::$app->conditionals->getFormConditionals($formId),
             'conditionalOptions' => SproutForms::$app->conditionals->getIntegrationOptions(),
@@ -199,6 +197,8 @@ class FormsController extends BaseController
 
         return $this->renderTemplate('sprout-forms/forms/_editForm', [
             'form' => $form,
+            'groups' => SproutForms::$app->groups->getAllFormGroups(),
+            'groupId' => $form->groupId ?? null,
             'settings' => $plugin->getSettings(),
             'continueEditingUrl' => 'sprout-forms/forms/edit/{id}'
         ]);
