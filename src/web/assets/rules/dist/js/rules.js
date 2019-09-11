@@ -62,7 +62,12 @@ SproutForms.FieldConditionalLogic = {
         for (var fieldToListen in this.fieldsToListen) {
             var fieldId = this.getFieldId(fieldToListen);
             var inputField = document.getElementById(fieldId);
-            inputField.addEventListener("keyup", function(event) {
+            var event = "change";
+
+            if (inputField.tagName === 'INPUT' && inputField.type === 'text'){
+                event = "keyup";
+            }
+            inputField.addEventListener(event, function(event) {
                 that.runConditionalRulesForInput(this);
             }, false);
         }
