@@ -60,20 +60,24 @@ table.rules-table {
     padding-top: 6px;
     padding-bottom: 6px;
 }
+
 table.rules-table tr th:first-child,
 table.rules-table tr td:first-child {
     padding-left: 12px;
 }
+
 table.rules-table tr th:last-child,
 table.rules-table tr td:last-child {
     padding-right: 12px;
 }
+
 div.rules-table-and {
     margin: 24px 0 24px 10px;
     font-weight: bold;
     line-height: 1.2;
     color: #8f98a3;
 }
+
 .rules-table-and-add {
     margin-left: 10px;
 }
