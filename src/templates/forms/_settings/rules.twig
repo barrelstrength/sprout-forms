@@ -8,6 +8,7 @@
         <thead>
         <tr>
             <th>{{ "Field Rule"|t('sprout-forms') }}</th>
+            <th>{{ "Behavior"|t('sprout-forms') }}</th>
             <th class="thin">{{ "Enabled"|t('sprout-forms') }}</th>
         </tr>
         </thead>
@@ -19,6 +20,13 @@
                         <a href="#" id="sproutform-conditional-{{ conditional.id }}" data-conditionalid="{{ conditional.id }}">
                             {{ conditional.name }}
                         </a>
+                    </td>
+                    <td>
+                        {% if conditional.behaviorAction and conditional.behaviorTarget %}
+                            {{ conditional.behaviorAction|capitalize }} {{ conditional.behaviorTarget }}
+                        {% else %}
+                            –
+                        {% endif %}
                     </td>
                     <td>
                         {{ forms.lightswitch({

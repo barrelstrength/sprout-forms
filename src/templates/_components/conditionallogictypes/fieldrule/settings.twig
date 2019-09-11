@@ -84,14 +84,13 @@
             {% endfor %}
         </tbody>
     </table>
-    {% if not loop.last %}
-        <h4>{{ "AND"|t('sprout-forms') }}</h4>
+    {% if not loop.first and not loop.last %}
+        <div class="rules-table-and">{{ "AND"|t('sprout-forms') }}</div>
     {% endif %}
 {% endfor %}
 
-<div class="buttons fullwidth" id="and-add-wrapper">
-    <div id="add-and-rules" class="btn add icon small" tabindex="0"> AND
-    </div>
+<div class="buttons" id="and-add-wrapper">
+    <div id="add-and-rules" class="btn add icon small rules-table-and-add" tabindex="0">AND</div>
 </div>
 
 <script>
@@ -121,7 +120,7 @@
             var tableId = 'sproutforms-rules-'+nextIndex;
             var baseName = namespace+'[conditionalRules]['+nextIndex+'][rules]';
 
-            $("#settings-barrelstrength-sproutforms-rules-FieldRule-and-add-wrapper").before('<h4>AND</h4><table id="'+tableId+'" class="data rules-table fullwidth">' +
+            $("#settings-barrelstrength-sproutforms-rules-FieldRule-and-add-wrapper").before('<div class="rules-table-and">AND</div><table id="'+tableId+'" class="data rules-table fullwidth">' +
                 '<thead><tr>' +
                 '<th>{{ "Field"|t('sprout-forms') }}</th>' +
                 '<th>{{ "Condition"|t('sprout-forms') }}</th>' +
