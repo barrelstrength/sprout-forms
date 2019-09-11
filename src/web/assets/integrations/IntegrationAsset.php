@@ -23,7 +23,7 @@ class IntegrationAsset extends AssetBundle
         ];
 
         $this->css = [
-            'css/formintegrations.css'
+            'css/integrations.css'
         ];
 
         $this->js = [

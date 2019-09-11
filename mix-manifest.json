@@ -1,0 +1,10 @@
+{
+    "/src/web/assets/entries/dist/js/entries.js": "/src/web/assets/entries/dist/js/entries.js",
+    "/src/web/assets/base/dist/css/sproutforms.css": "/src/web/assets/base/dist/css/sproutforms.css",
+    "/src/web/assets/charts/dist/css/charts-explorer.css": "/src/web/assets/charts/dist/css/charts-explorer.css",
+    "/src/web/assets/forms/dist/css/forms.css": "/src/web/assets/forms/dist/css/forms.css",
+    "/src/web/assets/integrations/dist/css/integrations.css": "/src/web/assets/integrations/dist/css/integrations.css",
+    "/src/web/assets/forms/dist/js/forms.js": "/src/web/assets/forms/dist/js/forms.js",
+    "/src/web/assets/integrations/dist/js/integration.js": "/src/web/assets/integrations/dist/js/integration.js",
+    "/src/web/assets/rules/dist/js/rules.js": "/src/web/assets/rules/dist/js/rules.js"
+}

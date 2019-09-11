@@ -370,9 +370,9 @@ Craft.SproutForms.EditableTable.Row = Garnish.Base.extend(
             this.addListener($deleteBtn, 'click', 'deleteRow');
         },
 
-        addValueInputHtml(that = null)
+        addValueInputHtml(self = null)
         {
-            var that = that == null ? this : that;
+            var that = (self == null) ? this : self;
             var data = {
                 'formFieldHandle' : this.$tr.find("td:eq(0)").find("select").val(),
                 'condition' : this.$tr.find("td:eq(1)").find("select").val(),
