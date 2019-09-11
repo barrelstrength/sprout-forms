@@ -62,7 +62,7 @@ SproutForms.FieldConditionalLogic = {
             var fieldId = this.getFieldId(fieldToListen);
             var inputField = document.getElementById(fieldId);
             var event = "change";
-            if (inputField.tagName === 'INPUT' && inputField.type === 'text'){
+            if ((inputField.tagName === 'INPUT' && inputField.type === 'text') || inputField.tagName === 'TEXTAREA'){
                 event = "keyup";
             }
             inputField.addEventListener(event, function(event) {
@@ -154,7 +154,7 @@ SproutForms.FieldConditionalLogic = {
                     orConditions.push({
                         condition: rule.condition,
                         inputValue: inputValue,
-                        ruleValue: rule.value
+                        ruleValue: typeof rule.value === 'undefined' ? '' : rule.value
                     });
 
                 }

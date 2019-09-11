@@ -389,7 +389,6 @@ abstract class BaseOptionsFormField extends FormField implements PreviewableFiel
             }
         }
 
-
         return $html;
     }
 }
