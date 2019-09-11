@@ -58,12 +58,10 @@ SproutForms.FieldConditionalLogic = {
         }
 
         // Enable events
-        // @todo add keyup for inputs and change for dropdowns
         for (var fieldToListen in this.fieldsToListen) {
             var fieldId = this.getFieldId(fieldToListen);
             var inputField = document.getElementById(fieldId);
             var event = "change";
-
             if (inputField.tagName === 'INPUT' && inputField.type === 'text'){
                 event = "keyup";
             }

@@ -10,4 +10,12 @@ class DoesNotEndsWithCondition extends BaseCondition
     {
         return 'does not ends with';
     }
+
+    /**
+     * @inheritDoc
+     */
+    public static function runValidation($inputValue, $ruleValue = null): bool
+    {
+        return substr_compare($inputValue, $ruleValue, -strlen($ruleValue)) !== 0;
+    }
 }

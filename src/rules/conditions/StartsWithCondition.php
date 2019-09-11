@@ -10,4 +10,12 @@ class StartsWithCondition extends BaseCondition
     {
         return 'starts with';
     }
+
+    /**
+     * @inheritDoc
+     */
+    public static function runValidation($inputValue, $ruleValue = null): bool
+    {
+        return substr_compare($inputValue, $ruleValue, 0, strlen($ruleValue)) === 0;
+    }
 }

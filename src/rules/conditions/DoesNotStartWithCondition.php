@@ -17,4 +17,12 @@ class DoesNotStartWithCondition extends BaseCondition
 
 		return $html;
 	}
+
+    /**
+     * @inheritDoc
+     */
+    public static function runValidation($inputValue, $ruleValue = null): bool
+    {
+        return substr_compare($inputValue, $ruleValue, 0, strlen($ruleValue)) !== 0;
+    }
 }
