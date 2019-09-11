@@ -25,11 +25,11 @@ if (typeof Craft.SproutForms === typeof undefined) {
      * Adds edit buttons to existing integrations.
      */
     initButtons: function() {
-      var that = this;
+      const that = this;
 
       // Add listeners to all the items that start with sproutform-field-
       $("a[id^='sproutform-integration']").each(function(i, el) {
-        var integrationId = $(el).data('integrationid');
+        const integrationId = $(el).data('integrationid');
 
         if (integrationId) {
           that.addListener($("#sproutform-integration-" + integrationId), 'activate', 'editIntegration');
@@ -38,7 +38,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
       // Add listeners to all conditionals
       $("a[id^='sproutform-conditional']").each(function(i, el) {
-        var conditionalId = $(el).data('conditionalid');
+        const conditionalId = $(el).data('conditionalid');
 
         if (conditionalId) {
           that.addListener($("#sproutform-conditional-" + conditionalId), 'activate', 'editConditional');
@@ -52,7 +52,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
       this.modal = Craft.SproutForms.IntegrationModal.getInstance();
 
       this.modal.on('saveIntegration', $.proxy(function(e) {
-        var integration = e.integration;
+        const integration = e.integration;
         // Let's update the name if the integration is updated
         this.resetIntegration(integration);
       }, this));
@@ -60,7 +60,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
       this.conditionalModal = Craft.SproutForms.ConditionalModal.getInstance();
 
       this.conditionalModal.on('saveConditional', $.proxy(function(e) {
-        var conditional = e.conditional;
+        const conditional = e.conditional;
         // Let's update the name if the conditional is updated
         this.resetConditional(conditional);
       }, this));
@@ -70,13 +70,13 @@ if (typeof Craft.SproutForms === typeof undefined) {
     },
 
     onChange: function(ev) {
-      var lightswitch = ev.currentTarget;
-      var integrationId = lightswitch.id;
-      var enabled = $(lightswitch).attr('aria-checked');
+      const lightswitch = ev.currentTarget;
+      const integrationId = lightswitch.id;
+      let enabled = $(lightswitch).attr('aria-checked');
       enabled = enabled === 'true' ? 1 : 0;
-      var formId = $("#formId").val();
+      const formId = $("#formId").val();
 
-      var data = {integrationId: integrationId, enabled: enabled, formId: formId};
+      const data = {integrationId: integrationId, enabled: enabled, formId: formId};
 
       Craft.postActionRequest('sprout-forms/integrations/enable-integration', data, $.proxy(function(response, textStatus) {
         if (textStatus === 'success' && response.success) {
@@ -95,11 +95,11 @@ if (typeof Craft.SproutForms === typeof undefined) {
      * @param integration
      */
     resetIntegration: function(integration) {
-      var $integrationDiv = $("#sproutform-integration-" + integration.id);
+      const $integrationDiv = $("#sproutform-integration-" + integration.id);
 
-      var $container = $("#integration-enabled-" + integration.id);
-      var currentValue = integration.enabled === '1' ? true : false;
-      var settingsValue = $container.attr('aria-checked') === 'true' ? true : false;
+      const $container = $("#integration-enabled-" + integration.id);
+      const currentValue = integration.enabled === '1' ? true : false;
+      const settingsValue = $container.attr('aria-checked') === 'true' ? true : false;
       if (currentValue !== settingsValue) {
         $container.attr('aria-checked', "" + currentValue);
         if (currentValue) {
@@ -118,11 +118,11 @@ if (typeof Craft.SproutForms === typeof undefined) {
      * @param conditional
      */
     resetConditional: function(conditional) {
-      var $conditionalDiv = $("#sproutform-conditional-" + conditional.id);
+      const $conditionalDiv = $("#sproutform-conditional-" + conditional.id);
 
-      var $container = $("#conditional-enabled-" + conditional.id);
-      var currentValue = conditional.enabled === '1' ? true : false;
-      var settingsValue = $container.attr('aria-checked') === 'true' ? true : false;
+      const $container = $("#conditional-enabled-" + conditional.id);
+      const currentValue = conditional.enabled === '1' ? true : false;
+      const settingsValue = $container.attr('aria-checked') === 'true' ? true : false;
       if (currentValue !== settingsValue) {
         $container.attr('aria-checked', "" + currentValue);
         if (currentValue) {
@@ -136,16 +136,16 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
     createDefaultIntegration: function(type) {
 
-      var that = this;
-      var integrationTableBody = $('#sproutforms-integrations-table tbody');
-      var currentIntegration = $("#integrationsOptions").val();
-      var formId = $("#formId").val();
+      const that = this;
+      const integrationTableBody = $('#sproutforms-integrations-table tbody');
+      const currentIntegration = $("#integrationsOptions").val();
+      const formId = $("#formId").val();
 
       if (currentIntegration === '') {
         return;
       }
 
-      var data = {
+      const data = {
         type: currentIntegration,
         formId: formId,
         sendRule: '*'
@@ -153,7 +153,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
       Craft.postActionRequest('sprout-forms/integrations/save-integration', data, $.proxy(function(response, textStatus) {
         if (textStatus === 'success') {
-          var integration = response.integration;
+          const integration = response.integration;
 
           integrationTableBody.append('<tr class="field sproutforms-integration-row" id ="sproutforms-integration-row-' + integration.id + '">' +
             '<td class="heading">' +
@@ -174,7 +174,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
           that.addListener($("#sproutform-integration-" + integration.id), 'activate', 'editIntegration');
 
           $('#integrationsOptions').val('');
-          var $container = $("#integration-enabled-" + integration.id);
+          const $container = $("#integration-enabled-" + integration.id);
           $container.lightswitch();
           that.addListener($container, 'click', 'onChange');
         } else {
@@ -185,23 +185,23 @@ if (typeof Craft.SproutForms === typeof undefined) {
     },
 
     createDefaultConditional: function(type) {
-      var that = this;
-      var conditionalTableBody = $("#sproutforms-conditionalrules-table tbody");
-      var currentConditional = $("#conditionalOptions").val();
-      var formId = $("#formId").val();
+      const that = this;
+      const conditionalTableBody = $("#sproutforms-conditionalrules-table tbody");
+      const currentConditional = $("#conditionalOptions").val();
+      const formId = $("#formId").val();
 
       if (currentConditional === '') {
         return;
       }
 
-      var data = {
+      const data = {
         type: currentConditional,
         formId: formId
       };
 
       Craft.postActionRequest('sprout-forms/conditionals/save-conditional', data, $.proxy(function(response, textStatus) {
         if (textStatus === 'success') {
-          var conditional = response.conditional;
+          const conditional = response.conditional;
 
           conditionalTableBody.append('<tr id ="sproutforms-conditional-row-' + conditional.id + '" class="field sproutforms-conditional-row">' +
             '<td>' +
@@ -222,7 +222,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
           that.addListener($("#sproutform-conditional-" + conditional.id), 'activate', 'editConditional');
 
           $('#conditionalOptions').val('');
-          var $container = $("#conditional-enabled-" + conditional.id);
+          const $container = $("#conditional-enabled-" + conditional.id);
           $container.lightswitch();
           that.addListener($container, 'click', 'onChange');
         } else {
@@ -232,9 +232,9 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
     },
 
-    editConditional: function(option) {
-      var option = option.currentTarget;
-      var conditionalId = $(option).data('conditionalid');
+    editConditional: function(currentOption) {
+      const option = currentOption.currentTarget;
+      const conditionalId = $(option).data('conditionalid');
       console.log(conditionalId);
       // Make our field available to our parent function
       //this.$field = $(option);
@@ -243,10 +243,10 @@ if (typeof Craft.SproutForms === typeof undefined) {
       this.conditionalModal.editConditional(conditionalId);
     },
 
-    editIntegration: function(option) {
-      var option = option.currentTarget;
+    editIntegration: function(currentOption) {
+      const option = currentOption.currentTarget;
 
-      var integrationId = $(option).data('integrationid');
+      const integrationId = $(option).data('integrationid');
       // Make our field available to our parent function
       //this.$field = $(option);
       this.base($(option));

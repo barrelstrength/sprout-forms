@@ -9,7 +9,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
 }
 
 (function($) {
-  var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+  let MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 
   // If mutation observer is not supported, create a harness for it for graceful degradation.
   // Older browsers could be supported through the DOMNodeInserted event, but that can be saved for another day...
@@ -75,12 +75,12 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
         // Observe the DOM
         this.observer = new MutationObserver($.proxy(function(mutations) {
-          for (var i = 0; i < mutations.length; i++) {
+          for (let i = 0; i < mutations.length; i++) {
             this.$observed = this.$observed.add(mutations[i].addedNodes);
           }
         }, this));
 
-        var $container = $('<form class="modal sprout-field-modal" style="display: none; opacity: 0;">').appendTo(Garnish.$bod);
+        const $container = $('<form class="modal sprout-field-modal" style="display: none; opacity: 0;">').appendTo(Garnish.$bod);
 
         this.$body = $('<div class="body">').appendTo($container);
         this.$content = $('<div class="content">').appendTo(this.$body);
@@ -99,8 +99,8 @@ if (typeof Craft.SproutForms === typeof undefined) {
         this.$saveSpinner = $('<div class="spinner hidden">').appendTo(this.$rightButtons);
 
         this.setContainer($container);
-        var formId = $("#formId").val();
-        var postData = {
+        const formId = $("#formId").val();
+        const postData = {
           formId: formId
         };
 
@@ -122,7 +122,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
        * @param template
        */
       initTemplate: function(template) {
-        var callback = $.proxy(function(e) {
+        const callback = $.proxy(function(e) {
           this.$html = e.$html;
           this.$js = e.$js;
           this.$css = e.$css;
@@ -147,20 +147,20 @@ if (typeof Craft.SproutForms === typeof undefined) {
        * @param template
        */
       parseTemplate: function(template) {
-        var that = this;
-        var $head = Garnish.$doc.find('head');
+        const that = this;
+        const $head = Garnish.$doc.find('head');
 
-        var $html = $(template.html);
-        var $js = $(template.js).filter('script');
-        var $css = $(template.css).filter('style, link');
+        const $html = $(template.html);
+        const $js = $(template.js).filter('script');
+        const $css = $(template.css).filter('style, link');
 
         // Ensure that external stylesheets are loaded asynchronously
-        var $cssFiles = $css.filter('link').prop('async', true);
-        var $cssInline = $css.filter('style');
+        const $cssFiles = $css.filter('link').prop('async', true);
+        const $cssInline = $css.filter('style');
 
         $cssFiles.each(function() {
-          var $this = $(this);
-          var src = $this.prop('href');
+          const $this = $(this);
+          const src = $this.prop('href');
 
           if (!that.loadedCss.hasOwnProperty(src)) {
             $head.append($this);
@@ -174,20 +174,20 @@ if (typeof Craft.SproutForms === typeof undefined) {
         // reused later on.
         // The Javascript tags that directly contain code are assumed to be context-dependent, so they are
         // saved to be executed each time the modal is opened.
-        var $jsFiles = $js.filter('[src]');
-        var $jsInline = $js.filter(':not([src])');
+        const $jsFiles = $js.filter('[src]');
+        const $jsInline = $js.filter(':not([src])');
 
-        var jsFiles = [];
+        const jsFiles = [];
         $jsFiles.each(function() {
-          var $this = $(this);
-          var src = $this.prop('src');
+          const $this = $(this);
+          const src = $this.prop('src');
           if (!that.executedJs.hasOwnProperty(src)) {
             jsFiles.push(src);
             that.executedJs[src] = true;
           }
         });
 
-        var callback = function() {
+        const callback = function() {
           that.off('runExternalScripts', callback);
           that.trigger('parseTemplate', {
             target: this,
@@ -211,11 +211,11 @@ if (typeof Craft.SproutForms === typeof undefined) {
        * @param files - An array of URL's (as strings) to Javascript files
        */
       runExternalScripts: function(files) {
-        var filesCount = files.length;
+        let filesCount = files.length;
 
         if (filesCount > 0) {
-          for (var i = 0; i < files.length; i++) {
-            var src = files[i];
+          for (let i = 0; i < files.length; i++) {
+            const src = files[i];
             // Fixes Double-instantiating bug
             if ((src.indexOf('MatrixConfigurator') >= 0) ||
               (src.indexOf('TableFieldSettings.min.js') >= 0) ||
@@ -287,7 +287,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
        * Initialises the HTML, CSS and Javascript for the modal window.
        */
       initSettings: function(e) {
-        var that = e && e.target ? e.target : this;
+        const that = e && e.target ? e.target : this;
 
         // If the template files are not loaded yet, just cancel initialisation of the settings.
         if (!that.templateLoaded) {
@@ -306,14 +306,14 @@ if (typeof Craft.SproutForms === typeof undefined) {
         Garnish.$bod.append(that.$currentJs);
 
         // Only show the delete button if editing a field
-        var $fieldId = that.$main.find('input[name="fieldId"]');
+        const $fieldId = that.$main.find('input[name="fieldId"]');
 
         Craft.initUiElements();
 
         // Rerun the external scripts as some field types may need to make DOM changes in their external files.
         // This means that libraries are being initialized multiple times, but hopefully they're smart enough to
         // deal with that. So far, no issues.
-        var callback = function() {
+        const callback = function() {
           that.off('runExternalScripts', callback);
 
           // Stop observing after a healthy timeout to ensure all mutations are captured.
@@ -331,7 +331,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
        * Clears out all events and elements of the modal.
        */
       destroySettings: function(e) {
-        var that = e && e.target ? e.target : this;
+        const that = e && e.target ? e.target : this;
 
         that.$currentHtml.remove();
         that.$currentJs.remove();
@@ -365,15 +365,15 @@ if (typeof Craft.SproutForms === typeof undefined) {
         this.destroyListeners();
 
         this.$saveSpinner.removeClass('hidden');
-        var data = this.$container.serialize();
+        const data = this.$container.serialize();
 
-        var inputId = this.$container.find('input[name="fieldId"]');
-        var id = inputId.length ? inputId.val() : false;
+        const inputId = this.$container.find('input[name="fieldId"]');
+        const id = inputId.length ? inputId.val() : false;
 
         Craft.postActionRequest('sprout-forms/fields/save-field', data, $.proxy(function(response, textStatus) {
           this.$saveSpinner.addClass('hidden');
 
-          var statusSuccess = (textStatus === 'success');
+          const statusSuccess = (textStatus === 'success');
 
           if (statusSuccess && response.success) {
             this.initListeners();
@@ -395,7 +395,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
             this.hide();
           } else if (statusSuccess && response.template) {
             if (this.visible) {
-              var callback = $.proxy(function(e) {
+              const callback = $.proxy(function(e) {
                 this.initListeners();
                 this.destroySettings();
                 this.initSettings(e);
@@ -428,16 +428,16 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
         this.$loadSpinner.removeClass('hidden');
 
-        var formId = $("#formId").val();
-        var data = {'fieldId': id, 'formId': formId};
+        const formId = $("#formId").val();
+        const data = {'fieldId': id, 'formId': formId};
 
         Craft.postActionRequest('sprout-forms/fields/edit-field', data, $.proxy(function(response, textStatus) {
           this.$loadSpinner.addClass('hidden');
 
-          var statusSuccess = (textStatus === 'success');
+          const statusSuccess = (textStatus === 'success');
 
           if (statusSuccess && response.success) {
-            var callback = $.proxy(function(e) {
+            const callback = $.proxy(function(e) {
               this.destroySettings();
               this.initSettings(e);
               this.off('parseTemplate', callback);
@@ -459,17 +459,17 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
       deleteField: function(e) {
         e.preventDefault();
-        var userResponse = this.confirmDeleteField();
+        const userResponse = this.confirmDeleteField();
 
         if (userResponse) {
           this.destroyListeners();
 
-          var data = this.$container.serialize();
+          const data = this.$container.serialize();
 
-          var fieldId = $(this.$container).find('input[name="fieldId"]').val();
+          const fieldId = $(this.$container).find('input[name="fieldId"]').val();
 
           Craft.postActionRequest('sprout-forms/fields/delete-field', data, $.proxy(function(response, textStatus) {
-            var statusSuccess = (textStatus === 'success');
+            const statusSuccess = (textStatus === 'success');
 
             if (statusSuccess && response.success) {
 

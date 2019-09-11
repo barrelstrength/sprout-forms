@@ -1,4 +1,4 @@
-var SproutForms = SproutForms || {};
+const SproutForms = SproutForms || {};
 if (typeof SproutForms.FieldConditionalLogic === typeof undefined) {
   SproutForms.FieldConditionalLogic = {};
 }
@@ -21,19 +21,19 @@ SproutForms.FieldConditionalLogic = {
     this.fieldConditionalRules = settings.fieldConditionalRules;
     this.form = document.getElementById(this.formId);
 
-    var that = this;
+    const that = this;
 
-    for (var i = 0; i < this.fieldConditionalRules.length; i++) {
-      var conditional = this.fieldConditionalRules[i];
-      var targetHandle = conditional.behaviorTarget;
+    for (let i = 0; i < this.fieldConditionalRules.length; i++) {
+      const conditional = this.fieldConditionalRules[i];
+      const targetHandle = conditional.behaviorTarget;
 
-      var fieldWrapper = document.getElementById("fields-" + targetHandle + "-field");
-      var rules = {};
-      for (var key in conditional['conditionalRules']) {
-        for (var pos in conditional['conditionalRules'][key]) {
-          var ruleObject = {};
-          for (var posRule in conditional['conditionalRules'][key][pos]) {
-            var rule = conditional['conditionalRules'][key][pos][posRule];
+      const fieldWrapper = document.getElementById("fields-" + targetHandle + "-field");
+      const rules = {};
+      for (let key in conditional['conditionalRules']) {
+        for (let pos in conditional['conditionalRules'][key]) {
+          const ruleObject = {};
+          for (let posRule in conditional['conditionalRules'][key][pos]) {
+            const rule = conditional['conditionalRules'][key][pos][posRule];
             this.fieldsToListen[rule[0]] = 1;
             ruleObject[posRule] = {
               'fieldHandle': rule[0],
@@ -45,8 +45,8 @@ SproutForms.FieldConditionalLogic = {
         }
       }
 
-      var wrapperId = "fields-" + targetHandle + "-field";
-      var wrapper = document.getElementById(wrapperId);
+      const wrapperId = "fields-" + targetHandle + "-field";
+      const wrapper = document.getElementById(wrapperId);
       if (conditional.behaviorAction == 'show') {
         this.hideField(wrapper);
       }
@@ -58,10 +58,10 @@ SproutForms.FieldConditionalLogic = {
     }
 
     // Enable events
-    for (var fieldToListen in this.fieldsToListen) {
-      var fieldId = this.getFieldId(fieldToListen);
-      var inputField = document.getElementById(fieldId);
-      var event = "change";
+    for (let fieldToListen in this.fieldsToListen) {
+      const fieldId = this.getFieldId(fieldToListen);
+      const inputField = document.getElementById(fieldId);
+      let event = "change";
       if ((inputField.tagName === 'INPUT' && inputField.type === 'text') || inputField.tagName === 'TEXTAREA') {
         event = "keyup";
       }
@@ -72,22 +72,22 @@ SproutForms.FieldConditionalLogic = {
   },
 
   callAjax: function(data, action = 'sprout-forms/conditionals/validate-condition') {
-    var xhr = new XMLHttpRequest();
-    var postData = {};
+    const xhr = new XMLHttpRequest();
+    const postData = {};
     xhr.open('POST', '/');
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    var that = this;
+    const that = this;
     xhr.onload = function() {
-      var conditionalLogicResults = that.form.querySelectorAll('[name="conditionalLogicResults"]');
+      const conditionalLogicResults = that.form.querySelectorAll('[name="conditionalLogicResults"]');
 
       conditionalLogicResults[0].value = this.response;
-      var response = JSON.parse(this.response);
+      const response = JSON.parse(this.response);
       if (this.status === 200 && response.success == true) {
         // apply rules
-        for (var targetField in response.result) {
-          var wrapperId = "fields-" + targetField + "-field";
-          var wrapper = document.getElementById(wrapperId);
-          var rule = that.allRules[targetField];
+        for (let targetField in response.result) {
+          const wrapperId = "fields-" + targetField + "-field";
+          const wrapper = document.getElementById(wrapperId);
+          const rule = that.allRules[targetField];
           if (response.result[targetField] == true) {
             if (rule.action == 'hide') {
               that.hideField(wrapper);
@@ -109,8 +109,8 @@ SproutForms.FieldConditionalLogic = {
 
     postData['action'] = action;
     postData['rules'] = JSON.stringify(data);
-    var str = [];
-    for (var key in postData) {
+    const str = [];
+    for (let key in postData) {
       if (postData.hasOwnProperty(key)) {
         str.push(encodeURIComponent(key) + "=" + encodeURIComponent(postData[key]));
       }
@@ -129,25 +129,25 @@ SproutForms.FieldConditionalLogic = {
    * prepare all the info to run the validation in the backend
    **/
   runConditionalRulesForInput: function(input) {
-    var inputFieldHandle = input.id.replace('fields-', '');
-    var postData = {};
-    for (var targetField in this.allRules) {
-      var wrapperId = "fields-" + targetField + "-field";
-      var wrapper = document.getElementById(wrapperId);
+    const inputFieldHandle = input.id.replace('fields-', '');
+    const postData = {};
+    for (let targetField in this.allRules) {
+      const wrapperId = "fields-" + targetField + "-field";
+      const wrapper = document.getElementById(wrapperId);
 
-      var conditional = this.allRules[targetField];
-      var result = false;
-      var andResult = true;
-      var i = 0;
-      var data = {};
-      for (var andPos in conditional.rules) {
-        var andRule = conditional.rules[andPos];
-        var orConditions = [];
-        for (var orPos in andRule) {
-          var rule = andRule[orPos];
-          var fieldId = this.getFieldId(rule.fieldHandle);
-          var inputField = document.getElementById(fieldId);
-          var inputValue = inputField.value;
+      const conditional = this.allRules[targetField];
+      const result = false;
+      const andResult = true;
+      let i = 0;
+      const data = {};
+      for (let andPos in conditional.rules) {
+        const andRule = conditional.rules[andPos];
+        const orConditions = [];
+        for (let orPos in andRule) {
+          const rule = andRule[orPos];
+          const fieldId = this.getFieldId(rule.fieldHandle);
+          const inputField = document.getElementById(fieldId);
+          const inputValue = inputField.value;
           orConditions.push({
             condition: rule.condition,
             inputValue: inputValue,

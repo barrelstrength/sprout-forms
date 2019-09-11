@@ -46,7 +46,7 @@ Craft.SproutForms.EntriesTableView = Craft.TableElementIndexView.extend({
 
     createChartExplorer: function() {
       // chart explorer
-      var $chartExplorer = $('<div class="chart-explorer"></div>').appendTo(this.$explorerContainer),
+      const $chartExplorer = $('<div class="chart-explorer"></div>').appendTo(this.$explorerContainer),
         $chartHeader = $('<div class="chart-header"></div>').appendTo($chartExplorer),
         $dateRange = $('<div class="date-range" />').appendTo($chartHeader),
         $startDateContainer = $('<div class="datewrapper"></div>').appendTo($dateRange),
@@ -56,7 +56,7 @@ Craft.SproutForms.EntriesTableView = Craft.TableElementIndexView.extend({
         $totalLabel = $('<div class="total-label light">' + Craft.t('sprout-forms', 'Total Submissions') + '</div>').appendTo($total),
         $totalValueWrapper = $('<div class="total-value-wrapper"></div>').appendTo($total);
 
-      var $totalValue = $('<span class="total-value">&nbsp;</span>').appendTo($totalValueWrapper);
+      const $totalValue = $('<span class="total-value">&nbsp;</span>').appendTo($totalValueWrapper);
 
       this.$chartExplorer = $chartExplorer;
       this.$totalValue = $totalValue;
@@ -83,7 +83,7 @@ Craft.SproutForms.EntriesTableView = Craft.TableElementIndexView.extend({
       this.addListener(this.$endDate, 'keyup', 'handleEndDateChange');
 
       // Set the start/end dates
-      var startTime = this.getStorage('startTime') || ((new Date()).getTime() - (60 * 60 * 24 * 30 * 1000)),
+      const startTime = this.getStorage('startTime') || ((new Date()).getTime() - (60 * 60 * 24 * 30 * 1000)),
         endTime = this.getStorage('endTime') || ((new Date()).getTime());
 
       this.setStartDate(new Date(startTime));
@@ -142,7 +142,7 @@ Craft.SproutForms.EntriesTableView = Craft.TableElementIndexView.extend({
     },
 
     loadReport: function() {
-      var requestData = this.settings.params;
+      const requestData = this.settings.params;
 
       requestData.startDate = Craft.SproutForms.EntriesTableView.getDateValue(this.startDate);
       requestData.endDate = Craft.SproutForms.EntriesTableView.getDateValue(this.endDate);
@@ -159,9 +159,9 @@ Craft.SproutForms.EntriesTableView = Craft.TableElementIndexView.extend({
             this.chart = new Craft.charts.Area(this.$chart);
           }
 
-          var chartDataTable = new Craft.charts.DataTable(response.dataTable);
+          const chartDataTable = new Craft.charts.DataTable(response.dataTable);
 
-          var chartSettings = {
+          const chartSettings = {
             localeDefinition: response.localeDefinition,
             orientation: response.orientation,
             formats: response.formats,
@@ -172,7 +172,7 @@ Craft.SproutForms.EntriesTableView = Craft.TableElementIndexView.extend({
 
           this.$totalValue.html(response.totalHtml);
         } else {
-          var msg = Craft.t('sprout-forms', 'An unknown error occurred.');
+          let msg = Craft.t('sprout-forms', 'An unknown error occurred.');
 
           if (typeof (response) !== 'undefined' && response && typeof (response.error) !== 'undefined') {
             msg = response.error;

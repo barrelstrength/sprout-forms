@@ -12,7 +12,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
     updateTargetFieldsOnChange: [],
 
     init: function(settings) {
-      var that = this;
+      const that = this;
 
       this.integrationType = typeof settings.integrationType !== 'undefined'
         ? settings.integrationType
@@ -38,23 +38,23 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
     disableOptions: function() {
 
-      var that = this;
+      const that = this;
 
-      var integrationId = $('#integrationId').val();
+      const integrationId = $('#integrationId').val();
 
       data = {
         'integrationId': integrationId
       };
 
       Craft.postActionRequest('sprout-forms/integrations/get-source-form-fields', data, $.proxy(function(response, textStatus) {
-        var statusSuccess = (textStatus === 'success');
+        const statusSuccess = (textStatus === 'success');
         if (statusSuccess && response.success) {
-          var rows = response.sourceFormFields;
+          const rows = response.sourceFormFields;
           $('tbody .formField').each(function(index) {
-            var td = $(this);
+            const td = $(this);
             td.empty();
-            var title = rows[index]["label"];
-            var handle = rows[index]["value"];
+            const title = rows[index]["label"];
+            const handle = rows[index]["value"];
             td.append('<div style="display:none;"><select readonly name="settings[' + that.integrationType + '][fieldMapping][' + index + '][sourceFormField]"><option selected value="' + handle + '">' + title + '</option></select></div><div style="padding: 7px 10px;font-size: 12px;color:#8f98a3;">' + title + ' <span class="code">(' + handle + ')</span></div>');
           });
         } else {
@@ -66,32 +66,32 @@ if (typeof Craft.SproutForms === typeof undefined) {
     },
 
     updateAllFieldSelects: function() {
-      var integrationIdBase = this.integrationType.replace(/\\/g, '-');
-      var mappingTableRows = 'table#settings-' + integrationIdBase + '-fieldMapping tr';
+      const integrationIdBase = this.integrationType.replace(/\\/g, '-');
+      const mappingTableRows = 'table#settings-' + integrationIdBase + '-fieldMapping tr';
       $(mappingTableRows).find('td:eq(2),th:eq(2)').remove();
       $(mappingTableRows).find('td:eq(0),th:eq(0)').css('width', '50%');
       $(mappingTableRows).find('td:eq(1),th:eq(1)').css('width', '50%');
 
-      var $currentRows = this.getCurrentRows('tbody .targetFields');
+      const $currentRows = this.getCurrentRows('tbody .targetFields');
 
       // Hand off all our current Form data so the Integration can use it if needed
-      var data = $("#integrationId").closest('form').serialize();
+      const data = $("#integrationId").closest('form').serialize();
 
-      var that = this;
+      const that = this;
 
       Craft.postActionRequest('sprout-forms/integrations/get-target-integration-fields', data, $.proxy(function(response, textStatus) {
-        var statusSuccess = (textStatus === 'success');
+        const statusSuccess = (textStatus === 'success');
 
         if (statusSuccess && response.success) {
-          var rows = response.targetIntegrationFields;
+          const rows = response.targetIntegrationFields;
 
           if (rows.length === 0) {
             return false;
           }
 
           $currentRows.each(function(index) {
-            var $select = $(this).find('select');
-            var fields = rows[index];
+            const $select = $(this).find('select');
+            const fields = rows[index];
 
             that.appendFieldsToSelect($select, fields);
           });
@@ -111,14 +111,14 @@ if (typeof Craft.SproutForms === typeof undefined) {
     appendFieldsToSelect: function($select, fields) {
       $select.empty();
 
-      var dropdown = '';
-      var closeOptgroup = false;
+      let dropdown = '';
+      let closeOptgroup = false;
       $select.append('<option value="">' + Craft.t('sprout-forms', 'None') + '</option>');
 
       for (i = 0; i < fields.length; i++) {
-        var field = fields[i];
-        var selectedCode = '';
-        var lastItem = i === (fields.length - 1);
+        const field = fields[i];
+        let selectedCode = '';
+        const lastItem = i === (fields.length - 1);
 
         if (!("optgroup" in field)) {
           if ("selected" in field) {
