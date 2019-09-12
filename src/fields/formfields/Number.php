@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
-use barrelstrength\sproutforms\rules\fieldrules\TextCondition;
+use barrelstrength\sproutforms\rules\fieldrules\NumberCondition;
 use Craft;
 use craft\fields\Dropdown as CraftDropdown;
 use craft\fields\Number as CraftNumber;
@@ -255,7 +255,7 @@ class Number extends FormField implements PreviewableFieldInterface
 	 */
 	public function getCompatibleConditional()
 	{
-		$textCondition = new TextCondition(['formField' => $this]);
+		$textCondition = new NumberCondition(['formField' => $this]);
 		return $textCondition;
 	}
 }
