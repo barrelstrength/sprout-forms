@@ -12,7 +12,7 @@ class NumberCondition extends ConditionalType
 {
 	public function getType(): string
 	{
-		return 'paragraph';
+		return 'number';
 	}
 
 	/**
