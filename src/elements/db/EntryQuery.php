@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\elements\db;
 
 use barrelstrength\sproutforms\elements\Form;
+use craft\base\Element;
 use craft\db\Query;
 use craft\elements\db\ElementQuery;
 use craft\helpers\Db;
@@ -234,8 +235,21 @@ class EntryQuery extends ElementQuery
      */
     protected function statusCondition(string $status)
     {
-        return Db::parseParam(
-            'sproutforms_entrystatuses.handle', $status);
+        switch ($status) {
+            case Element::STATUS_ENABLED:
+                return ['elements.enabled' => true];
+            case Element::STATUS_DISABLED:
+                return ['elements.enabled' => false];
+            case Element::STATUS_ARCHIVED:
+                return ['elements.archived' => true];
+            default:
+                if (!empty($status)) {
+                    return Db::parseParam(
+                        'sproutforms_entrystatuses.handle', $status);
+                }
+        }
+
+        return false;
     }
 
     /**
