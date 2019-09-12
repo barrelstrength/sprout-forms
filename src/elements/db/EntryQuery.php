@@ -186,8 +186,9 @@ class EntryQuery extends ElementQuery
             'sproutforms_entrystatuses.handle as statusHandle'
         ]);
 
-        $this->query->innerJoin('{{%sproutforms_entrystatuses}} sproutforms_entrystatuses', '[[sproutforms_entrystatuses.id]] = [[sproutforms_entries.statusId]]');
         $this->query->innerJoin('{{%sproutforms_forms}} sproutforms_forms', '[[sproutforms_forms.id]] = [[sproutforms_entries.formId]]');
+        $this->query->innerJoin('{{%sproutforms_entrystatuses}} sproutforms_entrystatuses', '[[sproutforms_entrystatuses.id]] = [[sproutforms_entries.statusId]]');
+        $this->subQuery->innerJoin('{{%sproutforms_entrystatuses}} sproutforms_entrystatuses', '[[sproutforms_entrystatuses.id]] = [[sproutforms_entries.statusId]]');
 
         if ($this->formId) {
             $this->subQuery->andWhere(Db::parseParam(
@@ -214,7 +215,7 @@ class EntryQuery extends ElementQuery
         }
 
         if ($this->statusHandle) {
-            $this->query->andWhere(Db::parseParam(
+            $this->subQuery->andWhere(Db::parseParam(
                 'sproutforms_entrystatuses.handle', $this->statusHandle)
             );
         }
@@ -226,6 +227,15 @@ class EntryQuery extends ElementQuery
         }
 
         return parent::beforePrepare();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function statusCondition(string $status)
+    {
+        return Db::parseParam(
+            'sproutforms_entrystatuses.handle', $status);
     }
 
     /**
