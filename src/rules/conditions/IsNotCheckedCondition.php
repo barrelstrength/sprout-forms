@@ -19,6 +19,10 @@ class IsNotCheckedCondition extends BaseCondition
 	 */
 	public static function runValidation($inputValue, $ruleValue = null): bool
 	{
-		return $inputValue !== 1;
+		if (filter_var($inputValue, FILTER_VALIDATE_BOOLEAN)) {
+			return false;
+		}
+
+		return true;
 	}
 }

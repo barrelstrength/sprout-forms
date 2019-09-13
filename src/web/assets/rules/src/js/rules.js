@@ -148,7 +148,10 @@ SproutForms.FieldConditionalLogic = {
           const rule = andRule[orPos];
           const fieldId = this.getFieldId(rule.fieldHandle);
           const inputField = document.getElementById(fieldId);
-          const inputValue = inputField.value;
+          let inputValue = inputField.value;
+          if (inputField.type === 'checkbox'){
+            inputValue = inputField.checked;
+          }
           orConditions.push({
             condition: rule.condition,
             inputValue: inputValue,
