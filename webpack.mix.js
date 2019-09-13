@@ -44,8 +44,8 @@ mix
     'src/web/assets/integrations/dist/css/integrations.css',
   )
 
-  // URL
-  .js([
+  // Rules
+  .copy([
     'src/web/assets/rules/src/js/rules.js',
   ], 'src/web/assets/rules/dist/js/rules.js');
 

@@ -1,11 +1,9 @@
-var SproutForms = typeof SproutForms === typeof undefined ? {} : SproutForms;
-
-if (typeof SproutForms.FieldConditionalLogic === typeof undefined) {
-  SproutForms.FieldConditionalLogic = {};
+if (typeof SproutFormsRules === typeof undefined) {
+  SproutFormsRules = {};
 }
 
 // Manage field conditional logic
-SproutForms.FieldConditionalLogic = {
+SproutFormsRules = {
 
   formId: null,
   form: null,
