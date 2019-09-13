@@ -1,4 +1,5 @@
-const SproutForms = SproutForms || {};
+var SproutForms = typeof SproutForms === typeof undefined ? {} : SproutForms;
+
 if (typeof SproutForms.FieldConditionalLogic === typeof undefined) {
   SproutForms.FieldConditionalLogic = {};
 }

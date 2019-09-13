@@ -65,8 +65,8 @@
         {%- endif %}
     {%- endfor %}
 {%- endif %}
-
-{% set jsUrl = view.getAssetManager().getPublishedUrl('@sproutforms/web/assets/rules/dist/js/rules.js', true) -%}
+{# @todo - update to dist folder #}
+{% set jsUrl = view.getAssetManager().getPublishedUrl('@sproutforms/web/assets/rules/src/js/rules.js', true) -%}
 {% do view.registerJsFile(jsUrl) %}
 
 {% css %}
@@ -76,8 +76,13 @@
 {% endcss %}
 
 {% js at endBody %}
-
     var SproutForms = SproutForms || {};
+    // CONDITIONAL LOGIC
+    SproutForms.FieldConditionalLogic.init({
+    formId: "{{ id }}",
+    fieldConditionalRules: {{ fieldConditionalRules|json_encode|raw }}
+    });
+
     SproutForms.CheckableInputs = SproutForms.CheckableInputs || {};
     SproutForms.AddressFields = SproutForms.AddressFields || {};
 
@@ -223,13 +228,6 @@
     };
 
     SproutForms.AddressFields.init('{{ id }}');
-
-
-    // CONDITIONAL LOGIC
-    SproutForms.FieldConditionalLogic.init({
-        formId: "{{ id }}",
-        fieldConditionalRules: {{ fieldConditionalRules|json_encode|raw }}
-    });
 
 {% endjs -%}
 
