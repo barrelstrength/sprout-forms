@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\rules\fieldrules\TextCondition;
 use Craft;
 use craft\fields\RadioButtons as CraftRadioButtons;
 use craft\helpers\Template as TemplateHelper;
@@ -141,4 +142,13 @@ class MultipleChoice extends BaseOptionsFormField
             CraftRadioButtons::class
         ];
     }
+
+	/**
+	 * @inheritdoc
+	 */
+	public function getCompatibleConditional()
+	{
+		$textCondition = new TextCondition(['formField' => $this]);
+		return $textCondition;
+	}
 }

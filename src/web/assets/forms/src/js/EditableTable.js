@@ -370,11 +370,13 @@ Craft.SproutForms.EditableTable.Row = Garnish.Base.extend(
 
     addValueInputHtml(self = null) {
       const that = (self == null) ? this : self;
+      // last element could be an input or select
+      const lastElement = this.$tr.find("td:eq(2)").find("input").length === 0 ? this.$tr.find("td:eq(2)").find("select") : this.$tr.find("td:eq(2)").find("input");
       const data = {
         'formFieldHandle': this.$tr.find("td:eq(0)").find("select").val(),
         'condition': this.$tr.find("td:eq(1)").find("select").val(),
-        'inputName': this.$tr.find("td:eq(2)").find("input").attr("name"),
-        'inputValue': this.$tr.find("td:eq(2)").find("input").val(),
+        'inputName': lastElement.attr("name"),
+        'inputValue': lastElement.val(),
         'formId': $("#formId").val()
       };
 
