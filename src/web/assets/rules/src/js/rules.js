@@ -63,12 +63,21 @@ SproutForms.FieldConditionalLogic = {
       const fieldId = this.getFieldId(fieldToListen);
       const inputField = document.getElementById(fieldId);
       let event = "change";
-      if ((inputField.tagName === 'INPUT' && inputField.type === 'text') || inputField.tagName === 'TEXTAREA') {
+      if ((inputField.tagName === 'INPUT' && inputField.type === 'text') || inputField.tagName === 'TEXTAREA' ||
+        (inputField.tagName === 'INPUT' && inputField.type === 'number')) {
         event = "keyup";
       }
       inputField.addEventListener(event, function(event) {
         that.runConditionalRulesForInput(this);
       }, false);
+
+      // The number field can have change and keyup events
+      if (inputField.tagName === 'INPUT' && inputField.type === 'number') {
+        event = "change";
+        inputField.addEventListener(event, function(event) {
+          that.runConditionalRulesForInput(this);
+        }, false);
+      }
     }
   },
 
