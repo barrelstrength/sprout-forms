@@ -75,16 +75,13 @@
                     </div>
                 </td>
                 <td class="thin action">
-                    <a class="move icon" title="{{ "Reorder"|t('sprout-forms') }}"></a>
-                </td>
-                <td class="thin action">
                     <a class="delete icon" title="{{ "Delete"|t('sprout-forms') }}"></a>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-    {% if not loop.first and not loop.last %}
+    {% if not loop.last %}
         <div class="rules-table-and">{{ "AND"|t('sprout-forms') }}</div>
     {% endif %}
 {% endfor %}
