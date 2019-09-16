@@ -223,13 +223,15 @@ class ConditionalsController extends BaseController
     private function returnJson(bool $success, Rule $conditional = null): Response
     {
         // @todo how we should return errors to the edit conditional modal? template response is disabled for now
+
         return $this->asJson([
             'success' => $success,
             'errors' => $conditional ? $conditional->getErrors() : null,
             'conditional' => [
                 'id' => $conditional->id,
                 'name' => $conditional->name ?? null,
-                'enabled' => $conditional->enabled
+                'enabled' => $conditional->enabled,
+                'behavior' => $conditional->getBehaviorActionLabel()
             ],
             //'template' => $success ? false : SproutForms::$app->conditionals->getModalConditionalTemplate($conditional),
         ]);

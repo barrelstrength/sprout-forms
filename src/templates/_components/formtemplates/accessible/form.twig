@@ -78,7 +78,7 @@
 {% js at endBody %}
     var SproutForms = SproutForms || {};
     // CONDITIONAL LOGIC
-    SproutForms.FieldConditionalLogic.init({
+    SproutFormsRules.init({
     formId: "{{ id }}",
     fieldConditionalRules: {{ fieldConditionalRules|json_encode|raw }}
     });

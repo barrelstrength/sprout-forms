@@ -109,14 +109,24 @@
         var conditionalTypes = {{ conditionRules|json_encode|raw }};
         var settings = {};
 
+        function getAndTablesCount()
+        {
+          return $(".rules-table").length;
+        }
+
         function addTable(){
             var tables = $(".rules-table");
             var currentIndex = tables.length ? tables.length : 0;
             var nextIndex = currentIndex + 1;
             var tableId = 'sproutforms-rules-'+nextIndex;
             var baseName = namespace+'[conditionalRules]['+nextIndex+'][rules]';
+            var andDiv = '<div class="rules-table-and">AND</div>';
 
-            $("#settings-barrelstrength-sproutforms-rules-FieldRule-and-add-wrapper").before('<div class="rules-table-and">AND</div><table id="'+tableId+'" class="data rules-table fullwidth">' +
+            if (getAndTablesCount() == 0){
+              andDiv = '';
+            }
+
+            $("#settings-barrelstrength-sproutforms-rules-FieldRule-and-add-wrapper").before(andDiv+'<table id="'+tableId+'" class="data rules-table fullwidth">' +
                 '<thead><tr>' +
                 '<th>{{ "Field"|t('sprout-forms') }}</th>' +
                 '<th>{{ "Condition"|t('sprout-forms') }}</th>' +
@@ -137,6 +147,10 @@
             var baseName = namespace+'[conditionalRules]['+index+'][rules]';
             new Craft.SproutForms.EditableTable(tableId, baseName, columns, settings, conditionalTypes);
         });
+
+      if (getAndTablesCount() == 0){
+        addTable();
+      }
     })();
 
 </script>

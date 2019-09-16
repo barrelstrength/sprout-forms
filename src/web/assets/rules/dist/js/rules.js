@@ -1,5 +1,5 @@
 if (typeof SproutFormsRules === typeof undefined) {
-  SproutFormsRules = {};
+  var SproutFormsRules = {};
 }
 
 // Manage field conditional logic
@@ -155,9 +155,16 @@ SproutFormsRules = {
           const rule = andRule[orPos];
           const fieldId = this.getFieldId(rule.fieldHandle);
           const inputField = document.getElementById(fieldId);
-          let inputValue = inputField.value;
+          let inputValue = typeof inputField.value === 'undefined' ? '' : inputField.value;
           if (inputField.type === 'checkbox'){
             inputValue = inputField.checked;
+          }
+          if (typeof inputField.type === 'undefined'){
+            var radios = inputField.querySelectorAll('input[type="radio"]');
+            if (radios.length >= 1){
+              // @todo add radio buttons support
+              console.log(radios.length);
+            }
           }
           orConditions.push({
             condition: rule.condition,

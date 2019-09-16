@@ -21,13 +21,7 @@
                             {{ conditional.name }}
                         </a>
                     </td>
-                    <td>
-                        {% if conditional.behaviorAction and conditional.behaviorTarget %}
-                            {{ conditional.behaviorAction|capitalize }} {{ conditional.behaviorTarget }}
-                        {% else %}
-                            –
-                        {% endif %}
-                    </td>
+                    <td><div id="sproutform-conditional-behavior-{{ conditional.id }}">{{ conditional.getBehaviorActionLabel() }}</div></td>
                     <td>
                         {{ forms.lightswitch({
                             on: conditional.enabled,

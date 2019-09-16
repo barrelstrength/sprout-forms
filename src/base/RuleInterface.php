@@ -24,4 +24,11 @@ interface RuleInterface extends SavableComponentInterface
      * @return array
      */
     public function getBehaviorActions(): array;
+
+    /**
+     * Human readable behavior action
+     *
+     * @return string
+     */
+    public function getBehaviorActionLabel(): string;
 }

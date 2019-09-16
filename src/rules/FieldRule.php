@@ -6,6 +6,7 @@ use barrelstrength\sproutforms\base\Rule;
 use barrelstrength\sproutforms\base\ConditionalLogic;
 use barrelstrength\sproutforms\conditionallogictypes\fieldrules\DropdownCondition;
 use barrelstrength\sproutforms\conditionallogictypes\fieldrules\TextCondition;
+use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -87,5 +88,23 @@ class FieldRule extends Rule
 
 		return $rules;
 	}
+
+    /**
+     * @inheritDoc
+     */
+    public function getBehaviorActionLabel(): string
+    {
+        $behavior = '-';
+
+        if ($this->behaviorAction && $this->behaviorTarget){
+            $form = SproutForms::$app->forms->getFormById($this->formId);
+            $field = $form->getField($this->behaviorTarget);
+            if ($field !== null){
+                $behavior = ucwords($this->behaviorAction).' ('.$field->name.')';
+            }
+        }
+
+        return $behavior;
+    }
 }
 

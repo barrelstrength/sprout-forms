@@ -98,6 +98,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
       const $integrationDiv = $("#sproutform-integration-" + integration.id);
 
       const $container = $("#integration-enabled-" + integration.id);
+
       const currentValue = integration.enabled === '1' ? true : false;
       const settingsValue = $container.attr('aria-checked') === 'true' ? true : false;
       if (currentValue !== settingsValue) {
@@ -121,6 +122,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
       const $conditionalDiv = $("#sproutform-conditional-" + conditional.id);
 
       const $container = $("#conditional-enabled-" + conditional.id);
+      const $behaviorContainer = $("#sproutform-conditional-behavior-"+ conditional.id);
       const currentValue = conditional.enabled === '1' ? true : false;
       const settingsValue = $container.attr('aria-checked') === 'true' ? true : false;
       if (currentValue !== settingsValue) {
@@ -131,6 +133,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
           $container.removeClass("on");
         }
       }
+      $behaviorContainer.html(conditional.behavior);
       $conditionalDiv.html(conditional.name);
     },
 
@@ -202,10 +205,12 @@ if (typeof Craft.SproutForms === typeof undefined) {
       Craft.postActionRequest('sprout-forms/conditionals/save-conditional', data, $.proxy(function (response, textStatus) {
         if (textStatus === 'success') {
           const conditional = response.conditional;
-
           conditionalTableBody.append('<tr id ="sproutforms-conditional-row-' + conditional.id + '" class="field sproutforms-conditional-row">' +
             '<td>' +
             '<a href="#" id ="sproutform-conditional-' + conditional.id + '" data-conditionalid="' + conditional.id + '">' + conditional.name + '</a>' +
+            '</td>' +
+            '<td>' +
+            '<div id ="sproutform-conditional-behavior-' + conditional.id + '">' + conditional.behavior + '</div>' +
             '</td>' +
             '<td>' +
             '<div class="lightswitch small" tabindex="0" data-value="1" role="checkbox" aria-checked="false" id ="conditional-enabled-' + conditional.id + '">' +
@@ -235,7 +240,6 @@ if (typeof Craft.SproutForms === typeof undefined) {
     editConditional: function (currentOption) {
       const option = currentOption.currentTarget;
       const conditionalId = $(option).data('conditionalid');
-      console.log(conditionalId);
       // Make our field available to our parent function
       //this.$field = $(option);
       this.base($(option));

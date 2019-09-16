@@ -90,5 +90,13 @@ abstract class Rule extends SavableComponent implements RuleInterface
     {
         return [];
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getBehaviorActionLabel(): string
+    {
+        return '';
+    }
 }
 
