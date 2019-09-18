@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\elements\db;
 
 use barrelstrength\sproutforms\elements\Form;
+use craft\base\Element;
 use craft\db\Query;
 use craft\elements\db\ElementQuery;
 use craft\helpers\Db;
@@ -186,8 +187,9 @@ class EntryQuery extends ElementQuery
             'sproutforms_entrystatuses.handle as statusHandle'
         ]);
 
-        $this->query->innerJoin('{{%sproutforms_entrystatuses}} sproutforms_entrystatuses', '[[sproutforms_entrystatuses.id]] = [[sproutforms_entries.statusId]]');
         $this->query->innerJoin('{{%sproutforms_forms}} sproutforms_forms', '[[sproutforms_forms.id]] = [[sproutforms_entries.formId]]');
+        $this->query->innerJoin('{{%sproutforms_entrystatuses}} sproutforms_entrystatuses', '[[sproutforms_entrystatuses.id]] = [[sproutforms_entries.statusId]]');
+        $this->subQuery->innerJoin('{{%sproutforms_entrystatuses}} sproutforms_entrystatuses', '[[sproutforms_entrystatuses.id]] = [[sproutforms_entries.statusId]]');
 
         if ($this->formId) {
             $this->subQuery->andWhere(Db::parseParam(
@@ -214,7 +216,7 @@ class EntryQuery extends ElementQuery
         }
 
         if ($this->statusHandle) {
-            $this->query->andWhere(Db::parseParam(
+            $this->subQuery->andWhere(Db::parseParam(
                 'sproutforms_entrystatuses.handle', $this->statusHandle)
             );
         }
@@ -226,6 +228,28 @@ class EntryQuery extends ElementQuery
         }
 
         return parent::beforePrepare();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function statusCondition(string $status)
+    {
+        switch ($status) {
+            case Element::STATUS_ENABLED:
+                return ['elements.enabled' => true];
+            case Element::STATUS_DISABLED:
+                return ['elements.enabled' => false];
+            case Element::STATUS_ARCHIVED:
+                return ['elements.archived' => true];
+            default:
+                if (!empty($status)) {
+                    return Db::parseParam(
+                        'sproutforms_entrystatuses.handle', $status);
+                }
+        }
+
+        return false;
     }
 
     /**
