@@ -100,7 +100,7 @@ class FieldRule extends Rule
             $form = SproutForms::$app->forms->getFormById($this->formId);
             $field = $form->getField($this->behaviorTarget);
             if ($field !== null){
-                $behavior = ucwords($this->behaviorAction).' ('.$field->name.')';
+                $behavior = ucwords($this->behaviorAction).' '.$field->name;
             }
         }
 

@@ -27,6 +27,8 @@ class Entry extends Element
     // =========================================================================
     private $form;
     private $submissionLogs = [];
+    /** @var array|null */
+    private $conditionalResults = null;
 
     public $id;
     public $formId;
@@ -433,5 +435,57 @@ class Entry extends Element
     public function getSubmissionLog(): array
     {
         return SproutForms::$app->integrations->getSubmissionLogsByEntryId($this->id);
+    }
+
+    /**
+     * @param $conditionalResults
+     */
+    public function setConditionalLogicResults(array $conditionalResults)
+    {
+        $this->conditionalResults = $conditionalResults;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getConditionalLogicResults()
+    {
+        return $this->conditionalResults;
+    }
+
+    /**
+     * @param $fieldHandle
+     * @return bool
+     * @throws InvalidConfigException
+     * @throws \craft\errors\MissingComponentException
+     */
+    public function getIsHiddenField($fieldHandle)
+    {
+        $conditionalLogicResults = $this->getConditionalLogicResults();
+
+        $rules = $this->getForm()->getFieldConditionalRules();
+        $fieldRules = [];
+
+        foreach ($rules as $rule) {
+            $fieldRules[$rule['behaviorTarget']] = [
+                'action' => $rule['behaviorAction']
+            ];
+        }
+
+        if (isset($fieldRules[$fieldHandle])){
+            $result = $conditionalLogicResults[$fieldHandle];
+            $rule = $fieldRules[$fieldHandle];
+            if ($result === true){
+                if ($rule['action'] === 'hide'){
+                    return true;
+                }
+            }else{
+                if ($rule['action'] === 'show'){
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

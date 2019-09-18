@@ -141,7 +141,7 @@ class EntriesController extends BaseController
             return false;
         }
 
-        $rules = $this->form ->getFieldConditionalRules();
+        $rules = $this->form->getFieldConditionalRules();
         $fieldRules = [];
         foreach ($rules as $rule) {
             $fieldRules[$rule['behaviorTarget']] = [
@@ -150,10 +150,12 @@ class EntriesController extends BaseController
         }
 
         $conditionalLogicResults = $_POST['conditionalLogicResults'] ?? null;
+        // @todo store the conditional results in a entry property and add the getIsHiddenField method
 
         if ($conditionalLogicResults !== null){
             $conditionalLogicResults = json_decode($conditionalLogicResults, true);
             $conditionalLogicResults = $conditionalLogicResults['result'] ?? [];
+            $entry->setConditionalLogicResults($conditionalLogicResults);
             foreach ($conditionalLogicResults as $fieldHandle => $result){
                 $rule = $fieldRules[$fieldHandle];
                 if ($result === true){
