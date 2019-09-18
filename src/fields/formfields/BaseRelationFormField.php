@@ -11,18 +11,22 @@ use craft\base\Field;
 use craft\base\PreviewableFieldInterface;
 use craft\db\Query;
 use craft\db\Table;
+use craft\db\Table as TableName;
 use craft\elements\db\ElementQuery;
 use craft\elements\db\ElementQueryInterface;
 use craft\errors\SiteNotFoundException;
+use craft\events\ElementEvent;
 use craft\helpers\ElementHelper;
 use craft\helpers\Html;
 use craft\helpers\StringHelper;
 use craft\queue\jobs\LocalizeRelations;
+use craft\services\Elements;
 use craft\validators\ArrayValidator;
 use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use yii\base\Event;
 use yii\base\NotSupportedException;
 
 use barrelstrength\sproutforms\base\FormField;
@@ -86,6 +90,18 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
     // =========================================================================
 
     /**
+     * @var array Related elements that have been validated
+     * @see _validateRelatedElement()
+     */
+    private static $_relatedElementValidates = [];
+
+    /**
+     * @var bool Whether we're listening for related element saves yet
+     * @see _validateRelatedElement()
+     */
+    private static $_listeningForRelatedElementSave = false;
+
+    /**
      * @var string|string[]|null The source keys that this field can relate elements from (used if [[allowMultipleSources]] is set to true)
      */
     public $sources = '*';
@@ -114,6 +130,11 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
      * @var string|null The label that should be used on the selection input
      */
     public $selectionLabel;
+
+    /**
+     * @var bool Whether related elements should be validated when the source element is saved.
+     */
+    public $validateRelatedElements = false;
 
     /**
      * @var int Whether each site should get its own unique set of relations
@@ -205,22 +226,18 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
         $attributes[] = 'limit';
         $attributes[] = 'selectionLabel';
         $attributes[] = 'localizeRelations';
+        $attributes[] = 'validateRelatedElements';
 
         return $attributes;
     }
 
     /**
      * @inheritdoc
-     *
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
      */
     public function getSettingsHtml()
     {
-        return Craft::$app->getView()->renderTemplate($this->settingsTemplate, [
-            'field' => $this,
-        ]);
+        $variables = $this->settingsTemplateVariables();
+        return Craft::$app->getView()->renderTemplate($this->settingsTemplate, $variables);
     }
 
     /**
@@ -228,13 +245,93 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
      */
     public function getElementValidationRules(): array
     {
-        return [
+        $rules = [
             [
                 ArrayValidator::class,
                 'max' => $this->allowLimit && $this->limit ? $this->limit : null,
                 'tooMany' => Craft::t('sprout-forms', '{attribute} should contain at most {max, number} {max, plural, one{selection} other{selections}}.'),
             ],
         ];
+
+        if ($this->validateRelatedElements) {
+            $rules[] = ['validateRelatedElements', 'on' => [Element::SCENARIO_LIVE]];
+        }
+
+        return $rules;
+    }
+
+    /**
+     * Validates the related elements.
+     *
+     * @param ElementInterface $element
+     */
+    public function validateRelatedElements(ElementInterface $element)
+    {
+        /** @var Element $element */
+        // Prevent circular relations from worrying about this entry
+        $sourceId = $element->getSourceId();
+        $sourceValidates = self::$_relatedElementValidates[$sourceId][$element->siteId] ?? null;
+        self::$_relatedElementValidates[$sourceId][$element->siteId] = true;
+
+        /** @var ElementQueryInterface $query */
+        $query = $element->getFieldValue($this->handle);
+        $errorCount = 0;
+
+        foreach ($query->all() as $i => $related) {
+            /** @var Element $related */
+            if ($related->enabled && $related->enabledForSite) {
+                if (!self::_validateRelatedElement($related)) {
+                    $element->addModelErrors($related, "{$this->handle}[{$i}]");
+                    $errorCount++;
+                }
+            }
+        }
+
+        // Reset self::$_relatedElementValidates[$sourceId][$element->siteId] to its original value
+        if ($sourceValidates !== null) {
+            self::$_relatedElementValidates[$sourceId][$element->siteId] = $sourceValidates;
+        } else {
+            unset(self::$_relatedElementValidates[$sourceId][$element->siteId]);
+        }
+
+        if ($errorCount) {
+            /** @var ElementInterface|string $elementType */
+            $elementType = static::elementType();
+            $element->addError($this->handle, Craft::t('sprout-forms', 'Fix validation errors on the related {type}.', [
+                'type' => mb_strtolower($errorCount === 1 ? $elementType::displayName() : $elementType::pluralDisplayName()),
+            ]));
+        }
+    }
+
+    /**
+     * Returns whether a related element validates.
+     *
+     * @param ElementInterface $element
+     * @return bool
+     */
+    private static function _validateRelatedElement(ElementInterface $element): bool
+    {
+        /** @var Element $element */
+        if (isset(self::$_relatedElementValidates[$element->id][$element->siteId])) {
+            return self::$_relatedElementValidates[$element->id][$element->siteId];
+        }
+
+        // If this is the first time we are validating a related element,
+        // listen for future element saves so we can clear our cache
+        if (!self::$_listeningForRelatedElementSave) {
+            Event::on(Elements::class, Elements::EVENT_AFTER_SAVE_ELEMENT, function(ElementEvent $e) {
+                /** @var Element $element */
+                $element = $e->element;
+                unset(self::$_relatedElementValidates[$element->id][$element->siteId]);
+            });
+            self::$_listeningForRelatedElementSave = true;
+        }
+
+        // Prevent an infinite loop if there are circular relations
+        self::$_relatedElementValidates[$element->id][$element->siteId] = true;
+
+        $element->setScenario(Element::SCENARIO_LIVE);
+        return self::$_relatedElementValidates[$element->id][$element->siteId] = $element->validate();
     }
 
     /**
@@ -335,9 +432,9 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
         }
 
         if ($value === ':notempty:' || $value === ':empty:') {
-            $alias = 'relations_'.$this->handle;
+            $alias = 'relations_' . $this->handle;
             $operator = ($value === ':notempty:' ? '!=' : '=');
-            $paramHandle = ':fieldId'.StringHelper::randomString(8);
+            $paramHandle = ':fieldId' . StringHelper::randomString(8);
 
             $query->subQuery->andWhere(
                 "(select count([[{$alias}.id]]) from {{%relations}} {{{$alias}}} where [[{$alias}.sourceId]] = [[elements.id]] and [[{$alias}.fieldId]] = {$paramHandle}) {$operator} 0",
@@ -389,6 +486,12 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
         /** @var Element|null $element */
         if ($element !== null && $element->hasEagerLoadedElements($this->handle)) {
             $value = $element->getEagerLoadedElements($this->handle);
+        } else {
+            /** @var ElementQueryInterface $value */
+            $value
+                ->siteId('*')
+                ->unique()
+                ->preferSites([$this->targetSiteId($element)]);
         }
 
         /** @var ElementQuery|array $value */
@@ -428,7 +531,7 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
         $value = $this->_all($value)->all();
 
         if (empty($value)) {
-            return '<p class="light">'.Craft::t('sprout-forms', 'Nothing selected.').'</p>';
+            return '<p class="light">' . Craft::t('sprout-forms', 'Nothing selected.') . '</p>';
         }
 
         $view = Craft::$app->getView();
@@ -501,7 +604,7 @@ JS;
         // Return any relation data on these elements, defined with this field
         $map = (new Query())
             ->select(['sourceId as source', 'targetId as target'])
-            ->from([Table::RELATIONS])
+            ->from([TableName::RELATIONS])
             ->where([
                 'and',
                 [
@@ -524,7 +627,9 @@ JS;
             'elementType' => static::elementType(),
             'map' => $map,
             'criteria' => [
-                'siteId' => $targetSite
+                'siteId' => '*',
+                'unique' => true,
+                'preferSites' => [$targetSite],
             ],
         ];
     }
@@ -587,6 +692,11 @@ JS;
 
             /** @var int|int[]|false|null $targetIds */
             SproutForms::$app->entries->saveRelations($this, $element, $targetIds);
+
+            // Reset the field value if this is a new element
+            if ($isNew) {
+                $element->setFieldValue($this->handle, null);
+            }
         }
 
         parent::afterElementSave($element, $isNew);
@@ -639,7 +749,7 @@ JS;
         }
 
         $type = mb_strtolower(static::displayName());
-        $showTargetSite = $this->targetSiteId !== null;
+        $showTargetSite = !empty($this->targetSiteId);
 
         $html = Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'checkboxField',
                 [
@@ -649,8 +759,8 @@ JS;
                         'checked' => $showTargetSite,
                         'toggle' => 'target-site-container'
                     ]
-                ]).
-            '<div id="target-site-container"'.(!$showTargetSite ? ' class="hidden"' : '').'>';
+                ]) .
+            '<div id="target-site-container"' . (!$showTargetSite ? ' class="hidden"' : '') . '>';
 
         $siteOptions = [];
 
@@ -715,6 +825,22 @@ JS;
     // =========================================================================
 
     /**
+     * Returns an array of variables that should be passed to the settings template.
+     *
+     * @return array
+     */
+    protected function settingsTemplateVariables(): array
+    {
+        /** @var ElementInterface|string $elementType */
+        $elementType = $this->elementType();
+
+        return [
+            'field' => $this,
+            'pluralElementType' => $elementType::pluralDisplayName(),
+        ];
+    }
+
+    /**
      * Returns an array of variables that should be passed to the input template.
      *
      * @param ElementQueryInterface|array|null $value
@@ -726,6 +852,7 @@ JS;
      */
     protected function inputTemplateVariables($value = null, ElementInterface $element = null): array
     {
+        /** @var Element|null $element */
         if ($value instanceof ElementQueryInterface) {
             $value = $value
                 ->anyStatus()
@@ -734,28 +861,39 @@ JS;
             $value = [];
         }
 
+        if ($this->validateRelatedElements) {
+            // Pre-validate related elements
+            foreach ($value as $related) {
+                if ($related->enabled && $related->enabledForSite) {
+                    $related->setScenario(Element::SCENARIO_LIVE);
+                    $related->validate();
+                }
+            }
+        }
+
         $selectionCriteria = $this->inputSelectionCriteria();
         $selectionCriteria['enabledForSite'] = null;
-        $selectionCriteria['siteId'] = $this->targetSiteId($element);
-
-        /** @var Element $element */
-        $elementId = $element && $element->id ? $element->id : null;
+        if ($this->targetSiteId) {
+            $selectionCriteria['siteId'] = $this->targetSiteId($element);
+        }
 
         return [
             'jsClass' => $this->inputJsClass,
             'elementType' => static::elementType(),
             'id' => Craft::$app->getView()->formatInputId($this->handle),
             'fieldId' => $this->id,
-            'storageKey' => 'field.'.$this->id,
+            'storageKey' => 'field.' . $this->id,
             'name' => $this->handle,
             'elements' => $value,
             'sources' => $this->inputSources($element),
             'criteria' => $selectionCriteria,
-            'sourceElementId' => $elementId,
+            'showSiteMenu' => $this->targetSiteId ? false : 'auto',
+            'sourceElementId' => !empty($element->id) ? $element->id : null,
             'limit' => $this->allowLimit ? $this->limit : null,
             'viewMode' => $this->viewMode(),
             'selectionLabel' => $this->selectionLabel ? Craft::t('site', $this->selectionLabel) : static::defaultSelectionLabel(),
             'sortable' => $this->sortable,
+            'prevalidate' => $this->validateRelatedElements,
         ];
     }
 

@@ -1,5 +1,13 @@
 # Changelog
 
+## WIP
+
+### Added
+- Added Craft 3.3 requirement
+
+### Fixed
+- Fixed bug where File Upload field doesn't update Asset Source option
+
 ## 3.4.2 - 2019-09-04
 
 ### Changed
