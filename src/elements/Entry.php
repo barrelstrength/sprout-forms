@@ -180,8 +180,11 @@ class Entry extends Element
         $statusArray = [];
 
         foreach ($statuses as $status) {
-            $key = $status['handle'].' '.$status['color'];
-            $statusArray[$key] = $status['name'];
+            $key = $status['handle'];
+            $statusArray[$key] = [
+                'label' => $status['name'],
+                'color' => $status['color'],
+            ];
         }
 
         return $statusArray;
