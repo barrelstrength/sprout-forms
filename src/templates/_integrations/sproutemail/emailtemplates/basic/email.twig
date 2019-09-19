@@ -128,7 +128,8 @@
 
                                                                 {% if value|length %}
                                                                     <ul style="margin-left:10px;padding-left:10px;">
-                                                                        {% for item in value %}
+                                                                        {% set values = attribute(value, "all") is defined ? value.all() : value %}
+                                                                        {% for item in values %}
                                                                             {% if item is not empty %}
                                                                                 <li>{{ item|striptags }}</li>
                                                                             {% endif %}
