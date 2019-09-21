@@ -160,10 +160,15 @@ SproutFormsRules = {
             inputValue = inputField.checked;
           }
           if (typeof inputField.type === 'undefined'){
-            var radios = inputField.querySelectorAll('input[type="radio"]');
+            const radios = inputField.querySelectorAll('input[type="radio"]');
             if (radios.length >= 1){
-              // @todo add radio buttons support
-              console.log(radios.length);
+              for (let i = 0; i < radios.length; i++){
+                let radio = radios[i];
+                if (radio.checked){
+                  inputValue = radio.value;
+                  break;
+                }
+              }
             }
           }
           orConditions.push({
