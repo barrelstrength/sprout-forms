@@ -13,6 +13,11 @@ use barrelstrength\sproutforms\rules\conditions\IsCondition;
 use barrelstrength\sproutforms\rules\conditions\IsNotCondition;
 use barrelstrength\sproutforms\rules\conditions\StartsWithCondition;
 
+/**
+ *
+ * @property array|\barrelstrength\sproutforms\base\BaseCondition[] $rules
+ * @property string                                                 $type
+ */
 class TextCondition extends ConditionalType
 {
     public function getType(): string

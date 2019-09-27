@@ -7,6 +7,11 @@ use barrelstrength\sproutforms\base\ConditionalType;
 use barrelstrength\sproutforms\rules\conditions\IsCheckedCondition;
 use barrelstrength\sproutforms\rules\conditions\IsNotCheckedCondition;
 
+/**
+ *
+ * @property array|\barrelstrength\sproutforms\base\BaseCondition[] $rules
+ * @property string                                                 $type
+ */
 class OptInCondition extends ConditionalType
 {
     public function getType(): string

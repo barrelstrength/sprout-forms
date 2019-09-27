@@ -31,8 +31,6 @@ use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\events\RegisterFieldsEvent;
 use Craft;
 use craft\base\FieldInterface;
-use craft\models\FieldLayout;
-use craft\models\FieldLayoutTab;
 use craft\records\FieldLayoutField;
 use craft\helpers\StringHelper;
 use craft\base\Field;

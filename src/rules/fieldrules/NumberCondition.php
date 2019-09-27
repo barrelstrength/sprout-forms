@@ -10,6 +10,11 @@ use barrelstrength\sproutforms\rules\conditions\IsGreaterThanOrEqualToCondition;
 use barrelstrength\sproutforms\rules\conditions\IsLessThanCondition;
 use barrelstrength\sproutforms\rules\conditions\IsLessThanOrEqualToCondition;
 
+/**
+ *
+ * @property array|\barrelstrength\sproutforms\base\BaseCondition[] $rules
+ * @property string                                                 $type
+ */
 class NumberCondition extends ConditionalType
 {
     public function getType(): string

@@ -6,7 +6,6 @@ use barrelstrength\sproutforms\base\ConditionInterface;
 use barrelstrength\sproutforms\rules\conditions\IsNotProvidedCondition;
 use barrelstrength\sproutforms\rules\conditions\IsProvidedCondition;
 use barrelstrength\sproutforms\rules\fieldrules\ParagraphCondition;
-use barrelstrength\sproutforms\rules\fieldrules\TextCondition;
 use Craft;
 use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Db;
@@ -27,11 +26,12 @@ use barrelstrength\sproutforms\base\FormField;
  *
  * @package Craft
  *
- * @property string      $contentColumnType
- * @property string      $svgIconPath
- * @property null|string $settingsHtml
- * @property array       $compatibleCraftFields
- * @property mixed       $exampleInputHtml
+ * @property string                                                          $contentColumnType
+ * @property string                                                          $svgIconPath
+ * @property null|string                                                     $settingsHtml
+ * @property array                                                           $compatibleCraftFields
+ * @property \barrelstrength\sproutforms\rules\fieldrules\ParagraphCondition $compatibleConditional
+ * @property mixed                                                           $exampleInputHtml
  */
 class Paragraph extends FormField implements PreviewableFieldInterface
 {

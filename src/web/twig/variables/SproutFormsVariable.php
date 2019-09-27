@@ -667,7 +667,7 @@ class SproutFormsVariable
      *
      * @return BaseCondition
      */
-    public function getFieldCondition($conditionClass, $formField)
+    public function getFieldCondition($conditionClass, $formField): BaseCondition
     {
         $condition = new $conditionClass(['formField' => $formField]);
 

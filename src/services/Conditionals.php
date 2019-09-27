@@ -20,6 +20,12 @@ use Twig\Error\SyntaxError;
 use yii\base\InvalidConfigException;
 
 
+/**
+ *
+ * @property array                                         $integrationOptions
+ * @property array                                         $allConditionalsTypes
+ * @property array|\barrelstrength\sproutforms\base\Rule[] $allConditionals
+ */
 class Conditionals extends Component
 {
     const EVENT_REGISTER_CONDITIONALS = 'registerConditionals';

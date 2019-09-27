@@ -20,13 +20,14 @@ use craft\helpers\StringHelper;
 
 /**
  *
- * @property array  $elementValidationRules
- * @property string $contentColumnType
- * @property string $svgIconPath
- * @property mixed  $settingsHtml
- * @property array  $compatibleCraftFields
- * @property array  $compatibleCraftFieldTypes
- * @property mixed  $exampleInputHtml
+ * @property array                                                      $elementValidationRules
+ * @property string                                                     $contentColumnType
+ * @property string                                                     $svgIconPath
+ * @property mixed                                                      $settingsHtml
+ * @property array                                                      $compatibleCraftFields
+ * @property array                                                      $compatibleCraftFieldTypes
+ * @property \barrelstrength\sproutforms\rules\fieldrules\TextCondition $compatibleConditional
+ * @property mixed                                                      $exampleInputHtml
  */
 class EmailDropdown extends BaseOptionsFormField
 {

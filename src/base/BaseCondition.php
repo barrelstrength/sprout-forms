@@ -2,13 +2,13 @@
 
 namespace barrelstrength\sproutforms\base;
 
-use barrelstrength\sproutforms\elements\Form;
-use barrelstrength\sproutforms\SproutForms;
-use Craft;
 use craft\base\SavableComponent;
 
 /**
  * Class BaseCondition
+ *
+ * @property string $label
+ * @property string $value
  */
 abstract class BaseCondition extends SavableComponent implements ConditionInterface
 {

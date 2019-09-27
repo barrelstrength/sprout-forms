@@ -8,7 +8,6 @@
 namespace barrelstrength\sproutforms\web\assets\rules;
 
 use craft\web\AssetBundle;
-use craft\web\assets\cp\CpAsset;
 
 class RulesAsset extends AssetBundle
 {

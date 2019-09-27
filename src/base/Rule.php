@@ -4,11 +4,15 @@ namespace barrelstrength\sproutforms\base;
 
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\SproutForms;
-use Craft;
 use craft\base\SavableComponent;
 
 /**
  * Class Rule
+ *
+ * @property array                                     $conditionRules
+ * @property \barrelstrength\sproutforms\elements\Form $form
+ * @property array                                     $behaviorActions
+ * @property string                                    $behaviorActionLabel
  */
 abstract class Rule extends SavableComponent implements RuleInterface
 {

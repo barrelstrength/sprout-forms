@@ -3,7 +3,6 @@
 namespace barrelstrength\sproutforms\elements\db;
 
 use barrelstrength\sproutforms\elements\Form;
-use craft\base\Element;
 use craft\db\Query;
 use craft\elements\db\ElementQuery;
 use craft\helpers\Db;
@@ -75,7 +74,7 @@ class EntryQuery extends ElementQuery
      *
      * @return static self reference
      */
-    public function statusId($value)
+    public function statusId($value): EntryQuery
     {
         $this->statusId = $value;
 
@@ -89,7 +88,7 @@ class EntryQuery extends ElementQuery
      *
      * @return static self reference
      */
-    public function formId($value)
+    public function formId($value): EntryQuery
     {
         $this->formId = $value;
 
@@ -103,7 +102,7 @@ class EntryQuery extends ElementQuery
      *
      * @return static self reference
      */
-    public function formHandle($value)
+    public function formHandle($value): EntryQuery
     {
         $this->formHandle = $value;
         $form = SproutForms::$app->forms->getFormByHandle($value);
@@ -122,7 +121,7 @@ class EntryQuery extends ElementQuery
      *
      * @return static self reference
      */
-    public function statusHandle($value)
+    public function statusHandle($value): EntryQuery
     {
         $this->statusHandle = $value;
 
@@ -136,7 +135,7 @@ class EntryQuery extends ElementQuery
      *
      * @return static self reference
      */
-    public function formName($value)
+    public function formName($value): EntryQuery
     {
         $this->formName = $value;
 

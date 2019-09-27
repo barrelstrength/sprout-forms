@@ -136,7 +136,7 @@ class EntriesController extends BaseController
      * @throws InvalidConfigException
      * @throws MissingComponentException
      */
-    private function runFieldConditionalRules(EntryElement $entry)
+    private function runFieldConditionalRules(EntryElement $entry): bool
     {
         if ($this->form === null) {
             return false;

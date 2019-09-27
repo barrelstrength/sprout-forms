@@ -13,7 +13,6 @@ use craft\elements\Entry;
 use craft\errors\InvalidElementException;
 use craft\errors\MissingComponentException;
 use craft\errors\WrongEditionException;
-use craft\models\FieldLayout;
 use craft\web\Controller as BaseController;
 use craft\helpers\UrlHelper;
 use Throwable;
@@ -87,7 +86,6 @@ class FormsController extends BaseController
      * @throws MissingComponentException
      * @throws NotFoundHttpException
      * @throws Throwable
-     * @throws \craft\errors\ElementNotFoundException
      */
     public function actionSaveForm(bool $duplicate = false)
     {

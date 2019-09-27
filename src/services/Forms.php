@@ -6,7 +6,6 @@ use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\base\FormTemplates;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
-use barrelstrength\sproutforms\models\Settings;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\records\Form as FormRecord;
@@ -21,7 +20,6 @@ use yii\base\Component;
 use craft\helpers\StringHelper;
 use craft\helpers\MigrationHelper;
 use yii\base\Exception;
-use yii\base\ExitException;
 use yii\base\InvalidConfigException;
 
 
@@ -106,7 +104,6 @@ class Forms extends Component
      *
      * @return bool
      * @throws Throwable
-     * @throws ExitException
      * @throws InvalidConfigException
      */
     public function saveForm(FormElement $form, bool $duplicate = false): bool

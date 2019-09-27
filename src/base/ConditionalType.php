@@ -2,13 +2,14 @@
 
 namespace barrelstrength\sproutforms\base;
 
-use barrelstrength\sproutforms\elements\Form;
-use barrelstrength\sproutforms\SproutForms;
-use Craft;
 use craft\base\SavableComponent;
 
 /**
  * Class ConditionalType
+ *
+ * @property array  $rulesAsOptions
+ * @property array  $rules
+ * @property string $type
  */
 abstract class ConditionalType extends SavableComponent implements ConditionalTypeInterface
 {

@@ -22,6 +22,7 @@ use craft\helpers\StringHelper;
 use craft\queue\jobs\LocalizeRelations;
 use craft\services\Elements;
 use craft\validators\ArrayValidator;
+use Exception;
 use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -233,6 +234,12 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
 
     /**
      * @inheritdoc
+     *
+     * @return string|null
+     * @throws LoaderError
+     * @throws NotSupportedException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getSettingsHtml()
     {
@@ -264,6 +271,8 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
      * Validates the related elements.
      *
      * @param ElementInterface $element
+     *
+     * @throws NotSupportedException
      */
     public function validateRelatedElements(ElementInterface $element)
     {
@@ -424,6 +433,12 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
 
     /**
      * @inheritdoc
+     *
+     * @param ElementQueryInterface $query
+     * @param                       $value
+     *
+     * @return bool|false|null
+     * @throws Exception
      */
     public function modifyElementsQuery(ElementQueryInterface $query, $value)
     {
@@ -829,11 +844,12 @@ JS;
      * Returns an array of variables that should be passed to the settings template.
      *
      * @return array
+     * @throws NotSupportedException
      */
     protected function settingsTemplateVariables(): array
     {
         /** @var ElementInterface|string $elementType */
-        $elementType = $this->elementType();
+        $elementType = self::elementType();
 
         return [
             'field' => $this,

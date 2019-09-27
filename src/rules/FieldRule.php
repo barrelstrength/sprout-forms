@@ -11,12 +11,15 @@ use Craft;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use yii\base\InvalidConfigException;
 
 /**
  * Add a conditional logic to show or hide a Form field
  *
  * @property array       $behaviorActions
  * @property array       $behaviorActionsAsOptions
+ * @property string      $behaviorActionLabel
+ * @property array       $conditionRules
  * @property null|string $settingsHtml
  */
 class FieldRule extends Rule
@@ -73,6 +76,7 @@ class FieldRule extends Rule
 
     /**
      * @inheritDoc
+     * @throws InvalidConfigException
      */
     public function getConditionRules(): array
     {
@@ -91,6 +95,7 @@ class FieldRule extends Rule
 
     /**
      * @inheritDoc
+     * @throws InvalidConfigException
      */
     public function getBehaviorActionLabel(): string
     {

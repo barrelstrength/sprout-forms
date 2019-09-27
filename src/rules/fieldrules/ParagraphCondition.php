@@ -9,6 +9,11 @@ use barrelstrength\sproutforms\rules\conditions\DoesNotContainsCondition;
 use barrelstrength\sproutforms\rules\conditions\IsNotProvidedCondition;
 use barrelstrength\sproutforms\rules\conditions\IsProvidedCondition;
 
+/**
+ *
+ * @property array|\barrelstrength\sproutforms\base\BaseCondition[] $rules
+ * @property string                                                 $type
+ */
 class ParagraphCondition extends ConditionalType
 {
     public function getType(): string

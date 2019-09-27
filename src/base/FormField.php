@@ -3,7 +3,6 @@
 namespace barrelstrength\sproutforms\base;
 
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
-use barrelstrength\sproutforms\rules\fieldrules\TextCondition;
 use Craft;
 use craft\base\Field;
 use ReflectionClass;
@@ -15,13 +14,14 @@ use Twig\Markup;
  *
  * @package Craft
  *
- * @property string $templatesPath
- * @property string $fieldInputFolder
- * @property string $namespace
- * @property string $svgIconPath
- * @property array  $compatibleCraftFields
- * @property array  $compatibleCraftFieldTypes
- * @property string $exampleInputHtml
+ * @property string                                                $templatesPath
+ * @property string                                                $fieldInputFolder
+ * @property string                                                $namespace
+ * @property string                                                $svgIconPath
+ * @property array                                                 $compatibleCraftFields
+ * @property array                                                 $compatibleCraftFieldTypes
+ * @property null|\barrelstrength\sproutforms\base\ConditionalType $compatibleConditional
+ * @property string                                                $exampleInputHtml
  */
 abstract class FormField extends Field
 {

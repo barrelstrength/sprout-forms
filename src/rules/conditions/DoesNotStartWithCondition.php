@@ -4,6 +4,10 @@ namespace barrelstrength\sproutforms\rules\conditions;
 
 use barrelstrength\sproutforms\base\BaseCondition;
 
+/**
+ *
+ * @property string $label
+ */
 class DoesNotStartWithCondition extends BaseCondition
 {
     public function getLabel(): string

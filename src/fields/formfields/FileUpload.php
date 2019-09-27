@@ -45,13 +45,15 @@ use yii\base\NotSupportedException;
  *
  * @package Craft
  *
- * @property array  $elementValidationRules
- * @property array  $fileKindOptions
- * @property string $svgIconPath
- * @property array  $sourceOptions
- * @property array  $compatibleCraftFields
- * @property array  $compatibleCraftFieldTypes
- * @property mixed  $exampleInputHtml
+ * @property array      $elementValidationRules
+ * @property array      $fileKindOptions
+ * @property string     $svgIconPath
+ * @property array      $sourceOptions
+ * @property array      $compatibleCraftFields
+ * @property array      $compatibleCraftFieldTypes
+ * @property array      $contentGqlType
+ * @property bool|array $eagerLoadingGqlConditions
+ * @property mixed      $exampleInputHtml
  */
 class FileUpload extends BaseRelationFormField
 {
@@ -106,7 +108,6 @@ class FileUpload extends BaseRelationFormField
     /**
      * @inheritDoc
      *
-     * @throws InvalidConfigException
      */
     public function init()
     {
@@ -432,7 +433,7 @@ class FileUpload extends BaseRelationFormField
      */
     public function resolveDynamicPathToFolderId(ElementInterface $element = null): int
     {
-        return $this->_determineUploadFolderId($element, true);
+        return $this->_determineUploadFolderId($element);
     }
 
     /**
@@ -458,13 +459,10 @@ class FileUpload extends BaseRelationFormField
      * @param ElementInterface $element
      * @param bool             $isNew
      *
-     * @throws InvalidSubpathException
-     * @throws InvalidVolumeException
      * @throws Throwable
      * @throws AssetLogicException
      * @throws ElementNotFoundException
      * @throws SiteNotFoundException
-     * @throws VolumeException
      * @throws ErrorException
      * @throws Exception
      * @throws NotSupportedException
@@ -939,7 +937,6 @@ class FileUpload extends BaseRelationFormField
      * @param mixed $sourceKey
      *
      * @return string
-     * @throws InvalidConfigException
      */
     private function _folderSourceToVolumeSource($sourceKey): string
     {

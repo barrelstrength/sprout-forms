@@ -16,10 +16,11 @@ use Twig\Markup;
  * Class SproutFormsRadioButtonsField
  *
  *
- * @property string $svgIconPath
- * @property array  $compatibleCraftFields
- * @property array  $compatibleCraftFieldTypes
- * @property mixed  $exampleInputHtml
+ * @property string                                                     $svgIconPath
+ * @property array                                                      $compatibleCraftFields
+ * @property array                                                      $compatibleCraftFieldTypes
+ * @property \barrelstrength\sproutforms\rules\fieldrules\TextCondition $compatibleConditional
+ * @property mixed                                                      $exampleInputHtml
  */
 class MultipleChoice extends BaseOptionsFormField
 {

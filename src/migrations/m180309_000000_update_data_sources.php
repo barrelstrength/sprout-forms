@@ -6,7 +6,6 @@ use craft\db\Migration;
 use craft\db\Query;
 use barrelstrength\sproutbasereports\migrations\m180307_042132_craft3_schema_changes as SproutReportsCraft2toCraft3Migration;
 use barrelstrength\sproutbasereports\migrations\Install as SproutBaseReportsInstall;
-use yii\base\NotSupportedException;
 
 /**
  * m180309_000000_update_data_sources migration.
@@ -15,7 +14,6 @@ class m180309_000000_update_data_sources extends Migration
 {
     /**
      * @inheritdoc
-     * @throws NotSupportedException
      */
     public function safeUp(): bool
     {

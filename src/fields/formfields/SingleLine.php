@@ -24,12 +24,13 @@ use barrelstrength\sproutforms\base\FormField;
  *
  * @package Craft
  *
- * @property string $contentColumnType
- * @property string $svgIconPath
- * @property mixed  $settingsHtml
- * @property array  $compatibleCraftFields
- * @property array  $compatibleCraftFieldTypes
- * @property mixed  $exampleInputHtml
+ * @property string                                                     $contentColumnType
+ * @property string                                                     $svgIconPath
+ * @property mixed                                                      $settingsHtml
+ * @property array                                                      $compatibleCraftFields
+ * @property array                                                      $compatibleCraftFieldTypes
+ * @property \barrelstrength\sproutforms\rules\fieldrules\TextCondition $compatibleConditional
+ * @property mixed                                                      $exampleInputHtml
  */
 class SingleLine extends FormField implements PreviewableFieldInterface
 {

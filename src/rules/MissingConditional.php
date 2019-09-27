@@ -12,7 +12,7 @@ use craft\base\MissingComponentTrait;
  *
  * @package barrelstrength\sproutforms\integrationtypes
  */
-class MissingIntegration extends Integration implements MissingComponentInterface
+class MissingConditional extends Integration implements MissingComponentInterface
 {
     // Traits
     // =========================================================================

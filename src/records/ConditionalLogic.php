@@ -3,7 +3,6 @@
 namespace barrelstrength\sproutforms\records;
 
 use craft\db\ActiveRecord;
-use barrelstrength\sproutforms\base\Integration as IntegrationApi;
 
 /**
  * Class ConditionalLogic record.

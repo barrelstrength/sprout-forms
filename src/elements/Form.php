@@ -12,6 +12,7 @@ use Craft;
 use craft\base\Element;
 use craft\base\FieldInterface;
 use craft\elements\db\ElementQueryInterface;
+use craft\errors\MissingComponentException;
 use craft\models\FieldLayout;
 use yii\base\ErrorHandler;
 use craft\db\Query;
@@ -452,9 +453,9 @@ class Form extends Element
      *
      * @return array
      * @throws InvalidConfigException
-     * @throws \craft\errors\MissingComponentException
+     * @throws MissingComponentException
      */
-    public function getFieldConditionalRules()
+    public function getFieldConditionalRules(): array
     {
         return SproutForms::$app->conditionals->getFormConditionals($this->id, FieldRule::class, true);
     }

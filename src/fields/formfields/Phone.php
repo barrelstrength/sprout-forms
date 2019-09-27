@@ -21,11 +21,12 @@ use Twig\Markup;
 
 /**
  *
- * @property array  $elementValidationRules
- * @property string $svgIconPath
- * @property mixed  $settingsHtml
- * @property mixed  $exampleInputHtml
- * @property array  $countries
+ * @property array                                                      $elementValidationRules
+ * @property string                                                     $svgIconPath
+ * @property mixed                                                      $settingsHtml
+ * @property mixed                                                      $exampleInputHtml
+ * @property \barrelstrength\sproutforms\rules\fieldrules\TextCondition $compatibleConditional
+ * @property array                                                      $countries
  */
 class Phone extends FormField implements PreviewableFieldInterface
 {

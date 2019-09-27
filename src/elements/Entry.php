@@ -5,6 +5,7 @@ namespace barrelstrength\sproutforms\elements;
 use Craft;
 use craft\base\Element;
 use craft\elements\db\ElementQueryInterface;
+use craft\errors\MissingComponentException;
 use craft\helpers\UrlHelper;
 use craft\elements\actions\Delete;
 use barrelstrength\sproutforms\elements\db\EntryQuery;
@@ -19,6 +20,7 @@ use yii\db\ActiveRecord;
  * Entry represents a entry element.
  *
  * @property array|ActiveRecord[] $submissionLog
+ * @property null|array           $conditionalLogicResults
  * @property array                $fields
  */
 class Entry extends Element
@@ -28,7 +30,7 @@ class Entry extends Element
     private $form;
     private $submissionLogs = [];
     /** @var array|null */
-    private $conditionalResults = null;
+    private $conditionalResults;
 
     public $id;
     public $formId;
@@ -461,9 +463,9 @@ class Entry extends Element
      *
      * @return bool
      * @throws InvalidConfigException
-     * @throws \craft\errors\MissingComponentException
+     * @throws MissingComponentException
      */
-    public function getIsHiddenField($fieldHandle)
+    public function getIsHiddenField($fieldHandle): bool
     {
         $conditionalLogicResults = $this->getConditionalLogicResults();
 
@@ -483,10 +485,8 @@ class Entry extends Element
                 if ($rule['action'] === 'hide') {
                     return true;
                 }
-            } else {
-                if ($rule['action'] === 'show') {
-                    return true;
-                }
+            } else if ($rule['action'] === 'show') {
+                return true;
             }
         }
 

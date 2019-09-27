@@ -22,10 +22,11 @@ use Twig\Markup;
 
 /**
  *
- * @property array  $elementValidationRules
- * @property string $svgIconPath
- * @property mixed  $settingsHtml
- * @property mixed  $exampleInputHtml
+ * @property array                                                      $elementValidationRules
+ * @property string                                                     $svgIconPath
+ * @property mixed                                                      $settingsHtml
+ * @property \barrelstrength\sproutforms\rules\fieldrules\TextCondition $compatibleConditional
+ * @property mixed                                                      $exampleInputHtml
  */
 class Name extends FormField implements PreviewableFieldInterface
 {
