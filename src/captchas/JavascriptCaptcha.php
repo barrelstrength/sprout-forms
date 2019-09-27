@@ -49,7 +49,7 @@ class JavascriptCaptcha extends Captcha
         $output = '
 <input type="hidden" id="'.$uniqueId.'" name="'.$uniqueId.'" />';
 
-        $js = 'document.getElementById("'.$uniqueId.'").value = "'.$uniqueId.'";';
+        $js = '(function(){ document.getElementById("'.$uniqueId.'").value = "'.$uniqueId.'"; })();';
 
         Craft::$app->getView()->registerJs($js, View::POS_END);
 
