@@ -479,9 +479,9 @@ Craft.SproutForms.EditableTable.Row = Garnish.Base.extend(
     deleteRow: function() {
       this.table.sorter.removeItems(this.$tr);
       this.$tr.remove();
-      if (this.table.$table.find("tr").length === 1){
+      if (this.table.$table.find("tr").length === 1) {
         var $andDiv = this.table.$table.prev(".rules-table-and");
-        if ($andDiv.length === 1){
+        if ($andDiv.length === 1) {
           $andDiv.remove();
         }
         this.table.$table.remove();

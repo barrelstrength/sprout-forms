@@ -289,9 +289,9 @@ class Name extends FormField implements PreviewableFieldInterface
         ];
     }
 
-	public function getCompatibleConditional()
-	{
-		$textCondition = new TextCondition(['formField' => $this]);
-		return $textCondition;
-	}
+    public function getCompatibleConditional()
+    {
+        $textCondition = new TextCondition(['formField' => $this]);
+        return $textCondition;
+    }
 }

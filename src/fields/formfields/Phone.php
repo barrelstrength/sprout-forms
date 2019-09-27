@@ -285,9 +285,9 @@ class Phone extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-	public function getCompatibleConditional()
-	{
-		$textCondition = new TextCondition(['formField' => $this]);
-		return $textCondition;
-	}
+    public function getCompatibleConditional()
+    {
+        $textCondition = new TextCondition(['formField' => $this]);
+        return $textCondition;
+    }
 }

@@ -289,9 +289,9 @@ class EmailDropdown extends BaseOptionsFormField
         ];
     }
 
-	public function getCompatibleConditional()
-	{
-		$textCondition = new TextCondition(['formField' => $this]);
-		return $textCondition;
-	}
+    public function getCompatibleConditional()
+    {
+        $textCondition = new TextCondition(['formField' => $this]);
+        return $textCondition;
+    }
 }

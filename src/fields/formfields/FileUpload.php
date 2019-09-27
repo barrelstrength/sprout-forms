@@ -227,16 +227,16 @@ class FileUpload extends BaseRelationFormField
         try {
             return parent::getInputHtml($value, $element);
         } catch (InvalidSubpathException $e) {
-            return '<p class="warning">' .
-                '<span data-icon="alert"></span> ' .
+            return '<p class="warning">'.
+                '<span data-icon="alert"></span> '.
                 Craft::t('sprout-forms', 'This field’s target subfolder path is invalid: {path}', [
-                    'path' => '<code>' . $this->singleUploadLocationSubpath . '</code>'
-                ]) .
+                    'path' => '<code>'.$this->singleUploadLocationSubpath.'</code>'
+                ]).
                 '</p>';
         } catch (InvalidVolumeException $e) {
-            return '<p class="warning">' .
-                '<span data-icon="alert"></span> ' .
-                $e->getMessage() .
+            return '<p class="warning">'.
+                '<span data-icon="alert"></span> '.
+                $e->getMessage().
                 '</p>';
         }
     }
@@ -445,7 +445,7 @@ class FileUpload extends BaseRelationFormField
             'name' => $this->handle,
             'type' => Type::listOf(AssetInterface::getType()),
             'args' => AssetArguments::getArguments(),
-            'resolve' => AssetResolver::class . '::resolve',
+            'resolve' => AssetResolver::class.'::resolve',
         ];
     }
 
@@ -597,16 +597,16 @@ class FileUpload extends BaseRelationFormField
     protected function inputSources(ElementInterface $element = null)
     {
         $folderId = $this->_determineUploadFolderId($element, false);
-        Craft::$app->getSession()->authorize('saveAssetInVolume:' . $folderId);
+        Craft::$app->getSession()->authorize('saveAssetInVolume:'.$folderId);
 
         if ($this->useSingleFolder) {
             $folder = Craft::$app->getAssets()->getFolderById($folderId);
-            $folderPath = 'folder:' . $folder->uid;
+            $folderPath = 'folder:'.$folder->uid;
 
             // Construct the path
             while ($folder->parentId && $folder->volumeId !== null) {
                 $parent = $folder->getParent();
-                $folderPath = 'folder:' . $parent->uid . '/' . $folderPath;
+                $folderPath = 'folder:'.$parent->uid.'/'.$folderPath;
                 $folder = $parent;
             }
 
@@ -695,7 +695,7 @@ class FileUpload extends BaseRelationFormField
                             continue;
                         }
 
-                        $filename = 'Uploaded_file.' . reset($extensions);
+                        $filename = 'Uploaded_file.'.reset($extensions);
                     }
 
                     $uploadedFiles[] = [
@@ -785,7 +785,7 @@ class FileUpload extends BaseRelationFormField
 
             $folder = $assetsService->findFolder([
                 'volumeId' => $volumeId,
-                'path' => $subpath . '/'
+                'path' => $subpath.'/'
             ]);
 
             // Ensure that the folder exists
@@ -951,7 +951,7 @@ class FileUpload extends BaseRelationFormField
                 try {
                     /** @var Volume $volume */
                     $volume = $folder->getVolume();
-                    return 'volume:' . $volume->uid;
+                    return 'volume:'.$volume->uid;
                 } catch (InvalidConfigException $e) {
                     // The volume is probably soft-deleted. Just pretend the folder didn't exist.
                 }
@@ -976,7 +976,7 @@ class FileUpload extends BaseRelationFormField
             $volume = Craft::$app->getVolumes()->getVolumeByUid($parts[1]);
 
             if ($volume && $folder = Craft::$app->getAssets()->getRootFolderByVolumeId($volume->id)) {
-                return 'folder:' . $folder->uid;
+                return 'folder:'.$folder->uid;
             }
         }
 

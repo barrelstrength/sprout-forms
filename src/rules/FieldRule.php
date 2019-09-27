@@ -71,23 +71,23 @@ class FieldRule extends Rule
         return $options;
     }
 
-	/**
-	 * @inheritDoc
-	 */
-	public function getConditionRules(): array
-	{
-		$fields = $this->getForm()->getFields();
-		$rules = [];
+    /**
+     * @inheritDoc
+     */
+    public function getConditionRules(): array
+    {
+        $fields = $this->getForm()->getFields();
+        $rules = [];
 
-		foreach ($fields as $field) {
-			$compatibleConditional = $field->getCompatibleConditional();
-			if ($compatibleConditional !== null){
-				$rules[$field->handle]['rulesAsOptions'] = $compatibleConditional->getRulesAsOptions();
-			}
-		}
+        foreach ($fields as $field) {
+            $compatibleConditional = $field->getCompatibleConditional();
+            if ($compatibleConditional !== null) {
+                $rules[$field->handle]['rulesAsOptions'] = $compatibleConditional->getRulesAsOptions();
+            }
+        }
 
-		return $rules;
-	}
+        return $rules;
+    }
 
     /**
      * @inheritDoc
@@ -96,10 +96,10 @@ class FieldRule extends Rule
     {
         $behavior = '-';
 
-        if ($this->behaviorAction && $this->behaviorTarget){
+        if ($this->behaviorAction && $this->behaviorTarget) {
             $form = SproutForms::$app->forms->getFormById($this->formId);
             $field = $form->getField($this->behaviorTarget);
-            if ($field !== null){
+            if ($field !== null) {
                 $behavior = ucwords($this->behaviorAction).' '.$field->name;
             }
         }

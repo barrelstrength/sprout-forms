@@ -344,6 +344,5 @@ class FormsController extends BaseController
         if ($settings->enablePerFormTemplateFolderOverride && $form->templateOverridesFolder === '') {
             $form->templateOverridesFolder = $settings->templateFolderOverride ?? AccessibleTemplates::class;
         }
-
     }
 }

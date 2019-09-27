@@ -646,32 +646,32 @@ class SproutFormsVariable
         return SproutForms::$app->integrations->getIntegrationById($integrationId);
     }
 
-	/**
-	 * @param $formFieldHandle
-	 * @param $formId
-	 *
-	 * @return \craft\base\FieldInterface|null
-	 * @throws InvalidConfigException
-	 */
-	public function getFormField($formFieldHandle, $formId)
+    /**
+     * @param $formFieldHandle
+     * @param $formId
+     *
+     * @return \craft\base\FieldInterface|null
+     * @throws InvalidConfigException
+     */
+    public function getFormField($formFieldHandle, $formId)
     {
-	    $form = SproutForms::$app->forms->getFormById($formId);
-	    $formField = $form->getField($formFieldHandle);
+        $form = SproutForms::$app->forms->getFormById($formId);
+        $formField = $form->getField($formFieldHandle);
 
-	    return $formField;
+        return $formField;
     }
 
-	/**
-	 * @param $conditionClass
-	 * @param $formField
-	 *
-	 * @return BaseCondition
-	 */
-	public function getFieldCondition($conditionClass, $formField)
-	{
-		$condition = new $conditionClass(['formField' => $formField]);
+    /**
+     * @param $conditionClass
+     * @param $formField
+     *
+     * @return BaseCondition
+     */
+    public function getFieldCondition($conditionClass, $formField)
+    {
+        $condition = new $conditionClass(['formField' => $formField]);
 
-		return $condition;
-	}
+        return $condition;
+    }
 }
 

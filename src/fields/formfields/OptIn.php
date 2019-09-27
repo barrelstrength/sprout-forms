@@ -201,34 +201,34 @@ class OptIn extends FormField implements PreviewableFieldInterface
         return $rules;
     }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function getCompatibleConditional()
-	{
-		$paragraphCondition = new OptInCondition(['formField' => $this]);
-		return $paragraphCondition;
-	}
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleConditional()
+    {
+        $paragraphCondition = new OptInCondition(['formField' => $this]);
+        return $paragraphCondition;
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function getValueConditionHtml(ConditionInterface $condition, $fieldName, $fieldValue): string
-	{
-		$html = '<input class="text fullwidth" type="text" name="' . $fieldName . '" value="' . $fieldValue . '">';
-		$emptyConditionClasses = [
-			IsCheckedCondition::class,
-			IsNotCheckedCondition::class
-		];
+    /**
+     * @inheritdoc
+     */
+    public function getValueConditionHtml(ConditionInterface $condition, $fieldName, $fieldValue): string
+    {
+        $html = '<input class="text fullwidth" type="text" name="'.$fieldName.'" value="'.$fieldValue.'">';
+        $emptyConditionClasses = [
+            IsCheckedCondition::class,
+            IsNotCheckedCondition::class
+        ];
 
-		foreach ($emptyConditionClasses as $selectCondition) {
-			if ($condition instanceof $selectCondition) {
-				$html = '<input class="text fullwidth" type="hidden" name="' . $fieldName . '" value="' . $fieldValue . '">';
-			}
-		}
+        foreach ($emptyConditionClasses as $selectCondition) {
+            if ($condition instanceof $selectCondition) {
+                $html = '<input class="text fullwidth" type="hidden" name="'.$fieldName.'" value="'.$fieldValue.'">';
+            }
+        }
 
-		return $html;
-	}
+        return $html;
+    }
 
     /**
      * @inheritdoc

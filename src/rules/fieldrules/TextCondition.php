@@ -20,20 +20,20 @@ class TextCondition extends ConditionalType
         return 'text';
     }
 
-	/**
-	 * @return BaseCondition[]
-	 */
-	public function getRules(): array
+    /**
+     * @return BaseCondition[]
+     */
+    public function getRules(): array
     {
         return [
             new IsCondition(['formField' => $this->formField]),
-	        new IsNotCondition(['formField' => $this->formField]),
-	        new ContainsCondition(['formField' => $this->formField]),
-	        new DoesNotContainsCondition(['formField' => $this->formField]),
-	        new StartsWithCondition(['formField' => $this->formField]),
-	        new DoesNotStartWithCondition(['formField' => $this->formField]),
-	        new EndsWithCondition(['formField' => $this->formField]),
-	        new DoesNotEndsWithCondition(['formField' => $this->formField])
+            new IsNotCondition(['formField' => $this->formField]),
+            new ContainsCondition(['formField' => $this->formField]),
+            new DoesNotContainsCondition(['formField' => $this->formField]),
+            new StartsWithCondition(['formField' => $this->formField]),
+            new DoesNotStartWithCondition(['formField' => $this->formField]),
+            new EndsWithCondition(['formField' => $this->formField]),
+            new DoesNotEndsWithCondition(['formField' => $this->formField])
         ];
     }
 }

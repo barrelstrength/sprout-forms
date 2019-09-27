@@ -232,12 +232,12 @@ class SingleLine extends FormField implements PreviewableFieldInterface
         ];
     }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function getCompatibleConditional()
-	{
-		$textCondition = new TextCondition(['formField' => $this]);
-		return $textCondition;
-	}
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleConditional()
+    {
+        $textCondition = new TextCondition(['formField' => $this]);
+        return $textCondition;
+    }
 }

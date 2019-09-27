@@ -28,31 +28,31 @@ interface IntegrationInterface extends SavableComponentInterface
      * Returns an array of fields to be used for the dropdown of each row of the mapping.
      * Integrations will display a plain text field by default.
      *
-     * @example
-     * return [
-     *   0 => [
-     *     0 => [
-     *       'label' => 'Title',
-     *       'value' => 'title'
-     *     ],
-     *     1 => [
-     *       'label' => 'Slug',
-     *       'value' => 'slug'
-     *     ]
-     *   ],
-     *   1 => [
-     *     0 => [
-     *       'label' => 'Title',
-     *       'value' => 'title'
-     *     ],
-     *     1 => [
-     *       'label' => 'Slug',
-     *       'value' => 'slug'
-     *     ]
-     *   ]
-     * ];
-     *
      * @return array
+     * @example
+     *       return [
+     *       0 => [
+     *       0 => [
+     *       'label' => 'Title',
+     *       'value' => 'title'
+     *       ],
+     *       1 => [
+     *       'label' => 'Slug',
+     *       'value' => 'slug'
+     *       ]
+     *       ],
+     *       1 => [
+     *       0 => [
+     *       'label' => 'Title',
+     *       'value' => 'title'
+     *       ],
+     *       1 => [
+     *       'label' => 'Slug',
+     *       'value' => 'slug'
+     *       ]
+     *       ]
+     *       ];
+     *
      */
     public function getTargetIntegrationFieldsAsMappingOptions(): array;
 

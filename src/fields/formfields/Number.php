@@ -250,12 +250,12 @@ class Number extends FormField implements PreviewableFieldInterface
         ];
     }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function getCompatibleConditional()
-	{
-		$textCondition = new NumberCondition(['formField' => $this]);
-		return $textCondition;
-	}
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleConditional()
+    {
+        $textCondition = new NumberCondition(['formField' => $this]);
+        return $textCondition;
+    }
 }

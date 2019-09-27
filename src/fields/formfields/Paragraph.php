@@ -241,18 +241,18 @@ class Paragraph extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-	public function getCompatibleConditional()
-	{
-		$paragraphCondition = new ParagraphCondition(['formField' => $this]);
-		return $paragraphCondition;
-	}
+    public function getCompatibleConditional()
+    {
+        $paragraphCondition = new ParagraphCondition(['formField' => $this]);
+        return $paragraphCondition;
+    }
 
     /**
      * @inheritdoc
      */
     public function getValueConditionHtml(ConditionInterface $condition, $fieldName, $fieldValue): string
     {
-        $html = '<input class="text fullwidth" type="text" name="' . $fieldName . '" value="' . $fieldValue . '">';
+        $html = '<input class="text fullwidth" type="text" name="'.$fieldName.'" value="'.$fieldValue.'">';
         $emptyConditionClasses = [
             IsProvidedCondition::class,
             IsNotProvidedCondition::class
@@ -260,7 +260,7 @@ class Paragraph extends FormField implements PreviewableFieldInterface
 
         foreach ($emptyConditionClasses as $selectCondition) {
             if ($condition instanceof $selectCondition) {
-                $html = '<input class="text fullwidth" type="hidden" name="' . $fieldName . '" value="' . $fieldValue . '">';
+                $html = '<input class="text fullwidth" type="hidden" name="'.$fieldName.'" value="'.$fieldValue.'">';
             }
         }
 

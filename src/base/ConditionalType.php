@@ -12,36 +12,36 @@ use craft\base\SavableComponent;
  */
 abstract class ConditionalType extends SavableComponent implements ConditionalTypeInterface
 {
-	public $formField;
+    public $formField;
 
-	/**
-	 * @inheritDoc
-	 */
-	public function getRules(): array
-	{
-		return [];
-	}
+    /**
+     * @inheritDoc
+     */
+    public function getRules(): array
+    {
+        return [];
+    }
 
-	public function getRulesAsOptions(): array
-	{
-		/** @var BaseCondition[] $rules */
-		$rules = $this->getRules();
-		$options = [];
+    public function getRulesAsOptions(): array
+    {
+        /** @var BaseCondition[] $rules */
+        $rules = $this->getRules();
+        $options = [];
 
-		if ($rules){
-			foreach ($rules as $rule){
-				$options[] = [
-					'label' => $rule->getLabel(),
-					'value' => get_class($rule)
-				];
-			}
-		}
+        if ($rules) {
+            foreach ($rules as $rule) {
+                $options[] = [
+                    'label' => $rule->getLabel(),
+                    'value' => get_class($rule)
+                ];
+            }
+        }
 
-		return $options;
-	}
+        return $options;
+    }
 
-	public function getType(): string
-	{
-		return "";
-	}
+    public function getType(): string
+    {
+        return "";
+    }
 }

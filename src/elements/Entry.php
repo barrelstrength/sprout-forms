@@ -458,6 +458,7 @@ class Entry extends Element
 
     /**
      * @param $fieldHandle
+     *
      * @return bool
      * @throws InvalidConfigException
      * @throws \craft\errors\MissingComponentException
@@ -475,15 +476,15 @@ class Entry extends Element
             ];
         }
 
-        if (isset($fieldRules[$fieldHandle])){
+        if (isset($fieldRules[$fieldHandle])) {
             $result = $conditionalLogicResults[$fieldHandle];
             $rule = $fieldRules[$fieldHandle];
-            if ($result === true){
-                if ($rule['action'] === 'hide'){
+            if ($result === true) {
+                if ($rule['action'] === 'hide') {
                     return true;
                 }
-            }else{
-                if ($rule['action'] === 'show'){
+            } else {
+                if ($rule['action'] === 'show') {
                     return true;
                 }
             }

@@ -143,12 +143,12 @@ class MultipleChoice extends BaseOptionsFormField
         ];
     }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function getCompatibleConditional()
-	{
-		$textCondition = new TextCondition(['formField' => $this]);
-		return $textCondition;
-	}
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleConditional()
+    {
+        $textCondition = new TextCondition(['formField' => $this]);
+        return $textCondition;
+    }
 }

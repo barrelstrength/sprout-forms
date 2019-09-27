@@ -15,23 +15,24 @@ interface ConditionInterface extends SavableComponentInterface
      */
     public function getLabel(): string;
 
-	/**
-	 * @return string
-	 */
-	public function getValue(): string;
+    /**
+     * @return string
+     */
+    public function getValue(): string;
 
     /**
-     * @param $inputValue
+     * @param      $inputValue
      * @param null $ruleValue
+     *
      * @return bool
      */
     public static function runValidation($inputValue, $ruleValue = null): bool;
 
-	/**
-	 * @param $name
-	 * @param $value
-	 *
-	 * @return string
-	 */
-	public function getValueInputHtml($name, $value): string;
+    /**
+     * @param $name
+     * @param $value
+     *
+     * @return string
+     */
+    public function getValueInputHtml($name, $value): string;
 }

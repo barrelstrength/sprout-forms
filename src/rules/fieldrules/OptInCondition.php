@@ -9,19 +9,19 @@ use barrelstrength\sproutforms\rules\conditions\IsNotCheckedCondition;
 
 class OptInCondition extends ConditionalType
 {
-	public function getType(): string
-	{
-		return 'opt-in';
-	}
+    public function getType(): string
+    {
+        return 'opt-in';
+    }
 
-	/**
-	 * @return BaseCondition[]
-	 */
-	public function getRules(): array
-	{
-		return [
-			new IsCheckedCondition(['formField' => $this->formField]),
-			new IsNotCheckedCondition(['formField' => $this->formField])
-		];
-	}
+    /**
+     * @return BaseCondition[]
+     */
+    public function getRules(): array
+    {
+        return [
+            new IsCheckedCondition(['formField' => $this->formField]),
+            new IsNotCheckedCondition(['formField' => $this->formField])
+        ];
+    }
 }

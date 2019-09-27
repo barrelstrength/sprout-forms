@@ -156,15 +156,15 @@ SproutFormsRules = {
           const fieldId = this.getFieldId(rule.fieldHandle);
           const inputField = document.getElementById(fieldId);
           let inputValue = typeof inputField.value === 'undefined' ? '' : inputField.value;
-          if (inputField.type === 'checkbox'){
+          if (inputField.type === 'checkbox') {
             inputValue = inputField.checked;
           }
-          if (typeof inputField.type === 'undefined'){
+          if (typeof inputField.type === 'undefined') {
             const radios = inputField.querySelectorAll('input[type="radio"]');
-            if (radios.length >= 1){
-              for (let i = 0; i < radios.length; i++){
+            if (radios.length >= 1) {
+              for (let i = 0; i < radios.length; i++) {
                 let radio = radios[i];
-                if (radio.checked){
+                if (radio.checked) {
                   inputValue = radio.value;
                   break;
                 }

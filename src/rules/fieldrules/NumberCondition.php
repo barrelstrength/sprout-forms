@@ -12,22 +12,22 @@ use barrelstrength\sproutforms\rules\conditions\IsLessThanOrEqualToCondition;
 
 class NumberCondition extends ConditionalType
 {
-	public function getType(): string
-	{
-		return 'number';
-	}
+    public function getType(): string
+    {
+        return 'number';
+    }
 
-	/**
-	 * @return BaseCondition[]
-	 */
-	public function getRules(): array
-	{
-		return [
-			new IsCondition(['formField' => $this->formField]),
-			new IsGreaterThanCondition(['formField' => $this->formField]),
-			new IsLessThanCondition(['formField' => $this->formField]),
-			new IsGreaterThanOrEqualToCondition(['formField' => $this->formField]),
-			new IsLessThanOrEqualToCondition(['formField' => $this->formField]),
-		];
-	}
+    /**
+     * @return BaseCondition[]
+     */
+    public function getRules(): array
+    {
+        return [
+            new IsCondition(['formField' => $this->formField]),
+            new IsGreaterThanCondition(['formField' => $this->formField]),
+            new IsLessThanCondition(['formField' => $this->formField]),
+            new IsGreaterThanOrEqualToCondition(['formField' => $this->formField]),
+            new IsLessThanOrEqualToCondition(['formField' => $this->formField]),
+        ];
+    }
 }

@@ -26,6 +26,7 @@ abstract class Rule extends SavableComponent implements RuleInterface
 
     /**
      * @param bool $checkCompatibleConditional
+     *
      * @return array
      * @throws \yii\base\InvalidConfigException
      */
@@ -40,17 +41,16 @@ abstract class Rule extends SavableComponent implements RuleInterface
                 'value' => $field->handle,
             ];
 
-            if ($checkCompatibleConditional){
+            if ($checkCompatibleConditional) {
                 $compatibleConditional = $field->getCompatibleConditional();
-                if ($compatibleConditional === null){
+                if ($compatibleConditional === null) {
                     $row = [];
                 }
             }
 
-            if ($row){
+            if ($row) {
                 $fieldOptions[] = $row;
             }
-
         }
 
         return $fieldOptions;

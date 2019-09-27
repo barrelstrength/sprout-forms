@@ -25,10 +25,10 @@ use barrelstrength\sproutforms\base\FormField;
  * BaseOptionsFormField is the base class for classes representing an options field.
  *
  *
- * @property array $elementValidationRules
- * @property bool $isMultiOptionsField
+ * @property array  $elementValidationRules
+ * @property bool   $isMultiOptionsField
  * @property string $contentColumnType
- * @property mixed $settingsHtml
+ * @property mixed  $settingsHtml
  */
 abstract class BaseOptionsFormField extends FormField implements PreviewableFieldInterface
 {
@@ -368,7 +368,7 @@ abstract class BaseOptionsFormField extends FormField implements PreviewableFiel
      */
     public function getValueConditionHtml(ConditionInterface $condition, $fieldName, $fieldValue): string
     {
-        $html = '<input class="text fullwidth" type="text" name="' . $fieldName . '" value="' . $fieldValue . '">';
+        $html = '<input class="text fullwidth" type="text" name="'.$fieldName.'" value="'.$fieldValue.'">';
         $selectConditionClasses = [
             IsCondition::class,
             IsNotCondition::class
@@ -376,13 +376,13 @@ abstract class BaseOptionsFormField extends FormField implements PreviewableFiel
 
         foreach ($selectConditionClasses as $selectCondition) {
             if ($condition instanceof $selectCondition) {
-                $html = '<div class="select"><select name="' . $fieldName . '">';
+                $html = '<div class="select"><select name="'.$fieldName.'">';
                 $firstRow = 'selected';
                 foreach ($this->options as $option) {
                     $rowValue = $option['value'];
                     $label = $option['label'];
                     $isSelected = $rowValue == $fieldValue ? 'selected' : '';
-                    $html .= '<option ' . $firstRow . ' value="' . $rowValue . '" ' . $isSelected . '>' . $label . '</option>';
+                    $html .= '<option '.$firstRow.' value="'.$rowValue.'" '.$isSelected.'>'.$label.'</option>';
                     $firstRow = '';
                 }
                 $html .= '</select></div>';

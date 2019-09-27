@@ -47,7 +47,7 @@ class ConditionalsController extends BaseController
                     $ruleValue = $orRule["ruleValue"];
                     /** @var ConditionInterface $condition */
                     $result = $condition::runValidation($inputValue, $ruleValue);
-                    if ($result){
+                    if ($result) {
                         $orResult = true;
                     }
                 }
@@ -120,7 +120,7 @@ class ConditionalsController extends BaseController
         $conditional->behaviorAction = $request->getBodyParam('behaviorAction');
         $conditional->behaviorTarget = $request->getBodyParam('behaviorTarget');
 
-        $settings = $request->getBodyParam('settings.' . $type);
+        $settings = $request->getBodyParam('settings.'.$type);
 
         $conditional = SproutForms::$app->conditionals->createConditional([
             'id' => $conditional->id,
@@ -215,7 +215,7 @@ class ConditionalsController extends BaseController
     }
 
     /**
-     * @param bool $success
+     * @param bool      $success
      * @param Rule|null $conditional
      *
      * @return Response

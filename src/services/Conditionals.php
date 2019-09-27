@@ -129,12 +129,12 @@ class Conditionals extends Component
             ->from(['{{%sproutforms_conditionals}} conditional'])
             ->where(['conditional.formId' => $formId]);
 
-        if ($type !== null){
-            $query->andWhere('conditional.type = :type',[':type' => $type]);
+        if ($type !== null) {
+            $query->andWhere('conditional.type = :type', [':type' => $type]);
         }
 
-        if ($enabled !== null){
-            $query->andWhere('conditional.enabled = :enabled',[':enabled' => $enabled]);
+        if ($enabled !== null) {
+            $query->andWhere('conditional.enabled = :enabled', [':enabled' => $enabled]);
         }
 
         $results = $query->all();
@@ -177,7 +177,7 @@ class Conditionals extends Component
             return null;
         }
 
-        /** @var Rule $conditional **/
+        /** @var Rule $conditional * */
         $conditional = ComponentHelper::createComponent($result, RuleInterface::class);
 
         return new $result['type']($conditional);

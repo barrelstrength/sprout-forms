@@ -73,7 +73,7 @@ class EntriesController extends BaseController
         }
 
         $formHandle = $request->getRequiredBodyParam('handle');
-        $this->form = $this->form == null ? SproutForms::$app->forms->getFormByHandle($formHandle): $this->form;
+        $this->form = $this->form == null ? SproutForms::$app->forms->getFormByHandle($formHandle) : $this->form;
 
         if ($this->form === null) {
             throw new Exception('No form exists with the handle '.$formHandle);
@@ -131,13 +131,14 @@ class EntriesController extends BaseController
 
     /**
      * @param EntryElement $entry
+     *
      * @return bool
      * @throws InvalidConfigException
      * @throws MissingComponentException
      */
     private function runFieldConditionalRules(EntryElement $entry)
     {
-        if ($this->form === null){
+        if ($this->form === null) {
             return false;
         }
 
@@ -152,18 +153,18 @@ class EntriesController extends BaseController
         $conditionalLogicResults = $_POST['conditionalLogicResults'] ?? null;
         // @todo store the conditional results in a entry property and add the getIsHiddenField method
 
-        if ($conditionalLogicResults !== null){
+        if ($conditionalLogicResults !== null) {
             $conditionalLogicResults = json_decode($conditionalLogicResults, true);
             $conditionalLogicResults = $conditionalLogicResults['result'] ?? [];
             $entry->setConditionalLogicResults($conditionalLogicResults);
-            foreach ($conditionalLogicResults as $fieldHandle => $result){
+            foreach ($conditionalLogicResults as $fieldHandle => $result) {
                 $rule = $fieldRules[$fieldHandle];
-                if ($result === true){
-                    if ($rule['action'] === 'hide'){
+                if ($result === true) {
+                    if ($rule['action'] === 'hide') {
                         $_POST['fields'][$fieldHandle] = '';
                     }
-                }else{
-                    if ($rule['action'] === 'show'){
+                } else {
+                    if ($rule['action'] === 'show') {
                         $_POST['fields'][$fieldHandle] = '';
                     }
                 }

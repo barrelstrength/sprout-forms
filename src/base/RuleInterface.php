@@ -14,6 +14,7 @@ interface RuleInterface extends SavableComponentInterface
      * Validate if the rules are meet
      *
      * @param $fields
+     *
      * @return bool
      */
     public function validateRules($fields): bool;

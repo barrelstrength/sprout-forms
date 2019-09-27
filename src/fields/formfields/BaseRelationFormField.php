@@ -307,6 +307,7 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
      * Returns whether a related element validates.
      *
      * @param ElementInterface $element
+     *
      * @return bool
      */
     private static function _validateRelatedElement(ElementInterface $element): bool
@@ -432,9 +433,9 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
         }
 
         if ($value === ':notempty:' || $value === ':empty:') {
-            $alias = 'relations_' . $this->handle;
+            $alias = 'relations_'.$this->handle;
             $operator = ($value === ':notempty:' ? '!=' : '=');
-            $paramHandle = ':fieldId' . StringHelper::randomString(8);
+            $paramHandle = ':fieldId'.StringHelper::randomString(8);
 
             $query->subQuery->andWhere(
                 "(select count([[{$alias}.id]]) from {{%relations}} {{{$alias}}} where [[{$alias}.sourceId]] = [[elements.id]] and [[{$alias}.fieldId]] = {$paramHandle}) {$operator} 0",
@@ -531,7 +532,7 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
         $value = $this->_all($value)->all();
 
         if (empty($value)) {
-            return '<p class="light">' . Craft::t('sprout-forms', 'Nothing selected.') . '</p>';
+            return '<p class="light">'.Craft::t('sprout-forms', 'Nothing selected.').'</p>';
         }
 
         $view = Craft::$app->getView();
@@ -759,8 +760,8 @@ JS;
                         'checked' => $showTargetSite,
                         'toggle' => 'target-site-container'
                     ]
-                ]) .
-            '<div id="target-site-container"' . (!$showTargetSite ? ' class="hidden"' : '') . '>';
+                ]).
+            '<div id="target-site-container"'.(!$showTargetSite ? ' class="hidden"' : '').'>';
 
         $siteOptions = [];
 
@@ -882,7 +883,7 @@ JS;
             'elementType' => static::elementType(),
             'id' => Craft::$app->getView()->formatInputId($this->handle),
             'fieldId' => $this->id,
-            'storageKey' => 'field.' . $this->id,
+            'storageKey' => 'field.'.$this->id,
             'name' => $this->handle,
             'elements' => $value,
             'sources' => $this->inputSources($element),
