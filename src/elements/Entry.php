@@ -166,7 +166,7 @@ class Entry extends Element
     {
         $statusId = $this->statusId;
 
-        return SproutForms::$app->entries->getEntryStatusById($statusId)->color;
+        return SproutForms::$app->entries->getEntryStatusById($statusId)->handle;
     }
 
     /**

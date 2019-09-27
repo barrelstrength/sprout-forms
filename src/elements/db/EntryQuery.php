@@ -53,6 +53,8 @@ class EntryQuery extends ElementQuery
      */
     public $formGroupId;
 
+    public $status = [];
+
     /**
      * @inheritdoc
      */
@@ -188,6 +190,7 @@ class EntryQuery extends ElementQuery
         ]);
 
         $this->query->innerJoin('{{%sproutforms_forms}} sproutforms_forms', '[[sproutforms_forms.id]] = [[sproutforms_entries.formId]]');
+
         $this->query->innerJoin('{{%sproutforms_entrystatuses}} sproutforms_entrystatuses', '[[sproutforms_entrystatuses.id]] = [[sproutforms_entries.statusId]]');
         $this->subQuery->innerJoin('{{%sproutforms_entrystatuses}} sproutforms_entrystatuses', '[[sproutforms_entrystatuses.id]] = [[sproutforms_entries.statusId]]');
 
@@ -235,21 +238,7 @@ class EntryQuery extends ElementQuery
      */
     protected function statusCondition(string $status)
     {
-        switch ($status) {
-            case Element::STATUS_ENABLED:
-                return ['elements.enabled' => true];
-            case Element::STATUS_DISABLED:
-                return ['elements.enabled' => false];
-            case Element::STATUS_ARCHIVED:
-                return ['elements.archived' => true];
-            default:
-                if (!empty($status)) {
-                    return Db::parseParam(
-                        'sproutforms_entrystatuses.handle', $status);
-                }
-        }
-
-        return false;
+        return Db::parseParam('sproutforms_entrystatuses.handle', $status);
     }
 
     /**

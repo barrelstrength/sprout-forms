@@ -8,6 +8,11 @@ use barrelstrength\sproutforms\rules\conditions\IsCheckedCondition;
 use barrelstrength\sproutforms\rules\conditions\IsNotCheckedCondition;
 use barrelstrength\sproutforms\rules\fieldrules\OptInCondition;
 use Craft;
+use craft\fields\Dropdown as CraftDropdown;
+use craft\fields\Lightswitch as CraftLightswitch;
+use craft\fields\Checkboxes as CraftCheckboxes;
+use craft\fields\RadioButtons as CraftRadioButtons;
+use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\PreviewableFieldInterface;
 use craft\base\ElementInterface;
@@ -224,4 +229,18 @@ class OptIn extends FormField implements PreviewableFieldInterface
 
 		return $html;
 	}
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleCraftFieldTypes(): array
+    {
+        return [
+            CraftPlainText::class,
+            CraftDropdown::class,
+            CraftCheckboxes::class,
+            CraftRadioButtons::class,
+            CraftLightswitch::class
+        ];
+    }
 }

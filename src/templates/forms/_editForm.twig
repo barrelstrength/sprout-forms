@@ -97,10 +97,14 @@
         <div id="deletedFieldsContainer" class="hidden"></div>
 
     </div>
+
+    {% hook 'cp.sproutForms.forms.edit.content' %}
 {% endblock %}
 
 {% block details %}
     {% include 'sprout-forms/forms/_sidebar/settings' %}
+
+    {% hook 'cp.sproutForms.forms.edit.details' %}
 {% endblock %}
 
 {% do view.registerAssetBundle("barrelstrength\\sproutbase\\web\\assets\\cp\\CpAsset") %}

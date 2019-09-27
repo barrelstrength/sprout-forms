@@ -7,6 +7,7 @@ use barrelstrength\sproutforms\rules\fieldrules\TextCondition;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
+use craft\fields\PlainText as CraftPlainText;
 use craft\base\PreviewableFieldInterface;
 
 use craft\helpers\Json;
@@ -283,7 +284,8 @@ class Name extends FormField implements PreviewableFieldInterface
     {
         /** @noinspection ClassConstantCanBeUsedInspection */
         return [
-            'barrelstrength\\sproutfields\\fields\\Name'
+            'barrelstrength\\sproutfields\\fields\\Name',
+            CraftPlainText::class
         ];
     }
 

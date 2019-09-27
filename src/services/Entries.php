@@ -117,6 +117,8 @@ class Entries extends Component
      */
     public function saveEntryStatus(EntryStatus $entryStatus): bool
     {
+        $isNew = !$entryStatus->id;
+
         $record = new EntryStatusRecord();
 
         if ($entryStatus->id) {
@@ -127,7 +129,13 @@ class Entries extends Component
             }
         }
 
-        $record->setAttributes($entryStatus->getAttributes(), false);
+        $attributes = $entryStatus->getAttributes();
+
+        if ($isNew) {
+            unset($attributes['id']);
+        }
+
+        $record->setAttributes($attributes, false);
 
         $record->sortOrder = $entryStatus->sortOrder ?: 999;
 
@@ -247,6 +255,9 @@ class Entries extends Component
         $query = EntryElement::find();
         $query->id($entryId);
         $query->siteId($siteId);
+
+        // We are using custom statuses, so all are welcome
+        $query->status(null);
 
         // @todo - look into enabledForSite method
         // $query->enabledForSite(false);
