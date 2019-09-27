@@ -848,8 +848,12 @@ JS;
      */
     protected function settingsTemplateVariables(): array
     {
-        /** @var ElementInterface|string $elementType */
-        $elementType = self::elementType();
+        /**
+         * @var $elementType ElementInterface|string
+         *
+         * don't use self:: like PhpStorm suggests
+         */
+        $elementType = $this->elementType();
 
         return [
             'field' => $this,
