@@ -63,7 +63,7 @@ abstract class FormField extends Field
      *
      * @return ConditionalType|null
      */
-    public function getCompatibleConditional()
+    public function getCompatibleConditions()
     {
         return null;
     }

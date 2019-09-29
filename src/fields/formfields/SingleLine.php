@@ -236,7 +236,7 @@ class SingleLine extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function getCompatibleConditional()
+    public function getCompatibleConditions()
     {
         $textCondition = new TextCondition(['formField' => $this]);
         return $textCondition;

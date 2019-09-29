@@ -227,7 +227,7 @@ class Email extends FormField implements PreviewableFieldInterface
         ];
     }
 
-    public function getCompatibleConditional()
+    public function getCompatibleConditions()
     {
         $textCondition = new TextCondition(['formField' => $this]);
         return $textCondition;

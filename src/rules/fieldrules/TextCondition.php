@@ -28,7 +28,7 @@ class TextCondition extends ConditionalType
     /**
      * @return Condition[]
      */
-    public function getRules(): array
+    public function getConditions(): array
     {
         return [
             new IsCondition(['formField' => $this->formField]),

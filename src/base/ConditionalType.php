@@ -18,19 +18,19 @@ abstract class ConditionalType extends SavableComponent implements ConditionalTy
     /**
      * @inheritDoc
      */
-    public function getRules(): array
+    public function getConditions(): array
     {
         return [];
     }
 
-    public function getRulesAsOptions(): array
+    public function conditions(): array
     {
-        /** @var Condition[] $rules */
-        $rules = $this->getRules();
+        /** @var Condition[] $conditions */
+        $conditions = $this->getConditions();
         $options = [];
 
-        if ($rules) {
-            foreach ($rules as $rule) {
+        if ($conditions) {
+            foreach ($conditions as $rule) {
                 $options[] = [
                     'label' => $rule->getLabel(),
                     'value' => get_class($rule)
@@ -39,10 +39,5 @@ abstract class ConditionalType extends SavableComponent implements ConditionalTy
         }
 
         return $options;
-    }
-
-    public function getType(): string
-    {
-        return "";
     }
 }

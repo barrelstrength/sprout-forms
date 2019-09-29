@@ -24,7 +24,7 @@ class ParagraphCondition extends ConditionalType
     /**
      * @return Condition[]
      */
-    public function getRules(): array
+    public function getConditions(): array
     {
         return [
             new IsProvidedCondition(['formField' => $this->formField]),

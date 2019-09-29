@@ -241,7 +241,7 @@ class Paragraph extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function getCompatibleConditional()
+    public function getCompatibleConditions()
     {
         $paragraphCondition = new ParagraphCondition(['formField' => $this]);
         return $paragraphCondition;

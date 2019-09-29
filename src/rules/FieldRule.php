@@ -81,9 +81,9 @@ class FieldRule extends Rule
         $rules = [];
 
         foreach ($fields as $field) {
-            $compatibleConditional = $field->getCompatibleConditional();
+            $compatibleConditional = $field->getCompatibleConditions();
             if ($compatibleConditional !== null) {
-                $rules[$field->handle]['rulesAsOptions'] = $compatibleConditional->getRulesAsOptions();
+                $rules[$field->handle]['rulesAsOptions'] = $compatibleConditional->getConditionsAsOptions();
             }
         }
 

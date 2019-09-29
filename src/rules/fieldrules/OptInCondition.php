@@ -22,7 +22,7 @@ class OptInCondition extends ConditionalType
     /**
      * @return Condition[]
      */
-    public function getRules(): array
+    public function getConditions(): array
     {
         return [
             new IsCheckedCondition(['formField' => $this->formField]),

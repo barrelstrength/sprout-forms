@@ -195,11 +195,11 @@ class RulesController extends BaseController
         $form = SproutForms::$app->forms->getFormById($formId);
         $formField = $form->getField($formFieldHandle);
 
-        $conditional = $formField->getCompatibleConditional();
+        $conditional = $formField->getCompatibleConditions();
 
         $html = '';
 
-        foreach ($conditional->getRules() as $rule) {
+        foreach ($conditional->getConditions() as $rule) {
             if (get_class($rule) == $condition) {
                 $html = $rule->getValueInputHtml($inputName, $inputValue);
             }

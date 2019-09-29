@@ -20,7 +20,7 @@ interface RuleInterface extends SavableComponentInterface
     public function validateRules($fields): bool;
 
     /**
-     * Behaviors actions
+     * Returns an array of possible Behaviors for a Rule
      *
      * @return array
      */

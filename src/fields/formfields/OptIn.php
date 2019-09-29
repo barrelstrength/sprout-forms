@@ -205,7 +205,7 @@ class OptIn extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function getCompatibleConditional()
+    public function getCompatibleConditions()
     {
         $paragraphCondition = new OptInCondition(['formField' => $this]);
         return $paragraphCondition;

@@ -55,14 +55,14 @@
                                 }) }}
                             {% elseif loop.index0 == 1 %}
                                 {% set formField = craft.sproutForms.getFormField(formFieldHandle, fieldRule.formId) %}
-                                {% set rulesAsOptions = formField.getCompatibleConditional().getRulesAsOptions() %}
+                                {% set conditionsAsOptions = formField.getCompatibleConditions().getConditionsAsOptions() %}
                                 {{ forms.select({
                                     name: rowName,
                                     hasOptgroups: true,
-                                    options: rulesAsOptions,
+                                    options: conditionsAsOptions,
                                     value: row
                                 }) }}
-                                {% set conditionClass = row != '' ? row : rulesAsOptions[0].value %}
+                                {% set conditionClass = row != '' ? row : conditionsAsOptions[0].value %}
                             {% else %}
                                 {% set fieldCondition = craft.sproutForms.getFieldCondition(conditionClass, formField) %}
                                 {{ fieldCondition.getValueInputHtml(rowName, row)|raw }}

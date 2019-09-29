@@ -254,7 +254,7 @@ class Number extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function getCompatibleConditional()
+    public function getCompatibleConditions()
     {
         $textCondition = new NumberCondition(['formField' => $this]);
         return $textCondition;

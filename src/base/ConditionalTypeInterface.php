@@ -10,17 +10,17 @@ use craft\base\SavableComponentInterface;
 interface ConditionalTypeInterface extends SavableComponentInterface
 {
     /**
-     * @return array
-     */
-    public function getRules(): array;
-
-    /**
-     * @return array
-     */
-    public function getRulesAsOptions(): array;
-
-    /**
      * @return string
      */
     public function getType(): string;
+
+    /**
+     * @return array
+     */
+    public function getConditions(): array;
+
+    /**
+     * @return array
+     */
+    public function getConditionsAsOptions(): array;
 }
