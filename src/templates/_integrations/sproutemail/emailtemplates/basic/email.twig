@@ -51,7 +51,7 @@
                                                         {# Loop through all of our fields except ones that don't get wrapped
                                                            in HTML on the front-end and probably are never seen by the person
                                                            submitting the form #}
-                                                        {% for field in fields if not field.isPlainInput() and not entry.getIsHiddenField(field.handle) %}
+                                                        {% for field in fields if not field.isPlainInput() and not entry.getIsFieldHiddenByRule(field.handle) %}
 
                                                             {% set value = attribute(entry, field.handle) %}
 

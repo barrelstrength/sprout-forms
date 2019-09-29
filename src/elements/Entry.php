@@ -465,7 +465,7 @@ class Entry extends Element
      * @throws InvalidConfigException
      * @throws MissingComponentException
      */
-    public function getIsHiddenField($fieldHandle): bool
+    public function getIsFieldHiddenByRule($fieldHandle): bool
     {
         $conditionalLogicResults = $this->getConditionalLogicResults();
 
