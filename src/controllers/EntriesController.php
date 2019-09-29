@@ -142,7 +142,7 @@ class EntriesController extends BaseController
             return false;
         }
 
-        $rules = $this->form->getFieldConditionalRules();
+        $rules = $this->form->getRules();
         $fieldRules = [];
         foreach ($rules as $rule) {
             $fieldRules[$rule['behaviorTarget']] = [

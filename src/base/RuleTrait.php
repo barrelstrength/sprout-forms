@@ -3,9 +3,9 @@
 namespace barrelstrength\sproutforms\base;
 
 /**
- * ConditionalTrait implements the common methods and properties for Conditional classes.
+ * RuleTrait implements the common properties Rule classes.
  */
-trait ConditionalTrait
+trait RuleTrait
 {
     // Properties
     // =========================================================================

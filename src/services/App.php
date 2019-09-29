@@ -37,9 +37,9 @@ class App extends Component
     public $integrations;
 
     /**
-     * @var Conditionals
+     * @var Rules
      */
-    public $conditionals;
+    public $rules;
 
     public function init()
     {
@@ -49,6 +49,6 @@ class App extends Component
         $this->entries = new Entries();
         $this->frontEndFields = new FrontEndFields();
         $this->integrations = new Integrations();
-        $this->conditionals = new Conditionals();
+        $this->rules = new Rules();
     }
 }

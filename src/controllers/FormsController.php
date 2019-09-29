@@ -17,6 +17,7 @@ use craft\web\Controller as BaseController;
 use craft\helpers\UrlHelper;
 use Throwable;
 use yii\base\InvalidConfigException;
+use yii\base\InvalidRouteException;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 use yii\base\Exception;
@@ -57,9 +58,9 @@ class FormsController extends BaseController
         return $this->renderTemplate('sprout-forms/forms/_settings/'.$settingsSectionHandle, [
             'form' => $form,
             'settings' => $plugin->getSettings(),
-            'conditionals' => SproutForms::$app->conditionals->getFormConditionals($formId),
-            'conditionalOptions' => SproutForms::$app->conditionals->getIntegrationOptions(),
-            'integrations' => SproutForms::$app->integrations->getFormIntegrations($formId),
+            'rules' => SproutForms::$app->rules->getRulesByFormId($formId),
+            'ruleOptions' => SproutForms::$app->rules->getRuleOptions(),
+            'integrations' => SproutForms::$app->integrations->getIntegrationsByFormId($formId),
             'isPro' => $isPro
         ]);
     }
@@ -68,7 +69,7 @@ class FormsController extends BaseController
      * Duplicates an entry.
      *
      * @return FormsController|mixed
-     * @throws \yii\base\InvalidRouteException
+     * @throws InvalidRouteException
      */
     public function actionDuplicateForm()
     {
@@ -122,7 +123,7 @@ class FormsController extends BaseController
                 ]);
 
                 return null;
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 throw new ServerErrorHttpException(Craft::t('app', 'An error occurred when duplicating the form.'), 0, $e);
             }
         }

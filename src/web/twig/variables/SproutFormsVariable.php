@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutforms\web\twig\variables;
 
-use barrelstrength\sproutforms\base\BaseCondition;
+use barrelstrength\sproutforms\base\Condition;
 use barrelstrength\sproutforms\base\Integration;
 use barrelstrength\sproutforms\elements\db\EntryQuery;
 use barrelstrength\sproutforms\elements\Entry;
@@ -11,6 +11,7 @@ use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\services\Forms;
 use Craft;
 use craft\base\ElementInterface;
+use craft\base\FieldInterface;
 use craft\errors\MissingComponentException;
 use craft\helpers\Template as TemplateHelper;
 use barrelstrength\sproutforms\SproutForms;
@@ -364,16 +365,6 @@ class SproutFormsVariable
     }
 
     /**
-     * @return array
-     *
-     * @see SproutForms::$app->conditionals->prepareConditionalTypeSelection()
-     */
-    public function prepareConditionalTypeSelection(): array
-    {
-        return SproutForms::$app->conditionals->prepareConditionalTypeSelection();
-    }
-
-    /**
      * @param $settings
      *
      * @throws MissingComponentException
@@ -650,7 +641,7 @@ class SproutFormsVariable
      * @param $formFieldHandle
      * @param $formId
      *
-     * @return \craft\base\FieldInterface|null
+     * @return FieldInterface|null
      * @throws InvalidConfigException
      */
     public function getFormField($formFieldHandle, $formId)
@@ -665,13 +656,11 @@ class SproutFormsVariable
      * @param $conditionClass
      * @param $formField
      *
-     * @return BaseCondition
+     * @return Condition
      */
-    public function getFieldCondition($conditionClass, $formField): BaseCondition
+    public function getFieldCondition($conditionClass, $formField): Condition
     {
-        $condition = new $conditionClass(['formField' => $formField]);
-
-        return $condition;
+        return new $conditionClass(['formField' => $formField]);
     }
 }
 

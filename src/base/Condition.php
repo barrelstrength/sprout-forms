@@ -5,14 +5,16 @@ namespace barrelstrength\sproutforms\base;
 use craft\base\SavableComponent;
 
 /**
- * Class BaseCondition
+ * Defines a condition that can be applied to a Rule
  *
  * @property string $label
  * @property string $value
  */
-abstract class BaseCondition extends SavableComponent implements ConditionInterface
+abstract class Condition extends SavableComponent implements ConditionInterface
 {
-    /** @var FormField */
+    /**
+     * @var $formField FormField
+     */
     public $formField;
 
     /**
@@ -20,7 +22,7 @@ abstract class BaseCondition extends SavableComponent implements ConditionInterf
      */
     public function getLabel(): string
     {
-        return "";
+        return '';
     }
 
     /**
@@ -28,7 +30,7 @@ abstract class BaseCondition extends SavableComponent implements ConditionInterf
      */
     public function getValue(): string
     {
-        return "";
+        return '';
     }
 
     /**
@@ -44,8 +46,6 @@ abstract class BaseCondition extends SavableComponent implements ConditionInterf
      */
     public function getValueInputHtml($name, $value): string
     {
-        $html = $this->formField->getValueConditionHtml($this, $name, $value);
-
-        return $html;
+        return $this->formField->getValueConditionHtml($this, $name, $value);
     }
 }

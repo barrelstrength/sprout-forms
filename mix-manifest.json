@@ -6,5 +6,7 @@
     "/src/web/assets/integrations/dist/css/integrations.css": "/src/web/assets/integrations/dist/css/integrations.css",
     "/src/web/assets/forms/dist/js/forms.js": "/src/web/assets/forms/dist/js/forms.js",
     "/src/web/assets/integrations/dist/js/integration.js": "/src/web/assets/integrations/dist/js/integration.js",
-    "/src/web/assets/rules/dist/js/rules.js": "/src/web/assets/rules/dist/js/rules.js"
+    "/src/web/assets/formtemplates/dist/js/addressfield.js": "/src/web/assets/formtemplates/dist/js/addressfield.js",
+    "/src/web/assets/formtemplates/dist/js/accessibility.js": "/src/web/assets/formtemplates/dist/js/accessibility.js",
+    "/src/web/assets/formtemplates/dist/js/rules.js": "/src/web/assets/formtemplates/dist/js/rules.js"
 }

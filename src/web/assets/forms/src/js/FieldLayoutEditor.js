@@ -36,7 +36,8 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
     /**
      * The constructor.
-     * @param - All the tabs of the form fieldLayout.
+     * @param currentTabs
+     * @param continueEditing
      */
     init: function(currentTabs, continueEditing) {
       const that = this;

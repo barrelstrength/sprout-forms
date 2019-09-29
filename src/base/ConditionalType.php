@@ -25,7 +25,7 @@ abstract class ConditionalType extends SavableComponent implements ConditionalTy
 
     public function getRulesAsOptions(): array
     {
-        /** @var BaseCondition[] $rules */
+        /** @var Condition[] $rules */
         $rules = $this->getRules();
         $options = [];
 

@@ -44,10 +44,16 @@ mix
     'src/web/assets/integrations/dist/css/integrations.css',
   )
 
-  // Rules
+  // Form Templates
   .copy([
-    'src/web/assets/rules/src/js/rules.js',
-  ], 'src/web/assets/rules/dist/js/rules.js');
+    'src/web/assets/formtemplates/src/js/addressfield.js',
+  ], 'src/web/assets/formtemplates/dist/js/addressfield.js')
+  .copy([
+    'src/web/assets/formtemplates/src/js/accessibility.js',
+  ], 'src/web/assets/formtemplates/dist/js/accessibility.js')
+  .copy([
+    'src/web/assets/formtemplates/src/js/rules.js',
+  ], 'src/web/assets/formtemplates/dist/js/rules.js');
 
 // Full API
 // mix.js(src, output);

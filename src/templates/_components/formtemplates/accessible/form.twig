@@ -1,5 +1,3 @@
-<!-- Custom form created using the Sprout Forms form builder plugin - https://sprout.barrelstrengthdesign.com/craft-plugins/forms -->
-
 {% do craft.sproutForms.addFieldVariables({
     'craft': craft,
     'now': now,
@@ -15,19 +13,16 @@
 {%- set id          = renderingOptions.id is defined ? renderingOptions.id : form.handle ~ '-form' -%}
 {%- set class       = renderingOptions.class is defined ? renderingOptions.class : form.handle ~ '-form' -%}
 {%- set redirectUri = form.redirectUri -%}
-{% set fieldConditionalRules = form.getFieldConditionalRules(true) %}
+{% set fieldConditionalRules = form.getRules(true) %}
 
 <form method="post" accept-charset="utf-8" enctype="multipart/form-data"
     {%- if id %} id="{{ id }}"{% endif -%}
     {%- if class %} class="{{ class -}}{%- if errors %} {{ errorClass }}{% endif -%}"{% endif -%}
 >
     {{ csrfInput() }}
-    <input type="hidden" aria-hidden="true" name="action"
-        value="sprout-forms/entries/save-entry">
-    <input type="hidden" aria-hidden="true" name="conditionalLogicResults"
-           value="">
-    <input type="hidden" aria-hidden="true" name="handle"
-        value="{{ form.handle }}">
+    <input type="hidden" aria-hidden="true" name="action" value="sprout-forms/entries/save-entry">
+    <input type="hidden" aria-hidden="true" name="conditionalLogicResults" value="">
+    <input type="hidden" aria-hidden="true" name="handle" value="{{ form.handle }}">
     {%- if redirectUri is not empty %}
         {% if redirectUri|slice(0, 1)|lower == '?' %}
             {%- set redirectUri = craft.app.request.getUrl()~redirectUri %}
@@ -56,179 +51,57 @@
         {%- if loop.first %}
             {%- js at endBody %}
                 (function() {
-                    var field = document.getElementById('fields-' + '{{ labelId }}');
-                    if (field) {
-                        field.focus();
-                    }
+                var field = document.getElementById('fields-' + '{{ labelId }}');
+                if (field) {
+                field.focus();
+                }
                 })();
             {% endjs -%}
         {%- endif %}
     {%- endfor %}
 {%- endif %}
+
 {# @todo - update to dist folder #}
-{% set jsUrl = view.getAssetManager().getPublishedUrl('@sproutforms/web/assets/rules/src/js/rules.js', true) -%}
-{% do view.registerJsFile(jsUrl) %}
+{%- set accessibilityJsUrl = view.getAssetManager().getPublishedUrl(
+    '@sproutforms/web/assets/formtemplates/dist/js/accessibility.js',
+    true) -%}
+{%- do view.registerJsFile(accessibilityJsUrl) -%}
+
+{%- set rulesJsUrl = view.getAssetManager().getPublishedUrl(
+        '@sproutforms/web/assets/formtemplates/dist/js/rules.js',
+        true) -%}
+{%- do view.registerJsFile(rulesJsUrl) -%}
+
+{%- set addressFieldJsUrl = view.getAssetManager().getPublishedUrl(
+    '@sproutforms/web/assets/formtemplates/dist/js/addressfield.js',
+    true) -%}
+{%- do view.registerJsFile(addressFieldJsUrl) -%}
 
 {% css %}
     .hidden{
-        display: none !important;
+    display: none !important;
     }
 {% endcss %}
 
 {% js at endBody %}
-    var SproutForms = SproutForms || {};
-    // CONDITIONAL LOGIC
-    SproutFormsRules.init({
-    formId: "{{ id }}",
-    fieldConditionalRules: {{ fieldConditionalRules|json_encode|raw }}
-    });
+    (function() {
+        window.csrfTokenName = "{{ craft.app.getConfig().getGeneral().csrfTokenName|e('js') }}";
+        window.csrfTokenValue = "{{ craft.app.getRequest().csrfToken|e('js') }}";
 
-    SproutForms.CheckableInputs = SproutForms.CheckableInputs || {};
-    SproutForms.AddressFields = SproutForms.AddressFields || {};
+        // Accessibility
+        SproutFormsCheckableInputs.init({
+            id: '{{ id }}'
+        });
 
-    // Manage aria-checked values on Checkbox and Radio Button inputs
-    SproutForms.CheckableInputs = {
+        // Conditional Logic
+        SproutFormsRules.init({
+            id: '{{ id }}',
+            fieldConditionalRules: {{ fieldConditionalRules|json_encode|raw }}
+        });
 
-    formId: null,
-    form: null,
-    checkableInputs: null,
-
-    init: function(id) {
-    this.formId = id;
-    this.form = document.getElementById(this.formId);
-    this.checkableInputs = this.form.querySelectorAll('[type=checkbox], [type=radio]');
-
-    this.setAriaCheckedAttributes();
-    this.addCheckableInputsEventListeners();
-    },
-
-    setAriaCheckedAttributes: function() {
-    for (var i = 0; i < this.checkableInputs.length; i += 1) {
-    if (this.checkableInputs[i].checked) {
-    this.checkableInputs[i].setAttribute("aria-checked", true);
-    }
-    }
-    },
-
-    addCheckableInputsEventListeners: function() {
-    for (var i = 0; i < this.checkableInputs.length; i += 1) {
-    this.checkableInputs[i].addEventListener("click", function(event) {
-    this.onCheckableInputChange(event);
-    }.bind(this), false);
-    }
-    },
-
-    onCheckableInputChange: function(event) {
-
-    if (event.target.checked) {
-
-    // Resets all buttons in radio group to false
-    if (event.target.getAttribute("type") === "radio") {
-    this.resetRadioGroup(event.target);
-    }
-
-    event.target.setAttribute("aria-checked", true);
-    } else {
-    event.target.setAttribute("aria-checked", false);
-    }
-    },
-
-    resetRadioGroup: function(selectedRadioInput) {
-
-    var radioInputName = selectedRadioInput.getAttribute("name");
-    var allRadioInputs = document.querySelectorAll('#' + this.formId + ' [name="' + radioInputName + '"] ');
-
-    for (var i = 0; i < allRadioInputs.length; i += 1) {
-    allRadioInputs[i].setAttribute("aria-checked", false);
-    }
-    }
-
-    };
-
-    SproutForms.CheckableInputs.init('{{ id }}');
-
-    SproutForms.AddressFields = {
-
-    formId: null,
-    addressFields: null,
-    countrySelectFields: null,
-    namespace: null,
-
-    init: function(id) {
-    this.formId = id;
-    this.form = document.getElementById(this.formId);
-    this.addressFields = document.querySelectorAll('.sproutfields-address-formfields');
-    this.countrySelectFields = document.querySelectorAll('.sprout-address-country-select');
-    this.getNamespace();
-    this.initCountrySelectFields();
-    },
-    getNamespace: function() {
-    if (this.addressFields.length) {
-    this.namespace = this.addressFields[0].dataset.namespace;
-    }
-    },
-    initCountrySelectFields: function() {
-    self = this;
-    for (var i = 0; i < this.countrySelectFields.length; i++) {
-    this.countrySelectFields[i].addEventListener('change', function(event) {
-    self.updateFormFields(this);
-    });
-    }
-    },
-    updateFormFields: function(el) {
-    self = this;
-    var oForm = el.closest('form');
-    var csrfValue = oForm.elements["{{ craft.app.getConfig().getGeneral().csrfTokenName }}"].value;
-    var data = {
-    namespace: this.namespace,
-    countryCode: el.value,
-    overrideTemplatePaths: true
-    };
-    var params = typeof data == 'string' ? data : Object.keys(data).map(
-    function(k) {
-    return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
-    }
-    ).join('&');
-
-    var http = new XMLHttpRequest();
-
-    http.open('POST', '{{ actionUrl('sprout-base-fields/fields-address/update-address-form-html') }}', true);
-    http.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-    http.onreadystatechange = function() {
-
-    //Call a function when the state changes.
-    if (http.readyState === 4 && http.status === 200) {
-
-    self.removeElements('.sprout-address-onchange-country', oForm);
-    var response = JSON.parse(http.response);
-    var countrySpecificFields = oForm.querySelector('.sprout-address-country-fields');
-
-    countrySpecificFields.innerHTML = response.html;
-    }
-    };
-
-    http.setRequestHeader('X-CSRF-Token', csrfValue);
-    http.setRequestHeader('Accept', 'application/json; charset=utf-8');
-    http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
-
-    http.send(params);
-    },
-
-    removeElements: function(classes, oForm) {
-    var inputs = oForm.querySelectorAll(classes);
-
-    for (var key in inputs) {
-    var elem = inputs[key];
-
-    if (typeof elem.parentNode !== 'undefined') {
-    elem.parentNode.removeChild(elem);
-    }
-    }
-    }
-    };
-
-    SproutForms.AddressFields.init('{{ id }}');
-
+        // Address Field
+        SproutFormsAddressField.init({
+            id: '{{ id }}'
+        });
+    })();
 {% endjs -%}
-
-<!-- / Sprout Forms Craft CMS form builder plugin -->

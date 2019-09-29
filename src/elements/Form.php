@@ -449,14 +449,14 @@ class Form extends Element
     }
 
     /**
-     * Return only enabled conditionals for this form
+     * Return only enabled rules for this form
      *
      * @return array
      * @throws InvalidConfigException
      * @throws MissingComponentException
      */
-    public function getFieldConditionalRules(): array
+    public function getRules(): array
     {
-        return SproutForms::$app->conditionals->getFormConditionals($this->id, FieldRule::class, true);
+        return SproutForms::$app->rules->getRulesByFormId($this->id, FieldRule::class, true);
     }
 }

@@ -3,9 +3,6 @@
 namespace barrelstrength\sproutforms\rules;
 
 use barrelstrength\sproutforms\base\Rule;
-use barrelstrength\sproutforms\base\ConditionalLogic;
-use barrelstrength\sproutforms\conditionallogictypes\fieldrules\DropdownCondition;
-use barrelstrength\sproutforms\conditionallogictypes\fieldrules\TextCondition;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use Twig\Error\LoaderError;
@@ -14,7 +11,7 @@ use Twig\Error\SyntaxError;
 use yii\base\InvalidConfigException;
 
 /**
- * Add a conditional logic to show or hide a Form field
+ * Add a conditional logic to show or hide a Form Field
  *
  * @property array       $behaviorActions
  * @property array       $behaviorActionsAsOptions
@@ -40,9 +37,9 @@ class FieldRule extends Rule
      */
     public function getSettingsHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/conditionallogictypes/fieldrule/settings',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/rules/fieldrule/settings',
             [
-                'conditional' => $this
+                'fieldRule' => $this
             ]
         );
     }

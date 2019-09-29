@@ -2,13 +2,13 @@
 
 namespace barrelstrength\sproutforms\rules\conditions;
 
-use barrelstrength\sproutforms\base\BaseCondition;
+use barrelstrength\sproutforms\base\Condition;
 
 /**
  *
  * @property string $label
  */
-class IsGreaterThanOrEqualToCondition extends BaseCondition
+class IsGreaterThanOrEqualToCondition extends Condition
 {
     /**
      * @inheritDoc

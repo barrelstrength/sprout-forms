@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutforms\rules\fieldrules;
 
-use barrelstrength\sproutforms\base\BaseCondition;
+use barrelstrength\sproutforms\base\Condition;
 use barrelstrength\sproutforms\base\ConditionalType;
 use barrelstrength\sproutforms\rules\conditions\IsCondition;
 use barrelstrength\sproutforms\rules\conditions\IsGreaterThanCondition;
@@ -12,8 +12,8 @@ use barrelstrength\sproutforms\rules\conditions\IsLessThanOrEqualToCondition;
 
 /**
  *
- * @property array|\barrelstrength\sproutforms\base\BaseCondition[] $rules
- * @property string                                                 $type
+ * @property array|Condition[] $rules
+ * @property string            $type
  */
 class NumberCondition extends ConditionalType
 {
@@ -23,7 +23,7 @@ class NumberCondition extends ConditionalType
     }
 
     /**
-     * @return BaseCondition[]
+     * @return Condition[]
      */
     public function getRules(): array
     {

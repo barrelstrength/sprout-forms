@@ -469,7 +469,7 @@ class Entry extends Element
     {
         $conditionalLogicResults = $this->getConditionalLogicResults();
 
-        $rules = $this->getForm()->getFieldConditionalRules();
+        $rules = $this->getForm()->getRules();
         $fieldRules = [];
 
         foreach ($rules as $rule) {

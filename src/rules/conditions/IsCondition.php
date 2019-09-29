@@ -2,13 +2,13 @@
 
 namespace barrelstrength\sproutforms\rules\conditions;
 
-use barrelstrength\sproutforms\base\BaseCondition;
+use barrelstrength\sproutforms\base\Condition;
 
 /**
  *
  * @property string $label
  */
-class IsCondition extends BaseCondition
+class IsCondition extends Condition
 {
     /**
      * @inheritDoc

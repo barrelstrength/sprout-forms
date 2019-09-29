@@ -5,20 +5,21 @@ namespace barrelstrength\sproutforms\base;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\SproutForms;
 use craft\base\SavableComponent;
+use yii\base\InvalidConfigException;
 
 /**
  * Class Rule
  *
- * @property array                                     $conditionRules
- * @property \barrelstrength\sproutforms\elements\Form $form
- * @property array                                     $behaviorActions
- * @property string                                    $behaviorActionLabel
+ * @property array  $conditionRules
+ * @property Form   $form
+ * @property array  $behaviorActions
+ * @property string $behaviorActionLabel
  */
 abstract class Rule extends SavableComponent implements RuleInterface
 {
     // Traits
     // =========================================================================
-    use ConditionalTrait;
+    use RuleTrait;
 
     /**
      * @return Form
@@ -32,7 +33,7 @@ abstract class Rule extends SavableComponent implements RuleInterface
      * @param bool $checkCompatibleConditional
      *
      * @return array
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     final public function getFormFieldsAsOptions($checkCompatibleConditional = false): array
     {

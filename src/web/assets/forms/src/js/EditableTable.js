@@ -380,7 +380,7 @@ Craft.SproutForms.EditableTable.Row = Garnish.Base.extend(
         'formId': $("#formId").val()
       };
 
-      Craft.postActionRequest("sprout-forms/conditionals/get-condition-input-html", data, $.proxy(function(response, textStatus) {
+      Craft.postActionRequest("sprout-forms/rules/get-condition-input-html", data, $.proxy(function(response, textStatus) {
         const statusSuccess = (textStatus === 'success');
         if (statusSuccess && response.success) {
           that.$tr.find("td:eq(2)").html(response.html);

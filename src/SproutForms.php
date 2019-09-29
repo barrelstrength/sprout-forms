@@ -26,7 +26,7 @@ use barrelstrength\sproutforms\fields\Entries as FormEntriesField;
 use barrelstrength\sproutforms\integrations\sproutreports\datasources\SubmissionLogDataSource;
 use barrelstrength\sproutforms\integrationtypes\EntryElementIntegration;
 use barrelstrength\sproutforms\integrationtypes\CustomEndpoint;
-use barrelstrength\sproutforms\services\Conditionals;
+use barrelstrength\sproutforms\services\Rules;
 use barrelstrength\sproutforms\services\Integrations;
 use barrelstrength\sproutforms\widgets\RecentEntries;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
@@ -212,7 +212,7 @@ class SproutForms extends Plugin implements SproutEditionsInterface
             $event->types[] = EntryElementIntegration::class;
         });
 
-        Event::on(Conditionals::class, Conditionals::EVENT_REGISTER_CONDITIONALS, static function(RegisterComponentTypesEvent $event) {
+        Event::on(Rules::class, Rules::EVENT_REGISTER_CONDITIONALS, static function(RegisterComponentTypesEvent $event) {
             $event->types[] = FieldRule::class;
         });
 

@@ -2,15 +2,15 @@
 
 namespace barrelstrength\sproutforms\rules\fieldrules;
 
-use barrelstrength\sproutforms\base\BaseCondition;
+use barrelstrength\sproutforms\base\Condition;
 use barrelstrength\sproutforms\base\ConditionalType;
 use barrelstrength\sproutforms\rules\conditions\IsCheckedCondition;
 use barrelstrength\sproutforms\rules\conditions\IsNotCheckedCondition;
 
 /**
  *
- * @property array|\barrelstrength\sproutforms\base\BaseCondition[] $rules
- * @property string                                                 $type
+ * @property array|Condition[] $rules
+ * @property string            $type
  */
 class OptInCondition extends ConditionalType
 {
@@ -20,7 +20,7 @@ class OptInCondition extends ConditionalType
     }
 
     /**
-     * @return BaseCondition[]
+     * @return Condition[]
      */
     public function getRules(): array
     {

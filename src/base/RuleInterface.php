@@ -5,8 +5,8 @@ namespace barrelstrength\sproutforms\base;
 use craft\base\SavableComponentInterface;
 
 /**
- * ConditionalInterface defines the common interface to be implemented by conditional classes.
- * A class implementing this interface should also use [[SavableComponentTrait]] and [[ConditionalTrait]].
+ * RuleInterface defines the common interface to be implemented by Rule classes.
+ * A class implementing this interface should also use [[SavableComponentTrait]] and [[RuleTrait]].
  */
 interface RuleInterface extends SavableComponentInterface
 {

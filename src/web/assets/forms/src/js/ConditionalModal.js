@@ -1,8 +1,4 @@
-/*
- * @link      https://sprout.barrelstrengthdesign.com/
- * @copyright Copyright (c) Barrel Strength Design LLC
- * @license   http://sprout.barrelstrengthdesign.com/license
- */
+/* global Craft */
 
 if (typeof Craft.SproutForms === typeof undefined) {
   Craft.SproutForms = {};
@@ -23,10 +19,10 @@ if (typeof Craft.SproutForms === typeof undefined) {
   }
 
   /**
-   * SproutForms.ConditionalModal class
+   * SproutForms.RuleModal class
    * Handles the modal window for editing conditionals.
    */
-  Craft.SproutForms.ConditionalModal = Garnish.Modal.extend({
+  Craft.SproutForms.RuleModal = Garnish.Modal.extend({
 
       $body: null,
       $content: null,
@@ -357,10 +353,10 @@ if (typeof Craft.SproutForms === typeof undefined) {
         this.$saveSpinner.removeClass('hidden');
         const data = this.$container.serialize();
 
-        const inputId = this.$container.find('input[name="conditionalId"]');
+        const inputId = this.$container.find('input[name="ruleId"]');
         const id = inputId.length ? inputId.val() : false;
 
-        Craft.postActionRequest('sprout-forms/conditionals/save-conditional', data, $.proxy(function(response, textStatus) {
+        Craft.postActionRequest('sprout-forms/rules/save-rule', data, $.proxy(function(response, textStatus) {
           this.$saveSpinner.addClass('hidden');
 
           const statusSuccess = (textStatus === 'success');
@@ -404,7 +400,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
        *
        * @param id
        */
-      editConditional: function(id) {
+      editRule: function(id) {
         this.destroyListeners();
         this.show();
         this.initListeners();
@@ -413,11 +409,11 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
         const formId = $("#formId").val();
         const data = {
-          'conditionalId': id,
+          'ruleId': id,
           'formId': formId
         };
 
-        Craft.postActionRequest('sprout-forms/conditionals/edit-conditional', data, $.proxy(function(response, textStatus) {
+        Craft.postActionRequest('sprout-forms/rules/edit-rule', data, $.proxy(function(response, textStatus) {
           this.$loadSpinner.addClass('hidden');
 
           const statusSuccess = (textStatus === 'success');
@@ -452,7 +448,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
           const data = this.$container.serialize();
 
-          const conditionalId = $(this.$container).find('input[name="conditionalId"]').val();
+          const ruleId = $(this.$container).find('input[name="ruleId"]').val();
 
           Craft.postActionRequest('sprout-forms/conditionals/delete-conditional', data, $.proxy(function(response, textStatus) {
             const statusSuccess = (textStatus === 'success');
@@ -461,7 +457,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
               Craft.cp.displayNotice(Craft.t('sprout-forms', 'Conditional deleted.'));
 
-              $('#sproutforms-conditional-row-' + conditionalId).remove();
+              $('#sproutforms-rules-row-' + ruleId).remove();
 
               this.initListeners();
               this.hide();
@@ -511,7 +507,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
        */
       getInstance: function() {
         if (!this._instance) {
-          this._instance = new Craft.SproutForms.ConditionalModal();
+          this._instance = new Craft.SproutForms.RuleModal();
         }
 
         return this._instance;

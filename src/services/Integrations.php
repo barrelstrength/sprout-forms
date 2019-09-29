@@ -83,7 +83,7 @@ class Integrations extends Component
      * @throws InvalidConfigException
      * @throws MissingComponentException
      */
-    public function getFormIntegrations($formId): array
+    public function getIntegrationsByFormId($formId): array
     {
         $results = (new Query())
             ->select([
@@ -107,39 +107,6 @@ class Integrations extends Component
         }
 
         return $integrations;
-    }
-
-    /**
-     * @param $formId
-     *
-     * @return IntegrationRecord[]
-     * @throws InvalidConfigException
-     * @throws MissingComponentException
-     */
-    public function getFormConditionals($formId): array
-    {
-        $results = (new Query())
-            ->select([
-                'integrations.id',
-                'integrations.formId',
-                'integrations.name',
-                'integrations.type',
-                'integrations.rule',
-                'integrations.settings',
-                'integrations.enabled'
-            ])
-            ->from(['{{%sproutforms_conditionals}} conditionals'])
-            ->where(['integrations.formId' => $formId])
-            ->all();
-
-        $conditionals = [];
-
-        foreach ($results as $result) {
-            $integration = ComponentHelper::createComponent($result, RuleInterface::class);
-            $conditionals[] = new $result['type']($integration);
-        }
-
-        return $conditionals;
     }
 
     /**
@@ -327,7 +294,7 @@ class Integrations extends Component
         }
 
         $form = $entry->getForm();
-        $integrations = $this->getFormIntegrations($form->id);
+        $integrations = $this->getIntegrationsByFormId($form->id);
         $submissionLogs = [];
         $entryId = $entry->id ?? null;
 
