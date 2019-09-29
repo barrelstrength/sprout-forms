@@ -60,33 +60,6 @@ class Rules extends Component
         return $conditionals;
     }
 
-//    /**
-//     * @param $config
-//     *
-//     * @return RuleInterface
-//     * @throws InvalidConfigException
-//     */
-//    public function createIntegration($config): RuleInterface
-//    {
-//        if (is_string($config)) {
-//            $config = ['type' => $config];
-//        }
-//
-//        try {
-//            /** @var Rule $conditional */
-//            $conditional = ComponentHelper::createComponent($config, RuleInterface::class);
-//        } catch (MissingComponentException $e) {
-//            $config['errorMessage'] = $e->getMessage();
-//            $config['expectedType'] = $config['type'];
-//            unset($config['type']);
-//
-//            $conditional = new MissingIntegration($config);
-//        }
-//
-//        return $conditional;
-
-//    }
-
     /**
      * @return array
      */
