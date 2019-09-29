@@ -626,18 +626,6 @@ class SproutFormsVariable
     }
 
     /**
-     * @param $integrationId
-     *
-     * @return Integration|null
-     * @throws MissingComponentException
-     * @throws InvalidConfigException
-     */
-    public function getIntegrationById($integrationId)
-    {
-        return SproutForms::$app->integrations->getIntegrationById($integrationId);
-    }
-
-    /**
      * @param $formFieldHandle
      * @param $formId
      *
