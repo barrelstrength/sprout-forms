@@ -75,16 +75,13 @@ class FieldRule extends Rule
      * @inheritDoc
      * @throws InvalidConfigException
      */
-    public function getConditionRules(): array
+    public function getRuleTargets(): array
     {
         $fields = $this->getForm()->getFields();
         $rules = [];
 
         foreach ($fields as $field) {
-            $compatibleConditional = $field->getCompatibleConditions();
-            if ($compatibleConditional !== null) {
-                $rules[$field->handle]['rulesAsOptions'] = $compatibleConditional->getConditionsAsOptions();
-            }
+            $rules[$field->handle]['rulesAsOptions'] = $field->getConditionsAsOptions();
         }
 
         return $rules;

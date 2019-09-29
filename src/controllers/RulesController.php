@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\controllers;
 
 use barrelstrength\sproutforms\base\ConditionInterface;
+use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\base\Rule;
 use barrelstrength\sproutforms\records\Rules as RulesRecord;
 use Craft;
@@ -181,7 +182,7 @@ class RulesController extends BaseController
      * @throws Throwable
      * @throws BadRequestHttpException
      */
-    public function actionGetConditionInputHtml(): Response
+    public function actionGetConditionValueInputHtml(): Response
     {
         $this->requireAcceptsJson();
 
@@ -193,21 +194,14 @@ class RulesController extends BaseController
         $formFieldHandle = $request->getBodyParam('formFieldHandle');
 
         $form = SproutForms::$app->forms->getFormById($formId);
+
+        /** @var FormField $formField */
         $formField = $form->getField($formFieldHandle);
-
-        $conditional = $formField->getCompatibleConditions();
-
-        $html = '';
-
-        foreach ($conditional->getConditions() as $rule) {
-            if (get_class($rule) == $condition) {
-                $html = $rule->getValueInputHtml($inputName, $inputValue);
-            }
-        }
+        $conditionClass = new $condition();
 
         return $this->asJson([
             'success' => true,
-            'html' => $html
+            'html' => $formField->getConditionValueInputHtml($conditionClass, $inputName, $inputValue)
         ]);
     }
 

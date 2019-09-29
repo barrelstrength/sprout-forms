@@ -212,10 +212,6 @@ class SproutForms extends Plugin implements SproutEditionsInterface
             $event->types[] = EntryElementIntegration::class;
         });
 
-        Event::on(Rules::class, Rules::EVENT_REGISTER_CONDITIONALS, static function(RegisterComponentTypesEvent $event) {
-            $event->types[] = FieldRule::class;
-        });
-
         Event::on(Forms::class, Forms::EVENT_REGISTER_FORM_TEMPLATES, static function(RegisterComponentTypesEvent $event) {
             $event->types[] = BasicTemplates::class;
             $event->types[] = AccessibleTemplates::class;

@@ -366,9 +366,10 @@ abstract class BaseOptionsFormField extends FormField implements PreviewableFiel
     /**
      * @inheritdoc
      */
-    public function getValueConditionHtml(ConditionInterface $condition, $fieldName, $fieldValue): string
+    public function getConditionValueInputHtml(ConditionInterface $condition, $fieldName, $fieldValue): string
     {
         $html = '<input class="text fullwidth" type="text" name="'.$fieldName.'" value="'.$fieldValue.'">';
+
         $selectConditionClasses = [
             IsCondition::class,
             IsNotCondition::class

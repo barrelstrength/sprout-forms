@@ -91,7 +91,7 @@ abstract class Rule extends SavableComponent implements RuleInterface
     /**
      * @inheritDoc
      */
-    public function getConditionRules(): array
+    public function getRuleTargets(): array
     {
         return [];
     }

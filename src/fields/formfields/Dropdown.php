@@ -2,6 +2,14 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\rules\conditions\ContainsCondition;
+use barrelstrength\sproutforms\rules\conditions\DoesNotContainsCondition;
+use barrelstrength\sproutforms\rules\conditions\DoesNotEndsWithCondition;
+use barrelstrength\sproutforms\rules\conditions\DoesNotStartWithCondition;
+use barrelstrength\sproutforms\rules\conditions\EndsWithCondition;
+use barrelstrength\sproutforms\rules\conditions\IsCondition;
+use barrelstrength\sproutforms\rules\conditions\IsNotCondition;
+use barrelstrength\sproutforms\rules\conditions\StartsWithCondition;
 use barrelstrength\sproutforms\rules\fieldrules\TextCondition;
 use Craft;
 use craft\helpers\Template as TemplateHelper;
@@ -151,7 +159,15 @@ class Dropdown extends BaseOptionsFormField
      */
     public function getCompatibleConditions()
     {
-        $textCondition = new TextCondition(['formField' => $this]);
-        return $textCondition;
+        return [
+            new IsCondition(),
+            new IsNotCondition(),
+            new ContainsCondition(),
+            new DoesNotContainsCondition(),
+            new StartsWithCondition(),
+            new DoesNotStartWithCondition(),
+            new EndsWithCondition(),
+            new DoesNotEndsWithCondition()
+        ];
     }
 }

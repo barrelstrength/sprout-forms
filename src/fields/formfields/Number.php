@@ -2,6 +2,11 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\rules\conditions\IsCondition;
+use barrelstrength\sproutforms\rules\conditions\IsGreaterThanCondition;
+use barrelstrength\sproutforms\rules\conditions\IsGreaterThanOrEqualToCondition;
+use barrelstrength\sproutforms\rules\conditions\IsLessThanCondition;
+use barrelstrength\sproutforms\rules\conditions\IsLessThanOrEqualToCondition;
 use barrelstrength\sproutforms\rules\fieldrules\NumberCondition;
 use Craft;
 use craft\fields\Dropdown as CraftDropdown;
@@ -256,7 +261,12 @@ class Number extends FormField implements PreviewableFieldInterface
      */
     public function getCompatibleConditions()
     {
-        $textCondition = new NumberCondition(['formField' => $this]);
-        return $textCondition;
+        return [
+            new IsCondition(),
+            new IsGreaterThanCondition(),
+            new IsLessThanCondition(),
+            new IsGreaterThanOrEqualToCondition(),
+            new IsLessThanOrEqualToCondition(),
+        ];
     }
 }

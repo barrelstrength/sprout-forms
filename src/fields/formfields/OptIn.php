@@ -207,16 +207,19 @@ class OptIn extends FormField implements PreviewableFieldInterface
      */
     public function getCompatibleConditions()
     {
-        $paragraphCondition = new OptInCondition(['formField' => $this]);
-        return $paragraphCondition;
+        return [
+            new IsCheckedCondition(),
+            new IsNotCheckedCondition()
+        ];
     }
 
     /**
      * @inheritdoc
      */
-    public function getValueConditionHtml(ConditionInterface $condition, $fieldName, $fieldValue): string
+    public function getConditionValueInputHtml(ConditionInterface $condition, $fieldName, $fieldValue): string
     {
         $html = '<input class="text fullwidth" type="text" name="'.$fieldName.'" value="'.$fieldValue.'">';
+
         $emptyConditionClasses = [
             IsCheckedCondition::class,
             IsNotCheckedCondition::class

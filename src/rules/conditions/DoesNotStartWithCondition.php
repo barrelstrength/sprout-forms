@@ -15,13 +15,6 @@ class DoesNotStartWithCondition extends Condition
         return 'does not starts with';
     }
 
-    public function getValueInputHtml($name, $value): string
-    {
-        $html = '<input class="text fullwidth" type="text" name="'.$name.'" value="'.$value.'">';
-
-        return $html;
-    }
-
     /**
      * @inheritDoc
      */

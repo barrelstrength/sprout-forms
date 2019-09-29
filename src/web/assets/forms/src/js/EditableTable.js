@@ -16,7 +16,7 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
     id: null,
     baseName: null,
     columns: null,
-    conditionalTypes: null,
+    fieldRuleOptions: null,
     sorter: null,
     biggestId: -1,
 
@@ -24,11 +24,11 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
     $tbody: null,
     $addRowBtn: null,
 
-    init: function(id, baseName, columns, settings, conditionalTypes) {
+    init: function(id, baseName, columns, settings, fieldRuleOptions) {
       this.id = id;
       this.baseName = baseName;
       this.columns = columns;
-      this.conditionalTypes = conditionalTypes;
+      this.fieldRuleOptions = fieldRuleOptions;
       this.setSettings(settings, Craft.SproutForms.EditableTable.defaults);
 
       this.$table = $('#' + id);
@@ -40,7 +40,7 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
       });
 
       if (this.isVisible()) {
-        this.initialize(this.conditionalTypes);
+        this.initialize(this.fieldRuleOptions);
       } else {
         this.addListener(Garnish.$win, 'resize', 'initializeIfVisible');
       }
@@ -50,7 +50,7 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
       return (this.$table.height() > 0);
     },
 
-    initialize: function(conditionalTypes) {
+    initialize: function(fieldRuleOptions) {
       if (this.initialized) {
         return;
       }
@@ -61,7 +61,7 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
       const $rows = this.$tbody.children();
 
       for (let i = 0; i < $rows.length; i++) {
-        new Craft.SproutForms.EditableTable.Row(this, $rows[i], conditionalTypes);
+        new Craft.SproutForms.EditableTable.Row(this, $rows[i], fieldRuleOptions);
       }
 
       this.$addRowBtn = this.$table.find('.buttons').children('.add');
@@ -80,10 +80,10 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
 
     addRow: function() {
       const rowId = this.settings.rowIdPrefix + (this.biggestId + 1),
-        rowHtml = Craft.SproutForms.EditableTable.getRowHtml(rowId, this.columns, this.baseName, {}, this.conditionalTypes),
+        rowHtml = Craft.SproutForms.EditableTable.getRowHtml(rowId, this.columns, this.baseName, {}, this.fieldRuleOptions),
         $tr = $(rowHtml).appendTo(this.$tbody);
 
-      new Craft.SproutForms.EditableTable.Row(this, $tr, this.conditionalTypes);
+      new Craft.SproutForms.EditableTable.Row(this, $tr, this.fieldRuleOptions);
 
       const $container = $tr.find('.sprout-selectother');
 
@@ -105,7 +105,7 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
       onDeleteRow: $.noop
     },
 
-    getRowHtml: function(rowId, columns, baseName, values, conditionalTypes) {
+    getRowHtml: function(rowId, columns, baseName, values, fieldRuleOptions) {
       let rowHtml = '<tr data-id="' + rowId + '">';
       let formFieldName = "";
       let formFieldValue = "";
@@ -171,7 +171,7 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
             conditionFieldValue = value != '' ? value : colVal;
 
             rowHtml += '<div class="select"><select data-check-value-html="true" name="' + name + '">';
-            col.options = conditionalTypes[formFieldValue]['rulesAsOptions'];
+            col.options = fieldRuleOptions[formFieldValue]['rulesAsOptions'];
             let hasOptgroups = false;
 
             let firstRow = 'selected';
@@ -245,13 +245,13 @@ Craft.SproutForms.EditableTable.Row = Garnish.Base.extend(
     $tds: null,
     $textareas: null,
     $deleteBtn: null,
-    conditionalTypes: null,
+    fieldRuleOptions: null,
 
-    init: function(table, tr, conditionalTypes) {
+    init: function(table, tr, fieldRuleOptions) {
       this.table = table;
       this.$tr = $(tr);
       this.$tds = this.$tr.children();
-      this.conditionalTypes = conditionalTypes;
+      this.fieldRuleOptions = fieldRuleOptions;
 
       // Get the row ID, sans prefix
       const id = parseInt(this.$tr.attr('data-id').substr(this.table.settings.rowIdPrefix.length));
@@ -315,7 +315,7 @@ Craft.SproutForms.EditableTable.Row = Garnish.Base.extend(
         let conditionSelectHtml = '';
         conditionSelectHtml += '<div class="select"><select data-check-value-html="true" name="' + name + '">';
         const col = {};
-        col['options'] = that.conditionalTypes[$formFieldInput.val()]['rulesAsOptions'];
+        col['options'] = that.fieldRuleOptions[$formFieldInput.val()]['rulesAsOptions'];
         const value = $conditionalInput.val();
         let hasOptgroups = false;
 
@@ -380,7 +380,7 @@ Craft.SproutForms.EditableTable.Row = Garnish.Base.extend(
         'formId': $("#formId").val()
       };
 
-      Craft.postActionRequest("sprout-forms/rules/get-condition-input-html", data, $.proxy(function(response, textStatus) {
+      Craft.postActionRequest("sprout-forms/rules/get-condition-value-input-html", data, $.proxy(function(response, textStatus) {
         const statusSuccess = (textStatus === 'success');
         if (statusSuccess && response.success) {
           that.$tr.find("td:eq(2)").html(response.html);

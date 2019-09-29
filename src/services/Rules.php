@@ -6,6 +6,7 @@ use barrelstrength\sproutforms\base\Rule;
 use barrelstrength\sproutforms\base\RuleInterface;
 use barrelstrength\sproutforms\integrationtypes\MissingIntegration;
 use barrelstrength\sproutforms\records\Rules as RulesRecord;
+use barrelstrength\sproutforms\rules\FieldRule;
 use barrelstrength\sproutforms\SproutForms;
 use craft\base\Component;
 use craft\db\Query;
@@ -19,65 +20,25 @@ use Twig\Error\SyntaxError;
 use yii\base\InvalidConfigException;
 
 /**
- *
  * @property array        $integrationOptions
- * @property array        $allConditionalsTypes
- * @property array|Rule[] $allConditionals
+ * @property array        $ruleOptions
  */
 class Rules extends Component
 {
-    const EVENT_REGISTER_CONDITIONALS = 'registerConditionals';
-
-    /**
-     * Returns all registered Conditional Logic Types
-     *
-     * @return array
-     */
-    public function getAllConditionalsTypes(): array
-    {
-        $event = new RegisterComponentTypesEvent([
-            'types' => []
-        ]);
-
-        $this->trigger(self::EVENT_REGISTER_CONDITIONALS, $event);
-
-        return $event->types;
-    }
-
-    /**
-     * @return Rule[]
-     */
-    public function getAllConditionals(): array
-    {
-        $conditionalTypes = $this->getAllConditionalsTypes();
-
-        $conditionals = [];
-
-        foreach ($conditionalTypes as $conditionalType) {
-            $conditionals[] = new $conditionalType();
-        }
-
-        return $conditionals;
-    }
-
     /**
      * @return array
      */
     public function getRuleOptions(): array
     {
-        $conditionals = $this->getAllConditionals();
-
         $options[] = [
             'label' => Craft::t('sprout-forms', 'Add Rule...'),
             'value' => ''
         ];
 
-        foreach ($conditionals as $conditional) {
-            $options[] = [
-                'label' => $conditional::displayName(),
-                'value' => get_class($conditional)
-            ];
-        }
+        $options[] = [
+            'label' => FieldRule::displayName(),
+            'value' => FieldRule::class
+        ];
 
         return $options;
     }
@@ -245,34 +206,4 @@ class Rules extends Component
             'css' => $css
         ];
     }
-
-//    /**
-//     * Returns a conditional type selection array grouped by category
-//     *
-//     * Categories
-//     * - Standard conditional
-//     * - Custom conditionals that need to be registered using the Sprout Forms Conditional API
-//     *
-//     * @return array
-//     */
-//    public function prepareConditionalTypeSelection(): array
-//    {
-//        $conditionals = $this->getAllConditionals();
-//        $standardConditionals = [];
-//
-//        if (count($conditionals)) {
-//            // Loop through registered conditionals and add them to the standard group
-//            foreach ($conditionals as $class => $integration) {
-//                $standardConditionals[get_class($integration)] = $integration::displayName();
-//            }
-//
-//            // Sort fields alphabetically by name
-//            asort($standardConditionals);
-//
-//            // Add the group label to the beginning of the standard group
-//            $standardConditionals = SproutForms::$app->fields->prependKeyValue($standardConditionals, 'standardConditionalsGroup', ['optgroup' => Craft::t('sprout-forms', 'Standard Rules')]);
-//        }
-//
-//        return $standardConditionals;
-//    }
 }

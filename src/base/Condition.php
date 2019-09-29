@@ -40,12 +40,4 @@ abstract class Condition extends SavableComponent implements ConditionInterface
     {
         return false;
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function getValueInputHtml($name, $value): string
-    {
-        return $this->formField->getValueConditionHtml($this, $name, $value);
-    }
 }
