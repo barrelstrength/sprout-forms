@@ -20,7 +20,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
   /**
    * SproutForms.RuleModal class
-   * Handles the modal window for editing conditionals.
+   * Handles the modal window for editing Rules.
    */
   Craft.SproutForms.RuleModal = Garnish.Modal.extend({
 
@@ -106,7 +106,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
       },
 
       /**
-       * Prepares the Conditional settings template HTML, CSS and Javascript.
+       * Prepares the Rule settings template HTML, CSS and Javascript.
        *
        * @param template
        */
@@ -236,7 +236,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
       },
 
       /**
-       * Binds all listeners so the quick conditional buttons can start working.
+       * Binds all listeners so the rule buttons can start working.
        */
       initListeners: function() {
         this.$deleteBtn.addClass('hidden');
@@ -244,9 +244,9 @@ if (typeof Craft.SproutForms === typeof undefined) {
         this.$saveBtn.addClass('disabled');
 
         this.addListener(this.$cancelBtn, 'activate', 'closeModal');
-        this.addListener(this.$saveBtn, 'activate', 'saveConditional');
+        this.addListener(this.$saveBtn, 'activate', 'saveRule');
         if (!this.addedDelete) {
-          this.addListener(this.$deleteBtn, 'click', 'deleteConditional');
+          this.addListener(this.$deleteBtn, 'click', 'deleteRule');
           this.addedDelete = true;
         }
 
@@ -335,11 +335,11 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
       /**
        * Event handler for the save button.
-       * Saves the Conditional settings to the database.
+       * Saves the Rule settings to the database.
        *
        * @param e
        */
-      saveConditional: function(e) {
+      saveRule: function(e) {
         if (e) {
           e.preventDefault();
         }
@@ -364,12 +364,14 @@ if (typeof Craft.SproutForms === typeof undefined) {
           if (statusSuccess && response.success) {
             this.initListeners();
 
-            this.trigger('saveConditional', {
+            this.trigger('saveRule', {
               target: this,
-              conditional: response.conditional
+              rule: response.rule
             });
 
-            Craft.cp.displayNotice(Craft.t('sprout-forms', '\'{name}\' conditional saved.', {name: response.conditional.name}));
+            Craft.cp.displayNotice(Craft.t('sprout-forms', '\'{name}\' rule saved.', {
+              name: response.rule.name
+            }));
 
             this.hide();
           } else if (statusSuccess && response.template) {
@@ -439,9 +441,9 @@ if (typeof Craft.SproutForms === typeof undefined) {
         }, this));
       },
 
-      deleteConditional: function(e) {
+      deleteRule: function(e) {
         e.preventDefault();
-        const userResponse = this.confirmDeleteConditional();
+        const userResponse = this.confirmDeleteRule();
 
         if (userResponse) {
           this.destroyListeners();
@@ -450,19 +452,19 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
           const ruleId = $(this.$container).find('input[name="ruleId"]').val();
 
-          Craft.postActionRequest('sprout-forms/conditionals/delete-conditional', data, $.proxy(function(response, textStatus) {
+          Craft.postActionRequest('sprout-forms/rules/delete-rule', data, $.proxy(function(response, textStatus) {
             const statusSuccess = (textStatus === 'success');
 
             if (statusSuccess && response.success) {
 
-              Craft.cp.displayNotice(Craft.t('sprout-forms', 'Conditional deleted.'));
+              Craft.cp.displayNotice(Craft.t('sprout-forms', 'Rule deleted.'));
 
               $('#sproutforms-rules-row-' + ruleId).remove();
 
               this.initListeners();
               this.hide();
             } else {
-              Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to delete conditional.'));
+              Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to delete rule.'));
 
               this.hide();
             }
@@ -470,13 +472,13 @@ if (typeof Craft.SproutForms === typeof undefined) {
         }
       },
 
-      confirmDeleteConditional: function() {
-        return confirm("Are you sure you want to delete this conditional and all of it's settings?");
+      confirmDeleteRule: function() {
+        return confirm("Are you sure you want to delete this rule and all of it's settings?");
       },
 
       /**
        * Prevents the modal from closing if it's disabled.
-       * This fixes issues if the modal is closed when saving/deleting conditionals.
+       * This fixes issues if the modal is closed when saving/deleting rule.
        */
       hide: function() {
         if (!this._disabled) {
@@ -503,7 +505,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
       /**
        * (Static) Singleton pattern.
        *
-       * @returns ConditionalModal
+       * @returns RuleModal
        */
       getInstance: function() {
         if (!this._instance) {

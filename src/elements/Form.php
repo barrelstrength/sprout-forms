@@ -32,7 +32,7 @@ use yii\base\InvalidConfigException;
  * Form represents a form element.
  *
  * @property FormTemplates $formTemplate
- * @property array         $fieldConditionalRules
+ * @property array         $rules
  * @property array         $fields
  *
  * @mixin FieldLayoutBehavior

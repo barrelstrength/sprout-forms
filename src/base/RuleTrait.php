@@ -9,18 +9,23 @@ trait RuleTrait
 {
     // Properties
     // =========================================================================
+
     /**
+     * The ID of the Form where this Rule exists
+     *
      * @var int
      */
     public $formId;
 
     /**
+     * The name given to this Rule
+     *
      * @var string
      */
     public $name;
 
     /**
-     * Whether this Conditional will be processed when a form is displayed
+     * Whether this Rule will be processed when a form is displayed
      *
      * @var boolean
      */
@@ -31,7 +36,7 @@ trait RuleTrait
      *
      * @var array|null
      */
-    public $conditionalRules;
+    public $conditions;
 
     /**
      * @var string

@@ -13,6 +13,8 @@ use yii\base\InvalidConfigException;
  * @property array  $conditionRules
  * @property Form   $form
  * @property array  $behaviorActions
+ * @property array  $ruleTargets
+ * @property string $behaviorDescription
  * @property string $behaviorActionLabel
  */
 abstract class Rule extends SavableComponent implements RuleInterface
@@ -67,17 +69,9 @@ abstract class Rule extends SavableComponent implements RuleInterface
     public function settingsAttributes(): array
     {
         $attributes = parent::settingsAttributes();
-        $attributes[] = 'conditionalRules';
+        $attributes[] = 'conditions';
 
         return $attributes;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function validateRules($fields): bool
-    {
-        return false;
     }
 
     /**
@@ -99,7 +93,7 @@ abstract class Rule extends SavableComponent implements RuleInterface
     /**
      * @inheritDoc
      */
-    public function getBehaviorActionLabel(): string
+    public function getBehaviorDescription(): string
     {
         return '';
     }

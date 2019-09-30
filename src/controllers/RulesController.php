@@ -259,7 +259,7 @@ class RulesController extends BaseController
                 'id' => $rule->id,
                 'name' => $rule->name ?? null,
                 'enabled' => $rule->enabled,
-                'behavior' => $rule->getBehaviorActionLabel()
+                'behavior' => $rule->getBehaviorDescription()
             ],
             //'template' => $success ? false : SproutForms::$app->rules->getModalConditionalTemplate($conditional),
         ]);

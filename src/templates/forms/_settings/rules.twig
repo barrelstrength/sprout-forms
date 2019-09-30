@@ -21,12 +21,12 @@
                             {{ rule.name }}
                         </a>
                     </td>
-                    <td><div id="sproutform-rules-behavior-{{ rule.id }}">{{ rule.getBehaviorActionLabel() }}</div></td>
+                    <td><div id="sproutform-rules-behavior-{{ rule.id }}">{{ rule.getBehaviorDescription() }}</div></td>
                     <td>
                         {{ forms.lightswitch({
                             on: rule.enabled,
                             small: true,
-                            id: "rule-enabled-"~rule.id,
+                            id: "condition-enabled-"~rule.id,
                             onLabel: "Show"|t('sprout-forms'),
                             offLabel: "Hide"|t('sprout-forms')
                         }) }}

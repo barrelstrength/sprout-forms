@@ -23,7 +23,7 @@ mix
 
   // Forms
   .js([
-    'src/web/assets/forms/src/js/ConditionalModal.js',
+    'src/web/assets/forms/src/js/RuleModal.js',
     'src/web/assets/forms/src/js/EditableTable.js',
     'src/web/assets/forms/src/js/FieldLayoutEditor.js',
     'src/web/assets/forms/src/js/FieldModal.js',

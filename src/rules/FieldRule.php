@@ -81,7 +81,7 @@ class FieldRule extends Rule
         $rules = [];
 
         foreach ($fields as $field) {
-            $rules[$field->handle]['rulesAsOptions'] = $field->getConditionsAsOptions();
+            $rules[$field->handle]['conditionsAsOptions'] = $field->getConditionsAsOptions();
         }
 
         return $rules;
@@ -91,7 +91,7 @@ class FieldRule extends Rule
      * @inheritDoc
      * @throws InvalidConfigException
      */
-    public function getBehaviorActionLabel(): string
+    public function getBehaviorDescription(): string
     {
         $behavior = '-';
 

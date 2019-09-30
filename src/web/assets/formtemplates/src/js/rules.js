@@ -10,48 +10,52 @@ SproutFormsRules = {
   allRules: {},
   fieldsToListen: {},
   targetFieldsHtml: {},
-  fieldConditionalRules: {},
+  rulesJson: {},
 
   init: function(settings) {
     this.id = settings.id;
-    this.fieldConditionalRules = settings.fieldConditionalRules;
+    this.rulesJson = settings.rulesJson;
     this.form = document.getElementById(this.id);
     this.allRules = {};
     this.fieldsToListen = {};
 
     var self = this;
 
-    for (var i = 0; i < this.fieldConditionalRules.length; i++) {
-      var conditional = this.fieldConditionalRules[i];
-      var targetHandle = conditional.behaviorTarget;
-
+    for (var i = 0; i < this.rulesJson.length; i++) {
+      var rule = this.rulesJson[i];
+      var targetHandle = rule.behaviorTarget;
       var fieldWrapper = document.getElementById("fields-" + targetHandle + "-field");
       var rules = {};
-      for (var key in conditional['conditionalRules']) {
-        for (var pos in conditional['conditionalRules'][key]) {
-          var ruleObject = {};
-          for (var posRule in conditional['conditionalRules'][key][pos]) {
-            var rule = conditional['conditionalRules'][key][pos][posRule];
-            this.fieldsToListen[rule[0]] = 1;
-            ruleObject[posRule] = {
-              'fieldHandle': rule[0],
-              'condition': rule[1],
-              'value': rule[2]
-            };
-          }
-          rules[key] = ruleObject;
+      var conditionSets = rule.conditions;
+
+      for (conditionSetId in conditionSets) {
+        var conditionSet = conditionSets[conditionSetId];
+        for (conditionId in conditionSet) {
+          var conditionObject = {};
+          var conditionSetIndex = conditionId.split('-').pop();
+          var condition = conditionSet[conditionId];
+
+          this.fieldsToListen[condition[0]] = 1;
+
+          conditionObject[conditionSetIndex] = {
+            'fieldHandle': condition[0],
+            'condition': condition[1],
+            'value': condition[2]
+          };
+
+          rules[conditionId] = conditionObject;
         }
       }
 
       var wrapperId = "fields-" + targetHandle + "-field";
       var wrapper = document.getElementById(wrapperId);
-      if (conditional.behaviorAction == 'show') {
+      if (rule.behaviorAction === 'show') {
         this.hideField(wrapper);
       }
 
       this.allRules[targetHandle] = {
         "rules": rules,
-        "action": conditional.behaviorAction
+        "action": rule.behaviorAction
       };
     }
 
@@ -60,19 +64,21 @@ SproutFormsRules = {
       var fieldId = this.getFieldId(fieldToListen);
       var inputField = document.getElementById(fieldId);
       var event = "change";
-      if ((inputField.tagName === 'INPUT' && inputField.type === 'text') || inputField.tagName === 'TEXTAREA' ||
+      if (
+        inputField.tagName === 'TEXTAREA' ||
+        (inputField.tagName === 'INPUT' && inputField.type === 'text') ||
         (inputField.tagName === 'INPUT' && inputField.type === 'number')) {
         event = "keyup";
       }
       inputField.addEventListener(event, function(event) {
-        self.runConditionalRulesForInput(this);
+        self.runConditionsForInput(this);
       }, false);
 
       // The number field can have change and keyup events
       if (inputField.tagName === 'INPUT' && inputField.type === 'number') {
         event = "change";
         inputField.addEventListener(event, function(event) {
-          self.runConditionalRulesForInput(this);
+          self.runConditionsForInput(this);
         }, false);
       }
     }
@@ -82,7 +88,7 @@ SproutFormsRules = {
    * Run all rules where this input is involved
    * prepare all the info to run the validation in the backend
    **/
-  runConditionalRulesForInput: function(input) {
+  runConditionsForInput: function(input) {
     var inputFieldHandle = input.id.replace('fields-', '');
     var postData = {};
     for (var targetField in this.allRules) {

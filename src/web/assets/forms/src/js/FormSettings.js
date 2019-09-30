@@ -49,9 +49,9 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
       this.addListener(this.$lightswitches, 'click', 'onEnableIntegration');
 
-      this.$conditionalLightswitches = $('.sproutforms-rules-row .lightswitch');
+      this.$ruleEnabledLightswitches = $('.sproutforms-rules-row .lightswitch');
 
-      this.addListener(this.$conditionalLightswitches, 'click', 'onEnableRule');
+      this.addListener(this.$ruleEnabledLightswitches, 'click', 'onEnableRule');
 
       this.modal = Craft.SproutForms.IntegrationModal.getInstance();
 
@@ -63,14 +63,14 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
       this.ruleModal = Craft.SproutForms.RuleModal.getInstance();
 
-      this.ruleModal.on('saveConditional', $.proxy(function(e) {
-        const conditional = e.conditional;
+      this.ruleModal.on('saveRule', $.proxy(function(e) {
+        const rule = e.rule;
         // Let's update the name if the conditional is updated
-        this.resetConditional(conditional);
+        this.resetConditional(rule);
       }, this));
 
       this.addListener($("#integrationsOptions"), 'change', 'createDefaultIntegration');
-      this.addListener($("#conditionalOptions"), 'change', 'createDefaultConditional');
+      this.addListener($("#ruleOptions"), 'change', 'createDefaultRule');
     },
 
     onEnableIntegration: function(ev) {
@@ -142,10 +142,10 @@ if (typeof Craft.SproutForms === typeof undefined) {
      * @param conditional
      */
     resetConditional: function(conditional) {
-      const $conditionalDiv = $("#sproutform-conditional-" + conditional.id);
+      const $conditionalDiv = $("#sproutform-rules-" + conditional.id);
 
-      const $container = $("#conditional-enabled-" + conditional.id);
-      const $behaviorContainer = $("#sproutform-conditional-behavior-" + conditional.id);
+      const $container = $("#condition-enabled-" + conditional.id);
+      const $behaviorContainer = $("#sproutform-rules-behavior-" + conditional.id);
       const currentValue = conditional.enabled === '1' ? true : false;
       const settingsValue = $container.attr('aria-checked') === 'true' ? true : false;
       if (currentValue !== settingsValue) {
@@ -210,25 +210,25 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
     },
 
-    createDefaultConditional: function(type) {
+    createDefaultRule: function(type) {
       const that = this;
-      const conditionalTableBody = $("#sproutforms-rules-table tbody");
-      const currentConditional = $("#conditionalOptions").val();
+      const ruleTableBody = $("#sproutforms-rules-table tbody");
+      const currentRule = $("#ruleOptions").val();
       const formId = $("#formId").val();
 
-      if (currentConditional === '') {
+      if (currentRule === '') {
         return;
       }
 
       const data = {
-        type: currentConditional,
+        type: currentRule,
         formId: formId
       };
 
       Craft.postActionRequest('sprout-forms/rules/save-rule', data, $.proxy(function(response, textStatus) {
         if (textStatus === 'success') {
           const rule = response.rule;
-          conditionalTableBody.append('<tr id ="sproutforms-rules-row-' + rule.id + '" class="field sproutforms-rules-row">' +
+          ruleTableBody.append('<tr id ="sproutforms-rules-row-' + rule.id + '" class="field sproutforms-rules-row">' +
             '<td>' +
             '<a href="#" id ="sproutform-rules-' + rule.id + '" data-rule-id="' + rule.id + '">' + rule.name + '</a>' +
             '</td>' +
@@ -236,7 +236,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
             '<div id ="sproutform-rules-behavior-' + rule.id + '">' + rule.behavior + '</div>' +
             '</td>' +
             '<td>' +
-            '<div class="lightswitch small" tabindex="0" data-value="1" role="checkbox" aria-checked="false" id ="conditional-enabled-' + rule.id + '">' +
+            '<div class="lightswitch small" tabindex="0" data-value="1" role="checkbox" aria-checked="false" id ="condition-enabled-' + rule.id + '">' +
             '<div class="lightswitch-container">' +
             '<div class="label on"></div>' +
             '<div class="handle"></div>' +
@@ -249,8 +249,8 @@ if (typeof Craft.SproutForms === typeof undefined) {
 
           that.addListener($("#sproutform-rules-" + rule.id), 'activate', 'editRule');
 
-          $('#conditionalOptions').val('');
-          const $container = $("#conditional-enabled-" + rule.id);
+          $('#ruleOptions').val('');
+          const $container = $("#condition-enabled-" + rule.id);
           $container.lightswitch();
           that.addListener($container, 'click', 'onEnableRule');
         } else {
