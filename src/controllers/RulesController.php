@@ -89,7 +89,7 @@ class RulesController extends BaseController
             'id' => $rule->id,
             'formId' => $rule->formId,
             'name' => $rule->name,
-            'enabled' => $rule->enabled,
+            'enabled' => $rule->enabled === '1',
             'behaviorAction' => $rule->behaviorAction,
             'behaviorTarget' => $rule->behaviorTarget,
             'type' => get_class($rule),
