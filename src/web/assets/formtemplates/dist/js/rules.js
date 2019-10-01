@@ -50,7 +50,7 @@ SproutFormsRules = {
       var wrapperId = "fields-" + targetHandle + "-field";
       var wrapper = document.getElementById(wrapperId);
       if (rule.behaviorAction === 'show') {
-        this.hideField(wrapper);
+        this.hideAndDisableField(wrapper);
       }
 
       this.allRules[targetHandle] = {
@@ -159,15 +159,15 @@ SproutFormsRules = {
           var rule = self.allRules[targetField];
           if (response.result[targetField] == true) {
             if (rule.action == 'hide') {
-              self.hideField(wrapper);
+              self.hideAndDisableField(wrapper);
             } else {
-              self.showField(wrapper);
+              self.showAndEnableField(wrapper);
             }
           } else {
             if (rule.action == 'hide') {
-              self.showField(wrapper);
+              self.showAndEnableField(wrapper);
             } else {
-              self.hideField(wrapper);
+              self.hideAndDisableField(wrapper);
             }
           }
         }
@@ -176,7 +176,7 @@ SproutFormsRules = {
       }
     };
 
-    postData[window.csrfTokenName] = window.csrfTokenValue;
+    postData[window.csrfTokenName] = this.form.querySelector('[name="'+window.csrfTokenName+'"]').value;
     postData['action'] = action;
     postData['rules'] = JSON.stringify(data);
 
@@ -191,11 +191,27 @@ SproutFormsRules = {
     return "fields-" + fieldHandle;
   },
 
-  hideField: function(element) {
+  hideAndDisableField: function(element) {
+    // Disable all form elements within this field
+    var inputs = element.querySelectorAll('input, select, option, textarea, button, datalist, output');
+    for (var key in inputs) {
+      var input = inputs[key];
+      input.disabled = true;
+    }
+
+    // Hide field
     element.classList.add('hidden');
   },
 
-  showField: function(element) {
+  showAndEnableField: function(element) {
+    // Enabled all form elements within this field
+    var inputs = element.querySelectorAll('input, select, option, textarea, button, datalist, output');
+    for (var key in inputs) {
+      var input = inputs[key];
+      input.disabled = false;
+    }
+
+    // Show field
     element.classList.remove('hidden');
   },
 };

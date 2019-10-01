@@ -50,7 +50,7 @@ class RulesController extends BaseController
         $rule->behaviorTarget = $request->getBodyParam('behaviorTarget');
 
         $settings = $request->getBodyParam('settings.'.$type);
-        
+
         $rule = SproutForms::$app->rules->createRule([
             'id' => $rule->id,
             'formId' => $rule->formId,

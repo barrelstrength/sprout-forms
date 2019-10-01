@@ -95,9 +95,6 @@ class EntriesController extends BaseController
             $entry->statusId = $statusId;
         }
 
-        $this->removeHiddenValuesBasedOnFieldRules($entry);
-
-        $request->setBodyParams($_POST);
         // Populate the entry with post data
         $this->populateEntryModel($entry);
 
@@ -127,56 +124,6 @@ class EntriesController extends BaseController
         }
 
         return $this->saveEntryInCraft($entry);
-    }
-
-    /**
-     * Removes field values from POST request if a Field Rule defines a given field to hidden
-     *
-     * @param EntryElement $entry
-     *
-     * @return bool
-     * @throws InvalidConfigException
-     * @throws MissingComponentException
-     */
-    private function removeHiddenValuesBasedOnFieldRules(EntryElement $entry): bool
-    {
-        if ($this->form === null) {
-            return false;
-        }
-
-        $conditionalLogicResults = $_POST['conditionalLogicResults'] ?? null;
-
-        // @todo store the conditional results in a entry property and add the getIsFieldHiddenByRule method
-
-        if ($conditionalLogicResults === null) {
-            return true;
-        }
-
-        $rules = $this->form->getRules();
-
-        $fieldRules = [];
-        foreach ($rules as $rule) {
-            $fieldRules[$rule['behaviorTarget']] = [
-                'action' => $rule['behaviorAction']
-            ];
-        }
-
-        $conditionalLogicResults = json_decode($conditionalLogicResults, true);
-        $conditionalLogicResults = $conditionalLogicResults['result'] ?? [];
-        $entry->setConditionalLogicResults($conditionalLogicResults);
-
-        foreach ($conditionalLogicResults as $fieldHandle => $result) {
-            $rule = $fieldRules[$fieldHandle];
-            if ($result === true) {
-                if ($rule['action'] === 'hide') {
-                    $_POST['fields'][$fieldHandle] = '';
-                }
-            } else if ($rule['action'] === 'show') {
-                $_POST['fields'][$fieldHandle] = '';
-            }
-        }
-
-        return true;
     }
 
     /**
