@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\rules\conditions;
 
 use barrelstrength\sproutforms\base\Condition;
+use Craft;
 
 /**
  *
@@ -19,10 +20,22 @@ class IsProvidedCondition extends Condition
     }
 
     /**
+     * @return array
+     */
+    public function rules(): array
+    {
+        return [
+            [['inputValue'], 'runValidation']
+        ];
+    }
+
+    /**
      * @inheritDoc
      */
-    public static function runValidation($inputValue, $ruleValue = null): bool
+    public function runValidation()
     {
-        return empty($inputValue) === false;
+        if (!(empty($this->inputValue) === false)) {
+            $this->addError('inputValue', Craft::t('sprout-forms', 'Does not validate'));
+        }
     }
 }

@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\rules\conditions;
 
 use barrelstrength\sproutforms\base\Condition;
+use Craft;
 
 /**
  *
@@ -19,14 +20,22 @@ class IsCheckedCondition extends Condition
     }
 
     /**
+     * @return array
+     */
+    public function rules(): array
+    {
+        return [
+            [['inputValue'], 'runValidation']
+        ];
+    }
+
+    /**
      * @inheritDoc
      */
-    public static function runValidation($inputValue, $ruleValue = null): bool
+    public function runValidation()
     {
-        if (filter_var($inputValue, FILTER_VALIDATE_BOOLEAN)) {
-            return true;
+        if (!filter_var($this->inputValue, FILTER_VALIDATE_BOOLEAN)) {
+            $this->addError('inputValue', Craft::t('sprout-forms', 'Does not validate'));
         }
-
-        return false;
     }
 }

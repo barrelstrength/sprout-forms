@@ -18,6 +18,17 @@ abstract class Condition extends SavableComponent implements ConditionInterface
     public $formField;
 
     /**
+     * @var $inputValue string
+     */
+    public $inputValue;
+
+    /**
+     * @var $ruleValue string
+     */
+    public $ruleValue;
+
+
+    /**
      * @inheritDoc
      */
     public function getLabel(): string
@@ -31,13 +42,5 @@ abstract class Condition extends SavableComponent implements ConditionInterface
     public function getValue(): string
     {
         return '';
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public static function runValidation($inputValue, $ruleValue = null): bool
-    {
-        return false;
     }
 }

@@ -222,11 +222,11 @@ class RulesController extends BaseController
             foreach ($andRules as $orRules) {
                 $orResult = false;
                 foreach ($orRules as $orRule) {
-                    $condition = $orRule['condition'];
-                    $inputValue = $orRule['inputValue'];
-                    $ruleValue = $orRule['ruleValue'];
+                    $condition = new $orRule['condition'];
+                    $condition->inputValue = $orRule['inputValue'];
+                    $condition->ruleValue = $orRule['ruleValue'];
                     /** @var ConditionInterface $condition */
-                    $result = $condition::runValidation($inputValue, $ruleValue);
+                    $result = $condition->validate();
                     if ($result) {
                         $orResult = true;
                     }
