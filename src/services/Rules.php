@@ -20,8 +20,8 @@ use Twig\Error\SyntaxError;
 use yii\base\InvalidConfigException;
 
 /**
- * @property array        $integrationOptions
- * @property array        $ruleOptions
+ * @property array $integrationOptions
+ * @property array $ruleOptions
  */
 class Rules extends Component
 {
@@ -78,14 +78,14 @@ class Rules extends Component
 
         $results = $query->all();
 
-        $conditionals = [];
+        $rules = [];
 
         foreach ($results as $result) {
-            $conditional = ComponentHelper::createComponent($result, RuleInterface::class);
-            $conditionals[] = new $result['type']($conditional);
+            $rule = ComponentHelper::createComponent($result, RuleInterface::class);
+            $rules[] = new $result['type']($rule);
         }
 
-        return $conditionals;
+        return $rules;
     }
 
     /**

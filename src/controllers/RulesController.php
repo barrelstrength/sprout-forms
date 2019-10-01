@@ -25,40 +25,6 @@ class RulesController extends BaseController
     ];
 
     /**
-     * Enable or disable a Rule
-     *
-     * @return Response
-     * @throws Throwable
-     * @throws BadRequestHttpException
-     */
-    public function actionEnableRule(): Response
-    {
-        $this->requireAcceptsJson();
-
-        $request = Craft::$app->getRequest();
-        $ruleId = $request->getBodyParam('ruleId');
-        $enabled = $request->getBodyParam('enabled');
-        $enabled = $enabled == 1;
-
-        $pieces = explode('-', $ruleId);
-        $ruleId = $pieces[2];
-
-        if (count($pieces) === 3) {
-            $conditional = SproutForms::$app->rules->getRuleById($ruleId);
-            if ($conditional) {
-                $conditional->enabled = $enabled;
-                if (SproutForms::$app->rules->saveRule($conditional)) {
-                    return $this->returnJson(true, $conditional);
-                }
-            }
-        }
-
-        return $this->asJson([
-            'success' => false
-        ]);
-    }
-
-    /**
      * Save an Rule
      *
      * @return Response
@@ -84,7 +50,7 @@ class RulesController extends BaseController
         $rule->behaviorTarget = $request->getBodyParam('behaviorTarget');
 
         $settings = $request->getBodyParam('settings.'.$type);
-
+        
         $rule = SproutForms::$app->rules->createRule([
             'id' => $rule->id,
             'formId' => $rule->formId,
@@ -174,6 +140,40 @@ class RulesController extends BaseController
 
         return $this->asJson([
             'success' => $response
+        ]);
+    }
+
+    /**
+     * Enable or disable a Rule
+     *
+     * @return Response
+     * @throws Throwable
+     * @throws BadRequestHttpException
+     */
+    public function actionEnableRule(): Response
+    {
+        $this->requireAcceptsJson();
+
+        $request = Craft::$app->getRequest();
+        $ruleId = $request->getBodyParam('ruleId');
+        $enabled = $request->getBodyParam('enabled');
+        $enabled = $enabled == 1;
+
+        $pieces = explode('-', $ruleId);
+        $ruleId = $pieces[2];
+
+        if (count($pieces) === 3) {
+            $rule = SproutForms::$app->rules->getRuleById($ruleId);
+            if ($rule) {
+                $rule->enabled = $enabled;
+                if (SproutForms::$app->rules->saveRule($rule)) {
+                    return $this->returnJson(true, $rule);
+                }
+            }
+        }
+
+        return $this->asJson([
+            'success' => false
         ]);
     }
 
