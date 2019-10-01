@@ -61,7 +61,6 @@ class Install extends Migration
 
         $this->dropTableIfExists('{{%sproutforms_log}}');
         $this->dropTableIfExists('{{%sproutforms_integrations}}');
-        $this->dropTableIfExists('{{%sproutforms_conditionals}}');
         $this->dropTableIfExists('{{%sproutforms_entries}}');
         $this->dropTableIfExists('{{%sproutforms_forms}}');
         $this->dropTableIfExists('{{%sproutforms_formgroups}}');
