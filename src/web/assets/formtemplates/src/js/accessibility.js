@@ -8,8 +8,8 @@ SproutFormsCheckableInputs = {
   form: null,
   checkableInputs: null,
 
-  init: function(settings) {
-    this.formId = settings.formId;
+  init: function(formId) {
+    this.formId = formId;
     this.form = document.getElementById(this.formId);
     this.checkableInputs = this.form.querySelectorAll('[type=checkbox], [type=radio]');
 
@@ -34,9 +34,7 @@ SproutFormsCheckableInputs = {
   },
 
   onCheckableInputChange: function(event) {
-
     if (event.target.checked) {
-
       // Resets all buttons in radio group to false
       if (event.target.getAttribute("type") === "radio") {
         this.resetRadioGroup(event.target);
@@ -49,7 +47,6 @@ SproutFormsCheckableInputs = {
   },
 
   resetRadioGroup: function(selectedRadioInput) {
-
     var radioInputName = selectedRadioInput.getAttribute("name");
     var allRadioInputs = document.querySelectorAll('#' + this.formId + ' [name="' + radioInputName + '"] ');
 

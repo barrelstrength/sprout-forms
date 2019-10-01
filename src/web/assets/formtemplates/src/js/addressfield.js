@@ -4,22 +4,17 @@ if (typeof SproutFormsAddressField === typeof undefined) {
 
 SproutFormsAddressField = {
 
-  addressFields: null,
   countrySelectFields: null,
-  baseInputName: null,
-
   form: null,
 
-  init: function(settings) {
-    this.addressFields = document.querySelectorAll('.sproutfields-address-formfields');
+  init: function() {
     this.countrySelectFields = document.querySelectorAll('.sprout-address-country-select');
 
-    // No need to continue if we don't have an Address Field
-    if (this.addressFields.length === 0 && this.countrySelectFields.length === 0) {
+    // No need to continue if we don't have any Country Select fields
+    if (this.countrySelectFields.length === 0) {
       return false;
     }
 
-    this.getNamespace();
     this.initCountrySelectFields();
   },
 
@@ -35,15 +30,16 @@ SproutFormsAddressField = {
   updateFormFields: function(countrySelectInput) {
     var self = this;
     this.form = countrySelectInput.closest('form');
+    var baseInputName = countrySelectInput.closest('[data-namespace]').dataset.namespace;
 
     var data = {
       action: 'sprout-base-fields/fields-address/update-address-form-html',
-      namespace: this.baseInputName,
+      namespace: baseInputName,
       countryCode: countrySelectInput.value,
       overrideTemplatePaths: true
     };
 
-    data[window.csrfTokenName] = this.form.querySelector('[name="'+window.csrfTokenName+'"]').value;
+    data[window.csrfTokenName] = this.form.querySelector('[name="' + window.csrfTokenName + '"]').value;
 
     var xhr = new XMLHttpRequest();
     xhr.open('POST', '/', true);
@@ -69,20 +65,11 @@ SproutFormsAddressField = {
 
   removeCountrySpecificElements: function() {
     var inputs = this.form.querySelectorAll('.sprout-address-onchange-country');
-
     for (var key in inputs) {
       var elem = inputs[key];
-
       if (typeof elem.parentNode !== 'undefined') {
         elem.parentNode.removeChild(elem);
       }
-    }
-  },
-
-  getNamespace: function() {
-    // @todo - update to support multiple address fields
-    if (this.addressFields.length) {
-      this.baseInputName = this.addressFields[0].dataset.namespace;
     }
   },
 };

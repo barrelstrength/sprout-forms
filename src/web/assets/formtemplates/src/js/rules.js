@@ -12,10 +12,10 @@ SproutFormsRules = {
   targetFieldsHtml: {},
   rulesJson: {},
 
-  init: function(settings) {
-    this.formId = settings.formId;
-    this.rulesJson = settings.rulesJson;
+  init: function(formId) {
+    this.formId = formId;
     this.form = document.getElementById(this.formId);
+    this.rulesJson = JSON.parse(this.form.dataset.rules);
     this.allRules = {};
     this.fieldsToListen = {};
 
@@ -90,7 +90,8 @@ SproutFormsRules = {
    **/
   runConditionsForInput: function(input) {
     var inputFieldHandle = input.id.replace('fields-', '');
-    var postData = {};
+    var conditionsByField = {};
+
     for (var targetField in this.allRules) {
       var wrapperId = "fields-" + targetField + "-field";
       var wrapper = document.getElementById(wrapperId);
@@ -99,7 +100,8 @@ SproutFormsRules = {
       var result = false;
       var andResult = true;
       var i = 0;
-      var data = {};
+      var conditions = {};
+
       for (var andPos in conditional.rules) {
         var andRule = conditional.rules[andPos];
         var orConditions = [];
@@ -111,6 +113,7 @@ SproutFormsRules = {
           if (inputField.type === 'checkbox') {
             inputValue = inputField.checked;
           }
+
           if (typeof inputField.type === 'undefined') {
             var radios = inputField.querySelectorAll('input[type="radio"]');
             if (radios.length >= 1) {
@@ -123,6 +126,7 @@ SproutFormsRules = {
               }
             }
           }
+
           orConditions.push({
             condition: rule.condition,
             inputValue: inputValue,
@@ -130,22 +134,27 @@ SproutFormsRules = {
           });
 
         }
-        data[i] = orConditions;
+        conditions[i] = orConditions;
         i++;
       }
-      postData[targetField] = data;
+      conditionsByField[targetField] = conditions;
     }
 
-    this.callAjax({data: postData});
+    var rules = JSON.stringify({
+      data: conditionsByField
+    });
+
+    this.validateConditions(rules);
   },
 
-  callAjax: function(data, action = 'sprout-forms/rules/validate-condition') {
-
+  validateConditions: function(rules) {
     var self = this;
     var postData = {};
+
     var xhr = new XMLHttpRequest();
     xhr.open('POST', '/');
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
     xhr.onload = function() {
       var response = JSON.parse(this.response);
       if (this.status === 200 && response.success == true) {
@@ -169,13 +178,13 @@ SproutFormsRules = {
           }
         }
       } else {
-        console.error("Something went wrong");
+        console.error("Invalid request while validating conditions");
       }
     };
 
     postData[window.csrfTokenName] = this.form.querySelector('[name="'+window.csrfTokenName+'"]').value;
-    postData['action'] = action;
-    postData['rules'] = JSON.stringify(data);
+    postData['action'] = 'sprout-forms/rules/validate-condition';
+    postData['rules'] = rules;
 
     var body = Object.keys(postData).map(function(key) {
       return encodeURIComponent(key) + '=' + encodeURIComponent(postData[key])

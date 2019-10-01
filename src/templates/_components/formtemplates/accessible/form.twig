@@ -18,6 +18,7 @@
 <form method="post" accept-charset="utf-8" enctype="multipart/form-data"
     {%- if id %} id="{{ id }}"{% endif -%}
     {%- if class %} class="{{ class -}}{%- if errors %} {{ errorClass }}{% endif -%}"{% endif -%}
+    data-rules="{{ rules|json_encode|raw|e('html') }}"
 >
     {{ csrfInput() }}
     <input type="hidden" aria-hidden="true" name="action" value="sprout-forms/entries/save-entry">
@@ -84,19 +85,8 @@
 {% js at endBody %}
     (function() {
     window.csrfTokenName = "{{ craft.app.getConfig().getGeneral().csrfTokenName|e('js') }}";
-
-    SproutFormsCheckableInputs.init({
-    formId: '{{ id }}'
-    });
-
-    SproutFormsAddressField.init({
-    formId: '{{ id }}'
-    });
-
-    SproutFormsRules.init({
-    formId: '{{ id }}',
-    rulesJson: {{ rules|json_encode|raw }}
-    });
-
+    SproutFormsAddressField.init();
+    SproutFormsCheckableInputs.init('{{ id }}');
+    SproutFormsRules.init('{{ id }}');
     })();
 {% endjs -%}
