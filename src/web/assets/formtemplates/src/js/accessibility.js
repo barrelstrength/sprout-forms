@@ -4,13 +4,13 @@ if (typeof SproutFormsCheckableInputs === typeof undefined) {
 
 // Manage aria-checked values on Checkbox and Radio Button inputs
 SproutFormsCheckableInputs = {
-  id: null,
+  formId: null,
   form: null,
   checkableInputs: null,
 
   init: function(settings) {
-    this.id = settings.id;
-    this.form = document.getElementById(this.id);
+    this.formId = settings.formId;
+    this.form = document.getElementById(this.formId);
     this.checkableInputs = this.form.querySelectorAll('[type=checkbox], [type=radio]');
 
     this.setAriaCheckedAttributes();

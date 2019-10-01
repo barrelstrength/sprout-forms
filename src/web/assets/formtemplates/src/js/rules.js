@@ -5,7 +5,7 @@ if (typeof SproutFormsRules === typeof undefined) {
 // Manage Form Rules
 SproutFormsRules = {
 
-  id: null,
+  formId: null,
   form: null,
   allRules: {},
   fieldsToListen: {},
@@ -13,9 +13,9 @@ SproutFormsRules = {
   rulesJson: {},
 
   init: function(settings) {
-    this.id = settings.id;
+    this.formId = settings.formId;
     this.rulesJson = settings.rulesJson;
-    this.form = document.getElementById(this.id);
+    this.form = document.getElementById(this.formId);
     this.allRules = {};
     this.fieldsToListen = {};
 

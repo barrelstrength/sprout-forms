@@ -86,22 +86,19 @@
 {% js at endBody %}
     (function() {
     window.csrfTokenName = "{{ craft.app.getConfig().getGeneral().csrfTokenName|e('js') }}";
-    window.csrfTokenValue = "{{ craft.app.getRequest().csrfToken|e('js') }}";
 
-    // Accessibility
     SproutFormsCheckableInputs.init({
-    id: '{{ id }}'
+    formId: '{{ id }}'
     });
 
-    // Conditional Logic
+    SproutFormsAddressField.init({
+    formId: '{{ id }}'
+    });
+
     SproutFormsRules.init({
-    id: '{{ id }}',
+    formId: '{{ id }}',
     rulesJson: {{ rules|json_encode|raw }}
     });
 
-    // Address Field
-    SproutFormsAddressField.init({
-    id: '{{ id }}'
-    });
     })();
 {% endjs -%}

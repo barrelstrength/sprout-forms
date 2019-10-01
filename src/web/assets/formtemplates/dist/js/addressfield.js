@@ -43,7 +43,7 @@ SproutFormsAddressField = {
       overrideTemplatePaths: true
     };
 
-    data[window.csrfTokenName] = window.csrfTokenValue;
+    data[window.csrfTokenName] = this.form.querySelector('[name="'+window.csrfTokenName+'"]').value;
 
     var xhr = new XMLHttpRequest();
     xhr.open('POST', '/', true);
