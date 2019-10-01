@@ -1,5 +1,3 @@
-<!-- Custom form created using the Sprout Forms form builder plugin - https://sprout.barrelstrengthdesign.com/craft-plugins/forms -->
-
 {% do craft.sproutForms.addFieldVariables({
     'craft': craft,
     'now': now,
@@ -15,6 +13,7 @@
 {%- set id          = renderingOptions.id is defined ? renderingOptions.id : form.handle ~ '-form' %}
 {%- set class       = renderingOptions.class is defined ? renderingOptions.class : form.handle ~ '-form' -%}
 {%- set redirectUri = form.redirectUri -%}
+{%- set rules       = form.getRules() -%}
 
 <form method="post" accept-charset="utf-8" enctype="multipart/form-data"
     {%- if id %} id="{{ id }}"{% endif -%}
@@ -62,4 +61,34 @@
     {%- endfor %}
 {%- endif %}
 
-<!-- / Sprout Forms Craft CMS form builder plugin -->
+{%- set rulesJsUrl = view.getAssetManager().getPublishedUrl(
+    '@sproutforms/web/assets/formtemplates/dist/js/rules.js',
+    true) -%}
+{%- do view.registerJsFile(rulesJsUrl) -%}
+
+{%- set addressFieldJsUrl = view.getAssetManager().getPublishedUrl(
+    '@sproutforms/web/assets/formtemplates/dist/js/addressfield.js',
+    true) -%}
+{%- do view.registerJsFile(addressFieldJsUrl) -%}
+
+{% css %}
+    .hidden{
+    display: none !important;
+    }
+{% endcss %}
+
+{% js at endBody %}
+    (function() {
+    window.csrfTokenName = "{{ craft.app.getConfig().getGeneral().csrfTokenName|e('js') }}";
+
+    SproutFormsAddressField.init({
+    formId: '{{ id }}'
+    });
+
+    SproutFormsRules.init({
+    formId: '{{ id }}',
+    rulesJson: {{ rules|json_encode|raw }}
+    });
+
+    })();
+{% endjs -%}

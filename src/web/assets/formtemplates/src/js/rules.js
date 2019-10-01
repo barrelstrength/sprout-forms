@@ -147,9 +147,6 @@ SproutFormsRules = {
     xhr.open('POST', '/');
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.onload = function() {
-      var conditionalLogicResults = self.form.querySelectorAll('[name="conditionalLogicResults"]');
-
-      conditionalLogicResults[0].value = this.response;
       var response = JSON.parse(this.response);
       if (this.status === 200 && response.success == true) {
         // apply rules

@@ -21,7 +21,6 @@
 >
     {{ csrfInput() }}
     <input type="hidden" aria-hidden="true" name="action" value="sprout-forms/entries/save-entry">
-    <input type="hidden" aria-hidden="true" name="conditionalLogicResults" value="">
     <input type="hidden" aria-hidden="true" name="handle" value="{{ form.handle }}">
     {%- if redirectUri is not empty %}
         {% if redirectUri|slice(0, 1)|lower == '?' %}
@@ -61,7 +60,6 @@
     {%- endfor %}
 {%- endif %}
 
-{# @todo - update to dist folder #}
 {%- set accessibilityJsUrl = view.getAssetManager().getPublishedUrl(
     '@sproutforms/web/assets/formtemplates/dist/js/accessibility.js',
     true) -%}
