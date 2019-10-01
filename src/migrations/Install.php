@@ -59,12 +59,13 @@ class Install extends Migration
     {
         SproutBaseReports::$app->dataSources->deleteReportsByType(EntriesDataSource::class);
 
-        $this->dropTable('{{%sproutforms_log}}');
-        $this->dropTable('{{%sproutforms_integrations}}');
-        $this->dropTable('{{%sproutforms_entries}}');
-        $this->dropTable('{{%sproutforms_forms}}');
-        $this->dropTable('{{%sproutforms_formgroups}}');
-        $this->dropTable('{{%sproutforms_entrystatuses}}');
+        $this->dropTableIfExists('{{%sproutforms_log}}');
+        $this->dropTableIfExists('{{%sproutforms_integrations}}');
+        $this->dropTableIfExists('{{%sproutforms_conditionals}}');
+        $this->dropTableIfExists('{{%sproutforms_entries}}');
+        $this->dropTableIfExists('{{%sproutforms_forms}}');
+        $this->dropTableIfExists('{{%sproutforms_formgroups}}');
+        $this->dropTableIfExists('{{%sproutforms_entrystatuses}}');
 
         return true;
     }
