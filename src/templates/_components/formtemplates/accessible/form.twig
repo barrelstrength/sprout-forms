@@ -64,7 +64,9 @@
 {%- set accessibilityJsUrl = view.getAssetManager().getPublishedUrl(
     '@sproutforms/web/assets/formtemplates/dist/js/accessibility.js',
     true) -%}
-{%- do view.registerJsFile(accessibilityJsUrl) -%}
+{%- do view.registerJsFile(accessibilityJsUrl, {
+    position: 3
+}) -%}
 
 {%- set rulesJsUrl = view.getAssetManager().getPublishedUrl(
     '@sproutforms/web/assets/formtemplates/dist/js/rules.js',
@@ -85,8 +87,8 @@
 {% js at endBody %}
     (function() {
     window.csrfTokenName = "{{ craft.app.getConfig().getGeneral().csrfTokenName|e('js') }}";
-    SproutFormsAddressField.init();
-    SproutFormsCheckableInputs.init('{{ id }}');
-    SproutFormsRules.init('{{ id }}');
+    new SproutFormsAddressField();
+    new SproutFormsCheckableInputs('{{ id }}');
+    new SproutFormsRules('{{ id }}');
     })();
 {% endjs -%}

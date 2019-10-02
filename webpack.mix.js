@@ -45,13 +45,13 @@ mix
   )
 
   // Form Templates
-  .copy([
+  .js([
     'src/web/assets/formtemplates/src/js/addressfield.js',
   ], 'src/web/assets/formtemplates/dist/js/addressfield.js')
-  .copy([
+  .js([
     'src/web/assets/formtemplates/src/js/accessibility.js',
   ], 'src/web/assets/formtemplates/dist/js/accessibility.js')
-  .copy([
+  .js([
     'src/web/assets/formtemplates/src/js/rules.js',
   ], 'src/web/assets/formtemplates/dist/js/rules.js');
 

@@ -1,38 +1,33 @@
-if (typeof SproutFormsAddressField === typeof undefined) {
-  var SproutFormsAddressField = {};
-}
+/** global window.csrfTokenName */
 
-SproutFormsAddressField = {
+class SproutFormsAddressField {
 
-  countrySelectFields: null,
-  form: null,
-
-  init: function() {
+  constructor() {
     this.countrySelectFields = document.querySelectorAll('.sprout-address-country-select');
 
     // No need to continue if we don't have any Country Select fields
     if (this.countrySelectFields.length === 0) {
-      return false;
+      return;
     }
 
     this.initCountrySelectFields();
-  },
+  }
 
-  initCountrySelectFields: function() {
-    self = this;
-    for (var i = 0; i < this.countrySelectFields.length; i++) {
+  initCountrySelectFields() {
+    let self = this;
+    for (let i = 0; i < this.countrySelectFields.length; i++) {
       this.countrySelectFields[i].addEventListener('change', function(event) {
         self.updateFormFields(this);
       });
     }
-  },
+  }
 
-  updateFormFields: function(countrySelectInput) {
-    var self = this;
+  updateFormFields(countrySelectInput) {
+    let self = this;
     this.form = countrySelectInput.closest('form');
-    var baseInputName = countrySelectInput.closest('[data-namespace]').dataset.namespace;
+    let baseInputName = countrySelectInput.closest('[data-namespace]').dataset.namespace;
 
-    var data = {
+    let data = {
       action: 'sprout-base-fields/fields-address/update-address-form-html',
       namespace: baseInputName,
       countryCode: countrySelectInput.value,
@@ -41,7 +36,7 @@ SproutFormsAddressField = {
 
     data[window.csrfTokenName] = this.form.querySelector('[name="' + window.csrfTokenName + '"]').value;
 
-    var xhr = new XMLHttpRequest();
+    let xhr = new XMLHttpRequest();
     xhr.open('POST', '/', true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
     xhr.setRequestHeader('Accept', 'application/json; charset=utf-8');
@@ -49,27 +44,31 @@ SproutFormsAddressField = {
     // When the country dropdown changes, update things
     xhr.onreadystatechange = function() {
       if (xhr.readyState === 4 && xhr.status === 200) {
-        var response = JSON.parse(xhr.response);
+        let response = JSON.parse(xhr.response);
         self.removeCountrySpecificElements();
-        var countrySpecificFields = self.form.querySelector('.sprout-address-country-fields');
+        let countrySpecificFields = self.form.querySelector('.sprout-address-country-fields');
         countrySpecificFields.innerHTML = response.html;
       }
     };
 
-    var body = Object.keys(data).map(function(key) {
+    let body = Object.keys(data).map(function(key) {
       return encodeURIComponent(key) + '=' + encodeURIComponent(data[key])
     }).join('&');
 
     xhr.send(body);
-  },
+  }
 
-  removeCountrySpecificElements: function() {
-    var inputs = this.form.querySelectorAll('.sprout-address-onchange-country');
-    for (var key in inputs) {
-      var elem = inputs[key];
-      if (typeof elem.parentNode !== 'undefined') {
-        elem.parentNode.removeChild(elem);
+  removeCountrySpecificElements() {
+    let inputs = this.form.querySelectorAll('.sprout-address-onchange-country');
+    for (let key in inputs) {
+      if (inputs.hasOwnProperty(key)) {
+        let elem = inputs[key];
+        if (typeof elem.parentNode !== 'undefined') {
+          elem.parentNode.removeChild(elem);
+        }
       }
     }
-  },
-};
+  }
+}
+
+window.SproutFormsAddressField = SproutFormsAddressField;
