@@ -32,6 +32,9 @@ class Entry extends Element
     /** @var array|null */
     private $conditionalResults;
 
+    /** @var array|null */
+    private $entryHiddenFields;
+
     public $id;
     public $formId;
     public $formHandle;
@@ -462,34 +465,31 @@ class Entry extends Element
      * @param $fieldHandle
      *
      * @return bool
-     * @throws InvalidConfigException
-     * @throws MissingComponentException
      */
     public function getIsFieldHiddenByRule($fieldHandle): bool
     {
-        $conditionalLogicResults = $this->getConditionalLogicResults();
+        $hiddenFields = $this->getHiddenFields();
 
-        $rules = $this->getForm()->getRules();
-        $fieldRules = [];
-
-        foreach ($rules as $rule) {
-            $fieldRules[$rule['behaviorTarget']] = [
-                'action' => $rule['behaviorAction']
-            ];
-        }
-
-        if (isset($fieldRules[$fieldHandle])) {
-            $result = $conditionalLogicResults[$fieldHandle];
-            $rule = $fieldRules[$fieldHandle];
-            if ($result === true) {
-                if ($rule['action'] === 'hide') {
-                    return true;
-                }
-            } else if ($rule['action'] === 'show') {
-                return true;
-            }
+        if (in_array($fieldHandle, $hiddenFields)){
+            return true;
         }
 
         return false;
+    }
+
+    /**
+     * @param $hiddenFields
+     */
+    public function setHiddenFields($hiddenFields)
+    {
+        $this->entryHiddenFields = $hiddenFields;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getHiddenFields()
+    {
+        return $this->entryHiddenFields ?? [];
     }
 }
