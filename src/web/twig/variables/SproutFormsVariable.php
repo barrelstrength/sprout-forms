@@ -3,7 +3,6 @@
 namespace barrelstrength\sproutforms\web\twig\variables;
 
 use barrelstrength\sproutforms\base\Condition;
-use barrelstrength\sproutforms\base\Integration;
 use barrelstrength\sproutforms\elements\db\EntryQuery;
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Form;
@@ -635,9 +634,8 @@ class SproutFormsVariable
     public function getFormField($formFieldHandle, $formId)
     {
         $form = SproutForms::$app->forms->getFormById($formId);
-        $formField = $form->getField($formFieldHandle);
 
-        return $formField;
+        return $form->getField($formFieldHandle);
     }
 
     /**

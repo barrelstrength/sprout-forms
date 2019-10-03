@@ -10,7 +10,6 @@ use barrelstrength\sproutforms\rules\conditions\EndsWithCondition;
 use barrelstrength\sproutforms\rules\conditions\IsCondition;
 use barrelstrength\sproutforms\rules\conditions\IsNotCondition;
 use barrelstrength\sproutforms\rules\conditions\StartsWithCondition;
-use barrelstrength\sproutforms\rules\fieldrules\TextCondition;
 use Craft;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\ElementInterface;
@@ -28,7 +27,6 @@ use Twig\Markup;
  * @property string        $svgIconPath
  * @property array         $compatibleCraftFields
  * @property array         $compatibleCraftFieldTypes
- * @property TextCondition $compatibleConditional
  * @property mixed         $exampleInputHtml
  */
 class Dropdown extends BaseOptionsFormField

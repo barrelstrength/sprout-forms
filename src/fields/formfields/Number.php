@@ -30,13 +30,12 @@ use yii\base\Exception;
  * Class SproutFormsNumberField
  *
  *
- * @property string                                                       $contentColumnType
- * @property string                                                       $svgIconPath
- * @property null|string                                                  $settingsHtml
- * @property array                                                        $compatibleCraftFields
- * @property array                                                        $compatibleCraftFieldTypes
- * @property \barrelstrength\sproutforms\rules\fieldrules\NumberCondition $compatibleConditional
- * @property mixed                                                        $exampleInputHtml
+ * @property string      $contentColumnType
+ * @property string      $svgIconPath
+ * @property null|string $settingsHtml
+ * @property array       $compatibleCraftFields
+ * @property array       $compatibleCraftFieldTypes
+ * @property mixed       $exampleInputHtml
  */
 class Number extends FormField implements PreviewableFieldInterface
 {

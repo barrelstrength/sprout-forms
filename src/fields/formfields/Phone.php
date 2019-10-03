@@ -11,7 +11,6 @@ use barrelstrength\sproutforms\rules\conditions\EndsWithCondition;
 use barrelstrength\sproutforms\rules\conditions\IsCondition;
 use barrelstrength\sproutforms\rules\conditions\IsNotCondition;
 use barrelstrength\sproutforms\rules\conditions\StartsWithCondition;
-use barrelstrength\sproutforms\rules\fieldrules\TextCondition;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
@@ -29,12 +28,11 @@ use Twig\Markup;
 
 /**
  *
- * @property array                                                      $elementValidationRules
- * @property string                                                     $svgIconPath
- * @property mixed                                                      $settingsHtml
- * @property mixed                                                      $exampleInputHtml
- * @property \barrelstrength\sproutforms\rules\fieldrules\TextCondition $compatibleConditional
- * @property array                                                      $countries
+ * @property array  $elementValidationRules
+ * @property string $svgIconPath
+ * @property mixed  $settingsHtml
+ * @property mixed  $exampleInputHtml
+ * @property array  $countries
  */
 class Phone extends FormField implements PreviewableFieldInterface
 {
@@ -119,7 +117,7 @@ class Phone extends FormField implements PreviewableFieldInterface
 
         if (is_array($value) && $element) {
             $namespace = $element->getFieldParamNamespace();
-            $namespace = $namespace.'.'.$this->handle;
+            $namespace .= '.'.$this->handle;
             $phoneInfo = Craft::$app->getRequest()->getBodyParam($namespace);
             // bad phone or empty phone
         }

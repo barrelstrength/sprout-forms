@@ -25,17 +25,17 @@ class IsCheckedCondition extends Condition
     public function rules(): array
     {
         return [
-            [['inputValue'], 'runValidation']
+            [['inputValue'], 'validateCondition']
         ];
     }
 
     /**
      * @inheritDoc
      */
-    public function runValidation()
+    public function validateCondition()
     {
         if (!filter_var($this->inputValue, FILTER_VALIDATE_BOOLEAN)) {
-            $this->addError('inputValue', Craft::t('sprout-forms', 'Does not validate'));
+            $this->addError('inputValue', Craft::t('sprout-forms', 'Condition does not validate'));
         }
     }
 }

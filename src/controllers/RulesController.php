@@ -250,8 +250,6 @@ class RulesController extends BaseController
      */
     private function returnJson(bool $success, Rule $rule = null): Response
     {
-        // @todo how we should return errors to the edit conditional modal? template response is disabled for now
-
         return $this->asJson([
             'success' => $success,
             'errors' => $rule ? $rule->getErrors() : null,
@@ -260,8 +258,7 @@ class RulesController extends BaseController
                 'name' => $rule->name ?? null,
                 'enabled' => $rule->enabled,
                 'behavior' => $rule->getBehaviorDescription()
-            ],
-            //'template' => $success ? false : SproutForms::$app->rules->getModalConditionalTemplate($conditional),
+            ]
         ]);
     }
 }

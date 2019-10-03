@@ -5,7 +5,6 @@ namespace barrelstrength\sproutforms\elements;
 use Craft;
 use craft\base\Element;
 use craft\elements\db\ElementQueryInterface;
-use craft\errors\MissingComponentException;
 use craft\helpers\UrlHelper;
 use craft\elements\actions\Delete;
 use barrelstrength\sproutforms\elements\db\EntryQuery;
@@ -21,6 +20,7 @@ use yii\db\ActiveRecord;
  *
  * @property array|ActiveRecord[] $submissionLog
  * @property null|array           $conditionalLogicResults
+ * @property null|array           $hiddenFields
  * @property array                $fields
  */
 class Entry extends Element
@@ -470,7 +470,7 @@ class Entry extends Element
     {
         $hiddenFields = $this->getHiddenFields();
 
-        if (in_array($fieldHandle, $hiddenFields)) {
+        if (in_array($fieldHandle, $hiddenFields, true)) {
             return true;
         }
 

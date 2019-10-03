@@ -355,10 +355,8 @@ class FileUpload extends BaseRelationFormField
                 if (strlen($file['data']) > $maxSize) {
                     $filenames[] = $file['filename'];
                 }
-            } else {
-                if (file_exists($file['location']) && (filesize($file['location']) > $maxSize)) {
-                    $filenames[] = $file['filename'];
-                }
+            } else if (file_exists($file['location']) && (filesize($file['location']) > $maxSize)) {
+                $filenames[] = $file['filename'];
             }
         }
 
@@ -516,7 +514,7 @@ class FileUpload extends BaseRelationFormField
                 }
 
                 // Add the newly uploaded IDs to the mix.
-                if (\is_array($query->id)) {
+                if (is_array($query->id)) {
                     $query = $this->normalizeValue(array_merge($query->id, $assetIds), $element);
                 } else {
                     $query = $this->normalizeValue($assetIds, $element);
@@ -537,7 +535,7 @@ class FileUpload extends BaseRelationFormField
                 // Only enforce the single upload folder setting if this isn't a draft or revision
                 if ($this->useSingleFolder && !$isDraftOrRevision) {
                     $targetFolderId = $getTargetFolderId();
-                    $assetsToMove = ArrayHelper::where($assets, function(Asset $asset) use ($targetFolderId) {
+                    $assetsToMove = ArrayHelper::where($assets, static function(Asset $asset) use ($targetFolderId) {
                         return $asset->folderId != $targetFolderId;
                     });
                 } else {
@@ -622,10 +620,8 @@ class FileUpload extends BaseRelationFormField
                     $sources[] = $this->_volumeSourceToFolderSource($source);
                 }
             }
-        } else {
-            if ($this->sources === '*') {
-                $sources = '*';
-            }
+        } else if ($this->sources === '*') {
+            $sources = '*';
         }
 
         return $sources;

@@ -259,9 +259,6 @@ class Entries extends Component
         // We are using custom statuses, so all are welcome
         $query->status(null);
 
-        // @todo - look into enabledForSite method
-        // $query->enabledForSite(false);
-
         /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $query->one();
     }

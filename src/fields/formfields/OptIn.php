@@ -25,10 +25,9 @@ use Twig\Markup;
  * Class SproutFormsCheckboxesField
  *
  *
- * @property string                                                      $svgIconPath
- * @property mixed                                                       $settingsHtml
- * @property \barrelstrength\sproutforms\rules\fieldrules\OptInCondition $compatibleConditional
- * @property mixed                                                       $exampleInputHtml
+ * @property string $svgIconPath
+ * @property mixed  $settingsHtml
+ * @property mixed  $exampleInputHtml
  */
 class OptIn extends FormField implements PreviewableFieldInterface
 {

@@ -1,5 +1,10 @@
 # Changelog
 
+Removed Form::deleteById breaking change, use Elements Service DeleteElementById instead.
+Custom Template breaking changes you may want to add:
+    Javascript changed in base templates..
+    Email template changed to handle hidden fields...
+
 ## 3.4.3 - 2019-09-26
 
 ### Added

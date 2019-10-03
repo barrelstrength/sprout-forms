@@ -10,7 +10,6 @@ use barrelstrength\sproutforms\rules\conditions\EndsWithCondition;
 use barrelstrength\sproutforms\rules\conditions\IsCondition;
 use barrelstrength\sproutforms\rules\conditions\IsNotCondition;
 use barrelstrength\sproutforms\rules\conditions\StartsWithCondition;
-use barrelstrength\sproutforms\rules\fieldrules\TextCondition;
 use Craft;
 use craft\fields\RadioButtons as CraftRadioButtons;
 use craft\helpers\Template as TemplateHelper;
@@ -24,11 +23,10 @@ use Twig\Markup;
  * Class SproutFormsRadioButtonsField
  *
  *
- * @property string                                                     $svgIconPath
- * @property array                                                      $compatibleCraftFields
- * @property array                                                      $compatibleCraftFieldTypes
- * @property \barrelstrength\sproutforms\rules\fieldrules\TextCondition $compatibleConditional
- * @property mixed                                                      $exampleInputHtml
+ * @property string $svgIconPath
+ * @property array  $compatibleCraftFields
+ * @property array  $compatibleCraftFieldTypes
+ * @property mixed  $exampleInputHtml
  */
 class MultipleChoice extends BaseOptionsFormField
 {

@@ -10,7 +10,6 @@ use barrelstrength\sproutforms\rules\conditions\EndsWithCondition;
 use barrelstrength\sproutforms\rules\conditions\IsCondition;
 use barrelstrength\sproutforms\rules\conditions\IsNotCondition;
 use barrelstrength\sproutforms\rules\conditions\StartsWithCondition;
-use barrelstrength\sproutforms\rules\fieldrules\TextCondition;
 use Craft;
 use craft\fields\PlainText as CraftPlainText;
 use craft\fields\Dropdown as CraftDropdown;
@@ -32,13 +31,12 @@ use barrelstrength\sproutforms\base\FormField;
  *
  * @package Craft
  *
- * @property string                                                     $contentColumnType
- * @property string                                                     $svgIconPath
- * @property mixed                                                      $settingsHtml
- * @property array                                                      $compatibleCraftFields
- * @property array                                                      $compatibleCraftFieldTypes
- * @property \barrelstrength\sproutforms\rules\fieldrules\TextCondition $compatibleConditional
- * @property mixed                                                      $exampleInputHtml
+ * @property string $contentColumnType
+ * @property string $svgIconPath
+ * @property mixed  $settingsHtml
+ * @property array  $compatibleCraftFields
+ * @property array  $compatibleCraftFieldTypes
+ * @property mixed  $exampleInputHtml
  */
 class SingleLine extends FormField implements PreviewableFieldInterface
 {

@@ -2,7 +2,6 @@
 
 namespace barrelstrength\sproutforms\services;
 
-use barrelstrength\sproutforms\base\RuleInterface;
 use barrelstrength\sproutforms\base\Integration;
 use barrelstrength\sproutforms\base\IntegrationInterface;
 use barrelstrength\sproutforms\elements\Entry;

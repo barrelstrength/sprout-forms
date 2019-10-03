@@ -11,7 +11,6 @@ use barrelstrength\sproutforms\rules\conditions\EndsWithCondition;
 use barrelstrength\sproutforms\rules\conditions\IsCondition;
 use barrelstrength\sproutforms\rules\conditions\IsNotCondition;
 use barrelstrength\sproutforms\rules\conditions\StartsWithCondition;
-use barrelstrength\sproutforms\rules\fieldrules\TextCondition;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
@@ -34,7 +33,6 @@ use craft\helpers\StringHelper;
  * @property mixed                                                      $settingsHtml
  * @property array                                                      $compatibleCraftFields
  * @property array                                                      $compatibleCraftFieldTypes
- * @property \barrelstrength\sproutforms\rules\fieldrules\TextCondition $compatibleConditional
  * @property mixed                                                      $exampleInputHtml
  */
 class EmailDropdown extends BaseOptionsFormField

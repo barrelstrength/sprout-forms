@@ -67,7 +67,7 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
       this.$addRowBtn = this.$table.find('.buttons').children('.add');
       this.addListener(this.$addRowBtn, 'activate', 'addRow');
 
-      if ($rows.length == 0) {
+      if ($rows.length === 0) {
         this.addRow();
       }
     },
@@ -117,9 +117,9 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
           value = (typeof values[colId] !== 'undefined' ? values[colId] : ''),
           textual = Craft.inArray(col.type, Craft.SproutForms.EditableTable.textualColTypes);
 
-        if (colId == 0) {
+        if (colId === 0) {
           formFieldName = name;
-          formFieldValue = value != '' ? value : col.options[0].value;
+          formFieldValue = value !== '' ? value : col.options[0].value;
         }
 
         rowHtml += '<td class="' + (textual ? 'textual' : '') + ' ' + (typeof col['class'] !== 'undefined' ? col['class'] : '') + '"' +
@@ -150,7 +150,7 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
                   optionValue = (typeof option.value !== 'undefined' ? option.value : key),
                   optionDisabled = (typeof option.disabled !== 'undefined' ? option.disabled : false);
 
-                rowHtml += '<option ' + firstRow + ' value="' + optionValue + '"' + (optionValue == value ? ' selected' : '') + (optionDisabled ? ' disabled' : '') + '>' + optionLabel + '</option>';
+                rowHtml += '<option ' + firstRow + ' value="' + optionValue + '"' + (optionValue === value ? ' selected' : '') + (optionDisabled ? ' disabled' : '') + '>' + optionLabel + '</option>';
               }
 
               firstRow = '';
@@ -168,7 +168,7 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
           case 'selectCondition': {
             conditionFieldName = name;
             const colVal = typeof col.options[0] !== 'undefined' ? col.options[0].value : '';
-            conditionFieldValue = value != '' ? value : colVal;
+            conditionFieldValue = value !== '' ? value : colVal;
 
             rowHtml += '<div class="select"><select data-check-value-html="true" name="' + name + '">';
             col.options = fieldRuleOptions[formFieldValue]['conditionsAsOptions'];
@@ -192,7 +192,7 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
                   optionValue = (typeof option.value !== 'undefined' ? option.value : key),
                   optionDisabled = (typeof option.disabled !== 'undefined' ? option.disabled : false);
 
-                rowHtml += '<option ' + firstRow + ' value="' + optionValue + '"' + (optionValue == value ? ' selected' : '') + (optionDisabled ? ' disabled' : '') + '>' + optionLabel + '</option>';
+                rowHtml += '<option ' + firstRow + ' value="' + optionValue + '"' + (optionValue === value ? ' selected' : '') + (optionDisabled ? ' disabled' : '') + '>' + optionLabel + '</option>';
               }
 
               firstRow = '';
@@ -337,7 +337,7 @@ Craft.SproutForms.EditableTable.Row = Garnish.Base.extend(
               optionValue = (typeof option.value !== 'undefined' ? option.value : key),
               optionDisabled = (typeof option.disabled !== 'undefined' ? option.disabled : false);
 
-            conditionSelectHtml += '<option ' + firstRow + ' value="' + optionValue + '"' + (optionValue == value ? ' selected' : '') + (optionDisabled ? ' disabled' : '') + '>' + optionLabel + '</option>';
+            conditionSelectHtml += '<option ' + firstRow + ' value="' + optionValue + '"' + (optionValue === value ? ' selected' : '') + (optionDisabled ? ' disabled' : '') + '>' + optionLabel + '</option>';
           }
 
           firstRow = '';
@@ -360,7 +360,7 @@ Craft.SproutForms.EditableTable.Row = Garnish.Base.extend(
       //   console.log(event.data.row.$tr.find("td:eq(0)").find("select").val());
       // });
 
-      if (needCheck == true) {
+      if (needCheck === true) {
         this.addValueInputHtml();
       }
 
@@ -380,10 +380,10 @@ Craft.SproutForms.EditableTable.Row = Garnish.Base.extend(
         'formId': $("#formId").val()
       };
 
-      Craft.postActionRequest("sprout-forms/rules/get-condition-value-input-html", data, $.proxy(function(response, textStatus) {
+      Craft.postActionRequest('sprout-forms/rules/get-condition-value-input-html', data, $.proxy(function(response, textStatus) {
         const statusSuccess = (textStatus === 'success');
         if (statusSuccess && response.success) {
-          that.$tr.find("td:eq(2)").html(response.html);
+          that.$tr.find('td:eq(2)').html(response.html);
         } else {
           Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to get the input html'));
         }
@@ -479,8 +479,8 @@ Craft.SproutForms.EditableTable.Row = Garnish.Base.extend(
     deleteRow: function() {
       this.table.sorter.removeItems(this.$tr);
       this.$tr.remove();
-      if (this.table.$table.find("tr").length === 1) {
-        var $andDiv = this.table.$table.prev(".rules-table-and");
+      if (this.table.$table.find('tr').length === 1) {
+        let $andDiv = this.table.$table.prev('.rules-table-and');
         if ($andDiv.length === 1) {
           $andDiv.remove();
         }

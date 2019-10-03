@@ -288,11 +288,10 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
 
         foreach ($query->all() as $i => $related) {
             /** @var Element $related */
-            if ($related->enabled && $related->enabledForSite) {
-                if (!self::_validateRelatedElement($related)) {
-                    $element->addModelErrors($related, "{$this->handle}[{$i}]");
-                    $errorCount++;
-                }
+            if ($related->enabled && $related->enabledForSite &&
+                !self::_validateRelatedElement($related)) {
+                $element->addModelErrors($related, "{$this->handle}[{$i}]");
+                $errorCount++;
             }
         }
 
@@ -329,7 +328,7 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
         // If this is the first time we are validating a related element,
         // listen for future element saves so we can clear our cache
         if (!self::$_listeningForRelatedElementSave) {
-            Event::on(Elements::class, Elements::EVENT_AFTER_SAVE_ELEMENT, function(ElementEvent $e) {
+            Event::on(Elements::class, Elements::EVENT_AFTER_SAVE_ELEMENT, static function(ElementEvent $e) {
                 /** @var Element $element */
                 $element = $e->element;
                 unset(self::$_relatedElementValidates[$element->id][$element->siteId]);
@@ -564,6 +563,7 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
 
         $nsId = $view->namespaceInputId($id);
         $js = <<<JS
+/* global Craft */
 (new Craft.ElementThumbLoader()).load($('#{$nsId}'));
 JS;
         $view->registerJs($js);

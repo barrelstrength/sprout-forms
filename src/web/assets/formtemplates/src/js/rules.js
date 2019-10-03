@@ -146,20 +146,20 @@ class SproutFormsRules {
 
     xhr.onload = function() {
       let response = JSON.parse(this.response);
-      if (this.status === 200 && response.success == true) {
+      if (this.status === 200 && response.success === true) {
         // apply rules
         for (let targetField in response.result) {
           let wrapperId = 'fields-' + targetField + '-field';
           let wrapper = document.getElementById(wrapperId);
           let rule = self.allRules[targetField];
-          if (response.result[targetField] == true) {
-            if (rule.action == 'hide') {
+          if (response.result[targetField] === true) {
+            if (rule.action === 'hide') {
               self.hideAndDisableField(wrapper);
             } else {
               self.showAndEnableField(wrapper);
             }
           } else {
-            if (rule.action == 'hide') {
+            if (rule.action === 'hide') {
               self.showAndEnableField(wrapper);
             } else {
               self.hideAndDisableField(wrapper);

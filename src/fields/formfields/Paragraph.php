@@ -28,12 +28,11 @@ use barrelstrength\sproutforms\base\FormField;
  *
  * @package Craft
  *
- * @property string                                                          $contentColumnType
- * @property string                                                          $svgIconPath
- * @property null|string                                                     $settingsHtml
- * @property array                                                           $compatibleCraftFields
- * @property \barrelstrength\sproutforms\rules\fieldrules\ParagraphCondition $compatibleConditional
- * @property mixed                                                           $exampleInputHtml
+ * @property string      $contentColumnType
+ * @property string      $svgIconPath
+ * @property null|string $settingsHtml
+ * @property array       $compatibleCraftFields
+ * @property mixed       $exampleInputHtml
  */
 class Paragraph extends FormField implements PreviewableFieldInterface
 {
