@@ -470,7 +470,7 @@ class Entry extends Element
     {
         $hiddenFields = $this->getHiddenFields();
 
-        if (in_array($fieldHandle, $hiddenFields)){
+        if (in_array($fieldHandle, $hiddenFields)) {
             return true;
         }
 

@@ -15,8 +15,8 @@
 
             <table class="data fullwidth" id="sproutforms-integrations-table">
                 <thead>
-                    <th>{{ "Integration Name"|t('sprout-forms') }}</th>
-                    <th class="thin">{{ "Enabled"|t('sprout-forms') }}</th>
+                <th>{{ "Integration Name"|t('sprout-forms') }}</th>
+                <th class="thin">{{ "Enabled"|t('sprout-forms') }}</th>
                 </thead>
                 <tbody>
                 {% if integrations|length %}
@@ -37,7 +37,9 @@
                         </tr>
                     {% endfor %}
                 {% else %}
-                    <tr><td colspan="2">{{ "Add an integration using the dropdown below."|t('sprout-forms') }}</td></tr>
+                    <tr>
+                        <td colspan="2">{{ "Add an integration using the dropdown below."|t('sprout-forms') }}</td>
+                    </tr>
                 {% endif %}
                 </tbody>
             </table>

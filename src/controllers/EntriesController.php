@@ -265,9 +265,9 @@ class EntriesController extends BaseController
      * Removes field values from POST request if a Field Rule defines a given field to hidden
      *
      * @param EntryElement $entry
+     *
      * @return bool
      * @throws InvalidConfigException
-     * @throws \yii\base\ExitException
      */
     private function addHiddenValuesBasedOnFieldRules(EntryElement $entry): bool
     {
@@ -280,8 +280,8 @@ class EntriesController extends BaseController
         $formFields = $this->form->getFields();
         $hiddenFields = [];
 
-        foreach ($formFields as $formField){
-            if (!in_array($formField->handle, $postFieldHandles)){
+        foreach ($formFields as $formField) {
+            if (!in_array($formField->handle, $postFieldHandles, true)) {
                 $hiddenFields[] = $formField->handle;
             }
         }

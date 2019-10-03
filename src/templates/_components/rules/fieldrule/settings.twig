@@ -55,7 +55,7 @@
                                     value: col
                                 }) }}
 
-                            {# Condition Dropdown #}
+                                {# Condition Dropdown #}
                             {% elseif loop.index0 == 1 %}
                                 {% set formField = craft.sproutForms.getFormField(formFieldHandle, fieldRule.formId) %}
                                 {% set conditionsAsOptions = formField.getConditionsAsOptions() %}
@@ -67,7 +67,7 @@
                                 }) }}
                                 {% set conditionClass = col != '' ? col : conditionsAsOptions[0].value %}
 
-                            {# Condition Value #}
+                                {# Condition Value #}
                             {% else %}
                                 {% set fieldCondition = craft.sproutForms.getFieldCondition(conditionClass, formField) %}
                                 {{ formField.getConditionValueInputHtml(fieldCondition, colName, col)|raw }}
