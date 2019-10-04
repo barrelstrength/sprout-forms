@@ -31,8 +31,6 @@ use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\events\RegisterFieldsEvent;
 use Craft;
 use craft\base\FieldInterface;
-use craft\models\FieldLayout;
-use craft\models\FieldLayoutTab;
 use craft\records\FieldLayoutField;
 use craft\helpers\StringHelper;
 use craft\base\Field;
@@ -309,73 +307,6 @@ class Fields extends Component
         $form->setFieldLayout($fieldLayout);
 
         return $form;
-    }
-
-    /**
-     * This service allows duplicate fields from Layout
-     *
-     * @param Form $form
-     * @param      $postFieldLayout
-     *
-     * @return FieldLayout|null
-     * @throws Throwable
-     */
-    public function getDuplicateLayout(Form $form, FieldLayout $postFieldLayout)
-    {
-        if (!$form || !$postFieldLayout) {
-            return null;
-        }
-
-        $postedFieldLayout = [];
-        $requiredFields = [];
-
-        /** @var FieldLayoutTab[] $tabs */
-        $tabs = $postFieldLayout->getTabs();
-
-        foreach ($tabs as $tab) {
-            /** @var Field[] $fieldLayoutFields */
-            $fieldLayoutFields = $tab->getFields();
-            $fields = [];
-
-            foreach ($fieldLayoutFields as $fieldLayoutField) {
-
-                /** @var Field $field */
-                $field = Craft::$app->getFields()->createField([
-                    'type' => get_class($fieldLayoutField),
-                    'name' => $fieldLayoutField->name,
-                    'handle' => $fieldLayoutField->handle,
-                    'instructions' => $fieldLayoutField->instructions,
-                    'required' => $fieldLayoutField->required,
-                    'settings' => $fieldLayoutField->getSettings()
-                ]);
-
-                Craft::$app->content->fieldContext = $form->getFieldContext();
-                Craft::$app->content->contentTable = $form->getContentTable();
-
-                // Save duplicate field
-                Craft::$app->fields->saveField($field);
-
-                $fields[] = $field;
-
-                if ($field->required) {
-                    $requiredFields[] = $field->id;
-                }
-            }
-
-            foreach ($fields as $field) {
-                // Add our new field
-                if ($field !== null && $field->id != null) {
-                    $postedFieldLayout[$tab->name][] = $field->id;
-                }
-            }
-        }
-
-        // Set the field layout
-        $fieldLayout = Craft::$app->fields->assembleLayout($postedFieldLayout, $requiredFields);
-
-        $fieldLayout->type = FormElement::class;
-
-        return $fieldLayout;
     }
 
     /**

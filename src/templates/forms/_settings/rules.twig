@@ -1,0 +1,53 @@
+{% extends "sprout-forms/_layouts/formsettings" %}
+{% import "_includes/forms" as forms %}
+
+{% set content %}
+
+    <input type="hidden" id="formId" value="{{ form.id }}">
+    <table class="data fullwidth" id="sproutforms-rules-table">
+        <thead>
+        <tr>
+            <th>{{ "Field Rule"|t('sprout-forms') }}</th>
+            <th>{{ "Behavior"|t('sprout-forms') }}</th>
+            <th class="thin">{{ "Enabled"|t('sprout-forms') }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if rules|length %}
+            {% for rule in rules %}
+                <tr id="sproutforms-rules-row-{{ rule.id }}" class="sproutforms-rules-row">
+                    <td>
+                        <a href="#" id="sproutform-rules-{{ rule.id }}" data-rule-id="{{ rule.id }}">
+                            {{ rule.name }}
+                        </a>
+                    </td>
+                    <td>
+                        <div id="sproutform-rules-behavior-{{ rule.id }}">{{ rule.getBehaviorDescription() }}</div>
+                    </td>
+                    <td>
+                        {{ forms.lightswitch({
+                            on: rule.enabled,
+                            small: true,
+                            id: "condition-enabled-"~rule.id,
+                            onLabel: "Show"|t('sprout-forms'),
+                            offLabel: "Hide"|t('sprout-forms')
+                        }) }}
+                    </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="2">{{ "Add a rule using the dropdown below."|t('sprout-forms') }}</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+
+    <div id="sproutforms-rules-create" class="field" style="padding-top:20px;">
+        {{ forms.select({
+            id: 'ruleOptions',
+            name: 'ruleOptions',
+            options: ruleOptions
+        }) }}
+    </div>
+{% endset %}

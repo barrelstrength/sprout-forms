@@ -32,54 +32,7 @@
 <hr>
 
 <div class="meta read-only sprout-meta-heading">
-    <h6>{{ "General Settings"|t('sprout-forms') }}</h6>
-</div>
-<hr>
-
-<div class="meta">
-
-    {{ forms.textField({
-        first: (groups is defined and groups|length ? false : true),
-        label: "Name <span class='info'>What this form will be called in the CP.</span>"|t('sprout-forms'),
-        id: 'name',
-        name: 'name',
-        value: form.name,
-        errors: form.getErrors('name'),
-        autofocus: true,
-        required: true
-    }) }}
-
-    {{ forms.textField({
-        label: "Title Format <span class='info'>Entry Titles are auto-generated based on the Title Format you enter here. All information contained in the Title will also be searchable. You may use the same syntax here as you would with Dynamic Titles in your Sections. (i.e. {dateCreated|date('Ymd')} {fullName})</span>"|t('sprout-forms'),
-        id: 'titleFormat',
-        name: 'titleFormat',
-        value: form.titleFormat,
-        errors: form.getErrors('titleFormat')
-    }) }}
-
-    {{ forms.textField({
-        label: "Redirect <span class='info'>Where should the user be redirected upon form submission? Leaving blank will redirect user back to the form.</span>"|t('sprout-forms'),
-        name: 'redirectUri',
-        placeholder: siteUrl,
-        value: (form is defined ? form.redirectUri : null),
-        errors: (form is defined ? form.getErrors('redirectUri') : null)
-    }) }}
-
-    {{ forms.textField({
-        label: "Button <span class='info'>What the text in the submit button should be.</span>"|t('sprout-forms'),
-        name: 'submitButtonText',
-        placeholder: 'Submit',
-        value: (form is defined ? form.submitButtonText : null),
-        required: false,
-        errors: (form is defined ? form.getErrors('submitButtonText') : null)
-    }) }}
-
-</div>
-
-<hr>
-
-<div class="meta read-only sprout-meta-heading">
-    <h6>{{ "Advanced Settings"|t('sprout-forms') }}</h6>
+    <h6>{{ "Settings"|t('sprout-forms') }}</h6>
 </div>
 <hr>
 
@@ -106,93 +59,39 @@
     {% endif %}
 
     {{ forms.textField({
-        label: "Handle <span class='info'>How you’ll refer to this form in the templates.</span>"|t('sprout-forms'),
-        id: 'handle',
-        class: 'code',
-        name: 'handle',
-        value: form.handle,
-        errors: form.getErrors('handle'),
-        required: true
+        label: "Redirect <span class='info'>Where should the user be redirected upon form submission? Leaving blank will redirect user back to the form.</span>"|t('sprout-forms'),
+        name: 'redirectUri',
+        placeholder: siteUrl,
+        value: (form is defined ? form.redirectUri : null),
+        errors: (form is defined ? form.getErrors('redirectUri') : null)
     }) }}
 
-    {{ forms.lightswitchField({
-        label: "Page Titles <span class='info'>Display Page Titles on Forms</span>"|t('sprout-forms'),
-        id: 'displaySectionTitles',
-        name: 'displaySectionTitles',
-        on: form.displaySectionTitles,
-        small: true,
-        onLabel: "Show"|t('sprout-forms'),
-        offLabel: "Hide"|t('sprout-forms')
+    {{ forms.textField({
+        label: "Button <span class='info'>What the text in the submit button should be.</span>"|t('sprout-forms'),
+        name: 'submitButtonText',
+        placeholder: 'Submit',
+        value: (form is defined ? form.submitButtonText : null),
+        required: false,
+        errors: (form is defined ? form.getErrors('submitButtonText') : null)
     }) }}
-
-    {% if settings.enableSaveData and settings.enableSaveDataPerFormBasis %}
-
-        {{ forms.lightswitchField({
-            label: "Save Data <span class='info'>Save submitted Sprout Form Entries for this form to the Craft database</span>"|t('sprout-forms'),
-            id: 'saveData',
-            name: 'saveData',
-            on: form.saveData,
-            small: true,
-            onLabel: "Show"|t('sprout-forms'),
-            offLabel: "Hide"|t('sprout-forms')
-        }) }}
-
-    {% endif %}
-
-    {% if settings.enablePerFormTemplateFolderOverride %}
-
-        {% set templateOptions = craft.sproutForms.getTemplateOptions(form) %}
-
-        {{ forms.field({
-            label: "Templates <span class='info'>The Form Templates that will be used to output your forms</span>"|t('sprout-forms'),
-            required: true,
-            errors: (form is defined ? form.getErrors('templateOverridesFolder') : null)
-        }, sproutFields.selectOther({
-            name: 'templateOverridesFolder',
-            options: templateOptions,
-            value: form.templateOverridesFolder ?? null,
-            otherPlaceholderText: '_forms/formHandle'|t('sprout-forms'),
-        })) }}
-
-    {% endif %}
 
 </div>
 
-{% if settings.enableIntegrationsPerFormBasis %}
+<hr>
 
-    <hr>
-    <div class="meta read-only sprout-meta-heading">
-        <h6>{{ "Integrations"|t('sprout-forms') }}</h6>
-    </div>
-    <hr>
-    {% set integrationOptions = craft.sproutForms.getIntegrationOptions() %}
+<div class="meta read-only sprout-meta-heading">
+    <h6>{{ "Additional Settings"|t('sprout-forms') }}</h6>
+</div>
+<hr>
 
-    <div id="sproutforms-integrations-wrapper" class="meta">
+<div class="meta">
 
-        {% for integration in integrations %}
-            <div class="field sproutforms-integration-row" id="sproutforms-integration-row-{{ integration.id }}">
-                <div class="heading">
-                    <a href="#" id="sproutform-integration-{{ integration.id }}" data-integrationid="{{ integration.id }}">{{ integration.name }}</a>
-                </div>
-                <div>
-                    {{ forms.lightswitch({
-                        on: integration.enabled,
-                        small: true,
-                        id: "integration-enabled-"~integration.id,
-                        onLabel: "Show"|t('sprout-forms'),
-                        offLabel: "Hide"|t('sprout-forms')
-                    }) }}
-                </div>
-            </div>
-        {% endfor %}
-
-        <div id="sproutforms-integrations-create" class="field" style="padding-top:20px;">
-            {{ forms.select({
-                id: 'integrationsOptions',
-                name: 'integrationsOptions',
-                options: integrationOptions
-            }) }}
-        </div>
-    </div>
-
-{% endif %}
+    <nav>
+        <ul>
+            <li><a href="{{ cpUrl('sprout-forms/forms/'~form.id~'/settings/general') }}">{{ "General"|t('sprout-forms') }}</a></li>
+            {#            <li><a href="{{ cpUrl('sprout-forms/forms/'~form.id~'/settings/notifications') }}">{{ "Notifications"|t('sprout-forms') }}</a></li>#}
+            <li><a href="{{ cpUrl('sprout-forms/forms/'~form.id~'/settings/rules') }}">{{ "Rules"|t('sprout-forms') }}</a></li>
+            <li><a href="{{ cpUrl('sprout-forms/forms/'~form.id~'/settings/integrations') }}">{{ "Integrations"|t('sprout-forms') }}</a></li>
+        </ul>
+    </nav>
+</div>

@@ -104,7 +104,7 @@ class SproutForms extends Plugin implements SproutEditionsInterface
     /**
      * @var string
      */
-    public $schemaVersion = '3.3.1';
+    public $schemaVersion = '3.3.2';
 
     /**
      * @var string
@@ -346,6 +346,8 @@ class SproutForms extends Plugin implements SproutEditionsInterface
                 'sprout-forms/entry-statuses/edit',
             'sprout-forms/forms/<groupId:\d+>' =>
                 'sprout-forms/forms',
+            'sprout-forms/forms/<formId:\d+>/settings/<settingsSectionHandle:.*>' =>
+                'sprout-forms/forms/settings',
 
             // Reports
             '<pluginHandle:sprout-forms>/reports/<dataSourceId:\d+>/new' => [

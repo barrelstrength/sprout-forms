@@ -59,12 +59,13 @@ class Install extends Migration
     {
         SproutBaseReports::$app->dataSources->deleteReportsByType(EntriesDataSource::class);
 
-        $this->dropTableIfExists('{{%sproutforms_log}}');
-        $this->dropTableIfExists('{{%sproutforms_integrations}}');
-        $this->dropTableIfExists('{{%sproutforms_entries}}');
-        $this->dropTableIfExists('{{%sproutforms_forms}}');
-        $this->dropTableIfExists('{{%sproutforms_formgroups}}');
-        $this->dropTableIfExists('{{%sproutforms_entrystatuses}}');
+        $this->dropTable('{{%sproutforms_log}}');
+        $this->dropTable('{{%sproutforms_integrations}}');
+        $this->dropTable('{{%sproutforms_rules}}');
+        $this->dropTable('{{%sproutforms_entries}}');
+        $this->dropTable('{{%sproutforms_forms}}');
+        $this->dropTable('{{%sproutforms_formgroups}}');
+        $this->dropTable('{{%sproutforms_entrystatuses}}');
 
         return true;
     }
@@ -144,6 +145,20 @@ class Install extends Migration
             'uid' => $this->uid(),
         ]);
 
+        $this->createTable('{{%sproutforms_rules}}', [
+            'id' => $this->primaryKey(),
+            'formId' => $this->integer()->notNull(),
+            'name' => $this->string()->notNull(),
+            'type' => $this->string()->notNull(),
+            'settings' => $this->text(),
+            'enabled' => $this->boolean()->defaultValue(false),
+            'behaviorAction' => $this->string(),
+            'behaviorTarget' => $this->string(),
+            'dateCreated' => $this->dateTime()->notNull(),
+            'dateUpdated' => $this->dateTime()->notNull(),
+            'uid' => $this->uid(),
+        ]);
+
         $this->createTable('{{%sproutforms_log}}', [
             'id' => $this->primaryKey(),
             'entryId' => $this->integer(),
@@ -195,6 +210,16 @@ class Install extends Migration
                 false, true
             ),
             '{{%sproutforms_integrations}}',
+            'formId'
+        );
+
+        $this->createIndex(
+            $this->db->getIndexName(
+                '{{%sproutforms_rules}}',
+                'formId',
+                false, true
+            ),
+            '{{%sproutforms_rules}}',
             'formId'
         );
 
@@ -263,6 +288,14 @@ class Install extends Migration
                 '{{%sproutforms_integrations}}', 'formId'
             ),
             '{{%sproutforms_integrations}}', 'formId',
+            '{{%sproutforms_forms}}', 'id', 'CASCADE'
+        );
+
+        $this->addForeignKey(
+            $this->db->getForeignKeyName(
+                '{{%sproutforms_rules}}', 'formId'
+            ),
+            '{{%sproutforms_rules}}', 'formId',
             '{{%sproutforms_forms}}', 'id', 'CASCADE'
         );
 

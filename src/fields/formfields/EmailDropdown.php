@@ -3,6 +3,14 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutbasefields\SproutBaseFields;
+use barrelstrength\sproutforms\rules\conditions\ContainsCondition;
+use barrelstrength\sproutforms\rules\conditions\DoesNotContainsCondition;
+use barrelstrength\sproutforms\rules\conditions\DoesNotEndsWithCondition;
+use barrelstrength\sproutforms\rules\conditions\DoesNotStartWithCondition;
+use barrelstrength\sproutforms\rules\conditions\EndsWithCondition;
+use barrelstrength\sproutforms\rules\conditions\IsCondition;
+use barrelstrength\sproutforms\rules\conditions\IsNotCondition;
+use barrelstrength\sproutforms\rules\conditions\StartsWithCondition;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
@@ -19,13 +27,13 @@ use craft\helpers\StringHelper;
 
 /**
  *
- * @property array  $elementValidationRules
- * @property string $contentColumnType
- * @property string $svgIconPath
- * @property mixed  $settingsHtml
- * @property array  $compatibleCraftFields
- * @property array  $compatibleCraftFieldTypes
- * @property mixed  $exampleInputHtml
+ * @property array                                                      $elementValidationRules
+ * @property string                                                     $contentColumnType
+ * @property string                                                     $svgIconPath
+ * @property mixed                                                      $settingsHtml
+ * @property array                                                      $compatibleCraftFields
+ * @property array                                                      $compatibleCraftFieldTypes
+ * @property mixed                                                      $exampleInputHtml
  */
 class EmailDropdown extends BaseOptionsFormField
 {
@@ -285,6 +293,20 @@ class EmailDropdown extends BaseOptionsFormField
         return [
             CraftPlainText::class,
             CraftDropdown::class
+        ];
+    }
+
+    public function getCompatibleConditions()
+    {
+        return [
+            new IsCondition(),
+            new IsNotCondition(),
+            new ContainsCondition(),
+            new DoesNotContainsCondition(),
+            new StartsWithCondition(),
+            new DoesNotStartWithCondition(),
+            new EndsWithCondition(),
+            new DoesNotEndsWithCondition()
         ];
     }
 }

@@ -39,18 +39,6 @@ class Form extends ElementImporter
     /**
      * @inheritdoc
      */
-    public function deleteById($id): bool
-    {
-        $form = SproutForms::$app->forms->getFormById($id);
-
-        if ($form) {
-            SproutForms::$app->forms->deleteForm($form);
-        }
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getFieldLayoutId($model)
     {
         /**

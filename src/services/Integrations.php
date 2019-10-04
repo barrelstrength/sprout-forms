@@ -82,7 +82,7 @@ class Integrations extends Component
      * @throws InvalidConfigException
      * @throws MissingComponentException
      */
-    public function getFormIntegrations($formId): array
+    public function getIntegrationsByFormId($formId): array
     {
         $results = (new Query())
             ->select([
@@ -293,7 +293,7 @@ class Integrations extends Component
         }
 
         $form = $entry->getForm();
-        $integrations = $this->getFormIntegrations($form->id);
+        $integrations = $this->getIntegrationsByFormId($form->id);
         $submissionLogs = [];
         $entryId = $entry->id ?? null;
 

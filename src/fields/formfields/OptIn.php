@@ -2,7 +2,11 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\base\ConditionInterface;
 use barrelstrength\sproutforms\base\FormField;
+use barrelstrength\sproutforms\rules\conditions\IsCheckedCondition;
+use barrelstrength\sproutforms\rules\conditions\IsNotCheckedCondition;
+use barrelstrength\sproutforms\rules\fieldrules\OptInCondition;
 use Craft;
 use craft\fields\Dropdown as CraftDropdown;
 use craft\fields\Lightswitch as CraftLightswitch;
@@ -195,6 +199,38 @@ class OptIn extends FormField implements PreviewableFieldInterface
         $rules[] = [['optInMessage'], 'required'];
 
         return $rules;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleConditions()
+    {
+        return [
+            new IsCheckedCondition(),
+            new IsNotCheckedCondition()
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getConditionValueInputHtml(ConditionInterface $condition, $fieldName, $fieldValue): string
+    {
+        $html = '<input class="text fullwidth" type="text" name="'.$fieldName.'" value="'.$fieldValue.'">';
+
+        $emptyConditionClasses = [
+            IsCheckedCondition::class,
+            IsNotCheckedCondition::class
+        ];
+
+        foreach ($emptyConditionClasses as $selectCondition) {
+            if ($condition instanceof $selectCondition) {
+                $html = '<input class="text fullwidth" type="hidden" name="'.$fieldName.'" value="'.$fieldValue.'">';
+            }
+        }
+
+        return $html;
     }
 
     /**

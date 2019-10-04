@@ -4,7 +4,6 @@ namespace barrelstrength\sproutforms\migrations;
 
 use barrelstrength\sproutbasereports\migrations\m180515_000001_rename_datasources_pluginId_column;
 use craft\db\Migration;
-use yii\base\NotSupportedException;
 
 /**
  * m180515_000001_rename_datasources_pluginId_column_sproutforms migration.
@@ -13,7 +12,6 @@ class m180515_000001_rename_datasources_pluginId_column_sproutforms extends Migr
 {
     /**
      * @inheritdoc
-     * @throws NotSupportedException
      */
     public function safeUp(): bool
     {

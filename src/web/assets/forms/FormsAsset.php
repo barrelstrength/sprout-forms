@@ -31,13 +31,8 @@ class FormsAsset extends AssetBundle
             'css/forms.css'
         ];
 
-        // define the relative path to CSS/JS files that should be registered with the page
-        // when this asset bundle is registered
         $this->js = [
-            'js/FieldLayoutEditor.js',
-            'js/FieldModal.js',
-            'js/FormSettings.js',
-            'js/IntegrationModal.js',
+            'js/forms.js'
         ];
 
         parent::init();

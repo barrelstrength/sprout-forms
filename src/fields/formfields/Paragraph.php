@@ -2,6 +2,12 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\base\ConditionInterface;
+use barrelstrength\sproutforms\rules\conditions\ContainsCondition;
+use barrelstrength\sproutforms\rules\conditions\DoesNotContainsCondition;
+use barrelstrength\sproutforms\rules\conditions\IsNotProvidedCondition;
+use barrelstrength\sproutforms\rules\conditions\IsProvidedCondition;
+use barrelstrength\sproutforms\rules\fieldrules\ParagraphCondition;
 use Craft;
 use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Db;
@@ -231,5 +237,39 @@ class Paragraph extends FormField implements PreviewableFieldInterface
         return [
             CraftPlainText::class
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleConditions()
+    {
+        return [
+            new IsProvidedCondition(),
+            new IsNotProvidedCondition(),
+            new ContainsCondition(),
+            new DoesNotContainsCondition()
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getConditionValueInputHtml(ConditionInterface $condition, $fieldName, $fieldValue): string
+    {
+        $html = '<input class="text fullwidth" type="text" name="'.$fieldName.'" value="'.$fieldValue.'">';
+
+        $emptyConditionClasses = [
+            IsProvidedCondition::class,
+            IsNotProvidedCondition::class
+        ];
+
+        foreach ($emptyConditionClasses as $selectCondition) {
+            if ($condition instanceof $selectCondition) {
+                $html = '<input class="text fullwidth" type="hidden" name="'.$fieldName.'" value="'.$fieldValue.'">';
+            }
+        }
+
+        return $html;
     }
 }

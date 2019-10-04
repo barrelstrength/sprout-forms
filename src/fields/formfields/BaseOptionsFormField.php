@@ -2,6 +2,9 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\base\ConditionInterface;
+use barrelstrength\sproutforms\rules\conditions\IsCondition;
+use barrelstrength\sproutforms\rules\conditions\IsNotCondition;
 use Craft;
 use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
@@ -213,6 +216,7 @@ abstract class BaseOptionsFormField extends FormField implements PreviewableFiel
                 /** @var OptionData $selectedValue */
                 $serialized[] = $selectedValue->value;
             }
+
             return Json::encode($serialized);
         }
 
@@ -357,5 +361,35 @@ abstract class BaseOptionsFormField extends FormField implements PreviewableFiel
         }
 
         return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getConditionValueInputHtml(ConditionInterface $condition, $fieldName, $fieldValue): string
+    {
+        $html = '<input class="text fullwidth" type="text" name="'.$fieldName.'" value="'.$fieldValue.'">';
+
+        $selectConditionClasses = [
+            IsCondition::class,
+            IsNotCondition::class
+        ];
+
+        foreach ($selectConditionClasses as $selectCondition) {
+            if ($condition instanceof $selectCondition) {
+                $html = '<div class="select"><select name="'.$fieldName.'">';
+                $firstRow = 'selected';
+                foreach ($this->options as $option) {
+                    $rowValue = $option['value'];
+                    $label = $option['label'];
+                    $isSelected = $rowValue == $fieldValue ? 'selected' : '';
+                    $html .= '<option '.$firstRow.' value="'.$rowValue.'" '.$isSelected.'>'.$label.'</option>';
+                    $firstRow = '';
+                }
+                $html .= '</select></div>';
+            }
+        }
+
+        return $html;
     }
 }

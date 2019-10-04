@@ -2,6 +2,14 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\rules\conditions\ContainsCondition;
+use barrelstrength\sproutforms\rules\conditions\DoesNotContainsCondition;
+use barrelstrength\sproutforms\rules\conditions\DoesNotEndsWithCondition;
+use barrelstrength\sproutforms\rules\conditions\DoesNotStartWithCondition;
+use barrelstrength\sproutforms\rules\conditions\EndsWithCondition;
+use barrelstrength\sproutforms\rules\conditions\IsCondition;
+use barrelstrength\sproutforms\rules\conditions\IsNotCondition;
+use barrelstrength\sproutforms\rules\conditions\StartsWithCondition;
 use Craft;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\ElementInterface;
@@ -15,12 +23,11 @@ use Twig\Markup;
 /**
  * Class SproutFormsDropdownField
  *
- *
- * @property string $modelName
- * @property string $svgIconPath
- * @property array  $compatibleCraftFields
- * @property array  $compatibleCraftFieldTypes
- * @property mixed  $exampleInputHtml
+ * @property string        $modelName
+ * @property string        $svgIconPath
+ * @property array         $compatibleCraftFields
+ * @property array         $compatibleCraftFieldTypes
+ * @property mixed         $exampleInputHtml
  */
 class Dropdown extends BaseOptionsFormField
 {
@@ -142,6 +149,23 @@ class Dropdown extends BaseOptionsFormField
         return [
             CraftPlainText::class,
             CraftDropdown::class
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleConditions()
+    {
+        return [
+            new IsCondition(),
+            new IsNotCondition(),
+            new ContainsCondition(),
+            new DoesNotContainsCondition(),
+            new StartsWithCondition(),
+            new DoesNotStartWithCondition(),
+            new EndsWithCondition(),
+            new DoesNotEndsWithCondition()
         ];
     }
 }

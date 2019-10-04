@@ -22,6 +22,7 @@ use craft\helpers\StringHelper;
 use craft\queue\jobs\LocalizeRelations;
 use craft\services\Elements;
 use craft\validators\ArrayValidator;
+use Exception;
 use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -233,6 +234,12 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
 
     /**
      * @inheritdoc
+     *
+     * @return string|null
+     * @throws LoaderError
+     * @throws NotSupportedException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getSettingsHtml()
     {
@@ -264,6 +271,8 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
      * Validates the related elements.
      *
      * @param ElementInterface $element
+     *
+     * @throws NotSupportedException
      */
     public function validateRelatedElements(ElementInterface $element)
     {
@@ -279,11 +288,10 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
 
         foreach ($query->all() as $i => $related) {
             /** @var Element $related */
-            if ($related->enabled && $related->enabledForSite) {
-                if (!self::_validateRelatedElement($related)) {
-                    $element->addModelErrors($related, "{$this->handle}[{$i}]");
-                    $errorCount++;
-                }
+            if ($related->enabled && $related->enabledForSite &&
+                !self::_validateRelatedElement($related)) {
+                $element->addModelErrors($related, "{$this->handle}[{$i}]");
+                $errorCount++;
             }
         }
 
@@ -307,6 +315,7 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
      * Returns whether a related element validates.
      *
      * @param ElementInterface $element
+     *
      * @return bool
      */
     private static function _validateRelatedElement(ElementInterface $element): bool
@@ -319,7 +328,7 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
         // If this is the first time we are validating a related element,
         // listen for future element saves so we can clear our cache
         if (!self::$_listeningForRelatedElementSave) {
-            Event::on(Elements::class, Elements::EVENT_AFTER_SAVE_ELEMENT, function(ElementEvent $e) {
+            Event::on(Elements::class, Elements::EVENT_AFTER_SAVE_ELEMENT, static function(ElementEvent $e) {
                 /** @var Element $element */
                 $element = $e->element;
                 unset(self::$_relatedElementValidates[$element->id][$element->siteId]);
@@ -423,6 +432,12 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
 
     /**
      * @inheritdoc
+     *
+     * @param ElementQueryInterface $query
+     * @param                       $value
+     *
+     * @return bool|false|null
+     * @throws Exception
      */
     public function modifyElementsQuery(ElementQueryInterface $query, $value)
     {
@@ -432,9 +447,9 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
         }
 
         if ($value === ':notempty:' || $value === ':empty:') {
-            $alias = 'relations_' . $this->handle;
+            $alias = 'relations_'.$this->handle;
             $operator = ($value === ':notempty:' ? '!=' : '=');
-            $paramHandle = ':fieldId' . StringHelper::randomString(8);
+            $paramHandle = ':fieldId'.StringHelper::randomString(8);
 
             $query->subQuery->andWhere(
                 "(select count([[{$alias}.id]]) from {{%relations}} {{{$alias}}} where [[{$alias}.sourceId]] = [[elements.id]] and [[{$alias}.fieldId]] = {$paramHandle}) {$operator} 0",
@@ -531,7 +546,7 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
         $value = $this->_all($value)->all();
 
         if (empty($value)) {
-            return '<p class="light">' . Craft::t('sprout-forms', 'Nothing selected.') . '</p>';
+            return '<p class="light">'.Craft::t('sprout-forms', 'Nothing selected.').'</p>';
         }
 
         $view = Craft::$app->getView();
@@ -548,6 +563,7 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
 
         $nsId = $view->namespaceInputId($id);
         $js = <<<JS
+/* global Craft */
 (new Craft.ElementThumbLoader()).load($('#{$nsId}'));
 JS;
         $view->registerJs($js);
@@ -759,8 +775,8 @@ JS;
                         'checked' => $showTargetSite,
                         'toggle' => 'target-site-container'
                     ]
-                ]) .
-            '<div id="target-site-container"' . (!$showTargetSite ? ' class="hidden"' : '') . '>';
+                ]).
+            '<div id="target-site-container"'.(!$showTargetSite ? ' class="hidden"' : '').'>';
 
         $siteOptions = [];
 
@@ -828,10 +844,15 @@ JS;
      * Returns an array of variables that should be passed to the settings template.
      *
      * @return array
+     * @throws NotSupportedException
      */
     protected function settingsTemplateVariables(): array
     {
-        /** @var ElementInterface|string $elementType */
+        /**
+         * @var $elementType ElementInterface|string
+         *
+         * don't use self:: like PhpStorm suggests
+         */
         $elementType = $this->elementType();
 
         return [
@@ -882,7 +903,7 @@ JS;
             'elementType' => static::elementType(),
             'id' => Craft::$app->getView()->formatInputId($this->handle),
             'fieldId' => $this->id,
-            'storageKey' => 'field.' . $this->id,
+            'storageKey' => 'field.'.$this->id,
             'name' => $this->handle,
             'elements' => $value,
             'sources' => $this->inputSources($element),
