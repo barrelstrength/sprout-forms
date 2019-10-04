@@ -66,6 +66,8 @@ class SproutFormsRules {
       inputField.addEventListener(event, function(event) {
         self.runConditionsForInput(this);
       }, false);
+      // on first page load
+      self.runConditionsForInput(inputField);
 
       // The number field can have change and keyup events
       if (inputField.tagName === 'INPUT' && inputField.type === 'number') {
