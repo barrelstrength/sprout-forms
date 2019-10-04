@@ -73,7 +73,7 @@ class EntriesController extends BaseController
         }
 
         $formHandle = $request->getRequiredBodyParam('handle');
-        $this->form = SproutForms::$app->forms->getFormByHandle($formHandle);
+        $this->form = $this->form == null ? SproutForms::$app->forms->getFormByHandle($formHandle) : $this->form;
 
         if ($this->form === null) {
             throw new Exception('No form exists with the handle '.$formHandle);
@@ -94,6 +94,8 @@ class EntriesController extends BaseController
         if ($statusId !== null) {
             $entry->statusId = $statusId;
         }
+
+        $this->addHiddenValuesBasedOnFieldRules($entry);
 
         // Populate the entry with post data
         $this->populateEntryModel($entry);
@@ -258,6 +260,37 @@ class EntriesController extends BaseController
 
         return $this->redirectToPostedUrl();
     }
+
+    /**
+     * Removes field values from POST request if a Field Rule defines a given field to hidden
+     *
+     * @param EntryElement $entry
+     *
+     * @return bool
+     * @throws InvalidConfigException
+     */
+    private function addHiddenValuesBasedOnFieldRules(EntryElement $entry): bool
+    {
+        if ($this->form === null) {
+            return false;
+        }
+
+        $postFields = $_POST['fields'] ?? [];
+        $postFieldHandles = array_keys($postFields);
+        $formFields = $this->form->getFields();
+        $hiddenFields = [];
+
+        foreach ($formFields as $formField) {
+            if (!in_array($formField->handle, $postFieldHandles, true)) {
+                $hiddenFields[] = $formField->handle;
+            }
+        }
+
+        $entry->setHiddenFields($hiddenFields);
+
+        return true;
+    }
+
 
     /**
      * Populate a EntryElement with post data

@@ -1,8 +1,45 @@
 # Changelog
 
+Removed Form::deleteById breaking change, use Elements Service DeleteElementById instead.
+Custom Template breaking changes you may want to add:
+    Javascript changed in base templates..
+    Email template changed to handle hidden fields...
+
+## 3.4.3 - 2019-09-26
+
+### Added
+- Added template hook `cp.sproutForms.forms.edit.content` ([#339pullrequest])
+- Added template hook `cp.sproutForms.forms.edit.details` ([#339pullrequest])
+- Added template hook `cp.sproutForms.entries.edit.content` ([#339pullrequest])
+- Added template hook `cp.sproutForms.entries.edit.details` ([#339pullrequest])
+
+### Changed
+- Updated craftcms/cms requirement to v3.3.0
+
+### Fixed
+- Fixed deprecation error in default Email Template when using Relations fields. ([#90])
+- Fixed bug introduced in Craft v3.3.0 where File Upload field doesn't update Asset Source option ([#343])
+- Fixed status filter behavior ([#339pullrequest])
+- Fixed bug where it was not possible to create new Entry Statuses using Postgres
+
+[#90]: https://github.com/barrelstrength/craft-sprout-forms/issues/90
+[#343]: https://github.com/barrelstrength/craft-sprout-forms/issues/343
+[#339pullrequest]: https://github.com/barrelstrength/craft-sprout-forms/pull/339
+
+## 3.4.2 - 2019-09-04
+
+### Changed
+- Updated barrelstrength/sprout-base-reports requirement to v1.3.8
+
+### Fixed
+- Fixed bug where field classes did not display in Basic Form Templates ([#335])
+- Fixed migration bug where `viewContext` column may not be found 
+
+[#335]: https://github.com/barrelstrength/craft-sprout-forms/issues/335
+
 ## 3.4.1 - 2019-08-26
 
-> {note} This release updates the Integrations API. Users with Custom Integrations will want to be sure to read the release notes as some updates may be required to existing Integration classes.
+> {note} This release updates the Integrations API. Users with Custom Integrations will want to be sure to read the [upgrade notes](https://sprout.barrelstrengthdesign.com/docs/forms/installing-and-updating-craft-3.html#upgrading-to-forms-3-4-1) as some updates may be required to existing Integration classes.
 
 ### Changed
 - Refactored Integrations API for additional flexibility

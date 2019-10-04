@@ -52,6 +52,8 @@ class EntryQuery extends ElementQuery
      */
     public $formGroupId;
 
+    public $status = [];
+
     /**
      * @inheritdoc
      */
@@ -72,7 +74,7 @@ class EntryQuery extends ElementQuery
      *
      * @return static self reference
      */
-    public function statusId($value)
+    public function statusId($value): EntryQuery
     {
         $this->statusId = $value;
 
@@ -86,7 +88,7 @@ class EntryQuery extends ElementQuery
      *
      * @return static self reference
      */
-    public function formId($value)
+    public function formId($value): EntryQuery
     {
         $this->formId = $value;
 
@@ -100,7 +102,7 @@ class EntryQuery extends ElementQuery
      *
      * @return static self reference
      */
-    public function formHandle($value)
+    public function formHandle($value): EntryQuery
     {
         $this->formHandle = $value;
         $form = SproutForms::$app->forms->getFormByHandle($value);
@@ -119,7 +121,7 @@ class EntryQuery extends ElementQuery
      *
      * @return static self reference
      */
-    public function statusHandle($value)
+    public function statusHandle($value): EntryQuery
     {
         $this->statusHandle = $value;
 
@@ -133,7 +135,7 @@ class EntryQuery extends ElementQuery
      *
      * @return static self reference
      */
-    public function formName($value)
+    public function formName($value): EntryQuery
     {
         $this->formName = $value;
 
@@ -186,8 +188,10 @@ class EntryQuery extends ElementQuery
             'sproutforms_entrystatuses.handle as statusHandle'
         ]);
 
-        $this->query->innerJoin('{{%sproutforms_entrystatuses}} sproutforms_entrystatuses', '[[sproutforms_entrystatuses.id]] = [[sproutforms_entries.statusId]]');
         $this->query->innerJoin('{{%sproutforms_forms}} sproutforms_forms', '[[sproutforms_forms.id]] = [[sproutforms_entries.formId]]');
+
+        $this->query->innerJoin('{{%sproutforms_entrystatuses}} sproutforms_entrystatuses', '[[sproutforms_entrystatuses.id]] = [[sproutforms_entries.statusId]]');
+        $this->subQuery->innerJoin('{{%sproutforms_entrystatuses}} sproutforms_entrystatuses', '[[sproutforms_entrystatuses.id]] = [[sproutforms_entries.statusId]]');
 
         if ($this->formId) {
             $this->subQuery->andWhere(Db::parseParam(
@@ -214,7 +218,7 @@ class EntryQuery extends ElementQuery
         }
 
         if ($this->statusHandle) {
-            $this->query->andWhere(Db::parseParam(
+            $this->subQuery->andWhere(Db::parseParam(
                 'sproutforms_entrystatuses.handle', $this->statusHandle)
             );
         }
@@ -226,6 +230,14 @@ class EntryQuery extends ElementQuery
         }
 
         return parent::beforePrepare();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function statusCondition(string $status)
+    {
+        return Db::parseParam('sproutforms_entrystatuses.handle', $status);
     }
 
     /**

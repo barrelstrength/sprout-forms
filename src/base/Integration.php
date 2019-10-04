@@ -360,7 +360,7 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
         }
 
         $fields = [];
-        $formEntry = $this->getForm();
+        $formEntry = $this->formEntry;
 
         foreach ($this->fieldMapping as $fieldMap) {
             if (isset($formEntry->{$fieldMap['sourceFormField']}) && $fieldMap['targetIntegrationField']) {

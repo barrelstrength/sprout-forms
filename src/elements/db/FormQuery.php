@@ -96,7 +96,7 @@ class FormQuery extends ElementQuery
         parent::__construct($elementType, $config);
     }
 
-    public function group($value)
+    public function group($value): FormQuery
     {
         if ($value instanceof FormGroup) {
             $this->groupId = $value->id;
@@ -120,7 +120,7 @@ class FormQuery extends ElementQuery
      *
      * @return static self reference
      */
-    public function groupId($value)
+    public function groupId($value): FormQuery
     {
         $this->groupId = $value;
 
@@ -134,7 +134,7 @@ class FormQuery extends ElementQuery
      *
      * @return static self reference
      */
-    public function name($value)
+    public function name($value): FormQuery
     {
         $this->name = $value;
 
@@ -148,7 +148,7 @@ class FormQuery extends ElementQuery
      *
      * @return static self reference
      */
-    public function handle($value)
+    public function handle($value): FormQuery
     {
         $this->handle = $value;
 

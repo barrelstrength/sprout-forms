@@ -3,6 +3,14 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutbasefields\SproutBaseFields;
+use barrelstrength\sproutforms\rules\conditions\ContainsCondition;
+use barrelstrength\sproutforms\rules\conditions\DoesNotContainsCondition;
+use barrelstrength\sproutforms\rules\conditions\DoesNotEndsWithCondition;
+use barrelstrength\sproutforms\rules\conditions\DoesNotStartWithCondition;
+use barrelstrength\sproutforms\rules\conditions\EndsWithCondition;
+use barrelstrength\sproutforms\rules\conditions\IsCondition;
+use barrelstrength\sproutforms\rules\conditions\IsNotCondition;
+use barrelstrength\sproutforms\rules\conditions\StartsWithCondition;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
@@ -109,7 +117,7 @@ class Phone extends FormField implements PreviewableFieldInterface
 
         if (is_array($value) && $element) {
             $namespace = $element->getFieldParamNamespace();
-            $namespace = $namespace.'.'.$this->handle;
+            $namespace .= '.'.$this->handle;
             $phoneInfo = Craft::$app->getRequest()->getBodyParam($namespace);
             // bad phone or empty phone
         }
@@ -278,6 +286,23 @@ class Phone extends FormField implements PreviewableFieldInterface
         /** @noinspection ClassConstantCanBeUsedInspection */
         return [
             'barrelstrength\\sproutfields\\fields\\Phone'
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleConditions()
+    {
+        return [
+            new IsCondition(),
+            new IsNotCondition(),
+            new ContainsCondition(),
+            new DoesNotContainsCondition(),
+            new StartsWithCondition(),
+            new DoesNotStartWithCondition(),
+            new EndsWithCondition(),
+            new DoesNotEndsWithCondition()
         ];
     }
 }

@@ -1,0 +1,105 @@
+{% import "_includes/forms" as forms %}
+{% import "sprout-base-fields/_includes/forms" as sproutFields %}
+
+<div id="sprout-content">
+    <input type="hidden" name="formId" value="{{ rule.formId }}">
+
+    {% if rule.id %}
+        <input type="hidden" id="ruleId" name="ruleId" value="{{ rule.id }}">
+    {% endif %}
+
+    {{ forms.lightswitchField({
+        label: "Enabled"|t('sprout-forms'),
+        name: 'enabled',
+        on: rule.enabled,
+        first: true
+    }) }}
+
+    {{ forms.textField({
+        label: "Rule Name"|t('sprout-forms'),
+        id: 'field-name',
+        name: 'name',
+        value: (rule is defined ? rule.name : null),
+        errors: (rule is defined ? rule.getErrors('name') : null),
+        required: true,
+    }) }}
+
+    <div class="field">
+        <div class="heading">
+            <label for="rules-section">{{ "Conditions"|t('sprout-forms') }}</label>
+            <div class="instructions"><p>{{ "The conditions that will be evaluated to determine if the behavior defined below should happen."|t('sprout-forms') }}</p>
+            </div>
+        </div>
+    </div>
+
+    {% namespace 'settings['~className(rule)~']' %}
+        {{ rule.getSettingsHtml()|raw }}
+    {% endnamespace %}
+
+    <hr>
+
+    <div class="field" id="settings-barrelstrength-sproutforms-rules-FieldRule-type-field">
+        <div class="heading">
+            <label id="settings-barrelstrength-sproutforms-rules-FieldRule-type-label" for="settings-barrelstrength-sproutforms-rules-FieldRule-type">{{ "Behavior"|t('sprout-forms') }}</label>
+            <div class="instructions"><p>{{ "When the rules above are true, show or hide this field."|t('sprout-forms') }}</p>
+            </div>
+        </div>
+    </div>
+
+    <table id="sproutforms-behaviors" class="behavior-table">
+        <tr>
+            <td class="behavior-action">
+                {{ forms.select({
+                    name: 'behaviorAction',
+                    hasOptgroups: true,
+                    options: rule.getBehaviorActionsAsOptions(),
+                    value: rule.behaviorAction,
+                    errors: rule.getErrors('behaviorAction') ?? null
+                }) }}
+            </td>
+            <td>
+                {{ forms.select({
+                    name: 'behaviorTarget',
+                    hasOptgroups: true,
+                    options: rule.getFormFieldsAsOptions(),
+                    value: rule.behaviorTarget,
+                    errors: rule.getErrors('behaviorTarget') ?? null
+                }) }}
+            </td>
+        </tr>
+    </table>
+
+    <hr>
+
+    {{ forms.selectField({
+        label: "Rule Type <span class='info'>Create a new rule if you need to update your rule type. This value cannot be changed.</span>"|t('sprout-forms'),
+        id: 'type',
+        name: 'selectType',
+        hasOptgroups: true,
+        options: [
+            {
+                label: 'Field Rule'|t('sprout-forms'),
+                value: className(rule)
+            }
+        ],
+        value: className(rule)|e('html'),
+        errors: rule.getErrors('type') ?? null,
+        disabled: true
+    }) }}
+
+    {{ forms.textField({
+        id: 'type',
+        name: 'type',
+        type: 'hidden',
+        value: className(rule),
+        errors: rule.getErrors('type') ?? null
+    }) }}
+</div>
+
+{% js %}
+    $(document).ready(function() {
+    if (Craft.SproutFields != null) {
+    Craft.SproutFields.initFields($(".field"));
+    }
+    });
+{% endjs %}

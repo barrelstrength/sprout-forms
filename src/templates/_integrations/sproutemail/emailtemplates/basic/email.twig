@@ -51,7 +51,7 @@
                                                         {# Loop through all of our fields except ones that don't get wrapped
                                                            in HTML on the front-end and probably are never seen by the person
                                                            submitting the form #}
-                                                        {% for field in fields if not field.isPlainInput() %}
+                                                        {% for field in fields if not field.isPlainInput() and not entry.getIsFieldHiddenByRule(field.handle) %}
 
                                                             {% set value = attribute(entry, field.handle) %}
 
@@ -128,7 +128,8 @@
 
                                                                 {% if value|length %}
                                                                     <ul style="margin-left:10px;padding-left:10px;">
-                                                                        {% for item in value %}
+                                                                        {% set values = attribute(value, "all") is defined ? value.all() : value %}
+                                                                        {% for item in values %}
                                                                             {% if item is not empty %}
                                                                                 <li>{{ item|striptags }}</li>
                                                                             {% endif %}

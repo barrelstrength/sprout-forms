@@ -81,6 +81,8 @@
 
     </div>
 
+    {% hook 'cp.sproutForms.entries.edit.content' %}
+
 {% endblock %}
 
 {% block details %}
@@ -117,7 +119,7 @@
             <hr>
             {% for submissionLog in submissionLogs %}
                 <div class="data">
-                    {% set integration = craft.sproutForms.getIntegrationById(submissionLog.integrationId) %}
+                    {% set integration = craft.app.getModule('sprout-forms').app.integrations.getIntegrationById(submissionLog.integrationId) %}
                     <h5 class="heading">{{ integration.name }}</h5>
                     {% if submissionLog.success %}
                         {% if submissionLog.status == 'notsent' %}
@@ -148,6 +150,9 @@
             {% endfor %}
         </div>
     {% endif %}
+
+    {% hook 'cp.sproutForms.entries.edit.details' %}
+
 {% endblock %}
 
 {% css %}

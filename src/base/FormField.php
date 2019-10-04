@@ -14,13 +14,15 @@ use Twig\Markup;
  *
  * @package Craft
  *
- * @property string $templatesPath
- * @property string $fieldInputFolder
- * @property string $namespace
- * @property string $svgIconPath
- * @property array  $compatibleCraftFields
- * @property array  $compatibleCraftFieldTypes
- * @property string $exampleInputHtml
+ * @property string           $templatesPath
+ * @property string           $fieldInputFolder
+ * @property string           $namespace
+ * @property string           $svgIconPath
+ * @property array            $compatibleCraftFields
+ * @property array            $compatibleCraftFieldTypes
+ * @property array            $conditionsAsOptions
+ * @property null|Condition[] $compatibleConditions
+ * @property string           $exampleInputHtml
  */
 abstract class FormField extends Field
 {
@@ -35,26 +37,6 @@ abstract class FormField extends Field
      * @var string
      */
     protected $originalTemplatesPath;
-
-    /**
-     * @param array|null $types
-     */
-    public function setCompatibleCraftFields(array $types = null)
-    {
-        if ($types) {
-            $this->compatibleCraftFields = array_merge($types, $this->compatibleCraftFields);
-        }
-    }
-
-    /**
-     * Return a list of compatible Craft Field Types to associate on the Element Integration API
-     *
-     * @return array
-     */
-    public function getCompatibleCraftFieldTypes(): array
-    {
-        return [];
-    }
 
     /**
      * The name of your form field
@@ -178,6 +160,21 @@ abstract class FormField extends Field
         return strtolower($fieldClassReflection->getShortName());
     }
 
+
+    /**
+     * This add support for the field rule condition api return a prover value input html depending of the condition
+     *
+     * @param ConditionInterface $condition
+     * @param                    $fieldName
+     * @param                    $fieldValue
+     *
+     * @return string
+     */
+    public function getConditionValueInputHtml(ConditionInterface $condition, $fieldName, $fieldValue): string
+    {
+        return '<input class="text fullwidth" type="text" name="'.$fieldName.'" value="'.$fieldValue.'">';
+    }
+
     /**
      * The example HTML input field that displays in the UI when a field is dragged to the form layout editor
      *
@@ -194,4 +191,56 @@ abstract class FormField extends Field
      * @return Markup
      */
     abstract public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup;
+
+    /**
+     * @param array|null $types
+     */
+    public function setCompatibleCraftFields(array $types = null)
+    {
+        if ($types) {
+            $this->compatibleCraftFields = array_merge($types, $this->compatibleCraftFields);
+        }
+    }
+
+    /**
+     * Return a list of compatible Craft Field Types to associate on the Element Integration API
+     *
+     * @return array
+     */
+    public function getCompatibleCraftFieldTypes(): array
+    {
+        return [];
+    }
+
+    /**
+     * Returns the Conditions that can be used when building field Rules
+     *
+     * @return Condition[]|null
+     */
+    public function getCompatibleConditions()
+    {
+        return null;
+    }
+
+    /**
+     * Returns the Conditions to be used in a dropdown
+     *
+     * @return array
+     */
+    public function getConditionsAsOptions(): array
+    {
+        $conditions = $this->getCompatibleConditions();
+        $options = [];
+
+        if ($conditions) {
+            foreach ($conditions as $condition) {
+                $options[] = [
+                    'label' => $condition->getLabel(),
+                    'value' => get_class($condition)
+                ];
+            }
+        }
+
+        return $options;
+    }
 }

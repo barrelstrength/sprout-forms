@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutforms\web\twig\variables;
 
-use barrelstrength\sproutforms\base\Integration;
+use barrelstrength\sproutforms\base\Condition;
 use barrelstrength\sproutforms\elements\db\EntryQuery;
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Form;
@@ -10,6 +10,7 @@ use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\services\Forms;
 use Craft;
 use craft\base\ElementInterface;
+use craft\base\FieldInterface;
 use craft\errors\MissingComponentException;
 use craft\helpers\Template as TemplateHelper;
 use barrelstrength\sproutforms\SproutForms;
@@ -343,6 +344,26 @@ class SproutFormsVariable
     }
 
     /**
+     * @return array
+     * @see SproutForms::$app->fields->prepareFieldTypeSelection()
+     *
+     */
+    public function prepareFieldTypeSelection(): array
+    {
+        return SproutForms::$app->fields->prepareFieldTypeSelection();
+    }
+
+    /**
+     * @return array
+     *
+     * @see SproutForms::$app->integrations->prepareIntegrationTypeSelection()
+     */
+    public function prepareIntegrationTypeSelection(): array
+    {
+        return SproutForms::$app->integrations->prepareIntegrationTypeSelection();
+    }
+
+    /**
      * @param $settings
      *
      * @throws MissingComponentException
@@ -604,15 +625,28 @@ class SproutFormsVariable
     }
 
     /**
-     * @param $integrationId
+     * @param $formFieldHandle
+     * @param $formId
      *
-     * @return Integration|null
-     * @throws MissingComponentException
+     * @return FieldInterface|null
      * @throws InvalidConfigException
      */
-    public function getIntegrationById($integrationId)
+    public function getFormField($formFieldHandle, $formId)
     {
-        return SproutForms::$app->integrations->getIntegrationById($integrationId);
+        $form = SproutForms::$app->forms->getFormById($formId);
+
+        return $form->getField($formFieldHandle);
+    }
+
+    /**
+     * @param $conditionClass
+     * @param $formField
+     *
+     * @return Condition
+     */
+    public function getFieldCondition($conditionClass, $formField): Condition
+    {
+        return new $conditionClass(['formField' => $formField]);
     }
 }
 

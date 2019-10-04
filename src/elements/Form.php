@@ -5,11 +5,14 @@ namespace barrelstrength\sproutforms\elements;
 use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\base\FormTemplates;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
+use barrelstrength\sproutforms\rules\FieldRule;
+use barrelstrength\sproutforms\validators\FieldLayoutValidator;
 use barrelstrength\sproutforms\validators\TemplateOverridesValidator;
 use Craft;
 use craft\base\Element;
 use craft\base\FieldInterface;
 use craft\elements\db\ElementQueryInterface;
+use craft\errors\MissingComponentException;
 use craft\models\FieldLayout;
 use yii\base\ErrorHandler;
 use craft\db\Query;
@@ -29,6 +32,7 @@ use yii\base\InvalidConfigException;
  * Form represents a form element.
  *
  * @property FormTemplates $formTemplate
+ * @property array         $rules
  * @property array         $fields
  *
  * @mixin FieldLayoutBehavior
@@ -249,29 +253,29 @@ class Form extends Element
         switch ($attribute) {
 
             case 'handle':
-                {
-                    return '<code>'.$this->handle.'</code>';
-                }
+            {
+                return '<code>'.$this->handle.'</code>';
+            }
             case 'numberOfFields':
-                {
-                    $totalFields = (new Query())
-                        ->select('COUNT(*)')
-                        ->from('{{%fieldlayoutfields}}')
-                        ->where(['layoutId' => $this->fieldLayoutId])
-                        ->scalar();
+            {
+                $totalFields = (new Query())
+                    ->select('COUNT(*)')
+                    ->from('{{%fieldlayoutfields}}')
+                    ->where(['layoutId' => $this->fieldLayoutId])
+                    ->scalar();
 
-                    return $totalFields;
-                }
+                return $totalFields;
+            }
             case 'totalEntries':
-                {
-                    $totalEntries = (new Query())
-                        ->select('COUNT(*)')
-                        ->from('{{%sproutforms_entries}}')
-                        ->where(['formId' => $this->id])
-                        ->scalar();
+            {
+                $totalEntries = (new Query())
+                    ->select('COUNT(*)')
+                    ->from('{{%sproutforms_entries}}')
+                    ->where(['formId' => $this->id])
+                    ->scalar();
 
-                    return $totalEntries;
-                }
+                return $totalEntries;
+            }
         }
 
         return parent::tableAttributeHtml($attribute);
@@ -351,25 +355,35 @@ class Form extends Element
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
+     *
+     * @throws InvalidConfigException
      */
     public function rules(): array
     {
-        return [
-            [['name', 'handle'], 'required'],
-            [['name', 'handle'], 'string', 'max' => 255],
-            [
-                ['handle'],
-                HandleValidator::class,
-                'reservedWords' => ['id', 'dateCreated', 'dateUpdated', 'uid', 'title']
-            ],
-
-            [
-                ['templateOverridesFolder'],
-                TemplateOverridesValidator::class
-            ],
-            [['name', 'handle'], UniqueValidator::class, 'targetClass' => FormRecord::class]
+        $rules = parent::rules();
+        $rules[] = [['name', 'handle'], 'required'];
+        $rules[] = [['name', 'handle'], 'string', 'max' => 255];
+        $rules[] = [
+            ['handle'],
+            HandleValidator::class,
+            'reservedWords' => ['id', 'dateCreated', 'dateUpdated', 'uid', 'title']
         ];
+        $rules[] = [
+            ['name', 'handle'],
+            UniqueValidator::class,
+            'targetClass' => FormRecord::class
+        ];
+        $rules[] = [
+            ['templateOverridesFolder'],
+            TemplateOverridesValidator::class
+        ];
+        $rules[] = [
+            ['fieldLayoutId'],
+            FieldLayoutValidator::class
+        ];
+
+        return $rules;
     }
 
     /**
@@ -432,5 +446,17 @@ class Form extends Element
         }
 
         return $defaultFormTemplates;
+    }
+
+    /**
+     * Return only enabled rules for this form
+     *
+     * @return array
+     * @throws InvalidConfigException
+     * @throws MissingComponentException
+     */
+    public function getRules(): array
+    {
+        return SproutForms::$app->rules->getRulesByFormId($this->id, FieldRule::class, true);
     }
 }

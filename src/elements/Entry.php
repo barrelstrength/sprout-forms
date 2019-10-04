@@ -19,6 +19,8 @@ use yii\db\ActiveRecord;
  * Entry represents a entry element.
  *
  * @property array|ActiveRecord[] $submissionLog
+ * @property null|array           $conditionalLogicResults
+ * @property null|array           $hiddenFields
  * @property array                $fields
  */
 class Entry extends Element
@@ -27,6 +29,11 @@ class Entry extends Element
     // =========================================================================
     private $form;
     private $submissionLogs = [];
+    /** @var array|null */
+    private $conditionalResults;
+
+    /** @var array|null */
+    private $entryHiddenFields;
 
     public $id;
     public $formId;
@@ -164,7 +171,7 @@ class Entry extends Element
     {
         $statusId = $this->statusId;
 
-        return SproutForms::$app->entries->getEntryStatusById($statusId)->color;
+        return SproutForms::$app->entries->getEntryStatusById($statusId)->handle;
     }
 
     /**
@@ -178,8 +185,11 @@ class Entry extends Element
         $statusArray = [];
 
         foreach ($statuses as $status) {
-            $key = $status['handle'].' '.$status['color'];
-            $statusArray[$key] = $status['name'];
+            $key = $status['handle'];
+            $statusArray[$key] = [
+                'label' => $status['name'],
+                'color' => $status['color'],
+            ];
         }
 
         return $statusArray;
@@ -433,5 +443,53 @@ class Entry extends Element
     public function getSubmissionLog(): array
     {
         return SproutForms::$app->integrations->getSubmissionLogsByEntryId($this->id);
+    }
+
+    /**
+     * @param $conditionalResults
+     */
+    public function setConditionalLogicResults(array $conditionalResults)
+    {
+        $this->conditionalResults = $conditionalResults;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getConditionalLogicResults()
+    {
+        return $this->conditionalResults;
+    }
+
+    /**
+     * @param $fieldHandle
+     *
+     * @return bool
+     */
+    public function getIsFieldHiddenByRule($fieldHandle): bool
+    {
+        $hiddenFields = $this->getHiddenFields();
+
+        if (in_array($fieldHandle, $hiddenFields, true)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $hiddenFields
+     */
+    public function setHiddenFields($hiddenFields)
+    {
+        $this->entryHiddenFields = $hiddenFields;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getHiddenFields()
+    {
+        return $this->entryHiddenFields ?? [];
     }
 }
