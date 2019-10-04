@@ -25,7 +25,7 @@ class IsNotCheckedCondition extends Condition
     public function rules(): array
     {
         return [
-            [['inputValue'], 'validateCondition']
+            [['inputValue'], 'validateCondition', 'skipOnEmpty' => false]
         ];
     }
 
@@ -34,8 +34,10 @@ class IsNotCheckedCondition extends Condition
      */
     public function validateCondition()
     {
-        if (filter_var($this->inputValue, FILTER_VALIDATE_BOOLEAN)) {
-            $this->addError('inputValue', Craft::t('sprout-forms', 'Condition does not validate'));
+        if (!filter_var($this->inputValue, FILTER_VALIDATE_BOOLEAN)) {
+            return true;
         }
+
+        $this->addError('inputValue', Craft::t('sprout-forms', 'Condition does not validate'));
     }
 }

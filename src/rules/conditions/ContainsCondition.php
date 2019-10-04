@@ -25,7 +25,7 @@ class ContainsCondition extends Condition
     public function rules(): array
     {
         return [
-            [['inputValue'], 'validateCondition']
+            [['inputValue'], 'validateCondition', 'skipOnEmpty' => false]
         ];
     }
 
@@ -34,8 +34,10 @@ class ContainsCondition extends Condition
      */
     public function validateCondition()
     {
-        if (strpos($this->inputValue, $this->ruleValue) === false) {
-            $this->addError('inputValue', Craft::t('sprout-forms', 'Condition does not validate'));
+        if (strpos($this->inputValue, $this->ruleValue) !== false) {
+            return true;
         }
+
+        $this->addError('inputValue', Craft::t('sprout-forms', 'Condition does not validate'));
     }
 }

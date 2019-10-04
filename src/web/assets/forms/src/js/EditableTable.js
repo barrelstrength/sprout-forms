@@ -116,8 +116,7 @@ Craft.SproutForms.EditableTable = Garnish.Base.extend(
           name = baseName + '[condition-' + rowId + '][' + colId + ']',
           value = (typeof values[colId] !== 'undefined' ? values[colId] : ''),
           textual = Craft.inArray(col.type, Craft.SproutForms.EditableTable.textualColTypes);
-
-        if (colId === 0) {
+        if (colId === '0') {
           formFieldName = name;
           formFieldValue = value !== '' ? value : col.options[0].value;
         }

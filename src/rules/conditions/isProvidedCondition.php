@@ -25,7 +25,7 @@ class IsProvidedCondition extends Condition
     public function rules(): array
     {
         return [
-            [['inputValue'], 'validateCondition']
+            [['inputValue'], 'validateCondition', 'skipOnEmpty' => false]
         ];
     }
 
@@ -34,8 +34,10 @@ class IsProvidedCondition extends Condition
      */
     public function validateCondition()
     {
-        if (!(empty($this->inputValue) === false)) {
-            $this->addError('inputValue', Craft::t('sprout-forms', 'Condition does not validate'));
+        if (empty($this->inputValue) === false) {
+            return true;
         }
+
+        $this->addError('inputValue', Craft::t('sprout-forms', 'Condition does not validate'));
     }
 }
