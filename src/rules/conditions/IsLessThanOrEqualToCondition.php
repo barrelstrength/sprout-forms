@@ -25,7 +25,7 @@ class IsLessThanOrEqualToCondition extends Condition
     public function rules(): array
     {
         return [
-            [['inputValue'], 'validateCondition']
+            [['inputValue'], 'validateCondition', 'skipOnEmpty' => false]
         ];
     }
 
@@ -34,8 +34,10 @@ class IsLessThanOrEqualToCondition extends Condition
      */
     public function validateCondition()
     {
-        if (!($this->inputValue <= $this->ruleValue)) {
-            $this->addError('inputValue', Craft::t('sprout-forms', 'Condition does not validate'));
+        if ($this->inputValue <= $this->ruleValue) {
+            return true;
         }
+        
+        $this->addError('inputValue', Craft::t('sprout-forms', 'Condition does not validate'));
     }
 }

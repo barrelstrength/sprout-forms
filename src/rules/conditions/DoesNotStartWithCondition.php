@@ -22,7 +22,7 @@ class DoesNotStartWithCondition extends Condition
     public function rules(): array
     {
         return [
-            [['inputValue'], 'validateCondition']
+            [['inputValue'], 'validateCondition', 'skipOnEmpty' => false]
         ];
     }
 
@@ -31,8 +31,10 @@ class DoesNotStartWithCondition extends Condition
      */
     public function validateCondition()
     {
-        if (substr_compare($this->inputValue, $this->ruleValue, 0, strlen($this->ruleValue)) === 0) {
-            $this->addError('inputValue', Craft::t('sprout-forms', 'Condition does not validate'));
+        if (substr_compare($this->inputValue, $this->ruleValue, 0, strlen($this->ruleValue)) !== 0) {
+            return true;
         }
+
+        $this->addError('inputValue', Craft::t('sprout-forms', 'Condition does not validate'));
     }
 }

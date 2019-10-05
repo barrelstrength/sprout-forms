@@ -15,14 +15,18 @@ class SproutFormsRules {
       let targetHandle = rule.behaviorTarget;
       let fieldWrapper = document.getElementById('fields-' + targetHandle + '-field');
       let rules = {};
+      let j = 0;
       let conditionSets = rule.conditions;
-
       for (conditionSetId in conditionSets) {
         let conditionSet = conditionSets[conditionSetId];
+
         for (conditionId in conditionSet) {
           let conditionObject = {};
           let conditionSetIndex = conditionId.split('-').pop();
           let condition = conditionSet[conditionId];
+
+          let conditionNewId = j + '-' + conditionId;
+          j++;
 
           this.fieldsToListen[condition[0]] = 1;
 
@@ -32,7 +36,7 @@ class SproutFormsRules {
             'value': condition[2]
           };
 
-          rules[conditionId] = conditionObject;
+          rules[conditionNewId] = conditionObject;
         }
       }
 
@@ -62,6 +66,8 @@ class SproutFormsRules {
       inputField.addEventListener(event, function(event) {
         self.runConditionsForInput(this);
       }, false);
+      // on first page load
+      self.runConditionsForInput(inputField);
 
       // The number field can have change and keyup events
       if (inputField.tagName === 'INPUT' && inputField.type === 'number') {
@@ -80,7 +86,6 @@ class SproutFormsRules {
   runConditionsForInput(input) {
     let inputFieldHandle = input.id.replace('fields-', '');
     let conditionsByField = {};
-
     for (let targetField in this.allRules) {
       let wrapperId = 'fields-' + targetField + '-field';
       let wrapper = document.getElementById(wrapperId);
