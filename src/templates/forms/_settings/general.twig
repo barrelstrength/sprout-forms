@@ -43,29 +43,19 @@
         required: true
     }) }}
 
+    <hr>
+
     {{ forms.lightswitchField({
-        label: "Page Titles"|t('sprout-forms'),
-        instructions: "Display Page Titles on Forms"|t('sprout-forms'),
-        id: 'displaySectionTitles',
-        name: 'displaySectionTitles',
-        on: form.displaySectionTitles,
+        label: "Save Data"|t('sprout-forms'),
+        instructions: "Save submitted Sprout Form Entries for this form to the Craft database"|t('sprout-forms'),
+        id: 'saveData',
+        name: 'saveData',
+        on: form.saveData,
         onLabel: "Show"|t('sprout-forms'),
         offLabel: "Hide"|t('sprout-forms')
     }) }}
 
-    {% if settings.enableSaveData %}
-
-        {{ forms.lightswitchField({
-            label: "Save Data"|t('sprout-forms'),
-            instructions: "Save submitted Sprout Form Entries for this form to the Craft database"|t('sprout-forms'),
-            id: 'saveData',
-            name: 'saveData',
-            on: form.saveData,
-            onLabel: "Show"|t('sprout-forms'),
-            offLabel: "Hide"|t('sprout-forms')
-        }) }}
-
-    {% endif %}
+    <hr>
 
     {% set templateOptions = craft.sproutForms.getTemplateOptions(form) %}
 
@@ -80,5 +70,15 @@
         value: form.templateOverridesFolder ?? null,
         otherPlaceholderText: '_forms/formHandle'|t('sprout-forms'),
     })) }}
+
+    {{ forms.lightswitchField({
+        label: "Page Titles"|t('sprout-forms'),
+        instructions: "Display Page Titles on Forms"|t('sprout-forms'),
+        id: 'displaySectionTitles',
+        name: 'displaySectionTitles',
+        on: form.displaySectionTitles,
+        onLabel: "Show"|t('sprout-forms'),
+        offLabel: "Hide"|t('sprout-forms')
+    }) }}
 
 {% endset %}

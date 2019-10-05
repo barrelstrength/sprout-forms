@@ -469,7 +469,7 @@ class Entries extends Component
 
         $saveData = $settings->enableSaveData;
 
-        if ($saveData && $settings->enableSaveDataPerFormBasis) {
+        if ($saveData) {
             $saveData = $form->saveData;
         }
 

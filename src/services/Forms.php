@@ -501,15 +501,12 @@ class Forms extends Component
         $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
         $settings = $plugin->getSettings();
 
-        if ($settings->enableSaveData && $settings->enableSaveDataPerFormBasis) {
-            $form->saveData = $settings->saveDataByDefault;
-        }
-
         $form->name = $this->getFieldAsNew('name', $name);
         $form->handle = $this->getFieldAsNew('handle', $handle);
         $form->titleFormat = "{dateCreated|date('D, d M Y H:i:s')}";
         $accessible = new AccessibleTemplates();
         $form->templateOverridesFolder = $settings->templateFolderOverride ?? $accessible->getTemplateId();
+        $form->saveData = $settings->enableSaveData ? $settings->enableSaveDataDefaultValue : false;
 
         // Set default tab
 
