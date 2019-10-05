@@ -9,7 +9,7 @@ use Craft;
  *
  * @property string $label
  */
-class DoesNotContainsCondition extends Condition
+class DoesNotContainCondition extends Condition
 {
     /**
      * @inheritDoc

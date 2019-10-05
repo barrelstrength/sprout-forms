@@ -4,7 +4,7 @@ namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutforms\base\ConditionInterface;
 use barrelstrength\sproutforms\rules\conditions\ContainsCondition;
-use barrelstrength\sproutforms\rules\conditions\DoesNotContainsCondition;
+use barrelstrength\sproutforms\rules\conditions\DoesNotContainCondition;
 use barrelstrength\sproutforms\rules\conditions\IsNotProvidedCondition;
 use barrelstrength\sproutforms\rules\conditions\IsProvidedCondition;
 use barrelstrength\sproutforms\rules\fieldrules\ParagraphCondition;
@@ -248,7 +248,7 @@ class Paragraph extends FormField implements PreviewableFieldInterface
             new IsProvidedCondition(),
             new IsNotProvidedCondition(),
             new ContainsCondition(),
-            new DoesNotContainsCondition()
+            new DoesNotContainCondition()
         ];
     }
 
