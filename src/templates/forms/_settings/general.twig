@@ -67,22 +67,18 @@
 
     {% endif %}
 
-    {% if settings.enablePerFormTemplateFolderOverride %}
+    {% set templateOptions = craft.sproutForms.getTemplateOptions(form) %}
 
-        {% set templateOptions = craft.sproutForms.getTemplateOptions(form) %}
-
-        {{ forms.field({
-            label: "Templates"|t('sprout-forms'),
-            instructions: "The Form Templates that will be used to output your forms"|t('sprout-forms'),
-            required: true,
-            errors: (form is defined ? form.getErrors('templateOverridesFolder') : null)
-        }, sproutFields.selectOther({
-            name: 'templateOverridesFolder',
-            options: templateOptions,
-            value: form.templateOverridesFolder ?? null,
-            otherPlaceholderText: '_forms/formHandle'|t('sprout-forms'),
-        })) }}
-
-    {% endif %}
+    {{ forms.field({
+        label: "Templates"|t('sprout-forms'),
+        instructions: "The Form Templates that will be used to output your forms"|t('sprout-forms'),
+        required: true,
+        errors: (form is defined ? form.getErrors('templateOverridesFolder') : null)
+    }, sproutFields.selectOther({
+        name: 'templateOverridesFolder',
+        options: templateOptions,
+        value: form.templateOverridesFolder ?? null,
+        otherPlaceholderText: '_forms/formHandle'|t('sprout-forms'),
+    })) }}
 
 {% endset %}

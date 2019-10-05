@@ -19,7 +19,6 @@ class Settings extends Model implements SproutSettingsInterface
     public $enableSaveData = 1;
     public $enableSaveDataPerFormBasis = 0;
     public $saveDataByDefault = 1;
-    public $enablePerFormTemplateFolderOverride = 0;
     public $captchaSettings = [];
     public $enableEditFormEntryViaFrontEnd = 0;
 

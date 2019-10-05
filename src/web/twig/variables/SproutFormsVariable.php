@@ -522,12 +522,6 @@ class SproutFormsVariable
 
         $templates = SproutForms::$app->forms->getAllFormTemplates();
         $templateIds = [];
-        $options = [
-            [
-                'label' => Craft::t('sprout-forms', 'Select...'),
-                'value' => ''
-            ]
-        ];
 
         foreach ($templates as $template) {
             $options[] = [

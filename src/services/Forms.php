@@ -510,9 +510,7 @@ class Forms extends Component
         $form->titleFormat = "{dateCreated|date('D, d M Y H:i:s')}";
         $accessible = new AccessibleTemplates();
         $form->templateOverridesFolder = $settings->templateFolderOverride ?? $accessible->getTemplateId();
-        if ($settings->enablePerFormTemplateFolderOverride && $settings->templateFolderOverride) {
-            $form->templateOverridesFolder = $settings->templateFolderOverride;
-        }
+
         // Set default tab
 
         /** @var Field $field */
