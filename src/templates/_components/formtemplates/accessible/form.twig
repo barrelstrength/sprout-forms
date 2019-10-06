@@ -87,7 +87,7 @@
 {% js at endBody %}
     (function() {
     window.csrfTokenName = "{{ craft.app.getConfig().getGeneral().csrfTokenName|e('js') }}";
-    new SproutFormsAddressField();
+    new SproutFormsAddressField('{{ id }}');
     new SproutFormsCheckableInputs('{{ id }}');
     new SproutFormsRules('{{ id }}');
     })();
