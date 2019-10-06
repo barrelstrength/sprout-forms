@@ -331,6 +331,8 @@ class SproutForms extends Plugin implements SproutEditionsInterface
                 'sprout-forms/forms/edit-form-template',
             'sprout-forms/forms/edit/<formId:\d+>' =>
                 'sprout-forms/forms/edit-form-template',
+            'sprout-forms/forms/edit/<formId:\d+>/settings/<settingsSectionHandle:.*>' =>
+                'sprout-forms/forms/settings',
             'sprout-forms/entries/edit/<entryId:\d+>' =>
                 'sprout-forms/entries/edit-entry',
             'sprout-forms/settings/(general|advanced)' =>
@@ -341,8 +343,6 @@ class SproutForms extends Plugin implements SproutEditionsInterface
                 'sprout-forms/entry-statuses/edit',
             'sprout-forms/forms/<groupId:\d+>' =>
                 'sprout-forms/forms',
-            'sprout-forms/forms/<formId:\d+>/settings/<settingsSectionHandle:.*>' =>
-                'sprout-forms/forms/settings',
 
             // Reports
             '<pluginHandle:sprout-forms>/reports/<dataSourceId:\d+>/new' => [

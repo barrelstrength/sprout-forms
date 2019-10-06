@@ -13,6 +13,7 @@ use craft\base\Element;
 use craft\base\FieldInterface;
 use craft\elements\db\ElementQueryInterface;
 use craft\errors\MissingComponentException;
+use craft\helpers\Html;
 use craft\models\FieldLayout;
 use yii\base\ErrorHandler;
 use craft\db\Query;
@@ -236,13 +237,14 @@ class Form extends Element
         $attributes['handle'] = ['label' => Craft::t('sprout-forms', 'Handle')];
         $attributes['numberOfFields'] = ['label' => Craft::t('sprout-forms', 'Number of Fields')];
         $attributes['totalEntries'] = ['label' => Craft::t('sprout-forms', 'Total Entries')];
+        $attributes['formSettings'] = ['label' => Craft::t('sprout-forms', 'Settings'), 'icon' => 'settings'];
 
         return $attributes;
     }
 
     protected static function defineDefaultTableAttributes(string $source): array
     {
-        return ['name', 'handle', 'numberOfFields', 'totalEntries'];
+        return ['name', 'handle', 'numberOfFields', 'totalEntries', 'formSettings'];
     }
 
     /**
@@ -275,6 +277,15 @@ class Form extends Element
                     ->scalar();
 
                 return $totalEntries;
+            }
+            case 'formSettings':
+            {
+                return Html::a('', $this->getCpEditUrl().'/settings/general', [
+                    'rel' => 'noopener',
+                    'target' => '_blank',
+                    'data-icon' => 'settings',
+                    'title' => Craft::t('sprout-forms', 'Visit form settings')
+                ]);
             }
         }
 

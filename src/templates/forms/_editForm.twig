@@ -62,7 +62,7 @@
             {% endif %}
         </div>
 
-        <a href="{{ cpUrl('sprout-forms/forms/'~ form.id ~'/settings/general/') }}"
+        <a href="{{ cpUrl('sprout-forms/forms/edit/'~ form.id ~'/settings/general/') }}"
             data-icon="settings" class="btn"></a>
         {% if not isPro %}
             {{ sprout.upgradeToProButton({
