@@ -6,7 +6,7 @@ use barrelstrength\sproutforms\SproutForms;
 use yii\validators\Validator;
 use Craft;
 
-class TemplateOverridesValidator extends Validator
+class FormTemplatesValidator extends Validator
 {
     public $skipOnEmpty = false;
 

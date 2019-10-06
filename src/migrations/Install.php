@@ -88,7 +88,7 @@ class Install extends Migration
             'redirectUri' => $this->string(),
             'submitButtonText' => $this->string(),
             'saveData' => $this->boolean()->defaultValue(false),
-            'templateOverridesFolder' => $this->string(),
+            'formTemplate' => $this->string(),
             'enableFileAttachments' => $this->boolean()->defaultValue(false),
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull(),
@@ -363,7 +363,7 @@ class Install extends Migration
         $settings = new Settings();
         $settings->setAttributes($currentSettings);
         $accessible = new AccessibleTemplates();
-        $settings->templateFolderOverride = $currentSettings['templateFolderOverride'] ?? $accessible->getTemplateId();
+        $settings->formTemplateDefaultValue = $currentSettings['formTemplateDefaultValue'] ?? $accessible->getTemplateId();
 
         $settings->captchaSettings = $currentSettings['captchaSettings'] ?? [
                 'sproutforms-duplicatecaptcha' => [

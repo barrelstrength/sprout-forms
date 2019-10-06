@@ -63,11 +63,11 @@
         label: "Templates"|t('sprout-forms'),
         instructions: "The Form Templates that will be used to output your forms"|t('sprout-forms'),
         required: true,
-        errors: (form is defined ? form.getErrors('templateOverridesFolder') : null)
+        errors: (form is defined ? form.getErrors('formTemplate') : null)
     }, sproutFields.selectOther({
-        name: 'templateOverridesFolder',
+        name: 'formTemplate',
         options: templateOptions,
-        value: form.templateOverridesFolder ?? null,
+        value: form.formTemplate ?? null,
         otherPlaceholderText: '_forms/formHandle'|t('sprout-forms'),
     })) }}
 

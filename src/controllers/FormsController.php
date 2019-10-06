@@ -339,9 +339,9 @@ class FormsController extends BaseController
             $form->titleFormat = "{dateCreated|date('D, d M Y H:i:s')}";
         }
 
-        $form->templateOverridesFolder = $request->getBodyParam('templateOverridesFolder', $form->templateOverridesFolder);
-        if ($form->templateOverridesFolder === '') {
-            $form->templateOverridesFolder = $settings->templateFolderOverride ?? AccessibleTemplates::class;
+        $form->formTemplate = $request->getBodyParam('formTemplate', $form->formTemplate);
+        if ($form->formTemplate === '') {
+            $form->formTemplate = $settings->formTemplateDefaultValue ?? AccessibleTemplates::class;
         }
     }
 }

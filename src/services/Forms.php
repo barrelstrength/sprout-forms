@@ -505,7 +505,7 @@ class Forms extends Component
         $form->handle = $this->getFieldAsNew('handle', $handle);
         $form->titleFormat = "{dateCreated|date('D, d M Y H:i:s')}";
         $accessible = new AccessibleTemplates();
-        $form->templateOverridesFolder = $settings->templateFolderOverride ?? $accessible->getTemplateId();
+        $form->formTemplate = $settings->formTemplateDefaultValue ?? $accessible->getTemplateId();
         $form->saveData = $settings->enableSaveData ? $settings->enableSaveDataDefaultValue : false;
 
         // Set default tab
@@ -580,29 +580,29 @@ class Forms extends Component
         $settings = $plugin->getSettings();
 
         $templates = [];
-        $templateFolderOverride = '';
+        $templateFolder = '';
         $defaultVersion = new AccessibleTemplates();
         $defaultTemplate = $defaultVersion->getPath();
 
-        if ($settings->templateFolderOverride) {
-            $templatePath = $this->getFormTemplateById($settings->templateFolderOverride);
+        if ($settings->formTemplateDefaultValue) {
+            $templatePath = $this->getFormTemplateById($settings->formTemplateDefaultValue);
             if ($templatePath) {
                 // custom path by template API
-                $templateFolderOverride = $templatePath->getPath();
+                $templateFolder = $templatePath->getPath();
             } else {
                 // custom folder on site path
-                $templateFolderOverride = $this->getSitePath($settings->templateFolderOverride);
+                $templateFolder = $this->getSitePath($settings->formTemplateDefaultValue);
             }
         }
 
-        if ($form->templateOverridesFolder) {
-            $formTemplatePath = $this->getFormTemplateById($form->templateOverridesFolder);
+        if ($form->formTemplate) {
+            $formTemplatePath = $this->getFormTemplateById($form->formTemplate);
             if ($formTemplatePath) {
                 // custom path by template API
-                $templateFolderOverride = $formTemplatePath->getPath();
+                $templateFolder = $formTemplatePath->getPath();
             } else {
                 // custom folder on site path
-                $templateFolderOverride = $this->getSitePath($form->templateOverridesFolder);
+                $templateFolder = $this->getSitePath($form->formTemplate);
             }
         }
 
@@ -614,14 +614,14 @@ class Forms extends Component
         $templates['email'] = $defaultTemplate;
 
         // See if we should override our defaults
-        if ($templateFolderOverride) {
+        if ($templateFolder) {
 
-            $formTemplate = $templateFolderOverride.DIRECTORY_SEPARATOR.'form';
-            $tabTemplate = $templateFolderOverride.DIRECTORY_SEPARATOR.'tab';
-            $fieldTemplate = $templateFolderOverride.DIRECTORY_SEPARATOR.'field';
-            $fieldsFolder = $templateFolderOverride.DIRECTORY_SEPARATOR.'fields';
-            $emailTemplate = $templateFolderOverride.DIRECTORY_SEPARATOR.'email';
-            $basePath = $templateFolderOverride.DIRECTORY_SEPARATOR;
+            $formTemplate = $templateFolder.DIRECTORY_SEPARATOR.'form';
+            $tabTemplate = $templateFolder.DIRECTORY_SEPARATOR.'tab';
+            $fieldTemplate = $templateFolder.DIRECTORY_SEPARATOR.'field';
+            $fieldsFolder = $templateFolder.DIRECTORY_SEPARATOR.'fields';
+            $emailTemplate = $templateFolder.DIRECTORY_SEPARATOR.'email';
+            $basePath = $templateFolder.DIRECTORY_SEPARATOR;
 
             foreach (Craft::$app->getConfig()->getGeneral()->defaultTemplateExtensions as $extension) {
 

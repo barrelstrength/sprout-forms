@@ -538,7 +538,7 @@ class SproutFormsVariable
             $settings = $plugin->getSettings();
         }
 
-        $templateFolder = $form->templateOverridesFolder ?? $settings->templateFolderOverride ?? $defaultFormTemplates->getPath();
+        $templateFolder = $form->formTemplate ?? $settings->formTemplateDefaultValue ?? $defaultFormTemplates->getPath();
 
         $options[] = [
             'optgroup' => Craft::t('sprout-forms', 'Custom Template Folder')

@@ -15,7 +15,7 @@ use Craft;
 class Settings extends Model implements SproutSettingsInterface
 {
     public $pluginNameOverride = '';
-    public $templateFolderOverride = '';
+    public $formTemplateDefaultValue = '';
     public $enableSaveData = 1;
     public $enableSaveDataDefaultValue = 1;
     public $captchaSettings = [];
@@ -72,7 +72,7 @@ class Settings extends Model implements SproutSettingsInterface
     public function rules(): array
     {
         return [
-            [['templateFolderOverride'], 'required', 'on' => 'general']
+            [['formTemplateDefaultValue'], 'required', 'on' => 'general']
         ];
     }
 }
