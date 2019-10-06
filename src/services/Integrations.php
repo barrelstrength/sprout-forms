@@ -284,16 +284,13 @@ class Integrations extends Component
      */
     public function runFormIntegrations(Entry $entry)
     {
-        /** @var SproutForms $plugin */
-        $plugin = SproutForms::getInstance();
+        $form = $entry->getForm();
+        $integrations = $this->getIntegrationsByFormId($form->id);
 
-        if (!Craft::$app->getRequest()->getIsSiteRequest() &&
-            !$plugin->getSettings()->enableIntegrationsPerFormBasis) {
+        if (!Craft::$app->getRequest()->getIsSiteRequest() || empty($integrations)) {
             return;
         }
 
-        $form = $entry->getForm();
-        $integrations = $this->getIntegrationsByFormId($form->id);
         $submissionLogs = [];
         $entryId = $entry->id ?? null;
 

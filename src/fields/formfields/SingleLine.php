@@ -3,8 +3,8 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutforms\rules\conditions\ContainsCondition;
-use barrelstrength\sproutforms\rules\conditions\DoesNotContainsCondition;
-use barrelstrength\sproutforms\rules\conditions\DoesNotEndsWithCondition;
+use barrelstrength\sproutforms\rules\conditions\DoesNotContainCondition;
+use barrelstrength\sproutforms\rules\conditions\DoesNotEndWithCondition;
 use barrelstrength\sproutforms\rules\conditions\DoesNotStartWithCondition;
 use barrelstrength\sproutforms\rules\conditions\EndsWithCondition;
 use barrelstrength\sproutforms\rules\conditions\IsCondition;
@@ -248,11 +248,11 @@ class SingleLine extends FormField implements PreviewableFieldInterface
             new IsCondition(),
             new IsNotCondition(),
             new ContainsCondition(),
-            new DoesNotContainsCondition(),
+            new DoesNotContainCondition(),
             new StartsWithCondition(),
             new DoesNotStartWithCondition(),
             new EndsWithCondition(),
-            new DoesNotEndsWithCondition()
+            new DoesNotEndWithCondition()
         ];
     }
 }

@@ -66,7 +66,7 @@ class FormQuery extends ElementQuery
     /**
      * @var string
      */
-    public $templateOverridesFolder;
+    public $formTemplate;
 
     /**
      * @var bool
@@ -182,7 +182,7 @@ class FormQuery extends ElementQuery
             'sproutforms_forms.redirectUri',
             'sproutforms_forms.saveData',
             'sproutforms_forms.submitButtonText',
-            'sproutforms_forms.templateOverridesFolder',
+            'sproutforms_forms.formTemplate',
             'sproutforms_forms.enableFileAttachments'
         ]);
 

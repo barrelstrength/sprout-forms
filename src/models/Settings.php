@@ -15,12 +15,9 @@ use Craft;
 class Settings extends Model implements SproutSettingsInterface
 {
     public $pluginNameOverride = '';
-    public $templateFolderOverride = '';
+    public $formTemplateDefaultValue = '';
     public $enableSaveData = 1;
-    public $enableSaveDataPerFormBasis = 0;
-    public $enableIntegrationsPerFormBasis = 0;
-    public $saveDataByDefault = 1;
-    public $enablePerFormTemplateFolderOverride = 0;
+    public $enableSaveDataDefaultValue = 1;
     public $captchaSettings = [];
     public $enableEditFormEntryViaFrontEnd = 0;
 
@@ -55,22 +52,6 @@ class Settings extends Model implements SproutSettingsInterface
                 'template' => 'sprout-forms/settings/entrystatuses',
                 'actionTemplate' => 'sprout-forms/settings/entrystatuses/_actionStatusButton',
                 'variables' => $variables
-            ],
-//            'bundles' => [
-//                'label' => Craft::t('sprout-forms', 'Bundles'),
-//                'url' => 'sprout-forms/settings/bundles',
-//                'selected' => 'bundles',
-//                'template' => 'sprout-base-import/bundles/bundle-cards',
-//                'actionTemplate' => false,
-//                'fullPageForm' => false,
-//                'settingsForm' => false,
-//                'variables' => $variables
-//            ],
-            'advanced' => [
-                'label' => Craft::t('sprout-forms', 'Advanced'),
-                'url' => 'sprout-forms/settings/advanced',
-                'selected' => 'advanced',
-                'template' => 'sprout-forms/settings/advanced'
             ]
         ];
 
@@ -91,7 +72,7 @@ class Settings extends Model implements SproutSettingsInterface
     public function rules(): array
     {
         return [
-            [['templateFolderOverride'], 'required', 'on' => 'general']
+            [['formTemplateDefaultValue'], 'required', 'on' => 'general']
         ];
     }
 }

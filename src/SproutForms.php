@@ -104,7 +104,7 @@ class SproutForms extends Plugin implements SproutEditionsInterface
     /**
      * @var string
      */
-    public $schemaVersion = '3.3.2';
+    public $schemaVersion = '3.5.0';
 
     /**
      * @var string
@@ -226,11 +226,6 @@ class SproutForms extends Plugin implements SproutEditionsInterface
 //            $event->types[] = FormsFieldImporter::class;
 //            $event->types[] = EntriesFieldImporter::class;
         });
-
-//        Event::on(Bundles::class, Bundles::EVENT_REGISTER_BUNDLE_TYPES, function(RegisterComponentTypesEvent $event) {
-//            $event->types[] = BasicFieldsBundle::class;
-//            $event->types[] = SpecialFieldsBundle::class;
-//        });
     }
 
     /**

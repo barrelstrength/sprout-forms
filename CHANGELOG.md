@@ -1,17 +1,53 @@
 # Changelog
 
-Removed Form::deleteById breaking change, use Elements Service DeleteElementById instead.
-Custom Template breaking changes you may want to add:
-    Javascript changed in base templates..
-    Email template changed to handle hidden fields...
+## UNRELEASED
+
+> {tip} IF: you upgrade, THEN: Conditional Fields! Projects using Custom Form Templates or extending Sprout Forms in other custom ways should read the upgrade notes on [Changes in Sprout Forms v3.5.0]() before upgrading.
+
+### Added)
+- Added Field Rules
+- Added `Is` and `IsNot` Conditions
+- Added `Contains` and `DoesNotContain` Conditions
+- Added `StartsWith` and `DoesNotStartWith` Conditions
+- Added `EndsWith` and `DoesNotEndWith` Conditions
+- Added `IsProvided` and `IsNotProvided` Conditions
+- Added `IsChecked` and `IsNotChecked` Conditions
+- Added `IsGreaterThan` and `IsLessThan` Conditions
+- Added `IsGreaterThanOrEqualTo` and `IsLessThanOrEqualTo` Conditions
+- Added `rules` data attribute to Form Templates
+
+### Changed
+- Added Form Edit Settings page to manage several Form Settings with more breathing room
+- Updated Integrations to be edited on the Form Edit Settings page
+- Updated Basic Email Template to exclude fields hidden by Field Rules
+- Updated front-end js resources to use files and only require initialization from main form template
+- Updated Javascript Captcha to ensure initialization runs after page load
+- Updated script elements in Accessible Form Templates to use `{% js %}` tag 
+- Renamed `barrelstrength\sproutforms\elements\Form::templateOverridesFolder` => `barrelstrength\sproutforms\elements\Form::formTemplate`
+- Renamed `barrelstrength\sproutforms\models\Settings::saveDataByDefault` => `barrelstrength\sproutforms\models\Settings::enableSaveDataDefaultValue`
+- Renamed `barrelstrength\sproutforms\models\Settings::templateFolderDefaultValue` => `barrelstrength\sproutforms\models\Settings::formTemplateDefaultValue`
+
+### Removed
+- Removed `barrelstrength\sproutforms\web\twig\variables\getIntegrationById()`
+- Removed `barrelstrength\sproutforms\elements\Form::deleteById()`
+- Removed `barrelstrength\sproutforms\models\Settings::enablePerFormTemplateFolderOverride`
+- Removed `barrelstrength\sproutforms\models\Settings::enableSaveDataPerFormBasis` 
+- Removed `barrelstrength\sproutforms\models\Settings::enableIntegrationsPerFormBasis` 
+
+### Fixed
+- Update Opt-in field to add required attribute when required ([#336])
+
+[#336]: https://github.com/barrelstrength/craft-sprout-forms/issues/336
 
 ## 3.4.3 - 2019-09-26
 
 ### Added
-- Added template hook `cp.sproutForms.forms.edit.content` ([#339pullrequest])
-- Added template hook `cp.sproutForms.forms.edit.details` ([#339pullrequest])
-- Added template hook `cp.sproutForms.entries.edit.content` ([#339pullrequest])
-- Added template hook `cp.sproutForms.entries.edit.details` ([#339pullrequest])
+- Added support to map Name fields in Integrations
+- Added support to map Opt-in fields in Integrations
+- Added template hook `cp.sproutForms.forms.edit.content` ([#339-pull-request])
+- Added template hook `cp.sproutForms.forms.edit.details` ([#339-pull-request])
+- Added template hook `cp.sproutForms.entries.edit.content` ([#339-pull-request])
+- Added template hook `cp.sproutForms.entries.edit.details` ([#339-pull-request])
 
 ### Changed
 - Updated craftcms/cms requirement to v3.3.0
@@ -19,12 +55,12 @@ Custom Template breaking changes you may want to add:
 ### Fixed
 - Fixed deprecation error in default Email Template when using Relations fields. ([#90])
 - Fixed bug introduced in Craft v3.3.0 where File Upload field doesn't update Asset Source option ([#343])
-- Fixed status filter behavior ([#339pullrequest])
+- Fixed status filter behavior ([#339-pull-request])
 - Fixed bug where it was not possible to create new Entry Statuses using Postgres
 
 [#90]: https://github.com/barrelstrength/craft-sprout-forms/issues/90
 [#343]: https://github.com/barrelstrength/craft-sprout-forms/issues/343
-[#339pullrequest]: https://github.com/barrelstrength/craft-sprout-forms/pull/339
+[#339-pull-request]: https://github.com/barrelstrength/craft-sprout-forms/pull/339
 
 ## 3.4.2 - 2019-09-04
 

@@ -1,8 +1,11 @@
 
 class SproutFormsAddressField {
 
-  constructor() {
-    this.countrySelectFields = document.querySelectorAll('.sprout-address-country-select');
+  constructor(formId) {
+    this.formId = formId;
+    this.form = document.getElementById(this.formId);
+
+    this.countrySelectFields = this.form.querySelectorAll('.sprout-address-country-select');
 
     // No need to continue if we don't have any Country Select fields
     if (this.countrySelectFields.length === 0) {
@@ -11,7 +14,6 @@ class SproutFormsAddressField {
 
     this.initCountrySelectFields();
   }
-
   initCountrySelectFields() {
     let self = this;
     for (let i = 0; i < this.countrySelectFields.length; i++) {

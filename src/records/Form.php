@@ -22,7 +22,7 @@ use craft\records\Element;
  * @property string    $redirectUri
  * @property string    $submitButtonText
  * @property bool      $saveData
- * @property string    $templateOverridesFolder
+ * @property string    $formTemplate
  * @property string    $oldHandle
  * @property bool      $enableFileAttachments
  */

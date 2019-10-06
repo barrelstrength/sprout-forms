@@ -21,23 +21,42 @@
 {{ forms.field({
     label: "Default Form Templates"|t('sprout-forms'),
     required: true,
-    errors: (settings is defined ? settings.getErrors('templateFolderOverride') : null),
+    errors: (settings is defined ? settings.getErrors('formTemplateDefaultValue') : null),
     instructions: "The templates that will be used to output your forms when using the displayForm tag. Add additional form templates via the Form Templates API or providing a custom template path."|t('sprout-forms'),
 }, sproutFields.selectOther({
-    name: 'templateFolderOverride',
+    name: 'formTemplateDefaultValue',
     options: templateOptions,
-    value: settings.templateFolderOverride ?? null,
+    value: settings.formTemplateDefaultValue ?? null,
     otherPlaceholderText: '_forms/mycustomtemplates'|t('sprout-forms')
 })) }}
 
+<hr>
+
 {{ forms.lightswitchField({
-    label: "Enable custom form templates on a per-form basis"|t('sprout-forms'),
-    instructions: "Allow admins to (optionally) add custom form templates for each form created. Enabling this setting will display additional fields to manage your custom form settings on every Form Element."|t('sprout-forms'),
-    id: 'enablePerFormTemplateFolderOverride',
-    name: 'enablePerFormTemplateFolderOverride',
-    on: settings.enablePerFormTemplateFolderOverride,
+    label: "Save data to the Craft database"|t('sprout-forms'),
+    instructions: "Disable this setting to stop Sprout Forms from saving data to the Craft database."|t('sprout-forms'),
+    id: 'enableSaveData',
+    name: 'enableSaveData',
+    toggle: 'settings-savedatadetails',
+    on: settings.enableSaveData,
     onLabel: "Enable"|t('sprout-forms'),
 }) }}
+
+<div id="settings-savedatadetails"
+    class="{{ not settings.enableSaveData ? "hidden" : '' }}">
+
+    {{ forms.lightswitchField({
+        label: "Default behavior for saving data"|t('sprout-forms'),
+        instructions: "The default behavior for saving data when a new Form is created."|t('sprout-forms'),
+        id: 'enableSaveDataDefaultValue',
+        name: 'enableSaveDataDefaultValue',
+        on: settings.enableSaveDataDefaultValue,
+        onLabel: "Enable"|t('sprout-forms'),
+    }) }}
+
+</div>
+
+<hr>
 
 {{ forms.lightswitchField({
     label: "Allow Forms to be edited in front-end templates"|t('sprout-forms'),

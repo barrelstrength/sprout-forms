@@ -9,7 +9,7 @@ use Craft;
  *
  * @property string $label
  */
-class DoesNotEndsWithCondition extends Condition
+class DoesNotEndWithCondition extends Condition
 {
     public function getLabel(): string
     {

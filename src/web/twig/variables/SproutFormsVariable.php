@@ -522,12 +522,6 @@ class SproutFormsVariable
 
         $templates = SproutForms::$app->forms->getAllFormTemplates();
         $templateIds = [];
-        $options = [
-            [
-                'label' => Craft::t('sprout-forms', 'Select...'),
-                'value' => ''
-            ]
-        ];
 
         foreach ($templates as $template) {
             $options[] = [
@@ -544,7 +538,7 @@ class SproutFormsVariable
             $settings = $plugin->getSettings();
         }
 
-        $templateFolder = $form->templateOverridesFolder ?? $settings->templateFolderOverride ?? $defaultFormTemplates->getPath();
+        $templateFolder = $form->formTemplate ?? $settings->formTemplateDefaultValue ?? $defaultFormTemplates->getPath();
 
         $options[] = [
             'optgroup' => Craft::t('sprout-forms', 'Custom Template Folder')

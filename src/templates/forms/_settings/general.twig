@@ -43,6 +43,34 @@
         required: true
     }) }}
 
+    <hr>
+
+    {{ forms.lightswitchField({
+        label: "Save Data"|t('sprout-forms'),
+        instructions: "Save submitted Sprout Form Entries for this form to the Craft database"|t('sprout-forms'),
+        id: 'saveData',
+        name: 'saveData',
+        on: form.saveData,
+        onLabel: "Show"|t('sprout-forms'),
+        offLabel: "Hide"|t('sprout-forms')
+    }) }}
+
+    <hr>
+
+    {% set templateOptions = craft.sproutForms.getTemplateOptions(form) %}
+
+    {{ forms.field({
+        label: "Templates"|t('sprout-forms'),
+        instructions: "The Form Templates that will be used to output your forms"|t('sprout-forms'),
+        required: true,
+        errors: (form is defined ? form.getErrors('formTemplate') : null)
+    }, sproutFields.selectOther({
+        name: 'formTemplate',
+        options: templateOptions,
+        value: form.formTemplate ?? null,
+        otherPlaceholderText: '_forms/formHandle'|t('sprout-forms'),
+    })) }}
+
     {{ forms.lightswitchField({
         label: "Page Titles"|t('sprout-forms'),
         instructions: "Display Page Titles on Forms"|t('sprout-forms'),
@@ -52,37 +80,5 @@
         onLabel: "Show"|t('sprout-forms'),
         offLabel: "Hide"|t('sprout-forms')
     }) }}
-
-    {% if settings.enableSaveData %}
-
-        {{ forms.lightswitchField({
-            label: "Save Data"|t('sprout-forms'),
-            instructions: "Save submitted Sprout Form Entries for this form to the Craft database"|t('sprout-forms'),
-            id: 'saveData',
-            name: 'saveData',
-            on: form.saveData,
-            onLabel: "Show"|t('sprout-forms'),
-            offLabel: "Hide"|t('sprout-forms')
-        }) }}
-
-    {% endif %}
-
-    {% if settings.enablePerFormTemplateFolderOverride %}
-
-        {% set templateOptions = craft.sproutForms.getTemplateOptions(form) %}
-
-        {{ forms.field({
-            label: "Templates"|t('sprout-forms'),
-            instructions: "The Form Templates that will be used to output your forms"|t('sprout-forms'),
-            required: true,
-            errors: (form is defined ? form.getErrors('templateOverridesFolder') : null)
-        }, sproutFields.selectOther({
-            name: 'templateOverridesFolder',
-            options: templateOptions,
-            value: form.templateOverridesFolder ?? null,
-            otherPlaceholderText: '_forms/formHandle'|t('sprout-forms'),
-        })) }}
-
-    {% endif %}
 
 {% endset %}

@@ -7,7 +7,7 @@ use barrelstrength\sproutforms\base\FormTemplates;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\rules\FieldRule;
 use barrelstrength\sproutforms\validators\FieldLayoutValidator;
-use barrelstrength\sproutforms\validators\TemplateOverridesValidator;
+use barrelstrength\sproutforms\validators\FormTemplatesValidator;
 use Craft;
 use craft\base\Element;
 use craft\base\FieldInterface;
@@ -61,7 +61,7 @@ class Form extends Element
     public $redirectUri;
     public $submitButtonText;
     public $saveData = false;
-    public $templateOverridesFolder;
+    public $formTemplate;
     public $enableFileAttachments = false;
 
     /**
@@ -308,7 +308,7 @@ class Form extends Element
         $record->redirectUri = $this->redirectUri;
         $record->saveData = $this->saveData;
         $record->submitButtonText = $this->submitButtonText;
-        $record->templateOverridesFolder = $this->templateOverridesFolder;
+        $record->formTemplate = $this->formTemplate;
         $record->enableFileAttachments = $this->enableFileAttachments;
 
         $record->save(false);
@@ -375,8 +375,8 @@ class Form extends Element
             'targetClass' => FormRecord::class
         ];
         $rules[] = [
-            ['templateOverridesFolder'],
-            TemplateOverridesValidator::class
+            ['formTemplate'],
+            FormTemplatesValidator::class
         ];
         $rules[] = [
             ['fieldLayoutId'],
@@ -438,8 +438,8 @@ class Form extends Element
     {
         $defaultFormTemplates = new AccessibleTemplates();
 
-        if ($this->templateOverridesFolder) {
-            $templatePath = SproutForms::$app->forms->getFormTemplateById($this->templateOverridesFolder);
+        if ($this->formTemplate) {
+            $templatePath = SproutForms::$app->forms->getFormTemplateById($this->formTemplate);
             if ($templatePath) {
                 return $templatePath;
             }
