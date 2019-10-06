@@ -1,5 +1,7 @@
 {% extends "_layouts/cp" %}
 
+{% do view.registerAssetBundle("barrelstrength\\sproutforms\\web\\assets\\cp\\CpAsset") %}
+
 {% set title  = "Settings"|t('sprout-forms') %}
 {% set bodyClass = craft.app.request.getSegments()|slice(0, 3)|join(' ') %}
 
@@ -52,5 +54,3 @@
     </nav>
 
 {% endset %}
-
-{% includeCssResource 'sprout-forms/css/sproutforms.css' %}
