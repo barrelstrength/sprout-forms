@@ -1,8 +1,4 @@
-/*
- * @link      https://sprout.barrelstrengthdesign.com/
- * @copyright Copyright (c) Barrel Strength Design LLC
- * @license   http://sprout.barrelstrengthdesign.com/license
- */
+/* global Craft */
 
 if (typeof Craft.SproutForms === typeof undefined) {
   Craft.SproutForms = {};
@@ -30,9 +26,7 @@ Craft.SproutForms.EntriesTableView = Craft.TableElementIndexView.extend({
 
     afterInit: function() {
       this.$explorerContainer = $('<div class="chart-explorer-container"></div>').prependTo(this.$container);
-
       this.createChartExplorer();
-
       this.base();
     },
 

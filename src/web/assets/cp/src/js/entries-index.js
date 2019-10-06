@@ -1,3 +1,5 @@
+/* global Craft */
+
 if (typeof Craft.SproutForms === typeof undefined) {
   Craft.SproutForms = {};
 }
@@ -7,11 +9,10 @@ if (typeof Craft.SproutForms === typeof undefined) {
  */
 Craft.SproutForms.EntriesIndex = Craft.BaseElementIndex.extend({
   getViewClass: function(mode) {
-    switch (mode) {
-      case 'table':
-        return Craft.SproutForms.EntriesTableView;
-      default:
-        return this.base(mode);
+    if (mode === 'table') {
+      return Craft.SproutForms.EntriesTableView;
+    } else {
+      return this.base(mode);
     }
   },
   getDefaultSort: function() {
