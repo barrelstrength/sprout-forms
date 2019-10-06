@@ -89,7 +89,6 @@ class Install extends Migration
             'submitButtonText' => $this->string(),
             'saveData' => $this->boolean()->defaultValue(false),
             'formTemplate' => $this->string(),
-            'enableFileAttachments' => $this->boolean()->defaultValue(false),
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull(),
             'uid' => $this->uid(),

@@ -332,7 +332,6 @@ class FormsController extends BaseController
         $form->redirectUri = $request->getBodyParam('redirectUri', $form->redirectUri);
         $form->saveData = $request->getBodyParam('saveData', $form->saveData);
         $form->submitButtonText = $request->getBodyParam('submitButtonText', $form->submitButtonText);
-        $form->enableFileAttachments = $request->getBodyParam('enableFileAttachments', $form->enableFileAttachments);
 
         $form->titleFormat = $request->getBodyParam('titleFormat', $form->titleFormat);
         if (!$form->titleFormat) {

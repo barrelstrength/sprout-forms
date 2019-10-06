@@ -24,7 +24,6 @@ use craft\records\Element;
  * @property bool      $saveData
  * @property string    $formTemplate
  * @property string    $oldHandle
- * @property bool      $enableFileAttachments
  */
 class Form extends ActiveRecord
 {
