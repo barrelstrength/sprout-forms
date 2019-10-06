@@ -63,7 +63,6 @@ class Form extends Element
     public $submitButtonText;
     public $saveData = false;
     public $formTemplate;
-    public $enableFileAttachments = false;
 
     /**
      * @inheritdoc
@@ -320,7 +319,6 @@ class Form extends Element
         $record->saveData = $this->saveData;
         $record->submitButtonText = $this->submitButtonText;
         $record->formTemplate = $this->formTemplate;
-        $record->enableFileAttachments = $this->enableFileAttachments;
 
         $record->save(false);
 
