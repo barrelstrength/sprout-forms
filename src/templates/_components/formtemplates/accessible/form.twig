@@ -61,6 +61,12 @@
     {%- endfor %}
 {%- endif %}
 
+{% css %}
+    .hidden{
+    display: none !important;
+    }
+{% endcss %}
+
 {%- set accessibilityJsUrl = view.getAssetManager().getPublishedUrl(
     '@sproutforms/web/assets/formtemplates/dist/js/accessibility.js',
     true) -%}
@@ -77,12 +83,6 @@
     '@sproutforms/web/assets/formtemplates/dist/js/addressfield.js',
     true) -%}
 {%- do view.registerJsFile(addressFieldJsUrl) -%}
-
-{% css %}
-    .hidden{
-    display: none !important;
-    }
-{% endcss %}
 
 {% js at endBody %}
     (function() {
