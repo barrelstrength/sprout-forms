@@ -226,11 +226,6 @@ class SproutForms extends Plugin implements SproutEditionsInterface
 //            $event->types[] = FormsFieldImporter::class;
 //            $event->types[] = EntriesFieldImporter::class;
         });
-
-//        Event::on(Bundles::class, Bundles::EVENT_REGISTER_BUNDLE_TYPES, function(RegisterComponentTypesEvent $event) {
-//            $event->types[] = BasicFieldsBundle::class;
-//            $event->types[] = SpecialFieldsBundle::class;
-//        });
     }
 
     /**
