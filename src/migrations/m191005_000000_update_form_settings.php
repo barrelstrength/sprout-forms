@@ -39,8 +39,8 @@ class m191005_000000_update_form_settings extends Migration
         $pluginSettings = $projectConfig->get(Plugins::CONFIG_PLUGINS_KEY.'.'.'sprout-forms.settings');
 
         // Add renamed settings
-        $pluginSettings['enableSaveDataDefaultValue'] = (int) $pluginSettings['saveDataByDefault'];
-        $pluginSettings['formTemplateDefaultValue'] = $pluginSettings['templateFolderDefaultValue'];
+        $pluginSettings['enableSaveDataDefaultValue'] = (int) $pluginSettings['saveDataByDefault'] ?? 0;
+        $pluginSettings['formTemplateDefaultValue'] = $pluginSettings['templateFolderDefaultValue'] ?? '';
 
         // Remove deprecated settings
         unset(
