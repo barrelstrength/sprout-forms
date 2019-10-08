@@ -6,6 +6,7 @@ use Craft;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\models\EntryStatus;
 use craft\helpers\Json;
+use craft\helpers\UrlHelper;
 use craft\web\Controller as BaseController;
 use Exception;
 use Throwable;
@@ -35,6 +36,11 @@ class EntryStatusesController extends BaseController
 
                 if (!$entryStatus->id) {
                     throw new NotFoundHttpException('Entry Status not found');
+                }
+
+                if ($entryStatus->handle == EntryStatus::SPAM_HANDLE) {
+                    Craft::$app->session->setError(Craft::t('sprout-forms', "Spam status can't be updated"));
+                    return $this->redirect(UrlHelper::cpUrl('sprout-forms/settings/entry-statuses'));
                 }
             } else {
                 $entryStatus = new EntryStatus();

@@ -110,6 +110,26 @@ class Entries extends Component
     }
 
     /**
+     * @param $entryStatusHandle
+     *
+     * @return EntryStatus
+     */
+    public function getEntryStatusByHandle($entryStatusHandle): EntryStatus
+    {
+        $entryStatus = EntryStatusRecord::find()
+            ->where(['handle' => $entryStatusHandle])
+            ->one();
+
+        $entryStatusesModel = new EntryStatus();
+
+        if ($entryStatus) {
+            $entryStatusesModel->setAttributes($entryStatus->getAttributes(), false);
+        }
+
+        return $entryStatusesModel;
+    }
+
+    /**
      * @param EntryStatus $entryStatus
      *
      * @return bool
