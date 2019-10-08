@@ -3,7 +3,7 @@
 {% do view.registerAssetBundle("barrelstrength\\sproutbase\\web\\assets\\cp\\CpAsset") %}
 {% do view.registerAssetBundle("barrelstrength\\sproutbase\\web\\assets\\landing\\LandingAsset") %}
 
-{% set assetUrl = view.getAssetManager().getPublishedUrl('@sproutforms/web/assets/base/dist', true) -%}
+{% set assetUrl = view.getAssetManager().getPublishedUrl('@sproutforms/web/assets/cp/dist', true) -%}
 {% set pluginStoreLink = currentUser.admin ? cpUrl('plugin-store/sprout-forms') : 'https://plugins.craftcms.com/sprout-forms' %}
 
 <div class="sprout-landing">
