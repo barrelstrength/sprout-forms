@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\elements\db;
 
 use barrelstrength\sproutforms\elements\Form;
+use barrelstrength\sproutforms\models\EntryStatus;
 use craft\db\Query;
 use craft\elements\db\ElementQuery;
 use craft\helpers\Db;
@@ -52,6 +53,16 @@ class EntryQuery extends ElementQuery
      */
     public $formGroupId;
 
+    /**
+     * @var boolean
+     */
+    public $notSpam = false;
+
+    /**
+     * @var boolean
+     */
+    public $onlySpam = false;
+
     public $status = [];
 
     /**
@@ -94,6 +105,35 @@ class EntryQuery extends ElementQuery
 
         return $this;
     }
+
+    /**
+     * Sets the [[notSpam]] property.
+     *
+     * @param boolean
+     *
+     * @return static self reference
+     */
+    public function notSpam($value): EntryQuery
+    {
+        $this->notSpam = $value;
+
+        return $this;
+    }
+
+    /**
+     * Sets the [[onlySpam]] property.
+     *
+     * @param boolean
+     *
+     * @return static self reference
+     */
+    public function onlySpam($value): EntryQuery
+    {
+        $this->onlySpam = $value;
+
+        return $this;
+    }
+
 
     /**
      * Sets the [[formHandle]] property.
@@ -208,6 +248,19 @@ class EntryQuery extends ElementQuery
         if ($this->statusId) {
             $this->subQuery->andWhere(Db::parseParam(
                 'sproutforms_entries.statusId', $this->statusId)
+            );
+        }
+
+        if ($this->onlySpam) {
+            $this->notSpam = false;
+            $this->subQuery->andWhere(Db::parseParam(
+                'sproutforms_entrystatuses.handle', EntryStatus::SPAM_HANDLE)
+            );
+        }
+
+        if ($this->notSpam) {
+            $this->subQuery->andWhere(Db::parseParam(
+                'sproutforms_entrystatuses.handle', EntryStatus::SPAM_HANDLE, '<>')
             );
         }
 
