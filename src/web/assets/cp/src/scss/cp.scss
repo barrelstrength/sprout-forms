@@ -180,6 +180,13 @@ table.behavior-table .behavior-action {
     padding-right: 12px;
 }
 
+table.rules-table tbody td select {
+    max-width:200px;
+}
+table.behavior-table tbody td select {
+    max-width:280px;
+}
+
 /* Integrations modal */
 table.editable tbody tr td {
     text-align: left;
