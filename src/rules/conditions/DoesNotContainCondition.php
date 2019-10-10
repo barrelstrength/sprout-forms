@@ -16,7 +16,7 @@ class DoesNotContainCondition extends Condition
      */
     public function getLabel(): string
     {
-        return 'does not contains';
+        return 'does not contain';
     }
 
     /**
