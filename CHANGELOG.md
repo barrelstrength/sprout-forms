@@ -15,6 +15,7 @@
 - Added `IsGreaterThan` and `IsLessThan` Conditions
 - Added `IsGreaterThanOrEqualTo` and `IsLessThanOrEqualTo` Conditions
 - Added `rules` data attribute to Form Templates
+- Added Field Rule support for custom Form Fields
 
 ### Changed
 - Added Form Edit Settings page to manage several Form Settings with more breathing room
