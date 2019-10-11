@@ -25,6 +25,7 @@ use barrelstrength\sproutforms\fields\Entries as FormEntriesField;
 use barrelstrength\sproutforms\integrations\sproutreports\datasources\SubmissionLogDataSource;
 use barrelstrength\sproutforms\integrationtypes\EntryElementIntegration;
 use barrelstrength\sproutforms\integrationtypes\CustomEndpoint;
+use barrelstrength\sproutforms\migrations\m191008_000000_add_spam_status;
 use barrelstrength\sproutforms\services\Integrations;
 use barrelstrength\sproutforms\widgets\RecentEntries;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
@@ -473,6 +474,12 @@ class SproutForms extends Plugin implements SproutEditionsInterface
             $dataSource->viewContext = 'sprout-forms';
             SproutBaseReports::$app->dataSources->saveDataSource($dataSource);
         }
+
+        // Create Spam status
+        $createSpamStatus = new m191008_000000_add_spam_status();
+        ob_start();
+        $createSpamStatus->safeUp();
+        ob_end_clean();
 
         // Redirect to welcome page
         if (Craft::$app->getRequest()->getIsConsoleRequest()) {
