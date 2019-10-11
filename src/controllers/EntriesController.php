@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\controllers;
 
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
+use barrelstrength\sproutforms\models\EntryStatus;
 use Craft;
 use craft\errors\MissingComponentException;
 use craft\web\Controller as BaseController;
@@ -74,6 +75,7 @@ class EntriesController extends BaseController
 
         $formHandle = $request->getRequiredBodyParam('handle');
         $this->form = $this->form == null ? SproutForms::$app->forms->getFormByHandle($formHandle) : $this->form;
+        $settings = SproutForms::getInstance()->getSettings();
 
         if ($this->form === null) {
             throw new Exception('No form exists with the handle '.$formHandle);
@@ -118,10 +120,18 @@ class EntriesController extends BaseController
 
         $this->trigger(self::EVENT_BEFORE_VALIDATE, $event);
 
-        $success = $entry->validate();
+        if ($settings->spamBehavior === 'simulateSuccessful' || $settings->spamBehavior === 'reloadPage'){
+            $entry->clearErrors(Entry::CAPTCHA_ERRORS_KEY);
+        }
 
-        if (!$success) {
-            Craft::error($entry->getErrors(), __METHOD__);
+        $success = $entry->validate(null, false);
+
+        $isRedirectSpam = false;
+        if($entry->getIsSpam() && ($settings->spamBehavior === 'reloadPage' || $settings->spamBehavior === 'displaySpamErrors')){
+            $isRedirectSpam = true;
+        }
+
+        if (!$success || $isRedirectSpam) {
             return $this->redirectWithErrors($entry);
         }
 

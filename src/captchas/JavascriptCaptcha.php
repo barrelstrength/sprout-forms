@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\captchas;
 
 use barrelstrength\sproutforms\base\Captcha;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
+use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
 use Craft;
 use craft\errors\MissingComponentException;
 use craft\web\View;
@@ -60,7 +61,7 @@ class JavascriptCaptcha extends Captcha
      * @inheritdoc
      * @throws MissingComponentException
      */
-    public function verifySubmission(OnBeforeSaveEntryEvent $event): bool
+    public function verifySubmission(OnBeforeValidateEntryEvent $event): bool
     {
         $uniqueid = null;
 

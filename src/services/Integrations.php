@@ -284,6 +284,10 @@ class Integrations extends Component
      */
     public function runFormIntegrations(Entry $entry)
     {
+        if ($entry->getIsSpam()){
+            return;
+        }
+
         $form = $entry->getForm();
         $integrations = $this->getIntegrationsByFormId($form->id);
 

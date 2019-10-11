@@ -1,5 +1,10 @@
 # Changelog
 
+## WIP
+
+### Updated
+- Updated OnBeforeSaveEntryEvent to OnBeforeValidateEntryEvent param in the verifySubmission method of the Spam class
+
 ## 3.5.1 - 2019-10-17
 
 ### Fixed

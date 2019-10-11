@@ -3,6 +3,8 @@
 namespace barrelstrength\sproutforms\base;
 
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
+use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
+use barrelstrength\sproutforms\models\EntryStatus;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use ReflectionClass;
@@ -106,12 +108,26 @@ abstract class Captcha
     /**
      * Returns if a form submission passes or fails your captcha validation.
      *
-     * @param OnBeforeSaveEntryEvent $event
+     * @param OnBeforeValidateEntryEvent $event
      *
      * @return bool
      */
-    public function verifySubmission(OnBeforeSaveEntryEvent $event): bool
+    public function verifySubmission(OnBeforeValidateEntryEvent $event): bool
     {
         return true;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getSpamStatusId()
+    {
+        $spam = SproutForms::$app->entries->getEntryStatusByHandle(EntryStatus::SPAM_HANDLE);
+
+        if (!$spam->id){
+            return null;
+        }
+
+        return $spam->id;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\elements;
 
+use barrelstrength\sproutforms\models\EntryStatus;
 use Craft;
 use craft\base\Element;
 use craft\elements\db\ElementQueryInterface;
@@ -25,6 +26,7 @@ use yii\db\ActiveRecord;
  */
 class Entry extends Element
 {
+    const CAPTCHA_ERRORS_KEY = 'sproutFormsCaptchaErrors';
     // Properties
     // =========================================================================
     private $form;
@@ -498,5 +500,19 @@ class Entry extends Element
     public function getHiddenFields()
     {
         return $this->entryHiddenFields ?? [];
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsSpam()
+    {
+        $status = $this->getStatus();
+
+        if($status === EntryStatus::SPAM_HANDLE){
+            return true;
+        }
+
+        return false;
     }
 }

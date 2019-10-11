@@ -17,6 +17,8 @@ class Settings extends Model implements SproutSettingsInterface
     public $pluginNameOverride = '';
     public $formTemplateDefaultValue = '';
     public $enableSaveData = 1;
+    // simulateSuccessful|displaySpamErrors|reloadPage
+    public $spamBehavior = 'simulateSuccessful';
     public $enableSaveDataDefaultValue = 1;
     public $captchaSettings = [];
     public $enableEditFormEntryViaFrontEnd = 0;

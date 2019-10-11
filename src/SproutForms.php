@@ -13,6 +13,8 @@ use barrelstrength\sproutbasereports\services\DataSources;
 use barrelstrength\sproutbasereports\SproutBaseReports;
 use barrelstrength\sproutbasereports\SproutBaseReportsHelper;
 use barrelstrength\sproutforms\base\Captcha;
+use barrelstrength\sproutforms\controllers\EntriesController;
+use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
 use barrelstrength\sproutforms\events\OnSaveEntryEvent;
 use barrelstrength\sproutforms\integrations\sproutemail\emailtemplates\basic\BasicSproutFormsNotification;
 use barrelstrength\sproutforms\integrations\sproutemail\events\notificationevents\SaveEntryEvent;
@@ -187,7 +189,8 @@ class SproutForms extends Plugin implements SproutEditionsInterface
             $event->types[] = HoneypotCaptcha::class;
         });
 
-        Event::on(Entries::class, EntryElement::EVENT_BEFORE_SAVE, static function(OnBeforeSaveEntryEvent $event) {
+        Event::on(EntriesController::class, EntriesController::EVENT_BEFORE_VALIDATE, static function(OnBeforeValidateEntryEvent $event) {
+
             if (Craft::$app->getRequest()->getIsSiteRequest()) {
                 /** @var Captcha[] $captchas */
                 $captchas = SproutForms::$app->forms->getAllEnabledCaptchas();
