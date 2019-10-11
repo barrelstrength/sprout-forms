@@ -154,6 +154,14 @@ class EntriesController extends BaseController
 
         $saveData = SproutForms::$app->entries->isSaveDataEnabled($this->form);
 
+        // Should we save if is spam?
+        if ($saveData){
+            if ($entry->getIsSpam()){
+                $settings = SproutForms::getInstance()->getSettings();
+                $saveData = $settings->saveSpamToDatabase;
+            }
+        }
+
         // Save Data and Trigger the onSaveEntryEvent
         if ($saveData) {
             $success = SproutForms::$app->entries->saveEntry($entry);
