@@ -14,11 +14,15 @@ use Craft;
  */
 class Settings extends Model implements SproutSettingsInterface
 {
+    const SPAM_BEHAVIOR_SIMULATE = 'simulateSuccessful';
+    const SPAM_BEHAVIOR_RELOAD = 'reloadPage';
+    const SPAM_BEHAVIOR_DISPLAY_ERRORS = 'displaySpamErrors';
+
     public $pluginNameOverride = '';
     public $formTemplateDefaultValue = '';
     public $enableSaveData = 1;
     // simulateSuccessful|displaySpamErrors|reloadPage
-    public $spamBehavior = 'simulateSuccessful';
+    public $spamBehavior = self::SPAM_BEHAVIOR_SIMULATE;
     public $enableSaveDataDefaultValue = 1;
     public $captchaSettings = [];
     public $enableEditFormEntryViaFrontEnd = 0;
@@ -75,6 +79,27 @@ class Settings extends Model implements SproutSettingsInterface
     {
         return [
             [['formTemplateDefaultValue'], 'required', 'on' => 'general']
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getSpamBehaviorsAsOptions(): array
+    {
+        return [
+            [
+                'label' => 'Simulate successful submission',
+                'value' => self::SPAM_BEHAVIOR_SIMULATE
+            ],
+            [
+                'label' => 'Display error messages',
+                'value' => self::SPAM_BEHAVIOR_DISPLAY_ERRORS
+            ],
+            [
+                'label' => 'Reload Form',
+                'value' => self::SPAM_BEHAVIOR_RELOAD
+            ],
         ];
     }
 }

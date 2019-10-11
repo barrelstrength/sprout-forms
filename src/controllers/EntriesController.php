@@ -5,6 +5,7 @@ namespace barrelstrength\sproutforms\controllers;
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
 use barrelstrength\sproutforms\models\EntryStatus;
+use barrelstrength\sproutforms\models\Settings;
 use Craft;
 use craft\errors\MissingComponentException;
 use craft\web\Controller as BaseController;
@@ -120,14 +121,14 @@ class EntriesController extends BaseController
 
         $this->trigger(self::EVENT_BEFORE_VALIDATE, $event);
 
-        if ($settings->spamBehavior === 'simulateSuccessful' || $settings->spamBehavior === 'reloadPage'){
+        if ($settings->spamBehavior === Settings::SPAM_BEHAVIOR_SIMULATE || $settings->spamBehavior === Settings::SPAM_BEHAVIOR_RELOAD){
             $entry->clearErrors(Entry::CAPTCHA_ERRORS_KEY);
         }
 
         $success = $entry->validate(null, false);
 
         $isRedirectSpam = false;
-        if($entry->getIsSpam() && ($settings->spamBehavior === 'reloadPage' || $settings->spamBehavior === 'displaySpamErrors')){
+        if($entry->getIsSpam() && ($settings->spamBehavior === Settings::SPAM_BEHAVIOR_RELOAD || $settings->spamBehavior === Settings::SPAM_BEHAVIOR_DISPLAY_ERRORS)){
             $isRedirectSpam = true;
         }
 

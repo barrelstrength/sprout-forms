@@ -2,6 +2,15 @@
 
 {% import "_includes/forms" as forms %}
 
+{{ forms.selectField({
+    label: "Spam Behavior"|t('sprout-forms'),
+    instructions: 'Select the spam behavior'|t('sprout-forms'),
+    name: 'spamBehavior',
+    options: craft.sproutForms.getSpamBehaviorOptions(),
+    value: settings.spamBehavior,
+    first: true
+}) }}
+
 {% set captchas = craft.sproutForms.getAllCaptchas() %}
 {% for captcha in captchas %}
 

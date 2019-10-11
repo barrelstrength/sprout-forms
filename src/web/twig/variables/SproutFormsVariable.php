@@ -7,6 +7,7 @@ use barrelstrength\sproutforms\elements\db\EntryQuery;
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
+use barrelstrength\sproutforms\models\Settings;
 use barrelstrength\sproutforms\services\Forms;
 use Craft;
 use craft\base\ElementInterface;
@@ -641,6 +642,16 @@ class SproutFormsVariable
     public function getFieldCondition($conditionClass, $formField): Condition
     {
         return new $conditionClass(['formField' => $formField]);
+    }
+
+    /**
+     * @return array
+     */
+    public function getSpamBehaviorOptions(): array
+    {
+        /** @var Settings $settings */
+        $settings = SproutForms::getInstance()->getSettings();
+        return $settings->getSpamBehaviorsAsOptions();
     }
 }
 
