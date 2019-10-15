@@ -7,7 +7,7 @@
 {% set content %}
 
     <input type="hidden" name="action" value="sprout-forms/forms/save-form">
-    {{ redirectInput('sprout-forms/forms/'~form.id~'/settings/general') }}
+    {{ redirectInput('sprout-forms/forms/edit/'~form.id~'/settings/general') }}
     <input type="hidden" id="formId" name="formId" value="{{ form.id }}">
 
     {{ forms.textField({
