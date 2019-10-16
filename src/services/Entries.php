@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\services;
 
+use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\elements\Entry;
 use Craft;
 
@@ -28,6 +29,8 @@ use yii\db\StaleObjectException;
  */
 class Entries extends Component
 {
+    const SPAM_DEFAULT_LIMIT = 500;
+
     /**
      * @var bool
      */
@@ -494,6 +497,32 @@ class Entries extends Component
         }
 
         return $saveData;
+    }
+
+    /**
+     * @return void
+     */
+    public function runPurgeSpamElements()
+    {
+        $settings = SproutForms::getInstance()->getSettings();
+
+        // Default to 5000 if no integer is found in settings
+        $spamLimit = is_int((int)$settings->spamLimit)
+            ? (int)$settings->spamLimit
+            : static::SPAM_DEFAULT_LIMIT;
+
+        if ($spamLimit <= 0) {
+            return ;
+        }
+
+        $ids = EntryElement::find()
+            ->limit(null)
+            ->offset($spamLimit)
+            ->onlySpam(true)
+            ->orderBy(['sproutforms_entries.dateCreated' => SORT_DESC])
+            ->ids();
+
+        SproutBase::$app->utilities->purgeElements(EntryElement::class, $ids);
     }
 
     /**

@@ -24,6 +24,7 @@ class Settings extends Model implements SproutSettingsInterface
     // simulateSuccessful|displaySpamErrors|reloadPage
     public $spamBehavior = self::SPAM_BEHAVIOR_SIMULATE;
     public $saveSpamToDatabase = 0;
+    public $spamLimit = 500;
     public $enableSaveDataDefaultValue = 1;
     public $captchaSettings = [];
     public $enableEditFormEntryViaFrontEnd = 0;

@@ -155,16 +155,21 @@ class EntriesController extends BaseController
         $saveData = SproutForms::$app->entries->isSaveDataEnabled($this->form);
 
         // Should we save if is spam?
+        $runPurgeElements = false;
         if ($saveData){
             if ($entry->getIsSpam()){
                 $settings = SproutForms::getInstance()->getSettings();
                 $saveData = $settings->saveSpamToDatabase;
+                $runPurgeElements = $saveData;
             }
         }
 
         // Save Data and Trigger the onSaveEntryEvent
         if ($saveData) {
             $success = SproutForms::$app->entries->saveEntry($entry);
+            if ($runPurgeElements){
+                SproutForms::$app->entries->runPurgeSpamElements();
+            }
         } else {
             $isNewEntry = !$entry->id;
 
