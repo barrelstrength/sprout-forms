@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\captchas;
 
 use barrelstrength\sproutforms\base\Captcha;
+use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
 use Craft;
@@ -65,9 +66,13 @@ class DuplicateCaptcha extends Captcha
         }
 
         if (!Craft::$app->getSession()->get($uniqueid)) {
-            Craft::error('A form submission failed the Duplicate Submission test.', __METHOD__);
+            $errorMessage = 'A form submission failed the Duplicate Submission test.';
+            Craft::error($errorMessage, __METHOD__);
 
-            $event->isValid = false;
+            $event->isValid = true;
+            $event->fakeIt = true;
+            $event->entry->statusId = $this->getSpamStatusId();
+            $event->entry->addError(Entry::CAPTCHA_ERRORS_KEY, $errorMessage);
 
             return false;
         }

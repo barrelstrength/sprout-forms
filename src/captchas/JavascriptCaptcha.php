@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\captchas;
 
 use barrelstrength\sproutforms\base\Captcha;
+use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
 use Craft;
@@ -74,11 +75,13 @@ class JavascriptCaptcha extends Captcha
         }
 
         if (empty($uniqueid)) {
+            $errorMessage = 'A form submission failed because the user did not have Javascript enabled.';
+            Craft::error($errorMessage, __METHOD__);
 
-            Craft::error('A form submission failed because the user did not have Javascript enabled.', __METHOD__);
-
-            $event->isValid = false;
+            $event->isValid = true;
             $event->fakeIt = true;
+            $event->entry->statusId = $this->getSpamStatusId();
+            $event->entry->addError(Entry::CAPTCHA_ERRORS_KEY, $errorMessage);
 
             return false;
         }
