@@ -46,7 +46,8 @@ class m191005_000000_update_form_settings extends Migration
             $pluginSettings['enableIntegrationsPerFormBasis'],
             $pluginSettings['enablePerFormTemplateFolderOverride'],
             $pluginSettings['enableSaveDataPerFormBasis'],
-            $pluginSettings['templateFolderDefaultValue']
+            $pluginSettings['templateFolderOverride'],
+            $pluginSettings['enableSaveData']
         );
 
         $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY.'.'.'sprout-forms.settings', $pluginSettings);
