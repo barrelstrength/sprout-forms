@@ -1,10 +1,17 @@
 # Changelog
 
+## 3.5.1 - 2019-10-17
+
+### Fixed
+- Fixed migration bug where Form Template setting was reset in migration
+- Fixed migration bug where Save Data setting was reset in migration
+- Fixed a bug where saving the Form settings redirected to an incorrect edit URL
+
 ## 3.5.0 - 2019-10-10
 
 > {tip} IF: you upgrade, THEN: Conditional Fields! Projects using Custom Form Templates or extending Sprout Forms in other custom ways should read the upgrade notes before upgrading: [Changes in Sprout Forms v3.5.0](https://sprout.barrelstrengthdesign.com/docs/forms/installing-and-updating-craft-3.html#upgrading-to-forms-v3-5-0) 
 
-### Added)
+### Added
 - Added Field Rules
 - Added `Is` and `IsNot` Conditions
 - Added `Contains` and `DoesNotContain` Conditions
