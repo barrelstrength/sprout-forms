@@ -78,10 +78,8 @@ class JavascriptCaptcha extends Captcha
             $errorMessage = 'A form submission failed because the user did not have Javascript enabled.';
             Craft::error($errorMessage, __METHOD__);
 
-            $event->isValid = true;
-            $event->fakeIt = true;
             $event->entry->statusId = $this->getSpamStatusId();
-            $event->entry->addError(Entry::CAPTCHA_ERRORS_KEY, $errorMessage);
+            $this->addError(self::CAPTCHA_ERRORS_KEY, $errorMessage);
 
             return false;
         }

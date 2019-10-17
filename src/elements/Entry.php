@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\elements;
 
+use barrelstrength\sproutforms\base\Captcha;
 use barrelstrength\sproutforms\models\EntryStatus;
 use Craft;
 use craft\base\Element;
@@ -26,7 +27,6 @@ use yii\db\ActiveRecord;
  */
 class Entry extends Element
 {
-    const CAPTCHA_ERRORS_KEY = 'sproutFormsCaptchaErrors';
     // Properties
     // =========================================================================
     private $form;
@@ -45,6 +45,9 @@ class Entry extends Element
     public $formName;
     public $ipAddress;
     public $userAgent;
+
+    /** @var Captcha[] $captchas */
+    protected $captchas;
     /**
      * @var string
      */
@@ -509,8 +512,27 @@ class Entry extends Element
     {
         $status = $this->getStatus();
 
-        if($status === EntryStatus::SPAM_HANDLE){
+        if($status === EntryStatus::SPAM_STATUS_HANDLE){
             return true;
+        }
+
+        return false;
+    }
+
+    public function addCaptcha(Captcha $captcha)
+    {
+        $this->captchas[get_class($captcha)] = $captcha;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasCaptchaErrors()
+    {
+        foreach ($this->captchas as $captcha) {
+            if ($captcha->hasErrors()){
+                return true;
+            }
         }
 
         return false;

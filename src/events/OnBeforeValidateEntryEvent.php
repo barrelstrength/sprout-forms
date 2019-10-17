@@ -20,14 +20,4 @@ class OnBeforeValidateEntryEvent extends Event
      * @var Entry
      */
     public $entry;
-
-    /**
-     * @var bool
-     */
-    public $isValid = true;
-
-    /**
-     * @var bool
-     */
-    public $fakeIt = false;
 }

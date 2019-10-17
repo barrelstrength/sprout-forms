@@ -197,6 +197,7 @@ class SproutForms extends Plugin implements SproutEditionsInterface
 
                 foreach ($captchas as $captcha) {
                     $captcha->verifySubmission($event);
+                    $event->entry->addCaptcha($captcha);
                 }
             }
         }, null, false);

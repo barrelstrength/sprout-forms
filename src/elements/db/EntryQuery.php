@@ -254,13 +254,13 @@ class EntryQuery extends ElementQuery
         if ($this->onlySpam) {
             $this->notSpam = false;
             $this->subQuery->andWhere(Db::parseParam(
-                'sproutforms_entrystatuses.handle', EntryStatus::SPAM_HANDLE)
+                'sproutforms_entrystatuses.handle', EntryStatus::SPAM_STATUS_HANDLE)
             );
         }
 
         if ($this->notSpam) {
             $this->subQuery->andWhere(Db::parseParam(
-                'sproutforms_entrystatuses.handle', EntryStatus::SPAM_HANDLE, '<>')
+                'sproutforms_entrystatuses.handle', EntryStatus::SPAM_STATUS_HANDLE, '<>')
             );
         }
 

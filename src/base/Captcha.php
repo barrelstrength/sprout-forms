@@ -7,14 +7,17 @@ use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
 use barrelstrength\sproutforms\models\EntryStatus;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
+use craft\base\Model;
 use ReflectionClass;
 use ReflectionException;
 
 /**
  * Class Captcha
  */
-abstract class Captcha
+abstract class Captcha extends Model
 {
+    const CAPTCHA_ERRORS_KEY = 'captchaErrors';
+
     /**
      * A unique ID that is generated dynamically using the plugin handle and the captcha class name {pluginhandle}-{captchaclassname}
      *
@@ -122,7 +125,7 @@ abstract class Captcha
      */
     public function getSpamStatusId()
     {
-        $spam = SproutForms::$app->entries->getEntryStatusByHandle(EntryStatus::SPAM_HANDLE);
+        $spam = SproutForms::$app->entries->getEntryStatusByHandle(EntryStatus::SPAM_STATUS_HANDLE);
 
         if (!$spam->id){
             return null;

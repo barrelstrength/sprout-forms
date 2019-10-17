@@ -481,11 +481,13 @@ class Entries extends Component
 
     /**
      * @param $form
+     * @param EntryElement|null $entry
      *
      * @return mixed
      */
-    public function isSaveDataEnabled($form)
+    public function isSaveDataEnabled($form, $entry = null)
     {
+        $form = $entry->getForm() ?? $form;
         /** @var SproutForms $plugin */
         $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
         $settings = $plugin->getSettings();
@@ -494,6 +496,13 @@ class Entries extends Component
 
         if ($saveData) {
             $saveData = $form->saveData;
+        }
+
+        if ($saveData && $entry !== null) {
+            if ($entry->getIsSpam()){
+                $settings = SproutForms::getInstance()->getSettings();
+                $saveData = $settings->saveSpamToDatabase;
+            }
         }
 
         return $saveData;

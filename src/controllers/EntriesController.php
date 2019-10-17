@@ -121,14 +121,12 @@ class EntriesController extends BaseController
 
         $this->trigger(self::EVENT_BEFORE_VALIDATE, $event);
 
-        if ($settings->spamBehavior === Settings::SPAM_BEHAVIOR_SIMULATE || $settings->spamBehavior === Settings::SPAM_BEHAVIOR_RELOAD){
-            $entry->clearErrors(Entry::CAPTCHA_ERRORS_KEY);
-        }
+        $hasCaptchaErrors = $entry->hasCaptchaErrors();
 
         $success = $entry->validate(null, false);
 
         $isRedirectSpam = false;
-        if($entry->getIsSpam() && ($settings->spamBehavior === Settings::SPAM_BEHAVIOR_RELOAD || $settings->spamBehavior === Settings::SPAM_BEHAVIOR_DISPLAY_ERRORS)){
+        if($hasCaptchaErrors && ($settings->spamBehavior === Settings::SPAM_BEHAVIOR_RELOAD || $settings->spamBehavior === Settings::SPAM_BEHAVIOR_DISPLAY_ERRORS)){
             $isRedirectSpam = true;
         }
 
@@ -152,22 +150,13 @@ class EntriesController extends BaseController
     {
         $success = true;
 
-        $saveData = SproutForms::$app->entries->isSaveDataEnabled($this->form);
-
-        // Should we save if is spam?
-        $runPurgeElements = false;
-        if ($saveData){
-            if ($entry->getIsSpam()){
-                $settings = SproutForms::getInstance()->getSettings();
-                $saveData = $settings->saveSpamToDatabase;
-                $runPurgeElements = $saveData;
-            }
-        }
+        $saveData = SproutForms::$app->entries->isSaveDataEnabled($this->form, $entry);
 
         // Save Data and Trigger the onSaveEntryEvent
         if ($saveData) {
             $success = SproutForms::$app->entries->saveEntry($entry);
-            if ($runPurgeElements){
+            $settings = SproutForms::getInstance()->getSettings();
+            if ($settings->saveSpamToDatabase){
                 SproutForms::$app->entries->runPurgeSpamElements();
             }
         } else {

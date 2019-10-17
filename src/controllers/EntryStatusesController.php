@@ -38,7 +38,7 @@ class EntryStatusesController extends BaseController
                     throw new NotFoundHttpException('Entry Status not found');
                 }
 
-                if ($entryStatus->handle == EntryStatus::SPAM_HANDLE) {
+                if ($entryStatus->handle == EntryStatus::SPAM_STATUS_HANDLE) {
                     Craft::$app->session->setError(Craft::t('sprout-forms', "Spam status can't be updated"));
                     return $this->redirect(UrlHelper::cpUrl('sprout-forms/settings/entry-statuses'));
                 }

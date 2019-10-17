@@ -7,7 +7,7 @@ use Craft;
 
 class EntryStatus extends Model
 {
-    const SPAM_HANDLE = 'sproutFormsSpam';
+    const SPAM_STATUS_HANDLE = 'spam';
 
     /**
      * @var int|null ID
