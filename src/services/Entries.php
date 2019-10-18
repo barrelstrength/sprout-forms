@@ -487,7 +487,6 @@ class Entries extends Component
      */
     public function isSaveDataEnabled($form, $entry = null)
     {
-        $form = $entry->getForm() ?? $form;
         /** @var SproutForms $plugin */
         $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
         $settings = $plugin->getSettings();

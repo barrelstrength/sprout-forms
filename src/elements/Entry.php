@@ -221,12 +221,15 @@ class Entry extends Element
                 'criteria' => ['notSpam' => true]
             ]
         ];
+        $settings = SproutForms::getInstance()->getSettings();
 
-        $sources[] = [
-            'key' => 'sproutFormsWithSpam',
-            'label' => "Spam",
-            'criteria' => ['onlySpam' => true]
-        ];
+        if ($settings->saveSpamToDatabase){
+            $sources[] = [
+                'key' => 'sproutFormsWithSpam',
+                'label' => "Spam",
+                'criteria' => ['onlySpam' => true]
+            ];
+        }
 
         $sources[] = [
             'heading' => Craft::t('sprout-forms', 'Forms')

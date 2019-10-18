@@ -284,7 +284,7 @@ class Integrations extends Component
      */
     public function runFormIntegrations(Entry $entry)
     {
-        if ($entry->getIsSpam()){
+        if ($entry->hasCaptchaErrors()){
             return;
         }
 
