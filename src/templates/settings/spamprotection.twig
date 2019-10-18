@@ -11,24 +11,6 @@
     first: true
 }) }}
 
-{{ forms.lightswitchField({
-    label: "Save Spam to the database",
-    instructions: "Should we store the spam in the database?",
-    name: 'saveSpamToDatabase',
-    on: settings.saveSpamToDatabase,
-    toggle: "spamLimit-field",
-    onLabel: "Enable"|t('sprout-forms'),
-}) }}
-
-{{ forms.textField({
-    label: "Spam Limit"|t('sprout-forms'),
-    instructions: "The total number of Spam entries that will be stored in the database. When the limit is reached, the least recently updated Spam entry will be deleted from the database."|t('sprout-forms'),
-    id: 'spamLimit',
-    name: 'spamLimit',
-    size:'10',
-    value: settings.spamLimit
-}) }}
-
 <hr>
 
 {% set captchas = craft.sproutForms.getAllCaptchas() %}
