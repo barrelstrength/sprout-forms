@@ -31,7 +31,7 @@
                     <a class="move icon" title="{{ 'Reorder'|t('sprout-forms') }}" role="button"></a>
                 </td>
                 <td class="thin">
-                    {% if entryStatus.id not in [1,2] and entryStatus.handle != 'sproutFormsSpam' %}
+                    {% if entryStatus.id not in [1,2] and entryStatus.handle != craft.sproutForms.getSpamStatusHandle() %}
                         <a class="delete icon" title="{{ 'Delete'|t('sprout-forms') }}" role="button"></a>
                     {% endif %}
                 </td>

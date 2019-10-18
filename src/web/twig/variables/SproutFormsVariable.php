@@ -7,6 +7,7 @@ use barrelstrength\sproutforms\elements\db\EntryQuery;
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
+use barrelstrength\sproutforms\models\EntryStatus;
 use barrelstrength\sproutforms\models\Settings;
 use barrelstrength\sproutforms\services\Forms;
 use Craft;
@@ -652,6 +653,14 @@ class SproutFormsVariable
         /** @var Settings $settings */
         $settings = SproutForms::getInstance()->getSettings();
         return $settings->getSpamBehaviorsAsOptions();
+    }
+
+    /**
+     * @return string
+     */
+    public function getSpamStatusHandle()
+    {
+        return EntryStatus::SPAM_STATUS_HANDLE;
     }
 }
 
