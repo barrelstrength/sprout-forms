@@ -530,10 +530,15 @@ class Entry extends Element
     /**
      * @return bool
      */
-    public function hasCaptchaErrors()
+    public function hasCaptchaErrors(): bool
     {
+        // When saving in the CP
+        if ($this->captchas === null) {
+            return false;
+        }
+
         foreach ($this->captchas as $captcha) {
-            if ($captcha->hasErrors()){
+            if ($captcha->hasErrors()) {
                 return true;
             }
         }
