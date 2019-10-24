@@ -21,7 +21,7 @@ class m191008_000000_add_spam_status extends Migration
     {
         $entryStatus = SproutForms::$app->entries->getEntryStatusByHandle(EntryStatus::SPAM_STATUS_HANDLE);
 
-        if ($entryStatus->id){
+        if ($entryStatus->id) {
             Craft::info("Spam status already exists");
             return true;
         }

@@ -480,7 +480,7 @@ class Entries extends Component
     }
 
     /**
-     * @param $form
+     * @param                   $form
      * @param EntryElement|null $entry
      *
      * @return mixed
@@ -498,7 +498,7 @@ class Entries extends Component
         }
 
         if ($saveData && $entry !== null) {
-            if ($entry->getIsSpam()){
+            if ($entry->getIsSpam()) {
                 $settings = SproutForms::getInstance()->getSettings();
                 $saveData = $settings->saveSpamToDatabase;
             }
@@ -520,7 +520,7 @@ class Entries extends Component
             : static::SPAM_DEFAULT_LIMIT;
 
         if ($spamLimit <= 0) {
-            return ;
+            return;
         }
 
         $ids = EntryElement::find()

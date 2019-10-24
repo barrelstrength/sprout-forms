@@ -126,7 +126,7 @@ class EntriesController extends BaseController
         $success = $entry->validate(null, false);
 
         $isRedirectSpam = false;
-        if($hasCaptchaErrors && ($settings->spamBehavior === Settings::SPAM_BEHAVIOR_RELOAD || $settings->spamBehavior === Settings::SPAM_BEHAVIOR_DISPLAY_ERRORS)){
+        if ($hasCaptchaErrors && ($settings->spamBehavior === Settings::SPAM_BEHAVIOR_RELOAD || $settings->spamBehavior === Settings::SPAM_BEHAVIOR_DISPLAY_ERRORS)) {
             $isRedirectSpam = true;
         }
 
@@ -156,7 +156,7 @@ class EntriesController extends BaseController
         if ($saveData) {
             $success = SproutForms::$app->entries->saveEntry($entry);
             $settings = SproutForms::getInstance()->getSettings();
-            if ($settings->saveSpamToDatabase){
+            if ($settings->saveSpamToDatabase) {
                 SproutForms::$app->entries->runPurgeSpamElements();
             }
         } else {

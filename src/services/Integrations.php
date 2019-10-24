@@ -284,7 +284,7 @@ class Integrations extends Component
      */
     public function runFormIntegrations(Entry $entry)
     {
-        if ($entry->hasCaptchaErrors()){
+        if ($entry->hasCaptchaErrors()) {
             return;
         }
 

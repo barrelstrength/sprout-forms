@@ -64,15 +64,15 @@
     }) }}
 
     <div id="settings-spamLimit"
-         class="{{ not settings.saveSpamToDatabase ? "hidden" : '' }}">
-    {{ forms.textField({
-        label: "Spam Limit"|t('sprout-forms'),
-        instructions: "The total number of Spam entries that will be stored in the database. When the limit is reached, the least recently updated Spam entry will be deleted from the database."|t('sprout-forms'),
-        id: 'spamLimit',
-        name: 'spamLimit',
-        size:'10',
-        value: settings.spamLimit
-    }) }}
+        class="{{ not settings.saveSpamToDatabase ? "hidden" : '' }}">
+        {{ forms.textField({
+            label: "Spam Limit"|t('sprout-forms'),
+            instructions: "The total number of Spam entries that will be stored in the database. When the limit is reached, the least recently updated Spam entry will be deleted from the database."|t('sprout-forms'),
+            id: 'spamLimit',
+            name: 'spamLimit',
+            size:'10',
+            value: settings.spamLimit
+        }) }}
     </div>
 
 </div>

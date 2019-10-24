@@ -223,7 +223,7 @@ class Entry extends Element
         ];
         $settings = SproutForms::getInstance()->getSettings();
 
-        if ($settings->saveSpamToDatabase){
+        if ($settings->saveSpamToDatabase) {
             $sources[] = [
                 'key' => 'sproutFormsWithSpam',
                 'label' => "Spam",
@@ -511,11 +511,11 @@ class Entry extends Element
     /**
      * @return bool
      */
-    public function getIsSpam()
+    public function getIsSpam(): bool
     {
         $status = $this->getStatus();
 
-        if($status === EntryStatus::SPAM_STATUS_HANDLE){
+        if ($status === EntryStatus::SPAM_STATUS_HANDLE) {
             return true;
         }
 

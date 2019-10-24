@@ -1,4 +1,3 @@
-
 class SproutFormsAddressField {
 
   constructor(formId) {
@@ -14,6 +13,7 @@ class SproutFormsAddressField {
 
     this.initCountrySelectFields();
   }
+
   initCountrySelectFields() {
     let self = this;
     for (let i = 0; i < this.countrySelectFields.length; i++) {

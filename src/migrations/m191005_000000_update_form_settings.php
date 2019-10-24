@@ -39,7 +39,7 @@ class m191005_000000_update_form_settings extends Migration
 
         $pluginSettings = $projectConfig->get(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings');
         // Add renamed settings
-        $pluginSettings['enableSaveDataDefaultValue'] = (int) $pluginSettings['enableSaveData'] ?? 0;
+        $pluginSettings['enableSaveDataDefaultValue'] = (int)$pluginSettings['enableSaveData'] ?? 0;
         $pluginSettings['formTemplateDefaultValue'] = $pluginSettings['templateFolderOverride'] ?? '';
 
         // Remove deprecated settings

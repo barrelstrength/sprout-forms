@@ -37,7 +37,7 @@ class IsLessThanOrEqualToCondition extends Condition
         if ($this->inputValue <= $this->ruleValue) {
             return true;
         }
-        
+
         $this->addError('inputValue', Craft::t('sprout-forms', 'Condition does not validate'));
     }
 }

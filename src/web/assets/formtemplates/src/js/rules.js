@@ -19,7 +19,7 @@ class SproutFormsRules {
       let conditionSets = rule.conditions;
       for (conditionSetId in conditionSets) {
         let conditionSet = conditionSets[conditionSetId];
-        let conditionSetKey = 'condition-set-'+j;
+        let conditionSetKey = 'condition-set-' + j;
 
         let orArray = [];
         for (conditionId in conditionSet) {
