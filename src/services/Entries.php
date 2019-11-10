@@ -4,9 +4,7 @@ namespace barrelstrength\sproutforms\services;
 
 use barrelstrength\sproutbase\jobs\PurgeElements;
 use barrelstrength\sproutbase\SproutBase;
-use barrelstrength\sproutforms\elements\Entry;
 use Craft;
-
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\elements\Form as FormElement;
@@ -309,9 +307,7 @@ class Entries extends Component
         $entry->validate();
 
         if ($entry->hasErrors()) {
-
             Craft::error($entry->getErrors(), __METHOD__);
-
             return false;
         }
 
@@ -498,11 +494,12 @@ class Entries extends Component
             $saveData = $form->saveData;
         }
 
-        if ($saveData && $entry !== null) {
-            if ($entry->getIsSpam()) {
-                $settings = SproutForms::getInstance()->getSettings();
-                $saveData = $settings->saveSpamToDatabase;
-            }
+        if ($saveData &&
+            $entry !== null &&
+            Craft::$app->getRequest()->getIsSiteRequest() &&
+            $entry->getIsSpam()) {
+            $settings = SproutForms::getInstance()->getSettings();
+            $saveData = $settings->saveSpamToDatabase;
         }
 
         return $saveData;

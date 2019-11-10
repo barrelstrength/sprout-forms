@@ -23,6 +23,7 @@ use yii\db\ActiveRecord;
  * @property array|ActiveRecord[] $submissionLog
  * @property null|array           $conditionalLogicResults
  * @property null|array           $hiddenFields
+ * @property bool                 $isSpam
  * @property array                $fields
  */
 class Entry extends Element
@@ -221,12 +222,13 @@ class Entry extends Element
                 'criteria' => ['notSpam' => true]
             ]
         ];
+
         $settings = SproutForms::getInstance()->getSettings();
 
         if ($settings->saveSpamToDatabase) {
             $sources[] = [
                 'key' => 'sproutFormsWithSpam',
-                'label' => "Spam",
+                'label' => 'Spam',
                 'criteria' => ['onlySpam' => true]
             ];
         }
@@ -515,11 +517,7 @@ class Entry extends Element
     {
         $status = $this->getStatus();
 
-        if ($status === EntryStatus::SPAM_STATUS_HANDLE) {
-            return true;
-        }
-
-        return false;
+        return $status === EntryStatus::SPAM_STATUS_HANDLE;
     }
 
     public function addCaptcha(Captcha $captcha)
