@@ -34,7 +34,7 @@
 
 {{ forms.lightswitchField({
     label: "Save data to the Craft database"|t('sprout-forms'),
-    instructions: "Disable this setting to stop Sprout Forms from saving data to the Craft database."|t('sprout-forms'),
+    instructions: "Disable this setting to stop Sprout Forms from saving all form submission data to the Craft database."|t('sprout-forms'),
     id: 'enableSaveData',
     name: 'enableSaveData',
     toggle: 'settings-savedatadetails',
@@ -46,6 +46,14 @@
     class="{{ not settings.enableSaveData ? "hidden" : '' }}">
 
     {{ forms.lightswitchField({
+        label: "Save Spam to the database",
+        instructions: "How form entries will behave after a submission is flagged as spam. See Spam Protection settings for additional control.",
+        name: 'saveSpamToDatabase',
+        on: settings.saveSpamToDatabase,
+        onLabel: "Enable"|t('sprout-forms'),
+    }) }}
+
+    {{ forms.lightswitchField({
         label: "Default behavior for saving data"|t('sprout-forms'),
         instructions: "The default behavior for saving data when a new Form is created."|t('sprout-forms'),
         id: 'enableSaveDataDefaultValue',
@@ -53,27 +61,6 @@
         on: settings.enableSaveDataDefaultValue,
         onLabel: "Enable"|t('sprout-forms'),
     }) }}
-
-    {{ forms.lightswitchField({
-        label: "Save Spam to the database",
-        instructions: "Should we store the spam in the database?",
-        name: 'saveSpamToDatabase',
-        on: settings.saveSpamToDatabase,
-        toggle: "settings-spamLimit",
-        onLabel: "Enable"|t('sprout-forms'),
-    }) }}
-
-    <div id="settings-spamLimit"
-        class="{{ not settings.saveSpamToDatabase ? "hidden" : '' }}">
-        {{ forms.textField({
-            label: "Spam Limit"|t('sprout-forms'),
-            instructions: "The total number of Spam entries that will be stored in the database. When the limit is reached, the least recently updated Spam entry will be deleted from the database."|t('sprout-forms'),
-            id: 'spamLimit',
-            name: 'spamLimit',
-            size:'10',
-            value: settings.spamLimit
-        }) }}
-    </div>
 
 </div>
 

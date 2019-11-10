@@ -2,6 +2,11 @@
 
 {% import "_includes/forms" as forms %}
 
+{% if not settings.saveSpamToDatabase %}
+    <div><strong>{{ "Spam Tracking Disabled."|t('sprout-forms') }}</strong> <a href="{{ cpUrl('sprout-forms/settings/general') }}">{{ "Enable in General Settings"|t('sprout-forms') }}</a></div>
+    <hr>
+{% endif %}
+
 {{ forms.selectField({
     label: "Spam Redirect Behavior"|t('sprout-forms'),
     instructions: 'The behavior your user will see if a submission is flagged as spam.'|t('sprout-forms'),
