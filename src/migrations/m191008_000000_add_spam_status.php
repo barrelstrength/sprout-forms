@@ -6,7 +6,6 @@ use barrelstrength\sproutforms\models\EntryStatus;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\db\Migration;
-use yii\base\NotSupportedException;
 
 /**
  * The class name is the UTC timestamp in the format of mYYMMDD_HHMMSS_migrationName
