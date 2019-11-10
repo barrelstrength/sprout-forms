@@ -126,7 +126,7 @@ class EntriesController extends BaseController
         $success = $entry->validate(null, false);
 
         $isRedirectSpam = false;
-        if ($hasCaptchaErrors && ($settings->spamBehavior === Settings::SPAM_BEHAVIOR_RELOAD || $settings->spamBehavior === Settings::SPAM_BEHAVIOR_DISPLAY_ERRORS)) {
+        if ($hasCaptchaErrors && ($settings->spamRedirectBehavior === Settings::SPAM_BEHAVIOR_RELOAD || $settings->spamRedirectBehavior === Settings::SPAM_BEHAVIOR_DISPLAY_ERRORS)) {
             $isRedirectSpam = true;
         }
 

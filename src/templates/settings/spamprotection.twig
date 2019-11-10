@@ -3,11 +3,11 @@
 {% import "_includes/forms" as forms %}
 
 {{ forms.selectField({
-    label: "Spam Behavior"|t('sprout-forms'),
-    instructions: 'Select the spam behavior'|t('sprout-forms'),
-    name: 'spamBehavior',
-    options: craft.sproutForms.getSpamBehaviorOptions(),
-    value: settings.spamBehavior,
+    label: "Spam Redirect Behavior"|t('sprout-forms'),
+    instructions: 'The behavior your user will see if a submission is flagged as spam.'|t('sprout-forms'),
+    name: 'spamRedirectBehavior',
+    options: craft.sproutForms.getSpamRedirectBehaviorOptions(),
+    value: settings.spamRedirectBehavior,
     first: true
 }) }}
 

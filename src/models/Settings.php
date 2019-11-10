@@ -10,6 +10,7 @@ use Craft;
 
 /**
  *
+ * @property array $spamRedirectBehaviorsAsOptions
  * @property array $settingsNavItems
  */
 class Settings extends Model implements SproutSettingsInterface
@@ -22,7 +23,7 @@ class Settings extends Model implements SproutSettingsInterface
     public $formTemplateDefaultValue = '';
     public $enableSaveData = 1;
     // simulateSuccessful|displaySpamErrors|reloadPage
-    public $spamBehavior = self::SPAM_BEHAVIOR_SIMULATE;
+    public $spamRedirectBehavior = self::SPAM_BEHAVIOR_SIMULATE;
     public $saveSpamToDatabase = 0;
     public $spamLimit = 500;
     public $enableSaveDataDefaultValue = 1;
@@ -87,19 +88,25 @@ class Settings extends Model implements SproutSettingsInterface
     /**
      * @return array
      */
-    public function getSpamBehaviorsAsOptions(): array
+    public function getSpamRedirectBehaviorsAsOptions(): array
     {
+//        redirect to thank you page, simulate successful submission (default)
+//
+//    - redirect back to to form with errors
+//
+//    - redirect back to form without errors
+
         return [
             [
-                'label' => 'Simulate successful submission',
+                'label' => 'Redirect as normal (simulate successful submission)',
                 'value' => self::SPAM_BEHAVIOR_SIMULATE
             ],
             [
-                'label' => 'Display error messages',
+                'label' => 'Redirect back to form (with errors)',
                 'value' => self::SPAM_BEHAVIOR_DISPLAY_ERRORS
             ],
             [
-                'label' => 'Reload Form',
+                'label' => 'Redirect back to form (without errors)',
                 'value' => self::SPAM_BEHAVIOR_RELOAD
             ],
         ];

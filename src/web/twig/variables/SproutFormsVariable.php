@@ -648,11 +648,11 @@ class SproutFormsVariable
     /**
      * @return array
      */
-    public function getSpamBehaviorOptions(): array
+    public function getSpamRedirectBehaviorOptions(): array
     {
         /** @var Settings $settings */
         $settings = SproutForms::getInstance()->getSettings();
-        return $settings->getSpamBehaviorsAsOptions();
+        return $settings->getSpamRedirectBehaviorsAsOptions();
     }
 
     /**
