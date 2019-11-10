@@ -155,15 +155,12 @@ class EntriesController extends BaseController
         // Save Data and Trigger the onSaveEntryEvent
         if ($saveData) {
             $success = SproutForms::$app->entries->saveEntry($entry);
-            $settings = SproutForms::getInstance()->getSettings();
-            if ($settings->saveSpamToDatabase) {
-                SproutForms::$app->entries->runPurgeSpamElements();
-            }
         } else {
             $isNewEntry = !$entry->id;
-
             SproutForms::$app->entries->callOnSaveEntryEvent($entry, $isNewEntry);
         }
+
+        SproutForms::$app->entries->runPurgeSpamElements();
 
         if (!$success) {
             return $this->redirectWithErrors($entry);

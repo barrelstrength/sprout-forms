@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\services;
 
 use barrelstrength\sproutbase\jobs\PurgeElements;
 use barrelstrength\sproutbase\SproutBase;
+use barrelstrength\sproutforms\models\Settings;
 use Craft;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
@@ -506,11 +507,23 @@ class Entries extends Component
     }
 
     /**
+     * @param bool $force
+     *
      * @return void
      */
-    public function runPurgeSpamElements()
+    public function runPurgeSpamElements($force = false)
     {
+        /** @var Settings $settings */
         $settings = SproutForms::getInstance()->getSettings();
+
+        $probability = (int)$settings->cleanupProbability;
+
+        // See Craft Garbage collection treatment of probability
+        // https://docs.craftcms.com/v3/gc.html
+        /** @noinspection RandomApiMigrationInspection */
+        if (!$force && mt_rand(0, 1000000) >= $probability) {
+            return;
+        }
 
         // Default to 5000 if no integer is found in settings
         $spamLimit = is_int((int)$settings->spamLimit)
