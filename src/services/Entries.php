@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\services;
 
+use barrelstrength\sproutbase\jobs\PurgeElements;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\elements\Entry;
 use Craft;
@@ -530,7 +531,11 @@ class Entries extends Component
             ->orderBy(['sproutforms_entries.dateCreated' => SORT_DESC])
             ->ids();
 
-        SproutBase::$app->utilities->purgeElements(EntryElement::class, $ids);
+        $purgeElements = new PurgeElements();
+        $purgeElements->elementType = EntryElement::class;
+        $purgeElements->idsToDelete = $ids;
+
+        SproutBase::$app->utilities->purgeElements($purgeElements);
     }
 
     /**
