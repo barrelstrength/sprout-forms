@@ -3,8 +3,6 @@
 namespace barrelstrength\sproutforms\captchas;
 
 use barrelstrength\sproutforms\base\Captcha;
-use barrelstrength\sproutforms\elements\Entry;
-use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
 use Craft;
 use craft\errors\MissingComponentException;
@@ -12,6 +10,10 @@ use craft\web\View;
 
 /**
  * Class InvisibleCaptcha
+ *
+ * @property string $name
+ * @property string $description
+ * @property string $captchaHtml
  */
 class JavascriptCaptcha extends Captcha
 {

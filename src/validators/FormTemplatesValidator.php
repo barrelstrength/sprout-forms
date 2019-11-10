@@ -2,7 +2,6 @@
 
 namespace barrelstrength\sproutforms\validators;
 
-use barrelstrength\sproutforms\SproutForms;
 use yii\validators\Validator;
 use Craft;
 

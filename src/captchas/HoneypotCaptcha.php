@@ -3,8 +3,6 @@
 namespace barrelstrength\sproutforms\captchas;
 
 use barrelstrength\sproutforms\base\Captcha;
-use barrelstrength\sproutforms\elements\Entry;
-use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
 use Craft;
 use ReflectionException;
@@ -14,6 +12,11 @@ use Twig\Error\SyntaxError;
 
 /**
  * Class HoneypotCaptcha
+ *
+ * @property string $captchaSettingsHtml
+ * @property string $name
+ * @property string $description
+ * @property string $captchaHtml
  */
 class HoneypotCaptcha extends Captcha
 {

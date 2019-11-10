@@ -2,7 +2,6 @@
 
 namespace barrelstrength\sproutforms\base;
 
-use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
 use barrelstrength\sproutforms\models\EntryStatus;
 use barrelstrength\sproutforms\SproutForms;
@@ -13,6 +12,13 @@ use ReflectionException;
 
 /**
  * Class Captcha
+ *
+ * @property null|int $spamStatusId
+ * @property null     $settings
+ * @property string   $captchaSettingsHtml
+ * @property string   $name
+ * @property string   $description
+ * @property string   $captchaHtml
  */
 abstract class Captcha extends Model
 {

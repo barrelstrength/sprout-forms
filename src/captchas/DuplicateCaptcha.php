@@ -3,14 +3,16 @@
 namespace barrelstrength\sproutforms\captchas;
 
 use barrelstrength\sproutforms\base\Captcha;
-use barrelstrength\sproutforms\elements\Entry;
-use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
 use Craft;
 use craft\errors\MissingComponentException;
 
 /**
  * Class DuplicateCaptcha
+ *
+ * @property string $name
+ * @property string $description
+ * @property string $captchaHtml
  */
 class DuplicateCaptcha extends Captcha
 {
