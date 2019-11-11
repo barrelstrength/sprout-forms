@@ -4,7 +4,6 @@ namespace barrelstrength\sproutforms\controllers;
 
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
-use barrelstrength\sproutforms\models\EntryStatus;
 use barrelstrength\sproutforms\models\Settings;
 use Craft;
 use craft\errors\MissingComponentException;
@@ -92,20 +91,13 @@ class EntriesController extends BaseController
 
         Craft::$app->getContent()->populateElementContent($entry);
 
-        $statusId = $request->getBodyParam('statusId');
-
-        if ($statusId !== null) {
-            $entry->statusId = $statusId;
-        }
-
         $this->addHiddenValuesBasedOnFieldRules($entry);
 
         // Populate the entry with post data
         $this->populateEntryModel($entry);
 
-        $entry->statusId = $entry->statusId != null
-            ? $entry->statusId
-            : SproutForms::$app->entries->getDefaultEntryStatusId();
+        $statusId = $request->getBodyParam('statusId');
+        $entry->statusId = $statusId ?? $entry->statusId ?? SproutForms::$app->entries->getDefaultEntryStatusId();
 
         // Render the Entry Title
         try {
