@@ -31,12 +31,13 @@ class m191005_000000_update_form_settings extends Migration
     {
         // Don't make the same config changes twice
         $projectConfig = Craft::$app->getProjectConfig();
-        $schemaVersion = $projectConfig->get('system.schemaVersion', true);
+        $pluginHandle = 'sprout-forms';
+        $schemaVersion = $projectConfig->get('plugins.'.$pluginHandle.'.schemaVersion', true);
         if (version_compare($schemaVersion, '3.5.0', '>=')) {
             return;
         }
 
-        $pluginSettings = $projectConfig->get(Plugins::CONFIG_PLUGINS_KEY.'.'.'sprout-forms.settings');
+        $pluginSettings = $projectConfig->get(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings');
         // Add renamed settings
         $pluginSettings['enableSaveDataDefaultValue'] = (int) $pluginSettings['enableSaveData'] ?? 0;
         $pluginSettings['formTemplateDefaultValue'] = $pluginSettings['templateFolderOverride'] ?? '';
@@ -50,7 +51,7 @@ class m191005_000000_update_form_settings extends Migration
             $pluginSettings['enableSaveData']
         );
 
-        $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY.'.'.'sprout-forms.settings', $pluginSettings);
+        $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings', $pluginSettings);
     }
 
     /**
