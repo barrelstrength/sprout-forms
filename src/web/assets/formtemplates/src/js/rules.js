@@ -200,7 +200,7 @@ class SproutFormsRules {
     }
 
     // Hide field
-    element.classList.add('hidden');
+    element.classList.add('sprout-hidden');
   }
 
   showAndEnableField(element) {
@@ -212,7 +212,7 @@ class SproutFormsRules {
     }
 
     // Show field
-    element.classList.remove('hidden');
+    element.classList.remove('sprout-hidden');
   }
 }
 
