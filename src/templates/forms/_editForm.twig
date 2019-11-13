@@ -83,7 +83,7 @@
     {# When we add tabs we need add a for loop here #}
     <div id="sproutforms-fieldlayout-container">
 
-        {% if form.getError('fieldLayoutId') %}
+        {% if form.getFirstError('fieldLayoutId') %}
             {{ forms.errorList(form.getErrors('fieldLayoutId')) }}
         {% endif %}
 
