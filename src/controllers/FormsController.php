@@ -94,42 +94,26 @@ class FormsController extends BaseController
         $request = Craft::$app->getRequest();
 
         $form = $this->_getFormModel();
+        $duplicateForm = null;
 
         // If we're duplicating the form, swap $form with the duplicate
+
         if ($duplicate) {
-            try {
-                $form = Craft::$app->getElements()->duplicateElement($form, [
-                    'name' => SproutForms::$app->forms->getFieldAsNew('name', $form->name),
-                    'handle' => SproutForms::$app->forms->getFieldAsNew('handle', $form->handle),
-                    'oldHandle' => null
-                ]);
-            } catch (InvalidElementException $e) {
-                /** @var Entry $clone */
-                $clone = $e->element;
+            $duplicateForm = SproutForms::$app->forms->createNewForm(
+                $request->getBodyParam('name'),
+                $request->getBodyParam('handle')
+            );
 
-                if ($request->getAcceptsJson()) {
-                    return $this->asJson([
-                        'success' => false,
-                        'errors' => $clone->getErrors(),
-                    ]);
-                }
-
-                Craft::$app->getSession()->setError(Craft::t('app', 'Couldn’t duplicate form.'));
-
-                // Send the original entry back to the template, with any validation errors on the clone
-                $form->addErrors($clone->getErrors());
-                Craft::$app->getUrlManager()->setRouteParams([
-                    'form' => $form
-                ]);
-
-                return null;
-            } catch (Throwable $e) {
-                throw new ServerErrorHttpException(Craft::t('app', 'An error occurred when duplicating the form.'), 0, $e);
+            if ($duplicateForm) {
+                $form->id = $duplicateForm->id;
+                $form->uid = $duplicateForm->uid;
+            } else {
+                throw new Exception('Error creating Form');
             }
         }
 
         $this->_populateEntryModel($form);
-        $this->prepareFieldLayout($form);
+        $this->prepareFieldLayout($form, $duplicate, $duplicateForm);
 
         // Save it
         if (!SproutForms::$app->forms->saveForm($form, $duplicate)) {
@@ -232,13 +216,19 @@ class FormsController extends BaseController
 
     /**
      * @param FormElement $form
+     * @param bool $duplicate
+     * @param FormElement $duplicatedForm
      *
      * @throws Throwable
      */
-    public function prepareFieldLayout(FormElement $form)
+    public function prepareFieldLayout(FormElement $form, $duplicate = false, $duplicatedForm = null)
     {
         // Set the field layout
         $fieldLayout = Craft::$app->getFields()->assembleLayoutFromPost();
+
+        if ($duplicate) {
+            $fieldLayout = SproutForms::$app->fields->getDuplicateLayout($duplicatedForm, $fieldLayout);
+        }
 
         // Make sure we have a layout if:
         // 1. Form fails validation due to no fields existing
@@ -280,7 +270,6 @@ class FormsController extends BaseController
             Craft::$app->content->fieldContext = $oldFieldContext;
             Craft::$app->content->contentTable = $oldContentTable;
         }
-//        return $fieldLayout;
     }
 
     /**

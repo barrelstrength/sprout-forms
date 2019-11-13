@@ -27,6 +27,9 @@ use craft\records\Element;
  */
 class Form extends ActiveRecord
 {
+    private $_oldHandle;
+    private $oldRecord;
+
     /**
      * @inheritdoc
      *
@@ -45,5 +48,34 @@ class Form extends ActiveRecord
     public function getElement(): ActiveQueryInterface
     {
         return $this->hasOne(Element::class, ['id' => 'id']);
+    }
+
+    /**
+     * Returns the form’s group.
+     *
+     * @return ActiveQueryInterface The relational query object.
+     *
+     * public function getGroup(): ActiveQueryInterface
+     * {
+     * return $this->hasOne(FormGroup::class, ['id' => 'groupId']);
+     * }*/
+
+    /**
+     * Store the old handle.
+     */
+    public function afterFind()
+    {
+        $this->_oldHandle = $this->handle;
+        $this->oldRecord = clone $this;
+    }
+
+    /**
+     * Returns the old handle.
+     *
+     * @return string
+     */
+    public function getOldHandle(): string
+    {
+        return $this->_oldHandle;
     }
 }
