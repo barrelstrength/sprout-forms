@@ -152,7 +152,6 @@ class m180314_161540_craft2_to_craft3 extends Migration
                 $notificationEmail->replyToEmail = $form['notificationReplyToEmail'];
                 $notificationEmail->recipients = $form['notificationRecipients'];
                 $notificationEmail->title = $notificationEmail->subjectLine;
-                $notificationEmail->pluginHandle = 'sprout-forms';
                 $notificationEmail->viewContext = 'sprout-forms';
                 $notificationEmail->enableFileAttachments = $form['enableFileAttachments'];
                 $notificationEmail->settings = Json::encode($settings);
