@@ -111,6 +111,21 @@ class Forms extends Component
         $isNew = !$form->id;
         $hasLayout = count($form->getFieldLayout()->getFields()) > 0;
 
+        if (!$isNew){
+            // Add the oldHandle to our model so we can determine if we
+            // need to rename the content table
+            /** @var FormRecord $formRecord */
+            $formRecord = FormRecord::findOne($form->id);
+            $form->oldHandle = $formRecord->getOldHandle();
+            $oldForm = $formRecord;
+
+            if ($duplicate) {
+                $form->name = $oldForm->name;
+                $form->handle = $oldForm->handle;
+                $form->oldHandle = null;
+            }
+        }
+
         $form->validate();
 
         if ($form->hasErrors()) {
@@ -131,10 +146,8 @@ class Forms extends Component
                 $form->fieldLayoutId = $fieldLayout->id;
                 $form->setFieldLayout($fieldLayout);
             } else if ($hasLayout) {
-                // Delete our previous record, unless duplicating an entry
-                if (!$duplicate) {
-                    Craft::$app->getFields()->deleteLayoutById($form->fieldLayoutId);
-                }
+                // Delete our previous record
+                Craft::$app->getFields()->deleteLayoutById($oldForm->fieldLayoutId);
 
                 $fieldLayout = $form->getFieldLayout();
 
@@ -158,7 +171,7 @@ class Forms extends Component
             $newContentTable = $this->getContentTableName($form);
 
             // Do we need to create/rename the content table?
-            if (!Craft::$app->db->tableExists($newContentTable) && !$form->saveAsNew) {
+            if (!Craft::$app->db->tableExists($newContentTable) && !$duplicate) {
                 if ($oldContentTable && Craft::$app->db->tableExists($oldContentTable)) {
                     MigrationHelper::renameTable($oldContentTable, $newContentTable);
                 } else {
