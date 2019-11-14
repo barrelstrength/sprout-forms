@@ -3,6 +3,8 @@
 namespace barrelstrength\sproutforms\elements;
 
 use barrelstrength\sproutforms\base\Captcha;
+use barrelstrength\sproutforms\elements\actions\MarkAsSpam;
+use barrelstrength\sproutforms\elements\actions\NotSpam;
 use barrelstrength\sproutforms\models\EntryStatus;
 use Craft;
 use craft\base\Element;
@@ -320,6 +322,16 @@ class Entry extends Element
             'type' => Delete::class,
             'confirmationMessage' => Craft::t('sprout-forms', 'Are you sure you want to delete the selected entries?'),
             'successMessage' => Craft::t('sprout-forms', 'Entries deleted.'),
+        ]);
+
+        // Mark As Spam
+        $actions[] = Craft::$app->getElements()->createAction([
+            'type' => MarkAsSpam::class
+        ]);
+
+        // Mark As Not Spam
+        $actions[] = Craft::$app->getElements()->createAction([
+            'type' => NotSpam::class
         ]);
 
         return $actions;

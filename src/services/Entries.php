@@ -271,7 +271,7 @@ class Entries extends Component
      * @param          $entryId
      * @param int|null $siteId
      *
-     * @return Entry|null
+     * @return EntryElement|null
      */
     public function getEntryById($entryId, int $siteId = null)
     {
@@ -562,4 +562,54 @@ class Entries extends Component
         $this->trigger(EntryElement::EVENT_AFTER_SAVE, $event);
     }
 
+    /**
+     * Mark entries as Spam
+     *
+     * @param $formEntryElements
+     *
+     * @return bool
+     * @throws \Exception
+     * @throws Throwable
+     */
+    public function markAsSpam($formEntryElements): bool
+    {
+        $spam = SproutForms::$app->entries->getEntryStatusByHandle(EntryStatus::SPAM_STATUS_HANDLE);
+        if (!$spam->id){
+            return false;
+        }
+
+        foreach ($formEntryElements as $key => $formEntryElement) {
+            $formEntryElement->statusId = $spam->id;
+
+            if (!$this->saveEntry($formEntryElement)) {
+                Craft::error("Can't mark as spam the entry with id: {$formEntryElement->id}", __METHOD__);
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Mark entries as Not Spam
+     *
+     * @param $formEntryElements
+     *
+     * @return bool
+     * @throws \Exception
+     * @throws Throwable
+     */
+    public function markAsNotSpam($formEntryElements): bool
+    {
+        $defaultStatusId = $this->getDefaultEntryStatusId();
+
+        foreach ($formEntryElements as $key => $formEntryElement) {
+            $formEntryElement->statusId = $defaultStatusId;
+
+            if (!$this->saveEntry($formEntryElement)) {
+                Craft::error("Can't mark as not spam the entry with id: {$formEntryElement->id}", __METHOD__);
+            }
+        }
+
+        return true;
+    }
 }
