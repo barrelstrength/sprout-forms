@@ -342,6 +342,13 @@ class Install extends Migration
                 'color' => 'grey',
                 'sortOrder' => 2,
                 'isDefault' => 0
+            ],
+            2 => [
+                'name' => 'Spam',
+                'handle' => 'spam',
+                'color' => 'black',
+                'sortOrder' => 3,
+                'isDefault' => 0
             ]
         ];
 
