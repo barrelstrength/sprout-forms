@@ -15,15 +15,14 @@ use Craft;
  */
 class Settings extends Model implements SproutSettingsInterface
 {
-    const SPAM_BEHAVIOR_SIMULATE = 'simulateSuccessful';
-    const SPAM_BEHAVIOR_RELOAD = 'reloadPage';
-    const SPAM_BEHAVIOR_DISPLAY_ERRORS = 'displaySpamErrors';
+    const SPAM_REDIRECT_BEHAVIOR_NORMAL = 'redirectAsNormal';
+    const SPAM_REDIRECT_BEHAVIOR_WITH_ERRORS = 'redirectBackToFormWithErrors';
+    const SPAM_REDIRECT_BEHAVIOR_WITHOUT_ERRORS = 'redirectBackToFormWithoutErrors';
 
     public $pluginNameOverride = '';
     public $formTemplateDefaultValue = '';
     public $enableSaveData = 1;
-    // simulateSuccessful|displaySpamErrors|reloadPage
-    public $spamRedirectBehavior = self::SPAM_BEHAVIOR_SIMULATE;
+    public $spamRedirectBehavior = self::SPAM_REDIRECT_BEHAVIOR_NORMAL;
     public $saveSpamToDatabase = 0;
     public $spamLimit = 500;
     public $cleanupProbability = 1000;
@@ -40,7 +39,8 @@ class Settings extends Model implements SproutSettingsInterface
         // 'fullPageForm' => true,
         // 'actionTemplate' => 'sprout/_includes/actionButton'
         // 'actionUrl' => 'sprout/settings/save-settings'
-        $variables['entryStatuses'] = SproutForms::$app->entries->getAllEntryStatuses();
+        $spamProtectionVariables['spamRedirectBehaviorOptions'] = $this->getSpamRedirectBehaviorsAsOptions();
+        $entryStatusVariables['entryStatuses'] = SproutForms::$app->entries->getAllEntryStatuses();
 
         $navItems = [
             'general' => [
@@ -53,7 +53,8 @@ class Settings extends Model implements SproutSettingsInterface
                 'label' => Craft::t('sprout-forms', 'Spam Protection'),
                 'url' => 'sprout-forms/settings/spam-protection',
                 'selected' => 'spam-protection',
-                'template' => 'sprout-forms/settings/spamprotection'
+                'template' => 'sprout-forms/settings/spamprotection',
+                'variables' => $spamProtectionVariables
             ],
             'entry-statuses' => [
                 'label' => Craft::t('sprout-forms', 'Entry Statuses'),
@@ -61,7 +62,7 @@ class Settings extends Model implements SproutSettingsInterface
                 'selected' => 'entry-statuses',
                 'template' => 'sprout-forms/settings/entrystatuses',
                 'actionTemplate' => 'sprout-forms/settings/entrystatuses/_actionStatusButton',
-                'variables' => $variables
+                'variables' => $entryStatusVariables
             ]
         ];
 
@@ -91,24 +92,18 @@ class Settings extends Model implements SproutSettingsInterface
      */
     public function getSpamRedirectBehaviorsAsOptions(): array
     {
-//        redirect to thank you page, simulate successful submission (default)
-//
-//    - redirect back to to form with errors
-//
-//    - redirect back to form without errors
-
         return [
             [
                 'label' => 'Redirect as normal (simulate successful submission)',
-                'value' => self::SPAM_BEHAVIOR_SIMULATE
+                'value' => self::SPAM_REDIRECT_BEHAVIOR_NORMAL
             ],
             [
                 'label' => 'Redirect back to form (with errors)',
-                'value' => self::SPAM_BEHAVIOR_DISPLAY_ERRORS
+                'value' => self::SPAM_REDIRECT_BEHAVIOR_WITH_ERRORS
             ],
             [
                 'label' => 'Redirect back to form (without errors)',
-                'value' => self::SPAM_BEHAVIOR_RELOAD
+                'value' => self::SPAM_REDIRECT_BEHAVIOR_WITHOUT_ERRORS
             ],
         ];
     }
