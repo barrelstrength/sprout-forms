@@ -53,16 +53,6 @@ class EntryQuery extends ElementQuery
      */
     public $formGroupId;
 
-    /**
-     * @var boolean
-     */
-    public $notSpam = false;
-
-    /**
-     * @var boolean
-     */
-    public $onlySpam = false;
-
     public $status = [];
 
     /**
@@ -105,35 +95,6 @@ class EntryQuery extends ElementQuery
 
         return $this;
     }
-
-    /**
-     * Sets the [[notSpam]] property.
-     *
-     * @param boolean
-     *
-     * @return static self reference
-     */
-    public function notSpam($value): EntryQuery
-    {
-        $this->notSpam = $value;
-
-        return $this;
-    }
-
-    /**
-     * Sets the [[onlySpam]] property.
-     *
-     * @param boolean
-     *
-     * @return static self reference
-     */
-    public function onlySpam($value): EntryQuery
-    {
-        $this->onlySpam = $value;
-
-        return $this;
-    }
-
 
     /**
      * Sets the [[formHandle]] property.
@@ -251,19 +212,6 @@ class EntryQuery extends ElementQuery
             );
         }
 
-        if ($this->onlySpam) {
-            $this->notSpam = false;
-            $this->subQuery->andWhere(Db::parseParam(
-                'sproutforms_entrystatuses.handle', EntryStatus::SPAM_STATUS_HANDLE)
-            );
-        }
-
-        if ($this->notSpam) {
-            $this->subQuery->andWhere(Db::parseParam(
-                'sproutforms_entrystatuses.handle', EntryStatus::SPAM_STATUS_HANDLE, '<>')
-            );
-        }
-
         if ($this->formHandle) {
             $this->query->andWhere(Db::parseParam(
                 'sproutforms_forms.handle', $this->formHandle)
@@ -271,8 +219,22 @@ class EntryQuery extends ElementQuery
         }
 
         if ($this->statusHandle) {
+            if ($this->statusHandle === EntryStatus::SPAM_STATUS_HANDLE) {
+                // Show the spam entries
+                $this->subQuery->andWhere(
+                    Db::parseParam('sproutforms_entrystatuses.handle', $this->statusHandle)
+                );
+            } else {
+                // Exclude spam from filtered views that are not the spam source
+                $this->subQuery->andWhere(
+                    Db::parseParam('sproutforms_entrystatuses.handle', $this->statusHandle),
+                    Db::parseParam('sproutforms_entrystatuses.handle', EntryStatus::SPAM_STATUS_HANDLE, '<>')
+                );
+            }
+        } else {
+            // Exclude spam from All Entries view
             $this->subQuery->andWhere(Db::parseParam(
-                'sproutforms_entrystatuses.handle', $this->statusHandle)
+                'sproutforms_entrystatuses.handle', EntryStatus::SPAM_STATUS_HANDLE, '<>')
             );
         }
 

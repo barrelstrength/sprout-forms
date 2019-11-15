@@ -539,7 +539,7 @@ class Entries extends Component
         $ids = EntryElement::find()
             ->limit(null)
             ->offset($spamLimit)
-            ->onlySpam(true)
+            ->statusHandle(EntryStatus::SPAM_STATUS_HANDLE)
             ->orderBy(['sproutforms_entries.dateCreated' => SORT_DESC])
             ->ids();
 
@@ -606,8 +606,9 @@ class Entries extends Component
      * @throws \Exception
      * @throws Throwable
      */
-    public function markAsNotSpam($formEntryElements): bool
+    public function markAsDefaultStatus($formEntryElements): bool
     {
+        /** @var EntryStatus $defaultStatus */
         $defaultStatus = $this->getDefaultEntryStatus();
 
         foreach ($formEntryElements as $key => $formEntryElement) {

@@ -220,8 +220,7 @@ class Entry extends Element
         $sources = [
             [
                 'key' => '*',
-                'label' => Craft::t('sprout-forms', 'All Entries'),
-                'criteria' => ['notSpam' => true]
+                'label' => Craft::t('sprout-forms', 'All Entries')
             ]
         ];
 
@@ -231,7 +230,9 @@ class Entry extends Element
             $sources[] = [
                 'key' => 'sproutFormsWithSpam',
                 'label' => 'Spam',
-                'criteria' => ['onlySpam' => true]
+                'criteria' => [
+                    'statusHandle' => EntryStatus::SPAM_STATUS_HANDLE
+                ]
             ];
         }
 
