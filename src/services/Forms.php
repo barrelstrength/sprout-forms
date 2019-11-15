@@ -465,6 +465,36 @@ class Forms extends Component
     }
 
     /**
+     * IF a field is deleted remove it from the rules
+     *
+     * @param string $oldHandle
+     * @param string $newHandle
+     * @param FormElement $form
+     *
+     * @throws InvalidConfigException
+     * @throws \craft\errors\MissingComponentException
+     */
+    public function updateFieldFromFieldRules($oldHandle, $newHandle, $form)
+    {
+        $rules = SproutForms::$app->rules->getRulesByFormId($form->id);
+
+        /** @var FieldRule $rule */
+        foreach ($rules as $rule){
+            $conditions = $rule->conditions;
+            foreach ($conditions as $key => $orConditions){
+                foreach ($orConditions as $key2 => $condition){
+                    if (isset($condition[0]) && $condition[0] === $oldHandle){
+                        $conditions[$key][$key2][0] = $newHandle;
+                    }
+                }
+            }
+
+            $rule->conditions = $conditions;
+            SproutForms::$app->rules->saveRule($rule);
+        }
+    }
+
+    /**
      * Update a field handle with an new title format
      *
      * @param string $oldHandle

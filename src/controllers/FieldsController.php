@@ -288,10 +288,14 @@ class FieldsController extends BaseController
             return $this->returnJson(false, $field, $form, null, $tabId);
         }
 
-        // Check if the handle is updated to also update the titleFormat
-        if (!$isNewField && $oldHandle !== $field->handle && strpos($form->titleFormat, $oldHandle) !== false) {
-            $newTitleFormat = SproutForms::$app->forms->updateTitleFormat($oldHandle, $field->handle, $form->titleFormat);
-            $form->titleFormat = $newTitleFormat;
+        // Check if the handle is updated to also update the titleFormat, rules and integrations
+        if (!$isNewField && $oldHandle !== $field->handle) {
+            if (strpos($form->titleFormat, $oldHandle) !== false){
+                $newTitleFormat = SproutForms::$app->forms->updateTitleFormat($oldHandle, $field->handle, $form->titleFormat);
+                $form->titleFormat = $newTitleFormat;
+            }
+
+            SproutForms::$app->forms->updateFieldFromFieldRules($oldHandle, $field->handle, $form);
         }
 
         // Now let's add this field to our field layout
