@@ -73,7 +73,7 @@ class MarkAsDefaultStatus extends ElementAction
     {
         $message = null;
 
-        $response = SproutForms::$app->entries->markAsNotSpam($query->all());
+        $response = SproutForms::$app->entries->markAsDefaultStatus($query->all());
 
         if ($response) {
             $message = Craft::t('sprout-forms', 'Entries marked as {statusName}.', [
