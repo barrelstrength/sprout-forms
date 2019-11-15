@@ -4,7 +4,7 @@ namespace barrelstrength\sproutforms\elements;
 
 use barrelstrength\sproutforms\base\Captcha;
 use barrelstrength\sproutforms\elements\actions\MarkAsSpam;
-use barrelstrength\sproutforms\elements\actions\NotSpam;
+use barrelstrength\sproutforms\elements\actions\MarkAsDefaultStatus;
 use barrelstrength\sproutforms\models\EntryStatus;
 use Craft;
 use craft\base\Element;
@@ -329,9 +329,9 @@ class Entry extends Element
             'type' => MarkAsSpam::class
         ]);
 
-        // Mark As Not Spam
+        // Mark As Default Status
         $actions[] = Craft::$app->getElements()->createAction([
-            'type' => NotSpam::class
+            'type' => MarkAsDefaultStatus::class
         ]);
 
         return $actions;

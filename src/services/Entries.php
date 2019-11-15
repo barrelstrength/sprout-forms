@@ -19,6 +19,7 @@ use craft\base\Element;
 use Throwable;
 use yii\base\Component;
 use yii\base\Exception;
+use yii\db\ActiveRecord;
 use yii\db\StaleObjectException;
 
 /**
@@ -360,15 +361,16 @@ class Entries extends Component
     }
 
     /**
-     * @return mixed|null
+     * @return EntryStatus|null
      */
-    public function getDefaultEntryStatusId()
+    public function getDefaultEntryStatus()
     {
+        /** @var EntryStatusRecord $entryStatus */
         $entryStatus = EntryStatusRecord::find()
             ->orderBy(['isDefault' => SORT_DESC])
             ->one();
 
-        return $entryStatus->id ?? null;
+        return new EntryStatus($entryStatus) ?? null;
     }
 
     /**
@@ -606,12 +608,12 @@ class Entries extends Component
      */
     public function markAsNotSpam($formEntryElements): bool
     {
-        $defaultStatusId = $this->getDefaultEntryStatusId();
+        $defaultStatus = $this->getDefaultEntryStatus();
 
         foreach ($formEntryElements as $key => $formEntryElement) {
             $success = Craft::$app->db->createCommand()->update(
                 '{{%sproutforms_entries}}',
-                ['statusId' => $defaultStatusId],
+                ['statusId' => $defaultStatus->id],
                 ['id' => $formEntryElement->id]
             )->execute();
 

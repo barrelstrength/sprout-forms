@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\elements\actions;
 
+use barrelstrength\sproutforms\models\EntryStatus;
 use Craft;
 use craft\base\ElementAction;
 use craft\elements\db\ElementQueryInterface;
@@ -13,7 +14,7 @@ use Throwable;
  *
  * @property string $triggerLabel
  */
-class NotSpam extends ElementAction
+class MarkAsDefaultStatus extends ElementAction
 {
     // Properties
     // =========================================================================
@@ -28,15 +29,27 @@ class NotSpam extends ElementAction
      */
     public $successMessage;
 
+    /**
+     * @var EntryStatus
+     */
+    public $entryStatus;
+
     // Public Methods
     // =========================================================================
+
+    public function init()
+    {
+        parent::init();
+
+        $this->entryStatus = SproutForms::$app->entries->getDefaultEntryStatus();
+    }
 
     /**
      * @inheritdoc
      */
     public function getTriggerLabel(): string
     {
-        return Craft::t('sprout-forms', 'Not Spam');
+        return Craft::t('sprout-forms', 'Mark as '.$this->entryStatus->name);
     }
 
     // Public Methods
@@ -47,7 +60,9 @@ class NotSpam extends ElementAction
      */
     public function getConfirmationMessage()
     {
-        return Craft::t('sprout-forms', 'Are you sure you want to not mark as spam the selected form entries?');
+        return Craft::t('sprout-forms', 'Are you sure you want to mark the selected form entries as {statusName}', [
+            'statusName' => $this->entryStatus->name
+        ]);
     }
 
     /**
@@ -61,9 +76,13 @@ class NotSpam extends ElementAction
         $response = SproutForms::$app->entries->markAsNotSpam($query->all());
 
         if ($response) {
-            $message = Craft::t('sprout-forms', 'Entries marked as Not Spam.');
+            $message = Craft::t('sprout-forms', 'Entries marked as {statusName}.', [
+                'statusName' => $this->entryStatus->name
+            ]);
         } else {
-            $message = Craft::t('sprout-forms', 'Failed to mark entry as Not Spam');
+            $message = Craft::t('sprout-forms', 'Unable to mark entries as {statusName}.', [
+                'statusName' => $this->entryStatus->name
+            ]);
         }
 
         $this->setMessage($message);

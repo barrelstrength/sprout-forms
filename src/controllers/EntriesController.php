@@ -97,7 +97,8 @@ class EntriesController extends BaseController
         $this->populateEntryModel($entry);
 
         $statusId = $request->getBodyParam('statusId');
-        $entry->statusId = $statusId ?? $entry->statusId ?? SproutForms::$app->entries->getDefaultEntryStatusId();
+        $entryStatus = SproutForms::$app->entries->getDefaultEntryStatus();
+        $entry->statusId = $statusId ?? $entry->statusId ?? $entryStatus->id;
 
         // Render the Entry Title
         try {

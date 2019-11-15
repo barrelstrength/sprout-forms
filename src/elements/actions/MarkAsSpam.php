@@ -47,7 +47,7 @@ class MarkAsSpam extends ElementAction
      */
     public function getConfirmationMessage()
     {
-        return Craft::t('sprout-forms', 'Are you sure you want to mark as spam the selected form entries?');
+        return Craft::t('sprout-forms', 'Are you sure you want to mark the selected form entries as Spam?');
     }
 
     /**
@@ -63,7 +63,7 @@ class MarkAsSpam extends ElementAction
         if ($response) {
             $message = Craft::t('sprout-forms', 'Entries marked as Spam.');
         } else {
-            $message = Craft::t('sprout-forms', 'Failed to mark entry as Spam');
+            $message = Craft::t('sprout-forms', 'Unable to mark entries as Spam');
         }
 
         $this->setMessage($message);
