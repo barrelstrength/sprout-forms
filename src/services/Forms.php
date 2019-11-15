@@ -6,6 +6,7 @@ use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\base\FormTemplates;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
+use barrelstrength\sproutforms\rules\FieldRule;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\records\Form as FormRecord;
@@ -13,6 +14,7 @@ use barrelstrength\sproutforms\migrations\CreateFormContentTable;
 use Craft;
 use craft\base\ElementInterface;
 use craft\base\Field;
+use craft\base\FieldInterface;
 use craft\db\Query;
 use craft\events\RegisterComponentTypesEvent;
 use Throwable;
@@ -428,6 +430,38 @@ class Forms extends Component
         }
 
         return null;
+    }
+
+    /**
+     * IF a field is deleted remove it from the rules
+     *
+     * @param string $oldHandle
+     * @param FormElement $form
+     *
+     * @throws InvalidConfigException
+     * @throws \craft\errors\MissingComponentException
+     */
+    public function cleanFieldFromFieldRules($oldHandle, $form)
+    {
+        $rules = SproutForms::$app->rules->getRulesByFormId($form->id);
+
+        /** @var FieldRule $rule */
+        foreach ($rules as $rule){
+            $conditions = $rule->conditions;
+            foreach ($conditions as $key => $orConditions){
+                foreach ($orConditions as $key2 => $condition){
+                    if (isset($condition[0]) && $condition[0] === $oldHandle){
+                        unset($conditions[$key][$key2]);
+                    }
+                }
+
+                if (count($conditions[$key]) === 0){
+                    unset($conditions[$key]);
+                }
+            }
+            $rule->conditions = $conditions;
+            SproutForms::$app->rules->saveRule($rule);
+        }
     }
 
     /**

@@ -404,6 +404,8 @@ class FieldsController extends BaseController
         $this->requirePermission('sproutForms-editEntries');
 
         $fieldId = Craft::$app->request->getRequiredBodyParam('fieldId');
+        $field = Craft::$app->fields->getFieldById($fieldId);
+        $oldHandle = $field->handle;
         $formId = Craft::$app->request->getRequiredBodyParam('formId');
         $form = SproutForms::$app->forms->getFormById((int)$formId);
 
@@ -423,6 +425,7 @@ class FieldsController extends BaseController
 
 
         if ($response) {
+            SproutForms::$app->forms->cleanFieldFromFieldRules($oldHandle, $form);
             return $this->asJson([
                 'success' => true
             ]);
