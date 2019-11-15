@@ -39,14 +39,6 @@ class NotSpam extends ElementAction
         return Craft::t('sprout-forms', 'Not Spam');
     }
 
-    /**
-     * @inheritdoc
-     */
-    public static function isDestructive(): bool
-    {
-        return false;
-    }
-
     // Public Methods
     // =========================================================================
 

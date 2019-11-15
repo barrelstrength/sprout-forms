@@ -39,14 +39,6 @@ class MarkAsSpam extends ElementAction
         return Craft::t('sprout-forms', 'Mark as Spam');
     }
 
-    /**
-     * @inheritdoc
-     */
-    public static function isDestructive(): bool
-    {
-        return false;
-    }
-
     // Public Methods
     // =========================================================================
 

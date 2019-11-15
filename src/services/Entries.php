@@ -574,15 +574,21 @@ class Entries extends Component
     public function markAsSpam($formEntryElements): bool
     {
         $spam = SproutForms::$app->entries->getEntryStatusByHandle(EntryStatus::SPAM_STATUS_HANDLE);
+
         if (!$spam->id){
             return false;
         }
 
         foreach ($formEntryElements as $key => $formEntryElement) {
-            $formEntryElement->statusId = $spam->id;
 
-            if (!$this->saveEntry($formEntryElement)) {
-                Craft::error("Can't mark as spam the entry with id: {$formEntryElement->id}", __METHOD__);
+            $success = Craft::$app->db->createCommand()->update(
+                '{{%sproutforms_entries}}',
+                ['statusId' => $spam->id],
+                ['id' => $formEntryElement->id]
+            )->execute();
+
+            if (!$success) {
+                Craft::error("Unable to mark entry as spam. Form Entry ID: {$formEntryElement->id}", __METHOD__);
             }
         }
 
@@ -603,10 +609,14 @@ class Entries extends Component
         $defaultStatusId = $this->getDefaultEntryStatusId();
 
         foreach ($formEntryElements as $key => $formEntryElement) {
-            $formEntryElement->statusId = $defaultStatusId;
+            $success = Craft::$app->db->createCommand()->update(
+                '{{%sproutforms_entries}}',
+                ['statusId' => $defaultStatusId],
+                ['id' => $formEntryElement->id]
+            )->execute();
 
-            if (!$this->saveEntry($formEntryElement)) {
-                Craft::error("Can't mark as not spam the entry with id: {$formEntryElement->id}", __METHOD__);
+            if (!$success) {
+                Craft::error("Unable to mark entry as not spam. Form Entry ID: {$formEntryElement->id}", __METHOD__);
             }
         }
 
