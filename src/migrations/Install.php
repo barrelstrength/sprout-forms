@@ -107,6 +107,7 @@ class Install extends Migration
             'formId' => $this->integer()->notNull(),
             'statusId' => $this->integer(),
             'ipAddress' => $this->string(),
+            'referrer' => $this->string(),
             'userAgent' => $this->longText(),
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull(),

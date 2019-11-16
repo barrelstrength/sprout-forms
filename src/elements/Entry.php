@@ -48,6 +48,7 @@ class Entry extends Element
     public $formGroupId;
     public $formName;
     public $ipAddress;
+    public $referrer;
     public $userAgent;
 
     /** @var Captcha[] $captchas */

@@ -306,7 +306,8 @@ class EntriesController extends BaseController
 
         // Our EntryElement requires that we assign it a FormElement id
         $entry->formId = $this->form->id;
-        $entry->ipAddress = $request->getUserIP();
+        $entry->ipAddress = $request->getRemoteIP();
+        $entry->referrer = $request->getReferrer();
         $entry->userAgent = $request->getUserAgent();
 
         // Set the entry attributes, defaulting to the existing values for whatever is missing from the post data
