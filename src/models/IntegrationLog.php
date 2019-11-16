@@ -13,7 +13,7 @@ use yii\base\InvalidConfigException;
  *
  * @property Integration|null $integration
  */
-class SubmissionLog extends Model
+class IntegrationLog extends Model
 {
     /**
      * @var int|null ID

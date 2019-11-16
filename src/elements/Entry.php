@@ -22,7 +22,7 @@ use yii\db\ActiveRecord;
 /**
  * Entry represents a entry element.
  *
- * @property array|ActiveRecord[] $submissionLog
+ * @property array|ActiveRecord[] $integrationLog
  * @property null|array           $conditionalLogicResults
  * @property null|array           $hiddenFields
  * @property bool                 $isSpam
@@ -33,7 +33,7 @@ class Entry extends Element
     // Properties
     // =========================================================================
     private $form;
-    private $submissionLogs = [];
+    private $integrationLogs = [];
     /** @var array|null */
     private $conditionalResults;
 
@@ -462,17 +462,17 @@ class Entry extends Element
     /**
      * @return array
      */
-    public function getSubmissionLogs(): array
+    public function getIntegrationLogs(): array
     {
-        return $this->submissionLogs;
+        return $this->integrationLogs;
     }
 
     /**
      * @return array|ActiveRecord[]
      */
-    public function getSubmissionLog(): array
+    public function getIntegrationLog(): array
     {
-        return SproutForms::$app->integrations->getSubmissionLogsByEntryId($this->id);
+        return SproutForms::$app->integrations->getIntegrationLogsByEntryId($this->id);
     }
 
     /**
