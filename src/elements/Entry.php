@@ -26,6 +26,7 @@ use yii\db\ActiveRecord;
  * @property null|array           $conditionalLogicResults
  * @property null|array           $hiddenFields
  * @property bool                 $isSpam
+ * @property array                $captchaErrors
  * @property array                $fields
  */
 class Entry extends Element

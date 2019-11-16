@@ -1,6 +1,6 @@
 <?php
 
-namespace barrelstrength\sproutseo\migrations;
+namespace barrelstrength\sproutforms\migrations;
 
 use craft\db\Migration;
 
@@ -11,15 +11,13 @@ class m191116_000000_rename_integrations_log_table extends Migration
 {
     /**
      * @inheritdoc
-     *
-     * @throws \yii\base\NotSupportedException
      */
-    public function safeUp()
+    public function safeUp(): bool
     {
         $oldTable = '{{%sproutforms_log}}';
         $newTable = '{{%sproutforms_integrations_log}}';
 
-        if ($this->db->tableExists($oldTable) && !$this->db->tableExists($newTable)){
+        if ($this->db->tableExists($oldTable) && !$this->db->tableExists($newTable)) {
             $this->renameTable($oldTable, $newTable);
         }
 
@@ -29,7 +27,7 @@ class m191116_000000_rename_integrations_log_table extends Migration
     /**
      * @inheritdoc
      */
-    public function safeDown()
+    public function safeDown(): bool
     {
         echo "m191116_000000_rename_integrations_log_table cannot be reverted.\n";
         return false;

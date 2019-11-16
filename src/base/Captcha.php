@@ -13,11 +13,11 @@ use ReflectionException;
 /**
  * Class Captcha
  *
- * @property null     $settings
- * @property string   $captchaSettingsHtml
- * @property string   $name
- * @property string   $description
- * @property string   $captchaHtml
+ * @property null   $settings
+ * @property string $captchaSettingsHtml
+ * @property string $name
+ * @property string $description
+ * @property string $captchaHtml
  */
 abstract class Captcha extends Model
 {

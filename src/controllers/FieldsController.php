@@ -290,7 +290,7 @@ class FieldsController extends BaseController
 
         // Check if the handle is updated to also update the titleFormat, rules and integrations
         if (!$isNewField && $oldHandle !== $field->handle) {
-            if (strpos($form->titleFormat, $oldHandle) !== false){
+            if (strpos($form->titleFormat, $oldHandle) !== false) {
                 $newTitleFormat = SproutForms::$app->forms->updateTitleFormat($oldHandle, $field->handle, $form->titleFormat);
                 $form->titleFormat = $newTitleFormat;
             }

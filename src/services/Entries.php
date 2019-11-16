@@ -583,7 +583,7 @@ class Entries extends Component
     {
         $spam = SproutForms::$app->entries->getEntryStatusByHandle(EntryStatus::SPAM_STATUS_HANDLE);
 
-        if (!$spam->id){
+        if (!$spam->id) {
             return false;
         }
 

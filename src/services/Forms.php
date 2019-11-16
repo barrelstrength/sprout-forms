@@ -113,7 +113,7 @@ class Forms extends Component
         $isNew = !$form->id;
         $hasLayout = count($form->getFieldLayout()->getFields()) > 0;
 
-        if (!$isNew){
+        if (!$isNew) {
             // Add the oldHandle to our model so we can determine if we
             // need to rename the content table
             /** @var FormRecord $formRecord */
@@ -435,7 +435,7 @@ class Forms extends Component
     /**
      * IF a field is deleted remove it from the rules
      *
-     * @param string $oldHandle
+     * @param string      $oldHandle
      * @param FormElement $form
      *
      * @throws InvalidConfigException
@@ -446,16 +446,16 @@ class Forms extends Component
         $rules = SproutForms::$app->rules->getRulesByFormId($form->id);
 
         /** @var FieldRule $rule */
-        foreach ($rules as $rule){
+        foreach ($rules as $rule) {
             $conditions = $rule->conditions;
-            foreach ($conditions as $key => $orConditions){
-                foreach ($orConditions as $key2 => $condition){
-                    if (isset($condition[0]) && $condition[0] === $oldHandle){
+            foreach ($conditions as $key => $orConditions) {
+                foreach ($orConditions as $key2 => $condition) {
+                    if (isset($condition[0]) && $condition[0] === $oldHandle) {
                         unset($conditions[$key][$key2]);
                     }
                 }
 
-                if (count($conditions[$key]) === 0){
+                if (count($conditions[$key]) === 0) {
                     unset($conditions[$key]);
                 }
             }
@@ -467,8 +467,8 @@ class Forms extends Component
     /**
      * IF a field is deleted remove it from the rules
      *
-     * @param string $oldHandle
-     * @param string $newHandle
+     * @param string      $oldHandle
+     * @param string      $newHandle
      * @param FormElement $form
      *
      * @throws InvalidConfigException
@@ -479,11 +479,11 @@ class Forms extends Component
         $rules = SproutForms::$app->rules->getRulesByFormId($form->id);
 
         /** @var FieldRule $rule */
-        foreach ($rules as $rule){
+        foreach ($rules as $rule) {
             $conditions = $rule->conditions;
-            foreach ($conditions as $key => $orConditions){
-                foreach ($orConditions as $key2 => $condition){
-                    if (isset($condition[0]) && $condition[0] === $oldHandle){
+            foreach ($conditions as $key => $orConditions) {
+                foreach ($orConditions as $key2 => $condition) {
+                    if (isset($condition[0]) && $condition[0] === $oldHandle) {
                         $conditions[$key][$key2][0] = $newHandle;
                     }
                 }

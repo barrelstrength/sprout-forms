@@ -226,7 +226,7 @@ class EntriesDataSource extends DataSource
             $entryStatusOptions[$entryStatus->id]['value'] = $entryStatus->id;
 
             if ($entryStatus->id !== $spamStatusId) {
-                $defaultSelectedEntryStatuses[] =  $entryStatus->id;
+                $defaultSelectedEntryStatuses[] = $entryStatus->id;
             }
         }
 

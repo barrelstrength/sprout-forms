@@ -216,7 +216,7 @@ class FormsController extends BaseController
 
     /**
      * @param FormElement $form
-     * @param bool $duplicate
+     * @param bool        $duplicate
      * @param FormElement $duplicatedForm
      *
      * @throws Throwable
