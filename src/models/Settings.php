@@ -27,6 +27,7 @@ class Settings extends Model implements SproutSettingsInterface
     public $spamLimit = 500;
     public $cleanupProbability = 1000;
     public $enableSaveDataDefaultValue = 1;
+    public $trackRemoteIp = false;
     public $captchaSettings = [];
     public $enableEditFormEntryViaFrontEnd = 0;
 

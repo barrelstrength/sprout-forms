@@ -62,6 +62,14 @@
         onLabel: "Enable"|t('sprout-forms'),
     }) }}
 
+    {{ forms.lightswitchField({
+        label: "Track Remote IP"|t('sprout-forms'),
+        instructions: "Enable to capture the IP Address used when a Form Entry is saved. IP Addresses may be considered personal information."|t('sprout-forms'),
+        name: 'trackRemoteIp',
+        on: settings.trackRemoteIp ? true : false,
+        onLabel: "Enable"|t('sprout-forms')
+    }) }}
+
 </div>
 
 <hr>

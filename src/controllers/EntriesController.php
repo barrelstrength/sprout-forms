@@ -302,11 +302,16 @@ class EntriesController extends BaseController
      */
     private function populateEntryModel(EntryElement $entry)
     {
+        /** @var SproutForms $plugin */
+        $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
+        /** @var Settings $settings */
+        $settings = $plugin->getSettings();
+
         $request = Craft::$app->getRequest();
 
         // Our EntryElement requires that we assign it a FormElement id
         $entry->formId = $this->form->id;
-        $entry->ipAddress = $request->getRemoteIP();
+        $entry->ipAddress = $settings->trackRemoteIp ? $request->getRemoteIP() : null;
         $entry->referrer = $request->getReferrer();
         $entry->userAgent = $request->getUserAgent();
 
