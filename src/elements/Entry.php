@@ -44,6 +44,7 @@ class Entry extends Element
     public $formId;
     public $formHandle;
     public $statusId;
+    public $statusHandle;
     public $formGroupId;
     public $formName;
     public $ipAddress;
@@ -51,10 +52,6 @@ class Entry extends Element
 
     /** @var Captcha[] $captchas */
     protected $captchas;
-    /**
-     * @var string
-     */
-    public $statusHandle;
 
     public function init()
     {
@@ -217,10 +214,23 @@ class Entry extends Element
      */
     protected static function defineSources(string $context = null): array
     {
+        $entryStatusHandlesExcludingSpam = [];
+        $entryStatuses = SproutForms::$app->entries->getAllEntryStatuses();
+        $spamStatusId = SproutForms::$app->entries->getSpamStatusId();
+
+        foreach ($entryStatuses as $entryStatus) {
+            if ($entryStatus->id !== $spamStatusId) {
+                $entryStatusHandlesExcludingSpam[] = $entryStatus->handle;
+            }
+        }
+
         $sources = [
             [
                 'key' => '*',
-                'label' => Craft::t('sprout-forms', 'All Entries')
+                'label' => Craft::t('sprout-forms', 'All Entries'),
+                'criteria' => [
+                    'status' => $entryStatusHandlesExcludingSpam
+                ]
             ]
         ];
 
@@ -231,7 +241,7 @@ class Entry extends Element
                 'key' => 'sproutFormsWithSpam',
                 'label' => 'Spam',
                 'criteria' => [
-                    'statusHandle' => EntryStatus::SPAM_STATUS_HANDLE
+                    'status' => EntryStatus::SPAM_STATUS_HANDLE
                 ]
             ];
         }
@@ -258,13 +268,19 @@ class Entry extends Element
                     $prepSources[$form->groupId]['forms'][$form->id] = [
                         'label' => $form->name,
                         'data' => ['formId' => $form->id],
-                        'criteria' => ['formId' => $form->id]
+                        'criteria' => [
+                            'formId' => $form->id,
+                            'status' => $entryStatusHandlesExcludingSpam
+                        ]
                     ];
                 } else {
                     $noSources[$form->id] = [
                         'label' => $form->name,
                         'data' => ['formId' => $form->id],
-                        'criteria' => ['formId' => $form->id]
+                        'criteria' => [
+                            'formId' => $form->id,
+                            'status' => $entryStatusHandlesExcludingSpam
+                        ]
                     ];
                 }
             }
@@ -281,6 +297,7 @@ class Entry extends Element
                 ],
                 'criteria' => [
                     'formId' => $form['criteria']['formId'],
+                    'status' => $entryStatusHandlesExcludingSpam
                 ]
             ];
         }
@@ -303,6 +320,7 @@ class Entry extends Element
                     ],
                     'criteria' => [
                         'formId' => $form['criteria']['formId'],
+                        'status' => $entryStatusHandlesExcludingSpam
                     ]
                 ];
             }

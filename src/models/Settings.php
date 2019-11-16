@@ -41,6 +41,7 @@ class Settings extends Model implements SproutSettingsInterface
         // 'actionUrl' => 'sprout/settings/save-settings'
         $spamProtectionVariables['spamRedirectBehaviorOptions'] = $this->getSpamRedirectBehaviorsAsOptions();
         $entryStatusVariables['entryStatuses'] = SproutForms::$app->entries->getAllEntryStatuses();
+        $entryStatusVariables['spamStatusHandle'] = EntryStatus::SPAM_STATUS_HANDLE;
 
         $navItems = [
             'general' => [

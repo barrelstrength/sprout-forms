@@ -545,7 +545,7 @@ class Entries extends Component
         $ids = EntryElement::find()
             ->limit(null)
             ->offset($spamLimit)
-            ->statusHandle(EntryStatus::SPAM_STATUS_HANDLE)
+            ->status(EntryStatus::SPAM_STATUS_HANDLE)
             ->orderBy(['sproutforms_entries.dateCreated' => SORT_DESC])
             ->ids();
 

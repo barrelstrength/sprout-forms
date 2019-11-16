@@ -644,13 +644,5 @@ class SproutFormsVariable
     {
         return new $conditionClass(['formField' => $formField]);
     }
-
-    /**
-     * @return string
-     */
-    public function getSpamStatusHandle()
-    {
-        return EntryStatus::SPAM_STATUS_HANDLE;
-    }
 }
 

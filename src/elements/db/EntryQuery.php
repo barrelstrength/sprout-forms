@@ -41,11 +41,6 @@ class EntryQuery extends ElementQuery
     /**
      * @var string
      */
-    public $statusHandle;
-
-    /**
-     * @var string
-     */
     public $formName;
 
     /**
@@ -111,20 +106,6 @@ class EntryQuery extends ElementQuery
         if ($form) {
             $this->formId = $form->id;
         }
-
-        return $this;
-    }
-
-    /**
-     * Sets the [[statusHandle]] property.
-     *
-     * @param int
-     *
-     * @return static self reference
-     */
-    public function statusHandle($value): EntryQuery
-    {
-        $this->statusHandle = $value;
 
         return $this;
     }
@@ -218,29 +199,9 @@ class EntryQuery extends ElementQuery
             );
         }
 
-        if ($this->statusHandle) {
-            if ($this->statusHandle === EntryStatus::SPAM_STATUS_HANDLE) {
-                // Show the spam entries
-                $this->subQuery->andWhere(
-                    Db::parseParam('sproutforms_entrystatuses.handle', $this->statusHandle)
-                );
-            } else {
-                // Exclude spam from filtered views that are not the spam source
-                $this->subQuery->andWhere(
-                    Db::parseParam('sproutforms_entrystatuses.handle', $this->statusHandle),
-                    Db::parseParam('sproutforms_entrystatuses.handle', EntryStatus::SPAM_STATUS_HANDLE, '<>')
-                );
-            }
-        } else {
-            // Exclude spam from All Entries view
-            $this->subQuery->andWhere(Db::parseParam(
-                'sproutforms_entrystatuses.handle', EntryStatus::SPAM_STATUS_HANDLE, '<>')
-            );
-        }
-
         if ($this->formName) {
-            $this->query->andWhere(Db::parseParam(
-                'sproutforms_forms.name', $this->formName)
+            $this->query->andWhere(
+                Db::parseParam('sproutforms_forms.name', $this->formName)
             );
         }
 
