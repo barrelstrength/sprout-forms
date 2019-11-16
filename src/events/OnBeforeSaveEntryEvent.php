@@ -11,22 +11,23 @@ use barrelstrength\sproutforms\elements\Entry;
 class OnBeforeSaveEntryEvent extends Event
 {
     /**
-     * @var array
-     */
-    public $errors = [];
-
-    /**
+     * The Form Entry being saved
+     *
      * @var Entry
      */
     public $entry;
 
     /**
+     * Set isValid to false to stop the Entry from being saved.
+     *
      * @var bool
      */
     public $isValid = true;
 
     /**
-     * @var bool
+     * Any errors defined on the Event will be added to the Form Entry model if isValid is set to false
+     *
+     * @var array
      */
-    public $fakeIt = false;
+    public $errors = [];
 }

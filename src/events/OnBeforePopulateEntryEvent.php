@@ -14,14 +14,4 @@ class OnBeforePopulateEntryEvent extends Event
      * @var Form
      */
     public $form;
-
-    /**
-     * @var bool
-     */
-    public $isValid = true;
-
-    /**
-     * @var bool
-     */
-    public $fakeIt = false;
 }

@@ -110,7 +110,7 @@ class HoneypotCaptcha extends Captcha
         if ($honeypotValue) {
             $errorMessage = 'A form submission failed the Honeypot test.';
             Craft::error($errorMessage, __METHOD__);
-            $event->entry->statusId = $this->getSpamStatusId();
+
             $this->addError(self::CAPTCHA_ERRORS_KEY, $errorMessage);
 
             return false;

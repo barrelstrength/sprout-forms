@@ -24,18 +24,14 @@ use yii\db\StaleObjectException;
 
 /**
  *
- * @property null        $defaultEntryStatusId
- * @property FormElement $entry
- * @property array       $allEntryStatuses
+ * @property null             $defaultEntryStatusId
+ * @property FormElement      $entry
+ * @property null|EntryStatus $defaultEntryStatus
+ * @property array            $allEntryStatuses
  */
 class Entries extends Component
 {
     const SPAM_DEFAULT_LIMIT = 500;
-
-    /**
-     * @var bool
-     */
-    public $fakeIt = false;
 
     /**
      * @var EntryRecord
@@ -330,10 +326,6 @@ class Entries extends Component
 
                 Craft::error('OnBeforeSaveEntryEvent is not valid', __METHOD__);
 
-                if ($event->fakeIt) {
-                    SproutForms::$app->entries->fakeIt = true;
-                }
-
                 return false;
             }
 
@@ -457,6 +449,20 @@ class Entries extends Component
     }
 
     /**
+     * @return int|null
+     */
+    public function getSpamStatusId()
+    {
+        $spam = SproutForms::$app->entries->getEntryStatusByHandle(EntryStatus::SPAM_STATUS_HANDLE);
+
+        if (!$spam->id) {
+            return null;
+        }
+
+        return $spam->id;
+    }
+
+    /**
      * Gets an Entry Status's record.
      *
      * @param null $entryStatusId
@@ -485,23 +491,23 @@ class Entries extends Component
      *
      * @return mixed
      */
-    public function isSaveDataEnabled($form, $entry = null)
+    public function isSaveDataEnabled($form, $entry = null): bool
     {
         /** @var SproutForms $plugin */
         $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
+        /** @var Settings $settings */
         $settings = $plugin->getSettings();
 
+        // Get the global saveData setting
         $saveData = $settings->enableSaveData;
 
         if ($saveData) {
+            // Allow Form to override global saveData setting
             $saveData = $form->saveData;
         }
 
-        if ($saveData &&
-            $entry !== null &&
-            Craft::$app->getRequest()->getIsSiteRequest() &&
-            $entry->getIsSpam()) {
-            $settings = SproutForms::getInstance()->getSettings();
+        if ($entry !== null && Craft::$app->getRequest()->getIsSiteRequest() && $entry->getIsSpam()) {
+            // If we have a spam entry, use the spam saveData setting
             $saveData = $settings->saveSpamToDatabase;
         }
 

@@ -2,8 +2,10 @@
 
 namespace barrelstrength\sproutforms\controllers;
 
+use barrelstrength\sproutforms\base\Captcha;
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
+use barrelstrength\sproutforms\models\EntryStatus;
 use barrelstrength\sproutforms\models\Settings;
 use Craft;
 use craft\errors\MissingComponentException;
@@ -75,7 +77,12 @@ class EntriesController extends BaseController
 
         $formHandle = $request->getRequiredBodyParam('handle');
         $this->form = $this->form == null ? SproutForms::$app->forms->getFormByHandle($formHandle) : $this->form;
-        $settings = SproutForms::getInstance()->getSettings();
+
+        /** @var SproutForms $plugin */
+        $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
+
+        /** @var Settings $settings */
+        $settings = $plugin->getSettings();
 
         if ($this->form === null) {
             throw new Exception('No form exists with the handle '.$formHandle);
@@ -114,39 +121,30 @@ class EntriesController extends BaseController
 
         $this->trigger(self::EVENT_BEFORE_VALIDATE, $event);
 
-        $hasCaptchaErrors = $entry->hasCaptchaErrors();
+        $entry->validate(null, false);
 
-        $success = $entry->validate(null, false);
-
-        $isRedirectSpam = false;
-        if ($hasCaptchaErrors && ($settings->spamRedirectBehavior === Settings::SPAM_REDIRECT_BEHAVIOR_WITHOUT_ERRORS || $settings->spamRedirectBehavior === Settings::SPAM_REDIRECT_BEHAVIOR_WITH_ERRORS)) {
-            $isRedirectSpam = true;
+        // Allow override of redirect URL on failure
+        if (Craft::$app->getRequest()->getBodyParam('redirectOnFailure') !== '') {
+            $_POST['redirect'] = Craft::$app->getRequest()->getBodyParam('redirectOnFailure');
         }
 
-        if (!$success || $isRedirectSpam) {
-            return $this->redirectWithErrors($entry);
+        if ($entry->hasErrors()) {
+            // Redirect back to form with validation errors
+            return $this->handleErrorBehavior($entry, $settings->spamRedirectBehavior);
         }
 
-        return $this->saveEntryInCraft($entry);
-    }
-
-    /**
-     * @param EntryElement $entry
-     *
-     * @return null|Response
-     * @throws Exception
-     * @throws \Exception
-     * @throws Throwable
-     * @throws BadRequestHttpException
-     */
-    private function saveEntryInCraft(Entry $entry)
-    {
+        // If we don't have errors or SPAM
         $success = true;
 
         $saveData = SproutForms::$app->entries->isSaveDataEnabled($this->form, $entry);
 
         // Save Data and Trigger the onSaveEntryEvent
+        // This saves both valid and spam entries
+        // Integrations run on EntryElement::EVENT_AFTER_SAVE Event
         if ($saveData) {
+            if ($entry->hasCaptchaErrors()) {
+                $entry->statusId = SproutForms::$app->entries->getSpamStatusId();
+            }
             $success = SproutForms::$app->entries->saveEntry($entry);
         } else {
             $isNewEntry = !$entry->id;
@@ -155,8 +153,8 @@ class EntriesController extends BaseController
 
         SproutForms::$app->entries->runPurgeSpamElements();
 
-        if (!$success) {
-            return $this->redirectWithErrors($entry);
+        if (!$success || $this->hasCaptchaRedirectBehavior($entry, $settings)) {
+            return $this->handleErrorBehavior($entry, $settings->spamRedirectBehavior);
         }
 
         $this->createLastEntryId($entry);
@@ -355,24 +353,40 @@ class EntriesController extends BaseController
 
     /**
      * @param EntryElement $entry
+     * @param              $spamRedirectBehavior
      *
-     * @return null|Response
+     * @return Response|null
      * @throws BadRequestHttpException
      * @throws MissingComponentException
      */
-    private function redirectWithErrors(Entry $entry)
+    private function handleErrorBehavior(Entry $entry, $spamRedirectBehavior)
     {
-        // Allow override of redirect URL on failure
-        if (Craft::$app->getRequest()->getBodyParam('redirectOnFailure') !== '') {
-            $_POST['redirect'] = Craft::$app->getRequest()->getBodyParam('redirectOnFailure');
+        // If no validation errors exist and captcha errors exist, we have spam
+        if (!$entry->hasErrors() && $entry->hasCaptchaErrors()) {
+            if ($spamRedirectBehavior === Settings::SPAM_REDIRECT_BEHAVIOR_WITHOUT_ERRORS) {
+                $entry->clearErrors();
+                return $this->redirectToPostedUrl($entry);
+            }
+
+            if ($spamRedirectBehavior === Settings::SPAM_REDIRECT_BEHAVIOR_WITH_ERRORS) {
+                $entry->addErrors($entry->getCaptchaErrors());
+                return $this->redirectWithValidationErrors($entry);
+            }
         }
 
+        // If validation errors exist, send user back to form
+        return $this->redirectWithValidationErrors($entry);
+    }
+
+    /**
+     * @param EntryElement $entry
+     *
+     * @return Response|null
+     * @throws MissingComponentException
+     */
+    private function redirectWithValidationErrors(Entry $entry)
+    {
         Craft::error($entry->getErrors(), __METHOD__);
-
-        // Send spam to the thank you page
-        if (SproutForms::$app->entries->fakeIt) {
-            return $this->redirectToPostedUrl($entry);
-        }
 
         // Handle CP requests in a CP-friendly way
         if (Craft::$app->getRequest()->getIsCpRequest()) {
@@ -410,6 +424,25 @@ class EntriesController extends BaseController
         ]);
 
         return null;
+    }
+
+    /**
+     * @param EntryElement $entry
+     * @param Settings     $settings
+     *
+     * @return bool
+     */
+    private function hasCaptchaRedirectBehavior(Entry $entry, Settings $settings): bool
+    {
+        if (!$entry->hasCaptchaErrors()) {
+            return false;
+        }
+
+        if ($settings->spamRedirectBehavior !== Settings::SPAM_REDIRECT_BEHAVIOR_NORMAL) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

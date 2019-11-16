@@ -13,7 +13,6 @@ use ReflectionException;
 /**
  * Class Captcha
  *
- * @property null|int $spamStatusId
  * @property null     $settings
  * @property string   $captchaSettingsHtml
  * @property string   $name
@@ -124,19 +123,5 @@ abstract class Captcha extends Model
     public function verifySubmission(OnBeforeValidateEntryEvent $event): bool
     {
         return true;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getSpamStatusId()
-    {
-        $spam = SproutForms::$app->entries->getEntryStatusByHandle(EntryStatus::SPAM_STATUS_HANDLE);
-
-        if (!$spam->id) {
-            return null;
-        }
-
-        return $spam->id;
     }
 }

@@ -556,4 +556,18 @@ class Entry extends Element
 
         return false;
     }
+
+    /**
+     * @return array
+     */
+    public function getCaptchaErrors(): array
+    {
+        $errors = [];
+
+        foreach ($this->captchas as $captcha) {
+            $errors['captchaErrors'][get_class($captcha)] = $captcha->getErrors();
+        }
+
+        return $errors;
+    }
 }

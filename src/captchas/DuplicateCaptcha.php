@@ -71,7 +71,6 @@ class DuplicateCaptcha extends Captcha
             $errorMessage = 'A form submission failed the Duplicate Submission test.';
             Craft::error($errorMessage, __METHOD__);
 
-            $event->entry->statusId = $this->getSpamStatusId();
             $this->addError(self::CAPTCHA_ERRORS_KEY, $errorMessage);
 
             return false;

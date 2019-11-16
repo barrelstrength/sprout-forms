@@ -94,16 +94,16 @@ class Settings extends Model implements SproutSettingsInterface
     {
         return [
             [
-                'label' => 'Redirect as normal (simulate successful submission)',
+                'label' => 'Redirect as normal (simulate successful submission, recommended)',
                 'value' => self::SPAM_REDIRECT_BEHAVIOR_NORMAL
-            ],
-            [
-                'label' => 'Redirect back to form (with errors)',
-                'value' => self::SPAM_REDIRECT_BEHAVIOR_WITH_ERRORS
             ],
             [
                 'label' => 'Redirect back to form (without errors)',
                 'value' => self::SPAM_REDIRECT_BEHAVIOR_WITHOUT_ERRORS
+            ],
+            [
+                'label' => 'Redirect back to form (with errors, not recommended)',
+                'value' => self::SPAM_REDIRECT_BEHAVIOR_WITH_ERRORS
             ],
         ];
     }
