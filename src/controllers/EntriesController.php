@@ -246,7 +246,12 @@ class EntriesController extends BaseController
             if ($entry->hasCaptchaErrors()) {
                 $entry->statusId = SproutForms::$app->entryStatuses->getSpamStatusId();
             }
+
             $success = SproutForms::$app->entries->saveEntry($entry);
+
+            if ($entry->hasCaptchaErrors()) {
+                SproutForms::$app->entries->logEntriesSpam($entry);
+            }
         } else {
             $isNewEntry = !$entry->id;
             SproutForms::$app->entries->callOnSaveEntryEvent($entry, $isNewEntry);
@@ -398,8 +403,6 @@ class EntriesController extends BaseController
     {
         // If no validation errors exist and captcha errors exist, we have spam
         if (!$entry->hasErrors() && $entry->hasCaptchaErrors()) {
-
-            SproutForms::$app->entries->logEntriesSpam($entry);
 
             if ($spamRedirectBehavior === Settings::SPAM_REDIRECT_BEHAVIOR_WITHOUT_ERRORS) {
                 $entry->clearErrors();
