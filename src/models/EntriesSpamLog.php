@@ -11,7 +11,7 @@ use craft\errors\MissingComponentException;
 use yii\base\InvalidConfigException;
 
 /**
- * @property null|Entry       $entry
+ * @property null|Entry $entry
  */
 class EntriesSpamLog extends Model
 {

@@ -86,7 +86,7 @@
 {% endblock %}
 
 {% block details %}
-    
+
     <div class="meta">
 
         {% set formName = "<h6>" ~ form.name ~ "</h6>" %}
@@ -157,13 +157,13 @@
             <h6 class="title">{{ "Failed Captchas"|t('sprout-forms') }}</h6>
             <hr>
             {% for captchaError in entry.getSavedCaptchaErrors() %}
-            <div class="data">
-                {% set captcha = create(captchaError.type) %}
-                <div style="padding-top:8px;"><span class="status error"></span>
-                    {{ captcha.name }}
-                    <span class="info">{{ captchaError.errors }}</span>
+                <div class="data">
+                    {% set captcha = create(captchaError.type) %}
+                    <div style="padding-top:8px;"><span class="status error"></span>
+                        {{ captcha.name }}
+                        <span class="info">{{ captchaError.errors }}</span>
+                    </div>
                 </div>
-            </div>
             {% endfor %}
         </div>
     {% endif %}
