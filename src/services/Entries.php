@@ -503,10 +503,15 @@ class Entries extends Component
 
         if ($saveData) {
             // Allow Form to override global saveData setting
-            $saveData = $form->saveData;
+            $saveData = $form->saveData ?? $settings->enableSaveDataDefaultValue;
         }
 
-        if ($entry !== null && Craft::$app->getRequest()->getIsSiteRequest() && $entry->getIsSpam()) {
+        // Let the SPAM setting determine if we save data if we are:
+        // 1. Saving data globally and/or at the form level
+        // 2. Have an Entry (entry may not exist when using saveData to determine what to display in the UI)
+        // 3. Processing a site request (if it's a CP request Entries with spam status can always be updated)
+        // 4. The entry being saved has been identified as spam
+        if ($saveData && $entry !== null && Craft::$app->getRequest()->getIsSiteRequest() && $entry->getIsSpam()) {
             // If we have a spam entry, use the spam saveData setting
             $saveData = $settings->saveSpamToDatabase;
         }

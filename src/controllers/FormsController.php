@@ -342,6 +342,10 @@ class FormsController extends BaseController
         }
 
         $form->formTemplate = $request->getBodyParam('formTemplate', $form->formTemplate);
+        if (!$form->saveData) {
+            $form->saveData = false;
+        }
+
         if ($form->formTemplate === '') {
             $form->formTemplate = $settings->formTemplateDefaultValue ?? AccessibleTemplates::class;
         }

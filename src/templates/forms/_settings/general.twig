@@ -45,17 +45,19 @@
 
     <hr>
 
-    {{ forms.lightswitchField({
-        label: "Save Data"|t('sprout-forms'),
-        instructions: "Save submitted Sprout Form Entries for this form to the Craft database"|t('sprout-forms'),
-        id: 'saveData',
-        name: 'saveData',
-        on: form.saveData,
-        onLabel: "Show"|t('sprout-forms'),
-        offLabel: "Hide"|t('sprout-forms')
-    }) }}
+    {% if settings.enableSaveData %}
+        {{ forms.lightswitchField({
+            label: "Save Data"|t('sprout-forms'),
+            instructions: "Save submitted Sprout Form Entries for this form to the Craft database. Disabling this setting will not delete existing entries, but they will no longer be visible in the Control Panel."|t('sprout-forms'),
+            id: 'saveData',
+            name: 'saveData',
+            on: settings.enableSaveData ? form.saveData : false,
+            onLabel: "Show"|t('sprout-forms'),
+            offLabel: "Hide"|t('sprout-forms')
+        }) }}
 
-    <hr>
+        <hr>
+    {% endif %}
 
     {% set templateOptions = craft.sproutForms.getTemplateOptions(form) %}
 

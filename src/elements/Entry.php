@@ -236,18 +236,6 @@ class Entry extends Element
             ]
         ];
 
-        $settings = SproutForms::getInstance()->getSettings();
-
-        if ($settings->saveSpamToDatabase) {
-            $sources[] = [
-                'key' => 'sproutFormsWithSpam',
-                'label' => 'Spam',
-                'criteria' => [
-                    'status' => EntryStatus::SPAM_STATUS_HANDLE
-                ]
-            ];
-        }
-
         $sources[] = [
             'heading' => Craft::t('sprout-forms', 'Forms')
         ];
@@ -326,6 +314,22 @@ class Entry extends Element
                     ]
                 ];
             }
+        }
+
+        $settings = SproutForms::getInstance()->getSettings();
+
+        $sources[] = [
+            'heading' => Craft::t('sprout-forms', 'Misc')
+        ];
+
+        if ($settings->saveSpamToDatabase) {
+            $sources[] = [
+                'key' => 'sproutFormsWithSpam',
+                'label' => 'Spam',
+                'criteria' => [
+                    'status' => EntryStatus::SPAM_STATUS_HANDLE
+                ]
+            ];
         }
 
         return $sources;

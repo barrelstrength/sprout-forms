@@ -61,7 +61,7 @@ class Form extends Element
     public $displaySectionTitles = false;
     public $redirectUri;
     public $submitButtonText;
-    public $saveData = false;
+    public $saveData = true;
     public $formTemplate;
 
     /**

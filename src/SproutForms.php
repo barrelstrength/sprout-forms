@@ -293,7 +293,8 @@ class SproutForms extends Plugin implements SproutEditionsInterface
             ];
         }
 
-        if (Craft::$app->getUser()->checkPermission('sproutForms-viewEntries')) {
+        if (Craft::$app->getUser()->checkPermission('sproutForms-viewEntries') &&
+            $this->getSettings()->enableSaveData) {
             $parent['subnav']['entries'] = [
                 'label' => Craft::t('sprout-forms', 'Entries'),
                 'url' => 'sprout-forms/entries'
