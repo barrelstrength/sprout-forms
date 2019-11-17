@@ -330,14 +330,18 @@ class SproutForms extends Plugin implements SproutEditionsInterface
     private function getCpUrlRules(): array
     {
         return [
+            'sprout-forms' =>
+                'sprout-forms/forms/index-template',
             'sprout-forms/forms/new' =>
                 'sprout-forms/forms/edit-form-template',
             'sprout-forms/forms/edit/<formId:\d+>' =>
                 'sprout-forms/forms/edit-form-template',
             'sprout-forms/forms/edit/<formId:\d+>/settings/<settingsSectionHandle:.*>' =>
                 'sprout-forms/forms/settings',
+            'sprout-forms/entries' =>
+                'sprout-forms/entries/entries-index-template',
             'sprout-forms/entries/edit/<entryId:\d+>' =>
-                'sprout-forms/entries/edit-entry',
+                'sprout-forms/entries/edit-entry-template',
             'sprout-forms/settings/(general|advanced)' =>
                 'sprout-forms/settings/settings-index-template',
             'sprout-forms/settings/entry-statuses/new' =>

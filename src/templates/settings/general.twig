@@ -70,6 +70,23 @@
         onLabel: "Enable"|t('sprout-forms')
     }) }}
 
+    {{ forms.selectField({
+        label: "Default Section"|t('sprout-forms'),
+        instructions: "The form section that will be selected by default in the sidebar navigation."|t('sprout-forms'),
+        name: 'defaultSection',
+        options: [
+            {
+                label: 'Entries'|t('sprout-forms'),
+                value: 'entries'|t('sprout-forms')
+            },
+            {
+                label: 'Forms'|t('sprout-forms'),
+                value: 'forms'|t('sprout-forms')
+            }
+        ],
+        value: not settings.enableSaveData ? 'forms' : settings.defaultSection
+    }) }}
+
 </div>
 
 <hr>

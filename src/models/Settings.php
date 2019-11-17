@@ -20,6 +20,7 @@ class Settings extends Model implements SproutSettingsInterface
     const SPAM_REDIRECT_BEHAVIOR_WITHOUT_ERRORS = 'redirectBackToFormWithoutErrors';
 
     public $pluginNameOverride = '';
+    public $defaultSection = 'entries';
     public $formTemplateDefaultValue = '';
     public $enableSaveData = 1;
     public $spamRedirectBehavior = self::SPAM_REDIRECT_BEHAVIOR_NORMAL;

@@ -2,13 +2,16 @@
 
 namespace barrelstrength\sproutforms\controllers;
 
-use barrelstrength\sproutforms\base\Captcha;
+use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Entry;
+use barrelstrength\sproutforms\elements\Entry as EntryElement;
+use barrelstrength\sproutforms\elements\Form as FormElement;
+use barrelstrength\sproutforms\events\OnBeforePopulateEntryEvent;
 use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
-use barrelstrength\sproutforms\models\EntryStatus;
 use barrelstrength\sproutforms\models\Settings;
 use Craft;
 use craft\errors\MissingComponentException;
+use craft\helpers\UrlHelper;
 use craft\web\Controller as BaseController;
 use Throwable;
 use yii\base\Exception;
@@ -16,11 +19,6 @@ use yii\base\InvalidConfigException;
 use yii\web\BadRequestHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
-
-use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutforms\elements\Form as FormElement;
-use barrelstrength\sproutforms\elements\Entry as EntryElement;
-use barrelstrength\sproutforms\events\OnBeforePopulateEntryEvent;
 use yii\web\Response;
 
 /**
@@ -53,6 +51,103 @@ class EntriesController extends BaseController
         $response = Craft::$app->getResponse();
         $headers = $response->getHeaders();
         $headers->set('Cache-Control', 'private');
+    }
+
+    public function actionEntriesIndexTemplate()
+    {
+        /** @var SproutForms $plugin */
+        $plugin = Craft::$app->plugins->getPlugin('sprout-forms');
+
+        /** @var Settings $settings */
+        $settings = $plugin->getSettings();
+
+        if (!$settings->enableSaveData) {
+            return Craft::$app->getResponse()->redirect(UrlHelper::cpUrl('sprout-forms/forms'));
+        }
+
+        return $this->renderTemplate('sprout-forms/entries/index');
+    }
+
+    /**
+     * Route Controller for Edit Entry Template
+     *
+     * @param int|null          $entryId
+     * @param EntryElement|null $entry
+     *
+     * @return Response
+     * @throws ForbiddenHttpException
+     * @throws NotFoundHttpException
+     * @throws MissingComponentException
+     * @throws InvalidConfigException
+     */
+    public function actionEditEntryTemplate(int $entryId = null, EntryElement $entry = null): Response
+    {
+        $this->requirePermission('sproutForms-editEntries');
+
+        /** @var SproutForms $plugin */
+        $plugin = Craft::$app->plugins->getPlugin('sprout-forms');
+
+        /** @var Settings $settings */
+        $settings = $plugin->getSettings();
+
+        if (!$settings->enableSaveData) {
+            return Craft::$app->getResponse()->redirect(UrlHelper::cpUrl('sprout-forms/forms'));
+        }
+
+        if (SproutForms::$app->forms->activeCpEntry) {
+            $entry = SproutForms::$app->forms->activeCpEntry;
+        } else {
+            if ($entry === null) {
+                $entry = SproutForms::$app->entries->getEntryById($entryId);
+            }
+
+            if (!$entry) {
+                throw new NotFoundHttpException('Entry not found');
+            }
+
+            Craft::$app->getContent()->populateElementContent($entry);
+        }
+
+        $form = SproutForms::$app->forms->getFormById($entry->formId);
+
+        $saveData = SproutForms::$app->entries->isSaveDataEnabled($form);
+
+        if (!$saveData) {
+            Craft::$app->getSession()->setError(Craft::t('sprout-forms', "Unable to edit entry. Enable the 'Save Data' for this form to view, edit, or delete content."));
+
+            return $this->renderTemplate('sprout-forms/entries');
+        }
+
+        $entryStatus = SproutForms::$app->entries->getEntryStatusById($entry->statusId);
+        $statuses = SproutForms::$app->entries->getAllEntryStatuses();
+        $entryStatuses = [];
+
+        foreach ($statuses as $key => $status) {
+            $entryStatuses[$status->id] = $status->name;
+        }
+
+        $variables['form'] = $form;
+        $variables['entryId'] = $entryId;
+        $variables['entryStatus'] = $entryStatus;
+        $variables['statuses'] = $entryStatuses;
+
+        // This is our element, so we know where to get the field values
+        $variables['entry'] = $entry;
+
+        // Get the fields for this entry
+        $fieldLayoutTabs = $entry->getFieldLayout()->getTabs();
+
+        $tabs = [];
+
+        foreach ($fieldLayoutTabs as $tab) {
+            $tabs[$tab->id]['label'] = $tab->name;
+            $tabs[$tab->id]['url'] = '#tab'.$tab->sortOrder;
+        }
+
+        $variables['tabs'] = $tabs;
+        $variables['fieldLayoutTabs'] = $fieldLayoutTabs;
+
+        return $this->renderTemplate('sprout-forms/entries/_edit', $variables);
     }
 
     /**
@@ -168,78 +263,6 @@ class EntriesController extends BaseController
         Craft::$app->getSession()->setNotice(Craft::t('sprout-forms', 'Entry saved.'));
 
         return $this->redirectToPostedUrl($entry);
-    }
-
-    /**
-     * Route Controller for Edit Entry Template
-     *
-     * @param int|null          $entryId
-     * @param EntryElement|null $entry
-     *
-     * @return Response
-     * @throws ForbiddenHttpException
-     * @throws NotFoundHttpException
-     * @throws MissingComponentException
-     * @throws InvalidConfigException
-     */
-    public function actionEditEntry(int $entryId = null, EntryElement $entry = null): Response
-    {
-        $this->requirePermission('sproutForms-editEntries');
-
-        if (SproutForms::$app->forms->activeCpEntry) {
-            $entry = SproutForms::$app->forms->activeCpEntry;
-        } else {
-            if ($entry === null) {
-                $entry = SproutForms::$app->entries->getEntryById($entryId);
-            }
-
-            if (!$entry) {
-                throw new NotFoundHttpException('Entry not found');
-            }
-
-            Craft::$app->getContent()->populateElementContent($entry);
-        }
-
-        $form = SproutForms::$app->forms->getFormById($entry->formId);
-
-        $saveData = SproutForms::$app->entries->isSaveDataEnabled($form);
-
-        if (!$saveData) {
-            Craft::$app->getSession()->setError(Craft::t('sprout-forms', "Unable to edit entry. Enable the 'Save Data' for this form to view, edit, or delete content."));
-
-            return $this->renderTemplate('sprout-forms/entries');
-        }
-
-        $entryStatus = SproutForms::$app->entries->getEntryStatusById($entry->statusId);
-        $statuses = SproutForms::$app->entries->getAllEntryStatuses();
-        $entryStatuses = [];
-
-        foreach ($statuses as $key => $status) {
-            $entryStatuses[$status->id] = $status->name;
-        }
-
-        $variables['form'] = $form;
-        $variables['entryId'] = $entryId;
-        $variables['entryStatus'] = $entryStatus;
-        $variables['statuses'] = $entryStatuses;
-
-        // This is our element, so we know where to get the field values
-        $variables['entry'] = $entry;
-
-        // Get the fields for this entry
-        $fieldLayoutTabs = $entry->getFieldLayout()->getTabs();
-
-        $tabs = [];
-
-        foreach ($fieldLayoutTabs as $tab) {
-            $tabs[$tab->id]['label'] = $tab->name;
-            $tabs[$tab->id]['url'] = '#tab'.$tab->sortOrder;
-        }
-
-        $variables['tabs'] = $tabs;
-        $variables['fieldLayoutTabs'] = $fieldLayoutTabs;
-
-        return $this->renderTemplate('sprout-forms/entries/_edit', $variables);
     }
 
     /**

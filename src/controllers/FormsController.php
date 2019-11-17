@@ -38,6 +38,20 @@ class FormsController extends BaseController
         parent::init();
     }
 
+    public function actionIndexTemplate() {
+        /** @var SproutForms $plugin */
+        $plugin = Craft::$app->plugins->getPlugin('sprout-forms');
+
+        /** @var Settings $settings */
+        $settings = $plugin->getSettings();
+
+        if ($settings->enableSaveData) {
+            return Craft::$app->getResponse()->redirect(UrlHelper::cpUrl('sprout-forms/'.$settings->defaultSection));
+        }
+
+        return Craft::$app->getResponse()->redirect(UrlHelper::cpUrl('sprout-forms/forms'));
+
+    }
     /**
      * @param int|null $formId
      * @param null     $settingsSectionHandle
