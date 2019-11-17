@@ -479,7 +479,7 @@ class EntriesController extends BaseController
             return false;
         }
 
-        if ($settings->spamRedirectBehavior !== Settings::SPAM_REDIRECT_BEHAVIOR_NORMAL) {
+        if ($settings->spamRedirectBehavior === Settings::SPAM_REDIRECT_BEHAVIOR_NORMAL) {
             return false;
         }
 
