@@ -89,6 +89,7 @@ class Install extends Migration
             'submitButtonText' => $this->string(),
             'saveData' => $this->boolean()->defaultValue(false)->notNull(),
             'formTemplate' => $this->string(),
+            'enableCaptchas' => $this->boolean()->defaultValue(true)->notNull(),
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull(),
             'uid' => $this->uid(),

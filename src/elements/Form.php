@@ -63,6 +63,7 @@ class Form extends Element
     public $submitButtonText;
     public $saveData = true;
     public $formTemplate;
+    public $enableCaptchas = true;
 
     /**
      * @inheritdoc
@@ -319,6 +320,7 @@ class Form extends Element
         $record->saveData = $this->saveData;
         $record->submitButtonText = $this->submitButtonText;
         $record->formTemplate = $this->formTemplate;
+        $record->enableCaptchas = $this->enableCaptchas;
 
         $record->save(false);
 

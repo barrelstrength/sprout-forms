@@ -74,6 +74,16 @@
     })) }}
 
     {{ forms.lightswitchField({
+        label: "Enable Captchas"|t('sprout-forms'),
+        instructions: "Enable or disable the global captchas for this specific form."|t('sprout-forms'),
+        id: 'enableCaptchas',
+        name: 'enableCaptchas',
+        on: form.enableCaptchas,
+        onLabel: "Show"|t('sprout-forms'),
+        offLabel: "Hide"|t('sprout-forms')
+    }) }}
+
+    {{ forms.lightswitchField({
         label: "Page Titles"|t('sprout-forms'),
         instructions: "Display Page Titles on Forms"|t('sprout-forms'),
         id: 'displaySectionTitles',

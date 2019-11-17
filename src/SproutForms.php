@@ -206,8 +206,8 @@ class SproutForms extends Plugin implements SproutEditionsInterface
             SproutForms::$app->integrations->runFormIntegrations($event->entry);
         });
 
-        Craft::$app->view->hook('sproutForms.modifyForm', static function() {
-            return SproutForms::$app->forms->getCaptchasHtml();
+        Craft::$app->view->hook('sproutForms.modifyForm', static function(array &$context) {
+            return SproutForms::$app->forms->handleModifyFormHook($context);
         });
 
         Event::on(Integrations::class, Integrations::EVENT_REGISTER_INTEGRATIONS, static function(RegisterComponentTypesEvent $event) {

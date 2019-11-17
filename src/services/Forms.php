@@ -812,6 +812,21 @@ class Forms extends Component
     }
 
     /**
+     * @param $context
+     *
+     * @return string|null
+     */
+    public function handleModifyFormHook($context) {
+        /** @var Form $form */
+        $form = $context['form'] ?? null;
+        if ($form !== null && $form->enableCaptchas) {
+            return $this->getCaptchasHtml();
+        }
+
+        return null;
+    }
+
+    /**
      * @return string
      */
     public function getCaptchasHtml(): string

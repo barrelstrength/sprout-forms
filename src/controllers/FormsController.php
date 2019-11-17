@@ -338,6 +338,7 @@ class FormsController extends BaseController
         $form->submitButtonText = $request->getBodyParam('submitButtonText', $form->submitButtonText);
         $form->titleFormat = $request->getBodyParam('titleFormat', $form->titleFormat);
         $form->formTemplate = $request->getBodyParam('formTemplate', $form->formTemplate);
+        $form->enableCaptchas = $request->getBodyParam('enableCaptchas', $form->enableCaptchas);
 
         if (!$form->titleFormat) {
             $form->titleFormat = "{dateCreated|date('D, d M Y H:i:s')}";
@@ -353,6 +354,10 @@ class FormsController extends BaseController
 
         if ($form->formTemplate === '') {
             $form->formTemplate = $settings->formTemplateDefaultValue ?? AccessibleTemplates::class;
+        }
+
+        if (!$form->enableCaptchas) {
+            $form->enableCaptchas = false;
         }
     }
 }

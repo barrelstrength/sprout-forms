@@ -69,6 +69,11 @@ class FormQuery extends ElementQuery
     public $formTemplate;
 
     /**
+     * @var bool
+     */
+    public $enableCaptchas;
+
+    /**
      * @var int
      */
     public $totalEntries;
@@ -177,7 +182,8 @@ class FormQuery extends ElementQuery
             'sproutforms_forms.redirectUri',
             'sproutforms_forms.saveData',
             'sproutforms_forms.submitButtonText',
-            'sproutforms_forms.formTemplate'
+            'sproutforms_forms.formTemplate',
+            'sproutforms_forms.enableCaptchas'
         ]);
 
         if ($this->totalEntries) {

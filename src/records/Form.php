@@ -23,6 +23,7 @@ use craft\records\Element;
  * @property string    $submitButtonText
  * @property bool      $saveData
  * @property string    $formTemplate
+ * @property bool      $enableCaptchas
  * @property string    $oldHandle
  */
 class Form extends ActiveRecord
