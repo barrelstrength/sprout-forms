@@ -114,6 +114,16 @@ class Install extends Migration
             'uid' => $this->uid(),
         ]);
 
+        $this->createTable('{{%sproutforms_entries_spam_log}}', [
+            'id' => $this->primaryKey(),
+            'entryId' => $this->integer()->notNull(),
+            'type' => $this->string(),
+            'errors' => $this->text(),
+            'dateCreated' => $this->dateTime()->notNull(),
+            'dateUpdated' => $this->dateTime()->notNull(),
+            'uid' => $this->uid(),
+        ]);
+
         $this->createTable('{{%sproutforms_entrystatuses}}', [
             'id' => $this->primaryKey(),
             'name' => $this->string()->notNull(),
@@ -205,6 +215,16 @@ class Install extends Migration
 
         $this->createIndex(
             $this->db->getIndexName(
+                '{{%sproutforms_entries_spam_log}}',
+                'entryId',
+                false, true
+            ),
+            '{{%sproutforms_entries_spam_log}}',
+            'entryId'
+        );
+
+        $this->createIndex(
+            $this->db->getIndexName(
                 '{{%sproutforms_integrations}}',
                 'formId',
                 false, true
@@ -273,6 +293,14 @@ class Install extends Migration
             ),
             '{{%sproutforms_entries}}', 'id',
             '{{%elements}}', 'id', 'CASCADE'
+        );
+
+        $this->addForeignKey(
+            $this->db->getForeignKeyName(
+                '{{%sproutforms_entries_spam_log}}', 'entryId'
+            ),
+            '{{%sproutforms_entries_spam_log}}', 'entryId',
+            '{{%sproutforms_entries}}', 'id', 'CASCADE'
         );
 
         $this->addForeignKey(

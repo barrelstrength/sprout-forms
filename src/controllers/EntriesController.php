@@ -392,6 +392,9 @@ class EntriesController extends BaseController
     {
         // If no validation errors exist and captcha errors exist, we have spam
         if (!$entry->hasErrors() && $entry->hasCaptchaErrors()) {
+
+            SproutForms::$app->entries->logEntriesSpam($entry);
+
             if ($spamRedirectBehavior === Settings::SPAM_REDIRECT_BEHAVIOR_WITHOUT_ERRORS) {
                 $entry->clearErrors();
                 return $this->redirectToPostedUrl($entry);

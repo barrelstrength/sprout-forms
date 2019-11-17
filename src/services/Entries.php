@@ -4,7 +4,12 @@ namespace barrelstrength\sproutforms\services;
 
 use barrelstrength\sproutbase\jobs\PurgeElements;
 use barrelstrength\sproutbase\SproutBase;
+use barrelstrength\sproutforms\base\Captcha;
+use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\models\Settings;
+use barrelstrength\sproutforms\models\EntriesSpamLog;
+use barrelstrength\sproutforms\records\EntriesSpamLog as EntriesSpamLogRecord;
+use barrelstrength\sproutforms\records\IntegrationLog as IntegrationLogRecord;
 use Craft;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
@@ -16,10 +21,10 @@ use barrelstrength\sproutforms\models\EntryStatus;
 use barrelstrength\sproutforms\records\Entry as EntryRecord;
 use barrelstrength\sproutforms\records\EntryStatus as EntryStatusRecord;
 use craft\base\Element;
+use craft\helpers\Json;
 use Throwable;
 use yii\base\Component;
 use yii\base\Exception;
-use yii\db\ActiveRecord;
 use yii\db\StaleObjectException;
 
 /**
@@ -559,6 +564,26 @@ class Entries extends Component
         $purgeElements->idsToDelete = $ids;
 
         SproutBase::$app->utilities->purgeElements($purgeElements);
+    }
+
+    /**
+     * @param EntryElement $entry
+     *
+     * @return bool
+     */
+    public function logEntriesSpam(Entry $entry): bool
+    {
+        foreach ($entry->getCaptchas() as $captcha) {
+            if ($captcha->hasErrors()) {
+                $entriesSpamLogRecord = new EntriesSpamLogRecord();
+                $entriesSpamLogRecord->entryId = $entry->id;
+                $entriesSpamLogRecord->type = get_class($captcha);
+                $entriesSpamLogRecord->errors = Json::encode($captcha->getErrors(Captcha::CAPTCHA_ERRORS_KEY));
+                $entriesSpamLogRecord->save();
+            }
+        }
+
+        return true;
     }
 
     /**

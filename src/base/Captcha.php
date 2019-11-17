@@ -21,10 +21,15 @@ use ReflectionException;
  */
 abstract class Captcha extends Model
 {
+    /**
+     * Add errors to a Captcha using the error key
+     * to support spam error logging and reporting
+     */
     const CAPTCHA_ERRORS_KEY = 'captchaErrors';
 
     /**
-     * A unique ID that is generated dynamically using the plugin handle and the captcha class name {pluginhandle}-{captchaclassname}
+     * A unique ID that is generated dynamically using the plugin
+     * handle and the captcha class name {pluginhandle}-{captchaclassname}
      *
      * @example
      * pluginname-captchaclassname

@@ -25,6 +25,7 @@ use barrelstrength\sproutbaseemail\events\NotificationEmailEvent;
 use barrelstrength\sproutforms\fields\Forms as FormsField;
 use barrelstrength\sproutforms\fields\Entries as FormEntriesField;
 use barrelstrength\sproutforms\integrations\sproutreports\datasources\IntegrationLogDataSource;
+use barrelstrength\sproutforms\integrations\sproutreports\datasources\SpamLogDataSource;
 use barrelstrength\sproutforms\integrationtypes\EntryElementIntegration;
 use barrelstrength\sproutforms\integrationtypes\CustomEndpoint;
 use barrelstrength\sproutforms\services\Integrations;
@@ -162,6 +163,7 @@ class SproutForms extends Plugin implements SproutEditionsInterface
         Event::on(DataSources::class, DataSources::EVENT_REGISTER_DATA_SOURCES, static function(RegisterComponentTypesEvent $event) {
             $event->types[] = EntriesDataSource::class;
             $event->types[] = IntegrationLogDataSource::class;
+            $event->types[] = SpamLogDataSource::class;
         });
 
         $this->setComponents([
@@ -467,7 +469,8 @@ class SproutForms extends Plugin implements SproutEditionsInterface
         // Add DataSource integrations so users don't have to install them manually
         $dataSourceTypes = [
             EntriesDataSource::class,
-            IntegrationLogDataSource::class
+            IntegrationLogDataSource::class,
+            SpamLogDataSource::class
         ];
 
         // @todo research why the plugin is not enabled after install

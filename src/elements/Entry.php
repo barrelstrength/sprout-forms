@@ -6,8 +6,10 @@ use barrelstrength\sproutforms\base\Captcha;
 use barrelstrength\sproutforms\elements\actions\MarkAsSpam;
 use barrelstrength\sproutforms\elements\actions\MarkAsDefaultStatus;
 use barrelstrength\sproutforms\models\EntryStatus;
+use barrelstrength\sproutforms\models\EntriesSpamLog;
 use Craft;
 use craft\base\Element;
+use craft\db\Query;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\UrlHelper;
 use craft\elements\actions\Delete;
@@ -563,6 +565,14 @@ class Entry extends Element
     }
 
     /**
+     * @return Captcha[]
+     */
+    public function getCaptchas(): array
+    {
+        return $this->captchas;
+    }
+
+    /**
      * @return bool
      */
     public function hasCaptchaErrors(): bool
@@ -593,5 +603,22 @@ class Entry extends Element
         }
 
         return $errors;
+    }
+
+    public function getSavedCaptchaErrors(): array
+    {
+        $spamLogEntries = (new Query())
+            ->select('*')
+            ->from('{{%sproutforms_entries_spam_log}}')
+            ->where(['entryId' => $this->id])
+            ->all();
+
+        $captchaErrors = [];
+
+        foreach ($spamLogEntries as $spamLogEntry) {
+            $captchaErrors[] = new EntriesSpamLog($spamLogEntry);
+        }
+
+        return $captchaErrors;
     }
 }

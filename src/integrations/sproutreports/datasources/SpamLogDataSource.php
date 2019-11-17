@@ -9,6 +9,7 @@ use Craft;
 use barrelstrength\sproutbasereports\base\DataSource;
 use craft\db\Query;
 use craft\helpers\DateTimeHelper;
+use craft\helpers\Json;
 use DateTime;
 use Exception;
 use Twig\Error\LoaderError;
@@ -16,18 +17,18 @@ use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
 /**
- * Class LogDataSource
+ * Class SpamLogDataSource
  *
  * @package barrelstrength\sproutforms\integrations\sproutreports\datasources
  */
-class IntegrationLogDataSource extends DataSource
+class SpamLogDataSource extends DataSource
 {
     /**
      * @return string
      */
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms', 'Integration Log (Sprout Forms)');
+        return Craft::t('sprout-forms', 'Spam Log (Sprout Forms)');
     }
 
     /**
@@ -35,7 +36,7 @@ class IntegrationLogDataSource extends DataSource
      */
     public function getDescription(): string
     {
-        return Craft::t('sprout-forms', 'Query form entry integrations results');
+        return Craft::t('sprout-forms', 'Overview of spam submissions');
     }
 
     /**
@@ -57,49 +58,51 @@ class IntegrationLogDataSource extends DataSource
 
         $formId = $report->getSetting('formId');
 
-        $query = new Query();
+        $query = (new Query())
+            ->select([
+                'entries_spam_log.id',
+                'entries_spam_log.entryId',
+                'entries_spam_log.type',
+                'entries_spam_log.errors',
+                'entries_spam_log.dateCreated',
+            ])
+            ->from('{{%sproutforms_entries_spam_log}} AS entries_spam_log')
+            ->innerJoin(
+                '{{%sproutforms_entries}} AS entries',
+                '[[entries_spam_log.entryId]] = [[entries.id]]'
+            )
+            ->innerJoin(
+                '{{%sproutforms_forms}} AS forms',
+                '[[entries.formId]] = [[forms.id]]'
+            );
 
-        $formQuery = $query
-            ->select('log.id id, log.dateCreated dateCreated, log.dateUpdated dateUpdated, log.entryId entryId, integrations.name integrationName, forms.name formName, log.message message, log.success success, log.status status')
-            ->from('{{%sproutforms_integrations_log}} AS log')
-            ->innerJoin('{{%sproutforms_integrations}} integrations', '[[log.integrationId]] = [[integrations.id]]')
-            ->innerJoin('{{%sproutforms_forms}} forms', '[[integrations.formId]] = [[forms.id]]');
-
-        if ($formId != '*') {
-            $formQuery->andWhere(['[[integrations.formId]]' => $formId]);
+        if ($formId !== '*') {
+            $query->andWhere(['[[entries.formId]]' => $formId]);
         }
 
         if ($startDate && $endDate) {
-            $formQuery->andWhere('[[log.dateCreated]] > :startDate', [
+            $query->andWhere('[[entries_spam_log.dateCreated]] > :startDate', [
                 ':startDate' => $startDate->format('Y-m-d H:i:s')
             ]);
-            $formQuery->andWhere('[[log.dateCreated]] < :endDate', [
+            $query->andWhere('[[entries_spam_log.dateCreated]] < :endDate', [
                 ':endDate' => $endDate->format('Y-m-d H:i:s')
             ]);
         }
 
-        $results = $formQuery->all();
+        $results = $query->all();
 
         if (!$results) {
             return $rows;
         }
 
         foreach ($results as $key => $result) {
-            $message = $result['message'];
-
-            if (strlen($result['message']) > 255) {
-                $message = substr($result['message'], 0, 255).' ...';
-            }
+            $captcha = new $result['type']();
 
             $rows[$key]['id'] = $result['id'];
             $rows[$key]['entryId'] = $result['entryId'];
-            $rows[$key]['formName'] = $result['formName'];
-            $rows[$key]['integrationName'] = $result['integrationName'];
-            $rows[$key]['message'] = $message;
-            $rows[$key]['status'] = $result['status'];
-            $rows[$key]['success'] = $result['success'] ? 'true' : 'false';
+            $rows[$key]['captchaName'] = $captcha->name;
+            $rows[$key]['errors'] = $result['errors'];
             $rows[$key]['dateCreated'] = $result['dateCreated'];
-            $rows[$key]['dateUpdated'] = $result['dateUpdated'];
         }
 
         return $rows;
@@ -151,7 +154,7 @@ class IntegrationLogDataSource extends DataSource
 
         $dateRanges = SproutBaseReports::$app->reports->getDateRanges(false);
 
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_integrations/sproutreports/datasources/IntegrationLogDataSource/settings', [
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_integrations/sproutreports/datasources/SpamLogDataSource/settings', [
             'formOptions' => $formOptions,
             'defaultStartDate' => new DateTime($defaultStartDate),
             'defaultEndDate' => new DateTime($defaultEndDate),
