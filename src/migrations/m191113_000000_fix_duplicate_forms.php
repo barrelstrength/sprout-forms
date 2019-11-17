@@ -27,11 +27,9 @@ class m191113_000000_fix_duplicate_forms extends Migration
             ->from(['{{%sproutforms_forms}}'])
             ->all();
 
-        $fakeFieldLayoutId = $this->getFakeFieldLayoutId();
-
         foreach ($forms as $form) {
             $formElement = SproutForms::$app->forms->getFormById($form['id']);
-            if ($formElement === null){
+            if ($formElement === null) {
                 continue;
             }
             $contentTable = $formElement->getContentTable();
@@ -45,8 +43,10 @@ class m191113_000000_fix_duplicate_forms extends Migration
                 }
             }
 
-            if ($missingFields === count($formFields) && $missingFields > 0){
-                Craft::info("Updating corrupted duplicated form field layout id: ".$formElement->fieldLayoutId. " to: ".$fakeFieldLayoutId, __METHOD__);
+            $fakeFieldLayoutId = $this->getFakeFieldLayoutId();
+
+            if ($missingFields === count($formFields) && $missingFields > 0) {
+                Craft::info('Updating corrupted duplicated form field layout id: '.$formElement->fieldLayoutId.' to: '.$fakeFieldLayoutId, __METHOD__);
                 $this->update('{{%sproutforms_forms}}', ['fieldLayoutId' => $fakeFieldLayoutId], ['id' => $formElement->id], [], false);
             }
         }
@@ -60,8 +60,8 @@ class m191113_000000_fix_duplicate_forms extends Migration
     {
         $tabs = [];
         $tab = new FieldLayoutTab();
-        $tab->name = urldecode("SproutFormsTabFake");
-        $tab->sortOrder = "888";
+        $tab->name = urldecode('Tab 1');
+        $tab->sortOrder = '888';
         $tab->setFields([]);
 
         $tabs[] = $tab;
