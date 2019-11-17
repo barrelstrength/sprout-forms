@@ -43,6 +43,36 @@
         required: true
     }) }}
 
+    {% if groups is defined and groups|length %}
+
+        {% set groupOptions = [
+            { label: 'All Forms'|t('sprout-forms') , value: '*' }
+        ] %}
+        {% for group in groups %}
+            {% set groupOptions = groupOptions|merge([{ label: group.name, value: group.id }]) %}
+        {% endfor %}
+
+        {{ forms.selectField({
+            first: true,
+            label: "Group"|t('sprout-forms'),
+            instructions: "Which group should this form be displayed in?"|t('sprout-forms'),
+            id: 'groupId',
+            name: 'groupId',
+            options: groupOptions,
+            value: groupId
+        }) }}
+
+    {% endif %}
+
+    {{ forms.textField({
+        label: "Redirect Page"|t('sprout-forms'),
+        instructions: "Where should the user be redirected upon form submission? Leave blank to redirect user back to the form."|t('sprout-forms'),
+        name: 'redirectUri',
+        placeholder: siteUrl,
+        value: (form is defined ? form.redirectUri : null),
+        errors: (form is defined ? form.getErrors('redirectUri') : null)
+    }) }}
+
     <hr>
 
     {% if settings.enableSaveData %}
@@ -58,39 +88,5 @@
 
         <hr>
     {% endif %}
-
-    {% set templateOptions = craft.sproutForms.getTemplateOptions(form) %}
-
-    {{ forms.field({
-        label: "Templates"|t('sprout-forms'),
-        instructions: "The Form Templates that will be used to output your forms"|t('sprout-forms'),
-        required: true,
-        errors: (form is defined ? form.getErrors('formTemplate') : null)
-    }, sproutFields.selectOther({
-        name: 'formTemplate',
-        options: templateOptions,
-        value: form.formTemplate ?? null,
-        otherPlaceholderText: '_forms/formHandle'|t('sprout-forms'),
-    })) }}
-
-    {{ forms.lightswitchField({
-        label: "Enable Captchas"|t('sprout-forms'),
-        instructions: "Enable or disable the global captchas for this specific form."|t('sprout-forms'),
-        id: 'enableCaptchas',
-        name: 'enableCaptchas',
-        on: form.enableCaptchas,
-        onLabel: "Show"|t('sprout-forms'),
-        offLabel: "Hide"|t('sprout-forms')
-    }) }}
-
-    {{ forms.lightswitchField({
-        label: "Page Titles"|t('sprout-forms'),
-        instructions: "Display Page Titles on Forms"|t('sprout-forms'),
-        id: 'displaySectionTitles',
-        name: 'displaySectionTitles',
-        on: form.displaySectionTitles,
-        onLabel: "Show"|t('sprout-forms'),
-        offLabel: "Hide"|t('sprout-forms')
-    }) }}
 
 {% endset %}

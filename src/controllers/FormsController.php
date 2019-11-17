@@ -58,7 +58,7 @@ class FormsController extends BaseController
      * @throws InvalidConfigException
      * @throws MissingComponentException
      */
-    public function actionSettingsTemplate(int $formId = null, $settingsSectionHandle = null): Response
+    public function actionEditSettingsTemplate(int $formId = null, $settingsSectionHandle = null): Response
     {
         $form = SproutForms::$app->forms->getFormById($formId);
 
@@ -69,6 +69,8 @@ class FormsController extends BaseController
 
         return $this->renderTemplate('sprout-forms/forms/_settings/'.$settingsSectionHandle, [
             'form' => $form,
+            'groups' => SproutForms::$app->groups->getAllFormGroups(),
+            'groupId' => $form->groupId ?? null,
             'settings' => $plugin->getSettings(),
             'rules' => SproutForms::$app->rules->getRulesByFormId($formId),
             'ruleOptions' => SproutForms::$app->rules->getRuleOptions(),
@@ -192,9 +194,6 @@ class FormsController extends BaseController
 
         return $this->renderTemplate('sprout-forms/forms/_editForm', [
             'form' => $form,
-            'groups' => SproutForms::$app->groups->getAllFormGroups(),
-            'groupId' => $form->groupId ?? null,
-            'settings' => $plugin->getSettings(),
             'continueEditingUrl' => 'sprout-forms/forms/edit/{id}'
         ]);
     }
