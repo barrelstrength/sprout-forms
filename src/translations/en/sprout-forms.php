@@ -105,7 +105,7 @@ return [
     'Which site should {type} be related from?' => 'Which site should {type} be related from?',
     'File Upload' => 'File Upload',
     'The maximum number of characters the field is allowed to have.' => 'The maximum number of characters the field is allowed to have.',
-    'Submission Log (Sprout Forms)' => 'Submission Log (Sprout Forms)',
+    'Integration Log (Sprout Forms)' => 'Integration Log (Sprout Forms)',
     'Initial Rows' => 'Initial Rows',
     'Form not found.' => 'Form not found.',
     'Reorder' => 'Reorder',
