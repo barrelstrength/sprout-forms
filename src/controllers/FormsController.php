@@ -126,7 +126,7 @@ class FormsController extends BaseController
             }
         }
 
-        $this->_populateEntryModel($form);
+        $this->_populateFormModel($form);
         $this->prepareFieldLayout($form, $duplicate, $duplicateForm);
 
         // Save it
@@ -317,7 +317,7 @@ class FormsController extends BaseController
         return $form;
     }
 
-    private function _populateEntryModel(FormElement $form)
+    private function _populateFormModel(FormElement $form)
     {
         /** @var SproutForms $plugin */
         $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
@@ -335,13 +335,17 @@ class FormsController extends BaseController
         $form->redirectUri = $request->getBodyParam('redirectUri', $form->redirectUri);
         $form->saveData = $request->getBodyParam('saveData', $form->saveData);
         $form->submitButtonText = $request->getBodyParam('submitButtonText', $form->submitButtonText);
-
         $form->titleFormat = $request->getBodyParam('titleFormat', $form->titleFormat);
+        $form->formTemplate = $request->getBodyParam('formTemplate', $form->formTemplate);
+
         if (!$form->titleFormat) {
             $form->titleFormat = "{dateCreated|date('D, d M Y H:i:s')}";
         }
 
-        $form->formTemplate = $request->getBodyParam('formTemplate', $form->formTemplate);
+        if (!$form->displaySectionTitles) {
+            $form->displaySectionTitles = false;
+        }
+
         if (!$form->saveData) {
             $form->saveData = false;
         }
