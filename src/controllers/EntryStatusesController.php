@@ -32,7 +32,7 @@ class EntryStatusesController extends BaseController
 
         if (!$entryStatus) {
             if ($entryStatusId) {
-                $entryStatus = SproutForms::$app->entries->getEntryStatusById($entryStatusId);
+                $entryStatus = SproutForms::$app->entryStatuses->getEntryStatusById($entryStatusId);
 
                 if (!$entryStatus->id) {
                     throw new NotFoundHttpException('Entry Status not found');
@@ -64,14 +64,14 @@ class EntryStatusesController extends BaseController
         $this->requireAdmin();
 
         $id = Craft::$app->request->getBodyParam('entryStatusId');
-        $entryStatus = SproutForms::$app->entries->getEntryStatusById($id);
+        $entryStatus = SproutForms::$app->entryStatuses->getEntryStatusById($id);
 
         $entryStatus->name = Craft::$app->request->getBodyParam('name');
         $entryStatus->handle = Craft::$app->request->getBodyParam('handle');
         $entryStatus->color = Craft::$app->request->getBodyParam('color');
         $entryStatus->isDefault = Craft::$app->request->getBodyParam('isDefault');
 
-        if (!SproutForms::$app->entries->saveEntryStatus($entryStatus)) {
+        if (!SproutForms::$app->entryStatuses->saveEntryStatus($entryStatus)) {
             Craft::$app->session->setError(Craft::t('sprout-forms', 'Could not save Entry Status.'));
 
             Craft::$app->getUrlManager()->setRouteParams([
@@ -98,7 +98,7 @@ class EntryStatusesController extends BaseController
 
         $ids = Json::decode(Craft::$app->request->getRequiredBodyParam('ids'));
 
-        if ($success = SproutForms::$app->entries->reorderEntryStatuses($ids)) {
+        if ($success = SproutForms::$app->entryStatuses->reorderEntryStatuses($ids)) {
             return $this->asJson(['success' => $success]);
         }
 
@@ -119,7 +119,7 @@ class EntryStatusesController extends BaseController
 
         $entryStatusId = Craft::$app->request->getRequiredBodyParam('id');
 
-        if (!SproutForms::$app->entries->deleteEntryStatusById($entryStatusId)) {
+        if (!SproutForms::$app->entryStatuses->deleteEntryStatusById($entryStatusId)) {
             $this->asJson(['success' => false]);
         }
 

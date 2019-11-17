@@ -181,7 +181,7 @@ class Entry extends Element
     {
         $statusId = $this->statusId;
 
-        return SproutForms::$app->entries->getEntryStatusById($statusId)->handle;
+        return SproutForms::$app->entryStatuses->getEntryStatusById($statusId)->handle;
     }
 
     /**
@@ -191,7 +191,7 @@ class Entry extends Element
      */
     public static function statuses(): array
     {
-        $statuses = SproutForms::$app->entries->getAllEntryStatuses();
+        $statuses = SproutForms::$app->entryStatuses->getAllEntryStatuses();
         $statusArray = [];
 
         foreach ($statuses as $status) {
@@ -220,8 +220,8 @@ class Entry extends Element
     protected static function defineSources(string $context = null): array
     {
         $entryStatusHandlesExcludingSpam = [];
-        $entryStatuses = SproutForms::$app->entries->getAllEntryStatuses();
-        $spamStatusId = SproutForms::$app->entries->getSpamStatusId();
+        $entryStatuses = SproutForms::$app->entryStatuses->getAllEntryStatuses();
+        $spamStatusId = SproutForms::$app->entryStatuses->getSpamStatusId();
 
         foreach ($entryStatuses as $entryStatus) {
             if ($entryStatus->id !== $spamStatusId) {

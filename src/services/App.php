@@ -27,6 +27,11 @@ class App extends Component
     public $entries;
 
     /**
+     * @var EntryStatuses
+     */
+    public $entryStatuses;
+
+    /**
      * @var FrontEndFields
      */
     public $frontEndFields;
@@ -47,6 +52,7 @@ class App extends Component
         $this->forms = new Forms();
         $this->fields = new Fields();
         $this->entries = new Entries();
+        $this->entryStatuses = new EntryStatuses();
         $this->frontEndFields = new FrontEndFields();
         $this->integrations = new Integrations();
         $this->rules = new Rules();

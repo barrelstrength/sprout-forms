@@ -437,7 +437,7 @@ class SproutFormsVariable
      */
     public function getEntryStatuses(): array
     {
-        return SproutForms::$app->entries->getAllEntryStatuses();
+        return SproutForms::$app->entryStatuses->getAllEntryStatuses();
     }
 
     /**

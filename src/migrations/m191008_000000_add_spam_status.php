@@ -18,7 +18,7 @@ class m191008_000000_add_spam_status extends Migration
      */
     public function safeUp(): bool
     {
-        $entryStatus = SproutForms::$app->entries->getEntryStatusByHandle('spam');
+        $entryStatus = SproutForms::$app->entryStatuses->getEntryStatusByHandle('spam');
 
         if ($entryStatus->id) {
             Craft::info('Spam status already exists');
@@ -29,7 +29,7 @@ class m191008_000000_add_spam_status extends Migration
         $entryStatus->handle = 'spam';
         $entryStatus->color = 'black';
         $entryStatus->isDefault = false;
-        SproutForms::$app->entries->saveEntryStatus($entryStatus);
+        SproutForms::$app->entryStatuses->saveEntryStatus($entryStatus);
 
         return true;
     }

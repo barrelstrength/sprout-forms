@@ -22,8 +22,11 @@ use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 /**
+ * Class EntriesController
  *
- * @property null|EntryElement $entryModel
+ * @package barrelstrength\sproutforms\controllers
+ *
+ * @property EntryElement $entryModel
  */
 class EntriesController extends BaseController
 {
@@ -118,8 +121,8 @@ class EntriesController extends BaseController
             return $this->renderTemplate('sprout-forms/entries');
         }
 
-        $entryStatus = SproutForms::$app->entries->getEntryStatusById($entry->statusId);
-        $statuses = SproutForms::$app->entries->getAllEntryStatuses();
+        $entryStatus = SproutForms::$app->entryStatuses->getEntryStatusById($entry->statusId);
+        $statuses = SproutForms::$app->entryStatuses->getAllEntryStatuses();
         $entryStatuses = [];
 
         foreach ($statuses as $key => $status) {
@@ -199,7 +202,7 @@ class EntriesController extends BaseController
         $this->populateEntryModel($entry);
 
         $statusId = $request->getBodyParam('statusId');
-        $entryStatus = SproutForms::$app->entries->getDefaultEntryStatus();
+        $entryStatus = SproutForms::$app->entryStatuses->getDefaultEntryStatus();
         $entry->statusId = $statusId ?? $entry->statusId ?? $entryStatus->id;
 
         // Render the Entry Title
@@ -238,7 +241,7 @@ class EntriesController extends BaseController
         // Integrations run on EntryElement::EVENT_AFTER_SAVE Event
         if ($saveData) {
             if ($entry->hasCaptchaErrors()) {
-                $entry->statusId = SproutForms::$app->entries->getSpamStatusId();
+                $entry->statusId = SproutForms::$app->entryStatuses->getSpamStatusId();
             }
             $success = SproutForms::$app->entries->saveEntry($entry);
         } else {
