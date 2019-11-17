@@ -3,8 +3,10 @@
 namespace barrelstrength\sproutforms\rules;
 
 use barrelstrength\sproutforms\base\Rule;
+use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
+use craft\base\Field;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -96,7 +98,9 @@ class FieldRule extends Rule
         $behavior = '-';
 
         if ($this->behaviorAction && $this->behaviorTarget) {
+            /** @var Form $form */
             $form = SproutForms::$app->forms->getFormById($this->formId);
+            /** @var Field $field */
             $field = $form->getField($this->behaviorTarget);
             if ($field !== null) {
                 $behavior = ucwords($this->behaviorAction).' '.$field->name;

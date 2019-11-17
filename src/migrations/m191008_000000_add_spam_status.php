@@ -2,7 +2,6 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutforms\models\EntryStatus;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\db\Migration;

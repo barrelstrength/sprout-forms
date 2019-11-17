@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\migrations;
 
 use barrelstrength\sproutbasereports\migrations\m180307_042132_craft3_schema_changes;
 use craft\db\Migration;
+use yii\base\NotSupportedException;
 
 /**
  * m180412_000000_sproutforms_sprout_email migration.
@@ -11,7 +12,8 @@ use craft\db\Migration;
 class m180417_000000_sproutforms_craft3_schema_changes extends Migration
 {
     /**
-     * @inheritdoc
+     * @return bool
+     * @throws NotSupportedException
      */
     public function safeUp(): bool
     {

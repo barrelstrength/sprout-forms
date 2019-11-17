@@ -29,6 +29,7 @@ use yii\db\ActiveRecord;
  * @property null|array           $hiddenFields
  * @property bool                 $isSpam
  * @property array                $captchaErrors
+ * @property array                $savedCaptchaErrors
  * @property array                $fields
  */
 class Entry extends Element

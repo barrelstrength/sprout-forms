@@ -9,16 +9,22 @@ use craft\db\Migration;
 use craft\db\Query;
 use craft\models\FieldLayout;
 use craft\models\FieldLayoutTab;
+use yii\base\Exception;
+use yii\base\InvalidConfigException;
 use yii\base\NotSupportedException;
 
 /**
  * The class name is the UTC timestamp in the format of mYYMMDD_HHMMSS_migrationName
+ *
+ * @property null|int $fakeFieldLayoutId
  */
 class m191113_000000_fix_duplicate_forms extends Migration
 {
     /**
-     * @inheritdoc
+     * @return bool|void
      * @throws NotSupportedException
+     * @throws Exception
+     * @throws InvalidConfigException
      */
     public function safeUp()
     {
@@ -54,7 +60,7 @@ class m191113_000000_fix_duplicate_forms extends Migration
 
     /**
      * @return int|null
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     private function getFakeFieldLayoutId()
     {

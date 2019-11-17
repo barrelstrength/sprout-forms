@@ -3,7 +3,6 @@
 namespace barrelstrength\sproutforms\elements\db;
 
 use barrelstrength\sproutforms\elements\Form;
-use barrelstrength\sproutforms\models\EntryStatus;
 use craft\db\Query;
 use craft\elements\db\ElementQuery;
 use craft\helpers\Db;

@@ -9,7 +9,6 @@ use Craft;
 use barrelstrength\sproutbasereports\base\DataSource;
 use craft\db\Query;
 use craft\helpers\DateTimeHelper;
-use craft\helpers\Json;
 use DateTime;
 use Exception;
 use Twig\Error\LoaderError;

@@ -9,8 +9,6 @@ use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\models\Settings;
 use Craft;
 use craft\base\ElementInterface;
-use craft\elements\Entry;
-use craft\errors\InvalidElementException;
 use craft\errors\MissingComponentException;
 use craft\errors\WrongEditionException;
 use craft\web\Controller as BaseController;
@@ -24,7 +22,6 @@ use yii\base\Exception;
 use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
 use barrelstrength\sproutforms\SproutForms;
-use yii\web\ServerErrorHttpException;
 
 class FormsController extends BaseController
 {

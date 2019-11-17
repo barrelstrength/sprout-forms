@@ -14,8 +14,8 @@ use barrelstrength\sproutforms\migrations\CreateFormContentTable;
 use Craft;
 use craft\base\ElementInterface;
 use craft\base\Field;
-use craft\base\FieldInterface;
 use craft\db\Query;
+use craft\errors\MissingComponentException;
 use craft\events\RegisterComponentTypesEvent;
 use Throwable;
 use yii\base\Component;
@@ -112,6 +112,7 @@ class Forms extends Component
     {
         $isNew = !$form->id;
         $hasLayout = count($form->getFieldLayout()->getFields()) > 0;
+        $oldForm = null;
 
         if (!$isNew) {
             // Add the oldHandle to our model so we can determine if we
@@ -147,7 +148,7 @@ class Forms extends Component
                 // Assign our new layout id info to our form model and record
                 $form->fieldLayoutId = $fieldLayout->id;
                 $form->setFieldLayout($fieldLayout);
-            } else if ($hasLayout) {
+            } else if ($oldForm !== null && $hasLayout) {
                 // Delete our previous record
                 Craft::$app->getFields()->deleteLayoutById($oldForm->fieldLayoutId);
 
@@ -439,7 +440,7 @@ class Forms extends Component
      * @param FormElement $form
      *
      * @throws InvalidConfigException
-     * @throws \craft\errors\MissingComponentException
+     * @throws MissingComponentException
      */
     public function cleanFieldFromFieldRules($oldHandle, $form)
     {
@@ -472,7 +473,7 @@ class Forms extends Component
      * @param FormElement $form
      *
      * @throws InvalidConfigException
-     * @throws \craft\errors\MissingComponentException
+     * @throws MissingComponentException
      */
     public function updateFieldFromFieldRules($oldHandle, $newHandle, $form)
     {

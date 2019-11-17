@@ -15,6 +15,7 @@ class m191116_000006_add_integration_and_spam_datasources extends Migration
      */
     public function safeUp(): bool
     {
+        /** @noinspection ClassConstantCanBeUsedInspection */
         $dataSourceClasses = [
             'barrelstrength\sproutforms\integrations\sproutreports\datasources\IntegrationLogDataSource',
             'barrelstrength\sproutforms\integrations\sproutreports\datasources\SpamLogDataSource'

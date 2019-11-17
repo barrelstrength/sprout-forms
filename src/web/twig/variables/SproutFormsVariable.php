@@ -7,8 +7,6 @@ use barrelstrength\sproutforms\elements\db\EntryQuery;
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
-use barrelstrength\sproutforms\models\EntryStatus;
-use barrelstrength\sproutforms\models\Settings;
 use barrelstrength\sproutforms\services\Forms;
 use Craft;
 use craft\base\ElementInterface;
@@ -343,26 +341,6 @@ class SproutFormsVariable
     public function getFormsByGroupId($id): array
     {
         return SproutForms::$app->groups->getFormsByGroupId($id);
-    }
-
-    /**
-     * @return array
-     * @see SproutForms::$app->fields->prepareFieldTypeSelection()
-     *
-     */
-    public function prepareFieldTypeSelection(): array
-    {
-        return SproutForms::$app->fields->prepareFieldTypeSelection();
-    }
-
-    /**
-     * @return array
-     *
-     * @see SproutForms::$app->integrations->prepareIntegrationTypeSelection()
-     */
-    public function prepareIntegrationTypeSelection(): array
-    {
-        return SproutForms::$app->integrations->prepareIntegrationTypeSelection();
     }
 
     /**

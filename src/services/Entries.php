@@ -7,9 +7,7 @@ use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\base\Captcha;
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\models\Settings;
-use barrelstrength\sproutforms\models\EntriesSpamLog;
 use barrelstrength\sproutforms\records\EntriesSpamLog as EntriesSpamLogRecord;
-use barrelstrength\sproutforms\records\IntegrationLog as IntegrationLogRecord;
 use Craft;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
@@ -32,6 +30,7 @@ use yii\db\StaleObjectException;
  * @property null             $defaultEntryStatusId
  * @property FormElement      $entry
  * @property null|EntryStatus $defaultEntryStatus
+ * @property null|int         $spamStatusId
  * @property array            $allEntryStatuses
  */
 class Entries extends Component

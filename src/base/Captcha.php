@@ -3,7 +3,6 @@
 namespace barrelstrength\sproutforms\base;
 
 use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
-use barrelstrength\sproutforms\models\EntryStatus;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\base\Model;

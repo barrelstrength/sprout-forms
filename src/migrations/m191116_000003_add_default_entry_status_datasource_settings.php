@@ -2,7 +2,6 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutforms\fields\formfields\OptIn;
 use craft\db\Migration;
 use craft\db\Query;
 

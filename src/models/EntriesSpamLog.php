@@ -2,13 +2,10 @@
 
 namespace barrelstrength\sproutforms\models;
 
-use barrelstrength\sproutforms\base\Integration;
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\SproutForms;
 use craft\base\Model;
 use Craft;
-use craft\errors\MissingComponentException;
-use yii\base\InvalidConfigException;
 
 /**
  * @property null|Entry $entry
