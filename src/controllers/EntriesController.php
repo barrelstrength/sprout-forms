@@ -56,7 +56,10 @@ class EntriesController extends BaseController
         $headers->set('Cache-Control', 'private');
     }
 
-    public function actionEntriesIndexTemplate()
+    /**
+     * @return Response
+     */
+    public function actionEntriesIndexTemplate(): Response
     {
         /** @var SproutForms $plugin */
         $plugin = Craft::$app->plugins->getPlugin('sprout-forms');

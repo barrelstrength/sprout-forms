@@ -340,7 +340,7 @@ class SproutForms extends Plugin implements SproutEditionsInterface
             'sprout-forms/forms/edit/<formId:\d+>' =>
                 'sprout-forms/forms/edit-form-template',
             'sprout-forms/forms/edit/<formId:\d+>/settings/<settingsSectionHandle:.*>' =>
-                'sprout-forms/forms/settings',
+                'sprout-forms/forms/settings-template',
             'sprout-forms/entries' =>
                 'sprout-forms/entries/entries-index-template',
             'sprout-forms/entries/edit/<entryId:\d+>' =>

@@ -58,7 +58,7 @@ class FormsController extends BaseController
      * @throws InvalidConfigException
      * @throws MissingComponentException
      */
-    public function actionSettings(int $formId = null, $settingsSectionHandle = null): Response
+    public function actionSettingsTemplate(int $formId = null, $settingsSectionHandle = null): Response
     {
         $form = SproutForms::$app->forms->getFormById($formId);
 
@@ -105,7 +105,7 @@ class FormsController extends BaseController
         $this->requirePostRequest();
         $request = Craft::$app->getRequest();
 
-        $form = $this->_getFormModel();
+        $form = $this->getFormModel();
         $duplicateForm = null;
 
         // If we're duplicating the form, swap $form with the duplicate
@@ -124,7 +124,7 @@ class FormsController extends BaseController
             }
         }
 
-        $this->_populateFormModel($form);
+        $this->populateFormModel($form);
         $this->prepareFieldLayout($form, $duplicate, $duplicateForm);
 
         // Save it
@@ -288,7 +288,7 @@ class FormsController extends BaseController
      * @return FormElement
      * @throws NotFoundHttpException
      */
-    private function _getFormModel(): FormElement
+    private function getFormModel(): FormElement
     {
         $request = Craft::$app->getRequest();
         $formId = $request->getBodyParam('formId');
@@ -315,7 +315,10 @@ class FormsController extends BaseController
         return $form;
     }
 
-    private function _populateFormModel(FormElement $form)
+    /**
+     * @param FormElement $form
+     */
+    private function populateFormModel(FormElement $form)
     {
         /** @var SproutForms $plugin */
         $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
