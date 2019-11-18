@@ -37,15 +37,6 @@
             value: (options.endDate is defined ? options.endDate : defaultEndDate)
         }) }}
     </div>
-
-    {{ forms.checkboxGroupField({
-        label: "Entry Statuses"|t('sprout-forms'),
-        instructions: "Select the entry statuses you wish to display in your report."|t('sprout-forms'),
-        id: 'entryStatusIds',
-        name: 'settings[entryStatusIds]',
-        options: entryStatusOptions,
-        values: options.entryStatusIds is defined ? options.entryStatusIds : defaultSelectedEntryStatuses
-    }) }}
 {% else %}
 
     {% set boxBody %}

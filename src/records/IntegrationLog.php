@@ -14,7 +14,7 @@ use craft\db\ActiveRecord;
  * @property $success
  * @property $status
  */
-class SubmissionLog extends ActiveRecord
+class IntegrationLog extends ActiveRecord
 {
     /**
      * @inheritdoc
@@ -23,6 +23,6 @@ class SubmissionLog extends ActiveRecord
      */
     public static function tableName(): string
     {
-        return '{{%sproutforms_log}}';
+        return '{{%sproutforms_integrations_log}}';
     }
 }

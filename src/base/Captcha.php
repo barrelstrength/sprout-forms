@@ -3,7 +3,6 @@
 namespace barrelstrength\sproutforms\base;
 
 use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
-use barrelstrength\sproutforms\models\EntryStatus;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\base\Model;
@@ -13,19 +12,23 @@ use ReflectionException;
 /**
  * Class Captcha
  *
- * @property null|int $spamStatusId
- * @property null     $settings
- * @property string   $captchaSettingsHtml
- * @property string   $name
- * @property string   $description
- * @property string   $captchaHtml
+ * @property null   $settings
+ * @property string $captchaSettingsHtml
+ * @property string $name
+ * @property string $description
+ * @property string $captchaHtml
  */
 abstract class Captcha extends Model
 {
+    /**
+     * Add errors to a Captcha using the error key
+     * to support spam error logging and reporting
+     */
     const CAPTCHA_ERRORS_KEY = 'captchaErrors';
 
     /**
-     * A unique ID that is generated dynamically using the plugin handle and the captcha class name {pluginhandle}-{captchaclassname}
+     * A unique ID that is generated dynamically using the plugin
+     * handle and the captcha class name {pluginhandle}-{captchaclassname}
      *
      * @example
      * pluginname-captchaclassname
@@ -124,19 +127,5 @@ abstract class Captcha extends Model
     public function verifySubmission(OnBeforeValidateEntryEvent $event): bool
     {
         return true;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getSpamStatusId()
-    {
-        $spam = SproutForms::$app->entries->getEntryStatusByHandle(EntryStatus::SPAM_STATUS_HANDLE);
-
-        if (!$spam->id) {
-            return null;
-        }
-
-        return $spam->id;
     }
 }

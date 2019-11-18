@@ -2,11 +2,16 @@
 
 namespace barrelstrength\sproutforms\controllers;
 
+use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Entry;
+use barrelstrength\sproutforms\elements\Entry as EntryElement;
+use barrelstrength\sproutforms\elements\Form as FormElement;
+use barrelstrength\sproutforms\events\OnBeforePopulateEntryEvent;
 use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
 use barrelstrength\sproutforms\models\Settings;
 use Craft;
 use craft\errors\MissingComponentException;
+use craft\helpers\UrlHelper;
 use craft\web\Controller as BaseController;
 use Throwable;
 use yii\base\Exception;
@@ -14,16 +19,14 @@ use yii\base\InvalidConfigException;
 use yii\web\BadRequestHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
-
-use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutforms\elements\Form as FormElement;
-use barrelstrength\sproutforms\elements\Entry as EntryElement;
-use barrelstrength\sproutforms\events\OnBeforePopulateEntryEvent;
 use yii\web\Response;
 
 /**
+ * Class EntriesController
  *
- * @property null|EntryElement $entryModel
+ * @package barrelstrength\sproutforms\controllers
+ *
+ * @property EntryElement $entryModel
  */
 class EntriesController extends BaseController
 {
@@ -54,122 +57,21 @@ class EntriesController extends BaseController
     }
 
     /**
-     * Processes form submissions
-     *
-     * @return null|Response
-     * @throws Exception
-     * @throws ForbiddenHttpException
-     * @throws \Exception
-     * @throws Throwable
-     * @throws BadRequestHttpException
+     * @return Response
      */
-    public function actionSaveEntry()
+    public function actionEntriesIndexTemplate(): Response
     {
-        $this->requirePostRequest();
+        /** @var SproutForms $plugin */
+        $plugin = Craft::$app->plugins->getPlugin('sprout-forms');
 
-        $request = Craft::$app->getRequest();
+        /** @var Settings $settings */
+        $settings = $plugin->getSettings();
 
-        if ($request->getIsCpRequest()) {
-            $this->requirePermission('sproutForms-editEntries');
+        if (!$settings->enableSaveData) {
+            return Craft::$app->getResponse()->redirect(UrlHelper::cpUrl('sprout-forms/forms'));
         }
 
-        $formHandle = $request->getRequiredBodyParam('handle');
-        $this->form = $this->form == null ? SproutForms::$app->forms->getFormByHandle($formHandle) : $this->form;
-        $settings = SproutForms::getInstance()->getSettings();
-
-        if ($this->form === null) {
-            throw new Exception('No form exists with the handle '.$formHandle);
-        }
-
-        $event = new OnBeforePopulateEntryEvent([
-            'form' => $this->form
-        ]);
-
-        $this->trigger(self::EVENT_BEFORE_POPULATE, $event);
-
-        $entry = $this->getEntryModel();
-
-        Craft::$app->getContent()->populateElementContent($entry);
-
-        $this->addHiddenValuesBasedOnFieldRules($entry);
-
-        // Populate the entry with post data
-        $this->populateEntryModel($entry);
-
-        $statusId = $request->getBodyParam('statusId');
-        $entryStatus = SproutForms::$app->entries->getDefaultEntryStatus();
-        $entry->statusId = $statusId ?? $entry->statusId ?? $entryStatus->id;
-
-        // Render the Entry Title
-        try {
-            $entry->title = Craft::$app->getView()->renderObjectTemplate($this->form->titleFormat, $entry);
-        } catch (\Exception $e) {
-            Craft::error('Title format error: '.$e->getMessage(), __METHOD__);
-        }
-
-        $event = new OnBeforeValidateEntryEvent([
-            'form' => $this->form,
-            'entry' => $entry
-        ]);
-
-        $this->trigger(self::EVENT_BEFORE_VALIDATE, $event);
-
-        $hasCaptchaErrors = $entry->hasCaptchaErrors();
-
-        $success = $entry->validate(null, false);
-
-        $isRedirectSpam = false;
-        if ($hasCaptchaErrors && ($settings->spamRedirectBehavior === Settings::SPAM_REDIRECT_BEHAVIOR_WITHOUT_ERRORS || $settings->spamRedirectBehavior === Settings::SPAM_REDIRECT_BEHAVIOR_WITH_ERRORS)) {
-            $isRedirectSpam = true;
-        }
-
-        if (!$success || $isRedirectSpam) {
-            return $this->redirectWithErrors($entry);
-        }
-
-        return $this->saveEntryInCraft($entry);
-    }
-
-    /**
-     * @param EntryElement $entry
-     *
-     * @return null|Response
-     * @throws Exception
-     * @throws \Exception
-     * @throws Throwable
-     * @throws BadRequestHttpException
-     */
-    private function saveEntryInCraft(Entry $entry)
-    {
-        $success = true;
-
-        $saveData = SproutForms::$app->entries->isSaveDataEnabled($this->form, $entry);
-
-        // Save Data and Trigger the onSaveEntryEvent
-        if ($saveData) {
-            $success = SproutForms::$app->entries->saveEntry($entry);
-        } else {
-            $isNewEntry = !$entry->id;
-            SproutForms::$app->entries->callOnSaveEntryEvent($entry, $isNewEntry);
-        }
-
-        SproutForms::$app->entries->runPurgeSpamElements();
-
-        if (!$success) {
-            return $this->redirectWithErrors($entry);
-        }
-
-        $this->createLastEntryId($entry);
-
-        if (Craft::$app->getRequest()->getAcceptsJson()) {
-            return $this->asJson([
-                'success' => true
-            ]);
-        }
-
-        Craft::$app->getSession()->setNotice(Craft::t('sprout-forms', 'Entry saved.'));
-
-        return $this->redirectToPostedUrl($entry);
+        return $this->renderTemplate('sprout-forms/entries/index');
     }
 
     /**
@@ -184,9 +86,19 @@ class EntriesController extends BaseController
      * @throws MissingComponentException
      * @throws InvalidConfigException
      */
-    public function actionEditEntry(int $entryId = null, EntryElement $entry = null): Response
+    public function actionEditEntryTemplate(int $entryId = null, EntryElement $entry = null): Response
     {
         $this->requirePermission('sproutForms-editEntries');
+
+        /** @var SproutForms $plugin */
+        $plugin = Craft::$app->plugins->getPlugin('sprout-forms');
+
+        /** @var Settings $settings */
+        $settings = $plugin->getSettings();
+
+        if (!$settings->enableSaveData) {
+            return Craft::$app->getResponse()->redirect(UrlHelper::cpUrl('sprout-forms/forms'));
+        }
 
         if (SproutForms::$app->forms->activeCpEntry) {
             $entry = SproutForms::$app->forms->activeCpEntry;
@@ -212,8 +124,8 @@ class EntriesController extends BaseController
             return $this->renderTemplate('sprout-forms/entries');
         }
 
-        $entryStatus = SproutForms::$app->entries->getEntryStatusById($entry->statusId);
-        $statuses = SproutForms::$app->entries->getAllEntryStatuses();
+        $entryStatus = SproutForms::$app->entryStatuses->getEntryStatusById($entry->statusId);
+        $statuses = SproutForms::$app->entryStatuses->getAllEntryStatuses();
         $entryStatuses = [];
 
         foreach ($statuses as $key => $status) {
@@ -242,6 +154,126 @@ class EntriesController extends BaseController
         $variables['fieldLayoutTabs'] = $fieldLayoutTabs;
 
         return $this->renderTemplate('sprout-forms/entries/_edit', $variables);
+    }
+
+    /**
+     * Processes form submissions
+     *
+     * @return null|Response
+     * @throws Exception
+     * @throws ForbiddenHttpException
+     * @throws \Exception
+     * @throws Throwable
+     * @throws BadRequestHttpException
+     */
+    public function actionSaveEntry()
+    {
+        $this->requirePostRequest();
+
+        $request = Craft::$app->getRequest();
+
+        if ($request->getIsCpRequest()) {
+            $this->requirePermission('sproutForms-editEntries');
+        }
+
+        $formHandle = $request->getRequiredBodyParam('handle');
+        $this->form = $this->form == null ? SproutForms::$app->forms->getFormByHandle($formHandle) : $this->form;
+
+        /** @var SproutForms $plugin */
+        $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
+
+        /** @var Settings $settings */
+        $settings = $plugin->getSettings();
+
+        if ($this->form === null) {
+            throw new Exception('No form exists with the handle '.$formHandle);
+        }
+
+        $event = new OnBeforePopulateEntryEvent([
+            'form' => $this->form
+        ]);
+
+        $this->trigger(self::EVENT_BEFORE_POPULATE, $event);
+
+        $entry = $this->getEntryModel();
+
+        Craft::$app->getContent()->populateElementContent($entry);
+
+        $this->addHiddenValuesBasedOnFieldRules($entry);
+
+        // Populate the entry with post data
+        $this->populateEntryModel($entry);
+
+        $statusId = $request->getBodyParam('statusId');
+        $entryStatus = SproutForms::$app->entryStatuses->getDefaultEntryStatus();
+        $entry->statusId = $statusId ?? $entry->statusId ?? $entryStatus->id;
+
+        // Render the Entry Title
+        try {
+            $entry->title = Craft::$app->getView()->renderObjectTemplate($this->form->titleFormat, $entry);
+        } catch (\Exception $e) {
+            Craft::error('Title format error: '.$e->getMessage(), __METHOD__);
+        }
+
+        $event = new OnBeforeValidateEntryEvent([
+            'form' => $this->form,
+            'entry' => $entry
+        ]);
+
+        $this->trigger(self::EVENT_BEFORE_VALIDATE, $event);
+
+        $entry->validate(null, false);
+
+        // Allow override of redirect URL on failure
+        if (Craft::$app->getRequest()->getBodyParam('redirectOnFailure') !== '') {
+            $_POST['redirect'] = Craft::$app->getRequest()->getBodyParam('redirectOnFailure');
+        }
+
+        if ($entry->hasErrors()) {
+            // Redirect back to form with validation errors
+            return $this->redirectWithValidationErrors($entry);
+        }
+
+        // If we don't have errors or SPAM
+        $success = true;
+
+        $saveData = SproutForms::$app->entries->isSaveDataEnabled($this->form, $entry);
+
+        // Save Data and Trigger the onSaveEntryEvent
+        // This saves both valid and spam entries
+        // Integrations run on EntryElement::EVENT_AFTER_SAVE Event
+        if ($saveData) {
+            if ($entry->hasCaptchaErrors()) {
+                $entry->statusId = SproutForms::$app->entryStatuses->getSpamStatusId();
+            }
+
+            $success = SproutForms::$app->entries->saveEntry($entry);
+
+            if ($entry->hasCaptchaErrors()) {
+                SproutForms::$app->entries->logEntriesSpam($entry);
+            }
+        } else {
+            $isNewEntry = !$entry->id;
+            SproutForms::$app->entries->callOnSaveEntryEvent($entry, $isNewEntry);
+        }
+
+        SproutForms::$app->entries->runPurgeSpamElements();
+
+        if (!$success || $this->isSpamAndHasRedirectBehavior($entry, $settings)) {
+            return $this->redirectWithValidationErrors($entry);
+        }
+
+        $this->createLastEntryId($entry);
+
+        if (Craft::$app->getRequest()->getAcceptsJson()) {
+            return $this->asJson([
+                'success' => true
+            ]);
+        }
+
+        Craft::$app->getSession()->setNotice(Craft::t('sprout-forms', 'Entry saved.'));
+
+        return $this->redirectToPostedUrl($entry);
     }
 
     /**
@@ -304,11 +336,17 @@ class EntriesController extends BaseController
      */
     private function populateEntryModel(EntryElement $entry)
     {
+        /** @var SproutForms $plugin */
+        $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
+        /** @var Settings $settings */
+        $settings = $plugin->getSettings();
+
         $request = Craft::$app->getRequest();
 
         // Our EntryElement requires that we assign it a FormElement id
         $entry->formId = $this->form->id;
-        $entry->ipAddress = $request->getUserIP();
+        $entry->ipAddress = $settings->trackRemoteIp ? $request->getRemoteIP() : null;
+        $entry->referrer = $request->getReferrer();
         $entry->userAgent = $request->getUserAgent();
 
         // Set the entry attributes, defaulting to the existing values for whatever is missing from the post data
@@ -356,23 +394,12 @@ class EntriesController extends BaseController
     /**
      * @param EntryElement $entry
      *
-     * @return null|Response
-     * @throws BadRequestHttpException
+     * @return Response|null
      * @throws MissingComponentException
      */
-    private function redirectWithErrors(Entry $entry)
+    private function redirectWithValidationErrors(Entry $entry)
     {
-        // Allow override of redirect URL on failure
-        if (Craft::$app->getRequest()->getBodyParam('redirectOnFailure') !== '') {
-            $_POST['redirect'] = Craft::$app->getRequest()->getBodyParam('redirectOnFailure');
-        }
-
         Craft::error($entry->getErrors(), __METHOD__);
-
-        // Send spam to the thank you page
-        if (SproutForms::$app->entries->fakeIt) {
-            return $this->redirectToPostedUrl($entry);
-        }
 
         // Handle CP requests in a CP-friendly way
         if (Craft::$app->getRequest()->getIsCpRequest()) {
@@ -410,6 +437,25 @@ class EntriesController extends BaseController
         ]);
 
         return null;
+    }
+
+    /**
+     * @param EntryElement $entry
+     * @param Settings     $settings
+     *
+     * @return bool
+     */
+    private function isSpamAndHasRedirectBehavior(Entry $entry, Settings $settings): bool
+    {
+        if (!$entry->hasCaptchaErrors()) {
+            return false;
+        }
+
+        if ($settings->spamRedirectBehavior === Settings::SPAM_REDIRECT_BEHAVIOR_NORMAL) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

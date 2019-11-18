@@ -16,10 +16,10 @@ use Craft;
 class Settings extends Model implements SproutSettingsInterface
 {
     const SPAM_REDIRECT_BEHAVIOR_NORMAL = 'redirectAsNormal';
-    const SPAM_REDIRECT_BEHAVIOR_WITH_ERRORS = 'redirectBackToFormWithErrors';
-    const SPAM_REDIRECT_BEHAVIOR_WITHOUT_ERRORS = 'redirectBackToFormWithoutErrors';
+    const SPAM_REDIRECT_BEHAVIOR_BACK_TO_FORM = 'redirectBackToForm';
 
     public $pluginNameOverride = '';
+    public $defaultSection = 'entries';
     public $formTemplateDefaultValue = '';
     public $enableSaveData = 1;
     public $spamRedirectBehavior = self::SPAM_REDIRECT_BEHAVIOR_NORMAL;
@@ -27,6 +27,7 @@ class Settings extends Model implements SproutSettingsInterface
     public $spamLimit = 500;
     public $cleanupProbability = 1000;
     public $enableSaveDataDefaultValue = 1;
+    public $trackRemoteIp = false;
     public $captchaSettings = [];
     public $enableEditFormEntryViaFrontEnd = 0;
 
@@ -40,7 +41,8 @@ class Settings extends Model implements SproutSettingsInterface
         // 'actionTemplate' => 'sprout/_includes/actionButton'
         // 'actionUrl' => 'sprout/settings/save-settings'
         $spamProtectionVariables['spamRedirectBehaviorOptions'] = $this->getSpamRedirectBehaviorsAsOptions();
-        $entryStatusVariables['entryStatuses'] = SproutForms::$app->entries->getAllEntryStatuses();
+        $entryStatusVariables['entryStatuses'] = SproutForms::$app->entryStatuses->getAllEntryStatuses();
+        $entryStatusVariables['spamStatusHandle'] = EntryStatus::SPAM_STATUS_HANDLE;
 
         $navItems = [
             'general' => [
@@ -94,17 +96,13 @@ class Settings extends Model implements SproutSettingsInterface
     {
         return [
             [
-                'label' => 'Redirect as normal (simulate successful submission)',
+                'label' => 'Redirect as normal (recommended)',
                 'value' => self::SPAM_REDIRECT_BEHAVIOR_NORMAL
             ],
             [
-                'label' => 'Redirect back to form (with errors)',
-                'value' => self::SPAM_REDIRECT_BEHAVIOR_WITH_ERRORS
-            ],
-            [
-                'label' => 'Redirect back to form (without errors)',
-                'value' => self::SPAM_REDIRECT_BEHAVIOR_WITHOUT_ERRORS
-            ],
+                'label' => 'Redirect back to form',
+                'value' => self::SPAM_REDIRECT_BEHAVIOR_BACK_TO_FORM
+            ]
         ];
     }
 }

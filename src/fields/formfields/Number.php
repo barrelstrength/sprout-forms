@@ -7,7 +7,6 @@ use barrelstrength\sproutforms\rules\conditions\IsGreaterThanCondition;
 use barrelstrength\sproutforms\rules\conditions\IsGreaterThanOrEqualToCondition;
 use barrelstrength\sproutforms\rules\conditions\IsLessThanCondition;
 use barrelstrength\sproutforms\rules\conditions\IsLessThanOrEqualToCondition;
-use barrelstrength\sproutforms\rules\fieldrules\NumberCondition;
 use Craft;
 use craft\fields\Dropdown as CraftDropdown;
 use craft\fields\Number as CraftNumber;

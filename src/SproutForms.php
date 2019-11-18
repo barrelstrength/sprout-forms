@@ -24,7 +24,8 @@ use barrelstrength\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbaseemail\events\NotificationEmailEvent;
 use barrelstrength\sproutforms\fields\Forms as FormsField;
 use barrelstrength\sproutforms\fields\Entries as FormEntriesField;
-use barrelstrength\sproutforms\integrations\sproutreports\datasources\SubmissionLogDataSource;
+use barrelstrength\sproutforms\integrations\sproutreports\datasources\IntegrationLogDataSource;
+use barrelstrength\sproutforms\integrations\sproutreports\datasources\SpamLogDataSource;
 use barrelstrength\sproutforms\integrationtypes\EntryElementIntegration;
 use barrelstrength\sproutforms\integrationtypes\CustomEndpoint;
 use barrelstrength\sproutforms\services\Integrations;
@@ -161,7 +162,8 @@ class SproutForms extends Plugin implements SproutEditionsInterface
         // Register DataSources for sproutReports plugin integration
         Event::on(DataSources::class, DataSources::EVENT_REGISTER_DATA_SOURCES, static function(RegisterComponentTypesEvent $event) {
             $event->types[] = EntriesDataSource::class;
-            $event->types[] = SubmissionLogDataSource::class;
+            $event->types[] = IntegrationLogDataSource::class;
+            $event->types[] = SpamLogDataSource::class;
         });
 
         $this->setComponents([
@@ -204,8 +206,8 @@ class SproutForms extends Plugin implements SproutEditionsInterface
             SproutForms::$app->integrations->runFormIntegrations($event->entry);
         });
 
-        Craft::$app->view->hook('sproutForms.modifyForm', static function() {
-            return SproutForms::$app->forms->getCaptchasHtml();
+        Craft::$app->view->hook('sproutForms.modifyForm', static function(array &$context) {
+            return SproutForms::$app->forms->handleModifyFormHook($context);
         });
 
         Event::on(Integrations::class, Integrations::EVENT_REGISTER_INTEGRATIONS, static function(RegisterComponentTypesEvent $event) {
@@ -293,7 +295,8 @@ class SproutForms extends Plugin implements SproutEditionsInterface
             ];
         }
 
-        if (Craft::$app->getUser()->checkPermission('sproutForms-viewEntries')) {
+        if (Craft::$app->getUser()->checkPermission('sproutForms-viewEntries') &&
+            $this->getSettings()->enableSaveData) {
             $parent['subnav']['entries'] = [
                 'label' => Craft::t('sprout-forms', 'Entries'),
                 'url' => 'sprout-forms/entries'
@@ -330,14 +333,18 @@ class SproutForms extends Plugin implements SproutEditionsInterface
     private function getCpUrlRules(): array
     {
         return [
+            'sprout-forms' =>
+                'sprout-forms/forms/index-template',
             'sprout-forms/forms/new' =>
                 'sprout-forms/forms/edit-form-template',
             'sprout-forms/forms/edit/<formId:\d+>' =>
                 'sprout-forms/forms/edit-form-template',
             'sprout-forms/forms/edit/<formId:\d+>/settings/<settingsSectionHandle:.*>' =>
-                'sprout-forms/forms/settings',
+                'sprout-forms/forms/edit-settings-template',
+            'sprout-forms/entries' =>
+                'sprout-forms/entries/entries-index-template',
             'sprout-forms/entries/edit/<entryId:\d+>' =>
-                'sprout-forms/entries/edit-entry',
+                'sprout-forms/entries/edit-entry-template',
             'sprout-forms/settings/(general|advanced)' =>
                 'sprout-forms/settings/settings-index-template',
             'sprout-forms/settings/entry-statuses/new' =>
@@ -462,7 +469,8 @@ class SproutForms extends Plugin implements SproutEditionsInterface
         // Add DataSource integrations so users don't have to install them manually
         $dataSourceTypes = [
             EntriesDataSource::class,
-            SubmissionLogDataSource::class
+            IntegrationLogDataSource::class,
+            SpamLogDataSource::class
         ];
 
         // @todo research why the plugin is not enabled after install

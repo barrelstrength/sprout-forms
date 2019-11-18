@@ -2,7 +2,7 @@
 
 namespace barrelstrength\sproutforms\events;
 
-use barrelstrength\sproutforms\models\SubmissionLog;
+use barrelstrength\sproutforms\models\IntegrationLog;
 use yii\base\Event;
 
 /**
@@ -11,7 +11,7 @@ use yii\base\Event;
 class OnAfterIntegrationSubmit extends Event
 {
     /**
-     * @var SubmissionLog
+     * @var IntegrationLog
      */
-    public $submissionLog;
+    public $integrationLog;
 }

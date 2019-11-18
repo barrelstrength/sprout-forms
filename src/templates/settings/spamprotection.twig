@@ -9,7 +9,7 @@
 
 {{ forms.selectField({
     label: "Spam Redirect Behavior"|t('sprout-forms'),
-    instructions: 'The behavior your user will see if a submission is flagged as spam.'|t('sprout-forms'),
+    instructions: 'The behavior your user will see if a submission is flagged as spam. Redirecting as normal will simulate a successful submission and direct the user to the Redirect Page. All failed captchas are logged on the Spam Entries saved in the database.'|t('sprout-forms'),
     name: 'spamRedirectBehavior',
     options: spamRedirectBehaviorOptions,
     value: settings.spamRedirectBehavior,

@@ -9,16 +9,22 @@ use craft\db\Migration;
 use craft\db\Query;
 use craft\models\FieldLayout;
 use craft\models\FieldLayoutTab;
+use yii\base\Exception;
+use yii\base\InvalidConfigException;
 use yii\base\NotSupportedException;
 
 /**
  * The class name is the UTC timestamp in the format of mYYMMDD_HHMMSS_migrationName
+ *
+ * @property null|int $fakeFieldLayoutId
  */
 class m191113_000000_fix_duplicate_forms extends Migration
 {
     /**
-     * @inheritdoc
+     * @return bool|void
      * @throws NotSupportedException
+     * @throws Exception
+     * @throws InvalidConfigException
      */
     public function safeUp()
     {
@@ -27,11 +33,9 @@ class m191113_000000_fix_duplicate_forms extends Migration
             ->from(['{{%sproutforms_forms}}'])
             ->all();
 
-        $fakeFieldLayoutId = $this->getFakeFieldLayoutId();
-
         foreach ($forms as $form) {
             $formElement = SproutForms::$app->forms->getFormById($form['id']);
-            if ($formElement === null){
+            if ($formElement === null) {
                 continue;
             }
             $contentTable = $formElement->getContentTable();
@@ -45,8 +49,10 @@ class m191113_000000_fix_duplicate_forms extends Migration
                 }
             }
 
-            if ($missingFields === count($formFields) && $missingFields > 0){
-                Craft::info("Updating corrupted duplicated form field layout id: ".$formElement->fieldLayoutId. " to: ".$fakeFieldLayoutId, __METHOD__);
+            $fakeFieldLayoutId = $this->getFakeFieldLayoutId();
+
+            if ($missingFields === count($formFields) && $missingFields > 0) {
+                Craft::info('Updating corrupted duplicated form field layout id: '.$formElement->fieldLayoutId.' to: '.$fakeFieldLayoutId, __METHOD__);
                 $this->update('{{%sproutforms_forms}}', ['fieldLayoutId' => $fakeFieldLayoutId], ['id' => $formElement->id], [], false);
             }
         }
@@ -54,14 +60,14 @@ class m191113_000000_fix_duplicate_forms extends Migration
 
     /**
      * @return int|null
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     private function getFakeFieldLayoutId()
     {
         $tabs = [];
         $tab = new FieldLayoutTab();
-        $tab->name = urldecode("SproutFormsTabFake");
-        $tab->sortOrder = "888";
+        $tab->name = urldecode('Tab 1');
+        $tab->sortOrder = '888';
         $tab->setFields([]);
 
         $tabs[] = $tab;

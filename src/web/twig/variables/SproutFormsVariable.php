@@ -7,8 +7,6 @@ use barrelstrength\sproutforms\elements\db\EntryQuery;
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
-use barrelstrength\sproutforms\models\EntryStatus;
-use barrelstrength\sproutforms\models\Settings;
 use barrelstrength\sproutforms\services\Forms;
 use Craft;
 use craft\base\ElementInterface;
@@ -346,26 +344,6 @@ class SproutFormsVariable
     }
 
     /**
-     * @return array
-     * @see SproutForms::$app->fields->prepareFieldTypeSelection()
-     *
-     */
-    public function prepareFieldTypeSelection(): array
-    {
-        return SproutForms::$app->fields->prepareFieldTypeSelection();
-    }
-
-    /**
-     * @return array
-     *
-     * @see SproutForms::$app->integrations->prepareIntegrationTypeSelection()
-     */
-    public function prepareIntegrationTypeSelection(): array
-    {
-        return SproutForms::$app->integrations->prepareIntegrationTypeSelection();
-    }
-
-    /**
      * @param $settings
      *
      * @throws MissingComponentException
@@ -459,7 +437,7 @@ class SproutFormsVariable
      */
     public function getEntryStatuses(): array
     {
-        return SproutForms::$app->entries->getAllEntryStatuses();
+        return SproutForms::$app->entryStatuses->getAllEntryStatuses();
     }
 
     /**
@@ -643,14 +621,6 @@ class SproutFormsVariable
     public function getFieldCondition($conditionClass, $formField): Condition
     {
         return new $conditionClass(['formField' => $formField]);
-    }
-
-    /**
-     * @return string
-     */
-    public function getSpamStatusHandle()
-    {
-        return EntryStatus::SPAM_STATUS_HANDLE;
     }
 }
 

@@ -16,6 +16,7 @@ use Craft;
 use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\db\Query;
+use craft\errors\MissingComponentException;
 use craft\events\RegisterComponentTypesEvent;
 use Throwable;
 use yii\base\Component;
@@ -112,8 +113,9 @@ class Forms extends Component
     {
         $isNew = !$form->id;
         $hasLayout = count($form->getFieldLayout()->getFields()) > 0;
+        $oldForm = null;
 
-        if (!$isNew){
+        if (!$isNew) {
             // Add the oldHandle to our model so we can determine if we
             // need to rename the content table
             /** @var FormRecord $formRecord */
@@ -147,7 +149,7 @@ class Forms extends Component
                 // Assign our new layout id info to our form model and record
                 $form->fieldLayoutId = $fieldLayout->id;
                 $form->setFieldLayout($fieldLayout);
-            } else if ($hasLayout) {
+            } else if ($oldForm !== null && $hasLayout) {
                 // Delete our previous record
                 Craft::$app->getFields()->deleteLayoutById($oldForm->fieldLayoutId);
 
@@ -435,27 +437,27 @@ class Forms extends Component
     /**
      * IF a field is deleted remove it from the rules
      *
-     * @param string $oldHandle
+     * @param string      $oldHandle
      * @param FormElement $form
      *
      * @throws InvalidConfigException
-     * @throws \craft\errors\MissingComponentException
+     * @throws MissingComponentException
      */
     public function cleanFieldFromFieldRules($oldHandle, $form)
     {
         $rules = SproutForms::$app->rules->getRulesByFormId($form->id);
 
         /** @var FieldRule $rule */
-        foreach ($rules as $rule){
+        foreach ($rules as $rule) {
             $conditions = $rule->conditions;
-            foreach ($conditions as $key => $orConditions){
-                foreach ($orConditions as $key2 => $condition){
-                    if (isset($condition[0]) && $condition[0] === $oldHandle){
+            foreach ($conditions as $key => $orConditions) {
+                foreach ($orConditions as $key2 => $condition) {
+                    if (isset($condition[0]) && $condition[0] === $oldHandle) {
                         unset($conditions[$key][$key2]);
                     }
                 }
 
-                if (count($conditions[$key]) === 0){
+                if (count($conditions[$key]) === 0) {
                     unset($conditions[$key]);
                 }
             }
@@ -467,23 +469,23 @@ class Forms extends Component
     /**
      * IF a field is deleted remove it from the rules
      *
-     * @param string $oldHandle
-     * @param string $newHandle
+     * @param string      $oldHandle
+     * @param string      $newHandle
      * @param FormElement $form
      *
      * @throws InvalidConfigException
-     * @throws \craft\errors\MissingComponentException
+     * @throws MissingComponentException
      */
     public function updateFieldFromFieldRules($oldHandle, $newHandle, $form)
     {
         $rules = SproutForms::$app->rules->getRulesByFormId($form->id);
 
         /** @var FieldRule $rule */
-        foreach ($rules as $rule){
+        foreach ($rules as $rule) {
             $conditions = $rule->conditions;
-            foreach ($conditions as $key => $orConditions){
-                foreach ($orConditions as $key2 => $condition){
-                    if (isset($condition[0]) && $condition[0] === $oldHandle){
+            foreach ($conditions as $key => $orConditions) {
+                foreach ($orConditions as $key2 => $condition) {
+                    if (isset($condition[0]) && $condition[0] === $oldHandle) {
                         $conditions[$key][$key2][0] = $newHandle;
                     }
                 }
@@ -848,6 +850,21 @@ class Forms extends Component
         }
 
         return $captchas;
+    }
+
+    /**
+     * @param $context
+     *
+     * @return string|null
+     */
+    public function handleModifyFormHook($context) {
+        /** @var Form $form */
+        $form = $context['form'] ?? null;
+        if ($form !== null && $form->enableCaptchas) {
+            return $this->getCaptchasHtml();
+        }
+
+        return null;
     }
 
     /**

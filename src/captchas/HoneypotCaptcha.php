@@ -108,9 +108,9 @@ class HoneypotCaptcha extends Captcha
 
         // The honeypot field must be left blank
         if ($honeypotValue) {
-            $errorMessage = 'A form submission failed the Honeypot test.';
+            $errorMessage = 'Honeypot must be blank. Value submitted: '.$honeypotValue;
             Craft::error($errorMessage, __METHOD__);
-            $event->entry->statusId = $this->getSpamStatusId();
+
             $this->addError(self::CAPTCHA_ERRORS_KEY, $errorMessage);
 
             return false;

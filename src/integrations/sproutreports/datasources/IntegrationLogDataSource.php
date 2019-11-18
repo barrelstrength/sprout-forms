@@ -20,14 +20,14 @@ use Twig\Error\SyntaxError;
  *
  * @package barrelstrength\sproutforms\integrations\sproutreports\datasources
  */
-class SubmissionLogDataSource extends DataSource
+class IntegrationLogDataSource extends DataSource
 {
     /**
      * @return string
      */
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms', 'Submission Log (Sprout Forms)');
+        return Craft::t('sprout-forms', 'Integration Log (Sprout Forms)');
     }
 
     /**
@@ -61,7 +61,7 @@ class SubmissionLogDataSource extends DataSource
 
         $formQuery = $query
             ->select('log.id id, log.dateCreated dateCreated, log.dateUpdated dateUpdated, log.entryId entryId, integrations.name integrationName, forms.name formName, log.message message, log.success success, log.status status')
-            ->from('{{%sproutforms_log}} AS log')
+            ->from('{{%sproutforms_integrations_log}} AS log')
             ->innerJoin('{{%sproutforms_integrations}} integrations', '[[log.integrationId]] = [[integrations.id]]')
             ->innerJoin('{{%sproutforms_forms}} forms', '[[integrations.formId]] = [[forms.id]]');
 
@@ -151,7 +151,7 @@ class SubmissionLogDataSource extends DataSource
 
         $dateRanges = SproutBaseReports::$app->reports->getDateRanges(false);
 
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_integrations/sproutreports/datasources/LogsDataSource/settings', [
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_integrations/sproutreports/datasources/IntegrationLogDataSource/settings', [
             'formOptions' => $formOptions,
             'defaultStartDate' => new DateTime($defaultStartDate),
             'defaultEndDate' => new DateTime($defaultEndDate),

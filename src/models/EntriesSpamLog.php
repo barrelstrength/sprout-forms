@@ -2,18 +2,15 @@
 
 namespace barrelstrength\sproutforms\models;
 
-use barrelstrength\sproutforms\base\Integration;
+use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\SproutForms;
 use craft\base\Model;
 use Craft;
-use craft\errors\MissingComponentException;
-use yii\base\InvalidConfigException;
 
 /**
- *
- * @property Integration|null $integration
+ * @property null|Entry $entry
  */
-class SubmissionLog extends Model
+class EntriesSpamLog extends Model
 {
     /**
      * @var int|null ID
@@ -26,24 +23,14 @@ class SubmissionLog extends Model
     public $entryId;
 
     /**
-     * @var int
+     * @var string
      */
-    public $integrationId;
-
-    /**
-     * @var bool
-     */
-    public $success;
+    public $type;
 
     /**
      * @var string
      */
-    public $status;
-
-    /**
-     * @var string
-     */
-    public $message;
+    public $errors;
 
     /**
      * @var string
@@ -71,12 +58,10 @@ class SubmissionLog extends Model
     }
 
     /**
-     * @return Integration|null
-     * @throws MissingComponentException
-     * @throws InvalidConfigException
+     * @return Entry|null
      */
-    public function getIntegration()
+    public function getEntry()
     {
-        return SproutForms::$app->integrations->getIntegrationById($this->integrationId);
+        return SproutForms::$app->entries->getEntryById($this->entryId);
     }
 }

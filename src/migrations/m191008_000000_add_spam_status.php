@@ -2,10 +2,10 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutforms\models\EntryStatus;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\db\Migration;
+use craft\db\Query;
 use yii\base\Exception;
 
 /**
@@ -15,22 +15,26 @@ class m191008_000000_add_spam_status extends Migration
 {
     /**
      * @return bool
-     * @throws Exception
      */
     public function safeUp(): bool
     {
-        $entryStatus = SproutForms::$app->entries->getEntryStatusByHandle('spam');
+        $spamStatusExists = (new Query())
+            ->select(['id'])
+            ->from(['{{%sproutforms_entrystatuses}}'])
+            ->where(['handle' => 'spam'])
+            ->exists();
 
-        if ($entryStatus->id) {
+        if ($spamStatusExists) {
             Craft::info('Spam status already exists');
             return true;
         }
 
-        $entryStatus->name = 'Spam';
-        $entryStatus->handle = 'spam';
-        $entryStatus->color = 'black';
-        $entryStatus->isDefault = false;
-        SproutForms::$app->entries->saveEntryStatus($entryStatus);
+        $this->insert('{{%sproutforms_entrystatuses}}', [
+            'name' => 'Spam',
+            'handle' => 'spam',
+            'color' => 'black',
+            'isDefault' => false
+        ]);
 
         return true;
     }

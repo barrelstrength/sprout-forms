@@ -68,10 +68,9 @@ class DuplicateCaptcha extends Captcha
         }
 
         if (!Craft::$app->getSession()->get($uniqueid)) {
-            $errorMessage = 'A form submission failed the Duplicate Submission test.';
+            $errorMessage = 'Submission appears to be a duplicate.';
             Craft::error($errorMessage, __METHOD__);
 
-            $event->entry->statusId = $this->getSpamStatusId();
             $this->addError(self::CAPTCHA_ERRORS_KEY, $errorMessage);
 
             return false;

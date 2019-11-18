@@ -4,7 +4,10 @@ namespace barrelstrength\sproutforms\services;
 
 use barrelstrength\sproutbase\jobs\PurgeElements;
 use barrelstrength\sproutbase\SproutBase;
+use barrelstrength\sproutforms\base\Captcha;
+use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\models\Settings;
+use barrelstrength\sproutforms\records\EntriesSpamLog as EntriesSpamLogRecord;
 use Craft;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
@@ -16,26 +19,22 @@ use barrelstrength\sproutforms\models\EntryStatus;
 use barrelstrength\sproutforms\records\Entry as EntryRecord;
 use barrelstrength\sproutforms\records\EntryStatus as EntryStatusRecord;
 use craft\base\Element;
+use craft\helpers\Json;
 use Throwable;
 use yii\base\Component;
 use yii\base\Exception;
-use yii\db\ActiveRecord;
 use yii\db\StaleObjectException;
 
 /**
+ * Class Entries
  *
- * @property null        $defaultEntryStatusId
+ * @package barrelstrength\sproutforms\services
+ *
  * @property FormElement $entry
- * @property array       $allEntryStatuses
  */
 class Entries extends Component
 {
     const SPAM_DEFAULT_LIMIT = 500;
-
-    /**
-     * @var bool
-     */
-    public $fakeIt = false;
 
     /**
      * @var EntryRecord
@@ -91,179 +90,6 @@ class Entries extends Component
     public function setEntry(FormElement $form, EntryElement $entry)
     {
         SproutForms::$app->forms->activeEntries[$form->handle] = $entry;
-    }
-
-    /**
-     * @param $entryStatusId
-     *
-     * @return EntryStatus
-     */
-    public function getEntryStatusById($entryStatusId): EntryStatus
-    {
-        $entryStatus = EntryStatusRecord::find()
-            ->where(['id' => $entryStatusId])
-            ->one();
-
-        $entryStatusesModel = new EntryStatus();
-
-        if ($entryStatus) {
-            $entryStatusesModel->setAttributes($entryStatus->getAttributes(), false);
-        }
-
-        return $entryStatusesModel;
-    }
-
-    /**
-     * @param $entryStatusHandle
-     *
-     * @return EntryStatus
-     */
-    public function getEntryStatusByHandle($entryStatusHandle): EntryStatus
-    {
-        $entryStatus = EntryStatusRecord::find()
-            ->where(['handle' => $entryStatusHandle])
-            ->one();
-
-        $entryStatusesModel = new EntryStatus();
-
-        if ($entryStatus) {
-            $entryStatusesModel->setAttributes($entryStatus->getAttributes(), false);
-        }
-
-        return $entryStatusesModel;
-    }
-
-    /**
-     * @param EntryStatus $entryStatus
-     *
-     * @return bool
-     * @throws Exception
-     */
-    public function saveEntryStatus(EntryStatus $entryStatus): bool
-    {
-        $isNew = !$entryStatus->id;
-
-        $record = new EntryStatusRecord();
-
-        if ($entryStatus->id) {
-            $record = EntryStatusRecord::findOne($entryStatus->id);
-
-            if (!$record) {
-                throw new Exception('No Entry Status exists with the ID: '.$entryStatus->id);
-            }
-        }
-
-        $attributes = $entryStatus->getAttributes();
-
-        if ($isNew) {
-            unset($attributes['id']);
-        }
-
-        $record->setAttributes($attributes, false);
-
-        $record->sortOrder = $entryStatus->sortOrder ?: 999;
-
-        $entryStatus->validate();
-
-        if (!$entryStatus->hasErrors()) {
-            $transaction = Craft::$app->db->beginTransaction();
-
-            try {
-                if ($record->isDefault) {
-                    EntryStatusRecord::updateAll(['isDefault' => false]);
-                }
-
-                $record->save(false);
-
-                if (!$entryStatus->id) {
-                    $entryStatus->id = $record->id;
-                }
-
-                $transaction->commit();
-            } catch (Exception $e) {
-                $transaction->rollBack();
-
-                throw $e;
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @param $id
-     *
-     * @return bool
-     * @throws \Exception
-     * @throws Throwable
-     * @throws StaleObjectException
-     */
-    public function deleteEntryStatusById($id): bool
-    {
-        $statuses = $this->getAllEntryStatuses();
-
-        $entry = EntryElement::find()->where(['statusId' => $id])->one();
-
-        if ($entry) {
-            return false;
-        }
-
-        if (count($statuses) >= 2) {
-            $entryStatus = EntryStatusRecord::findOne($id);
-
-            if ($entryStatus) {
-                $entryStatus->delete();
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Reorders Entry Statuses
-     *
-     * @param $entryStatusIds
-     *
-     * @return bool
-     * @throws Exception
-     */
-    public function reorderEntryStatuses($entryStatusIds): bool
-    {
-        $transaction = Craft::$app->db->beginTransaction();
-
-        try {
-            foreach ($entryStatusIds as $entryStatus => $entryStatusId) {
-                $entryStatusRecord = $this->getEntryStatusRecordById($entryStatusId);
-
-                if ($entryStatusRecord) {
-                    $entryStatusRecord->sortOrder = $entryStatus + 1;
-                    $entryStatusRecord->save();
-                }
-            }
-
-            $transaction->commit();
-        } catch (Exception $e) {
-            $transaction->rollBack();
-
-            throw $e;
-        }
-
-        return true;
-    }
-
-    /**
-     * @return array
-     */
-    public function getAllEntryStatuses(): array
-    {
-        $entryStatuses = EntryStatusRecord::find()
-            ->orderBy(['sortOrder' => 'asc'])
-            ->all();
-
-        return $entryStatuses;
     }
 
     /**
@@ -330,10 +156,6 @@ class Entries extends Component
 
                 Craft::error('OnBeforeSaveEntryEvent is not valid', __METHOD__);
 
-                if ($event->fakeIt) {
-                    SproutForms::$app->entries->fakeIt = true;
-                }
-
                 return false;
             }
 
@@ -358,19 +180,6 @@ class Entries extends Component
         }
 
         return true;
-    }
-
-    /**
-     * @return EntryStatus|null
-     */
-    public function getDefaultEntryStatus()
-    {
-        /** @var EntryStatusRecord $entryStatus */
-        $entryStatus = EntryStatusRecord::find()
-            ->orderBy(['isDefault' => SORT_DESC])
-            ->one();
-
-        return new EntryStatus($entryStatus) ?? null;
     }
 
     /**
@@ -457,51 +266,33 @@ class Entries extends Component
     }
 
     /**
-     * Gets an Entry Status's record.
-     *
-     * @param null $entryStatusId
-     *
-     * @return EntryStatusRecord|null|static
-     * @throws Exception
-     */
-    private function getEntryStatusRecordById($entryStatusId = null)
-    {
-        if ($entryStatusId) {
-            $entryStatusRecord = EntryStatusRecord::findOne($entryStatusId);
-
-            if (!$entryStatusRecord) {
-                throw new Exception('No Entry Status exists with the ID: '.$entryStatusId);
-            }
-        } else {
-            $entryStatusRecord = new EntryStatusRecord();
-        }
-
-        return $entryStatusRecord;
-    }
-
-    /**
      * @param                   $form
      * @param EntryElement|null $entry
      *
      * @return mixed
      */
-    public function isSaveDataEnabled($form, $entry = null)
+    public function isSaveDataEnabled($form, $entry = null): bool
     {
         /** @var SproutForms $plugin */
         $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
+        /** @var Settings $settings */
         $settings = $plugin->getSettings();
 
+        // Get the global saveData setting
         $saveData = $settings->enableSaveData;
 
         if ($saveData) {
-            $saveData = $form->saveData;
+            // Allow Form to override global saveData setting
+            $saveData = $form->saveData ?? $settings->enableSaveDataDefaultValue;
         }
 
-        if ($saveData &&
-            $entry !== null &&
-            Craft::$app->getRequest()->getIsSiteRequest() &&
-            $entry->getIsSpam()) {
-            $settings = SproutForms::getInstance()->getSettings();
+        // Let the SPAM setting determine if we save data if we are:
+        // 1. Saving data globally and/or at the form level
+        // 2. Have an Entry (entry may not exist when using saveData to determine what to display in the UI)
+        // 3. Processing a site request (if it's a CP request Entries with spam status can always be updated)
+        // 4. The entry being saved has been identified as spam
+        if ($saveData && $entry !== null && Craft::$app->getRequest()->getIsSiteRequest() && $entry->getIsSpam()) {
+            // If we have a spam entry, use the spam saveData setting
             $saveData = $settings->saveSpamToDatabase;
         }
 
@@ -539,7 +330,7 @@ class Entries extends Component
         $ids = EntryElement::find()
             ->limit(null)
             ->offset($spamLimit)
-            ->statusHandle(EntryStatus::SPAM_STATUS_HANDLE)
+            ->status(EntryStatus::SPAM_STATUS_HANDLE)
             ->orderBy(['sproutforms_entries.dateCreated' => SORT_DESC])
             ->ids();
 
@@ -548,6 +339,26 @@ class Entries extends Component
         $purgeElements->idsToDelete = $ids;
 
         SproutBase::$app->utilities->purgeElements($purgeElements);
+    }
+
+    /**
+     * @param EntryElement $entry
+     *
+     * @return bool
+     */
+    public function logEntriesSpam(Entry $entry): bool
+    {
+        foreach ($entry->getCaptchas() as $captcha) {
+            if ($captcha->hasErrors()) {
+                $entriesSpamLogRecord = new EntriesSpamLogRecord();
+                $entriesSpamLogRecord->entryId = $entry->id;
+                $entriesSpamLogRecord->type = get_class($captcha);
+                $entriesSpamLogRecord->errors = Json::encode($captcha->getErrors(Captcha::CAPTCHA_ERRORS_KEY));
+                $entriesSpamLogRecord->save();
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -562,67 +373,5 @@ class Entries extends Component
         ]);
 
         $this->trigger(EntryElement::EVENT_AFTER_SAVE, $event);
-    }
-
-    /**
-     * Mark entries as Spam
-     *
-     * @param $formEntryElements
-     *
-     * @return bool
-     * @throws \Exception
-     * @throws Throwable
-     */
-    public function markAsSpam($formEntryElements): bool
-    {
-        $spam = SproutForms::$app->entries->getEntryStatusByHandle(EntryStatus::SPAM_STATUS_HANDLE);
-
-        if (!$spam->id){
-            return false;
-        }
-
-        foreach ($formEntryElements as $key => $formEntryElement) {
-
-            $success = Craft::$app->db->createCommand()->update(
-                '{{%sproutforms_entries}}',
-                ['statusId' => $spam->id],
-                ['id' => $formEntryElement->id]
-            )->execute();
-
-            if (!$success) {
-                Craft::error("Unable to mark entry as spam. Form Entry ID: {$formEntryElement->id}", __METHOD__);
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Mark entries as Not Spam
-     *
-     * @param $formEntryElements
-     *
-     * @return bool
-     * @throws \Exception
-     * @throws Throwable
-     */
-    public function markAsDefaultStatus($formEntryElements): bool
-    {
-        /** @var EntryStatus $defaultStatus */
-        $defaultStatus = $this->getDefaultEntryStatus();
-
-        foreach ($formEntryElements as $key => $formEntryElement) {
-            $success = Craft::$app->db->createCommand()->update(
-                '{{%sproutforms_entries}}',
-                ['statusId' => $defaultStatus->id],
-                ['id' => $formEntryElement->id]
-            )->execute();
-
-            if (!$success) {
-                Craft::error("Unable to mark entry as not spam. Form Entry ID: {$formEntryElement->id}", __METHOD__);
-            }
-        }
-
-        return true;
     }
 }

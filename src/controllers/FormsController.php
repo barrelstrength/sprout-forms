@@ -9,8 +9,6 @@ use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\models\Settings;
 use Craft;
 use craft\base\ElementInterface;
-use craft\elements\Entry;
-use craft\errors\InvalidElementException;
 use craft\errors\MissingComponentException;
 use craft\errors\WrongEditionException;
 use craft\web\Controller as BaseController;
@@ -24,7 +22,6 @@ use yii\base\Exception;
 use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
 use barrelstrength\sproutforms\SproutForms;
-use yii\web\ServerErrorHttpException;
 
 class FormsController extends BaseController
 {
@@ -38,6 +35,21 @@ class FormsController extends BaseController
         parent::init();
     }
 
+    public function actionIndexTemplate()
+    {
+        /** @var SproutForms $plugin */
+        $plugin = Craft::$app->plugins->getPlugin('sprout-forms');
+
+        /** @var Settings $settings */
+        $settings = $plugin->getSettings();
+
+        if ($settings->enableSaveData) {
+            return Craft::$app->getResponse()->redirect(UrlHelper::cpUrl('sprout-forms/'.$settings->defaultSection));
+        }
+
+        return Craft::$app->getResponse()->redirect(UrlHelper::cpUrl('sprout-forms/forms'));
+    }
+
     /**
      * @param int|null $formId
      * @param null     $settingsSectionHandle
@@ -46,7 +58,7 @@ class FormsController extends BaseController
      * @throws InvalidConfigException
      * @throws MissingComponentException
      */
-    public function actionSettings(int $formId = null, $settingsSectionHandle = null): Response
+    public function actionEditSettingsTemplate(int $formId = null, $settingsSectionHandle = null): Response
     {
         $form = SproutForms::$app->forms->getFormById($formId);
 
@@ -57,6 +69,8 @@ class FormsController extends BaseController
 
         return $this->renderTemplate('sprout-forms/forms/_settings/'.$settingsSectionHandle, [
             'form' => $form,
+            'groups' => SproutForms::$app->groups->getAllFormGroups(),
+            'groupId' => $form->groupId ?? null,
             'settings' => $plugin->getSettings(),
             'rules' => SproutForms::$app->rules->getRulesByFormId($formId),
             'ruleOptions' => SproutForms::$app->rules->getRuleOptions(),
@@ -93,7 +107,7 @@ class FormsController extends BaseController
         $this->requirePostRequest();
         $request = Craft::$app->getRequest();
 
-        $form = $this->_getFormModel();
+        $form = $this->getFormModel();
         $duplicateForm = null;
 
         // If we're duplicating the form, swap $form with the duplicate
@@ -112,7 +126,7 @@ class FormsController extends BaseController
             }
         }
 
-        $this->_populateEntryModel($form);
+        $this->populateFormModel($form);
         $this->prepareFieldLayout($form, $duplicate, $duplicateForm);
 
         // Save it
@@ -180,9 +194,6 @@ class FormsController extends BaseController
 
         return $this->renderTemplate('sprout-forms/forms/_editForm', [
             'form' => $form,
-            'groups' => SproutForms::$app->groups->getAllFormGroups(),
-            'groupId' => $form->groupId ?? null,
-            'settings' => $plugin->getSettings(),
             'continueEditingUrl' => 'sprout-forms/forms/edit/{id}'
         ]);
     }
@@ -216,7 +227,7 @@ class FormsController extends BaseController
 
     /**
      * @param FormElement $form
-     * @param bool $duplicate
+     * @param bool        $duplicate
      * @param FormElement $duplicatedForm
      *
      * @throws Throwable
@@ -276,7 +287,7 @@ class FormsController extends BaseController
      * @return FormElement
      * @throws NotFoundHttpException
      */
-    private function _getFormModel(): FormElement
+    private function getFormModel(): FormElement
     {
         $request = Craft::$app->getRequest();
         $formId = $request->getBodyParam('formId');
@@ -303,7 +314,10 @@ class FormsController extends BaseController
         return $form;
     }
 
-    private function _populateEntryModel(FormElement $form)
+    /**
+     * @param FormElement $form
+     */
+    private function populateFormModel(FormElement $form)
     {
         /** @var SproutForms $plugin */
         $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
@@ -321,15 +335,28 @@ class FormsController extends BaseController
         $form->redirectUri = $request->getBodyParam('redirectUri', $form->redirectUri);
         $form->saveData = $request->getBodyParam('saveData', $form->saveData);
         $form->submitButtonText = $request->getBodyParam('submitButtonText', $form->submitButtonText);
-
         $form->titleFormat = $request->getBodyParam('titleFormat', $form->titleFormat);
+        $form->formTemplate = $request->getBodyParam('formTemplate', $form->formTemplate);
+        $form->enableCaptchas = $request->getBodyParam('enableCaptchas', $form->enableCaptchas);
+
         if (!$form->titleFormat) {
             $form->titleFormat = "{dateCreated|date('D, d M Y H:i:s')}";
         }
 
-        $form->formTemplate = $request->getBodyParam('formTemplate', $form->formTemplate);
+        if (!$form->displaySectionTitles) {
+            $form->displaySectionTitles = false;
+        }
+
+        if (!$form->saveData) {
+            $form->saveData = false;
+        }
+
         if ($form->formTemplate === '') {
             $form->formTemplate = $settings->formTemplateDefaultValue ?? AccessibleTemplates::class;
+        }
+
+        if (!$form->enableCaptchas) {
+            $form->enableCaptchas = false;
         }
     }
 }

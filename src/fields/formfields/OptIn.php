@@ -6,7 +6,6 @@ use barrelstrength\sproutforms\base\ConditionInterface;
 use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\rules\conditions\IsCheckedCondition;
 use barrelstrength\sproutforms\rules\conditions\IsNotCheckedCondition;
-use barrelstrength\sproutforms\rules\fieldrules\OptInCondition;
 use Craft;
 use craft\fields\Dropdown as CraftDropdown;
 use craft\fields\Lightswitch as CraftLightswitch;

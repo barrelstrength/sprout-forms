@@ -64,6 +64,8 @@ class EntriesDataSource extends DataSource
         $formId = $report->getSetting('formId');
         $form = SproutForms::$app->forms->getFormById($formId);
 
+        $entryStatusIds = $report->getSetting('entryStatusIds');
+
         if (!$form) {
             return null;
         }
@@ -76,6 +78,8 @@ class EntriesDataSource extends DataSource
             ->select('*')
             ->from($contentTable.' AS formcontenttable')
             ->innerJoin('{{%elements}} elements', '[[formcontenttable.elementId]] = [[elements.id]]')
+            ->innerJoin('{{%sproutforms_entries}} entries', '[[entries.id]] = [[elements.id]]')
+            ->innerJoin('{{%sproutforms_entrystatuses}} entrystatuses', '[[entries.statusId]] = [[entrystatuses.id]]')
             ->where(['elements.dateDeleted' => null]);
 
         if ($startDate && $endDate) {
@@ -85,6 +89,10 @@ class EntriesDataSource extends DataSource
             $formQuery->andWhere('[[formcontenttable.dateCreated]] < :endDate', [
                 ':endDate' => $endDate->format('Y-m-d H:i:s')
             ]);
+        }
+
+        if (count($entryStatusIds)) {
+            $formQuery->andWhere(['entries.statusId' => $entryStatusIds]);
         }
 
         $results = $formQuery->all();
@@ -100,6 +108,10 @@ class EntriesDataSource extends DataSource
             $rows[$key]['elementId'] = $elementId;
             $rows[$key]['siteId'] = $result['siteId'];
             $rows[$key]['title'] = $result['title'];
+            $rows[$key]['status'] = $result['name'];
+            $rows[$key]['ipAddress'] = $result['ipAddress'];
+            $rows[$key]['referrer'] = $result['referrer'];
+            $rows[$key]['userAgent'] = $result['userAgent'];
             $rows[$key]['dateCreated'] = $result['dateCreated'];
             $rows[$key]['dateUpdated'] = $result['dateUpdated'];
 
@@ -203,12 +215,29 @@ class EntriesDataSource extends DataSource
 
         $dateRanges = SproutBaseReports::$app->reports->getDateRanges(false);
 
+        $entryStatusOptions = [];
+        $defaultSelectedEntryStatuses = [];
+
+        $entryStatuses = SproutForms::$app->entryStatuses->getAllEntryStatuses();
+        $spamStatusId = SproutForms::$app->entryStatuses->getSpamStatusId();
+
+        foreach ($entryStatuses as $entryStatus) {
+            $entryStatusOptions[$entryStatus->id]['label'] = $entryStatus->name;
+            $entryStatusOptions[$entryStatus->id]['value'] = $entryStatus->id;
+
+            if ($entryStatus->id !== $spamStatusId) {
+                $defaultSelectedEntryStatuses[] = $entryStatus->id;
+            }
+        }
+
         return Craft::$app->getView()->renderTemplate('sprout-forms/_integrations/sproutreports/datasources/EntriesDataSource/settings', [
             'formOptions' => $formOptions,
             'defaultStartDate' => new DateTime($defaultStartDate),
             'defaultEndDate' => new DateTime($defaultEndDate),
             'dateRanges' => $dateRanges,
-            'options' => $settings
+            'options' => $settings,
+            'entryStatusOptions' => $entryStatusOptions,
+            'defaultSelectedEntryStatuses' => $defaultSelectedEntryStatuses
         ]);
     }
 

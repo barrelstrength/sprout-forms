@@ -290,7 +290,7 @@ class FieldsController extends BaseController
 
         // Check if the handle is updated to also update the titleFormat, rules and integrations
         if (!$isNewField && $oldHandle !== $field->handle) {
-            if (strpos($form->titleFormat, $oldHandle) !== false){
+            if (strpos($form->titleFormat, $oldHandle) !== false) {
                 $newTitleFormat = SproutForms::$app->forms->updateTitleFormat($oldHandle, $field->handle, $form->titleFormat);
                 $form->titleFormat = $newTitleFormat;
             }
@@ -409,9 +409,13 @@ class FieldsController extends BaseController
         $this->requirePermission('sproutForms-editEntries');
 
         $fieldId = Craft::$app->request->getRequiredBodyParam('fieldId');
+
+        /** @var Field $field */
         $field = Craft::$app->fields->getFieldById($fieldId);
         $oldHandle = $field->handle;
         $formId = Craft::$app->request->getRequiredBodyParam('formId');
+
+        /** @var Form $form */
         $form = SproutForms::$app->forms->getFormById((int)$formId);
 
         // Backup our field context and content table
