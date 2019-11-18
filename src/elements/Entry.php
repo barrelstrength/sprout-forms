@@ -600,7 +600,9 @@ class Entry extends Element
         $errors = [];
 
         foreach ($this->captchas as $captcha) {
-            $errors['captchaErrors'][get_class($captcha)] = $captcha->getErrors();
+            if (count($captcha->getErrors())) {
+                $errors['captchaErrors'][get_class($captcha)] = $captcha->getErrors('captchaErrors');
+            }
         }
 
         return $errors;
