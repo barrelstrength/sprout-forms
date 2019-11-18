@@ -18,7 +18,7 @@ use yii\base\NotSupportedException;
  *
  * @property null|int $fakeFieldLayoutId
  */
-class m191113_000000_fix_duplicate_forms extends Migration
+class m191118_000000_fix_duplicate_forms extends Migration
 {
     /**
      * @return bool|void

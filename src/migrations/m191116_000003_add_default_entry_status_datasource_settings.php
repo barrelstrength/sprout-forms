@@ -25,12 +25,12 @@ class m191116_000003_add_default_entry_status_datasource_settings extends Migrat
 
         $formEntriesReports = (new Query())
             ->select([
-                'sproutreports_reports.id',
-                'sproutreports_reports.dataSourceId',
-                'sproutreports_reports.settings'
+                'reports.id',
+                'reports.dataSourceId',
+                'reports.settings'
             ])
-            ->from(['{{%sproutreports_reports}}'])
-            ->leftJoin(['{{%sproutreports_datasources}}'], '[[sproutreports_datasources.id]] = [[sproutreports_reports.dataSourceId]]')
+            ->from(['{{%sproutreports_reports}} reports'])
+            ->leftJoin(['{{%sproutreports_datasources}} datasources'], '[[datasources.id]] = [[reports.dataSourceId]]')
             ->where(['type' => $dataSourceType])
             ->all();
 
@@ -41,7 +41,7 @@ class m191116_000003_add_default_entry_status_datasource_settings extends Migrat
                 $settings->entryStatusIds = $entryStatusIds;
             }
 
-            $this->update('{{%sproutreports_reports}}', ['settings' => json_encode($settings)], ['id' => $formEntriesReport['id']], [], false);
+            $this->update('{{%sproutreports_reports}}', ['settings' => json_encode($settings)], ['id' => $formEntriesReport['reports.id']], [], false);
         }
 
         return true;
