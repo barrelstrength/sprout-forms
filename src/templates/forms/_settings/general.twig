@@ -73,9 +73,10 @@
         errors: (form is defined ? form.getErrors('redirectUri') : null)
     }) }}
 
-    <hr>
-
     {% if settings.enableSaveData %}
+
+        <hr>
+
         {{ forms.lightswitchField({
             label: "Save Data"|t('sprout-forms'),
             instructions: "Save submitted Sprout Form Entries for this form to the Craft database. Disabling this setting will not delete existing entries, but they will no longer be visible in the Control Panel."|t('sprout-forms'),
@@ -86,7 +87,6 @@
             offLabel: "Hide"|t('sprout-forms')
         }) }}
 
-        <hr>
     {% endif %}
 
 {% endset %}
