@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\services;
 
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\base\FormTemplates;
+use barrelstrength\sproutforms\base\Integration;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\rules\FieldRule;
@@ -14,7 +15,6 @@ use barrelstrength\sproutforms\migrations\CreateFormContentTable;
 use Craft;
 use craft\base\ElementInterface;
 use craft\base\Field;
-use craft\base\FieldInterface;
 use craft\db\Query;
 use craft\events\RegisterComponentTypesEvent;
 use Throwable;
@@ -491,6 +491,46 @@ class Forms extends Component
 
             $rule->conditions = $conditions;
             SproutForms::$app->rules->saveRule($rule);
+        }
+    }
+
+    /**
+     * IF a field is updated, update the integrations
+     *
+     * @param string $oldHandle
+     * @param string $newHandle
+     * @param FormElement $form
+     *
+     * @throws InvalidConfigException
+     * @throws \craft\errors\MissingComponentException
+     */
+    public function updateFieldFromIntegrations($oldHandle, $newHandle, $form)
+    {
+        $integrations = SproutForms::$app->integrations->getIntegrationsByFormId($form->id);
+
+        /** @var Integration $integration */
+        foreach ($integrations as $integration){
+            $integrationResult = (new Query())
+                ->select(['id', 'settings'])
+                ->from(['{{%sproutforms_integrations}}'])
+                ->where(['id' => $integration->id])
+                ->one();
+
+            if (is_null($integrationResult)){
+                continue;
+            }
+
+            $settings = json_decode($integrationResult['settings'], true);
+
+            $fieldMapping = $settings['fieldMapping'];
+            foreach ($fieldMapping as $pos => $map){
+                if (isset($map['sourceFormField']) && $map['sourceFormField'] === $oldHandle){
+                    $fieldMapping[$pos]['sourceFormField'] = $newHandle;
+                }
+            }
+
+            $integration->fieldMapping = $fieldMapping;
+            SproutForms::$app->integrations->saveIntegration($integration);
         }
     }
 

@@ -296,6 +296,7 @@ class FieldsController extends BaseController
             }
 
             SproutForms::$app->forms->updateFieldFromFieldRules($oldHandle, $field->handle, $form);
+            SproutForms::$app->forms->updateFieldFromIntegrations($oldHandle, $field->handle, $form);
         }
 
         // Now let's add this field to our field layout
