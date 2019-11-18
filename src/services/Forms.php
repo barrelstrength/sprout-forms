@@ -443,7 +443,7 @@ class Forms extends Component
      * @throws InvalidConfigException
      * @throws MissingComponentException
      */
-    public function cleanFieldFromFieldRules($oldHandle, $form)
+    public function removeFieldRulesUsingField($oldHandle, $form)
     {
         $rules = SproutForms::$app->rules->getRulesByFormId($form->id);
 
@@ -476,7 +476,7 @@ class Forms extends Component
      * @throws InvalidConfigException
      * @throws MissingComponentException
      */
-    public function updateFieldFromFieldRules($oldHandle, $newHandle, $form)
+    public function updateFieldOnFieldRules($oldHandle, $newHandle, $form)
     {
         $rules = SproutForms::$app->rules->getRulesByFormId($form->id);
 
@@ -499,14 +499,14 @@ class Forms extends Component
     /**
      * IF a field is updated, update the integrations
      *
-     * @param string $oldHandle
-     * @param string $newHandle
+     * @param string      $oldHandle
+     * @param string      $newHandle
      * @param FormElement $form
      *
      * @throws InvalidConfigException
-     * @throws \craft\errors\MissingComponentException
+     * @throws MissingComponentException
      */
-    public function updateFieldFromIntegrations($oldHandle, $newHandle, $form)
+    public function updateFieldOnIntegrations($oldHandle, $newHandle, $form)
     {
         $integrations = SproutForms::$app->integrations->getIntegrationsByFormId($form->id);
 

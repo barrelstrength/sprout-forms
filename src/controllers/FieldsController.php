@@ -295,8 +295,8 @@ class FieldsController extends BaseController
                 $form->titleFormat = $newTitleFormat;
             }
 
-            SproutForms::$app->forms->updateFieldFromFieldRules($oldHandle, $field->handle, $form);
-            SproutForms::$app->forms->updateFieldFromIntegrations($oldHandle, $field->handle, $form);
+            SproutForms::$app->forms->updateFieldOnFieldRules($oldHandle, $field->handle, $form);
+            SproutForms::$app->forms->updateFieldOnIntegrations($oldHandle, $field->handle, $form);
         }
 
         // Now let's add this field to our field layout
@@ -434,7 +434,7 @@ class FieldsController extends BaseController
 
 
         if ($response) {
-            SproutForms::$app->forms->cleanFieldFromFieldRules($oldHandle, $form);
+            SproutForms::$app->forms->removeFieldRulesUsingField($oldHandle, $form);
             return $this->asJson([
                 'success' => true
             ]);
