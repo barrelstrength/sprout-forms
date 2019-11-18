@@ -38,7 +38,7 @@ class m191116_000004_set_saveData_displaySectionTitles_not_null extends Migratio
             $this->alterColumn($table, 'saveData', 'SET DEFAULT TRUE');
         } else {
             $this->alterColumn($table, 'displaySectionTitles', $this->boolean()->defaultValue(false)->notNull());
-            $this->alterColumn($table, 'saveData', $this->boolean()->defaultValue(false)->notNull());
+            $this->alterColumn($table, 'saveData', $this->boolean()->defaultValue(true)->notNull());
         }
 
         return true;
