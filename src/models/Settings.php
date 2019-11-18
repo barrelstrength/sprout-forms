@@ -16,8 +16,7 @@ use Craft;
 class Settings extends Model implements SproutSettingsInterface
 {
     const SPAM_REDIRECT_BEHAVIOR_NORMAL = 'redirectAsNormal';
-    const SPAM_REDIRECT_BEHAVIOR_WITH_ERRORS = 'redirectBackToFormWithErrors';
-    const SPAM_REDIRECT_BEHAVIOR_WITHOUT_ERRORS = 'redirectBackToFormWithoutErrors';
+    const SPAM_REDIRECT_BEHAVIOR_BACK_TO_FORM = 'redirectBackToForm';
 
     public $pluginNameOverride = '';
     public $defaultSection = 'entries';
@@ -97,17 +96,13 @@ class Settings extends Model implements SproutSettingsInterface
     {
         return [
             [
-                'label' => 'Redirect as normal (simulate successful submission, recommended)',
+                'label' => 'Redirect as normal (recommended)',
                 'value' => self::SPAM_REDIRECT_BEHAVIOR_NORMAL
             ],
             [
-                'label' => 'Redirect back to form (without errors)',
-                'value' => self::SPAM_REDIRECT_BEHAVIOR_WITHOUT_ERRORS
-            ],
-            [
-                'label' => 'Redirect back to form (with errors, not recommended)',
-                'value' => self::SPAM_REDIRECT_BEHAVIOR_WITH_ERRORS
-            ],
+                'label' => 'Redirect back to form',
+                'value' => self::SPAM_REDIRECT_BEHAVIOR_BACK_TO_FORM
+            ]
         ];
     }
 }

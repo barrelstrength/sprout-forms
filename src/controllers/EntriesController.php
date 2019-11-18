@@ -231,7 +231,7 @@ class EntriesController extends BaseController
 
         if ($entry->hasErrors()) {
             // Redirect back to form with validation errors
-            return $this->handleErrorBehavior($entry, $settings->spamRedirectBehavior);
+            return $this->redirectWithValidationErrors($entry);
         }
 
         // If we don't have errors or SPAM
@@ -259,8 +259,8 @@ class EntriesController extends BaseController
 
         SproutForms::$app->entries->runPurgeSpamElements();
 
-        if (!$success || $this->hasCaptchaRedirectBehavior($entry, $settings)) {
-            return $this->handleErrorBehavior($entry, $settings->spamRedirectBehavior);
+        if (!$success || $this->isSpamAndHasRedirectBehavior($entry, $settings)) {
+            return $this->redirectWithValidationErrors($entry);
         }
 
         $this->createLastEntryId($entry);
@@ -393,34 +393,6 @@ class EntriesController extends BaseController
 
     /**
      * @param EntryElement $entry
-     * @param              $spamRedirectBehavior
-     *
-     * @return Response|null
-     * @throws BadRequestHttpException
-     * @throws MissingComponentException
-     */
-    private function handleErrorBehavior(Entry $entry, $spamRedirectBehavior)
-    {
-        // If no validation errors exist and captcha errors exist, we have spam
-        if (!$entry->hasErrors() && $entry->hasCaptchaErrors()) {
-
-            if ($spamRedirectBehavior === Settings::SPAM_REDIRECT_BEHAVIOR_WITHOUT_ERRORS) {
-                $entry->clearErrors();
-                return $this->redirectToPostedUrl($entry);
-            }
-
-            if ($spamRedirectBehavior === Settings::SPAM_REDIRECT_BEHAVIOR_WITH_ERRORS) {
-                $entry->addErrors($entry->getCaptchaErrors());
-                return $this->redirectWithValidationErrors($entry);
-            }
-        }
-
-        // If validation errors exist, send user back to form
-        return $this->redirectWithValidationErrors($entry);
-    }
-
-    /**
-     * @param EntryElement $entry
      *
      * @return Response|null
      * @throws MissingComponentException
@@ -473,7 +445,7 @@ class EntriesController extends BaseController
      *
      * @return bool
      */
-    private function hasCaptchaRedirectBehavior(Entry $entry, Settings $settings): bool
+    private function isSpamAndHasRedirectBehavior(Entry $entry, Settings $settings): bool
     {
         if (!$entry->hasCaptchaErrors()) {
             return false;
