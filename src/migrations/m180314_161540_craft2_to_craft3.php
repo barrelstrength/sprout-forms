@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
+use barrelstrength\sproutbaseemail\migrations\m190714_000001_add_notification_email_context_column;
 use barrelstrength\sproutbaseemail\SproutBaseEmail;
 use craft\db\Migration;
 use craft\db\Query;
@@ -111,6 +112,12 @@ class m180314_161540_craft2_to_craft3 extends Migration
         $notificationPluginIdMigration->safeUp();
         ob_end_clean();
 
+        $migration = new m190714_000001_add_notification_email_context_column();
+
+        ob_start();
+        $migration->safeUp();
+        ob_end_clean();
+
         $ccBccMigration = new CcBccMigration();
         ob_start();
         $ccBccMigration->safeUp();
@@ -152,6 +159,7 @@ class m180314_161540_craft2_to_craft3 extends Migration
                 $notificationEmail->replyToEmail = $form['notificationReplyToEmail'];
                 $notificationEmail->recipients = $form['notificationRecipients'];
                 $notificationEmail->title = $notificationEmail->subjectLine;
+                $notificationEmail->pluginHandle = 'sprout-forms';
                 $notificationEmail->viewContext = 'sprout-forms';
                 $notificationEmail->enableFileAttachments = $form['enableFileAttachments'];
                 $notificationEmail->settings = Json::encode($settings);
