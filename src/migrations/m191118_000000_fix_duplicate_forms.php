@@ -3,7 +3,6 @@
 namespace barrelstrength\sproutforms\migrations;
 
 use barrelstrength\sproutforms\elements\Form;
-use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\db\Migration;
 use craft\db\Query;
@@ -29,21 +28,21 @@ class m191118_000000_fix_duplicate_forms extends Migration
     public function safeUp()
     {
         $forms = (new Query())
-            ->select(['id'])
+            ->select(['id', 'handle', 'fieldLayoutId'])
             ->from(['{{%sproutforms_forms}}'])
             ->all();
 
         foreach ($forms as $form) {
-            $formElement = SproutForms::$app->forms->getFormById($form['id']);
-            if ($formElement === null) {
-                continue;
-            }
-            $contentTable = $formElement->getContentTable();
-            $formFields = $formElement->getFields();
+            $contentTable = '{{%sproutformscontent_'.$form['handle'].'}}';
+            $formFields = (new Query())
+                ->select(['id', 'handle', 'settings'])
+                ->from(['{{%fields}}'])
+                ->where(['context' => 'sproutForms:'.$form['id']])
+                ->all();
             // All the fields columns does not exists
             $missingFields = 0;
             foreach ($formFields as $formField) {
-                $fieldColumn = 'field_'.$formField->handle;
+                $fieldColumn = 'field_'.$formField['handle'];
                 if (!$this->db->columnExists($contentTable, $fieldColumn)) {
                     $missingFields++;
                 }
@@ -52,8 +51,8 @@ class m191118_000000_fix_duplicate_forms extends Migration
             $fakeFieldLayoutId = $this->getFakeFieldLayoutId();
 
             if ($missingFields === count($formFields) && $missingFields > 0) {
-                Craft::info('Updating corrupted duplicated form field layout id: '.$formElement->fieldLayoutId.' to: '.$fakeFieldLayoutId, __METHOD__);
-                $this->update('{{%sproutforms_forms}}', ['fieldLayoutId' => $fakeFieldLayoutId], ['id' => $formElement->id], [], false);
+                Craft::info('Updating corrupted duplicated form field layout id: '.$form['fieldLayoutId'].' to: '.$fakeFieldLayoutId, __METHOD__);
+                $this->update('{{%sproutforms_forms}}', ['fieldLayoutId' => $fakeFieldLayoutId], ['id' => $form['id']], [], false);
             }
         }
     }
