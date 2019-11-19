@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.6.0 - 2019-11-19
+## 3.6.1 - 2019-11-19
 
 > {tip} This release adds improved Spam protection workflows, a new Spam Status, and integrated Spam Log reporting. Configure Spam Protection in the settings. Custom Captcha Integrations and Form Templates using conditional field logic may need to updated to address breaking changes. See the upgrade notes: [Upgrading to Sprout Forms v3.6.0](https://sprout.barrelstrengthdesign.com/docs/forms/installing-and-updating-craft-3.html#updating-to-forms-v3-6-0)
 
