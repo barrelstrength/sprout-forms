@@ -350,9 +350,9 @@ class FormsController extends BaseController
         if (!$form->saveData) {
             $form->saveData = false;
         }
-
         if ($form->formTemplate === '') {
-            $form->formTemplate = $settings->formTemplateDefaultValue ?? AccessibleTemplates::class;
+
+            $form->formTemplate = empty($settings->formTemplateDefaultValue) ? AccessibleTemplates::class : $settings->formTemplateDefaultValue;
         }
 
         if (!$form->enableCaptchas) {
