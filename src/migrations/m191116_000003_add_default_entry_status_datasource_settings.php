@@ -8,7 +8,7 @@ use craft\db\Query;
 /**
  * m191116_000003_add_default_entry_status_datasource_settings migration.
  */
-class m191116_000003_add_default_entry_status_datasource_settings extends Migration
+class   m191116_000003_add_default_entry_status_datasource_settings extends Migration
 {
     /**
      * @inheritdoc
@@ -41,7 +41,7 @@ class m191116_000003_add_default_entry_status_datasource_settings extends Migrat
                 $settings->entryStatusIds = $entryStatusIds;
             }
 
-            $this->update('{{%sproutreports_reports}}', ['settings' => json_encode($settings)], ['id' => $formEntriesReport['reports.id']], [], false);
+            $this->update('{{%sproutreports_reports}}', ['settings' => json_encode($settings)], ['id' => $formEntriesReport['id']], [], false);
         }
 
         return true;
