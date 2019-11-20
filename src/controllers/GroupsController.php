@@ -24,7 +24,7 @@ class GroupsController extends BaseController
     public function actionSaveGroup(): Response
     {
         $this->requirePostRequest();
-        $this->requireAdmin();
+        $this->requireAdmin(false);
 
         $request = Craft::$app->getRequest();
 
@@ -63,7 +63,7 @@ class GroupsController extends BaseController
     {
         $this->requirePostRequest();
         $this->requireAcceptsJson();
-        $this->requireAdmin();
+        $this->requireAdmin(false);
 
         $request = Craft::$app->getRequest();
 
