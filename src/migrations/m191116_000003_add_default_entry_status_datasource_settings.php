@@ -8,7 +8,7 @@ use craft\db\Query;
 /**
  * m191116_000003_add_default_entry_status_datasource_settings migration.
  */
-class   m191116_000003_add_default_entry_status_datasource_settings extends Migration
+class m191116_000003_add_default_entry_status_datasource_settings extends Migration
 {
     /**
      * @inheritdoc
