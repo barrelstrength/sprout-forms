@@ -14,7 +14,13 @@ class m181120_000000_add_integrations_table extends Migration
      */
     public function safeUp(): bool
     {
-        $this->createTable('{{%sproutforms_integrations}}', [
+        $table = '{{%sproutforms_integrations}}';
+
+        if ($this->db->tableExists($table)){
+            return true;
+        }
+
+        $this->createTable($table, [
             'id' => $this->primaryKey(),
             'formId' => $this->integer()->notNull(),
             'name' => $this->string()->notNull(),
