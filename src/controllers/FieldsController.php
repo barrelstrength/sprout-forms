@@ -455,7 +455,7 @@ class FieldsController extends BaseController
      */
     public function actionReorderFields(): Response
     {
-        $this->requireAdmin();
+        $this->requireAdmin(false);
         $this->requirePostRequest();
         $this->requireAcceptsJson();
         $this->requirePermission('sproutForms-editEntries');
