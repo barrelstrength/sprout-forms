@@ -28,7 +28,7 @@ class EntryStatusesController extends BaseController
      */
     public function actionEdit(int $entryStatusId = null, EntryStatus $entryStatus = null): Response
     {
-        $this->requireAdmin();
+        $this->requireAdmin(false);
 
         if (!$entryStatus) {
             if ($entryStatusId) {
@@ -61,7 +61,7 @@ class EntryStatusesController extends BaseController
     public function actionSave()
     {
         $this->requirePostRequest();
-        $this->requireAdmin();
+        $this->requireAdmin(false);
 
         $id = Craft::$app->request->getBodyParam('entryStatusId');
         $entryStatus = SproutForms::$app->entryStatuses->getEntryStatusById($id);
@@ -94,7 +94,7 @@ class EntryStatusesController extends BaseController
     public function actionReorder(): Response
     {
         $this->requirePostRequest();
-        $this->requireAdmin();
+        $this->requireAdmin(false);
 
         $ids = Json::decode(Craft::$app->request->getRequiredBodyParam('ids'));
 
@@ -115,7 +115,7 @@ class EntryStatusesController extends BaseController
     public function actionDelete(): Response
     {
         $this->requirePostRequest();
-        $this->requireAdmin();
+        $this->requireAdmin(false);
 
         $entryStatusId = Craft::$app->request->getRequiredBodyParam('id');
 
