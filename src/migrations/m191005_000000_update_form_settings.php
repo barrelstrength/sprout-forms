@@ -44,9 +44,9 @@ class m191005_000000_update_form_settings extends Migration
         // Add renamed settings
         $enableSaveData = (int)$pluginSettings['enableSaveData'];
         $pluginSettings['enableSaveDataDefaultValue'] = $enableSaveData ?? 0;
-        // from craft 2 let's set basic
-        $basic = new BasicTemplates();
-        $pluginSettings['formTemplateDefaultValue'] = empty($pluginSettings['templateFolderOverride']) ? $basic->getTemplateId() : $pluginSettings['templateFolderOverride'];
+
+        $accessible = new AccessibleTemplates();
+        $pluginSettings['formTemplateDefaultValue'] = empty($pluginSettings['templateFolderOverride']) ? $accessible->getTemplateId() : $pluginSettings['templateFolderOverride'];
 
         if ($enableSaveData){
             if (isset($pluginSettings['enableSaveDataPerFormBasis']) && !$pluginSettings['enableSaveDataPerFormBasis']){

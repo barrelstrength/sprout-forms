@@ -4,6 +4,8 @@ namespace barrelstrength\sproutforms\migrations;
 
 use barrelstrength\sproutbaseemail\migrations\m190714_000001_add_notification_email_context_column;
 use barrelstrength\sproutbaseemail\SproutBaseEmail;
+use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
+use barrelstrength\sproutforms\formtemplates\BasicTemplates;
 use craft\db\Migration;
 use craft\db\Query;
 
@@ -17,6 +19,7 @@ use barrelstrength\sproutbaseemail\migrations\m180501_000002_rename_notification
 use barrelstrength\sproutbaseemail\migrations\m180501_000003_add_notification_columns;
 use barrelstrength\sproutbaseemail\migrations\m180515_000000_rename_notification_pluginId_column;
 use barrelstrength\sproutbaseemail\migrations\Install as SproutBaseNotificationInstall;
+use craft\services\Plugins;
 use Throwable;
 use yii\base\NotSupportedException;
 
@@ -175,6 +178,16 @@ class m180314_161540_craft2_to_craft3 extends Migration
                 $this->dropColumn($table, $notificationColumn);
             }
         }
+
+        // Let's set default the C2 legacy template
+        $projectConfig = Craft::$app->getProjectConfig();
+        $pluginHandle = 'sprout-forms';
+        $pluginSettings = $projectConfig->get(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings');
+
+        $basic = new BasicTemplates();
+        $pluginSettings['templateFolderOverride'] = empty($pluginSettings['templateFolderOverride']) ? $basic->getTemplateId() : $pluginSettings['templateFolderOverride'];
+
+        $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings', $pluginSettings);
 
         return true;
     }
