@@ -1,5 +1,26 @@
 # Changelog
 
+## 3.6.3 - 2019-11-22
+
+### Changed
+- Updated barrelstrength/sprout-base-reports requirement v1.3.9
+- Improved support for required checkboxes in Accessible Form Templates ([#336])
+
+### Fixed
+- Fixed `allowAdminChanges` requirement when updating Form Groups and Entry Statuses ([#371])
+- Fixed migration bug where integrations table could already exist ([#363])
+- Fixed horizontal scroll on some screen sizes ([#67][#67-sproutreports])
+- Fixed bug where Basic Form Template may not get set in Craft 2 to Craft 3 migration
+- Fixed bug where deleting a field can throw an error if rule conditions are not set properly
+- Improved support for console requests ([#66][#66-sproutreports], [#376])
+
+[#66-sproutreports]: https://github.com/barrelstrength/craft-sprout-reports/issues/66
+[#67-sproutreports]: https://github.com/barrelstrength/craft-sprout-reports/issues/67
+[#336]: https://github.com/barrelstrength/craft-sprout-forms/issues/336
+[#363]: https://github.com/barrelstrength/craft-sprout-forms/issues/363
+[#371]: https://github.com/barrelstrength/craft-sprout-forms/issues/371
+[#376]: https://github.com/barrelstrength/craft-sprout-forms/issues/376
+
 ## 3.6.2 - 2019-11-20
 
 ### Updated
