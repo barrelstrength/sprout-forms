@@ -25,7 +25,6 @@ use craft\helpers\MigrationHelper;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
 
-
 /**
  *
  * @property array    $allEnabledCaptchas
@@ -437,8 +436,8 @@ class Forms extends Component
     /**
      * IF a field is deleted remove it from the rules
      *
-     * @param string      $oldHandle
-     * @param FormElement $form
+     * @param $oldHandle
+     * @param $form
      *
      * @throws InvalidConfigException
      * @throws MissingComponentException
@@ -450,15 +449,17 @@ class Forms extends Component
         /** @var FieldRule $rule */
         foreach ($rules as $rule) {
             $conditions = $rule->conditions;
-            foreach ($conditions as $key => $orConditions) {
-                foreach ($orConditions as $key2 => $condition) {
-                    if (isset($condition[0]) && $condition[0] === $oldHandle) {
-                        unset($conditions[$key][$key2]);
+            if ($conditions) {
+                foreach ($conditions as $key => $orConditions) {
+                    foreach ($orConditions as $key2 => $condition) {
+                        if (isset($condition[0]) && $condition[0] === $oldHandle) {
+                            unset($conditions[$key][$key2]);
+                        }
                     }
-                }
 
-                if (count($conditions[$key]) === 0) {
-                    unset($conditions[$key]);
+                    if (count($conditions[$key]) === 0) {
+                        unset($conditions[$key]);
+                    }
                 }
             }
             $rule->conditions = $conditions;
