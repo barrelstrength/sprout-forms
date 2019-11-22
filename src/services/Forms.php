@@ -514,22 +514,22 @@ class Forms extends Component
         $integrations = SproutForms::$app->integrations->getIntegrationsByFormId($form->id);
 
         /** @var Integration $integration */
-        foreach ($integrations as $integration){
+        foreach ($integrations as $integration) {
             $integrationResult = (new Query())
                 ->select(['id', 'settings'])
                 ->from(['{{%sproutforms_integrations}}'])
                 ->where(['id' => $integration->id])
                 ->one();
 
-            if (is_null($integrationResult)){
+            if (is_null($integrationResult)) {
                 continue;
             }
 
             $settings = json_decode($integrationResult['settings'], true);
 
             $fieldMapping = $settings['fieldMapping'];
-            foreach ($fieldMapping as $pos => $map){
-                if (isset($map['sourceFormField']) && $map['sourceFormField'] === $oldHandle){
+            foreach ($fieldMapping as $pos => $map) {
+                if (isset($map['sourceFormField']) && $map['sourceFormField'] === $oldHandle) {
                     $fieldMapping[$pos]['sourceFormField'] = $newHandle;
                 }
             }
@@ -860,7 +860,8 @@ class Forms extends Component
      *
      * @return string|null
      */
-    public function handleModifyFormHook($context) {
+    public function handleModifyFormHook($context)
+    {
         /** @var Form $form */
         $form = $context['form'] ?? null;
         if ($form !== null && $form->enableCaptchas) {
