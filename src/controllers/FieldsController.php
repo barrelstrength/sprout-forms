@@ -433,7 +433,6 @@ class FieldsController extends BaseController
         Craft::$app->getContent()->fieldContext = $oldFieldContext;
         Craft::$app->getContent()->contentTable = $oldContentTable;
 
-
         if ($response) {
             SproutForms::$app->forms->removeFieldRulesUsingField($oldHandle, $form);
             return $this->asJson([
