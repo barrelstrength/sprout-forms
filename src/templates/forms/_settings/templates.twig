@@ -10,18 +10,18 @@
     {{ redirectInput('sprout-forms/forms/edit/'~form.id~'/settings/templates') }}
     <input type="hidden" id="formId" name="formId" value="{{ form.id }}">
 
-    {% set templateOptions = craft.sproutForms.getTemplateOptions(form) %}
+    {% set templateOptions = craft.sproutForms.getTemplateOptions(form, true) %}
 
     {{ forms.field({
         label: "Templates"|t('sprout-forms'),
-        instructions: "The Form Templates that will be used to output your forms"|t('sprout-forms'),
+        instructions: "The Form Templates that will be used to output your forms. Update the 'Default Form Templates' in the general settings."|t('sprout-forms'),
         required: true,
         first: true,
         errors: (form is defined ? form.getErrors('formTemplate') : null)
     }, sproutFields.selectOther({
         name: 'formTemplate',
         options: templateOptions,
-        value: form.formTemplate ?? settings.formTemplateDefaultValue ?? '',
+        value: form.formTemplate ?? '',
         otherPlaceholderText: '_forms/formHandle'|t('sprout-forms')
     })) }}
 
@@ -34,8 +34,6 @@
         required: false,
         errors: (form is defined ? form.getErrors('submitButtonText') : null)
     }) }}
-
-
 
     {{ forms.lightswitchField({
         label: "Enable Captchas"|t('sprout-forms'),

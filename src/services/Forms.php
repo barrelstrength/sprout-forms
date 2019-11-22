@@ -626,8 +626,7 @@ class Forms extends Component
         $form->name = $this->getFieldAsNew('name', $name);
         $form->handle = $this->getFieldAsNew('handle', $handle);
         $form->titleFormat = "{dateCreated|date('D, d M Y H:i:s')}";
-        $accessible = new AccessibleTemplates();
-        $form->formTemplate = $settings->formTemplateDefaultValue ?? $accessible->getTemplateId();
+        $form->formTemplate = '';
         $form->saveData = $settings->enableSaveData ? $settings->enableSaveDataDefaultValue : false;
 
         // Set default tab
