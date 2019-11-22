@@ -484,10 +484,12 @@ class Forms extends Component
         /** @var FieldRule $rule */
         foreach ($rules as $rule) {
             $conditions = $rule->conditions;
-            foreach ($conditions as $key => $orConditions) {
-                foreach ($orConditions as $key2 => $condition) {
-                    if (isset($condition[0]) && $condition[0] === $oldHandle) {
-                        $conditions[$key][$key2][0] = $newHandle;
+            if ($conditions) {
+                foreach ($conditions as $key => $orConditions) {
+                    foreach ($orConditions as $key2 => $condition) {
+                        if (isset($condition[0]) && $condition[0] === $oldHandle) {
+                            $conditions[$key][$key2][0] = $newHandle;
+                        }
                     }
                 }
             }
