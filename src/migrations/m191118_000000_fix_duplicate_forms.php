@@ -48,9 +48,8 @@ class m191118_000000_fix_duplicate_forms extends Migration
                 }
             }
 
-            $fakeFieldLayoutId = $this->getFakeFieldLayoutId();
-
             if ($missingFields === count($formFields) && $missingFields > 0) {
+                $fakeFieldLayoutId = $this->getFakeFieldLayoutId();
                 Craft::info('Updating corrupted duplicated form field layout id: '.$form['fieldLayoutId'].' to: '.$fakeFieldLayoutId, __METHOD__);
                 $this->update('{{%sproutforms_forms}}', ['fieldLayoutId' => $fakeFieldLayoutId], ['id' => $form['id']], [], false);
             }
