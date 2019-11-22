@@ -21,7 +21,7 @@
     }, sproutFields.selectOther({
         name: 'formTemplate',
         options: templateOptions,
-        value: form.formTemplate ?? null,
+        value: form.formTemplate ?? settings.formTemplateDefaultValue ?? '',
         otherPlaceholderText: '_forms/formHandle'|t('sprout-forms')
     })) }}
 
