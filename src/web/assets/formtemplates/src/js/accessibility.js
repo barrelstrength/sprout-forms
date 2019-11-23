@@ -4,10 +4,13 @@ class SproutFormsCheckableInputs {
   constructor(formId) {
     this.formId = formId;
     this.form = document.getElementById(this.formId);
-    this.checkableInputs = this.form.querySelectorAll('[type=checkbox], [type=radio]');
 
+    this.checkableInputs = this.form.querySelectorAll('[type=checkbox], [type=radio]');
     this.setAriaCheckedAttributes();
     this.addCheckableInputsEventListeners();
+
+    this.requiredCheckboxFields = document.querySelectorAll('.checkboxes.required');
+    this.setRequiredCheckboxFieldEventListeners();
   }
 
   setAriaCheckedAttributes() {
@@ -47,6 +50,55 @@ class SproutFormsCheckableInputs {
 
     for (let i = 0; i < allRadioInputs.length; i += 1) {
       allRadioInputs[i].setAttribute('aria-checked', 'false');
+    }
+  }
+
+  setRequiredCheckboxFieldEventListeners() {
+    let self = this;
+    for (const checkboxField of this.requiredCheckboxFields) {
+      // Get all checkbox inputs for a given required Checkboxes field
+      let checkboxInputs = checkboxField.querySelectorAll('input[type="checkbox"]');
+      for (const checkboxInput of checkboxInputs) {
+        checkboxInput.addEventListener('change', function() {
+          let isSomethingChecked = self.isSomethingChecked(checkboxInputs);
+          self.updateRequiredCheckboxInputAttributes(checkboxInputs, isSomethingChecked);
+        }.bind(this), false);
+      }
+    }
+  }
+
+  /**
+   * If a single checkbox is checked, a checkbox field satisfies the 'required' criteria
+   *
+   * @param checkboxInputs
+   * @returns {boolean}
+   */
+  isSomethingChecked(checkboxInputs) {
+    for (let i = 0; i < checkboxInputs.length; i++) {
+      if (checkboxInputs[i].checked) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * If a single checkbox is selected, remove all required attributes.
+   * If no checkboxes are checked, set all checkbox inputs to required
+   *
+   * @param checkboxInputs
+   * @param isSomethingChecked
+   */
+  updateRequiredCheckboxInputAttributes(checkboxInputs, isSomethingChecked) {
+    for (const checkboxInput of checkboxInputs) {
+      if (isSomethingChecked) {
+        checkboxInput.removeAttribute('required');
+        checkboxInput.removeAttribute('aria-required');
+      } else {
+        checkboxInput.setAttribute('required', 'true');
+        checkboxInput.setAttribute('aria-required', 'true');
+      }
     }
   }
 }

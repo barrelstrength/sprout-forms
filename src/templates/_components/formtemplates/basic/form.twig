@@ -37,6 +37,8 @@
         {% endfor -%}
     </div>
 
+    {# Do not remote this line when customizing templates.
+       All Captcha behavior depends on this hook. #}
     {% hook 'sproutForms.modifyForm' %}
 
     <div class="submit">
@@ -72,7 +74,7 @@
 {%- do view.registerJsFile(addressFieldJsUrl) -%}
 
 {% css %}
-    .hidden{
+    .sprout-hidden{
     display: none !important;
     }
 {% endcss %}

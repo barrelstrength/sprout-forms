@@ -3,7 +3,7 @@
 namespace barrelstrength\sproutforms\captchas;
 
 use barrelstrength\sproutforms\base\Captcha;
-use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
+use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
 use Craft;
 use ReflectionException;
 use Twig\Error\LoaderError;
@@ -12,6 +12,11 @@ use Twig\Error\SyntaxError;
 
 /**
  * Class HoneypotCaptcha
+ *
+ * @property string $captchaSettingsHtml
+ * @property string $name
+ * @property string $description
+ * @property string $captchaHtml
  */
 class HoneypotCaptcha extends Captcha
 {
@@ -87,7 +92,7 @@ class HoneypotCaptcha extends Captcha
      * @inheritdoc
      * @throws ReflectionException
      */
-    public function verifySubmission(OnBeforeSaveEntryEvent $event): bool
+    public function verifySubmission(OnBeforeValidateEntryEvent $event): bool
     {
         $honeypotFieldName = $this->getHoneypotFieldName();
 
@@ -103,11 +108,10 @@ class HoneypotCaptcha extends Captcha
 
         // The honeypot field must be left blank
         if ($honeypotValue) {
+            $errorMessage = 'Honeypot must be blank. Value submitted: '.$honeypotValue;
+            Craft::error($errorMessage, __METHOD__);
 
-            Craft::error('A form submission failed the Honeypot test.', __METHOD__);
-
-            $event->isValid = false;
-            $event->fakeIt = true;
+            $this->addError(self::CAPTCHA_ERRORS_KEY, $errorMessage);
 
             return false;
         }

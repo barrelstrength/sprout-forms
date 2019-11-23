@@ -1,15 +1,15 @@
 {% extends "sprout-forms/_layouts/base" %}
 {% import 'sprout-base/_includes/sproutcp' as sprout %}
-{% do view.registerAssetBundle("barrelstrength\\sproutbase\\web\\assets\\cp\\CpAsset") %}
-{% do view.registerAssetBundle("barrelstrength\\sproutforms\\web\\assets\\forms\\FormsAsset") %}
+
+{% do view.registerAssetBundle("barrelstrength\\sproutforms\\web\\assets\\cp\\CpAsset") %}
 
 {% set title  = "Settings"|t('sprout-forms') %}
-{% set bodyClass = craft.app.request.getSegments()|slice(0, 3)|join(' ') %}
+{% set bodyClass = craft.app.request.getSegments()|slice(0, 4)|join(' ') %}
 {% set fullPageForm = true %}
 
 {% set selectedSubnavItem = craft.app.request.getSegment(2) %}
-{% set selectedSidebarItem = craft.app.request.getSegment(5) %}
-{% set baseUrl = 'sprout-forms/forms/'~form.id~'/settings/' %}
+{% set selectedSidebarItem = craft.app.request.getSegment(6) %}
+{% set baseUrl = 'sprout-forms/forms/edit/'~form.id~'/settings/' %}
 
 {% set crumbs = [
     { label: "Forms"|t('sprout-forms'), url: cpUrl('sprout-forms/forms') },
@@ -58,6 +58,9 @@
                 {#            </li>#}
                 {#            <li><a href="{{ cpUrl(baseUrl~'notifications') }}"#}
                 {#                    {% if selectedSidebarItem == 'notifications' %}class="sel"{% endif %}>{{ "Notifications"|t('sprout-forms') }}</a>#}
+            </li>
+            <li><a href="{{ cpUrl(baseUrl~'templates') }}"
+                    {% if selectedSidebarItem == 'templates' %}class="sel"{% endif %}>{{ "Templates"|t('sprout-forms') }}</a>
             </li>
             <li><a href="{{ cpUrl(baseUrl~'rules') }}"
                     {% if selectedSidebarItem == 'rules' %}class="sel"{% endif %}>{{ "Rules"|t('sprout-forms') }}</a>

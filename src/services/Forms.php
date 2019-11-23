@@ -4,8 +4,10 @@ namespace barrelstrength\sproutforms\services;
 
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\base\FormTemplates;
+use barrelstrength\sproutforms\base\Integration;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
+use barrelstrength\sproutforms\rules\FieldRule;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\records\Form as FormRecord;
@@ -14,6 +16,7 @@ use Craft;
 use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\db\Query;
+use craft\errors\MissingComponentException;
 use craft\events\RegisterComponentTypesEvent;
 use Throwable;
 use yii\base\Component;
@@ -21,7 +24,6 @@ use craft\helpers\StringHelper;
 use craft\helpers\MigrationHelper;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
-
 
 /**
  *
@@ -110,6 +112,22 @@ class Forms extends Component
     {
         $isNew = !$form->id;
         $hasLayout = count($form->getFieldLayout()->getFields()) > 0;
+        $oldForm = null;
+
+        if (!$isNew) {
+            // Add the oldHandle to our model so we can determine if we
+            // need to rename the content table
+            /** @var FormRecord $formRecord */
+            $formRecord = FormRecord::findOne($form->id);
+            $form->oldHandle = $formRecord->getOldHandle();
+            $oldForm = $formRecord;
+
+            if ($duplicate) {
+                $form->name = $oldForm->name;
+                $form->handle = $oldForm->handle;
+                $form->oldHandle = null;
+            }
+        }
 
         $form->validate();
 
@@ -130,11 +148,9 @@ class Forms extends Component
                 // Assign our new layout id info to our form model and record
                 $form->fieldLayoutId = $fieldLayout->id;
                 $form->setFieldLayout($fieldLayout);
-            } else if ($hasLayout) {
-                // Delete our previous record, unless duplicating an entry
-                if (!$duplicate) {
-                    Craft::$app->getFields()->deleteLayoutById($form->fieldLayoutId);
-                }
+            } else if ($oldForm !== null && $hasLayout) {
+                // Delete our previous record
+                Craft::$app->getFields()->deleteLayoutById($oldForm->fieldLayoutId);
 
                 $fieldLayout = $form->getFieldLayout();
 
@@ -158,7 +174,7 @@ class Forms extends Component
             $newContentTable = $this->getContentTableName($form);
 
             // Do we need to create/rename the content table?
-            if (!Craft::$app->db->tableExists($newContentTable) && !$form->saveAsNew) {
+            if (!Craft::$app->db->tableExists($newContentTable) && !$duplicate) {
                 if ($oldContentTable && Craft::$app->db->tableExists($oldContentTable)) {
                     MigrationHelper::renameTable($oldContentTable, $newContentTable);
                 } else {
@@ -418,6 +434,112 @@ class Forms extends Component
     }
 
     /**
+     * IF a field is deleted remove it from the rules
+     *
+     * @param $oldHandle
+     * @param $form
+     *
+     * @throws InvalidConfigException
+     * @throws MissingComponentException
+     */
+    public function removeFieldRulesUsingField($oldHandle, $form)
+    {
+        $rules = SproutForms::$app->rules->getRulesByFormId($form->id);
+
+        /** @var FieldRule $rule */
+        foreach ($rules as $rule) {
+            $conditions = $rule->conditions;
+            if ($conditions) {
+                foreach ($conditions as $key => $orConditions) {
+                    foreach ($orConditions as $key2 => $condition) {
+                        if (isset($condition[0]) && $condition[0] === $oldHandle) {
+                            unset($conditions[$key][$key2]);
+                        }
+                    }
+
+                    if (count($conditions[$key]) === 0) {
+                        unset($conditions[$key]);
+                    }
+                }
+            }
+            $rule->conditions = $conditions;
+            SproutForms::$app->rules->saveRule($rule);
+        }
+    }
+
+    /**
+     * IF a field is deleted remove it from the rules
+     *
+     * @param string      $oldHandle
+     * @param string      $newHandle
+     * @param FormElement $form
+     *
+     * @throws InvalidConfigException
+     * @throws MissingComponentException
+     */
+    public function updateFieldOnFieldRules($oldHandle, $newHandle, $form)
+    {
+        $rules = SproutForms::$app->rules->getRulesByFormId($form->id);
+
+        /** @var FieldRule $rule */
+        foreach ($rules as $rule) {
+            $conditions = $rule->conditions;
+            if ($conditions) {
+                foreach ($conditions as $key => $orConditions) {
+                    foreach ($orConditions as $key2 => $condition) {
+                        if (isset($condition[0]) && $condition[0] === $oldHandle) {
+                            $conditions[$key][$key2][0] = $newHandle;
+                        }
+                    }
+                }
+            }
+
+            $rule->conditions = $conditions;
+            SproutForms::$app->rules->saveRule($rule);
+        }
+    }
+
+    /**
+     * IF a field is updated, update the integrations
+     *
+     * @param string      $oldHandle
+     * @param string      $newHandle
+     * @param FormElement $form
+     *
+     * @throws InvalidConfigException
+     * @throws MissingComponentException
+     */
+    public function updateFieldOnIntegrations($oldHandle, $newHandle, $form)
+    {
+        $integrations = SproutForms::$app->integrations->getIntegrationsByFormId($form->id);
+
+        /** @var Integration $integration */
+        foreach ($integrations as $integration) {
+            $integrationResult = (new Query())
+                ->select(['id', 'settings'])
+                ->from(['{{%sproutforms_integrations}}'])
+                ->where(['id' => $integration->id])
+                ->one();
+
+            if (is_null($integrationResult)) {
+                continue;
+            }
+
+            $settings = json_decode($integrationResult['settings'], true);
+
+            $fieldMapping = $settings['fieldMapping'];
+            foreach ($fieldMapping as $pos => $map) {
+                if (isset($map['sourceFormField']) && $map['sourceFormField'] === $oldHandle) {
+                    $fieldMapping[$pos]['sourceFormField'] = $newHandle;
+                }
+            }
+
+            $integration->fieldMapping = $fieldMapping;
+            SproutForms::$app->integrations->saveIntegration($integration);
+        }
+    }
+
+    /**
      * Update a field handle with an new title format
      *
      * @param string $oldHandle
@@ -504,8 +626,7 @@ class Forms extends Component
         $form->name = $this->getFieldAsNew('name', $name);
         $form->handle = $this->getFieldAsNew('handle', $handle);
         $form->titleFormat = "{dateCreated|date('D, d M Y H:i:s')}";
-        $accessible = new AccessibleTemplates();
-        $form->formTemplate = $settings->formTemplateDefaultValue ?? $accessible->getTemplateId();
+        $form->formTemplate = '';
         $form->saveData = $settings->enableSaveData ? $settings->enableSaveDataDefaultValue : false;
 
         // Set default tab
@@ -731,6 +852,22 @@ class Forms extends Component
         }
 
         return $captchas;
+    }
+
+    /**
+     * @param $context
+     *
+     * @return string|null
+     */
+    public function handleModifyFormHook($context)
+    {
+        /** @var Form $form */
+        $form = $context['form'] ?? null;
+        if ($form !== null && $form->enableCaptchas) {
+            return $this->getCaptchasHtml();
+        }
+
+        return null;
     }
 
     /**

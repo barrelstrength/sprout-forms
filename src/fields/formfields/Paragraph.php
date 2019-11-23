@@ -7,7 +7,6 @@ use barrelstrength\sproutforms\rules\conditions\ContainsCondition;
 use barrelstrength\sproutforms\rules\conditions\DoesNotContainCondition;
 use barrelstrength\sproutforms\rules\conditions\IsNotProvidedCondition;
 use barrelstrength\sproutforms\rules\conditions\IsProvidedCondition;
-use barrelstrength\sproutforms\rules\fieldrules\ParagraphCondition;
 use Craft;
 use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Db;

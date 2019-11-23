@@ -2,8 +2,14 @@
 
 namespace barrelstrength\sproutforms\elements;
 
+use barrelstrength\sproutforms\base\Captcha;
+use barrelstrength\sproutforms\elements\actions\MarkAsSpam;
+use barrelstrength\sproutforms\elements\actions\MarkAsDefaultStatus;
+use barrelstrength\sproutforms\models\EntryStatus;
+use barrelstrength\sproutforms\models\EntriesSpamLog;
 use Craft;
 use craft\base\Element;
+use craft\db\Query;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\UrlHelper;
 use craft\elements\actions\Delete;
@@ -18,9 +24,12 @@ use yii\db\ActiveRecord;
 /**
  * Entry represents a entry element.
  *
- * @property array|ActiveRecord[] $submissionLog
+ * @property array|ActiveRecord[] $integrationLog
  * @property null|array           $conditionalLogicResults
  * @property null|array           $hiddenFields
+ * @property bool                 $isSpam
+ * @property array                $captchaErrors
+ * @property array                $savedCaptchaErrors
  * @property array                $fields
  */
 class Entry extends Element
@@ -28,7 +37,7 @@ class Entry extends Element
     // Properties
     // =========================================================================
     private $form;
-    private $submissionLogs = [];
+    private $integrationLogs = [];
     /** @var array|null */
     private $conditionalResults;
 
@@ -39,14 +48,15 @@ class Entry extends Element
     public $formId;
     public $formHandle;
     public $statusId;
+    public $statusHandle;
     public $formGroupId;
     public $formName;
     public $ipAddress;
+    public $referrer;
     public $userAgent;
-    /**
-     * @var string
-     */
-    public $statusHandle;
+
+    /** @var Captcha[] $captchas */
+    protected $captchas;
 
     public function init()
     {
@@ -171,7 +181,7 @@ class Entry extends Element
     {
         $statusId = $this->statusId;
 
-        return SproutForms::$app->entries->getEntryStatusById($statusId)->handle;
+        return SproutForms::$app->entryStatuses->getEntryStatusById($statusId)->handle;
     }
 
     /**
@@ -181,7 +191,7 @@ class Entry extends Element
      */
     public static function statuses(): array
     {
-        $statuses = SproutForms::$app->entries->getAllEntryStatuses();
+        $statuses = SproutForms::$app->entryStatuses->getAllEntryStatuses();
         $statusArray = [];
 
         foreach ($statuses as $status) {
@@ -209,10 +219,23 @@ class Entry extends Element
      */
     protected static function defineSources(string $context = null): array
     {
+        $entryStatusHandlesExcludingSpam = [];
+        $entryStatuses = SproutForms::$app->entryStatuses->getAllEntryStatuses();
+        $spamStatusId = SproutForms::$app->entryStatuses->getSpamStatusId();
+
+        foreach ($entryStatuses as $entryStatus) {
+            if ($entryStatus->id !== $spamStatusId) {
+                $entryStatusHandlesExcludingSpam[] = $entryStatus->handle;
+            }
+        }
+
         $sources = [
             [
                 'key' => '*',
                 'label' => Craft::t('sprout-forms', 'All Entries'),
+                'criteria' => [
+                    'status' => $entryStatusHandlesExcludingSpam
+                ]
             ]
         ];
 
@@ -238,13 +261,19 @@ class Entry extends Element
                     $prepSources[$form->groupId]['forms'][$form->id] = [
                         'label' => $form->name,
                         'data' => ['formId' => $form->id],
-                        'criteria' => ['formId' => $form->id]
+                        'criteria' => [
+                            'formId' => $form->id,
+                            'status' => $entryStatusHandlesExcludingSpam
+                        ]
                     ];
                 } else {
                     $noSources[$form->id] = [
                         'label' => $form->name,
                         'data' => ['formId' => $form->id],
-                        'criteria' => ['formId' => $form->id]
+                        'criteria' => [
+                            'formId' => $form->id,
+                            'status' => $entryStatusHandlesExcludingSpam
+                        ]
                     ];
                 }
             }
@@ -261,6 +290,7 @@ class Entry extends Element
                 ],
                 'criteria' => [
                     'formId' => $form['criteria']['formId'],
+                    'status' => $entryStatusHandlesExcludingSpam
                 ]
             ];
         }
@@ -283,9 +313,26 @@ class Entry extends Element
                     ],
                     'criteria' => [
                         'formId' => $form['criteria']['formId'],
+                        'status' => $entryStatusHandlesExcludingSpam
                     ]
                 ];
             }
+        }
+
+        $settings = SproutForms::getInstance()->getSettings();
+
+        $sources[] = [
+            'heading' => Craft::t('sprout-forms', 'Misc')
+        ];
+
+        if ($settings->saveSpamToDatabase) {
+            $sources[] = [
+                'key' => 'sproutFormsWithSpam',
+                'label' => 'Spam',
+                'criteria' => [
+                    'status' => EntryStatus::SPAM_STATUS_HANDLE
+                ]
+            ];
         }
 
         return $sources;
@@ -303,6 +350,16 @@ class Entry extends Element
             'type' => Delete::class,
             'confirmationMessage' => Craft::t('sprout-forms', 'Are you sure you want to delete the selected entries?'),
             'successMessage' => Craft::t('sprout-forms', 'Entries deleted.'),
+        ]);
+
+        // Mark As Spam
+        $actions[] = Craft::$app->getElements()->createAction([
+            'type' => MarkAsSpam::class
+        ]);
+
+        // Mark As Default Status
+        $actions[] = Craft::$app->getElements()->createAction([
+            'type' => MarkAsDefaultStatus::class
         ]);
 
         return $actions;
@@ -432,17 +489,17 @@ class Entry extends Element
     /**
      * @return array
      */
-    public function getSubmissionLogs(): array
+    public function getIntegrationLogs(): array
     {
-        return $this->submissionLogs;
+        return $this->integrationLogs;
     }
 
     /**
      * @return array|ActiveRecord[]
      */
-    public function getSubmissionLog(): array
+    public function getIntegrationLog(): array
     {
-        return SproutForms::$app->integrations->getSubmissionLogsByEntryId($this->id);
+        return SproutForms::$app->integrations->getIntegrationLogsByEntryId($this->id);
     }
 
     /**
@@ -491,5 +548,80 @@ class Entry extends Element
     public function getHiddenFields()
     {
         return $this->entryHiddenFields ?? [];
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsSpam(): bool
+    {
+        $status = $this->getStatus();
+
+        return $status === EntryStatus::SPAM_STATUS_HANDLE;
+    }
+
+    public function addCaptcha(Captcha $captcha)
+    {
+        $this->captchas[get_class($captcha)] = $captcha;
+    }
+
+    /**
+     * @return Captcha[]
+     */
+    public function getCaptchas(): array
+    {
+        return $this->captchas;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasCaptchaErrors(): bool
+    {
+        // When saving in the CP
+        if ($this->captchas === null) {
+            return false;
+        }
+
+        foreach ($this->captchas as $captcha) {
+            if ($captcha->hasErrors()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCaptchaErrors(): array
+    {
+        $errors = [];
+
+        foreach ($this->captchas as $captcha) {
+            if (count($captcha->getErrors())) {
+                $errors['captchaErrors'][get_class($captcha)] = $captcha->getErrors('captchaErrors');
+            }
+        }
+
+        return $errors;
+    }
+
+    public function getSavedCaptchaErrors(): array
+    {
+        $spamLogEntries = (new Query())
+            ->select('*')
+            ->from('{{%sproutforms_entries_spam_log}}')
+            ->where(['entryId' => $this->id])
+            ->all();
+
+        $captchaErrors = [];
+
+        foreach ($spamLogEntries as $spamLogEntry) {
+            $captchaErrors[] = new EntriesSpamLog($spamLogEntry);
+        }
+
+        return $captchaErrors;
     }
 }

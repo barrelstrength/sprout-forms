@@ -6,6 +6,7 @@ use Craft;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\models\EntryStatus;
 use craft\helpers\Json;
+use craft\helpers\UrlHelper;
 use craft\web\Controller as BaseController;
 use Exception;
 use Throwable;
@@ -27,14 +28,19 @@ class EntryStatusesController extends BaseController
      */
     public function actionEdit(int $entryStatusId = null, EntryStatus $entryStatus = null): Response
     {
-        $this->requireAdmin();
+        $this->requireAdmin(false);
 
         if (!$entryStatus) {
             if ($entryStatusId) {
-                $entryStatus = SproutForms::$app->entries->getEntryStatusById($entryStatusId);
+                $entryStatus = SproutForms::$app->entryStatuses->getEntryStatusById($entryStatusId);
 
                 if (!$entryStatus->id) {
                     throw new NotFoundHttpException('Entry Status not found');
+                }
+
+                if ($entryStatus->handle == EntryStatus::SPAM_STATUS_HANDLE) {
+                    Craft::$app->session->setError(Craft::t('sprout-forms', "Spam status can't be updated"));
+                    return $this->redirect(UrlHelper::cpUrl('sprout-forms/settings/entry-statuses'));
                 }
             } else {
                 $entryStatus = new EntryStatus();
@@ -55,17 +61,17 @@ class EntryStatusesController extends BaseController
     public function actionSave()
     {
         $this->requirePostRequest();
-        $this->requireAdmin();
+        $this->requireAdmin(false);
 
         $id = Craft::$app->request->getBodyParam('entryStatusId');
-        $entryStatus = SproutForms::$app->entries->getEntryStatusById($id);
+        $entryStatus = SproutForms::$app->entryStatuses->getEntryStatusById($id);
 
         $entryStatus->name = Craft::$app->request->getBodyParam('name');
         $entryStatus->handle = Craft::$app->request->getBodyParam('handle');
         $entryStatus->color = Craft::$app->request->getBodyParam('color');
         $entryStatus->isDefault = Craft::$app->request->getBodyParam('isDefault');
 
-        if (!SproutForms::$app->entries->saveEntryStatus($entryStatus)) {
+        if (!SproutForms::$app->entryStatuses->saveEntryStatus($entryStatus)) {
             Craft::$app->session->setError(Craft::t('sprout-forms', 'Could not save Entry Status.'));
 
             Craft::$app->getUrlManager()->setRouteParams([
@@ -88,11 +94,11 @@ class EntryStatusesController extends BaseController
     public function actionReorder(): Response
     {
         $this->requirePostRequest();
-        $this->requireAdmin();
+        $this->requireAdmin(false);
 
         $ids = Json::decode(Craft::$app->request->getRequiredBodyParam('ids'));
 
-        if ($success = SproutForms::$app->entries->reorderEntryStatuses($ids)) {
+        if ($success = SproutForms::$app->entryStatuses->reorderEntryStatuses($ids)) {
             return $this->asJson(['success' => $success]);
         }
 
@@ -109,11 +115,11 @@ class EntryStatusesController extends BaseController
     public function actionDelete(): Response
     {
         $this->requirePostRequest();
-        $this->requireAdmin();
+        $this->requireAdmin(false);
 
         $entryStatusId = Craft::$app->request->getRequiredBodyParam('id');
 
-        if (!SproutForms::$app->entries->deleteEntryStatusById($entryStatusId)) {
+        if (!SproutForms::$app->entryStatuses->deleteEntryStatusById($entryStatusId)) {
             $this->asJson(['success' => false]);
         }
 

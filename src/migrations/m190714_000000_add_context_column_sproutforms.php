@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\migrations;
 
 use barrelstrength\sproutbasereports\migrations\m190714_000000_add_context_column;
 use craft\db\Migration;
+use yii\base\NotSupportedException;
 
 /**
  * m190714_000000_add_context_column_sproutforms migration.
@@ -11,8 +12,8 @@ use craft\db\Migration;
 class m190714_000000_add_context_column_sproutforms extends Migration
 {
     /**
-     * @inheritdoc
-     *
+     * @return bool
+     * @throws NotSupportedException
      */
     public function safeUp(): bool
     {

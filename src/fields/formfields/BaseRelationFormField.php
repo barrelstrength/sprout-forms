@@ -853,6 +853,7 @@ JS;
          *
          * don't use self:: like PhpStorm suggests
          */
+        /** @noinspection StaticInvocationViaThisInspection */
         $elementType = $this->elementType();
 
         return [

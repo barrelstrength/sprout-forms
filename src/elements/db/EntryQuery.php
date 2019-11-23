@@ -40,11 +40,6 @@ class EntryQuery extends ElementQuery
     /**
      * @var string
      */
-    public $statusHandle;
-
-    /**
-     * @var string
-     */
     public $formName;
 
     /**
@@ -115,20 +110,6 @@ class EntryQuery extends ElementQuery
     }
 
     /**
-     * Sets the [[statusHandle]] property.
-     *
-     * @param int
-     *
-     * @return static self reference
-     */
-    public function statusHandle($value): EntryQuery
-    {
-        $this->statusHandle = $value;
-
-        return $this;
-    }
-
-    /**
      * Sets the [[formName]] property.
      *
      * @param int
@@ -189,8 +170,12 @@ class EntryQuery extends ElementQuery
         ]);
 
         $this->query->innerJoin('{{%sproutforms_forms}} sproutforms_forms', '[[sproutforms_forms.id]] = [[sproutforms_entries.formId]]');
-
         $this->query->innerJoin('{{%sproutforms_entrystatuses}} sproutforms_entrystatuses', '[[sproutforms_entrystatuses.id]] = [[sproutforms_entries.statusId]]');
+
+        $this->query->andWhere(
+            Db::parseParam('[[sproutforms_forms.saveData]]', true)
+        );
+
         $this->subQuery->innerJoin('{{%sproutforms_entrystatuses}} sproutforms_entrystatuses', '[[sproutforms_entrystatuses.id]] = [[sproutforms_entries.statusId]]');
 
         if ($this->formId) {
@@ -217,15 +202,9 @@ class EntryQuery extends ElementQuery
             );
         }
 
-        if ($this->statusHandle) {
-            $this->subQuery->andWhere(Db::parseParam(
-                'sproutforms_entrystatuses.handle', $this->statusHandle)
-            );
-        }
-
         if ($this->formName) {
-            $this->query->andWhere(Db::parseParam(
-                'sproutforms_forms.name', $this->formName)
+            $this->query->andWhere(
+                Db::parseParam('sproutforms_forms.name', $this->formName)
             );
         }
 

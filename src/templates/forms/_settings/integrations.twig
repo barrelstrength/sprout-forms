@@ -1,8 +1,6 @@
 {% extends "sprout-forms/_layouts/formsettings" %}
 {% import "_includes/forms" as forms %}
 
-{% do view.registerAssetBundle("barrelstrength\\sproutforms\\web\\assets\\integrations\\IntegrationAsset") %}
-
 {% set content %}
 
     {% set integrationOptions = craft.sproutForms.getIntegrationOptions() %}

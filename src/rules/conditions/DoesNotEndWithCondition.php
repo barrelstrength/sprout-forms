@@ -13,7 +13,7 @@ class DoesNotEndWithCondition extends Condition
 {
     public function getLabel(): string
     {
-        return 'does not ends with';
+        return 'does not end with';
     }
 
     /**

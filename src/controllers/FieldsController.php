@@ -288,10 +288,15 @@ class FieldsController extends BaseController
             return $this->returnJson(false, $field, $form, null, $tabId);
         }
 
-        // Check if the handle is updated to also update the titleFormat
-        if (!$isNewField && $oldHandle !== $field->handle && strpos($form->titleFormat, $oldHandle) !== false) {
-            $newTitleFormat = SproutForms::$app->forms->updateTitleFormat($oldHandle, $field->handle, $form->titleFormat);
-            $form->titleFormat = $newTitleFormat;
+        // Check if the handle is updated to also update the titleFormat, rules and integrations
+        if (!$isNewField && $oldHandle !== $field->handle) {
+            if (strpos($form->titleFormat, $oldHandle) !== false) {
+                $newTitleFormat = SproutForms::$app->forms->updateTitleFormat($oldHandle, $field->handle, $form->titleFormat);
+                $form->titleFormat = $newTitleFormat;
+            }
+
+            SproutForms::$app->forms->updateFieldOnFieldRules($oldHandle, $field->handle, $form);
+            SproutForms::$app->forms->updateFieldOnIntegrations($oldHandle, $field->handle, $form);
         }
 
         // Now let's add this field to our field layout
@@ -317,7 +322,7 @@ class FieldsController extends BaseController
         // field layout of our Form Element
         if ($response) {
             Craft::info('Field Saved', __METHOD__);
-
+            SproutForms::$app->forms->saveForm($form);
             return $this->returnJson(true, $field, $form, $tabName, $tabId);
         }
 
@@ -404,7 +409,13 @@ class FieldsController extends BaseController
         $this->requirePermission('sproutForms-editEntries');
 
         $fieldId = Craft::$app->request->getRequiredBodyParam('fieldId');
+
+        /** @var Field $field */
+        $field = Craft::$app->fields->getFieldById($fieldId);
+        $oldHandle = $field->handle;
         $formId = Craft::$app->request->getRequiredBodyParam('formId');
+
+        /** @var Form $form */
         $form = SproutForms::$app->forms->getFormById((int)$formId);
 
         // Backup our field context and content table
@@ -421,8 +432,8 @@ class FieldsController extends BaseController
         Craft::$app->getContent()->fieldContext = $oldFieldContext;
         Craft::$app->getContent()->contentTable = $oldContentTable;
 
-
         if ($response) {
+            SproutForms::$app->forms->removeFieldRulesUsingField($oldHandle, $form);
             return $this->asJson([
                 'success' => true
             ]);
@@ -443,7 +454,7 @@ class FieldsController extends BaseController
      */
     public function actionReorderFields(): Response
     {
-        $this->requireAdmin();
+        $this->requireAdmin(false);
         $this->requirePostRequest();
         $this->requireAcceptsJson();
         $this->requirePermission('sproutForms-editEntries');

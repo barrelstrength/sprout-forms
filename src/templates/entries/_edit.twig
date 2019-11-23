@@ -86,6 +86,7 @@
 {% endblock %}
 
 {% block details %}
+
     <div class="meta">
 
         {% set formName = "<h6>" ~ form.name ~ "</h6>" %}
@@ -112,40 +113,56 @@
         </div>
     </div>
 
-    {% set submissionLogs = entry.submissionLog() %}
-    {% if submissionLogs %}
+    {% set integrationLogs = entry.integrationLog() %}
+    {% if integrationLogs %}
         <div class="meta read-only">
             <h6 class="title">{{ "Integrations"|t('sprout-forms') }}</h6>
             <hr>
-            {% for submissionLog in submissionLogs %}
+            {% for integrationLog in integrationLogs %}
                 <div class="data">
-                    {% set integration = craft.app.getModule('sprout-forms').app.integrations.getIntegrationById(submissionLog.integrationId) %}
+                    {% set integration = craft.app.getModule('sprout-forms').app.integrations.getIntegrationById(integrationLog.integrationId) %}
                     <h5 class="heading">{{ integration.name }}</h5>
-                    {% if submissionLog.success %}
-                        {% if submissionLog.status == 'notsent' %}
+                    {% if integrationLog.success %}
+                        {% if integrationLog.status == 'notsent' %}
                             <div class="value"><span class="status pending"></span>
                                 {{ "Not Sent"|t('sprout-forms') }}
-                                <span class="info">{{ submissionLog.message }}</span>
+                                <span class="info">{{ integrationLog.message }}</span>
                             </div>
                         {% else %}
                             <div class="value"><span class="status live"></span>
                                 {{ "Success"|t('sprout-forms') }}
-                                <span class="info">{{ submissionLog.message }}</span>
+                                <span class="info">{{ integrationLog.message }}</span>
                             </div>
                         {% endif %}
                     {% else %}
-                        {% if submissionLog.status == 'pending' %}
+                        {% if integrationLog.status == 'pending' %}
                             <div class="value"><span class="status pending"></span>
                                 {{ "Pending"|t('sprout-forms') }}
-                                <span class="info">{{ submissionLog.message }}</span>
+                                <span class="info">{{ integrationLog.message }}</span>
                             </div>
                         {% else %}
                             <div class="value"><span class="status disabled"></span>
                                 {{ "Error"|t('sprout-forms') }}
-                                <span class="info">{{ submissionLog.message }}</span>
+                                <span class="info">{{ integrationLog.message }}</span>
                             </div>
                         {% endif %}
                     {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if entry.getSavedCaptchaErrors()|length %}
+        <div class="meta read-only">
+            <h6 class="title">{{ "Failed Captchas"|t('sprout-forms') }}</h6>
+            <hr>
+            {% for captchaError in entry.getSavedCaptchaErrors() %}
+                <div class="data">
+                    {% set captcha = create(captchaError.type) %}
+                    <div style="padding-top:8px;"><span class="status error"></span>
+                        {{ captcha.name }}
+                        <span class="info">{{ captchaError.errors }}</span>
+                    </div>
                 </div>
             {% endfor %}
         </div>

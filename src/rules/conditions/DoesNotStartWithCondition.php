@@ -13,7 +13,7 @@ class DoesNotStartWithCondition extends Condition
 {
     public function getLabel(): string
     {
-        return 'does not starts with';
+        return 'does not start with';
     }
 
     /**

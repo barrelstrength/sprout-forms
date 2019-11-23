@@ -71,7 +71,7 @@ class FormQuery extends ElementQuery
     /**
      * @var bool
      */
-    public $enableFileAttachments;
+    public $enableCaptchas;
 
     /**
      * @var int
@@ -183,7 +183,7 @@ class FormQuery extends ElementQuery
             'sproutforms_forms.saveData',
             'sproutforms_forms.submitButtonText',
             'sproutforms_forms.formTemplate',
-            'sproutforms_forms.enableFileAttachments'
+            'sproutforms_forms.enableCaptchas'
         ]);
 
         if ($this->totalEntries) {

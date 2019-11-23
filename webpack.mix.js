@@ -1,48 +1,28 @@
 const mix = require('laravel-mix');
 
 mix
-  // Base
-  .sass(
-    'src/web/assets/base/src/scss/sproutforms.scss',
-    'src/web/assets/base/dist/css/sproutforms.css',
-  )
-  .copy('src/web/assets/base/src/images',
-    'src/web/assets/base/dist/images')
-
-  // Base
-  .sass(
-    'src/web/assets/charts/src/scss/charts-explorer.scss',
-    'src/web/assets/charts/dist/css/charts-explorer.css',
-  )
-
-  // Entries
-  .js([
-    'src/web/assets/entries/src/js/SproutFormsEntriesIndex.js',
-    'src/web/assets/entries/src/js/SproutFormsEntriesTableView.js',
-  ], 'src/web/assets/entries/dist/js/entries.js')
 
   // Forms
   .js([
-    'src/web/assets/forms/src/js/RuleModal.js',
-    'src/web/assets/forms/src/js/EditableTable.js',
-    'src/web/assets/forms/src/js/FieldLayoutEditor.js',
-    'src/web/assets/forms/src/js/FieldModal.js',
-    'src/web/assets/forms/src/js/FormSettings.js',
-    'src/web/assets/forms/src/js/IntegrationModal.js',
-  ], 'src/web/assets/forms/dist/js/forms.js')
-  .sass(
-    'src/web/assets/forms/src/scss/forms.scss',
-    'src/web/assets/forms/dist/css/forms.css',
-  )
+    'src/web/assets/cp/src/js/editable-table.js',
+    'src/web/assets/cp/src/js/form-settings.js',
 
-  // Integrations
-  .js([
-    'src/web/assets/integrations/src/js/Integration.js',
-  ], 'src/web/assets/integrations/dist/js/integration.js')
-  .sass(
-    'src/web/assets/integrations/src/scss/integrations.scss',
-    'src/web/assets/integrations/dist/css/integrations.css',
-  )
+    'src/web/assets/cp/src/js/entries-index.js',
+    'src/web/assets/cp/src/js/entries-table-view.js',
+    'src/web/assets/cp/src/js/field-layout-editor.js',
+    'src/web/assets/cp/src/js/field-modal.js',
+    'src/web/assets/cp/src/js/integration-modal.js',
+    'src/web/assets/cp/src/js/integrations.js',
+    'src/web/assets/cp/src/js/rule-modal.js',
+  ], 'src/web/assets/cp/dist/js/sproutforms-cp.js')
+  .sass('src/web/assets/cp/src/scss/charts.scss',
+    'src/web/assets/cp/dist/css/sproutforms-charts.css')
+  .sass('src/web/assets/cp/src/scss/forms-ui.scss',
+    'src/web/assets/cp/dist/css/sproutforms-forms-ui.css')
+  .sass('src/web/assets/cp/src/scss/cp.scss',
+    'src/web/assets/cp/dist/css/sproutforms-cp.css')
+  .copy('src/web/assets/cp/src/images',
+    'src/web/assets/cp/dist/images')
 
   // Form Templates
   .js([

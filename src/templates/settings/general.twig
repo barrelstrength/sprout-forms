@@ -22,7 +22,7 @@
     label: "Default Form Templates"|t('sprout-forms'),
     required: true,
     errors: (settings is defined ? settings.getErrors('formTemplateDefaultValue') : null),
-    instructions: "The templates that will be used to output your forms when using the displayForm tag. Add additional form templates via the Form Templates API or providing a custom template path."|t('sprout-forms'),
+    instructions: "The default templates that will be used to output your forms when using the displayForm tag if no Form Templates are selected for a given form. Add additional form templates via the Form Templates API or providing a custom template path."|t('sprout-forms'),
 }, sproutFields.selectOther({
     name: 'formTemplateDefaultValue',
     options: templateOptions,
@@ -34,7 +34,7 @@
 
 {{ forms.lightswitchField({
     label: "Save data to the Craft database"|t('sprout-forms'),
-    instructions: "Disable this setting to stop Sprout Forms from saving data to the Craft database."|t('sprout-forms'),
+    instructions: "Disable this setting to stop Sprout Forms from saving all form submission data to the Craft database and hide the Form Entries tab. Existing data will not be deleted, but will no longer be accessible via the Control Panel."|t('sprout-forms'),
     id: 'enableSaveData',
     name: 'enableSaveData',
     toggle: 'settings-savedatadetails',
@@ -46,12 +46,45 @@
     class="{{ not settings.enableSaveData ? "hidden" : '' }}">
 
     {{ forms.lightswitchField({
+        label: "Save Spam to the database",
+        instructions: "How form entries will behave after a submission is flagged as spam. See Spam Protection settings for additional control.",
+        name: 'saveSpamToDatabase',
+        on: settings.saveSpamToDatabase,
+        onLabel: "Enable"|t('sprout-forms'),
+    }) }}
+
+    {{ forms.lightswitchField({
         label: "Default behavior for saving data"|t('sprout-forms'),
         instructions: "The default behavior for saving data when a new Form is created."|t('sprout-forms'),
         id: 'enableSaveDataDefaultValue',
         name: 'enableSaveDataDefaultValue',
         on: settings.enableSaveDataDefaultValue,
         onLabel: "Enable"|t('sprout-forms'),
+    }) }}
+
+    {{ forms.lightswitchField({
+        label: "Track Remote IP"|t('sprout-forms'),
+        instructions: "Enable to capture the IP Address used when a Form Entry is saved. IP Addresses may be considered personal information."|t('sprout-forms'),
+        name: 'trackRemoteIp',
+        on: settings.trackRemoteIp ? true : false,
+        onLabel: "Enable"|t('sprout-forms')
+    }) }}
+
+    {{ forms.selectField({
+        label: "Default Section"|t('sprout-forms'),
+        instructions: "The form section that will be selected by default in the sidebar navigation."|t('sprout-forms'),
+        name: 'defaultSection',
+        options: [
+            {
+                label: 'Entries'|t('sprout-forms'),
+                value: 'entries'|t('sprout-forms')
+            },
+            {
+                label: 'Forms'|t('sprout-forms'),
+                value: 'forms'|t('sprout-forms')
+            }
+        ],
+        value: not settings.enableSaveData ? 'forms' : settings.defaultSection
     }) }}
 
 </div>

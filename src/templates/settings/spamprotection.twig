@@ -2,6 +2,48 @@
 
 {% import "_includes/forms" as forms %}
 
+{% if not settings.saveSpamToDatabase %}
+    <div><strong>{{ "Spam Tracking Disabled."|t('sprout-forms') }}</strong> <a href="{{ cpUrl('sprout-forms/settings/general') }}">{{ "Enable in General Settings"|t('sprout-forms') }}</a></div>
+    <hr>
+{% endif %}
+
+{{ forms.selectField({
+    label: "Spam Redirect Behavior"|t('sprout-forms'),
+    instructions: 'The behavior your user will see if a submission is flagged as spam. Redirecting as normal will simulate a successful submission and direct the user to the Redirect Page. All failed captchas are logged on the Spam Entries saved in the database.'|t('sprout-forms'),
+    name: 'spamRedirectBehavior',
+    options: spamRedirectBehaviorOptions,
+    value: settings.spamRedirectBehavior,
+    first: true
+}) }}
+
+{{ forms.textField({
+    label: "Spam Limit"|t('sprout-forms'),
+    instructions: "The total number of Spam entries that will be stored in the database. When the limit is reached, the least recently updated Spam entry will be deleted from the database."|t('sprout-forms'),
+    id: 'spamLimit',
+    name: 'spamLimit',
+    size:'10',
+    value: settings.spamLimit
+}) }}
+
+{{ forms.selectField({
+    label: "Cleanup Probability"|t('sprout-forms'),
+    id: 'cleanup-probability',
+    name: 'cleanupProbability',
+    instructions: "The probability that the Spam cleanup task will run each time a Form Entry is saved. A lower probability will trigger a cleanup task less often and the number of Spam Entries stored in the database may be higher than the Spam Limit target until the cleanup task is triggered."|t('sprout-forms'),
+    options: [
+        { value: '0', label: 'None' },
+        { value: '100000', label: '1 in 10'},
+        { value: '10000', label: '1 in 100' },
+        { value: '1000', label: '1 in 1,000' },
+        { value: '100', label: '1 in 10,000' },
+        { value: '10', label: '1 in 100,000' },
+        { value: '1', label: '1 in 1,000,000' }
+    ],
+    value: settings.cleanupProbability
+}) }}
+
+<hr>
+
 {% set captchas = craft.sproutForms.getAllCaptchas() %}
 {% for captcha in captchas %}
 

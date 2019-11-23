@@ -19,25 +19,25 @@ class SproutFormsRules {
       let conditionSets = rule.conditions;
       for (conditionSetId in conditionSets) {
         let conditionSet = conditionSets[conditionSetId];
+        let conditionSetKey = 'condition-set-' + j;
 
+        let orArray = [];
         for (conditionId in conditionSet) {
           let conditionObject = {};
-          let conditionSetIndex = conditionId.split('-').pop();
           let condition = conditionSet[conditionId];
-
-          let conditionNewId = j + '-' + conditionId;
-          j++;
 
           this.fieldsToListen[condition[0]] = 1;
 
-          conditionObject[conditionSetIndex] = {
+          conditionObject = {
             'fieldHandle': condition[0],
             'condition': condition[1],
             'value': condition[2]
           };
-
-          rules[conditionNewId] = conditionObject;
+          orArray.push(conditionObject)
         }
+        rules[conditionSetKey] = orArray;
+
+        j++;
       }
 
       let wrapperId = 'fields-' + targetHandle + '-field';
@@ -200,7 +200,7 @@ class SproutFormsRules {
     }
 
     // Hide field
-    element.classList.add('hidden');
+    element.classList.add('sprout-hidden');
   }
 
   showAndEnableField(element) {
@@ -212,7 +212,7 @@ class SproutFormsRules {
     }
 
     // Show field
-    element.classList.remove('hidden');
+    element.classList.remove('sprout-hidden');
   }
 }
 

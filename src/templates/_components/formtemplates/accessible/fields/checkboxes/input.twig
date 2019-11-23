@@ -1,5 +1,6 @@
 {%- set id = renderingOptions.id ?? name %}
 {%- set class = renderingOptions.class ?? name %}
+{%- set required = field.required ? true : false %}
 {%- set hasInstructions = field.instructions ? true : false %}
 {%- set values = value is defined ? value : [] %}
 
@@ -29,6 +30,7 @@
                 <input type="checkbox"
                     {%- if name %} name="{{ name }}[]"{% endif %}
                     {%- if id %} id="{{ id }}-{{ loop.index }}"{% endif %}
+                    {%- if required %} required aria-required="true"{% endif %}
                     {%- if value %} value="{{ value }}"{% endif %}
                     {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
                     {%- if value in values %} checked aria-checked="true"{% else %} aria-checked="false"{% endif %}
@@ -40,3 +42,5 @@
         {% endfor %}
     </div>
 {% endspaceless %}
+
+

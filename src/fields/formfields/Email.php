@@ -27,12 +27,12 @@ use Twig\Markup;
 
 /**
  *
- * @property array         $elementValidationRules
- * @property string        $svgIconPath
- * @property mixed         $settingsHtml
- * @property array         $compatibleCraftFields
- * @property array         $compatibleCraftFieldTypes
- * @property mixed         $exampleInputHtml
+ * @property array  $elementValidationRules
+ * @property string $svgIconPath
+ * @property mixed  $settingsHtml
+ * @property array  $compatibleCraftFields
+ * @property array  $compatibleCraftFieldTypes
+ * @property mixed  $exampleInputHtml
  */
 class Email extends FormField implements PreviewableFieldInterface
 {

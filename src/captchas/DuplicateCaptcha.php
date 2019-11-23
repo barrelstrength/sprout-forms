@@ -3,12 +3,16 @@
 namespace barrelstrength\sproutforms\captchas;
 
 use barrelstrength\sproutforms\base\Captcha;
-use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
+use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
 use Craft;
 use craft\errors\MissingComponentException;
 
 /**
  * Class DuplicateCaptcha
+ *
+ * @property string $name
+ * @property string $description
+ * @property string $captchaHtml
  */
 class DuplicateCaptcha extends Captcha
 {
@@ -51,7 +55,7 @@ class DuplicateCaptcha extends Captcha
      * @throws MissingComponentException
      * @throws MissingComponentException
      */
-    public function verifySubmission(OnBeforeSaveEntryEvent $event): bool
+    public function verifySubmission(OnBeforeValidateEntryEvent $event): bool
     {
         $uniqueid = null;
 
@@ -64,9 +68,10 @@ class DuplicateCaptcha extends Captcha
         }
 
         if (!Craft::$app->getSession()->get($uniqueid)) {
-            Craft::error('A form submission failed the Duplicate Submission test.', __METHOD__);
+            $errorMessage = 'Submission appears to be a duplicate.';
+            Craft::error($errorMessage, __METHOD__);
 
-            $event->isValid = false;
+            $this->addError(self::CAPTCHA_ERRORS_KEY, $errorMessage);
 
             return false;
         }

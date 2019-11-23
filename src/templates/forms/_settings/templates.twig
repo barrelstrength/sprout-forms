@@ -1,0 +1,58 @@
+{% extends "sprout-forms/_layouts/formsettings" %}
+{% import "_includes/forms" as forms %}
+{% import "sprout-base-fields/_includes/forms" as sproutFields %}
+
+{% set fullPageForm = true %}
+
+{% set content %}
+
+    <input type="hidden" name="action" value="sprout-forms/forms/save-form">
+    {{ redirectInput('sprout-forms/forms/edit/'~form.id~'/settings/templates') }}
+    <input type="hidden" id="formId" name="formId" value="{{ form.id }}">
+
+    {% set templateOptions = craft.sproutForms.getTemplateOptions(form, true) %}
+
+    {{ forms.field({
+        label: "Templates"|t('sprout-forms'),
+        instructions: "The Form Templates that will be used to output your forms. Update the 'Default Form Templates' in the general settings."|t('sprout-forms'),
+        required: true,
+        first: true,
+        errors: (form is defined ? form.getErrors('formTemplate') : null)
+    }, sproutFields.selectOther({
+        name: 'formTemplate',
+        options: templateOptions,
+        value: form.formTemplate ?? '',
+        otherPlaceholderText: '_forms/formHandle'|t('sprout-forms')
+    })) }}
+
+    {{ forms.textField({
+        label: "Submit Button"|t('sprout-forms'),
+        instructions: "The text displayed for the submit button."|t('sprout-forms'),
+        name: 'submitButtonText',
+        placeholder: 'Submit',
+        value: (form is defined ? form.submitButtonText : null),
+        required: false,
+        errors: (form is defined ? form.getErrors('submitButtonText') : null)
+    }) }}
+
+    {{ forms.lightswitchField({
+        label: "Enable Captchas"|t('sprout-forms'),
+        instructions: "Enable or disable the global captchas for this specific form."|t('sprout-forms'),
+        id: 'enableCaptchas',
+        name: 'enableCaptchas',
+        on: form.enableCaptchas,
+        onLabel: "Show"|t('sprout-forms'),
+        offLabel: "Hide"|t('sprout-forms')
+    }) }}
+
+    {{ forms.lightswitchField({
+        label: "Page Titles"|t('sprout-forms'),
+        instructions: "Display Page Titles on Forms"|t('sprout-forms'),
+        id: 'displaySectionTitles',
+        name: 'displaySectionTitles',
+        on: form.displaySectionTitles,
+        onLabel: "Show"|t('sprout-forms'),
+        offLabel: "Hide"|t('sprout-forms')
+    }) }}
+
+{% endset %}

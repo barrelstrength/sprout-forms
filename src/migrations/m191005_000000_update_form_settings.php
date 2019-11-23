@@ -2,8 +2,11 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
+use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
+use barrelstrength\sproutforms\formtemplates\BasicTemplates;
 use craft\db\Migration;
 use Craft;
+use craft\db\Query;
 use craft\services\Plugins;
 use yii\base\ErrorException;
 use yii\base\Exception;
@@ -31,26 +34,44 @@ class m191005_000000_update_form_settings extends Migration
     {
         // Don't make the same config changes twice
         $projectConfig = Craft::$app->getProjectConfig();
-        $schemaVersion = $projectConfig->get('system.schemaVersion', true);
+        $pluginHandle = 'sprout-forms';
+        $schemaVersion = $projectConfig->get('plugins.'.$pluginHandle.'.schemaVersion', true);
         if (version_compare($schemaVersion, '3.5.0', '>=')) {
             return;
         }
 
-        $pluginSettings = $projectConfig->get(Plugins::CONFIG_PLUGINS_KEY.'.'.'sprout-forms.settings');
-
+        $pluginSettings = $projectConfig->get(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings');
         // Add renamed settings
-        $pluginSettings['enableSaveDataDefaultValue'] = (int) $pluginSettings['saveDataByDefault'];
-        $pluginSettings['formTemplateDefaultValue'] = $pluginSettings['templateFolderDefaultValue'];
+        $enableSaveData = (int)$pluginSettings['enableSaveData'];
+        $pluginSettings['enableSaveDataDefaultValue'] = $enableSaveData ?? 0;
+
+        $accessible = new AccessibleTemplates();
+        $pluginSettings['formTemplateDefaultValue'] = empty($pluginSettings['templateFolderOverride']) ? $accessible->getTemplateId() : $pluginSettings['templateFolderOverride'];
+
+        if ($enableSaveData){
+            if (isset($pluginSettings['enableSaveDataPerFormBasis']) && !$pluginSettings['enableSaveDataPerFormBasis']){
+                // Let's set true to saveData on all forms
+                $forms = (new Query())
+                    ->select(['id'])
+                    ->from(['{{%sproutforms_forms}}'])
+                    ->all();
+
+                foreach ($forms as $form){
+                    $this->update('{{%sproutforms_forms}}', ['saveData' => true], ['id' => $form['id']], [], false);
+                }
+            }
+        }
 
         // Remove deprecated settings
         unset(
             $pluginSettings['enableIntegrationsPerFormBasis'],
             $pluginSettings['enablePerFormTemplateFolderOverride'],
             $pluginSettings['enableSaveDataPerFormBasis'],
-            $pluginSettings['templateFolderDefaultValue']
+            $pluginSettings['templateFolderOverride'],
+            $pluginSettings['enableSaveData']
         );
 
-        $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY.'.'.'sprout-forms.settings', $pluginSettings);
+        $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings', $pluginSettings);
     }
 
     /**

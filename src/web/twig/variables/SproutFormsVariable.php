@@ -344,26 +344,6 @@ class SproutFormsVariable
     }
 
     /**
-     * @return array
-     * @see SproutForms::$app->fields->prepareFieldTypeSelection()
-     *
-     */
-    public function prepareFieldTypeSelection(): array
-    {
-        return SproutForms::$app->fields->prepareFieldTypeSelection();
-    }
-
-    /**
-     * @return array
-     *
-     * @see SproutForms::$app->integrations->prepareIntegrationTypeSelection()
-     */
-    public function prepareIntegrationTypeSelection(): array
-    {
-        return SproutForms::$app->integrations->prepareIntegrationTypeSelection();
-    }
-
-    /**
      * @param $settings
      *
      * @throws MissingComponentException
@@ -457,7 +437,7 @@ class SproutFormsVariable
      */
     public function getEntryStatuses(): array
     {
-        return SproutForms::$app->entries->getAllEntryStatuses();
+        return SproutForms::$app->entryStatuses->getAllEntryStatuses();
     }
 
     /**
@@ -513,15 +493,33 @@ class SproutFormsVariable
 
     /**
      * @param Form|null $form
+     * @param bool      $globalSettings
      *
      * @return array
      */
-    public function getTemplateOptions(Form $form = null): array
+    public function getTemplateOptions(Form $form = null, $generalSettings = false): array
     {
         $defaultFormTemplates = new AccessibleTemplates();
 
+        if ($generalSettings) {
+            $options[] = [
+                'optgroup' => Craft::t('sprout-forms', 'Global Templates')
+            ];
+
+            $options[] = [
+                'label' => Craft::t('sprout-forms', 'Default Form Templates'),
+                'value' => null
+            ];
+        }
+
         $templates = SproutForms::$app->forms->getAllFormTemplates();
         $templateIds = [];
+
+        if ($generalSettings) {
+            $options[] = [
+                'optgroup' => Craft::t('sprout-forms', 'Form-Specific Templates')
+            ];
+        }
 
         foreach ($templates as $template) {
             $options[] = [

@@ -1,10 +1,114 @@
 # Changelog
 
-## UNRELEASED
+## 3.6.4 - 2019-11-22
 
-> {tip} IF: you upgrade, THEN: Conditional Fields! Projects using Custom Form Templates or extending Sprout Forms in other custom ways should read the upgrade notes on [Changes in Sprout Forms v3.5.0]() before upgrading.
+### Changed
+- Improved support for required checkboxes in Accessible Form Templates ([#336])
+- Updated Form settings to allow Default Form Templates general setting to be selected
+- Improved how default Form Templates are set when creating a new Form
+- Updated barrelstrength/sprout-base-reports requirement v1.3.10
 
-### Added)
+### Fixed
+- Fixed `allowAdminChanges` requirement when updating Form Groups and Entry Statuses ([#371])
+- Fixed migration bug where integrations table could already exist ([#363])
+- Fixed issue where Title Format did not get updated after a field handle changed ([#348])
+- Fixed bug where Basic Form Template may not get set in Craft 2 to Craft 3 migration
+- Fixed bug where deleting a field can throw an error if rule conditions are not set properly
+- Fixed bug where Report may not exist when loading Dashboard widget ([#64][#64-sproutreports])
+- Fixed bug when running console requests ([#66][#66-sproutreports], [#376])
+- Fixed horizontal scroll on some screen sizes ([#67][#67-sproutreports])
+
+[#64-sproutreports]: https://github.com/barrelstrength/craft-sprout-reports/issues/64
+[#66-sproutreports]: https://github.com/barrelstrength/craft-sprout-reports/issues/66
+[#67-sproutreports]: https://github.com/barrelstrength/craft-sprout-reports/issues/67
+[#336]: https://github.com/barrelstrength/craft-sprout-forms/issues/336
+[#348]: https://github.com/barrelstrength/craft-sprout-forms/issues/348
+[#363]: https://github.com/barrelstrength/craft-sprout-forms/issues/363
+[#371]: https://github.com/barrelstrength/craft-sprout-forms/issues/371
+[#376]: https://github.com/barrelstrength/craft-sprout-forms/issues/376
+
+## 3.6.2 - 2019-11-20
+
+### Updated
+- Improved Form Template comments around use of `modifyForm` hook ([#225])
+ 
+### Fixed
+- Fixed error migrating report ID ([#370])
+
+[#225]: https://github.com/barrelstrength/craft-sprout-forms/issues/225 
+[#370]: https://github.com/barrelstrength/craft-sprout-forms/issues/370
+
+## 3.6.1 - 2019-11-19
+
+> {tip} This release adds improved Spam protection workflows, a new Spam Status, and integrated Spam Log reporting. Configure Spam Protection in the settings. Custom Captcha Integrations and Form Templates using conditional field logic may need to updated to address breaking changes. See the upgrade notes: [Upgrading to Sprout Forms v3.6.0](https://sprout.barrelstrengthdesign.com/docs/forms/installing-and-updating-craft-3.html#updating-to-forms-v3-6-0)
+
+### Added
+- Added Spam status and additional control over management workflow
+- Added Spam Log to Failed Captchas an error messages when a Form Entry is flagged as spam
+- Added Failed Captchas to sidebar of Entry Edit page
+- Added Spam filter to Entries Element Index page 
+- Added 'Mark as Default Status' Element Action
+- Added 'Mark as Spam' Element Action
+- Added 'Save Spam to the database' setting
+- Added 'Spam Redirect Behavior' setting to control where a user gets redirected when an entry is flagged as spam 
+- Added 'Spam Limit' setting to control how many Spam Entries to track in the database 
+- Added 'Cleanup Probability' setting to set the probability the Spam cleanup task will run
+- Added 'Track Remote IP' setting 
+- Added 'Default Section' setting to set the initial page to _Forms_ or _Entries_
+- Added 'Referrer' tracking to Entries
+- Added 'Entry Status' setting to _Entries Data Source_ to limit reports by status
+- Added 'Status Name', 'IP Address', 'Referrer', and 'User Agent' to _Entries Data Source_ reports
+- Added 'Enable Captchas' setting for individual Forms
+- Added `Entry::getCaptchaErrors()` method to retrieve all Failed Captcha error messages 
+- Added default translation file
+
+### Changed
+- Updated Captcha API (See upgrade notes in docs)
+- Updated where Captchas run validation from Event `OnBeforeSaveEntryEvent` to `OnBeforeValidateEntryEvent`
+- Updated Entry queries to use native Element `status`
+- Updated All Form and Individual Form sources to exclude Spam on Entries Element Index page
+- Updated 'Save Data' Form setting to only display when the global Save Data setting is enabled
+- Moved all Form settings to Form Settings
+- Added new _Templates_ tab in Form Settings
+- Updated navigation sidebar to hide _Entries_ tab if 'Save Data' setting is disabled 
+- Updated generic class name used in conditional logic: `hidden` => `sprout-hidden` ([#354])
+- Renamed Data Source _Submission Log_ to _Integrations Log_
+- Updated IP Address tracking to use 'Remote IP' instead of 'User IP' 
+- Updated `saveData` and `displaySectionTitles` columns to not allow null values
+- Updated barrelstrength/sprout-base requirement to v5.0.8
+- Updated barrelstrength/sprout-base-email requirement to v1.1.6
+    
+### Fixed
+- Fixed "Save as new Form" behavior ([#360])
+- Fixed check for schema version in migration ([#355])
+- Fixed deprecation warning ([#357])
+- Updated Integration settings to get updated when a field handle is changed
+- Updated Field Rule settings to get updated when a field handle is changed
+- Updated Field Rule settings to be removed when a Field is deleted
+ 
+### Removed
+- Removed `Entry::statusHandle` attribute
+- Removed `getSpamStatusHandle` variable 
+- Removed the `fakeIt` and isValid properties from the `OnBeforeValidateEntryEvent` in favor of new Spam Redirect Behavior setting
+- Removed `fakeIt` from `OnBeforeSaveEntryEvent` in favor of Spam Redirect Behavior setting
+
+[#354]: https://github.com/barrelstrength/craft-sprout-forms/issues/354
+[#355]: https://github.com/barrelstrength/craft-sprout-forms/issues/355
+[#357]: https://github.com/barrelstrength/craft-sprout-forms/issues/357
+[#360]: https://github.com/barrelstrength/craft-sprout-forms/issues/360
+
+## 3.5.1 - 2019-10-17
+
+### Fixed
+- Fixed migration bug where Form Template setting was reset in migration
+- Fixed migration bug where Save Data setting was reset in migration
+- Fixed a bug where saving the Form settings redirected to an incorrect edit URL
+
+## 3.5.0 - 2019-10-10
+
+> {tip} IF: you upgrade, THEN: Conditional Fields! Projects using Custom Form Templates or extending Sprout Forms in other custom ways should read the upgrade notes before upgrading: [Changes in Sprout Forms v3.5.0](https://sprout.barrelstrengthdesign.com/docs/forms/installing-and-updating-craft-3.html#upgrading-to-forms-v3-5-0) 
+
+### Added
 - Added Field Rules
 - Added `Is` and `IsNot` Conditions
 - Added `Contains` and `DoesNotContain` Conditions
@@ -15,6 +119,7 @@
 - Added `IsGreaterThan` and `IsLessThan` Conditions
 - Added `IsGreaterThanOrEqualTo` and `IsLessThanOrEqualTo` Conditions
 - Added `rules` data attribute to Form Templates
+- Added Field Rule support for custom Form Fields
 
 ### Changed
 - Added Form Edit Settings page to manage several Form Settings with more breathing room

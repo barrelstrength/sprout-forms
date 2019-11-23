@@ -9,8 +9,6 @@ use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\models\Settings;
 use Craft;
 use craft\base\ElementInterface;
-use craft\elements\Entry;
-use craft\errors\InvalidElementException;
 use craft\errors\MissingComponentException;
 use craft\errors\WrongEditionException;
 use craft\web\Controller as BaseController;
@@ -24,7 +22,7 @@ use yii\base\Exception;
 use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
 use barrelstrength\sproutforms\SproutForms;
-use yii\web\ServerErrorHttpException;
+use function Matrix\diagonal;
 
 class FormsController extends BaseController
 {
@@ -38,6 +36,21 @@ class FormsController extends BaseController
         parent::init();
     }
 
+    public function actionIndexTemplate()
+    {
+        /** @var SproutForms $plugin */
+        $plugin = Craft::$app->plugins->getPlugin('sprout-forms');
+
+        /** @var Settings $settings */
+        $settings = $plugin->getSettings();
+
+        if ($settings->enableSaveData) {
+            return Craft::$app->getResponse()->redirect(UrlHelper::cpUrl('sprout-forms/'.$settings->defaultSection));
+        }
+
+        return Craft::$app->getResponse()->redirect(UrlHelper::cpUrl('sprout-forms/forms'));
+    }
+
     /**
      * @param int|null $formId
      * @param null     $settingsSectionHandle
@@ -46,7 +59,7 @@ class FormsController extends BaseController
      * @throws InvalidConfigException
      * @throws MissingComponentException
      */
-    public function actionSettings(int $formId = null, $settingsSectionHandle = null): Response
+    public function actionEditSettingsTemplate(int $formId = null, $settingsSectionHandle = null): Response
     {
         $form = SproutForms::$app->forms->getFormById($formId);
 
@@ -57,6 +70,8 @@ class FormsController extends BaseController
 
         return $this->renderTemplate('sprout-forms/forms/_settings/'.$settingsSectionHandle, [
             'form' => $form,
+            'groups' => SproutForms::$app->groups->getAllFormGroups(),
+            'groupId' => $form->groupId ?? null,
             'settings' => $plugin->getSettings(),
             'rules' => SproutForms::$app->rules->getRulesByFormId($formId),
             'ruleOptions' => SproutForms::$app->rules->getRuleOptions(),
@@ -93,43 +108,27 @@ class FormsController extends BaseController
         $this->requirePostRequest();
         $request = Craft::$app->getRequest();
 
-        $form = $this->_getFormModel();
+        $form = $this->getFormModel();
+        $duplicateForm = null;
 
         // If we're duplicating the form, swap $form with the duplicate
+
         if ($duplicate) {
-            try {
-                $form = Craft::$app->getElements()->duplicateElement($form, [
-                    'name' => SproutForms::$app->forms->getFieldAsNew('name', $form->name),
-                    'handle' => SproutForms::$app->forms->getFieldAsNew('handle', $form->handle),
-                    'oldHandle' => null
-                ]);
-            } catch (InvalidElementException $e) {
-                /** @var Entry $clone */
-                $clone = $e->element;
+            $duplicateForm = SproutForms::$app->forms->createNewForm(
+                $request->getBodyParam('name'),
+                $request->getBodyParam('handle')
+            );
 
-                if ($request->getAcceptsJson()) {
-                    return $this->asJson([
-                        'success' => false,
-                        'errors' => $clone->getErrors(),
-                    ]);
-                }
-
-                Craft::$app->getSession()->setError(Craft::t('app', 'Couldn’t duplicate form.'));
-
-                // Send the original entry back to the template, with any validation errors on the clone
-                $form->addErrors($clone->getErrors());
-                Craft::$app->getUrlManager()->setRouteParams([
-                    'form' => $form
-                ]);
-
-                return null;
-            } catch (Throwable $e) {
-                throw new ServerErrorHttpException(Craft::t('app', 'An error occurred when duplicating the form.'), 0, $e);
+            if ($duplicateForm) {
+                $form->id = $duplicateForm->id;
+                $form->uid = $duplicateForm->uid;
+            } else {
+                throw new Exception('Error creating Form');
             }
         }
 
-        $this->_populateEntryModel($form);
-        $this->prepareFieldLayout($form);
+        $this->populateFormModel($form);
+        $this->prepareFieldLayout($form, $duplicate, $duplicateForm);
 
         // Save it
         if (!SproutForms::$app->forms->saveForm($form, $duplicate)) {
@@ -196,9 +195,6 @@ class FormsController extends BaseController
 
         return $this->renderTemplate('sprout-forms/forms/_editForm', [
             'form' => $form,
-            'groups' => SproutForms::$app->groups->getAllFormGroups(),
-            'groupId' => $form->groupId ?? null,
-            'settings' => $plugin->getSettings(),
             'continueEditingUrl' => 'sprout-forms/forms/edit/{id}'
         ]);
     }
@@ -232,13 +228,19 @@ class FormsController extends BaseController
 
     /**
      * @param FormElement $form
+     * @param bool        $duplicate
+     * @param FormElement $duplicatedForm
      *
      * @throws Throwable
      */
-    public function prepareFieldLayout(FormElement $form)
+    public function prepareFieldLayout(FormElement $form, $duplicate = false, $duplicatedForm = null)
     {
         // Set the field layout
         $fieldLayout = Craft::$app->getFields()->assembleLayoutFromPost();
+
+        if ($duplicate) {
+            $fieldLayout = SproutForms::$app->fields->getDuplicateLayout($duplicatedForm, $fieldLayout);
+        }
 
         // Make sure we have a layout if:
         // 1. Form fails validation due to no fields existing
@@ -280,14 +282,13 @@ class FormsController extends BaseController
             Craft::$app->content->fieldContext = $oldFieldContext;
             Craft::$app->content->contentTable = $oldContentTable;
         }
-//        return $fieldLayout;
     }
 
     /**
      * @return FormElement
      * @throws NotFoundHttpException
      */
-    private function _getFormModel(): FormElement
+    private function getFormModel(): FormElement
     {
         $request = Craft::$app->getRequest();
         $formId = $request->getBodyParam('formId');
@@ -314,7 +315,10 @@ class FormsController extends BaseController
         return $form;
     }
 
-    private function _populateEntryModel(FormElement $form)
+    /**
+     * @param FormElement $form
+     */
+    private function populateFormModel(FormElement $form)
     {
         /** @var SproutForms $plugin */
         $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
@@ -332,16 +336,24 @@ class FormsController extends BaseController
         $form->redirectUri = $request->getBodyParam('redirectUri', $form->redirectUri);
         $form->saveData = $request->getBodyParam('saveData', $form->saveData);
         $form->submitButtonText = $request->getBodyParam('submitButtonText', $form->submitButtonText);
-        $form->enableFileAttachments = $request->getBodyParam('enableFileAttachments', $form->enableFileAttachments);
-
         $form->titleFormat = $request->getBodyParam('titleFormat', $form->titleFormat);
+        $form->formTemplate = $request->getBodyParam('formTemplate', $form->formTemplate);
+        $form->enableCaptchas = $request->getBodyParam('enableCaptchas', $form->enableCaptchas);
+
         if (!$form->titleFormat) {
             $form->titleFormat = "{dateCreated|date('D, d M Y H:i:s')}";
         }
 
-        $form->formTemplate = $request->getBodyParam('formTemplate', $form->formTemplate);
-        if ($form->formTemplate === '') {
-            $form->formTemplate = $settings->formTemplateDefaultValue ?? AccessibleTemplates::class;
+        if (!$form->displaySectionTitles) {
+            $form->displaySectionTitles = false;
+        }
+
+        if (!$form->saveData) {
+            $form->saveData = false;
+        }
+
+        if (!$form->enableCaptchas) {
+            $form->enableCaptchas = false;
         }
     }
 }

@@ -157,15 +157,17 @@ class Invisible extends FormField implements PreviewableFieldInterface
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
-        $invisibleValue = Craft::$app->getSession()->get($this->handle);
+        if (!Craft::$app->getRequest()->getIsConsoleRequest()) {
+            $invisibleValue = Craft::$app->getSession()->get($this->handle);
 
-        // If we have have a value stored in the session for the Invisible Field, use it
-        if ($invisibleValue) {
-            $value = $invisibleValue;
+            // If we have have a value stored in the session for the Invisible Field, use it
+            if ($invisibleValue) {
+                $value = $invisibleValue;
+            }
+
+            // Clean up so the session value doesn't persist
+            Craft::$app->getSession()->set($this->handle, null);
         }
-
-        // Clean up so the session value doesn't persist
-        Craft::$app->getSession()->set($this->handle, null);
 
         return parent::normalizeValue($value, $element);
     }

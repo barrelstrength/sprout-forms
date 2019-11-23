@@ -7,12 +7,12 @@ use barrelstrength\sproutforms\base\FormTemplates;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\rules\FieldRule;
 use barrelstrength\sproutforms\validators\FieldLayoutValidator;
-use barrelstrength\sproutforms\validators\FormTemplatesValidator;
 use Craft;
 use craft\base\Element;
 use craft\base\FieldInterface;
 use craft\elements\db\ElementQueryInterface;
 use craft\errors\MissingComponentException;
+use craft\helpers\Html;
 use craft\models\FieldLayout;
 use yii\base\ErrorHandler;
 use craft\db\Query;
@@ -60,9 +60,9 @@ class Form extends Element
     public $displaySectionTitles = false;
     public $redirectUri;
     public $submitButtonText;
-    public $saveData = false;
+    public $saveData = true;
     public $formTemplate;
-    public $enableFileAttachments = false;
+    public $enableCaptchas = true;
 
     /**
      * @inheritdoc
@@ -236,13 +236,14 @@ class Form extends Element
         $attributes['handle'] = ['label' => Craft::t('sprout-forms', 'Handle')];
         $attributes['numberOfFields'] = ['label' => Craft::t('sprout-forms', 'Number of Fields')];
         $attributes['totalEntries'] = ['label' => Craft::t('sprout-forms', 'Total Entries')];
+        $attributes['formSettings'] = ['label' => Craft::t('sprout-forms', 'Settings'), 'icon' => 'settings'];
 
         return $attributes;
     }
 
     protected static function defineDefaultTableAttributes(string $source): array
     {
-        return ['name', 'handle', 'numberOfFields', 'totalEntries'];
+        return ['name', 'handle', 'numberOfFields', 'totalEntries', 'formSettings'];
     }
 
     /**
@@ -275,6 +276,15 @@ class Form extends Element
                     ->scalar();
 
                 return $totalEntries;
+            }
+            case 'formSettings':
+            {
+                return Html::a('', $this->getCpEditUrl().'/settings/general', [
+                    'rel' => 'noopener',
+                    'target' => '_blank',
+                    'data-icon' => 'settings',
+                    'title' => Craft::t('sprout-forms', 'Visit form settings')
+                ]);
             }
         }
 
@@ -309,7 +319,7 @@ class Form extends Element
         $record->saveData = $this->saveData;
         $record->submitButtonText = $this->submitButtonText;
         $record->formTemplate = $this->formTemplate;
-        $record->enableFileAttachments = $this->enableFileAttachments;
+        $record->enableCaptchas = $this->enableCaptchas;
 
         $record->save(false);
 
@@ -373,10 +383,6 @@ class Form extends Element
             ['name', 'handle'],
             UniqueValidator::class,
             'targetClass' => FormRecord::class
-        ];
-        $rules[] = [
-            ['formTemplate'],
-            FormTemplatesValidator::class
         ];
         $rules[] = [
             ['fieldLayoutId'],
