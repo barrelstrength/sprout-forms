@@ -14,6 +14,10 @@ class m190724_000000_add_conditional_logic_table extends Migration
      */
     public function safeUp(): bool
     {
+        if ($this->db->tableExists('{{%sproutforms_rules}}')){
+            return true;
+        }
+
         $this->createTable('{{%sproutforms_rules}}', [
             'id' => $this->primaryKey(),
             'formId' => $this->integer()->notNull(),

@@ -17,14 +17,12 @@ use barrelstrength\sproutforms\events\OnSaveEntryEvent;
 use barrelstrength\sproutforms\fields\formfields\BaseRelationFormField;
 use barrelstrength\sproutforms\models\EntryStatus;
 use barrelstrength\sproutforms\records\Entry as EntryRecord;
-use barrelstrength\sproutforms\records\EntryStatus as EntryStatusRecord;
 use craft\base\Element;
 use craft\helpers\Json;
 use craft\queue\jobs\ResaveElements;
 use Throwable;
 use yii\base\Component;
 use yii\base\Exception;
-use yii\db\StaleObjectException;
 
 /**
  * Class Entries
@@ -382,7 +380,7 @@ class Entries extends Component
     public function resaveElements($formId)
     {
         Craft::$app->getQueue()->push(new ResaveElements([
-            'description' => Craft::t('sprout-base-uris', 'Re-saving Form entries.'),
+            'description' => Craft::t('sprout-forms', 'Re-saving Form entries.'),
             'elementType' => EntryElement::class,
             'criteria' => [
                 'formId' => $formId,

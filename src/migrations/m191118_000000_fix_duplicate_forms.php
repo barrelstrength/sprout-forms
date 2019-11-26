@@ -34,6 +34,11 @@ class m191118_000000_fix_duplicate_forms extends Migration
 
         foreach ($forms as $form) {
             $contentTable = '{{%sproutformscontent_'.$form['handle'].'}}';
+
+            if (!$this->db->tableExists($contentTable)){
+                continue;
+            }
+
             $formFields = (new Query())
                 ->select(['id', 'handle', 'settings'])
                 ->from(['{{%fields}}'])
@@ -41,8 +46,10 @@ class m191118_000000_fix_duplicate_forms extends Migration
                 ->all();
             // All the fields columns does not exists
             $missingFields = 0;
+
             foreach ($formFields as $formField) {
                 $fieldColumn = 'field_'.$formField['handle'];
+
                 if (!$this->db->columnExists($contentTable, $fieldColumn)) {
                     $missingFields++;
                 }
