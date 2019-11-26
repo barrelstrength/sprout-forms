@@ -22,6 +22,7 @@ use yii\base\Exception;
 use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
 use barrelstrength\sproutforms\SproutForms;
+use function Matrix\diagonal;
 
 class FormsController extends BaseController
 {
@@ -349,10 +350,6 @@ class FormsController extends BaseController
 
         if (!$form->saveData) {
             $form->saveData = false;
-        }
-        if ($form->formTemplate === '') {
-
-            $form->formTemplate = empty($settings->formTemplateDefaultValue) ? AccessibleTemplates::class : $settings->formTemplateDefaultValue;
         }
 
         if (!$form->enableCaptchas) {

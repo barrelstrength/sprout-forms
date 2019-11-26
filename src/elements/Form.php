@@ -7,7 +7,6 @@ use barrelstrength\sproutforms\base\FormTemplates;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\rules\FieldRule;
 use barrelstrength\sproutforms\validators\FieldLayoutValidator;
-use barrelstrength\sproutforms\validators\FormTemplatesValidator;
 use Craft;
 use craft\base\Element;
 use craft\base\FieldInterface;
@@ -384,10 +383,6 @@ class Form extends Element
             ['name', 'handle'],
             UniqueValidator::class,
             'targetClass' => FormRecord::class
-        ];
-        $rules[] = [
-            ['formTemplate'],
-            FormTemplatesValidator::class
         ];
         $rules[] = [
             ['fieldLayoutId'],

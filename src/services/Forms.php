@@ -484,10 +484,12 @@ class Forms extends Component
         /** @var FieldRule $rule */
         foreach ($rules as $rule) {
             $conditions = $rule->conditions;
-            foreach ($conditions as $key => $orConditions) {
-                foreach ($orConditions as $key2 => $condition) {
-                    if (isset($condition[0]) && $condition[0] === $oldHandle) {
-                        $conditions[$key][$key2][0] = $newHandle;
+            if ($conditions) {
+                foreach ($conditions as $key => $orConditions) {
+                    foreach ($orConditions as $key2 => $condition) {
+                        if (isset($condition[0]) && $condition[0] === $oldHandle) {
+                            $conditions[$key][$key2][0] = $newHandle;
+                        }
                     }
                 }
             }
@@ -512,22 +514,22 @@ class Forms extends Component
         $integrations = SproutForms::$app->integrations->getIntegrationsByFormId($form->id);
 
         /** @var Integration $integration */
-        foreach ($integrations as $integration){
+        foreach ($integrations as $integration) {
             $integrationResult = (new Query())
                 ->select(['id', 'settings'])
                 ->from(['{{%sproutforms_integrations}}'])
                 ->where(['id' => $integration->id])
                 ->one();
 
-            if (is_null($integrationResult)){
+            if (is_null($integrationResult)) {
                 continue;
             }
 
             $settings = json_decode($integrationResult['settings'], true);
 
             $fieldMapping = $settings['fieldMapping'];
-            foreach ($fieldMapping as $pos => $map){
-                if (isset($map['sourceFormField']) && $map['sourceFormField'] === $oldHandle){
+            foreach ($fieldMapping as $pos => $map) {
+                if (isset($map['sourceFormField']) && $map['sourceFormField'] === $oldHandle) {
                     $fieldMapping[$pos]['sourceFormField'] = $newHandle;
                 }
             }
@@ -624,8 +626,7 @@ class Forms extends Component
         $form->name = $this->getFieldAsNew('name', $name);
         $form->handle = $this->getFieldAsNew('handle', $handle);
         $form->titleFormat = "{dateCreated|date('D, d M Y H:i:s')}";
-        $accessible = new AccessibleTemplates();
-        $form->formTemplate = $settings->formTemplateDefaultValue ?? $accessible->getTemplateId();
+        $form->formTemplate = '';
         $form->saveData = $settings->enableSaveData ? $settings->enableSaveDataDefaultValue : false;
 
         // Set default tab
@@ -858,7 +859,8 @@ class Forms extends Component
      *
      * @return string|null
      */
-    public function handleModifyFormHook($context) {
+    public function handleModifyFormHook($context)
+    {
         /** @var Form $form */
         $form = $context['form'] ?? null;
         if ($form !== null && $form->enableCaptchas) {

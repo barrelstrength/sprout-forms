@@ -493,15 +493,33 @@ class SproutFormsVariable
 
     /**
      * @param Form|null $form
+     * @param bool      $globalSettings
      *
      * @return array
      */
-    public function getTemplateOptions(Form $form = null): array
+    public function getTemplateOptions(Form $form = null, $generalSettings = false): array
     {
         $defaultFormTemplates = new AccessibleTemplates();
 
+        if ($generalSettings) {
+            $options[] = [
+                'optgroup' => Craft::t('sprout-forms', 'Global Templates')
+            ];
+
+            $options[] = [
+                'label' => Craft::t('sprout-forms', 'Default Form Templates'),
+                'value' => null
+            ];
+        }
+
         $templates = SproutForms::$app->forms->getAllFormTemplates();
         $templateIds = [];
+
+        if ($generalSettings) {
+            $options[] = [
+                'optgroup' => Craft::t('sprout-forms', 'Form-Specific Templates')
+            ];
+        }
 
         foreach ($templates as $template) {
             $options[] = [

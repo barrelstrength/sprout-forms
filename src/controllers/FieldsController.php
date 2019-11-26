@@ -323,7 +323,6 @@ class FieldsController extends BaseController
         if ($response) {
             Craft::info('Field Saved', __METHOD__);
             SproutForms::$app->forms->saveForm($form);
-
             return $this->returnJson(true, $field, $form, $tabName, $tabId);
         }
 
