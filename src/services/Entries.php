@@ -6,6 +6,7 @@ use barrelstrength\sproutbase\jobs\PurgeElements;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\base\Captcha;
 use barrelstrength\sproutforms\elements\Entry;
+use barrelstrength\sproutforms\jobs\ResaveEntries;
 use barrelstrength\sproutforms\models\Settings;
 use barrelstrength\sproutforms\records\EntriesSpamLog as EntriesSpamLogRecord;
 use Craft;
@@ -379,13 +380,8 @@ class Entries extends Component
      */
     public function resaveElements($formId)
     {
-        Craft::$app->getQueue()->push(new ResaveElements([
-            'description' => Craft::t('sprout-forms', 'Re-saving Form entries.'),
-            'elementType' => EntryElement::class,
-            'criteria' => [
-                'formId' => $formId,
-                'limit' => null
-            ]
+        Craft::$app->getQueue()->push(new ResaveEntries([
+            'formId' => $formId
         ]));
     }
 }
