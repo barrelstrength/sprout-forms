@@ -29,6 +29,7 @@ use barrelstrength\sproutforms\fields\formfields\Tags;
 use barrelstrength\sproutforms\fields\formfields\Url;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\events\RegisterFieldsEvent;
+use barrelstrength\sproutforms\fields\formfields\Users;
 use Craft;
 use craft\base\FieldInterface;
 use craft\models\FieldLayout;
@@ -254,6 +255,7 @@ class Fields extends Component
         $groupedFields[$relationsLabel][] = Categories::class;
         $groupedFields[$relationsLabel][] = Entries::class;
         $groupedFields[$relationsLabel][] = Tags::class;
+        $groupedFields[$relationsLabel][] = Users::class;
 
         return $groupedFields;
     }

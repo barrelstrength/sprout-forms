@@ -1,0 +1,15 @@
+{% import "_includes/forms" as forms %}
+
+{% set options = [
+    {
+        label: 'Select an user...'|t('sprout-forms'),
+        value: true
+    }
+] %}
+
+{{ forms.select({
+    options: options,
+    value: '',
+    readonly: true,
+    disabled: true
+}) }}

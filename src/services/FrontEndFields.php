@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\services;
 
 use Craft;
+use craft\elements\User;
 use yii\base\Component;
 use craft\elements\Category;
 use craft\elements\Entry;
@@ -74,6 +75,62 @@ class FrontEndFields extends Component
         }
 
         return $entries;
+    }
+
+    /**
+     * @param array $settings field settings
+     *
+     * @return array
+     */
+    public function getFrontEndUsers($settings): array
+    {
+        $users = [];
+        $userGroups = Craft::$app->getUserGroups();
+
+        if (is_array($settings['sources'])) {
+            foreach ($settings['sources'] as $source) {
+                $section = explode(':', $source);
+                $pos = count($users) + 1;
+
+                if (count($section) == 2) {
+                    $groupModel = $userGroups->getGroupByUid($section[1]);
+
+                    $entryQuery = User::find()->groupId($groupModel->id);
+                    $usersResult = $entryQuery->all();
+                    if ($usersResult){
+                        $users[$pos]['users'] = $usersResult;
+                        $users[$pos]['group'] = $groupModel;
+                    }
+                }else if ($section[0] == 'admins') {
+                    $entryQuery = User::find()->admin(true);
+
+                    $users[$pos]['users'] = $entryQuery->all();
+                    $users[$pos]['group'] = 'admin';
+                }
+            }
+        } else if ($settings['sources'] == '*') {
+            $groups = $userGroups->getAllGroups();
+            $pos = count($users) + 1;
+
+            $entryQuery = User::find()->admin(true);
+
+            $users[$pos]['users'] = $entryQuery->all();
+            $users[$pos]['group'] = 'admin';
+
+            foreach ($groups as $group) {
+                $pos = count($users) + 1;
+                $groupModel = $userGroups->getGroupById($group->id);
+
+                $entryQuery = User::find()->groupId($group->id);
+                $usersResult = $entryQuery->all();
+                if ($usersResult){
+                    $users[$pos]['users'] = $usersResult;
+                    $users[$pos]['group'] = $groupModel;
+                }
+            }
+        }
+
+        return $users;
     }
 
     /**
