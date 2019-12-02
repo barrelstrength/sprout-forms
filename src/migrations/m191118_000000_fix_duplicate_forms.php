@@ -2,7 +2,11 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
+use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\elements\Form;
+use barrelstrength\sproutforms\fields\Entries;
+use barrelstrength\sproutforms\fields\formfields\Categories;
+use barrelstrength\sproutforms\fields\formfields\FileUpload;
 use Craft;
 use craft\db\Migration;
 use craft\db\Query;
@@ -32,6 +36,24 @@ class m191118_000000_fix_duplicate_forms extends Migration
             ->from(['{{%sproutforms_forms}}'])
             ->all();
 
+        $formFieldLayoutIds = [];
+
+        foreach ($forms as $form) {
+            $formFieldLayoutIds[] = $form['fieldLayoutId'];
+        }
+
+        $fieldLayoutFields = (new Query())
+            ->select(['id', 'layoutId', 'fieldId'])
+            ->from(['{{%fieldlayoutfields}}'])
+            ->where(['in', 'layoutId', $formFieldLayoutIds])
+            ->all();
+
+        $fieldLayoutMapped = [];
+
+        foreach ($fieldLayoutFields as $fieldLayoutField) {
+            $fieldLayoutMapped[$fieldLayoutField['layoutId']][] = $fieldLayoutField['fieldId'];
+        }
+
         foreach ($forms as $form) {
             $contentTable = '{{%sproutformscontent_'.$form['handle'].'}}';
 
@@ -39,23 +61,33 @@ class m191118_000000_fix_duplicate_forms extends Migration
                 continue;
             }
 
-            $formFields = (new Query())
-                ->select(['id', 'handle', 'settings'])
-                ->from(['{{%fields}}'])
-                ->where(['context' => 'sproutForms:'.$form['id']])
-                ->all();
-            // All the fields columns does not exists
-            $missingFields = 0;
+            $possibleFieldLayoutId = $form['fieldLayoutId'];
+            $candidate = false;
+            $localFieldLayoutMapped = $fieldLayoutMapped;
 
-            foreach ($formFields as $formField) {
-                $fieldColumn = 'field_'.$formField['handle'];
+            // Let's get all the fields that are used from other fieldLayout
+            $possibleFieldLayoutFieldsIds = $localFieldLayoutMapped[$possibleFieldLayoutId] ?? [];
+            unset($localFieldLayoutMapped[$possibleFieldLayoutId]);
 
-                if (!$this->db->columnExists($contentTable, $fieldColumn)) {
-                    $missingFields++;
+            foreach ($localFieldLayoutMapped as $item) {
+                $duplicatedFieldIds = array_intersect($possibleFieldLayoutFieldsIds, $item);
+                if (count($duplicatedFieldIds)){
+                    $candidate = true;
+                    break;
                 }
             }
 
-            if ($missingFields === count($formFields) && $missingFields > 0) {
+            if (!$candidate){
+                break;
+            }
+
+            $formFields = (new Query())
+                ->select(['id', 'handle', 'type', 'settings'])
+                ->from(['{{%fields}}'])
+                ->where(['context' => 'sproutForms:'.$form['id']])
+                ->all();
+
+            if (count($possibleFieldLayoutFieldsIds) != count($formFields)){
                 $fakeFieldLayoutId = $this->getFakeFieldLayoutId();
                 Craft::info('Updating corrupted duplicated form field layout id: '.$form['fieldLayoutId'].' to: '.$fakeFieldLayoutId, __METHOD__);
                 $this->update('{{%sproutforms_forms}}', ['fieldLayoutId' => $fakeFieldLayoutId], ['id' => $form['id']], [], false);
