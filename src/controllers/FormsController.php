@@ -143,7 +143,7 @@ class FormsController extends BaseController
 
             return null;
         }
-        if ($oldTitleFormat != $currentTitleFormat){
+        if ($oldTitleFormat !== $currentTitleFormat){
             SproutForms::$app->entries->resaveElements($form->id);
         }
 
