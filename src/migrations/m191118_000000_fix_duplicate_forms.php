@@ -48,50 +48,70 @@ class m191118_000000_fix_duplicate_forms extends Migration
             ->where(['in', 'layoutId', $formFieldLayoutIds])
             ->all();
 
-        $fieldLayoutMapped = [];
+        $fieldLayoutFieldsIndexedByLayoutId = [];
 
         foreach ($fieldLayoutFields as $fieldLayoutField) {
-            $fieldLayoutMapped[$fieldLayoutField['layoutId']][] = $fieldLayoutField['fieldId'];
+            $fieldLayoutFieldsIndexedByLayoutId[$fieldLayoutField['layoutId']][] = $fieldLayoutField['fieldId'];
         }
 
         foreach ($forms as $form) {
             $contentTable = '{{%sproutformscontent_'.$form['handle'].'}}';
 
-            if (!$this->db->tableExists($contentTable)){
+            if (!$this->db->tableExists($contentTable)) {
                 continue;
             }
 
-            $possibleFieldLayoutId = $form['fieldLayoutId'];
-            $candidate = false;
-            $localFieldLayoutMapped = $fieldLayoutMapped;
+            $possibleDuplicateForm = false;
+            $possibleDuplicateFieldLayoutId = $form['fieldLayoutId'];
+            $localFieldLayoutFieldsIndexedByLayoutId = $fieldLayoutFieldsIndexedByLayoutId;
 
-            // Let's get all the fields that are used from other fieldLayout
-            $possibleFieldLayoutFieldsIds = $localFieldLayoutMapped[$possibleFieldLayoutId] ?? [];
-            unset($localFieldLayoutMapped[$possibleFieldLayoutId]);
+            // Get an array all Field IDs associatd with this Field Layout ID
+            $possibleDuplicateFieldLayoutFieldIds = $localFieldLayoutFieldsIndexedByLayoutId[$possibleDuplicateFieldLayoutId] ?? [];
 
-            foreach ($localFieldLayoutMapped as $item) {
-                $duplicatedFieldIds = array_intersect($possibleFieldLayoutFieldsIds, $item);
-                if (count($duplicatedFieldIds)){
-                    $candidate = true;
+            // Remove our current Field Layout ID from the Field Layouts we want to check
+            unset($localFieldLayoutFieldsIndexedByLayoutId[$possibleDuplicateFieldLayoutId]);
+
+            // Check a list of our current Field Layout Field IDs against each other Field Layout
+            // If we find any matches that suggests we Field IDs from this layout asigned to multiple
+            // Field Layouts that we need to resolve.
+            foreach ($localFieldLayoutFieldsIndexedByLayoutId as $fieldLayoutFieldIds) {
+                $duplicatedFieldIds = array_intersect($possibleDuplicateFieldLayoutFieldIds, $fieldLayoutFieldIds);
+                if (count($duplicatedFieldIds)) {
+                    $possibleDuplicateForm = true;
                     break;
                 }
             }
 
-            if (!$candidate){
-                break;
+            if (!$possibleDuplicateForm) {
+                continue;
             }
 
-            $formFields = (new Query())
+            // If we have a Form that is using duplicate fields, we don't know if it's the original
+            // Form or the duplicated Form so we need to check if the number of Fields in the
+            // craft_fields column that match this forms Field Layout ID are the same as the Fields
+            // found for this form in the craft_fieldlayoutfields column. If we have a mismatch,
+            // we can conculde the Save As New Form bug created a duplicate without the correct fields
+            // an any additional fields that were created did not fix the original problem where
+            // fields may still be related to another form.
+            $fieldIdsMatchedByFieldsTableContextColumn = (new Query())
                 ->select(['id', 'handle', 'type', 'settings'])
                 ->from(['{{%fields}}'])
                 ->where(['context' => 'sproutForms:'.$form['id']])
                 ->all();
 
-            if (count($possibleFieldLayoutFieldsIds) != count($formFields)){
-                $fakeFieldLayoutId = $this->getFakeFieldLayoutId();
-                Craft::info('Updating corrupted duplicated form field layout id: '.$form['fieldLayoutId'].' to: '.$fakeFieldLayoutId, __METHOD__);
-                $this->update('{{%sproutforms_forms}}', ['fieldLayoutId' => $fakeFieldLayoutId], ['id' => $form['id']], [], false);
+            if (count($possibleDuplicateFieldLayoutFieldIds) === count($fieldIdsMatchedByFieldsTableContextColumn)) {
+                continue;
             }
+
+            // Generate an empty Field Layout
+            $emptyFieldLayoutId = $this->getEmptyFieldLayoutId();
+
+            $formId = (int) $form['id'];
+
+            // Assign a new, empty field layout to the corrupted duplicate form field layout
+            $this->update('{{%sproutforms_forms}}', ['fieldLayoutId' => $emptyFieldLayoutId], ['id' => $formId], [], false);
+
+            Craft::info('Updated corrupted duplicate form field layout id: '.$form['fieldLayoutId'].' to: '.$emptyFieldLayoutId, __METHOD__);
         }
     }
 
@@ -99,7 +119,7 @@ class m191118_000000_fix_duplicate_forms extends Migration
      * @return int|null
      * @throws Exception
      */
-    private function getFakeFieldLayoutId()
+    private function getEmptyFieldLayoutId()
     {
         $tabs = [];
         $tab = new FieldLayoutTab();
