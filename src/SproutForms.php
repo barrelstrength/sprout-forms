@@ -377,14 +377,14 @@ class SproutForms extends Plugin implements SproutEditionsInterface
                 'route' => 'sprout-base-reports/reports/reports-index-template',
                 'params' => [
                     'viewContext' => 'sprout-forms',
-                    'hideSidebar' => true
+//                    'hideSidebar' => true
                 ]
             ],
             '<pluginHandle:sprout-forms>/reports' => [
                 'route' => 'sprout-base-reports/reports/reports-index-template',
                 'params' => [
                     'viewContext' => 'sprout-forms',
-                    'hideSidebar' => true
+//                    'hideSidebar' => true
                 ]
             ],
 
@@ -393,7 +393,7 @@ class SproutForms extends Plugin implements SproutEditionsInterface
                 'route' => 'sprout-base-email/notifications/notifications-index-template',
                 'params' => [
                     'viewContext' => 'sprout-forms',
-                    'hideSidebar' => true
+//                    'hideSidebar' => true
                 ]
             ],
             '<pluginHandle:sprout-forms>/notifications/edit/<emailId:\d+|new>' => [

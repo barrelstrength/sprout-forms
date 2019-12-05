@@ -38,6 +38,12 @@ class SpamLogDataSource extends DataSource
         return Craft::t('sprout-forms', 'Overview of spam submissions');
     }
 
+    public function getViewContextLabel(): string
+    {
+        // @todo - implement this with an interface or Trait so it's easier to apply to all DataSources in a plugin?
+        return 'Sprout Forms';
+    }
+
     /**
      * @inheritdoc
      *
