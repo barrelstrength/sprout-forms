@@ -376,15 +376,13 @@ class SproutForms extends Plugin implements SproutEditionsInterface
             '<pluginHandle:sprout-forms>/reports/<dataSourceId:\d+>' => [
                 'route' => 'sprout-base-reports/reports/reports-index-template',
                 'params' => [
-                    'viewContext' => 'sprout-forms',
-//                    'hideSidebar' => true
+                    'viewContext' => 'sprout-forms'
                 ]
             ],
             '<pluginHandle:sprout-forms>/reports' => [
                 'route' => 'sprout-base-reports/reports/reports-index-template',
                 'params' => [
-                    'viewContext' => 'sprout-forms',
-//                    'hideSidebar' => true
+                    'viewContext' => 'sprout-forms'
                 ]
             ],
 
