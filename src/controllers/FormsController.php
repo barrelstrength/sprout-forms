@@ -109,6 +109,7 @@ class FormsController extends BaseController
         $request = Craft::$app->getRequest();
 
         $form = $this->getFormModel();
+        $oldTitleFormat = $form->titleFormat;
         $duplicateForm = null;
 
         // If we're duplicating the form, swap $form with the duplicate
@@ -128,6 +129,7 @@ class FormsController extends BaseController
         }
 
         $this->populateFormModel($form);
+        $currentTitleFormat = $form->titleFormat;
         $this->prepareFieldLayout($form, $duplicate, $duplicateForm);
 
         // Save it
@@ -140,6 +142,9 @@ class FormsController extends BaseController
             ]);
 
             return null;
+        }
+        if ($oldTitleFormat !== $currentTitleFormat){
+            SproutForms::$app->entries->resaveElements($form->id);
         }
 
         Craft::$app->getSession()->setNotice(Craft::t('sprout-forms', 'Form saved.'));

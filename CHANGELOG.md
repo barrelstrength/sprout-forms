@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.6.5 - 2019-12-03
+
+### Fixed
+- Added ResaveEntries job to ensure all Form Entry Title's get updated when the Title Format setting is changed ([#374])
+- Fixed Address Field and Rules javascript behavior in Basic Templates ([#378])
+- Updated duplicate field layout cleanup migration ([#377])
+
+[#374]: https://github.com/barrelstrength/craft-sprout-forms/issues/374
+[#377]: https://github.com/barrelstrength/craft-sprout-forms/issues/377
+[#378]: https://github.com/barrelstrength/craft-sprout-forms/issues/378
+
 ## 3.6.4 - 2019-11-22
 
 ### Changed

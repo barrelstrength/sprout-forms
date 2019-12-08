@@ -6,6 +6,7 @@ use barrelstrength\sproutbase\jobs\PurgeElements;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\base\Captcha;
 use barrelstrength\sproutforms\elements\Entry;
+use barrelstrength\sproutforms\jobs\ResaveEntries;
 use barrelstrength\sproutforms\models\Settings;
 use barrelstrength\sproutforms\records\EntriesSpamLog as EntriesSpamLogRecord;
 use Craft;
@@ -17,13 +18,12 @@ use barrelstrength\sproutforms\events\OnSaveEntryEvent;
 use barrelstrength\sproutforms\fields\formfields\BaseRelationFormField;
 use barrelstrength\sproutforms\models\EntryStatus;
 use barrelstrength\sproutforms\records\Entry as EntryRecord;
-use barrelstrength\sproutforms\records\EntryStatus as EntryStatusRecord;
 use craft\base\Element;
 use craft\helpers\Json;
+use craft\queue\jobs\ResaveElements;
 use Throwable;
 use yii\base\Component;
 use yii\base\Exception;
-use yii\db\StaleObjectException;
 
 /**
  * Class Entries
@@ -373,5 +373,15 @@ class Entries extends Component
         ]);
 
         $this->trigger(EntryElement::EVENT_AFTER_SAVE, $event);
+    }
+
+    /**
+     * @param $formId
+     */
+    public function resaveElements($formId)
+    {
+        Craft::$app->getQueue()->push(new ResaveEntries([
+            'formId' => $formId
+        ]));
     }
 }

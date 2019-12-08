@@ -14,6 +14,10 @@ class m191116_000005_add_entries_spam_table extends Migration
      */
     public function safeUp(): bool
     {
+        if ($this->db->tableExists('{{%sproutforms_entries_spam_log}}')){
+            return true;
+        }
+
         $this->createTable('{{%sproutforms_entries_spam_log}}', [
             'id' => $this->primaryKey(),
             'entryId' => $this->integer()->notNull(),
