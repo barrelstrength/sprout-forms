@@ -28,6 +28,8 @@ class Settings extends Model implements SproutSettingsInterface
     public $cleanupProbability = 1000;
     public $enableSaveDataDefaultValue = 1;
     public $trackRemoteIp = false;
+    public $showNotificationsTab = true;
+    public $showReportsTab = true;
     public $captchaSettings = [];
     public $enableEditFormEntryViaFrontEnd = 0;
 
@@ -65,6 +67,21 @@ class Settings extends Model implements SproutSettingsInterface
                 'template' => 'sprout-forms/settings/entrystatuses',
                 'actionTemplate' => 'sprout-forms/settings/entrystatuses/_actionStatusButton',
                 'variables' => $entryStatusVariables
+            ],
+            'settingsHeading' => [
+                'heading' => Craft::t('sprout-forms', 'Integrations'),
+            ],
+            'email' => [
+                'label' => Craft::t('sprout-forms', 'Email'),
+                'url' => 'sprout-forms/settings/email',
+                'selected' => 'email',
+                'template' => 'sprout-forms/settings/email'
+            ],
+            'reports' => [
+                'label' => Craft::t('sprout-forms', 'Reports'),
+                'url' => 'sprout-forms/settings/reports',
+                'selected' => 'reports',
+                'template' => 'sprout-forms/settings/reports'
             ]
         ];
 

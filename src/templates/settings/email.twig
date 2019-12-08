@@ -1,0 +1,15 @@
+{% requireAdmin %}
+
+{% import "_includes/forms" as forms %}
+
+
+{% set sproutEmailIsEnabled = craft.app.getPlugins().isPluginEnabled('sprout-email') %}
+
+{{ forms.lightswitchField({
+    label: "Show Notifications Tab"|t('sprout-forms'),
+    instructions: "Sprout Forms includes full-featured Notification Emails powered by Sprout Email. If you also have Sprout Email installed, you may want to disable the Notifications tab in Sprout Forms and manage all Notifications in the Email section of the CP."|t('sprout-forms'),
+    name: 'showNotificationsTab',
+    on: settings.showNotificationsTab ? true : not sproutEmailIsEnabled,
+    onLabel: "Enable"|t('sprout-forms'),
+    warning: not sproutEmailIsEnabled ? 'Notifications tab will always display while Sprout Email is disabled'|t('sprout-forms') : null
+}) }}
