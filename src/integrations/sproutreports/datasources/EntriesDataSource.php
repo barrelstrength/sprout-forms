@@ -91,9 +91,20 @@ class EntriesDataSource extends DataSource
         $query = new Query();
 
         $formQuery = $query
-            ->select('*')
+            ->select([
+                '[[elements.id]] AS "elementId"',
+                '[[elements_sites.siteId]] AS "siteId"',
+                '[[formcontenttable.title]] AS "title"',
+                '[[entrystatuses.name]] AS "entryStatusName"',
+                '[[entries.ipAddress]] AS "ipAddress"',
+                '[[entries.referrer]] AS "referrer"',
+                '[[entries.userAgent]] AS "userAgent"',
+                '[[entries.dateCreated]] AS "dateCreated"',
+                '[[entries.dateUpdated]] AS "dateUpdated"'
+            ])
             ->from($contentTable.' AS formcontenttable')
             ->innerJoin('{{%elements}} elements', '[[formcontenttable.elementId]] = [[elements.id]]')
+            ->innerJoin('{{%elements_sites}} elements_sites', '[[elements_sites.elementId]] = [[elements.id]]')
             ->innerJoin('{{%sproutforms_entries}} entries', '[[entries.id]] = [[elements.id]]')
             ->innerJoin('{{%sproutforms_entrystatuses}} entrystatuses', '[[entries.statusId]] = [[entrystatuses.id]]')
             ->where(['elements.dateDeleted' => null]);
@@ -118,13 +129,11 @@ class EntriesDataSource extends DataSource
         }
 
         foreach ($results as $key => $result) {
-
             $elementId = $result['elementId'];
-            $rows[$key]['id'] = $result['id'];
             $rows[$key]['elementId'] = $elementId;
             $rows[$key]['siteId'] = $result['siteId'];
             $rows[$key]['title'] = $result['title'];
-            $rows[$key]['status'] = $result['name'];
+            $rows[$key]['status'] = $result['entryStatusName'];
             $rows[$key]['ipAddress'] = $result['ipAddress'];
             $rows[$key]['referrer'] = $result['referrer'];
             $rows[$key]['userAgent'] = $result['userAgent'];
