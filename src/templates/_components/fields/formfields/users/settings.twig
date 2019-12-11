@@ -1,0 +1,29 @@
+{% extends "sprout-forms/_components/fields/formfields/elementfieldsettings" %}
+
+{% import "_includes/forms" as forms %}
+
+{% block fieldSettings %}
+    {{ parent() }}
+
+    {{ forms.selectField({
+        label: "Username Format"|t('sprout-forms'),
+        instructions: "How to display users when output. If 'Full Name' is selected and a User does not have a First and Last Name, the user will not display. The 'Username' option displays what Craft considers the username which can be a username or email depending on how your site is configured. Be careful and considerate when displaying personal information in your forms."|t('sprout-forms'),
+        id: 'usernameFormat',
+        name: 'usernameFormat',
+        options: [
+            {
+                label: 'Full Name (First and Last)',
+                value: 'fullName'
+            },
+            {
+                label: 'Username (may include email addresses)',
+                value: 'username'
+            },
+            {
+                label: 'Email',
+                value: 'email'
+            }
+        ],
+        value: field.usernameFormat
+    }) }}
+{% endblock %}

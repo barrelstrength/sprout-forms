@@ -5,7 +5,7 @@
 {%- set value = value ? value : [] %}
 
 {%- set multiple = field.limit == '' ? true : field.limit > 1 ? true : false %}
-{%- set selectionLabel = field.selectionLabel != '' ? field.selectionLabel : "Select an entry..."|t('site') -%}
+{%- set selectionLabel = field.selectionLabel != '' ? field.selectionLabel : "Select a user..."|t('sprout-forms') -%}
 {%- set hasTitle = users|length > 1 %}
 
 {%- set dataAttributes = null %}
@@ -28,16 +28,29 @@
         {%- endif -%}
         {%- for options in users -%}
             {% if hasTitle %}
-                {% set label = options.group == 'admin' ? 'Admins'|t('site') : options.group.name %}
+                {% set label = options.group == 'admin' ? 'Admins'|t('sprout-forms') : options.group.name %}
                 <optgroup label="{{ label }}">
             {% endif %}
             {%- for option in options.users -%}
-                {%- set optionLabel = option.username -%}
-                {%- set optionValue =  option.id -%}
+                {% set username = null %}
+                {% switch field.usernameFormat %}
+                    {% case "username" %}
+                        {% set username = option.username %}
+                    {% case "email" %}
+                        {% set username = option.email %}
+                    {% default %}
+                        {% set username = option.getFullName() %}
+                {% endswitch %}
 
-                <option value="{{ optionValue }}"
+                {# Only add an option if our username value is not null #}
+                {% if username %}
+                    {%- set optionLabel = username -%}
+                    {%- set optionValue =  option.id -%}
+
+                    <option value="{{ optionValue }}"
                         {% if optionValue in value %}selected{% endif %}>{{ optionLabel }}</option>
 
+                {% endif %}
             {% endfor %}
             {% if hasTitle %}
                 </optgroup>

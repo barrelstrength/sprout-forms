@@ -30,6 +30,13 @@ class Users extends BaseRelationFormField
     public $cssClasses;
 
     /**
+     * @var string
+     */
+    public $usernameFormat = 'fullName';
+
+    protected $settingsTemplate = 'sprout-forms/_components/fields/formfields/users/settings';
+
+    /**
      * @inheritdoc
      */
     public static function displayName(): string
