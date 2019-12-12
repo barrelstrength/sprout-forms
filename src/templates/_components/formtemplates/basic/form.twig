@@ -18,7 +18,7 @@
 <form method="post" accept-charset="utf-8" enctype="multipart/form-data"
     {%- if id %} id="{{ id }}"{% endif -%}
     {%- if class %} class="{{ class -}}{%- if errors %} {{ errorClass }}{% endif -%}"{% endif -%}
-    data-rules="{{ rules|json_encode|raw|e('html') }}"
+    {%- if rules %} data-rules="{{ rules|json_encode|raw|e('html') }}"{% endif -%}
 >
     {{ csrfInput() }}
     <input type="hidden" aria-hidden="true" name="action"
