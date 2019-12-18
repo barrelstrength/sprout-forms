@@ -64,11 +64,6 @@
     {%- endfor %}
 {%- endif %}
 
-{%- set rulesJsUrl = view.getAssetManager().getPublishedUrl(
-    '@sproutforms/web/assets/formtemplates/dist/js/rules.js',
-    true) -%}
-{%- do view.registerJsFile(rulesJsUrl) -%}
-
 {%- set addressFieldJsUrl = view.getAssetManager().getPublishedUrl(
     '@sproutforms/web/assets/formtemplates/dist/js/addressfield.js',
     true) -%}
@@ -78,6 +73,11 @@
     '@sproutforms/web/assets/formtemplates/dist/js/disable-submit-button.js',
     true) -%}
 {%- do view.registerJsFile(disableSubmitButtonJsUrl) -%}
+
+{%- set rulesJsUrl = view.getAssetManager().getPublishedUrl(
+    '@sproutforms/web/assets/formtemplates/dist/js/rules.js',
+    true) -%}
+{%- do view.registerJsFile(rulesJsUrl) -%}
 
 {% css %}
     .sprout-hidden{
