@@ -86,11 +86,17 @@
     true) -%}
 {%- do view.registerJsFile(addressFieldJsUrl) -%}
 
+{%- set disableSubmitButtonJsUrl = view.getAssetManager().getPublishedUrl(
+    '@sproutforms/web/assets/formtemplates/dist/js/disable-submit-button.js',
+    true) -%}
+{%- do view.registerJsFile(disableSubmitButtonJsUrl) -%}
+
 {% js at endBody %}
     (function() {
     window.csrfTokenName = "{{ craft.app.getConfig().getGeneral().csrfTokenName|e('js') }}";
     new SproutFormsAddressField('{{ id }}');
     new SproutFormsCheckableInputs('{{ id }}');
+    new SproutFormsDisableSubmitButton('{{ id }}');
     new SproutFormsRules('{{ id }}');
     })();
 {% endjs -%}
