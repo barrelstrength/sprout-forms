@@ -6,6 +6,11 @@ class SproutFormsRules {
     this.form = document.getElementById(this.formId);
     this.allRules = {};
     this.fieldsToListen = {};
+
+    if (!this.form.dataset.rules) {
+      return;
+    }
+
     this.rulesJson = JSON.parse(this.form.dataset.rules);
 
     let self = this;
