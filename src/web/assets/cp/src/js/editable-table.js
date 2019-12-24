@@ -355,10 +355,6 @@ Craft.SproutForms.EditableTable.Row = Garnish.Base.extend(
         that.addValueInputHtml(that);
       });
 
-      // $conditionalInput.change({row: this}, function(event) {
-      //   console.log(event.data.row.$tr.find("td:eq(0)").find("select").val());
-      // });
-
       if (needCheck === true) {
         this.addValueInputHtml();
       }
