@@ -3,12 +3,16 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutbasefields\base\AddressFieldTrait;
+use barrelstrength\sproutbasefields\helpers\AddressFieldHelper;
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
+use craft\errors\SiteNotFoundException;
 use craft\helpers\Template as TemplateHelper;
+use Exception;
+use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -16,6 +20,7 @@ use Twig\Markup;
 use yii\db\Schema;
 use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutbasefields\models\Address as AddressModel;
+use yii\db\StaleObjectException;
 
 /**
  *
@@ -34,6 +39,11 @@ class Address extends FormField implements PreviewableFieldInterface
      * @var string
      */
     public $cssClasses;
+
+    public function init() {
+        parent::init();
+        $this->addressFieldHelper = new AddressFieldHelper();
+    }
 
     /**
      * @inheritdoc
@@ -54,9 +64,9 @@ class Address extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function getContentColumnType(): string
+    public static function hasContentColumn(): bool
     {
-        return Schema::TYPE_INTEGER;
+        return false;
     }
 
     /**
@@ -65,6 +75,68 @@ class Address extends FormField implements PreviewableFieldInterface
     public function getSvgIconPath(): string
     {
         return '@sproutbaseicons/map-marker-alt.svg';
+    }
+
+    /**
+     * @return string|null
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws SiteNotFoundException
+     */
+    public function getSettingsHtml()
+    {
+        return $this->addressFieldHelper->getSettingsHtml($this);
+    }
+
+    /**
+     * @param                       $value
+     * @param ElementInterface|null $element
+     *
+     * @return string
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function getInputHtml($value, ElementInterface $element = null): string
+    {
+        return $this->addressFieldHelper->getInputHtml($this, $value, $element);
+    }
+
+    /**
+     * @param                       $value
+     * @param ElementInterface|null $element
+     *
+     * @return AddressModel|mixed|null
+     */
+    public function normalizeValue($value, ElementInterface $element = null)
+    {
+        return $this->addressFieldHelper->normalizeValue($this, $value, $element);
+    }
+
+    /**
+     * @param                       $value
+     * @param ElementInterface|null $element
+     *
+     * @return array|bool|mixed|string|null
+     */
+    public function serializeValue($value, ElementInterface $element = null)
+    {
+        return $this->addressFieldHelper->serializeValue($value, $element);
+    }
+
+    /**
+     * @param ElementInterface $element
+     * @param bool             $isNew
+     *
+     * @throws Throwable
+     * @throws \yii\db\Exception
+     * @throws StaleObjectException
+     */
+    public function afterElementSave(ElementInterface $element, bool $isNew)
+    {
+        $this->addressFieldHelper->afterElementSave($this, $element, $isNew);
+        parent::afterElementSave($element, $isNew);
     }
 
     /**
@@ -103,24 +175,24 @@ class Address extends FormField implements PreviewableFieldInterface
 
         // This defaults to Sprout Base and we need it to get updated to look
         // in the Sprout Forms Form Template location like other fields.
-        SproutBaseFields::$app->addressHelper->setBaseAddressFieldPath('');
+        SproutBaseFields::$app->addressFormatter->setBaseAddressFieldPath('');
 
-        SproutBaseFields::$app->addressHelper->setNamespace($name);
+        SproutBaseFields::$app->addressFormatter->setNamespace($name);
 
         if (isset($this->highlightCountries) && count($this->highlightCountries)) {
-            SproutBaseFields::$app->addressHelper->setHighlightCountries($this->highlightCountries);
+            SproutBaseFields::$app->addressFormatter->setHighlightCountries($this->highlightCountries);
         }
 
-        SproutBaseFields::$app->addressHelper->setCountryCode($countryCode);
-        SproutBaseFields::$app->addressHelper->setAddressModel($addressModel);
-        SproutBaseFields::$app->addressHelper->setLanguage($this->defaultLanguage);
+        SproutBaseFields::$app->addressFormatter->setCountryCode($countryCode);
+        SproutBaseFields::$app->addressFormatter->setAddressModel($addressModel);
+        SproutBaseFields::$app->addressFormatter->setLanguage($this->defaultLanguage);
 
         if (count($this->highlightCountries)) {
-            SproutBaseFields::$app->addressHelper->setHighlightCountries($this->highlightCountries);
+            SproutBaseFields::$app->addressFormatter->setHighlightCountries($this->highlightCountries);
         }
 
-        $countryInputHtml = SproutBaseFields::$app->addressHelper->getCountryInputHtml($showCountryDropdown);
-        $addressFormHtml = SproutBaseFields::$app->addressHelper->getAddressFormHtml();
+        $countryInputHtml = SproutBaseFields::$app->addressFormatter->getCountryInputHtml($showCountryDropdown);
+        $addressFormHtml = SproutBaseFields::$app->addressFormatter->getAddressFormHtml();
 
         $rendered = Craft::$app->getView()->renderTemplate(
             'address/input', [
