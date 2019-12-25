@@ -3,7 +3,6 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutbasefields\base\AddressFieldTrait;
-use barrelstrength\sproutbasefields\helpers\AddressFieldHelper;
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use Craft;
 use craft\base\Element;
@@ -39,11 +38,6 @@ class Address extends FormField implements PreviewableFieldInterface
      * @var string
      */
     public $cssClasses;
-
-    public function init() {
-        parent::init();
-        $this->addressFieldHelper = new AddressFieldHelper();
-    }
 
     /**
      * @inheritdoc
@@ -86,7 +80,7 @@ class Address extends FormField implements PreviewableFieldInterface
      */
     public function getSettingsHtml()
     {
-        return $this->addressFieldHelper->getSettingsHtml($this);
+        return SproutBaseFields::$app->addressField->getSettingsHtml($this);
     }
 
     /**
@@ -100,7 +94,7 @@ class Address extends FormField implements PreviewableFieldInterface
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        return $this->addressFieldHelper->getInputHtml($this, $value, $element);
+        return SproutBaseFields::$app->addressField->getInputHtml($this, $value, $element);
     }
 
     /**
@@ -111,7 +105,7 @@ class Address extends FormField implements PreviewableFieldInterface
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
-        return $this->addressFieldHelper->normalizeValue($this, $value, $element);
+        return SproutBaseFields::$app->addressField->normalizeValue($this, $value, $element);
     }
 
     /**
@@ -122,7 +116,7 @@ class Address extends FormField implements PreviewableFieldInterface
      */
     public function serializeValue($value, ElementInterface $element = null)
     {
-        return $this->addressFieldHelper->serializeValue($value, $element);
+        return SproutBaseFields::$app->addressField->serializeValue($value, $element);
     }
 
     /**
@@ -135,7 +129,7 @@ class Address extends FormField implements PreviewableFieldInterface
      */
     public function afterElementSave(ElementInterface $element, bool $isNew)
     {
-        $this->addressFieldHelper->afterElementSave($this, $element, $isNew);
+        SproutBaseFields::$app->addressField->afterElementSave($this, $element, $isNew);
         parent::afterElementSave($element, $isNew);
     }
 
