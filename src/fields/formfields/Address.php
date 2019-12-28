@@ -10,15 +10,14 @@ use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
 use craft\errors\SiteNotFoundException;
 use craft\helpers\Template as TemplateHelper;
-use Exception;
 use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Markup;
-use yii\db\Schema;
 use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutbasefields\models\Address as AddressModel;
+use yii\db\Exception;
 use yii\db\StaleObjectException;
 
 /**
@@ -109,22 +108,11 @@ class Address extends FormField implements PreviewableFieldInterface
     }
 
     /**
-     * @param                       $value
-     * @param ElementInterface|null $element
-     *
-     * @return array|bool|mixed|string|null
-     */
-    public function serializeValue($value, ElementInterface $element = null)
-    {
-        return SproutBaseFields::$app->addressField->serializeValue($value, $element);
-    }
-
-    /**
      * @param ElementInterface $element
      * @param bool             $isNew
      *
      * @throws Throwable
-     * @throws \yii\db\Exception
+     * @throws Exception
      * @throws StaleObjectException
      */
     public function afterElementSave(ElementInterface $element, bool $isNew)
