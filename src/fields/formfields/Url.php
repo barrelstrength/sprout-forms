@@ -145,8 +145,7 @@ class Url extends FormField implements PreviewableFieldInterface
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
-        $attributes = $this->getAttributes();
-        $errorMessage = SproutBaseFields::$app->urlField->getErrorMessage($attributes['name'], $this);
+        $errorMessage = SproutBaseFields::$app->urlField->getErrorMessage($this);
         $placeholder = $this->placeholder ?? '';
 
         $rendered = Craft::$app->getView()->renderTemplate(
@@ -182,7 +181,10 @@ class Url extends FormField implements PreviewableFieldInterface
      */
     public function getElementValidationRules(): array
     {
-        return ['validateUrl'];
+        $rules = parent::getElementValidationRules();
+        $rules[] = 'validateUrl';
+
+        return $rules;
     }
 
     /**
@@ -197,13 +199,7 @@ class Url extends FormField implements PreviewableFieldInterface
     {
         /** @var Element $element */
         $value = $element->getFieldValue($this->handle);
-
-        if (!SproutBaseFields::$app->urlField->validate($value, $this)) {
-            $element->addError(
-                $this->handle,
-                SproutBaseFields::$app->urlField->getErrorMessage($this->name, $this)
-            );
-        }
+        SproutBaseFields::$app->urlField->validate($value, $this, $element);
     }
 
     /**
