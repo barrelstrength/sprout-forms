@@ -127,6 +127,9 @@
         required: true
     }) }}
 
+    {% set formFieldClassName = className(field) %}
+    {% set formFieldClass = create(formFieldClassName) %}
+
     {{ forms.selectField({
         label: "Field Type <span class='info'>Create a new field if you need to update your field type. This value cannot be changed.</span>"|t('sprout-forms'),
         id: 'type',
@@ -134,11 +137,11 @@
         hasOptgroups: true,
         options: [
             {
-                label: field.name,
-                value: className(field)
+                label: formFieldClass.displayName(),
+                value: formFieldClassName
             }
         ],
-        value: className(field),
+        value: formFieldClassName,
         errors: field.getErrors('type') ?? null,
         disabled: true
     }) }}
