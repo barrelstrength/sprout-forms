@@ -493,7 +493,7 @@ class SproutFormsVariable
 
     /**
      * @param Form|null $form
-     * @param bool      $globalSettings
+     * @param bool      $generalSettings
      *
      * @return array
      */

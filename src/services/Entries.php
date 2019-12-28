@@ -20,7 +20,6 @@ use barrelstrength\sproutforms\models\EntryStatus;
 use barrelstrength\sproutforms\records\Entry as EntryRecord;
 use craft\base\Element;
 use craft\helpers\Json;
-use craft\queue\jobs\ResaveElements;
 use Throwable;
 use yii\base\Component;
 use yii\base\Exception;

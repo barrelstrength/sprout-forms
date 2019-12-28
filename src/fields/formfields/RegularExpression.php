@@ -12,7 +12,6 @@ use craft\base\PreviewableFieldInterface;
 
 
 use barrelstrength\sproutforms\base\FormField;
-use barrelstrength\sproutbasefields\web\assets\regularexpression\RegularExpressionFieldAsset;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;

@@ -14,7 +14,6 @@ use barrelstrength\sproutforms\rules\conditions\StartsWithCondition;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
-use craft\helpers\Json;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\PreviewableFieldInterface;
 
@@ -138,7 +137,7 @@ class Phone extends FormField implements PreviewableFieldInterface
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        return SproutBaseFields::$app->phoneField->getInputHtml($this, $value, $element);
+        return SproutBaseFields::$app->phoneField->getInputHtml($this, $value);
     }
 
     /**

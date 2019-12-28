@@ -5,7 +5,6 @@ namespace barrelstrength\sproutforms\controllers;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\elements\Form as FormElement;
-use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\models\Settings;
 use Craft;
 use craft\base\ElementInterface;
@@ -22,8 +21,11 @@ use yii\base\Exception;
 use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
 use barrelstrength\sproutforms\SproutForms;
-use function Matrix\diagonal;
 
+/**
+ *
+ * @property FormElement $formModel
+ */
 class FormsController extends BaseController
 {
     /**
@@ -143,7 +145,7 @@ class FormsController extends BaseController
 
             return null;
         }
-        if ($oldTitleFormat !== $currentTitleFormat){
+        if ($oldTitleFormat !== $currentTitleFormat) {
             SproutForms::$app->entries->resaveElements($form->id);
         }
 
@@ -194,9 +196,6 @@ class FormsController extends BaseController
                 throw new NotFoundHttpException('Form not found');
             }
         }
-
-        /** @var SproutForms $plugin */
-        $plugin = Craft::$app->plugins->getPlugin('sprout-forms');
 
         return $this->renderTemplate('sprout-forms/forms/_editForm', [
             'form' => $form,
@@ -325,12 +324,6 @@ class FormsController extends BaseController
      */
     private function populateFormModel(FormElement $form)
     {
-        /** @var SproutForms $plugin */
-        $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
-
-        /** @var Settings $settings */
-        $settings = $plugin->getSettings();
-
         $request = Craft::$app->getRequest();
 
         // Set the form attributes, defaulting to the existing values for whatever is missing from the post data

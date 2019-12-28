@@ -22,12 +22,13 @@ use yii\db\StaleObjectException;
 
 /**
  *
- * @property array  $elementValidationRules
- * @property string $contentColumnType
- * @property string $svgIconPath
- * @property array  $compatibleCraftFields
- * @property array  $compatibleCraftFieldTypes
- * @property string $exampleInputHtml
+ * @property array       $elementValidationRules
+ * @property string      $contentColumnType
+ * @property string      $svgIconPath
+ * @property array       $compatibleCraftFields
+ * @property array       $compatibleCraftFieldTypes
+ * @property null|string $settingsHtml
+ * @property string      $exampleInputHtml
  */
 class Address extends FormField implements PreviewableFieldInterface
 {

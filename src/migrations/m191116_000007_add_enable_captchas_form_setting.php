@@ -2,9 +2,7 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use craft\config\DbConfig;
 use craft\db\Migration;
-use Craft;
 use yii\base\NotSupportedException;
 
 /**

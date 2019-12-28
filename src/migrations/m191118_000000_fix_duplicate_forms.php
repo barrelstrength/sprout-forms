@@ -105,7 +105,7 @@ class m191118_000000_fix_duplicate_forms extends Migration
             // Generate an empty Field Layout
             $emptyFieldLayoutId = $this->getEmptyFieldLayoutId();
 
-            $formId = (int) $form['id'];
+            $formId = (int)$form['id'];
 
             // Assign a new, empty field layout to the corrupted duplicate form field layout
             $this->update('{{%sproutforms_forms}}', ['fieldLayoutId' => $emptyFieldLayoutId], ['id' => $formId], [], false);
