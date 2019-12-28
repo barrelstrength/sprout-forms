@@ -70,12 +70,7 @@ class RegularExpression extends FormField implements PreviewableFieldInterface
      */
     public function getSettingsHtml()
     {
-        return Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/formfields/regularexpression/settings',
-            [
-                'field' => $this,
-            ]
-        );
+        return SproutBaseFields::$app->regularExpressionField->getSettingsHtml($this);
     }
 
     /**
@@ -92,26 +87,7 @@ class RegularExpression extends FormField implements PreviewableFieldInterface
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        $view = Craft::$app->getView();
-        $view->registerAssetBundle(RegularExpressionFieldAsset::class);
-
-        $name = $this->handle;
-        $inputId = Craft::$app->getView()->formatInputId($name);
-        $namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
-
-        $fieldContext = SproutBaseFields::$app->utilities->getFieldContext($this, $element);
-
-        return Craft::$app->getView()->renderTemplate(
-            'sprout-base-fields/_components/fields/formfields/regularexpression/input',
-            [
-                'id' => $namespaceInputId,
-                'field' => $this,
-                'name' => $name,
-                'value' => $value,
-                'fieldContext' => $fieldContext,
-                'placeholder' => $this->placeholder
-            ]
-        );
+        return SproutBaseFields::$app->regularExpressionField->getInputHtml($this, $value, $element);
     }
 
     /**
@@ -170,7 +146,10 @@ class RegularExpression extends FormField implements PreviewableFieldInterface
      */
     public function getElementValidationRules(): array
     {
-        return ['validateRegularExpression'];
+        $rules = parent::getElementValidationRules();
+        $rules[] = 'validateRegularExpression';
+
+        return $rules;
     }
 
     /**

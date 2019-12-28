@@ -28,8 +28,6 @@ use Twig\Error\SyntaxError;
 use Twig\Markup;
 
 /**
- *
- * @property array  $elementValidationRules
  * @property string $svgIconPath
  * @property mixed  $settingsHtml
  * @property mixed  $exampleInputHtml
@@ -116,36 +114,6 @@ class Name extends FormField implements PreviewableFieldInterface
     public function getInputHtml($value, ElementInterface $element = null): string
     {
         return SproutBaseFields::$app->nameField->getInputHtml($this, $value, $element);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getElementValidationRules(): array
-    {
-        return ['validateName'];
-    }
-
-    /**
-     * Validates our fields submitted value beyond the checks
-     * that were assumed based on the content attribute.
-     *
-     * @param Element|ElementInterface $element
-     *
-     * @return void
-     */
-    public function validateName(ElementInterface $element)
-    {
-        $value = $element->getFieldValue($this->handle);
-
-        if ($this->required && !$value->getFullName()) {
-            $element->addError(
-                $this->handle,
-                Craft::t('sprout-forms', '{field} cannot be blank', [
-                    'field' => $this->name
-                ])
-            );
-        }
     }
 
     /**

@@ -75,17 +75,10 @@ class Url extends FormField implements PreviewableFieldInterface
      */
     public function getSettingsHtml()
     {
-        return Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/formfields/url/settings',
-            [
-                'field' => $this,
-            ]
-        );
+        return SproutBaseFields::$app->urlField->getSettingsHtml($this);
     }
 
     /**
-     * @inheritdoc
-     *
      * @param                       $value
      * @param ElementInterface|null $element
      *
@@ -93,28 +86,10 @@ class Url extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws InvalidConfigException
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        $view = Craft::$app->getView();
-        $view->registerAssetBundle(UrlFieldAsset::class);
-
-        $name = $this->handle;
-        $inputId = Craft::$app->getView()->formatInputId($name);
-        $namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
-
-        $fieldContext = SproutBaseFields::$app->utilities->getFieldContext($this, $element);
-
-        return Craft::$app->getView()->renderTemplate('sprout-base-fields/_components/fields/formfields/url/input', [
-                'namespaceInputId' => $namespaceInputId,
-                'id' => $inputId,
-                'name' => $name,
-                'value' => $value,
-                'fieldContext' => $fieldContext,
-                'placeholder' => $this->placeholder
-            ]
-        );
+        return SproutBaseFields::$app->urlField->getInputHtml($this, $value, $element);
     }
 
     /**
@@ -199,7 +174,12 @@ class Url extends FormField implements PreviewableFieldInterface
     {
         /** @var Element $element */
         $value = $element->getFieldValue($this->handle);
-        SproutBaseFields::$app->urlField->validate($value, $this, $element);
+        $isValid = SproutBaseFields::$app->urlField->validate($value, $this);
+
+        if (!$isValid) {
+            $message = SproutBaseFields::$app->urlField->getErrorMessage($this);
+            $element->addError($this->handle, $message);
+        }
     }
 
     /**
