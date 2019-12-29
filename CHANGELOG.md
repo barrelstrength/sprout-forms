@@ -1,5 +1,52 @@
 # Changelog
 
+## UNRELEASED
+
+### Added
+- Added Disable Submit js for front-end Form Templates
+- Added `barrelstrength\sproutbasefields\services\Name`
+
+### Updates
+- Updated how Address Fields are saved and retrieved to better handle integrations
+- Updated and standardized shared logic, validation, and response for fields Email, Name, Phone, Regular Expression, and Url 
+- Updated dynamic email validation to exclude check for unique email setting
+- Updated `barrelstrength\sproutforms\fields\formfields\Address::hasContentColumn` to return false. Addresses are now stored only in the `sproutfields_adddresses` table.
+- Added `barrelstrength\sproutbasefields\models\Address::getCountryCode()`
+- Updated `barrelstrength\sproutbasefields\services\Address::deleteAddressById()` to require address ID
+- Improved fallbacks for Address Field's default country and language
+- Moved methods from `barrelstrength\sproutbasefields\helpers\AddressHelper` to `barrelstrength\sproutbasefields\services\Address`
+- Updated `barrelstrength\sproutbasefields\helpers\AddressHelper` to `barrelstrength\sproutbasefields\services\AddressFormatter`
+- Added property `barrelstrength\sproutbasefields\events\OnSaveAddressEvent::$address`
+- Deprecated property `barrelstrength\sproutbasefields\events\OnSaveAddressEvent::$model`
+- Renamed `barrelstrength\sproutbasefields\services\Address::getAddress()` => `getAddressFromElement()`
+- Renamed data attribute `addressid` => `address-id`
+- Renamed data attribute `defaultcountrycode` => `default-country-code`
+- Renamed data attribute `showcountrydropdown` => `show-country-dropdown`
+- Updated `barrelstrength/sprout-base-fields` to v1.2.0
+- Updated `commerceguys/addressing` to v1.0.6
+- Updated `giggsey/libphonenumber-for-php` to v8.11.1
+
+### Fixed
+- Added `site` translation category to Form Templates errors
+- Fixed naming conventions in Name field `input` template. Updated input element references to `address` => `name` 
+- Fixed js console error when rules are not defined
+- Fixed spacing around rule attribute in Form Templates
+- Fixed Form Element index settings icon target to open in same page 
+- Fixed output of Form Field modal Field Type name setting
+- Fixed display issue with Gibraltar addresses
+- Fixed bug where Address input fields did not display in edit modal after Address was cleared
+
+### Removed
+- Removed `barrelstrength\sproutforms\fields\formfields\Address::serializeValue()`
+- Removed `barrelstrength\sproutbasefields\helpers\AddressHelper`
+- Removed `barrelstrength\sproutbasefields\controllers\actionDeleteAddress()`
+- Removed `src/templates/_components/fields/formfields/email/settings.twig`
+- Removed `src/templates/_components/fields/formfields/name/settings.twig`
+- Removed `src/templates/_components/fields/formfields/phone/settings.twig`
+- Removed `src/templates/_components/fields/formfields/regularexpression/settings.twig`
+- Removed `src/templates/_components/fields/formfields/url/settings.twig`
+- Removed `commerceguys/intl`
+
 ## 3.6.6 - 2019-12-11
 
 ### Fixed 
