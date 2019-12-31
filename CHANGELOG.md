@@ -10,11 +10,12 @@
 - Updated how Address Fields are saved and retrieved to better handle integrations
 - Updated and standardized shared logic, validation, and response for fields Email, Name, Phone, Regular Expression, and Url 
 - Updated dynamic email validation to exclude check for unique email setting
-- Updated `barrelstrength\sproutforms\fields\formfields\Address::hasContentColumn` to return false. Addresses are now stored only in the `sproutfields_adddresses` table.
+- Addresses are now stored only in the `sproutfields_adddresses` table. Updated `barrelstrength\sproutforms\fields\formfields\Address::hasContentColumn` to return false. 
 - Added `barrelstrength\sproutbasefields\models\Address::getCountryCode()`
 - Updated `barrelstrength\sproutbasefields\services\Address::deleteAddressById()` to require address ID
 - Improved fallbacks for Address Field's default country and language
 - Moved methods from `barrelstrength\sproutbasefields\helpers\AddressHelper` to `barrelstrength\sproutbasefields\services\Address`
+- Moved methods from `barrelstrength\sproutbasefields\helpers\AddressHelper` to `barrelstrength\sproutbasefields\services\AddressFormatter`
 - Updated `barrelstrength\sproutbasefields\helpers\AddressHelper` to `barrelstrength\sproutbasefields\services\AddressFormatter`
 - Added property `barrelstrength\sproutbasefields\events\OnSaveAddressEvent::$address`
 - Deprecated property `barrelstrength\sproutbasefields\events\OnSaveAddressEvent::$model`
