@@ -128,8 +128,7 @@ class Dropdown extends BaseOptionsFormField
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'dropdown/input',
+        $rendered = Craft::$app->getView()->renderTemplate('dropdown/input',
             [
                 'name' => $this->handle,
                 'value' => $value,

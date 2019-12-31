@@ -124,8 +124,7 @@ class RegularExpression extends FormField implements PreviewableFieldInterface
         // Do no escape "-" html5 does not treat it as special chars
         $pattern = str_replace("\\-", '-', $pattern);
 
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'regularexpression/input',
+        $rendered = Craft::$app->getView()->renderTemplate('regularexpression/input',
             [
                 'name' => $this->handle,
                 'value' => $value,

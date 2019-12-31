@@ -254,8 +254,7 @@ class FileUpload extends BaseRelationFormField
      */
     public function getExampleInputHtml(): string
     {
-        return Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/formfields/fileupload/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/formfields/fileupload/example',
             [
                 'field' => $this
             ]
@@ -273,8 +272,7 @@ class FileUpload extends BaseRelationFormField
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'fileupload/input',
+        $rendered = Craft::$app->getView()->renderTemplate('fileupload/input',
             [
                 'name' => $this->handle,
                 'value' => $value,

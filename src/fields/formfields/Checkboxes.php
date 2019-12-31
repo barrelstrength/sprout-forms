@@ -126,8 +126,7 @@ class Checkboxes extends BaseOptionsFormField
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'checkboxes/input',
+        $rendered = Craft::$app->getView()->renderTemplate('checkboxes/input',
             [
                 'name' => $this->handle,
                 'value' => $value,

@@ -146,8 +146,7 @@ class Name extends FormField implements PreviewableFieldInterface
             $this->hasMultipleLabels = true;
         }
 
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'name/input',
+        $rendered = Craft::$app->getView()->renderTemplate('name/input',
             [
                 'name' => $this->handle,
                 'value' => $value,

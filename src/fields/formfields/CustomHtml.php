@@ -147,8 +147,7 @@ class CustomHtml extends FormField implements PreviewableFieldInterface
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'customhtml/input',
+        $rendered = Craft::$app->getView()->renderTemplate('customhtml/input',
             [
                 'name' => $this->handle,
                 'value' => $value,

@@ -121,8 +121,7 @@ class Url extends FormField implements PreviewableFieldInterface
         $errorMessage = SproutBaseFields::$app->urlField->getErrorMessage($this);
         $placeholder = $this->placeholder ?? '';
 
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'url/input',
+        $rendered = Craft::$app->getView()->renderTemplate('url/input',
             [
                 'name' => $this->handle,
                 'value' => $value,

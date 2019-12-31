@@ -177,8 +177,7 @@ class Address extends FormField implements PreviewableFieldInterface
         $countryInputHtml = SproutBaseFields::$app->addressFormatter->getCountryInputHtml($showCountryDropdown);
         $addressFormHtml = SproutBaseFields::$app->addressFormatter->getAddressFormHtml();
 
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'address/input', [
+        $rendered = Craft::$app->getView()->renderTemplate('address/input', [
                 'field' => $this,
                 'name' => $this->handle,
                 'renderingOptions' => $renderingOptions,

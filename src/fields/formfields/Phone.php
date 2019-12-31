@@ -153,6 +153,7 @@ class Phone extends FormField implements PreviewableFieldInterface
     {
         $name = $this->handle;
         $country = $value['country'] ?? $this->country;
+        $countries = SproutBaseFields::$app->phoneField->getCountries();
         $val = $value['phone'] ?? null;
 
         $rendered = Craft::$app->getView()->renderTemplate('phone/input',
@@ -161,6 +162,7 @@ class Phone extends FormField implements PreviewableFieldInterface
                 'value' => $val,
                 'field' => $this,
                 'country' => $country,
+                'countries' => $countries,
                 'renderingOptions' => $renderingOptions
             ]
         );

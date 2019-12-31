@@ -138,8 +138,7 @@ class Email extends FormField implements PreviewableFieldInterface
         $errorMessage = SproutBaseFields::$app->emailField->getErrorMessage($this);
         $placeholder = $this['placeholder'] ?? '';
 
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'email/input',
+        $rendered = Craft::$app->getView()->renderTemplate('email/input',
             [
                 'name' => $this->handle,
                 'value' => $value,

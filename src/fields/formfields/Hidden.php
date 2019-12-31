@@ -138,8 +138,7 @@ class Hidden extends FormField implements PreviewableFieldInterface
             }
         }
 
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'hidden/input',
+        $rendered = Craft::$app->getView()->renderTemplate('hidden/input',
             [
                 'name' => $this->handle,
                 'value' => $value,

@@ -194,8 +194,7 @@ class Paragraph extends FormField implements PreviewableFieldInterface
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'paragraph/input',
+        $rendered = Craft::$app->getView()->renderTemplate('paragraph/input',
             [
                 'name' => $this->handle,
                 'value' => $value,

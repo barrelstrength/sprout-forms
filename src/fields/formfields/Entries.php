@@ -92,8 +92,7 @@ class Entries extends BaseRelationFormField
     {
         $entries = SproutForms::$app->frontEndFields->getFrontEndEntries($this->getSettings());
 
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'entries/input',
+        $rendered = Craft::$app->getView()->renderTemplate('entries/input',
             [
                 'name' => $this->handle,
                 'value' => $value->ids(),

@@ -159,8 +159,7 @@ class Tags extends BaseRelationFormField
     {
         $tags = SproutForms::$app->frontEndFields->getFrontEndTags($this->getSettings());
 
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'tags/input',
+        $rendered = Craft::$app->getView()->renderTemplate('tags/input',
             [
                 'name' => $this->handle,
                 'value' => $value->ids(),
