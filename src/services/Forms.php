@@ -422,7 +422,7 @@ class Forms extends Component
             // Check if the field is in the titleformat
             if (strpos($formRecord->titleFormat, $field->handle) !== false) {
                 // Let's remove the field from the titleFormat
-                $newTitleFormat = preg_replace('/\{'.$field->handle.'.*\}/', '', $formRecord->titleFormat);
+                $newTitleFormat = preg_replace('/{'.$field->handle.'.*}/', '', $formRecord->titleFormat);
                 $formRecord->titleFormat = $newTitleFormat;
                 $formRecord->save(false);
 
@@ -521,7 +521,7 @@ class Forms extends Component
                 ->where(['id' => $integration->id])
                 ->one();
 
-            if (is_null($integrationResult)) {
+            if ($integrationResult === null) {
                 continue;
             }
 

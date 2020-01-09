@@ -5,5 +5,6 @@
     "/src/web/assets/cp/dist/css/sproutforms-cp.css": "/src/web/assets/cp/dist/css/sproutforms-cp.css",
     "/src/web/assets/formtemplates/dist/js/accessibility.js": "/src/web/assets/formtemplates/dist/js/accessibility.js",
     "/src/web/assets/formtemplates/dist/js/addressfield.js": "/src/web/assets/formtemplates/dist/js/addressfield.js",
+    "/src/web/assets/formtemplates/dist/js/disable-submit-button.js": "/src/web/assets/formtemplates/dist/js/disable-submit-button.js",
     "/src/web/assets/formtemplates/dist/js/rules.js": "/src/web/assets/formtemplates/dist/js/rules.js"
 }

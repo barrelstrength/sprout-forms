@@ -87,8 +87,7 @@ class MultipleChoice extends BaseOptionsFormField
             $value = $this->defaultValue();
         }
 
-        return Craft::$app->getView()->renderTemplate(
-            '_includes/forms/radioGroup',
+        return Craft::$app->getView()->renderTemplate('_includes/forms/radioGroup',
             [
                 'name' => $this->handle,
                 'value' => $value,
@@ -106,8 +105,7 @@ class MultipleChoice extends BaseOptionsFormField
      */
     public function getExampleInputHtml(): string
     {
-        return Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/formfields/multiplechoice/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/formfields/multiplechoice/example',
             [
                 'field' => $this
             ]
@@ -127,8 +125,7 @@ class MultipleChoice extends BaseOptionsFormField
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'multiplechoice/input',
+        $rendered = Craft::$app->getView()->renderTemplate('multiplechoice/input',
             [
                 'name' => $this->handle,
                 'value' => $value,

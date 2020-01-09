@@ -14,7 +14,6 @@ use barrelstrength\sproutforms\rules\conditions\StartsWithCondition;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
-use craft\helpers\Json;
 use craft\helpers\Template as TemplateHelper;
 use craft\base\PreviewableFieldInterface;
 
@@ -83,54 +82,29 @@ class Phone extends FormField implements PreviewableFieldInterface
      */
     public function getSettingsHtml()
     {
-        return Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/formfields/phone/settings',
-            [
-                'field' => $this,
-            ]
-        );
+        return SproutBaseFields::$app->phoneField->getSettingsHtml($this);
     }
 
     /**
-     * @param mixed                 $value
+     * @param                       $value
      * @param ElementInterface|null $element
      *
-     * @return array|mixed|null|string
-     */
-    public function serializeValue($value, ElementInterface $element = null)
-    {
-        // Submitting an Element to be saved
-        if (is_object($value) && get_class($value) == PhoneModel::class) {
-            return $value->getAsJson();
-        }
-
-        // Save the phone as json with the number and country
-        return $value;
-    }
-
-    /**
-     * @inheritdoc
+     * @return PhoneModel|mixed|null
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
-        $phoneInfo = [];
+        return SproutBaseFields::$app->phoneField->normalizeValue($this, $value, $element);
+    }
 
-        if (is_array($value) && $element) {
-            $namespace = $element->getFieldParamNamespace();
-            $namespace .= '.'.$this->handle;
-            $phoneInfo = Craft::$app->getRequest()->getBodyParam($namespace);
-            // bad phone or empty phone
-        }
-
-        if (is_string($value)) {
-            $phoneInfo = Json::decode($value);
-        }
-
-        if (!isset($phoneInfo['phone'], $phoneInfo['country'])) {
-            return null;
-        }
-        // Always return array
-        return new PhoneModel($phoneInfo['phone'], $phoneInfo['country']);
+    /**
+     * @param                       $value
+     * @param ElementInterface|null $element
+     *
+     * @return array|mixed|string|null
+     */
+    public function serializeValue($value, ElementInterface $element = null)
+    {
+        return SproutBaseFields::$app->phoneField->serializeValue($value);
     }
 
     /**
@@ -163,31 +137,7 @@ class Phone extends FormField implements PreviewableFieldInterface
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        $name = $this->handle;
-        $countryId = Craft::$app->getView()->formatInputId($name.'-country');
-        $inputId = Craft::$app->getView()->formatInputId($name);
-        $namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
-        $namespaceCountryId = Craft::$app->getView()->namespaceInputId($countryId);
-        $countries = $this->getCountries();
-
-        $country = $value['country'] ?? $this->country;
-        $val = $value['phone'] ?? null;
-
-        return Craft::$app->getView()->renderTemplate(
-            'sprout-base-fields/_components/fields/formfields/phone/input',
-            [
-                'namespaceInputId' => $namespaceInputId,
-                'namespaceCountryId' => $namespaceCountryId,
-                'id' => $inputId,
-                'countryId' => $countryId,
-                'name' => $this->handle,
-                'value' => $val,
-                'placeholder' => $this->placeholder,
-                'countries' => $countries,
-                'country' => $country,
-                'limitToSingleCountry' => $this->limitToSingleCountry
-            ]
-        );
+        return SproutBaseFields::$app->phoneField->getInputHtml($this, $value);
     }
 
     /**
@@ -203,6 +153,7 @@ class Phone extends FormField implements PreviewableFieldInterface
     {
         $name = $this->handle;
         $country = $value['country'] ?? $this->country;
+        $countries = SproutBaseFields::$app->phoneField->getCountries();
         $val = $value['phone'] ?? null;
 
         $rendered = Craft::$app->getView()->renderTemplate('phone/input',
@@ -211,6 +162,7 @@ class Phone extends FormField implements PreviewableFieldInterface
                 'value' => $val,
                 'field' => $this,
                 'country' => $country,
+                'countries' => $countries,
                 'renderingOptions' => $renderingOptions
             ]
         );
@@ -238,7 +190,10 @@ class Phone extends FormField implements PreviewableFieldInterface
      */
     public function getElementValidationRules(): array
     {
-        return ['validatePhone'];
+        $rules = parent::getElementValidationRules();
+        $rules[] = 'validatePhone';
+
+        return $rules;
     }
 
     /**
@@ -252,30 +207,12 @@ class Phone extends FormField implements PreviewableFieldInterface
     public function validatePhone(ElementInterface $element)
     {
         $value = $element->getFieldValue($this->handle);
+        $isValid = SproutBaseFields::$app->phoneField->validate($value);
 
-        if ($this->required && !$value->phone) {
-            $element->addError(
-                $this->handle,
-                Craft::t('sprout-forms', '{field} cannot be blank.', [
-                    'field' => $this->name
-                ])
-            );
+        if (!$isValid) {
+            $message = SproutBaseFields::$app->phoneField->getErrorMessage($this, $value->country);
+            $element->addError($this->handle, $message);
         }
-
-        if ($value->country && $value->phone && !SproutBaseFields::$app->phoneField->validate($value->phone, $value->country)) {
-            $element->addError(
-                $this->handle,
-                SproutBaseFields::$app->phoneField->getErrorMessage($this, $value->country)
-            );
-        }
-    }
-
-    /**
-     * @return array
-     */
-    public function getCountries(): array
-    {
-        return SproutBaseFields::$app->phoneField->getCountries();
     }
 
     /**

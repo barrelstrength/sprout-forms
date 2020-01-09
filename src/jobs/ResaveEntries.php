@@ -7,9 +7,11 @@ use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\elements\db\ElementQueryInterface;
-use craft\events\BatchElementActionEvent;
 use craft\queue\BaseJob;
-use craft\services\Elements;
+use craft\queue\QueueInterface;
+use Exception;
+use Throwable;
+use yii\queue\Queue;
 
 /**
  * ResaveEntries job
@@ -25,7 +27,7 @@ class ResaveEntries extends BaseJob
     public $formId;
 
     /**
-     * @var array|null The element criteria that determines which elements should be resaved
+     * @var array|null The element criteria that determines which elements should be re-saved
      */
     public $criteria;
 
@@ -33,7 +35,9 @@ class ResaveEntries extends BaseJob
     // =========================================================================
 
     /**
-     * @inheritdoc
+     * @param QueueInterface|Queue $queue
+     *
+     * @throws Throwable
      */
     public function execute($queue)
     {
@@ -57,7 +61,7 @@ class ResaveEntries extends BaseJob
                     'step' => $count,
                     'total' => $total,
                 ]));
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 Craft::error('Title format error: '.$e->getMessage(), __METHOD__);
             }
         }

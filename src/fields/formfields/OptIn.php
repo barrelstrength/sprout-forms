@@ -176,8 +176,7 @@ class OptIn extends FormField implements PreviewableFieldInterface
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'optin/input',
+        $rendered = Craft::$app->getView()->renderTemplate('optin/input',
             [
                 'name' => $this->handle,
                 'value' => $value,

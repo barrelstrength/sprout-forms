@@ -105,10 +105,7 @@ class Email extends FormField implements PreviewableFieldInterface
      */
     public function getSettingsHtml()
     {
-        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/formfields/email/settings',
-            [
-                'field' => $this,
-            ]);
+        return SproutBaseFields::$app->emailField->getSettingsHtml($this);
     }
 
     /**
@@ -124,31 +121,7 @@ class Email extends FormField implements PreviewableFieldInterface
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        $name = $this->handle;
-        $inputId = Craft::$app->getView()->formatInputId($name);
-        $namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
-
-        $fieldContext = SproutBaseFields::$app->utilities->getFieldContext($this, $element);
-
-        /** Set this to false for Quick Entry Dashboard Widget
-         *
-         * @var Element $element
-         */
-        $elementId = ($element !== null) ? $element->id : false;
-
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'sprout-base-fields/_components/fields/formfields/email/input',
-            [
-                'namespaceInputId' => $namespaceInputId,
-                'id' => $inputId,
-                'name' => $name,
-                'value' => $value,
-                'elementId' => $elementId,
-                'fieldContext' => $fieldContext,
-                'placeholder' => $this->placeholder
-            ]);
-
-        return TemplateHelper::raw($rendered);
+        return SproutBaseFields::$app->emailField->getInputHtml($this, $value, $element);
     }
 
     /**
@@ -162,12 +135,10 @@ class Email extends FormField implements PreviewableFieldInterface
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
-        $attributes = $this->getAttributes();
-        $errorMessage = SproutBaseFields::$app->emailField->getErrorMessage($attributes['name'], $this);
+        $errorMessage = SproutBaseFields::$app->emailField->getErrorMessage($this);
         $placeholder = $this['placeholder'] ?? '';
 
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'email/input',
+        $rendered = Craft::$app->getView()->renderTemplate('email/input',
             [
                 'name' => $this->handle,
                 'value' => $value,
@@ -186,13 +157,19 @@ class Email extends FormField implements PreviewableFieldInterface
      */
     public function getElementValidationRules(): array
     {
-        return ['validateEmail'];
+        $rules = parent::getElementValidationRules();
+        $rules[] = 'validateEmail';
+
+        if ($this->uniqueEmail) {
+            $rules[] = 'validateUniqueEmail';
+        }
+
+        return $rules;
     }
 
     /**
      * Validates our fields submitted value beyond the checks
      * that were assumed based on the content attribute.
-     *
      *
      * @param Element|ElementInterface $element
      *
@@ -201,23 +178,25 @@ class Email extends FormField implements PreviewableFieldInterface
     public function validateEmail(ElementInterface $element)
     {
         $value = $element->getFieldValue($this->handle);
+        $isValid = SproutBaseFields::$app->emailField->validateEmail($value, $this);
 
-        $customPattern = $this->customPattern;
-        $checkPattern = $this->customPatternToggle;
-
-        if (!SproutBaseFields::$app->emailField->validateEmailAddress($value, $customPattern, $checkPattern)) {
-            $element->addError($this->handle,
-                SproutBaseFields::$app->emailField->getErrorMessage(
-                    $this->name, $this)
-            );
+        if (!$isValid) {
+            $message = SproutBaseFields::$app->emailField->getErrorMessage($this);
+            $element->addError($this->handle, $message);
         }
+    }
 
-        $uniqueEmail = $this->uniqueEmail;
+    /**
+     * @param ElementInterface $element
+     */
+    public function validateUniqueEmail(ElementInterface $element)
+    {
+        $value = $element->getFieldValue($this->handle);
+        $isValid = SproutBaseFields::$app->emailField->validateUniqueEmail($value, $this, $element);
 
-        if ($uniqueEmail && !SproutBaseFields::$app->emailField->validateUniqueEmailAddress($value, $element, $this)) {
-            $element->addError($this->handle,
-                Craft::t('sprout-forms', $this->name.' must be a unique email.')
-            );
+        if (!$isValid) {
+            $message = Craft::t('sprout-base-fields', $this->name.' must be a unique email.');
+            $element->addError($this->handle, $message);
         }
     }
 

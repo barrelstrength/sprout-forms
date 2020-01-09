@@ -4,7 +4,6 @@ namespace barrelstrength\sproutforms\migrations;
 
 use barrelstrength\sproutbaseemail\migrations\m190714_000001_add_notification_email_context_column;
 use barrelstrength\sproutbaseemail\SproutBaseEmail;
-use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\formtemplates\BasicTemplates;
 use craft\db\Migration;
 use craft\db\Query;

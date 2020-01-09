@@ -133,8 +133,7 @@ class Categories extends BaseRelationFormField
     {
         $categories = SproutForms::$app->frontEndFields->getFrontEndCategories($this->getSettings());
 
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'categories/input',
+        $rendered = Craft::$app->getView()->renderTemplate('categories/input',
             [
                 'name' => $this->handle,
                 'value' => $value->ids(),

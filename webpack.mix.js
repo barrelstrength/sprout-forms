@@ -26,11 +26,14 @@ mix
 
   // Form Templates
   .js([
+    'src/web/assets/formtemplates/src/js/accessibility.js',
+  ], 'src/web/assets/formtemplates/dist/js/accessibility.js')
+  .js([
     'src/web/assets/formtemplates/src/js/addressfield.js',
   ], 'src/web/assets/formtemplates/dist/js/addressfield.js')
   .js([
-    'src/web/assets/formtemplates/src/js/accessibility.js',
-  ], 'src/web/assets/formtemplates/dist/js/accessibility.js')
+    'src/web/assets/formtemplates/src/js/disable-submit-button.js',
+  ], 'src/web/assets/formtemplates/dist/js/disable-submit-button.js')
   .js([
     'src/web/assets/formtemplates/src/js/rules.js',
   ], 'src/web/assets/formtemplates/dist/js/rules.js');

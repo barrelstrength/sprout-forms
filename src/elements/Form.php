@@ -280,8 +280,6 @@ class Form extends Element
             case 'formSettings':
             {
                 return Html::a('', $this->getCpEditUrl().'/settings/general', [
-                    'rel' => 'noopener',
-                    'target' => '_blank',
                     'data-icon' => 'settings',
                     'title' => Craft::t('sprout-forms', 'Visit form settings')
                 ]);

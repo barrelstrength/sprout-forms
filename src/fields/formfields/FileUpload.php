@@ -6,6 +6,7 @@ use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\base\Volume;
+use craft\base\VolumeInterface;
 use craft\db\Table as DbTable;
 use craft\errors\AssetLogicException;
 use craft\errors\ElementNotFoundException;
@@ -30,6 +31,7 @@ use craft\errors\InvalidVolumeException;
 use craft\helpers\Assets as AssetsHelper;
 use craft\helpers\FileHelper;
 use craft\web\UploadedFile;
+use GraphQL\Type\Definition\Type;
 use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -252,8 +254,7 @@ class FileUpload extends BaseRelationFormField
      */
     public function getExampleInputHtml(): string
     {
-        return Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/formfields/fileupload/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/formfields/fileupload/example',
             [
                 'field' => $this
             ]
@@ -271,8 +272,7 @@ class FileUpload extends BaseRelationFormField
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'fileupload/input',
+        $rendered = Craft::$app->getView()->renderTemplate('fileupload/input',
             [
                 'name' => $this->handle,
                 'value' => $value,
@@ -910,7 +910,7 @@ class FileUpload extends BaseRelationFormField
     /**
      * Returns the target upload volume for the field.
      *
-     * @return Volume|null
+     * @return Volume|VolumeInterface|null
      */
     private function _uploadVolume()
     {

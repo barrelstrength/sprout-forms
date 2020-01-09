@@ -6,49 +6,50 @@ class SproutFormsRules {
     this.form = document.getElementById(this.formId);
     this.allRules = {};
     this.fieldsToListen = {};
+
+    if (!this.form.dataset.rules) {
+      return;
+    }
+
     this.rulesJson = JSON.parse(this.form.dataset.rules);
 
     let self = this;
 
     for (let i = 0; i < this.rulesJson.length; i++) {
-      let rule = this.rulesJson[i];
-      let targetHandle = rule.behaviorTarget;
+      let rules = this.rulesJson[i];
+      let targetHandle = rules.behaviorTarget;
       let fieldWrapper = document.getElementById('fields-' + targetHandle + '-field');
-      let rules = {};
+      let ruleSets = {};
       let j = 0;
-      let conditionSets = rule.conditions;
-      for (conditionSetId in conditionSets) {
-        let conditionSet = conditionSets[conditionSetId];
-        let conditionSetKey = 'condition-set-' + j;
-
-        let orArray = [];
-        for (conditionId in conditionSet) {
-          let conditionObject = {};
-          let condition = conditionSet[conditionId];
+      let andConditionSets = rules.conditions;
+      for (let andConditionSetKey in andConditionSets) {
+        let andConditionSet = andConditionSets[andConditionSetKey];
+        let orConditions = [];
+        for (let orConditionKey in andConditionSet) {
+          let condition = andConditionSet[orConditionKey];
 
           this.fieldsToListen[condition[0]] = 1;
 
-          conditionObject = {
+          orConditions.push({
             'fieldHandle': condition[0],
             'condition': condition[1],
             'value': condition[2]
-          };
-          orArray.push(conditionObject)
+          });
         }
-        rules[conditionSetKey] = orArray;
+        ruleSets[andConditionSetKey] = orConditions;
 
         j++;
       }
 
       let wrapperId = 'fields-' + targetHandle + '-field';
       let wrapper = document.getElementById(wrapperId);
-      if (rule.behaviorAction === 'show') {
+      if (rules.behaviorAction === 'show') {
         this.hideAndDisableField(wrapper);
       }
 
       this.allRules[targetHandle] = {
-        "rules": rules,
-        "action": rule.behaviorAction
+        "rules": ruleSets,
+        "action": rules.behaviorAction
       };
     }
 
@@ -56,26 +57,25 @@ class SproutFormsRules {
     for (let fieldToListen in this.fieldsToListen) {
       let fieldId = this.getFieldId(fieldToListen);
       let inputField = document.getElementById(fieldId);
-      let event = "change";
+
+      // Watch all fields for the 'change' event
+      inputField.addEventListener('change', function(event) {
+        self.runConditionsForInput(event);
+      }, false);
+
       if (
         inputField.tagName === 'TEXTAREA' ||
         (inputField.tagName === 'INPUT' && inputField.type === 'text') ||
         (inputField.tagName === 'INPUT' && inputField.type === 'number')) {
-        event = "keyup";
-      }
-      inputField.addEventListener(event, function(event) {
-        self.runConditionsForInput(this);
-      }, false);
-      // on first page load
-      self.runConditionsForInput(inputField);
 
-      // The number field can have change and keyup events
-      if (inputField.tagName === 'INPUT' && inputField.type === 'number') {
-        event = "change";
-        inputField.addEventListener(event, function(event) {
-          self.runConditionsForInput(this);
+        // Add support for 'keyup' and 'paste' event to these fields
+        inputField.addEventListener('keyup', function(event) {
+          self.runConditionsForInput(event);
         }, false);
       }
+
+      // on first page load
+      self.runConditionsForInput(inputField);
     }
   }
 
@@ -83,27 +83,30 @@ class SproutFormsRules {
    * Run all rules where this input is involved
    * prepare all the info to run the validation in the backend
    **/
-  runConditionsForInput(input) {
-    let inputFieldHandle = input.id.replace('fields-', '');
+  runConditionsForInput(event) {
     let conditionsByField = {};
-    for (let targetField in this.allRules) {
-      let wrapperId = 'fields-' + targetField + '-field';
-      let wrapper = document.getElementById(wrapperId);
 
-      let conditional = this.allRules[targetField];
-      let result = false;
-      let andResult = true;
+    for (let targetField in this.allRules) {
+      let rules = this.allRules[targetField];
+
       let i = 0;
       let conditions = {};
 
-      for (let andPos in conditional.rules) {
-        let andRule = conditional.rules[andPos];
+      for (let andConditionSetKey in rules.rules) {
+        let andConditionSet = rules.rules[andConditionSetKey];
         let orConditions = [];
-        for (let orPos in andRule) {
-          let rule = andRule[orPos];
-          let fieldId = this.getFieldId(rule.fieldHandle);
+        for (let orConditionKey in andConditionSet) {
+          let condition = andConditionSet[orConditionKey];
+          let fieldId = this.getFieldId(condition.fieldHandle);
           let inputField = document.getElementById(fieldId);
           let inputValue = typeof inputField.value === 'undefined' ? '' : inputField.value;
+
+          if (event.type === 'paste') {
+            let clipboardData = event.clipboardData || window.clipboardData;
+            let pastedData = clipboardData.getData('Text');
+            inputValue = pastedData;
+          }
+
           if (inputField.type === 'checkbox') {
             inputValue = inputField.checked;
           }
@@ -122,12 +125,13 @@ class SproutFormsRules {
           }
 
           orConditions.push({
-            condition: rule.condition,
+            condition: condition.condition,
             inputValue: inputValue,
-            ruleValue: typeof rule.value === 'undefined' ? '' : rule.value
+            ruleValue: typeof condition.value === 'undefined' ? '' : condition.value
           });
 
         }
+
         conditions[i] = orConditions;
         i++;
       }
@@ -152,7 +156,7 @@ class SproutFormsRules {
     xhr.onload = function() {
       let response = JSON.parse(this.response);
       if (this.status === 200 && response.success === true) {
-        // apply rules
+        // Apply the conditions
         for (let targetField in response.result) {
           let wrapperId = 'fields-' + targetField + '-field';
           let wrapper = document.getElementById(wrapperId);

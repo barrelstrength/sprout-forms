@@ -116,8 +116,7 @@ class MultiSelect extends BaseOptionsFormField
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'multiselect/input',
+        $rendered = Craft::$app->getView()->renderTemplate('multiselect/input',
             [
                 'name' => $this->handle,
                 'value' => $value,

@@ -40,6 +40,7 @@ class FieldsController extends BaseController
      */
     public function actionModalField(): Response
     {
+
         $this->requireAcceptsJson();
         $formId = Craft::$app->getRequest()->getBodyParam('formId');
         $form = SproutForms::$app->forms->getFormById($formId);

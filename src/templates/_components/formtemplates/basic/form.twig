@@ -18,7 +18,7 @@
 <form method="post" accept-charset="utf-8" enctype="multipart/form-data"
     {%- if id %} id="{{ id }}"{% endif -%}
     {%- if class %} class="{{ class -}}{%- if errors %} {{ errorClass }}{% endif -%}"{% endif -%}
-    data-rules="{{ rules|json_encode|raw|e('html') }}"
+    {%- if rules %} data-rules="{{ rules|json_encode|raw|e('html') }}"{% endif -%}
 >
     {{ csrfInput() }}
     <input type="hidden" aria-hidden="true" name="action"
@@ -64,15 +64,20 @@
     {%- endfor %}
 {%- endif %}
 
-{%- set rulesJsUrl = view.getAssetManager().getPublishedUrl(
-    '@sproutforms/web/assets/formtemplates/dist/js/rules.js',
-    true) -%}
-{%- do view.registerJsFile(rulesJsUrl) -%}
-
 {%- set addressFieldJsUrl = view.getAssetManager().getPublishedUrl(
     '@sproutforms/web/assets/formtemplates/dist/js/addressfield.js',
     true) -%}
 {%- do view.registerJsFile(addressFieldJsUrl) -%}
+
+{%- set disableSubmitButtonJsUrl = view.getAssetManager().getPublishedUrl(
+    '@sproutforms/web/assets/formtemplates/dist/js/disable-submit-button.js',
+    true) -%}
+{%- do view.registerJsFile(disableSubmitButtonJsUrl) -%}
+
+{%- set rulesJsUrl = view.getAssetManager().getPublishedUrl(
+    '@sproutforms/web/assets/formtemplates/dist/js/rules.js',
+    true) -%}
+{%- do view.registerJsFile(rulesJsUrl) -%}
 
 {% css %}
     .sprout-hidden{
@@ -84,6 +89,7 @@
     (function() {
     window.csrfTokenName = "{{ craft.app.getConfig().getGeneral().csrfTokenName|e('js') }}";
     new SproutFormsAddressField('{{ id }}');
+    new SproutFormsDisableSubmitButton('{{ id }}');
     new SproutFormsRules('{{ id }}');
     })();
 {% endjs -%}

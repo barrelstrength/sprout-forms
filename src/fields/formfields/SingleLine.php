@@ -125,8 +125,7 @@ class SingleLine extends FormField implements PreviewableFieldInterface
      */
     public function getSettingsHtml()
     {
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/formfields/singleline/settings',
+        $rendered = Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/formfields/singleline/settings',
             [
                 'field' => $this,
             ]
@@ -194,8 +193,7 @@ class SingleLine extends FormField implements PreviewableFieldInterface
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'singleline/input',
+        $rendered = Craft::$app->getView()->renderTemplate('singleline/input',
             [
                 'name' => $this->handle,
                 'value' => $value,

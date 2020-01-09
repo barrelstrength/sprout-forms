@@ -21,7 +21,7 @@
         {%- if field.limitToSingleCountry %} disabled {% endif %}
         {{- dataAttributes|raw -}}
     >
-        {%- for key, option in field.getCountries() -%}
+        {%- for key, option in craft.sproutFields.getCountries() -%}
 
             {%- set optionLabel = option -%}
             {%- set optionValue = key -%}
