@@ -104,7 +104,7 @@ class Phone extends FormField implements PreviewableFieldInterface
      */
     public function serializeValue($value, ElementInterface $element = null)
     {
-        return SproutBaseFields::$app->phoneField->serializeValue($this);
+        return SproutBaseFields::$app->phoneField->serializeValue($value);
     }
 
     /**
