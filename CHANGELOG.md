@@ -1,12 +1,20 @@
 # Changelog
 
+## 3.6.8 - 2020-01-09
+
+### Updated
+- Updated `barrelstrength/sprout-base-fields` to v1.2.1
+
+### Fixed
+- Fixed scenario where address table updates may not get triggered in migrations
+ 
 ## 3.6.7 - 2020-01-09
 
 ### Added
 - Added Disable Submit js for front-end Form Templates
 - Added `barrelstrength\sproutbasefields\services\Name`
 
-### Updates
+### Updated
 - Updated how Address Fields are saved and retrieved to better handle integrations
 - Updated and standardized shared logic, validation, and response for fields Email, Name, Phone, Regular Expression, and Url 
 - Updated dynamic email validation to exclude check for unique email setting
