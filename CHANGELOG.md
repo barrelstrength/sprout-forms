@@ -1,6 +1,6 @@
 # Changelog
 
-## UNRELEASED
+## 3.6.7 - 2020-01-09
 
 ### Added
 - Added Disable Submit js for front-end Form Templates
@@ -34,6 +34,7 @@
 - Fixed spacing around rule attribute in Form Templates
 - Fixed Form Element index settings icon target to open in same page 
 - Fixed output of Form Field modal Field Type name setting
+- Fixed order of events in uninstall migration
 - Fixed display issue with Gibraltar addresses
 - Fixed bug where Address input fields did not display in edit modal after Address was cleared
 
