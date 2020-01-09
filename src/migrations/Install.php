@@ -62,6 +62,7 @@ class Install extends Migration
         $this->dropTable('{{%sproutforms_integrations_log}}');
         $this->dropTable('{{%sproutforms_integrations}}');
         $this->dropTable('{{%sproutforms_rules}}');
+        $this->dropTable('{{%sproutforms_entries_spam_log}}');
         $this->dropTable('{{%sproutforms_entries}}');
         $this->dropTable('{{%sproutforms_forms}}');
         $this->dropTable('{{%sproutforms_formgroups}}');
