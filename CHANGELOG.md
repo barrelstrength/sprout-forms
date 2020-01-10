@@ -1,5 +1,24 @@
 # Changelog
 
+## UNRELEASED
+
+{note}: This update migrates recipient emails in some conditions from the cc and bcc fields to the standard recipients field. Please review your recipients after updating and ensure they are working as expected.
+
+### Added 
+- Added Mailing List Reports
+- Added support for Notification Emails to send to Mailing List Reports
+- Added 'All mailing lists' source
+- Added Users Data Source
+- Added Reports Custom Query Data Source
+- Added Reports Twig Template Data Source
+- Added settings to show or hide Notifications and Reports tabs
+
+### Updated
+- Updated `barrelstrength/sprout-base-reports` requirement vXYZ???
+
+### Removed
+- Removed `barrelstrength/sprout-base-lists` requirement (use Mailing List Reports)
+
 ## 3.6.8 - 2020-01-09
 
 ### Updated
