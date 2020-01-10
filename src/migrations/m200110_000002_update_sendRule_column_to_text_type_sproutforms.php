@@ -3,7 +3,6 @@
 namespace barrelstrength\sproutforms\migrations;
 
 use barrelstrength\sproutbaseemail\migrations\m200110_000002_update_sendRule_column_to_text_type;
-use barrelstrength\sproutbasefields\migrations\m200109_000000_update_address_tables;
 use craft\db\Migration;
 use yii\base\NotSupportedException;
 
