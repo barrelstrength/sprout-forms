@@ -4,6 +4,7 @@ namespace barrelstrength\sproutforms\models;
 
 use craft\base\Model;
 use Craft;
+use craft\helpers\UrlHelper;
 
 class EntryStatus extends Model
 {
@@ -62,6 +63,22 @@ class EntryStatus extends Model
     public function __toString()
     {
         return Craft::t('sprout-forms', $this->name);
+    }
+
+    /**
+     * @return string
+     */
+    public function getCpEditUrl(): string
+    {
+        return UrlHelper::cpUrl('sprout-forms/settings/orders-statuses/'.$this->id);
+    }
+
+    /**
+     * @return string
+     */
+    public function htmlLabel(): string
+    {
+        return '<span class="sproutFormsStatusLabel"><span class="status '.$this->color.'"></span> '.$this->name.'</span>';
     }
 
     /**
