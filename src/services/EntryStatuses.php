@@ -26,9 +26,14 @@ class EntryStatuses extends Component
      */
     public function getAllEntryStatuses(): array
     {
-        $entryStatuses = EntryStatusRecord::find()
+        $results = EntryStatusRecord::find()
             ->orderBy(['sortOrder' => 'asc'])
             ->all();
+
+        $entryStatuses = [];
+        foreach ($results as $result) {
+            $entryStatuses[] = new EntryStatus($result);
+        }
 
         return $entryStatuses;
     }
@@ -142,21 +147,37 @@ class EntryStatuses extends Component
      */
     public function deleteEntryStatusById($id): bool
     {
-        $statuses = $this->getAllEntryStatuses();
+        $existsStatusOnEntries = EntryElement::find()->where(['statusId' => $id])->exists();
 
-        $entry = EntryElement::find()->where(['statusId' => $id])->one();
-
-        if ($entry) {
+        if ($existsStatusOnEntries) {
             return false;
         }
 
-        if (count($statuses) >= 2) {
-            $entryStatus = EntryStatusRecord::findOne($id);
+        $statuses = $this->getAllEntryStatuses();
 
-            if ($entryStatus) {
-                $entryStatus->delete();
-                return true;
+        // We allow users to change the handles of default statuses, so we
+        // just broadly check for our 3 default statuses by number. If we have
+        // less that our default number, we shouldn't be allowing folks to delete
+        if (count($statuses) <= 3) {
+            return false;
+        }
+
+        $entryStatus = EntryStatusRecord::findOne($id);
+
+        if ($entryStatus) {
+            // If we're deleting the default status, grab the first status
+            // that is not the 'spam' status and make it default
+            if ($entryStatus->isDefault) {
+                foreach ($statuses as $status) {
+                    if ($status->handle !== 'spam') {
+                        $status->isDefault = 1;
+                        SproutForms::$app->entryStatuses->saveEntryStatus($status);
+                        break;
+                    }
+                }
             }
+            $entryStatus->delete();
+            return true;
         }
 
         return false;
