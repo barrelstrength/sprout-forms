@@ -43,6 +43,7 @@ use barrelstrength\sproutbaseimport\services\Importers;
 use Craft;
 use craft\base\Plugin;
 use craft\events\RegisterComponentTypesEvent;
+use craft\events\RegisterTemplateRootsEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
 use craft\helpers\UrlHelper;
@@ -50,6 +51,7 @@ use craft\services\Fields;
 use craft\services\Plugins;
 use craft\web\UrlManager;
 use craft\services\UserPermissions;
+use craft\web\View;
 use Exception;
 use Throwable;
 use yii\base\ErrorException;
@@ -230,6 +232,10 @@ class SproutForms extends Plugin implements SproutEditionsInterface
             $event->types[] = EntryElementImporter::class;
 //            $event->types[] = FormsFieldImporter::class;
 //            $event->types[] = EntriesFieldImporter::class;
+        });
+
+        Event::on(View::class, View::EVENT_REGISTER_SITE_TEMPLATE_ROOTS, function(RegisterTemplateRootsEvent $e) {
+            $e->roots['sprout-forms/form-templates'] = Craft::getAlias('@sproutforms/templates/_components/formtemplates');
         });
     }
 

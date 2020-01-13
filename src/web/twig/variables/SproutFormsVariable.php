@@ -12,6 +12,7 @@ use Craft;
 use craft\base\ElementInterface;
 use craft\base\FieldInterface;
 use craft\errors\MissingComponentException;
+use craft\helpers\ArrayHelper;
 use craft\helpers\Template as TemplateHelper;
 use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
@@ -50,6 +51,108 @@ class SproutFormsVariable
         $plugin = Craft::$app->plugins->getPlugin('sprout-forms');
 
         return $plugin->getVersion();
+    }
+
+    public function getFormByHandle($formHandle) {
+        return SproutForms::$app->forms->getFormByHandle($formHandle);
+    }
+    public function getCurrentFormEntry($form) {
+        return SproutForms::$app->entries->getEntry($form);
+    }
+    public function setSiteTemplatePath() {
+        Craft::$app->getView()->setTemplatesPath(Craft::$app->path->getSiteTemplatesPath());
+    }
+    public function setTabTemplatePath($form) {
+        $templatePaths = SproutForms::$app->forms->getFormTemplatePaths($form);
+
+        // Set Tab template path
+        Craft::$app->getView()->setTemplatesPath($templatePaths['tab']);
+    }
+    public function setFieldTemplatePathAndGetInputHtml($form, $entry, $field, $renderingOptions) {
+        if ($renderingOptions !== null) {
+            $renderingOptions = [
+                'fields' => $renderingOptions['fields'] ?? null
+            ];
+        }
+
+        $view = Craft::$app->getView();
+
+        $templatePaths = SproutForms::$app->forms->getFormTemplatePaths($form);
+
+        $view->setTemplatesPath($field->getTemplatesPath());
+
+        $inputFilePath = $templatePaths['fields'].DIRECTORY_SEPARATOR.$field->getFieldInputFolder().DIRECTORY_SEPARATOR.'input';
+
+        // Allow input field templates to be overridden
+        foreach (Craft::$app->getConfig()->getGeneral()->defaultTemplateExtensions as $extension) {
+            if (file_exists($inputFilePath.'.'.$extension)) {
+
+                // Override Field Input template path
+                $view->setTemplatesPath($templatePaths['fields']);
+                break;
+            }
+        }
+
+        $fieldRenderingOptions = $renderingOptions['fields'][$field->handle] ?? null;
+
+        $value = $entry->getFieldValue($field->handle);
+
+        $inputHtml = $field->getFrontEndInputHtml($value, $fieldRenderingOptions);
+
+        // Set Field template path (we handled the case for overriding the field input templates above)
+        $view->setTemplatesPath($templatePaths['field']);
+
+        return $inputHtml;
+    }
+
+    /**
+     * Returns a complete form for display in template
+     *
+     * @param            $formHandle
+     * @param array|null $renderingOptions
+     *
+     * @return Markup
+     * @throws \Exception
+     * @throws Exception
+     */
+    public function displayFormNew($formHandle, array $renderingOptions = null): Markup
+    {
+        /**
+         * @var $form Form
+         */
+//        $form = SproutForms::$app->forms->getFormByHandle($formHandle);
+//
+//        if (!$form) {
+//            throw new Exception('Unable to find form with the handle: '.$formHandle);
+//        }
+
+        $view = Craft::$app->getView();
+
+//        $entry = SproutForms::$app->entries->getEntry($form);
+
+//        $templatePaths = SproutForms::$app->forms->getFormTemplatePaths($form);
+
+        // Check if we need to update our Front-end Form Template Path
+//        $view->setTemplatesPath($templatePaths['form']);
+
+        $formHtml = $view->renderTemplate('sprout-forms/form-templates/accessible/form', [
+                'formHandle' => $formHandle,
+//                'entry' => $entry,
+                'renderingOptions' => $renderingOptions
+            ]
+        );
+
+        // Build our complete form
+//        $formHtml = $view->renderTemplate('sprout-forms/form-templates/accessible/form', [
+//                'form' => $form,
+//                'entry' => $entry,
+//                'renderingOptions' => $renderingOptions
+//            ]
+//        );
+
+        $view->setTemplatesPath(Craft::$app->path->getSiteTemplatesPath());
+
+        return TemplateHelper::raw($formHtml);
     }
 
     /**
@@ -501,60 +604,157 @@ class SproutFormsVariable
     {
         $defaultFormTemplates = new AccessibleTemplates();
 
-        if ($generalSettings) {
-            $options[] = [
-                'optgroup' => Craft::t('sprout-forms', 'Global Templates')
-            ];
-
-            $options[] = [
-                'label' => Craft::t('sprout-forms', 'Default Form Templates'),
-                'value' => null
-            ];
-        }
+//        if ($generalSettings) {
+//            $options[] = [
+//                'optgroup' => Craft::t('sprout-forms', 'Global Templates')
+//            ];
+//
+//            $options[] = [
+//                'label' => Craft::t('sprout-forms', 'Default Form Templates'),
+//                'value' => null
+//            ];
+//        }
 
         $templates = SproutForms::$app->forms->getAllFormTemplates();
         $templateIds = [];
 
-        if ($generalSettings) {
-            $options[] = [
-                'optgroup' => Craft::t('sprout-forms', 'Form-Specific Templates')
-            ];
-        }
+//        if ($generalSettings) {
+//            $options[] = [
+//                'optgroup' => Craft::t('sprout-forms', 'Form-Specific Templates')
+//            ];
+//        }
 
+        $formTemplates = [];
         foreach ($templates as $template) {
-            $options[] = [
-                'label' => $template->getName(),
-                'value' => $template->getTemplateId()
+            $formTemplates[] = [
+                'hint' => $template->getName(),
+                'name' => $template->getTemplateFolder()
             ];
-            $templateIds[] = $template->getTemplateId();
+//            $templateIds[] = $template->getTemplateId();
         }
 
-        $templateFolder = null;
-        $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
+//        $templateFolder = null;
+//        $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
 
-        if ($plugin) {
-            $settings = $plugin->getSettings();
-        }
+//        if ($plugin) {
+//            $settings = $plugin->getSettings();
+//        }
 
-        $templateFolder = $form->formTemplate ?? $settings->formTemplateDefaultValue ?? $defaultFormTemplates->getPath();
+//        $templateFolder = $form->formTemplate ?? $settings->formTemplateDefaultValue ?? $defaultFormTemplates->getPath();
+//
+//        $options[] = [
+//            'optgroup' => Craft::t('sprout-forms', 'Custom Template Folder')
+//        ];
+//
+//        if (!in_array($templateFolder, $templateIds, false) && $templateFolder != '') {
+//            $options[] = [
+//                'label' => $templateFolder,
+//                'value' => $templateFolder
+//            ];
+//        }
 
-        $options[] = [
-            'optgroup' => Craft::t('sprout-forms', 'Custom Template Folder')
+        $suggestions[] = [
+            'label' => Craft::t('sprout-forms', 'Form Templates'),
+            'data' => $formTemplates
         ];
 
-        if (!in_array($templateFolder, $templateIds, false) && $templateFolder != '') {
-            $options[] = [
-                'label' => $templateFolder,
-                'value' => $templateFolder
+        return $suggestions;
+
+//        [
+//{
+//    label: 'Common Dividers'|t('sprout-seo'),
+//data: [
+//{ hint: 'Dash'|t('sprout-seo'), name: '-' },
+//{ hint: 'Bullet'|t('sprout-seo'), name: '•' },
+//{ hint: 'Pipe'|t('sprout-seo'), name: '|' },
+//{ hint: 'Forward Slash'|t('sprout-seo'), name: '/' },
+//{ hint: 'Colon'|t('sprout-seo'), name: ':' }
+//]
+//}
+//]
+    }
+
+    /**
+     * Returns the available template path suggestions for template inputs.
+     *
+     * @return string[]
+     */
+    public function getTemplateFolderSuggestions(): array
+    {
+        // Get all the template files sorted by path length
+        $root = Craft::$app->getPath()->getSiteTemplatesPath();
+
+        if (!is_dir($root)) {
+            return [];
+        }
+
+        $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($root));
+        /** @var \SplFileInfo[] $files */
+        $files = [];
+        $pathLengths = [];
+
+        foreach ($iterator as $file) {
+            /** @var \SplFileInfo $file */
+            if ($file->isDir()) {
+                $files[] = $file;
+                $pathLengths[] = strlen($file->getRealPath());
+            }
+        }
+
+        array_multisort($pathLengths, SORT_NUMERIC, $files);
+
+        // Now build the suggestions array
+        $suggestions = [];
+        $templates = [];
+        $sites = [];
+        $config = Craft::$app->getConfig()->getGeneral();
+        $rootLength = strlen($root);
+
+        foreach (Craft::$app->getSites()->getAllSites() as $site) {
+            $sites[$site->handle] = Craft::t('sprout-forms', $site->name);
+        }
+
+        foreach ($files as $file) {
+
+            $template = substr($file->getRealPath(), $rootLength + 1);
+
+            // Can we chop off the extension?
+//            $extension = $file->getExtension();
+//            if (in_array($extension, $config->defaultTemplateExtensions, true)) {
+//                $template = substr($template, 0, strlen($template) - (strlen($extension) + 1));
+//            }
+
+            $hint = null;
+
+            // Is it in a site template directory?
+            foreach ($sites as $handle => $name) {
+                if (strpos($template, $handle . DIRECTORY_SEPARATOR) === 0) {
+                    $hint = $name;
+                    $template = substr($template, strlen($handle) + 1);
+                    break;
+                }
+            }
+
+            // Avoid listing the same template path twice (considering localized templates)
+            if (isset($templates[$template]) || $template === false) {
+                continue;
+            }
+
+            $templates[$template] = true;
+            $suggestions[] = [
+                'name' => $template,
+                'hint' => $hint,
             ];
         }
 
-        $options[] = [
-            'label' => Craft::t('sprout-forms', 'Add Custom'),
-            'value' => 'custom'
-        ];
+        ArrayHelper::multisort($suggestions, 'name');
 
-        return $options;
+        return [
+            [
+                'label' => Craft::t('sprout-forms', 'Template Folders'),
+                'data' => $suggestions,
+            ]
+        ];
     }
 
     /**

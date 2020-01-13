@@ -1,3 +1,6 @@
+{% set form = craft.sproutForms.getFormByHandle(formHandle) %}
+{% set entry = craft.sproutForms.getCurrentFormEntry(form) %}
+
 {% do craft.sproutForms.addFieldVariables({
     'craft': craft,
     'now': now,
@@ -33,9 +36,18 @@
     {% endif %}
 
     <div class="fields">
+        {% do craft.sproutForms.setTabTemplatePath(form) %}
         {%- for tab in form.getFieldLayout().getTabs() %}
-            {{ craft.sproutForms.displayTab(form, tab.id, renderingOptions) }}
+{#            {{ craft.sproutForms.displayTab(form, tab.id, renderingOptions) }}#}
+
+            {% include 'sprout-forms/form-templates/accessible/tab' with {
+                form: form,
+                tab: tab,
+                renderingOptions: renderingOptions
+            } %}
+
         {% endfor -%}
+        {% do craft.sproutForms.setSiteTemplatePath() %}
     </div>
 
     {# Do not remote this line when customizing templates.

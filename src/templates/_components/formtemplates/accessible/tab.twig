@@ -1,4 +1,4 @@
-{%- for tab in tabs -%}
+{#{%- for tab in tabs -%}#}
 
     {%- set layoutFields = tab.getFields() %}
 
@@ -9,9 +9,17 @@
         {%- endif %}
 
         {% for field in layoutFields -%}
-            {{- craft.sproutForms.displayField(form, field, renderingOptions) }}
+            {% set inputHtml = craft.sproutForms.setFieldTemplatePathAndGetInputHtml(form, entry, field, renderingOptions) %}
+            {% include 'sprout-forms/form-templates/accessible/field' with {
+                form: form,
+                entry: entry,
+                field: field,
+                input: inputHtml,
+                renderingOptions: renderingOptions
+            } %}
+            {% do craft.sproutForms.setSiteTemplatePath() %}
         {%- endfor %}
 
     </section>
 
-{%- endfor -%}
+{#{%- endfor -%}#}

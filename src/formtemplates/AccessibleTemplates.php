@@ -21,6 +21,14 @@ class AccessibleTemplates extends FormTemplates
     /**
      * @return string
      */
+    public function getTemplateFolder(): string
+    {
+        return 'sprout-forms/form-templates/accessible';
+    }
+
+    /**
+     * @return string
+     */
     public function getPath(): string
     {
         return Craft::getAlias('@barrelstrength/sproutforms/templates/_components/formtemplates/accessible');

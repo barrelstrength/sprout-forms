@@ -18,12 +18,16 @@ abstract class FormTemplates
      * sproutforms-accessibletemplates
      * sproutforms-basictemplates
      *
+     * @deprecated - No longer needed. Use getTemplateFolder() instead.
+     *
      * @var string
      */
     public $templateId;
 
     /**
      * Generates the Template ID
+     *
+     * @deprecated - No longer needed. Use getTemplateFolder() instead.
      *
      * @return string
      * @throws ReflectionException
@@ -52,7 +56,14 @@ abstract class FormTemplates
     abstract public function getName(): string;
 
     /**
+     * @return string
+     */
+    abstract public function getTemplateFolder(): string;
+
+    /**
      * The folder path where your form templates exist
+     *
+     * @deprecated - No longer needed. Use getTemplateFolder() instead.
      *
      * @return string
      */

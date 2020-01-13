@@ -13,6 +13,7 @@ use craft\base\FieldInterface;
 use craft\elements\db\ElementQueryInterface;
 use craft\errors\MissingComponentException;
 use craft\helpers\Html;
+use craft\helpers\Template as TemplateHelper;
 use craft\models\FieldLayout;
 use yii\base\ErrorHandler;
 use craft\db\Query;
@@ -61,6 +62,7 @@ class Form extends Element
     public $redirectUri;
     public $submitButtonText;
     public $saveData = true;
+    public $useCustomFormTemplates = false;
     public $formTemplate;
     public $enableCaptchas = true;
 
@@ -462,5 +464,25 @@ class Form extends Element
     public function getRules(): array
     {
         return SproutForms::$app->rules->getRulesByFormId($this->id, FieldRule::class, true);
+    }
+
+    public function displayForm($renderingOptions = []) {
+        $view = Craft::$app->getView();
+
+        $templatePaths = SproutForms::$app->forms->getFormTemplatePaths($this);
+
+        // Check if we need to update our Front-end Form Template Path
+        $view->setTemplatesPath($templatePaths['form']);
+
+        $formHtml = $view->renderTemplate('sprout-forms/form-templates/accessible/form', [
+                'formHandle' => $this->handle,
+//                'entry' => $entry,
+                'renderingOptions' => $renderingOptions
+            ]
+        );
+
+        $view->setTemplatesPath(Craft::$app->path->getSiteTemplatesPath());
+
+        return TemplateHelper::raw($formHtml);
     }
 }
