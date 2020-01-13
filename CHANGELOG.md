@@ -1,5 +1,22 @@
 # Changelog
 
+## UNRELEASED
+
+### Added
+- Added `barrelstrength\sproutforms\models\EntryStatus::getCpEditUrl()`
+- Added `barrelstrength\sproutforms\models\EntryStatus::htmlLabel()`
+
+### Changed
+- Updated `barrelstrength\sproutforms\models\EntryStatus::$isDefault` to default to `false`
+
+### Fixed
+- Fixed bug where optional Phone field would not validate with blank value
+- Fixed bug where 'When a form is saved' Notification Event may not get migrated properly
+
+### Removed
+- Removed `barrelstrength\sproutforms\records\EntryStatus::getCpEditUrl()`
+- Removed `barrelstrength\sproutforms\records\EntryStatus::htmlLabel()`
+
 ## 3.6.8 - 2020-01-09
 
 ### Updated
