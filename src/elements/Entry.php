@@ -56,7 +56,7 @@ class Entry extends Element
     public $userAgent;
 
     /** @var Captcha[] $captchas */
-    protected $captchas;
+    protected $captchas = [];
 
     public function init()
     {
