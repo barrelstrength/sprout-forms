@@ -220,6 +220,7 @@ class EntriesController extends BaseController
             'entry' => $entry
         ]);
 
+        // Captchas are processed and added to
         $this->trigger(self::EVENT_BEFORE_VALIDATE, $event);
 
         $entry->validate(null, false);
