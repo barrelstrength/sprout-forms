@@ -156,6 +156,7 @@ class SaveEntryEvent extends NotificationEvent
 
         $rules[] = [['whenNew', 'whenUpdated'], 'validateWhenTriggers'];
         $rules[] = [['event'], 'validateEvent'];
+        $rules[] = [['event'], 'validateCaptchas'];
         $rules[] = [['formIds'], 'validateFormIds'];
 
         return $rules;
@@ -199,6 +200,15 @@ class SaveEntryEvent extends NotificationEvent
 
         if (get_class($event->entry) !== Entry::class) {
             $this->addError('event', Craft::t('sprout-forms', 'Event Element does not match barrelstrength\sproutforms\elements\Entry class.'));
+        }
+    }
+
+    public function validateCaptchas()
+    {
+        $entry = $this->event->entry;
+
+        if ($entry->hasCaptchaErrors()) {
+            $this->addError('event', Craft::t('sprout-forms', 'Submitted entry has captcha errors.'));
         }
     }
 
