@@ -1,17 +1,24 @@
 # Changelog
 
-## UNRELEASED
+## 3.6.9 - 2020-01-15
 
 ### Added
 - Added `barrelstrength\sproutforms\models\EntryStatus::getCpEditUrl()`
 - Added `barrelstrength\sproutforms\models\EntryStatus::htmlLabel()`
 
 ### Changed
-- Updated `barrelstrength\sproutforms\models\EntryStatus::$isDefault` to default to `false`
+- Updated 'When a form entry is saved' Notification Event to only send notifications if captchas pass validation ([#396])
+- Updated `barrelstrength\sproutforms\models\EntryStatus::$isDefault` default value to `false`
 
 ### Fixed
-- Fixed bug where optional Phone field would not validate with blank value
-- Fixed bug where 'When a form is saved' Notification Event may not get migrated properly
+- Fixed bug where optional Phone field would not validate with blank value ([#403])
+- Fixed bug where 'When a form is saved' Notification Event may not get migrated properly ([#400])
+- Fixed bug where custom Entry Status could not be deleted ([#368])
+
+[#368]: https://github.com/barrelstrength/craft-sprout-forms/issues/386
+[#396]: https://github.com/barrelstrength/craft-sprout-forms/issues/396
+[#400]: https://github.com/barrelstrength/craft-sprout-forms/issues/400
+[#403]: https://github.com/barrelstrength/craft-sprout-forms/issues/403
 
 ### Removed
 - Removed `barrelstrength\sproutforms\records\EntryStatus::getCpEditUrl()`
