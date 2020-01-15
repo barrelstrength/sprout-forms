@@ -55,7 +55,7 @@ class Settings extends Model implements SproutSettingsInterface
                 'label' => Craft::t('sprout-forms', 'Spam Protection'),
                 'url' => 'sprout-forms/settings/spam-protection',
                 'selected' => 'spam-protection',
-                'template' => 'sprout-forms/settings/spamprotection',
+                'template' => 'sprout-forms/settings/spam-protection',
                 'variables' => $spamProtectionVariables
             ],
             'entry-statuses' => [
