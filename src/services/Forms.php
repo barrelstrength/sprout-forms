@@ -864,21 +864,24 @@ class Forms extends Component
         /** @var Form $form */
         $form = $context['form'] ?? null;
         if ($form !== null && $form->enableCaptchas) {
-            return $this->getCaptchasHtml();
+            return $this->getCaptchasHtml($form);
         }
 
         return null;
     }
 
     /**
+     * @param FormElement $form
+     *
      * @return string
      */
-    public function getCaptchasHtml(): string
+    public function getCaptchasHtml(Form $form): string
     {
         $captchas = $this->getAllEnabledCaptchas();
         $captchaHtml = '';
 
         foreach ($captchas as $captcha) {
+            $captcha->form = $form;
             $captchaHtml .= $captcha->getCaptchaHtml();
         }
 
