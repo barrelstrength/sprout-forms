@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.7.0 - 2020-01-17
+
+### Added
+- Added `barrelstrength\sproutforms\base\Captcha::$form`
+
 ## 3.6.10 - 2020-01-16
 
 ### Updated
