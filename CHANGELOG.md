@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.7.1.1 - 2020-01-18
+
+### Fixed 
+- Fixed composer release number 
+
 ## 3.7.1 - 2020-01-18
 
 ### Updated
