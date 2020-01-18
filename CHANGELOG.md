@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.7.1 - 2020-01-18
+
+### Updated
+- Updated `barrelstrength/sprout-base-fields` to v1.2.3
+
+### Fixed 
+- Fixed array offset error in PHP 7.4 ([#405][405-sproutbasefields]) 
+
+[405-sproutbasefields]: https://github.com/barrelstrength/craft-sprout-forms/issues/405
+
 ## 3.7.0 - 2020-01-17
 
 ### Added
