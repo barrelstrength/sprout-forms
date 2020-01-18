@@ -17,17 +17,7 @@ class EndsWithCondition extends Condition
     }
 
     /**
-     * @return array
-     */
-    public function rules(): array
-    {
-        return [
-            [['inputValue'], 'validateCondition', 'skipOnEmpty' => false]
-        ];
-    }
-
-    /**
-     * @inheritDoc
+     * @return bool|mixed
      */
     public function validateCondition()
     {
