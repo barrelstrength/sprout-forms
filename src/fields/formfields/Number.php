@@ -221,9 +221,10 @@ class Number extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function defineRules(): array
     {
-        $rules = parent::rules();
+        $rules = parent::defineRules();
+
         $rules[] = [['min', 'max'], 'number'];
         $rules[] = [['decimals', 'size'], 'integer'];
         $rules[] = [

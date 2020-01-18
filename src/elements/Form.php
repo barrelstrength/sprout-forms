@@ -363,13 +363,13 @@ class Form extends Element
     }
 
     /**
-     * @inheritDoc
-     *
+     * @return array
      * @throws InvalidConfigException
      */
-    public function rules(): array
+    protected function defineRules(): array
     {
-        $rules = parent::rules();
+        $rules = parent::defineRules();
+
         $rules[] = [['name', 'handle'], 'required'];
         $rules[] = [['name', 'handle'], 'string', 'max' => 255];
         $rules[] = [

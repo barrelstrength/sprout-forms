@@ -82,11 +82,13 @@ class Settings extends Model implements SproutSettingsInterface
         return $navItems;
     }
 
-    public function rules(): array
+    public function defineRules(): array
     {
-        return [
-            [['formTemplateDefaultValue'], 'required', 'on' => 'general']
-        ];
+        $rules = parent::defineRules();
+
+        $rules[] = [['formTemplateDefaultValue'], 'required', 'on' => 'general'];
+
+        return $rules;
     }
 
     /**

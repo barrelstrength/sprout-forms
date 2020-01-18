@@ -15,6 +15,7 @@ use Craft;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use yii\base\Exception;
 
 
 /**
@@ -73,14 +74,13 @@ class SaveEntryEvent extends NotificationEvent
 
 
     /**
-     * @inheritdoc
-     *
      * @param array $context
      *
      * @return string
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws Exception
      */
     public function getSettingsHtml($context = []): string
     {
@@ -138,22 +138,23 @@ class SaveEntryEvent extends NotificationEvent
         return null;
     }
 
-    public function rules(): array
+    /**
+     * @return array
+     */
+    public function defineRules(): array
     {
-        $rules = parent::rules();
+        $rules = parent::defineRules();
 
         $rules[] = [
             'whenNew', 'required', 'when' => function() {
                 return $this->whenUpdated == false;
             }
         ];
-
         $rules[] = [
             'whenUpdated', 'required', 'when' => function() {
                 return $this->whenNew == false;
             }
         ];
-
         $rules[] = [['whenNew', 'whenUpdated'], 'validateWhenTriggers'];
         $rules[] = [['event'], 'validateEvent'];
         $rules[] = [['event'], 'validateCaptchas'];

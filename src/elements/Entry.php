@@ -478,9 +478,10 @@ class Entry extends Element
      * @inheritdoc
      * @throws InvalidConfigException
      */
-    public function rules(): array
+    protected function defineRules(): array
     {
-        $rules = parent::rules();
+        $rules = parent::defineRules();
+
         $rules[] = [['formId'], 'required'];
 
         return $rules;

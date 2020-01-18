@@ -63,9 +63,10 @@ class Paragraph extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function defineRules(): array
     {
-        $rules = parent::rules();
+        $rules = parent::defineRules();
+
         $rules[] = [['charLimit'], 'validateCharLimit'];
 
         return $rules;
