@@ -63,6 +63,7 @@ class Settings extends Model implements SproutSettingsInterface
                 'url' => 'sprout-forms/settings/entry-statuses',
                 'selected' => 'entry-statuses',
                 'template' => 'sprout-forms/settings/entrystatuses',
+                'settingsForm' => false,
                 'actionTemplate' => 'sprout-forms/settings/entrystatuses/_actionStatusButton',
                 'variables' => $entryStatusVariables
             ]

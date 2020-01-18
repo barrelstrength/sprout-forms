@@ -1,59 +1,73 @@
 {% set title = "Entry Statuses"|t('sprout-forms') %}
 
+{% set tableData = [] %}
 {% if entryStatuses|length %}
-    <table id="entryStatuses" class="data fullwidth collapsible">
-        <thead>
-        <tr>
-            <th scope="col">{{ "Name"|t('sprout-forms') }}</th>
-            <th scope="col">{{ "Handle"|t('sprout-forms') }}</th>
-            <th scope="col">{{ "Default Status"|t('sprout-forms') }}
-            <td class="thin"></td>
-            <td class="thin"></td>
-        </tr>
-        </thead>
-        <tbody>
-        {% for entryStatus in entryStatuses %}
-            <tr data-id="{{ entryStatus.id }}"
-                data-name="{{ entryStatus.name|t('sprout-forms') }}">
-                <th scope="row" data-title="{{ 'Name'|t('sprout-forms') }}">
-                    <a href="{{ url('sprout-forms/settings/entry-statuses/' ~ entryStatus.id) }}">{{ entryStatus.htmlLabel|raw }}</a>
-                </th>
-                <td data-title="{{ 'Handle'|t('sprout-forms') }}" class="code">
-                    {{ entryStatus.handle }}
-                </td>
-                <td>
-                    {% if entryStatus.isDefault %}
-                        <span data-icon="check" title="{{ 'Yes'|t('sprout-forms') }}"></span>
-                    {% endif %}
-                </td>
-                <td>
-                <td class="thin">
-                    <a class="move icon" title="{{ 'Reorder'|t('sprout-forms') }}" role="button"></a>
-                </td>
-                <td class="thin">
-                    {# We know IDs 1 and 2 were installed first. Spam was added later. #}
-                    {% if entryStatus.id not in [1,2] and entryStatus.handle != spamStatusHandle %}
-                        <a class="delete icon" title="{{ 'Delete'|t('sprout-forms') }}" role="button"></a>
-                    {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    {% for entryStatus in entryStatuses %}
+
+        {% set cpEditUrl = cpUrl('sprout-forms/settings/entry-statuses/' ~ entryStatus.id) %}
+
+        {% set tableData = tableData|merge([{
+            id: entryStatus.id,
+            labelHtml: {
+                url: cpEditUrl,
+                color: entryStatus.color,
+                name: entryStatus.name
+            },
+            title: entryStatus.name|t('sprout-forms')|e,
+            url: cpEditUrl,
+            handle: entryStatus.handle,
+            isDefault: entryStatus.isDefault
+        }]) %}
+
+    {% endfor %}
 {% endif %}
 
+<h2>{{ "Entry Statuses"|t('sprout-forms') }}</h2>
+<p>{{ "Define the statuses that can be set on form entries once they’ve been completed."|t('sprout-forms') }}</p>
+
+<div id="entry-statuses-admin-table"></div>
+
+{% do view.registerAssetBundle('craft\\web\\assets\\admintable\\AdminTableAsset') -%}
+
+{# @todo - Not yet supported: deleteFailMessage
+    "Unable to delete status. Please remove this status from all Form Entries first."
+     Also no way to disable a particular row from being deleted. Ideally we could just hide the delete button. #}
 {% js %}
-    new Craft.AdminTable({
-    tableSelector: '#settings-entryStatuses',
-    newObjectBtnSelector: '#newentrystatus',
-    deleteAction: 'sprout-forms/entry-statuses/delete',
-    minObjects: 1,
-    sortable: true,
-    reorderAction: 'sprout-forms/entry-statuses/reorder',
-    reorderSuccessMessage: Craft.t('Entry statuses reordered.'),
-    reorderFailMessage:    Craft.t('Couldn’t reorder statuses..'),
-    confirmDeleteMessage: '{{ "Are you sure you want to delete the Entry Status “{name}”?"|t('sprout-forms') }}',
-    deleteFailMessage: '{{ "Unable to delete status. Please remove this status from all Form Entries first."|t('sprout-forms') }}'
+    var columns = [
+      {
+        name: 'labelHtml',
+        title: Craft.t('sprout-forms', 'Name'),
+        callback: function(value) {
+          return '<a class="cell-bold sproutFormsStatusLabel" href="' + value.url + '"><span class="status ' + value.color + '"></span>' + value.name + '</a>';
+        }
+      },
+      {
+        name: '__slot:handle',
+        title: Craft.t('sprout-forms', 'Handle')
+      },
+      {
+        name: 'isDefault',
+        title: Craft.t('sprout-forms', 'Default Status'), callback: function(value) {
+          if (value) {
+            return '<span data-icon="check" title="' + Craft.t('sprout-forms', 'Yes') + '"></span>';
+          }
+          return '';
+        }
+      }
+    ];
+
+    new Craft.VueAdminTable({
+      columns: columns,
+      container: '#entry-statuses-admin-table',
+      deleteAction: 'sprout-forms/entry-statuses/delete',
+      deleteConfirmationMessage: Craft.t('sprout-forms', "Are you sure you want to delete the Entry Status “{name}”?"),
+      deleteSuccessMessage: Craft.t('sprout-forms', "Entry status deleted"),
+      emptyMessage: Craft.t('sprout-forms', 'No entry statuses exist yet.'),
+      minItems: 3,
+      padded: true,
+      reorderAction: 'sprout-forms/entry-statuses/reorder',
+      reorderSuccessMessage: Craft.t('sprout-forms', 'Entry statuses reordered.'),
+      reorderFailMessage: Craft.t('sprout-forms', 'Couldn’t reorder statuses..'),
+      tableData: {{ tableData|json_encode|raw }}
     });
 {% endjs %}
-
