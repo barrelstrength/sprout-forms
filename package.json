@@ -10,7 +10,7 @@
     "autoprefixer": "^9.6.1",
     "craftcms-sass": "^1.6.7",
     "cross-env": "^5.2.1",
-    "laravel-mix": "^4.1.4",
+    "laravel-mix": "^5.0.0",
     "resolve-url-loader": "^3.1.0",
     "sass": "^1.22.0",
     "sass-loader": "^7.3.1",
