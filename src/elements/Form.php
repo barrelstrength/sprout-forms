@@ -103,7 +103,15 @@ class Form extends Element
      */
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms', 'Sprout Forms');
+        return Craft::t('sprout-forms', 'Form');
+    }
+
+    /**
+     * @return string
+     */
+    public static function pluralDisplayName(): string
+    {
+        return Craft::t('sprout-forms', 'Forms');
     }
 
     /**

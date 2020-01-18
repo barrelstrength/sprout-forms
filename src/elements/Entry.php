@@ -98,7 +98,15 @@ class Entry extends Element
      */
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms', 'Sprout Forms Entries');
+        return Craft::t('sprout-forms', 'Form Entry');
+    }
+
+    /**
+     * @return string
+     */
+    public static function pluralDisplayName(): string
+    {
+        return Craft::t('sprout-forms', 'Form Entries');
     }
 
     /**
