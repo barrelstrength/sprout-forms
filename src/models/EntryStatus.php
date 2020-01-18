@@ -77,14 +77,6 @@ class EntryStatus extends Model
     }
 
     /**
-     * @return string
-     */
-    public function htmlLabel(): string
-    {
-        return '<span class="sproutFormsStatusLabel"><span class="status '.$this->color.'"></span> '.$this->name.'</span>';
-    }
-
-    /**
      * @inheritdoc
      */
     public function defineRules(): array
