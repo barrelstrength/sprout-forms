@@ -71,6 +71,10 @@ class EntryStatusesController extends BaseController
         $entryStatus->color = Craft::$app->request->getBodyParam('color');
         $entryStatus->isDefault = Craft::$app->request->getBodyParam('isDefault');
 
+        if (empty($entryStatus->isDefault)) {
+            $entryStatus->isDefault = 0;
+        }
+
         if (!SproutForms::$app->entryStatuses->saveEntryStatus($entryStatus)) {
             Craft::$app->session->setError(Craft::t('sprout-forms', 'Could not save Entry Status.'));
 
@@ -120,7 +124,7 @@ class EntryStatusesController extends BaseController
         $entryStatusId = Craft::$app->request->getRequiredBodyParam('id');
 
         if (!SproutForms::$app->entryStatuses->deleteEntryStatusById($entryStatusId)) {
-            $this->asJson(['success' => false]);
+            return $this->asJson(['success' => false]);
         }
 
         return $this->asJson(['success' => true]);

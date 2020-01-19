@@ -27,7 +27,6 @@ abstract class Condition extends SavableComponent implements ConditionInterface
      */
     public $ruleValue;
 
-
     /**
      * @inheritDoc
      */
@@ -43,4 +42,23 @@ abstract class Condition extends SavableComponent implements ConditionInterface
     {
         return '';
     }
+
+    /**
+     * @return array
+     */
+    protected function defineRules(): array
+    {
+        $rules = parent::defineRules();
+
+        $rules[] = [['inputValue'], 'validateCondition', 'skipOnEmpty' => false];
+
+        return $rules;
+    }
+
+    /**
+     * The default condition validation rule
+     *
+     * @return mixed
+     */
+    abstract public function validateCondition();
 }

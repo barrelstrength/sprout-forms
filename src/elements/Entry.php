@@ -56,7 +56,7 @@ class Entry extends Element
     public $userAgent;
 
     /** @var Captcha[] $captchas */
-    protected $captchas;
+    protected $captchas = [];
 
     public function init()
     {
@@ -98,7 +98,15 @@ class Entry extends Element
      */
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms', 'Sprout Forms Entries');
+        return Craft::t('sprout-forms', 'Form Entry');
+    }
+
+    /**
+     * @return string
+     */
+    public static function pluralDisplayName(): string
+    {
+        return Craft::t('sprout-forms', 'Form Entries');
     }
 
     /**
@@ -478,9 +486,10 @@ class Entry extends Element
      * @inheritdoc
      * @throws InvalidConfigException
      */
-    public function rules(): array
+    protected function defineRules(): array
     {
-        $rules = parent::rules();
+        $rules = parent::defineRules();
+
         $rules[] = [['formId'], 'required'];
 
         return $rules;

@@ -191,9 +191,10 @@ class OptIn extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function defineRules(): array
     {
-        $rules = parent::rules();
+        $rules = parent::defineRules();
+
         $rules[] = [['optInMessage'], 'required'];
 
         return $rules;

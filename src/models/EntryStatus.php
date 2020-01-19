@@ -4,7 +4,11 @@ namespace barrelstrength\sproutforms\models;
 
 use craft\base\Model;
 use Craft;
+use craft\helpers\UrlHelper;
 
+/**
+ * @property string $cpEditUrl
+ */
 class EntryStatus extends Model
 {
     const SPAM_STATUS_HANDLE = 'spam';
@@ -65,13 +69,23 @@ class EntryStatus extends Model
     }
 
     /**
+     * @return string
+     */
+    public function getCpEditUrl(): string
+    {
+        return UrlHelper::cpUrl('sprout-forms/settings/orders-statuses/'.$this->id);
+    }
+
+    /**
      * @inheritdoc
      */
-    public function rules(): array
+    public function defineRules(): array
     {
-        return [
-            [['name', 'handle'], 'required'],
-            [['name', 'handle'], 'string', 'max' => 255]
-        ];
+        $rules = parent::defineRules();
+
+        $rules[] = [['name', 'handle'], 'required'];
+        $rules[] = [['name', 'handle'], 'string', 'max' => 255];
+
+        return $rules;
     }
 }

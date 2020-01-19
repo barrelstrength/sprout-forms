@@ -57,7 +57,7 @@ class Settings extends Model implements SproutSettingsInterface
                 'label' => Craft::t('sprout-forms', 'Spam Protection'),
                 'url' => 'sprout-forms/settings/spam-protection',
                 'selected' => 'spam-protection',
-                'template' => 'sprout-forms/settings/spamprotection',
+                'template' => 'sprout-forms/settings/spam-protection',
                 'variables' => $spamProtectionVariables
             ],
             'entry-statuses' => [
@@ -65,6 +65,7 @@ class Settings extends Model implements SproutSettingsInterface
                 'url' => 'sprout-forms/settings/entry-statuses',
                 'selected' => 'entry-statuses',
                 'template' => 'sprout-forms/settings/entrystatuses',
+                'settingsForm' => false,
                 'actionTemplate' => 'sprout-forms/settings/entrystatuses/_actionStatusButton',
                 'variables' => $entryStatusVariables
             ],
@@ -99,11 +100,13 @@ class Settings extends Model implements SproutSettingsInterface
         return $navItems;
     }
 
-    public function rules(): array
+    public function defineRules(): array
     {
-        return [
-            [['formTemplateDefaultValue'], 'required', 'on' => 'general']
-        ];
+        $rules = parent::defineRules();
+
+        $rules[] = [['formTemplateDefaultValue'], 'required', 'on' => 'general'];
+
+        return $rules;
     }
 
     /**

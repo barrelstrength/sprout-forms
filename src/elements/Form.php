@@ -103,7 +103,15 @@ class Form extends Element
      */
     public static function displayName(): string
     {
-        return Craft::t('sprout-forms', 'Sprout Forms');
+        return Craft::t('sprout-forms', 'Form');
+    }
+
+    /**
+     * @return string
+     */
+    public static function pluralDisplayName(): string
+    {
+        return Craft::t('sprout-forms', 'Forms');
     }
 
     /**
@@ -363,13 +371,13 @@ class Form extends Element
     }
 
     /**
-     * @inheritDoc
-     *
+     * @return array
      * @throws InvalidConfigException
      */
-    public function rules(): array
+    protected function defineRules(): array
     {
-        $rules = parent::rules();
+        $rules = parent::defineRules();
+
         $rules[] = [['name', 'handle'], 'required'];
         $rules[] = [['name', 'handle'], 'string', 'max' => 255];
         $rules[] = [

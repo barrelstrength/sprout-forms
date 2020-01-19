@@ -20,16 +20,6 @@ class IsGreaterThanOrEqualToCondition extends Condition
     }
 
     /**
-     * @return array
-     */
-    public function rules(): array
-    {
-        return [
-            [['inputValue'], 'validateCondition', 'skipOnEmpty' => false]
-        ];
-    }
-
-    /**
      * @inheritDoc
      */
     public function validateCondition()
