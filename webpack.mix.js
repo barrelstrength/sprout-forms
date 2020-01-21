@@ -1,20 +1,21 @@
 const mix = require('laravel-mix');
 
 mix
-
   // Forms
   .js([
     'src/web/assets/cp/src/js/editable-table.js',
     'src/web/assets/cp/src/js/form-settings.js',
-
-    'src/web/assets/cp/src/js/entries-index.js',
-    'src/web/assets/cp/src/js/entries-table-view.js',
     'src/web/assets/cp/src/js/field-layout-editor.js',
     'src/web/assets/cp/src/js/field-modal.js',
     'src/web/assets/cp/src/js/integration-modal.js',
     'src/web/assets/cp/src/js/integrations.js',
     'src/web/assets/cp/src/js/rule-modal.js',
   ], 'src/web/assets/cp/dist/js/sproutforms-cp.js')
+  // Entries Index
+  .js([
+    'src/web/assets/cp/src/js/entries-index.js',
+    'src/web/assets/cp/src/js/entries-table-view.js',
+  ], 'src/web/assets/cp/dist/js/sprout-entries-index.js')
   .sass('src/web/assets/cp/src/scss/charts.scss',
     'src/web/assets/cp/dist/css/sproutforms-charts.css')
   .sass('src/web/assets/cp/src/scss/forms-ui.scss',

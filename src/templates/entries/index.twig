@@ -6,7 +6,7 @@
 {% set title = "Entries"|t %}
 {% set elementType = 'barrelstrength\\sproutforms\\elements\\Entry' %}
 
-{% do view.registerAssetBundle("barrelstrength\\sproutforms\\web\\assets\\cp\\CpAsset") %}
+{% do view.registerAssetBundle("barrelstrength\\sproutforms\\web\\assets\\cp\\SproutEntriesIndexAsset") %}
 
 {% set canCreateForm = craft.app.getModule('sprout-forms').app.forms.canCreateForm() %}
 
