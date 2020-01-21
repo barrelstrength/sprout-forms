@@ -56,13 +56,11 @@
     errors: []|unique
 }) }}
 
-{% js %}
-    (function() {
+{% js on ready %}
     new SproutFormsIntegration({
-    integrationType: "{{ className(integration)|e('js') }}",
-    updateTargetFieldsOnChange: [
-    '#settings-barrelstrength-sproutforms-integrationtypes-EntryElementIntegration-entryTypeId'
-    ]
+        integrationType: "{{ className(integration)|e('js') }}",
+        updateTargetFieldsOnChange: [
+            '#settings-barrelstrength-sproutforms-integrationtypes-EntryElementIntegration-entryTypeId'
+        ]
     });
-    })();
 {% endjs %}
