@@ -18,10 +18,11 @@ field    = field object
 instance = source or active
 tab      = tab or null
 #}
-{% macro field(field, instance = 'active', tab = null) %}
+{% macro field(field, instance = 'active', tab = null, loopIndex = null) %}
+    {% set evenOddClass = loopIndex is odd ? 'odd' : 'even' %}
     <div
         {% if instance == 'active' %}id="sproutfield-{{ field.id }}"{% endif %}
-        class="{%- if instance == 'active' %}target-field {% endif -%}{%- if instance == 'source' %}source-field {% endif -%}"
+        class="{%- if instance == 'active' %}target-field{% endif -%}{%- if instance == 'source' %}source-field{% endif %} {{ evenOddClass }}"
         data-type="{{ craft.sproutForms.getFieldClassName(field) }}"
         data-defaultname="{{ field.displayName }}"
     >

@@ -14,18 +14,10 @@
 {% set fieldLayout = form.getFieldLayout() %}
 {% set formFields = {} %}
 
-{% set formTabs = {} %}
-{% for tab in fieldLayout.getTabs() %}
-    {% set formTabs = formTabs|merge({(tab.name) : {
-        label: tab.name,
-        url: '#sproutforms-tab-'~tab.id}
-    }) %}
-{% endfor %}
-
 {% set title = form.name %}
 {% set saveShortcutRedirect = continueEditingUrl %}
 {% set fullPageForm = true %}
-{% set selectedTab = '{{fieldLayout.getTabs()[0].name}}' %}
+{% set selectedTab = fieldLayout.getTabs()[0].id %}
 
 {% block actionButton %}
     <input type="hidden" name="action" value="sprout-forms/forms/save-form">
@@ -33,9 +25,19 @@
     <input type="hidden" id="formId" name="formId" value="{{ form.id is defined ? form.id : '' }}">
 
     <div class="buttons">
+
+    <div class="btngroup submit first">
+        <a id="addFormPageBtn" class="btn add icon" href="#" title="New Page">{{ "New page"|t('sprout-forms') }}</a>
+        <div id="formPageManagerBtn" class="btn icon" title="{{ 'Edit Pages'|t('sprout-forms') }}" data-icon="menu"></div>
+    </div>
+
+    <div class="btngroup submit first">
+
+        <a href="{{ cpUrl('sprout-forms/forms/edit/'~ form.id ~'/settings/general/') }}"
+             class="btn" title="{{ 'Edit Settings'|t('sprout-forms') }}" data-icon="settings"></a>
+        </div>
         <div id="save-form-button" class="btngroup submit first">
-            <input type="submit" class="btn submit"
-                value="{{ 'Save'|t('sprout-forms') }}">
+            <input type="submit" class="btn submit" value="{{ 'Save'|t('sprout-forms') }}">
             {% if form.id != null %}
                 <div class="btn submit menubtn"></div>
                 <div class="menu">
@@ -62,8 +64,6 @@
             {% endif %}
         </div>
 
-        <a href="{{ cpUrl('sprout-forms/forms/edit/'~ form.id ~'/settings/general/') }}"
-            data-icon="settings" class="btn"></a>
         {% if not isPro %}
             {{ sprout.upgradeToProButton({
                 url: cpUrl('sprout-forms/upgrade'),
@@ -73,13 +73,8 @@
     </div>
 {% endblock %}
 
-{% block tabs %}
-    {% if formTabs is defined and formTabs %}
-        {% include "sprout-forms/_includes/tabs" %}
-    {% endif %}
-{% endblock %}
-
 {% block content %}
+
     {# When we add tabs we need add a for loop here #}
     <div id="sproutforms-fieldlayout-container">
 
@@ -109,37 +104,22 @@
 
 {% do view.registerAssetBundle("craft\\web\\assets\\fields\\FieldsAsset") %}
 
-{% js %}
-    {% if not form.handle %}
-        new Craft.HandleGenerator('#name', '#handle');
-    {% endif %}
-
-    new Craft.AdminTable({
-    tableSelector: '#formFields',
-    noObjectsSelector: '#noFormfields',
-    sortable: true,
-    reorderAction: 'sprout-forms/fields/reorderFields',
-    deleteAction: 'sprout-forms/fields/deleteField'
-    });
-
-    $(document).ready(function() {
-
-    if (Craft.SproutFields != null) {
-    Craft.SproutFields.initFields($("#details"));
-    }
-
-    $("#maindiv").css("height","600px");
-
-    $("input#display-form-code")
-    .focus(function() { $(this).select(); } )
-    .mouseup(function (e) {e.preventDefault(); });
+{% js on ready %}
 
     var tabs = {{ fieldLayout.getTabs()|json_encode()|raw }};
-
     var continueEditing = "{{ ('sprout-forms/forms/edit/'~form.id)|hash }}";
 
+    new Craft.SproutForms.FormPageManager('{{ form.id }}');
     new Craft.SproutForms.FieldLayoutEditor(tabs, continueEditing);
     new Craft.SproutForms.FormSettings();
 
-    });
 {% endjs %}
+
+{% css %}
+    .formpagemanagerhud .icon.edit:before {
+    color: rgba(123, 135, 147, 0.5);
+    }
+    .formpagemanagerhud {
+    max-width: 400px;
+    }
+{% endcss %}

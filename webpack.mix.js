@@ -10,7 +10,9 @@ mix
     'src/web/assets/cp/src/js/integration-modal.js',
     'src/web/assets/cp/src/js/integrations.js',
     'src/web/assets/cp/src/js/rule-modal.js',
+    'src/web/assets/cp/src/js/form-page-manager.js',
   ], 'src/web/assets/cp/dist/js/sproutforms-cp.js')
+
   // Entries Index
   .js([
     'src/web/assets/cp/src/js/entries-index.js',
@@ -37,7 +39,8 @@ mix
   ], 'src/web/assets/formtemplates/dist/js/disable-submit-button.js')
   .js([
     'src/web/assets/formtemplates/src/js/rules.js',
-  ], 'src/web/assets/formtemplates/dist/js/rules.js');
+  ], 'src/web/assets/formtemplates/dist/js/rules.js')
+  .sourceMaps();
 
 // Full API
 // mix.js(src, output);

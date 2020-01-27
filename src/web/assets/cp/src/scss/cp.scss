@@ -22,22 +22,22 @@
 }
 
 .sprout-field-modal > .spinner {
+    left: calc(50% - 24px);
     position: absolute;
     top: calc(50% - 29px - 24px);
-    left: calc(50% - 24px);
 }
 
 .sprout-field-modal .main {
-    margin: -24px;
-    padding: 24px;
     height: calc(100% - 48px);
+    margin: -24px;
     overflow: auto;
+    padding: 24px;
     position: relative;
 }
 
 .sprout-field-modal .body {
-    position: relative;
     height: 100%;
+    position: relative;
 }
 
 .sprout-field-modal .body .content {
@@ -45,11 +45,11 @@
 }
 
 .sprout-field-modal .footer {
-    position: absolute;
     bottom: 0;
     left: 0;
-    width: 100%;
     margin: 0;
+    position: absolute;
+    width: 100%;
 }
 
 .sprout-field-modal .footer .buttons.left {
@@ -57,31 +57,19 @@
 }
 
 .sprout-field-modal .footer .buttons.left .spinner {
+    margin: 0;
     position: absolute;
     right: 100%;
     top: 0;
-    margin: 0;
 }
 
 .tab-title {
-    width: 100%;
     text-align: left;
+    width: 100%;
 }
 
 #tabs {
     width: 100%;
-}
-
-ul#sprout-forms-tabs {
-    width: 100% !important;
-    display: flex;
-    overflow-x: auto;
-    overflow-y: hidden;
-    white-space: nowrap;
-}
-
-ul#sprout-forms-tabs li {
-    display: inline-table;
 }
 
 .field.sproutforms-integration-row {
@@ -94,30 +82,30 @@ ul#sprout-forms-tabs li {
 
 .sproutforms-exampleinput-address,
 .sproutforms-exampleinput-customhtml {
+    align-items: center;
     display: flex;
     flex-direction: row;
-    align-items: center;
 }
 
 .sproutforms-exampleinput-address .address-icon svg,
 .sproutforms-exampleinput-customhtml .customhtml-icon svg {
+    fill: #cccccc;
     height: 48px;
     width: 48px;
-    fill: #cccccc;
 }
 
 .sproutforms-exampleinput-address p,
 .sproutforms-exampleinput-customhtml p {
     flex-grow: 1;
-    margin-left: 20px;
     font-style: italic;
+    margin-left: 20px;
 }
 
 .target-field .body .sproutform-exampleinput-privatenotes textarea {
     border: 2px dashed #cccccc;
     box-shadow: none;
-    padding: 4px;
     margin-bottom: 12px;
+    padding: 4px;
 }
 
 .sproutform-exampleinput-privatenotes p {
@@ -128,8 +116,8 @@ ul#sprout-forms-tabs li {
 .sproutform-exampleinput-hidden input[type="text"] {
     border: 2px dashed #bbbbbb;
     box-shadow: none;
-    padding: 4px;
     margin-bottom: 12px;
+    padding: 4px;
 }
 
 .sproutform-exampleinput-hidden p {
@@ -148,13 +136,24 @@ table.editable .custom-endpoint textarea {
 }
 
 table.rules-table {
-    background-color: #efefef;
+    background-color: #f3f7fc;
     border-radius: 6px;
     margin-top: 24px;
-    padding-top: 6px;
     padding-bottom: 6px;
 }
 
+table.rules-table thead tr {
+    background-color: #cdd8e4;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+table.rules-table tr th:first-child {
+    border-top-left-radius: 4px;
+}
+table.rules-table tr th:last-child {
+    border-top-right-radius: 4px;
+}
 table.rules-table tr th:first-child,
 table.rules-table tr td:first-child {
     padding-left: 12px;
@@ -164,12 +163,15 @@ table.rules-table tr th:last-child,
 table.rules-table tr td:last-child {
     padding-right: 12px;
 }
+table.rules-table tbody tr:first-child td {
+    padding-top: 12px;
+}
 
 div.rules-table-and {
-    margin: 24px 0 24px 10px;
+    color: #8f98a3;
     font-weight: bold;
     line-height: 1.2;
-    color: #8f98a3;
+    margin: 24px 0 24px 10px;
 }
 
 .rules-table-and-add {

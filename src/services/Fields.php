@@ -4,40 +4,43 @@ namespace barrelstrength\sproutforms\services;
 
 use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\elements\Form;
+use barrelstrength\sproutforms\elements\Form as FormElement;
+use barrelstrength\sproutforms\events\RegisterFieldsEvent;
 use barrelstrength\sproutforms\fields\formfields\Address;
-use barrelstrength\sproutforms\fields\formfields\FileUpload;
 use barrelstrength\sproutforms\fields\formfields\Categories;
 use barrelstrength\sproutforms\fields\formfields\Checkboxes;
+use barrelstrength\sproutforms\fields\formfields\CustomHtml;
 use barrelstrength\sproutforms\fields\formfields\Dropdown;
 use barrelstrength\sproutforms\fields\formfields\Email;
 use barrelstrength\sproutforms\fields\formfields\EmailDropdown;
+use barrelstrength\sproutforms\fields\formfields\Entries;
+use barrelstrength\sproutforms\fields\formfields\FileUpload;
 use barrelstrength\sproutforms\fields\formfields\Hidden;
 use barrelstrength\sproutforms\fields\formfields\Invisible;
+use barrelstrength\sproutforms\fields\formfields\MultipleChoice;
 use barrelstrength\sproutforms\fields\formfields\MultiSelect;
 use barrelstrength\sproutforms\fields\formfields\Name;
 use barrelstrength\sproutforms\fields\formfields\Number;
 use barrelstrength\sproutforms\fields\formfields\OptIn;
 use barrelstrength\sproutforms\fields\formfields\Paragraph;
 use barrelstrength\sproutforms\fields\formfields\Phone;
-use barrelstrength\sproutforms\fields\formfields\MultipleChoice;
-use barrelstrength\sproutforms\fields\formfields\RegularExpression;
 use barrelstrength\sproutforms\fields\formfields\PrivateNotes;
-use barrelstrength\sproutforms\fields\formfields\Entries;
-use barrelstrength\sproutforms\fields\formfields\CustomHtml;
+use barrelstrength\sproutforms\fields\formfields\RegularExpression;
 use barrelstrength\sproutforms\fields\formfields\SectionHeading;
+use barrelstrength\sproutforms\fields\formfields\SingleLine;
 use barrelstrength\sproutforms\fields\formfields\Tags;
 use barrelstrength\sproutforms\fields\formfields\Url;
-use barrelstrength\sproutforms\elements\Form as FormElement;
-use barrelstrength\sproutforms\events\RegisterFieldsEvent;
+use barrelstrength\sproutforms\SproutForms;
 use Craft;
+use craft\base\Field;
 use craft\base\FieldInterface;
+use craft\db\Query;
+use craft\db\Table;
+use craft\helpers\StringHelper;
 use craft\models\FieldLayout;
 use craft\models\FieldLayoutTab;
-use craft\records\FieldLayoutField;
-use craft\helpers\StringHelper;
-use craft\base\Field;
 use craft\records\Field as FieldRecord;
-use barrelstrength\sproutforms\fields\formfields\SingleLine;
+use craft\records\FieldLayoutField;
 use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
 use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
 use Throwable;
@@ -55,14 +58,14 @@ use yii\base\InvalidConfigException;
 class Fields extends Component
 {
     /**
-     * @var FormField[]
-     */
-    protected $registeredFields;
-
-    /**
      * @event RegisterFieldsEvent The event that is triggered when registering the fields available.
      */
     const EVENT_REGISTER_FIELDS = 'registerFieldsEvent';
+
+    /**
+     * @var FormField[]
+     */
+    protected $registeredFields;
 
     /**
      * @param $fieldIds
@@ -161,31 +164,6 @@ class Fields extends Component
         $fieldLayout->type = FormElement::class;
 
         return $fieldLayout;
-    }
-
-    /**
-     * @param int $fieldId
-     *
-     * @return FieldLayoutFieldRecord
-     * @throws Exception
-     */
-    protected function getFieldLayoutFieldRecordByFieldId($fieldId = null): FieldLayoutFieldRecord
-    {
-        if ($fieldId) {
-            /** @var FieldLayoutFieldRecord $fieldLayoutFieldRecord */
-            $fieldLayoutFieldRecord = FieldLayoutFieldRecord::find()
-                ->where('fieldId=:fieldId', [
-                    ':fieldId' => $fieldId
-                ]);
-
-            if (!$fieldLayoutFieldRecord) {
-                throw new Exception('No field exists with the ID '.$fieldId);
-            }
-
-            return $fieldLayoutFieldRecord;
-        }
-
-        return new FieldLayoutFieldRecord();
     }
 
     /**
@@ -575,12 +553,17 @@ class Fields extends Component
      * @return FieldLayoutTabRecord
      * @throws InvalidConfigException
      */
-    public function createNewTab($name, $sortOrder, FormElement $form): FieldLayoutTabRecord
+    public function createNewTab($formId, $name): FieldLayoutTabRecord
     {
+        $form = SproutForms::$app->forms->getFormById($formId);
+
         $fieldLayout = $form->getFieldLayout();
 
+        // Place after other tabs
+        $sortOrder = count($fieldLayout->getTabs()) + 1;
+
         $tabRecord = new FieldLayoutTabRecord();
-        $tabRecord->name = $name;
+        $tabRecord->name = strip_tags($name);
         $tabRecord->sortOrder = $sortOrder;
         $tabRecord->layoutId = $fieldLayout->id;
 
@@ -599,25 +582,47 @@ class Fields extends Component
      * @return bool
      * @throws InvalidConfigException
      */
-    public function renameTab($name, $oldName, FormElement $form): bool
+    public function renameTab($tabId, $newName): bool
     {
-        $fieldLayout = $form->getFieldLayout();
-        $tabs = $fieldLayout->getTabs();
+//        $fieldLayout = $form->getFieldLayout();
+//        $tabs = $fieldLayout->getTabs();
         $response = false;
 
-        foreach ($tabs as $tab) {
-            if ($tab->name == $oldName) {
-                $tabRecord = FieldLayoutTabRecord::findOne($tab->id);
+//        foreach ($tabs as $tab) {
+//            if ($tab->name == $oldName) {
+        $tabRecord = FieldLayoutTabRecord::findOne($tabId);
 
-                if ($tabRecord) {
-                    $tabRecord->name = $name;
-                    $response = $tabRecord->save(false);
-                }
-            }
+        if ($tabRecord) {
+            $tabRecord->name = $newName;
+            $response = $tabRecord->save(false);
         }
+//            }
+//        }
 
         return $response;
     }
+
+    public function getFieldLayoutTabs($layoutId): array
+    {
+        $results = (new Query())
+            ->select('*')
+            ->from(Table::FIELDLAYOUTTABS)
+            ->where([
+                'layoutId' => $layoutId
+            ])
+            ->orderBy('sortOrder asc')
+            ->all();
+
+        return $results;
+    }
+
+//    public function what() {
+//        $fieldLayout = Craft::$app->fields->assembleLayout($postedFieldLayout, $requiredFields);
+//        $fieldLayout->type = FormElement::class;
+//
+//        // Set the tab to the form
+//        $form->setFieldLayout($fieldLayout);
+//    }
 
     /**
      * Prepends a key/value pair to an array
@@ -636,5 +641,30 @@ class Fields extends Component
         $haystack[$key] = $value;
 
         return array_reverse($haystack, true);
+    }
+
+    /**
+     * @param int $fieldId
+     *
+     * @return FieldLayoutFieldRecord
+     * @throws Exception
+     */
+    protected function getFieldLayoutFieldRecordByFieldId($fieldId = null): FieldLayoutFieldRecord
+    {
+        if ($fieldId) {
+            /** @var FieldLayoutFieldRecord $fieldLayoutFieldRecord */
+            $fieldLayoutFieldRecord = FieldLayoutFieldRecord::find()
+                ->where('fieldId=:fieldId', [
+                    ':fieldId' => $fieldId
+                ]);
+
+            if (!$fieldLayoutFieldRecord) {
+                throw new Exception('No field exists with the ID '.$fieldId);
+            }
+
+            return $fieldLayoutFieldRecord;
+        }
+
+        return new FieldLayoutFieldRecord();
     }
 }

@@ -8,6 +8,7 @@ use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\models\Settings;
 use Craft;
 use craft\base\ElementInterface;
+use craft\base\Field;
 use craft\errors\MissingComponentException;
 use craft\errors\WrongEditionException;
 use craft\web\Controller as BaseController;
@@ -197,8 +198,31 @@ class FormsController extends BaseController
             }
         }
 
+        $tabs = [];
+
+        foreach ($form->getFieldLayout()->getTabs() as $index => $tab) {
+            // Do any of the fields on this tab have errors?
+            $hasErrors = false;
+
+            if ($form->hasErrors()) {
+                foreach ($tab->getFields() as $field) {
+                    /** @var Field $field */
+                    if ($hasErrors = $form->hasErrors($field->handle . '.*')) {
+                        break;
+                    }
+                }
+            }
+
+            $tabs[$tab->id] = [
+                'label' => Craft::t('sprout-forms', $tab->name),
+                'url' => '#sproutforms-tab-' .$tab->id,
+                'class' => $hasErrors ? 'error' : null
+            ];
+        }
+
         return $this->renderTemplate('sprout-forms/forms/_editForm', [
             'form' => $form,
+            'tabs' => $tabs,
             'continueEditingUrl' => 'sprout-forms/forms/edit/{id}'
         ]);
     }

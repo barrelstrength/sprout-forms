@@ -1,17 +1,19 @@
 /* DRAGULA
 ------------------------------------------------------------ */
 
-.sproutforms-tab-fields,
-#sproutforms-source-fields {
+.sproutforms-tab-fields {
     padding: 10px;
+}
+#sproutforms-source-fields {
+    padding-left:10px;
 }
 
 /*#main-container #main #main-content #details {*/
 /*background-color: #fff;*/
 /*}*/
 #main-container #main #main-content #details #sproutforms-source-fields {
-    padding: 14px 16px 20px;
-    text-align: center;
+    //padding: 14px 16px 20px;
+    //text-align: center;
 }
 
 .sproutforms-icon svg {
@@ -125,10 +127,21 @@
     text-align: left;
     box-sizing: border-box;
     border: 2px solid transparent;
-    width: 47%;
-    margin-right: 3%;
+    width: 155px;
     margin-bottom: 10px;
     padding: 8px;
+}
+
+@media only screen and (min-width: 975px) {
+    #sproutforms-source-fields .source-field.odd {
+        margin-right: 10px;
+    }
+}
+
+@media only screen and (max-width: 974px) {
+    #sproutforms-source-fields .source-field {
+        margin-right: 5px;
+    }
 }
 
 .source-field:hover,
@@ -227,26 +240,4 @@
     padding: 10px 20px 20px;
     min-height: 80px;
     width: 100%;
-}
-
-#sprout-forms-tabs ul li {
-    display: inline;
-}
-
-#sprout-forms-tabs .tab .settings {
-    opacity: .2;
-    padding-left: 1px;
-    transition: opacity 0.2s ease-in-out;
-}
-
-#sprout-forms-tabs .tab.sel .settings {
-    opacity: .8;
-    transition: opacity 0.2s ease-in-out;
-    cursor: pointer;
-}
-
-.drag-tab-active {
-    list-style: none;
-    background-color: #e4e6e8;
-    text-align: center;
 }

@@ -3,9 +3,12 @@
 namespace barrelstrength\sproutforms\controllers;
 
 
+use barrelstrength\sproutfields\SproutFields;
 use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\elements\Form;
 use Craft;
+use craft\db\Query;
+use craft\db\Table;
 use craft\errors\ElementNotFoundException;
 use craft\helpers\Json;
 use craft\web\Controller as BaseController;
@@ -40,7 +43,6 @@ class FieldsController extends BaseController
      */
     public function actionModalField(): Response
     {
-
         $this->requireAcceptsJson();
         $formId = Craft::$app->getRequest()->getBodyParam('formId');
         $form = SproutForms::$app->forms->getFormById($formId);
@@ -103,21 +105,19 @@ class FieldsController extends BaseController
      * @throws ForbiddenHttpException
      * @throws InvalidConfigException
      */
-    public function actionAddTab(): Response
+    public function actionAddFormTab(): Response
     {
         $this->requireAcceptsJson();
         $this->requirePermission('sproutForms-editEntries');
 
         $request = Craft::$app->getRequest();
-        $name = $request->getBodyParam('name');
-        $sortOrder = $request->getBodyParam('sortOrder');
         $formId = $request->getBodyParam('formId');
-        $form = SproutForms::$app->forms->getFormById($formId);
+        $name = $request->getBodyParam('name');
 
         $tab = null;
 
-        if ($name && $form && $sortOrder) {
-            $tab = SproutForms::$app->fields->createNewTab($name, $sortOrder, $form);
+        if ($formId && $name) {
+            $tab = SproutForms::$app->fields->createNewTab($formId, $name);
 
             if ($tab->id) {
                 return $this->asJson([
@@ -144,15 +144,15 @@ class FieldsController extends BaseController
      * @throws StaleObjectException
      * @throws BadRequestHttpException
      */
-    public function actionDeleteTab(): Response
+    public function actionDeleteFormTab(): Response
     {
         $this->requireAcceptsJson();
         $this->requirePermission('sproutForms-editEntries');
 
         $request = Craft::$app->getRequest();
-        $tabId = $request->getBodyParam('tabId');
-        $tabId = str_replace('tab-', '', $tabId);
-        $tabRecord = FieldLayoutTabRecord::findOne($tabId);
+        $pageId = $request->getBodyParam('id');
+        $pageId = str_replace('tab-', '', $pageId);
+        $tabRecord = FieldLayoutTabRecord::findOne($pageId);
 
         if ($tabRecord) {
             $result = $tabRecord->delete();
@@ -178,19 +178,20 @@ class FieldsController extends BaseController
      * @throws ForbiddenHttpException
      * @throws InvalidConfigException
      */
-    public function actionRenameTab(): Response
+    public function actionRenameFormTab(): Response
     {
         $this->requireAcceptsJson();
         $this->requirePermission('sproutForms-editEntries');
 
         $request = Craft::$app->getRequest();
-        $name = $request->getBodyParam('name');
-        $oldName = $request->getBodyParam('oldName');
-        $formId = $request->getBodyParam('formId');
-        $form = SproutForms::$app->forms->getFormById($formId);
+        $tabId = $request->getBodyParam('tabId');
+        $newName = $request->getBodyParam('newName');
+//        $oldName = $request->getBodyParam('oldName');
+//        $formId = $request->getBodyParam('formId');
+//        $form = SproutForms::$app->forms->getFormById($formId);
 
-        if ($name && $form) {
-            $result = SproutForms::$app->fields->renameTab($name, $oldName, $form);
+        if ($tabId && $newName) {
+            $result = SproutForms::$app->fields->renameTab($tabId, $newName);
 
             if ($result) {
                 return $this->asJson([
@@ -205,6 +206,55 @@ class FieldsController extends BaseController
         ]);
     }
 
+    public function actionReorderFormTabs() {
+
+        $this->requirePostRequest();
+        $this->requireAcceptsJson();
+
+        $formTabIds = Json::decode(Craft::$app->getRequest()->getRequiredBodyParam('ids'));
+
+        $db = Craft::$app->getDb();
+        $transaction = $db->beginTransaction();
+
+        try {
+            // Loop through our reordered IDs and update the DB with their new order
+            // increment $index by one to avoid using '0' in the sort order
+            foreach ($formTabIds as $index => $tabId) {
+                $db->createCommand()->update(Table::FIELDLAYOUTTABS, [
+                    'sortOrder' => $index + 1
+                ], ['id' => $tabId], [], false)->execute();
+            }
+            $transaction->commit();
+
+            return $this->asJson([
+                'success' => true
+            ]);
+
+        } catch (\yii\db\Exception $e) {
+            $transaction->rollBack();
+        }
+
+        return $this->asJson([
+            'success' => false,
+            'errors' => Craft::t('sprout-forms', 'Unable to rename tab')
+        ]);
+    }
+
+    public function actionGetFormTabs() {
+
+        $this->requirePostRequest();
+        $this->requireAcceptsJson();
+
+        $formId = Craft::$app->getRequest()->getBodyParam('formId');
+        $form = SproutForms::$app->forms->getFormById($formId);
+
+        SproutForms::$app->forms->saveForm($form);
+
+        return $this->asJson([
+            'success' => true,
+            'tabs' => $form->getFieldLayout()->getTabs()
+        ]);
+    }
     /**
      * Save a field.
      *
