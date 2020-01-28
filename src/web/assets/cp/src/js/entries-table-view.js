@@ -25,7 +25,7 @@ Craft.SproutForms.EntriesTableView = Craft.TableElementIndexView.extend({
     $endDate: null,
 
     afterInit: function() {
-      this.$explorerContainer = $('<div class="chart-explorer-container"></div>').prependTo(this.$container);
+      this.$explorerContainer = $('<div class="chart-container"></div>').prependTo(this.$container);
       this.createChartExplorer();
       this.base();
     },
