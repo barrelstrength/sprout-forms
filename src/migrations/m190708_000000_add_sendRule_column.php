@@ -41,6 +41,7 @@ class m190708_000000_add_sendRule_column extends Migration
     public function safeDown(): bool
     {
         echo "m190708_000000_add_sendRule_column cannot be reverted.\n";
+
         return false;
     }
 }

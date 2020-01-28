@@ -11,9 +11,9 @@ use barrelstrength\sproutforms\rules\conditions\IsCondition;
 use barrelstrength\sproutforms\rules\conditions\IsNotCondition;
 use barrelstrength\sproutforms\rules\conditions\StartsWithCondition;
 use Craft;
+use craft\base\ElementInterface;
 use craft\fields\RadioButtons as CraftRadioButtons;
 use craft\helpers\Template as TemplateHelper;
-use craft\base\ElementInterface;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -57,14 +57,6 @@ class MultipleChoice extends BaseOptionsFormField
     public function getSvgIconPath(): string
     {
         return '@sproutbaseicons/dot-circle-o.svg';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function optionsSettingLabel(): string
-    {
-        return Craft::t('sprout-forms', 'Multiple Choice Options');
     }
 
     /**
@@ -162,5 +154,13 @@ class MultipleChoice extends BaseOptionsFormField
             new EndsWithCondition(),
             new DoesNotEndWithCondition()
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function optionsSettingLabel(): string
+    {
+        return Craft::t('sprout-forms', 'Multiple Choice Options');
     }
 }

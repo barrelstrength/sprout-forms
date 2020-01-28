@@ -7,10 +7,10 @@ use barrelstrength\sproutforms\base\RuleInterface;
 use barrelstrength\sproutforms\integrationtypes\MissingIntegration;
 use barrelstrength\sproutforms\records\Rules as RulesRecord;
 use barrelstrength\sproutforms\rules\FieldRule;
+use Craft;
 use craft\base\Component;
 use craft\db\Query;
 use craft\errors\MissingComponentException;
-use Craft;
 use craft\helpers\Component as ComponentHelper;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -145,6 +145,7 @@ class Rules extends Component
         if ($conditionalRecord->save()) {
             $rule->id = $conditionalRecord->id;
             $rule->name = $conditionalRecord->name;
+
             return true;
         }
 

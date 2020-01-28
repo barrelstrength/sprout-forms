@@ -6,18 +6,18 @@ use barrelstrength\sproutbase\jobs\PurgeElements;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\base\Captcha;
 use barrelstrength\sproutforms\elements\Entry;
-use barrelstrength\sproutforms\jobs\ResaveEntries;
-use barrelstrength\sproutforms\models\Settings;
-use barrelstrength\sproutforms\records\EntriesSpamLog as EntriesSpamLogRecord;
-use Craft;
-use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use barrelstrength\sproutforms\events\OnSaveEntryEvent;
 use barrelstrength\sproutforms\fields\formfields\BaseRelationFormField;
+use barrelstrength\sproutforms\jobs\ResaveEntries;
 use barrelstrength\sproutforms\models\EntryStatus;
+use barrelstrength\sproutforms\models\Settings;
+use barrelstrength\sproutforms\records\EntriesSpamLog as EntriesSpamLogRecord;
 use barrelstrength\sproutforms\records\Entry as EntryRecord;
+use barrelstrength\sproutforms\SproutForms;
+use Craft;
 use craft\base\Element;
 use craft\helpers\Json;
 use Throwable;
@@ -135,6 +135,7 @@ class Entries extends Component
 
         if ($entry->hasErrors()) {
             Craft::error($entry->getErrors(), __METHOD__);
+
             return false;
         }
 
@@ -163,6 +164,7 @@ class Entries extends Component
             if (!$success) {
                 Craft::error('Couldn’t save Element on saveEntry service.', __METHOD__);
                 $transaction->rollBack();
+
                 return false;
             }
 

@@ -30,6 +30,7 @@ class m200109_000000_update_address_tables_sproutforms extends Migration
     public function safeDown(): bool
     {
         echo "m200109_000000_update_address_tables_sproutforms cannot be reverted.\n";
+
         return false;
     }
 }

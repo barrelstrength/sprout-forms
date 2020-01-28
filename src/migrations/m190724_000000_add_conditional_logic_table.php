@@ -59,6 +59,7 @@ class m190724_000000_add_conditional_logic_table extends Migration
     public function safeDown(): bool
     {
         echo "m190724_000000_add_conditional_logic_table cannot be reverted.\n";
+
         return false;
     }
 }

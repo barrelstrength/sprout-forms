@@ -59,6 +59,7 @@ class m181120_000000_add_integrations_table extends Migration
     public function safeDown(): bool
     {
         echo "m181120_000000_add_integrations_table cannot be reverted.\n";
+
         return false;
     }
 }

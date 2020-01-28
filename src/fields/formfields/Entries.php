@@ -2,12 +2,11 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\SproutForms;
 use Craft;
+use craft\elements\Entry;
 use craft\fields\Entries as CraftEntries;
 use craft\helpers\Template as TemplateHelper;
-use craft\elements\Entry;
-
-use barrelstrength\sproutforms\SproutForms;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -40,11 +39,18 @@ class Entries extends BaseRelationFormField
     /**
      * @inheritdoc
      */
+    public static function defaultSelectionLabel(): string
+    {
+        return Craft::t('sprout-forms', 'Add an Entry');
+    }
+
+    /**
+     * @inheritdoc
+     */
     protected static function elementType(): string
     {
         return Entry::class;
     }
-
 
     /**
      * @return string
@@ -52,14 +58,6 @@ class Entries extends BaseRelationFormField
     public function getSvgIconPath(): string
     {
         return '@sproutbaseicons/newspaper-o.svg';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function defaultSelectionLabel(): string
-    {
-        return Craft::t('sprout-forms', 'Add an Entry');
     }
 
     /**

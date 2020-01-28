@@ -2,12 +2,12 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
+use barrelstrength\sproutbaseemail\migrations\m180501_000001_update_notification_element_types;
+use barrelstrength\sproutbaseemail\migrations\m180501_000002_rename_notification_options_column;
 use barrelstrength\sproutbaseemail\migrations\m180501_000003_add_notification_columns;
 use barrelstrength\sproutbaseemail\migrations\m180501_000004_update_element_types;
 use barrelstrength\sproutbaseemail\migrations\m180501_000005_update_copypaste_type;
 use barrelstrength\sproutbaseemail\migrations\m180515_000000_rename_notification_pluginId_column;
-use barrelstrength\sproutbaseemail\migrations\m180501_000001_update_notification_element_types;
-use barrelstrength\sproutbaseemail\migrations\m180501_000002_rename_notification_options_column;
 use barrelstrength\sproutbaseemail\migrations\m180515_000003_update_notification_eventId_types;
 use barrelstrength\sproutbaseemail\migrations\m181026_000000_update_notification_data;
 use barrelstrength\sproutbasereports\migrations\m180515_000002_update_report_element_types;
@@ -81,6 +81,7 @@ class m181025_000000_schema_version_sproutbase_v309 extends Migration
     public function safeDown(): bool
     {
         echo "m180515_000000_schema_version_v302 cannot be reverted.\n";
+
         return false;
     }
 }

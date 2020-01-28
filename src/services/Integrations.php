@@ -8,14 +8,14 @@ use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\events\OnAfterIntegrationSubmit;
 use barrelstrength\sproutforms\integrationtypes\MissingIntegration;
 use barrelstrength\sproutforms\models\IntegrationLog;
-use barrelstrength\sproutforms\records\IntegrationLog as IntegrationLogRecord;
 use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
+use barrelstrength\sproutforms\records\IntegrationLog as IntegrationLogRecord;
 use barrelstrength\sproutforms\SproutForms;
+use Craft;
 use craft\base\Component;
 use craft\db\Query;
 use craft\errors\MissingComponentException;
 use craft\events\RegisterComponentTypesEvent;
-use Craft;
 use craft\helpers\Component as ComponentHelper;
 use Throwable;
 use Twig\Error\LoaderError;
@@ -164,6 +164,7 @@ class Integrations extends Component
         if ($integrationRecord->save()) {
             $integration->id = $integrationRecord->id;
             $integration->name = $integrationRecord->name;
+
             return true;
         }
 

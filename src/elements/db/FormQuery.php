@@ -3,12 +3,11 @@
 namespace barrelstrength\sproutforms\elements\db;
 
 use barrelstrength\sproutbase\SproutBase;
+use barrelstrength\sproutforms\models\FormGroup;
 use barrelstrength\sproutforms\SproutForms;
 use craft\db\Query;
 use craft\elements\db\ElementQuery;
 use craft\helpers\Db;
-
-use barrelstrength\sproutforms\models\FormGroup;
 
 class FormQuery extends ElementQuery
 {

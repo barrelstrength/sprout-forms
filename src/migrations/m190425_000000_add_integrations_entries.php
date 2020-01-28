@@ -77,6 +77,7 @@ class m190425_000000_add_integrations_entries extends Migration
     public function safeDown(): bool
     {
         echo "m190425_000000_add_integrations_entries cannot be reverted.\n";
+
         return false;
     }
 }

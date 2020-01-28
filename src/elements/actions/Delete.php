@@ -2,11 +2,10 @@
 
 namespace barrelstrength\sproutforms\elements\actions;
 
+use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\base\ElementAction;
 use craft\elements\db\ElementQueryInterface;
-
-use barrelstrength\sproutforms\SproutForms;
 use Throwable;
 
 /**
@@ -34,17 +33,17 @@ class Delete extends ElementAction
     /**
      * @inheritdoc
      */
-    public function getTriggerLabel(): string
+    public static function isDestructive(): bool
     {
-        return Craft::t('sprout-forms', 'Delete…');
+        return true;
     }
 
     /**
      * @inheritdoc
      */
-    public static function isDestructive(): bool
+    public function getTriggerLabel(): string
     {
-        return true;
+        return Craft::t('sprout-forms', 'Delete…');
     }
 
     // Public Methods

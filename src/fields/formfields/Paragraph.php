@@ -3,24 +3,23 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutforms\base\ConditionInterface;
+use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\rules\conditions\ContainsCondition;
 use barrelstrength\sproutforms\rules\conditions\DoesNotContainCondition;
 use barrelstrength\sproutforms\rules\conditions\IsNotProvidedCondition;
 use barrelstrength\sproutforms\rules\conditions\IsProvidedCondition;
 use Craft;
+use craft\base\ElementInterface;
+use craft\base\PreviewableFieldInterface;
 use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Db;
 use craft\helpers\Template as TemplateHelper;
+use LitEmoji\LitEmoji;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Markup;
 use yii\db\Schema;
-use craft\base\ElementInterface;
-use LitEmoji\LitEmoji;
-use craft\base\PreviewableFieldInterface;
-
-use barrelstrength\sproutforms\base\FormField;
 
 /**
  * Class PlainText
@@ -63,6 +62,14 @@ class Paragraph extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
+    public static function displayName(): string
+    {
+        return Craft::t('sprout-forms', 'Paragraph');
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function defineRules(): array
     {
         $rules = parent::defineRules();
@@ -70,14 +77,6 @@ class Paragraph extends FormField implements PreviewableFieldInterface
         $rules[] = [['charLimit'], 'validateCharLimit'];
 
         return $rules;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function displayName(): string
-    {
-        return Craft::t('sprout-forms', 'Paragraph');
     }
 
     /**
@@ -215,6 +214,7 @@ class Paragraph extends FormField implements PreviewableFieldInterface
         if ($value !== null) {
             $value = LitEmoji::unicodeToShortcode($value);
         }
+
         return $value;
     }
 
@@ -225,6 +225,7 @@ class Paragraph extends FormField implements PreviewableFieldInterface
     {
         $value = (string)$value;
         $value = LitEmoji::unicodeToShortcode($value);
+
         return $value;
     }
 

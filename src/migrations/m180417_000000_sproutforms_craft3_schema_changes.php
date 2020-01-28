@@ -32,6 +32,7 @@ class m180417_000000_sproutforms_craft3_schema_changes extends Migration
     public function safeDown(): bool
     {
         echo "m180417_000000_sproutforms_craft3_schema_changes cannot be reverted.\n";
+
         return false;
     }
 }

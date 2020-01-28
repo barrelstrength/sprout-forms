@@ -32,6 +32,7 @@ class m200102_000000_remove_address_field_content_column_sproutforms extends Mig
     public function safeDown(): bool
     {
         echo "m200102_000000_remove_address_field_content_column_sproutforms cannot be reverted.\n";
+
         return false;
     }
 }

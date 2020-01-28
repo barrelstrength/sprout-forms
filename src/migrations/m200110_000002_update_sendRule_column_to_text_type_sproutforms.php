@@ -32,6 +32,7 @@ class m200110_000002_update_sendRule_column_to_text_type_sproutforms extends Mig
     public function safeDown(): bool
     {
         echo "m200110_000002_update_sendRule_column_to_text_type_sproutforms cannot be reverted.\n";
+
         return false;
     }
 }

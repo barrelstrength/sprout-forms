@@ -46,6 +46,7 @@ class m191116_000006_add_integration_and_spam_datasources extends Migration
     public function safeDown(): bool
     {
         echo "m191116_000006_add_integration_and_spam_datasources cannot be reverted.\n";
+
         return false;
     }
 }

@@ -3,19 +3,19 @@
 namespace barrelstrength\sproutforms\elements;
 
 use barrelstrength\sproutforms\base\Captcha;
-use barrelstrength\sproutforms\elements\actions\MarkAsSpam;
 use barrelstrength\sproutforms\elements\actions\MarkAsDefaultStatus;
-use barrelstrength\sproutforms\models\EntryStatus;
+use barrelstrength\sproutforms\elements\actions\MarkAsSpam;
+use barrelstrength\sproutforms\elements\db\EntryQuery;
 use barrelstrength\sproutforms\models\EntriesSpamLog;
+use barrelstrength\sproutforms\models\EntryStatus;
+use barrelstrength\sproutforms\records\Entry as EntryRecord;
+use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\base\Element;
 use craft\db\Query;
+use craft\elements\actions\Delete;
 use craft\elements\db\ElementQueryInterface;
 use craft\helpers\UrlHelper;
-use craft\elements\actions\Delete;
-use barrelstrength\sproutforms\elements\db\EntryQuery;
-use barrelstrength\sproutforms\records\Entry as EntryRecord;
-use barrelstrength\sproutforms\SproutForms;
 use craft\models\FieldLayout;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
@@ -36,60 +36,38 @@ class Entry extends Element
 {
     // Properties
     // =========================================================================
-    private $form;
-    private $integrationLogs = [];
-    /** @var array|null */
-    private $conditionalResults;
-
-    /** @var array|null */
-    private $entryHiddenFields;
-
     public $id;
+
     public $formId;
+
     public $formHandle;
+
     public $statusId;
+
     public $statusHandle;
+
     public $formGroupId;
+
     public $formName;
+
     public $ipAddress;
+
     public $referrer;
+
     public $userAgent;
 
     /** @var Captcha[] $captchas */
     protected $captchas = [];
 
-    public function init()
-    {
-        parent::init();
-        $this->setScenario(self::SCENARIO_LIVE);
-    }
+    private $form;
 
-    /**
-     * Returns the field context this element's content uses.
-     *
-     * @access protected
-     * @return string
-     */
-    public function getFieldContext(): string
-    {
-        return 'sproutForms:'.$this->formId;
-    }
+    private $integrationLogs = [];
 
-    /**
-     * Returns the name of the table this element's content is stored in.
-     *
-     * @return string
-     */
-    public function getContentTable(): string
-    {
-        $form = $this->getForm();
+    /** @var array|null */
+    private $conditionalResults;
 
-        if ($form) {
-            return SproutForms::$app->forms->getContentTableName($this->getForm());
-        }
-
-        return '';
-    }
+    /** @var array|null */
+    private $entryHiddenFields;
 
     /**
      * Returns the element type name.
@@ -139,57 +117,6 @@ class Entry extends Element
     public static function hasStatuses(): bool
     {
         return true;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getCpEditUrl()
-    {
-        return UrlHelper::cpUrl(
-            'sprout-forms/entries/edit/'.$this->id
-        );
-    }
-
-    /**
-     * Use the name as the string representation.
-     *
-     * @return string
-     */
-    /** @noinspection PhpInconsistentReturnPointsInspection */
-    public function __toString()
-    {
-        try {
-            // @todo - For some reason the Title returns null possible Craft3 bug
-            // @todo - Why do we need to call populateElementContent?
-            Craft::$app->getContent()->populateElementContent($this);
-
-            $string = (string)$this->id ?: static::class;
-            return $this->title ?: $string;
-        } catch (\Exception $e) {
-            // return empty to avoid errors when form is deleted
-            return '';
-        }
-    }
-
-    /**
-     * @return FieldLayout
-     * @throws InvalidConfigException
-     */
-    public function getFieldLayout(): FieldLayout
-    {
-        return $this->getForm()->getFieldLayout();
-    }
-
-    /**
-     *
-     * @return string|null
-     */
-    public function getStatus()
-    {
-        $statusId = $this->statusId;
-
-        return SproutForms::$app->entryStatuses->getEntryStatusById($statusId)->handle;
     }
 
     /**
@@ -374,6 +301,12 @@ class Entry extends Element
     }
 
     /**
+     * Use the name as the string representation.
+     *
+     * @return string
+     */
+    /** @noinspection PhpInconsistentReturnPointsInspection */
+    /**
      * @inheritdoc
      */
     protected static function defineSearchableAttributes(): array
@@ -425,6 +358,86 @@ class Entry extends Element
     protected static function defineDefaultTableAttributes(string $source): array
     {
         return ['title', 'formName', 'dateCreated', 'dateUpdated'];
+    }
+
+    public function init()
+    {
+        parent::init();
+        $this->setScenario(self::SCENARIO_LIVE);
+    }
+
+    /**
+     * Returns the field context this element's content uses.
+     *
+     * @access protected
+     * @return string
+     */
+    public function getFieldContext(): string
+    {
+        return 'sproutForms:'.$this->formId;
+    }
+
+    /**
+     * Returns the name of the table this element's content is stored in.
+     *
+     * @return string
+     */
+    public function getContentTable(): string
+    {
+        $form = $this->getForm();
+
+        if ($form) {
+            return SproutForms::$app->forms->getContentTableName($this->getForm());
+        }
+
+        return '';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCpEditUrl()
+    {
+        return UrlHelper::cpUrl(
+            'sprout-forms/entries/edit/'.$this->id
+        );
+    }
+
+
+    public function __toString()
+    {
+        try {
+            // @todo - For some reason the Title returns null possible Craft3 bug
+            // @todo - Why do we need to call populateElementContent?
+            Craft::$app->getContent()->populateElementContent($this);
+
+            $string = (string)$this->id ?: static::class;
+
+            return $this->title ?: $string;
+        } catch (\Exception $e) {
+            // return empty to avoid errors when form is deleted
+            return '';
+        }
+    }
+
+    /**
+     * @return FieldLayout
+     * @throws InvalidConfigException
+     */
+    public function getFieldLayout(): FieldLayout
+    {
+        return $this->getForm()->getFieldLayout();
+    }
+
+    /**
+     *
+     * @return string|null
+     */
+    public function getStatus()
+    {
+        $statusId = $this->statusId;
+
+        return SproutForms::$app->entryStatuses->getEntryStatusById($statusId)->handle;
     }
 
     /**
@@ -480,19 +493,6 @@ class Entry extends Element
         }
 
         return $this->form;
-    }
-
-    /**
-     * @inheritdoc
-     * @throws InvalidConfigException
-     */
-    protected function defineRules(): array
-    {
-        $rules = parent::defineRules();
-
-        $rules[] = [['formId'], 'required'];
-
-        return $rules;
     }
 
     /**
@@ -632,5 +632,18 @@ class Entry extends Element
         }
 
         return $captchaErrors;
+    }
+
+    /**
+     * @inheritdoc
+     * @throws InvalidConfigException
+     */
+    protected function defineRules(): array
+    {
+        $rules = parent::defineRules();
+
+        $rules[] = [['formId'], 'required'];
+
+        return $rules;
     }
 }

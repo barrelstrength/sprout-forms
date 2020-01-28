@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\base\FormField;
 use Craft;
 use craft\base\ElementInterface;
 use craft\fields\PlainText as CraftPlainText;
@@ -11,7 +12,6 @@ use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Markup;
 use yii\db\Schema;
-use barrelstrength\sproutforms\base\FormField;
 
 /**
  *

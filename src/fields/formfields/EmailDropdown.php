@@ -17,13 +17,13 @@ use craft\base\ElementInterface;
 use craft\fields\data\SingleOptionFieldData;
 use craft\fields\Dropdown as CraftDropdown;
 use craft\fields\PlainText as CraftPlainText;
+use craft\helpers\StringHelper;
 use craft\helpers\Template as TemplateHelper;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Markup;
 use yii\db\Schema;
-use craft\helpers\StringHelper;
 
 /**
  *
@@ -67,14 +67,6 @@ class EmailDropdown extends BaseOptionsFormField
         }
 
         return $value;
-    }
-
-    /**
-     * @return string
-     */
-    protected function optionsSettingLabel(): string
-    {
-        return Craft::t('sprout-forms', 'Dropdown Options');
     }
 
     /**
@@ -307,5 +299,13 @@ class EmailDropdown extends BaseOptionsFormField
             new EndsWithCondition(),
             new DoesNotEndWithCondition()
         ];
+    }
+
+    /**
+     * @return string
+     */
+    protected function optionsSettingLabel(): string
+    {
+        return Craft::t('sprout-forms', 'Dropdown Options');
     }
 }

@@ -29,6 +29,7 @@ class m200110_000000_add_reports_emailColumn_column_sproutforms extends Migratio
     public function safeDown(): bool
     {
         echo "m200110_000000_add_reports_emailColumn_column_sproutforms cannot be reverted.\n";
+
         return false;
     }
 }

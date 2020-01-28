@@ -36,6 +36,7 @@ class m190628_000000_update_default_to_pro_edition extends Migration
     public function safeDown(): bool
     {
         echo "m190628_000000_update_default_to_pro_edition cannot be reverted.\n";
+
         return false;
     }
 }

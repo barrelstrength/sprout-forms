@@ -7,25 +7,25 @@
 {% set customFields =  craft.sproutForms.getCustomFields(fieldTypes, fieldTypesByGroup) %}
 
 <div id="sproutforms-source-fields">
-{#    <div class='parent'>#}
-{#        <div class="clear"></div>#}
-        <div id='right-copy'>
-            {% for name,group in fieldTypesByGroup %}
-                <h6 class="tab-title donotdrag">{{ name }}</h6>
-                {% for type in group %}
-                    {% set field = fieldTypes[type] %}
-                    {{ formBuilder.field(field, 'source', null, loop.index) }}
-                {% endfor %}
+    {#    <div class='parent'>#}
+    {#        <div class="clear"></div>#}
+    <div id='right-copy'>
+        {% for name,group in fieldTypesByGroup %}
+            <h6 class="tab-title donotdrag">{{ name }}</h6>
+            {% for type in group %}
+                {% set field = fieldTypes[type] %}
+                {{ formBuilder.field(field, 'source', null, loop.index) }}
             {% endfor %}
+        {% endfor %}
 
-            {% if customFields %}
-                <h6 class="tab-title donotdrag">{{ 'Custom Fields'|t('sprout-forms') }}</h6>
-                {% for field in customFields %}
-                    {{ formBuilder.field(field, 'source', null, loop.index) }}
-                {% endfor %}
-            {% endif %}
-        </div>
-{#    </div>#}
+        {% if customFields %}
+            <h6 class="tab-title donotdrag">{{ 'Custom Fields'|t('sprout-forms') }}</h6>
+            {% for field in customFields %}
+                {{ formBuilder.field(field, 'source', null, loop.index) }}
+            {% endfor %}
+        {% endif %}
+    </div>
+    {#    </div>#}
 
 </div><!-- fields div -->
 

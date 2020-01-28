@@ -3,9 +3,9 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use Craft;
+use craft\base\ElementInterface;
 use craft\fields\MultiSelect as CraftMultiSelect;
 use craft\helpers\Template as TemplateHelper;
-use craft\base\ElementInterface;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -30,18 +30,18 @@ class MultiSelect extends BaseOptionsFormField
     /**
      * @inheritdoc
      */
-    public function init()
+    public static function displayName(): string
     {
-        parent::init();
-        $this->multi = true;
+        return Craft::t('sprout-forms', 'Multi Select');
     }
 
     /**
      * @inheritdoc
      */
-    public static function displayName(): string
+    public function init()
     {
-        return Craft::t('sprout-forms', 'Multi Select');
+        parent::init();
+        $this->multi = true;
     }
 
     /**
@@ -50,14 +50,6 @@ class MultiSelect extends BaseOptionsFormField
     public function getSvgIconPath(): string
     {
         return '@sproutbaseicons/bars.svg';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function optionsSettingLabel(): string
-    {
-        return Craft::t('sprout-forms', 'Multi-select Options');
     }
 
     /**
@@ -136,5 +128,13 @@ class MultiSelect extends BaseOptionsFormField
         return [
             CraftMultiSelect::class
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function optionsSettingLabel(): string
+    {
+        return Craft::t('sprout-forms', 'Multi-select Options');
     }
 }

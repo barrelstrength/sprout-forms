@@ -2,9 +2,9 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
+use barrelstrength\sproutforms\fields\formfields\Invisible;
 use craft\db\Migration;
 use craft\db\Query;
-use barrelstrength\sproutforms\fields\formfields\Invisible;
 
 /**
  * m180314_161533_sproutforms_invisible_fields migration.
@@ -36,6 +36,7 @@ class m180314_161533_sproutforms_invisible_fields extends Migration
     public function safeDown(): bool
     {
         echo "m180314_161533_sproutforms_invisible_fields cannot be reverted.\n";
+
         return false;
     }
 }

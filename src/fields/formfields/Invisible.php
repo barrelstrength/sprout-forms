@@ -2,15 +2,15 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\services\Forms;
 use Craft;
 use craft\base\ElementInterface;
+use craft\base\PreviewableFieldInterface;
 use craft\errors\MissingComponentException;
 use craft\fields\Dropdown as CraftDropdown;
 use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Template as TemplateHelper;
-use craft\base\PreviewableFieldInterface;
-use barrelstrength\sproutforms\base\FormField;
 use Exception;
 use Throwable;
 use Twig\Error\LoaderError;
@@ -186,6 +186,17 @@ class Invisible extends FormField implements PreviewableFieldInterface
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getCompatibleCraftFieldTypes(): array
+    {
+        return [
+            CraftPlainText::class,
+            CraftDropdown::class
+        ];
+    }
+
+    /**
      * @return string
      * @throws Throwable
      */
@@ -203,16 +214,5 @@ class Invisible extends FormField implements PreviewableFieldInterface
         }
 
         return $value;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getCompatibleCraftFieldTypes(): array
-    {
-        return [
-            CraftPlainText::class,
-            CraftDropdown::class
-        ];
     }
 }

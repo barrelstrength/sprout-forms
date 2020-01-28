@@ -44,6 +44,13 @@ abstract class Condition extends SavableComponent implements ConditionInterface
     }
 
     /**
+     * The default condition validation rule
+     *
+     * @return mixed
+     */
+    abstract public function validateCondition();
+
+    /**
      * @return array
      */
     protected function defineRules(): array
@@ -54,11 +61,4 @@ abstract class Condition extends SavableComponent implements ConditionInterface
 
         return $rules;
     }
-
-    /**
-     * The default condition validation rule
-     *
-     * @return mixed
-     */
-    abstract public function validateCondition();
 }

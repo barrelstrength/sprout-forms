@@ -48,6 +48,7 @@ class m190318_000000_updates_user_permissions_groups extends Migration
     public function safeDown(): bool
     {
         echo "m190318_000000_updates_user_permissions_groups cannot be reverted.\n";
+
         return false;
     }
 }

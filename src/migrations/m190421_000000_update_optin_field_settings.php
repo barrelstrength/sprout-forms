@@ -47,6 +47,7 @@ class m190421_000000_update_optin_field_settings extends Migration
     public function safeDown(): bool
     {
         echo "m190421_000000_update_optin_field_settings cannot be reverted.\n";
+
         return false;
     }
 }

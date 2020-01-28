@@ -3,8 +3,8 @@
 namespace barrelstrength\sproutforms\migrations;
 
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
-use craft\db\Migration;
 use Craft;
+use craft\db\Migration;
 use craft\db\Query;
 use craft\services\Plugins;
 use ReflectionException;

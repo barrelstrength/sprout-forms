@@ -2,23 +2,22 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\rules\conditions\IsCondition;
 use barrelstrength\sproutforms\rules\conditions\IsGreaterThanCondition;
 use barrelstrength\sproutforms\rules\conditions\IsGreaterThanOrEqualToCondition;
 use barrelstrength\sproutforms\rules\conditions\IsLessThanCondition;
 use barrelstrength\sproutforms\rules\conditions\IsLessThanOrEqualToCondition;
 use Craft;
+use craft\base\ElementInterface;
+use craft\base\PreviewableFieldInterface;
 use craft\fields\Dropdown as CraftDropdown;
 use craft\fields\Number as CraftNumber;
 use craft\fields\PlainText as CraftPlainText;
-use craft\helpers\Template as TemplateHelper;
-use craft\base\ElementInterface;
-use craft\base\PreviewableFieldInterface;
 use craft\helpers\Db;
 use craft\helpers\Localization;
+use craft\helpers\Template as TemplateHelper;
 use craft\i18n\Locale;
-
-use barrelstrength\sproutforms\base\FormField;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -66,6 +65,14 @@ class Number extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
+    public static function displayName(): string
+    {
+        return Craft::t('sprout-forms', 'Number');
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function init()
     {
         parent::init();
@@ -90,15 +97,6 @@ class Number extends FormField implements PreviewableFieldInterface
             $this->size = null;
         }
     }
-
-    /**
-     * @inheritdoc
-     */
-    public static function displayName(): string
-    {
-        return Craft::t('sprout-forms', 'Number');
-    }
-
 
     /**
      * @return string

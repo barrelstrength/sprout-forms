@@ -29,6 +29,7 @@ class m200110_000000_update_to_cc_bcc_columns_to_text_type_sproutforms extends M
     public function safeDown(): bool
     {
         echo "m200110_000000_update_to_cc_bcc_columns_to_text_type_sproutforms cannot be reverted.\n";
+
         return false;
     }
 }

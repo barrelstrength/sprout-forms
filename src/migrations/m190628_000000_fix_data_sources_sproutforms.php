@@ -32,6 +32,7 @@ class m190628_000000_fix_data_sources_sproutforms extends Migration
     public function safeDown(): bool
     {
         echo "m190628_000000_fix_data_sources_sproutforms cannot be reverted.\n";
+
         return false;
     }
 }

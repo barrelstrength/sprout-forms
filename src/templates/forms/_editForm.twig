@@ -24,15 +24,15 @@
 
     <div class="buttons">
 
-    <div class="btngroup submit first">
-        <a id="addFormPageBtn" class="btn add icon" href="#" title="New Page">{{ "New page"|t('sprout-forms') }}</a>
-        <div id="formPageManagerBtn" class="btn icon" title="{{ 'Edit Pages'|t('sprout-forms') }}" data-icon="menu"></div>
-    </div>
+        <div class="btngroup submit first">
+            <a id="addFormPageBtn" class="btn add icon" href="#" title="New Page">{{ "New page"|t('sprout-forms') }}</a>
+            <div id="formPageManagerBtn" class="btn icon" title="{{ 'Edit Pages'|t('sprout-forms') }}" data-icon="menu"></div>
+        </div>
 
-    <div class="btngroup submit first">
+        <div class="btngroup submit first">
 
-        <a href="{{ cpUrl('sprout-forms/forms/edit/'~ form.id ~'/settings/general/') }}"
-             class="btn" title="{{ 'Edit Settings'|t('sprout-forms') }}" data-icon="settings"></a>
+            <a href="{{ cpUrl('sprout-forms/forms/edit/'~ form.id ~'/settings/general/') }}"
+                class="btn" title="{{ 'Edit Settings'|t('sprout-forms') }}" data-icon="settings"></a>
         </div>
         <div id="save-form-button" class="btngroup submit first">
             <input type="submit" class="btn submit" value="{{ 'Save'|t('sprout-forms') }}">

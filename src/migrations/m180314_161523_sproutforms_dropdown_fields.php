@@ -2,9 +2,9 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
+use barrelstrength\sproutforms\fields\formfields\Dropdown;
 use craft\db\Migration;
 use craft\db\Query;
-use barrelstrength\sproutforms\fields\formfields\Dropdown;
 use craft\fields\Dropdown as CraftDropdown;
 
 /**
@@ -37,6 +37,7 @@ class m180314_161523_sproutforms_dropdown_fields extends Migration
     public function safeDown(): bool
     {
         echo "m180314_161523_sproutforms_dropdown_fields cannot be reverted.\n";
+
         return false;
     }
 }

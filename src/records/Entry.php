@@ -2,12 +2,11 @@
 
 namespace barrelstrength\sproutforms\records;
 
-use craft\db\ActiveRecord;
-use yii\db\ActiveQueryInterface;
-use craft\records\Element;
-
-use barrelstrength\sproutforms\records\Form as FormRecord;
 use barrelstrength\sproutforms\records\EntryStatus as EntryStatusRecord;
+use barrelstrength\sproutforms\records\Form as FormRecord;
+use craft\db\ActiveRecord;
+use craft\records\Element;
+use yii\db\ActiveQueryInterface;
 
 /**
  * Class Entry record.

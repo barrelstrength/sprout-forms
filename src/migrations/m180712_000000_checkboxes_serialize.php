@@ -75,6 +75,7 @@ class m180712_000000_checkboxes_serialize extends Migration
     public function safeDown(): bool
     {
         echo "m180712_000000_checkboxes_serialize cannot be reverted.\n";
+
         return false;
     }
 }

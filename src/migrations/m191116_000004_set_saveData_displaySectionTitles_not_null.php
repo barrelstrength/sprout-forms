@@ -2,9 +2,9 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
+use Craft;
 use craft\config\DbConfig;
 use craft\db\Migration;
-use Craft;
 
 /**
  * m191116_000004_set_saveData_displaySectionTitles_not_null migration.
@@ -50,6 +50,7 @@ class m191116_000004_set_saveData_displaySectionTitles_not_null extends Migratio
     public function safeDown(): bool
     {
         echo "m191116_000004_set_saveData_displaySectionTitles_not_null cannot be reverted.\n";
+
         return false;
     }
 }

@@ -4,10 +4,10 @@ namespace barrelstrength\sproutforms\services;
 
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
-use Craft;
-use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\models\EntryStatus;
 use barrelstrength\sproutforms\records\EntryStatus as EntryStatusRecord;
+use barrelstrength\sproutforms\SproutForms;
+use Craft;
 use Throwable;
 use yii\base\Component;
 use yii\base\Exception;

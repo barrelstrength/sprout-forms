@@ -30,6 +30,7 @@ class m190212_000003_update_email_template_id_sproutforms extends Migration
     public function safeDown(): bool
     {
         echo "m190212_000003_update_email_template_id_sproutforms cannot be reverted.\n";
+
         return false;
     }
 }

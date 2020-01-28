@@ -3,8 +3,8 @@
 namespace barrelstrength\sproutforms\records;
 
 use craft\db\ActiveRecord;
-use yii\db\ActiveQueryInterface;
 use craft\records\Element;
+use yii\db\ActiveQueryInterface;
 
 
 /**
@@ -29,6 +29,7 @@ use craft\records\Element;
 class Form extends ActiveRecord
 {
     private $_oldHandle;
+
     private $oldRecord;
 
     /**

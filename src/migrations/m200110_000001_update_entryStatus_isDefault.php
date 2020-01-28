@@ -27,6 +27,7 @@ class m200110_000001_update_entryStatus_isDefault extends Migration
     public function safeDown(): bool
     {
         echo "m200110_000001_update_entryStatus_isDefault cannot be reverted.\n";
+
         return false;
     }
 }

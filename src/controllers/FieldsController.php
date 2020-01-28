@@ -3,26 +3,22 @@
 namespace barrelstrength\sproutforms\controllers;
 
 
-use barrelstrength\sproutfields\SproutFields;
 use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\elements\Form;
+use barrelstrength\sproutforms\SproutForms;
 use Craft;
-use craft\db\Query;
-use craft\db\Table;
+use craft\base\Field;
 use craft\errors\ElementNotFoundException;
 use craft\helpers\Json;
-use craft\web\Controller as BaseController;
-use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
 use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
-use craft\base\Field;
-use barrelstrength\sproutforms\SproutForms;
+use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
+use craft\web\Controller as BaseController;
 use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
-use yii\db\StaleObjectException;
 use yii\web\BadRequestHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
@@ -93,6 +89,7 @@ class FieldsController extends BaseController
                 }
             }
         }
+
         // @todo - add error messages
         return $this->returnJson(false, null, $form, null, $tabId);
     }
@@ -328,6 +325,7 @@ class FieldsController extends BaseController
 
         if ($response) {
             SproutForms::$app->forms->removeFieldRulesUsingField($oldHandle, $form);
+
             return $this->asJson([
                 'success' => true
             ]);

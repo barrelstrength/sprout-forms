@@ -2,9 +2,9 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
+use barrelstrength\sproutforms\fields\formfields\MultiSelect;
 use craft\db\Migration;
 use craft\db\Query;
-use barrelstrength\sproutforms\fields\formfields\MultiSelect;
 use craft\fields\Multiselect as CraftMultiselect;
 
 /**
@@ -37,6 +37,7 @@ class m180314_161525_sproutforms_multiselect_fields extends Migration
     public function safeDown(): bool
     {
         echo "m180314_161525_sproutforms_multiselect_fields cannot be reverted.\n";
+
         return false;
     }
 }

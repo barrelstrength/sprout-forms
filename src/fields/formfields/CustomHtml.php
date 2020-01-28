@@ -2,17 +2,16 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\base\FormField;
 use Craft;
 use craft\base\ElementInterface;
-use craft\helpers\Template as TemplateHelper;
 use craft\base\PreviewableFieldInterface;
+use craft\helpers\Template as TemplateHelper;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Markup;
 use yii\db\Schema;
-
-use barrelstrength\sproutforms\base\FormField;
 
 /**
  *
@@ -44,6 +43,11 @@ class CustomHtml extends FormField implements PreviewableFieldInterface
      */
     public $hideLabel;
 
+    public static function displayName(): string
+    {
+        return Craft::t('sprout-forms', 'Custom HTML');
+    }
+
     /**
      * @inheritdoc
      */
@@ -58,11 +62,6 @@ class CustomHtml extends FormField implements PreviewableFieldInterface
     public function displayInstructionsField(): bool
     {
         return false;
-    }
-
-    public static function displayName(): string
-    {
-        return Craft::t('sprout-forms', 'Custom HTML');
     }
 
     /**

@@ -23,16 +23,16 @@ class Entries extends BaseRelationField
     /**
      * @inheritdoc
      */
-    protected static function elementType(): string
+    public static function defaultSelectionLabel(): string
     {
-        return EntryElement::class;
+        return Craft::t('sprout-forms', 'Add an entry');
     }
 
     /**
      * @inheritdoc
      */
-    public static function defaultSelectionLabel(): string
+    protected static function elementType(): string
     {
-        return Craft::t('sprout-forms', 'Add an entry');
+        return EntryElement::class;
     }
 }

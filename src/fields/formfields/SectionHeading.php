@@ -2,6 +2,8 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutbasefields\web\assets\quill\QuillAsset;
+use barrelstrength\sproutforms\base\FormField;
 use Craft;
 use craft\base\ElementInterface;
 use craft\helpers\Template as TemplateHelper;
@@ -13,9 +15,6 @@ use Twig\Error\SyntaxError;
 use Twig\Markup;
 use yii\base\InvalidConfigException;
 use yii\db\Schema;
-
-use barrelstrength\sproutforms\base\FormField;
-use barrelstrength\sproutbasefields\web\assets\quill\QuillAsset;
 
 /**
  *
@@ -58,6 +57,14 @@ class SectionHeading extends FormField
     /**
      * @inheritdoc
      */
+    public static function hasContentColumn(): bool
+    {
+        return false;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function isPlainInput(): bool
     {
         return true;
@@ -75,14 +82,6 @@ class SectionHeading extends FormField
      * @inheritdoc
      */
     public function displayInstructionsField(): bool
-    {
-        return false;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function hasContentColumn(): bool
     {
         return false;
     }

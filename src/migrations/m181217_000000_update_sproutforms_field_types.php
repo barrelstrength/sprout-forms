@@ -40,6 +40,7 @@ class m181217_000000_update_sproutforms_field_types extends Migration
     public function safeDown(): bool
     {
         echo "m181217_000000_update_sproutforms_field_types cannot be reverted.\n";
+
         return false;
     }
 }

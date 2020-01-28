@@ -7,9 +7,9 @@ use craft\db\ActiveRecord;
 /**
  * Class EntryStatus record
  *
- * @property int    $id    ID
+ * @property int    $id     ID
  * @property string $cpEditUrl
- * @property string $name  Name
+ * @property string $name   Name
  * @property string $handle Handle
  * @property string $color
  * @property int    $sortOrder

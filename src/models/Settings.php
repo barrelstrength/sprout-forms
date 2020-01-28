@@ -5,8 +5,8 @@ namespace barrelstrength\sproutforms\models;
 use barrelstrength\sproutbase\base\SproutSettingsInterface;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\SproutForms;
-use craft\base\Model;
 use Craft;
+use craft\base\Model;
 
 /**
  *
@@ -19,18 +19,31 @@ class Settings extends Model implements SproutSettingsInterface
     const SPAM_REDIRECT_BEHAVIOR_BACK_TO_FORM = 'redirectBackToForm';
 
     public $pluginNameOverride = '';
+
     public $defaultSection = 'entries';
+
     public $formTemplateDefaultValue = '';
+
     public $enableSaveData = 1;
+
     public $spamRedirectBehavior = self::SPAM_REDIRECT_BEHAVIOR_NORMAL;
+
     public $saveSpamToDatabase = 0;
+
     public $spamLimit = 500;
+
     public $cleanupProbability = 1000;
+
     public $enableSaveDataDefaultValue = 1;
+
     public $trackRemoteIp = false;
+
     public $showNotificationsTab = true;
+
     public $showReportsTab = true;
+
     public $captchaSettings = [];
+
     public $enableEditFormEntryViaFrontEnd = 0;
 
     /**

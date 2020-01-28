@@ -3,6 +3,7 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutbasefields\SproutBaseFields;
+use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\rules\conditions\ContainsCondition;
 use barrelstrength\sproutforms\rules\conditions\DoesNotContainCondition;
 use barrelstrength\sproutforms\rules\conditions\DoesNotEndWithCondition;
@@ -19,7 +20,6 @@ use craft\fields\Dropdown as CraftDropdown;
 use craft\fields\Email as CraftEmail;
 use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Template as TemplateHelper;
-use barrelstrength\sproutforms\base\FormField;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;

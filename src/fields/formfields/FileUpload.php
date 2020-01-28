@@ -8,8 +8,13 @@ use craft\base\ElementInterface;
 use craft\base\Volume;
 use craft\base\VolumeInterface;
 use craft\db\Table as DbTable;
+use craft\elements\Asset;
+use craft\elements\db\AssetQuery;
+use craft\elements\db\ElementQuery;
 use craft\errors\AssetLogicException;
 use craft\errors\ElementNotFoundException;
+use craft\errors\InvalidSubpathException;
+use craft\errors\InvalidVolumeException;
 use craft\errors\MissingComponentException;
 use craft\errors\SiteNotFoundException;
 use craft\errors\VolumeException;
@@ -18,18 +23,13 @@ use craft\gql\arguments\elements\Asset as AssetArguments;
 use craft\gql\interfaces\elements\Asset as AssetInterface;
 use craft\gql\resolvers\elements\Asset as AssetResolver;
 use craft\helpers\ArrayHelper;
+use craft\helpers\Assets as AssetsHelper;
 use craft\helpers\Db;
 use craft\helpers\ElementHelper;
+use craft\helpers\FileHelper;
 use craft\helpers\Gql;
 use craft\helpers\Html;
 use craft\helpers\Template as TemplateHelper;
-use craft\elements\Asset;
-use craft\elements\db\AssetQuery;
-use craft\elements\db\ElementQuery;
-use craft\errors\InvalidSubpathException;
-use craft\errors\InvalidVolumeException;
-use craft\helpers\Assets as AssetsHelper;
-use craft\helpers\FileHelper;
 use craft\web\UploadedFile;
 use GraphQL\Type\Definition\Type;
 use Throwable;
@@ -108,6 +108,30 @@ class FileUpload extends BaseRelationFormField
     private $_uploadedDataFiles;
 
     /**
+     * @inheritdoc
+     */
+    public static function displayName(): string
+    {
+        return Craft::t('sprout-forms', 'File Upload');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function defaultSelectionLabel(): string
+    {
+        return Craft::t('sprout-forms', 'Add a file');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected static function elementType(): string
+    {
+        return Asset::class;
+    }
+
+    /**
      * @inheritDoc
      *
      */
@@ -130,35 +154,11 @@ class FileUpload extends BaseRelationFormField
     }
 
     /**
-     * @inheritdoc
-     */
-    public static function displayName(): string
-    {
-        return Craft::t('sprout-forms', 'File Upload');
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected static function elementType(): string
-    {
-        return Asset::class;
-    }
-
-    /**
      * @return string
      */
     public function getSvgIconPath(): string
     {
         return '@sproutbaseicons/cloud-upload.svg';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function defaultSelectionLabel(): string
-    {
-        return Craft::t('sprout-forms', 'Add a file');
     }
 
     /**
@@ -477,6 +477,7 @@ class FileUpload extends BaseRelationFormField
 
             $getTargetFolderId = function() use ($element, $isDraftOrRevision): int {
                 static $targetFolderId;
+
                 return $targetFolderId = $targetFolderId ?? $this->_determineUploadFolderId($element, !$isDraftOrRevision);
             };
 
@@ -580,6 +581,37 @@ class FileUpload extends BaseRelationFormField
     }
 
     /**
+     * Returns a volume ID from an upload source key.
+     *
+     * @param string $sourceKey
+     *
+     * @return int|null
+     */
+    public function _volumeIdBySourceKey(string $sourceKey)
+    {
+        $parts = explode(':', $sourceKey, 2);
+
+        if (count($parts) !== 2) {
+            return null;
+        }
+
+        /** @var Volume|null $volume */
+        $volume = Craft::$app->getVolumes()->getVolumeByUid($parts[1]);
+
+        return $volume ? $volume->id : null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleCraftFieldTypes(): array
+    {
+        return [
+            CraftAssets::class
+        ];
+    }
+
+    /**
      * @inheritdoc
      *
      * @param ElementInterface|null $element
@@ -627,6 +659,9 @@ class FileUpload extends BaseRelationFormField
         return $sources;
     }
 
+    // Private Methods
+    // =========================================================================
+
     /**
      * @inheritdoc
      */
@@ -648,9 +683,6 @@ class FileUpload extends BaseRelationFormField
             'kind' => ($this->restrictFiles && !empty($this->allowedKinds)) ? $this->allowedKinds : [],
         ];
     }
-
-    // Private Methods
-    // =========================================================================
 
     /**
      * Returns any files that were uploaded to the field.
@@ -877,37 +909,6 @@ class FileUpload extends BaseRelationFormField
     }
 
     /**
-     * Returns a volume ID from an upload source key.
-     *
-     * @param string $sourceKey
-     *
-     * @return int|null
-     */
-    public function _volumeIdBySourceKey(string $sourceKey)
-    {
-        $parts = explode(':', $sourceKey, 2);
-
-        if (count($parts) !== 2) {
-            return null;
-        }
-
-        /** @var Volume|null $volume */
-        $volume = Craft::$app->getVolumes()->getVolumeByUid($parts[1]);
-
-        return $volume ? $volume->id : null;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getCompatibleCraftFieldTypes(): array
-    {
-        return [
-            CraftAssets::class
-        ];
-    }
-
-    /**
      * Returns the target upload volume for the field.
      *
      * @return Volume|VolumeInterface|null
@@ -944,6 +945,7 @@ class FileUpload extends BaseRelationFormField
                 try {
                     /** @var Volume $volume */
                     $volume = $folder->getVolume();
+
                     return 'volume:'.$volume->uid;
                 } catch (InvalidConfigException $e) {
                     // The volume is probably soft-deleted. Just pretend the folder didn't exist.

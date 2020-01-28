@@ -2,8 +2,8 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use craft\db\Migration;
 use barrelstrength\sproutbasefields\migrations\m190313_000000_fix_non_abbreviation_administrative_codes;
+use craft\db\Migration;
 
 /**
  * m190313_000001_fix_non_abbreviation_administrative_codes_sproutforms migration.
@@ -30,6 +30,7 @@ class m190313_000001_fix_non_abbreviation_administrative_codes_sproutforms exten
     public function safeDown(): bool
     {
         echo "m190313_000001_fix_non_abbreviation_administrative_codes_sproutforms cannot be reverted.\n";
+
         return false;
     }
 }

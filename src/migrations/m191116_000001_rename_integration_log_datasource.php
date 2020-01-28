@@ -33,6 +33,7 @@ class m191116_000001_rename_integration_log_datasource extends Migration
     public function safeDown(): bool
     {
         echo "m191116_000001_rename_integration_log_datasource cannot be reverted.\n";
+
         return false;
     }
 }

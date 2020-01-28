@@ -115,6 +115,16 @@ class m191118_000000_fix_duplicate_forms extends Migration
     }
 
     /**
+     * @inheritdoc
+     */
+    public function safeDown(): bool
+    {
+        echo "m191113_000000_fix_duplicate_forms cannot be reverted.\n";
+
+        return false;
+    }
+
+    /**
      * @return int|null
      * @throws Exception
      */
@@ -136,15 +146,5 @@ class m191118_000000_fix_duplicate_forms extends Migration
         Craft::$app->getFields()->saveLayout($layout);
 
         return $layout->id;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function safeDown(): bool
-    {
-        echo "m191113_000000_fix_duplicate_forms cannot be reverted.\n";
-
-        return false;
     }
 }

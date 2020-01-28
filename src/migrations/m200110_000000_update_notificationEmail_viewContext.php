@@ -27,6 +27,7 @@ class m200110_000000_update_notificationEmail_viewContext extends Migration
     public function safeDown(): bool
     {
         echo "m200110_000000_update_notificationEmail_viewContext cannot be reverted.\n";
+
         return false;
     }
 }

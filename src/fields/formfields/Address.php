@@ -3,7 +3,9 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutbasefields\base\AddressFieldTrait;
+use barrelstrength\sproutbasefields\models\Address as AddressModel;
 use barrelstrength\sproutbasefields\SproutBaseFields;
+use barrelstrength\sproutforms\base\FormField;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
@@ -15,8 +17,6 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Markup;
-use barrelstrength\sproutforms\base\FormField;
-use barrelstrength\sproutbasefields\models\Address as AddressModel;
 use yii\db\Exception;
 use yii\db\StaleObjectException;
 
@@ -50,17 +50,17 @@ class Address extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function hasMultipleLabels(): bool
+    public static function hasContentColumn(): bool
     {
-        return true;
+        return false;
     }
 
     /**
      * @inheritdoc
      */
-    public static function hasContentColumn(): bool
+    public function hasMultipleLabels(): bool
     {
-        return false;
+        return true;
     }
 
     /**

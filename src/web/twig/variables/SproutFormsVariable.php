@@ -3,19 +3,19 @@
 namespace barrelstrength\sproutforms\web\twig\variables;
 
 use barrelstrength\sproutforms\base\Condition;
+use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\elements\db\EntryQuery;
 use barrelstrength\sproutforms\elements\Entry;
+use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\services\Forms;
+use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\base\ElementInterface;
 use craft\base\FieldInterface;
 use craft\errors\MissingComponentException;
 use craft\helpers\Template as TemplateHelper;
-use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutforms\elements\Entry as EntryElement;
-use barrelstrength\sproutforms\base\FormField;
 use ReflectionException;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -570,6 +570,7 @@ class SproutFormsVariable
         if ($criteria) {
             Craft::configure($query, $criteria);
         }
+
         return $query;
     }
 

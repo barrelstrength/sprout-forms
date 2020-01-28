@@ -2,10 +2,10 @@
 
 namespace barrelstrength\sproutforms\base;
 
+use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\fields\formfields\Number;
 use barrelstrength\sproutforms\fields\formfields\OptIn;
 use barrelstrength\sproutforms\fields\formfields\SingleLine;
-use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\base\SavableComponent;

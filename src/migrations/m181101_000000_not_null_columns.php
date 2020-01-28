@@ -31,6 +31,7 @@ class m181101_000000_not_null_columns extends Migration
     public function safeDown(): bool
     {
         echo "m181101_000000_not_null_columns cannot be reverted.\n";
+
         return false;
     }
 }

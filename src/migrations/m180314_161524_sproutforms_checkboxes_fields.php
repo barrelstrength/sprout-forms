@@ -2,9 +2,9 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
+use barrelstrength\sproutforms\fields\formfields\Checkboxes;
 use craft\db\Migration;
 use craft\db\Query;
-use barrelstrength\sproutforms\fields\formfields\Checkboxes;
 use craft\fields\Checkboxes as CraftCheckboxes;
 
 /**
@@ -37,6 +37,7 @@ class m180314_161524_sproutforms_checkboxes_fields extends Migration
     public function safeDown(): bool
     {
         echo "m180314_161524_sproutforms_checkboxes_fields cannot be reverted.\n";
+
         return false;
     }
 }

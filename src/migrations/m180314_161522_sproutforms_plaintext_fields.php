@@ -2,10 +2,10 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
+use barrelstrength\sproutforms\fields\formfields\Paragraph;
+use barrelstrength\sproutforms\fields\formfields\SingleLine;
 use craft\db\Migration;
 use craft\db\Query;
-use barrelstrength\sproutforms\fields\formfields\SingleLine;
-use barrelstrength\sproutforms\fields\formfields\Paragraph;
 use craft\fields\PlainText;
 use craft\helpers\Json;
 
@@ -57,6 +57,7 @@ class m180314_161522_sproutforms_plaintext_fields extends Migration
     public function safeDown(): bool
     {
         echo "m180314_161522_sproutforms_plaintext_fields cannot be reverted.\n";
+
         return false;
     }
 }

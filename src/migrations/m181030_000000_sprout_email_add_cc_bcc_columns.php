@@ -32,6 +32,7 @@ class m181030_000000_sprout_email_add_cc_bcc_columns extends Migration
     public function safeDown(): bool
     {
         echo "m181030_000000_sprout_email_add_cc_bcc_columns cannot be reverted.\n";
+
         return false;
     }
 }

@@ -2,22 +2,21 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutbaseemail\migrations\m190714_000001_add_notification_email_context_column;
-use barrelstrength\sproutbaseemail\SproutBaseEmail;
-use barrelstrength\sproutforms\formtemplates\BasicTemplates;
-use craft\db\Migration;
-use craft\db\Query;
-
-use Craft;
-use craft\errors\SiteNotFoundException;
-use craft\helpers\Json;
-use craft\helpers\MigrationHelper;
 use barrelstrength\sproutbaseemail\elements\NotificationEmail;
-use barrelstrength\sproutbaseemail\migrations\m180927_080639_add_cc_bcc_columns as CcBccMigration;
+use barrelstrength\sproutbaseemail\migrations\Install as SproutBaseNotificationInstall;
 use barrelstrength\sproutbaseemail\migrations\m180501_000002_rename_notification_options_column;
 use barrelstrength\sproutbaseemail\migrations\m180501_000003_add_notification_columns;
 use barrelstrength\sproutbaseemail\migrations\m180515_000000_rename_notification_pluginId_column;
-use barrelstrength\sproutbaseemail\migrations\Install as SproutBaseNotificationInstall;
+use barrelstrength\sproutbaseemail\migrations\m180927_080639_add_cc_bcc_columns as CcBccMigration;
+use barrelstrength\sproutbaseemail\migrations\m190714_000001_add_notification_email_context_column;
+use barrelstrength\sproutbaseemail\SproutBaseEmail;
+use barrelstrength\sproutforms\formtemplates\BasicTemplates;
+use Craft;
+use craft\db\Migration;
+use craft\db\Query;
+use craft\errors\SiteNotFoundException;
+use craft\helpers\Json;
+use craft\helpers\MigrationHelper;
 use craft\services\Plugins;
 use Throwable;
 use yii\base\NotSupportedException;
@@ -197,6 +196,7 @@ class m180314_161540_craft2_to_craft3 extends Migration
     public function safeDown(): bool
     {
         echo "m180314_161540_craft2_to_craft3 cannot be reverted.\n";
+
         return false;
     }
 }

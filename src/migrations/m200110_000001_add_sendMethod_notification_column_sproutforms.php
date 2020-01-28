@@ -30,6 +30,7 @@ class m200110_000001_add_sendMethod_notification_column_sproutforms extends Migr
     public function safeDown(): bool
     {
         echo "m200110_000001_add_sendMethod_notification_column cannot be reverted.\n";
+
         return false;
     }
 }

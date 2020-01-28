@@ -32,6 +32,7 @@ class m200102_000000_update_empty_phone_fields_to_null_sproutforms extends Migra
     public function safeDown(): bool
     {
         echo "m200102_000000_update_empty_phone_fields_to_null_sproutfields cannot be reverted.\n";
+
         return false;
     }
 }

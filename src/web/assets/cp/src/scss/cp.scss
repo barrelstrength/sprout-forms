@@ -151,9 +151,11 @@ table.rules-table thead tr {
 table.rules-table tr th:first-child {
     border-top-left-radius: 4px;
 }
+
 table.rules-table tr th:last-child {
     border-top-right-radius: 4px;
 }
+
 table.rules-table tr th:first-child,
 table.rules-table tr td:first-child {
     padding-left: 12px;
@@ -163,6 +165,7 @@ table.rules-table tr th:last-child,
 table.rules-table tr td:last-child {
     padding-right: 12px;
 }
+
 table.rules-table tbody tr:first-child td {
     padding-top: 12px;
 }

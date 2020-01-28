@@ -5,11 +5,10 @@ namespace barrelstrength\sproutforms\controllers;
 use barrelstrength\sproutforms\base\ElementIntegration;
 use barrelstrength\sproutforms\base\Integration;
 use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
+use barrelstrength\sproutforms\SproutForms;
 use Craft;
-
 use craft\errors\MissingComponentException;
 use craft\web\Controller as BaseController;
-use barrelstrength\sproutforms\SproutForms;
 use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -95,6 +94,7 @@ class IntegrationsController extends BaseController
 
         if (!SproutForms::$app->integrations->saveIntegration($integration)) {
             Craft::error('Unable to save integration.', __METHOD__);
+
             return $this->returnJson(false);
         }
 

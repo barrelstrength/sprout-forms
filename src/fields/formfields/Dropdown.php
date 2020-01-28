@@ -11,10 +11,10 @@ use barrelstrength\sproutforms\rules\conditions\IsCondition;
 use barrelstrength\sproutforms\rules\conditions\IsNotCondition;
 use barrelstrength\sproutforms\rules\conditions\StartsWithCondition;
 use Craft;
-use craft\helpers\Template as TemplateHelper;
 use craft\base\ElementInterface;
 use craft\fields\Dropdown as CraftDropdown;
 use craft\fields\PlainText as CraftPlainText;
+use craft\helpers\Template as TemplateHelper;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -37,14 +37,6 @@ class Dropdown extends BaseOptionsFormField
     public $cssClasses;
 
     /**
-     * @return string
-     */
-    public function getModelName(): string
-    {
-        return CraftDropdown::class;
-    }
-
-    /**
      * @inheritdoc
      */
     public static function displayName(): string
@@ -55,17 +47,17 @@ class Dropdown extends BaseOptionsFormField
     /**
      * @return string
      */
-    public function getSvgIconPath(): string
+    public function getModelName(): string
     {
-        return '@sproutbaseicons/chevron-circle-down.svg';
+        return CraftDropdown::class;
     }
 
     /**
-     * @inheritdoc
+     * @return string
      */
-    protected function optionsSettingLabel(): string
+    public function getSvgIconPath(): string
     {
-        return Craft::t('sprout-forms', 'Dropdown Options');
+        return '@sproutbaseicons/chevron-circle-down.svg';
     }
 
     /**
@@ -166,5 +158,13 @@ class Dropdown extends BaseOptionsFormField
             new EndsWithCondition(),
             new DoesNotEndWithCondition()
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function optionsSettingLabel(): string
+    {
+        return Craft::t('sprout-forms', 'Dropdown Options');
     }
 }

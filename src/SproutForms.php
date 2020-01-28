@@ -2,68 +2,66 @@
 
 namespace barrelstrength\sproutforms;
 
+use barrelstrength\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbase\base\SproutEditionsInterface;
 use barrelstrength\sproutbase\SproutBase;
+use barrelstrength\sproutbase\SproutBaseHelper;
+use barrelstrength\sproutbaseemail\events\NotificationEmailEvent;
 use barrelstrength\sproutbaseemail\services\EmailTemplates;
+use barrelstrength\sproutbaseemail\services\NotificationEmailEvents;
 use barrelstrength\sproutbaseemail\SproutBaseEmailHelper;
 use barrelstrength\sproutbasefields\SproutBaseFieldsHelper;
-use barrelstrength\sproutbaseemail\services\NotificationEmailEvents;
+use barrelstrength\sproutbaseimport\services\Importers;
 use barrelstrength\sproutbasereports\base\DataSource;
 use barrelstrength\sproutbasereports\services\DataSources;
 use barrelstrength\sproutbasereports\SproutBaseReports;
 use barrelstrength\sproutbasereports\SproutBaseReportsHelper;
 use barrelstrength\sproutforms\base\Captcha;
-use barrelstrength\sproutforms\controllers\EntriesController;
-use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
-use barrelstrength\sproutforms\events\OnSaveEntryEvent;
-use barrelstrength\sproutforms\integrations\sproutemail\emailtemplates\basic\BasicSproutFormsNotification;
-use barrelstrength\sproutforms\integrations\sproutemail\events\notificationevents\SaveEntryEvent;
-use barrelstrength\sproutforms\integrations\sproutimport\elements\Form as FormElementImporter;
-use barrelstrength\sproutforms\integrations\sproutimport\elements\Entry as EntryElementImporter;
-use barrelstrength\sproutbase\base\BaseSproutTrait;
-use barrelstrength\sproutbaseemail\events\NotificationEmailEvent;
-use barrelstrength\sproutforms\fields\Forms as FormsField;
-use barrelstrength\sproutforms\fields\Entries as FormEntriesField;
-use barrelstrength\sproutforms\integrations\sproutreports\datasources\IntegrationLogDataSource;
-use barrelstrength\sproutforms\integrations\sproutreports\datasources\SpamLogDataSource;
-use barrelstrength\sproutforms\integrationtypes\EntryElementIntegration;
-use barrelstrength\sproutforms\integrationtypes\CustomEndpoint;
-use barrelstrength\sproutforms\services\Integrations;
-use barrelstrength\sproutforms\widgets\RecentEntries;
 use barrelstrength\sproutforms\captchas\DuplicateCaptcha;
 use barrelstrength\sproutforms\captchas\HoneypotCaptcha;
 use barrelstrength\sproutforms\captchas\JavascriptCaptcha;
-use barrelstrength\sproutforms\formtemplates\BasicTemplates;
+use barrelstrength\sproutforms\controllers\EntriesController;
+use barrelstrength\sproutforms\elements\Entry as EntryElement;
+use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
+use barrelstrength\sproutforms\events\OnSaveEntryEvent;
+use barrelstrength\sproutforms\events\RegisterFieldsEvent;
+use barrelstrength\sproutforms\fields\Entries as FormEntriesField;
+use barrelstrength\sproutforms\fields\Forms as FormsField;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
+use barrelstrength\sproutforms\formtemplates\BasicTemplates;
+use barrelstrength\sproutforms\integrations\sproutemail\emailtemplates\basic\BasicSproutFormsNotification;
+use barrelstrength\sproutforms\integrations\sproutemail\events\notificationevents\SaveEntryEvent;
+use barrelstrength\sproutforms\integrations\sproutimport\elements\Entry as EntryElementImporter;
+use barrelstrength\sproutforms\integrations\sproutimport\elements\Form as FormElementImporter;
 use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesDataSource;
+use barrelstrength\sproutforms\integrations\sproutreports\datasources\IntegrationLogDataSource;
+use barrelstrength\sproutforms\integrations\sproutreports\datasources\SpamLogDataSource;
+use barrelstrength\sproutforms\integrationtypes\CustomEndpoint;
+use barrelstrength\sproutforms\integrationtypes\EntryElementIntegration;
+use barrelstrength\sproutforms\models\Settings;
 use barrelstrength\sproutforms\services\App;
 use barrelstrength\sproutforms\services\Entries;
+use barrelstrength\sproutforms\services\Fields as SproutFormsFields;
 use barrelstrength\sproutforms\services\Forms;
-use barrelstrength\sproutbaseimport\services\Importers;
+use barrelstrength\sproutforms\services\Integrations;
+use barrelstrength\sproutforms\web\twig\variables\SproutFormsVariable;
+use barrelstrength\sproutforms\widgets\RecentEntries;
 use Craft;
 use craft\base\Plugin;
-use craft\db\Query;
-use craft\db\Table;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
 use craft\helpers\UrlHelper;
+use craft\services\Dashboard;
 use craft\services\Fields;
 use craft\services\Plugins;
-use craft\web\UrlManager;
 use craft\services\UserPermissions;
+use craft\web\twig\variables\CraftVariable;
+use craft\web\UrlManager;
 use Exception;
 use Throwable;
 use yii\base\ErrorException;
 use yii\base\Event;
-use craft\web\twig\variables\CraftVariable;
-use barrelstrength\sproutbase\SproutBaseHelper;
-use barrelstrength\sproutforms\models\Settings;
-use barrelstrength\sproutforms\web\twig\variables\SproutFormsVariable;
-use barrelstrength\sproutforms\events\RegisterFieldsEvent;
-use barrelstrength\sproutforms\services\Fields as SproutFormsFields;
-use barrelstrength\sproutforms\elements\Entry as EntryElement;
-use craft\services\Dashboard;
 use yii\base\InvalidConfigException;
 use yii\base\NotSupportedException;
 use yii\web\Response;
@@ -80,6 +78,10 @@ use yii\web\ServerErrorHttpException;
 class SproutForms extends Plugin implements SproutEditionsInterface
 {
     use BaseSproutTrait;
+
+    const EDITION_LITE = 'lite';
+
+    const EDITION_PRO = 'pro';
 
     /**
      * Enable use of SproutForms::$app-> in place of Craft::$app->
@@ -115,8 +117,16 @@ class SproutForms extends Plugin implements SproutEditionsInterface
      */
     public $minVersionRequired = '2.5.1';
 
-    const EDITION_LITE = 'lite';
-    const EDITION_PRO = 'pro';
+    /**
+     * @inheritDoc
+     */
+    public static function editions(): array
+    {
+        return [
+            self::EDITION_LITE,
+            self::EDITION_PRO,
+        ];
+    }
 
     /**
      * @throws InvalidConfigException
@@ -238,17 +248,6 @@ class SproutForms extends Plugin implements SproutEditionsInterface
     /**
      * @inheritDoc
      */
-    public static function editions(): array
-    {
-        return [
-            self::EDITION_LITE,
-            self::EDITION_PRO,
-        ];
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getUpgradeUrl()
     {
         if (!SproutBase::$app->settings->isEdition('sprout-forms', self::EDITION_PRO)) {
@@ -256,14 +255,6 @@ class SproutForms extends Plugin implements SproutEditionsInterface
         }
 
         return null;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function createSettingsModel()
-    {
-        return new Settings();
     }
 
     /**
@@ -335,6 +326,105 @@ class SproutForms extends Plugin implements SproutEditionsInterface
         }
 
         return $parent;
+    }
+
+    /**
+     * @return array
+     */
+    public function getUserPermissions(): array
+    {
+        return [
+            'sproutForms-editForms' => [
+                'label' => Craft::t('sprout-forms', 'Edit Forms')
+            ],
+            'sproutForms-viewEntries' => [
+                'label' => Craft::t('sprout-forms', 'View Form Entries'),
+                'nested' => [
+                    'sproutForms-editEntries' => [
+                        'label' => Craft::t('sprout-forms', 'Edit Form Entries')
+                    ]
+                ]
+            ],
+
+            // Notifications
+            'sproutForms-viewNotifications' => [
+                'label' => Craft::t('sprout-forms', 'View Notifications'),
+                'nested' => [
+                    'sproutForms-editNotifications' => [
+                        'label' => Craft::t('sprout-forms', 'Edit Notification Emails')
+                    ]
+                ]
+            ],
+
+            // Reports
+            'sproutForms-viewReports' => [
+                'label' => Craft::t('sprout-forms', 'View Reports'),
+                'nested' => [
+                    'sproutForms-editReports' => [
+                        'label' => Craft::t('sprout-forms', 'Edit Reports')
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * @return bool
+     * @throws Exception
+     * @throws Throwable
+     */
+    public function beforeUninstall(): bool
+    {
+        $forms = self::$app->forms->getAllForms();
+
+        foreach ($forms as $form) {
+            self::$app->forms->deleteForm($form);
+        }
+
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function createSettingsModel()
+    {
+        return new Settings();
+    }
+
+    /**
+     * @throws ErrorException
+     * @throws \yii\base\Exception
+     * @throws NotSupportedException
+     * @throws ServerErrorHttpException
+     */
+    protected function afterInstall()
+    {
+        // Add DataSource integrations so users don't have to install them manually
+        $dataSourceTypes = [
+            EntriesDataSource::class,
+            IntegrationLogDataSource::class,
+            SpamLogDataSource::class
+        ];
+
+        // @todo research why the plugin is not enabled after install
+        $projectConfig = Craft::$app->getProjectConfig();
+        $pluginHandle = 'sprout-forms';
+        $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.enabled', true);
+
+        foreach ($dataSourceTypes as $dataSourceClass) {
+            /** @var DataSource $dataSource */
+            $dataSource = new $dataSourceClass();
+            $dataSource->viewContext = 'sprout-forms';
+            SproutBaseReports::$app->dataSources->saveDataSource($dataSource);
+        }
+
+        // Redirect to welcome page
+        if (Craft::$app->getRequest()->getIsConsoleRequest()) {
+            return;
+        }
+
+        Craft::$app->controller->redirect(UrlHelper::cpUrl('sprout-forms/welcome'))->send();
     }
 
     /**
@@ -424,97 +514,6 @@ class SproutForms extends Plugin implements SproutEditionsInterface
             'sprout-forms/settings' =>
                 'sprout/settings/edit-settings'
         ];
-    }
-
-    /**
-     * @return array
-     */
-    public function getUserPermissions(): array
-    {
-        return [
-            'sproutForms-editForms' => [
-                'label' => Craft::t('sprout-forms', 'Edit Forms')
-            ],
-            'sproutForms-viewEntries' => [
-                'label' => Craft::t('sprout-forms', 'View Form Entries'),
-                'nested' => [
-                    'sproutForms-editEntries' => [
-                        'label' => Craft::t('sprout-forms', 'Edit Form Entries')
-                    ]
-                ]
-            ],
-
-            // Notifications
-            'sproutForms-viewNotifications' => [
-                'label' => Craft::t('sprout-forms', 'View Notifications'),
-                'nested' => [
-                    'sproutForms-editNotifications' => [
-                        'label' => Craft::t('sprout-forms', 'Edit Notification Emails')
-                    ]
-                ]
-            ],
-
-            // Reports
-            'sproutForms-viewReports' => [
-                'label' => Craft::t('sprout-forms', 'View Reports'),
-                'nested' => [
-                    'sproutForms-editReports' => [
-                        'label' => Craft::t('sprout-forms', 'Edit Reports')
-                    ]
-                ]
-            ]
-        ];
-    }
-
-    /**
-     * @throws ErrorException
-     * @throws \yii\base\Exception
-     * @throws NotSupportedException
-     * @throws ServerErrorHttpException
-     */
-    protected function afterInstall()
-    {
-        // Add DataSource integrations so users don't have to install them manually
-        $dataSourceTypes = [
-            EntriesDataSource::class,
-            IntegrationLogDataSource::class,
-            SpamLogDataSource::class
-        ];
-
-        // @todo research why the plugin is not enabled after install
-        $projectConfig = Craft::$app->getProjectConfig();
-        $pluginHandle = 'sprout-forms';
-        $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.enabled', true);
-
-        foreach ($dataSourceTypes as $dataSourceClass) {
-            /** @var DataSource $dataSource */
-            $dataSource = new $dataSourceClass();
-            $dataSource->viewContext = 'sprout-forms';
-            SproutBaseReports::$app->dataSources->saveDataSource($dataSource);
-        }
-
-        // Redirect to welcome page
-        if (Craft::$app->getRequest()->getIsConsoleRequest()) {
-            return;
-        }
-
-        Craft::$app->controller->redirect(UrlHelper::cpUrl('sprout-forms/welcome'))->send();
-    }
-
-    /**
-     * @return bool
-     * @throws Exception
-     * @throws Throwable
-     */
-    public function beforeUninstall(): bool
-    {
-        $forms = self::$app->forms->getAllForms();
-
-        foreach ($forms as $form) {
-            self::$app->forms->deleteForm($form);
-        }
-
-        return true;
     }
 }
 

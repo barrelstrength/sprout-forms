@@ -3,9 +3,9 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use Craft;
+use craft\base\ElementInterface;
 use craft\fields\Checkboxes as CraftCheckboxes;
 use craft\helpers\Template as TemplateHelper;
-use craft\base\ElementInterface;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -30,18 +30,18 @@ class Checkboxes extends BaseOptionsFormField
     /**
      * @inheritdoc
      */
-    public function init()
+    public static function displayName(): string
     {
-        parent::init();
-        $this->multi = true;
+        return Craft::t('sprout-forms', 'Checkboxes');
     }
 
     /**
      * @inheritdoc
      */
-    public static function displayName(): string
+    public function init()
     {
-        return Craft::t('sprout-forms', 'Checkboxes');
+        parent::init();
+        $this->multi = true;
     }
 
     /**
@@ -58,14 +58,6 @@ class Checkboxes extends BaseOptionsFormField
     public function getSvgIconPath(): string
     {
         return '@sproutbaseicons/check-square.svg';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function optionsSettingLabel(): string
-    {
-        return Craft::t('sprout-forms', 'Checkbox Options');
     }
 
     /**
@@ -146,5 +138,13 @@ class Checkboxes extends BaseOptionsFormField
         return [
             CraftCheckboxes::class
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function optionsSettingLabel(): string
+    {
+        return Craft::t('sprout-forms', 'Checkbox Options');
     }
 }

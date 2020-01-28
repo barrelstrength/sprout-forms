@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\rules\conditions\ContainsCondition;
 use barrelstrength\sproutforms\rules\conditions\DoesNotContainCondition;
 use barrelstrength\sproutforms\rules\conditions\DoesNotEndWithCondition;
@@ -11,20 +12,18 @@ use barrelstrength\sproutforms\rules\conditions\IsCondition;
 use barrelstrength\sproutforms\rules\conditions\IsNotCondition;
 use barrelstrength\sproutforms\rules\conditions\StartsWithCondition;
 use Craft;
-use craft\fields\PlainText as CraftPlainText;
+use craft\base\ElementInterface;
+use craft\base\PreviewableFieldInterface;
 use craft\fields\Dropdown as CraftDropdown;
+use craft\fields\PlainText as CraftPlainText;
+use craft\helpers\Db;
 use craft\helpers\Template as TemplateHelper;
+use LitEmoji\LitEmoji;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Markup;
 use yii\db\Schema;
-use craft\base\ElementInterface;
-use craft\base\PreviewableFieldInterface;
-use LitEmoji\LitEmoji;
-use craft\helpers\Db;
-
-use barrelstrength\sproutforms\base\FormField;
 
 /**
  * Class SingleLine
@@ -59,6 +58,14 @@ class SingleLine extends FormField implements PreviewableFieldInterface
      * @var string The type of database column the field should have in the content table
      */
     public $columnType = Schema::TYPE_TEXT;
+
+    /**
+     * @inheritdoc
+     */
+    public static function displayName(): string
+    {
+        return Craft::t('sprout-forms', 'Single Line');
+    }
 
     /**
      * @inheritdoc
@@ -99,14 +106,6 @@ class SingleLine extends FormField implements PreviewableFieldInterface
                 $this->addError($attribute, Craft::t('sprout-forms', 'Character Limit is too big for your chosen Column Type.'));
             }
         }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function displayName(): string
-    {
-        return Craft::t('sprout-forms', 'Single Line');
     }
 
     /**
@@ -214,6 +213,7 @@ class SingleLine extends FormField implements PreviewableFieldInterface
         if ($value !== null) {
             $value = LitEmoji::unicodeToShortcode($value);
         }
+
         return $value;
     }
 
@@ -224,6 +224,7 @@ class SingleLine extends FormField implements PreviewableFieldInterface
     {
         $value = (string)$value;
         $value = LitEmoji::unicodeToShortcode($value);
+
         return $value;
     }
 

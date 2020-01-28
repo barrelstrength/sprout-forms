@@ -2,9 +2,9 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
+use barrelstrength\sproutforms\fields\formfields\Categories;
 use craft\db\Migration;
 use craft\db\Query;
-use barrelstrength\sproutforms\fields\formfields\Categories;
 use craft\fields\Categories as CraftCategories;
 use craft\helpers\Json;
 
@@ -44,6 +44,7 @@ class m180314_161529_sproutforms_categories_fields extends Migration
     public function safeDown(): bool
     {
         echo "m180314_161529_sproutforms_categories_fields cannot be reverted.\n";
+
         return false;
     }
 }

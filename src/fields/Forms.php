@@ -26,14 +26,6 @@ class Forms extends BaseRelationField
     /**
      * @inheritDoc
      */
-    protected static function elementType(): string
-    {
-        return FormElement::class;
-    }
-
-    /**
-     * @inheritDoc
-     */
     public static function defaultSelectionLabel(): string
     {
         return Craft::t('sprout-forms', 'Add a form');
@@ -45,5 +37,13 @@ class Forms extends BaseRelationField
     public static function valueType(): string
     {
         return FormQuery::class;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected static function elementType(): string
+    {
+        return FormElement::class;
     }
 }

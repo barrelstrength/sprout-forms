@@ -2,9 +2,9 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
+use barrelstrength\sproutforms\fields\formfields\Email;
 use craft\db\Migration;
 use craft\db\Query;
-use barrelstrength\sproutforms\fields\formfields\Email;
 
 /**
  * m180314_161535_sproutforms_email_fields migration.
@@ -36,6 +36,7 @@ class m180314_161535_sproutforms_email_fields extends Migration
     public function safeDown(): bool
     {
         echo "m180314_161535_sproutforms_email_fields cannot be reverted.\n";
+
         return false;
     }
 }

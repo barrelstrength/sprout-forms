@@ -32,6 +32,7 @@ class m180515_000001_rename_datasources_pluginId_column_sproutforms extends Migr
     public function safeDown(): bool
     {
         echo "m180515_000001_rename_datasources_pluginId_column_sproutforms cannot be reverted.\n";
+
         return false;
     }
 }

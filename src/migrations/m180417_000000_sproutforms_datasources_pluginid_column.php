@@ -2,8 +2,8 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use craft\db\Migration;
 use barrelstrength\sproutbasereports\migrations\m180417_000000_sproutreports_datasources_pluginid_column as SproutReportsPluginId;
+use craft\db\Migration;
 use yii\base\NotSupportedException;
 
 /**
@@ -32,6 +32,7 @@ class m180417_000000_sproutforms_datasources_pluginid_column extends Migration
     public function safeDown(): bool
     {
         echo "m180417_000000_sproutforms_datasources_pluginid_column cannot be reverted.\n";
+
         return false;
     }
 }

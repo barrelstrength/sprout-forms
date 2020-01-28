@@ -2,8 +2,8 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use craft\db\Migration;
 use barrelstrength\sproutbasereports\migrations\m190305_000002_update_record_to_element_types as BaseUpdateElements;
+use craft\db\Migration;
 use Throwable;
 
 /**
@@ -32,6 +32,7 @@ class m190318_000001_update_record_to_element_types_sproutforms extends Migratio
     public function safeDown(): bool
     {
         echo "m190318_000001_update_record_to_element_types_sproutforms cannot be reverted.\n";
+
         return false;
     }
 }

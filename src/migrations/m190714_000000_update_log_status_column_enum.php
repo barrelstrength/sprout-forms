@@ -21,6 +21,7 @@ class m190714_000000_update_log_status_column_enum extends Migration
         } else {
             $this->alterColumn('{{%sproutforms_log}}', 'status', $this->enum('status', ['pending', 'notsent', 'completed'])->notNull()->defaultValue('pending'));
         }
+
         return true;
     }
 
@@ -30,6 +31,7 @@ class m190714_000000_update_log_status_column_enum extends Migration
     public function safeDown(): bool
     {
         echo "m190714_000000_update_log_status_column_enum cannot be reverted.\n";
+
         return false;
     }
 }

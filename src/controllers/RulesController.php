@@ -6,10 +6,10 @@ use barrelstrength\sproutforms\base\ConditionInterface;
 use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\base\Rule;
 use barrelstrength\sproutforms\records\Rules as RulesRecord;
+use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\errors\MissingComponentException;
 use craft\web\Controller as BaseController;
-use barrelstrength\sproutforms\SproutForms;
 use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -66,6 +66,7 @@ class RulesController extends BaseController
 
         if (!SproutForms::$app->rules->saveRule($rule)) {
             Craft::error('Unable to save rule.', __METHOD__);
+
             return $this->returnJson(false);
         }
 

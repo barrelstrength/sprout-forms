@@ -27,6 +27,7 @@ class m200110_000002_update_datasources_types_sproutforms extends Migration
     public function safeDown(): bool
     {
         echo "m200110_000002_update_datasources_types_sproutforms cannot be reverted.\n";
+
         return false;
     }
 }

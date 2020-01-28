@@ -3,11 +3,10 @@
 namespace barrelstrength\sproutforms\elements\db;
 
 use barrelstrength\sproutforms\elements\Form;
+use barrelstrength\sproutforms\SproutForms;
 use craft\db\Query;
 use craft\elements\db\ElementQuery;
 use craft\helpers\Db;
-
-use barrelstrength\sproutforms\SproutForms;
 use yii\base\InvalidConfigException;
 
 class EntryQuery extends ElementQuery
@@ -229,6 +228,7 @@ class EntryQuery extends ElementQuery
         // This method won't get called if $this->formId isn't set to a single int
         /** @var Form $form */
         $form = SproutForms::$app->forms->getFormById($this->formId);
+
         return $form->getFields();
     }
 }

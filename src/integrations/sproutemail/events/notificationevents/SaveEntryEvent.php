@@ -3,15 +3,14 @@
 namespace barrelstrength\sproutforms\integrations\sproutemail\events\notificationevents;
 
 use barrelstrength\sproutbaseemail\base\NotificationEvent;
-
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\events\OnSaveEntryEvent;
 use barrelstrength\sproutforms\services\Entries;
 use barrelstrength\sproutforms\SproutForms;
-use craft\events\ModelEvent;
-use craft\events\ElementEvent;
 use Craft;
+use craft\events\ElementEvent;
+use craft\events\ModelEvent;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;

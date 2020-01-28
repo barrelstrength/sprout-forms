@@ -27,6 +27,7 @@ class m190212_000001_update_element_types_sproutforms extends Migration
     public function safeDown(): bool
     {
         echo "m191202_000001_update_element_types_sproutforms cannot be reverted.\n";
+
         return false;
     }
 }

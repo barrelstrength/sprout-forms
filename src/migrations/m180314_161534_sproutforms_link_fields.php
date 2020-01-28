@@ -2,9 +2,9 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
+use barrelstrength\sproutforms\fields\formfields\Url;
 use craft\db\Migration;
 use craft\db\Query;
-use barrelstrength\sproutforms\fields\formfields\Url;
 
 /**
  * m180314_161534_sproutforms_link_fields migration.
@@ -36,6 +36,7 @@ class m180314_161534_sproutforms_link_fields extends Migration
     public function safeDown(): bool
     {
         echo "m180314_161534_sproutforms_link_fields cannot be reverted.\n";
+
         return false;
     }
 }

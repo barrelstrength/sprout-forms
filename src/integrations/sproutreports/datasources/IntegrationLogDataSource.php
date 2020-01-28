@@ -2,11 +2,11 @@
 
 namespace barrelstrength\sproutforms\integrations\sproutreports\datasources;
 
+use barrelstrength\sproutbasereports\base\DataSource;
+use barrelstrength\sproutbasereports\elements\Report;
 use barrelstrength\sproutbasereports\SproutBaseReports;
 use barrelstrength\sproutforms\elements\Form;
-use barrelstrength\sproutbasereports\elements\Report;
 use Craft;
-use barrelstrength\sproutbasereports\base\DataSource;
 use craft\db\Query;
 use craft\helpers\DateTimeHelper;
 use DateTime;

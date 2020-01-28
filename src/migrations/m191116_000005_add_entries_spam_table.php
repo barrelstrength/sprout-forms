@@ -55,6 +55,7 @@ class m191116_000005_add_entries_spam_table extends Migration
     public function safeDown(): bool
     {
         echo "m191116_000005_add_entries_spam_table cannot be reverted.\n";
+
         return false;
     }
 }

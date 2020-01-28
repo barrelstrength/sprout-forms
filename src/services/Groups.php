@@ -2,18 +2,18 @@
 
 namespace barrelstrength\sproutforms\services;
 
-use Craft;
-use craft\db\Query;
-use yii\base\Component;
-
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\models\FormGroup as FormGroupModel;
 use barrelstrength\sproutforms\records\FormGroup as FormGroupRecord;
+use Craft;
+use craft\db\Query;
+use yii\base\Component;
 use yii\base\Exception;
 
 class Groups extends Component
 {
     private $_groupsById;
+
     private $_fetchedAllGroups = false;
 
     /**

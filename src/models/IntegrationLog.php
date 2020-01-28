@@ -4,8 +4,8 @@ namespace barrelstrength\sproutforms\models;
 
 use barrelstrength\sproutforms\base\Integration;
 use barrelstrength\sproutforms\SproutForms;
-use craft\base\Model;
 use Craft;
+use craft\base\Model;
 use craft\errors\MissingComponentException;
 use yii\base\InvalidConfigException;
 

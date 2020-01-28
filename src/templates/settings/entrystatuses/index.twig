@@ -1,4 +1,3 @@
-
 {% set tableData = [] %}
 {% if entryStatuses|length %}
     {% for entryStatus in entryStatuses %}
@@ -35,40 +34,40 @@
      Also no way to disable a particular row from being deleted. Ideally we could just hide the delete button. #}
 {% js %}
     var columns = [
-      {
-        name: 'labelHtml',
-        title: Craft.t('sprout-forms', 'Name'),
-        callback: function(value) {
+    {
+    name: 'labelHtml',
+    title: Craft.t('sprout-forms', 'Name'),
+    callback: function(value) {
     return '<a class="cell-bold sproutFormsStatusLabel" href="' + value.url + '"><span class="status ' + value.color + '"></span>' + value.name + '</a>';
-        }
-      },
-      {
-        name: '__slot:handle',
-        title: Craft.t('sprout-forms', 'Handle')
-      },
-      {
-        name: 'isDefault',
-        title: Craft.t('sprout-forms', 'Default Status'), callback: function(value) {
-          if (value) {
-            return '<span data-icon="check" title="' + Craft.t('sprout-forms', 'Yes') + '"></span>';
-          }
-          return '';
-        }
-      }
+    }
+    },
+    {
+    name: '__slot:handle',
+    title: Craft.t('sprout-forms', 'Handle')
+    },
+    {
+    name: 'isDefault',
+    title: Craft.t('sprout-forms', 'Default Status'), callback: function(value) {
+    if (value) {
+    return '<span data-icon="check" title="' + Craft.t('sprout-forms', 'Yes') + '"></span>';
+    }
+    return '';
+    }
+    }
     ];
 
     new Craft.VueAdminTable({
-      columns: columns,
-      container: '#entry-statuses-admin-table',
-      deleteAction: 'sprout-forms/entry-statuses/delete',
-      deleteConfirmationMessage: Craft.t('sprout-forms', "Are you sure you want to delete the Entry Status “{name}”?"),
-      deleteSuccessMessage: Craft.t('sprout-forms', "Entry status deleted"),
-      emptyMessage: Craft.t('sprout-forms', 'No entry statuses exist yet.'),
-      minItems: 2,
-      padded: true,
-      reorderAction: 'sprout-forms/entry-statuses/reorder',
-      reorderSuccessMessage: Craft.t('sprout-forms', 'Entry statuses reordered.'),
-      reorderFailMessage: Craft.t('sprout-forms', 'Couldn’t reorder statuses.'),
-      tableData: {{ tableData|json_encode|raw }}
+    columns: columns,
+    container: '#entry-statuses-admin-table',
+    deleteAction: 'sprout-forms/entry-statuses/delete',
+    deleteConfirmationMessage: Craft.t('sprout-forms', "Are you sure you want to delete the Entry Status “{name}”?"),
+    deleteSuccessMessage: Craft.t('sprout-forms', "Entry status deleted"),
+    emptyMessage: Craft.t('sprout-forms', 'No entry statuses exist yet.'),
+    minItems: 2,
+    padded: true,
+    reorderAction: 'sprout-forms/entry-statuses/reorder',
+    reorderSuccessMessage: Craft.t('sprout-forms', 'Entry statuses reordered.'),
+    reorderFailMessage: Craft.t('sprout-forms', 'Couldn’t reorder statuses.'),
+    tableData: {{ tableData|json_encode|raw }}
     });
 {% endjs %}

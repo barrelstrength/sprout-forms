@@ -2,8 +2,8 @@
 
 namespace barrelstrength\sproutforms\models;
 
-use craft\base\Model;
 use Craft;
+use craft\base\Model;
 
 class FormGroup extends Model
 {

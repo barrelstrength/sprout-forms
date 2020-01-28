@@ -31,6 +31,7 @@ class m191116_000007_add_enable_captchas_form_setting extends Migration
     public function safeDown(): bool
     {
         echo "m191116_000007_add_enable_captchas_form_setting cannot be reverted.\n";
+
         return false;
     }
 }

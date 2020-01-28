@@ -2,8 +2,8 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use craft\db\Migration;
 use barrelstrength\sproutbaseemail\migrations\m190212_000004_add_sent_email_foreign_key;
+use craft\db\Migration;
 
 class m190212_000000_add_sent_email_foreign_key_sproutforms extends Migration
 {
@@ -27,6 +27,7 @@ class m190212_000000_add_sent_email_foreign_key_sproutforms extends Migration
     public function safeDown(): bool
     {
         echo "m190212_000000_add_sent_email_foreign_key_sproutforms cannot be reverted.\n";
+
         return false;
     }
 }

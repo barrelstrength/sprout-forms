@@ -32,6 +32,7 @@ class m200102_000000_update_empty_name_fields_to_null_sproutforms extends Migrat
     public function safeDown(): bool
     {
         echo "m200102_000000_update_empty_phone_fields_to_null_sproutforms cannot be reverted.\n";
+
         return false;
     }
 }

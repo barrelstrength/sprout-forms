@@ -2,9 +2,9 @@
 
 namespace barrelstrength\sproutforms\controllers;
 
-use Craft;
-use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\models\EntryStatus;
+use barrelstrength\sproutforms\SproutForms;
+use Craft;
 use craft\helpers\Json;
 use craft\helpers\UrlHelper;
 use craft\web\Controller as BaseController;
@@ -40,6 +40,7 @@ class EntryStatusesController extends BaseController
 
                 if ($entryStatus->handle == EntryStatus::SPAM_STATUS_HANDLE) {
                     Craft::$app->session->setError(Craft::t('sprout-forms', "Spam status can't be updated"));
+
                     return $this->redirect(UrlHelper::cpUrl('sprout-forms/settings/entry-statuses'));
                 }
             } else {
@@ -125,6 +126,7 @@ class EntryStatusesController extends BaseController
 
         if (!SproutForms::$app->entryStatuses->deleteEntryStatusById($entryStatusId)) {
             SproutForms::error('Unable to delete Entry Status. This status is required or may still be assigned to existing entries.');
+
             return $this->asJson(['success' => false]);
         }
 

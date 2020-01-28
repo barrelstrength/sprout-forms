@@ -3,10 +3,10 @@
 namespace barrelstrength\sproutforms\validators;
 
 use barrelstrength\sproutforms\elements\Form;
+use Craft;
 use craft\models\FieldLayout;
 use yii\base\InvalidConfigException;
 use yii\validators\Validator;
-use Craft;
 
 class FieldLayoutValidator extends Validator
 {

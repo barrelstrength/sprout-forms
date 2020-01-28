@@ -24,6 +24,7 @@ class m191008_000000_add_spam_status extends Migration
 
         if ($spamStatusExists) {
             Craft::info('Spam status already exists');
+
             return true;
         }
 

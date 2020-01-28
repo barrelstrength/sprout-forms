@@ -4,27 +4,26 @@ namespace barrelstrength\sproutforms\elements;
 
 use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\base\FormTemplates;
+use barrelstrength\sproutforms\elements\actions\Delete;
+use barrelstrength\sproutforms\elements\db\FormQuery;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
+use barrelstrength\sproutforms\records\Form as FormRecord;
 use barrelstrength\sproutforms\rules\FieldRule;
+use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\validators\FieldLayoutValidator;
 use Craft;
 use craft\base\Element;
 use craft\base\FieldInterface;
+use craft\behaviors\FieldLayoutBehavior;
+use craft\db\Query;
 use craft\elements\db\ElementQueryInterface;
 use craft\errors\MissingComponentException;
 use craft\helpers\Html;
-use craft\models\FieldLayout;
-use yii\base\ErrorHandler;
-use craft\db\Query;
 use craft\helpers\UrlHelper;
+use craft\models\FieldLayout;
 use craft\validators\HandleValidator;
 use craft\validators\UniqueValidator;
-use craft\behaviors\FieldLayoutBehavior;
-
-use barrelstrength\sproutforms\elements\db\FormQuery;
-use barrelstrength\sproutforms\records\Form as FormRecord;
-use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutforms\elements\actions\Delete;
+use yii\base\ErrorHandler;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
 
@@ -41,8 +40,6 @@ class Form extends Element
 {
     // Properties
     // =========================================================================
-    private $_fields;
-
     /**
      * @var int|null Group ID
      */
@@ -52,51 +49,30 @@ class Form extends Element
      * @var int|null name
      */
     public $name;
+
     public $handle;
+
     public $oldHandle;
+
     public $saveAsNew;
+
     public $fieldLayoutId;
+
     public $titleFormat;
+
     public $displaySectionTitles = false;
+
     public $redirectUri;
+
     public $submitButtonText;
+
     public $saveData = true;
+
     public $formTemplate;
+
     public $enableCaptchas = true;
 
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return array_merge(parent::behaviors(), [
-            'fieldLayout' => [
-                'class' => FieldLayoutBehavior::class,
-                'elementType' => self::class
-            ],
-        ]);
-    }
-
-    /**
-     * Returns the field context this element's content uses.
-     *
-     * @access protected
-     * @return string
-     */
-    public function getFieldContext(): string
-    {
-        return 'sproutForms:'.$this->id;
-    }
-
-    /**
-     * Returns the name of the table this element's content is stored in.
-     *
-     * @return string
-     */
-    public function getContentTable(): string
-    {
-        return SproutForms::$app->forms->getContentTableName($this);
-    }
+    private $_fields;
 
     /**
      * @inheritdoc
@@ -120,44 +96,6 @@ class Form extends Element
     public static function refHandle()
     {
         return 'form';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getCpEditUrl()
-    {
-        return UrlHelper::cpUrl(
-            'sprout-forms/forms/edit/'.$this->id
-        );
-    }
-
-    /**
-     * Use the name as the string representation.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        try {
-            return (string)$this->name;
-        } catch (\Exception $e) {
-            ErrorHandler::convertExceptionToError($e);
-        }
-    }
-
-    /**
-     * @return FieldLayout
-     * @throws InvalidConfigException
-     */
-    public function getFieldLayout(): FieldLayout
-    {
-        $behaviors = $this->getBehaviors();
-
-        /** @var FieldLayoutBehavior $fieldLayout */
-        $fieldLayout = $behaviors['fieldLayout'];
-
-        return $fieldLayout->getFieldLayout();
     }
 
     /**
@@ -257,44 +195,73 @@ class Form extends Element
     /**
      * @inheritdoc
      */
-    protected function tableAttributeHtml(string $attribute): string
+    public function behaviors()
     {
-        switch ($attribute) {
+        return array_merge(parent::behaviors(), [
+            'fieldLayout' => [
+                'class' => FieldLayoutBehavior::class,
+                'elementType' => self::class
+            ],
+        ]);
+    }
 
-            case 'handle':
-            {
-                return '<code>'.$this->handle.'</code>';
-            }
-            case 'numberOfFields':
-            {
-                $totalFields = (new Query())
-                    ->select('COUNT(*)')
-                    ->from('{{%fieldlayoutfields}}')
-                    ->where(['layoutId' => $this->fieldLayoutId])
-                    ->scalar();
+    /**
+     * Returns the field context this element's content uses.
+     *
+     * @access protected
+     * @return string
+     */
+    public function getFieldContext(): string
+    {
+        return 'sproutForms:'.$this->id;
+    }
 
-                return $totalFields;
-            }
-            case 'totalEntries':
-            {
-                $totalEntries = (new Query())
-                    ->select('COUNT(*)')
-                    ->from('{{%sproutforms_entries}}')
-                    ->where(['formId' => $this->id])
-                    ->scalar();
+    /**
+     * Returns the name of the table this element's content is stored in.
+     *
+     * @return string
+     */
+    public function getContentTable(): string
+    {
+        return SproutForms::$app->forms->getContentTableName($this);
+    }
 
-                return $totalEntries;
-            }
-            case 'formSettings':
-            {
-                return Html::a('', $this->getCpEditUrl().'/settings/general', [
-                    'data-icon' => 'settings',
-                    'title' => Craft::t('sprout-forms', 'Visit form settings')
-                ]);
-            }
+    /**
+     * @inheritdoc
+     */
+    public function getCpEditUrl()
+    {
+        return UrlHelper::cpUrl(
+            'sprout-forms/forms/edit/'.$this->id
+        );
+    }
+
+    /**
+     * Use the name as the string representation.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        try {
+            return (string)$this->name;
+        } catch (\Exception $e) {
+            ErrorHandler::convertExceptionToError($e);
         }
+    }
 
-        return parent::tableAttributeHtml($attribute);
+    /**
+     * @return FieldLayout
+     * @throws InvalidConfigException
+     */
+    public function getFieldLayout(): FieldLayout
+    {
+        $behaviors = $this->getBehaviors();
+
+        /** @var FieldLayoutBehavior $fieldLayout */
+        $fieldLayout = $behaviors['fieldLayout'];
+
+        return $fieldLayout->getFieldLayout();
     }
 
     /**
@@ -371,34 +338,6 @@ class Form extends Element
     }
 
     /**
-     * @return array
-     * @throws InvalidConfigException
-     */
-    protected function defineRules(): array
-    {
-        $rules = parent::defineRules();
-
-        $rules[] = [['name', 'handle'], 'required'];
-        $rules[] = [['name', 'handle'], 'string', 'max' => 255];
-        $rules[] = [
-            ['handle'],
-            HandleValidator::class,
-            'reservedWords' => ['id', 'dateCreated', 'dateUpdated', 'uid', 'title']
-        ];
-        $rules[] = [
-            ['name', 'handle'],
-            UniqueValidator::class,
-            'targetClass' => FormRecord::class
-        ];
-        $rules[] = [
-            ['fieldLayoutId'],
-            FieldLayoutValidator::class
-        ];
-
-        return $rules;
-    }
-
-    /**
      * @param null $cssClasses
      *
      * @return array
@@ -470,5 +409,76 @@ class Form extends Element
     public function getRules(): array
     {
         return SproutForms::$app->rules->getRulesByFormId($this->id, FieldRule::class, true);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tableAttributeHtml(string $attribute): string
+    {
+        switch ($attribute) {
+
+            case 'handle':
+            {
+                return '<code>'.$this->handle.'</code>';
+            }
+            case 'numberOfFields':
+            {
+                $totalFields = (new Query())
+                    ->select('COUNT(*)')
+                    ->from('{{%fieldlayoutfields}}')
+                    ->where(['layoutId' => $this->fieldLayoutId])
+                    ->scalar();
+
+                return $totalFields;
+            }
+            case 'totalEntries':
+            {
+                $totalEntries = (new Query())
+                    ->select('COUNT(*)')
+                    ->from('{{%sproutforms_entries}}')
+                    ->where(['formId' => $this->id])
+                    ->scalar();
+
+                return $totalEntries;
+            }
+            case 'formSettings':
+            {
+                return Html::a('', $this->getCpEditUrl().'/settings/general', [
+                    'data-icon' => 'settings',
+                    'title' => Craft::t('sprout-forms', 'Visit form settings')
+                ]);
+            }
+        }
+
+        return parent::tableAttributeHtml($attribute);
+    }
+
+    /**
+     * @return array
+     * @throws InvalidConfigException
+     */
+    protected function defineRules(): array
+    {
+        $rules = parent::defineRules();
+
+        $rules[] = [['name', 'handle'], 'required'];
+        $rules[] = [['name', 'handle'], 'string', 'max' => 255];
+        $rules[] = [
+            ['handle'],
+            HandleValidator::class,
+            'reservedWords' => ['id', 'dateCreated', 'dateUpdated', 'uid', 'title']
+        ];
+        $rules[] = [
+            ['name', 'handle'],
+            UniqueValidator::class,
+            'targetClass' => FormRecord::class
+        ];
+        $rules[] = [
+            ['fieldLayoutId'],
+            FieldLayoutValidator::class
+        ];
+
+        return $rules;
     }
 }

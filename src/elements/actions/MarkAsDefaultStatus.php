@@ -3,11 +3,10 @@
 namespace barrelstrength\sproutforms\elements\actions;
 
 use barrelstrength\sproutforms\models\EntryStatus;
+use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\base\ElementAction;
 use craft\elements\db\ElementQueryInterface;
-
-use barrelstrength\sproutforms\SproutForms;
 use Throwable;
 
 /**

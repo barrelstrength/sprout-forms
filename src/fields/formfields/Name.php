@@ -2,7 +2,9 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutbasefields\models\Name as NameModel;
 use barrelstrength\sproutbasefields\SproutBaseFields;
+use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\rules\conditions\ContainsCondition;
 use barrelstrength\sproutforms\rules\conditions\DoesNotContainCondition;
 use barrelstrength\sproutforms\rules\conditions\DoesNotEndWithCondition;
@@ -13,13 +15,9 @@ use barrelstrength\sproutforms\rules\conditions\IsNotCondition;
 use barrelstrength\sproutforms\rules\conditions\StartsWithCondition;
 use Craft;
 use craft\base\ElementInterface;
-use craft\fields\PlainText as CraftPlainText;
 use craft\base\PreviewableFieldInterface;
-
+use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Template as TemplateHelper;
-
-use barrelstrength\sproutbasefields\models\Name as NameModel;
-use barrelstrength\sproutforms\base\FormField;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;

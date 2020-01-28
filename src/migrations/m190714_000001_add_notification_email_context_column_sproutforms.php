@@ -33,6 +33,7 @@ class m190714_000001_add_notification_email_context_column_sproutforms extends M
     public function safeDown(): bool
     {
         echo "m190714_000001_add_notification_email_context_column_sproutforms cannot be reverted.\n";
+
         return false;
     }
 }
