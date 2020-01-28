@@ -42,6 +42,8 @@ use barrelstrength\sproutforms\services\Forms;
 use barrelstrength\sproutbaseimport\services\Importers;
 use Craft;
 use craft\base\Plugin;
+use craft\db\Query;
+use craft\db\Table;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;

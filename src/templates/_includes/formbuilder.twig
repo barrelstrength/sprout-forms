@@ -2,13 +2,11 @@
     {% import _self as formBuilder %}
 
     <div id="sproutforms-tab-{{ tab.id }}" data-tabname="{{ tab.name }}" data-tabid="{{ tab.id }}" class="sproutforms-tab-fields {% if isHidden %} hidden {% endif %}">
-        <div class="parent">
-            <div id="sproutforms-tab-container-{{ tab.id }}" class="sprout-tab-container">
-                {# here will be the fields #}
-                {% for field in tabFields %}
-                    {{ formBuilder.field(field, 'active', tab) }}
-                {% endfor %}
-            </div>
+        <div id="sproutforms-tab-container-{{ tab.id }}" class="sprout-tab-container">
+            {# here will be the fields #}
+            {% for field in tabFields %}
+                {{ formBuilder.field(field, 'active', tab) }}
+            {% endfor %}
         </div>
     </div>
 {% endmacro %}

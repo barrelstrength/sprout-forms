@@ -559,8 +559,17 @@ class Fields extends Component
 
         $fieldLayout = $form->getFieldLayout();
 
+        $maxSortOrder = (new Query())
+            ->select('sortOrder')
+            ->from(Table::FIELDLAYOUTTABS)
+            ->where([
+                'layoutId' => $fieldLayout->id
+            ])
+            ->orderBy('sortOrder desc')
+            ->scalar();
+
         // Place after other tabs
-        $sortOrder = count($fieldLayout->getTabs()) + 1;
+        $sortOrder = (int)$maxSortOrder + 1;
 
         $tabRecord = new FieldLayoutTabRecord();
         $tabRecord->name = strip_tags($name);
@@ -584,20 +593,14 @@ class Fields extends Component
      */
     public function renameTab($tabId, $newName): bool
     {
-//        $fieldLayout = $form->getFieldLayout();
-//        $tabs = $fieldLayout->getTabs();
         $response = false;
 
-//        foreach ($tabs as $tab) {
-//            if ($tab->name == $oldName) {
         $tabRecord = FieldLayoutTabRecord::findOne($tabId);
 
         if ($tabRecord) {
             $tabRecord->name = $newName;
             $response = $tabRecord->save(false);
         }
-//            }
-//        }
 
         return $response;
     }

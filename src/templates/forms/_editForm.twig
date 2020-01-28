@@ -2,8 +2,6 @@
 
 {% extends "sprout-forms/_layouts/base" %}
 {% import 'sprout-base/_includes/sproutcp' as sprout %}
-{% import "_includes/forms" as forms %}
-{% import "sprout-forms/_includes/formbuilder" as formBuilder %}
 
 {% set isPro = craft.app.getModule('sprout-forms').is('pro') %}
 
@@ -74,26 +72,7 @@
 {% endblock %}
 
 {% block content %}
-
-    {# When we add tabs we need add a for loop here #}
-    <div id="sproutforms-fieldlayout-container">
-
-        {% if form.getFirstError('fieldLayoutId') %}
-            {{ forms.errorList(form.getErrors('fieldLayoutId')) }}
-        {% endif %}
-
-        {# let's add the tabs and fields to the dropped divs #}
-        {% if fieldLayout %}
-            {% for tab in fieldLayout.getTabs() %}
-                {{ formBuilder.tab(tab, tab.getFields(), not loop.first) }}
-            {% endfor %}
-        {% endif %}
-
-        <div id="deletedFieldsContainer" class="hidden"></div>
-
-    </div>
-
-    {% hook 'cp.sproutForms.forms.edit.content' %}
+    {% include 'sprout-forms/forms/_editFormContent' %}
 {% endblock %}
 
 {% block details %}
