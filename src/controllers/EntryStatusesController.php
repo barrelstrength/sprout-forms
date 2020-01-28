@@ -124,6 +124,7 @@ class EntryStatusesController extends BaseController
         $entryStatusId = Craft::$app->request->getRequiredBodyParam('id');
 
         if (!SproutForms::$app->entryStatuses->deleteEntryStatusById($entryStatusId)) {
+            SproutForms::error('Unable to delete Entry Status. This status is required or may still be assigned to existing entries.');
             return $this->asJson(['success' => false]);
         }
 

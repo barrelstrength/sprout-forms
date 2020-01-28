@@ -153,34 +153,15 @@ class EntryStatuses extends Component
             return false;
         }
 
-        $statuses = $this->getAllEntryStatuses();
+        $entryStatus = EntryStatusRecord::findOne($id);
 
-        // We allow users to change the handles of default statuses, so we
-        // just broadly check for our 3 default statuses by number. If we have
-        // less that our default number, we shouldn't be allowing folks to delete
-        if (count($statuses) <= 3) {
+        if (!$entryStatus || $entryStatus->isDefault || $entryStatus->handle === 'spam') {
             return false;
         }
 
-        $entryStatus = EntryStatusRecord::findOne($id);
+        $entryStatus->delete();
 
-        if ($entryStatus) {
-            // If we're deleting the default status, grab the first status
-            // that is not the 'spam' status and make it default
-            if ($entryStatus->isDefault) {
-                foreach ($statuses as $status) {
-                    if ($status->handle !== 'spam') {
-                        $status->isDefault = 1;
-                        SproutForms::$app->entryStatuses->saveEntryStatus($status);
-                        break;
-                    }
-                }
-            }
-            $entryStatus->delete();
-            return true;
-        }
-
-        return false;
+        return true;
     }
 
     /**

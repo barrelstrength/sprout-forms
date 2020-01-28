@@ -4,6 +4,7 @@
     {% for entryStatus in entryStatuses %}
 
         {% set cpEditUrl = cpUrl('sprout-forms/settings/entry-statuses/' ~ entryStatus.id) %}
+        {% set showDelete = entryStatus.isDefault or entryStatus.handle == 'spam' ? false : true %}
 
         {% set tableData = tableData|merge([{
             id: entryStatus.id,
@@ -15,7 +16,8 @@
             title: entryStatus.name|t('sprout-forms')|e,
             url: cpEditUrl,
             handle: entryStatus.handle,
-            isDefault: entryStatus.isDefault
+            isDefault: entryStatus.isDefault,
+            _showDelete: showDelete
         }]) %}
 
     {% endfor %}
@@ -62,7 +64,7 @@
       deleteConfirmationMessage: Craft.t('sprout-forms', "Are you sure you want to delete the Entry Status “{name}”?"),
       deleteSuccessMessage: Craft.t('sprout-forms', "Entry status deleted"),
       emptyMessage: Craft.t('sprout-forms', 'No entry statuses exist yet.'),
-      minItems: 3,
+      minItems: 2,
       padded: true,
       reorderAction: 'sprout-forms/entry-statuses/reorder',
       reorderSuccessMessage: Craft.t('sprout-forms', 'Entry statuses reordered.'),
