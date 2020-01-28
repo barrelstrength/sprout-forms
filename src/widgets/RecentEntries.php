@@ -80,6 +80,7 @@ class RecentEntries extends Widget
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getBodyHtml(): string
     {
@@ -103,6 +104,7 @@ class RecentEntries extends Widget
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml(): string
     {

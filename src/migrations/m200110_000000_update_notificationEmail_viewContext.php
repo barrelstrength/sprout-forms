@@ -2,7 +2,6 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutseo\elements\Redirect;
 use craft\db\Migration;
 
 class m200110_000000_update_notificationEmail_viewContext extends Migration
@@ -12,6 +11,7 @@ class m200110_000000_update_notificationEmail_viewContext extends Migration
      */
     public function safeUp(): bool
     {
+        /** @noinspection ClassConstantCanBeUsedInspection */
         $this->update('{{%sproutemail_notificationemails}}', [
             'viewContext' => 'sprout-forms'
         ], [

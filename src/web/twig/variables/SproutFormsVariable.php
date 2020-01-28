@@ -23,6 +23,7 @@ use Twig\Error\SyntaxError;
 use Twig\Markup;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
+use yii\web\BadRequestHttpException;
 
 /**
  * SproutForms provides an API for accessing information about forms. It is accessible from templates via `craft.sproutForms`.
@@ -621,12 +622,16 @@ class SproutFormsVariable
      * @param $formFieldHandle
      * @param $formId
      *
-     * @return FieldInterface|null
-     * @throws InvalidConfigException
+     * @return mixed
+     * @throws \yii\web\BadRequestHttpException
      */
     public function getFormField($formFieldHandle, $formId)
     {
-        $form = SproutForms::$app->forms->getFormById($formId);
+        $form = Craft::$app->elements->getElementById($formId);
+
+        if (!$form) {
+            throw new BadRequestHttpException('No form exists with the ID ' . $formId);
+        }
 
         return $form->getField($formFieldHandle);
     }

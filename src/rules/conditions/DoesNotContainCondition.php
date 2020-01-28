@@ -19,13 +19,10 @@ class DoesNotContainCondition extends Condition
         return 'does not contain';
     }
 
-    /**
-     * @inheritDoc
-     */
     public function validateCondition()
     {
         if (strpos($this->inputValue, $this->ruleValue) === false) {
-            return true;
+            return;
         }
 
         $this->addError('inputValue', Craft::t('sprout-forms', 'Condition does not validate'));

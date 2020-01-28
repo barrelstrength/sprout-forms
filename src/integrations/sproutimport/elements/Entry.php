@@ -62,6 +62,7 @@ class Entry extends ElementImporter
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getSeedSettingsHtml(SeedJob $seedJob): string
     {

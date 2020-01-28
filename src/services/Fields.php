@@ -466,6 +466,7 @@ class Fields extends Component
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws InvalidConfigException
+     * @throws \yii\base\Exception
      */
     public function getModalFieldTemplate(Form $form, $field = null, $tabId = null): array
     {
@@ -546,12 +547,11 @@ class Fields extends Component
     }
 
     /**
+     * @param             $formId
      * @param             $name
-     * @param             $sortOrder
-     * @param FormElement $form
      *
      * @return FieldLayoutTabRecord
-     * @throws InvalidConfigException
+     * @throws \yii\base\InvalidConfigException
      */
     public function createNewTab($formId, $name): FieldLayoutTabRecord
     {
@@ -584,12 +584,9 @@ class Fields extends Component
     /**
      * Renames tab of form layout
      *
-     * @param             $name
-     * @param             $oldName
-     * @param FormElement $form
-     *
+     * @param $tabId
+     * @param $newName
      * @return bool
-     * @throws InvalidConfigException
      */
     public function renameTab($tabId, $newName): bool
     {

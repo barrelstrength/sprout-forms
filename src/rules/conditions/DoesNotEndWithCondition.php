@@ -16,13 +16,10 @@ class DoesNotEndWithCondition extends Condition
         return 'does not end with';
     }
 
-    /**
-     * @return bool|mixed
-     */
     public function validateCondition()
     {
         if (substr_compare($this->inputValue, $this->ruleValue, -strlen($this->ruleValue)) !== 0) {
-            return true;
+            return;
         }
 
         $this->addError('inputValue', Craft::t('sprout-forms', 'Condition does not validate'));

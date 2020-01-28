@@ -19,13 +19,10 @@ class IsNotProvidedCondition extends Condition
         return 'is not provided';
     }
 
-    /**
-     * @inheritDoc
-     */
     public function validateCondition()
     {
         if (empty($this->inputValue) === true) {
-            return true;
+            return;
         }
 
         $this->addError('inputValue', Craft::t('sprout-forms', 'Condition does not validate'));

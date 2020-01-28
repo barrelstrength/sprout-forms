@@ -2,7 +2,6 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutbaseemail\migrations\m200110000001_update_to_cc_bcc_columns_to_text_type;
 use barrelstrength\sproutbaseemail\migrations\m200110_000001_add_sendMethod_notification_column;
 use craft\db\Migration;
 use yii\base\NotSupportedException;

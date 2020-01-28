@@ -2,7 +2,6 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutseo\elements\Redirect;
 use craft\db\Migration;
 
 class m200110_000001_update_entryStatus_isDefault extends Migration

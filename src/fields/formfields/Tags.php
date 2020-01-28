@@ -93,6 +93,7 @@ class Tags extends BaseRelationFormField
      * @throws SyntaxError
      * @throws SiteNotFoundException
      * @throws NotSupportedException
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -135,6 +136,7 @@ class Tags extends BaseRelationFormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml(): string
     {
@@ -153,6 +155,7 @@ class Tags extends BaseRelationFormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {

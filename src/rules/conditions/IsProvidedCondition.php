@@ -19,13 +19,10 @@ class IsProvidedCondition extends Condition
         return 'is provided';
     }
 
-    /**
-     * @return bool
-     */
     public function validateCondition()
     {
         if (empty($this->inputValue) === false) {
-            return true;
+            return;
         }
 
         $this->addError('inputValue', Craft::t('sprout-forms', 'Condition does not validate'));

@@ -69,6 +69,7 @@ class MultipleChoice extends BaseOptionsFormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -94,6 +95,7 @@ class MultipleChoice extends BaseOptionsFormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml(): string
     {
@@ -114,6 +116,7 @@ class MultipleChoice extends BaseOptionsFormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {

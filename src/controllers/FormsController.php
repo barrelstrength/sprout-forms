@@ -376,7 +376,6 @@ class FormsController extends BaseController
      * @return Response
      * @throws BadRequestHttpException
      * @throws ForbiddenHttpException
-     * @throws InvalidConfigException
      */
     public function actionRenameFormTab(): Response
     {

@@ -272,6 +272,7 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
      * @throws NotSupportedException
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {
@@ -496,6 +497,7 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -541,6 +543,7 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getStaticHtml($value, ElementInterface $element): string
     {
@@ -582,6 +585,7 @@ JS;
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getTableAttributeHtml($value, ElementInterface $element): string
     {
@@ -755,6 +759,7 @@ JS;
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getTargetSiteFieldHtml()
     {
@@ -811,6 +816,7 @@ JS;
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getViewModeFieldHtml()
     {

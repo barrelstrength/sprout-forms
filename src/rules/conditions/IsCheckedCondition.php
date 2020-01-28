@@ -19,13 +19,10 @@ class IsCheckedCondition extends Condition
         return 'is checked';
     }
 
-    /**
-     * @return bool
-     */
     public function validateCondition()
     {
         if (filter_var($this->inputValue, FILTER_VALIDATE_BOOLEAN)) {
-            return true;
+            return;
         }
 
         $this->addError('inputValue', Craft::t('sprout-forms', 'Condition does not validate'));

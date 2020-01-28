@@ -46,7 +46,7 @@ abstract class Condition extends SavableComponent implements ConditionInterface
     /**
      * The default condition validation rule
      *
-     * @return mixed
+     * @return void
      */
     abstract public function validateCondition();
 

@@ -83,6 +83,7 @@ class EmailDropdown extends BaseOptionsFormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {
@@ -134,6 +135,7 @@ class EmailDropdown extends BaseOptionsFormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -169,6 +171,7 @@ class EmailDropdown extends BaseOptionsFormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml(): string
     {
@@ -187,6 +190,7 @@ class EmailDropdown extends BaseOptionsFormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {

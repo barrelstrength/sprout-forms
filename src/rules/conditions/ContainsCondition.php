@@ -19,13 +19,10 @@ class ContainsCondition extends Condition
         return 'contains';
     }
 
-    /**
-     * @return bool|mixed
-     */
     public function validateCondition()
     {
         if (strpos($this->inputValue, $this->ruleValue) !== false) {
-            return true;
+            return;
         }
 
         $this->addError('inputValue', Craft::t('sprout-forms', 'Condition does not validate'));

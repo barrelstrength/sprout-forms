@@ -53,6 +53,7 @@ class HoneypotCaptcha extends Captcha
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getCaptchaSettingsHtml(): string
     {

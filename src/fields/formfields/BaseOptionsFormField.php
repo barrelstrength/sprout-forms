@@ -116,6 +116,7 @@ abstract class BaseOptionsFormField extends FormField implements PreviewableFiel
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {

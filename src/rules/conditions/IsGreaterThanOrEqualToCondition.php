@@ -19,13 +19,10 @@ class IsGreaterThanOrEqualToCondition extends Condition
         return 'is greater than or equal to';
     }
 
-    /**
-     * @inheritDoc
-     */
     public function validateCondition()
     {
         if ($this->inputValue >= $this->ruleValue) {
-            return true;
+            return;
         }
 
         $this->addError('inputValue', Craft::t('sprout-forms', 'Condition does not validate'));

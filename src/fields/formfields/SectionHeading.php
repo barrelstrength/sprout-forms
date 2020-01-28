@@ -102,6 +102,7 @@ class SectionHeading extends FormField
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws InvalidConfigException
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml(): string
     {
@@ -140,6 +141,7 @@ class SectionHeading extends FormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -167,6 +169,7 @@ class SectionHeading extends FormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml(): string
     {
@@ -185,6 +188,7 @@ class SectionHeading extends FormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {

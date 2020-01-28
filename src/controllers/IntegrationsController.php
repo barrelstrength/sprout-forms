@@ -113,6 +113,8 @@ class IntegrationsController extends BaseController
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
      */
     public function actionEditIntegration(): Response
     {
