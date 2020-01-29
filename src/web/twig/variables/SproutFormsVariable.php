@@ -1,4 +1,9 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\web\twig\variables;
 
@@ -13,7 +18,6 @@ use barrelstrength\sproutforms\services\Forms;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\base\ElementInterface;
-use craft\base\FieldInterface;
 use craft\errors\MissingComponentException;
 use craft\helpers\Template as TemplateHelper;
 use ReflectionException;
@@ -22,7 +26,6 @@ use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Markup;
 use yii\base\Exception;
-use yii\base\InvalidConfigException;
 use yii\web\BadRequestHttpException;
 
 /**
@@ -630,7 +633,7 @@ class SproutFormsVariable
         $form = Craft::$app->elements->getElementById($formId);
 
         if (!$form) {
-            throw new BadRequestHttpException('No form exists with the ID ' . $formId);
+            throw new BadRequestHttpException('No form exists with the ID '.$formId);
         }
 
         return $form->getField($formFieldHandle);

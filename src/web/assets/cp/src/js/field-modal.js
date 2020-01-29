@@ -1,7 +1,7 @@
 /*
- * @link      https://sprout.barrelstrengthdesign.com/
+ * @link https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license   http://sprout.barrelstrengthdesign.com/license
+ * @license https://craftcms.github.io/license
  */
 
 if (typeof Craft.SproutForms === typeof undefined) {

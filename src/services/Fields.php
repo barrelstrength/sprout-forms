@@ -1,4 +1,9 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\services;
 
@@ -586,6 +591,7 @@ class Fields extends Component
      *
      * @param $tabId
      * @param $newName
+     *
      * @return bool
      */
     public function renameTab($tabId, $newName): bool
