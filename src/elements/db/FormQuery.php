@@ -159,9 +159,6 @@ class FormQuery extends ElementQuery
         return $this;
     }
 
-    // Protected Methods
-    // =========================================================================
-
     /**
      * @inheritdoc
      */

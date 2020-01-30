@@ -43,8 +43,6 @@ use yii\base\InvalidConfigException;
  */
 class Form extends Element
 {
-    // Properties
-    // =========================================================================
     /**
      * @var int|null Group ID
      */

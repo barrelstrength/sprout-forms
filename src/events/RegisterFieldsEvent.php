@@ -14,9 +14,6 @@ use yii\base\Event;
  */
 class RegisterFieldsEvent extends Event
 {
-    // Properties
-    // =========================================================================
-
     /**
      * @var array The registered Fields.
      */

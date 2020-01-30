@@ -15,9 +15,6 @@ use barrelstrength\sproutforms\elements\Form;
  */
 trait IntegrationTrait
 {
-    // Properties
-    // =========================================================================
-
     /**
      * @var string
      */

@@ -19,9 +19,6 @@ use craft\base\MissingComponentTrait;
  */
 class MissingIntegration extends Integration implements MissingComponentInterface
 {
-    // Traits
-    // =========================================================================
-
     use MissingComponentTrait;
 
     /**

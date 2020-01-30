@@ -39,9 +39,6 @@ use yii\base\InvalidConfigException;
  */
 abstract class Integration extends SavableComponent implements IntegrationInterface
 {
-    // Traits
-    // =========================================================================
-
     use IntegrationTrait;
 
     protected $successMessage;

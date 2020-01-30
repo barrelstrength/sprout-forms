@@ -15,9 +15,6 @@ use yii\base\Event;
  */
 class OnSaveEntryEvent extends Event
 {
-    // Properties
-    // =========================================================================
-
     /**
      * @var Entry
      */

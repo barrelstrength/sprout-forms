@@ -17,9 +17,6 @@ use craft\fields\BaseRelationField;
  */
 class Forms extends BaseRelationField
 {
-    // Static
-    // =========================================================================
-
     /**
      * @inheritDoc
      */

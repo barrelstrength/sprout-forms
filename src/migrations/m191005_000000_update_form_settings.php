@@ -23,9 +23,6 @@ use yii\web\ServerErrorHttpException;
  */
 class m191005_000000_update_form_settings extends Migration
 {
-    // Public Methods
-    // =========================================================================
-
     /**
      * @inheritdoc
      *

@@ -48,9 +48,6 @@ use yii\base\NotSupportedException;
  */
 abstract class BaseRelationFormField extends FormField implements PreviewableFieldInterface, EagerLoadingFieldInterface
 {
-    // Static
-    // =========================================================================
-
     /**
      * @var array Related elements that have been validated
      * @see _validateRelatedElement()
@@ -72,9 +69,6 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
      * @var string|null The source key that this field can relate elements from (used if [[allowMultipleSources]] is set to false)
      */
     public $source;
-
-    // Properties
-    // =========================================================================
 
     /**
      * @var string|null The site that this field should relate elements from
@@ -190,9 +184,6 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
     {
         return Craft::t('sprout-forms', 'Choose');
     }
-
-    // Public Methods
-    // =========================================================================
 
     /**
      * Returns the element class associated with this field type.
@@ -848,9 +839,6 @@ JS;
             ]
         ]);
     }
-
-    // Protected Methods
-    // =========================================================================
 
     /**
      * Returns an array of variables that should be passed to the settings template.

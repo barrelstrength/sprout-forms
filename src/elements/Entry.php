@@ -39,8 +39,6 @@ use yii\db\ActiveRecord;
  */
 class Entry extends Element
 {
-    // Properties
-    // =========================================================================
     public $id;
 
     public $formId;

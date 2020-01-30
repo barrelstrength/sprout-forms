@@ -11,17 +11,11 @@ use craft\db\Migration;
 
 class CreateFormContentTable extends Migration
 {
-    // Properties
-    // =========================================================================
-
     /**
      * @var string|null The table name
      */
     public $tableName;
-
-    // Public Methods
-    // =========================================================================
-
+    
     /**
      * @inheritdoc
      */

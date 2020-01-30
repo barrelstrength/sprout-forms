@@ -19,9 +19,6 @@ use Throwable;
  */
 class MarkAsSpam extends ElementAction
 {
-    // Properties
-    // =========================================================================
-
     /**
      * @var string|null The confirmation message that should be shown before the elements get deleted
      */
@@ -32,9 +29,6 @@ class MarkAsSpam extends ElementAction
      */
     public $successMessage;
 
-    // Public Methods
-    // =========================================================================
-
     /**
      * @inheritdoc
      */
@@ -42,9 +36,6 @@ class MarkAsSpam extends ElementAction
     {
         return Craft::t('sprout-forms', 'Mark as Spam');
     }
-
-    // Public Methods
-    // =========================================================================
 
     /**
      * @inheritdoc

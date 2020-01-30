@@ -23,9 +23,6 @@ use yii\queue\Queue;
  */
 class ResaveEntries extends BaseJob
 {
-    // Properties
-    // =========================================================================
-
     /**
      * @var int The form entries to be saved
      */
@@ -35,9 +32,6 @@ class ResaveEntries extends BaseJob
      * @var array|null The element criteria that determines which elements should be re-saved
      */
     public $criteria;
-
-    // Public Methods
-    // =========================================================================
 
     /**
      * @param QueueInterface|Queue $queue
@@ -72,9 +66,6 @@ class ResaveEntries extends BaseJob
         }
     }
 
-    // Protected Methods
-    // =========================================================================
-
     /**
      * @inheritdoc
      */
@@ -82,9 +73,6 @@ class ResaveEntries extends BaseJob
     {
         return Craft::t('app', 'Resaving Form Entries');
     }
-
-    // Private Methods
-    // =========================================================================
 
     /**
      * Returns the element query based on the criteria.

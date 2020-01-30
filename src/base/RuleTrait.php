@@ -12,9 +12,6 @@ namespace barrelstrength\sproutforms\base;
  */
 trait RuleTrait
 {
-    // Properties
-    // =========================================================================
-
     /**
      * The ID of the Form where this Rule exists
      *

@@ -36,9 +36,6 @@ use yii\db\Schema;
  */
 abstract class BaseOptionsFormField extends FormField implements PreviewableFieldInterface
 {
-    // Properties
-    // =========================================================================
-
     /**
      * @var array|null The available options
      */
@@ -48,9 +45,6 @@ abstract class BaseOptionsFormField extends FormField implements PreviewableFiel
      * @var bool Whether the field should support multiple selections
      */
     protected $multi = false;
-
-    // Public Methods
-    // =========================================================================
 
     /**
      * @inheritdoc
@@ -288,9 +282,6 @@ abstract class BaseOptionsFormField extends FormField implements PreviewableFiel
     {
         return $this->multi;
     }
-
-    // Protected Methods
-    // =========================================================================
 
     /**
      * @inheritdoc

@@ -69,9 +69,6 @@ class FileUpload extends BaseRelationFormField
      */
     public $cssClasses;
 
-    // Properties
-    // =========================================================================
-
     /**
      * @var bool|null Whether related assets should be limited to a single folder
      */
@@ -665,9 +662,6 @@ class FileUpload extends BaseRelationFormField
 
         return $sources;
     }
-
-    // Private Methods
-    // =========================================================================
 
     /**
      * @inheritdoc

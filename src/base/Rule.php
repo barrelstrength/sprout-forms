@@ -24,8 +24,6 @@ use yii\base\InvalidConfigException;
  */
 abstract class Rule extends SavableComponent implements RuleInterface
 {
-    // Traits
-    // =========================================================================
     use RuleTrait;
 
     /**
