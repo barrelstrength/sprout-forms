@@ -302,23 +302,33 @@ class SproutForms extends Plugin implements SproutEditionsInterface
         }
 
         $sproutEmailIsEnabled = Craft::$app->getPlugins()->isPluginEnabled('sprout-email');
+        $emailNavLabel = Craft::t('sprout-forms', 'Notifications');
+
+        if ($sproutEmailIsEnabled && $this->getSettings()->showNotificationsTab) {
+            SproutBase::$app->utilities->addSubNavIcon('sprout-forms',$emailNavLabel);
+        }
 
         if (Craft::$app->getUser()->checkPermission('sproutForms-viewNotifications')) {
             if (!$sproutEmailIsEnabled || ($sproutEmailIsEnabled && $this->getSettings()->showNotificationsTab)) {
                 $parent['subnav']['notifications'] = [
-                    'label' => Craft::t('sprout-forms', 'Notifications'),
-                    'url' => 'sprout-forms/notifications'
+                    'label' => $emailNavLabel,
+                    'url' => $sproutEmailIsEnabled ? 'sprout-email/notifications' : 'sprout-forms/notifications'
                 ];
             }
         }
 
         $sproutReportsIsEnabled = Craft::$app->getPlugins()->isPluginEnabled('sprout-reports');
+        $reportsNavLabel = Craft::t('sprout-forms', 'Reports');
+
+        if ($sproutReportsIsEnabled && $this->getSettings()->showReportsTab) {
+            SproutBase::$app->utilities->addSubNavIcon('sprout-forms',$reportsNavLabel);
+        }
 
         if (Craft::$app->getUser()->checkPermission('sproutForms-viewReports')) {
             if (!$sproutReportsIsEnabled || ($sproutReportsIsEnabled && $this->getSettings()->showReportsTab)) {
                 $parent['subnav']['reports'] = [
-                    'label' => Craft::t('sprout-forms', 'Reports'),
-                    'url' => 'sprout-forms/reports'
+                    'label' => $reportsNavLabel,
+                    'url' => $sproutReportsIsEnabled ? 'sprout-reports/reports' : 'sprout-forms/reports',
                 ];
             }
         }
