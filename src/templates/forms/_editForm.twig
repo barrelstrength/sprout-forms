@@ -17,6 +17,11 @@
 {% set fullPageForm = true %}
 {% set selectedTab = fieldLayout.getTabs()[0].id %}
 
+{% block contextMenu %}
+    <div id="revision-spinner" class="spinner hidden" title="{{ 'Saving'|t('app') }}"></div>
+    <div id="revision-status" class="invisible"></div>
+{% endblock %}
+
 {% block actionButton %}
     <input type="hidden" name="action" value="sprout-forms/forms/save-form">
     {{ redirectInput('sprout-forms/forms') }}
