@@ -10,7 +10,7 @@
         },
         "settings": {
             "fieldLayout": {
-                "Tab 1": [
+                "Page 1": [
                     {
                         "@model": "barrelstrength\\sproutbaseimport\\importers\\settings\\Field",
                         "type": "barrelstrength\\sproutforms\\fields\\formfields\\SectionHeading",

@@ -456,7 +456,7 @@ class Fields extends Component
 
     public function getDefaultTabName(): string
     {
-        return Craft::t('sprout-forms', 'Tab 1');
+        return Craft::t('sprout-forms', 'Page 1');
     }
 
     /**

@@ -137,7 +137,7 @@ class m191118_000000_fix_duplicate_forms extends Migration
     {
         $tabs = [];
         $tab = new FieldLayoutTab();
-        $tab->name = urldecode('Tab 1');
+        $tab->name = urldecode('Page 1');
         $tab->sortOrder = '888';
         $tab->setFields([]);
 
