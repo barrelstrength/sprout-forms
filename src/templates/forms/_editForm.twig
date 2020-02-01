@@ -71,6 +71,13 @@
     </div>
 {% endblock %}
 
+{% block tabs %}
+    {# Override tabs using formTabs to ensure the first tab always displays #}
+    {% include 'sprout-forms/_includes/tabs' with {
+        formTabs: formTabs
+    } %}
+{% endblock %}
+
 {% block content %}
     {% include 'sprout-forms/forms/_editFormContent' %}
 {% endblock %}

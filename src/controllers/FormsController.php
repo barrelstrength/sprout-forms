@@ -212,7 +212,7 @@ class FormsController extends BaseController
 
         return $this->renderTemplate('sprout-forms/forms/_editForm', [
             'form' => $form,
-            'tabs' => $tabs,
+            'formTabs' => $tabs,
             'continueEditingUrl' => 'sprout-forms/forms/edit/{id}'
         ]);
     }
@@ -452,7 +452,6 @@ class FormsController extends BaseController
      */
     public function actionGetUpdatedLayoutHtml(): Response
     {
-
         $this->requirePostRequest();
         $this->requireAcceptsJson();
 
