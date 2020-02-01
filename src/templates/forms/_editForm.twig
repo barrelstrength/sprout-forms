@@ -90,17 +90,6 @@
 
 {% do view.registerAssetBundle("craft\\web\\assets\\fields\\FieldsAsset") %}
 
-{% js on ready %}
-
-    var tabs = {{ fieldLayout.getTabs()|json_encode()|raw }};
-    var continueEditing = "{{ ('sprout-forms/forms/edit/'~form.id)|hash }}";
-
-    new Craft.SproutForms.FormPageManager('{{ form.id }}');
-    new Craft.SproutForms.FieldLayoutEditor(tabs, continueEditing);
-    new Craft.SproutForms.FormSettings();
-
-{% endjs %}
-
 {% css %}
     .formpagemanagerhud .icon.edit:before {
     color: rgba(123, 135, 147, 0.5);
