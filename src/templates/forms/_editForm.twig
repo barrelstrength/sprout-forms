@@ -95,11 +95,4 @@
 
 {% do view.registerAssetBundle("craft\\web\\assets\\fields\\FieldsAsset") %}
 
-{% css %}
-    .formpagemanagerhud .icon.edit:before {
-    color: rgba(123, 135, 147, 0.5);
-    }
-    .formpagemanagerhud {
-    max-width: 400px;
-    }
-{% endcss %}
+{% do view.registerJs("new SproutFormsFieldLayoutEditor("~form.id~");") %}

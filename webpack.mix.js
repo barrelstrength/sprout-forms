@@ -10,7 +10,6 @@ mix
     'src/web/assets/cp/src/js/integration-modal.js',
     'src/web/assets/cp/src/js/integrations.js',
     'src/web/assets/cp/src/js/rule-modal.js',
-    'src/web/assets/cp/src/js/form-page-manager.js',
   ], 'src/web/assets/cp/dist/js/sproutforms-cp.js')
 
   // Entries Index

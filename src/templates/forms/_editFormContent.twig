@@ -22,5 +22,4 @@
 {% hook 'cp.sproutForms.forms.edit.content' %}
 
 {# Load assets here so that they get refreshed when rebuilding the field layout #}
-{% do view.registerJs("new SproutFormsPageManager("~form.id~");") %}
-{% do view.registerJs("new SproutFormsFieldLayoutEditor("~form.id~");") %}
+
