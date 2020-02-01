@@ -7,53 +7,69 @@
 /* global Craft */
 /* global Garnish */
 
-if (typeof Craft.SproutForms === undefined) {
-  Craft.SproutForms = {};
-}
-
+// if (typeof Craft.SproutForms === undefined) {
+//   Craft.SproutForms = {};
+// }
+//
 (function($) {
-  Craft.SproutForms.FormPageManager = Garnish.Base.extend({
+//   Craft.SproutForms.FormPageManager = Garnish.Base.extend({
 
-    $formPageManagerBtn: null,
-    $addFormPageBtn: null,
+  class SproutFormsPageManager {
+    // $formPageManagerBtn: null,
+    // $addFormPageBtn: null,
+    //
+    // formPageManager: null,
+    // $formPageManagerTable: null,
+    // $formPageManagerNoTabs: null,
+    //
+    // tabAdminTable: null,
+    // formPageManagerTabs: [],
+    //
+    // totalFormTabs: null,
+    // selectedTab: null,
+    // selectedTabId: null,
+    //
+    // newTabName: null,
+    // $newTabs: null,
+    //
+    // $renamedTab: null,
+    //
+    // currentActionType: null,
 
-    formPageManager: null,
-    $formPageManagerTable: null,
-    $formPageManagerNoTabs: null,
+    constructor(formId) {
 
-    tabAdminTable: null,
-    formPageManagerTabs: [],
-
-    totalFormTabs: null,
-    selectedTab: null,
-    selectedTabId: null,
-
-    newTabName: null,
-    $newTabs: null,
-
-    $renamedTab: null,
-
-    currentActionType: null,
-
-    init(formId) {
       let self = this;
 
       this.formId = formId;
       this.$formPageManagerBtn = $('#formPageManagerBtn');
       this.$addFormPageBtn = $('#addFormPageBtn');
+      this.$formPage = $( 'body.sprout-forms' );
+
+      this.$revisionSpinner = $('#revision-spinner');
+      this.$revisionStatus = $('#revision-status');
 
       this.selectedTab = Craft.cp.$selectedTab;
       this.selectedTabId = this.selectedTab ? this.selectedTab.parent().data('id') : null;
 
-      this.addListener(this.$formPageManagerBtn, 'click', 'showFormPageManager');
-      this.addListener(this.$addFormPageBtn, 'click', 'addFormPage');
-    },
+      this.formPageManagerTabs = [];
+
+      this.$formPageManagerBtn.on('click', function() {
+        self.showFormPageManager();
+      });
+      this.$addFormPageBtn.on('click', function() {
+        self.addFormPage();
+      });
+      this.$formPage.on( 'refreshFieldLayout', function() {
+        self.refreshFieldLayout()
+      });
+    }
 
     showFormPageManager() {
-      if (!this.formPageManager) {
-        let self = this;
+      let self = this;
 
-        this.buildFormPageManagerElements(Craft.cp.$tabs);
+      if (!this.formPageManager) {
+        let $tabs = Craft.cp.$tabs ?? [];
+        this.buildFormPageManagerElements($tabs);
 
         this.formPageManager = new Garnish.HUD(this.$formPageManagerBtn, this.$formPageManagerForm, {
           hudClass: 'hud formpagemanagerhud',
@@ -70,7 +86,7 @@ if (typeof Craft.SproutForms === undefined) {
       } else {
         this.formPageManager.show();
       }
-    },
+    }
 
     buildFormPageManagerElements($tabs) {
       let self = this;
@@ -99,14 +115,14 @@ if (typeof Craft.SproutForms === undefined) {
         let $row = self.getFormManagerTableRow(tabId, formTab);
         let $renameBtn = $row.find('> td.formpagemanagerhud-col-rename');
 
-        this.addListener($renameBtn, 'click', function(event) {
+        $renameBtn.on('click', function(event) {
           self.renameFormPage(event);
         });
 
-        this.formPageManagerTabs[tabId] = $row;
+        self.formPageManagerTabs[tabId] = $row;
         $row.appendTo($tbody);
       }
-    },
+    }
 
     initFormPageManagerAdminTable() {
       let self = this;
@@ -120,35 +136,39 @@ if (typeof Craft.SproutForms === undefined) {
         reorderFailMessage: Craft.t('sprout-forms', 'Couldn’t reorder items.'),
         deleteAction: 'sprout-forms/forms/delete-form-tab',
         confirmDeleteMessage: Craft.t('sprout-forms', "Are you sure you want to delete this tab, all of it's fields, and all of it's data?"),
-        onReorderItems: $.proxy(function(ids) {
-          self.refreshTabs('reorder');
-        }, this),
-        onDeleteItem: $.proxy(function(id) {
-          self.refreshTabs('delete');
-        }, this)
+        onReorderItems: function(ids) {
+          self.refreshFieldLayout('reorder');
+        },
+        onDeleteItem: function(id) {
+          self.refreshFieldLayout('delete');
+        }
       });
-    },
+    }
 
     addFormPage() {
       let self = this;
 
-      this.newTabName = prompt(Craft.t('sprout-forms', 'Page Name'));
+      self.newTabName = prompt(Craft.t('sprout-forms', 'Page Name'));
 
       let data = {
-        formId: this.formId,
-        name: this.newTabName
+        formId: self.formId,
+        name: self.newTabName
       };
 
+      this.$revisionSpinner.removeClass('hidden');
+
       Craft.postActionRequest('sprout-forms/forms/add-form-tab', data, function(response) {
+        self.$revisionSpinner.addClass('hidden');
+        self.$revisionStatus.removeClass('invisible');
+        self.$revisionStatus.addClass('checkmark-icon');
 
         if (response.success) {
-          self.refreshTabs('add');
-          Craft.cp.displayNotice(Craft.t('sprout-forms', 'Page added.'));
+          self.refreshFieldLayout('add');
         } else {
           Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to add page.'));
         }
       });
-    },
+    }
 
     renameFormPage(event) {
       let self = this;
@@ -169,7 +189,7 @@ if (typeof Craft.SproutForms === undefined) {
 
       Craft.postActionRequest('sprout-forms/forms/rename-form-tab', data, function(response) {
         if (response.success) {
-          self.refreshTabs('rename');
+          self.refreshFieldLayout('rename');
           Craft.cp.displayNotice(Craft.t('sprout-forms', 'Page renamed.'));
         } else {
           Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to rename page.'));
@@ -185,7 +205,7 @@ if (typeof Craft.SproutForms === undefined) {
       }
 
       Craft.cp.initTabs();
-    },
+    }
 
     getFormManagerTableRow(tabId, formTab) {
 
@@ -199,9 +219,9 @@ if (typeof Craft.SproutForms === undefined) {
         '<td class="thin"><a class="delete icon" title="' + Craft.t('app', 'Delete') + '" role="button"></a></td>' +
         '</tr>'
       );
-    },
+    }
 
-    refreshTabs(currentActionType = null) {
+    refreshFieldLayout(currentActionType = null) {
       let self = this;
       this.currentActionType = currentActionType;
       this.$newTabs = null;
@@ -237,13 +257,13 @@ if (typeof Craft.SproutForms === undefined) {
 
           if (self.currentActionType === 'add') {
             let $lastTab = $(Craft.cp.$tabs[Craft.cp.$tabs.length - 1]);
-            $lastTab.find('a').click();
+            $lastTab.find('a').trigger('click');
           }
 
           if (self.currentActionType === 'delete') {
             let $firstTab = $(Craft.cp.$tabs[0]);
             Craft.cp.$selectedTab = null;
-            $firstTab.find('a').click();
+            $firstTab.find('a').trigger('click');
           }
 
           if (self.currentActionType === 'rename') {
@@ -251,8 +271,7 @@ if (typeof Craft.SproutForms === undefined) {
               let $tab = $(tab);
               let tabName = $tab.find('a').attr('title');
               if (typeof self.newTabName !== undefined && tabName === self.newTabName) {
-                console.log(tabName);
-                $tab.find('a').click();
+                $tab.find('a').trigger('click');
               }
             }
           }
@@ -267,6 +286,9 @@ if (typeof Craft.SproutForms === undefined) {
         return false;
       });
     }
+  }
 
-  });
+  window.SproutFormsPageManager = SproutFormsPageManager;
+
 })(jQuery);
+
