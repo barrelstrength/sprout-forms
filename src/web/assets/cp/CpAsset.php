@@ -18,15 +18,12 @@ class CpAsset extends AssetBundle
 {
     public function init()
     {
-        // define the path that your publishable resources live
         $this->sourcePath = '@barrelstrength/sproutforms/web/assets/cp/dist';
 
-        // define the dependencies
         // @todo - refactor sproutfields.js asset within SelectOtherField asset
         $this->depends = [
             CraftCpAsset::class,
             SproutBaseCpAsset::class,
-            DragulaAsset::class,
             FontAwesomeAsset::class,
             SelectOtherFieldAsset::class
         ];

@@ -8,6 +8,7 @@
 /* global dragula */
 
 // import autoScroll from 'dom-autoscroller/dist/dom-autoscroller.min';
+let dragula = require('dragula');
 let autoScroll = require('dom-autoscroller');
 
 (function($) {
