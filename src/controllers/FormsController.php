@@ -341,12 +341,9 @@ class FormsController extends BaseController
     }
 
     /**
-     * This action allows delete a Tab of the current layout
-     *
-     * @return Response
-     * @throws Throwable
-     * @throws StaleObjectException
-     * @throws BadRequestHttpException
+     * @return \yii\web\Response
+     * @throws \yii\web\BadRequestHttpException
+     * @throws \yii\web\ForbiddenHttpException
      */
     public function actionDeleteFormTab(): Response
     {
@@ -354,18 +351,21 @@ class FormsController extends BaseController
         $this->requirePermission('sproutForms-editEntries');
 
         $request = Craft::$app->getRequest();
-        $pageId = $request->getBodyParam('id');
-        $pageId = str_replace('tab-', '', $pageId);
-        $tabRecord = FieldLayoutTabRecord::findOne($pageId);
+        $tabId = $request->getBodyParam('id');
+        $tabId = str_replace('tab-', '', $tabId);
 
-        if ($tabRecord) {
-            $result = $tabRecord->delete();
+        // @todo - requests the deleteAction method grabs all data attributes not just the ID
+        $tabRecord = FieldLayoutTabRecord::findOne($tabId);
 
-            if ($result) {
-                return $this->asJson([
-                    'success' => true
-                ]);
-            }
+        /** @var Form $form */
+        $form = Form::find()
+            ->fieldLayoutId($tabRecord->layoutId)
+            ->one();
+
+        if (SproutForms::$app->fields->deleteTab($form, $tabRecord)) {
+            return $this->asJson([
+                'success' => true
+            ]);
         }
 
         return $this->asJson([
