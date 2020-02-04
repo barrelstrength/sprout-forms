@@ -41,7 +41,7 @@ let autoScroll = require('dom-autoscroller');
 
       // Initialize once
       this.initGlobalButtons();
-      this.resizeTabContainers();
+      this.resizeContainers();
 
       // Initialize whenever we rebuild the layout
       this.initFieldLayout();
@@ -63,8 +63,12 @@ let autoScroll = require('dom-autoscroller');
         self.refreshFieldLayout()
       });
 
+      Garnish.$win.on('scroll', function() {
+        self.resizeContainers()
+      });
+
       window.addEventListener('resize', function() {
-        self.resizeTabContainers()
+        self.resizeContainers()
       });
 
       this.fieldModal.on('saveField', function(event) {
@@ -73,6 +77,7 @@ let autoScroll = require('dom-autoscroller');
     }
 
     initFieldLayout() {
+      let self = this;
       // Add listeners to all the items that start with sproutform-field-
       let $formFields = $("a[id^='sproutform-field-']");
       for (let formField of $formFields) {
@@ -120,11 +125,14 @@ let autoScroll = require('dom-autoscroller');
         $(target).find('.drag-active').removeClass('drag-active');
         $(source).find('.drag-active').removeClass('drag-active');
 
+        self.$revisionStatus.addClass('invisible');
+        self.$revisionSpinner.removeClass('hidden');
+
         // Reorder fields
         if ($(target).attr('id') === $(source).attr('id')) {
-          // just if we need check when the field is reorder
-          // not needed because the order is saved from the hidden field
-          // when the form is saved
+          // No need to save stuff as reordered fields are re-saved based on the order
+          // in the hidden field when the form is saved
+          self.$revisionStatus.addClass('checkmark-icon unsaved').fadeIn('slow');
         }
 
         if (target && source === self.fieldsLayout) {
@@ -132,10 +140,18 @@ let autoScroll = require('dom-autoscroller');
           const tab = $(el).closest(".sproutforms-tab-fields");
           const tabName = tab.data('tabname');
           const tabId = tab.data('tabid');
-          const fieldType = $(el).data("type");
+          const fieldType = $(el).data('type');
 
           self.createDefaultField(fieldType, tabId, tabName, el);
         }
+
+        // Don't change the status.
+        // If things are saved, a new field is also saved.
+        // If things are not saved, a re-ordered field still requires that things get saved
+        setTimeout(function(){
+          self.$revisionSpinner.addClass('hidden');
+          self.$revisionStatus.removeClass('invisible');
+        },500);
 
       }).on('over', function(el, container) {
 
@@ -163,18 +179,35 @@ let autoScroll = require('dom-autoscroller');
       );
     }
 
-    resizeTabContainers() {
-      let globalHeaderHeight = $('#global-header').outerHeight(true);
+    resizeContainers() {
+      let globalHeader = $('#global-header');
+      let tabsContainer = $('#tabs');
+      let contentContainer = $('#content-container');
+
+      let body = $('body');
+      let globalHeaderHeight = 0;
+
+      if (Garnish.$bod.hasClass('fixed-header')) {
+        body.addClass('sproutforms-editor-adjust-fixed-header');
+      } else {
+        globalHeaderHeight = globalHeader.outerHeight(true);
+        body.removeClass('sproutforms-editor-adjust-fixed-header');
+      }
+
       let headerContainerHeight = $('#header-container').outerHeight(true);
-      let tabHeight = $('#tabs').outerHeight();
+      let tabHeight = tabsContainer.outerHeight();
 
       /** 44 = padding at top and bottom of content-pane
        *  48 = footer spacing between content pane footer  and browser */
       let bottomPaddingAdjustment = 44 + 48;
+      if (Garnish.$bod.hasClass('fixed-header')) {
+        bottomPaddingAdjustment = 44 + 48;
+      }
       let headerFooterHeight = globalHeaderHeight + headerContainerHeight + tabHeight + bottomPaddingAdjustment;
 
       // Height required to allow scrolling while dragging a field
       $('.sproutforms-tab-fields').height($(window).height() - headerFooterHeight);
+      $('#details-container').height(contentContainer.height());
     }
 
     createDefaultField(type, tabId, tabName, el) {
@@ -261,7 +294,6 @@ let autoScroll = require('dom-autoscroller');
       let self = this;
 
       if (!window.sproutforms.formPageManager) {
-        console.log('pagemanager: show new');
         let $tabs = Craft.cp.$tabs ?? [];
         this.buildFormPageManagerElements($tabs);
 
@@ -278,7 +310,6 @@ let autoScroll = require('dom-autoscroller');
         this.initFormPageManagerAdminTable();
 
       } else {
-        console.log('pagemanager: show existing');
         window.sproutforms.formPageManager.show();
       }
     }
@@ -307,7 +338,7 @@ let autoScroll = require('dom-autoscroller');
 
       for (let formTab of $tabs) {
         let tabId = formTab.getAttribute('data-id');
-        let $row = self.getFormManagerTableRow(tabId, formTab);
+        let $row = self.getFormManagerTableRow(tabId, formTab, $tabs.length);
         let $renameBtn = $row.find('> td.formpagemanagerhud-col-rename');
 
         $renameBtn.on('click', function(event) {
@@ -332,10 +363,12 @@ let autoScroll = require('dom-autoscroller');
         deleteAction: 'sprout-forms/forms/delete-form-tab',
         confirmDeleteMessage: Craft.t('sprout-forms', "Are you sure you want to delete this tab, all of it's fields, and all of it's data?"),
         onReorderItems: function(ids) {
-          self.refreshFieldLayout('reorder');
+          self.currentTabName = Craft.cp.$selectedTab.text();
+          self.refreshFieldLayout();
         },
         onDeleteItem: function(id) {
-          self.refreshFieldLayout('delete');
+          self.currentTabName = Craft.cp.$selectedTab.text();
+          self.refreshFieldLayout();
         }
       });
     }
@@ -345,12 +378,17 @@ let autoScroll = require('dom-autoscroller');
 
       self.newTabName = prompt(Craft.t('sprout-forms', 'Page Name'));
 
+      if (self.newTabName === null) {
+        return;
+      }
+
       let data = {
         formId: self.formId,
         name: self.newTabName
       };
 
-      this.$revisionSpinner.removeClass('hidden');
+      self.$revisionStatus.addClass('invisible');
+      self.$revisionSpinner.removeClass('hidden');
 
       Craft.postActionRequest('sprout-forms/forms/add-form-tab', data, function(response) {
         self.$revisionSpinner.addClass('hidden');
@@ -358,7 +396,8 @@ let autoScroll = require('dom-autoscroller');
         self.$revisionStatus.addClass('checkmark-icon');
 
         if (response.success) {
-          self.refreshFieldLayout('add');
+          self.currentTabName = 'last';
+          self.refreshFieldLayout();
         } else {
           Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to add page.'));
         }
@@ -384,7 +423,8 @@ let autoScroll = require('dom-autoscroller');
 
       Craft.postActionRequest('sprout-forms/forms/rename-form-tab', data, function(response) {
         if (response.success) {
-          self.refreshFieldLayout('rename');
+          self.currentTabName = self.newTabName;
+          self.refreshFieldLayout();
           Craft.cp.displayNotice(Craft.t('sprout-forms', 'Page renamed.'));
         } else {
           Craft.cp.displayError(Craft.t('sprout-forms', 'Unable to rename page.'));
@@ -402,7 +442,7 @@ let autoScroll = require('dom-autoscroller');
       Craft.cp.initTabs();
     }
 
-    getFormManagerTableRow(tabId, formTab) {
+    getFormManagerTableRow(tabId, formTab, totalTabs) {
 
       let tabName = formTab.querySelector('a').innerText;
 
@@ -410,20 +450,22 @@ let autoScroll = require('dom-autoscroller');
         '<tr data-id="' + tabId + '" data-name="' + Craft.escapeHtml(tabName) + '">' +
         '<td class="formpagemanagerhud-col-page-name">' + tabName + '</td>' +
         '<td class="formpagemanagerhud-col-rename thin"><a class="edit icon" title="' + Craft.t('sprout-forms', 'Rename') + '" role="button"></a></td>' +
-        '<td class="formpagemanagerhud-col-move thin"><a class="move icon" title="' + Craft.t('sprout-forms', 'Reorder') + '" role="button"></a></td>' +
-        '<td class="thin"><a class="delete icon" title="' + Craft.t('app', 'Delete') + '" role="button"></a></td>' +
+        (totalTabs > 1 ? '<td class="formpagemanagerhud-col-move thin"><a class="move icon" title="' + Craft.t('sprout-forms', 'Reorder') + '" role="button"></a></td>' : '') +
+        (totalTabs > 1 ? '<td class="thin"><a class="delete icon" title="' + Craft.t('app', 'Delete') + '" role="button"></a></td>' : '') +
         '</tr>'
       );
     }
 
-    refreshFieldLayout(currentActionType = null) {
+    refreshFieldLayout() {
       let self = this;
-      this.currentActionType = currentActionType;
       this.$newTabs = null;
 
       let data = {
         formId: this.formId
       };
+
+      self.$revisionStatus.addClass('invisible');
+      self.$revisionSpinner.removeClass('hidden');
 
       Craft.postActionRequest('sprout-forms/forms/get-updated-layout-html', data, function(response) {
         if (response.success) {
@@ -447,42 +489,50 @@ let autoScroll = require('dom-autoscroller');
 
           // Update Page Manager Modal to reflect new ID targets
           if (window.sproutforms.formPageManager) {
-            console.log('pagemanager: REFRESH yes.');
             self.buildFormPageManagerElements(Craft.cp.$tabs);
             window.sproutforms.formPageManager.updateBody(self.$formPageManagerForm);
             self.initFormPageManagerAdminTable();
           }
 
-          if (self.currentActionType === 'add') {
-            let $lastTab = $(Craft.cp.$tabs[Craft.cp.$tabs.length - 1]);
-            $lastTab.find('a').trigger('click');
+          let $targetActiveTab = self.getCurrentTabByName();
+
+          // If we have a targetActiveTab, select it, defaults to first tab if nothing found
+          if ($targetActiveTab !== null) {
+            $targetActiveTab.find('a').trigger('click');
           }
 
-          if (self.currentActionType === 'delete') {
-            let $firstTab = $(Craft.cp.$tabs[0]);
-            Craft.cp.$selectedTab = null;
-            $firstTab.find('a').trigger('click');
-          }
-
-          if (self.currentActionType === 'rename') {
-            for (let tab of Craft.cp.$tabs) {
-              let $tab = $(tab);
-              let tabName = $tab.find('a').attr('title');
-              if (typeof self.newTabName !== undefined && tabName === self.newTabName) {
-                $tab.find('a').trigger('click');
-              }
-            }
-          }
-
-          if (self.currentActionType === 'reorder') {
-
-          }
+          self.$revisionSpinner.addClass('hidden');
+          self.$revisionStatus.addClass('checkmark-icon');
+          self.$revisionStatus.removeClass('invisible unsaved');
 
           return true;
         }
 
         return false;
       });
+    }
+
+    getCurrentTabByName() {
+      let self = this;
+
+      if (typeof self.currentTabName === undefined) {
+        return null;
+      }
+
+      if (self.currentTabName === 'last') {
+        let $lastTab = $(Craft.cp.$tabs[Craft.cp.$tabs.length - 1]);
+        self.currentTabName = $lastTab.text().trim();
+      }
+
+      for (let tab of Craft.cp.$tabs) {
+        let $tab = $(tab);
+        let tabName = $tab.find('a').attr('title');
+        if (tabName === self.currentTabName) {
+          return $tab;
+        }
+      }
+
+      return null;
     }
 
     /**

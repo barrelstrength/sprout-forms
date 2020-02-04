@@ -1,12 +1,12 @@
 @import '~dragula/dist/dragula.min.css';
 
-.sprout-forms.forms.edit #content {
+.sprout-forms.forms.edit [sproutforms-fieldlayouteditor] #content {
     padding: 24px 0;
 }
 
-.sprout-forms.forms.edit #page-title {
-    margin-bottom: 1px;
-    margin-top: 1px;
+// Stop page title from jumping down when we add the spinner
+.sprout-forms.forms.edit #page-title h1 {
+    padding-top: 2px;
 }
 
 .sproutforms-tab-fields {
@@ -265,11 +265,15 @@
 
 // Give freedom to non-Desktop UI to adjust as needed
 @media only screen and (min-width: 975px) {
-    #main-content {
+    [sproutforms-fieldlayouteditor] #main-content {
         position: fixed;
     }
-    #details-container {
+    [sproutforms-fieldlayouteditor] #details-container {
         overflow-x: hidden;
         overflow-y: auto;
     }
+}
+
+.sprout-forms.forms.edit .unsaved.checkmark-icon:before {
+    color: inherit;
 }
