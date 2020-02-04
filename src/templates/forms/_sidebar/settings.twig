@@ -7,8 +7,6 @@
 {% set customFields =  craft.sproutForms.getCustomFields(fieldTypes, fieldTypesByGroup) %}
 
 <div id="sproutforms-source-fields">
-    {#    <div class='parent'>#}
-    {#        <div class="clear"></div>#}
     <div id='right-copy'>
         {% for name,group in fieldTypesByGroup %}
             <h6 class="tab-title donotdrag">{{ name }}</h6>
@@ -24,25 +22,5 @@
                 {{ formBuilder.field(field, 'source', null, loop.index) }}
             {% endfor %}
         {% endif %}
-    </div>
-    {#    </div>#}
-
-</div><!-- fields div -->
-
-<br>
-
-<div id="meta-details" class="meta read-only">
-    <div class="data">
-        <h5 class="heading">{{ "Settings"|t('sprout-forms') }}</h5>
-        <div class="value">
-            <nav>
-                <ul>
-                    <li><a href="{{ cpUrl('sprout-forms/forms/edit/'~form.id~'/settings/general') }}">{{ "General"|t('sprout-forms') }}</a></li>
-                    <li><a href="{{ cpUrl('sprout-forms/forms/edit/'~form.id~'/settings/templates') }}">{{ "Templates"|t('sprout-forms') }}</a></li>
-                    <li><a href="{{ cpUrl('sprout-forms/forms/edit/'~form.id~'/settings/rules') }}">{{ "Rules"|t('sprout-forms') }}</a></li>
-                    <li><a href="{{ cpUrl('sprout-forms/forms/edit/'~form.id~'/settings/integrations') }}">{{ "Integrations"|t('sprout-forms') }}</a></li>
-                </ul>
-            </nav>
-        </div>
     </div>
 </div>
