@@ -29,28 +29,23 @@
 
     <div class="buttons">
 
-        <div class="btngroup submit first">
+        <div class="btngroup submit">
             <a id="addFormPageBtn" class="btn add icon" href="#" title="New Page">{{ "New page"|t('sprout-forms') }}</a>
             <div id="formPageManagerBtn" class="btn icon" title="{{ 'Edit Pages'|t('sprout-forms') }}" data-icon="menu"></div>
         </div>
 
-        <div class="btngroup submit first">
-
-            <a href="{{ cpUrl('sprout-forms/forms/edit/'~ form.id ~'/settings/general/') }}"
-                class="btn" title="{{ 'Edit Settings'|t('sprout-forms') }}" data-icon="settings">Settings</a>
-
-            <div class="btn menubtn"></div>
+        <div class="btngroup submit">
+            <div class="btn settings icon menubtn" title="{{ 'Edit Settings'|t('sprout-forms') }}">{{ "Settings"|t('sprout-forms') }}</div>
             <div class="menu sproutforms-settings-dropdown">
                 <ul>
-                    <li class="formsubmit"><a data-redirect="{{ cpUrl('sprout-forms/forms/edit/'~form.id~'/settings/general')|hash }}">{{ "General"|t('sprout-forms') }}</a></li>
-                    <li class="formsubmit"><a data-redirect="{{ cpUrl('sprout-forms/forms/edit/'~form.id~'/settings/templates')|hash }}">{{ "Templates"|t('sprout-forms') }}</a></li>
-                    <li class="formsubmit"><a data-redirect="{{ cpUrl('sprout-forms/forms/edit/'~form.id~'/settings/rules')|hash }}">{{ "Rules"|t('sprout-forms') }}</a></li>
-                    <li class="formsubmit"><a data-redirect="{{ cpUrl('sprout-forms/forms/edit/'~form.id~'/settings/integrations')|hash }}">{{ "Integrations"|t('sprout-forms') }}</a></li>
+                    <li><a class="formsubmit" data-redirect="{{ cpUrl('sprout-forms/forms/edit/'~form.id~'/settings/general')|hash }}">{{ "General"|t('sprout-forms') }}</a></li>
+                    <li><a a class="formsubmit" data-redirect="{{ cpUrl('sprout-forms/forms/edit/'~form.id~'/settings/templates')|hash }}">{{ "Templates"|t('sprout-forms') }}</a></li>
+                    <li><a a class="formsubmit" data-redirect="{{ cpUrl('sprout-forms/forms/edit/'~form.id~'/settings/rules')|hash }}">{{ "Rules"|t('sprout-forms') }}</a></li>
+                    <li><a a class="formsubmit" data-redirect="{{ cpUrl('sprout-forms/forms/edit/'~form.id~'/settings/integrations')|hash }}">{{ "Integrations"|t('sprout-forms') }}</a></li>
                 </ul>
             </div>
         </div>
 
-        <div id="save-form-button" class="btngroup submit first">
             <input type="submit" class="btn submit" value="{{ 'Save'|t('sprout-forms') }}">
             {% if form.id != null %}
                 <div class="btn submit menubtn"></div>
