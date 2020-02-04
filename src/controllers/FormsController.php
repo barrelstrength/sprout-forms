@@ -9,7 +9,6 @@ namespace barrelstrength\sproutforms\controllers;
 
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\elements\Form;
-use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\models\Settings;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
@@ -34,7 +33,7 @@ use yii\web\Response;
 
 /**
  *
- * @property FormElement $formModel
+ * @property Form $formModel
  */
 class FormsController extends BaseController
 {
@@ -170,14 +169,14 @@ class FormsController extends BaseController
      * Edit a form.
      *
      * @param int|null                          $formId
-     * @param FormElement|ElementInterface|null $form
+     * @param Form|ElementInterface|null $form
      *
      * @return Response
      * @throws NotFoundHttpException
      * @throws \Exception
      * @throws Throwable
      */
-    public function actionEditFormTemplate(int $formId = null, FormElement $form = null): Response
+    public function actionEditFormTemplate(int $formId = null, Form $form = null): Response
     {
         $isNew = !$formId;
 
@@ -245,13 +244,13 @@ class FormsController extends BaseController
     }
 
     /**
-     * @param FormElement $form
+     * @param Form $form
      * @param bool        $duplicate
-     * @param FormElement $duplicatedForm
+     * @param Form $duplicatedForm
      *
      * @throws Throwable
      */
-    public function prepareFieldLayout(FormElement $form, $duplicate = false, $duplicatedForm = null)
+    public function prepareFieldLayout(Form $form, $duplicate = false, $duplicatedForm = null)
     {
         // Set the field layout
         $fieldLayout = Craft::$app->getFields()->assembleLayoutFromPost();
@@ -267,7 +266,7 @@ class FormsController extends BaseController
             $fieldLayout = $form->getFieldLayout();
         }
 
-        $fieldLayout->type = FormElement::class;
+        $fieldLayout->type = Form::class;
 
         $form->setFieldLayout($fieldLayout);
 
@@ -483,10 +482,10 @@ class FormsController extends BaseController
     }
 
     /**
-     * @return FormElement
+     * @return Form
      * @throws NotFoundHttpException
      */
-    private function getFormModel(): FormElement
+    private function getFormModel(): Form
     {
         $request = Craft::$app->getRequest();
         $formId = $request->getBodyParam('formId');
@@ -503,7 +502,7 @@ class FormsController extends BaseController
             // determine if we need to rename the content table
             $form->oldHandle = $form->handle;
         } else {
-            $form = new FormElement();
+            $form = new Form();
 
             if ($siteId) {
                 $form->siteId = $siteId;
@@ -514,9 +513,9 @@ class FormsController extends BaseController
     }
 
     /**
-     * @param FormElement $form
+     * @param Form $form
      */
-    private function populateFormModel(FormElement $form)
+    private function populateFormModel(Form $form)
     {
         $request = Craft::$app->getRequest();
 
