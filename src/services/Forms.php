@@ -252,10 +252,8 @@ class Forms extends Component
 
             Craft::$app->content->contentTable = $originalContentTable;
 
-
             // Delete the Element and Form
             $success = Craft::$app->elements->deleteElementById($form->id);
-
 
             if (!$success) {
                 $transaction->rollBack();

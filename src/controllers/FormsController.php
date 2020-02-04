@@ -24,7 +24,6 @@ use Throwable;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
 use yii\base\InvalidRouteException;
-use yii\db\StaleObjectException;
 use yii\web\BadRequestHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\HttpException;
@@ -168,7 +167,7 @@ class FormsController extends BaseController
     /**
      * Edit a form.
      *
-     * @param int|null                          $formId
+     * @param int|null                   $formId
      * @param Form|ElementInterface|null $form
      *
      * @return Response
@@ -245,7 +244,7 @@ class FormsController extends BaseController
 
     /**
      * @param Form $form
-     * @param bool        $duplicate
+     * @param bool $duplicate
      * @param Form $duplicatedForm
      *
      * @throws Throwable

@@ -82,6 +82,8 @@ class Address extends FormField implements PreviewableFieldInterface
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws SiteNotFoundException
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {
@@ -96,6 +98,8 @@ class Address extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {

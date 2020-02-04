@@ -608,12 +608,13 @@ class Fields extends Component
         return $response;
     }
 
-    public function deleteTab(Form $form, FieldLayoutTabRecord $tabRecord) {
-
+    public function deleteTab(Form $form, FieldLayoutTabRecord $tabRecord): bool 
+    {
         $fieldLayout = $form->getFieldLayout();
 
         if (count($fieldLayout->getTabs()) <= 1) {
             $tabRecord->addError('fieldLayoutId', Craft::t('sprout-forms', 'Unable to delete page. One page required.'));
+
             return false;
         }
 

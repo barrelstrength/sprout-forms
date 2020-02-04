@@ -15,7 +15,7 @@ class CreateFormContentTable extends Migration
      * @var string|null The table name
      */
     public $tableName;
-    
+
     /**
      * @inheritdoc
      */

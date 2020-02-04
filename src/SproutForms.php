@@ -305,7 +305,7 @@ class SproutForms extends Plugin implements SproutEditionsInterface
         $emailNavLabel = Craft::t('sprout-forms', 'Notifications');
 
         if ($sproutEmailIsEnabled && $this->getSettings()->showNotificationsTab) {
-            SproutBase::$app->utilities->addSubNavIcon('sprout-forms',$emailNavLabel);
+            SproutBase::$app->utilities->addSubNavIcon('sprout-forms', $emailNavLabel);
         }
 
         if (Craft::$app->getUser()->checkPermission('sproutForms-viewNotifications')) {
@@ -321,7 +321,7 @@ class SproutForms extends Plugin implements SproutEditionsInterface
         $reportsNavLabel = Craft::t('sprout-forms', 'Reports');
 
         if ($sproutReportsIsEnabled && $this->getSettings()->showReportsTab) {
-            SproutBase::$app->utilities->addSubNavIcon('sprout-forms',$reportsNavLabel);
+            SproutBase::$app->utilities->addSubNavIcon('sprout-forms', $reportsNavLabel);
         }
 
         if (Craft::$app->getUser()->checkPermission('sproutForms-viewReports')) {

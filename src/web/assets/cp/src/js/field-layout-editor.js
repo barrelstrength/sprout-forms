@@ -25,7 +25,7 @@ let autoScroll = require('dom-autoscroller');
       }
 
       this.formId = formId;
-      this.$formPage = $( 'body.sprout-forms' );
+      this.$formPage = $('body.sprout-forms');
       this.$formPageManagerBtn = $('#formPageManagerBtn');
       this.$addFormPageBtn = $('#addFormPageBtn');
       this.$saveFormButton = $('#save-form-button');
@@ -59,7 +59,7 @@ let autoScroll = require('dom-autoscroller');
         self.addFormPage();
       });
 
-      this.$formPage.on( 'refreshFieldLayout', function() {
+      this.$formPage.on('refreshFieldLayout', function() {
         self.refreshFieldLayout()
       });
 
@@ -72,7 +72,7 @@ let autoScroll = require('dom-autoscroller');
       });
 
       this.fieldModal.on('saveField', function(event) {
-        $( 'body.sprout-forms').trigger( 'refreshFieldLayout');
+        $('body.sprout-forms').trigger('refreshFieldLayout');
       });
     }
 
@@ -148,10 +148,10 @@ let autoScroll = require('dom-autoscroller');
         // Don't change the status.
         // If things are saved, a new field is also saved.
         // If things are not saved, a re-ordered field still requires that things get saved
-        setTimeout(function(){
+        setTimeout(function() {
           self.$revisionSpinner.addClass('hidden');
           self.$revisionStatus.removeClass('invisible');
-        },500);
+        }, 500);
 
       }).on('over', function(el, container) {
 
