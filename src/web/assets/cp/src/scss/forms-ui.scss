@@ -1,22 +1,21 @@
 @import '~dragula/dist/dragula.min.css';
 
-.sprout-forms #content {
+.sprout-forms.forms.edit #content {
     padding: 24px 0;
 }
 
-.sprout-forms #page-title {
-    margin-top: 1px;
+.sprout-forms.forms.edit #page-title {
     margin-bottom: 1px;
+    margin-top: 1px;
 }
 
 .sproutforms-tab-fields {
-    padding: 10px;
     overflow-y: auto; // Required to support autoScroll
+    padding: 10px;
 }
 
 /* DRAGULA
 ------------------------------------------------------------ */
-
 
 
 #sproutforms-source-fields {
@@ -235,19 +234,7 @@
 
 .target-field.drag-active.gu-mirror {
     border: 2px solid transparent;
-    //margin-bottom: 0 !important;
-    //padding-bottom: 0 !important;
-    //border: 1px solid red;
 }
-//.target-field.drag-active.gu-mirror .active-field-header {
-//    border: 1px solid blue;
-//}
-//.target-field.drag-active.gu-mirror .body:after {
-//    content: '';
-//    border: 1px solid green;
-//    margin-bottom: 0 !important;
-//    padding-bottom: 0 !important;
-//}
 
 .target-field.drag-active.gu-mirror ul.settings {
     opacity: 0;
@@ -271,6 +258,18 @@
 .formpagemanagerhud .icon.edit:before {
     color: rgba(123, 135, 147, 0.5);
 }
+
 .formpagemanagerhud {
     max-width: 400px;
+}
+
+// Give freedom to non-Desktop UI to adjust as needed
+@media only screen and (min-width: 975px) {
+    #main-content {
+        position: fixed;
+    }
+    #details-container {
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
 }
