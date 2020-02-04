@@ -160,6 +160,18 @@ class FormQuery extends ElementQuery
     }
 
     /**
+     * @param $value
+     *
+     * @return \barrelstrength\sproutforms\elements\db\FormQuery
+     */
+    public function fieldLayoutId($value): FormQuery
+    {
+        $this->fieldLayoutId = $value;
+
+        return $this;
+    }
+
+    /**
      * @inheritdoc
      */
     protected function beforePrepare(): bool
@@ -194,6 +206,10 @@ class FormQuery extends ElementQuery
         if ($this->numberOfFields) {
             $this->query->addSelect('COUNT(fields.id) numberOfFields');
             $this->query->leftJoin('fieldlayoutfields fields', '[[fields.layoutId]] = [[sproutforms_forms.fieldLayoutId]]');
+        }
+
+        if ($this->fieldLayoutId) {
+            $this->subQuery->andWhere(Db::parseParam('sproutforms_forms.fieldLayoutId', $this->fieldLayoutId));
         }
 
         if ($this->groupId) {
