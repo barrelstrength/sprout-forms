@@ -9,6 +9,8 @@
     { label: "Forms"|t('sprout-forms'), url: cpUrl('sprout-forms/forms') }
 ] %}
 
+{% set mainFormAttributes = {'sproutforms-fieldlayouteditor': true} %}
+
 {% set fieldLayout = form.getFieldLayout() %}
 {% set formFields = {} %}
 
@@ -46,6 +48,7 @@
             </div>
         </div>
 
+        <div id="save-form-button" class="btngroup submit">
             <input type="submit" class="btn submit" value="{{ 'Save'|t('sprout-forms') }}">
             {% if form.id != null %}
                 <div class="btn submit menubtn"></div>
