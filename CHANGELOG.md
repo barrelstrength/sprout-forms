@@ -5,6 +5,9 @@
 {note}: This update migrates recipient emails in some conditions from the cc and bcc fields to the standard recipients field. Please review your recipients after updating and ensure they are working as expected.
 
 ### Added 
+- Improved Form Builder and Field Layout Editor
+- Added Page Manager modal to reorder, rename, and delete form pages
+- Added status icon and saving spinner to indicate current state of form 
 - Added Mailing List Reports
 - Added support for Notification Emails to send to Mailing List Reports
 - Added 'All mailing lists' source
@@ -12,12 +15,35 @@
 - Added Reports Custom Query Data Source
 - Added Reports Twig Template Data Source
 - Added settings to show or hide Notifications and Reports tabs
+- Added `barrelstrength/sproutforms/elements/Form::pluralDisplayName()`
+- Added `barrelstrength/sproutforms/elements/Entry::pluralDisplayName()`
 
-### Updated
-- Updated `barrelstrength/sprout-base-reports` requirement vXYZ???
+### Changed
+- Updated UI to match look and field of Craft 3.4
+- Updated tab management to use the Page Manager modal
+- Moved several elements of the sidebar navigation to the header 
+- Updated models to use `defineRules()` method
+- Updated Page deletion behavior to throw error if trying to delete the final Page on a form
+- Updated Entry Status settings page to use `Craft.VueAdminTable`
+- Updated Notifications integration to redirect to Sprout Email if plugin is installed
+- Updated Reports integration to redirect to Sprout Reports if plugin is installed
+- Added `dragula` and `dom-autoscroller` assets as dependencies  
+- Updated `barrelstrength/sprout-base-email` requirement to vXYZ???
+- Updated `barrelstrength/sprout-base-fields` requirement to v1.3.0
+- Updated `barrelstrength/sprout-base-reports` requirement to vXYZ???
+- Updated `barrelstrength/sprout-base` requirement to v5.1.0
+ 
+### Fixed
+- Fixed several display bugs introduced in Craft 3.4
+- Fixed bug where user was unable to save a form with no fields in the field layout
+- Fixed bug where saving a form would create a new field layout
+- Fixed bug where editing a field too quickly could result in an error
+- Fixed bug where editing a field and quickly adding another could result in an error
+- Fixed bug where default Entry Status could be deleted
 
 ### Removed
 - Removed `barrelstrength/sprout-base-lists` requirement (use Mailing List Reports)
+- Removed `barrelstrength/sproutforms/validators/FieldLayoutValidator`
 
 ## 3.7.1.1 - 2020-01-18
 
