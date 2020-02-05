@@ -1,6 +1,8 @@
 {% import "_includes/forms" as forms %}
 {% import 'sprout-base/_includes/sproutcp' as sprout %}
 
+{% set dateRange = options.dateRange is defined ? options.dateRange : 'customRange' %}
+
 {% if formOptions|length %}
 
     {{ forms.selectField({
@@ -18,12 +20,12 @@
         label: "Date Range"|t('sprout-forms'),
         instructions: "Select the date range for your report. Predefined options like 'Last Month' will always be determined based on when the report is run."|t('sprout-forms'),
         options: dateRanges,
-        value: options.dateRange is defined ? options.dateRange : 'customRange',
+        value: dateRange,
         toggle: true,
         targetPrefix: 'sprout-date-range-'
     }) }}
 
-    <div id="sprout-date-range-customRange" class="field{% if options.dateRange != 'customRange' %} hidden{% endif %}">
+    <div id="sprout-date-range-customRange" class="field{% if dateRange != 'customRange' %} hidden{% endif %}">
         {{ forms.dateTimeField({
             label: "Start Date"|t('sprout-forms'),
             id: 'startDate',
