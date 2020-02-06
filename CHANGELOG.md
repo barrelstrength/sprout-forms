@@ -1,6 +1,6 @@
 # Changelog
 
-## UNRELEASED
+## 3.8.0 - 2020-02-05
 
 {note}: This update migrates recipient emails in some conditions from the cc and bcc fields to the standard recipients field. Please review your recipients after updating and ensure they are working as expected.
 
@@ -8,15 +8,10 @@
 - Improved Form Builder and Field Layout Editor
 - Added Page Manager modal to reorder, rename, and delete form pages
 - Added status icon and saving spinner to indicate current state of form 
-- Added Mailing List Reports
 - Added support for Notification Emails to send to Mailing List Reports
-- Added 'All mailing lists' source
-- Added Users Data Source
-- Added Reports Custom Query Data Source
-- Added Reports Twig Template Data Source
 - Added settings to show or hide Notifications and Reports tabs
-- Added `barrelstrength/sproutforms/elements/Form::pluralDisplayName()`
-- Added `barrelstrength/sproutforms/elements/Entry::pluralDisplayName()`
+- Added `barrelstrength\sproutforms\elements\Form::pluralDisplayName()`
+- Added `barrelstrength\sproutforms\elements\Entry::pluralDisplayName()`
 
 ### Changed
 - Updated UI to match look and field of Craft 3.4
@@ -28,9 +23,9 @@
 - Updated Notifications integration to redirect to Sprout Email if plugin is installed
 - Updated Reports integration to redirect to Sprout Reports if plugin is installed
 - Added `dragula` and `dom-autoscroller` assets as dependencies  
-- Updated `barrelstrength/sprout-base-email` requirement to vXYZ???
+- Updated `barrelstrength/sprout-base-email` requirement to v1.2.0
 - Updated `barrelstrength/sprout-base-fields` requirement to v1.3.0
-- Updated `barrelstrength/sprout-base-reports` requirement to vXYZ???
+- Updated `barrelstrength/sprout-base-reports` requirement to v1.4.0
 - Updated `barrelstrength/sprout-base` requirement to v5.1.0
  
 ### Fixed
@@ -42,8 +37,8 @@
 - Fixed bug where default Entry Status could be deleted
 
 ### Removed
+- Removed `barrelstrength\sproutforms\validators\FieldLayoutValidator`
 - Removed `barrelstrength/sprout-base-lists` requirement (use Mailing List Reports)
-- Removed `barrelstrength/sproutforms/validators/FieldLayoutValidator`
 
 ## 3.7.1.1 - 2020-01-18
 
