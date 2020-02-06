@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.8.0.2 - 2020-02-06
+
+### Changed
+- Updated `barrelstrength/sprout-base-email` requirement to v1.2.1
+
+### Fixed
+- Fixed bug where viewContext may not be defined correctly when loading Mailing Lists modal
+
 ## 3.8.0.1 - 2020-02-06
 
 ### Fixed
