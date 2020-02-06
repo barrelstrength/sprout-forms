@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.8.0.1 - 2020-02-06
+
+### Fixed
+- Fixed display bug with Upgrade to Pro button on Entries index page
+
 ## 3.8.0 - 2020-02-05
 
 {note}: This update migrates recipient emails in some conditions from the cc and bcc fields to the standard recipients field. Please review your recipients after updating and ensure they are working as expected.
