@@ -196,7 +196,11 @@
 }
 
 /* Drag Behavior */
-
+.sprout-tab-container:empty,
+.sprout-tab-container .source-field:only-child {
+    height: 160px;
+    padding-bottom: 0;
+}
 .sprout-tab-container {
     padding-bottom: 20px;
 }
@@ -241,8 +245,8 @@
     transition: opacity 0.2s ease-in-out;
 }
 
-.sproutforms-tab-fields .source-field.drag-active,
-.sproutforms-tab-fields .target-field.drag-active {
+.sprout-tab-container .source-field.drag-active,
+.sprout-tab-container .target-field.drag-active {
     background-color: transparent;
     border: 2px dashed rgb(13, 120, 242);
     box-sizing: border-box;
@@ -252,6 +256,7 @@
     padding: 12px 20px 20px;
     width: 100%;
 }
+
 
 // ----
 
