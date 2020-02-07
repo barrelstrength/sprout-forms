@@ -58,7 +58,7 @@ class Users extends BaseRelationFormField
      */
     public function getSvgIconPath(): string
     {
-        return '@sproutbaseicons/newspaper-o.svg';
+        return '@sproutbaseicons/users.svg';
     }
 
     /**
