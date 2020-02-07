@@ -1,7 +1,13 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\base;
 
+use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
@@ -36,6 +42,13 @@ abstract class Captcha extends Model
      * @var string
      */
     public $captchaId;
+
+    /**
+     * The form where the captcha is being output
+     *
+     * @var Form
+     */
+    public $form;
 
     /**
      * Generates the Captcha ID

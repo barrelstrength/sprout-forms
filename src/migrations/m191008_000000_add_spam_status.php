@@ -1,12 +1,15 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\db\Migration;
 use craft\db\Query;
-use yii\base\Exception;
 
 /**
  * The class name is the UTC timestamp in the format of mYYMMDD_HHMMSS_migrationName
@@ -26,6 +29,7 @@ class m191008_000000_add_spam_status extends Migration
 
         if ($spamStatusExists) {
             Craft::info('Spam status already exists');
+
             return true;
         }
 

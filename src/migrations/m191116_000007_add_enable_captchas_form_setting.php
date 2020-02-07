@@ -1,10 +1,14 @@
-<?php /** @noinspection ClassConstantCanBeUsedInspection */
+<?php /**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
+
+/** @noinspection ClassConstantCanBeUsedInspection */
 
 namespace barrelstrength\sproutforms\migrations;
 
-use craft\config\DbConfig;
 use craft\db\Migration;
-use Craft;
 use yii\base\NotSupportedException;
 
 /**
@@ -33,6 +37,7 @@ class m191116_000007_add_enable_captchas_form_setting extends Migration
     public function safeDown(): bool
     {
         echo "m191116_000007_add_enable_captchas_form_setting cannot be reverted.\n";
+
         return false;
     }
 }

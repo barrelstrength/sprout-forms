@@ -1,4 +1,9 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\integrations\sproutimport\elements;
 
@@ -6,10 +11,9 @@ use barrelstrength\sproutbaseimport\base\ElementImporter;
 use barrelstrength\sproutbaseimport\base\FieldImporter;
 use barrelstrength\sproutbaseimport\models\jobs\SeedJob;
 use barrelstrength\sproutbaseimport\SproutBaseImport;
-use barrelstrength\sproutforms\elements\Entry as FormElement;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
+use barrelstrength\sproutforms\elements\Entry as FormElement;
 use barrelstrength\sproutforms\SproutForms;
-
 use Craft;
 use Throwable;
 use Twig\Error\LoaderError;
@@ -63,6 +67,7 @@ class Entry extends ElementImporter
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getSeedSettingsHtml(SeedJob $seedJob): string
     {

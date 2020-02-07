@@ -1,26 +1,30 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutforms\base\ConditionInterface;
+use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\rules\conditions\ContainsCondition;
 use barrelstrength\sproutforms\rules\conditions\DoesNotContainCondition;
 use barrelstrength\sproutforms\rules\conditions\IsNotProvidedCondition;
 use barrelstrength\sproutforms\rules\conditions\IsProvidedCondition;
 use Craft;
+use craft\base\ElementInterface;
+use craft\base\PreviewableFieldInterface;
 use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Db;
 use craft\helpers\Template as TemplateHelper;
+use LitEmoji\LitEmoji;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Markup;
 use yii\db\Schema;
-use craft\base\ElementInterface;
-use LitEmoji\LitEmoji;
-use craft\base\PreviewableFieldInterface;
-
-use barrelstrength\sproutforms\base\FormField;
 
 /**
  * Class PlainText
@@ -63,20 +67,21 @@ class Paragraph extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function rules()
+    public static function displayName(): string
     {
-        $rules = parent::rules();
-        $rules[] = [['charLimit'], 'validateCharLimit'];
-
-        return $rules;
+        return Craft::t('sprout-forms', 'Paragraph');
     }
 
     /**
      * @inheritdoc
      */
-    public static function displayName(): string
+    public function defineRules(): array
     {
-        return Craft::t('sprout-forms', 'Paragraph');
+        $rules = parent::defineRules();
+
+        $rules[] = [['charLimit'], 'validateCharLimit'];
+
+        return $rules;
     }
 
     /**
@@ -129,6 +134,7 @@ class Paragraph extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {
@@ -155,6 +161,7 @@ class Paragraph extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -173,6 +180,7 @@ class Paragraph extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml(): string
     {
@@ -191,11 +199,11 @@ class Paragraph extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'paragraph/input',
+        $rendered = Craft::$app->getView()->renderTemplate('paragraph/input',
             [
                 'name' => $this->handle,
                 'value' => $value,
@@ -215,6 +223,7 @@ class Paragraph extends FormField implements PreviewableFieldInterface
         if ($value !== null) {
             $value = LitEmoji::unicodeToShortcode($value);
         }
+
         return $value;
     }
 
@@ -225,6 +234,7 @@ class Paragraph extends FormField implements PreviewableFieldInterface
     {
         $value = (string)$value;
         $value = LitEmoji::unicodeToShortcode($value);
+
         return $value;
     }
 

@@ -1,3 +1,9 @@
+/*
+ * @link https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license https://craftcms.github.io/license
+ */
+
 // Manage aria-checked values on Checkbox and Radio Button inputs
 class SproutFormsCheckableInputs {
 

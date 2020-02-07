@@ -1,20 +1,25 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\integrations\sproutemail\events\notificationevents;
 
 use barrelstrength\sproutbaseemail\base\NotificationEvent;
-
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\events\OnSaveEntryEvent;
 use barrelstrength\sproutforms\services\Entries;
 use barrelstrength\sproutforms\SproutForms;
-use craft\events\ModelEvent;
-use craft\events\ElementEvent;
 use Craft;
+use craft\events\ElementEvent;
+use craft\events\ModelEvent;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use yii\base\Exception;
 
 
 /**
@@ -73,14 +78,13 @@ class SaveEntryEvent extends NotificationEvent
 
 
     /**
-     * @inheritdoc
-     *
      * @param array $context
      *
      * @return string
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws Exception
      */
     public function getSettingsHtml($context = []): string
     {
@@ -138,24 +142,26 @@ class SaveEntryEvent extends NotificationEvent
         return null;
     }
 
-    public function rules(): array
+    /**
+     * @return array
+     */
+    public function defineRules(): array
     {
-        $rules = parent::rules();
+        $rules = parent::defineRules();
 
         $rules[] = [
             'whenNew', 'required', 'when' => function() {
                 return $this->whenUpdated == false;
             }
         ];
-
         $rules[] = [
             'whenUpdated', 'required', 'when' => function() {
                 return $this->whenNew == false;
             }
         ];
-
         $rules[] = [['whenNew', 'whenUpdated'], 'validateWhenTriggers'];
         $rules[] = [['event'], 'validateEvent'];
+        $rules[] = [['event'], 'validateCaptchas'];
         $rules[] = [['formIds'], 'validateFormIds'];
 
         return $rules;
@@ -199,6 +205,15 @@ class SaveEntryEvent extends NotificationEvent
 
         if (get_class($event->entry) !== Entry::class) {
             $this->addError('event', Craft::t('sprout-forms', 'Event Element does not match barrelstrength\sproutforms\elements\Entry class.'));
+        }
+    }
+
+    public function validateCaptchas()
+    {
+        $entry = $this->event->entry;
+
+        if ($entry->hasCaptchaErrors()) {
+            $this->addError('event', Craft::t('sprout-forms', 'Submitted entry has captcha errors.'));
         }
     }
 

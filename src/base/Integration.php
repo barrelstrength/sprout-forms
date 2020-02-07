@@ -1,11 +1,16 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\base;
 
+use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\fields\formfields\Number;
 use barrelstrength\sproutforms\fields\formfields\OptIn;
 use barrelstrength\sproutforms\fields\formfields\SingleLine;
-use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\base\SavableComponent;
@@ -34,9 +39,6 @@ use yii\base\InvalidConfigException;
  */
 abstract class Integration extends SavableComponent implements IntegrationInterface
 {
-    // Traits
-    // =========================================================================
-
     use IntegrationTrait;
 
     protected $successMessage;

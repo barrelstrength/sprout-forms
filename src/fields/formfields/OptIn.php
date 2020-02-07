@@ -1,4 +1,9 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
@@ -7,14 +12,14 @@ use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\rules\conditions\IsCheckedCondition;
 use barrelstrength\sproutforms\rules\conditions\IsNotCheckedCondition;
 use Craft;
+use craft\base\ElementInterface;
+use craft\base\PreviewableFieldInterface;
+use craft\fields\Checkboxes as CraftCheckboxes;
 use craft\fields\Dropdown as CraftDropdown;
 use craft\fields\Lightswitch as CraftLightswitch;
-use craft\fields\Checkboxes as CraftCheckboxes;
-use craft\fields\RadioButtons as CraftRadioButtons;
 use craft\fields\PlainText as CraftPlainText;
+use craft\fields\RadioButtons as CraftRadioButtons;
 use craft\helpers\Template as TemplateHelper;
-use craft\base\PreviewableFieldInterface;
-use craft\base\ElementInterface;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -55,6 +60,14 @@ class OptIn extends FormField implements PreviewableFieldInterface
      */
     public $optInValueWhenFalse;
 
+    /**
+     * @inheritdoc
+     */
+    public static function displayName(): string
+    {
+        return Craft::t('sprout-forms', 'Opt-in');
+    }
+
     public function init()
     {
         if ($this->optInMessage === null) {
@@ -70,14 +83,6 @@ class OptIn extends FormField implements PreviewableFieldInterface
         }
 
         parent::init();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function displayName(): string
-    {
-        return Craft::t('sprout-forms', 'Opt-in');
     }
 
     /**
@@ -110,6 +115,7 @@ class OptIn extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {
@@ -129,6 +135,7 @@ class OptIn extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -153,6 +160,7 @@ class OptIn extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml(): string
     {
@@ -173,11 +181,11 @@ class OptIn extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'optin/input',
+        $rendered = Craft::$app->getView()->renderTemplate('optin/input',
             [
                 'name' => $this->handle,
                 'value' => $value,
@@ -192,9 +200,10 @@ class OptIn extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function defineRules(): array
     {
-        $rules = parent::rules();
+        $rules = parent::defineRules();
+
         $rules[] = [['optInMessage'], 'required'];
 
         return $rules;

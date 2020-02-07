@@ -33,10 +33,8 @@
     errors: []|unique
 }) }}
 
-{% js %}
-    (function() {
+{% js on ready %}
     new SproutFormsIntegration({
     integrationType: "{{ className(integration)|e('js') }}"
     });
-    })();
 {% endjs %}

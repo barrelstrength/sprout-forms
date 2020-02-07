@@ -1,23 +1,26 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutbasefields\SproutBaseFields;
+use barrelstrength\sproutforms\base\FormField;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
+use craft\base\PreviewableFieldInterface;
 use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Template as TemplateHelper;
-use craft\base\PreviewableFieldInterface;
-
-
-use barrelstrength\sproutforms\base\FormField;
-use barrelstrength\sproutbasefields\web\assets\regularexpression\RegularExpressionFieldAsset;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Markup;
 use yii\base\InvalidConfigException;
+
 
 /**
  *
@@ -67,15 +70,12 @@ class RegularExpression extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {
-        return Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/formfields/regularexpression/settings',
-            [
-                'field' => $this,
-            ]
-        );
+        return SproutBaseFields::$app->regularExpressionField->getSettingsHtml($this);
     }
 
     /**
@@ -89,29 +89,12 @@ class RegularExpression extends FormField implements PreviewableFieldInterface
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws InvalidConfigException
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        $view = Craft::$app->getView();
-        $view->registerAssetBundle(RegularExpressionFieldAsset::class);
-
-        $name = $this->handle;
-        $inputId = Craft::$app->getView()->formatInputId($name);
-        $namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
-
-        $fieldContext = SproutBaseFields::$app->utilities->getFieldContext($this, $element);
-
-        return Craft::$app->getView()->renderTemplate(
-            'sprout-base-fields/_components/fields/formfields/regularexpression/input',
-            [
-                'id' => $namespaceInputId,
-                'field' => $this,
-                'name' => $name,
-                'value' => $value,
-                'fieldContext' => $fieldContext,
-                'placeholder' => $this->placeholder
-            ]
-        );
+        return SproutBaseFields::$app->regularExpressionField->getInputHtml($this, $value, $element);
     }
 
     /**
@@ -121,6 +104,7 @@ class RegularExpression extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml(): string
     {
@@ -139,6 +123,7 @@ class RegularExpression extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
@@ -149,8 +134,7 @@ class RegularExpression extends FormField implements PreviewableFieldInterface
         // Do no escape "-" html5 does not treat it as special chars
         $pattern = str_replace("\\-", '-', $pattern);
 
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'regularexpression/input',
+        $rendered = Craft::$app->getView()->renderTemplate('regularexpression/input',
             [
                 'name' => $this->handle,
                 'value' => $value,
@@ -170,7 +154,10 @@ class RegularExpression extends FormField implements PreviewableFieldInterface
      */
     public function getElementValidationRules(): array
     {
-        return ['validateRegularExpression'];
+        $rules = parent::getElementValidationRules();
+        $rules[] = 'validateRegularExpression';
+
+        return $rules;
     }
 
     /**

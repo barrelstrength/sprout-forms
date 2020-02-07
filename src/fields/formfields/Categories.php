@@ -1,16 +1,20 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\SproutForms;
 use Craft;
-use craft\fields\Categories as CraftCategories;
-use craft\helpers\Template as TemplateHelper;
 use craft\base\ElementInterface;
 use craft\elements\Category;
+use craft\fields\Categories as CraftCategories;
 use craft\helpers\ArrayHelper;
 use craft\helpers\ElementHelper;
-
-use barrelstrength\sproutforms\SproutForms;
+use craft\helpers\Template as TemplateHelper;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -42,6 +46,30 @@ class Categories extends BaseRelationFormField
     /**
      * @inheritdoc
      */
+    public static function displayName(): string
+    {
+        return Craft::t('sprout-forms', 'Categories');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function defaultSelectionLabel(): string
+    {
+        return Craft::t('sprout-forms', 'Add a category');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected static function elementType(): string
+    {
+        return Category::class;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function init()
     {
         parent::init();
@@ -54,35 +82,11 @@ class Categories extends BaseRelationFormField
     }
 
     /**
-     * @inheritdoc
-     */
-    public static function displayName(): string
-    {
-        return Craft::t('sprout-forms', 'Categories');
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected static function elementType(): string
-    {
-        return Category::class;
-    }
-
-    /**
      * @return string
      */
     public function getSvgIconPath(): string
     {
         return '@sproutbaseicons/folder-open.svg';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function defaultSelectionLabel(): string
-    {
-        return Craft::t('sprout-forms', 'Add a category');
     }
 
     /**
@@ -110,6 +114,7 @@ class Categories extends BaseRelationFormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml(): string
     {
@@ -128,13 +133,13 @@ class Categories extends BaseRelationFormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
         $categories = SproutForms::$app->frontEndFields->getFrontEndCategories($this->getSettings());
 
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'categories/input',
+        $rendered = Craft::$app->getView()->renderTemplate('categories/input',
             [
                 'name' => $this->handle,
                 'value' => $value->ids(),
@@ -178,21 +183,21 @@ class Categories extends BaseRelationFormField
     /**
      * @inheritdoc
      */
+    public function getCompatibleCraftFieldTypes(): array
+    {
+        return [
+            CraftCategories::class
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
     protected function inputTemplateVariables($value = null, ElementInterface $element = null): array
     {
         $variables = parent::inputTemplateVariables($value, $element);
         $variables['branchLimit'] = $this->branchLimit;
 
         return $variables;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getCompatibleCraftFieldTypes(): array
-    {
-        return [
-            CraftCategories::class
-        ];
     }
 }

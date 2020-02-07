@@ -1,0 +1,14 @@
+{% requireAdmin %}
+
+{% import "_includes/forms" as forms %}
+
+{% set sproutReportsIsEnabled = craft.app.getPlugins().isPluginEnabled('sprout-reports') %}
+
+{{ forms.lightswitchField({
+    label: "Show Reports Tab"|t('sprout-forms'),
+    instructions: "Sprout Forms supports full-featured Reports and Mailing Lists powered by Sprout Reports. If you also have Sprout Reports installed, you may want to disable the Reports tab in Sprout Forms and manage all Reports and Mailing Lists in the Reports section of the CP."|t('sprout-forms'),
+    name: 'showReportsTab',
+    on: settings.showReportsTab ? true : not sproutReportsIsEnabled,
+    onLabel: "Enable"|t('sprout-forms'),
+    warning: not sproutReportsIsEnabled ? 'Reports tab will always display while Sprout Reports is disabled'|t('sprout-forms') : null
+}) }}

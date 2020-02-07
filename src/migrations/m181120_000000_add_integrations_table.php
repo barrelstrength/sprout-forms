@@ -1,4 +1,9 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\migrations;
 
@@ -16,7 +21,7 @@ class m181120_000000_add_integrations_table extends Migration
     {
         $table = '{{%sproutforms_integrations}}';
 
-        if ($this->db->tableExists($table)){
+        if ($this->db->tableExists($table)) {
             return true;
         }
 
@@ -59,6 +64,7 @@ class m181120_000000_add_integrations_table extends Migration
     public function safeDown(): bool
     {
         echo "m181120_000000_add_integrations_table cannot be reverted.\n";
+
         return false;
     }
 }

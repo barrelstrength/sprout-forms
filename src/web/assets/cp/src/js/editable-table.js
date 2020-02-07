@@ -1,3 +1,9 @@
+/*
+ * @link https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license https://craftcms.github.io/license
+ */
+
 /* global Craft */
 /* global Garnish */
 /* global $ */
@@ -355,10 +361,6 @@ Craft.SproutForms.EditableTable.Row = Garnish.Base.extend(
         that.addValueInputHtml(that);
       });
 
-      // $conditionalInput.change({row: this}, function(event) {
-      //   console.log(event.data.row.$tr.find("td:eq(0)").find("select").val());
-      // });
-
       if (needCheck === true) {
         this.addValueInputHtml();
       }
@@ -438,7 +440,7 @@ Craft.SproutForms.EditableTable.Row = Garnish.Base.extend(
 
       if (ev.data.type === 'number') {
         // Only grab the number at the beginning of the value (if any)
-        const match = ev.currentTarget.value.match(/^\s*(-?[\d\.]*)/);
+        const match = ev.currentTarget.value.match(/^\s*(-?[\d.]*)/);
 
         if (match !== null) {
           safeValue = match[1];

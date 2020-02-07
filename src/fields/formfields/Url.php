@@ -1,23 +1,25 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutbasefields\SproutBaseFields;
+use barrelstrength\sproutforms\base\FormField;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
+use craft\base\PreviewableFieldInterface;
 use craft\fields\PlainText as CraftPlainText;
 use craft\fields\Url as CraftUrl;
 use craft\helpers\Template as TemplateHelper;
-use craft\base\PreviewableFieldInterface;
-
-use barrelstrength\sproutforms\base\FormField;
-use barrelstrength\sproutbasefields\web\assets\url\UrlFieldAsset;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Markup;
-use yii\base\InvalidConfigException;
 
 /**
  *
@@ -72,20 +74,15 @@ class Url extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {
-        return Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/formfields/url/settings',
-            [
-                'field' => $this,
-            ]
-        );
+        return SproutBaseFields::$app->urlField->getSettingsHtml($this);
     }
 
     /**
-     * @inheritdoc
-     *
      * @param                       $value
      * @param ElementInterface|null $element
      *
@@ -93,28 +90,12 @@ class Url extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws InvalidConfigException
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        $view = Craft::$app->getView();
-        $view->registerAssetBundle(UrlFieldAsset::class);
-
-        $name = $this->handle;
-        $inputId = Craft::$app->getView()->formatInputId($name);
-        $namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
-
-        $fieldContext = SproutBaseFields::$app->utilities->getFieldContext($this, $element);
-
-        return Craft::$app->getView()->renderTemplate('sprout-base-fields/_components/fields/formfields/url/input', [
-                'namespaceInputId' => $namespaceInputId,
-                'id' => $inputId,
-                'name' => $name,
-                'value' => $value,
-                'fieldContext' => $fieldContext,
-                'placeholder' => $this->placeholder
-            ]
-        );
+        return SproutBaseFields::$app->urlField->getInputHtml($this, $value, $element);
     }
 
     /**
@@ -124,6 +105,7 @@ class Url extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml(): string
     {
@@ -142,15 +124,14 @@ class Url extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
-        $attributes = $this->getAttributes();
-        $errorMessage = SproutBaseFields::$app->urlField->getErrorMessage($attributes['name'], $this);
+        $errorMessage = SproutBaseFields::$app->urlField->getErrorMessage($this);
         $placeholder = $this->placeholder ?? '';
 
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'url/input',
+        $rendered = Craft::$app->getView()->renderTemplate('url/input',
             [
                 'name' => $this->handle,
                 'value' => $value,
@@ -182,7 +163,10 @@ class Url extends FormField implements PreviewableFieldInterface
      */
     public function getElementValidationRules(): array
     {
-        return ['validateUrl'];
+        $rules = parent::getElementValidationRules();
+        $rules[] = 'validateUrl';
+
+        return $rules;
     }
 
     /**
@@ -197,12 +181,11 @@ class Url extends FormField implements PreviewableFieldInterface
     {
         /** @var Element $element */
         $value = $element->getFieldValue($this->handle);
+        $isValid = SproutBaseFields::$app->urlField->validate($value, $this);
 
-        if (!SproutBaseFields::$app->urlField->validate($value, $this)) {
-            $element->addError(
-                $this->handle,
-                SproutBaseFields::$app->urlField->getErrorMessage($this->name, $this)
-            );
+        if (!$isValid) {
+            $message = SproutBaseFields::$app->urlField->getErrorMessage($this);
+            $element->addError($this->handle, $message);
         }
     }
 

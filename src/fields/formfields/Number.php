@@ -1,24 +1,28 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\rules\conditions\IsCondition;
 use barrelstrength\sproutforms\rules\conditions\IsGreaterThanCondition;
 use barrelstrength\sproutforms\rules\conditions\IsGreaterThanOrEqualToCondition;
 use barrelstrength\sproutforms\rules\conditions\IsLessThanCondition;
 use barrelstrength\sproutforms\rules\conditions\IsLessThanOrEqualToCondition;
 use Craft;
+use craft\base\ElementInterface;
+use craft\base\PreviewableFieldInterface;
 use craft\fields\Dropdown as CraftDropdown;
 use craft\fields\Number as CraftNumber;
 use craft\fields\PlainText as CraftPlainText;
-use craft\helpers\Template as TemplateHelper;
-use craft\base\ElementInterface;
-use craft\base\PreviewableFieldInterface;
 use craft\helpers\Db;
 use craft\helpers\Localization;
+use craft\helpers\Template as TemplateHelper;
 use craft\i18n\Locale;
-
-use barrelstrength\sproutforms\base\FormField;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -66,17 +70,25 @@ class Number extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
+    public static function displayName(): string
+    {
+        return Craft::t('sprout-forms', 'Number');
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function init()
     {
         parent::init();
 
         // Normalize $max
-        if ($this->max !== null && empty($this->max)) {
+        if ($this->max !== null && $this->max !== '0' && empty($this->max)) {
             $this->max = null;
         }
 
         // Normalize $min
-        if ($this->min !== null && empty($this->min)) {
+        if ($this->min !== null && $this->min !== '0' && empty($this->min)) {
             $this->min = null;
         }
 
@@ -90,15 +102,6 @@ class Number extends FormField implements PreviewableFieldInterface
             $this->size = null;
         }
     }
-
-    /**
-     * @inheritdoc
-     */
-    public static function displayName(): string
-    {
-        return Craft::t('sprout-forms', 'Number');
-    }
-
 
     /**
      * @return string
@@ -138,11 +141,11 @@ class Number extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/formfields/number/settings',
+        $rendered = Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/formfields/number/settings',
             [
                 'field' => $this,
             ]
@@ -161,6 +164,7 @@ class Number extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -186,6 +190,7 @@ class Number extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml(): string
     {
@@ -204,11 +209,11 @@ class Number extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'number/input',
+        $rendered = Craft::$app->getView()->renderTemplate('number/input',
             [
                 'name' => $this->handle,
                 'value' => $value,
@@ -223,9 +228,10 @@ class Number extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function defineRules(): array
     {
-        $rules = parent::rules();
+        $rules = parent::defineRules();
+
         $rules[] = [['min', 'max'], 'number'];
         $rules[] = [['decimals', 'size'], 'integer'];
         $rules[] = [
@@ -240,6 +246,13 @@ class Number extends FormField implements PreviewableFieldInterface
         }
 
         return $rules;
+    }
+
+    public function getElementValidationRules(): array
+    {
+        return [
+            ['number', 'min' => $this->min, 'max' => $this->max],
+        ];
     }
 
     /**

@@ -1,4 +1,9 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\rules\conditions;
 
@@ -19,23 +24,10 @@ class DoesNotContainCondition extends Condition
         return 'does not contain';
     }
 
-    /**
-     * @return array
-     */
-    public function rules(): array
-    {
-        return [
-            [['inputValue'], 'validateCondition', 'skipOnEmpty' => false]
-        ];
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function validateCondition()
     {
         if (strpos($this->inputValue, $this->ruleValue) === false) {
-            return true;
+            return;
         }
 
         $this->addError('inputValue', Craft::t('sprout-forms', 'Condition does not validate'));

@@ -1,7 +1,13 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\rules\conditions\ContainsCondition;
 use barrelstrength\sproutforms\rules\conditions\DoesNotContainCondition;
 use barrelstrength\sproutforms\rules\conditions\DoesNotEndWithCondition;
@@ -11,20 +17,18 @@ use barrelstrength\sproutforms\rules\conditions\IsCondition;
 use barrelstrength\sproutforms\rules\conditions\IsNotCondition;
 use barrelstrength\sproutforms\rules\conditions\StartsWithCondition;
 use Craft;
-use craft\fields\PlainText as CraftPlainText;
+use craft\base\ElementInterface;
+use craft\base\PreviewableFieldInterface;
 use craft\fields\Dropdown as CraftDropdown;
+use craft\fields\PlainText as CraftPlainText;
+use craft\helpers\Db;
 use craft\helpers\Template as TemplateHelper;
+use LitEmoji\LitEmoji;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Markup;
 use yii\db\Schema;
-use craft\base\ElementInterface;
-use craft\base\PreviewableFieldInterface;
-use LitEmoji\LitEmoji;
-use craft\helpers\Db;
-
-use barrelstrength\sproutforms\base\FormField;
 
 /**
  * Class SingleLine
@@ -63,9 +67,18 @@ class SingleLine extends FormField implements PreviewableFieldInterface
     /**
      * @inheritdoc
      */
-    public function rules()
+    public static function displayName(): string
     {
-        $rules = parent::rules();
+        return Craft::t('sprout-forms', 'Single Line');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function defineRules(): array
+    {
+        $rules = parent::defineRules();
+
         $rules[] = [['charLimit'], 'validateCharLimit'];
 
         return $rules;
@@ -101,14 +114,6 @@ class SingleLine extends FormField implements PreviewableFieldInterface
     }
 
     /**
-     * @inheritdoc
-     */
-    public static function displayName(): string
-    {
-        return Craft::t('sprout-forms', 'Single Line');
-    }
-
-    /**
      * @return string
      */
     public function getSvgIconPath(): string
@@ -122,11 +127,11 @@ class SingleLine extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/formfields/singleline/settings',
+        $rendered = Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/formfields/singleline/settings',
             [
                 'field' => $this,
             ]
@@ -145,6 +150,7 @@ class SingleLine extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -171,6 +177,7 @@ class SingleLine extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml(): string
     {
@@ -191,11 +198,11 @@ class SingleLine extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'singleline/input',
+        $rendered = Craft::$app->getView()->renderTemplate('singleline/input',
             [
                 'name' => $this->handle,
                 'value' => $value,
@@ -215,6 +222,7 @@ class SingleLine extends FormField implements PreviewableFieldInterface
         if ($value !== null) {
             $value = LitEmoji::unicodeToShortcode($value);
         }
+
         return $value;
     }
 
@@ -225,6 +233,7 @@ class SingleLine extends FormField implements PreviewableFieldInterface
     {
         $value = (string)$value;
         $value = LitEmoji::unicodeToShortcode($value);
+
         return $value;
     }
 

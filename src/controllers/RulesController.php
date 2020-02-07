@@ -1,4 +1,9 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\controllers;
 
@@ -6,10 +11,10 @@ use barrelstrength\sproutforms\base\ConditionInterface;
 use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\base\Rule;
 use barrelstrength\sproutforms\records\Rules as RulesRecord;
+use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\errors\MissingComponentException;
 use craft\web\Controller as BaseController;
-use barrelstrength\sproutforms\SproutForms;
 use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -66,6 +71,7 @@ class RulesController extends BaseController
 
         if (!SproutForms::$app->rules->saveRule($rule)) {
             Craft::error('Unable to save rule.', __METHOD__);
+
             return $this->returnJson(false);
         }
 
@@ -84,6 +90,8 @@ class RulesController extends BaseController
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
      */
     public function actionEditRule(): Response
     {

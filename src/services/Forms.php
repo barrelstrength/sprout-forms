@@ -1,4 +1,9 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\services;
 
@@ -6,22 +11,22 @@ use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\base\FormTemplates;
 use barrelstrength\sproutforms\base\Integration;
 use barrelstrength\sproutforms\elements\Form;
+use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
+use barrelstrength\sproutforms\migrations\CreateFormContentTable;
+use barrelstrength\sproutforms\records\Form as FormRecord;
 use barrelstrength\sproutforms\rules\FieldRule;
 use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutforms\elements\Form as FormElement;
-use barrelstrength\sproutforms\records\Form as FormRecord;
-use barrelstrength\sproutforms\migrations\CreateFormContentTable;
 use Craft;
 use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\db\Query;
 use craft\errors\MissingComponentException;
 use craft\events\RegisterComponentTypesEvent;
+use craft\helpers\MigrationHelper;
+use craft\helpers\StringHelper;
 use Throwable;
 use yii\base\Component;
-use craft\helpers\StringHelper;
-use craft\helpers\MigrationHelper;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
 
@@ -41,6 +46,11 @@ class Forms extends Component
     const EVENT_REGISTER_FORM_TEMPLATES = 'registerFormTemplatesEvent';
 
     /**
+     * @var array
+     */
+    protected static $fieldVariables = [];
+
+    /**
      * @var
      */
     public $activeEntries;
@@ -56,9 +66,20 @@ class Forms extends Component
     protected $formRecord;
 
     /**
-     * @var array
+     * Constructor
+     *
+     * @param object $formRecord
      */
-    protected static $fieldVariables = [];
+    public function __construct($formRecord = null)
+    {
+        $this->formRecord = $formRecord;
+
+        if ($this->formRecord === null) {
+            $this->formRecord = new FormRecord();
+        }
+
+        parent::__construct($formRecord);
+    }
 
     /**
      *
@@ -82,22 +103,6 @@ class Forms extends Component
     public static function getFieldVariables()
     {
         return static::$fieldVariables;
-    }
-
-    /**
-     * Constructor
-     *
-     * @param object $formRecord
-     */
-    public function __construct($formRecord = null)
-    {
-        $this->formRecord = $formRecord;
-
-        if ($this->formRecord === null) {
-            $this->formRecord = new FormRecord();
-        }
-
-        parent::__construct($formRecord);
     }
 
     /**
@@ -133,6 +138,7 @@ class Forms extends Component
 
         if ($form->hasErrors()) {
             Craft::error($form->getErrors(), __METHOD__);
+
             return false;
         }
 
@@ -246,10 +252,8 @@ class Forms extends Component
 
             Craft::$app->content->contentTable = $originalContentTable;
 
-
             // Delete the Element and Form
             $success = Craft::$app->elements->deleteElementById($form->id);
-
 
             if (!$success) {
                 $transaction->rollBack();
@@ -368,24 +372,6 @@ class Forms extends Component
     }
 
     /**
-     * Creates the content table for a Form.
-     *
-     * @param $name
-     *
-     * @throws Throwable
-     */
-    private function _createContentTable($name)
-    {
-        $migration = new CreateFormContentTable([
-            'tableName' => $name
-        ]);
-
-        ob_start();
-        $migration->up();
-        ob_end_clean();
-    }
-
-    /**
      * Returns the value of a given field
      *
      * @param $field
@@ -422,7 +408,7 @@ class Forms extends Component
             // Check if the field is in the titleformat
             if (strpos($formRecord->titleFormat, $field->handle) !== false) {
                 // Let's remove the field from the titleFormat
-                $newTitleFormat = preg_replace('/\{'.$field->handle.'.*\}/', '', $formRecord->titleFormat);
+                $newTitleFormat = preg_replace('/{'.$field->handle.'.*}/', '', $formRecord->titleFormat);
                 $formRecord->titleFormat = $newTitleFormat;
                 $formRecord->save(false);
 
@@ -521,7 +507,7 @@ class Forms extends Component
                 ->where(['id' => $integration->id])
                 ->one();
 
-            if (is_null($integrationResult)) {
+            if ($integrationResult === null) {
                 continue;
             }
 
@@ -794,17 +780,6 @@ class Forms extends Component
     }
 
     /**
-     * @param $path
-     *
-     * @return string
-     * @throws Exception
-     */
-    private function getSitePath($path): string
-    {
-        return Craft::$app->path->getSiteTemplatesPath().DIRECTORY_SEPARATOR.$path;
-    }
-
-    /**
      * Returns all available Captcha classes
      *
      * @return array[]
@@ -864,21 +839,24 @@ class Forms extends Component
         /** @var Form $form */
         $form = $context['form'] ?? null;
         if ($form !== null && $form->enableCaptchas) {
-            return $this->getCaptchasHtml();
+            return $this->getCaptchasHtml($form);
         }
 
         return null;
     }
 
     /**
+     * @param FormElement $form
+     *
      * @return string
      */
-    public function getCaptchasHtml(): string
+    public function getCaptchasHtml(Form $form): string
     {
         $captchas = $this->getAllEnabledCaptchas();
         $captchaHtml = '';
 
         foreach ($captchas as $captcha) {
+            $captcha->form = $form;
             $captchaHtml .= $captcha->getCaptchaHtml();
         }
 
@@ -903,5 +881,67 @@ class Forms extends Component
         }
 
         return true;
+    }
+
+    /**
+     * @param \barrelstrength\sproutforms\elements\Form $form
+     *
+     * @return array
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function getTabsForFieldLayout(Form $form): array
+    {
+        $tabs = [];
+
+        foreach ($form->getFieldLayout()->getTabs() as $index => $tab) {
+            // Do any of the fields on this tab have errors?
+            $hasErrors = false;
+
+            if ($form->hasErrors()) {
+                foreach ($tab->getFields() as $field) {
+                    /** @var Field $field */
+                    if ($hasErrors = $form->hasErrors($field->handle.'.*')) {
+                        break;
+                    }
+                }
+            }
+
+            $tabs[$tab->id] = [
+                'label' => Craft::t('sprout-forms', $tab->name),
+                'url' => '#sproutforms-tab-'.$tab->id,
+                'class' => $hasErrors ? 'error' : null
+            ];
+        }
+
+        return $tabs;
+    }
+
+    /**
+     * Creates the content table for a Form.
+     *
+     * @param $name
+     *
+     * @throws Throwable
+     */
+    private function _createContentTable($name)
+    {
+        $migration = new CreateFormContentTable([
+            'tableName' => $name
+        ]);
+
+        ob_start();
+        $migration->up();
+        ob_end_clean();
+    }
+
+    /**
+     * @param $path
+     *
+     * @return string
+     * @throws Exception
+     */
+    private function getSitePath($path): string
+    {
+        return Craft::$app->path->getSiteTemplatesPath().DIRECTORY_SEPARATOR.$path;
     }
 }

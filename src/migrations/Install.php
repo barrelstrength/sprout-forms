@@ -1,16 +1,21 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\migrations;
 
+use barrelstrength\sproutbaseemail\migrations\Install as SproutBaseNotificationInstall;
 use barrelstrength\sproutbasefields\migrations\Install as SproutBaseFieldsInstall;
 use barrelstrength\sproutbasereports\migrations\Install as SproutBaseReportsInstall;
-use barrelstrength\sproutbaseemail\migrations\Install as SproutBaseNotificationInstall;
 use barrelstrength\sproutbasereports\SproutBaseReports;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesDataSource;
 use barrelstrength\sproutforms\models\Settings;
-use craft\db\Migration;
 use Craft;
+use craft\db\Migration;
 use craft\services\Plugins;
 use ReflectionException;
 use yii\base\ErrorException;
@@ -59,15 +64,43 @@ class Install extends Migration
     {
         SproutBaseReports::$app->dataSources->deleteReportsByType(EntriesDataSource::class);
 
-        $this->dropTable('{{%sproutforms_integrations_log}}');
-        $this->dropTable('{{%sproutforms_integrations}}');
-        $this->dropTable('{{%sproutforms_rules}}');
-        $this->dropTable('{{%sproutforms_entries}}');
-        $this->dropTable('{{%sproutforms_forms}}');
-        $this->dropTable('{{%sproutforms_formgroups}}');
-        $this->dropTable('{{%sproutforms_entrystatuses}}');
+        $this->dropTableIfExists('{{%sproutforms_integrations_log}}');
+        $this->dropTableIfExists('{{%sproutforms_integrations}}');
+        $this->dropTableIfExists('{{%sproutforms_rules}}');
+        $this->dropTableIfExists('{{%sproutforms_entries_spam_log}}');
+        $this->dropTableIfExists('{{%sproutforms_entries}}');
+        $this->dropTableIfExists('{{%sproutforms_entrystatuses}}');
+        $this->dropTableIfExists('{{%sproutforms_forms}}');
+        $this->dropTableIfExists('{{%sproutforms_formgroups}}');
 
         return true;
+    }
+
+    public function installSproutFields()
+    {
+        $migration = new SproutBaseFieldsInstall();
+
+        ob_start();
+        $migration->safeUp();
+        ob_end_clean();
+    }
+
+    public function installSproutEmail()
+    {
+        $migration = new SproutBaseNotificationInstall();
+
+        ob_start();
+        $migration->safeUp();
+        ob_end_clean();
+    }
+
+    public function installSproutReports()
+    {
+        $migration = new SproutBaseReportsInstall();
+
+        ob_start();
+        $migration->safeUp();
+        ob_end_clean();
     }
 
     /**
@@ -416,32 +449,5 @@ class Install extends Migration
             ];
 
         $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings', $settings->toArray());
-    }
-
-    public function installSproutFields()
-    {
-        $migration = new SproutBaseFieldsInstall();
-
-        ob_start();
-        $migration->safeUp();
-        ob_end_clean();
-    }
-
-    public function installSproutEmail()
-    {
-        $migration = new SproutBaseNotificationInstall();
-
-        ob_start();
-        $migration->safeUp();
-        ob_end_clean();
-    }
-
-    public function installSproutReports()
-    {
-        $migration = new SproutBaseReportsInstall();
-
-        ob_start();
-        $migration->safeUp();
-        ob_end_clean();
     }
 }

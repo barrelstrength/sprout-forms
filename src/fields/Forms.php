@@ -1,4 +1,9 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\fields;
 
@@ -12,23 +17,12 @@ use craft\fields\BaseRelationField;
  */
 class Forms extends BaseRelationField
 {
-    // Static
-    // =========================================================================
-
     /**
      * @inheritDoc
      */
     public static function displayName(): string
     {
         return Craft::t('sprout-forms', 'Forms (Sprout Forms)');
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected static function elementType(): string
-    {
-        return FormElement::class;
     }
 
     /**
@@ -45,5 +39,13 @@ class Forms extends BaseRelationField
     public static function valueType(): string
     {
         return FormQuery::class;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected static function elementType(): string
+    {
+        return FormElement::class;
     }
 }

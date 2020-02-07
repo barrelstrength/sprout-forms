@@ -1,6 +1,6 @@
 {% import "_includes/forms" as forms %}
 
-{% set options = field.getCountries() %}
+{% set options = craft.sproutFields.getCountries() %}
 
 {{ forms.select({
     options: options,

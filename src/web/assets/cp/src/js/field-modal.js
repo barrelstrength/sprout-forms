@@ -1,7 +1,7 @@
 /*
- * @link      https://sprout.barrelstrengthdesign.com/
+ * @link https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license   http://sprout.barrelstrengthdesign.com/license
+ * @license https://craftcms.github.io/license
  */
 
 if (typeof Craft.SproutForms === typeof undefined) {
@@ -105,7 +105,6 @@ if (typeof Craft.SproutForms === typeof undefined) {
         };
 
         // Loads the field settings template file, as well as all the resources that come with it
-
         Craft.postActionRequest('sprout-forms/fields/modal-field', postData, $.proxy(function(response, textStatus) {
           if (textStatus === 'success') {
             this.$loadSpinner.addClass('hidden');
@@ -506,6 +505,7 @@ if (typeof Craft.SproutForms === typeof undefined) {
        * Removes everything to do with the modal form the DOM.
        */
       destroy: function() {
+
         this.base.destroy();
 
         this.destroyListeners();

@@ -1,11 +1,17 @@
-<?php /** @noinspection ClassConstantCanBeUsedInspection */
+<?php /**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
+
+/** @noinspection ClassConstantCanBeUsedInspection */
 
 namespace barrelstrength\sproutforms\migrations;
 
+use barrelstrength\sproutbasereports\migrations\Install as SproutBaseReportsInstall;
+use barrelstrength\sproutbasereports\migrations\m180307_042132_craft3_schema_changes as SproutReportsCraft2toCraft3Migration;
 use craft\db\Migration;
 use craft\db\Query;
-use barrelstrength\sproutbasereports\migrations\m180307_042132_craft3_schema_changes as SproutReportsCraft2toCraft3Migration;
-use barrelstrength\sproutbasereports\migrations\Install as SproutBaseReportsInstall;
 use yii\base\NotSupportedException;
 
 /**
@@ -90,6 +96,7 @@ class m180309_000000_update_data_sources extends Migration
     public function safeDown(): bool
     {
         echo "m180309_000000_update_data_sources cannot be reverted.\n";
+
         return false;
     }
 }

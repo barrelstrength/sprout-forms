@@ -1,18 +1,22 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\base\Element;
+use craft\base\ElementInterface;
+use craft\elements\db\ElementQueryInterface;
+use craft\elements\Tag;
 use craft\errors\SiteNotFoundException;
 use craft\fields\Tags as CraftTags;
 use craft\helpers\Template as TemplateHelper;
-use craft\base\ElementInterface;
-use craft\elements\Tag;
-use craft\elements\db\ElementQueryInterface;
 use craft\models\TagGroup;
-
-use barrelstrength\sproutforms\SproutForms;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -43,19 +47,17 @@ class Tags extends BaseRelationFormField
     /**
      * @inheritdoc
      */
-    public function init()
+    public static function displayName(): string
     {
-        parent::init();
-        $this->allowMultipleSources = false;
-        $this->allowLimit = false;
+        return Craft::t('sprout-forms', 'Tags');
     }
 
     /**
      * @inheritdoc
      */
-    public static function displayName(): string
+    public static function defaultSelectionLabel(): string
     {
-        return Craft::t('sprout-forms', 'Tags');
+        return Craft::t('sprout-forms', 'Add a Tag');
     }
 
     /**
@@ -67,19 +69,21 @@ class Tags extends BaseRelationFormField
     }
 
     /**
+     * @inheritdoc
+     */
+    public function init()
+    {
+        parent::init();
+        $this->allowMultipleSources = false;
+        $this->allowLimit = false;
+    }
+
+    /**
      * @return string
      */
     public function getSvgIconPath(): string
     {
         return '@sproutbaseicons/tags.svg';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function defaultSelectionLabel(): string
-    {
-        return Craft::t('sprout-forms', 'Add a Tag');
     }
 
     /**
@@ -94,6 +98,7 @@ class Tags extends BaseRelationFormField
      * @throws SyntaxError
      * @throws SiteNotFoundException
      * @throws NotSupportedException
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -136,6 +141,7 @@ class Tags extends BaseRelationFormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml(): string
     {
@@ -154,13 +160,13 @@ class Tags extends BaseRelationFormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
         $tags = SproutForms::$app->frontEndFields->getFrontEndTags($this->getSettings());
 
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'tags/input',
+        $rendered = Craft::$app->getView()->renderTemplate('tags/input',
             [
                 'name' => $this->handle,
                 'value' => $value->ids(),
@@ -175,6 +181,16 @@ class Tags extends BaseRelationFormField
 
     // Private Methods
     // =======================================================================
+
+    /**
+     * @inheritdoc
+     */
+    public function getCompatibleCraftFieldTypes(): array
+    {
+        return [
+            CraftTags::class
+        ];
+    }
 
     /**
      * Returns the tag group associated with this field.
@@ -208,15 +224,5 @@ class Tags extends BaseRelationFormField
         }
 
         return $this->_tagGroupId = $matches[1];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getCompatibleCraftFieldTypes(): array
-    {
-        return [
-            CraftTags::class
-        ];
     }
 }

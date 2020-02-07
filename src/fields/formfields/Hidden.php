@@ -1,16 +1,20 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\services\Forms;
 use Craft;
 use craft\base\ElementInterface;
+use craft\base\PreviewableFieldInterface;
 use craft\fields\Dropdown as CraftDropdown;
 use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Template as TemplateHelper;
-use craft\base\PreviewableFieldInterface;
-
-use barrelstrength\sproutforms\base\FormField;
 use Exception;
 use Throwable;
 use Twig\Error\LoaderError;
@@ -73,6 +77,7 @@ class Hidden extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {
@@ -92,6 +97,7 @@ class Hidden extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -111,6 +117,7 @@ class Hidden extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml(): string
     {
@@ -138,8 +145,7 @@ class Hidden extends FormField implements PreviewableFieldInterface
             }
         }
 
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'hidden/input',
+        $rendered = Craft::$app->getView()->renderTemplate('hidden/input',
             [
                 'name' => $this->handle,
                 'value' => $value,

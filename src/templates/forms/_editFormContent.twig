@@ -1,0 +1,26 @@
+{% import "_includes/forms" as forms %}
+{% import "sprout-forms/_includes/formbuilder" as formBuilder %}
+
+{# When we add tabs we need add a for loop here #}
+<div id="sproutforms-fieldlayout-container">
+
+    {% if form.getFirstError('fieldLayoutId') %}
+        {{ forms.errorList(form.getErrors('fieldLayoutId')) }}
+    {% endif %}
+
+    {# let's add the tabs and fields to the dropped divs #}
+    {% if fieldLayout %}
+        {% for tab in fieldLayout.getTabs() %}
+            {{ formBuilder.tab(tab, tab.getFields(), not loop.first) }}
+        {% endfor %}
+    {% endif %}
+
+    <input type="hidden" name="fieldLayoutId" value="{{ fieldLayout.id }}">
+    <div id="deletedFieldsContainer" class="hidden"></div>
+
+</div>
+
+{% hook 'cp.sproutForms.forms.edit.content' %}
+
+{# Load assets here so that they get refreshed when rebuilding the field layout #}
+

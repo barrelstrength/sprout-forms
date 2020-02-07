@@ -1,13 +1,18 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\services;
 
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
-use Craft;
-use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\models\EntryStatus;
 use barrelstrength\sproutforms\records\EntryStatus as EntryStatusRecord;
+use barrelstrength\sproutforms\SproutForms;
+use Craft;
 use Throwable;
 use yii\base\Component;
 use yii\base\Exception;
@@ -26,9 +31,14 @@ class EntryStatuses extends Component
      */
     public function getAllEntryStatuses(): array
     {
-        $entryStatuses = EntryStatusRecord::find()
+        $results = EntryStatusRecord::find()
             ->orderBy(['sortOrder' => 'asc'])
             ->all();
+
+        $entryStatuses = [];
+        foreach ($results as $result) {
+            $entryStatuses[] = new EntryStatus($result);
+        }
 
         return $entryStatuses;
     }
@@ -142,24 +152,21 @@ class EntryStatuses extends Component
      */
     public function deleteEntryStatusById($id): bool
     {
-        $statuses = $this->getAllEntryStatuses();
+        $existsStatusOnEntries = EntryElement::find()->where(['statusId' => $id])->exists();
 
-        $entry = EntryElement::find()->where(['statusId' => $id])->one();
-
-        if ($entry) {
+        if ($existsStatusOnEntries) {
             return false;
         }
 
-        if (count($statuses) >= 2) {
-            $entryStatus = EntryStatusRecord::findOne($id);
+        $entryStatus = EntryStatusRecord::findOne($id);
 
-            if ($entryStatus) {
-                $entryStatus->delete();
-                return true;
-            }
+        if (!$entryStatus || $entryStatus->isDefault || $entryStatus->handle === 'spam') {
+            return false;
         }
 
-        return false;
+        $entryStatus->delete();
+
+        return true;
     }
 
     /**

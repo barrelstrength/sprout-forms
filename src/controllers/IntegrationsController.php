@@ -1,15 +1,19 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\controllers;
 
 use barrelstrength\sproutforms\base\ElementIntegration;
 use barrelstrength\sproutforms\base\Integration;
 use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
+use barrelstrength\sproutforms\SproutForms;
 use Craft;
-
 use craft\errors\MissingComponentException;
 use craft\web\Controller as BaseController;
-use barrelstrength\sproutforms\SproutForms;
 use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -95,6 +99,7 @@ class IntegrationsController extends BaseController
 
         if (!SproutForms::$app->integrations->saveIntegration($integration)) {
             Craft::error('Unable to save integration.', __METHOD__);
+
             return $this->returnJson(false);
         }
 
@@ -113,6 +118,8 @@ class IntegrationsController extends BaseController
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
      */
     public function actionEditIntegration(): Response
     {

@@ -1,4 +1,10 @@
-<?php /** @noinspection ClassConstantCanBeUsedInspection */
+<?php /**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
+
+/** @noinspection ClassConstantCanBeUsedInspection */
 
 namespace barrelstrength\sproutforms\migrations;
 
@@ -77,6 +83,7 @@ class m190425_000000_add_integrations_entries extends Migration
     public function safeDown(): bool
     {
         echo "m190425_000000_add_integrations_entries cannot be reverted.\n";
+
         return false;
     }
 }

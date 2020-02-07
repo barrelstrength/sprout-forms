@@ -1,4 +1,9 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\events;
 
@@ -10,9 +15,6 @@ use yii\base\Event;
  */
 class OnSaveEntryEvent extends Event
 {
-    // Properties
-    // =========================================================================
-
     /**
      * @var Entry
      */

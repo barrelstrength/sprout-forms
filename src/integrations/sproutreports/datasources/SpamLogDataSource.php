@@ -1,12 +1,17 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\integrations\sproutreports\datasources;
 
+use barrelstrength\sproutbasereports\base\DataSource;
+use barrelstrength\sproutbasereports\elements\Report;
 use barrelstrength\sproutbasereports\SproutBaseReports;
 use barrelstrength\sproutforms\elements\Form;
-use barrelstrength\sproutbasereports\elements\Report;
 use Craft;
-use barrelstrength\sproutbasereports\base\DataSource;
 use craft\db\Query;
 use craft\helpers\DateTimeHelper;
 use DateTime;
@@ -36,6 +41,12 @@ class SpamLogDataSource extends DataSource
     public function getDescription(): string
     {
         return Craft::t('sprout-forms', 'Overview of spam submissions');
+    }
+
+    public function getViewContextLabel(): string
+    {
+        // @todo - implement this with an interface or Trait so it's easier to apply to all DataSources in a plugin?
+        return 'Sprout Forms';
     }
 
     /**

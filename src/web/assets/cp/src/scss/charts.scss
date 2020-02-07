@@ -1,21 +1,19 @@
 /* Chart Explorer */
 
 .chart-explorer {
-    position: relative;
-    padding: 24px;
-    border-radius: 3px;
-    border: 1px solid HSLA(240, 4%, 91%, .5);
     margin-bottom: 24px;
+    margin-right: 24px;
+    position: relative;
 }
 
 .chart-explorer .chart-header {
-    position: relative;
     margin-bottom: 14px;
+    position: relative;
 }
 
 .chart-explorer .chart-header .date-range {
-    width: auto;
     float: right;
+    width: auto;
 }
 
 body.rtl .chart-explorer .chart-header .date-range {
@@ -40,8 +38,8 @@ body.rtl .chart-explorer .chart-header .spinner {
 }
 
 .chart-explorer .chart-container {
-    position: relative;
     margin: 0 -24px -14px -24px;
+    position: relative;
 }
 
 .chart-explorer .chart-container .chart {

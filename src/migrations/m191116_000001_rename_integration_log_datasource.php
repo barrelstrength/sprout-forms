@@ -1,4 +1,10 @@
-<?php /** @noinspection ClassConstantCanBeUsedInspection */
+<?php /**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
+
+/** @noinspection ClassConstantCanBeUsedInspection */
 
 namespace barrelstrength\sproutforms\migrations;
 
@@ -33,6 +39,7 @@ class m191116_000001_rename_integration_log_datasource extends Migration
     public function safeDown(): bool
     {
         echo "m191116_000001_rename_integration_log_datasource cannot be reverted.\n";
+
         return false;
     }
 }

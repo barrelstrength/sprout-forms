@@ -1,4 +1,9 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\rules\conditions;
 
@@ -16,23 +21,10 @@ class DoesNotEndWithCondition extends Condition
         return 'does not end with';
     }
 
-    /**
-     * @return array
-     */
-    public function rules(): array
-    {
-        return [
-            [['inputValue'], 'validateCondition', 'skipOnEmpty' => false]
-        ];
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function validateCondition()
     {
         if (substr_compare($this->inputValue, $this->ruleValue, -strlen($this->ruleValue)) !== 0) {
-            return true;
+            return;
         }
 
         $this->addError('inputValue', Craft::t('sprout-forms', 'Condition does not validate'));

@@ -1,4 +1,9 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\migrations;
 
@@ -105,13 +110,23 @@ class m191118_000000_fix_duplicate_forms extends Migration
             // Generate an empty Field Layout
             $emptyFieldLayoutId = $this->getEmptyFieldLayoutId();
 
-            $formId = (int) $form['id'];
+            $formId = (int)$form['id'];
 
             // Assign a new, empty field layout to the corrupted duplicate form field layout
             $this->update('{{%sproutforms_forms}}', ['fieldLayoutId' => $emptyFieldLayoutId], ['id' => $formId], [], false);
 
             Craft::info('Updated corrupted duplicate form field layout id: '.$form['fieldLayoutId'].' to: '.$emptyFieldLayoutId, __METHOD__);
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function safeDown(): bool
+    {
+        echo "m191113_000000_fix_duplicate_forms cannot be reverted.\n";
+
+        return false;
     }
 
     /**
@@ -122,7 +137,7 @@ class m191118_000000_fix_duplicate_forms extends Migration
     {
         $tabs = [];
         $tab = new FieldLayoutTab();
-        $tab->name = urldecode('Tab 1');
+        $tab->name = urldecode('Page 1');
         $tab->sortOrder = '888';
         $tab->setFields([]);
 
@@ -136,15 +151,5 @@ class m191118_000000_fix_duplicate_forms extends Migration
         Craft::$app->getFields()->saveLayout($layout);
 
         return $layout->id;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function safeDown(): bool
-    {
-        echo "m191113_000000_fix_duplicate_forms cannot be reverted.\n";
-
-        return false;
     }
 }

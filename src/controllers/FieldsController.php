@@ -1,25 +1,29 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\controllers;
 
 
 use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\elements\Form;
+use barrelstrength\sproutforms\SproutForms;
 use Craft;
+use craft\base\Field;
 use craft\errors\ElementNotFoundException;
 use craft\helpers\Json;
-use craft\web\Controller as BaseController;
-use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
 use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
-use craft\base\Field;
-use barrelstrength\sproutforms\SproutForms;
+use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
+use craft\web\Controller as BaseController;
 use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
-use yii\db\StaleObjectException;
 use yii\web\BadRequestHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
@@ -37,6 +41,8 @@ class FieldsController extends BaseController
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
      */
     public function actionModalField(): Response
     {
@@ -90,118 +96,9 @@ class FieldsController extends BaseController
                 }
             }
         }
+
         // @todo - add error messages
         return $this->returnJson(false, null, $form, null, $tabId);
-    }
-
-    /**
-     * This action allows create a new Tab to current layout
-     *
-     * @return Response
-     * @throws BadRequestHttpException
-     * @throws ForbiddenHttpException
-     * @throws InvalidConfigException
-     */
-    public function actionAddTab(): Response
-    {
-        $this->requireAcceptsJson();
-        $this->requirePermission('sproutForms-editEntries');
-
-        $request = Craft::$app->getRequest();
-        $name = $request->getBodyParam('name');
-        $sortOrder = $request->getBodyParam('sortOrder');
-        $formId = $request->getBodyParam('formId');
-        $form = SproutForms::$app->forms->getFormById($formId);
-
-        $tab = null;
-
-        if ($name && $form && $sortOrder) {
-            $tab = SproutForms::$app->fields->createNewTab($name, $sortOrder, $form);
-
-            if ($tab->id) {
-                return $this->asJson([
-                    'success' => true,
-                    'tab' => [
-                        'id' => $tab->id,
-                        'name' => $tab->name
-                    ]
-                ]);
-            }
-        }
-
-        return $this->asJson([
-            'success' => false,
-            'errors' => $tab->getErrors()
-        ]);
-    }
-
-    /**
-     * This action allows delete a Tab of the current layout
-     *
-     * @return Response
-     * @throws Throwable
-     * @throws StaleObjectException
-     * @throws BadRequestHttpException
-     */
-    public function actionDeleteTab(): Response
-    {
-        $this->requireAcceptsJson();
-        $this->requirePermission('sproutForms-editEntries');
-
-        $request = Craft::$app->getRequest();
-        $tabId = $request->getBodyParam('tabId');
-        $tabId = str_replace('tab-', '', $tabId);
-        $tabRecord = FieldLayoutTabRecord::findOne($tabId);
-
-        if ($tabRecord) {
-            $result = $tabRecord->delete();
-
-            if ($result) {
-                return $this->asJson([
-                    'success' => true
-                ]);
-            }
-        }
-
-        return $this->asJson([
-            'success' => false,
-            'errors' => $tabRecord->getErrors()
-        ]);
-    }
-
-    /**
-     * This action allows rename a current Tab
-     *
-     * @return Response
-     * @throws BadRequestHttpException
-     * @throws ForbiddenHttpException
-     * @throws InvalidConfigException
-     */
-    public function actionRenameTab(): Response
-    {
-        $this->requireAcceptsJson();
-        $this->requirePermission('sproutForms-editEntries');
-
-        $request = Craft::$app->getRequest();
-        $name = $request->getBodyParam('name');
-        $oldName = $request->getBodyParam('oldName');
-        $formId = $request->getBodyParam('formId');
-        $form = SproutForms::$app->forms->getFormById($formId);
-
-        if ($name && $form) {
-            $result = SproutForms::$app->fields->renameTab($name, $oldName, $form);
-
-            if ($result) {
-                return $this->asJson([
-                    'success' => true
-                ]);
-            }
-        }
-
-        return $this->asJson([
-            'success' => false,
-            'errors' => Craft::t('sprout-forms', 'Unable to rename tab')
-        ]);
     }
 
     /**
@@ -345,6 +242,8 @@ class FieldsController extends BaseController
      * @throws BadRequestHttpException
      * @throws ForbiddenHttpException
      * @throws InvalidConfigException
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
      */
     public function actionEditField(): Response
     {
@@ -435,6 +334,7 @@ class FieldsController extends BaseController
 
         if ($response) {
             SproutForms::$app->forms->removeFieldRulesUsingField($oldHandle, $form);
+
             return $this->asJson([
                 'success' => true
             ]);
@@ -480,6 +380,8 @@ class FieldsController extends BaseController
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws InvalidConfigException
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
      */
     private function returnJson(bool $success, $field, Form $form, $tabName = null, $tabId = null): Response
     {

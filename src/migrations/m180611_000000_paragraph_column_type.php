@@ -1,4 +1,9 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\migrations;
 
@@ -54,6 +59,7 @@ class m180611_000000_paragraph_column_type extends Migration
     public function safeDown(): bool
     {
         echo "m180611_000000_paragraph_column_type cannot be reverted.\n";
+
         return false;
     }
 }

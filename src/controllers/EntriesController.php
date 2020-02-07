@@ -1,14 +1,19 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\controllers;
 
-use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\events\OnBeforePopulateEntryEvent;
 use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
 use barrelstrength\sproutforms\models\Settings;
+use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\errors\MissingComponentException;
 use craft\helpers\UrlHelper;
@@ -34,6 +39,11 @@ class EntriesController extends BaseController
     const EVENT_BEFORE_VALIDATE = 'beforeValidate';
 
     /**
+     * @var FormElement
+     */
+    public $form;
+
+    /**
      * Allows anonymous execution
      *
      * @var string[]
@@ -41,11 +51,6 @@ class EntriesController extends BaseController
     protected $allowAnonymous = [
         'save-entry'
     ];
-
-    /**
-     * @var FormElement
-     */
-    public $form;
 
     public function init()
     {
@@ -220,6 +225,7 @@ class EntriesController extends BaseController
             'entry' => $entry
         ]);
 
+        // Captchas are processed and added to
         $this->trigger(self::EVENT_BEFORE_VALIDATE, $event);
 
         $entry->validate(null, false);

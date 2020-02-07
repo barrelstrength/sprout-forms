@@ -1,9 +1,14 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\migrations;
 
-use craft\db\Migration;
 use barrelstrength\sproutbasefields\migrations\m190313_000000_add_administrativeareacode_column;
+use craft\db\Migration;
 use yii\base\NotSupportedException as NotSupportedExceptionAlias;
 
 /**
@@ -33,6 +38,7 @@ class m190313_000000_rename_administrative_area_code_column_sproutforms extends 
     public function safeDown(): bool
     {
         echo "m190313_000000_rename_administrative_area_code_column_sproutforms cannot be reverted.\n";
+
         return false;
     }
 }

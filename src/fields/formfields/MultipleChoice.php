@@ -1,4 +1,9 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
@@ -11,9 +16,9 @@ use barrelstrength\sproutforms\rules\conditions\IsCondition;
 use barrelstrength\sproutforms\rules\conditions\IsNotCondition;
 use barrelstrength\sproutforms\rules\conditions\StartsWithCondition;
 use Craft;
+use craft\base\ElementInterface;
 use craft\fields\RadioButtons as CraftRadioButtons;
 use craft\helpers\Template as TemplateHelper;
-use craft\base\ElementInterface;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -61,14 +66,6 @@ class MultipleChoice extends BaseOptionsFormField
 
     /**
      * @inheritdoc
-     */
-    protected function optionsSettingLabel(): string
-    {
-        return Craft::t('sprout-forms', 'Multiple Choice Options');
-    }
-
-    /**
-     * @inheritdoc
      *
      * @param                       $value
      * @param ElementInterface|null $element
@@ -77,6 +74,7 @@ class MultipleChoice extends BaseOptionsFormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -87,8 +85,7 @@ class MultipleChoice extends BaseOptionsFormField
             $value = $this->defaultValue();
         }
 
-        return Craft::$app->getView()->renderTemplate(
-            '_includes/forms/radioGroup',
+        return Craft::$app->getView()->renderTemplate('_includes/forms/radioGroup',
             [
                 'name' => $this->handle,
                 'value' => $value,
@@ -103,11 +100,11 @@ class MultipleChoice extends BaseOptionsFormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml(): string
     {
-        return Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/formfields/multiplechoice/example',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/formfields/multiplechoice/example',
             [
                 'field' => $this
             ]
@@ -124,11 +121,11 @@ class MultipleChoice extends BaseOptionsFormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'multiplechoice/input',
+        $rendered = Craft::$app->getView()->renderTemplate('multiplechoice/input',
             [
                 'name' => $this->handle,
                 'value' => $value,
@@ -165,5 +162,13 @@ class MultipleChoice extends BaseOptionsFormField
             new EndsWithCondition(),
             new DoesNotEndWithCondition()
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function optionsSettingLabel(): string
+    {
+        return Craft::t('sprout-forms', 'Multiple Choice Options');
     }
 }

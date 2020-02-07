@@ -1,9 +1,14 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\records;
 
-use craft\db\ActiveRecord;
 use barrelstrength\sproutforms\base\Integration as IntegrationApi;
+use craft\db\ActiveRecord;
 
 /**
  * Class Integration record.

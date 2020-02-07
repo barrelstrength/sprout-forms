@@ -1,10 +1,15 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\controllers;
 
-use Craft;
-use barrelstrength\sproutforms\SproutForms;
 use barrelstrength\sproutforms\models\EntryStatus;
+use barrelstrength\sproutforms\SproutForms;
+use Craft;
 use craft\helpers\Json;
 use craft\helpers\UrlHelper;
 use craft\web\Controller as BaseController;
@@ -40,6 +45,7 @@ class EntryStatusesController extends BaseController
 
                 if ($entryStatus->handle == EntryStatus::SPAM_STATUS_HANDLE) {
                     Craft::$app->session->setError(Craft::t('sprout-forms', "Spam status can't be updated"));
+
                     return $this->redirect(UrlHelper::cpUrl('sprout-forms/settings/entry-statuses'));
                 }
             } else {
@@ -70,6 +76,10 @@ class EntryStatusesController extends BaseController
         $entryStatus->handle = Craft::$app->request->getBodyParam('handle');
         $entryStatus->color = Craft::$app->request->getBodyParam('color');
         $entryStatus->isDefault = Craft::$app->request->getBodyParam('isDefault');
+
+        if (empty($entryStatus->isDefault)) {
+            $entryStatus->isDefault = 0;
+        }
 
         if (!SproutForms::$app->entryStatuses->saveEntryStatus($entryStatus)) {
             Craft::$app->session->setError(Craft::t('sprout-forms', 'Could not save Entry Status.'));
@@ -120,7 +130,7 @@ class EntryStatusesController extends BaseController
         $entryStatusId = Craft::$app->request->getRequiredBodyParam('id');
 
         if (!SproutForms::$app->entryStatuses->deleteEntryStatusById($entryStatusId)) {
-            $this->asJson(['success' => false]);
+            return $this->asJson(['success' => false]);
         }
 
         return $this->asJson(['success' => true]);

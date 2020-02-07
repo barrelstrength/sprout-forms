@@ -1,12 +1,17 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\models;
 
 use barrelstrength\sproutbase\base\SproutSettingsInterface;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\SproutForms;
-use craft\base\Model;
 use Craft;
+use craft\base\Model;
 
 /**
  *
@@ -19,16 +24,31 @@ class Settings extends Model implements SproutSettingsInterface
     const SPAM_REDIRECT_BEHAVIOR_BACK_TO_FORM = 'redirectBackToForm';
 
     public $pluginNameOverride = '';
+
     public $defaultSection = 'entries';
+
     public $formTemplateDefaultValue = '';
+
     public $enableSaveData = 1;
+
     public $spamRedirectBehavior = self::SPAM_REDIRECT_BEHAVIOR_NORMAL;
+
     public $saveSpamToDatabase = 0;
+
     public $spamLimit = 500;
+
     public $cleanupProbability = 1000;
+
     public $enableSaveDataDefaultValue = 1;
+
     public $trackRemoteIp = false;
+
+    public $showNotificationsTab = true;
+
+    public $showReportsTab = true;
+
     public $captchaSettings = [];
+
     public $enableEditFormEntryViaFrontEnd = 0;
 
     /**
@@ -55,7 +75,7 @@ class Settings extends Model implements SproutSettingsInterface
                 'label' => Craft::t('sprout-forms', 'Spam Protection'),
                 'url' => 'sprout-forms/settings/spam-protection',
                 'selected' => 'spam-protection',
-                'template' => 'sprout-forms/settings/spamprotection',
+                'template' => 'sprout-forms/settings/spam-protection',
                 'variables' => $spamProtectionVariables
             ],
             'entry-statuses' => [
@@ -63,8 +83,24 @@ class Settings extends Model implements SproutSettingsInterface
                 'url' => 'sprout-forms/settings/entry-statuses',
                 'selected' => 'entry-statuses',
                 'template' => 'sprout-forms/settings/entrystatuses',
+                'settingsForm' => false,
                 'actionTemplate' => 'sprout-forms/settings/entrystatuses/_actionStatusButton',
                 'variables' => $entryStatusVariables
+            ],
+            'settingsHeading' => [
+                'heading' => Craft::t('sprout-forms', 'Integrations'),
+            ],
+            'email' => [
+                'label' => Craft::t('sprout-forms', 'Email'),
+                'url' => 'sprout-forms/settings/email',
+                'selected' => 'email',
+                'template' => 'sprout-forms/settings/email'
+            ],
+            'reports' => [
+                'label' => Craft::t('sprout-forms', 'Reports'),
+                'url' => 'sprout-forms/settings/reports',
+                'selected' => 'reports',
+                'template' => 'sprout-forms/settings/reports'
             ]
         ];
 
@@ -82,11 +118,13 @@ class Settings extends Model implements SproutSettingsInterface
         return $navItems;
     }
 
-    public function rules(): array
+    public function defineRules(): array
     {
-        return [
-            [['formTemplateDefaultValue'], 'required', 'on' => 'general']
-        ];
+        $rules = parent::defineRules();
+
+        $rules[] = [['formTemplateDefaultValue'], 'required', 'on' => 'general'];
+
+        return $rules;
     }
 
     /**

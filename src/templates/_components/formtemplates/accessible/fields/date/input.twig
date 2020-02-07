@@ -1,0 +1,52 @@
+{%- set id = renderingOptions.id ?? name %}
+{%- set class = renderingOptions.class ?? name %}
+{%- set required = field.required ? true : false %}
+{%- set hasInstructions = field.instructions ? true : false %}
+{%- set value = value ? value : null %}
+
+{%- set timeOptions = timeOptions ? timeOptions : [] %}
+
+{%- set dataAttributes = null %}
+{%- set data = renderingOptions.data ?? null %}
+{%- for key, dataValue in data %}
+    {%- set dataAttributes = dataAttributes ~ ' data-'~key~'="'~dataValue~'"' %}
+{%- endfor -%}
+
+<div {%- if id %} id="{{ id }}"{% endif %} class="{{ name }}-wrapper
+        {%- if class %} {{ class }}{% endif %}"
+    {{- dataAttributes|raw -}}>
+
+    {% if field.showDate %}
+        <input
+            type="date"
+            {%- if name %} name="{{ name }}[date]"{% endif %}
+            {%- if required %} required aria-required="true"{% endif %}
+            {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+            {%- if value %} value="{{ value|date('Y-m-d') }}"{% endif %}
+            {%- if field.minimumDate %} min="{{ field.minimumDate }}"{% endif %}
+            {%- if field.maximumDate %} max="{{ field.maximumDate }}"{% endif -%}
+        >
+    {% endif %}
+
+    {% if field.showTime %}
+        <select
+            {%- if name %} name="{{ name }}[time]"{% endif %}
+            {%- if required %} required aria-required="true"{% endif %}
+            {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+        >
+            {%- for key, option in timeOptions -%}
+
+                {%- set optionLabel = (option.label is defined ? option.label : null) -%}
+                {%- set optionValue = (option.value is defined ? option.value : key) -%}
+
+                <option value="{{ optionValue }}"
+                    {% if optionValue == value %}selected{% endif %}>{{ optionLabel }}</option>
+            {% endfor %}
+        </select>
+    {% endif %}
+
+    <input
+        type="hidden"
+        {%- if name %} name="{{ name }}[timezone]"{% endif %}
+        value="{{ craft.app.getTimeZone() }}">
+</div>

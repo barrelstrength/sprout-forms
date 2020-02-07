@@ -54,9 +54,7 @@
     }
 </style>
 
-{% js %}
-
-    $(document).ready(function() {
+{% js on ready %}
 
     var initSelectValue = $("{{ '#' ~ selectId }}").val();
     var textareaInput = $("#{{ selectTextarea }}");
@@ -105,7 +103,6 @@
     // copy from rich text
     //textareaInput.val(textareaInput.text());
     }
-    });
     });
 
 {% endjs %}

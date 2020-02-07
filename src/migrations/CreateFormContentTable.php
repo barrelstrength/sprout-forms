@@ -1,4 +1,9 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\migrations;
 
@@ -6,16 +11,10 @@ use craft\db\Migration;
 
 class CreateFormContentTable extends Migration
 {
-    // Properties
-    // =========================================================================
-
     /**
      * @var string|null The table name
      */
     public $tableName;
-
-    // Public Methods
-    // =========================================================================
 
     /**
      * @inheritdoc

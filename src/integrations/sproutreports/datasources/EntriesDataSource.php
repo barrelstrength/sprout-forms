@@ -1,18 +1,23 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\integrations\sproutreports\datasources;
 
+use barrelstrength\sproutbasereports\base\DataSource;
+use barrelstrength\sproutbasereports\elements\Report;
 use barrelstrength\sproutbasereports\SproutBaseReports;
+use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutbasereports\elements\Report;
 use Craft;
-use barrelstrength\sproutbasereports\base\DataSource;
 use craft\db\Query;
+use craft\elements\db\ElementQueryInterface;
 use craft\fields\data\MultiOptionsFieldData;
 use craft\helpers\DateTimeHelper;
-use barrelstrength\sproutforms\elements\Entry;
-use craft\elements\db\ElementQueryInterface;
 use DateTime;
 use Exception;
 use Twig\Error\LoaderError;
@@ -42,6 +47,22 @@ class EntriesDataSource extends DataSource
     public function getDescription(): string
     {
         return Craft::t('sprout-forms', 'Query form entries');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getViewContext(): string
+    {
+        return 'sprout-forms';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getViewContextLabel(): string
+    {
+        return 'Forms Reports';
     }
 
     /**

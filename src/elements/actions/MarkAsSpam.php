@@ -1,12 +1,16 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\elements\actions;
 
+use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\base\ElementAction;
 use craft\elements\db\ElementQueryInterface;
-
-use barrelstrength\sproutforms\SproutForms;
 use Throwable;
 
 /**
@@ -15,9 +19,6 @@ use Throwable;
  */
 class MarkAsSpam extends ElementAction
 {
-    // Properties
-    // =========================================================================
-
     /**
      * @var string|null The confirmation message that should be shown before the elements get deleted
      */
@@ -28,9 +29,6 @@ class MarkAsSpam extends ElementAction
      */
     public $successMessage;
 
-    // Public Methods
-    // =========================================================================
-
     /**
      * @inheritdoc
      */
@@ -38,9 +36,6 @@ class MarkAsSpam extends ElementAction
     {
         return Craft::t('sprout-forms', 'Mark as Spam');
     }
-
-    // Public Methods
-    // =========================================================================
 
     /**
      * @inheritdoc

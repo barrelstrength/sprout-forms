@@ -1,11 +1,16 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\models;
 
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\SproutForms;
-use craft\base\Model;
 use Craft;
+use craft\base\Model;
 
 /**
  * @property null|Entry $entry

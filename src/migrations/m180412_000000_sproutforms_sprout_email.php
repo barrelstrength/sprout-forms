@@ -1,10 +1,14 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\migrations;
 
-use craft\db\Migration;
-
 use barrelstrength\sproutbaseemail\migrations\Install as SproutBaseNotificationInstall;
+use craft\db\Migration;
 
 /**
  * m180412_000000_sproutforms_sprout_email migration.
@@ -37,6 +41,7 @@ class m180412_000000_sproutforms_sprout_email extends Migration
     public function safeDown(): bool
     {
         echo "m180412_000000_sproutforms_sprout_email cannot be reverted.\n";
+
         return false;
     }
 }

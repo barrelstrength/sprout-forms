@@ -1,9 +1,14 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutforms\fields\formfields\Entries;
 use barrelstrength\sproutforms\fields\formfields\Categories;
+use barrelstrength\sproutforms\fields\formfields\Entries;
 use barrelstrength\sproutforms\fields\formfields\FileUpload;
 use barrelstrength\sproutforms\fields\formfields\Tags;
 use craft\db\Migration;
@@ -165,6 +170,7 @@ class m190124_000000_form_fields_settings extends Migration
     public function safeDown(): bool
     {
         echo "m190124_000000_form_fields_settings cannot be reverted.\n";
+
         return false;
     }
 }

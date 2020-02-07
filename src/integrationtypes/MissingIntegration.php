@@ -1,4 +1,9 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\integrationtypes;
 
@@ -14,9 +19,6 @@ use craft\base\MissingComponentTrait;
  */
 class MissingIntegration extends Integration implements MissingComponentInterface
 {
-    // Traits
-    // =========================================================================
-
     use MissingComponentTrait;
 
     /**

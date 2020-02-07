@@ -1,4 +1,10 @@
-<?php /** @noinspection ClassConstantCanBeUsedInspection */
+<?php /**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
+
+/** @noinspection ClassConstantCanBeUsedInspection */
 
 namespace barrelstrength\sproutforms\migrations;
 
@@ -53,6 +59,7 @@ class m191116_000003_add_default_entry_status_datasource_settings extends Migrat
     public function safeDown(): bool
     {
         echo "m191116_000003_add_default_entry_status_datasource_settings cannot be reverted.\n";
+
         return false;
     }
 }

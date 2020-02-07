@@ -1,7 +1,13 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\base\EagerLoadingFieldInterface;
@@ -30,8 +36,6 @@ use Twig\Error\SyntaxError;
 use yii\base\Event;
 use yii\base\NotSupportedException;
 
-use barrelstrength\sproutforms\base\FormField;
-
 /**
  * BaseRelationFormField is the base class for classes representing a relational field.
  *
@@ -44,52 +48,6 @@ use barrelstrength\sproutforms\base\FormField;
  */
 abstract class BaseRelationFormField extends FormField implements PreviewableFieldInterface, EagerLoadingFieldInterface
 {
-    // Static
-    // =========================================================================
-
-    /**
-     * @inheritdoc
-     */
-    public static function hasContentColumn(): bool
-    {
-        return false;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function supportedTranslationMethods(): array
-    {
-        // Don't ever automatically propagate values to other sites.
-        return [
-            self::TRANSLATION_METHOD_SITE,
-        ];
-    }
-
-    /**
-     * Returns the element class associated with this field type.
-     *
-     * @return string The Element class name
-     * @throws NotSupportedException if the method hasn't been implemented by the subclass
-     */
-    protected static function elementType(): string
-    {
-        throw new NotSupportedException('"elementType()" is not implemented.');
-    }
-
-    /**
-     * Returns the default [[selectionLabel]] value.
-     *
-     * @return string The default selection label
-     */
-    public static function defaultSelectionLabel(): string
-    {
-        return Craft::t('sprout-forms', 'Choose');
-    }
-
-    // Properties
-    // =========================================================================
-
     /**
      * @var array Related elements that have been validated
      * @see _validateRelatedElement()
@@ -182,9 +140,6 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
      */
     private $_makeExistingRelationsTranslatable = false;
 
-    // Public Methods
-    // =========================================================================
-
     /**
      * @inheritdoc
      */
@@ -199,6 +154,79 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
         }
 
         parent::__construct($config);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function hasContentColumn(): bool
+    {
+        return false;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function supportedTranslationMethods(): array
+    {
+        // Don't ever automatically propagate values to other sites.
+        return [
+            self::TRANSLATION_METHOD_SITE,
+        ];
+    }
+
+    /**
+     * Returns the default [[selectionLabel]] value.
+     *
+     * @return string The default selection label
+     */
+    public static function defaultSelectionLabel(): string
+    {
+        return Craft::t('sprout-forms', 'Choose');
+    }
+
+    /**
+     * Returns the element class associated with this field type.
+     *
+     * @return string The Element class name
+     * @throws NotSupportedException if the method hasn't been implemented by the subclass
+     */
+    protected static function elementType(): string
+    {
+        throw new NotSupportedException('"elementType()" is not implemented.');
+    }
+
+    /**
+     * Returns whether a related element validates.
+     *
+     * @param ElementInterface $element
+     *
+     * @return bool
+     */
+    private static function _validateRelatedElement(ElementInterface $element): bool
+    {
+        /** @var Element $element */
+        if (isset(self::$_relatedElementValidates[$element->id][$element->siteId])) {
+            return self::$_relatedElementValidates[$element->id][$element->siteId];
+        }
+
+        // If this is the first time we are validating a related element,
+        // listen for future element saves so we can clear our cache
+        if (!self::$_listeningForRelatedElementSave) {
+            Event::on(Elements::class, Elements::EVENT_AFTER_SAVE_ELEMENT, static function(ElementEvent $e) {
+                /** @var Element $element */
+                $element = $e->element;
+                unset(self::$_relatedElementValidates[$element->id][$element->siteId]);
+            });
+            self::$_listeningForRelatedElementSave = true;
+        }
+
+        // Prevent an infinite loop if there are circular relations
+        self::$_relatedElementValidates[$element->id][$element->siteId] = true;
+
+        $element->setScenario(Element::SCENARIO_LIVE);
+
+        return self::$_relatedElementValidates[$element->id][$element->siteId] = $element->validate();
     }
 
     /**
@@ -240,10 +268,12 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
      * @throws NotSupportedException
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {
         $variables = $this->settingsTemplateVariables();
+
         return Craft::$app->getView()->renderTemplate($this->settingsTemplate, $variables);
     }
 
@@ -309,38 +339,6 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
                 'type' => mb_strtolower($errorCount === 1 ? $elementType::displayName() : $elementType::pluralDisplayName()),
             ]));
         }
-    }
-
-    /**
-     * Returns whether a related element validates.
-     *
-     * @param ElementInterface $element
-     *
-     * @return bool
-     */
-    private static function _validateRelatedElement(ElementInterface $element): bool
-    {
-        /** @var Element $element */
-        if (isset(self::$_relatedElementValidates[$element->id][$element->siteId])) {
-            return self::$_relatedElementValidates[$element->id][$element->siteId];
-        }
-
-        // If this is the first time we are validating a related element,
-        // listen for future element saves so we can clear our cache
-        if (!self::$_listeningForRelatedElementSave) {
-            Event::on(Elements::class, Elements::EVENT_AFTER_SAVE_ELEMENT, static function(ElementEvent $e) {
-                /** @var Element $element */
-                $element = $e->element;
-                unset(self::$_relatedElementValidates[$element->id][$element->siteId]);
-            });
-            self::$_listeningForRelatedElementSave = true;
-        }
-
-        // Prevent an infinite loop if there are circular relations
-        self::$_relatedElementValidates[$element->id][$element->siteId] = true;
-
-        $element->setScenario(Element::SCENARIO_LIVE);
-        return self::$_relatedElementValidates[$element->id][$element->siteId] = $element->validate();
     }
 
     /**
@@ -495,6 +493,7 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -540,6 +539,7 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getStaticHtml($value, ElementInterface $element): string
     {
@@ -581,6 +581,7 @@ JS;
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getTableAttributeHtml($value, ElementInterface $element): string
     {
@@ -754,6 +755,7 @@ JS;
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getTargetSiteFieldHtml()
     {
@@ -810,6 +812,7 @@ JS;
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getViewModeFieldHtml()
     {
@@ -836,9 +839,6 @@ JS;
             ]
         ]);
     }
-
-    // Protected Methods
-    // =========================================================================
 
     /**
      * Returns an array of variables that should be passed to the settings template.

@@ -1,13 +1,17 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\elements\actions;
 
 use barrelstrength\sproutforms\models\EntryStatus;
+use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\base\ElementAction;
 use craft\elements\db\ElementQueryInterface;
-
-use barrelstrength\sproutforms\SproutForms;
 use Throwable;
 
 /**
@@ -16,9 +20,6 @@ use Throwable;
  */
 class MarkAsDefaultStatus extends ElementAction
 {
-    // Properties
-    // =========================================================================
-
     /**
      * @var string|null The confirmation message that should be shown before the elements get deleted
      */
@@ -34,9 +35,6 @@ class MarkAsDefaultStatus extends ElementAction
      */
     public $entryStatus;
 
-    // Public Methods
-    // =========================================================================
-
     public function init()
     {
         parent::init();
@@ -51,9 +49,6 @@ class MarkAsDefaultStatus extends ElementAction
     {
         return Craft::t('sprout-forms', 'Mark as '.$this->entryStatus->name);
     }
-
-    // Public Methods
-    // =========================================================================
 
     /**
      * @inheritdoc

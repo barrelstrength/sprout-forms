@@ -1,4 +1,10 @@
-<?php /** @noinspection ClassConstantCanBeUsedInspection */
+<?php /**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
+
+/** @noinspection ClassConstantCanBeUsedInspection */
 
 namespace barrelstrength\sproutforms\migrations;
 
@@ -120,6 +126,7 @@ class m180515_000001_update_field_types extends Migration
     public function safeDown(): bool
     {
         echo "m180515_000001_update_field_types cannot be reverted.\n";
+
         return false;
     }
 }

@@ -1,10 +1,15 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\migrations;
 
+use barrelstrength\sproutbaseemail\migrations\m190715_000000_add_sendRule_notification_column;
 use craft\db\Migration;
 use yii\base\NotSupportedException;
-use barrelstrength\sproutbaseemail\migrations\m190715_000000_add_sendRule_notification_column;
 
 /**
  * m190715_000000_add_sendRule_notification_column_sproutforms migration.
@@ -33,6 +38,7 @@ class m190715_000000_add_sendRule_notification_column_sproutforms extends Migrat
     public function safeDown(): bool
     {
         echo "m190715_000000_add_sendRule_notification_column_sproutforms cannot be reverted.\n";
+
         return false;
     }
 }

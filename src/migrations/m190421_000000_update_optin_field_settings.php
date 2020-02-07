@@ -1,4 +1,10 @@
-<?php /** @noinspection ClassConstantCanBeUsedInspection */
+<?php /**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
+
+/** @noinspection ClassConstantCanBeUsedInspection */
 
 namespace barrelstrength\sproutforms\migrations;
 
@@ -47,6 +53,7 @@ class m190421_000000_update_optin_field_settings extends Migration
     public function safeDown(): bool
     {
         echo "m190421_000000_update_optin_field_settings cannot be reverted.\n";
+
         return false;
     }
 }

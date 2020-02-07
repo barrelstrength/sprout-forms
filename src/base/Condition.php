@@ -1,4 +1,9 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\base;
 
@@ -27,7 +32,6 @@ abstract class Condition extends SavableComponent implements ConditionInterface
      */
     public $ruleValue;
 
-
     /**
      * @inheritDoc
      */
@@ -42,5 +46,24 @@ abstract class Condition extends SavableComponent implements ConditionInterface
     public function getValue(): string
     {
         return '';
+    }
+
+    /**
+     * The default condition validation rule
+     *
+     * @return void
+     */
+    abstract public function validateCondition();
+
+    /**
+     * @return array
+     */
+    protected function defineRules(): array
+    {
+        $rules = parent::defineRules();
+
+        $rules[] = [['inputValue'], 'validateCondition', 'skipOnEmpty' => false];
+
+        return $rules;
     }
 }

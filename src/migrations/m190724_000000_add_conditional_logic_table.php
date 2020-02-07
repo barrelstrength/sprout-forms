@@ -1,4 +1,9 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\migrations;
 
@@ -14,7 +19,7 @@ class m190724_000000_add_conditional_logic_table extends Migration
      */
     public function safeUp(): bool
     {
-        if ($this->db->tableExists('{{%sproutforms_rules}}')){
+        if ($this->db->tableExists('{{%sproutforms_rules}}')) {
             return true;
         }
 
@@ -59,6 +64,7 @@ class m190724_000000_add_conditional_logic_table extends Migration
     public function safeDown(): bool
     {
         echo "m190724_000000_add_conditional_logic_table cannot be reverted.\n";
+
         return false;
     }
 }

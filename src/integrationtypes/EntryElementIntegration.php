@@ -1,4 +1,9 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\integrationtypes;
 
@@ -48,6 +53,7 @@ class EntryElementIntegration extends ElementIntegration
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {
@@ -101,6 +107,7 @@ class EntryElementIntegration extends ElementIntegration
                     'id' => $entryElement->id,
                     'sectionName' => $entryElement->getSection()->name
                 ]);
+
                 return true;
             }
 
@@ -266,35 +273,6 @@ class EntryElementIntegration extends ElementIntegration
     }
 
     /**
-     * @return array
-     */
-    private function getSectionsAsOptions(): array
-    {
-        $sections = Craft::$app->getSections()->getAllSections();
-        $options = [];
-
-        foreach ($sections as $section) {
-            // Don't show Singles
-            if ($section->type === 'single') {
-                continue;
-            }
-
-            $entryTypes = $section->getEntryTypes();
-
-            $options[] = ['optgroup' => $section->name];
-
-            foreach ($entryTypes as $entryType) {
-                $options[] = [
-                    'label' => $entryType->name,
-                    'value' => $entryType->id
-                ];
-            }
-        }
-
-        return $options;
-    }
-
-    /**
      * @return string
      */
     public function getUserElementType(): string
@@ -323,5 +301,34 @@ class EntryElementIntegration extends ElementIntegration
         }
 
         return $author;
+    }
+
+    /**
+     * @return array
+     */
+    private function getSectionsAsOptions(): array
+    {
+        $sections = Craft::$app->getSections()->getAllSections();
+        $options = [];
+
+        foreach ($sections as $section) {
+            // Don't show Singles
+            if ($section->type === 'single') {
+                continue;
+            }
+
+            $entryTypes = $section->getEntryTypes();
+
+            $options[] = ['optgroup' => $section->name];
+
+            foreach ($entryTypes as $entryType) {
+                $options[] = [
+                    'label' => $entryType->name,
+                    'value' => $entryType->id
+                ];
+            }
+        }
+
+        return $options;
     }
 }

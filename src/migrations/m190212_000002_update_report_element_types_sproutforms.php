@@ -1,4 +1,10 @@
-<?php /** @noinspection ClassConstantCanBeUsedInspection */
+<?php /**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
+
+/** @noinspection ClassConstantCanBeUsedInspection */
 
 namespace barrelstrength\sproutforms\migrations;
 
@@ -30,6 +36,7 @@ class m190212_000002_update_report_element_types_sproutforms extends Migration
     public function safeDown(): bool
     {
         echo "m190212_000002_update_report_element_types_sproutforms cannot be reverted.\n";
+
         return false;
     }
 }

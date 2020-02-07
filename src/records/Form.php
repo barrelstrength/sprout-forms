@@ -1,10 +1,15 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\records;
 
 use craft\db\ActiveRecord;
-use yii\db\ActiveQueryInterface;
 use craft\records\Element;
+use yii\db\ActiveQueryInterface;
 
 
 /**
@@ -29,6 +34,7 @@ use craft\records\Element;
 class Form extends ActiveRecord
 {
     private $_oldHandle;
+
     private $oldRecord;
 
     /**

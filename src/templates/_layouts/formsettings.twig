@@ -1,8 +1,6 @@
 {% extends "sprout-forms/_layouts/base" %}
 {% import 'sprout-base/_includes/sproutcp' as sprout %}
 
-{% do view.registerAssetBundle("barrelstrength\\sproutforms\\web\\assets\\cp\\CpAsset") %}
-
 {% set title  = "Settings"|t('sprout-forms') %}
 {% set bodyClass = craft.app.request.getSegments()|slice(0, 4)|join(' ') %}
 {% set fullPageForm = true %}
@@ -73,12 +71,5 @@
 
 {% endset %}
 
-{% js %}
-
-    (function() {
-    $("#maindiv").css("height","600px");
-
-    new Craft.SproutForms.FormSettings();
-    })();
-
-{% endjs %}
+{% do view.registerAssetBundle("barrelstrength\\sproutforms\\web\\assets\\cp\\CpAsset") %}
+{% do view.registerJs("new Craft.SproutForms.FormSettings();") %}

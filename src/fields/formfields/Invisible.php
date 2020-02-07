@@ -1,16 +1,21 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\services\Forms;
 use Craft;
 use craft\base\ElementInterface;
+use craft\base\PreviewableFieldInterface;
 use craft\errors\MissingComponentException;
 use craft\fields\Dropdown as CraftDropdown;
 use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Template as TemplateHelper;
-use craft\base\PreviewableFieldInterface;
-use barrelstrength\sproutforms\base\FormField;
 use Exception;
 use Throwable;
 use Twig\Error\LoaderError;
@@ -75,11 +80,11 @@ class Invisible extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {
-        return Craft::$app->getView()->renderTemplate(
-            'sprout-forms/_components/fields/formfields/invisible/settings',
+        return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/formfields/invisible/settings',
             [
                 'field' => $this,
             ]
@@ -96,6 +101,7 @@ class Invisible extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -120,6 +126,7 @@ class Invisible extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml(): string
     {
@@ -187,6 +194,17 @@ class Invisible extends FormField implements PreviewableFieldInterface
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getCompatibleCraftFieldTypes(): array
+    {
+        return [
+            CraftPlainText::class,
+            CraftDropdown::class
+        ];
+    }
+
+    /**
      * @return string
      * @throws Throwable
      */
@@ -204,16 +222,5 @@ class Invisible extends FormField implements PreviewableFieldInterface
         }
 
         return $value;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getCompatibleCraftFieldTypes(): array
-    {
-        return [
-            CraftPlainText::class,
-            CraftDropdown::class
-        ];
     }
 }

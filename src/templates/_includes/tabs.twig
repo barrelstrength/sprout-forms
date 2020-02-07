@@ -1,20 +1,21 @@
 <nav id="tabs">
-    <ul id="sprout-forms-tabs">
-        {% for tabId, tab in formTabs %}
-            {% if tab %}
-                {# let's get the tab id from the url #}
-                {% set tabIdKey = tab.url|split('-') %}
-                {% set tabIsSelected = ((loop.first) or (selectedTab is defined and selectedTab == tabId)) -%}
-                <li class="drag-tab">
-                    <a id="tab-{% if tabIdKey[2] is defined %}{{ tabIdKey[2] }}{% endif %}"
-                        class="tab {% if tabIsSelected %} sel{% endif %}
-                       {% if tab.class is defined %} {{ tab.class }}{% endif %}"
-                        href="{{ tab.url }}"><span
-                            class="tab-label">{{ tab.label }}</span>&nbsp;<span
-                            id="icon-wheel" class="settings icon"></span>
-                    </a>
-                </li>
-            {% endif %}
+    <ul>
+        {% for tabId, tab in formTabs|filter %}
+            {% set tabIsSelected = ((selectedTab is not defined and loop.first) or (selectedTab is defined and selectedTab == tabId)) -%}
+            {% set class = tab.class ?? '' -%}
+            <li data-id="{{ tabId }}">
+                {{ tag('a', {
+                    id: "tab-#{tabId}",
+                    class: ['tab', tabIsSelected ? 'sel', class]|filter,
+                    href: tab.url,
+                    title: tab.label,
+                    html: tab.label|e ~ (class == 'error' ? ' <span data-icon="alert"></span>'),
+                }) }}
+            </li>
         {% endfor %}
     </ul>
+    <a id="overflow-tab-btn" data-icon="ellipsis" class="btn menubtn hidden" role="button"></a>
+    <div id="overflow-tab-menu" class="menu">
+        <ul role="listbox"></ul>
+    </div>
 </nav>

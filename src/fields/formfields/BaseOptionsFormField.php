@@ -1,8 +1,14 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutforms\base\ConditionInterface;
+use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\rules\conditions\IsCondition;
 use barrelstrength\sproutforms\rules\conditions\IsNotCondition;
 use Craft;
@@ -19,8 +25,6 @@ use Twig\Error\SyntaxError;
 use yii\base\Exception;
 use yii\db\Schema;
 
-use barrelstrength\sproutforms\base\FormField;
-
 /**
  * BaseOptionsFormField is the base class for classes representing an options field.
  *
@@ -32,9 +36,6 @@ use barrelstrength\sproutforms\base\FormField;
  */
 abstract class BaseOptionsFormField extends FormField implements PreviewableFieldInterface
 {
-    // Properties
-    // =========================================================================
-
     /**
      * @var array|null The available options
      */
@@ -44,9 +45,6 @@ abstract class BaseOptionsFormField extends FormField implements PreviewableFiel
      * @var bool Whether the field should support multiple selections
      */
     protected $multi = false;
-
-    // Public Methods
-    // =========================================================================
 
     /**
      * @inheritdoc
@@ -117,6 +115,7 @@ abstract class BaseOptionsFormField extends FormField implements PreviewableFiel
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {
@@ -284,8 +283,35 @@ abstract class BaseOptionsFormField extends FormField implements PreviewableFiel
         return $this->multi;
     }
 
-    // Protected Methods
-    // =========================================================================
+    /**
+     * @inheritdoc
+     */
+    public function getConditionValueInputHtml(ConditionInterface $condition, $fieldName, $fieldValue): string
+    {
+        $html = '<input class="text fullwidth" type="text" name="'.$fieldName.'" value="'.$fieldValue.'">';
+
+        $selectConditionClasses = [
+            IsCondition::class,
+            IsNotCondition::class
+        ];
+
+        foreach ($selectConditionClasses as $selectCondition) {
+            if ($condition instanceof $selectCondition) {
+                $html = '<div class="select"><select name="'.$fieldName.'">';
+                $firstRow = 'selected';
+                foreach ($this->options as $option) {
+                    $rowValue = $option['value'];
+                    $label = $option['label'];
+                    $isSelected = $rowValue == $fieldValue ? 'selected' : '';
+                    $html .= '<option '.$firstRow.' value="'.$rowValue.'" '.$isSelected.'>'.$label.'</option>';
+                    $firstRow = '';
+                }
+                $html .= '</select></div>';
+            }
+        }
+
+        return $html;
+    }
 
     /**
      * Returns the label for the Options setting.
@@ -361,35 +387,5 @@ abstract class BaseOptionsFormField extends FormField implements PreviewableFiel
         }
 
         return null;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getConditionValueInputHtml(ConditionInterface $condition, $fieldName, $fieldValue): string
-    {
-        $html = '<input class="text fullwidth" type="text" name="'.$fieldName.'" value="'.$fieldValue.'">';
-
-        $selectConditionClasses = [
-            IsCondition::class,
-            IsNotCondition::class
-        ];
-
-        foreach ($selectConditionClasses as $selectCondition) {
-            if ($condition instanceof $selectCondition) {
-                $html = '<div class="select"><select name="'.$fieldName.'">';
-                $firstRow = 'selected';
-                foreach ($this->options as $option) {
-                    $rowValue = $option['value'];
-                    $label = $option['label'];
-                    $isSelected = $rowValue == $fieldValue ? 'selected' : '';
-                    $html .= '<option '.$firstRow.' value="'.$rowValue.'" '.$isSelected.'>'.$label.'</option>';
-                    $firstRow = '';
-                }
-                $html .= '</select></div>';
-            }
-        }
-
-        return $html;
     }
 }

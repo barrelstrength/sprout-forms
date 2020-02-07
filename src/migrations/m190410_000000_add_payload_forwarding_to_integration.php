@@ -1,12 +1,17 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\migrations;
 
 use barrelstrength\sproutforms\integrationtypes\CustomEndpoint;
 use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
+use Craft;
 use craft\db\Migration;
 use craft\db\Query;
-use Craft;
 use craft\services\Plugins;
 use yii\base\ErrorException;
 use yii\base\Exception;
@@ -97,6 +102,7 @@ class m190410_000000_add_payload_forwarding_to_integration extends Migration
     public function safeDown(): bool
     {
         echo "m190410_000000_add_payload_forwarding_to_integration cannot be reverted.\n";
+
         return false;
     }
 }

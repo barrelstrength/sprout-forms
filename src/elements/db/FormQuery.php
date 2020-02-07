@@ -1,14 +1,18 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\elements\db;
 
 use barrelstrength\sproutbase\SproutBase;
+use barrelstrength\sproutforms\models\FormGroup;
 use barrelstrength\sproutforms\SproutForms;
 use craft\db\Query;
 use craft\elements\db\ElementQuery;
 use craft\helpers\Db;
-
-use barrelstrength\sproutforms\models\FormGroup;
 
 class FormQuery extends ElementQuery
 {
@@ -155,8 +159,17 @@ class FormQuery extends ElementQuery
         return $this;
     }
 
-    // Protected Methods
-    // =========================================================================
+    /**
+     * @param $value
+     *
+     * @return \barrelstrength\sproutforms\elements\db\FormQuery
+     */
+    public function fieldLayoutId($value): FormQuery
+    {
+        $this->fieldLayoutId = $value;
+
+        return $this;
+    }
 
     /**
      * @inheritdoc
@@ -193,6 +206,10 @@ class FormQuery extends ElementQuery
         if ($this->numberOfFields) {
             $this->query->addSelect('COUNT(fields.id) numberOfFields');
             $this->query->leftJoin('fieldlayoutfields fields', '[[fields.layoutId]] = [[sproutforms_forms.fieldLayoutId]]');
+        }
+
+        if ($this->fieldLayoutId) {
+            $this->subQuery->andWhere(Db::parseParam('sproutforms_forms.fieldLayoutId', $this->fieldLayoutId));
         }
 
         if ($this->groupId) {

@@ -1,4 +1,9 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\migrations;
 
@@ -21,6 +26,7 @@ class m181028_000000_add_save_data_column extends Migration
         if (!$this->db->columnExists($table, 'saveData')) {
             $this->addColumn($table, 'saveData', $this->string()->after('submitButtonText'));
         }
+
         return true;
     }
 
@@ -30,6 +36,7 @@ class m181028_000000_add_save_data_column extends Migration
     public function safeDown(): bool
     {
         echo "m181028_000000_add_save_data_column cannot be reverted.\n";
+
         return false;
     }
 }

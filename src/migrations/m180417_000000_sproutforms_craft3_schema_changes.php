@@ -1,4 +1,9 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\migrations;
 
@@ -32,6 +37,7 @@ class m180417_000000_sproutforms_craft3_schema_changes extends Migration
     public function safeDown(): bool
     {
         echo "m180417_000000_sproutforms_craft3_schema_changes cannot be reverted.\n";
+
         return false;
     }
 }

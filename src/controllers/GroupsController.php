@@ -1,12 +1,17 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\controllers;
 
+use barrelstrength\sproutforms\models\FormGroup as FormGroupModel;
+use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\errors\MissingComponentException;
 use craft\web\Controller as BaseController;
-use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutforms\models\FormGroup as FormGroupModel;
 use yii\db\Exception;
 use yii\web\BadRequestHttpException;
 use yii\web\ForbiddenHttpException;

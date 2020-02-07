@@ -5,12 +5,15 @@
     "watch": "npm run build -- --watch",
     "build": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
-  "dependencies": {},
+  "dependencies": {
+    "dom-autoscroller": "^2.3.4",
+    "dragula": "^3.7.2"
+  },
   "devDependencies": {
     "autoprefixer": "^9.6.1",
     "craftcms-sass": "^1.6.7",
     "cross-env": "^5.2.1",
-    "laravel-mix": "^4.1.4",
+    "laravel-mix": "^5.0.0",
     "resolve-url-loader": "^3.1.0",
     "sass": "^1.22.0",
     "sass-loader": "^7.3.1",

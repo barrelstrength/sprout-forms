@@ -1,10 +1,15 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\migrations;
 
+use barrelstrength\sproutforms\fields\formfields\FileUpload;
 use craft\db\Migration;
 use craft\db\Query;
-use barrelstrength\sproutforms\fields\formfields\FileUpload;
 use craft\fields\Assets as CraftAssets;
 use craft\helpers\Json;
 
@@ -47,6 +52,7 @@ class m180314_161531_sproutforms_assets_fields extends Migration
     public function safeDown(): bool
     {
         echo "m180314_161531_sproutforms_assets_fields cannot be reverted.\n";
+
         return false;
     }
 }

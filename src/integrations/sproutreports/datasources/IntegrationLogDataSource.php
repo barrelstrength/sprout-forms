@@ -1,12 +1,17 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\integrations\sproutreports\datasources;
 
+use barrelstrength\sproutbasereports\base\DataSource;
+use barrelstrength\sproutbasereports\elements\Report;
 use barrelstrength\sproutbasereports\SproutBaseReports;
 use barrelstrength\sproutforms\elements\Form;
-use barrelstrength\sproutbasereports\elements\Report;
 use Craft;
-use barrelstrength\sproutbasereports\base\DataSource;
 use craft\db\Query;
 use craft\helpers\DateTimeHelper;
 use DateTime;
@@ -36,6 +41,22 @@ class IntegrationLogDataSource extends DataSource
     public function getDescription(): string
     {
         return Craft::t('sprout-forms', 'Query form entry integrations results');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getViewContext(): string
+    {
+        return 'sprout-forms';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getViewContextLabel(): string
+    {
+        return 'Forms';
     }
 
     /**

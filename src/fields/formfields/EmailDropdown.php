@@ -1,4 +1,9 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
@@ -17,13 +22,13 @@ use craft\base\ElementInterface;
 use craft\fields\data\SingleOptionFieldData;
 use craft\fields\Dropdown as CraftDropdown;
 use craft\fields\PlainText as CraftPlainText;
+use craft\helpers\StringHelper;
 use craft\helpers\Template as TemplateHelper;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Markup;
 use yii\db\Schema;
-use craft\helpers\StringHelper;
 
 /**
  *
@@ -72,14 +77,6 @@ class EmailDropdown extends BaseOptionsFormField
     /**
      * @return string
      */
-    protected function optionsSettingLabel(): string
-    {
-        return Craft::t('sprout-forms', 'Dropdown Options');
-    }
-
-    /**
-     * @return string
-     */
     public function getSvgIconPath(): string
     {
         return '@sproutbaseicons/share.svg';
@@ -91,6 +88,7 @@ class EmailDropdown extends BaseOptionsFormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml()
     {
@@ -142,6 +140,7 @@ class EmailDropdown extends BaseOptionsFormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -177,6 +176,7 @@ class EmailDropdown extends BaseOptionsFormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml(): string
     {
@@ -195,6 +195,7 @@ class EmailDropdown extends BaseOptionsFormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
@@ -203,8 +204,7 @@ class EmailDropdown extends BaseOptionsFormField
         $options = $this->options;
         $options = SproutBaseFields::$app->emailDropdownField->obfuscateEmailAddresses($options, $selectedValue);
 
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'emaildropdown/input',
+        $rendered = Craft::$app->getView()->renderTemplate('emaildropdown/input',
             [
                 'name' => $this->handle,
                 'value' => $value,
@@ -308,5 +308,13 @@ class EmailDropdown extends BaseOptionsFormField
             new EndsWithCondition(),
             new DoesNotEndWithCondition()
         ];
+    }
+
+    /**
+     * @return string
+     */
+    protected function optionsSettingLabel(): string
+    {
+        return Craft::t('sprout-forms', 'Dropdown Options');
     }
 }

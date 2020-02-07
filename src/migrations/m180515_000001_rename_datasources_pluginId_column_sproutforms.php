@@ -1,4 +1,9 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\migrations;
 
@@ -32,6 +37,7 @@ class m180515_000001_rename_datasources_pluginId_column_sproutforms extends Migr
     public function safeDown(): bool
     {
         echo "m180515_000001_rename_datasources_pluginId_column_sproutforms cannot be reverted.\n";
+
         return false;
     }
 }

@@ -1,12 +1,16 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\elements\actions;
 
+use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\base\ElementAction;
 use craft\elements\db\ElementQueryInterface;
-
-use barrelstrength\sproutforms\SproutForms;
 use Throwable;
 
 /**
@@ -15,9 +19,6 @@ use Throwable;
  */
 class Delete extends ElementAction
 {
-    // Properties
-    // =========================================================================
-
     /**
      * @var string|null The confirmation message that should be shown before the elements get deleted
      */
@@ -28,17 +29,6 @@ class Delete extends ElementAction
      */
     public $successMessage;
 
-    // Public Methods
-    // =========================================================================
-
-    /**
-     * @inheritdoc
-     */
-    public function getTriggerLabel(): string
-    {
-        return Craft::t('sprout-forms', 'Delete…');
-    }
-
     /**
      * @inheritdoc
      */
@@ -47,8 +37,13 @@ class Delete extends ElementAction
         return true;
     }
 
-    // Public Methods
-    // =========================================================================
+    /**
+     * @inheritdoc
+     */
+    public function getTriggerLabel(): string
+    {
+        return Craft::t('sprout-forms', 'Delete…');
+    }
 
     /**
      * @inheritdoc

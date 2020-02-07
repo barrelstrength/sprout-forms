@@ -1,13 +1,18 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\migrations;
 
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
-use barrelstrength\sproutforms\formtemplates\BasicTemplates;
-use craft\db\Migration;
 use Craft;
+use craft\db\Migration;
 use craft\db\Query;
 use craft\services\Plugins;
+use ReflectionException;
 use yii\base\ErrorException;
 use yii\base\Exception;
 use yii\base\NotSupportedException;
@@ -18,9 +23,6 @@ use yii\web\ServerErrorHttpException;
  */
 class m191005_000000_update_form_settings extends Migration
 {
-    // Public Methods
-    // =========================================================================
-
     /**
      * @inheritdoc
      *
@@ -29,6 +31,7 @@ class m191005_000000_update_form_settings extends Migration
      * @throws Exception
      * @throws NotSupportedException
      * @throws ServerErrorHttpException
+     * @throws ReflectionException
      */
     public function safeUp()
     {
@@ -48,17 +51,15 @@ class m191005_000000_update_form_settings extends Migration
         $accessible = new AccessibleTemplates();
         $pluginSettings['formTemplateDefaultValue'] = empty($pluginSettings['templateFolderOverride']) ? $accessible->getTemplateId() : $pluginSettings['templateFolderOverride'];
 
-        if ($enableSaveData){
-            if (isset($pluginSettings['enableSaveDataPerFormBasis']) && !$pluginSettings['enableSaveDataPerFormBasis']){
-                // Let's set true to saveData on all forms
-                $forms = (new Query())
-                    ->select(['id'])
-                    ->from(['{{%sproutforms_forms}}'])
-                    ->all();
+        if ($enableSaveData && isset($pluginSettings['enableSaveDataPerFormBasis']) && !$pluginSettings['enableSaveDataPerFormBasis']) {
+            // Let's set true to saveData on all forms
+            $forms = (new Query())
+                ->select(['id'])
+                ->from(['{{%sproutforms_forms}}'])
+                ->all();
 
-                foreach ($forms as $form){
-                    $this->update('{{%sproutforms_forms}}', ['saveData' => true], ['id' => $form['id']], [], false);
-                }
+            foreach ($forms as $form) {
+                $this->update('{{%sproutforms_forms}}', ['saveData' => true], ['id' => $form['id']], [], false);
             }
         }
 

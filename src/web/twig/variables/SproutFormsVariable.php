@@ -1,28 +1,32 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\web\twig\variables;
 
 use barrelstrength\sproutforms\base\Condition;
+use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\elements\db\EntryQuery;
 use barrelstrength\sproutforms\elements\Entry;
+use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\services\Forms;
+use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\base\ElementInterface;
-use craft\base\FieldInterface;
 use craft\errors\MissingComponentException;
 use craft\helpers\Template as TemplateHelper;
-use barrelstrength\sproutforms\SproutForms;
-use barrelstrength\sproutforms\elements\Entry as EntryElement;
-use barrelstrength\sproutforms\base\FormField;
 use ReflectionException;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Markup;
 use yii\base\Exception;
-use yii\base\InvalidConfigException;
+use yii\web\BadRequestHttpException;
 
 /**
  * SproutForms provides an API for accessing information about forms. It is accessible from templates via `craft.sproutForms`.
@@ -493,7 +497,7 @@ class SproutFormsVariable
 
     /**
      * @param Form|null $form
-     * @param bool      $globalSettings
+     * @param bool      $generalSettings
      *
      * @return array
      */
@@ -570,6 +574,7 @@ class SproutFormsVariable
         if ($criteria) {
             Craft::configure($query, $criteria);
         }
+
         return $query;
     }
 
@@ -620,12 +625,16 @@ class SproutFormsVariable
      * @param $formFieldHandle
      * @param $formId
      *
-     * @return FieldInterface|null
-     * @throws InvalidConfigException
+     * @return mixed
+     * @throws \yii\web\BadRequestHttpException
      */
     public function getFormField($formFieldHandle, $formId)
     {
-        $form = SproutForms::$app->forms->getFormById($formId);
+        $form = Craft::$app->elements->getElementById($formId);
+
+        if (!$form) {
+            throw new BadRequestHttpException('No form exists with the ID '.$formId);
+        }
 
         return $form->getField($formFieldHandle);
     }

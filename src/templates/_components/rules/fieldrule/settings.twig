@@ -19,7 +19,7 @@
 
 {% for conditionSet in fieldRule.conditions %}
     {% set conditionSetIndex = loop.index0 %}
-    <table id="sproutforms-rules-{{ conditionSetIndex }}" class="data fullwidth rules-table">
+    <table id="sproutforms-rules-{{ conditionSetIndex }}" class="fullwidth rules-table">
         <thead>
         <tr>
             <th>{{ "Field"|t('sprout-forms') }}</th>
@@ -132,7 +132,7 @@
         andDiv = '';
       }
 
-      $("#settings-barrelstrength-sproutforms-rules-FieldRule-and-add-wrapper").before(andDiv + '<table id="' + tableId + '" class="data rules-table fullwidth">' +
+      $("#settings-barrelstrength-sproutforms-rules-FieldRule-and-add-wrapper").before(andDiv + '<table id="' + tableId + '" class="rules-table fullwidth">' +
         '<thead><tr>' +
         '<th>{{ "Field"|t('sprout-forms') }}</th>' +
         '<th>{{ "Condition"|t('sprout-forms') }}</th>' +

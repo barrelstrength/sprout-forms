@@ -1,16 +1,16 @@
 <?php
 /**
- * @link      https://sprout.barrelstrengthdesign.com/
+ * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
- * @license   http://sprout.barrelstrengthdesign.com/license
+ * @license   https://craftcms.github.io/license
  */
 
 namespace barrelstrength\sproutforms\widgets;
 
-use barrelstrength\sproutforms\SproutForms;
-use craft\base\Widget;
-use Craft;
 use barrelstrength\sproutforms\elements\Entry;
+use barrelstrength\sproutforms\SproutForms;
+use Craft;
+use craft\base\Widget;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -49,6 +49,14 @@ class RecentEntries extends Widget
     /**
      * @inheritdoc
      */
+    public static function icon()
+    {
+        return Craft::getAlias('@barrelstrength/sproutforms/icon-mask.svg');
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getTitle(): string
     {
         // Concat form name if the user select a specific form
@@ -67,19 +75,12 @@ class RecentEntries extends Widget
 
     /**
      * @inheritdoc
-     */
-    public static function icon()
-    {
-        return Craft::getAlias('@barrelstrength/sproutforms/icon-mask.svg');
-    }
-
-    /**
-     * @inheritdoc
      *
      * @return string
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getBodyHtml(): string
     {
@@ -103,6 +104,7 @@ class RecentEntries extends Widget
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml(): string
     {

@@ -5,18 +5,17 @@
 
 {% set title = "Entries"|t %}
 {% set elementType = 'barrelstrength\\sproutforms\\elements\\Entry' %}
+{% set isPro = craft.app.getModule('sprout-forms').is('pro') %}
 
-{% do view.registerAssetBundle("barrelstrength\\sproutforms\\web\\assets\\cp\\CpAsset") %}
-
-{% set canCreateForm = craft.app.getModule('sprout-forms').app.forms.canCreateForm() %}
+{% do view.registerAssetBundle("barrelstrength\\sproutforms\\web\\assets\\cp\\SproutEntriesIndexAsset") %}
 
 {% block actionButton %}
-    <div class="buttons">
-        {% if not canCreateForm %}
+    {% if not isPro %}
+        <div class="buttons">
             {{ sprout.upgradeToProButton({
                 url: cpUrl('sprout-forms/upgrade'),
                 title: "Upgrade to Sprout Forms PRO to manage Unlimited Forms"|t('sprout-forms')
             }) }}
-        {% endif %}
-    </div>
+        </div>
+    {% endif %}
 {% endblock %}

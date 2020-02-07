@@ -1,7 +1,14 @@
 <?php
+/**
+ * @link      https://sprout.barrelstrengthdesign.com
+ * @copyright Copyright (c) Barrel Strength Design LLC
+ * @license   https://craftcms.github.io/license
+ */
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutbasefields\web\assets\quill\QuillAsset;
+use barrelstrength\sproutforms\base\FormField;
 use Craft;
 use craft\base\ElementInterface;
 use craft\helpers\Template as TemplateHelper;
@@ -13,9 +20,6 @@ use Twig\Error\SyntaxError;
 use Twig\Markup;
 use yii\base\InvalidConfigException;
 use yii\db\Schema;
-
-use barrelstrength\sproutforms\base\FormField;
-use barrelstrength\sproutbasefields\web\assets\quill\QuillAsset;
 
 /**
  *
@@ -58,6 +62,14 @@ class SectionHeading extends FormField
     /**
      * @inheritdoc
      */
+    public static function hasContentColumn(): bool
+    {
+        return false;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function isPlainInput(): bool
     {
         return true;
@@ -80,14 +92,6 @@ class SectionHeading extends FormField
     }
 
     /**
-     * @inheritdoc
-     */
-    public static function hasContentColumn(): bool
-    {
-        return false;
-    }
-
-    /**
      * @return string
      */
     public function getSvgIconPath(): string
@@ -103,6 +107,7 @@ class SectionHeading extends FormField
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws InvalidConfigException
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml(): string
     {
@@ -121,8 +126,7 @@ class SectionHeading extends FormField
             'html' => 'HTML'
         ];
 
-        return $view->renderTemplate(
-            'sprout-forms/_components/fields/formfields/sectionheading/settings',
+        return $view->renderTemplate('sprout-forms/_components/fields/formfields/sectionheading/settings',
             [
                 'id' => $namespaceInputId,
                 'name' => $name,
@@ -142,6 +146,7 @@ class SectionHeading extends FormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -153,8 +158,7 @@ class SectionHeading extends FormField
             $this->notes = '';
         }
 
-        return Craft::$app->getView()->renderTemplate(
-            'sprout-base-fields/_components/fields/formfields/sectionheading/input',
+        return Craft::$app->getView()->renderTemplate('sprout-base-fields/_components/fields/formfields/sectionheading/input',
             [
                 'id' => $namespaceInputId,
                 'name' => $name,
@@ -170,6 +174,7 @@ class SectionHeading extends FormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getExampleInputHtml(): string
     {
@@ -188,6 +193,7 @@ class SectionHeading extends FormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
