@@ -528,8 +528,9 @@ class Fields extends Component
         $fieldsService = Craft::$app->getFields();
         // get the field name and remove spaces
         $fieldName = preg_replace('/\s+/', '', $instanceField::displayName());
+        // strip all non-alphanumeric characters
+        $fieldName = preg_replace('/[^A-Za-z0-9 ]/', '', $fieldName);
         $handleName = StringHelper::toCamelCase(lcfirst($fieldName));
-
         $name = $this->getFieldAsNew('name', $fieldName);
         $handle = $this->getFieldAsNew('handle', $handleName);
 
