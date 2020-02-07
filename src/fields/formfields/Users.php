@@ -66,7 +66,7 @@ class Users extends BaseRelationFormField
      */
     public static function defaultSelectionLabel(): string
     {
-        return Craft::t('sprout-forms', 'Add an User');
+        return Craft::t('sprout-forms', 'Select a User');
     }
 
     /**

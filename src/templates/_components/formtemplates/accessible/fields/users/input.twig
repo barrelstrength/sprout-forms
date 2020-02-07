@@ -5,7 +5,7 @@
 {%- set value = value ? value : [] %}
 
 {%- set multiple = field.limit == '' ? true : field.limit > 1 ? true : false %}
-{%- set selectionLabel = field.selectionLabel != '' ? field.selectionLabel : "Select a user..."|t('sprout-forms') -%}
+{%- set selectionLabel = field.selectionLabel != '' ? field.selectionLabel : field.defaultSelectionLabel() ~ '…' -%}
 {%- set hasTitle = users|length > 1 %}
 
 {%- set dataAttributes = null %}
