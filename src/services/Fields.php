@@ -15,6 +15,7 @@ use barrelstrength\sproutforms\fields\formfields\Address;
 use barrelstrength\sproutforms\fields\formfields\Categories;
 use barrelstrength\sproutforms\fields\formfields\Checkboxes;
 use barrelstrength\sproutforms\fields\formfields\CustomHtml;
+use barrelstrength\sproutforms\fields\formfields\Date;
 use barrelstrength\sproutforms\fields\formfields\Dropdown;
 use barrelstrength\sproutforms\fields\formfields\Email;
 use barrelstrength\sproutforms\fields\formfields\EmailDropdown;
@@ -220,18 +221,21 @@ class Fields extends Component
 
         // Special
         $groupedFields[$specialLabel][] = Name::class;
+        $groupedFields[$specialLabel][] = OptIn::class;
         $groupedFields[$specialLabel][] = Email::class;
         $groupedFields[$specialLabel][] = EmailDropdown::class;
-        $groupedFields[$specialLabel][] = Phone::class;
         $groupedFields[$specialLabel][] = Url::class;
+        $groupedFields[$specialLabel][] = Phone::class;
         $groupedFields[$specialLabel][] = Address::class;
+        $groupedFields[$specialLabel][] = Date::class;
         $groupedFields[$specialLabel][] = CustomHtml::class;
         $groupedFields[$specialLabel][] = PrivateNotes::class;
         $groupedFields[$specialLabel][] = MultiSelect::class;
+        $groupedFields[$specialLabel][] = RegularExpression::class;
         $groupedFields[$specialLabel][] = Hidden::class;
         $groupedFields[$specialLabel][] = Invisible::class;
-        $groupedFields[$specialLabel][] = RegularExpression::class;
-        $groupedFields[$specialLabel][] = OptIn::class;
+
+
 
         // Relations
         $groupedFields[$relationsLabel][] = Categories::class;

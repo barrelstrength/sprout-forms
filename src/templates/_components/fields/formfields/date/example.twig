@@ -1,0 +1,22 @@
+{% import "_includes/forms" as forms %}
+
+{% if field.showDate %}
+    {{ forms.text({
+        type: 'date',
+        placeholder: ' ',
+        readonly: true,
+        disabled: true,
+        size: 10
+    }) }}
+{% endif %}
+
+{% if field.showTime %}
+    {{ forms.select({
+        options: [
+            { label: '12:00 AM', value: '' }
+        ],
+        value: '',
+        readonly: true,
+        disabled: true
+    }) }}
+{% endif %}
