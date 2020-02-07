@@ -14,7 +14,6 @@ use craft\elements\Category;
 use craft\elements\Entry;
 use craft\elements\Tag;
 use craft\models\Section;
-use yii\base\Component;
 
 /**
  *
