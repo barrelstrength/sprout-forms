@@ -248,6 +248,13 @@ class Number extends FormField implements PreviewableFieldInterface
         return $rules;
     }
 
+    public function getElementValidationRules(): array
+    {
+        return [
+            ['number', 'min' => $this->min, 'max' => $this->max],
+        ];
+    }
+
     /**
      * @inheritdoc
      */
