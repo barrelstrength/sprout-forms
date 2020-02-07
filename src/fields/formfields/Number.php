@@ -83,12 +83,12 @@ class Number extends FormField implements PreviewableFieldInterface
         parent::init();
 
         // Normalize $max
-        if ($this->max !== null && empty($this->max)) {
+        if ($this->max !== null && $this->max !== '0' && empty($this->max)) {
             $this->max = null;
         }
 
         // Normalize $min
-        if ($this->min !== null && empty($this->min)) {
+        if ($this->min !== null && $this->min !== '0' && empty($this->min)) {
             $this->min = null;
         }
 
