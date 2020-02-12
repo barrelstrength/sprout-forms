@@ -1,5 +1,26 @@
 # Changelog
 
+## 3.8.2 - 2020-02-12
+
+## Added
+- Added Date Form Field ([#381])
+- Added Users Relations Form Field ([#368], [#369])
+
+### Changed
+- Improved validation for Number field ([#414])
+- Increased size of initial field drop area
+- Updated `barrelstrength/sprout-base-fields` requirement to v1.3.1
+- Updated `barrelstrength/sprout-base` requirement to v5.1.1
+
+### Fixed
+- Fixed bug where Number field wouldn’t recognize zero as a min or max value
+- Fixed bug when generating field handle for custom fields using non-alphanumeric characters
+
+[#368]: https://github.com/barrelstrength/craft-sprout-forms/issues/368
+[#369]: https://github.com/barrelstrength/craft-sprout-forms/issues/369
+[#381]: https://github.com/barrelstrength/craft-sprout-forms/issues/381
+[#414]: https://github.com/barrelstrength/craft-sprout-forms/issues/414 
+
 ## 3.8.1 - 2020-02-12
 
 ### Changed
