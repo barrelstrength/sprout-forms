@@ -321,18 +321,4 @@ class Date extends FormField implements PreviewableFieldInterface
             CraftDate::class
         ];
     }
-
-//    public function getCompatibleConditions()
-//    {
-//        return [
-//            new IsCondition(),
-//            new IsNotCondition(),
-//            new ContainsCondition(),
-//            new DoesNotContainCondition(),
-//            new StartsWithCondition(),
-//            new DoesNotStartWithCondition(),
-//            new EndsWithCondition(),
-//            new DoesNotEndWithCondition()
-//        ];
-//    }
 }
