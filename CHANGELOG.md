@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.8.1 - 2020-02-12
+
+### Changed
+- Updated `barrelstrength/sprout-base-email` requirement to v1.2.2
+
+### Fixed
+- Fixed incorrect preview link ([#421])
+
+[#421]: https://github.com/barrelstrength/craft-sprout-forms/issues/421
+
 ## 3.8.0.2 - 2020-02-06
 
 ### Changed
