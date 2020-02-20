@@ -2,7 +2,7 @@
 {% import 'sprout-base/_includes/sproutcp' as sprout %}
 
 {% set title = "Upgrade to Sprout Forms Pro"|t('sprout-forms') %}
-
+{% set bodyClass = 'sprout-landing-page' %}
 {% set assetUrl = view.getAssetManager().getPublishedUrl('@sproutforms/web/assets/cp/dist', true) -%}
 {% set pluginStoreLink = currentUser.admin ? cpUrl('plugin-store/sprout-forms') : 'https://plugins.craftcms.com/sprout-forms' %}
 

@@ -2,7 +2,7 @@
 {% import 'sprout-base/_includes/sproutcp' as sprout %}
 
 {% set title = "Welcome to Sprout Forms"|t('sprout-forms') %}
-
+{% set bodyClass = 'sprout-landing-page' %}
 {% set assetUrl = view.getAssetManager().getPublishedUrl('@sproutforms/web/assets/cp/dist', true) -%}
 
 {% block content %}
