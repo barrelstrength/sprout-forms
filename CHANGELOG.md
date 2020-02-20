@@ -3,7 +3,7 @@
 ## 3.8.3 - 2020-02-20
 
 ### Added
-- Added support for Report Relations Editor Modal
+- Added support for Report Relations Editor Modal ([#139][#139-sprout-email])
 	
 ### Changed
 - Updated Notification Email logic to only define CC and BCC when sending a Single Email
@@ -23,11 +23,10 @@
 - Removed `barrelstrength/sproutbasereports/services/getReport()`
 
 [#139-sprout-email]: https://github.com/barrelstrength/craft-sprout-email/issues/139
+[#140-sprout-email]: https://github.com/barrelstrength/craft-sprout-email/issues/140
 [#425]: https://github.com/barrelstrength/craft-sprout-forms/issues/425
 [#427]: https://github.com/barrelstrength/craft-sprout-forms/issues/427
 [#428]: https://github.com/barrelstrength/craft-sprout-forms/issues/428
-
-Relation Modal: https://github.com/barrelstrength/craft-sprout-email/issues/140
 
 ## 3.8.2 - 2020-02-12
 
