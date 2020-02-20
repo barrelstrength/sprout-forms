@@ -54,8 +54,11 @@ class FormsController extends BaseController
         /** @var Settings $settings */
         $settings = $plugin->getSettings();
 
-        if ($settings->enableSaveData) {
-            return Craft::$app->getResponse()->redirect(UrlHelper::cpUrl('sprout-forms/'.$settings->defaultSection));
+        $canViewEntries = Craft::$app->getUser()->checkPermission('sproutForms-viewEntries') &&
+            $settings->enableSaveData;
+
+        if ($canViewEntries && $settings->defaultSection === 'entries') {
+            return Craft::$app->getResponse()->redirect(UrlHelper::cpUrl('sprout-forms/entries'));
         }
 
         return Craft::$app->getResponse()->redirect(UrlHelper::cpUrl('sprout-forms/forms'));
@@ -340,9 +343,9 @@ class FormsController extends BaseController
     }
 
     /**
-     * @return \yii\web\Response
-     * @throws \yii\web\BadRequestHttpException
-     * @throws \yii\web\ForbiddenHttpException
+     * @return Response
+     * @throws BadRequestHttpException
+     * @throws ForbiddenHttpException
      */
     public function actionDeleteFormTab(): Response
     {
@@ -406,8 +409,8 @@ class FormsController extends BaseController
     }
 
     /**
-     * @return \yii\web\Response
-     * @throws \yii\web\BadRequestHttpException
+     * @return Response
+     * @throws BadRequestHttpException
      */
     public function actionReorderFormTabs(): Response
     {
@@ -443,10 +446,10 @@ class FormsController extends BaseController
     }
 
     /**
-     * @return \yii\web\Response
-     * @throws \Throwable
-     * @throws \yii\base\InvalidConfigException
-     * @throws \yii\web\BadRequestHttpException
+     * @return Response
+     * @throws Throwable
+     * @throws InvalidConfigException
+     * @throws BadRequestHttpException
      */
     public function actionGetUpdatedLayoutHtml(): Response
     {
