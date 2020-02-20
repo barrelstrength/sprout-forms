@@ -1,5 +1,34 @@
 # Changelog
 
+## 3.8.3 - 2020-02-20
+
+### Added
+- Added support for Report Relations Editor Modal
+	
+### Changed
+- Updated Notification Email logic to only define CC and BCC when sending a Single Email
+- Updated instances of `barrelstrength/sproutbasereports/services/getReport()` to default `getElementById()`
+- Updated `barrelstrength/sprout-base-email` requirement to v1.2.3
+- Updated `barrelstrength/sprout-base-fields` requirement to v1.3.2
+- Updated `barrelstrength/sprout-base-reports` requirement to v1.4.2
+- Updated `barrelstrength/sprout-base` requirement to v5.1.2
+
+### Fixed
+- Fixed display bug with select dropdown field in edit page sidebars ([#139][#139-sprout-email])
+- Fixed bug in session logic when defining `viewContext` setting ([#425], [#428])
+- Fixed bug where Mailing Lists settings may not display on Notification Email Edit page
+- Fixed bug where CC and BCC fields displayed alongside Email List settings even though they don't apply ([#427][#427-sprout-email])
+
+### Removed
+- Removed `barrelstrength/sproutbasereports/services/getReport()`
+
+[#139-sprout-email]: https://github.com/barrelstrength/craft-sprout-email/issues/139
+[#425]: https://github.com/barrelstrength/craft-sprout-forms/issues/425
+[#427]: https://github.com/barrelstrength/craft-sprout-forms/issues/427
+[#428]: https://github.com/barrelstrength/craft-sprout-forms/issues/428
+
+Relation Modal: https://github.com/barrelstrength/craft-sprout-email/issues/140
+
 ## 3.8.2 - 2020-02-12
 
 ## Added
