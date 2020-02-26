@@ -110,6 +110,11 @@ class FileUpload extends BaseRelationFormField
     private $_uploadedDataFiles;
 
     /**
+     * @var int|null The default upload location for this field to open in modal
+     */
+    private $_defaultUploadLocation;
+
+    /**
      * @inheritdoc
      */
     public static function displayName(): string
@@ -229,6 +234,7 @@ class FileUpload extends BaseRelationFormField
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
+
         try {
             return parent::getInputHtml($value, $element);
         } catch (InvalidSubpathException $e) {
@@ -632,15 +638,7 @@ class FileUpload extends BaseRelationFormField
         Craft::$app->getSession()->authorize('saveAssetInVolume:'.$folderId);
 
         if ($this->useSingleFolder) {
-            $folder = Craft::$app->getAssets()->getFolderById($folderId);
-            $folderPath = 'folder:'.$folder->uid;
-
-            // Construct the path
-            while ($folder->parentId && $folder->volumeId !== null) {
-                $parent = $folder->getParent();
-                $folderPath = 'folder:'.$parent->uid.'/'.$folderPath;
-                $folder = $parent;
-            }
+            $folderPath = $this->_getSourcePathByFolderId($folderId);
 
             return [$folderPath];
         }
@@ -671,6 +669,7 @@ class FileUpload extends BaseRelationFormField
         $variables = parent::inputTemplateVariables($value, $element);
         $variables['hideSidebar'] = (int)$this->useSingleFolder;
         $variables['defaultFieldLayoutId'] = $this->_uploadVolume()->fieldLayoutId ?? null;
+        $variables['defaultUploadLocation'] = $this->_defaultUploadLocation;
 
         return $variables;
     }
@@ -867,6 +866,9 @@ class FileUpload extends BaseRelationFormField
      */
     private function _determineUploadFolderId(ElementInterface $element = null, bool $createDynamicFolders = true): int
     {
+        $userFolder = null;
+        $folderId = null;
+
         /** @var Element $element */
         if ($this->useSingleFolder) {
             $uploadVolume = $this->singleUploadLocationSource;
@@ -884,8 +886,15 @@ class FileUpload extends BaseRelationFormField
             if (!$uploadVolume) {
                 throw new InvalidVolumeException('Invalid volume.');
             }
+
             $folderId = $this->_resolveVolumePathToFolderId($uploadVolume, $subpath, $element, $createDynamicFolders);
         } catch (InvalidVolumeException $e) {
+            // If this is a static path, go ahead and create it
+            if (!preg_match('/\{|\}/', $subpath)) {
+                $volumeId = $this->_volumeIdBySourceKey($uploadVolume);
+                $folderId = $assets->ensureFolderByFullPathAndVolume($subpath, Craft::$app->getVolumes()->getVolumeById($volumeId));
+            }
+
             throw new InvalidVolumeException(Craft::t('sprout-forms', 'The {field} field’s {setting} setting is set to an invalid volume.', [
                 'field' => $this->name,
                 'setting' => $settingName,
@@ -895,7 +904,6 @@ class FileUpload extends BaseRelationFormField
             // so use the user's upload folder instead
             if ($element === null || !$element->id || !$element->enabled || !$createDynamicFolders) {
                 $userFolder = $assets->getUserTemporaryUploadFolder();
-                $folderId = $userFolder->id;
             } else {
                 // Existing element, so this is just a bad subpath
                 throw new InvalidSubpathException($e->subpath, Craft::t('sprout-forms', 'The {field} field’s {setting} setting has an invalid subpath (“{subpath}”).', [
@@ -906,6 +914,14 @@ class FileUpload extends BaseRelationFormField
             }
         }
 
+        // If we have resolved everything to a temporary user folder, fine
+        if ($userFolder !== null) {
+            $folderId = $userFolder->id;
+            // But in all other cases, make it the default upload location, too
+        } else {
+            $this->_defaultUploadLocation = $this->_getSourcePathByFolderId($folderId);
+        }
+        
         return $folderId;
     }
 
@@ -977,5 +993,26 @@ class FileUpload extends BaseRelationFormField
         }
 
         return (string)$sourceKey;
+    }
+
+    /**
+     * Generate the full path for a folder in a volume in the form of folder:UID/folder:UID... based on a folder id.
+     *
+     * @param int $folderId
+     * @return string
+     */
+    private function _getSourcePathByFolderId(int $folderId): string
+    {
+        $folder = Craft::$app->getAssets()->getFolderById($folderId);
+        $folderPath = 'folder:' . $folder->uid;
+
+        // Construct the path
+        while ($folder->parentId && $folder->volumeId !== null) {
+            $parent = $folder->getParent();
+            $folderPath = 'folder:' . $parent->uid . '/' . $folderPath;
+            $folder = $parent;
+        }
+
+        return $folderPath;
     }
 }

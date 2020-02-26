@@ -502,10 +502,7 @@ abstract class BaseRelationFormField extends FormField implements PreviewableFie
             $value = $element->getEagerLoadedElements($this->handle);
         } else {
             /** @var ElementQueryInterface $value */
-            $value
-                ->siteId('*')
-                ->unique()
-                ->preferSites([$this->targetSiteId($element)]);
+            $value = $this->_all($value, $element);
         }
 
         /** @var ElementQuery|array $value */
@@ -1022,15 +1019,22 @@ JS;
     }
 
     /**
-     * Returns a clone of the element query value, prepped to include disabled elements.
-     *
      * @param ElementQueryInterface $query
+     * @param ElementInterface|null $element
      *
      * @return ElementQueryInterface
+     * @throws SiteNotFoundException
      */
-    private function _all(ElementQueryInterface $query): ElementQueryInterface
+    private function _all(ElementQueryInterface $query, ElementInterface $element = null): ElementQueryInterface
     {
-        return (clone $query)
-            ->anyStatus();
+        $clone = clone $query;
+        $clone
+            ->anyStatus()
+            ->siteId('*')
+            ->unique();
+        if ($element !== null) {
+            $clone->preferSites([$this->targetSiteId($element)]);
+        }
+        return $clone;
     }
 }
