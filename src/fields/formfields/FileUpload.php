@@ -921,7 +921,7 @@ class FileUpload extends BaseRelationFormField
         } else {
             $this->_defaultUploadLocation = $this->_getSourcePathByFolderId($folderId);
         }
-        
+
         return $folderId;
     }
 

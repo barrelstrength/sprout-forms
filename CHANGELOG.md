@@ -1,5 +1,12 @@
 # Changelog
 
+## UNRELEASED
+
+### Fixed
+Fixed bug where File Upload Field would throw `defaultUploadLocation` error when loading an Entry Edit page in the CP ([#432])
+
+[#432]: https://github.com/barrelstrength/craft-sprout-forms/issues/432
+
 ## 3.8.3 - 2020-02-20
 
 ### Added
