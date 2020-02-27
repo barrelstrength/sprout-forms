@@ -1,6 +1,6 @@
 # Changelog
 
-## UNRELEASED
+## 3.8.5 - 2020-02-27
 
 ### Fixed
 - Fixed bug where custom fields did not map correctly in Entry Element Integration ([#434])
