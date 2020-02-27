@@ -1,5 +1,12 @@
 # Changelog
 
+## UNRELEASED
+
+### Fixed
+- Fixed bug where custom fields did not map correctly in Entry Element Integration ([#434])
+
+[#434]: https://github.com/barrelstrength/craft-sprout-forms/issues/434
+
 ## 3.8.4 - 2020-02-26
 
 ### Fixed

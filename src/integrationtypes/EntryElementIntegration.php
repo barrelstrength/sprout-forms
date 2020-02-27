@@ -18,6 +18,7 @@ use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use yii\base\Exception;
 use yii\base\InvalidConfigException;
 use yii\web\IdentityInterface;
 
@@ -53,7 +54,7 @@ class EntryElementIntegration extends ElementIntegration
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getSettingsHtml()
     {
@@ -98,7 +99,20 @@ class EntryElementIntegration extends ElementIntegration
         // reason that causes the need to do this
         unset($targetIntegrationFieldValues['id']);
 
-        $entryElement->setAttributes($targetIntegrationFieldValues, false);
+        $defaultAttributes = $this->getDefaultSourceMappingAttributes();
+
+        $defaultAttributesHandles = [];
+        foreach ($defaultAttributes as $defaultAttribute) {
+            $defaultAttributesHandles[] = $defaultAttribute['handle'];
+        }
+
+        foreach($targetIntegrationFieldValues as $fieldHandle => $fieldValue) {
+            if (in_array($fieldHandle, $defaultAttributesHandles, true)) {
+                $entryElement->{$fieldHandle} = $fieldValue;
+            } else {
+                $entryElement->setFieldValue($fieldHandle, $fieldValue);
+            }
+        }
 
         if ($entryElement->validate()) {
             $result = Craft::$app->getElements()->saveElement($entryElement);

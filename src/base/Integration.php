@@ -114,62 +114,7 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
      */
     public function getSourceFormFields(): array
     {
-        $sourceFormFieldsData = [
-            [
-                'name' => Craft::t('sprout-forms', 'Form ID'),
-                'handle' => 'formId',
-                'compatibleCraftFields' => [
-                    CraftPlainText::class,
-                    CraftDropdown::class,
-                    CraftNumber::class
-                ],
-                'type' => Number::class
-            ],
-            [
-                'name' => Craft::t('sprout-forms', 'Entry ID'),
-                'handle' => 'id',
-                'compatibleCraftFields' => [
-                    CraftPlainText::class,
-                    CraftDropdown::class,
-                    CraftNumber::class
-                ],
-                'type' => Number::class
-            ],
-            [
-                'name' => Craft::t('sprout-forms', 'Title'),
-                'handle' => 'title',
-                'compatibleCraftFields' => [
-                    CraftPlainText::class,
-                    CraftDropdown::class
-                ],
-                'type' => SingleLine::class
-            ],
-            [
-                'name' => Craft::t('sprout-forms', 'Date Created'),
-                'handle' => 'dateCreated',
-                'compatibleCraftFields' => [
-                    CraftDate::class
-                ],
-                'type' => SingleLine::class
-            ],
-            [
-                'name' => Craft::t('sprout-forms', 'IP Address'),
-                'handle' => 'ipAddress',
-                'compatibleCraftFields' => [
-                    CraftPlainText::class,
-                    CraftDropdown::class
-                ],
-                'type' => SingleLine::class
-            ],
-            [
-                'name' => Craft::t('sprout-forms', 'User Agent'),
-                'handle' => 'userAgent',
-                'compatibleCraftFields' => [
-                    CraftPlainText::class
-                ],
-                'type' => SingleLine::class
-            ]
-        ];
+        $sourceFormFieldsData = $this->getDefaultSourceMappingAttributes();
 
         $sourceFormFields = [];
 
@@ -431,5 +376,70 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
         ];
 
         return $options;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getDefaultSourceMappingAttributes(): array
+    {
+        $sourceFormFieldsData = [
+            [
+                'name' => Craft::t('sprout-forms', 'Form ID'),
+                'handle' => 'formId',
+                'compatibleCraftFields' => [
+                    CraftPlainText::class,
+                    CraftDropdown::class,
+                    CraftNumber::class
+                ],
+                'type' => Number::class
+            ],
+            [
+                'name' => Craft::t('sprout-forms', 'Entry ID'),
+                'handle' => 'id',
+                'compatibleCraftFields' => [
+                    CraftPlainText::class,
+                    CraftDropdown::class,
+                    CraftNumber::class
+                ],
+                'type' => Number::class
+            ],
+            [
+                'name' => Craft::t('sprout-forms', 'Title'),
+                'handle' => 'title',
+                'compatibleCraftFields' => [
+                    CraftPlainText::class,
+                    CraftDropdown::class
+                ],
+                'type' => SingleLine::class
+            ],
+            [
+                'name' => Craft::t('sprout-forms', 'Date Created'),
+                'handle' => 'dateCreated',
+                'compatibleCraftFields' => [
+                    CraftDate::class
+                ],
+                'type' => SingleLine::class
+            ],
+            [
+                'name' => Craft::t('sprout-forms', 'IP Address'),
+                'handle' => 'ipAddress',
+                'compatibleCraftFields' => [
+                    CraftPlainText::class,
+                    CraftDropdown::class
+                ],
+                'type' => SingleLine::class
+            ],
+            [
+                'name' => Craft::t('sprout-forms', 'User Agent'),
+                'handle' => 'userAgent',
+                'compatibleCraftFields' => [
+                    CraftPlainText::class
+                ],
+                'type' => SingleLine::class
+            ]
+        ];
+
+        return $sourceFormFieldsData;
     }
 }
