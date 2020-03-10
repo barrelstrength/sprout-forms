@@ -243,16 +243,16 @@ class EntriesController extends BaseController
         // If we don't have errors or SPAM
         $success = true;
 
-        $saveData = SproutForms::$app->entries->isSaveDataEnabled($this->form, $entry);
+        if ($entry->hasCaptchaErrors()) {
+            $entry->statusId = SproutForms::$app->entryStatuses->getSpamStatusId();
+        }
+
+        $saveData = SproutForms::$app->entries->isSaveDataEnabled($this->form, $entry->getIsSpam());
 
         // Save Data and Trigger the onSaveEntryEvent
         // This saves both valid and spam entries
         // Integrations run on EntryElement::EVENT_AFTER_SAVE Event
         if ($saveData) {
-            if ($entry->hasCaptchaErrors()) {
-                $entry->statusId = SproutForms::$app->entryStatuses->getSpamStatusId();
-            }
-
             $success = SproutForms::$app->entries->saveEntry($entry);
 
             if ($entry->hasCaptchaErrors()) {
