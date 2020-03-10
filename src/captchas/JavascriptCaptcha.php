@@ -11,7 +11,9 @@ use barrelstrength\sproutforms\base\Captcha;
 use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
 use Craft;
 use craft\errors\MissingComponentException;
+use craft\helpers\StringHelper;
 use craft\web\View;
+use yii\base\InvalidConfigException;
 
 /**
  * Class InvisibleCaptcha
@@ -49,7 +51,7 @@ class JavascriptCaptcha extends Captcha
      */
     public function getCaptchaHtml(): string
     {
-        $uniqueId = uniqid('alojs', true);
+        $uniqueId = StringHelper::appendUniqueIdentifier('alojs');
 
         // Create session variable to test for javascript
         Craft::$app->getSession()->set($this->javascriptId, $uniqueId);
@@ -66,27 +68,28 @@ class JavascriptCaptcha extends Captcha
     }
 
     /**
-     * @inheritdoc
+     * @param OnBeforeValidateEntryEvent $event
+     *
+     * @return bool
      * @throws MissingComponentException
+     * @throws InvalidConfigException
      */
     public function verifySubmission(OnBeforeValidateEntryEvent $event): bool
     {
-        $uniqueid = null;
+        $uniqueId = Craft::$app->getSession()->get($this->javascriptId);
+        $postedValues = Craft::$app->getRequest()->getBodyParams();
 
-        foreach ($_POST as $key => $value) {
-            // Fix issue on multiple forms on same page
-            if (strpos($key, 'alojs') === 0) {
-                $uniqueid = $_POST[$key];
-                break;
-            }
-        }
+        // Filter out the JS Captcha Input
+        $jsCaptchaInput = array_filter($postedValues, static function($key) {
+            return strpos($key, 'alojs') === 0;
+        }, ARRAY_FILTER_USE_KEY);
 
-        if (empty($uniqueid)) {
-            $errorMessage = 'Javascript was not enabled in browser.';
+        $inputValue = $jsCaptchaInput[$uniqueId] ?? null;
+
+        if ($inputValue !== $uniqueId) {
+            $errorMessage = 'Javascript not enabled in browser or form page does not have a <body> tag.';
             Craft::error($errorMessage, __METHOD__);
-
             $this->addError(self::CAPTCHA_ERRORS_KEY, $errorMessage);
-
             return false;
         }
 
@@ -96,6 +99,3 @@ class JavascriptCaptcha extends Captcha
         return true;
     }
 }
-
-
-
