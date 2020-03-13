@@ -1,5 +1,18 @@
 # Changelog
 
+## 3.8.6 - 2020-03-14
+
+### Changed
+- Updated `barrelstrength/sprout-base-email` requirement to v1.2.3
+
+### Fixed
+- Fixed bug where spam entries were not respecting `saveSpamToDatabase` setting
+- Fixed validation logic in Javascript Captcha 
+- Notification Events are no longer initialized on install and migration requests ([#143][#143-sproutemail])
+- Notification Events are no longer initialized on console requests
+
+[#143-sproutemail]: https://github.com/barrelstrength/craft-sprout-email/issues/143
+
 ## 3.8.5 - 2020-02-27
 
 ### Fixed
@@ -18,7 +31,7 @@
 
 ### Added
 - Added support for Report Relations Editor Modal ([#139][#139-sprout-email])
-	
+
 ### Changed
 - Updated Notification Email logic to only define CC and BCC when sending a Single Email
 - Updated instances of `barrelstrength/sproutbasereports/services/getReport()` to default `getElementById()`
@@ -113,7 +126,7 @@
 - Updated `barrelstrength/sprout-base-fields` requirement to v1.3.0
 - Updated `barrelstrength/sprout-base-reports` requirement to v1.4.0
 - Updated `barrelstrength/sprout-base` requirement to v5.1.0
- 
+
 ### Fixed
 - Fixed several display bugs introduced in Craft 3.4
 - Fixed bug where user was unable to save a form with no fields in the field layout
@@ -185,7 +198,7 @@
 
 ### Fixed
 - Fixed scenario where address table updates may not get triggered in migrations
- 
+
 ## 3.6.7 - 2020-01-09
 
 ### Added
@@ -284,7 +297,7 @@
 
 ### Updated
 - Improved Form Template comments around use of `modifyForm` hook ([#225])
- 
+
 ### Fixed
 - Fixed error migrating report ID ([#370])
 
@@ -330,7 +343,7 @@
 - Updated `saveData` and `displaySectionTitles` columns to not allow null values
 - Updated barrelstrength/sprout-base requirement to v5.0.8
 - Updated barrelstrength/sprout-base-email requirement to v1.1.6
-    
+
 ### Fixed
 - Fixed "Save as new Form" behavior ([#360])
 - Fixed check for schema version in migration ([#355])
@@ -338,7 +351,7 @@
 - Updated Integration settings to get updated when a field handle is changed
 - Updated Field Rule settings to get updated when a field handle is changed
 - Updated Field Rule settings to be removed when a Field is deleted
- 
+
 ### Removed
 - Removed `Entry::statusHandle` attribute
 - Removed `getSpamStatusHandle` variable 
