@@ -1,12 +1,17 @@
 # Changelog
 
-## UNRELEASED
+## 3.8.7 - 2020-03-14
+
+### Added
+- Added support for setting default Sort Order and Sort Column on Reports ([#60], [#71])
 
 ### Changed
-- Updated `barrelstrength/sprout-base-reports` requirement to v1.4.3
+- Updated `barrelstrength/sprout-base-email` requirement to v1.2.5
+- Updated `barrelstrength/sprout-base-reports` requirement to v1.4.4
 
 ### Fixed
 - Fixed bug where `dataSourceBaseUrl` was not defined after editing a report with validation errors
+- Fixed display bug when viewing Notification and Report Element Index pages
 
 ## 3.8.6 - 2020-03-14
 
