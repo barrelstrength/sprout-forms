@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\fields\formfields\base\BaseAssetsFormField;
 use Craft;
 use craft\fields\Assets as CraftAssets;
 use craft\helpers\Template as TemplateHelper;

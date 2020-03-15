@@ -5,7 +5,7 @@
  * @license   https://craftcms.github.io/license
  */
 
-namespace barrelstrength\sproutforms\fields\formfields;
+namespace barrelstrength\sproutforms\fields\formfields\base;
 
 use barrelstrength\sproutforms\base\FormFieldTrait;
 use craft\fields\Assets as CraftAssetsField;

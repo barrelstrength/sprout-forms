@@ -2,6 +2,7 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\fields\formfields\base\BaseUsersFormField;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\fields\Entries as CraftEntries;

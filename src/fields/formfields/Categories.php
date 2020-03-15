@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\fields\formfields\base\BaseCategoriesFormField;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\fields\Categories as CraftCategories;

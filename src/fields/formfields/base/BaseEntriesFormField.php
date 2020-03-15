@@ -5,12 +5,12 @@
  * @license   https://craftcms.github.io/license
  */
 
-namespace barrelstrength\sproutforms\fields\formfields;
+namespace barrelstrength\sproutforms\fields\formfields\base;
 
 use barrelstrength\sproutforms\base\FormFieldTrait;
-use craft\fields\Tags as CraftTagsField;
+use craft\fields\Entries as CraftEntriesField;
 
-abstract class BaseTagsFormField extends CraftTagsField
+abstract class BaseEntriesFormField extends CraftEntriesField
 {
     use FormFieldTrait;
 

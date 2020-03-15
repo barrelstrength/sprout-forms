@@ -5,17 +5,17 @@
  * @license   https://craftcms.github.io/license
  */
 
-namespace barrelstrength\sproutforms\fields\formfields;
+namespace barrelstrength\sproutforms\fields\formfields\base;
 
 use barrelstrength\sproutforms\base\FormFieldTrait;
-use craft\fields\Entries as CraftEntriesField;
+use craft\fields\Categories as CraftCategoriesField;
 
-abstract class BaseEntriesFormField extends CraftEntriesField
+abstract class BaseCategoriesFormField extends CraftCategoriesField
 {
     use FormFieldTrait;
 
     /**
      * @var string Template to use for settings rendering
      */
-    protected $settingsTemplate = 'sprout-forms/_components/fields/formfields/elementfieldsettings';
+    protected $settingsTemplate = 'sprout-forms/_components/fields/formfields/categories/settings';
 }

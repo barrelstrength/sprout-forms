@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\fields\formfields\base\BaseTagsFormField;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\fields\Tags as CraftTags;
