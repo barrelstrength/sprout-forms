@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\base\FormFieldTrait;
 use barrelstrength\sproutforms\fields\formfields\base\BaseCategoriesFormField;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
@@ -23,10 +24,9 @@ use yii\base\Exception;
  * @property array  $compatibleCraftFieldTypes
  * @property mixed  $exampleInputHtml
  */
-class Categories extends BaseCategoriesFormField
+class Categories extends CraftCategories
 {
-    // Properties
-    // =====================================================================
+    use FormFieldTrait;
 
     /**
      * @var int|null Branch limit
@@ -37,6 +37,11 @@ class Categories extends BaseCategoriesFormField
      * @var string
      */
     public $cssClasses;
+
+    /**
+     * @var string Template to use for settings rendering
+     */
+    protected $settingsTemplate = 'sprout-forms/_components/fields/formfields/categories/settings';
 
     /**
      * @return string

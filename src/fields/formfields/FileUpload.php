@@ -7,7 +7,7 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
-use barrelstrength\sproutforms\fields\formfields\base\BaseAssetsFormField;
+use barrelstrength\sproutforms\base\FormFieldTrait;
 use Craft;
 use craft\fields\Assets as CraftAssets;
 use craft\helpers\Template as TemplateHelper;
@@ -29,8 +29,10 @@ use yii\base\Exception;
  * @property mixed      $settingsHtml
  * @property mixed      $exampleInputHtml
  */
-class FileUpload extends BaseAssetsFormField
+class FileUpload extends CraftAssets
 {
+    use FormFieldTrait;
+
     /**
      * @var string
      */

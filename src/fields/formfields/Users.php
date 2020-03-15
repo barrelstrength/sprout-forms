@@ -2,10 +2,10 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
-use barrelstrength\sproutforms\fields\formfields\base\BaseUsersFormField;
+use barrelstrength\sproutforms\base\FormFieldTrait;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
-use craft\fields\Entries as CraftEntries;
+use craft\fields\Users as CraftUsers;
 use craft\helpers\Template as TemplateHelper;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -19,18 +19,22 @@ use yii\base\Exception;
  * @property array  $compatibleCraftFieldTypes
  * @property mixed  $exampleInputHtml
  */
-class Users extends BaseUsersFormField
+class Users extends CraftUsers
 {
+    use FormFieldTrait;
+
     /**
      * @var string
      */
     public $cssClasses;
-
     /**
      * @var string
      */
     public $usernameFormat = 'fullName';
 
+    /**
+     * @var string Template to use for settings rendering
+     */
     protected $settingsTemplate = 'sprout-forms/_components/fields/formfields/users/settings';
 
     /**

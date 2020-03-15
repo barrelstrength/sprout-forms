@@ -7,7 +7,7 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
-use barrelstrength\sproutforms\fields\formfields\base\BaseEntriesFormField;
+use barrelstrength\sproutforms\base\FormFieldTrait;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\fields\Entries as CraftEntries;
@@ -24,12 +24,18 @@ use yii\base\Exception;
  * @property array  $compatibleCraftFieldTypes
  * @property mixed  $exampleInputHtml
  */
-class Entries extends BaseEntriesFormField
+class Entries extends CraftEntries
 {
+    use FormFieldTrait;
     /**
      * @var string
      */
     public $cssClasses;
+
+    /**
+     * @var string Template to use for settings rendering
+     */
+    protected $settingsTemplate = 'sprout-forms/_components/fields/formfields/elementfieldsettings';
 
     /**
      * @return string
