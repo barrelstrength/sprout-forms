@@ -37,53 +37,58 @@
         {% if conditionSet|length %}
             {% for condition in conditionSet %}
                 {% set conditionIndex = loop.index0 %}
-                <tr data-id="{{ conditionIndex }}">
-                    {% for col in condition %}
-                        <td>
-                            {% set colName = 'conditions[conditionSet-' ~ conditionSetIndex ~ '][condition-' ~ conditionIndex ~ '][' ~ loop.index0 ~ ']' %}
+                {% set formField = craft.sproutForms.getFormField(formFieldHandle, fieldRule.formId) %}
 
-                            {# Field Dropdown #}
-                            {% if loop.index0 == 0 %}
-                                {% set formFieldHandle = col %}
-                                {% if formFieldHandle is empty %}
-                                    {% set formFieldHandle = formFieldsAsOptions[0].value %}
+                {# Does the field our rule is for still exist in the layout? #}
+                {% if formField is not null %}
+                    <tr data-id="{{ conditionIndex }}">
+                        {% for col in condition %}
+                            <td>
+                                {% set colName = 'conditions[conditionSet-' ~ conditionSetIndex ~ '][condition-' ~ conditionIndex ~ '][' ~ loop.index0 ~ ']' %}
+
+                                {# Field Dropdown #}
+                                {% if loop.index0 == 0 %}
+                                    {% set formFieldHandle = col %}
+                                    {% if formFieldHandle is empty %}
+                                        {% set formFieldHandle = formFieldsAsOptions[0].value %}
+                                    {% endif %}
+                                    {{ forms.select({
+                                        name: colName,
+                                        hasOptgroups: true,
+                                        options: formFieldsAsOptions,
+                                        value: col
+                                    }) }}
+
+                                    {# Condition Dropdown #}
+                                {% elseif loop.index0 == 1 %}
+
+                                    {% set conditionsAsOptions = formField.getConditionsAsOptions() %}
+                                    {{ forms.select({
+                                        name: colName,
+                                        hasOptgroups: true,
+                                        options: conditionsAsOptions,
+                                        value: col
+                                    }) }}
+                                    {% set conditionClass = col != '' ? col : conditionsAsOptions[0].value %}
+
+                                    {# Condition Value #}
+                                {% else %}
+                                    {% set fieldCondition = craft.sproutForms.getFieldCondition(conditionClass, formField) %}
+                                    {{ formField.getConditionValueInputHtml(fieldCondition, colName, col)|raw }}
                                 {% endif %}
-                                {{ forms.select({
-                                    name: colName,
-                                    hasOptgroups: true,
-                                    options: formFieldsAsOptions,
-                                    value: col
-                                }) }}
+                            </td>
+                        {% endfor %}
 
-                                {# Condition Dropdown #}
-                            {% elseif loop.index0 == 1 %}
-                                {% set formField = craft.sproutForms.getFormField(formFieldHandle, fieldRule.formId) %}
-                                {% set conditionsAsOptions = formField.getConditionsAsOptions() %}
-                                {{ forms.select({
-                                    name: colName,
-                                    hasOptgroups: true,
-                                    options: conditionsAsOptions,
-                                    value: col
-                                }) }}
-                                {% set conditionClass = col != '' ? col : conditionsAsOptions[0].value %}
-
-                                {# Condition Value #}
-                            {% else %}
-                                {% set fieldCondition = craft.sproutForms.getFieldCondition(conditionClass, formField) %}
-                                {{ formField.getConditionValueInputHtml(fieldCondition, colName, col)|raw }}
-                            {% endif %}
+                        <td class="thin action">
+                            <div class="buttons">
+                                <div id="add-rule{{ conditionSetIndex }}" class="btn add icon small" tabindex="0">OR</div>
+                            </div>
                         </td>
-                    {% endfor %}
-
-                    <td class="thin action">
-                        <div class="buttons">
-                            <div id="add-rule{{ conditionSetIndex }}" class="btn add icon small" tabindex="0">OR</div>
-                        </div>
-                    </td>
-                    <td class="thin action">
-                        <a class="delete icon" title="{{ "Delete"|t('sprout-forms') }}"></a>
-                    </td>
-                </tr>
+                        <td class="thin action">
+                            <a class="delete icon" title="{{ "Delete"|t('sprout-forms') }}"></a>
+                        </td>
+                    </tr>
+                {% endif %}
             {% endfor %}
         {% endif %}
         </tbody>
