@@ -608,7 +608,7 @@ class SproutFormsVariable
      */
     public function validateField($field)
     {
-        return $field instanceof FormField;
+        return method_exists($field, 'getFrontEndInputHtml');
     }
 
     /**
