@@ -15,7 +15,6 @@ use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use barrelstrength\sproutforms\events\OnSaveEntryEvent;
-use barrelstrength\sproutforms\fields\formfields\BaseRelationFormField;
 use barrelstrength\sproutforms\jobs\ResaveEntries;
 use barrelstrength\sproutforms\models\EntryStatus;
 use barrelstrength\sproutforms\models\Settings;
@@ -186,89 +185,6 @@ class Entries extends Component
         }
 
         return true;
-    }
-
-    /**
-     * Saves some relations for a field.
-     *
-     * @param BaseRelationFormField $field
-     * @param Element               $source
-     * @param array                 $targetIds
-     *
-     * @return void
-     * @throws Throwable
-     */
-    public function saveRelations(BaseRelationFormField $field, Element $source, array $targetIds)
-    {
-        if (!is_array($targetIds)) {
-            $targetIds = [];
-        }
-
-        // Prevent duplicate target IDs.
-        $targetIds = array_unique($targetIds);
-
-        $transaction = Craft::$app->getDb()->beginTransaction();
-
-        try {
-            // Delete the existing relations
-            $oldRelationConditions = [
-                'and',
-                [
-                    'fieldId' => $field->id,
-                    'sourceId' => $source->id,
-                ]
-            ];
-
-            if ($field->localizeRelations) {
-                $oldRelationConditions[] = [
-                    'or',
-                    ['sourceSiteId' => null],
-                    ['sourceSiteId' => $source->siteId]
-                ];
-            }
-
-            Craft::$app->getDb()->createCommand()
-                ->delete('{{%relations}}', $oldRelationConditions)
-                ->execute();
-
-            // Add the new ones
-            if (!empty($targetIds)) {
-                $values = [];
-
-                if ($field->localizeRelations) {
-                    $sourceSiteId = $source->siteId;
-                } else {
-                    $sourceSiteId = null;
-                }
-
-                foreach ($targetIds as $sortOrder => $targetId) {
-                    $values[] = [
-                        $field->id,
-                        $source->id,
-                        $sourceSiteId,
-                        $targetId,
-                        $sortOrder + 1
-                    ];
-                }
-
-                $columns = [
-                    'fieldId',
-                    'sourceId',
-                    'sourceSiteId',
-                    'targetId',
-                    'sortOrder'
-                ];
-                Craft::$app->getDb()->createCommand()
-                    ->batchInsert('{{%relations}}', $columns, $values)
-                    ->execute();
-            }
-
-            $transaction->commit();
-        } catch (Throwable $e) {
-            $transaction->rollBack();
-
-            throw $e;
-        }
     }
 
     /**
