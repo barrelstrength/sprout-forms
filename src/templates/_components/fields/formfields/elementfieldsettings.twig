@@ -1,67 +1,14 @@
+{% extends "_components/fieldtypes/elementfieldsettings" %}
+
 {% import "_includes/forms" as forms %}
 
-{% set sourceOptions = field.getSourceOptions() %}
-
 {% block fieldSettings %}
-    {% block sourcesField %}
-        {% if sourceOptions %}
-            {% if field.allowMultipleSources %}
-                {{ forms.checkboxSelectField({
-                    label: "Sources"|t('sprout-forms'),
-                    instructions: "Which sources do you want to select {type} from?"|t('sprout-forms', { type: field.displayName()|lower }),
-                    id: 'sources',
-                    name: 'sources',
-                    options: sourceOptions,
-                    values: field.sources,
-                    showAllOption: true,
-                }) }}
-            {% else %}
-                {{ forms.selectField({
-                    label: "Source"|t('sprout-forms'),
-                    instructions: "Which source do you want to select {type} from?"|t('sprout-forms', { type: field.displayName()|lower }),
-                    id: 'source',
-                    name: 'source',
-                    options: sourceOptions,
-                    value: field.source
-                }) }}
-            {% endif %}
-        {% else %}
-            {{ forms.field({
-                label: (field.allowMultipleSources ? "Sources"|t('sprout-forms') : "Source"|t('sprout-forms'))
-            }, '<p class="error">' ~ "No sources exist yet."|t('sprout-forms') ~ '</p>') }}
-        {% endif %}
-    {% endblock %}
-
-    {% block limitField %}
-        {% if field.allowLimit %}
-            {{ forms.textField({
-                label: "Limit"|t('sprout-forms'),
-                instructions: "Limit the number of selectable {type}."|t('sprout-forms', { type: field.displayName()|lower }),
-                id: 'limit',
-                name: 'limit',
-                value: field.limit,
-                size: 2,
-                errors: field.getErrors('limit')
-            }) }}
-        {% endif %}
-    {% endblock %}
-
-    {% block selectionLabelField %}
-        {{ forms.textField({
-            label: "Selection Label"|t('sprout-forms'),
-            instructions: "Enter the text you want to appear on the {type} selection input."|t('sprout-forms', { type: field.displayName()|lower }),
-            id: 'selectionLabel',
-            name: 'selectionLabel',
-            value: field.selectionLabel,
-            placeholder: field.defaultSelectionLabel(),
-            errors: field.getErrors('selectionLabel')
-        }) }}
-    {% endblock %}
+    {{ block('sourcesField') }}
+    {{ block('limitField') }}
+    {{ block('selectionLabelField') }}
 
     {% if craft.app.getIsMultiSite() %}
-
         {{ field.getTargetSiteFieldHtml()|raw }}
-
     {% endif %}
 
 {% endblock %}
