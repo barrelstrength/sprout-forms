@@ -2,27 +2,23 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\SproutForms;
 use Craft;
-use craft\elements\User;
 use craft\fields\Entries as CraftEntries;
 use craft\helpers\Template as TemplateHelper;
-
-use barrelstrength\sproutforms\SproutForms;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Markup;
+use yii\base\Exception;
 
 /**
- * Class SproutFormsEntriesField
- *
- *
  * @property string $svgIconPath
  * @property array  $compatibleCraftFields
  * @property array  $compatibleCraftFieldTypes
  * @property mixed  $exampleInputHtml
  */
-class Users extends BaseRelationFormField
+class Users extends BaseUsersFormField
 {
     /**
      * @var string
@@ -37,23 +33,6 @@ class Users extends BaseRelationFormField
     protected $settingsTemplate = 'sprout-forms/_components/fields/formfields/users/settings';
 
     /**
-     * @inheritdoc
-     */
-    public static function displayName(): string
-    {
-        return Craft::t('sprout-forms', 'Users');
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected static function elementType(): string
-    {
-        return User::class;
-    }
-
-
-    /**
      * @return string
      */
     public function getSvgIconPath(): string
@@ -63,19 +42,12 @@ class Users extends BaseRelationFormField
 
     /**
      * @inheritdoc
-     */
-    public static function defaultSelectionLabel(): string
-    {
-        return Craft::t('sprout-forms', 'Select a User');
-    }
-
-    /**
-     * @inheritdoc
      *
      * @return string
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws Exception
      */
     public function getExampleInputHtml(): string
     {
@@ -94,14 +66,13 @@ class Users extends BaseRelationFormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
         $users = SproutForms::$app->frontEndFields->getFrontEndUsers($this->getSettings());
 
-        $rendered = Craft::$app->getView()->renderTemplate(
-            'users/input',
-            [
+        $rendered = Craft::$app->getView()->renderTemplate('users/input', [
                 'name' => $this->handle,
                 'value' => $value->ids(),
                 'field' => $this,

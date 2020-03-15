@@ -9,53 +9,26 @@ namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
-use craft\elements\Entry;
 use craft\fields\Entries as CraftEntries;
 use craft\helpers\Template as TemplateHelper;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Markup;
+use yii\base\Exception;
 
 /**
- * Class SproutFormsEntriesField
- *
- *
  * @property string $svgIconPath
  * @property array  $compatibleCraftFields
  * @property array  $compatibleCraftFieldTypes
  * @property mixed  $exampleInputHtml
  */
-class Entries extends BaseRelationFormField
+class Entries extends BaseEntriesFormField
 {
     /**
      * @var string
      */
     public $cssClasses;
-
-    /**
-     * @inheritdoc
-     */
-    public static function displayName(): string
-    {
-        return Craft::t('sprout-forms', 'Entries');
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function defaultSelectionLabel(): string
-    {
-        return Craft::t('sprout-forms', 'Add an Entry');
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected static function elementType(): string
-    {
-        return Entry::class;
-    }
 
     /**
      * @return string
@@ -72,7 +45,7 @@ class Entries extends BaseRelationFormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getExampleInputHtml(): string
     {
@@ -91,7 +64,7 @@ class Entries extends BaseRelationFormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
