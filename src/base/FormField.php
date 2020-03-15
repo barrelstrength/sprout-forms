@@ -7,9 +7,11 @@
 
 namespace barrelstrength\sproutforms\base;
 
+use barrelstrength\sproutforms\fields\formfields\base\BaseConditionalTrait;
 use craft\base\Field;
 
 abstract class FormField extends Field
 {
     use FormFieldTrait;
+    use BaseConditionalTrait;
 }

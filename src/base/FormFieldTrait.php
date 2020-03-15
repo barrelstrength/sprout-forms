@@ -139,21 +139,6 @@ trait FormFieldTrait
         return strtolower($fieldClassReflection->getShortName());
     }
 
-
-    /**
-     * This add support for the field rule condition api return a prover value input html depending of the condition
-     *
-     * @param ConditionInterface $condition
-     * @param                    $fieldName
-     * @param                    $fieldValue
-     *
-     * @return string
-     */
-    public function getConditionValueInputHtml(ConditionInterface $condition, $fieldName, $fieldValue): string
-    {
-        return '<input class="text fullwidth" type="text" name="'.$fieldName.'" value="'.$fieldValue.'">';
-    }
-
     /**
      * The example HTML input field that displays in the UI when a field is dragged to the form layout editor
      *
