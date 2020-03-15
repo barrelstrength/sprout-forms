@@ -7,6 +7,8 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\base\FormFieldTrait;
+use barrelstrength\sproutforms\fields\formfields\base\BaseOptionsConditionalTrait;
 use barrelstrength\sproutforms\rules\conditions\ContainsCondition;
 use barrelstrength\sproutforms\rules\conditions\DoesNotContainCondition;
 use barrelstrength\sproutforms\rules\conditions\DoesNotEndWithCondition;
@@ -16,14 +18,14 @@ use barrelstrength\sproutforms\rules\conditions\IsCondition;
 use barrelstrength\sproutforms\rules\conditions\IsNotCondition;
 use barrelstrength\sproutforms\rules\conditions\StartsWithCondition;
 use Craft;
-use craft\base\ElementInterface;
-use craft\fields\Dropdown as CraftDropdown;
+use craft\fields\Dropdown as CraftDropdownField;
 use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\Template as TemplateHelper;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Markup;
+use yii\base\Exception;
 
 /**
  * Class SproutFormsDropdownField
@@ -32,29 +34,25 @@ use Twig\Markup;
  * @property string $svgIconPath
  * @property array  $compatibleCraftFields
  * @property array  $compatibleCraftFieldTypes
+ * @property array  $compatibleConditions
  * @property mixed  $exampleInputHtml
  */
-class Dropdown extends BaseOptionsFormField
+class Dropdown extends CraftDropdownField
 {
+    use FormFieldTrait;
+    use BaseOptionsConditionalTrait;
+
     /**
      * @var string
      */
     public $cssClasses;
 
     /**
-     * @inheritdoc
-     */
-    public static function displayName(): string
-    {
-        return Craft::t('sprout-forms', 'Dropdown');
-    }
-
-    /**
      * @return string
      */
     public function getModelName(): string
     {
-        return CraftDropdown::class;
+        return CraftDropdownField::class;
     }
 
     /**
@@ -66,46 +64,13 @@ class Dropdown extends BaseOptionsFormField
     }
 
     /**
-     * Adds support for edit field in the Entries section of SproutForms (Control
-     * panel html)
-     *
-     * @inheritdoc
-     *
-     * @param                       $value
-     * @param ElementInterface|null $element
-     *
-     * @return string
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     * @throws \yii\base\Exception
-     */
-    public function getInputHtml($value, ElementInterface $element = null): string
-    {
-        $options = $this->translatedOptions();
-
-        // If this is a new entry, look for a default option
-        if ($this->isFresh($element)) {
-            $value = $this->defaultValue();
-        }
-
-        return Craft::$app->getView()->renderTemplate('_includes/forms/select',
-            [
-                'name' => $this->handle,
-                'value' => $value,
-                'options' => $options
-            ]
-        );
-    }
-
-    /**
      * @inheritdoc
      *
      * @return string
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getExampleInputHtml(): string
     {
@@ -124,7 +89,7 @@ class Dropdown extends BaseOptionsFormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
@@ -147,7 +112,7 @@ class Dropdown extends BaseOptionsFormField
     {
         return [
             CraftPlainText::class,
-            CraftDropdown::class
+            CraftDropdownField::class
         ];
     }
 
@@ -166,13 +131,5 @@ class Dropdown extends BaseOptionsFormField
             new EndsWithCondition(),
             new DoesNotEndWithCondition()
         ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function optionsSettingLabel(): string
-    {
-        return Craft::t('sprout-forms', 'Dropdown Options');
     }
 }

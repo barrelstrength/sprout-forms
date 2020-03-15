@@ -7,6 +7,8 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\base\FormFieldTrait;
+use barrelstrength\sproutforms\fields\formfields\base\BaseOptionsConditionalTrait;
 use Craft;
 use craft\base\ElementInterface;
 use craft\fields\MultiSelect as CraftMultiSelect;
@@ -15,18 +17,19 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Markup;
+use yii\base\Exception;
 
 /**
- * Class SproutFormsMultiSelectField
- *
- *
  * @property string $svgIconPath
  * @property array  $compatibleCraftFields
  * @property array  $compatibleCraftFieldTypes
  * @property mixed  $exampleInputHtml
  */
-class MultiSelect extends BaseOptionsFormField
+class MultiSelect extends CraftMultiSelect
 {
+    use FormFieldTrait;
+    use BaseOptionsConditionalTrait;
+
     /**
      * @var string
      */
@@ -41,15 +44,6 @@ class MultiSelect extends BaseOptionsFormField
     }
 
     /**
-     * @inheritdoc
-     */
-    public function init()
-    {
-        parent::init();
-        $this->multi = true;
-    }
-
-    /**
      * @return string
      */
     public function getSvgIconPath(): string
@@ -60,40 +54,11 @@ class MultiSelect extends BaseOptionsFormField
     /**
      * @inheritdoc
      *
-     * @param                       $value
-     * @param ElementInterface|null $element
-     *
      * @return string
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
-     */
-    public function getInputHtml($value, ElementInterface $element = null): string
-    {
-        $options = $this->translatedOptions();
-
-        // If this is a new entry, look for any default options
-        if ($this->isFresh($element)) {
-            $value = $this->defaultValue();
-        }
-
-        return Craft::$app->getView()->renderTemplate('_includes/forms/multiselect',
-            [
-                'name' => $this->handle,
-                'values' => $value,
-                'options' => $options
-            ]);
-    }
-
-    /**
-     * @inheritdoc
-     *
-     * @return string
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getExampleInputHtml(): string
     {
@@ -112,7 +77,7 @@ class MultiSelect extends BaseOptionsFormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
@@ -136,13 +101,5 @@ class MultiSelect extends BaseOptionsFormField
         return [
             CraftMultiSelect::class
         ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function optionsSettingLabel(): string
-    {
-        return Craft::t('sprout-forms', 'Multi-select Options');
     }
 }

@@ -7,6 +7,8 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\base\FormFieldTrait;
+use barrelstrength\sproutforms\fields\formfields\base\BaseOptionsConditionalTrait;
 use barrelstrength\sproutforms\rules\conditions\ContainsCondition;
 use barrelstrength\sproutforms\rules\conditions\DoesNotContainCondition;
 use barrelstrength\sproutforms\rules\conditions\DoesNotEndWithCondition;
@@ -16,13 +18,13 @@ use barrelstrength\sproutforms\rules\conditions\IsCondition;
 use barrelstrength\sproutforms\rules\conditions\IsNotCondition;
 use barrelstrength\sproutforms\rules\conditions\StartsWithCondition;
 use Craft;
-use craft\base\ElementInterface;
 use craft\fields\RadioButtons as CraftRadioButtons;
 use craft\helpers\Template as TemplateHelper;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Markup;
+use yii\base\Exception;
 
 /**
  * Class SproutFormsRadioButtonsField
@@ -31,10 +33,14 @@ use Twig\Markup;
  * @property string $svgIconPath
  * @property array  $compatibleCraftFields
  * @property array  $compatibleCraftFieldTypes
+ * @property array  $compatibleConditions
  * @property mixed  $exampleInputHtml
  */
-class MultipleChoice extends BaseOptionsFormField
+class MultipleChoice extends CraftRadioButtons
 {
+    use FormFieldTrait;
+    use BaseOptionsConditionalTrait;
+
     /**
      * @var string
      */
@@ -67,40 +73,11 @@ class MultipleChoice extends BaseOptionsFormField
     /**
      * @inheritdoc
      *
-     * @param                       $value
-     * @param ElementInterface|null $element
-     *
      * @return string
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
-     */
-    public function getInputHtml($value, ElementInterface $element = null): string
-    {
-        $options = $this->translatedOptions();
-
-        // If this is a new entry, look for a default option
-        if ($this->isFresh($element)) {
-            $value = $this->defaultValue();
-        }
-
-        return Craft::$app->getView()->renderTemplate('_includes/forms/radioGroup',
-            [
-                'name' => $this->handle,
-                'value' => $value,
-                'options' => $options
-            ]);
-    }
-
-    /**
-     * @inheritdoc
-     *
-     * @return string
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getExampleInputHtml(): string
     {
@@ -121,7 +98,7 @@ class MultipleChoice extends BaseOptionsFormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {

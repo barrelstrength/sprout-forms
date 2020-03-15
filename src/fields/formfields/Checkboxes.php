@@ -7,47 +7,35 @@
 
 namespace barrelstrength\sproutforms\fields\formfields;
 
+use barrelstrength\sproutforms\base\FormFieldTrait;
+use barrelstrength\sproutforms\fields\formfields\base\BaseOptionsConditionalTrait;
 use Craft;
-use craft\base\ElementInterface;
+use craft\fields\Checkboxes as CraftCheckboxesField;
 use craft\fields\Checkboxes as CraftCheckboxes;
 use craft\helpers\Template as TemplateHelper;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Markup;
+use yii\base\Exception;
 
 /**
  * Class SproutFormsCheckboxesField
- *
  *
  * @property string $svgIconPath
  * @property array  $compatibleCraftFields
  * @property array  $compatibleCraftFieldTypes
  * @property mixed  $exampleInputHtml
  */
-class Checkboxes extends BaseOptionsFormField
+class Checkboxes extends CraftCheckboxesField
 {
+    use FormFieldTrait;
+    use BaseOptionsConditionalTrait;
+
     /**
      * @var string
      */
     public $cssClasses;
-
-    /**
-     * @inheritdoc
-     */
-    public static function displayName(): string
-    {
-        return Craft::t('sprout-forms', 'Checkboxes');
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function init()
-    {
-        parent::init();
-        $this->multi = true;
-    }
 
     /**
      * @return bool
@@ -66,42 +54,13 @@ class Checkboxes extends BaseOptionsFormField
     }
 
     /**
-     * @inheritdoc
-     *
-     * @param                       $value
-     * @param ElementInterface|null $element
+     * @inheritDoc
      *
      * @return string
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
-     */
-    public function getInputHtml($value, ElementInterface $element = null): string
-    {
-        $options = $this->translatedOptions();
-
-        // If this is a new entry, look for any default options
-        if ($this->isFresh($element)) {
-            $value = $this->defaultValue();
-        }
-
-        return Craft::$app->getView()->renderTemplate('_includes/forms/checkboxGroup',
-            [
-                'name' => $this->handle,
-                'values' => $value,
-                'options' => $options
-            ]);
-    }
-
-    /**
-     * @inheritdoc
-     *
-     * @return string
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getExampleInputHtml(): string
     {
@@ -122,7 +81,7 @@ class Checkboxes extends BaseOptionsFormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
@@ -146,13 +105,5 @@ class Checkboxes extends BaseOptionsFormField
         return [
             CraftCheckboxes::class
         ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function optionsSettingLabel(): string
-    {
-        return Craft::t('sprout-forms', 'Checkbox Options');
     }
 }

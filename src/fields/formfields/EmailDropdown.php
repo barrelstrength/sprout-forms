@@ -8,6 +8,8 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutbasefields\SproutBaseFields;
+use barrelstrength\sproutforms\base\FormFieldTrait;
+use barrelstrength\sproutforms\fields\formfields\base\BaseOptionsConditionalTrait;
 use barrelstrength\sproutforms\rules\conditions\ContainsCondition;
 use barrelstrength\sproutforms\rules\conditions\DoesNotContainCondition;
 use barrelstrength\sproutforms\rules\conditions\DoesNotEndWithCondition;
@@ -20,7 +22,7 @@ use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\fields\data\SingleOptionFieldData;
-use craft\fields\Dropdown as CraftDropdown;
+use craft\fields\Dropdown as CraftDropdownField;
 use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\StringHelper;
 use craft\helpers\Template as TemplateHelper;
@@ -28,6 +30,7 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Markup;
+use yii\base\Exception;
 use yii\db\Schema;
 
 /**
@@ -38,10 +41,14 @@ use yii\db\Schema;
  * @property mixed  $settingsHtml
  * @property array  $compatibleCraftFields
  * @property array  $compatibleCraftFieldTypes
+ * @property array  $compatibleConditions
  * @property mixed  $exampleInputHtml
  */
-class EmailDropdown extends BaseOptionsFormField
+class EmailDropdown extends CraftDropdownField
 {
+    use FormFieldTrait;
+    use BaseOptionsConditionalTrait;
+
     /**
      * @var string
      */
@@ -60,6 +67,26 @@ class EmailDropdown extends BaseOptionsFormField
         return Schema::TYPE_STRING;
     }
 
+    /**
+     * @return string
+     */
+    public function getSvgIconPath(): string
+    {
+        return '@sproutbaseicons/share.svg';
+    }
+
+    public function normalizeValue($value, ElementInterface $element = null)
+    {
+        // Make the unobfuscated values available to email notifications
+        if (Craft::$app->request->getIsSiteRequest() && Craft::$app->getRequest()->getIsPost()) {
+            // Swap our obfuscated number value (e.g. 1) with the email value
+            $selectedOption = $this->options[$value];
+            $value = $selectedOption['value'];
+        }
+
+        return parent::normalizeValue($value, $element);
+    }
+
     public function serializeValue($value, ElementInterface $element = null)
     {
         if (Craft::$app->getRequest()->isSiteRequest && $value->selected) {
@@ -75,20 +102,12 @@ class EmailDropdown extends BaseOptionsFormField
     }
 
     /**
-     * @return string
-     */
-    public function getSvgIconPath(): string
-    {
-        return '@sproutbaseicons/share.svg';
-    }
-
-    /**
      * @inheritdoc
      *
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getSettingsHtml()
     {
@@ -140,7 +159,7 @@ class EmailDropdown extends BaseOptionsFormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -176,7 +195,7 @@ class EmailDropdown extends BaseOptionsFormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getExampleInputHtml(): string
     {
@@ -195,7 +214,7 @@ class EmailDropdown extends BaseOptionsFormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
@@ -214,18 +233,6 @@ class EmailDropdown extends BaseOptionsFormField
         );
 
         return TemplateHelper::raw($rendered);
-    }
-
-    public function normalizeValue($value, ElementInterface $element = null)
-    {
-        // Make the unobfuscated values available to email notifications
-        if (Craft::$app->request->getIsSiteRequest() && Craft::$app->getRequest()->getIsPost()) {
-            // Swap our obfuscated number value (e.g. 1) with the email value
-            $selectedOption = $this->options[$value];
-            $value = $selectedOption['value'];
-        }
-
-        return parent::normalizeValue($value, $element);
     }
 
     /**
@@ -292,10 +299,13 @@ class EmailDropdown extends BaseOptionsFormField
     {
         return [
             CraftPlainText::class,
-            CraftDropdown::class
+            CraftDropdownField::class
         ];
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getCompatibleConditions()
     {
         return [
@@ -308,13 +318,5 @@ class EmailDropdown extends BaseOptionsFormField
             new EndsWithCondition(),
             new DoesNotEndWithCondition()
         ];
-    }
-
-    /**
-     * @return string
-     */
-    protected function optionsSettingLabel(): string
-    {
-        return Craft::t('sprout-forms', 'Dropdown Options');
     }
 }
