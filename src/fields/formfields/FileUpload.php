@@ -46,6 +46,11 @@ class FileUpload extends CraftAssets
     public $useSingleFolder = true;
 
     /**
+     * @var string Template to use for settings rendering
+     */
+    protected $settingsTemplate = 'sprout-forms/_components/fields/formfields/fileupload/settings';
+
+    /**
      * Make these attributes available as Form Field settings
      *
      * @return array
