@@ -174,13 +174,13 @@ class SproutFormsVariable
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function displayField(Form $form, FormField $field, array $renderingOptions = null): Markup
+    public function displayField(Form $form, $field, array $renderingOptions = null): Markup
     {
         if (!$form) {
             throw new Exception('The displayField tag requires a Form model.');
         }
 
-        if (!$field) {
+        if (!$this->validateField($field)) {
             throw new Exception('The displayField tag requires a Field model.');
         }
 
