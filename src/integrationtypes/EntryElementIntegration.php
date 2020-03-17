@@ -196,22 +196,22 @@ class EntryElementIntegration extends ElementIntegration
     public function getCompatibleFields(array $entryFields, array $formField): array
     {
         $compatibleFields = $formField['compatibleCraftFields'] ?? '*';
+
+        if (!is_array($compatibleFields)) {
+            return [];
+        }
+
         $finalOptions = [];
 
         foreach ($entryFields as $field) {
-            $option = [
+            if (!in_array(get_class($field), $compatibleFields, true)) {
+                continue;
+            }
+
+            $finalOptions[] = [
                 'label' => $field->name.' ('.$field->handle.')',
                 'value' => $field->handle
             ];
-
-            if (is_array($compatibleFields) &&
-                !in_array(get_class($field), $compatibleFields, true)) {
-                $option = null;
-            }
-
-            if ($option) {
-                $finalOptions[] = $option;
-            }
         }
 
         return $finalOptions;
