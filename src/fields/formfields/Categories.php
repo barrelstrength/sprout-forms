@@ -29,11 +29,6 @@ class Categories extends CraftCategories
     use FormFieldTrait;
 
     /**
-     * @var int|null Branch limit
-     */
-    public $branchLimit;
-
-    /**
      * @var string
      */
     public $cssClasses;
