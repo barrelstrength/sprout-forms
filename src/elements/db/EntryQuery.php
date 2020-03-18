@@ -173,40 +173,40 @@ class EntryQuery extends ElementQuery
         $this->query->innerJoin('{{%sproutforms_forms}} sproutforms_forms', '[[sproutforms_forms.id]] = [[sproutforms_entries.formId]]');
         $this->query->innerJoin('{{%sproutforms_entrystatuses}} sproutforms_entrystatuses', '[[sproutforms_entrystatuses.id]] = [[sproutforms_entries.statusId]]');
 
-        $this->query->andWhere(
-            Db::parseParam('[[sproutforms_forms.saveData]]', true)
-        );
+        $this->query->andWhere(Db::parseParam(
+            '[[sproutforms_forms.saveData]]', true
+        ));
 
         $this->subQuery->innerJoin('{{%sproutforms_entrystatuses}} sproutforms_entrystatuses', '[[sproutforms_entrystatuses.id]] = [[sproutforms_entries.statusId]]');
 
         if ($this->formId) {
             $this->subQuery->andWhere(Db::parseParam(
-                'sproutforms_entries.formId', $this->formId)
-            );
+                'sproutforms_entries.formId', $this->formId
+            ));
         }
 
         if ($this->id) {
             $this->subQuery->andWhere(Db::parseParam(
-                'sproutforms_entries.id', $this->id)
-            );
+                'sproutforms_entries.id', $this->id
+            ));
         }
 
         if ($this->statusId) {
             $this->subQuery->andWhere(Db::parseParam(
-                'sproutforms_entries.statusId', $this->statusId)
-            );
+                'sproutforms_entries.statusId', $this->statusId
+            ));
         }
 
         if ($this->formHandle) {
             $this->query->andWhere(Db::parseParam(
-                'sproutforms_forms.handle', $this->formHandle)
-            );
+                'sproutforms_forms.handle', $this->formHandle
+            ));
         }
 
         if ($this->formName) {
-            $this->query->andWhere(
-                Db::parseParam('sproutforms_forms.name', $this->formName)
-            );
+            $this->query->andWhere(Db::parseParam(
+                'sproutforms_forms.name', $this->formName
+            ));
         }
 
         return parent::beforePrepare();
