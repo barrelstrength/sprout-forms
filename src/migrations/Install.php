@@ -436,13 +436,13 @@ class Install extends Migration
 
         $settings->captchaSettings = $currentSettings['captchaSettings'] ?? [
                 'sproutforms-duplicatecaptcha' => [
-                    'enabled' => 1
+                    'enabled' => 0
                 ],
                 'sproutforms-javascriptcaptcha' => [
                     'enabled' => 1
                 ],
                 'sproutforms-honeypotcaptcha' => [
-                    'enabled' => 1,
+                    'enabled' => 0,
                     'honeypotFieldName' => 'beesknees',
                     'honeypotScreenReaderMessage' => 'Leave this field blank'
                 ],
