@@ -139,6 +139,7 @@ class EntryQuery extends ElementQuery
 
         // Figure out which content table to use
         $this->contentTable = null;
+
         if (!$this->formId && $this->id) {
             $formIds = (new Query())
                 ->select(['formId'])
@@ -214,8 +215,9 @@ class EntryQuery extends ElementQuery
 
         $spamStatusId = SproutForms::$app->entryStatuses->getSpamStatusId();
 
-        // If the spam status ID or handle is explicitly provided, override the include spam flag
-        if ($this->statusId === $spamStatusId || $this->status === EntryStatus::SPAM_STATUS_HANDLE) {
+        // If and ID is being requested directly OR the spam status ID OR
+        // the spam status handle is explicitly provided, override the include spam flag
+        if ($this->id || $this->statusId === $spamStatusId || $this->status === EntryStatus::SPAM_STATUS_HANDLE) {
             $this->excludeSpam = false;
         }
 
