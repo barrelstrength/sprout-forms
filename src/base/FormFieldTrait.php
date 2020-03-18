@@ -169,6 +169,8 @@ trait FormFieldTrait
     /**
      * Return a list of compatible Craft Field Types to associate on the Element Integration API
      *
+     * @todo - update to be named `getCompatibleFieldTypes()` in v4.x
+     *
      * @return array
      */
     public function getCompatibleCraftFieldTypes(): array
