@@ -1,21 +1,6 @@
 {% extends "_components/fieldtypes/elementfieldsettings" %}
 
 {% block fieldSettings %}
-
     {{ block('sourcesField') }}
-
-    {#{% block branchLimitField %}#}
-    {#{{ forms.textField({#}
-    {#label: "Branch Limit"|t('sprout-forms'),#}
-    {#instructions: "Limit the number of selectable category branches."|t('sprout-forms'),#}
-    {#id: 'branchLimit',#}
-    {#name: 'branchLimit',#}
-    {#value: field.branchLimit,#}
-    {#size: 2,#}
-    {#errors: field.getErrors('branchLimit')#}
-    {#}) }}#}
-    {#{% endblock %}#}
-
     {{ block('selectionLabelField') }}
-
 {% endblock %}
