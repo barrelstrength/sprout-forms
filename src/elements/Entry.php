@@ -157,23 +157,10 @@ class Entry extends Element
      */
     protected static function defineSources(string $context = null): array
     {
-        $entryStatusHandlesExcludingSpam = [];
-        $entryStatuses = SproutForms::$app->entryStatuses->getAllEntryStatuses();
-        $spamStatusId = SproutForms::$app->entryStatuses->getSpamStatusId();
-
-        foreach ($entryStatuses as $entryStatus) {
-            if ($entryStatus->id !== $spamStatusId) {
-                $entryStatusHandlesExcludingSpam[] = $entryStatus->handle;
-            }
-        }
-
         $sources = [
             [
                 'key' => '*',
                 'label' => Craft::t('sprout-forms', 'All Entries'),
-                'criteria' => [
-                    'status' => $entryStatusHandlesExcludingSpam
-                ]
             ]
         ];
 
@@ -200,8 +187,7 @@ class Entry extends Element
                         'label' => $form->name,
                         'data' => ['formId' => $form->id],
                         'criteria' => [
-                            'formId' => $form->id,
-                            'status' => $entryStatusHandlesExcludingSpam
+                            'formId' => $form->id
                         ]
                     ];
                 } else {
@@ -209,8 +195,7 @@ class Entry extends Element
                         'label' => $form->name,
                         'data' => ['formId' => $form->id],
                         'criteria' => [
-                            'formId' => $form->id,
-                            'status' => $entryStatusHandlesExcludingSpam
+                            'formId' => $form->id
                         ]
                     ];
                 }
@@ -227,8 +212,7 @@ class Entry extends Element
                     'formId' => $form['data']['formId'],
                 ],
                 'criteria' => [
-                    'formId' => $form['criteria']['formId'],
-                    'status' => $entryStatusHandlesExcludingSpam
+                    'formId' => $form['criteria']['formId']
                 ]
             ];
         }
@@ -250,8 +234,7 @@ class Entry extends Element
                         'formId' => $form['data']['formId'],
                     ],
                     'criteria' => [
-                        'formId' => $form['criteria']['formId'],
-                        'status' => $entryStatusHandlesExcludingSpam
+                        'formId' => $form['criteria']['formId']
                     ]
                 ];
             }

@@ -8,6 +8,7 @@
 namespace barrelstrength\sproutforms\elements\db;
 
 use barrelstrength\sproutforms\elements\Form;
+use barrelstrength\sproutforms\models\EntryStatus;
 use barrelstrength\sproutforms\SproutForms;
 use craft\db\Query;
 use craft\elements\db\ElementQuery;
@@ -52,6 +53,8 @@ class EntryQuery extends ElementQuery
     public $formGroupId;
 
     public $status = [];
+
+    private $excludeSpam = true;
 
     /**
      * @inheritdoc
@@ -191,12 +194,6 @@ class EntryQuery extends ElementQuery
             ));
         }
 
-        if ($this->statusId) {
-            $this->subQuery->andWhere(Db::parseParam(
-                'sproutforms_entries.statusId', $this->statusId
-            ));
-        }
-
         if ($this->formHandle) {
             $this->query->andWhere(Db::parseParam(
                 'sproutforms_forms.handle', $this->formHandle
@@ -208,6 +205,26 @@ class EntryQuery extends ElementQuery
                 'sproutforms_forms.name', $this->formName
             ));
         }
+
+        if ($this->statusId) {
+            $this->subQuery->andWhere(Db::parseParam(
+                'sproutforms_entries.statusId', $this->statusId
+            ));
+        }
+
+        $spamStatusId = SproutForms::$app->entryStatuses->getSpamStatusId();
+
+        // If the spam status ID or handle is explicitly provided, override the include spam flag
+        if ($this->statusId === $spamStatusId || $this->status === EntryStatus::SPAM_STATUS_HANDLE) {
+            $this->excludeSpam = false;
+        }
+
+        if ($this->excludeSpam) {
+            $this->subQuery->andWhere(Db::parseParam(
+                'sproutforms_entries.statusId', $spamStatusId, '!='
+            ));
+        }
+
 
         return parent::beforePrepare();
     }

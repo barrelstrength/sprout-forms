@@ -27,7 +27,7 @@ use yii\db\StaleObjectException;
 class EntryStatuses extends Component
 {
     /**
-     * @return array
+     * @return EntryStatus[]
      */
     public function getAllEntryStatuses(): array
     {
