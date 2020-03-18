@@ -34,7 +34,7 @@ class DuplicateCaptcha extends Captcha
      */
     public function getDescription(): string
     {
-        return Craft::t('sprout-forms', 'Prevent duplicate submissions if a user hits submit more than once');
+        return Craft::t('sprout-forms', 'Prevent duplicate submissions if a user hits submit more than once. This check is handled on the server side in addition to any duplicate submission prevention behavior handled via javascript when the user submits the form.');
     }
 
     /**
