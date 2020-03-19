@@ -13,8 +13,11 @@ use barrelstrength\sproutbaseemail\migrations\Install as SproutBaseNotificationI
 use barrelstrength\sproutbaseemail\migrations\m180501_000002_rename_notification_options_column;
 use barrelstrength\sproutbaseemail\migrations\m180501_000003_add_notification_columns;
 use barrelstrength\sproutbaseemail\migrations\m180515_000000_rename_notification_pluginId_column;
-use barrelstrength\sproutbaseemail\migrations\m180927_080639_add_cc_bcc_columns as CcBccMigration;
+use barrelstrength\sproutbaseemail\migrations\m180927_080639_add_cc_bcc_columns;
+use barrelstrength\sproutbaseemail\migrations\m181128_000000_add_list_settings_column;
 use barrelstrength\sproutbaseemail\migrations\m190714_000001_add_notification_email_context_column;
+use barrelstrength\sproutbaseemail\migrations\m190715_000000_add_sendRule_notification_column;
+use barrelstrength\sproutbaseemail\migrations\m200110_000001_add_sendMethod_notification_column;
 use barrelstrength\sproutbaseemail\SproutBaseEmail;
 use barrelstrength\sproutforms\formtemplates\BasicTemplates;
 use Craft;
@@ -120,14 +123,28 @@ class m180314_161540_craft2_to_craft3 extends Migration
         ob_end_clean();
 
         $migration = new m190714_000001_add_notification_email_context_column();
-
         ob_start();
         $migration->safeUp();
         ob_end_clean();
 
-        $ccBccMigration = new CcBccMigration();
+        $migration = new m190715_000000_add_sendRule_notification_column();
+        ob_start();
+        $migration->safeUp();
+        ob_end_clean();
+
+        $ccBccMigration = new m180927_080639_add_cc_bcc_columns();
         ob_start();
         $ccBccMigration->safeUp();
+        ob_end_clean();
+
+        $migration = new m181128_000000_add_list_settings_column();
+        ob_start();
+        $migration->safeUp();
+        ob_end_clean();
+
+        $migration = new m200110_000001_add_sendMethod_notification_column();
+        ob_start();
+        $migration->safeUp();
         ob_end_clean();
 
         // Only for Sprout Forms, migrate notifications from forms
