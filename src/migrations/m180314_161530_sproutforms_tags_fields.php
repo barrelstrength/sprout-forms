@@ -7,10 +7,8 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutforms\fields\formfields\Tags;
 use craft\db\Migration;
 use craft\db\Query;
-use craft\fields\Tags as CraftTags;
 use craft\helpers\Json;
 
 /**
@@ -26,7 +24,7 @@ class m180314_161530_sproutforms_tags_fields extends Migration
         $tagFields = (new Query())
             ->select(['id', 'handle', 'settings'])
             ->from(['{{%fields}}'])
-            ->where(['type' => CraftTags::class])
+            ->where(['type' => 'craft\fields\Tags'])
             ->andWhere(['like', 'context', 'sproutForms:'])
             ->all();
 
@@ -39,7 +37,12 @@ class m180314_161530_sproutforms_tags_fields extends Migration
             $settings['localizeRelations'] = false;
             $settingsAsJson = Json::encode($settings);
 
-            $this->update('{{%fields}}', ['type' => Tags::class, 'settings' => $settingsAsJson], ['id' => $tagField['id']], [], false);
+            $this->update('{{%fields}}', [
+                'type' => 'barrelstrength\sproutforms\fields\formfields\Tags',
+                'settings' => $settingsAsJson
+            ], [
+                'id' => $tagField['id']
+            ], [], false);
         }
 
         return true;

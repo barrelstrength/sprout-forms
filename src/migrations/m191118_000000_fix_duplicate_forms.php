@@ -7,7 +7,6 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutforms\elements\Form;
 use Craft;
 use craft\db\Migration;
 use craft\db\Query;
@@ -146,7 +145,7 @@ class m191118_000000_fix_duplicate_forms extends Migration
         $layout = new FieldLayout();
         $layout->setTabs($tabs);
         $layout->setFields([]);
-        $layout->type = Form::class;
+        $layout->type = 'barrelstrength\sproutforms\elements\Form';
 
         Craft::$app->getFields()->saveLayout($layout);
 

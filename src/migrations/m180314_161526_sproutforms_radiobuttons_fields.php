@@ -7,14 +7,9 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutforms\fields\formfields\MultipleChoice;
 use craft\db\Migration;
 use craft\db\Query;
-use craft\fields\RadioButtons as CraftRadioButtons;
 
-/**
- * m180314_161526_sproutforms_radiobuttons_fields migration.
- */
 class m180314_161526_sproutforms_radiobuttons_fields extends Migration
 {
     /**
@@ -25,12 +20,16 @@ class m180314_161526_sproutforms_radiobuttons_fields extends Migration
         $radioButtonsFields = (new Query())
             ->select(['id', 'handle', 'settings'])
             ->from(['{{%fields}}'])
-            ->where(['type' => CraftRadioButtons::class])
+            ->where(['type' => 'craft\fields\RadioButtons'])
             ->andWhere(['like', 'context', 'sproutForms:'])
             ->all();
 
         foreach ($radioButtonsFields as $radioButtonsField) {
-            $this->update('{{%fields}}', ['type' => MultipleChoice::class], ['id' => $radioButtonsField['id']], [], false);
+            $this->update('{{%fields}}', [
+                'type' => 'barrelstrength\sproutforms\fields\formfields\MultipleChoice'
+            ], [
+                'id' => $radioButtonsField['id']
+            ], [], false);
         }
 
         return true;

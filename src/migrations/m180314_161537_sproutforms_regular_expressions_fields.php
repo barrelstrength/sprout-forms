@@ -7,13 +7,9 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutforms\fields\formfields\RegularExpression;
 use craft\db\Migration;
 use craft\db\Query;
 
-/**
- * m180314_161537_sproutforms_regular_expressions_fields migration.
- */
 class m180314_161537_sproutforms_regular_expressions_fields extends Migration
 {
     /**
@@ -29,7 +25,11 @@ class m180314_161537_sproutforms_regular_expressions_fields extends Migration
             ->all();
 
         foreach ($fields as $field) {
-            $this->update('{{%fields}}', ['type' => RegularExpression::class], ['id' => $field['id']], [], false);
+            $this->update('{{%fields}}', [
+                'type' => 'barrelstrength\sproutforms\fields\formfields\RegularExpression'
+            ], [
+                'id' => $field['id']
+            ], [], false);
         }
 
         return true;

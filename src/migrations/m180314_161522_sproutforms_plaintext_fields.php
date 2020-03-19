@@ -7,16 +7,10 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutforms\fields\formfields\Paragraph;
-use barrelstrength\sproutforms\fields\formfields\SingleLine;
 use craft\db\Migration;
 use craft\db\Query;
-use craft\fields\PlainText;
 use craft\helpers\Json;
 
-/**
- * m180314_161522_sproutforms_plaintext_fields migration.
- */
 class m180314_161522_sproutforms_plaintext_fields extends Migration
 {
     /**
@@ -28,7 +22,7 @@ class m180314_161522_sproutforms_plaintext_fields extends Migration
         $plainTextFields = (new Query())
             ->select(['id', 'handle', 'settings'])
             ->from(['{{%fields}}'])
-            ->where(['type' => PlainText::class])
+            ->where(['type' => 'craft\fields\PlainText'])
             ->andWhere(['like', 'context', 'sproutForms:'])
             ->all();
 
@@ -40,10 +34,10 @@ class m180314_161522_sproutforms_plaintext_fields extends Migration
             ];
 
             $settings = Json::decode($plainTextField['settings']);
-            $newType = SingleLine::class;
+            $newType = 'barrelstrength\sproutforms\fields\formfields\SingleLine';
 
             if (isset($settings['multiline']) && $settings['multiline']) {
-                $newType = Paragraph::class;
+                $newType = 'barrelstrength\sproutforms\fields\formfields\Paragraph';
                 $newSettings['columnType'] = 'text';
                 $newSettings['initialRows'] = $settings['initialRows'];
             }

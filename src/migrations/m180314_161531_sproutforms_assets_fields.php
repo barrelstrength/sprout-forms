@@ -7,15 +7,10 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutforms\fields\formfields\FileUpload;
 use craft\db\Migration;
 use craft\db\Query;
-use craft\fields\Assets as CraftAssets;
 use craft\helpers\Json;
 
-/**
- * m180314_161531_sproutforms_assets_fields migration.
- */
 class m180314_161531_sproutforms_assets_fields extends Migration
 {
     /**
@@ -26,7 +21,7 @@ class m180314_161531_sproutforms_assets_fields extends Migration
         $fields = (new Query())
             ->select(['id', 'handle', 'settings'])
             ->from(['{{%fields}}'])
-            ->where(['type' => CraftAssets::class])
+            ->where(['type' => 'craft\fields\Assets'])
             ->andWhere(['like', 'context', 'sproutForms:'])
             ->all();
 
@@ -40,7 +35,11 @@ class m180314_161531_sproutforms_assets_fields extends Migration
             $settings['localizeRelations'] = false;
             $settingsAsJson = Json::encode($settings);
 
-            $this->update('{{%fields}}', ['type' => FileUpload::class, 'settings' => $settingsAsJson], ['id' => $field['id']], [], false);
+            $this->update('{{%fields}}', [
+                'type' => 'barrelstrength\sproutforms\fields\formfields\FileUpload',
+                'settings' => $settingsAsJson], [
+                    'id' => $field['id']
+            ], [], false);
         }
 
         return true;

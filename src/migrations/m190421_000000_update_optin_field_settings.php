@@ -8,14 +8,10 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutforms\fields\formfields\OptIn;
 use craft\db\Migration;
 use craft\db\Query;
 use Throwable;
 
-/**
- * m190421_000000_update_optin_field_settings migration.
- */
 class m190421_000000_update_optin_field_settings extends Migration
 {
     /**
@@ -27,7 +23,7 @@ class m190421_000000_update_optin_field_settings extends Migration
         $optinFields = (new Query())
             ->select(['id', 'handle', 'settings'])
             ->from(['{{%fields}}'])
-            ->where(['type' => OptIn::class])
+            ->where(['type' => 'barrelstrength\sproutforms\fields\formfields\OptIn'])
             ->all();
 
         foreach ($optinFields as $optinField) {
@@ -41,7 +37,11 @@ class m190421_000000_update_optin_field_settings extends Migration
                 $settings->optInValueWhenFalse = 'No';
             }
 
-            $this->update('{{%fields}}', ['settings' => json_encode($settings)], ['id' => $optinField['id']], [], false);
+            $this->update('{{%fields}}', [
+                'settings' => json_encode($settings)
+            ], [
+                'id' => $optinField['id']
+            ], [], false);
         }
 
         return true;

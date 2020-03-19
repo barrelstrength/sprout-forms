@@ -7,14 +7,9 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutforms\fields\formfields\Checkboxes;
 use craft\db\Migration;
 use craft\db\Query;
-use craft\fields\Checkboxes as CraftCheckboxes;
 
-/**
- * m180314_161524_sproutforms_checkboxes_fields migration.
- */
 class m180314_161524_sproutforms_checkboxes_fields extends Migration
 {
     /**
@@ -25,12 +20,16 @@ class m180314_161524_sproutforms_checkboxes_fields extends Migration
         $checkboxesFields = (new Query())
             ->select(['id', 'handle', 'settings'])
             ->from(['{{%fields}}'])
-            ->where(['type' => CraftCheckboxes::class])
+            ->where(['type' => 'craft\fields\Checkboxes'])
             ->andWhere(['like', 'context', 'sproutForms:'])
             ->all();
 
         foreach ($checkboxesFields as $checkboxesField) {
-            $this->update('{{%fields}}', ['type' => Checkboxes::class], ['id' => $checkboxesField['id']], [], false);
+            $this->update('{{%fields}}', [
+                'type' => 'barrelstrength\sproutforms\fields\formfields\Checkboxes'
+            ], [
+                'id' => $checkboxesField['id']
+            ], [], false);
         }
 
         return true;

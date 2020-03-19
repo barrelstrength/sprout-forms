@@ -7,15 +7,10 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutforms\fields\formfields\Paragraph;
-use barrelstrength\sproutforms\fields\formfields\SingleLine;
 use craft\db\Migration;
 use craft\db\Query;
 use yii\base\NotSupportedException;
 
-/**
- * m180611_000000_paragraph_column_type migration.
- */
 class m180611_000000_paragraph_column_type extends Migration
 {
     /**
@@ -41,7 +36,7 @@ class m180611_000000_paragraph_column_type extends Migration
                 ->all();
 
             foreach ($fields as $field) {
-                if ($field['type'] == SingleLine::class || $field['type'] == Paragraph::class) {
+                if ($field['type'] == 'barrelstrength\sproutforms\fields\formfields\SingleLine' || $field['type'] == 'barrelstrength\sproutforms\fields\formfields\Paragraph') {
                     $column = 'field_'.$field['handle'];
                     if ($this->db->columnExists($table, $column)) {
                         $this->alterColumn($table, $column, $this->text());

@@ -7,15 +7,10 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutforms\fields\formfields\Entries;
 use craft\db\Migration;
 use craft\db\Query;
-use craft\fields\Entries as CraftEntries;
 use craft\helpers\Json;
 
-/**
- * m180314_161528_sproutforms_entries_fields migration.
- */
 class m180314_161528_sproutforms_entries_fields extends Migration
 {
     /**
@@ -26,7 +21,7 @@ class m180314_161528_sproutforms_entries_fields extends Migration
         $entriesFields = (new Query())
             ->select(['id', 'handle', 'settings'])
             ->from(['{{%fields}}'])
-            ->where(['type' => CraftEntries::class])
+            ->where(['type' => 'craft\fields\Entries'])
             ->andWhere(['like', 'context', 'sproutForms:'])
             ->all();
 
@@ -37,7 +32,12 @@ class m180314_161528_sproutforms_entries_fields extends Migration
             $settings['localizeRelations'] = false;
             $settingsAsJson = Json::encode($settings);
 
-            $this->update('{{%fields}}', ['type' => Entries::class, 'settings' => $settingsAsJson], ['id' => $entryField['id']], [], false);
+            $this->update('{{%fields}}', [
+                'type' => 'barrelstrength\sproutforms\fields\formfields\Entries',
+                'settings' => $settingsAsJson
+            ], [
+                'id' => $entryField['id']
+            ], [], false);
         }
 
         return true;

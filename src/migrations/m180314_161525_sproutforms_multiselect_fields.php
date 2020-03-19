@@ -7,14 +7,9 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutforms\fields\formfields\MultiSelect;
 use craft\db\Migration;
 use craft\db\Query;
-use craft\fields\Multiselect as CraftMultiselect;
 
-/**
- * m180314_161525_sproutforms_multiselect_fields migration.
- */
 class m180314_161525_sproutforms_multiselect_fields extends Migration
 {
     /**
@@ -25,12 +20,16 @@ class m180314_161525_sproutforms_multiselect_fields extends Migration
         $multiselectFields = (new Query())
             ->select(['id', 'handle', 'settings'])
             ->from(['{{%fields}}'])
-            ->where(['type' => CraftMultiselect::class])
+            ->where(['type' => 'craft\fields\Multiselect'])
             ->andWhere(['like', 'context', 'sproutForms:'])
             ->all();
 
         foreach ($multiselectFields as $multiselectField) {
-            $this->update('{{%fields}}', ['type' => MultiSelect::class], ['id' => $multiselectField['id']], [], false);
+            $this->update('{{%fields}}', [
+                'type' => 'barrelstrength\sproutforms\fields\formfields\MultiSelect'
+            ], [
+                'id' => $multiselectField['id']
+            ], [], false);
         }
 
         return true;

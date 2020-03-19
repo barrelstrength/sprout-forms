@@ -7,13 +7,9 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutforms\fields\formfields\Url;
 use craft\db\Migration;
 use craft\db\Query;
 
-/**
- * m180314_161534_sproutforms_link_fields migration.
- */
 class m180314_161534_sproutforms_link_fields extends Migration
 {
     /**
@@ -29,7 +25,11 @@ class m180314_161534_sproutforms_link_fields extends Migration
             ->all();
 
         foreach ($fields as $field) {
-            $this->update('{{%fields}}', ['type' => Url::class], ['id' => $field['id']], [], false);
+            $this->update('{{%fields}}', [
+                'type' => 'barrelstrength\sproutforms\fields\formfields\Url'
+            ], [
+                'id' => $field['id']
+            ], [], false);
         }
 
         return true;

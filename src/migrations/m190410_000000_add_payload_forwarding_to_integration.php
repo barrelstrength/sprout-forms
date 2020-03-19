@@ -7,7 +7,6 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutforms\integrationtypes\CustomEndpoint;
 use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
 use Craft;
 use craft\db\Migration;
@@ -18,9 +17,6 @@ use yii\base\Exception;
 use yii\base\NotSupportedException;
 use yii\web\ServerErrorHttpException;
 
-/**
- * m190410_000000_add_payload_forwarding_to_integration migration.
- */
 class m190410_000000_add_payload_forwarding_to_integration extends Migration
 {
     /**
@@ -40,7 +36,7 @@ class m190410_000000_add_payload_forwarding_to_integration extends Migration
             ->where('[[submitAction]] is not null')
             ->all();
 
-        $type = CustomEndpoint::class;
+        $type = 'barrelstrength\sproutforms\integrationtypes\CustomEndpoint';
 
         $enableIntegrations = false;
 

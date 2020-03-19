@@ -7,18 +7,11 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutforms\fields\formfields\Categories;
-use barrelstrength\sproutforms\fields\formfields\Entries;
-use barrelstrength\sproutforms\fields\formfields\FileUpload;
-use barrelstrength\sproutforms\fields\formfields\Tags;
 use craft\db\Migration;
 use craft\db\Query;
 use craft\db\Table;
 use craft\helpers\Json;
 
-/**
- * m190124_000000_form_fields_settings migration.
- */
 class m190124_000000_form_fields_settings extends Migration
 {
     /**
@@ -45,7 +38,7 @@ class m190124_000000_form_fields_settings extends Migration
             }
 
             switch ($field['type']) {
-                case FileUpload::class:
+                case 'barrelstrength\sproutforms\fields\formfields\FileUpload':
                     if (!empty($settings['defaultUploadLocationSource']) && strpos($settings['defaultUploadLocationSource'], ':') !== false) {
                         list(, $folderIds[]) = explode(':', $settings['defaultUploadLocationSource']);
                     }
@@ -54,7 +47,7 @@ class m190124_000000_form_fields_settings extends Migration
                     }
 
                     break;
-                case Entries::class:
+                case 'barrelstrength\sproutforms\fields\formfields\Entries':
                     if (!empty($settings['sources']) && is_array($settings['sources'])) {
                         foreach ($settings['sources'] as $source) {
                             if (strpos($source, ':') !== false) {
@@ -64,13 +57,13 @@ class m190124_000000_form_fields_settings extends Migration
                     }
 
                     break;
-                case Categories::class:
+                case 'barrelstrength\sproutforms\fields\formfields\Categories':
                     if (!empty($settings['source']) && strpos($settings['source'], ':') !== false) {
                         list(, $categoryGroupIds[]) = explode(':', $settings['source']);
                     }
 
                     break;
-                case Tags::class:
+                case 'barrelstrength\sproutforms\fields\formfields\Tags':
                     if (!empty($settings['source']) && strpos($settings['source'], ':') !== false) {
                         list(, $tagGroupIds[]) = explode(':', $settings['source']);
                     }
@@ -111,7 +104,7 @@ class m190124_000000_form_fields_settings extends Migration
             }
 
             switch ($field['type']) {
-                case FileUpload::class:
+                case 'barrelstrength\sproutforms\fields\formfields\FileUpload':
                     if (!empty($settings['defaultUploadLocationSource']) && strpos($settings['defaultUploadLocationSource'], ':') !== false) {
                         $default = explode(':', $settings['defaultUploadLocationSource']);
                         $settings['defaultUploadLocationSource'] = isset($folders[$default[1]]) ? $default[0].':'.$folders[$default[1]] : null;
@@ -123,7 +116,7 @@ class m190124_000000_form_fields_settings extends Migration
                     }
 
                     break;
-                case Entries::class:
+                case 'barrelstrength\sproutforms\fields\formfields\Entries':
                     if (!empty($settings['sources']) && is_array($settings['sources'])) {
                         $newSources = [];
 
@@ -140,14 +133,14 @@ class m190124_000000_form_fields_settings extends Migration
                     }
 
                     break;
-                case Categories::class:
+                case 'barrelstrength\sproutforms\fields\formfields\Categories':
                     if (!empty($settings['source']) && strpos($settings['source'], ':') !== false) {
                         $source = explode(':', $settings['source']);
                         $settings['source'] = $source[0].':'.($categoryGroups[$source[1]] ?? $source[1]);
                     }
 
                     break;
-                case Tags::class:
+                case 'barrelstrength\sproutforms\fields\formfields\Tags':
                     if (!empty($settings['source']) && strpos($settings['source'], ':') !== false) {
                         $source = explode(':', $settings['source']);
                         $settings['source'] = $source[0].':'.($tagGroups[$source[1]] ?? $source[1]);

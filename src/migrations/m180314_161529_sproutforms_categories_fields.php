@@ -7,10 +7,8 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutforms\fields\formfields\Categories;
 use craft\db\Migration;
 use craft\db\Query;
-use craft\fields\Categories as CraftCategories;
 use craft\helpers\Json;
 
 /**
@@ -26,7 +24,7 @@ class m180314_161529_sproutforms_categories_fields extends Migration
         $categoriesFields = (new Query())
             ->select(['id', 'handle', 'settings'])
             ->from(['{{%fields}}'])
-            ->where(['type' => CraftCategories::class])
+            ->where(['type' => 'craft\fields\Categories'])
             ->andWhere(['like', 'context', 'sproutForms:'])
             ->all();
 
@@ -37,7 +35,12 @@ class m180314_161529_sproutforms_categories_fields extends Migration
             $settings['localizeRelations'] = false;
             $settingsAsJson = Json::encode($settings);
 
-            $this->update('{{%fields}}', ['type' => Categories::class, 'settings' => $settingsAsJson], ['id' => $categoryField['id']], [], false);
+            $this->update('{{%fields}}', [
+                'type' => 'barrelstrength\sproutforms\fields\formfields\Categories',
+                'settings' => $settingsAsJson
+            ], [
+                'id' => $categoryField['id']
+            ], [], false);
         }
 
         return true;

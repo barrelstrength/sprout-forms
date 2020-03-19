@@ -7,15 +7,10 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutforms\fields\formfields\Number;
 use craft\db\Migration;
 use craft\db\Query;
-use craft\fields\Number as CraftNumber;
 use craft\helpers\Json;
 
-/**
- * m180314_161527_sproutforms_number_fields migration.
- */
 class m180314_161527_sproutforms_number_fields extends Migration
 {
     /**
@@ -26,7 +21,7 @@ class m180314_161527_sproutforms_number_fields extends Migration
         $numberFields = (new Query())
             ->select(['id', 'handle', 'settings'])
             ->from(['{{%fields}}'])
-            ->where(['type' => CraftNumber::class])
+            ->where(['type' => 'craft\fields\Number'])
             ->andWhere(['like', 'context', 'sproutForms:'])
             ->all();
 
@@ -35,7 +30,12 @@ class m180314_161527_sproutforms_number_fields extends Migration
             $settings['size'] = '';
             $settingsAsJson = Json::encode($settings);
 
-            $this->update('{{%fields}}', ['type' => Number::class, 'settings' => $settingsAsJson], ['id' => $numberField['id']], [], false);
+            $this->update('{{%fields}}', [
+                'type' => 'barrelstrength\sproutforms\fields\formfields\Number',
+                'settings' => $settingsAsJson
+            ], [
+                'id' => $numberField['id']
+            ], [], false);
         }
 
         return true;

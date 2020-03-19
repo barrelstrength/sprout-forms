@@ -7,10 +7,8 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutforms\fields\formfields\Dropdown;
 use craft\db\Migration;
 use craft\db\Query;
-use craft\fields\Dropdown as CraftDropdown;
 
 /**
  * m180314_161523_sproutforms_dropdown_fields migration.
@@ -25,12 +23,16 @@ class m180314_161523_sproutforms_dropdown_fields extends Migration
         $dropdownFields = (new Query())
             ->select(['id', 'handle', 'settings'])
             ->from(['{{%fields}}'])
-            ->where(['type' => CraftDropdown::class])
+            ->where(['type' => 'craft\fields\Dropdown'])
             ->andWhere(['like', 'context', 'sproutForms:'])
             ->all();
 
         foreach ($dropdownFields as $dropdownField) {
-            $this->update('{{%fields}}', ['type' => Dropdown::class], ['id' => $dropdownField['id']], [], false);
+            $this->update('{{%fields}}', [
+                'type' => 'barrelstrength\sproutforms\fields\formfields\Dropdown'
+            ], [
+                'id' => $dropdownField['id']
+            ], [], false);
         }
 
         return true;

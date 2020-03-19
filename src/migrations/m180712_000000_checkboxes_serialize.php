@@ -7,15 +7,11 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutforms\fields\formfields\Checkboxes;
 use craft\db\Migration;
 use craft\db\Query;
 use craft\helpers\Json;
 use yii\base\NotSupportedException;
 
-/**
- * m180712_000000_checkboxes_serialize migration.
- */
 class m180712_000000_checkboxes_serialize extends Migration
 {
     /**
@@ -27,7 +23,7 @@ class m180712_000000_checkboxes_serialize extends Migration
         $fields = (new Query())
             ->select(['id', 'handle'])
             ->from(['{{%fields}}'])
-            ->where(['type' => Checkboxes::class])
+            ->where(['type' => 'barrelstrength\sproutforms\fields\formfields\Checkboxes'])
             ->andWhere(['like', 'context', 'sproutForms:'])
             ->all();
 
