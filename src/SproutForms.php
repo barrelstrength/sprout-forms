@@ -209,6 +209,13 @@ class SproutForms extends Plugin implements SproutEditionsInterface
         Event::on(EntriesController::class, EntriesController::EVENT_BEFORE_VALIDATE, static function(OnBeforeValidateEntryEvent $event) {
 
             if (Craft::$app->getRequest()->getIsSiteRequest()) {
+                $enableCaptchas = (int)$event->form->enableCaptchas;
+
+                // Don't process captchas if the form is set to ignore them
+                if (!$enableCaptchas) {
+                    return;
+                }
+
                 /** @var Captcha[] $captchas */
                 $captchas = SproutForms::$app->forms->getAllEnabledCaptchas();
 
