@@ -211,7 +211,7 @@ class Integrations extends Component
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getModalIntegrationTemplate(Integration $integration): array
     {

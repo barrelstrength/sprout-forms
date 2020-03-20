@@ -28,6 +28,7 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Markup;
+use yii\base\Exception;
 use yii\db\Schema;
 
 /**
@@ -40,6 +41,7 @@ use yii\db\Schema;
  * @property mixed  $settingsHtml
  * @property array  $compatibleCraftFields
  * @property array  $compatibleCraftFieldTypes
+ * @property array  $compatibleConditions
  * @property mixed  $exampleInputHtml
  */
 class SingleLine extends FormField implements PreviewableFieldInterface
@@ -127,7 +129,7 @@ class SingleLine extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getSettingsHtml()
     {
@@ -150,7 +152,7 @@ class SingleLine extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -177,7 +179,7 @@ class SingleLine extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getExampleInputHtml(): string
     {
@@ -198,7 +200,7 @@ class SingleLine extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {

@@ -4,8 +4,6 @@
  * @license   https://craftcms.github.io/license
  */
 
-/** @noinspection ClassConstantCanBeUsedInspection */
-
 namespace barrelstrength\sproutforms\migrations;
 
 use barrelstrength\sproutbaseemail\migrations\m200110_000000_update_to_cc_bcc_columns_to_text_type;

@@ -10,7 +10,6 @@ namespace barrelstrength\sproutforms\fields\formfields;
 use barrelstrength\sproutforms\base\FormFieldTrait;
 use barrelstrength\sproutforms\fields\formfields\base\BaseOptionsConditionalTrait;
 use Craft;
-use craft\base\ElementInterface;
 use craft\fields\MultiSelect as CraftMultiSelect;
 use craft\helpers\Template as TemplateHelper;
 use Twig\Error\LoaderError;

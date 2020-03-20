@@ -16,11 +16,13 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Markup;
+use yii\base\Exception;
 use yii\db\Schema;
 
 /**
  *
  * @property string $svgIconPath
+ * @property array  $compatibleCraftFieldTypes
  * @property mixed  $exampleInputHtml
  */
 class PrivateNotes extends FormField
@@ -77,7 +79,7 @@ class PrivateNotes extends FormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -97,7 +99,7 @@ class PrivateNotes extends FormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getExampleInputHtml(): string
     {

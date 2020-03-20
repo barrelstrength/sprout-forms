@@ -27,6 +27,7 @@ class Users extends CraftUsers
      * @var string
      */
     public $cssClasses;
+
     /**
      * @var string
      */

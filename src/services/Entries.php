@@ -22,7 +22,6 @@ use barrelstrength\sproutforms\records\EntriesSpamLog as EntriesSpamLogRecord;
 use barrelstrength\sproutforms\records\Entry as EntryRecord;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
-use craft\base\Element;
 use craft\helpers\Json;
 use Throwable;
 use yii\base\Component;

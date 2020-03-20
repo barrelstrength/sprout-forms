@@ -90,6 +90,7 @@ class JavascriptCaptcha extends Captcha
             $errorMessage = 'Javascript not enabled in browser or form page does not have a <body> tag.';
             Craft::error($errorMessage, __METHOD__);
             $this->addError(self::CAPTCHA_ERRORS_KEY, $errorMessage);
+
             return false;
         }
 

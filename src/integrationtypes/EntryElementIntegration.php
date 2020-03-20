@@ -106,7 +106,7 @@ class EntryElementIntegration extends ElementIntegration
             $defaultAttributesHandles[] = $defaultAttribute['handle'];
         }
 
-        foreach($targetIntegrationFieldValues as $fieldHandle => $fieldValue) {
+        foreach ($targetIntegrationFieldValues as $fieldHandle => $fieldValue) {
             if (in_array($fieldHandle, $defaultAttributesHandles, true)) {
                 $entryElement->{$fieldHandle} = $fieldValue;
             } else {

@@ -20,6 +20,7 @@ use craft\helpers\Component as ComponentHelper;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use yii\base\Exception;
 use yii\base\InvalidConfigException;
 
 /**
@@ -192,7 +193,7 @@ class Rules extends Component
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getRulesModal(Rule $rule): array
     {

@@ -14,6 +14,7 @@ use GuzzleHttp\RequestOptions;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use yii\base\Exception;
 
 /**
  * Route our request to Craft or a third-party endpoint
@@ -46,7 +47,7 @@ class CustomEndpoint extends Integration
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getSettingsHtml()
     {

@@ -8,12 +8,12 @@
 namespace barrelstrength\sproutforms\services;
 
 use Craft;
-use craft\elements\User;
-use yii\base\Component;
 use craft\elements\Category;
 use craft\elements\Entry;
 use craft\elements\Tag;
+use craft\elements\User;
 use craft\models\Section;
+use yii\base\Component;
 
 /**
  *
@@ -102,11 +102,11 @@ class FrontEndFields extends Component
 
                     $entryQuery = User::find()->groupId($groupModel->id);
                     $usersResult = $entryQuery->all();
-                    if ($usersResult){
+                    if ($usersResult) {
                         $users[$pos]['users'] = $usersResult;
                         $users[$pos]['group'] = $groupModel;
                     }
-                }else if ($section[0] == 'admins') {
+                } else if ($section[0] == 'admins') {
                     $entryQuery = User::find()->admin(true);
 
                     $users[$pos]['users'] = $entryQuery->all();
@@ -128,7 +128,7 @@ class FrontEndFields extends Component
 
                 $entryQuery = User::find()->groupId($group->id);
                 $usersResult = $entryQuery->all();
-                if ($usersResult){
+                if ($usersResult) {
                     $users[$pos]['users'] = $usersResult;
                     $users[$pos]['group'] = $groupModel;
                 }

@@ -162,7 +162,7 @@ class FormQuery extends ElementQuery
     /**
      * @param $value
      *
-     * @return \barrelstrength\sproutforms\elements\db\FormQuery
+     * @return FormQuery
      */
     public function fieldLayoutId($value): FormQuery
     {

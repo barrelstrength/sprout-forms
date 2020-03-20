@@ -291,7 +291,6 @@ class Entry extends Element
      *
      * @return string
      */
-    /** @noinspection PhpInconsistentReturnPointsInspection */
     /**
      * @inheritdoc
      */

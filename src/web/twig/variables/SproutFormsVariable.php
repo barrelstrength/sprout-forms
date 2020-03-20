@@ -626,7 +626,7 @@ class SproutFormsVariable
      * @param $formId
      *
      * @return mixed
-     * @throws \yii\web\BadRequestHttpException
+     * @throws BadRequestHttpException
      */
     public function getFormField($formFieldHandle, $formId)
     {

@@ -41,8 +41,8 @@ class FieldsController extends BaseController
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
-     * @throws \yii\base\Exception
+     * @throws Exception
+     * @throws Exception
      */
     public function actionModalField(): Response
     {
@@ -242,8 +242,8 @@ class FieldsController extends BaseController
      * @throws BadRequestHttpException
      * @throws ForbiddenHttpException
      * @throws InvalidConfigException
-     * @throws \yii\base\Exception
-     * @throws \yii\base\Exception
+     * @throws Exception
+     * @throws Exception
      */
     public function actionEditField(): Response
     {
@@ -380,8 +380,8 @@ class FieldsController extends BaseController
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws InvalidConfigException
-     * @throws \yii\base\Exception
-     * @throws \yii\base\Exception
+     * @throws Exception
+     * @throws Exception
      */
     private function returnJson(bool $success, $field, Form $form, $tabName = null, $tabId = null): Response
     {

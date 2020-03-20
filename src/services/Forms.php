@@ -884,10 +884,10 @@ class Forms extends Component
     }
 
     /**
-     * @param \barrelstrength\sproutforms\elements\Form $form
+     * @param FormElement $form
      *
      * @return array
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function getTabsForFieldLayout(Form $form): array
     {

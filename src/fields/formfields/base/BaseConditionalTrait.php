@@ -8,8 +8,6 @@
 namespace barrelstrength\sproutforms\fields\formfields\base;
 
 use barrelstrength\sproutforms\base\ConditionInterface;
-use barrelstrength\sproutforms\rules\conditions\IsCondition;
-use barrelstrength\sproutforms\rules\conditions\IsNotCondition;
 
 trait BaseConditionalTrait
 {

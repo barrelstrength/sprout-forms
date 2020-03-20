@@ -24,6 +24,7 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Markup;
+use yii\base\Exception;
 use yii\db\Schema;
 
 /**
@@ -35,6 +36,8 @@ use yii\db\Schema;
  * @property string      $svgIconPath
  * @property null|string $settingsHtml
  * @property array       $compatibleCraftFields
+ * @property array       $compatibleConditions
+ * @property array       $compatibleCraftFieldTypes
  * @property mixed       $exampleInputHtml
  */
 class Paragraph extends FormField implements PreviewableFieldInterface
@@ -134,7 +137,7 @@ class Paragraph extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getSettingsHtml()
     {
@@ -161,7 +164,7 @@ class Paragraph extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -180,7 +183,7 @@ class Paragraph extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getExampleInputHtml(): string
     {
@@ -199,7 +202,7 @@ class Paragraph extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {

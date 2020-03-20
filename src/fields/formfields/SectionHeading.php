@@ -18,6 +18,7 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Markup;
+use yii\base\Exception;
 use yii\base\InvalidConfigException;
 use yii\db\Schema;
 
@@ -107,7 +108,7 @@ class SectionHeading extends FormField
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws InvalidConfigException
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getSettingsHtml(): string
     {
@@ -146,7 +147,7 @@ class SectionHeading extends FormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -174,7 +175,7 @@ class SectionHeading extends FormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getExampleInputHtml(): string
     {
@@ -193,7 +194,7 @@ class SectionHeading extends FormField
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {

@@ -37,8 +37,9 @@ class m180314_161531_sproutforms_assets_fields extends Migration
 
             $this->update('{{%fields}}', [
                 'type' => 'barrelstrength\sproutforms\fields\formfields\FileUpload',
-                'settings' => $settingsAsJson], [
-                    'id' => $field['id']
+                'settings' => $settingsAsJson
+            ], [
+                'id' => $field['id']
             ], [], false);
         }
 

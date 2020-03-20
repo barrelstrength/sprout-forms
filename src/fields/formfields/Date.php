@@ -9,7 +9,6 @@ namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutforms\base\FormField;
 use Craft;
-use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;
 use craft\fields\Date as CraftDate;
@@ -17,6 +16,7 @@ use craft\fields\PlainText as CraftPlainText;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\Template as TemplateHelper;
 use DateTime;
+use Exception;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -29,6 +29,7 @@ use yii\db\Schema;
  * @property mixed  $settingsHtml
  * @property array  $compatibleCraftFields
  * @property array  $compatibleCraftFieldTypes
+ * @property string $contentColumnType
  * @property mixed  $exampleInputHtml
  */
 class Date extends FormField implements PreviewableFieldInterface
@@ -115,11 +116,11 @@ class Date extends FormField implements PreviewableFieldInterface
     }
 
     /**
-     * @param mixed                             $value
-     * @param \craft\base\ElementInterface|null $element
+     * @param mixed                 $value
+     * @param ElementInterface|null $element
      *
-     * @return \DateTime|false|mixed|null
-     * @throws \Exception
+     * @return DateTime|false|mixed|null
+     * @throws Exception
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
@@ -215,7 +216,7 @@ class Date extends FormField implements PreviewableFieldInterface
      * @throws SyntaxError
      * @throws \yii\base\Exception
      * @throws \yii\base\Exception
-     * @throws \Exception
+     * @throws Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -248,6 +249,7 @@ class Date extends FormField implements PreviewableFieldInterface
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {
@@ -281,7 +283,7 @@ class Date extends FormField implements PreviewableFieldInterface
      * @param int    $upper
      *
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function getTimeIncrementsAsOptions($minuteIncrement = 30, $format = '', $lower = 0, $upper = 86400): array
     {

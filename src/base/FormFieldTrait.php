@@ -8,10 +8,10 @@
 namespace barrelstrength\sproutforms\base;
 
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
+use Craft;
 use ReflectionClass;
 use ReflectionException;
 use Twig\Markup;
-use Craft;
 
 trait FormFieldTrait
 {
@@ -169,9 +169,9 @@ trait FormFieldTrait
     /**
      * Return a list of compatible Craft Field Types to associate on the Element Integration API
      *
+     * @return array
      * @todo - update to be named `getCompatibleFieldTypes()` in v4.x
      *
-     * @return array
      */
     public function getCompatibleCraftFieldTypes(): array
     {

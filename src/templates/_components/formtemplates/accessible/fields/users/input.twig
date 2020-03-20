@@ -16,12 +16,12 @@
 
 {% spaceless %}
     <select {%- if name %} name="{{ name }}[]"{% endif %}
-            {%- if id %} id="{{ id }}"{% endif %}
-            {%- if class %} class="{{ class }}"{% endif %}
-            {%- if required %} required aria-required="true"{% endif %}
-            {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
-            {%- if multiple %} multiple {% endif %}
-            {{- dataAttributes|raw -}}
+        {%- if id %} id="{{ id }}"{% endif %}
+        {%- if class %} class="{{ class }}"{% endif %}
+        {%- if required %} required aria-required="true"{% endif %}
+        {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
+        {%- if multiple %} multiple {% endif %}
+        {{- dataAttributes|raw -}}
     >
         {%- if not multiple -%}
             <option value="" disabled selected>{{ selectionLabel }}</option>
@@ -34,12 +34,12 @@
             {%- for option in options.users -%}
                 {% set username = null %}
                 {% switch field.usernameFormat %}
-                    {% case "username" %}
-                        {% set username = option.username %}
-                    {% case "email" %}
-                        {% set username = option.email %}
-                    {% default %}
-                        {% set username = option.getFullName() %}
+                {% case "username" %}
+                    {% set username = option.username %}
+                {% case "email" %}
+                    {% set username = option.email %}
+                {% default %}
+                    {% set username = option.getFullName() %}
                 {% endswitch %}
 
                 {# Only add an option if our username value is not null #}

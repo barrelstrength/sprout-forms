@@ -4,8 +4,6 @@
  * @license   https://craftcms.github.io/license
  */
 
-/** @noinspection ClassConstantCanBeUsedInspection */
-
 namespace barrelstrength\sproutforms\migrations;
 
 use barrelstrength\sproutbasereports\migrations\m200110_000000_add_reports_emailColumn_column;

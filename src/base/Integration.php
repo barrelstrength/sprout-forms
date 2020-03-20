@@ -35,6 +35,7 @@ use yii\base\InvalidConfigException;
  * @property array  $targetIntegrationFieldsAsMappingOptions
  * @property array  $targetIntegrationFieldValues
  * @property array  $indexedFieldMapping
+ * @property array  $defaultSourceMappingAttributes
  * @property string $type
  */
 abstract class Integration extends SavableComponent implements IntegrationInterface

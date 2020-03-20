@@ -1,4 +1,4 @@
-<?php /** @noinspection ClassConstantCanBeUsedInspection */
+<?php
 
 namespace barrelstrength\sproutforms\migrations;
 

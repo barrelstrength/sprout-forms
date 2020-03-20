@@ -14,6 +14,7 @@ use ReflectionException;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use yii\base\Exception;
 
 /**
  * Class HoneypotCaptcha
@@ -58,7 +59,7 @@ class HoneypotCaptcha extends Captcha
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getCaptchaSettingsHtml(): string
     {

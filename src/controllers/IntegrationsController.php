@@ -18,6 +18,7 @@ use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use yii\base\Exception;
 use yii\base\InvalidConfigException;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
@@ -118,8 +119,8 @@ class IntegrationsController extends BaseController
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
-     * @throws \yii\base\Exception
+     * @throws Exception
+     * @throws Exception
      */
     public function actionEditIntegration(): Response
     {

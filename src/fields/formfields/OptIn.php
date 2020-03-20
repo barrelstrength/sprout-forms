@@ -24,6 +24,7 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Markup;
+use yii\base\Exception;
 
 /**
  * Class SproutFormsCheckboxesField
@@ -31,6 +32,8 @@ use Twig\Markup;
  *
  * @property string $svgIconPath
  * @property mixed  $settingsHtml
+ * @property array  $compatibleConditions
+ * @property array  $compatibleCraftFieldTypes
  * @property mixed  $exampleInputHtml
  */
 class OptIn extends FormField implements PreviewableFieldInterface
@@ -115,7 +118,7 @@ class OptIn extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getSettingsHtml()
     {
@@ -135,7 +138,7 @@ class OptIn extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -160,7 +163,7 @@ class OptIn extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getExampleInputHtml(): string
     {
@@ -181,7 +184,7 @@ class OptIn extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {

@@ -27,6 +27,7 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Markup;
+use yii\base\Exception;
 
 
 /**
@@ -35,6 +36,8 @@ use Twig\Markup;
  * @property string $svgIconPath
  * @property mixed  $settingsHtml
  * @property mixed  $exampleInputHtml
+ * @property array  $compatibleConditions
+ * @property array  $compatibleCraftFieldTypes
  * @property array  $countries
  */
 class Phone extends FormField implements PreviewableFieldInterface
@@ -83,8 +86,8 @@ class Phone extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
-     * @throws \yii\base\Exception
+     * @throws Exception
+     * @throws Exception
      */
     public function getSettingsHtml()
     {
@@ -120,7 +123,7 @@ class Phone extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getExampleInputHtml(): string
     {
@@ -141,8 +144,8 @@ class Phone extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
-     * @throws \yii\base\Exception
+     * @throws Exception
+     * @throws Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -157,7 +160,7 @@ class Phone extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {

@@ -4,8 +4,6 @@
  * @license   https://craftcms.github.io/license
  */
 
-/** @noinspection ClassConstantCanBeUsedInspection */
-
 namespace barrelstrength\sproutforms\migrations;
 
 use barrelstrength\sproutbaseemail\migrations\m190212_000004_update_element_types;

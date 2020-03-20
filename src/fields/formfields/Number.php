@@ -38,6 +38,8 @@ use yii\base\Exception;
  * @property null|string $settingsHtml
  * @property array       $compatibleCraftFields
  * @property array       $compatibleCraftFieldTypes
+ * @property array       $compatibleConditions
+ * @property array       $elementValidationRules
  * @property mixed       $exampleInputHtml
  */
 class Number extends FormField implements PreviewableFieldInterface
@@ -141,7 +143,7 @@ class Number extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getSettingsHtml()
     {
@@ -164,7 +166,7 @@ class Number extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
@@ -190,7 +192,7 @@ class Number extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getExampleInputHtml(): string
     {
@@ -209,7 +211,7 @@ class Number extends FormField implements PreviewableFieldInterface
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
     {

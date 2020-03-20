@@ -4,8 +4,6 @@
  * @license   https://craftcms.github.io/license
  */
 
-/** @noinspection ClassConstantCanBeUsedInspection */
-
 namespace barrelstrength\sproutforms\migrations;
 
 use barrelstrength\sproutbasereports\migrations\m190305_000002_update_record_to_element_types as BaseUpdateElements;

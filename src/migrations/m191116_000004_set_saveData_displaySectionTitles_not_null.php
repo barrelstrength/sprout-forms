@@ -4,8 +4,6 @@
  * @license   https://craftcms.github.io/license
  */
 
-/** @noinspection ClassConstantCanBeUsedInspection */
-
 namespace barrelstrength\sproutforms\migrations;
 
 use Craft;

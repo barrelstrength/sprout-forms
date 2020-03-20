@@ -57,6 +57,7 @@ use Twig\Error\SyntaxError;
 use yii\base\Component;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
+use yii\db\StaleObjectException;
 
 /**
  * @property mixed $defaultTabName
@@ -235,7 +236,6 @@ class Fields extends Component
         $groupedFields[$specialLabel][] = RegularExpression::class;
         $groupedFields[$specialLabel][] = Hidden::class;
         $groupedFields[$specialLabel][] = Invisible::class;
-
 
 
         // Relations
@@ -477,7 +477,7 @@ class Fields extends Component
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws InvalidConfigException
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function getModalFieldTemplate(Form $form, $field = null, $tabId = null): array
     {
@@ -563,7 +563,7 @@ class Fields extends Component
      * @param             $name
      *
      * @return FieldLayoutTabRecord
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function createNewTab($formId, $name): FieldLayoutTabRecord
     {
@@ -615,7 +615,16 @@ class Fields extends Component
         return $response;
     }
 
-    public function deleteTab(Form $form, FieldLayoutTabRecord $tabRecord): bool 
+    /**
+     * @param FormElement          $form
+     * @param FieldLayoutTabRecord $tabRecord
+     *
+     * @return bool
+     * @throws InvalidConfigException
+     * @throws Throwable
+     * @throws StaleObjectException
+     */
+    public function deleteTab(Form $form, FieldLayoutTabRecord $tabRecord): bool
     {
         $fieldLayout = $form->getFieldLayout();
 

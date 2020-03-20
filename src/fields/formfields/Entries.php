@@ -27,6 +27,7 @@ use yii\base\Exception;
 class Entries extends CraftEntries
 {
     use FormFieldTrait;
+
     /**
      * @var string
      */

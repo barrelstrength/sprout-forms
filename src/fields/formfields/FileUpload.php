@@ -51,6 +51,22 @@ class FileUpload extends CraftAssets
     protected $settingsTemplate = 'sprout-forms/_components/fields/formfields/fileupload/settings';
 
     /**
+     * @inheritdoc
+     */
+    public static function displayName(): string
+    {
+        return Craft::t('sprout-forms', 'File Upload');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function defaultSelectionLabel(): string
+    {
+        return Craft::t('sprout-forms', 'Add a file');
+    }
+
+    /**
      * Make these attributes available as Form Field settings
      *
      * @return array
@@ -67,22 +83,6 @@ class FileUpload extends CraftAssets
         $attributes[] = 'allowedKinds';
 
         return $attributes;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function displayName(): string
-    {
-        return Craft::t('sprout-forms', 'File Upload');
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function defaultSelectionLabel(): string
-    {
-        return Craft::t('sprout-forms', 'Add a file');
     }
 
     /**
