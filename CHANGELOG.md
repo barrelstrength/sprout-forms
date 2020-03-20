@@ -1,6 +1,6 @@
 # Changelog
 
-## UNRELEASED
+## 3.8.8 - 2020-03-20
 
 ### Added
 - Added `barrelstrength\sproutforms\base\FormFieldTrait`
@@ -29,7 +29,6 @@
 [#411]: https://github.com/barrelstrength/craft-sprout-forms/issues/411
 [#121-sproutemail]: https://github.com/barrelstrength/craft-sprout-email/issues/121
 [#125-sproutemail]: https://github.com/barrelstrength/craft-sprout-email/issues/125
-
 
 ## 3.8.7 - 2020-03-14
 
