@@ -1,5 +1,36 @@
 # Changelog
 
+## UNRELEASED
+
+### Added
+- Added `barrelstrength\sproutforms\base\FormFieldTrait`
+- Added `barrelstrength\sproutforms\fields\formfields\base\BaseConditionalTrait`
+- Added `barrelstrength\sproutforms\fields\formfields\base\BaseOptionsConditionalTrait`
+
+### Changed
+- Updated FormField base class to use FormFieldTrait
+- Updated relations Fields (Categories, Entries, File Upload, Tags, Users) to extend related Craft fields directly and implement `FormFieldTrait`
+- Updated options Fields (Checkboxes, Dropdown, Email Dropdown, Multiple Choice, Multi-select) to extend related Craft fields directly and implement `FormFieldTrait`
+- Updated `SproutFormsDisableSubmitButton` logic to ensure the submit button is enabled if edits are made to a form ([#411])
+- Updated handling of spam in Form Entry Element queries ([#406])
+- Updated default for Duplicate and Honeypot Captchas to be disabled on install
+- Updated `barrelstrength/sprout-base-email` requirement to v1.2.6
+
+### Fixed
+- Fixed bug when loading rule modal if field no longer exists
+- Fixed `min` and `max` Form Field input attributes for Number field in Basic Form Templates
+- Fixed Notification Email Record properties in Craft 2 to Craft 3 migration
+- Fixed Notification Email settings in some Notification Email migration scenarios ([#121][#121-sproutemail], [#125][#125-sproutemail])
+
+### Removed
+- Removed `barrelstrength\sproutforms\services\entries\Entries::saveRelations()`
+
+[#406]: https://github.com/barrelstrength/craft-sprout-forms/issues/406
+[#411]: https://github.com/barrelstrength/craft-sprout-forms/issues/411
+[#121-sproutemail]: https://github.com/barrelstrength/craft-sprout-email/issues/121
+[#125-sproutemail]: https://github.com/barrelstrength/craft-sprout-email/issues/125
+
+
 ## 3.8.7 - 2020-03-14
 
 ### Added
