@@ -1,5 +1,14 @@
 # Changelog
 
+## UNRELEASED
+
+### Fixed
+- Fixed issue where Default Section segment could accidentally be translated ([#446])
+- Fixed issue where for Form-specific 'Enable Captchas' setting was ignored ([#450])
+
+[#446]: https://github.com/barrelstrength/craft-sprout-forms/issues/446
+[#450]: https://github.com/barrelstrength/craft-sprout-forms/issues/450
+
 ## 3.8.8 - 2020-03-20
 
 ### Added
