@@ -25,6 +25,10 @@ use yii\db\ActiveQueryInterface;
  * @property Element   $element
  * @property FormGroup $group
  * @property string    $redirectUri
+ * @property string    $submissionMethod
+ * @property string    $errorDisplayMethod
+ * @property string    $successMessage
+ * @property string    $errorMessage
  * @property string    $submitButtonText
  * @property bool      $saveData
  * @property string    $formTemplate

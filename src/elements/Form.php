@@ -66,6 +66,14 @@ class Form extends Element
 
     public $redirectUri;
 
+    public $submissionMethod = 'sync';
+
+    public $errorDisplayMethod = 'inline';
+
+    public $successMessage;
+
+    public $errorMessage;
+
     public $submitButtonText;
 
     public $saveData = true;
@@ -75,6 +83,7 @@ class Form extends Element
     public $enableCaptchas = true;
 
     private $_fields;
+
 
     /**
      * @inheritdoc
@@ -292,6 +301,10 @@ class Form extends Element
         $record->groupId = $this->groupId;
         $record->redirectUri = $this->redirectUri;
         $record->saveData = $this->saveData;
+        $record->submissionMethod = $this->submissionMethod;
+        $record->errorDisplayMethod = $this->errorDisplayMethod;
+        $record->successMessage = $this->successMessage;
+        $record->errorMessage = $this->errorMessage;
         $record->submitButtonText = $this->submitButtonText;
         $record->formTemplate = $this->formTemplate;
         $record->enableCaptchas = $this->enableCaptchas;

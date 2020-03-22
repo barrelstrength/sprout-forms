@@ -528,6 +528,10 @@ class FormsController extends BaseController
         $form->displaySectionTitles = $request->getBodyParam('displaySectionTitles', $form->displaySectionTitles);
         $form->redirectUri = $request->getBodyParam('redirectUri', $form->redirectUri);
         $form->saveData = $request->getBodyParam('saveData', $form->saveData);
+        $form->submissionMethod = $request->getBodyParam('submissionMethod', $form->submissionMethod);
+        $form->errorDisplayMethod = $request->getBodyParam('errorDisplayMethod', $form->errorDisplayMethod);
+        $form->successMessage = $request->getBodyParam('successMessage', $form->successMessage);
+        $form->errorMessage = $request->getBodyParam('errorMessage', $form->errorMessage);
         $form->submitButtonText = $request->getBodyParam('submitButtonText', $form->submitButtonText);
         $form->titleFormat = $request->getBodyParam('titleFormat', $form->titleFormat);
         $form->formTemplate = $request->getBodyParam('formTemplate', $form->formTemplate);
@@ -547,6 +551,14 @@ class FormsController extends BaseController
 
         if (!$form->enableCaptchas) {
             $form->enableCaptchas = false;
+        }
+
+        if (!$form->submissionMethod) {
+            $form->submissionMethod = 'sync';
+        }
+
+        if (!$form->errorDisplayMethod) {
+            $form->errorDisplayMethod = 'inline';
         }
     }
 }

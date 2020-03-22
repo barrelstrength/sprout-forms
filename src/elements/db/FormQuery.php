@@ -60,6 +60,26 @@ class FormQuery extends ElementQuery
     /**
      * @var string
      */
+    public $submissionMethod;
+
+    /**
+     * @var string
+     */
+    public $errorDisplayMethod;
+
+    /**
+     * @var string
+     */
+    public $successMessage;
+
+    /**
+     * @var string
+     */
+    public $errorMessage;
+
+    /**
+     * @var string
+     */
     public $submitButtonText;
 
     /**
@@ -194,6 +214,10 @@ class FormQuery extends ElementQuery
             'sproutforms_forms.displaySectionTitles',
             'sproutforms_forms.redirectUri',
             'sproutforms_forms.saveData',
+            'sproutforms_forms.submissionMethod',
+            'sproutforms_forms.errorDisplayMethod',
+            'sproutforms_forms.successMessage',
+            'sproutforms_forms.errorMessage',
             'sproutforms_forms.submitButtonText',
             'sproutforms_forms.formTemplate',
             'sproutforms_forms.enableCaptchas'
