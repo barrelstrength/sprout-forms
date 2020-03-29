@@ -12,31 +12,40 @@ class SproutFormsDisableSubmitButton {
     this.form = document.getElementById(this.formId);
     this.submitButtons = this.form.querySelectorAll('[type="submit"]');
 
-    this.setDuplicateSubmissionEventListener();
-    this.setResetDuplicateSubmissionEventListener();
+    this.setDuplicateSubmissionEventListeners();
   }
 
-  // Mark all submit buttons as disabled once a user submits the form
-  setDuplicateSubmissionEventListener() {
+  setDuplicateSubmissionEventListeners() {
     let self = this;
-    this.form.addEventListener('submit', function() {
+
+    // Mark all submit buttons as disabled once a user submits the form
+    this.form.addEventListener('beforeSproutFormsSubmit', function(event) {
       self.submitButtons.forEach(function(button) {
         button.setAttribute('disabled', 'disabled');
       });
     }, false);
-  }
 
-  // If any inputs change, make sure all submit buttons are not disabled
-  setResetDuplicateSubmissionEventListener() {
-    let self = this;
-    let inputs = this.form.querySelectorAll('input, select, option, textarea, button, datalist, output');
-    inputs.forEach(function(input) {
-      input.addEventListener('input', function() {
-        self.submitButtons.forEach(function(button) {
+    // Mark all submit buttons as enabled after the form submission is complete
+    this.form.addEventListener('afterSproutFormsSubmit', function(event) {
+      self.submitButtons.forEach(function(button) {
+        // Add slight delay, for kicks
+        setTimeout(() => {
           button.removeAttribute('disabled');
-        });
-      }, false);
-    });
+        }, 500)
+
+      });
+    }, false);
+
+    // Mark all submit buttons as enabled if the form submission is cancelled
+    this.form.addEventListener('onSproutFormSubmitCancelled', function(event) {
+      self.submitButtons.forEach(function(button) {
+        // Add slight delay, for kicks
+        setTimeout(() => {
+          button.removeAttribute('disabled');
+        }, 500)
+
+      });
+    }, false);
   }
 }
 
