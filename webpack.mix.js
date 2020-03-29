@@ -39,7 +39,9 @@ mix
   .js([
     'src/web/assets/formtemplates/src/js/rules.js',
   ], 'src/web/assets/formtemplates/dist/js/rules.js')
-  .sourceMaps();
+  .js([
+    'src/web/assets/formtemplates/src/js/submit-handler.js',
+  ], 'src/web/assets/formtemplates/dist/js/submit-handler.js');
 
 // Full API
 // mix.js(src, output);
