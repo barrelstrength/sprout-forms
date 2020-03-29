@@ -25,6 +25,21 @@
         otherPlaceholderText: '_forms/formHandle'|t('sprout-forms')
     })) }}
 
+    {{ forms.selectField({
+        label: 'Submission Method'|t('sprout-forms'),
+        instructions: 'The method used to submit your forms.'|t('sprout-forms'),
+        id: 'submissionMethod',
+        name: 'submissionMethod',
+        value: form.submissionMethod,
+        options: [{
+            value: "sync",
+            label: "Reload Page (Syncronous)",
+        },{
+            value: "async",
+            label: "AJAX (Asyncronous)",
+        }]
+    }) }}
+
     {{ forms.textField({
         label: "Submit Button"|t('sprout-forms'),
         instructions: "The text displayed for the submit button."|t('sprout-forms'),
@@ -34,6 +49,50 @@
         required: false,
         errors: (form is defined ? form.getErrors('submitButtonText') : null)
     }) }}
+
+    {{ forms.textareaField({
+        label: "Success Message"|t('sprout-forms'),
+        instructions: "The message displayed after a form entry is successfully submitted. Leave blank for no message."|t('sprout-forms'),
+        id: 'successMessage',
+        name: 'successMessage',
+        class: 'nicetext',
+        rows: 5,
+        placeholder: "Thanks! We'll be in touch."|t('sprout-forms'),
+        value: (form is defined ? form.successMessage : null),
+        errors: (form is defined ? form.getErrors('successMessage') : null)
+    }) }}
+
+    {{ forms.textareaField({
+        label: "Error Message"|t('sprout-forms'),
+        instructions: "The message displayed when a form submission has errors. This message will display above the error list if 'Globally' is selected as the Error Display Method. Leave blank for no message."|t('sprout-forms'),
+        id: 'errorMessage',
+        name: 'errorMessage',
+        class: 'nicetext',
+        rows: 5,
+        placeholder: "We were unable to process your submission. Please correct any errors and submit the form again."|t('sprout-forms'),
+        value: (form is defined ? form.errorMessage : null),
+        errors: (form is defined ? form.getErrors('errorMessage') : null)
+    }) }}
+
+    {{ forms.selectField({
+        label: 'Error Display Method'|t('sprout-forms'),
+        instructions: 'The method used to display errors after a form fails validation.'|t('sprout-forms'),
+        id: 'errorDisplayMethod',
+        name: 'errorDisplayMethod',
+        value: form.errorDisplayMethod,
+        options: [{
+            value: "inline",
+            label: "Inline - Display errors alongside their respective fields",
+        },{
+            value: "global",
+            label: "Globally - Display errors together in a list",
+        },{
+            value: "both",
+            label: "Inline & Globally - Display errors everywhere!",
+        }]
+    }) }}
+
+    <hr>
 
     {{ forms.lightswitchField({
         label: "Enable Captchas"|t('sprout-forms'),
