@@ -23,16 +23,6 @@
     }) }}
 
     {{ forms.textField({
-        label: "Title Format"|t('sprout-forms'),
-        instructions: "Entry Titles are auto-generated based on the Title Format you enter here. All information contained in the Title will also be searchable. You may use the same syntax here as you would with Dynamic Titles in your Sections. (i.e. {dateCreated|date('Ymd')} {fullName})"|t('sprout-forms'),
-        id: 'titleFormat',
-        name: 'titleFormat',
-        value: form.titleFormat,
-        errors: form.getErrors('titleFormat'),
-        required: true
-    }) }}
-
-    {{ forms.textField({
         label: "Handle"|t('sprout-forms'),
         instructions: "How you’ll refer to this form in the templates."|t('sprout-forms'),
         id: 'handle',
@@ -40,6 +30,16 @@
         name: 'handle',
         value: form.handle,
         errors: form.getErrors('handle'),
+        required: true
+    }) }}
+
+    {{ forms.textField({
+        label: "Title Format"|t('sprout-forms'),
+        instructions: "Entry Titles are auto-generated based on the Title Format you enter here. All information contained in the Title will also be searchable. You may use the same syntax here as you would with Dynamic Titles in your Sections. (i.e. {dateCreated|date('Ymd')} {fullName})"|t('sprout-forms'),
+        id: 'titleFormat',
+        name: 'titleFormat',
+        value: form.titleFormat,
+        errors: form.getErrors('titleFormat'),
         required: true
     }) }}
 
@@ -64,18 +64,9 @@
 
     {% endif %}
 
-    {{ forms.textField({
-        label: "Redirect Page"|t('sprout-forms'),
-        instructions: "Where should the user be redirected upon form submission? Leave blank to redirect user back to the form."|t('sprout-forms'),
-        name: 'redirectUri',
-        placeholder: siteUrl,
-        value: (form is defined ? form.redirectUri : null),
-        errors: (form is defined ? form.getErrors('redirectUri') : null)
-    }) }}
+    <hr>
 
     {% if settings.enableSaveData %}
-
-        <hr>
 
         {{ forms.lightswitchField({
             label: "Save Data"|t('sprout-forms'),
@@ -88,5 +79,14 @@
         }) }}
 
     {% endif %}
+
+    {{ forms.textField({
+        label: "Redirect Page"|t('sprout-forms'),
+        instructions: "Where should the user be redirected upon form submission? Leave blank to redirect user back to the form."|t('sprout-forms'),
+        name: 'redirectUri',
+        placeholder: siteUrl,
+        value: (form is defined ? form.redirectUri : null),
+        errors: (form is defined ? form.getErrors('redirectUri') : null)
+    }) }}
 
 {% endset %}
