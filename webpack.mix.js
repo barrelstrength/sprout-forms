@@ -1,5 +1,12 @@
 const mix = require('laravel-mix');
 
+require('laravel-mix-polyfill');
+
+/**
+ * @param {Object} mix
+ * @param {method} mix.sass
+ * @param {method} mix.polyfill
+ */
 mix
   // Forms
   .js([
@@ -41,7 +48,8 @@ mix
   ], 'src/web/assets/formtemplates/dist/js/rules.js')
   .js([
     'src/web/assets/formtemplates/src/js/submit-handler.js',
-  ], 'src/web/assets/formtemplates/dist/js/submit-handler.js');
+  ], 'src/web/assets/formtemplates/dist/js/submit-handler.js')
+  .polyfill();
 
 // Full API
 // mix.js(src, output);
