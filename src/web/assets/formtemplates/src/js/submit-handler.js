@@ -26,8 +26,13 @@ class SproutFormsSubmitHandler {
     this.errorsContainerElement = settings.errorsContainerElement ?? 'ul.errors';
     this.errorsItemElement = settings.errorsItemElement ?? 'li';
 
-    // this.errorsStyle = settings.errorsStyle ?? 'fields'; // global / fields / both|none?
-    // this.errorClassGlobal = 'form-errors';
+    // The id used to identify a specific field
+    // Fields are targeted via their dynamic field handle: id="fields-{fieldHandle}-field"
+    this.fieldWrapperIdPrefix = settings.fieldWrapperIdPrefix ?? 'fields-';
+    this.fieldWrapperIdSuffix = settings.fieldWrapperIdSuffix ?? '-field';
+
+    // The class used to identify the wrapper for all fields
+    this.fieldWrapperQuerySelector = settings.fieldWrapperQuerySelector ?? '.field';
 
     this.addFormSubmitEventListener();
   }
@@ -270,7 +275,8 @@ class SproutFormsSubmitHandler {
           // Add inline errors to fields
           if (inlineErrorsEnabled) {
             for (let [fieldHandle, errors] of Object.entries(response.errors)) {
-              let fieldWrapper = document.getElementById('fields-' + fieldHandle + '-field');
+              let fieldId = self.fieldWrapperIdPrefix + fieldHandle + self.fieldWrapperIdSuffix;
+              let fieldWrapper = document.getElementById(fieldId);
 
               // Make sure we don't display two copies of the inline errors box on subsequent requests
               let errorClasses = '.' + self.getTargetElementClasses(self.errorsContainerElement).join('.');
@@ -348,7 +354,7 @@ class SproutFormsSubmitHandler {
     let errorListClasses = classesArray.map(cssClass => {
       return '.' + cssClass
     });
-    let fields = document.querySelectorAll('.field');
+    let fields = document.querySelectorAll(self.fieldWrapperQuerySelector);
     for (const field of fields) {
       let oldErrorList = field.querySelector(errorListClasses);
       if (oldErrorList !== null) {
