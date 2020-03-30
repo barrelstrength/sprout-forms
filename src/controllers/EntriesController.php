@@ -21,6 +21,7 @@ use craft\web\Controller as BaseController;
 use Throwable;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
+use yii\helpers\Markdown;
 use yii\web\BadRequestHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
@@ -272,8 +273,12 @@ class EntriesController extends BaseController
         $this->createLastEntryId($entry);
 
         if (Craft::$app->getRequest()->getAcceptsJson()) {
+
+            $successMessage = Craft::$app->getView()->renderObjectTemplate($entry->getForm()->successMessage, $entry);
+
             return $this->asJson([
-                'success' => true
+                'success' => true,
+                'message' => Markdown::process($successMessage),
             ]);
         }
 
@@ -425,8 +430,13 @@ class EntriesController extends BaseController
 
         // Respond to ajax requests with JSON
         if (Craft::$app->getRequest()->getAcceptsJson()) {
+
+            $errorMessage = Craft::$app->getView()->renderObjectTemplate($entry->getForm()->errorMessage, $entry);
+
             return $this->asJson([
                 'success' => false,
+                'errorDisplayMethod' => $entry->getForm()->errorDisplayMethod,
+                'message' => Markdown::process($errorMessage),
                 'errors' => $entry->getErrors(),
             ]);
         }
