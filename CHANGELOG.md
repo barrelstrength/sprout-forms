@@ -2,11 +2,27 @@
 
 ## UNRELEASED
 
+### Added
+- Added native support for AJAX Form Submissions
+- Added 'Submission Method' setting to control form submission behavior
+- Added 'Success Message' and 'Error Message' settings to manage global messaging on a per-form basis. Messages support rendering values from the submitted form as well as Markdown. ([#269], [#449])
+- Added 'Error Display Method' setting to control whether errors display inline or globally
+- Added `beforeSproutFormsSubmit`, `sproutFormsSubmit`, `afterSproutFormsSubmit`, and `onSproutFormSubmitCancelled` javascript events in front-end submit workflow ([#448])
+
+### Changed
+- Added polyfill for front-end javascript resources to support additional browsers
+- Improved front-end JS to make less assumptions about how a user might customize a given form ([#413])
+- Updated `disable-submit-button.js` behavior to watch new events and re-enable submit button after submissions
+
 ### Fixed
 - Fixed issue where Default Section segment could accidentally be translated ([#446])
 - Fixed issue where for Form-specific 'Enable Captchas' setting was ignored ([#450])
 
+[#269]: https://github.com/barrelstrength/craft-sprout-forms/issues/269
+[#413]: https://github.com/barrelstrength/craft-sprout-forms/issues/413
 [#446]: https://github.com/barrelstrength/craft-sprout-forms/issues/446
+[#448]: https://github.com/barrelstrength/craft-sprout-forms/issues/448
+[#449]: https://github.com/barrelstrength/craft-sprout-forms/issues/449
 [#450]: https://github.com/barrelstrength/craft-sprout-forms/issues/450
 
 ## 3.8.8 - 2020-03-20
