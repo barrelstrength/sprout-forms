@@ -310,9 +310,6 @@ class SproutFormsSubmitHandler {
 
     xhr.open('POST', '/');
     xhr.setRequestHeader('Accept', 'application/json');
-    // Test with Files...
-    // xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    // xhr.setRequestHeader('Content-type', 'multipart/form-data');
     xhr.send(formData);
   }
 
