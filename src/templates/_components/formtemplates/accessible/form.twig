@@ -91,6 +91,11 @@
     true) -%}
 {%- do view.registerJsFile(rulesJsUrl) -%}
 
+{%- set submitHandlerJsUrl = view.getAssetManager().getPublishedUrl(
+    '@sproutforms/web/assets/formtemplates/dist/js/submit-handler.js',
+    true) -%}
+{%- do view.registerJsFile(submitHandlerJsUrl) -%}
+
 {% js at endBody %}
     (function() {
     window.csrfTokenName = "{{ craft.app.getConfig().getGeneral().csrfTokenName|e('js') }}";
@@ -98,5 +103,6 @@
     new SproutFormsCheckableInputs('{{ id }}');
     new SproutFormsDisableSubmitButton('{{ id }}');
     new SproutFormsRules('{{ id }}');
+    new SproutFormsSubmitHandler('{{ id }}');
     })();
 {% endjs -%}
