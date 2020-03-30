@@ -100,7 +100,6 @@ class SproutFormsSubmitHandler {
    * @returns {Promise<boolean>}
    */
   getBeforeFormSubmitPromise() {
-    console.log('getBeforeFormSubmitPromise');
     let self = this;
 
     const beforeSproutFormsSubmitEvent = new CustomEvent('beforeSproutFormsSubmit', {
