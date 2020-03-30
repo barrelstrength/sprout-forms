@@ -19,6 +19,7 @@
     {%- if id %} id="{{ id }}"{% endif -%}
     {%- if class %} class="{{ class -}}{%- if errors %} {{ errorClass }}{% endif -%}"{% endif -%}
     {%- if rules %} data-rules="{{ rules|json_encode|raw|e('html') }}"{% endif -%}
+    data-submission-method="{{ form.submissionMethod }}"
 >
     {{ csrfInput() }}
     <input type="hidden" aria-hidden="true" name="action" value="sprout-forms/entries/save-entry">

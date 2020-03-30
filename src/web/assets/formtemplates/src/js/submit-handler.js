@@ -15,8 +15,6 @@ class SproutFormsSubmitHandler {
     this.submitButtons = this.form.querySelectorAll('[type="submit"]');
     this.messageBoxId = this.formId + '-message-box';
 
-    this.async = settings.async ?? false;
-
     this.globalErrorsEnabled = settings.globalErrorsEnabled ?? false;
     this.inlineErrorsEnabled = settings.inlineErrorsEnabled ?? true;
 
@@ -172,8 +170,10 @@ class SproutFormsSubmitHandler {
   getFormSubmitPromise() {
     let self = this;
 
+    let submissionMethod = self.form.dataset.submissionMethod;
+
     return new Promise((resolve) => {
-      if (self.async) {
+      if (submissionMethod === 'async') {
         self.submitAsync()
       } else {
         self.form.submit();
