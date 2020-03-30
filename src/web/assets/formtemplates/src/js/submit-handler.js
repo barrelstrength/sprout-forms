@@ -215,7 +215,9 @@ class SproutFormsSubmitHandler {
 
       /**
        * @param {Object} response
+       * @param {boolean} response.success
        * @param {string} response.errorDisplayMethod
+       * @param {string} response.message
        */
       let response = JSON.parse(xhr.responseText);
 
