@@ -272,9 +272,9 @@ class EntriesController extends BaseController
 
         $this->createLastEntryId($entry);
 
-        if (Craft::$app->getRequest()->getAcceptsJson()) {
+        $successMessage = Craft::$app->getView()->renderObjectTemplate($entry->getForm()->successMessage, $entry);
 
-            $successMessage = Craft::$app->getView()->renderObjectTemplate($entry->getForm()->successMessage, $entry);
+        if (Craft::$app->getRequest()->getAcceptsJson()) {
 
             return $this->asJson([
                 'success' => true,

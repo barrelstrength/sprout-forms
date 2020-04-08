@@ -8,6 +8,8 @@
     'systemName': systemName
 }) -%}
 {%- set renderingOptions = renderingOptions is defined and renderingOptions is not empty ? renderingOptions : {} -%}
+{%- set lastEntry = craft.sproutForms.lastEntry(form.id) -%}
+{%- set globalErrorsEnabled = form.errorDisplayMethod in ['both', 'global'] ? true : false -%}
 {%- set errors      = entry.getErrors()|length ? entry.getErrors() : false -%}
 {%- set errorClass  = renderingOptions.errorClass is defined ? renderingOptions.errorClass : 'errors' -%}
 {%- set id          = renderingOptions.id is defined ? renderingOptions.id : form.handle ~ '-form' -%}
@@ -30,6 +32,26 @@
 
         <input type="hidden" aria-hidden="true" name="redirect"
             value="{{ redirectUri|hash }}">
+    {% endif %}
+
+    {% if globalErrorsEnabled and errors|length %}
+        {% set errorMessage = view.renderObjectTemplate(form.errorMessage, entry) %}
+        <div id="{{ id }}-message-box" class="sproutforms-message-errors">
+            {{ errorMessage|markdown }}
+            {% set globalErrors = [] %}
+            {% for errors in entry.getErrors() %}
+                {% for error in errors %}
+                    {% set globalErrors = globalErrors|merge([error]) %}
+                {% endfor %}
+            {% endfor %}
+            {% include "errors" with {
+                errors: globalErrors
+            } %}
+        </div>
+    {% endif %}
+    {% if lastEntry and form.id == lastEntry.getForm().id %}
+        {% set successMessage = view.renderObjectTemplate(form.successMessage, lastEntry) %}
+        <div id="{{ id }}-message-box" class="sproutforms-message-success">{{ successMessage|markdown }}:::</div>
     {% endif %}
 
     <div class="fields">
