@@ -7,6 +7,7 @@
 {%- set id               = renderingOptions.id ?? name %}
 {%- set class            = renderingOptions.class ?? name ~ '-field' %}
 {%- set value            = entry is not empty ? entry.getFieldValue(name) : null %}
+{%- set inlineErrorsEnabled = form.errorDisplayMethod in ['both', 'inline'] ? true : false %}
 {%- set errors           = entry is not empty ? entry.getErrors(name) : null %}
 {%- set errorClass       = renderingOptions.errorClass ?? 'errors' %}
 {%- set fieldCssClasses  = field['cssClasses'] is defined and not null ? field.cssClasses : '' %}
@@ -50,10 +51,12 @@
         <div class="input">
             {{ input|raw }}
         </div>
-        {% include "errors" with {
-            errors: errors,
-            name: name
-        } %}
+        {% if inlineErrorsEnabled %}
+            {% include "errors" with {
+                errors: errors,
+                name: name
+            } %}
+        {% endif %}
 
         </{{ fieldHtmlTag }}>
     {%- endif -%}
