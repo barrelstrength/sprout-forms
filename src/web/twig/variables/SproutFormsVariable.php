@@ -306,18 +306,25 @@ class SproutFormsVariable
     }
 
     /**
-     * Gets last entry submitted
+     * Gets last entry submitted and cleans up lastEntryId from session
+     *
+     * @param null $formId
      *
      * @return array|ElementInterface|null
      * @throws MissingComponentException
      */
-    public function getLastEntry()
+    public function getLastEntry($formId = null)
     {
-        if (Craft::$app->getSession()->get('lastEntryId')) {
-            $entryId = Craft::$app->getSession()->get('lastEntryId');
+        if ($entryId = Craft::$app->getSession()->get('lastEntryId')) {
             $entry = SproutForms::$app->entries->getEntryById($entryId);
 
-            Craft::$app->getSession()->remove('lastEntryId');
+            if (!$entry) {
+                return null;
+            }
+
+            if (!$formId || $formId === $entry->getForm()->id) {
+                Craft::$app->getSession()->remove('lastEntryId');
+            }
         }
 
         return $entry ?? null;
