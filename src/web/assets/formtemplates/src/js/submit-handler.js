@@ -55,7 +55,6 @@ class SproutFormsSubmitHandler {
    */
   handleBeforeFormSubmit() {
     let self = this;
-
     this.getBeforeFormSubmitPromise()
       .then(self.onFormSubmitEvent.bind(self))
       .then(() => {
@@ -216,7 +215,7 @@ class SproutFormsSubmitHandler {
       if (xhr.readyState !== 4) {
         return;
       }
-
+    
       /**
        * @param {Object} response
        * @param {boolean} response.success
