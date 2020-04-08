@@ -26,9 +26,17 @@ class BasicSproutFormsNotification extends EmailTemplates
     /**
      * @return string
      */
+    public function getTemplateRoot(): string
+    {
+        return Craft::getAlias('@barrelstrength/sproutforms/templates');
+    }
+
+    /**
+     * @return string
+     */
     public function getPath(): string
     {
-        return Craft::getAlias('@barrelstrength/sproutforms/templates/_integrations/sproutemail/emailtemplates/basic');
+        return '_integrations/sproutemail/emailtemplates/basic';
     }
 }
 
