@@ -156,8 +156,13 @@ class FormsController extends BaseController
 
             return null;
         }
+
         if ($oldTitleFormat !== $currentTitleFormat) {
             SproutForms::$app->entries->resaveElements($form->id);
+        }
+
+        if ($form->formTemplate === 'sproutforms-basictemplates') {
+            Craft::$app->getDeprecator()->log('BasicFormTemplates', 'A form currently uses the legacy Basic Form Templates. The Basic Form Templates were provided to help migrate from Craft 2.0 and have been deprecated. The Basic Form Templates will be removed in Sprout Forms 4.0. Please migrate to use the Accessible Form Templates or a custom template folder.', 'Sprout Forms→'.$form->name.'→Settings→Templates');
         }
 
         Craft::$app->getSession()->setNotice(Craft::t('sprout-forms', 'Form saved.'));
