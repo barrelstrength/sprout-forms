@@ -145,7 +145,7 @@ class SproutFormsSubmitHandler {
   onFormSubmitEvent() {
     let self = this;
 
-    const sproutFormsSubmitEvent = new CustomEvent('sproutFormsSubmit', {
+    const sproutFormsSubmitEvent = new CustomEvent('onSproutFormsSubmit', {
       detail: {
         submitHandler: self
       },
