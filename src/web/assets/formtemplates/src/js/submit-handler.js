@@ -28,7 +28,7 @@ class SproutFormsSubmitHandler {
     this.fieldWrapperIdPrefix = settings.fieldWrapperIdPrefix ?? 'fields-';
     this.fieldWrapperIdSuffix = settings.fieldWrapperIdSuffix ?? '-field';
 
-    // The class used to identify the wrapper for all fields
+    // The selector used to identify the wrapper for all fields
     this.fieldWrapperQuerySelector = settings.fieldWrapperQuerySelector ?? '.field';
 
     this.addFormSubmitEventListener();
@@ -212,7 +212,7 @@ class SproutFormsSubmitHandler {
       if (xhr.readyState !== 4) {
         return;
       }
-    
+
       /**
        * @param {Object} response
        * @param {boolean} response.success
