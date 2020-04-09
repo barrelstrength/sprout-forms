@@ -251,6 +251,7 @@ class Form extends Element
      * Use the name as the string representation.
      *
      * @return string
+     * @noinspection PhpInconsistentReturnPointsInspection
      */
     public function __toString()
     {

@@ -107,7 +107,7 @@ class FrontEndFields extends Component
                         $users[$pos]['group'] = $groupModel;
                     }
                 } else if ($section[0] == 'admins') {
-                    $entryQuery = User::find()->admin(true);
+                    $entryQuery = User::find()->admin();
 
                     $users[$pos]['users'] = $entryQuery->all();
                     $users[$pos]['group'] = 'admin';
@@ -117,7 +117,7 @@ class FrontEndFields extends Component
             $groups = $userGroups->getAllGroups();
             $pos = count($users) + 1;
 
-            $entryQuery = User::find()->admin(true);
+            $entryQuery = User::find()->admin();
 
             $users[$pos]['users'] = $entryQuery->all();
             $users[$pos]['group'] = 'admin';

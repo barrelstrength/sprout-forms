@@ -406,7 +406,9 @@ class EntriesController extends BaseController
      * @param EntryElement $entry
      *
      * @return Response|null
+     * @throws Exception
      * @throws MissingComponentException
+     * @throws Throwable
      */
     private function redirectWithValidationErrors(Entry $entry)
     {

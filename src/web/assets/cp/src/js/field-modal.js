@@ -4,11 +4,17 @@
  * @license https://craftcms.github.io/license
  */
 
+/* global Craft */
+/* global Garnish */
+
 if (typeof Craft.SproutForms === typeof undefined) {
   Craft.SproutForms = {};
 }
 
 (function($) {
+  /**
+   * @param window.WebKitMutationObserver
+   */
   let MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 
   // If mutation observer is not supported, create a harness for it for graceful degradation.
@@ -25,6 +31,8 @@ if (typeof Craft.SproutForms === typeof undefined) {
   /**
    * SproutForms.FieldModal class
    * Handles the modal window for creating new fields.
+   *
+   * @param Garnish.Modal
    */
   Craft.SproutForms.FieldModal = Garnish.Modal.extend({
 

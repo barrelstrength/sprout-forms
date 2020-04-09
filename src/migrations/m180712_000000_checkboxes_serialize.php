@@ -1,4 +1,6 @@
-<?php
+<?php /** @noinspection ClassConstantCanBeUsedInspection */
+/** @noinspection ClassConstantCanBeUsedInspection */
+
 /**
  * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC

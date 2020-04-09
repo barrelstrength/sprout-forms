@@ -5,6 +5,7 @@
  */
 
 /* global Craft */
+/* global Garnish */
 /* global dragula */
 
 // import autoScroll from 'dom-autoscroller/dist/dom-autoscroller.min';

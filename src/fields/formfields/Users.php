@@ -96,7 +96,7 @@ class Users extends CraftUsers
     public function getCompatibleCraftFieldTypes(): array
     {
         return [
-            CraftEntries::class
+            CraftUsers::class
         ];
     }
 }

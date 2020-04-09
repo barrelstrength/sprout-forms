@@ -815,7 +815,9 @@ class Forms extends Component
      */
     public function getAllEnabledCaptchas(): array
     {
-        $sproutFormsSettings = Craft::$app->getPlugins()->getPlugin('sprout-forms')->getSettings();
+        /** @var SproutForms $plugin */
+        $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
+        $sproutFormsSettings = $plugin->getSettings();
         $captchaTypes = $this->getAllCaptchas();
         $captchas = [];
 

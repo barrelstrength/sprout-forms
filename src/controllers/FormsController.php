@@ -14,6 +14,7 @@ use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\base\ElementInterface;
 use craft\db\Table;
+use craft\errors\ElementNotFoundException;
 use craft\errors\MissingComponentException;
 use craft\errors\WrongEditionException;
 use craft\helpers\Json;
@@ -24,6 +25,7 @@ use Throwable;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
 use yii\base\InvalidRouteException;
+use yii\db\StaleObjectException;
 use yii\web\BadRequestHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\HttpException;
@@ -351,6 +353,9 @@ class FormsController extends BaseController
      * @return Response
      * @throws BadRequestHttpException
      * @throws ForbiddenHttpException
+     * @throws InvalidConfigException
+     * @throws Throwable
+     * @throws StaleObjectException
      */
     public function actionDeleteFormTab(): Response
     {
@@ -364,15 +369,17 @@ class FormsController extends BaseController
         // @todo - requests the deleteAction method grabs all data attributes not just the ID
         $tabRecord = FieldLayoutTabRecord::findOne($tabId);
 
-        /** @var Form $form */
-        $form = Form::find()
-            ->fieldLayoutId($tabRecord->layoutId)
-            ->one();
+        if ($tabRecord) {
+            /** @var Form $form */
+            $form = Form::find()
+                ->fieldLayoutId($tabRecord->layoutId)
+                ->one();
 
-        if (SproutForms::$app->fields->deleteTab($form, $tabRecord)) {
-            return $this->asJson([
-                'success' => true
-            ]);
+            if (SproutForms::$app->fields->deleteTab($form, $tabRecord)) {
+                return $this->asJson([
+                    'success' => true
+                ]);
+            }
         }
 
         return $this->asJson([
@@ -463,6 +470,10 @@ class FormsController extends BaseController
 
         $formId = Craft::$app->getRequest()->getBodyParam('formId');
         $form = SproutForms::$app->forms->getFormById($formId);
+
+        if (!$form) {
+            throw new ElementNotFoundException('Form not found.');
+        }
 
         SproutForms::$app->forms->saveForm($form);
 

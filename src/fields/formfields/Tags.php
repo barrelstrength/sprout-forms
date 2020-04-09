@@ -8,7 +8,6 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutforms\base\FormFieldTrait;
-use barrelstrength\sproutforms\fields\formfields\base\BaseTagsFormField;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\fields\Tags as CraftTags;
@@ -91,10 +90,7 @@ class Tags extends CraftTags
 
         return TemplateHelper::raw($rendered);
     }
-
-    // Private Methods
-    // =======================================================================
-
+    
     /**
      * @inheritdoc
      */

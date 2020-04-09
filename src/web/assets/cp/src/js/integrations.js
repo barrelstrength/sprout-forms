@@ -111,7 +111,7 @@ class SproutFormsIntegration {
     let closeOptgroup = false;
     $select.append('<option value="">' + Craft.t('sprout-forms', 'None') + '</option>');
 
-    for (i = 0; i < fields.length; i++) {
+    for (let i = 0; i < fields.length; i++) {
       const field = fields[i];
       let selectedCode = '';
       const lastItem = i === (fields.length - 1);

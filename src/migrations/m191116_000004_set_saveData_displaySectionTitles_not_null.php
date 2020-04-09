@@ -8,6 +8,7 @@ namespace barrelstrength\sproutforms\migrations;
 
 use Craft;
 use craft\config\DbConfig;
+use craft\db\Connection;
 use craft\db\Migration;
 
 /**
@@ -35,7 +36,7 @@ class m191116_000004_set_saveData_displaySectionTitles_not_null extends Migratio
         ], [], false);
 
         // https://github.com/yiisoft/yii2/issues/4492
-        if (Craft::$app->getDb()->getDriverName() === DbConfig::DRIVER_PGSQL) {
+        if (Craft::$app->getDb()->getDriverName() === Connection::DRIVER_PGSQL) {
             $this->alterColumn($table, 'displaySectionTitles', 'SET NOT NULL');
             $this->alterColumn($table, 'displaySectionTitles', 'SET DEFAULT FALSE');
             $this->alterColumn($table, 'saveData', 'SET NOT NULL');

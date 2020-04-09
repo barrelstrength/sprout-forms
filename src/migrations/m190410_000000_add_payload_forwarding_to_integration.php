@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection ClassConstantCanBeUsedInspection */
+
 /**
  * @link      https://sprout.barrelstrengthdesign.com
  * @copyright Copyright (c) Barrel Strength Design LLC
@@ -7,6 +8,7 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
+use barrelstrength\sproutforms\integrationtypes\CustomEndpoint;
 use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
 use Craft;
 use craft\db\Migration;
