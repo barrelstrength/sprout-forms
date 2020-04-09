@@ -17,6 +17,18 @@
 {%- set redirectUri = form.redirectUri -%}
 {%- set rules       = form.getRules() -%}
 
+{%- set globalErrorListHtml -%}
+    {% set globalErrors = [] %}
+    {% for errors in entry.getErrors() %}
+        {% for error in errors %}
+            {% set globalErrors = globalErrors|merge([error]) %}
+        {% endfor %}
+    {% endfor %}
+    {% include "errors" with {
+        errors: globalErrors
+    } %}
+{%- endset -%}
+
 <form method="post" accept-charset="utf-8" enctype="multipart/form-data" data-submission-method="{{ form.submissionMethod }}"
     {%- if id %} id="{{ id }}"{% endif -%}
     {%- if class %} class="{{ class -}}{%- if errors %} {{ errorClass }}{% endif -%}"{% endif -%}
@@ -34,24 +46,18 @@
         <input type="hidden" name="redirect" value="{{ redirectUri|hash }}">
     {% endif %}
 
-    {% if globalErrorsEnabled and errors|length %}
+    {% if globalErrorsEnabled and errors|length and (form.errorMessage or globalErrorListHtml) %}
         {% set errorMessage = view.renderObjectTemplate(form.errorMessage, entry) %}
         <div id="{{ id }}-message-box" class="sproutforms-message-errors">
             {{ errorMessage|markdown }}
-            {% set globalErrors = [] %}
-            {% for errors in entry.getErrors() %}
-                {% for error in errors %}
-                    {% set globalErrors = globalErrors|merge([error]) %}
-                {% endfor %}
-            {% endfor %}
-            {% include "errors" with {
-                errors: globalErrors
-            } %}
+            {{ globalErrorListHtml }}
         </div>
     {% endif %}
-    {% if lastEntry and form.id == lastEntry.getForm().id %}
-        {% set successMessage = view.renderObjectTemplate(form.successMessage, lastEntry) %}
-        <div id="{{ id }}-message-box" class="sproutforms-message-success">{{ successMessage|markdown }}:::</div>
+
+    {% if lastEntry and form.id == lastEntry.getForm().id and form.successMessage %}
+        {% set successMessageTemplate = form.successMessage ?? '' %}
+        {% set successMessage = view.renderObjectTemplate(successMessageTemplate, lastEntry) %}
+        <div id="{{ id }}-message-box" class="sproutforms-message-success">{{ successMessage|markdown }}</div>
     {% endif %}
 
     <div class="fields">
