@@ -238,6 +238,8 @@ class SproutFormsSubmitHandler {
             messageClass: self.successMessageClass
           });
 
+          self.form.reset();
+
         } else {
 
           let globalErrorsEnabled = response && response.errorDisplayMethod
