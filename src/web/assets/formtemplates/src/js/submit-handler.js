@@ -192,7 +192,7 @@ class SproutFormsSubmitHandler {
   }
 
   onFormSubmitCancelledEvent() {
-    const cancelSproutFormsSubmitEvent = new CustomEvent('onSproutFormSubmitCancelled', {
+    const cancelSproutFormsSubmitEvent = new CustomEvent('onSproutFormsSubmitCancelled', {
       bubbles: true
     });
 

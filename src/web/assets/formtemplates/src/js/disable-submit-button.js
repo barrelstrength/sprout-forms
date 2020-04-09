@@ -37,7 +37,7 @@ class SproutFormsDisableSubmitButton {
     }, false);
 
     // Mark all submit buttons as enabled if the form submission is cancelled
-    this.form.addEventListener('onSproutFormSubmitCancelled', function(event) {
+    this.form.addEventListener('onSproutFormsSubmitCancelled', function(event) {
       self.submitButtons.forEach(function(button) {
         // Add slight delay, for kicks
         setTimeout(() => {
