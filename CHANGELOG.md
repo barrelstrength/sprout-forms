@@ -1,22 +1,37 @@
 # Changelog
 
-## UNRELEASED
+## 3.9.0 - 2020-04-09 [CRITICAL]
+
+> {note} This is a recommended upgrade and fixes a vulnerability that could occur in some scenarios with custom Email Templates.
+
+> {warning} If your Form Templates use AJAX or any custom javascript please review the [upgrade notes](https://sprout.barrelstrengthdesign.com/docs/forms/installing-and-updating-craft-3.html#upgrading-to-forms-v3-9-0) and see the new [Javascript Events](https://sprout.barrelstrengthdesign.com/docs/forms/javascript-events.html)
 
 ### Added
 - Added native support for AJAX Form Submissions
 - Added 'Submission Method' setting to control form submission behavior
-- Added 'Success Message' and 'Error Message' settings to manage global messaging on a per-form basis. Messages support rendering values from the submitted form as well as Markdown. ([#269], [#449])
+- Added 'Success Message' and 'Error Message' settings to manage global messaging on a per-form basis. Messages support Markdown and rendering values from the submitted form entry. ([#269], [#449])
 - Added 'Error Display Method' setting to control whether errors display inline or globally
 - Added `beforeSproutFormsSubmit`, `sproutFormsSubmit`, `afterSproutFormsSubmit`, and `onSproutFormSubmitCancelled` javascript events in front-end submit workflow ([#448])
+- Added `barrelstrength\sproutbaseemail\base\EmailTemplates::getTemplateRoot()`
 
 ### Changed
 - Added polyfill for front-end javascript resources to support additional browsers
 - Improved front-end JS to make less assumptions about how a user might customize a given form ([#413])
 - Updated `disable-submit-button.js` behavior to watch new events and re-enable submit button after submissions
+- Updated Email Template rendering to treat Email Template folder as a subfolder of the template folder to allow more flexible use of extending other templates ([#111][#111-sprout-email], [#122][#122-sprout-email])
+- Updated `craft.sproutForms.lastEntry()` tag to support more than one form on a page 
+- Updated `barrelstrength\sproutbaseemail\base\EmailTemplates::getPath()` to define path within target template folder
+- Updated `barrelstrength/sprout-base-email` requirement to v1.2.7
+- Updated `barrelstrength/sprout-base-fields` requirement to v1.3.4
 
 ### Fixed
 - Fixed issue where Default Section segment could accidentally be translated ([#446])
 - Fixed issue where for Form-specific 'Enable Captchas' setting was ignored ([#450])
+- Fixed issue where accessing Email Dropdown value could throw error if it didn't exist
+- Fixed saving Address Field when using Postgres
+
+### Security
+- Fixed SSTI vulnerability
 
 [#269]: https://github.com/barrelstrength/craft-sprout-forms/issues/269
 [#413]: https://github.com/barrelstrength/craft-sprout-forms/issues/413
@@ -24,6 +39,8 @@
 [#448]: https://github.com/barrelstrength/craft-sprout-forms/issues/448
 [#449]: https://github.com/barrelstrength/craft-sprout-forms/issues/449
 [#450]: https://github.com/barrelstrength/craft-sprout-forms/issues/450
+[#111-sprout-email]: https://github.com/barrelstrength/craft-sprout-email/issues/111
+[#122-sprout-email]: https://github.com/barrelstrength/craft-sprout-email/issues/122
 
 ## 3.8.8 - 2020-03-20
 
