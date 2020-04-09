@@ -232,11 +232,13 @@ class SproutFormsSubmitHandler {
 
         if (response.success) {
 
-          self.displayMessageBox({
-            id: self.messageBoxId,
-            message: response.message,
-            messageClass: self.successMessageClass
-          });
+          if (response.message) {
+            self.displayMessageBox({
+              id: self.messageBoxId,
+              message: response.message,
+              messageClass: self.successMessageClass
+            });
+          }
 
           self.form.reset();
 
