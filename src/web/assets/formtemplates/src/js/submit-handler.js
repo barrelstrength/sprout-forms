@@ -15,9 +15,6 @@ class SproutFormsSubmitHandler {
     this.submitButtons = this.form.querySelectorAll('[type="submit"]');
     this.messageBoxId = this.formId + '-message-box';
 
-    this.globalErrorsEnabled = settings.globalErrorsEnabled ?? false;
-    this.inlineErrorsEnabled = settings.inlineErrorsEnabled ?? true;
-
     this.successMessageClass = settings.successMessageClass ?? 'sproutforms-message-success';
     this.errorMessageClass = settings.errorMessageClass ?? 'sproutforms-message-errors';
     this.failureMessage = settings.failureMessage ?? 'Submission failed';
