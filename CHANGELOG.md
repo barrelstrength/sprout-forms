@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.9.0.1 - 2020-04-09
+
+### Added
+- Added `barrelstrength\sproutbaseemail\base\EmailTemplates::getTemplateMode()`
+
+### Changed
+- Updated `barrelstrength/sprout-base-email` requirement to v1.2.8
+
+### Fixed
+- Fixed issue where Email Templates may render in the incorrect Template Mode in some scenarios
+
 ## 3.9.0 - 2020-04-09 [CRITICAL]
 
 > {note} This is a recommended upgrade and fixes a vulnerability that could occur in some scenarios with custom Email Templates.
@@ -31,7 +42,7 @@
 - Fixed saving Address Field when using Postgres
 
 ### Security
-- Fixed SSTI vulnerability
+- Fixed injection vulnerability
 
 [#269]: https://github.com/barrelstrength/craft-sprout-forms/issues/269
 [#413]: https://github.com/barrelstrength/craft-sprout-forms/issues/413
