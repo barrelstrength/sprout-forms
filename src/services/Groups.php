@@ -73,7 +73,7 @@ class Groups extends Component
 
         $affectedRows = Craft::$app->getDb()
             ->createCommand()
-            ->delete('{{%sproutforms_formgroups}}', ['[[id]]' => $groupId])
+            ->delete(FormGroupRecord::tableName(), ['[[id]]' => $groupId])
             ->execute();
 
         return (bool)$affectedRows;
@@ -126,7 +126,7 @@ class Groups extends Component
     {
         $query = (new Query())
             ->select('*')
-            ->from('{{%sproutforms_formgroups}}')
+            ->from(FormGroupRecord::tableName())
             ->where('groupId=:groupId', ['groupId' => $groupId])
             ->orderBy('name')
             ->all();

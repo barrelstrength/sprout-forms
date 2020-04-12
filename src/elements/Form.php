@@ -13,6 +13,7 @@ use barrelstrength\sproutforms\elements\actions\Delete;
 use barrelstrength\sproutforms\elements\db\FormQuery;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\records\Form as FormRecord;
+use barrelstrength\sproutforms\records\Entry as EntryRecord;
 use barrelstrength\sproutforms\rules\FieldRule;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
@@ -452,7 +453,7 @@ class Form extends Element
             {
                 $totalEntries = (new Query())
                     ->select('COUNT(*)')
-                    ->from('{{%sproutforms_entries}}')
+                    ->from(EntryRecord::tableName())
                     ->where(['formId' => $this->id])
                     ->scalar();
 

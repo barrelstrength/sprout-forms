@@ -9,6 +9,9 @@ namespace barrelstrength\sproutforms\elements\db;
 
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\models\EntryStatus;
+use barrelstrength\sproutforms\records\Entry as EntryRecord;
+use barrelstrength\sproutforms\records\Form as FormRecord;
+use barrelstrength\sproutforms\records\EntryStatus as EntryStatusRecord;
 use barrelstrength\sproutforms\SproutForms;
 use craft\db\Query;
 use craft\elements\db\ElementQuery;
@@ -144,7 +147,7 @@ class EntryQuery extends ElementQuery
             $formIds = (new Query())
                 ->select(['formId'])
                 ->distinct()
-                ->from(['{{%sproutforms_entries}}'])
+                ->from([EntryRecord::tableName()])
                 ->where(Db::parseParam('id', $this->id))
                 ->column();
 
@@ -174,14 +177,14 @@ class EntryQuery extends ElementQuery
             'sproutforms_entrystatuses.handle as statusHandle'
         ]);
 
-        $this->query->innerJoin('{{%sproutforms_forms}} sproutforms_forms', '[[sproutforms_forms.id]] = [[sproutforms_entries.formId]]');
-        $this->query->innerJoin('{{%sproutforms_entrystatuses}} sproutforms_entrystatuses', '[[sproutforms_entrystatuses.id]] = [[sproutforms_entries.statusId]]');
+        $this->query->innerJoin(FormRecord::tableName().' sproutforms_forms', '[[sproutforms_forms.id]] = [[sproutforms_entries.formId]]');
+        $this->query->innerJoin(EntryStatusRecord::tableName().' sproutforms_entrystatuses', '[[sproutforms_entrystatuses.id]] = [[sproutforms_entries.statusId]]');
 
         $this->query->andWhere(Db::parseParam(
             '[[sproutforms_forms.saveData]]', true
         ));
 
-        $this->subQuery->innerJoin('{{%sproutforms_entrystatuses}} sproutforms_entrystatuses', '[[sproutforms_entrystatuses.id]] = [[sproutforms_entries.statusId]]');
+        $this->subQuery->innerJoin(EntryStatusRecord::tableName().' sproutforms_entrystatuses', '[[sproutforms_entrystatuses.id]] = [[sproutforms_entries.statusId]]');
 
         if ($this->formId) {
             $this->subQuery->andWhere(Db::parseParam(

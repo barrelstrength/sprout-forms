@@ -15,6 +15,7 @@ use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\migrations\CreateFormContentTable;
 use barrelstrength\sproutforms\records\Form as FormRecord;
+use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
 use barrelstrength\sproutforms\rules\FieldRule;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
@@ -503,7 +504,7 @@ class Forms extends Component
         foreach ($integrations as $integration) {
             $integrationResult = (new Query())
                 ->select(['id', 'settings'])
-                ->from(['{{%sproutforms_integrations}}'])
+                ->from([IntegrationRecord::tableName()])
                 ->where(['id' => $integration->id])
                 ->one();
 

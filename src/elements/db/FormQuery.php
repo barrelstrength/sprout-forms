@@ -9,6 +9,7 @@ namespace barrelstrength\sproutforms\elements\db;
 
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\models\FormGroup;
+use barrelstrength\sproutforms\records\FormGroup as FormGroupRecord;
 use barrelstrength\sproutforms\SproutForms;
 use craft\db\Query;
 use craft\elements\db\ElementQuery;
@@ -127,7 +128,7 @@ class FormQuery extends ElementQuery
         } else if ($value !== null) {
             $this->groupId = (new Query())
                 ->select(['id'])
-                ->from(['{{%sproutforms_formgroups}}'])
+                ->from([FormGroupRecord::tableName()])
                 ->where(Db::parseParam('name', $value))
                 ->column();
         } else {

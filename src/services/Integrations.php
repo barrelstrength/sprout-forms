@@ -99,7 +99,7 @@ class Integrations extends Component
                 'integrations.settings',
                 'integrations.enabled'
             ])
-            ->from(['{{%sproutforms_integrations}} integrations'])
+            ->from([IntegrationRecord::tableName().' integrations'])
             ->where(['integrations.formId' => $formId])
             ->all();
 
@@ -132,7 +132,7 @@ class Integrations extends Component
                 'integrations.settings',
                 'integrations.enabled'
             ])
-            ->from(['{{%sproutforms_integrations}} integrations'])
+            ->from([IntegrationRecord::tableName().' integrations'])
             ->where(['integrations.id' => $integrationId])
             ->one();
 
@@ -272,7 +272,7 @@ class Integrations extends Component
     {
         $integrationLogs = (new Query())
             ->select(['*'])
-            ->from(['{{%sproutforms_integrations_log}}'])
+            ->from([IntegrationLogRecord::tableName()])
             ->where(['entryId' => $entryId])
             ->all();
 

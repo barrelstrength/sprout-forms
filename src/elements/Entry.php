@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutforms\elements;
 
+use barrelstrength\sproutforms\records\EntriesSpamLog as EntriesSpamLogRecord;
 use barrelstrength\sproutforms\base\Captcha;
 use barrelstrength\sproutforms\elements\actions\MarkAsDefaultStatus;
 use barrelstrength\sproutforms\elements\actions\MarkAsSpam;
@@ -606,7 +607,7 @@ class Entry extends Element
     {
         $spamLogEntries = (new Query())
             ->select('*')
-            ->from('{{%sproutforms_entries_spam_log}}')
+            ->from(EntriesSpamLogRecord::tableName())
             ->where(['entryId' => $this->id])
             ->all();
 

@@ -12,6 +12,8 @@ use barrelstrength\sproutbasereports\elements\Report;
 use barrelstrength\sproutbasereports\SproutBaseReports;
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Form;
+use barrelstrength\sproutforms\records\Entry as EntryRecord;
+use barrelstrength\sproutforms\records\EntryStatus as EntryStatusRecord;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\db\Query;
@@ -110,8 +112,8 @@ class EntriesDataSource extends DataSource
             ->from($contentTable.' AS formcontenttable')
             ->innerJoin('{{%elements}} elements', '[[formcontenttable.elementId]] = [[elements.id]]')
             ->innerJoin('{{%elements_sites}} elements_sites', '[[elements_sites.elementId]] = [[elements.id]]')
-            ->innerJoin('{{%sproutforms_entries}} entries', '[[entries.id]] = [[elements.id]]')
-            ->innerJoin('{{%sproutforms_entrystatuses}} entrystatuses', '[[entries.statusId]] = [[entrystatuses.id]]')
+            ->innerJoin(EntryRecord::tableName().' entries', '[[entries.id]] = [[elements.id]]')
+            ->innerJoin(EntryStatusRecord::tableName().' entrystatuses', '[[entries.statusId]] = [[entrystatuses.id]]')
             ->where(['elements.dateDeleted' => null]);
 
         if ($startDate && $endDate) {

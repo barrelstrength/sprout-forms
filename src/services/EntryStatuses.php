@@ -10,6 +10,7 @@ namespace barrelstrength\sproutforms\services;
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\models\EntryStatus;
+use barrelstrength\sproutforms\records\Entry as EntryRecord;
 use barrelstrength\sproutforms\records\EntryStatus as EntryStatusRecord;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
@@ -249,7 +250,7 @@ class EntryStatuses extends Component
         foreach ($formEntryElements as $key => $formEntryElement) {
 
             $success = Craft::$app->db->createCommand()->update(
-                '{{%sproutforms_entries}}',
+                EntryRecord::tableName(),
                 ['statusId' => $spam->id],
                 ['id' => $formEntryElement->id]
             )->execute();
@@ -278,7 +279,7 @@ class EntryStatuses extends Component
 
         foreach ($formEntryElements as $key => $formEntryElement) {
             $success = Craft::$app->db->createCommand()->update(
-                '{{%sproutforms_entries}}',
+                EntryRecord::tableName(),
                 ['statusId' => $defaultStatus->id],
                 ['id' => $formEntryElement->id]
             )->execute();

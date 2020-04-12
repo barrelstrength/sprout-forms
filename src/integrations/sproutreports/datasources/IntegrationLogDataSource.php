@@ -11,6 +11,9 @@ use barrelstrength\sproutbasereports\base\DataSource;
 use barrelstrength\sproutbasereports\elements\Report;
 use barrelstrength\sproutbasereports\SproutBaseReports;
 use barrelstrength\sproutforms\elements\Form;
+use barrelstrength\sproutforms\records\Form as FormRecord;
+use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
+use barrelstrength\sproutforms\records\IntegrationLog as IntegrationLogRecord;
 use Craft;
 use craft\db\Query;
 use craft\helpers\DateTimeHelper;
@@ -82,9 +85,9 @@ class IntegrationLogDataSource extends DataSource
 
         $formQuery = $query
             ->select('log.id id, log.dateCreated dateCreated, log.dateUpdated dateUpdated, log.entryId entryId, integrations.name integrationName, forms.name formName, log.message message, log.success success, log.status status')
-            ->from('{{%sproutforms_integrations_log}} AS log')
-            ->innerJoin('{{%sproutforms_integrations}} integrations', '[[log.integrationId]] = [[integrations.id]]')
-            ->innerJoin('{{%sproutforms_forms}} forms', '[[integrations.formId]] = [[forms.id]]');
+            ->from(IntegrationLogRecord::tableName().' log')
+            ->innerJoin(IntegrationRecord::tableName().' integrations', '[[log.integrationId]] = [[integrations.id]]')
+            ->innerJoin(FormRecord::tableName().' forms', '[[integrations.formId]] = [[forms.id]]');
 
         if ($formId != '*') {
             $formQuery->andWhere(['[[integrations.formId]]' => $formId]);

@@ -11,6 +11,9 @@ use barrelstrength\sproutbasereports\base\DataSource;
 use barrelstrength\sproutbasereports\elements\Report;
 use barrelstrength\sproutbasereports\SproutBaseReports;
 use barrelstrength\sproutforms\elements\Form;
+use barrelstrength\sproutforms\records\Form as FormRecord;
+use barrelstrength\sproutforms\records\EntriesSpamLog as EntriesSpamLogRecord;
+use barrelstrength\sproutforms\records\Entry as EntryRecord;
 use Craft;
 use craft\db\Query;
 use craft\helpers\DateTimeHelper;
@@ -76,13 +79,13 @@ class SpamLogDataSource extends DataSource
                 'entries_spam_log.errors',
                 'entries_spam_log.dateCreated',
             ])
-            ->from('{{%sproutforms_entries_spam_log}} AS entries_spam_log')
+            ->from(EntriesSpamLogRecord::tableName().' entries_spam_log')
             ->innerJoin(
-                '{{%sproutforms_entries}} AS entries',
+                EntryRecord::tableName().' AS entries',
                 '[[entries_spam_log.entryId]] = [[entries.id]]'
             )
             ->innerJoin(
-                '{{%sproutforms_forms}} AS forms',
+                FormRecord::tableName().' forms',
                 '[[entries.formId]] = [[forms.id]]'
             );
 

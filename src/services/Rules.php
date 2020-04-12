@@ -69,7 +69,7 @@ class Rules extends Component
                 'rules.settings',
                 'rules.enabled'
             ])
-            ->from(['{{%sproutforms_rules}} rules'])
+            ->from([RulesRecord::tableName().' rules'])
             ->where(['rules.formId' => $formId]);
 
         if ($type !== null) {
@@ -112,7 +112,7 @@ class Rules extends Component
                 'rules.settings',
                 'rules.enabled'
             ])
-            ->from(['{{%sproutforms_rules}} rules'])
+            ->from([RulesRecord::tableName().' rules'])
             ->where(['rules.id' => $ruleId])
             ->one();
 
