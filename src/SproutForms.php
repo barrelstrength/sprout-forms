@@ -7,7 +7,6 @@
 
 namespace barrelstrength\sproutforms;
 
-use barrelstrength\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbase\base\SproutEditionsInterface;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutbase\SproutBaseHelper;
@@ -82,7 +81,6 @@ use yii\web\ServerErrorHttpException;
  */
 class SproutForms extends Plugin implements SproutEditionsInterface
 {
-    use BaseSproutTrait;
 
     const EDITION_LITE = 'lite';
 
@@ -94,13 +92,6 @@ class SproutForms extends Plugin implements SproutEditionsInterface
      * @var App
      */
     public static $app;
-
-    /**
-     * Identify our plugin for BaseSproutTrait
-     *
-     * @var string
-     */
-    public static $pluginHandle = 'sprout-forms';
 
     /**
      * @var bool

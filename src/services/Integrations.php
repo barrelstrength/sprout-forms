@@ -336,10 +336,7 @@ class Integrations extends Component
 
             $integration->formEntry = $entry;
 
-            Craft::info(Craft::t('sprout-forms', 'Running Integration: {integrationName} for Form Entry {entryId}', [
-                'integrationName' => $integration->name,
-                'entryId' => $entryId
-            ]), __METHOD__);
+            Craft::info('Running Integration: '.$integration->name.' for Form Entry '.$entryId, __METHOD__);
 
             if (!$this->sendRuleIsTrue($integration, $entry)) {
                 $integrationNotSentMessage = Craft::t('sprout-forms', 'Integration not sent. Send Rule setting did not evaluate to true.');

@@ -137,7 +137,7 @@ class SaveEntryEvent extends NotificationEvent
             return $formEntry;
         }
 
-        Craft::warning('sprout-forms', 'Unable to generate a mock form Entry. Make sure you have at least one Entry submitted in your database.');
+        Craft::warning('Unable to generate a mock form Entry. Make sure you have at least one Entry submitted in your database.', __METHOD__);
 
         return null;
     }
