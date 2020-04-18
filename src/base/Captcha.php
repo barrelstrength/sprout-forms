@@ -51,23 +51,13 @@ abstract class Captcha extends Model
     public $form;
 
     /**
-     * Generates the Captcha ID
+     * Converts namespace to string that can be used as an ID in HTML
      *
      * @return string
-     * @throws ReflectionException
      */
     public function getCaptchaId(): string
     {
-        $pluginHandle = Craft::$app->getPlugins()->getPluginHandleByClass(get_class($this));
-
-        // Build $captchaId: pluginhandle-captchaclassname
-        $pluginHandleWithoutSpaces = str_replace('-', '', $pluginHandle);
-
-        $captchaClass = (new ReflectionClass($this))->getShortName();
-
-        $captchaId = $pluginHandleWithoutSpaces.'-'.$captchaClass;
-
-        $this->captchaId = strtolower($captchaId);
+        $this->captchaId = strtolower(str_replace('\\', '-', get_class($this)));
 
         return $this->captchaId;
     }
