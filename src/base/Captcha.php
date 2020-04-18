@@ -51,18 +51,6 @@ abstract class Captcha extends Model
     public $form;
 
     /**
-     * Converts namespace to string that can be used as an ID in HTML
-     *
-     * @return string
-     */
-    public function getCaptchaId(): string
-    {
-        $this->captchaId = strtolower(str_replace('\\', '-', get_class($this)));
-
-        return $this->captchaId;
-    }
-
-    /**
      * The name of the captcha
      *
      * @return string
@@ -80,7 +68,6 @@ abstract class Captcha extends Model
      * Returns any values saved as settings for this captcha
      *
      * @return null
-     * @throws ReflectionException
      */
     public function getSettings()
     {
@@ -88,7 +75,7 @@ abstract class Captcha extends Model
         $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
         $sproutFormsSettings = $plugin->getSettings();
 
-        return $sproutFormsSettings->captchaSettings[$this->getCaptchaId()] ?? null;
+        return $sproutFormsSettings->captchaSettings[get_class($this)] ?? null;
     }
 
     /**

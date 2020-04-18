@@ -47,18 +47,20 @@
 {% set captchas = craft.sproutForms.getAllCaptchas() %}
 {% for captcha in captchas %}
 
+    {% set captchaId = className(captcha)|kebab %}
+
     {% set isEnabled = settings['captchaSettings'][className(captcha)]['enabled'] ?? false %}
     {{ forms.lightswitchField({
         label: captcha.getName(),
         instructions: captcha.getDescription(),
         name: 'captchaSettings[' ~ className(captcha) ~ '][enabled]',
-        toggle: captcha.getCaptchaId(),
+        toggle: captchaId,
         on: isEnabled,
         onLabel: "Enable"|t('sprout-forms'),
     }) }}
 
     {% if captcha.getCaptchaSettingsHtml()|length %}
-        <div id="{{ captcha.getCaptchaId() }}" class="{{ not isEnabled ? "hidden" : '' }}">
+        <div id="{{ captchaId }}" class="{{ not isEnabled ? "hidden" : '' }}">
             {{ captcha.getCaptchaSettingsHtml()|raw }}
         </div>
     {% endif %}
