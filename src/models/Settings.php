@@ -27,7 +27,7 @@ class Settings extends Model implements SproutSettingsInterface
 
     public $defaultSection = 'entries';
 
-    public $formTemplateDefaultValue = '';
+    public $formTemplateId = '';
 
     public $enableSaveData = true;
 
@@ -122,7 +122,7 @@ class Settings extends Model implements SproutSettingsInterface
     {
         $rules = parent::defineRules();
 
-        $rules[] = [['formTemplateDefaultValue'], 'required', 'on' => 'general'];
+        $rules[] = [['formTemplateId'], 'required', 'on' => 'general'];
 
         return $rules;
     }

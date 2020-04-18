@@ -692,14 +692,14 @@ class Forms extends Component
         $defaultVersion = new AccessibleTemplates();
         $defaultTemplate = $defaultVersion->getPath();
 
-        if ($settings->formTemplateDefaultValue) {
-            $templatePath = $this->getFormTemplateById($settings->formTemplateDefaultValue);
+        if ($settings->formTemplateId) {
+            $templatePath = $this->getFormTemplateById($settings->formTemplateId);
             if ($templatePath) {
                 // custom path by template API
                 $templateFolder = $templatePath->getPath();
             } else {
                 // custom folder on site path
-                $templateFolder = $this->getSitePath($settings->formTemplateDefaultValue);
+                $templateFolder = $this->getSitePath($settings->formTemplateId);
             }
         }
 

@@ -21,12 +21,12 @@
 {{ forms.field({
     label: "Default Form Templates"|t('sprout-forms'),
     required: true,
-    errors: (settings is defined ? settings.getErrors('formTemplateDefaultValue') : null),
+    errors: (settings is defined ? settings.getErrors('formTemplateId') : null),
     instructions: "The default templates that will be used to output your forms when using the displayForm tag if no Form Templates are selected for a given form. Add additional form templates via the Form Templates API or providing a custom template path."|t('sprout-forms'),
 }, sproutFields.selectOther({
-    name: 'formTemplateDefaultValue',
+    name: 'formTemplateId',
     options: templateOptions,
-    value: settings.formTemplateDefaultValue ?? null,
+    value: settings.formTemplateId ?? null,
     otherPlaceholderText: '_forms/mycustomtemplates'|t('sprout-forms')
 })) }}
 
