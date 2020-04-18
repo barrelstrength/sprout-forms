@@ -7,6 +7,8 @@
 
 namespace barrelstrength\sproutforms;
 
+use barrelstrength\sproutbase\base\SproutDependencyInterface;
+use barrelstrength\sproutbase\base\SproutDependencyTrait;
 use barrelstrength\sproutbase\base\SproutEditionsInterface;
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutbase\SproutBaseHelper;
@@ -55,6 +57,8 @@ use craft\base\Plugin;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
+use craft\helpers\ProjectConfig;
+use craft\helpers\ProjectConfig as ProjectConfigHelper;
 use craft\helpers\UrlHelper;
 use craft\services\Dashboard;
 use craft\services\Fields;
@@ -72,15 +76,16 @@ use yii\web\Response;
 use yii\web\ServerErrorHttpException;
 
 /**
- *
  * @property null|array           $cpNavItem
  * @property array                $cpUrlRules
  * @property $this|Response|mixed $settingsResponse
  * @property null|string          $upgradeUrl
+ * @property array                $sproutDependencies
  * @property array                $userPermissions
  */
-class SproutForms extends Plugin implements SproutEditionsInterface
+class SproutForms extends Plugin implements SproutEditionsInterface, SproutDependencyInterface
 {
+    use SproutDependencyTrait;
 
     const EDITION_LITE = 'lite';
 
@@ -308,6 +313,7 @@ class SproutForms extends Plugin implements SproutEditionsInterface
 
         if (Craft::$app->getUser()->checkPermission('sproutForms-viewNotifications')) {
             if (!$sproutEmailIsEnabled || ($sproutEmailIsEnabled && $this->getSettings()->showNotificationsTab)) {
+
                 $parent['subnav']['notifications'] = [
                     'label' => $emailNavLabel,
                     'url' => $sproutEmailIsEnabled ? 'sprout-email/notifications' : 'sprout-forms/notifications'
@@ -378,6 +384,20 @@ class SproutForms extends Plugin implements SproutEditionsInterface
                     ]
                 ]
             ]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getSproutDependencies(): array
+    {
+        return [
+            SproutDependencyInterface::SPROUT_BASE,
+            SproutDependencyInterface::SPROUT_BASE_EMAIL,
+            SproutDependencyInterface::SPROUT_BASE_FIELDS,
+            SproutDependencyInterface::SPROUT_BASE_IMPORT,
+            SproutDependencyInterface::SPROUT_BASE_REPORTS
         ];
     }
 
