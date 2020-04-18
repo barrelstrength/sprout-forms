@@ -37,6 +37,7 @@ class m200416_000000_update_captcha_keys extends Migration
 
         $pluginSettings = Craft::$app->getProjectConfig()->get(Plugins::CONFIG_PLUGINS_KEY.'.sprout-forms.settings');
 
+        /** @noinspection ClassConstantCanBeUsedInspection */
         $captchaMap = [
             [
                 'oldKey' => 'sproutforms-duplicatecaptcha',

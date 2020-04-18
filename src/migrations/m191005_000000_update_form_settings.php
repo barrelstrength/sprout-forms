@@ -7,7 +7,6 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use Craft;
 use craft\db\Migration;
 use craft\db\Query;
@@ -48,8 +47,7 @@ class m191005_000000_update_form_settings extends Migration
         $enableSaveData = (int)$pluginSettings['enableSaveData'];
         $pluginSettings['enableSaveDataDefaultValue'] = $enableSaveData ?? 0;
 
-        $accessible = new AccessibleTemplates();
-        $pluginSettings['formTemplateDefaultValue'] = empty($pluginSettings['templateFolderOverride']) ? $accessible->getTemplateId() : $pluginSettings['templateFolderOverride'];
+        $pluginSettings['formTemplateDefaultValue'] = empty($pluginSettings['templateFolderOverride']) ? 'sproutforms-accessibletemplates' : $pluginSettings['templateFolderOverride'];
 
         if ($enableSaveData && isset($pluginSettings['enableSaveDataPerFormBasis']) && !$pluginSettings['enableSaveDataPerFormBasis']) {
             // Let's set true to saveData on all forms

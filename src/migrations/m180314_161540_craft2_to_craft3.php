@@ -19,7 +19,6 @@ use barrelstrength\sproutbaseemail\migrations\m190714_000001_add_notification_em
 use barrelstrength\sproutbaseemail\migrations\m190715_000000_add_sendRule_notification_column;
 use barrelstrength\sproutbaseemail\migrations\m200110_000001_add_sendMethod_notification_column;
 use barrelstrength\sproutbaseemail\SproutBaseEmail;
-use barrelstrength\sproutforms\formtemplates\BasicTemplates;
 use Craft;
 use craft\db\Migration;
 use craft\db\Query;
@@ -206,8 +205,7 @@ class m180314_161540_craft2_to_craft3 extends Migration
         $pluginHandle = 'sprout-forms';
         $pluginSettings = $projectConfig->get(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings');
 
-        $basic = new BasicTemplates();
-        $pluginSettings['templateFolderOverride'] = empty($pluginSettings['templateFolderOverride']) ? $basic->getTemplateId() : $pluginSettings['templateFolderOverride'];
+        $pluginSettings['templateFolderOverride'] = empty($pluginSettings['templateFolderOverride']) ? 'sproutforms-basictemplates' : $pluginSettings['templateFolderOverride'];
 
         $projectConfig->set(Plugins::CONFIG_PLUGINS_KEY.'.'.$pluginHandle.'.settings', $pluginSettings);
 
