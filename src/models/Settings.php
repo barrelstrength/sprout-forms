@@ -31,22 +31,22 @@ class Settings extends Model implements SproutSettingsInterface
 
     public $enableSaveData = true;
 
-    public $spamRedirectBehavior = self::SPAM_REDIRECT_BEHAVIOR_NORMAL;
     public $saveSpamToDatabase = false;
 
     public $enableSaveDataDefaultValue = true;
+
+    public $spamRedirectBehavior = self::SPAM_REDIRECT_BEHAVIOR_NORMAL;
 
     public $spamLimit = 500;
 
     public $cleanupProbability = 1000;
 
-
     public $trackRemoteIp = false;
 
+    public $captchaSettings = [];
 
     public $enableEditFormEntryViaFrontEnd = false;
 
-    public $captchaSettings = [];
     public $showNotificationsTab = true;
 
     public $showReportsTab = true;
