@@ -17,11 +17,11 @@
         instructions: "The Form Templates that will be used to output your forms. Update the 'Default Form Templates' in the general settings."|t('sprout-forms'),
         required: true,
         first: true,
-        errors: (form is defined ? form.getErrors('formTemplate') : null)
+        errors: (form is defined ? form.getErrors('formTemplateId') : null)
     }, sproutFields.selectOther({
-        name: 'formTemplate',
+        name: 'formTemplateId',
         options: templateOptions,
-        value: form.formTemplate ?? '',
+        value: form.formTemplateId ?? '',
         otherPlaceholderText: '_forms/formHandle'|t('sprout-forms')
     })) }}
 

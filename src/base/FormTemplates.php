@@ -17,39 +17,6 @@ use ReflectionException;
 abstract class FormTemplates
 {
     /**
-     * The Template ID of the Form Templates in the format {pluginhandle}-{formtemplateclassname}
-     *
-     * @example
-     * sproutforms-accessibletemplates
-     * sproutforms-basictemplates
-     *
-     * @var string
-     */
-    public $templateId;
-
-    /**
-     * Generates the Template ID
-     *
-     * @return string
-     * @throws ReflectionException
-     */
-    public function getTemplateId(): string
-    {
-        $pluginHandle = Craft::$app->getPlugins()->getPluginHandleByClass(get_class($this));
-
-        // Build $templateId: pluginhandle-formtemplateclassname
-        $pluginHandleWithoutSpaces = str_replace('-', '', $pluginHandle);
-
-        $captchaClass = (new ReflectionClass($this))->getShortName();
-
-        $templateId = $pluginHandleWithoutSpaces.'-'.$captchaClass;
-
-        $this->templateId = strtolower($templateId);
-
-        return $this->templateId;
-    }
-
-    /**
      * The name of your Form Templates
      *
      * @return string

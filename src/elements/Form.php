@@ -79,7 +79,7 @@ class Form extends Element
 
     public $saveData = true;
 
-    public $formTemplate;
+    public $formTemplateId;
 
     public $enableCaptchas = true;
 
@@ -308,7 +308,7 @@ class Form extends Element
         $record->successMessage = $this->successMessage;
         $record->errorMessage = $this->errorMessage;
         $record->submitButtonText = $this->submitButtonText;
-        $record->formTemplate = $this->formTemplate;
+        $record->formTemplateId = $this->formTemplateId;
         $record->enableCaptchas = $this->enableCaptchas;
 
         $record->save(false);
@@ -406,8 +406,8 @@ class Form extends Element
     {
         $defaultFormTemplates = new AccessibleTemplates();
 
-        if ($this->formTemplate) {
-            $templatePath = SproutForms::$app->forms->getFormTemplateById($this->formTemplate);
+        if ($this->formTemplateId) {
+            $templatePath = SproutForms::$app->forms->getFormTemplateById($this->formTemplateId);
             if ($templatePath) {
                 return $templatePath;
             }

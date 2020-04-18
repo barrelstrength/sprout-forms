@@ -36,9 +36,28 @@ class m200418_000000_update_formTemplateId_setting extends Migration
             return true;
         }
 
+        /** @noinspection ClassConstantCanBeUsedInspection */
+        $settings = [
+            0 => [
+                'oldId' => 'sproutforms-accessibletemplates',
+                'newId' => 'barrelstrength\sproutforms\formtemplates\AccessibleTemplates'
+            ],
+            1 => [
+                'oldId' => 'sproutforms-basictemplates',
+                'newId' => 'barrelstrength\sproutforms\formtemplates\BasicTemplates'
+            ]
+        ];
+
         $pluginSettings = Craft::$app->getProjectConfig()->get(Plugins::CONFIG_PLUGINS_KEY.'.sprout-forms.settings');
 
         $formTemplateId = $pluginSettings['formTemplateDefaultValue'] ?? 'barrelstrength\sproutforms\formtemplates\AccessibleTemplates';
+
+        foreach ($settings as $setting) {
+            if ($formTemplateId === $setting['oldId']) {
+                $formTemplateId = $setting['newId'];
+                break;
+            }
+        }
 
         Craft::$app->getProjectConfig()->set(Plugins::CONFIG_PLUGINS_KEY.'.sprout-forms.settings.formTemplateId', $formTemplateId, 'Added Sprout Forms `formTemplateId` setting.');
 

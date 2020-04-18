@@ -163,7 +163,7 @@ class FormsController extends BaseController
             SproutForms::$app->entries->resaveElements($form->id);
         }
 
-        if ($form->formTemplate === 'sproutforms-basictemplates') {
+        if ($form->formTemplateId === 'sproutforms-basictemplates') {
             Craft::$app->getDeprecator()->log('BasicFormTemplates', 'A form currently uses the legacy Basic Form Templates. The Basic Form Templates were provided to help migrate from Craft 2.0 and have been deprecated. The Basic Form Templates will be removed in Sprout Forms 4.0. Please migrate to use the Accessible Form Templates or a custom template folder.', 'Sprout Forms→'.$form->name.'→Settings→Templates');
         }
 
@@ -550,7 +550,7 @@ class FormsController extends BaseController
         $form->errorMessage = $request->getBodyParam('errorMessage', $form->errorMessage);
         $form->submitButtonText = $request->getBodyParam('submitButtonText', $form->submitButtonText);
         $form->titleFormat = $request->getBodyParam('titleFormat', $form->titleFormat);
-        $form->formTemplate = $request->getBodyParam('formTemplate', $form->formTemplate);
+        $form->formTemplateId = $request->getBodyParam('formTemplateId', $form->formTemplateId);
         $form->enableCaptchas = $request->getBodyParam('enableCaptchas', $form->enableCaptchas);
 
         if (!$form->titleFormat) {

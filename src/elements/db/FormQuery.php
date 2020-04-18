@@ -220,7 +220,7 @@ class FormQuery extends ElementQuery
             'sproutforms_forms.successMessage',
             'sproutforms_forms.errorMessage',
             'sproutforms_forms.submitButtonText',
-            'sproutforms_forms.formTemplate',
+            'sproutforms_forms.formTemplateId',
             'sproutforms_forms.enableCaptchas'
         ]);
 

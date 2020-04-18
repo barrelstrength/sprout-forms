@@ -613,7 +613,7 @@ class Forms extends Component
         $form->name = $this->getFieldAsNew('name', $name);
         $form->handle = $this->getFieldAsNew('handle', $handle);
         $form->titleFormat = "{dateCreated|date('D, d M Y H:i:s')}";
-        $form->formTemplate = '';
+        $form->formTemplateId = '';
         $form->saveData = $settings->enableSaveData ? $settings->enableSaveDataDefaultValue : false;
 
         // Set default tab
@@ -703,14 +703,14 @@ class Forms extends Component
             }
         }
 
-        if ($form->formTemplate) {
-            $formTemplatePath = $this->getFormTemplateById($form->formTemplate);
+        if ($form->formTemplateId) {
+            $formTemplatePath = $this->getFormTemplateById($form->formTemplateId);
             if ($formTemplatePath) {
                 // custom path by template API
                 $templateFolder = $formTemplatePath->getPath();
             } else {
                 // custom folder on site path
-                $templateFolder = $this->getSitePath($form->formTemplate);
+                $templateFolder = $this->getSitePath($form->formTemplateId);
             }
         }
 

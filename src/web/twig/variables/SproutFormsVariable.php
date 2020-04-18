@@ -535,9 +535,9 @@ class SproutFormsVariable
         foreach ($templates as $template) {
             $options[] = [
                 'label' => $template->getName(),
-                'value' => $template->getTemplateId()
+                'value' => get_class($template)
             ];
-            $templateIds[] = $template->getTemplateId();
+            $templateIds[] = get_class($template);
         }
 
         $templateFolder = null;
@@ -547,7 +547,7 @@ class SproutFormsVariable
             $settings = $plugin->getSettings();
         }
 
-        $templateFolder = $form->formTemplate ?? $settings->formTemplateId ?? $defaultFormTemplates->getPath();
+        $templateFolder = $form->formTemplateId ?? $settings->formTemplateId ?? $defaultFormTemplates->getPath();
 
         $options[] = [
             'optgroup' => Craft::t('sprout-forms', 'Custom Template Folder')
