@@ -17,7 +17,6 @@ use barrelstrength\sproutforms\events\OnBeforeSaveEntryEvent;
 use barrelstrength\sproutforms\events\OnSaveEntryEvent;
 use barrelstrength\sproutforms\jobs\ResaveEntries;
 use barrelstrength\sproutforms\models\EntryStatus;
-use barrelstrength\sproutforms\models\Settings;
 use barrelstrength\sproutforms\records\EntriesSpamLog as EntriesSpamLogRecord;
 use barrelstrength\sproutforms\records\Entry as EntryRecord;
 use barrelstrength\sproutforms\SproutForms;
@@ -194,10 +193,7 @@ class Entries extends Component
      */
     public function isSaveDataEnabled(FormElement $form, $isSpam = false): bool
     {
-        /** @var SproutForms $plugin */
-        $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
-        /** @var Settings $settings */
-        $settings = $plugin->getSettings();
+        $settings = SproutForms::$app->getSettings();
 
         // Get the global saveData setting
         $saveData = $settings->enableSaveData;
@@ -230,8 +226,7 @@ class Entries extends Component
      */
     public function runPurgeSpamElements($force = false)
     {
-        /** @var Settings $settings */
-        $settings = SproutForms::getInstance()->getSettings();
+        $settings = SproutForms::$app->getSettings();
 
         $probability = (int)$settings->cleanupProbability;
 

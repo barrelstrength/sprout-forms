@@ -9,11 +9,11 @@ namespace barrelstrength\sproutforms\integrations\sproutemail\events\notificatio
 
 use barrelstrength\sproutbaseemail\base\NotificationEvent;
 use barrelstrength\sproutforms\elements\Entry;
-use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\events\OnSaveEntryEvent;
 use barrelstrength\sproutforms\services\Entries;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
+use craft\errors\ElementNotFoundException;
 use craft\events\ElementEvent;
 use craft\events\ModelEvent;
 use Twig\Error\LoaderError;
@@ -217,6 +217,9 @@ class SaveEntryEvent extends NotificationEvent
         }
     }
 
+    /**
+     * @throws ElementNotFoundException
+     */
     public function validateFormIds()
     {
         /** @var OnSaveEntryEvent $event */
@@ -225,7 +228,7 @@ class SaveEntryEvent extends NotificationEvent
         $elementId = null;
 
         if (get_class($event->entry) === Entry::class) {
-            /** @var Form $form */
+
             $form = $event->entry->getForm();
             $elementId = $form->id;
         }

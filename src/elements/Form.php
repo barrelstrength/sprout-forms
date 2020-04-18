@@ -11,9 +11,10 @@ use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\base\FormTemplates;
 use barrelstrength\sproutforms\elements\actions\Delete;
 use barrelstrength\sproutforms\elements\db\FormQuery;
+use barrelstrength\sproutforms\errors\FormTemplatesDirectoryNotFoundException;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
-use barrelstrength\sproutforms\records\Form as FormRecord;
 use barrelstrength\sproutforms\records\Entry as EntryRecord;
+use barrelstrength\sproutforms\records\Form as FormRecord;
 use barrelstrength\sproutforms\rules\FieldRule;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
@@ -358,6 +359,7 @@ class Form extends Element
      * @param null $cssClasses
      *
      * @return array
+     * @throws FormTemplatesDirectoryNotFoundException
      */
     public function getClassesOptions($cssClasses = null): array
     {
@@ -401,6 +403,7 @@ class Form extends Element
      * Get the global template used by Sprout Forms
      *
      * @return FormTemplates
+     * @throws FormTemplatesDirectoryNotFoundException
      */
     public function getFormTemplate(): FormTemplates
     {

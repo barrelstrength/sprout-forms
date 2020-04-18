@@ -18,6 +18,7 @@ use barrelstrength\sproutforms\services\Forms;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\base\ElementInterface;
+use craft\errors\ElementNotFoundException;
 use craft\errors\MissingComponentException;
 use craft\helpers\Template as TemplateHelper;
 use ReflectionException;
@@ -312,6 +313,7 @@ class SproutFormsVariable
      *
      * @return array|ElementInterface|null
      * @throws MissingComponentException
+     * @throws ElementNotFoundException
      */
     public function getLastEntry($formId = null)
     {
@@ -541,11 +543,7 @@ class SproutFormsVariable
         }
 
         $templateFolder = null;
-        $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
-
-        if ($plugin) {
-            $settings = $plugin->getSettings();
-        }
+        $settings = SproutForms::$app->getSettings();
 
         $templateFolder = $form->formTemplateId ?? $settings->formTemplateId ?? $defaultFormTemplates->getPath();
 

@@ -16,7 +16,6 @@ use barrelstrength\sproutforms\errors\FormTemplatesDirectoryNotFoundException;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\formtemplates\CustomTemplates;
 use barrelstrength\sproutforms\migrations\CreateFormContentTable;
-use barrelstrength\sproutforms\models\Settings;
 use barrelstrength\sproutforms\records\Form as FormRecord;
 use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
 use barrelstrength\sproutforms\rules\FieldRule;
@@ -25,10 +24,8 @@ use Craft;
 use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\db\Query;
-use craft\errors\FormTemplatesNotFoundException;
 use craft\errors\MissingComponentException;
 use craft\events\RegisterComponentTypesEvent;
-use craft\helpers\FileHelper;
 use craft\helpers\MigrationHelper;
 use craft\helpers\StringHelper;
 use Throwable;
@@ -611,9 +608,7 @@ class Forms extends Component
         $name = $name ?? 'Form';
         $handle = $handle ?? 'form';
 
-        /** @var SproutForms $plugin */
-        $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
-        $settings = $plugin->getSettings();
+        $settings = SproutForms::$app->getSettings();
 
         $form->name = $this->getFieldAsNew('name', $name);
         $form->handle = $this->getFieldAsNew('handle', $handle);
@@ -688,9 +683,7 @@ class Forms extends Component
      */
     public function getFormTemplatePaths(FormElement $form): array
     {
-        /** @var SproutForms $plugin */
-        $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
-        $settings = $plugin->getSettings();
+        $settings = SproutForms::$app->getSettings();
 
         $templates = [];
         $templateFolder = '';
@@ -788,7 +781,6 @@ class Forms extends Component
         }
 
         if (!is_dir($formTemplates->getFullPath())) {
-            \Craft::dd($formTemplates);
             throw new FormTemplatesDirectoryNotFoundException('Unable to find Form Templates directory: '.$formTemplates->getFullPath());
         }
 
@@ -831,9 +823,7 @@ class Forms extends Component
      */
     public function getAllEnabledCaptchas(): array
     {
-        /** @var SproutForms $plugin */
-        $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
-        $sproutFormsSettings = $plugin->getSettings();
+        $sproutFormsSettings = SproutForms::$app->getSettings();
         $captchaTypes = $this->getAllCaptchas();
         $captchas = [];
 

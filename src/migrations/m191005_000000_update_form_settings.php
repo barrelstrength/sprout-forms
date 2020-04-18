@@ -11,7 +11,6 @@ use Craft;
 use craft\db\Migration;
 use craft\db\Query;
 use craft\services\Plugins;
-use ReflectionException;
 use yii\base\ErrorException;
 use yii\base\Exception;
 use yii\base\NotSupportedException;
@@ -30,7 +29,6 @@ class m191005_000000_update_form_settings extends Migration
      * @throws Exception
      * @throws NotSupportedException
      * @throws ServerErrorHttpException
-     * @throws ReflectionException
      */
     public function safeUp()
     {

@@ -9,7 +9,6 @@ namespace barrelstrength\sproutforms\controllers;
 
 use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutforms\elements\Form;
-use barrelstrength\sproutforms\models\Settings;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\base\ElementInterface;
@@ -50,11 +49,7 @@ class FormsController extends BaseController
 
     public function actionIndexTemplate()
     {
-        /** @var SproutForms $plugin */
-        $plugin = Craft::$app->plugins->getPlugin('sprout-forms');
-
-        /** @var Settings $settings */
-        $settings = $plugin->getSettings();
+        $settings = SproutForms::$app->getSettings();
 
         $canViewEntries = Craft::$app->getUser()->checkPermission('sproutForms-viewEntries') &&
             $settings->enableSaveData;
@@ -317,6 +312,7 @@ class FormsController extends BaseController
      * @throws BadRequestHttpException
      * @throws ForbiddenHttpException
      * @throws InvalidConfigException
+     * @throws ElementNotFoundException
      */
     public function actionAddFormTab(): Response
     {

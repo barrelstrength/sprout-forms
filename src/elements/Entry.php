@@ -7,13 +7,13 @@
 
 namespace barrelstrength\sproutforms\elements;
 
-use barrelstrength\sproutforms\records\EntriesSpamLog as EntriesSpamLogRecord;
 use barrelstrength\sproutforms\base\Captcha;
 use barrelstrength\sproutforms\elements\actions\MarkAsDefaultStatus;
 use barrelstrength\sproutforms\elements\actions\MarkAsSpam;
 use barrelstrength\sproutforms\elements\db\EntryQuery;
 use barrelstrength\sproutforms\models\EntriesSpamLog;
 use barrelstrength\sproutforms\models\EntryStatus;
+use barrelstrength\sproutforms\records\EntriesSpamLog as EntriesSpamLogRecord;
 use barrelstrength\sproutforms\records\Entry as EntryRecord;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
@@ -21,6 +21,7 @@ use craft\base\Element;
 use craft\db\Query;
 use craft\elements\actions\Delete;
 use craft\elements\db\ElementQueryInterface;
+use craft\errors\ElementNotFoundException;
 use craft\helpers\UrlHelper;
 use craft\models\FieldLayout;
 use yii\base\Exception;
@@ -241,7 +242,7 @@ class Entry extends Element
             }
         }
 
-        $settings = SproutForms::getInstance()->getSettings();
+        $settings = SproutForms::$app->getSettings();
 
         $sources[] = [
             'heading' => Craft::t('sprout-forms', 'Misc')
@@ -367,6 +368,8 @@ class Entry extends Element
      * Returns the name of the table this element's content is stored in.
      *
      * @return string
+     * @throws ElementNotFoundException
+     * @throws ElementNotFoundException
      */
     public function getContentTable(): string
     {
@@ -409,6 +412,7 @@ class Entry extends Element
     /**
      * @return FieldLayout
      * @throws InvalidConfigException
+     * @throws ElementNotFoundException
      */
     public function getFieldLayout(): FieldLayout
     {
@@ -460,6 +464,7 @@ class Entry extends Element
      *
      * @return array
      * @throws InvalidConfigException
+     * @throws ElementNotFoundException
      */
     public function getFields(): array
     {
@@ -470,12 +475,19 @@ class Entry extends Element
      * Returns the form element associated with this entry
      * Due to soft delete, deleted forms leaves entries with not forms
      *
-     * @return Form|null
+     * @return Form
+     * @throws ElementNotFoundException
      */
-    public function getForm()
+    public function getForm(): Form
     {
         if ($this->form === null) {
-            $this->form = SproutForms::$app->forms->getFormById($this->formId);
+            $form = SproutForms::$app->forms->getFormById($this->formId);
+
+            if (!$form) {
+                throw new ElementNotFoundException('No Form exists with id '.$this->formId);
+            }
+
+            $this->form = $form;
         }
 
         return $this->form;

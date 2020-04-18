@@ -15,6 +15,7 @@ use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
 use barrelstrength\sproutforms\models\Settings;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
+use craft\errors\ElementNotFoundException;
 use craft\errors\MissingComponentException;
 use craft\helpers\UrlHelper;
 use craft\web\Controller as BaseController;
@@ -67,11 +68,7 @@ class EntriesController extends BaseController
      */
     public function actionEntriesIndexTemplate(): Response
     {
-        /** @var SproutForms $plugin */
-        $plugin = Craft::$app->plugins->getPlugin('sprout-forms');
-
-        /** @var Settings $settings */
-        $settings = $plugin->getSettings();
+        $settings = SproutForms::$app->getSettings();
 
         if (!$settings->enableSaveData) {
             return Craft::$app->getResponse()->redirect(UrlHelper::cpUrl('sprout-forms/forms'));
@@ -91,16 +88,13 @@ class EntriesController extends BaseController
      * @throws NotFoundHttpException
      * @throws MissingComponentException
      * @throws InvalidConfigException
+     * @throws ElementNotFoundException
      */
     public function actionEditEntryTemplate(int $entryId = null, EntryElement $entry = null): Response
     {
         $this->requirePermission('sproutForms-editEntries');
 
-        /** @var SproutForms $plugin */
-        $plugin = Craft::$app->plugins->getPlugin('sprout-forms');
-
-        /** @var Settings $settings */
-        $settings = $plugin->getSettings();
+        $settings = SproutForms::$app->getSettings();
 
         if (!$settings->enableSaveData) {
             return Craft::$app->getResponse()->redirect(UrlHelper::cpUrl('sprout-forms/forms'));
@@ -121,6 +115,10 @@ class EntriesController extends BaseController
         }
 
         $form = SproutForms::$app->forms->getFormById($entry->formId);
+
+        if (!$form) {
+            throw new ElementNotFoundException('No Form exists with id '.$form->id);
+        }
 
         $saveData = SproutForms::$app->entries->isSaveDataEnabled($form);
 
@@ -185,11 +183,7 @@ class EntriesController extends BaseController
         $formHandle = $request->getRequiredBodyParam('handle');
         $this->form = $this->form == null ? SproutForms::$app->forms->getFormByHandle($formHandle) : $this->form;
 
-        /** @var SproutForms $plugin */
-        $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
-
-        /** @var Settings $settings */
-        $settings = $plugin->getSettings();
+        $settings = SproutForms::$app->getSettings();
 
         if ($this->form === null) {
             throw new Exception('No form exists with the handle '.$formHandle);
@@ -348,10 +342,7 @@ class EntriesController extends BaseController
      */
     private function populateEntryModel(EntryElement $entry)
     {
-        /** @var SproutForms $plugin */
-        $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
-        /** @var Settings $settings */
-        $settings = $plugin->getSettings();
+        $settings = SproutForms::$app->getSettings();
 
         $request = Craft::$app->getRequest();
 
@@ -379,9 +370,7 @@ class EntriesController extends BaseController
         $entryId = null;
         $request = Craft::$app->getRequest();
 
-        /** @var SproutForms $plugin */
-        $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
-        $settings = $plugin->getSettings();
+        $settings = SproutForms::$app->getSettings();
 
         if ($request->getIsCpRequest() || $settings->enableEditFormEntryViaFrontEnd) {
             $entryId = $request->getBodyParam('entryId');

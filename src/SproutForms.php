@@ -57,8 +57,6 @@ use craft\base\Plugin;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
-use craft\helpers\ProjectConfig;
-use craft\helpers\ProjectConfig as ProjectConfigHelper;
 use craft\helpers\UrlHelper;
 use craft\services\Dashboard;
 use craft\services\Fields;
@@ -135,7 +133,7 @@ class SproutForms extends Plugin implements SproutEditionsInterface, SproutDepen
     public function init()
     {
         parent::init();
-        
+
         $this->setComponents([
             'app' => App::class
         ]);

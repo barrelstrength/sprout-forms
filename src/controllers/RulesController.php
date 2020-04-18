@@ -13,6 +13,7 @@ use barrelstrength\sproutforms\base\Rule;
 use barrelstrength\sproutforms\records\Rules as RulesRecord;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
+use craft\errors\ElementNotFoundException;
 use craft\errors\MissingComponentException;
 use craft\web\Controller as BaseController;
 use Throwable;
@@ -203,6 +204,10 @@ class RulesController extends BaseController
         $formFieldHandle = $request->getBodyParam('formFieldHandle');
 
         $form = SproutForms::$app->forms->getFormById($formId);
+
+        if (!$form) {
+            throw new ElementNotFoundException('No Form exists with id '.$formId);
+        }
 
         /** @var FormField $formField */
         $formField = $form->getField($formFieldHandle);

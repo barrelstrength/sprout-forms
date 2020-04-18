@@ -43,6 +43,7 @@ use craft\base\Field;
 use craft\base\FieldInterface;
 use craft\db\Query;
 use craft\db\Table;
+use craft\errors\ElementNotFoundException;
 use craft\helpers\StringHelper;
 use craft\models\FieldLayout;
 use craft\models\FieldLayoutTab;
@@ -564,10 +565,15 @@ class Fields extends Component
      *
      * @return FieldLayoutTabRecord
      * @throws InvalidConfigException
+     * @throws ElementNotFoundException
      */
     public function createNewTab($formId, $name): FieldLayoutTabRecord
     {
         $form = SproutForms::$app->forms->getFormById($formId);
+
+        if (!$form) {
+            throw new ElementNotFoundException('No Form exists with id '.$form->id);
+        }
 
         $fieldLayout = $form->getFieldLayout();
 

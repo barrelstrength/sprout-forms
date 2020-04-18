@@ -5,6 +5,7 @@ namespace barrelstrength\sproutforms\formtemplates;
 use barrelstrength\sproutforms\base\FormTemplates;
 use Craft;
 use craft\web\View;
+use yii\base\Exception;
 
 /**
  * The Custom Templates is used to dynamically create a FormTemplates
@@ -34,6 +35,10 @@ class CustomTemplates extends FormTemplates
         return View::TEMPLATE_MODE_SITE;
     }
 
+    /**
+     * @return string
+     * @throws Exception
+     */
     public function getTemplateRoot(): string
     {
         return Craft::$app->path->getSiteTemplatesPath();

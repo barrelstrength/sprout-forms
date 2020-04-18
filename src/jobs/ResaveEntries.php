@@ -12,6 +12,7 @@ use barrelstrength\sproutforms\elements\Entry as EntryElement;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\elements\db\ElementQueryInterface;
+use craft\errors\ElementNotFoundException;
 use craft\queue\BaseJob;
 use craft\queue\QueueInterface;
 use Exception;
@@ -46,9 +47,13 @@ class ResaveEntries extends BaseJob
         /** @var EntryQuery $query */
         $query = $this->_query();
         $total = $query->count();
+        $count = 0;
         $elementsService = Craft::$app->getElements();
         $form = SproutForms::$app->forms->getFormById($this->formId);
-        $count = 0;
+
+        if (!$form) {
+            throw new ElementNotFoundException('No Form exists with id '.$this->formId);
+        }
 
         foreach ($query->each() as $entry) {
             try {

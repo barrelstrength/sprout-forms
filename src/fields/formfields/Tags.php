@@ -90,7 +90,7 @@ class Tags extends CraftTags
 
         return TemplateHelper::raw($rendered);
     }
-    
+
     /**
      * @inheritdoc
      */

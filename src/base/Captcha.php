@@ -10,10 +10,7 @@ namespace barrelstrength\sproutforms\base;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
 use barrelstrength\sproutforms\SproutForms;
-use Craft;
 use craft\base\Model;
-use ReflectionClass;
-use ReflectionException;
 
 /**
  * Class Captcha
@@ -71,11 +68,7 @@ abstract class Captcha extends Model
      */
     public function getSettings()
     {
-        /** @var SproutForms $plugin */
-        $plugin = Craft::$app->getPlugins()->getPlugin('sprout-forms');
-        $sproutFormsSettings = $plugin->getSettings();
-
-        return $sproutFormsSettings->captchaSettings[get_class($this)] ?? null;
+        return SproutForms::$app->getSettings()->captchaSettings[get_class($this)] ?? null;
     }
 
     /**

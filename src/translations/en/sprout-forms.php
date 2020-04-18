@@ -564,5 +564,7 @@ return [
     'We were unable to process your submission. Please correct any errors and submit the form again.' => 'We were unable to process your submission. Please correct any errors and submit the form again.',
     'The message displayed when a form submission has errors.' => 'The message displayed when a form submission has errors.',
     'Error Display Method' => 'Error Display Method',
-    'forms' => 'forms'
+    'forms' => 'forms',
+    'Sprout Forms includes full-featured Notification Emails powered by Sprout Email. If you also have Sprout Email installed, you may want to disable the Notifications tab in Sprout Forms and manage all Notifications in the Email section of the CP.' => 'Sprout Forms includes full-featured Notification Emails powered by Sprout Email. If you also have Sprout Email installed, you may want to disable the Notifications tab in Sprout Forms and manage all Notifications in the Email section of the CP.',
+    'Sprout Forms supports full-featured Reports and Mailing Lists powered by Sprout Reports. If you also have Sprout Reports installed, you may want to disable the Reports tab in Sprout Forms and manage all Reports and Mailing Lists in the Reports section of the CP.' => 'Sprout Forms supports full-featured Reports and Mailing Lists powered by Sprout Reports. If you also have Sprout Reports installed, you may want to disable the Reports tab in Sprout Forms and manage all Reports and Mailing Lists in the Reports section of the CP.'
 ];

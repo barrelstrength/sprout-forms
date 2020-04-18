@@ -7,7 +7,6 @@
 namespace barrelstrength\sproutforms\migrations;
 
 use Craft;
-use craft\config\DbConfig;
 use craft\db\Connection;
 use craft\db\Migration;
 

@@ -6,12 +6,9 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
-use craft\db\Migration;
-use craft\helpers\ProjectConfig;
-use craft\helpers\ProjectConfig as ProjectConfigHelper;
-use craft\services\Plugins;
 use Craft;
+use craft\db\Migration;
+use craft\services\Plugins;
 use yii\base\ErrorException;
 use yii\base\Exception;
 use yii\base\NotSupportedException;
