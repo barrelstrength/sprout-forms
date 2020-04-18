@@ -9,6 +9,7 @@ namespace barrelstrength\sproutforms\models;
 
 use barrelstrength\sproutbase\base\SproutSettingsInterface;
 use barrelstrength\sproutbase\SproutBase;
+use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\base\Model;
@@ -27,7 +28,7 @@ class Settings extends Model implements SproutSettingsInterface
 
     public $defaultSection = 'entries';
 
-    public $formTemplateId = '';
+    public $formTemplateId = AccessibleTemplates::class;
 
     public $enableSaveData = true;
 

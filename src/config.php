@@ -17,6 +17,8 @@
  * Once copied to 'craft/config', this file will be multi-environment aware as
  * well, so you can have different settings groups for each environment, just as
  * you do for 'general.php'
+ * 
+ * @noinspection ClassConstantCanBeUsedInspection
  */
 
 return [
@@ -24,7 +26,7 @@ return [
     'pluginNameOverride' => 'Sprout Forms',
 
     // The default templates that will be used to output your forms when using the displayForm tag if no Form Templates are selected for a given form
-    // 'formTemplateDefaultValue' => 'sproutforms-accessibletemplates',
+    'formTemplateId' => 'barrelstrength\sproutforms\formtemplates\AccessibleTemplates',
 
     // Disable this setting to stop Sprout Forms from saving all form submission data to the Craft database
     'enableSaveData' => true,
