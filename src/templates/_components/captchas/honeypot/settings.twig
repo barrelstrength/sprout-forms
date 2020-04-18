@@ -4,7 +4,7 @@
     label: 'Name of your honeypot field'|t('sprout-forms'),
     instructions: 'All lowercase, no spaces.'|t('sprout-forms'),
     id: 'honeypotFieldName',
-    name: 'captchaSettings['~captchaId~'][honeypotFieldName]',
+    name: 'captchaSettings['~className(captcha)~'][honeypotFieldName]',
     required: true,
     errors: null,
     value: settings['honeypotFieldName'] ?? 'beesknees'
@@ -14,7 +14,7 @@
     label: 'Hidden honeypot message for screen readers'|t('sprout-forms'),
     instructions: 'This is displayed to screen readers so users will know not to fill in this field.'|t('sprout-forms'),
     id: 'honeypotScreenReaderMessage',
-    name: 'captchaSettings['~captchaId~'][honeypotScreenReaderMessage]',
+    name: 'captchaSettings['~className(captcha)~'][honeypotScreenReaderMessage]',
     required: true,
     value: settings['honeypotScreenReaderMessage'] ?? 'Leave this field blank'|t('sprout-forms')
 }) }}
