@@ -135,14 +135,14 @@ class SproutForms extends Plugin implements SproutEditionsInterface, SproutDepen
     public function init()
     {
         parent::init();
-
+        
         $this->setComponents([
             'app' => App::class
         ]);
 
         self::$app = $this->get('app');
 
-        Craft::setAlias('@sproutforms', $this->basePath);
+        Craft::setAlias('@sproutforms', $this->getBasePath());
         Craft::setAlias('@sproutformslib', dirname(__DIR__).'/lib');
 
         SproutBaseHelper::registerModule();

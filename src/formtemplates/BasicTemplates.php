@@ -23,12 +23,17 @@ class BasicTemplates extends FormTemplates
         return Craft::t('sprout-forms', 'Basic Templates (Sprout, Legacy)');
     }
 
+    public function getTemplateRoot(): string
+    {
+        return Craft::getAlias('@barrelstrength/sproutforms/templates');
+    }
+
     /**
      * @return string
      */
     public function getPath(): string
     {
-        return Craft::getAlias('@barrelstrength/sproutforms/templates/_components/formtemplates/basic');
+        return '_components/formtemplates/basic';
     }
 }
 

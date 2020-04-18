@@ -8,6 +8,7 @@
 namespace barrelstrength\sproutforms\base;
 
 use Craft;
+use craft\web\View;
 use ReflectionClass;
 use ReflectionException;
 
@@ -24,7 +25,31 @@ abstract class FormTemplates
     abstract public function getName(): string;
 
     /**
-     * The folder path where your form templates exist
+     * The Template Mode to use when loading the email template
+     *
+     * @return string
+     */
+    public function getTemplateMode(): string
+    {
+        return View::TEMPLATE_MODE_CP;
+    }
+
+    public function getFullPath(): string
+    {
+        return $this->getTemplateRoot().'/'.$this->getPath();
+    }
+
+    /**
+     * The root folder where the Form Templates exist
+     *
+     * @return string
+     */
+    abstract public function getTemplateRoot(): string;
+
+    /**
+     * The folder path where your Form Templates exist in relation to the folder defined in [[self::getTemplateRoot]]
+     *
+     * This value should also be a folder. Sprout Forms will look for any template files that you choose to override
      *
      * @return string
      */

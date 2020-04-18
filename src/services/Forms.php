@@ -12,8 +12,11 @@ use barrelstrength\sproutforms\base\FormTemplates;
 use barrelstrength\sproutforms\base\Integration;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\elements\Form as FormElement;
+use barrelstrength\sproutforms\errors\FormTemplatesDirectoryNotFoundException;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
+use barrelstrength\sproutforms\formtemplates\CustomTemplates;
 use barrelstrength\sproutforms\migrations\CreateFormContentTable;
+use barrelstrength\sproutforms\models\Settings;
 use barrelstrength\sproutforms\records\Form as FormRecord;
 use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
 use barrelstrength\sproutforms\rules\FieldRule;
@@ -22,8 +25,10 @@ use Craft;
 use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\db\Query;
+use craft\errors\FormTemplatesNotFoundException;
 use craft\errors\MissingComponentException;
 use craft\events\RegisterComponentTypesEvent;
+use craft\helpers\FileHelper;
 use craft\helpers\MigrationHelper;
 use craft\helpers\StringHelper;
 use Throwable;
@@ -689,14 +694,14 @@ class Forms extends Component
 
         $templates = [];
         $templateFolder = '';
-        $defaultVersion = new AccessibleTemplates();
-        $defaultTemplate = $defaultVersion->getPath();
+        $fallbackFormTemplates = new AccessibleTemplates();
+        $defaultTemplate = $fallbackFormTemplates->getFullPath();
 
         if ($settings->formTemplateId) {
-            $templatePath = $this->getFormTemplateById($settings->formTemplateId);
-            if ($templatePath) {
+            $defaultFormTemplates = $this->getFormTemplateById($settings->formTemplateId);
+            if ($defaultFormTemplates) {
                 // custom path by template API
-                $templateFolder = $templatePath->getPath();
+                $templateFolder = $defaultFormTemplates->getFullPath();
             } else {
                 // custom folder on site path
                 $templateFolder = $this->getSitePath($settings->formTemplateId);
@@ -704,10 +709,10 @@ class Forms extends Component
         }
 
         if ($form->formTemplateId) {
-            $formTemplatePath = $this->getFormTemplateById($form->formTemplateId);
-            if ($formTemplatePath) {
+            $formTemplates = $this->getFormTemplateById($form->formTemplateId);
+            if ($formTemplates) {
                 // custom path by template API
-                $templateFolder = $formTemplatePath->getPath();
+                $templateFolder = $formTemplates->getFullPath();
             } else {
                 // custom folder on site path
                 $templateFolder = $this->getSitePath($form->formTemplateId);
@@ -765,19 +770,29 @@ class Forms extends Component
     /**
      * @param $templateId
      *
-     * @return null|FormTemplates
+     * @return FormTemplates|null
+     * @throws FormTemplatesDirectoryNotFoundException
      */
     public function getFormTemplateById($templateId)
     {
-        $templates = SproutForms::$app->forms->getAllFormTemplates();
+        $formTemplates = null;
 
-        foreach ($templates as $template) {
-            if ($template->getTemplateId() == $templateId) {
-                return $template;
-            }
+        if (class_exists($templateId)) {
+            /** @var FormTemplates $templateId */
+            $formTemplates = new $templateId();
         }
 
-        return null;
+        if ($formTemplates instanceof FormTemplates === false) {
+            $formTemplates = new CustomTemplates();
+            $formTemplates->setPath($templateId);
+        }
+
+        if (!is_dir($formTemplates->getFullPath())) {
+            \Craft::dd($formTemplates);
+            throw new FormTemplatesDirectoryNotFoundException('Unable to find Form Templates directory: '.$formTemplates->getFullPath());
+        }
+
+        return $formTemplates;
     }
 
     /**
