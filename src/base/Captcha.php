@@ -64,7 +64,7 @@ abstract class Captcha extends Model
     /**
      * Returns any values saved as settings for this captcha
      *
-     * @return null
+     * @return array|null
      */
     public function getSettings()
     {

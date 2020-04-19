@@ -44,7 +44,7 @@ use barrelstrength\sproutforms\integrations\sproutreports\datasources\Integratio
 use barrelstrength\sproutforms\integrations\sproutreports\datasources\SpamLogDataSource;
 use barrelstrength\sproutforms\integrationtypes\CustomEndpoint;
 use barrelstrength\sproutforms\integrationtypes\EntryElementIntegration;
-use barrelstrength\sproutforms\models\Settings;
+use barrelstrength\sproutforms\models\Settings as SproutFormsSettings;
 use barrelstrength\sproutforms\services\App;
 use barrelstrength\sproutforms\services\Entries;
 use barrelstrength\sproutforms\services\Fields as SproutFormsFields;
@@ -416,11 +416,11 @@ class SproutForms extends Plugin implements SproutEditionsInterface, SproutDepen
     }
 
     /**
-     * @inheritDoc
+     * @return SproutFormsSettings
      */
-    protected function createSettingsModel()
+    protected function createSettingsModel(): SproutFormsSettings
     {
-        return new Settings();
+        return new SproutFormsSettings();
     }
 
     /**
