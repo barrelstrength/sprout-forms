@@ -134,7 +134,7 @@ class Install extends Migration
             'errorMessage' => $this->text(),
             'submitButtonText' => $this->string(),
             'saveData' => $this->boolean()->defaultValue(false)->notNull(),
-            'formTemplate' => $this->string(),
+            'formTemplateId' => $this->string(),
             'enableCaptchas' => $this->boolean()->defaultValue(true)->notNull(),
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull(),
@@ -444,8 +444,7 @@ class Install extends Migration
 
         $settings = new Settings();
         $settings->setAttributes($currentSettings);
-        $accessible = new AccessibleTemplates();
-        $settings->formTemplateDefaultValue = $currentSettings['formTemplateDefaultValue'] ?? $accessible->getTemplateId();
+        $settings->formTemplateId = $currentSettings['formTemplateId'] ?? AccessibleTemplates::class;
 
         $settings->captchaSettings = $currentSettings['captchaSettings'] ?? [
                 'sproutforms-duplicatecaptcha' => [
