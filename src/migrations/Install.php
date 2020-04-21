@@ -7,7 +7,7 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutbaseemail\migrations\Install as SproutBaseNotificationInstall;
+use barrelstrength\sproutbaseemail\migrations\Install as SproutBaseEmailInstall;
 use barrelstrength\sproutbasefields\migrations\Install as SproutBaseFieldsInstall;
 use barrelstrength\sproutbasereports\migrations\Install as SproutBaseReportsInstall;
 use barrelstrength\sproutbasereports\SproutBaseReports;
@@ -96,7 +96,7 @@ class Install extends Migration
 
     public function installSproutEmail()
     {
-        $migration = new SproutBaseNotificationInstall();
+        $migration = new SproutBaseEmailInstall();
 
         ob_start();
         $migration->safeUp();
