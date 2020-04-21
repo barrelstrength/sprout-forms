@@ -11,6 +11,9 @@ use barrelstrength\sproutbaseemail\migrations\Install as SproutBaseEmailInstall;
 use barrelstrength\sproutbasefields\migrations\Install as SproutBaseFieldsInstall;
 use barrelstrength\sproutbasereports\migrations\Install as SproutBaseReportsInstall;
 use barrelstrength\sproutbasereports\SproutBaseReports;
+use barrelstrength\sproutforms\captchas\DuplicateCaptcha;
+use barrelstrength\sproutforms\captchas\HoneypotCaptcha;
+use barrelstrength\sproutforms\captchas\JavascriptCaptcha;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesDataSource;
 use barrelstrength\sproutforms\models\Settings;
@@ -447,13 +450,13 @@ class Install extends Migration
         $settings->formTemplateId = $currentSettings['formTemplateId'] ?? AccessibleTemplates::class;
 
         $settings->captchaSettings = $currentSettings['captchaSettings'] ?? [
-                'sproutforms-duplicatecaptcha' => [
+                DuplicateCaptcha::class => [
                     'enabled' => 0
                 ],
-                'sproutforms-javascriptcaptcha' => [
+                JavascriptCaptcha::class => [
                     'enabled' => 1
                 ],
-                'sproutforms-honeypotcaptcha' => [
+                HoneypotCaptcha::class => [
                     'enabled' => 0,
                     'honeypotFieldName' => 'beesknees',
                     'honeypotScreenReaderMessage' => 'Leave this field blank'
