@@ -523,9 +523,12 @@ class SproutForms extends Plugin implements SproutEditionsInterface, SproutDepen
                 ]
             ],
             '<pluginHandle:sprout-forms>/notifications/settings/edit/<emailId:\d+|new>' => [
-                'route' => 'sprout-base-email/notifications/edit-notification-email-settings-template'
+                'route' => 'sprout-base-email/notifications/edit-notification-email-settings-template',
+                'params' => [
+                    'viewContext' => 'sprout-forms'
+                ]
             ],
-            '<pluginHandle:sprout-forms>/notifications/preview/<emailType:notification>/<emailId:\d+>' => [
+            '<pluginHandle:sprout-forms>/preview/<emailId:\d+>' => [
                 'route' => 'sprout-base-email/notifications/preview'
             ],
 
