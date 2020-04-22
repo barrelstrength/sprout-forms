@@ -17,7 +17,6 @@ use barrelstrength\sproutbaseemail\services\EmailTemplates;
 use barrelstrength\sproutbaseemail\services\NotificationEmailEvents;
 use barrelstrength\sproutbaseemail\SproutBaseEmailHelper;
 use barrelstrength\sproutbasefields\SproutBaseFieldsHelper;
-use barrelstrength\sproutbaseimport\services\Importers;
 use barrelstrength\sproutbasereports\base\DataSource;
 use barrelstrength\sproutbasereports\services\DataSources;
 use barrelstrength\sproutbasereports\SproutBaseReports;
@@ -37,8 +36,6 @@ use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\formtemplates\BasicTemplates;
 use barrelstrength\sproutforms\integrations\sproutemail\emailtemplates\basic\BasicSproutFormsNotification;
 use barrelstrength\sproutforms\integrations\sproutemail\events\notificationevents\SaveEntryEvent;
-use barrelstrength\sproutforms\integrations\sproutimport\elements\Entry as EntryElementImporter;
-use barrelstrength\sproutforms\integrations\sproutimport\elements\Form as FormElementImporter;
 use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesDataSource;
 use barrelstrength\sproutforms\integrations\sproutreports\datasources\IntegrationLogDataSource;
 use barrelstrength\sproutforms\integrations\sproutreports\datasources\SpamLogDataSource;
@@ -242,13 +239,6 @@ class SproutForms extends Plugin implements SproutEditionsInterface, SproutDepen
         Event::on(EmailTemplates::class, EmailTemplates::EVENT_REGISTER_EMAIL_TEMPLATES, static function(RegisterComponentTypesEvent $event) {
             $event->types[] = BasicSproutFormsNotification::class;
         });
-
-        Event::on(Importers::class, Importers::EVENT_REGISTER_IMPORTER_TYPES, static function(RegisterComponentTypesEvent $event) {
-            $event->types[] = FormElementImporter::class;
-            $event->types[] = EntryElementImporter::class;
-//            $event->types[] = FormsFieldImporter::class;
-//            $event->types[] = EntriesFieldImporter::class;
-        });
     }
 
     /**
@@ -394,7 +384,6 @@ class SproutForms extends Plugin implements SproutEditionsInterface, SproutDepen
             SproutDependencyInterface::SPROUT_BASE,
             SproutDependencyInterface::SPROUT_BASE_EMAIL,
             SproutDependencyInterface::SPROUT_BASE_FIELDS,
-            SproutDependencyInterface::SPROUT_BASE_IMPORT,
             SproutDependencyInterface::SPROUT_BASE_REPORTS
         ];
     }
