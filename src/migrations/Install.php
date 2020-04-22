@@ -7,6 +7,8 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
+use barrelstrength\sproutbase\base\SproutDependencyInterface;
+use barrelstrength\sproutbase\migrations\Install as SproutBaseInstall;
 use barrelstrength\sproutbaseemail\migrations\Install as SproutBaseEmailInstall;
 use barrelstrength\sproutbasefields\migrations\Install as SproutBaseFieldsInstall;
 use barrelstrength\sproutbasereports\migrations\Install as SproutBaseReportsInstall;
@@ -14,22 +16,24 @@ use barrelstrength\sproutbasereports\SproutBaseReports;
 use barrelstrength\sproutforms\captchas\DuplicateCaptcha;
 use barrelstrength\sproutforms\captchas\HoneypotCaptcha;
 use barrelstrength\sproutforms\captchas\JavascriptCaptcha;
+use barrelstrength\sproutforms\elements\Entry;
+use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesDataSource;
 use barrelstrength\sproutforms\models\Settings;
-use barrelstrength\sproutforms\records\Entry as EntryRecord;
-use barrelstrength\sproutforms\records\Form as FormRecord;
 use barrelstrength\sproutforms\records\EntriesSpamLog as EntriesSpamLogRecord;
+use barrelstrength\sproutforms\records\Entry as EntryRecord;
 use barrelstrength\sproutforms\records\EntryStatus as EntryStatusRecord;
+use barrelstrength\sproutforms\records\Form as FormRecord;
 use barrelstrength\sproutforms\records\FormGroup as FormGroupRecord;
 use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
 use barrelstrength\sproutforms\records\IntegrationLog as IntegrationLogRecord;
 use barrelstrength\sproutforms\records\Rules as RulesRecord;
+use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\db\Migration;
 use craft\db\Table;
 use craft\services\Plugins;
-use ReflectionException;
 use yii\base\ErrorException;
 use yii\base\NotSupportedException;
 use yii\db\Exception;
@@ -43,7 +47,6 @@ class Install extends Migration
     /**
      * @inheritdoc
      *
-     * @throws ReflectionException
      * @throws ErrorException
      * @throws \yii\base\Exception
      * @throws NotSupportedException
@@ -74,7 +77,53 @@ class Install extends Migration
      */
     public function safeDown(): bool
     {
+        /** @var SproutForms $plugin */
+        $plugin = SproutForms::getInstance();
+
+        $sproutBaseEmailInUse = $plugin->dependencyInUse(SproutDependencyInterface::SPROUT_BASE_EMAIL);
+        $sproutBaseFieldsInUse = $plugin->dependencyInUse(SproutDependencyInterface::SPROUT_BASE_FIELDS);
+        $sproutBaseReportsInUse = $plugin->dependencyInUse(SproutDependencyInterface::SPROUT_BASE_REPORTS);
+        $sproutBaseInUse = $plugin->dependencyInUse(SproutDependencyInterface::SPROUT_BASE);
+
         SproutBaseReports::$app->dataSources->deleteReportsByType(EntriesDataSource::class);
+
+        if (!$sproutBaseEmailInUse) {
+            $migration = new SproutBaseEmailInstall();
+
+            ob_start();
+            $migration->safeDown();
+            ob_end_clean();
+        }
+
+        if (!$sproutBaseFieldsInUse) {
+            $migration = new SproutBaseFieldsInstall();
+
+            ob_start();
+            $migration->safeDown();
+            ob_end_clean();
+        }
+
+        if (!$sproutBaseReportsInUse) {
+            $migration = new SproutBaseReportsInstall();
+
+            ob_start();
+            $migration->safeDown();
+            ob_end_clean();
+        }
+
+        if (!$sproutBaseInUse) {
+            $migration = new SproutBaseInstall();
+
+            ob_start();
+            $migration->safeDown();
+            ob_end_clean();
+        }
+
+        // Delete Form Entry Elements
+        $this->delete(Table::ELEMENTS, ['type', Entry::class]);
+
+        // Delete Form Elements
+        $this->delete(Table::ELEMENTS, ['type', Form::class]);
 
         $this->dropTableIfExists(IntegrationLogRecord::tableName());
         $this->dropTableIfExists(IntegrationRecord::tableName());
@@ -397,7 +446,6 @@ class Install extends Migration
     /**
      * Populates the DB with the default data.
      *
-     * @throws ReflectionException
      * @throws ErrorException
      * @throws \yii\base\Exception
      * @throws NotSupportedException
