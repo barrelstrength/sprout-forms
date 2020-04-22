@@ -78,7 +78,8 @@ class App extends Component
      *
      * @return Settings
      */
-    public function getSettings(): Settings {
+    public function getSettings(): Settings
+    {
         /** @var SproutForms $plugin */
         $plugin = SproutForms::getInstance();
 

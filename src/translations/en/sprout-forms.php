@@ -566,5 +566,8 @@ return [
     'Error Display Method' => 'Error Display Method',
     'forms' => 'forms',
     'Sprout Forms includes full-featured Notification Emails powered by Sprout Email. If you also have Sprout Email installed, you may want to disable the Notifications tab in Sprout Forms and manage all Notifications in the Email section of the CP.' => 'Sprout Forms includes full-featured Notification Emails powered by Sprout Email. If you also have Sprout Email installed, you may want to disable the Notifications tab in Sprout Forms and manage all Notifications in the Email section of the CP.',
-    'Sprout Forms supports full-featured Reports and Mailing Lists powered by Sprout Reports. If you also have Sprout Reports installed, you may want to disable the Reports tab in Sprout Forms and manage all Reports and Mailing Lists in the Reports section of the CP.' => 'Sprout Forms supports full-featured Reports and Mailing Lists powered by Sprout Reports. If you also have Sprout Reports installed, you may want to disable the Reports tab in Sprout Forms and manage all Reports and Mailing Lists in the Reports section of the CP.'
+    'Sprout Forms supports full-featured Reports and Mailing Lists powered by Sprout Reports. If you also have Sprout Reports installed, you may want to disable the Reports tab in Sprout Forms and manage all Reports and Mailing Lists in the Reports section of the CP.' => 'Sprout Forms supports full-featured Reports and Mailing Lists powered by Sprout Reports. If you also have Sprout Reports installed, you may want to disable the Reports tab in Sprout Forms and manage all Reports and Mailing Lists in the Reports section of the CP.',
+    'Email makes it personal.' => 'Email makes it personal.',
+    'Master Blaster.' => 'Master Blaster.',
+    'You are a master blaster.' => 'You are a master blaster.'
 ];
