@@ -1,5 +1,46 @@
 # Changelog
 
+## 3.10.0 - UNRELEASED
+
+> {warning} Form Templates using relative paths to include other twig files should review the [upgrade notes](https://sprout.barrelstrengthdesign.com/docs/forms/installing-and-updating-craft-3.html#upgrading-to-forms-3-10-0)
+
+### Added
+- Added example config file `src/config.php`
+- Added `barrelstrength\sproutforms\models\Settings::$formTemplateId`
+- Added `barrelstrength\sproutforms\formtemplates\CustomTemplates`
+- Added `barrelstrength\sproutforms\base\FormTemplates::getFullPath()`
+- Added `barrelstrength\sproutforms\base\FormTemplates::getTemplateRoot()`
+- Added `barrelstrength\sproutforms\base\FormTemplates::getTemplateMode()`
+- Added `barrelstrength\sproutbase\base\SproutDependencyTrait`
+- Added `barrelstrength\sproutbase\base\SproutDependencyInterface`
+- Added `barrelstrength\sproutbase\records\Settings`
+- Added `barrelstrength\sproutbase\migrations\Install::safeDown()`
+- Added support for config overrides in base settings models
+
+### Changed
+- Improved uninstall migration
+- Updated Form Template to support more flexible template relationships
+- Update Accessible and Basic Form Templates to support updated `getTemplateRoot` and `getPath` settings
+- Updated captcha settings to use class name
+- Updated `barrelstrength/sprout-base` requirement v5.2.0
+- Updated `barrelstrength/sprout-base-email` requirement v1.3.0
+- Updated `barrelstrength/sprout-base-fields` requirement v1.4.0
+- Updated `barrelstrength/sprout-base-reports` requirement v1.5.0
+
+### Fixed
+- Fixed path in `barrelstrength\sproutbaseemail\emailtemplates\CustomTemplates::getTemplateRoot()`
+- Fixed migration bug where email table may not exist ([#463]) 
+ 
+### Removed
+- Removed `barrelstrength\sprout-base-import` dependency
+- Removed `barrelstrength\sproutforms\base\Captcha::getCaptchaId()`
+- Removed `barrelstrength\sproutforms\base\FormTemplates::getTemplateId()`
+- Removed `barrelstrength\sproutforms\models\Settings::$formTemplateDefaultValue`
+- Removed `barrelstrength\sproutbase\services\Settings::getPluginSettings()`
+- Removed `barrelstrength\sproutbase\base\BaseSproutTrait`
+
+[#463]: https://github.com/barrelstrength/craft-sprout-forms/issues/463
+
 ## 3.9.0.1 - 2020-04-09
 
 ### Added
