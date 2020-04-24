@@ -25,10 +25,12 @@ return [
     // The name to display in the control panel in place of the plugin name
     'pluginNameOverride' => 'Sprout Forms',
 
-    // The default templates that will be used to output your forms when using the displayForm tag if no Form Templates are selected for a given form
+    // The default templates that will be used to output your forms when using
+    // the displayForm tag if no Form Templates are selected for a given form
     'formTemplateId' => 'barrelstrength\sproutforms\formtemplates\AccessibleTemplates',
 
-    // Disable this setting to stop Sprout Forms from saving all form submission data to the Craft database
+    // Disable this setting to stop Sprout Forms from saving all
+    // form submission data to the Craft database
     'enableSaveData' => true,
 
     // Whether to save Entries flagged as spam to the database
@@ -40,21 +42,32 @@ return [
     // Enable to capture the IP Address used when a Form Entry is saved
     'trackRemoteIp' => false,
 
-    // The form section that will be selected by default in the sidebar navigation ('forms' or 'entries')
+    // The form section that will be selected by default in the
+    // sidebar navigation ('forms' or 'entries')
     'defaultSection' => 'entries',
 
-    // Enable this setting to allow users to edit existing form entries in front-end templates. Enabling this feature may have some workflow or security considerations as forms allow anonymous submissions.
+    // Enable this setting to allow users to edit existing form entries in
+    // front-end templates. Enabling this feature may have some workflow or
+    // security considerations as forms allow anonymous submissions.
     'enableEditFormEntryViaFrontEnd' => false,
 
     // The behavior your user will see if a submission is flagged as spam
-    // redirectAsNormal
-    // redirectBackToForm
+    // 'redirectAsNormal' - will simulate a successful submission and direct
+    //   the user to the Redirect Page.
+    // 'redirectBackToForm - will return the user to the form. All failed
+    //   captchas are logged on the Spam Entries saved in the database.
     'spamRedirectBehavior' => 'redirectAsNormal',
 
-    // The total number of Spam entries that will be stored in the database
+    // The total number of Spam entries that will be stored in the database.
+    // When the limit is reached, the least recently updated Spam entry will
+    // be deleted from the database.
     'spamLimit' => 500,
 
-    // The probability that the Spam cleanup task will run each time a Form Entry is saved
+    // The probability that the Spam cleanup task will run each time a
+    // Form Entry is saved. A lower probability will trigger a cleanup task
+    // less often and the number of Spam Entries stored in the database may
+    // be higher than the Spam Limit target until the cleanup task is triggered.
+    //
     // 0 - None
     // 100000 - 1 in 10
     // 10000 - 1 in 100
@@ -65,6 +78,11 @@ return [
     'cleanupProbability' => 1000,
 
     // Individual captcha settings
+    //
+    // Additional Captchas can be found in the Plugin Store:
+    // https://plugins.craftcms.com/sprout-forms-google-recaptcha
+    //
+    // Custom Captchas can be added via the Captcha API
     'captchaSettings' => [
         'barrelstrength\sproutforms\captchas\DuplicateCaptcha' => [
             'enabled' => true,
