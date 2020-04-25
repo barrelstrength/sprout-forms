@@ -33,15 +33,24 @@ abstract class FormTemplates
 
     public function getFullPath(): string
     {
+        // @deprecate in v4.0. If getTemplateRoot is not implemented,
+        // keep old behavior, for now.
+        if ($this->getTemplateRoot() === null) {
+            return $this->getPath();
+        }
+
         return $this->getTemplateRoot().'/'.$this->getPath();
     }
 
     /**
      * The root folder where the Form Templates exist
      *
-     * @return string
+     * @return string|null
      */
-    abstract public function getTemplateRoot(): string;
+    public function getTemplateRoot()
+    {
+        return null;
+    }
 
     /**
      * The folder path where your Form Templates exist in relation to the folder defined in [[self::getTemplateRoot]]
