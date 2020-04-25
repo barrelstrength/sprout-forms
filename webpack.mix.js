@@ -49,7 +49,9 @@ mix
   .js([
     'src/web/assets/formtemplates/src/js/submit-handler.js',
   ], 'src/web/assets/formtemplates/dist/js/submit-handler.js')
-  .polyfill();
+  .polyfill({
+    targets: '> 0.5%, last 2 versions, Firefox ESR'
+  });
 
 // Full API
 // mix.js(src, output);
