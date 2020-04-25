@@ -766,7 +766,7 @@ class Forms extends Component
      * @return FormTemplates|null
      * @throws FormTemplatesDirectoryNotFoundException
      */
-    public function getFormTemplateById($templateId)
+    public function getFormTemplateById($templateId): FormTemplates
     {
         $formTemplates = null;
 
