@@ -296,7 +296,7 @@ class Integrations extends Component
         }
 
         $form = $entry->getForm();
-        $integrations = $this->getIntegrationsByFormId($form);
+        $integrations = $this->getIntegrationsByFormId($form->id);
 
         if (!Craft::$app->getRequest()->getIsSiteRequest() || empty($integrations)) {
             return;
