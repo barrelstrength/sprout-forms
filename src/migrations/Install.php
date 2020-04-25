@@ -124,10 +124,10 @@ class Install extends Migration
         }
 
         // Delete Form Entry Elements
-        $this->delete(Table::ELEMENTS, ['type', Entry::class]);
+        $this->delete(Table::ELEMENTS, ['type' => Entry::class]);
 
         // Delete Form Elements
-        $this->delete(Table::ELEMENTS, ['type', Form::class]);
+        $this->delete(Table::ELEMENTS, ['type' => Form::class]);
 
         $this->dropTableIfExists(IntegrationLogRecord::tableName());
         $this->dropTableIfExists(IntegrationRecord::tableName());
