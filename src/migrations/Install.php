@@ -20,6 +20,8 @@ use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesDataSource;
+use barrelstrength\sproutforms\integrations\sproutreports\datasources\IntegrationLogDataSource;
+use barrelstrength\sproutforms\integrations\sproutreports\datasources\SpamLogDataSource;
 use barrelstrength\sproutforms\models\Settings;
 use barrelstrength\sproutforms\records\EntriesSpamLog as EntriesSpamLogRecord;
 use barrelstrength\sproutforms\records\Entry as EntryRecord;
@@ -86,6 +88,8 @@ class Install extends Migration
         $sproutBaseInUse = $plugin->dependencyInUse(SproutDependencyInterface::SPROUT_BASE);
 
         SproutBaseReports::$app->dataSources->deleteReportsByType(EntriesDataSource::class);
+        SproutBaseReports::$app->dataSources->deleteReportsByType(IntegrationLogDataSource::class);
+        SproutBaseReports::$app->dataSources->deleteReportsByType(SpamLogDataSource::class);
 
         if (!$sproutBaseEmailInUse) {
             $migration = new SproutBaseEmailInstall();
