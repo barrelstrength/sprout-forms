@@ -396,7 +396,7 @@ class Forms extends Component
      *
      * @return string newTitleFormat
      */
-    public function cleanTitleFormat($fieldId): string
+    public function cleanTitleFormat($fieldId)
     {
         /** @var Field $field */
         $field = Craft::$app->getFields()->getFieldById($fieldId);
