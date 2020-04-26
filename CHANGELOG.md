@@ -2,8 +2,6 @@
 
 ## 3.10.0 - UNRELEASED
 
-> {warning} Form Templates using relative paths to include other twig files should review the [upgrade notes](https://sprout.barrelstrengthdesign.com/docs/forms/installing-and-updating-craft-3.html#upgrading-to-forms-3-10-0)
-
 ### Added
 - Added example config file `src/config.php`
 - Added `barrelstrength\sproutforms\models\Settings::$formTemplateId`
@@ -19,8 +17,6 @@
 
 ### Changed
 - Improved uninstall migration
-- Updated Form Template to support more flexible template relationships
-- Update Accessible and Basic Form Templates to support updated `getTemplateRoot` and `getPath` settings
 - Updated captcha settings to use class name
 - Updated `barrelstrength/sprout-base` requirement v5.2.0
 - Updated `barrelstrength/sprout-base-email` requirement v1.3.0
