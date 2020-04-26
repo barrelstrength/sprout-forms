@@ -475,31 +475,31 @@ class SproutForms extends Plugin implements SproutEditionsInterface, SproutDepen
                 'sprout-forms/forms',
 
             // Reports
-            '<pluginHandle:sprout-forms>/reports/<dataSourceId:\d+>/new' => [
+            '<pluginHandle:sprout-forms>/<pluginSection:reports>/<dataSourceId:\d+>/new' => [
                 'route' => 'sprout-base-reports/reports/edit-report-template',
                 'params' => [
                     'viewContext' => 'sprout-forms'
                 ]
             ],
-            '<pluginHandle:sprout-forms>/reports/<dataSourceId:\d+>/edit/<reportId:\d+>' => [
+            '<pluginHandle:sprout-forms>/<pluginSection:reports>/<dataSourceId:\d+>/edit/<reportId:\d+>' => [
                 'route' => 'sprout-base-reports/reports/edit-report-template',
                 'params' => [
                     'viewContext' => 'sprout-forms'
                 ]
             ],
-            '<pluginHandle:sprout-forms>/reports/view/<reportId:\d+>' => [
+            '<pluginHandle:sprout-forms>/<pluginSection:reports>/view/<reportId:\d+>' => [
                 'route' => 'sprout-base-reports/reports/results-index-template',
                 'params' => [
                     'viewContext' => 'sprout-forms'
                 ]
             ],
-            '<pluginHandle:sprout-forms>/reports/<dataSourceId:\d+>' => [
+            '<pluginHandle:sprout-forms>/<pluginSection:reports>/<dataSourceId:\d+>' => [
                 'route' => 'sprout-base-reports/reports/reports-index-template',
                 'params' => [
                     'viewContext' => 'sprout-forms'
                 ]
             ],
-            '<pluginHandle:sprout-forms>/reports' => [
+            '<pluginHandle:sprout-forms>/<pluginSection:reports>' => [
                 'route' => 'sprout-base-reports/reports/reports-index-template',
                 'params' => [
                     'viewContext' => 'sprout-forms',
@@ -508,21 +508,21 @@ class SproutForms extends Plugin implements SproutEditionsInterface, SproutDepen
             ],
 
             // Notifications
-            '<pluginHandle:sprout-forms>/notifications' => [
+            '<pluginHandle:sprout-forms>/<pluginSection:notifications>' => [
                 'route' => 'sprout-base-email/notifications/notifications-index-template',
                 'params' => [
                     'viewContext' => 'sprout-forms',
                     'hideSidebar' => true
                 ]
             ],
-            '<pluginHandle:sprout-forms>/notifications/edit/<emailId:\d+|new>' => [
+            '<pluginHandle:sprout-forms>/<pluginSection:notifications>/edit/<emailId:\d+|new>' => [
                 'route' => 'sprout-base-email/notifications/edit-notification-email-template',
                 'params' => [
                     'viewContext' => 'sprout-forms',
                     'defaultEmailTemplate' => BasicSproutFormsNotification::class
                 ]
             ],
-            '<pluginHandle:sprout-forms>/notifications/settings/edit/<emailId:\d+|new>' => [
+            '<pluginHandle:sprout-forms>/<pluginSection:notifications>/settings/edit/<emailId:\d+|new>' => [
                 'route' => 'sprout-base-email/notifications/edit-notification-email-settings-template',
                 'params' => [
                     'viewContext' => 'sprout-forms'
