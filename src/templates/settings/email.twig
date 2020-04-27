@@ -2,6 +2,13 @@
 
 {% import "_includes/forms" as forms %}
 
+{% macro configWarning(setting) -%}
+    {{ "This is being overridden by the {setting} config setting."|t('sprout-forms-google-recaptcha', {
+        setting: setting
+    })|raw }}
+{%- endmacro %}
+
+{% from _self import configWarning %}
 
 {% set sproutEmailIsEnabled = craft.app.getPlugins().isPluginEnabled('sprout-email') %}
 
@@ -11,5 +18,6 @@
     name: 'showNotificationsTab',
     on: settings.showNotificationsTab ? true : not sproutEmailIsEnabled,
     onLabel: "Enable"|t('sprout-forms'),
-    warning: not sproutEmailIsEnabled ? 'Notifications tab will always display while Sprout Email is disabled'|t('sprout-forms') : null
+    warning: not sproutEmailIsEnabled ? 'Notifications tab will always display while Sprout Email is disabled'|t('sprout-forms') : null,
+    warning: config.showNotificationsTab is defined ? configWarning('showNotificationsTab')
 }) }}

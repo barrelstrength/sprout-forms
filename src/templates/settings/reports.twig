@@ -2,6 +2,14 @@
 
 {% import "_includes/forms" as forms %}
 
+{% macro configWarning(setting) -%}
+    {{ "This is being overridden by the {setting} config setting."|t('sprout-forms-google-recaptcha', {
+        setting: setting
+    })|raw }}
+{%- endmacro %}
+
+{% from _self import configWarning %}
+
 {% set sproutReportsIsEnabled = craft.app.getPlugins().isPluginEnabled('sprout-reports') %}
 
 {{ forms.lightswitchField({
@@ -10,5 +18,6 @@
     name: 'showReportsTab',
     on: settings.showReportsTab ? true : not sproutReportsIsEnabled,
     onLabel: "Enable"|t('sprout-forms'),
-    warning: not sproutReportsIsEnabled ? 'Reports tab will always display while Sprout Reports is disabled'|t('sprout-forms') : null
+    warning: not sproutReportsIsEnabled ? 'Reports tab will always display while Sprout Reports is disabled'|t('sprout-forms') : null,
+    warning: config.showReportsTab is defined ? configWarning('showReportsTab')
 }) }}

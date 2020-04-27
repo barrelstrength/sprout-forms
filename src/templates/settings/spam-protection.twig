@@ -2,6 +2,14 @@
 
 {% import "_includes/forms" as forms %}
 
+{% macro configWarning(setting) -%}
+    {{ "This is being overridden by the {setting} config setting."|t('sprout-forms-google-recaptcha', {
+        setting: setting
+    })|raw }}
+{%- endmacro %}
+
+{% from _self import configWarning %}
+
 {% if not settings.saveSpamToDatabase %}
     <div><strong>{{ "Spam Tracking Disabled."|t('sprout-forms') }}</strong> <a href="{{ cpUrl('sprout-forms/settings/general') }}">{{ "Enable in General Settings"|t('sprout-forms') }}</a></div>
     <hr>
@@ -13,7 +21,8 @@
     name: 'spamRedirectBehavior',
     options: spamRedirectBehaviorOptions,
     value: settings.spamRedirectBehavior,
-    first: true
+    first: true,
+    warning: config.spamRedirectBehavior is defined ? configWarning('spamRedirectBehavior')
 }) }}
 
 {{ forms.textField({
@@ -22,7 +31,8 @@
     id: 'spamLimit',
     name: 'spamLimit',
     size:'10',
-    value: settings.spamLimit
+    value: settings.spamLimit,
+    warning: config.spamLimit is defined ? configWarning('spamLimit')
 }) }}
 
 {{ forms.selectField({
@@ -39,7 +49,8 @@
         { value: '10', label: '1 in 100,000' },
         { value: '1', label: '1 in 1,000,000' }
     ],
-    value: settings.cleanupProbability
+    value: settings.cleanupProbability,
+    warning: config.cleanupProbability is defined ? configWarning('cleanupProbability')
 }) }}
 
 <hr>
@@ -57,6 +68,7 @@
         toggle: captchaId,
         on: isEnabled,
         onLabel: "Enable"|t('sprout-forms'),
+        warning: config.captchaSettings[className(captcha)] is defined ? configWarning('captchaSettings')
     }) }}
 
     {% if captcha.getCaptchaSettingsHtml()|length %}
