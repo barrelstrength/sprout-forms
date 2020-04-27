@@ -118,7 +118,7 @@ trait FormFieldTrait
     {
         $defaultFormTemplates = new AccessibleTemplates();
 
-        return Craft::getAlias($defaultFormTemplates->getPath().'/fields/');
+        return Craft::getAlias($defaultFormTemplates->getFullPath().'/fields/');
     }
 
     /**
