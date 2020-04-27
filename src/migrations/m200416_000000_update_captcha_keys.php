@@ -56,7 +56,8 @@ class m200416_000000_update_captcha_keys extends Migration
                 'newKey' => 'barrelstrength\sproutformsgooglerecaptcha\integrations\sproutforms\captchas\GoogleRecaptcha'
             ]
         ];
-        $captchaSettings = ProjectConfig::unpackAssociativeArray($pluginSettings['captchaSettings']);
+
+        $captchaSettings = ProjectConfig::unpackAssociativeArray($pluginSettings['captchaSettings'] ?? []);
 
         $newCaptchaSettings = [];
 
