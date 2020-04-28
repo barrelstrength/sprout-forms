@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.10.0.1 - 2020-04-27
+
+### Changed
+- Updated `barrelstrength/sprout-base-email` requirement v1.3.0
+
+### Fixed
+- Fixed bug in email settings migration
+
 ## 3.10.0 - 2020-04-27
 
 ### Added
