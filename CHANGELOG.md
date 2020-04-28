@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.11.0 - 2020-04-28
+
+### Changed
+- Updated `barrelstrength/sprout-base` requirement v6.0.0
+
+### Fixed
+- Fixed migration issue when multiple Sprout plugins are installed
+
 ## 3.10.0.1 - 2020-04-27
 
 ### Changed
