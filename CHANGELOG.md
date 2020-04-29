@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.11.1 - 2020-04-29
+
+### Added
+- Added support for global field rendering options
+
+### Fixed
+- Fixed `renderingOptions` output bug when using Name Field 
+
 ## 3.11.0 - 2020-04-28
 
 ### Changed
