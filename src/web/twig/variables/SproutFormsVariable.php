@@ -211,7 +211,10 @@ class SproutFormsVariable
             }
         }
 
-        $fieldRenderingOptions = $renderingOptions['fields'][$field->handle] ?? null;
+        $globalFieldRenderingOptions = $renderingOptions['fields']['*'] ?? [];
+        $fieldSpecificRenderingOptions = $renderingOptions['fields'][$field->handle] ?? [];
+
+        $fieldRenderingOptions = $this->processFieldRenderingOptions($fieldSpecificRenderingOptions, $globalFieldRenderingOptions);
 
         $value = $entry->getFieldValue($field->handle);
 
@@ -653,6 +656,47 @@ class SproutFormsVariable
     public function getFieldCondition($conditionClass, $formField): Condition
     {
         return new $conditionClass(['formField' => $formField]);
+    }
+
+    /**
+     * @param       $fieldSpecificRenderingOptions
+     * @param       $globalFieldRenderingOptions
+     *
+     * @return array
+     */
+    protected function processFieldRenderingOptions($fieldSpecificRenderingOptions, $globalFieldRenderingOptions): array
+    {
+        $fieldRenderingOptions = [];
+
+        $supportedFieldRenderingOptions = ['id', 'class', 'errorClass', 'data'];
+
+        foreach ($supportedFieldRenderingOptions as $fieldRenderingOption) {
+            switch ($fieldRenderingOption) {
+                case 'id':
+                    $fieldRenderingOptions['id'] = $fieldSpecificRenderingOptions['id'] ?? null;
+                    break;
+                case 'class':
+                    // Append any global classes to field specific ones
+                    $class[] = $globalFieldRenderingOptions['class'] ?? null;
+                    $class[] = $fieldSpecificRenderingOptions['class'] ?? null;
+                    $fieldRenderingOptions['class'] = trim(implode(' ', $class));
+                    break;
+                case 'errorClass':
+                    // Append any global classes to field specific ones
+                    $errorClass[] = $globalFieldRenderingOptions['errorClass'] ?? null;
+                    $errorClass[] = $fieldSpecificRenderingOptions['errorClass'] ?? null;
+                    $fieldRenderingOptions['errorClass'] = trim(implode(' ', $errorClass));
+                    break;
+                case 'data':
+                    // give priority to more specific data attributes
+                    $globalData = $globalFieldRenderingOptions['data'] ?? [];
+                    $fieldSpecificData = $fieldSpecificRenderingOptions['data'] ?? [];
+                    $fieldRenderingOptions['data'] = array_filter(array_merge($globalData, $fieldSpecificData));
+                    break;
+            }
+        }
+
+        return $fieldRenderingOptions;
     }
 }
 
