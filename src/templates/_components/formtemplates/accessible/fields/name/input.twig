@@ -81,6 +81,7 @@
     <input type="text" autocomplete="name"
         {%- if name %} name="{{ name ~ '[name][fullNameShort]' }}"{% endif %}
         {%- if id %} id="{{ id }}"{% endif %}
+        {%- if class %} class="{{ class }}"{% endif %}
         {%- if required %} required aria-required="true"{% endif %}
         {%- if hasInstructions %} aria-describedby="{{ field.getNamespace() }}-{{ id }}-instructions"{% endif %}
         {%- if value %} value="{{ value.getFullName() }}"{% endif %}
