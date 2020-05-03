@@ -1,10 +1,20 @@
 # Changelog
 
+## 3.11.2 - 2020-05-03
+
+### Changed
+- Updated `barrelstrength/sprout-base-email` requirement v1.3.3
+- Updated `barrelstrength/sprout-base-reports` requirement v1.5.1
+
+### Fixed
+- Fixed issue where report settings table may not get created in migration scenario
+- Fixed variable name when selecting default Email Template
+
 ## 3.11.1 - 2020-04-29
 
 ### Added
 - Added support for global field rendering options
-
+ 
 ### Fixed
 - Fixed `renderingOptions` output bug when using Name Field 
 
