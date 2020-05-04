@@ -304,7 +304,7 @@ abstract class Integration extends SavableComponent implements IntegrationInterf
     public function getTargetIntegrationFieldValues(): array
     {
         if (!$this->fieldMapping) {
-            return null;
+            return [];
         }
 
         $fields = [];
