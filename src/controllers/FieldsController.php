@@ -67,7 +67,7 @@ class FieldsController extends BaseController
     public function actionCreateField(): Response
     {
         $this->requireAcceptsJson();
-        $this->requirePermission('sproutForms-editEntries');
+        $this->requirePermission('sproutForms-editForms');
 
         $request = Craft::$app->getRequest();
         $type = $request->getBodyParam('type');
@@ -306,7 +306,7 @@ class FieldsController extends BaseController
     {
         $this->requirePostRequest();
         $this->requireAcceptsJson();
-        $this->requirePermission('sproutForms-editEntries');
+        $this->requirePermission('sproutForms-editForms');
 
         $fieldId = Craft::$app->request->getRequiredBodyParam('fieldId');
 
@@ -358,7 +358,7 @@ class FieldsController extends BaseController
         $this->requireAdmin(false);
         $this->requirePostRequest();
         $this->requireAcceptsJson();
-        $this->requirePermission('sproutForms-editEntries');
+        $this->requirePermission('sproutForms-editForms');
 
         $fieldIds = Json::decode(Craft::$app->request->getRequiredBodyParam('ids'));
         SproutForms::$app->fields->reorderFields($fieldIds);

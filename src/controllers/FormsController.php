@@ -317,7 +317,7 @@ class FormsController extends BaseController
     public function actionAddFormTab(): Response
     {
         $this->requireAcceptsJson();
-        $this->requirePermission('sproutForms-editEntries');
+        $this->requirePermission('sproutForms-editForms');
 
         $request = Craft::$app->getRequest();
         $formId = $request->getBodyParam('formId');
@@ -356,7 +356,7 @@ class FormsController extends BaseController
     public function actionDeleteFormTab(): Response
     {
         $this->requireAcceptsJson();
-        $this->requirePermission('sproutForms-editEntries');
+        $this->requirePermission('sproutForms-editForms');
 
         $request = Craft::$app->getRequest();
         $tabId = $request->getBodyParam('id');
@@ -394,7 +394,7 @@ class FormsController extends BaseController
     public function actionRenameFormTab(): Response
     {
         $this->requireAcceptsJson();
-        $this->requirePermission('sproutForms-editEntries');
+        $this->requirePermission('sproutForms-editForms');
 
         $request = Craft::$app->getRequest();
         $tabId = $request->getBodyParam('tabId');
