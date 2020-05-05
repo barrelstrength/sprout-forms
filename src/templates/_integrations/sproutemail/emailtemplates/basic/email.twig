@@ -104,6 +104,11 @@
                                                                     <br>
                                                                 {% endif %}
 
+                                                            {% elseif field.getFieldInputFolder() == 'date' %}
+
+                                                                {{ value|date('Y-m-d h:i:s A') }}
+                                                                <br>
+
                                                             {% elseif field.getFieldInputFolder() == 'name' and value.getFullNameExtended() != '' %}
 
                                                                 {{ value.getFullNameExtended() }}
