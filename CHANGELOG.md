@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.11.3 - 2020-05-03
+
+### Fixed
+- Added support for Date field in Form Notification Email Templates ([#459])
+- Fixed Form and Entry permissions in several scenarios ([#466])
+- Fixed email preview URL ([#469])
+
+[#459]: https://github.com/barrelstrength/craft-sprout-forms/issues/459
+[#466]: https://github.com/barrelstrength/craft-sprout-forms/issues/466
+[#469]: https://github.com/barrelstrength/craft-sprout-forms/issues/469
+
 ## 3.11.2 - 2020-05-03
 
 ### Changed
