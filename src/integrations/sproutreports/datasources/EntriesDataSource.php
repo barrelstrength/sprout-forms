@@ -90,7 +90,7 @@ class EntriesDataSource extends DataSource
         $entryStatusIds = $report->getSetting('entryStatusIds');
 
         if (!$form) {
-            return null;
+            return [];
         }
 
         $contentTable = $form->contentTable;
