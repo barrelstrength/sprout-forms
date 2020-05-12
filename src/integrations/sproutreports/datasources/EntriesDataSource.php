@@ -21,6 +21,7 @@ use craft\elements\db\ElementQueryInterface;
 use craft\fields\data\MultiOptionsFieldData;
 use craft\fields\data\SingleOptionFieldData;
 use craft\helpers\DateTimeHelper;
+use craft\helpers\Json;
 use DateTime;
 use Exception;
 use Twig\Error\LoaderError;
@@ -199,12 +200,16 @@ class EntriesDataSource extends DataSource
                     if (count($selectedOptions)) {
                         $value = implode(', ', $selectedOptions);
                     }
-                } else {
+                } else if (is_array($field)) {
+                    $value = Json::encode($field);
+                } else if (is_string($field) OR $field === null) {
                     $value = $field;
+                } else {
+                    $value = Craft::t('sprout-forms', 'Unsupported Field');
                 }
 
                 $fieldHandleKey = 'field_'.$handle;
-                $rows[$key][$fieldHandleKey] = $value;
+                $rows[$key][$fieldHandleKey] = $value ?? null;
             }
         }
 
