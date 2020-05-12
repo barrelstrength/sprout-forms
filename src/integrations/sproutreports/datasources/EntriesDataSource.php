@@ -19,6 +19,7 @@ use Craft;
 use craft\db\Query;
 use craft\elements\db\ElementQueryInterface;
 use craft\fields\data\MultiOptionsFieldData;
+use craft\fields\data\SingleOptionFieldData;
 use craft\helpers\DateTimeHelper;
 use DateTime;
 use Exception;
@@ -173,6 +174,15 @@ class EntriesDataSource extends DataSource
 
                     if (!empty($titles)) {
                         $value = implode(', ', $titles);
+                    }
+                } else if ($field instanceof SingleOptionFieldData) {
+                    $options = $field->getOptions();
+
+                    foreach ($options as $option) {
+                        if ($option->selected) {
+                            $value = $option->value;
+                            break;
+                        }
                     }
                 } else if ($field instanceof MultiOptionsFieldData) {
                     $options = $field->getOptions();
