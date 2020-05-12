@@ -35,6 +35,9 @@ use Twig\Error\SyntaxError;
  */
 class EntriesDataSource extends DataSource
 {
+    const DELIMITER_COMMA = ',';
+    const DELIMITER_SEMICOLON = ';';
+    
     /**
      * @return string
      */
@@ -227,6 +230,17 @@ class EntriesDataSource extends DataSource
             ];
         }
 
+        $delimiterOptions = [
+            [
+                'label' => Craft::t('sprout-forms', 'Comma seperated'),
+                'value' => self::DELIMITER_COMMA,
+            ],
+            [
+                'label' => Craft::t('sprout-forms', 'Semicolon seperated'),
+                'value' => self::DELIMITER_SEMICOLON,
+            ],
+        ];
+
         // @todo Determine sensible default start and end date based on Order data
         $defaultStartDate = null;
         $defaultEndDate = null;
@@ -269,7 +283,9 @@ class EntriesDataSource extends DataSource
             'dateRanges' => $dateRanges,
             'options' => $settings,
             'entryStatusOptions' => $entryStatusOptions,
-            'defaultSelectedEntryStatuses' => $defaultSelectedEntryStatuses
+            'defaultSelectedEntryStatuses' => $defaultSelectedEntryStatuses,
+            'delimiter' => $settings['delimiter'],
+            'delimiterOptions' => $delimiterOptions,
         ]);
     }
 

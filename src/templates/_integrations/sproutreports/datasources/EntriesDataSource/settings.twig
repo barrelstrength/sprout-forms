@@ -49,6 +49,15 @@
         options: entryStatusOptions,
         values: options.entryStatusIds is defined ? options.entryStatusIds : defaultSelectedEntryStatuses
     }) }}
+	
+	{{ forms.selectField({
+		label: "Delimiter"|t('sprout-forms'),
+		instructions: 'Select which delimiter to use in the export.'|t('sprout-forms'),
+		name: 'settings[delimiter]',
+		options: delimiterOptions,
+		value: options.delimiter,
+		first: true
+	}) }}
 {% else %}
 
     {% set boxBody %}
