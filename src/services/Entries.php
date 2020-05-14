@@ -200,7 +200,7 @@ class Entries extends Component
 
         if ($saveData) {
             // Allow Form to override global saveData setting
-            $saveData = $form->saveData ?: $settings->enableSaveDataDefaultValue;
+            $saveData = (int)$form->saveData ? true : false;
         }
 
         // Let the SPAM setting determine if we save data if we are:
