@@ -18,6 +18,5 @@
     name: 'showNotificationsTab',
     on: settings.showNotificationsTab ? true : not sproutEmailIsEnabled,
     onLabel: "Enable"|t('sprout-forms'),
-    warning: not sproutEmailIsEnabled ? 'Notifications tab will always display while Sprout Email is disabled'|t('sprout-forms') : null,
-    warning: config.showNotificationsTab is defined ? configWarning('showNotificationsTab')
+    warning: not sproutEmailIsEnabled ? 'Notifications tab will always display while Sprout Email is disabled'|t('sprout-forms') : config.showNotificationsTab is defined ? configWarning('showNotificationsTab')
 }) }}

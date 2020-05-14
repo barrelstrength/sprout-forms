@@ -18,6 +18,5 @@
     name: 'showReportsTab',
     on: settings.showReportsTab ? true : not sproutReportsIsEnabled,
     onLabel: "Enable"|t('sprout-forms'),
-    warning: not sproutReportsIsEnabled ? 'Reports tab will always display while Sprout Reports is disabled'|t('sprout-forms') : null,
-    warning: config.showReportsTab is defined ? configWarning('showReportsTab')
+    warning: not sproutReportsIsEnabled ? 'Reports tab will always display while Sprout Reports is disabled'|t('sprout-forms') : config.showReportsTab is defined ? configWarning('showReportsTab')
 }) }}
