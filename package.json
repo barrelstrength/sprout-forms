@@ -2,7 +2,7 @@
   "author": "Barrel Strength Design",
   "license": "proprietary",
   "scripts": {
-    "watch": "npm run prod -- --watch",
+    "watch": "npm run build -- --watch",
     "build": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "debug": "npm run dev -- --watch",
     "dev": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
