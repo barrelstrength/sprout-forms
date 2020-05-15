@@ -1,5 +1,28 @@
 # Changelog
 
+## 3.11.4 - 2020-05-15
+
+### Added
+- Added Report export delimiter setting and support for comma, semi-colon, and tab-delimited exports
+- Added Report 'Default Export Delimiter' setting
+
+### Changed
+- Improved support for Single Option Fields in exports
+- Improved support for exporting generic field values for arrays, strings, and nulls
+- Updated `barrelstrength/sprout-base` requirement v6.0.1
+- Updated `barrelstrength/sprout-base-email` requirement v1.3.4
+- Updated `barrelstrength/sprout-base-fields` requirement v1.4.1
+- Updated `barrelstrength/sprout-base-reports` requirement v1.5.2
+
+### Fixed
+- Fixed bug where hyphens were being escaped when processing front-end regular expression pattern
+- Fixed display bug managing Address field 'Highlight Country' settings
+- Fixed bug with display tab settings 
+
+[#476]: https://github.com/barrelstrength/craft-sprout-forms/issues/476
+
+### Fixed
+
 ## 3.11.3 - 2020-05-03
 
 ### Fixed
