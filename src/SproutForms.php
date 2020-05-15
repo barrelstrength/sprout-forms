@@ -106,7 +106,7 @@ class SproutForms extends Plugin implements SproutEditionsInterface, SproutDepen
     /**
      * @var string
      */
-    public $schemaVersion = '3.11.2.1';
+    public $schemaVersion = '3.11.4';
 
     /**
      * @var string
