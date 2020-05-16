@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.11.5 - 2020-05-16
+
+### Changed
+- Updated `barrelstrength/sprout-base-email` requirement v1.3.5
+
+### Fixed
+- Fixed bug where Email Template settings were not saving correctly ([#474])
+- Fixed email settings migration and save behavior
+
+[#474]: https://github.com/barrelstrength/craft-sprout-forms/issues/474
+
 ## 3.11.4 - 2020-05-15
 
 ### Added
