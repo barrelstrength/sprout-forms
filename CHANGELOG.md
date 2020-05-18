@@ -1,5 +1,18 @@
 # Changelog
 
+## 3.11.6 - 2020-05-18
+
+### Changed
+- Improved cleanup of Field Rule settings when a Form Field is deleted
+
+### Fixed
+- Fixed bug where Element Integration would not map Post Date properly ([#440]) 
+- Fixed bug where Rules would not retain condition target values ([#473])
+- Fixed Rule logic around disabling fields
+
+[#440]: https://github.com/barrelstrength/craft-sprout-forms/issues/440
+[#473]: https://github.com/barrelstrength/craft-sprout-forms/issues/473
+
 ## 3.11.5 - 2020-05-16
 
 ### Changed
