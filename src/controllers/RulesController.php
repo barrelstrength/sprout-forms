@@ -142,14 +142,24 @@ class RulesController extends BaseController
         $response = false;
 
         $ruleId = Craft::$app->request->getRequiredBodyParam('ruleId');
-        $rule = RulesRecord::findOne($ruleId);
 
-        if ($rule) {
-            $response = $rule->delete();
+        $rule = SproutForms::$app->rules->getRuleById($ruleId);
+
+        if (!$rule) {
+            return $this->asJson([
+                'success' => false
+            ]);
+        }
+
+        if (!SproutForms::$app->rules->deleteRule($rule)) {
+            return $this->asJson([
+                'success' => false,
+                'errors' => $rule->getErrors()
+            ]);
         }
 
         return $this->asJson([
-            'success' => $response
+            'success' => true
         ]);
     }
 

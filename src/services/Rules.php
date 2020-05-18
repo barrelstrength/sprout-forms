@@ -17,11 +17,13 @@ use craft\base\Component;
 use craft\db\Query;
 use craft\errors\MissingComponentException;
 use craft\helpers\Component as ComponentHelper;
+use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
+use yii\db\StaleObjectException;
 
 /**
  * @property array $integrationOptions
@@ -153,6 +155,23 @@ class Rules extends Component
             $rule->name = $conditionalRecord->name;
 
             return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param Rule $rule
+     *
+     * @return bool|false|int
+     * @throws Throwable
+     * @throws StaleObjectException
+     */
+    public function deleteRule(Rule $rule) {
+        $ruleRecord = RulesRecord::findOne($rule->id);
+
+        if ($ruleRecord) {
+            return $ruleRecord->delete();
         }
 
         return false;
