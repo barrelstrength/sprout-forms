@@ -204,10 +204,9 @@ class SproutFormsRules {
   hideAndDisableField(element) {
     // Disable all form elements within this field
     let inputs = element.querySelectorAll('input, select, option, textarea, button, datalist, output');
-    for (let key in inputs) {
-      let input = inputs[key];
+    inputs.forEach((input) => {
       input.disabled = true;
-    }
+    });
 
     // Hide field
     element.classList.add('sprout-hidden');
@@ -216,10 +215,9 @@ class SproutFormsRules {
   showAndEnableField(element) {
     // Enabled all form elements within this field
     let inputs = element.querySelectorAll('input, select, option, textarea, button, datalist, output');
-    for (let key in inputs) {
-      let input = inputs[key];
+    inputs.forEach((input) => {
       input.disabled = false;
-    }
+    });
 
     // Show field
     element.classList.remove('sprout-hidden');
