@@ -99,7 +99,7 @@ class EntryElementIntegration extends ElementIntegration
         // reason that causes the need to do this
         unset($targetIntegrationFieldValues['id']);
 
-        $defaultAttributes = $this->getDefaultSourceMappingAttributes();
+        $defaultAttributes = $this->getDefaultAttributes();
 
         $defaultAttributesHandles = [];
         foreach ($defaultAttributes as $defaultAttribute) {
@@ -253,7 +253,12 @@ class EntryElementIntegration extends ElementIntegration
                 'label' => Craft::t('sprout-forms', 'Post Date'),
                 'value' => 'postDate',
                 'class' => Date::class
-            ]
+            ],
+            [
+                'label' => Craft::t('sprout-forms', 'Date Created'),
+                'value' => 'dateCreated',
+                'class' => Date::class
+            ],
         ];
 
         $defaultFields = [];
