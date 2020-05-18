@@ -32,6 +32,7 @@ use Throwable;
 use yii\base\Component;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
+use yii\db\StaleObjectException;
 
 /**
  *
@@ -423,35 +424,53 @@ class Forms extends Component
     }
 
     /**
-     * IF a field is deleted remove it from the rules
-     *
+     * If a field is deleted remove it from the rules
+     * 
      * @param $oldHandle
      * @param $form
      *
      * @throws InvalidConfigException
      * @throws MissingComponentException
+     * @throws StaleObjectException
+     * @throws Throwable
      */
     public function removeFieldRulesUsingField($oldHandle, $form)
     {
-        $rules = SproutForms::$app->rules->getRulesByFormId($form->id);
+        $rules = SproutForms::$app->rules->getRulesByFormId($form->id, FieldRule::class);
 
-        /** @var FieldRule $rule */
+        /** @var Field[] $fields */
+        $fields = $form->getFieldLayout()->getFields();
+
+        $fieldHandles = [];
+        foreach ($fields as $field) {
+            $fieldHandles[] = $field->handle;
+        }
+
+        // Clean up rules if any SOURCE or TARGET fields were deleted
         foreach ($rules as $rule) {
-            $conditions = $rule->conditions;
-            if ($conditions) {
-                foreach ($conditions as $key => $orConditions) {
-                    foreach ($orConditions as $key2 => $condition) {
-                        if (isset($condition[0]) && $condition[0] === $oldHandle) {
-                            unset($conditions[$key][$key2]);
-                        }
-                    }
 
-                    if (count($conditions[$key]) === 0) {
-                        unset($conditions[$key]);
+            if (!in_array($rule->behaviorTarget, $fieldHandles, true)) {
+                SproutForms::$app->rules->deleteRule($rule);
+                continue;
+            }
+
+            foreach ($rule->conditions as $conditionSetKey => $conditionSet) {
+                foreach ($conditionSet as $conditionKey => $condition) {
+                    // $condition[0] is the fieldHandle of the Source Field for the rule
+                    $ruleSourceFieldHandle = $condition[0] ?? null;
+                    if ($ruleSourceFieldHandle
+                        && !in_array($ruleSourceFieldHandle, $fieldHandles, true)) {
+                        unset($rule->conditions[$conditionSetKey][$conditionKey]);
                     }
                 }
+
+                if (empty($rule->conditions[$conditionSetKey])) {
+                    // If we removed all conditions from a rule, delete the entire rule
+                    SproutForms::$app->rules->deleteRule($rule);
+                    continue 2;
+                }
             }
-            $rule->conditions = $conditions;
+
             SproutForms::$app->rules->saveRule($rule);
         }
     }
