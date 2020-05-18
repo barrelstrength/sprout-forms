@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.11.7 - 2020-05-18
+
+### Changed
+- Updated `barrelstrength/sprout-base-email` requirement to v1.3.6
+
+### Fixed
+- Fixed error when creating new Notification Emails if Email Notification is not defined ([#479][#479-email])
+
+[#479-email]: https://github.com/barrelstrength/craft-sprout-forms/issues/479
+
 ## 3.11.6 - 2020-05-18
 
 ### Changed
