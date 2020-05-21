@@ -1,5 +1,21 @@
 # Changelog
 
+## 3.11.8 - 2020-05-21
+
+### Changed
+- Improved error handling when sending test emails
+- Updated `barrelstrength/sprout-base-email` requirement to v1.3.7
+- Updated `barrelstrength/sprout-base-fields` requirement to v1.4.2
+- Updated `barrelstrength/sprout-base-reports` requirement to v1.5.3
+- Updated `giggsey/libphonenumber-for-php` requirement to v8.12.4
+    
+### Fixed
+- Fixed bug processing Test recipients to ensure only Test Recipients receive Test Emails
+- Fixed bug where valid Test email addresses could be marked invalid
+- Fixed syntax error when assigning errors during Test email workflow
+- Fixed bug where Notification Email `defaultBody` field could be processed even if it was null
+- Fixed potential data type inconsistencies in report tables
+
 ## 3.11.7 - 2020-05-18
 
 ### Changed
