@@ -3,7 +3,7 @@
 {% extends "sprout-forms/_layouts/elementindex" %}
 {% import 'sprout-base/_includes/sproutcp' as sprout %}
 
-{% set title = "Entries"|t %}
+{% set title = "Entries"|t('sprout-forms') %}
 {% set elementType = 'barrelstrength\\sproutforms\\elements\\Entry' %}
 {% set isPro = craft.app.getModule('sprout-forms').is('pro') %}
 
