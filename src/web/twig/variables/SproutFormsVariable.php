@@ -214,11 +214,12 @@ class SproutFormsVariable
         $globalFieldRenderingOptions = $renderingOptions['fields']['*'] ?? [];
         $fieldSpecificRenderingOptions = $renderingOptions['fields'][$field->handle] ?? [];
 
-        $fieldRenderingOptions = $this->processFieldRenderingOptions($fieldSpecificRenderingOptions, $globalFieldRenderingOptions);
+        $fieldRenderingOptionsInput = $this->processFieldRenderingOptions($fieldSpecificRenderingOptions, $globalFieldRenderingOptions, 'input');
+        $fieldRenderingOptionsWrapper = $this->processFieldRenderingOptions($fieldSpecificRenderingOptions, $globalFieldRenderingOptions, 'container');
 
         $value = $entry->getFieldValue($field->handle);
 
-        $inputHtml = $field->getFrontEndInputHtml($value, $fieldRenderingOptions);
+        $inputHtml = $field->getFrontEndInputHtml($value, $entry, $fieldRenderingOptionsInput);
 
         // Set Field template path (we handled the case for overriding the field input templates above)
         $view->setTemplatesPath($templatePaths['field']);
@@ -229,7 +230,11 @@ class SproutFormsVariable
                 'entry' => $entry,
                 'field' => $field,
                 'input' => $inputHtml,
-                'renderingOptions' => $renderingOptions
+                'renderingOptions' => [
+                    'fields' => [
+                        $field->handle => $fieldRenderingOptionsWrapper
+                    ]
+                ]
             ]
         );
 
@@ -661,10 +666,11 @@ class SproutFormsVariable
     /**
      * @param       $fieldSpecificRenderingOptions
      * @param       $globalFieldRenderingOptions
+     * @param       $targetSettingsHandle
      *
      * @return array
      */
-    protected function processFieldRenderingOptions($fieldSpecificRenderingOptions, $globalFieldRenderingOptions): array
+    protected function processFieldRenderingOptions($fieldSpecificRenderingOptions, $globalFieldRenderingOptions, $targetSettingsHandle): array
     {
         $fieldRenderingOptions = [];
 
@@ -676,15 +682,41 @@ class SproutFormsVariable
                     $fieldRenderingOptions['id'] = $fieldSpecificRenderingOptions['id'] ?? null;
                     break;
                 case 'class':
+
+                    if (isset($globalFieldRenderingOptions['class'])
+                        && is_array($globalFieldRenderingOptions['class'])) {
+                        $class[] = $globalFieldRenderingOptions['class'][$targetSettingsHandle] ?? null;
+                    } else {
+                        $class[] = $globalFieldRenderingOptions['class'] ?? null;
+                    }
+
+                    if (isset($fieldSpecificRenderingOptions['class'])
+                        && is_array($fieldSpecificRenderingOptions['class'])) {
+                        $class[] = $fieldSpecificRenderingOptions['class'][$targetSettingsHandle] ?? null;
+                    } else {
+                        $class[] = $fieldSpecificRenderingOptions['class'] ?? null;
+                    }
+
                     // Append any global classes to field specific ones
-                    $class[] = $globalFieldRenderingOptions['class'] ?? null;
-                    $class[] = $fieldSpecificRenderingOptions['class'] ?? null;
                     $fieldRenderingOptions['class'] = trim(implode(' ', $class));
                     break;
                 case 'errorClass':
+
+                    if (isset($globalFieldRenderingOptions['errorClass'])
+                        && is_array($globalFieldRenderingOptions['errorClass'])) {
+                        $errorClass[] = $globalFieldRenderingOptions['errorClass'][$targetSettingsHandle] ?? null;
+                    } else {
+                        $errorClass[] = $globalFieldRenderingOptions['errorClass'] ?? null;
+                    }
+
+                    if (isset($fieldSpecificRenderingOptions['errorClass'])
+                        && is_array($fieldSpecificRenderingOptions['class'])) {
+                        $errorClass[] = $fieldSpecificRenderingOptions['errorClass'][$targetSettingsHandle] ?? null;
+                    } else {
+                        $errorClass[] = $fieldSpecificRenderingOptions['errorClass'] ?? null;
+                    }
+
                     // Append any global classes to field specific ones
-                    $errorClass[] = $globalFieldRenderingOptions['errorClass'] ?? null;
-                    $errorClass[] = $fieldSpecificRenderingOptions['errorClass'] ?? null;
                     $fieldRenderingOptions['errorClass'] = trim(implode(' ', $errorClass));
                     break;
                 case 'data':
