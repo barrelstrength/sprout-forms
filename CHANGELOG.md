@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.11.9 - 2020-05-21
+
+### Changed
+- Updated `barrelstrength/sprout-base-reports` requirement to v1.5.4
+
+### Fixed
+- Fixed PHP return type in migration
+
 ## 3.11.8 - 2020-05-21
 
 ### Changed
