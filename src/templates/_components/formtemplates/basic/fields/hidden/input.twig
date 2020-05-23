@@ -2,6 +2,9 @@
 {%- set class = renderingOptions.class ?? name %}
 {%- set required = field.required ? true : false %}
 {%- set value = value ? value : null %}
+{%- set errors = entry is not empty ? entry.getErrors(name) : null %}
+{%- set errorClass = renderingOptions.errorClass ?? null %}
+{%- set class = errors and errorClass ? class~' '~errorClass : class %}
 
 {%- set dataAttributes = null %}
 {%- set data = renderingOptions.data ?? null %}

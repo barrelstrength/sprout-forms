@@ -5,6 +5,9 @@
 {%- set value = value ? value : null %}
 {%- set placeholder = field.placeholder ? field.placeholder : null %}
 {%- set pattern  = pattern is defined and pattern ? pattern : null %}
+{%- set errors = entry is not empty ? entry.getErrors(name) : null %}
+{%- set errorClass = renderingOptions.errorClass ?? null %}
+{%- set class = errors and errorClass ? class~' '~errorClass : class %}
 
 {%- set dataAttributes = null %}
 {%- set data = renderingOptions.data ?? null %}
