@@ -5,7 +5,7 @@
 {%- set renderingOptions = attribute(renderingOptions.fields, name) is defined ? attribute(renderingOptions
     .fields, name) : {} %}
 {%- set id               = renderingOptions.id is defined ? renderingOptions.id : name %}
-{%- set class            = renderingOptions.class is defined ? renderingOptions.class : name ~ '-field' %}
+{%- set class            = renderingOptions.class is defined ? renderingOptions.class : (name ~ '-field') %}
 {%- set value            = entry is not empty ? entry.getFieldValue(name) : null %}
 {%- set inlineErrorsEnabled = form.errorDisplayMethod in ['both', 'inline'] ? true : false %}
 {%- set errors           = entry is not empty ? entry.getErrors(name) : null %}
