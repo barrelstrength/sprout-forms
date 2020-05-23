@@ -502,6 +502,10 @@ class Forms extends Component
                 }
             }
 
+            if ($rule->behaviorTarget === $oldHandle) {
+                $rule->behaviorTarget = $newHandle;
+            }
+
             $rule->conditions = $conditions;
             SproutForms::$app->rules->saveRule($rule);
         }
