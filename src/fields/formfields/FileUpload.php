@@ -8,6 +8,7 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutforms\base\FormFieldTrait;
+use barrelstrength\sproutforms\elements\Entry;
 use Craft;
 use craft\fields\Assets as CraftAssets;
 use craft\helpers\Template as TemplateHelper;
@@ -113,6 +114,7 @@ class FileUpload extends CraftAssets
 
     /**
      * @param mixed      $value
+     * @param Entry      $entry
      * @param array|null $renderingOptions
      *
      * @return Markup
@@ -121,13 +123,14 @@ class FileUpload extends CraftAssets
      * @throws SyntaxError
      * @throws Exception
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
+    public function getFrontEndInputHtml($value, Entry $entry, array $renderingOptions = null): Markup
     {
         $rendered = Craft::$app->getView()->renderTemplate('fileupload/input',
             [
                 'name' => $this->handle,
                 'value' => $value,
                 'field' => $this,
+                'entry' => $entry,
                 'renderingOptions' => $renderingOptions
             ]
         );

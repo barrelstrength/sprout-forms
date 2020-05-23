@@ -8,6 +8,7 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutforms\base\FormFieldTrait;
+use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\fields\formfields\base\BaseOptionsConditionalTrait;
 use barrelstrength\sproutforms\rules\conditions\ContainsCondition;
 use barrelstrength\sproutforms\rules\conditions\DoesNotContainCondition;
@@ -83,6 +84,7 @@ class Dropdown extends CraftDropdownField
 
     /**
      * @param mixed      $value
+     * @param Entry      $entry
      * @param array|null $renderingOptions
      *
      * @return Markup
@@ -91,13 +93,14 @@ class Dropdown extends CraftDropdownField
      * @throws SyntaxError
      * @throws Exception
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
+    public function getFrontEndInputHtml($value, Entry $entry, array $renderingOptions = null): Markup
     {
         $rendered = Craft::$app->getView()->renderTemplate('dropdown/input',
             [
                 'name' => $this->handle,
                 'value' => $value,
                 'field' => $this,
+                'entry' => $entry,
                 'renderingOptions' => $renderingOptions
             ]
         );

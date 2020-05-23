@@ -8,6 +8,7 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutforms\base\FormField;
+use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\rules\conditions\IsCondition;
 use barrelstrength\sproutforms\rules\conditions\IsGreaterThanCondition;
 use barrelstrength\sproutforms\rules\conditions\IsGreaterThanOrEqualToCondition;
@@ -205,21 +206,23 @@ class Number extends FormField implements PreviewableFieldInterface
 
     /**
      * @param mixed      $value
+     * @param Entry      $entry
      * @param array|null $renderingOptions
      *
      * @return Markup
+     * @throws Exception
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws Exception
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
+    public function getFrontEndInputHtml($value, Entry $entry, array $renderingOptions = null): Markup
     {
         $rendered = Craft::$app->getView()->renderTemplate('number/input',
             [
                 'name' => $this->handle,
                 'value' => $value,
                 'field' => $this,
+                'entry' => $entry,
                 'renderingOptions' => $renderingOptions
             ]
         );

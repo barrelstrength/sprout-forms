@@ -11,6 +11,7 @@ use barrelstrength\sproutbasefields\base\AddressFieldTrait;
 use barrelstrength\sproutbasefields\models\Address as AddressModel;
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use barrelstrength\sproutforms\base\FormField;
+use barrelstrength\sproutforms\elements\Entry;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
@@ -149,6 +150,7 @@ class Address extends FormField implements PreviewableFieldInterface
 
     /**
      * @param mixed      $value
+     * @param Entry      $entry
      * @param array|null $renderingOptions
      *
      * @return Markup
@@ -157,7 +159,7 @@ class Address extends FormField implements PreviewableFieldInterface
      * @throws SyntaxError
      * @throws \yii\base\Exception
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
+    public function getFrontEndInputHtml($value, Entry $entry, array $renderingOptions = null): Markup
     {
         $name = $this->handle;
         $settings = $this->getSettings();
@@ -190,6 +192,7 @@ class Address extends FormField implements PreviewableFieldInterface
 
         $rendered = Craft::$app->getView()->renderTemplate('address/input', [
                 'field' => $this,
+                'entry' => $entry,
                 'name' => $this->handle,
                 'renderingOptions' => $renderingOptions,
                 'addressFormHtml' => TemplateHelper::raw($addressFormHtml),

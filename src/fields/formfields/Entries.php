@@ -8,6 +8,7 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutforms\base\FormFieldTrait;
+use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\fields\Entries as CraftEntries;
@@ -66,6 +67,7 @@ class Entries extends CraftEntries
 
     /**
      * @param mixed      $value
+     * @param Entry      $entry
      * @param array|null $renderingOptions
      *
      * @return Markup
@@ -74,7 +76,7 @@ class Entries extends CraftEntries
      * @throws SyntaxError
      * @throws Exception
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
+    public function getFrontEndInputHtml($value, Entry $entry, array $renderingOptions = null): Markup
     {
         $entries = SproutForms::$app->frontEndFields->getFrontEndEntries($this->getSettings());
 
@@ -83,6 +85,7 @@ class Entries extends CraftEntries
                 'name' => $this->handle,
                 'value' => $value->ids(),
                 'field' => $this,
+                'entry' => $entry,
                 'renderingOptions' => $renderingOptions,
                 'entries' => $entries,
             ]

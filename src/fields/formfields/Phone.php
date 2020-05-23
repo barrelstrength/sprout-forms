@@ -10,6 +10,7 @@ namespace barrelstrength\sproutforms\fields\formfields;
 use barrelstrength\sproutbasefields\models\Phone as PhoneModel;
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use barrelstrength\sproutforms\base\FormField;
+use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\rules\conditions\ContainsCondition;
 use barrelstrength\sproutforms\rules\conditions\DoesNotContainCondition;
 use barrelstrength\sproutforms\rules\conditions\DoesNotEndWithCondition;
@@ -154,15 +155,16 @@ class Phone extends FormField implements PreviewableFieldInterface
 
     /**
      * @param mixed      $value
+     * @param Entry      $entry
      * @param array|null $renderingOptions
      *
      * @return Markup
+     * @throws Exception
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws Exception
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
+    public function getFrontEndInputHtml($value, Entry $entry, array $renderingOptions = null): Markup
     {
         $name = $this->handle;
         $country = $value['country'] ?? $this->country;
@@ -174,6 +176,7 @@ class Phone extends FormField implements PreviewableFieldInterface
                 'name' => $name,
                 'value' => $val,
                 'field' => $this,
+                'entry' => $entry,
                 'country' => $country,
                 'countries' => $countries,
                 'renderingOptions' => $renderingOptions

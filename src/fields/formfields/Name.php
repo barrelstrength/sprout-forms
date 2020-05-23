@@ -10,6 +10,7 @@ namespace barrelstrength\sproutforms\fields\formfields;
 use barrelstrength\sproutbasefields\models\Name as NameModel;
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use barrelstrength\sproutforms\base\FormField;
+use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\rules\conditions\ContainsCondition;
 use barrelstrength\sproutforms\rules\conditions\DoesNotContainCondition;
 use barrelstrength\sproutforms\rules\conditions\DoesNotEndWithCondition;
@@ -144,15 +145,16 @@ class Name extends FormField implements PreviewableFieldInterface
 
     /**
      * @param mixed      $value
+     * @param Entry      $entry
      * @param array|null $renderingOptions
      *
      * @return Markup
+     * @throws Exception
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws Exception
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
+    public function getFrontEndInputHtml($value, Entry $entry, array $renderingOptions = null): Markup
     {
         if ($this->displayMultipleFields) {
             $this->hasMultipleLabels = true;
@@ -163,6 +165,7 @@ class Name extends FormField implements PreviewableFieldInterface
                 'name' => $this->handle,
                 'value' => $value,
                 'field' => $this,
+                'entry' => $entry,
                 'renderingOptions' => $renderingOptions
             ]
         );

@@ -9,6 +9,7 @@ namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use barrelstrength\sproutforms\base\FormFieldTrait;
+use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\fields\formfields\base\BaseOptionsConditionalTrait;
 use barrelstrength\sproutforms\rules\conditions\ContainsCondition;
 use barrelstrength\sproutforms\rules\conditions\DoesNotContainCondition;
@@ -208,6 +209,7 @@ class EmailDropdown extends CraftDropdownField
 
     /**
      * @param mixed      $value
+     * @param Entry      $entry
      * @param array|null $renderingOptions
      *
      * @return Markup
@@ -216,7 +218,7 @@ class EmailDropdown extends CraftDropdownField
      * @throws SyntaxError
      * @throws Exception
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
+    public function getFrontEndInputHtml($value, Entry $entry, array $renderingOptions = null): Markup
     {
         $selectedValue = $value->value ?? null;
 
@@ -228,7 +230,9 @@ class EmailDropdown extends CraftDropdownField
                 'name' => $this->handle,
                 'value' => $value,
                 'options' => $options,
-                'field' => $this
+                'field' => $this,
+                'entry' => $entry,
+                'renderingOptions' => $renderingOptions
             ]
         );
 

@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutforms\base;
 
+use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
 use Craft;
 use ReflectionClass;
@@ -149,12 +150,13 @@ trait FormFieldTrait
     /**
      * The HTML to render when a Form is output using the displayForm, displayTab, or displayField tags
      *
-     * @param mixed $value
-     * @param array $renderingOptions
+     * @param mixed                                      $value
+     * @param Entry $entry
+     * @param array                                      $renderingOptions
      *
      * @return Markup
      */
-    abstract public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup;
+    abstract public function getFrontEndInputHtml($value, Entry $entry, array $renderingOptions = null): Markup;
 
     /**
      * @param array|null $types

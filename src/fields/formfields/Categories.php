@@ -8,6 +8,7 @@
 namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutforms\base\FormFieldTrait;
+use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\fields\Categories as CraftCategories;
@@ -65,6 +66,7 @@ class Categories extends CraftCategories
 
     /**
      * @param mixed      $value
+     * @param Entry      $entry
      * @param array|null $renderingOptions
      *
      * @return Markup
@@ -73,7 +75,7 @@ class Categories extends CraftCategories
      * @throws SyntaxError
      * @throws Exception
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
+    public function getFrontEndInputHtml($value, Entry $entry, array $renderingOptions = null): Markup
     {
         $categories = SproutForms::$app->frontEndFields->getFrontEndCategories($this->getSettings());
 
@@ -82,6 +84,7 @@ class Categories extends CraftCategories
                 'name' => $this->handle,
                 'value' => $value->ids(),
                 'field' => $this,
+                'entry' => $entry,
                 'renderingOptions' => $renderingOptions,
                 'categories' => $categories,
             ]

@@ -9,6 +9,7 @@ namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use barrelstrength\sproutforms\base\FormField;
+use barrelstrength\sproutforms\elements\Entry;
 use Craft;
 use craft\base\Element;
 use craft\base\ElementInterface;
@@ -120,15 +121,16 @@ class Url extends FormField implements PreviewableFieldInterface
 
     /**
      * @param mixed      $value
+     * @param Entry      $entry
      * @param array|null $renderingOptions
      *
      * @return Markup
+     * @throws Exception
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws Exception
      */
-    public function getFrontEndInputHtml($value, array $renderingOptions = null): Markup
+    public function getFrontEndInputHtml($value, Entry $entry, array $renderingOptions = null): Markup
     {
         $errorMessage = SproutBaseFields::$app->urlField->getErrorMessage($this);
         $placeholder = $this->placeholder ?? '';
@@ -138,6 +140,7 @@ class Url extends FormField implements PreviewableFieldInterface
                 'name' => $this->handle,
                 'value' => $value,
                 'field' => $this,
+                'entry' => $entry,
                 'pattern' => $this->customPattern,
                 'errorMessage' => $errorMessage,
                 'renderingOptions' => $renderingOptions,
