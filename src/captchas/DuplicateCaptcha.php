@@ -68,7 +68,6 @@ class DuplicateCaptcha extends Captcha
         $uniqueid = null;
 
         foreach ($_POST as $key => $value) {
-            // Fix issue on multiple forms on same page
             if (strpos($key, self::DUPLICATE_CAPTCHA_INPUT_KEY) === 0) {
                 $uniqueid = $_POST[$key];
                 break;

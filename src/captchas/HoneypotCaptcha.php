@@ -100,7 +100,6 @@ class HoneypotCaptcha extends Captcha
         $honeypotValue = null;
 
         foreach ($_POST as $key => $value) {
-            // Fix issue on multiple forms on same page
             if (strpos($key, $honeypotFieldName) === 0) {
                 $honeypotValue = $_POST[$key];
                 break;
