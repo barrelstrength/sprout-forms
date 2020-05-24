@@ -24,12 +24,8 @@ use yii\base\InvalidConfigException;
  */
 class JavascriptCaptcha extends Captcha
 {
-    const JAVASCRIPT_CAPTCHA_INPUT_KEY = 'sprout-forms-jc';
-
-    /**
-     * @var string
-     */
-    private $javascriptId = 'sprout-forms-javascript-captcha';
+    const JAVASCRIPT_CAPTCHA_INPUT_KEY = 'sprout-forms-jck';
+    const JAVASCRIPT_CAPTCHA_VALUE_PREFIX = 'sprout-forms-jcv';
 
     /**
      * @inheritdoc
@@ -53,16 +49,23 @@ class JavascriptCaptcha extends Captcha
      */
     public function getCaptchaHtml(): string
     {
-        $uniqueId = StringHelper::appendUniqueIdentifier(self::JAVASCRIPT_CAPTCHA_INPUT_KEY);
+        $inputName = StringHelper::appendUniqueIdentifier(self::JAVASCRIPT_CAPTCHA_INPUT_KEY);
+        $inputValue = StringHelper::appendUniqueIdentifier(self::JAVASCRIPT_CAPTCHA_VALUE_PREFIX);
 
-        // Create session variable to test for javascript
-        Craft::$app->getSession()->set($this->javascriptId, $uniqueId);
+        // Create session variable to retrieve a given forms js key/value
+        Craft::$app->getSession()->set($inputName, $inputValue);
 
-        // Set a hidden field with no value and use javascript to set it.
-        $output = '
-<input type="hidden" id="'.$uniqueId.'" name="'.$uniqueId.'" />';
+        // Create a second session variable so we can match the posted key
+        // to what we expect it to be. If we can retrieve this second key
+        // based on the submitted value, we know it's the same. And this lets
+        // us support more than one form on a page.
+        Craft::$app->getSession()->set($inputValue, true);
 
-        $js = '(function(){ document.getElementById("'.$uniqueId.'").value = "'.$uniqueId.'"; })();';
+        // Set a hidden field with no value
+        $output = '<input type="hidden" id="'.$inputName.'" name="'.$inputName.'" />';
+
+        // Set the value of the hidden field using js
+        $js = '(function(){ document.getElementById("'.$inputName.'").value = "'.$inputValue.'"; })();';
 
         Craft::$app->getView()->registerJs($js, View::POS_END);
 
@@ -78,17 +81,17 @@ class JavascriptCaptcha extends Captcha
      */
     public function verifySubmission(OnBeforeValidateEntryEvent $event): bool
     {
-        $uniqueId = Craft::$app->getSession()->get($this->javascriptId);
         $postedValues = Craft::$app->getRequest()->getBodyParams();
 
-        // Filter out the JS Captcha Input
-        $jsCaptchaInput = array_filter($postedValues, static function($key) {
+        // Filter out the posted JS Captcha Input.
+        $jsCaptchaPostedInput = array_filter($postedValues, static function($key) {
             return strpos($key, self::JAVASCRIPT_CAPTCHA_INPUT_KEY) === 0;
         }, ARRAY_FILTER_USE_KEY);
 
-        $inputValue = $jsCaptchaInput[$uniqueId] ?? null;
+        $inputValue = reset($jsCaptchaPostedInput);
+        $inputKey = key($jsCaptchaPostedInput);
 
-        if ($inputValue !== $uniqueId) {
+        if (Craft::$app->getSession()->get($inputValue) !== true) {
             $errorMessage = 'Javascript not enabled in browser or form page does not have a <body> tag.';
             Craft::error($errorMessage, __METHOD__);
             $this->addError(self::CAPTCHA_ERRORS_KEY, $errorMessage);
@@ -97,7 +100,8 @@ class JavascriptCaptcha extends Captcha
         }
 
         // If there is a valid unique token set, unset it
-        Craft::$app->getSession()->remove($this->javascriptId);
+        Craft::$app->getSession()->remove($inputKey);
+        Craft::$app->getSession()->remove($inputValue);
 
         return true;
     }
