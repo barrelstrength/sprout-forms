@@ -21,6 +21,8 @@ use craft\errors\MissingComponentException;
  */
 class DuplicateCaptcha extends Captcha
 {
+    const DUPLICATE_CAPTCHA_INPUT_KEY = 'sprout-forms-dc';
+
     /**
      * @inheritdoc
      */
@@ -43,9 +45,6 @@ class DuplicateCaptcha extends Captcha
      */
     public function getCaptchaHtml(): string
     {
-        $inputName = uniqid('dupe', true);
-        $uniqueKeyId = uniqid('dupe', true);
-
         $inputName = uniqid(self::DUPLICATE_CAPTCHA_INPUT_KEY, false);
         $uniqueKeyId = uniqid('dc', false);
 
@@ -70,7 +69,7 @@ class DuplicateCaptcha extends Captcha
 
         foreach ($_POST as $key => $value) {
             // Fix issue on multiple forms on same page
-            if (strpos($key, 'dupe') === 0) {
+            if (strpos($key, self::DUPLICATE_CAPTCHA_INPUT_KEY) === 0) {
                 $uniqueid = $_POST[$key];
                 break;
             }
@@ -85,7 +84,8 @@ class DuplicateCaptcha extends Captcha
             return false;
         }
 
-        // If we have a duplicate key, unset our test variable so we don't have it on the next request
+        // If we have a duplicate key, unset our test variable
+        // so we don't have it on the next request
         Craft::$app->getSession()->remove($uniqueid);
 
         return true;
