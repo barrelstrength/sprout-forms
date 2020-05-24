@@ -7,7 +7,8 @@
     name: 'captchaSettings['~className(captcha)~'][honeypotFieldName]',
     required: true,
     errors: null,
-    value: settings['honeypotFieldName'] ?? 'beesknees'
+    placeholder: defaultFieldName,
+    value: settings['honeypotFieldName'] is not empty ? settings['honeypotFieldName'] : defaultFieldName
 }) }}
 
 {{ forms.textField({

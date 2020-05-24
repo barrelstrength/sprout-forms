@@ -92,7 +92,7 @@ return [
         ],
         'barrelstrength\sproutforms\captchas\HoneypotCaptcha' => [
             'enabled' => true,
-            'honeypotFieldName' => 'beesknees',
+            'honeypotFieldName' => 'sprout-forms-hc',
             'honeypotScreenReaderMessage' => 'Leave this field blank'
         ],
     ],

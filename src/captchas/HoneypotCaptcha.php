@@ -25,6 +25,8 @@ use yii\base\Exception;
  */
 class HoneypotCaptcha extends Captcha
 {
+    const HONEYPOT_CAPTCHA_INPUT_KEY = 'sprout-forms-hc';
+
     /**
      * @var string
      */
@@ -58,6 +60,7 @@ class HoneypotCaptcha extends Captcha
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws Exception
+     * @throws \Exception
      */
     public function getCaptchaSettingsHtml(): string
     {
@@ -65,7 +68,8 @@ class HoneypotCaptcha extends Captcha
 
         $html = Craft::$app->getView()->renderTemplate('sprout-forms/_components/captchas/honeypot/settings', [
             'captcha' => $this,
-            'settings' => $settings
+            'settings' => $settings,
+            'defaultFieldName' => self::HONEYPOT_CAPTCHA_INPUT_KEY
         ]);
 
         return $html;
@@ -126,7 +130,7 @@ class HoneypotCaptcha extends Captcha
     {
         $settings = $this->getSettings();
 
-        return $settings['honeypotFieldName'] ?? 'beesknees';
+        return $settings['honeypotFieldName'];
     }
 
     /**

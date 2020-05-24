@@ -24,6 +24,8 @@ use yii\base\InvalidConfigException;
  */
 class JavascriptCaptcha extends Captcha
 {
+    const JAVASCRIPT_CAPTCHA_INPUT_KEY = 'sprout-forms-jc';
+
     /**
      * @var string
      */
@@ -51,7 +53,7 @@ class JavascriptCaptcha extends Captcha
      */
     public function getCaptchaHtml(): string
     {
-        $uniqueId = StringHelper::appendUniqueIdentifier('alojs');
+        $uniqueId = StringHelper::appendUniqueIdentifier(self::JAVASCRIPT_CAPTCHA_INPUT_KEY);
 
         // Create session variable to test for javascript
         Craft::$app->getSession()->set($this->javascriptId, $uniqueId);
@@ -81,7 +83,7 @@ class JavascriptCaptcha extends Captcha
 
         // Filter out the JS Captcha Input
         $jsCaptchaInput = array_filter($postedValues, static function($key) {
-            return strpos($key, 'alojs') === 0;
+            return strpos($key, self::JAVASCRIPT_CAPTCHA_INPUT_KEY) === 0;
         }, ARRAY_FILTER_USE_KEY);
 
         $inputValue = $jsCaptchaInput[$uniqueId] ?? null;

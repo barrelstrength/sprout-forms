@@ -455,6 +455,7 @@ class Install extends Migration
      * @throws NotSupportedException
      * @throws Exception
      * @throws ServerErrorHttpException
+     * @throws \Exception
      */
     protected function insertDefaultData()
     {
@@ -510,7 +511,7 @@ class Install extends Migration
                 ],
                 HoneypotCaptcha::class => [
                     'enabled' => 0,
-                    'honeypotFieldName' => 'beesknees',
+                    'honeypotFieldName' => 'sprout-forms-hc',
                     'honeypotScreenReaderMessage' => 'Leave this field blank'
                 ],
             ];
