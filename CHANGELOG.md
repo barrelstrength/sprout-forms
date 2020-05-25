@@ -1,8 +1,8 @@
 # Changelog
 
-## 3.12.0 - UNRELEASED
+## 3.12.0 - 2020-05-25
 
-> {note} Websites using Custom Form Fields should read the release notes regarding a minor update to the getFrontEndInputHtml method signature.  
+> {note} Websites using Custom Form Fields or Field Template Overrides should read the [upgrade notes](https://sprout.barrelstrengthdesign.com/docs/forms/installing-and-updating-craft-3.html#upgrading-to-forms-v3-12-0) regarding updates to the `FormField::getFrontEndInputHtml()` method signature and front-end field templates to better support error classes in rendering options.
 
 ### Added
 - Added Global targets for Rendering Options
