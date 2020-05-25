@@ -454,7 +454,9 @@ class SproutForms extends Plugin implements SproutEditionsInterface, SproutDepen
     {
         return [
             'sprout-forms' =>
-                'sprout-forms/forms/index-template',
+                'sprout-forms/forms/forms-default-section',
+            'sprout-forms/forms' =>
+                'sprout-forms/forms/forms-index-template',
             'sprout-forms/forms/new' =>
                 'sprout-forms/forms/edit-form-template',
             'sprout-forms/forms/edit/<formId:\d+>' =>

@@ -13,6 +13,7 @@ use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\base\ElementInterface;
 use craft\db\Table;
+use craft\errors\DeprecationException;
 use craft\errors\ElementNotFoundException;
 use craft\errors\MissingComponentException;
 use craft\errors\WrongEditionException;
@@ -38,23 +39,17 @@ use yii\web\Response;
 class FormsController extends BaseController
 {
     /**
-     * @throws HttpException
-     * @throws InvalidConfigException
+     * @return \craft\web\Response|\yii\console\Response
      */
-    public function init()
-    {
-        $this->requirePermission('sproutForms-editForms');
-        parent::init();
-    }
-
-    public function actionIndexTemplate()
+    public function actionFormsDefaultSection()
     {
         $settings = SproutForms::$app->getSettings();
 
         $canViewEntries = Craft::$app->getUser()->checkPermission('sproutForms-viewEntries') &&
             $settings->enableSaveData;
+        $canEditForms = Craft::$app->getUser()->checkPermission('sproutForms-editForms');
 
-        if ($canViewEntries && $settings->defaultSection === 'entries') {
+        if ($canViewEntries && ($settings->defaultSection === 'entries' || !$canEditForms)) {
             return Craft::$app->getResponse()->redirect(UrlHelper::cpUrl('sprout-forms/entries'));
         }
 
@@ -62,15 +57,29 @@ class FormsController extends BaseController
     }
 
     /**
+     * @return Response
+     * @throws ForbiddenHttpException
+     */
+    public function actionFormsIndexTemplate(): Response
+    {
+        $this->requirePermission('sproutForms-editForms');
+
+        return $this->renderTemplate('sprout-forms/forms');
+    }
+
+    /**
      * @param int|null $formId
      * @param null     $settingsSectionHandle
      *
      * @return Response
+     * @throws ForbiddenHttpException
      * @throws InvalidConfigException
      * @throws MissingComponentException
      */
     public function actionEditSettingsTemplate(int $formId = null, $settingsSectionHandle = null): Response
     {
+        $this->requirePermission('sproutForms-editForms');
+
         $form = SproutForms::$app->forms->getFormById($formId);
 
         /** @var SproutForms $plugin */
@@ -95,9 +104,12 @@ class FormsController extends BaseController
      *
      * @return FormsController|mixed
      * @throws InvalidRouteException
+     * @throws ForbiddenHttpException
      */
     public function actionDuplicateForm()
     {
+        $this->requirePermission('sproutForms-editForms');
+
         return $this->runAction('save-form', ['duplicate' => true]);
     }
 
@@ -116,6 +128,8 @@ class FormsController extends BaseController
     public function actionSaveForm(bool $duplicate = false)
     {
         $this->requirePostRequest();
+        $this->requirePermission('sproutForms-editForms');
+
         $request = Craft::$app->getRequest();
 
         $form = $this->getFormModel();
@@ -182,6 +196,8 @@ class FormsController extends BaseController
      */
     public function actionEditFormTemplate(int $formId = null, Form $form = null): Response
     {
+        $this->requirePermission('sproutForms-editForms');
+
         $isNew = !$formId;
 
         // Immediately create a new Form
@@ -231,6 +247,7 @@ class FormsController extends BaseController
     public function actionDeleteForm(): Response
     {
         $this->requirePostRequest();
+        $this->requirePermission('sproutForms-editForms');
 
         $request = Craft::$app->getRequest();
 
@@ -256,6 +273,8 @@ class FormsController extends BaseController
      */
     public function prepareFieldLayout(Form $form, $duplicate = false, $duplicatedForm = null)
     {
+        $this->requirePermission('sproutForms-editForms');
+
         // Set the field layout
         $fieldLayout = Craft::$app->getFields()->assembleLayoutFromPost();
 
@@ -419,11 +438,13 @@ class FormsController extends BaseController
     /**
      * @return Response
      * @throws BadRequestHttpException
+     * @throws ForbiddenHttpException
      */
     public function actionReorderFormTabs(): Response
     {
         $this->requirePostRequest();
         $this->requireAcceptsJson();
+        $this->requirePermission('sproutForms-editForms');
 
         $formTabIds = Json::decode(Craft::$app->getRequest()->getRequiredBodyParam('ids'));
 
@@ -463,6 +484,7 @@ class FormsController extends BaseController
     {
         $this->requirePostRequest();
         $this->requireAcceptsJson();
+        $this->requirePermission('sproutForms-editForms');
 
         $formId = Craft::$app->getRequest()->getBodyParam('formId');
         $form = SproutForms::$app->forms->getFormById($formId);
