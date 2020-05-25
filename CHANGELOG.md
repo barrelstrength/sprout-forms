@@ -1,5 +1,28 @@
 # Changelog
 
+## 3.12.0 - UNRELEASED
+
+> {note} Websites using Custom Form Fields should read the release notes regarding a minor update to the getFrontEndInputHtml method signature.  
+
+### Added
+- Added Global targets for Rendering Options
+- Added `container` and `input` targets for Rendering Option classes
+- Added `container` and `input` targets for Rendering Option error classes 
+- Added Enabled/Disabled status filters to Notification Email Element Index
+- Add Notification Email SetStatus Element Action
+
+### Changed
+- Updated form input templates to support `errorClass` Rendering Option
+- Updated default captcha key naming conventions
+- Updated `barrelstrength/sproutforms/base/FormFieldTrait::getFrontEndInputHtml()` method signature
+- Updated `barrelstrength/sprout-base-email` requirement to v1.3.8
+
+### Fixed
+- Fixed bug when rendering class name on field wrapper
+- Fixed bug where renamed field would not update Rule targeting same field
+- Fixed default return type for `barrelstrength/sproutbaseemail/base/NotificationEvent:getDescription()` 
+- Fixed Notification Email Element Index CP Edit URL after modal close behavior  ([#163])
+
 ## 3.11.9 - 2020-05-21
 
 ### Changed
