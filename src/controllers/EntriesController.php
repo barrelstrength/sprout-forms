@@ -92,7 +92,7 @@ class EntriesController extends BaseController
      */
     public function actionEditEntryTemplate(int $entryId = null, EntryElement $entry = null): Response
     {
-        $this->requirePermission('sproutForms-editEntries');
+        $this->requirePermission('sproutForms-viewEntries');
 
         $settings = SproutForms::$app->getSettings();
 
