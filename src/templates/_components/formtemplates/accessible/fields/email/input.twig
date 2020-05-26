@@ -25,7 +25,7 @@
     {%- if value %} value="{{ value }}"{% endif -%}
     {%- if placeholder %} placeholder="{{ placeholder }}"{% endif %}
     {%- if pattern %} oninvalid="setCustomValidity('{{ errorMessage|e('js') }}')"{% endif -%}
-    {%- if pattern is not null %} oninput="setCustomValidity('')"{% endif -%}
-    {%- if pattern is not null %} pattern="{{ pattern }}"{% endif %}
+    {%- if pattern %} oninput="setCustomValidity('')"{% endif -%}
+    {%- if pattern %} pattern="{{ pattern }}"{% endif %}
     {{- dataAttributes -}}
 >
