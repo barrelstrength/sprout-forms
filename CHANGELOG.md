@@ -1,5 +1,17 @@
 # Changelog
 
+## 3.12.1 - 2020-05-27
+
+### Changed
+- Updated `barrelstrength/sprout-base-reports` requirement v1.5.5
+
+### Fixed
+- Fixed potential bugs in URL, Email, Number, and Regular Expression field behavior ([#487])
+- Fixed migration data type bug that could occur in some scenarios ([#492])
+
+[#487]: https://github.com/barrelstrength/craft-sprout-forms/issues/487
+[#492]: https://github.com/barrelstrength/craft-sprout-forms/issues/492
+
 ## 3.12.0 - 2020-05-25
 
 > {note} Websites using Custom Form Fields or Field Template Overrides should read the [upgrade notes](https://sprout.barrelstrengthdesign.com/docs/forms/installing-and-updating-craft-3.html#upgrading-to-forms-v3-12-0) regarding updates to the `FormField::getFrontEndInputHtml()` method signature and front-end field templates to better support error classes in rendering options.
