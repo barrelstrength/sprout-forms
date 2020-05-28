@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.12.2 - 2020-05-28
+
+### Changed
+- Updated `barrelstrength/sprout-base-reports` requirement v1.5.6
+
+### Fixed
+- Removed problematic, niche data type migration
+
 ## 3.12.1 - 2020-05-27
 
 ### Changed
