@@ -1,7 +1,0 @@
-{% extends "_layouts/cp" %}
-
-{% set bodyClass = craft.app.request.getSegments()|slice(0, 3)|join(' ') %}
-
-{% set selectedSubnavItem = craft.app.request.getSegment(2) %}
-
-{% do view.registerAssetBundle("barrelstrength\\sproutforms\\web\\assets\\cp\\CpAsset") %}

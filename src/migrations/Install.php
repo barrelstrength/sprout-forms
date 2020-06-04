@@ -7,31 +7,31 @@
 
 namespace barrelstrength\sproutforms\migrations;
 
-use barrelstrength\sproutbase\base\SproutDependencyInterface;
+use barrelstrength\sproutbase\config\base\DependencyInterface;
 use barrelstrength\sproutbase\migrations\Install as SproutBaseInstall;
-use barrelstrength\sproutbaseemail\migrations\Install as SproutBaseEmailInstall;
-use barrelstrength\sproutbasefields\migrations\Install as SproutBaseFieldsInstall;
-use barrelstrength\sproutbasereports\migrations\Install as SproutBaseReportsInstall;
-use barrelstrength\sproutbasereports\SproutBaseReports;
-use barrelstrength\sproutforms\captchas\DuplicateCaptcha;
-use barrelstrength\sproutforms\captchas\HoneypotCaptcha;
-use barrelstrength\sproutforms\captchas\JavascriptCaptcha;
-use barrelstrength\sproutforms\elements\Entry;
-use barrelstrength\sproutforms\elements\Form;
-use barrelstrength\sproutforms\formtemplates\AccessibleTemplates;
-use barrelstrength\sproutforms\integrations\sproutreports\datasources\EntriesDataSource;
-use barrelstrength\sproutforms\integrations\sproutreports\datasources\IntegrationLogDataSource;
-use barrelstrength\sproutforms\integrations\sproutreports\datasources\SpamLogDataSource;
-use barrelstrength\sproutforms\models\Settings;
-use barrelstrength\sproutforms\records\EntriesSpamLog as EntriesSpamLogRecord;
-use barrelstrength\sproutforms\records\Entry as EntryRecord;
-use barrelstrength\sproutforms\records\EntryStatus as EntryStatusRecord;
-use barrelstrength\sproutforms\records\Form as FormRecord;
-use barrelstrength\sproutforms\records\FormGroup as FormGroupRecord;
-use barrelstrength\sproutforms\records\Integration as IntegrationRecord;
-use barrelstrength\sproutforms\records\IntegrationLog as IntegrationLogRecord;
-use barrelstrength\sproutforms\records\Rules as RulesRecord;
-use barrelstrength\sproutforms\SproutForms;
+use barrelstrength\sproutbase\app\email\migrations\Install as SproutBaseEmailInstall;
+use barrelstrength\sproutbase\app\fields\migrations\Install as SproutBaseFieldsInstall;
+use barrelstrength\sproutbase\app\reports\migrations\Install as SproutBaseReportsInstall;
+use barrelstrength\sproutbase\SproutBase;
+use barrelstrength\sproutbase\app\forms\captchas\DuplicateCaptcha;
+use barrelstrength\sproutbase\app\forms\captchas\HoneypotCaptcha;
+use barrelstrength\sproutbase\app\forms\captchas\JavascriptCaptcha;
+use barrelstrength\sproutbase\app\forms\elements\Entry;
+use barrelstrength\sproutbase\app\forms\elements\Form;
+use barrelstrength\sproutbase\app\forms\formtemplates\AccessibleTemplates;
+use barrelstrength\sproutbase\app\forms\integrations\sproutreports\datasources\EntriesDataSource;
+use barrelstrength\sproutbase\app\forms\integrations\sproutreports\datasources\IntegrationLogDataSource;
+use barrelstrength\sproutbase\app\forms\integrations\sproutreports\datasources\SpamLogDataSource;
+use barrelstrength\sproutbase\app\forms\models\Settings;
+use barrelstrength\sproutbase\app\forms\records\EntriesSpamLog as EntriesSpamLogRecord;
+use barrelstrength\sproutbase\app\forms\records\Entry as EntryRecord;
+use barrelstrength\sproutbase\app\forms\records\EntryStatus as EntryStatusRecord;
+use barrelstrength\sproutbase\app\forms\records\Form as FormRecord;
+use barrelstrength\sproutbase\app\forms\records\FormGroup as FormGroupRecord;
+use barrelstrength\sproutbase\app\forms\records\Integration as IntegrationRecord;
+use barrelstrength\sproutbase\app\forms\records\IntegrationLog as IntegrationLogRecord;
+use barrelstrength\sproutbase\app\forms\records\Rules as RulesRecord;
+use barrelstrength\sproutbase\app\forms\SproutForms;
 use Craft;
 use craft\db\Migration;
 use craft\db\Table;
@@ -57,12 +57,7 @@ class Install extends Migration
      */
     public function safeUp(): bool
     {
-        // Make sure Sprout Fields is also configured
-        $this->installSproutFields();
-        // Make sure Sprout Reports is also configured
-        $this->installSproutReports();
-        // Install Sprout Notifications Table
-        $this->installSproutEmail();
+        SproutBase::$app->config->runInstallMigrations(SproutForms::getInstance());
 
         // Install Sprout Forms
         $this->createTables();
@@ -79,49 +74,9 @@ class Install extends Migration
      */
     public function safeDown(): bool
     {
-        /** @var SproutForms $plugin */
-        $plugin = SproutForms::getInstance();
-
-        $sproutBaseEmailInUse = $plugin->dependencyInUse(SproutDependencyInterface::SPROUT_BASE_EMAIL);
-        $sproutBaseFieldsInUse = $plugin->dependencyInUse(SproutDependencyInterface::SPROUT_BASE_FIELDS);
-        $sproutBaseReportsInUse = $plugin->dependencyInUse(SproutDependencyInterface::SPROUT_BASE_REPORTS);
-        $sproutBaseInUse = $plugin->dependencyInUse(SproutDependencyInterface::SPROUT_BASE);
-
-        SproutBaseReports::$app->dataSources->deleteReportsByType(EntriesDataSource::class);
-        SproutBaseReports::$app->dataSources->deleteReportsByType(IntegrationLogDataSource::class);
-        SproutBaseReports::$app->dataSources->deleteReportsByType(SpamLogDataSource::class);
-
-        if (!$sproutBaseEmailInUse) {
-            $migration = new SproutBaseEmailInstall();
-
-            ob_start();
-            $migration->safeDown();
-            ob_end_clean();
-        }
-
-        if (!$sproutBaseFieldsInUse) {
-            $migration = new SproutBaseFieldsInstall();
-
-            ob_start();
-            $migration->safeDown();
-            ob_end_clean();
-        }
-
-        if (!$sproutBaseReportsInUse) {
-            $migration = new SproutBaseReportsInstall();
-
-            ob_start();
-            $migration->safeDown();
-            ob_end_clean();
-        }
-
-        if (!$sproutBaseInUse) {
-            $migration = new SproutBaseInstall();
-
-            ob_start();
-            $migration->safeDown();
-            ob_end_clean();
-        }
+        SproutBase::$app->dataSources->deleteReportsByType(EntriesDataSource::class);
+        SproutBase::$app->dataSources->deleteReportsByType(IntegrationLogDataSource::class);
+        SproutBase::$app->dataSources->deleteReportsByType(SpamLogDataSource::class);
 
         // Delete Form Entry Elements
         $this->delete(Table::ELEMENTS, ['type' => Entry::class]);
@@ -138,34 +93,9 @@ class Install extends Migration
         $this->dropTableIfExists(FormRecord::tableName());
         $this->dropTableIfExists(FormGroupRecord::tableName());
 
+        SproutBase::$app->config->runUninstallMigrations(SproutForms::getInstance());
+
         return true;
-    }
-
-    public function installSproutFields()
-    {
-        $migration = new SproutBaseFieldsInstall();
-
-        ob_start();
-        $migration->safeUp();
-        ob_end_clean();
-    }
-
-    public function installSproutEmail()
-    {
-        $migration = new SproutBaseEmailInstall();
-
-        ob_start();
-        $migration->safeUp();
-        ob_end_clean();
-    }
-
-    public function installSproutReports()
-    {
-        $migration = new SproutBaseReportsInstall();
-
-        ob_start();
-        $migration->safeUp();
-        ob_end_clean();
     }
 
     /**
