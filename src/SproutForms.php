@@ -10,17 +10,6 @@ namespace barrelstrength\sproutforms;
 use barrelstrength\sproutbase\app\email\events\NotificationEmailEvent;
 use barrelstrength\sproutbase\app\email\services\EmailTemplates;
 use barrelstrength\sproutbase\app\email\services\NotificationEmailEvents;
-use barrelstrength\sproutbase\app\reports\base\DataSource;
-use barrelstrength\sproutbase\app\reports\services\DataSources;
-use barrelstrength\sproutbase\config\base\EditionsInterface;
-use barrelstrength\sproutbase\config\base\SproutCentralInterface;
-use barrelstrength\sproutbase\config\configs\EmailConfig;
-use barrelstrength\sproutbase\config\configs\FieldsConfig;
-use barrelstrength\sproutbase\config\configs\FormsConfig;
-use barrelstrength\sproutbase\config\configs\GeneralConfig;
-use barrelstrength\sproutbase\config\configs\ReportsConfig;
-use barrelstrength\sproutbase\SproutBase;
-use barrelstrength\sproutbase\SproutBaseHelper;
 use barrelstrength\sproutbase\app\forms\base\Captcha;
 use barrelstrength\sproutbase\app\forms\captchas\DuplicateCaptcha;
 use barrelstrength\sproutbase\app\forms\captchas\HoneypotCaptcha;
@@ -45,10 +34,19 @@ use barrelstrength\sproutbase\app\forms\services\Entries;
 use barrelstrength\sproutbase\app\forms\services\Fields as SproutFormsFields;
 use barrelstrength\sproutbase\app\forms\services\Forms;
 use barrelstrength\sproutbase\app\forms\services\Integrations;
-use barrelstrength\sproutbase\app\forms\web\twig\variables\SproutFormsVariable;
 use barrelstrength\sproutbase\app\forms\widgets\RecentEntries;
+use barrelstrength\sproutbase\app\reports\base\DataSource;
+use barrelstrength\sproutbase\app\reports\services\DataSources;
+use barrelstrength\sproutbase\config\base\EditionsInterface;
+use barrelstrength\sproutbase\config\base\SproutBasePlugin;
+use barrelstrength\sproutbase\config\configs\EmailConfig;
+use barrelstrength\sproutbase\config\configs\FieldsConfig;
+use barrelstrength\sproutbase\config\configs\FormsConfig;
+use barrelstrength\sproutbase\config\configs\ControlPanelConfig;
+use barrelstrength\sproutbase\config\configs\ReportsConfig;
+use barrelstrength\sproutbase\SproutBase;
+use barrelstrength\sproutbase\SproutBaseHelper;
 use Craft;
-use craft\base\Plugin;
 use craft\events\RegisterComponentTypesEvent;
 use craft\helpers\UrlHelper;
 use craft\services\Dashboard;
@@ -62,7 +60,7 @@ use yii\base\Event;
 use yii\base\NotSupportedException;
 use yii\web\ServerErrorHttpException;
 
-class SproutForms extends Plugin implements SproutCentralInterface, EditionsInterface
+class SproutForms extends SproutBasePlugin implements EditionsInterface
 {
     const EDITION_LITE = 'lite';
     const EDITION_PRO = 'pro';
@@ -75,7 +73,7 @@ class SproutForms extends Plugin implements SproutCentralInterface, EditionsInte
     /**
      * @var string
      */
-    public $minVersionRequired = '2.5.1';
+    public $minVersionRequired = '3.12.2';
 
     /**
      * @inheritDoc
@@ -91,7 +89,7 @@ class SproutForms extends Plugin implements SproutCentralInterface, EditionsInte
     public static function getSproutConfigs(): array
     {
         return [
-            GeneralConfig::class,
+            ControlPanelConfig::class,
             EmailConfig::class,
             FieldsConfig::class,
             FormsConfig::class,
@@ -126,13 +124,13 @@ class SproutForms extends Plugin implements SproutCentralInterface, EditionsInte
             $event->types[] = SpamLogDataSource::class;
         });
 
-        $this->setComponents([
-            'sproutforms' => SproutFormsVariable::class
-        ]);
+//        $this->setComponents([
+//            'sproutforms' => SproutFormsVariable::class
+//        ]);
 
-        Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, static function(Event $event) {
-            $event->sender->set('sproutForms', SproutFormsVariable::class);
-        });
+//        Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, static function(Event $event) {
+//            $event->sender->set('sproutForms', SproutFormsVariable::class);
+//        });
 
         Event::on(Fields::class, Fields::EVENT_REGISTER_FIELD_TYPES, static function(RegisterComponentTypesEvent $event) {
             $event->types[] = FormsField::class;
