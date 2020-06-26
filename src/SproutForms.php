@@ -102,24 +102,6 @@ class SproutForms extends SproutBasePlugin
             $event->types[] = RecentEntries::class;
         });
 
-        Event::on(SproutFormsFields::class, SproutFormsFields::EVENT_REGISTER_FIELDS, static function(RegisterFieldsEvent $event) {
-            $fieldsByGroup = SproutBase::$app->formFields->getRegisteredFieldsByGroup();
-
-            foreach ($fieldsByGroup as $group) {
-                foreach ($group as $field) {
-                    $event->fields[] = new $field;
-                }
-            }
-        });
-
-//        $this->setComponents([
-//            'sproutforms' => SproutFormsVariable::class
-//        ]);
-
-//        Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, static function(Event $event) {
-//            $event->sender->set('sproutForms', SproutFormsVariable::class);
-//        });
-
         Event::on(Fields::class, Fields::EVENT_REGISTER_FIELD_TYPES, static function(RegisterComponentTypesEvent $event) {
             $event->types[] = FormsField::class;
             $event->types[] = FormEntriesField::class;
@@ -135,34 +117,6 @@ class SproutForms extends SproutBasePlugin
             $event->types[] = HoneypotCaptcha::class;
         });
 
-        Event::on(FormEntriesController::class, FormEntriesController::EVENT_BEFORE_VALIDATE, static function(OnBeforeValidateEntryEvent $event) {
-
-            if (Craft::$app->getRequest()->getIsSiteRequest()) {
-                $enableCaptchas = (int)$event->form->enableCaptchas;
-
-                // Don't process captchas if the form is set to ignore them
-                if (!$enableCaptchas) {
-                    return;
-                }
-
-                /** @var Captcha[] $captchas */
-                $captchas = SproutBase::$app->formCaptchas->getAllEnabledCaptchas();
-
-                foreach ($captchas as $captcha) {
-                    $captcha->verifySubmission($event);
-                    $event->entry->addCaptcha($captcha);
-                }
-            }
-        }, null, false);
-
-        Event::on(FormEntries::class, EntryElement::EVENT_AFTER_SAVE, static function(OnSaveEntryEvent $event) {
-            SproutBase::$app->formIntegrations->runFormIntegrations($event->entry);
-        });
-
-        Craft::$app->view->hook('sproutForms.modifyForm', static function(array &$context) {
-            return SproutBase::$app->forms->handleModifyFormHook($context);
-        });
-
         Event::on(FormIntegrations::class, FormIntegrations::EVENT_REGISTER_INTEGRATIONS, static function(RegisterComponentTypesEvent $event) {
             $event->types[] = CustomEndpoint::class;
             $event->types[] = EntryElementIntegration::class;
@@ -172,10 +126,32 @@ class SproutForms extends SproutBasePlugin
             $event->types[] = AccessibleTemplates::class;
         });
 
-        // Register Sprout Email Templates
         Event::on(EmailTemplates::class, EmailTemplates::EVENT_REGISTER_EMAIL_TEMPLATES, static function(RegisterComponentTypesEvent $event) {
             $event->types[] = BasicSproutFormsNotification::class;
         });
+
+        Event::on(
+            SproutFormsFields::class,
+            SproutFormsFields::EVENT_REGISTER_FIELDS, [
+            SproutBase::$app->formFields, 'handleRegisterFormFieldsEvent'
+        ]);
+
+        Event::on(
+            FormEntriesController::class,
+            FormEntriesController::EVENT_BEFORE_VALIDATE, [
+            SproutBase::$app->formCaptchas, 'handleFormCaptchasEvent'
+        ], null, false);
+
+        Event::on(
+            FormEntries::class,
+            EntryElement::EVENT_AFTER_SAVE, [
+            SproutBase::$app->formIntegrations, 'handleFormIntegrations'
+        ]);
+
+        Craft::$app->view->hook('sproutForms.modifyForm', static function(array &$context) {
+            return SproutBase::$app->forms->handleModifyFormHook($context);
+        });
+
     }
 
     /**
@@ -185,10 +161,10 @@ class SproutForms extends SproutBasePlugin
      */
     public function beforeUninstall(): bool
     {
-        $forms = self::$app->forms->getAllForms();
+        $forms = SproutBase::$app->forms->getAllForms();
 
         foreach ($forms as $form) {
-            self::$app->forms->deleteForm($form);
+            SproutBase::$app->forms->deleteForm($form);
         }
 
         return true;
