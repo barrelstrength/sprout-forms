@@ -85,8 +85,6 @@ class SproutForms extends SproutBasePlugin
     {
         return [
             NotificationsConfig::class,
-            EmailPreviewConfig::class,
-            FieldsConfig::class,
             FormsConfig::class,
             ReportsConfig::class
         ];
@@ -130,23 +128,19 @@ class SproutForms extends SproutBasePlugin
             $event->types[] = BasicSproutFormsNotification::class;
         });
 
-        Event::on(
-            SproutFormsFields::class,
-            SproutFormsFields::EVENT_REGISTER_FIELDS, [
-            SproutBase::$app->formFields, 'handleRegisterFormFieldsEvent'
-        ]);
+        Event::on(SproutFormsFields::class, SproutFormsFields::EVENT_REGISTER_FIELDS, static function(RegisterFieldsEvent $event) {
+            SproutBase::$app->formFields->handleRegisterFormFieldsEvent($event);
+        });
 
         Event::on(
             FormEntriesController::class,
-            FormEntriesController::EVENT_BEFORE_VALIDATE, [
-            SproutBase::$app->formCaptchas, 'handleFormCaptchasEvent'
-        ], null, false);
+            FormEntriesController::EVENT_BEFORE_VALIDATE, static function(OnBeforeValidateEntryEvent $event) {
+            SproutBase::$app->formCaptchas->handleFormCaptchasEvent($event);
+        }, null, false);
 
-        Event::on(
-            FormEntries::class,
-            EntryElement::EVENT_AFTER_SAVE, [
-            SproutBase::$app->formIntegrations, 'handleFormIntegrations'
-        ]);
+        Event::on(FormEntries::class, EntryElement::EVENT_AFTER_SAVE, static function(OnSaveEntryEvent $event) {
+            SproutBase::$app->formIntegrations->handleFormIntegrations($event);
+        });
 
         Craft::$app->view->hook('sproutForms.modifyForm', static function(array &$context) {
             return SproutBase::$app->forms->handleModifyFormHook($context);
