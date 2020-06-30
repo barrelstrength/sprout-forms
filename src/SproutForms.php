@@ -148,22 +148,6 @@ class SproutForms extends SproutBasePlugin
 
     }
 
-    /**
-     * @return bool
-     * @throws Exception
-     * @throws Throwable
-     */
-    public function beforeUninstall(): bool
-    {
-        $forms = SproutBase::$app->forms->getAllForms();
-
-        foreach ($forms as $form) {
-            SproutBase::$app->forms->deleteForm($form);
-        }
-
-        return true;
-    }
-
     protected function afterInstall()
     {
         if (Craft::$app->getRequest()->getIsConsoleRequest()) {
