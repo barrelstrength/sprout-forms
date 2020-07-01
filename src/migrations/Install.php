@@ -19,23 +19,21 @@ use yii\web\ServerErrorHttpException;
 class Install extends Migration
 {
     /**
-     * @return bool
      * @throws ErrorException
      * @throws NotSupportedException
      * @throws ReflectionException
      * @throws ServerErrorHttpException
      * @throws Exception
      */
-    public function safeUp(): bool
+    public function safeUp()
     {
         SproutBase::$app->config->runInstallMigrations(SproutForms::getInstance());
     }
 
     /**
-     * @return bool
      * @throws ReflectionException
      */
-    public function safeDown(): bool
+    public function safeDown()
     {
         SproutBase::$app->config->runUninstallMigrations(SproutForms::getInstance());
     }
