@@ -38,6 +38,6 @@
     "handle": "sprout-forms",
     "developer": "Barrel Strength",
     "documentationUrl": "https://sprout.barrelstrengthdesign.com/docs/forms",
-    "class": "Forms"
+    "class": "barrelstrength\\sproutforms\\SproutForms"
   }
 }
