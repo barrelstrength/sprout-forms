@@ -25,7 +25,7 @@
     "rss": "https://github.com/barrelstrength/sprout-forms/commits/v2.atom"
   },
   "require": {
-    "craftcms/cms": "^3.4.0",
+    "craftcms/cms": "^3.5.0",
     "barrelstrength/sprout-base": "^7.0.0"
   },
   "autoload": {
