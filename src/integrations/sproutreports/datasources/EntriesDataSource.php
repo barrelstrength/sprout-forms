@@ -7,11 +7,14 @@
 
 namespace barrelstrength\sproutforms\integrations\sproutreports\datasources;
 
+use barrelstrength\sproutbasefields\models\Address;
+use barrelstrength\sproutbasefields\SproutBaseFields;
 use barrelstrength\sproutbasereports\base\DataSource;
 use barrelstrength\sproutbasereports\elements\Report;
 use barrelstrength\sproutbasereports\SproutBaseReports;
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\elements\Form;
+use barrelstrength\sproutbasefields\models\Phone;
 use barrelstrength\sproutforms\records\Entry as EntryRecord;
 use barrelstrength\sproutforms\records\EntryStatus as EntryStatusRecord;
 use barrelstrength\sproutforms\SproutForms;
@@ -200,6 +203,11 @@ class EntriesDataSource extends DataSource
                     if (count($selectedOptions)) {
                         $value = implode(', ', $selectedOptions);
                     }
+                } else if ($field instanceof Address) {
+                    $addressWithSpanTags = SproutBaseFields::$app->addressFormatter->getAddressDisplayHtml($field, ['html' => false]);
+                    $value = strip_tags($addressWithSpanTags);
+                } else if ($field instanceof Phone) {
+                    $value = $field->getInternational();
                 } else if (is_array($field)) {
                     $value = Json::encode($field);
                 } else if (is_string($field) OR $field === null) {
