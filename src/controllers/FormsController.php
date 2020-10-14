@@ -493,8 +493,6 @@ class FormsController extends BaseController
             throw new ElementNotFoundException('Form not found.');
         }
 
-        SproutForms::$app->forms->saveForm($form);
-
         $view = Craft::$app->getView();
 
         $tabs = SproutForms::$app->forms->getTabsForFieldLayout($form);
