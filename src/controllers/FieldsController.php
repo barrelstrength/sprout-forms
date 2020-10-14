@@ -78,6 +78,7 @@ class FieldsController extends BaseController
         $nextId = $request->getBodyParam('nextId');
 
         $form = SproutForms::$app->forms->getFormById($formId);
+        $field = null;
 
         if ($type && $form && $tab) {
             /** @var Field $field */
@@ -97,8 +98,7 @@ class FieldsController extends BaseController
             }
         }
 
-        // @todo - add error messages
-        return $this->returnJson(false, null, $form, null, $tabId);
+        return $this->returnJson(false, $field, $form, null, $tabId);
     }
 
     /**
@@ -401,6 +401,7 @@ class FieldsController extends BaseController
                     'name' => $tabName,
                     'id' => $tabId
                 ],
+                'uid' => $field->uid
             ],
             'template' => $success ? false : SproutForms::$app->fields->getModalFieldTemplate($form, $field),
         ]);
