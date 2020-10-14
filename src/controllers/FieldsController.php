@@ -219,7 +219,6 @@ class FieldsController extends BaseController
         // field layout of our Form Element
         if ($response) {
             Craft::info('Field Saved', __METHOD__);
-            SproutForms::$app->forms->saveForm($form);
 
             return $this->returnJson(true, $field, $form, $tabName, $tabId);
         }
