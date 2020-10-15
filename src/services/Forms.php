@@ -28,6 +28,7 @@ use craft\errors\MissingComponentException;
 use craft\events\RegisterComponentTypesEvent;
 use craft\helpers\MigrationHelper;
 use craft\helpers\StringHelper;
+use craft\models\FieldLayoutTab;
 use Throwable;
 use yii\base\Component;
 use yii\base\Exception;
@@ -924,7 +925,18 @@ class Forms extends Component
     {
         $tabs = [];
 
-        foreach ($form->getFieldLayout()->getTabs() as $index => $tab) {
+        $fieldLayout = $form->getFieldLayout();
+        $flTabs = $fieldLayout->getTabs();
+        if (empty($flTabs)) {
+            $flTabs[] = new FieldLayoutTab([
+                'name' => SproutForms::$app->fields->getDefaultTabName(),
+                'sortOrder' => 1,
+            ]);
+            $fieldLayout->setTabs($flTabs);
+            Craft::$app->getFields()->saveLayout($fieldLayout);
+        }
+
+        foreach ($flTabs as $index => $tab) {
             // Do any of the fields on this tab have errors?
             $hasErrors = false;
 

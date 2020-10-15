@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+- Fixed a Twig error that would occur when editing a form if its field layout had no tabs.
+
 ## 3.12.2 - 2020-05-28
 
 ### Changed
