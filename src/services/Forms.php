@@ -121,7 +121,6 @@ class Forms extends Component
     public function saveForm(FormElement $form, bool $duplicate = false): bool
     {
         $isNew = !$form->id;
-        $hasLayout = count($form->getFieldLayout()->getFields()) > 0;
         $oldForm = null;
 
         if (!$isNew) {
@@ -150,31 +149,12 @@ class Forms extends Component
         $transaction = Craft::$app->db->beginTransaction();
 
         try {
-            if ($isNew) {
-                $fieldLayout = $form->getFieldLayout();
+            // Save the field layout
+            $fieldLayout = $form->getFieldLayout();
+            Craft::$app->getFields()->saveLayout($fieldLayout);
 
-                // Save the field layout
-                Craft::$app->getFields()->saveLayout($fieldLayout);
-
-                // Assign our new layout id info to our form model and record
-                $form->fieldLayoutId = $fieldLayout->id;
-                $form->setFieldLayout($fieldLayout);
-            } else if ($oldForm !== null && $hasLayout) {
-                // Delete our previous record
-                Craft::$app->getFields()->deleteLayoutById($oldForm->fieldLayoutId);
-
-                $fieldLayout = $form->getFieldLayout();
-
-                // Save the field layout
-                Craft::$app->getFields()->saveLayout($fieldLayout);
-
-                // Assign our new layout id info to our form model
-                $form->fieldLayoutId = $fieldLayout->id;
-                $form->setFieldLayout($fieldLayout);
-            } else {
-                // We don't have a field layout right now
-                $form->fieldLayoutId = null;
-            }
+            // Assign our new layout id info to our form model and record
+            $form->fieldLayoutId = $fieldLayout->id;
 
             // Set the field context
             Craft::$app->content->fieldContext = $form->getFieldContext();
@@ -928,10 +908,7 @@ class Forms extends Component
         $fieldLayout = $form->getFieldLayout();
         $flTabs = $fieldLayout->getTabs();
         if (empty($flTabs)) {
-            $flTabs[] = new FieldLayoutTab([
-                'name' => SproutForms::$app->fields->getDefaultTabName(),
-                'sortOrder' => 1,
-            ]);
+            $flTabs[] = new FieldLayoutTab(['name' => 'Tab 1', 'sortOrder' => 1]);
             $fieldLayout->setTabs($flTabs);
             Craft::$app->getFields()->saveLayout($fieldLayout);
         }

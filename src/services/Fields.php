@@ -44,11 +44,12 @@ use craft\base\FieldInterface;
 use craft\db\Query;
 use craft\db\Table;
 use craft\errors\ElementNotFoundException;
+use craft\fieldlayoutelements\CustomField;
+use craft\helpers\ArrayHelper;
 use craft\helpers\StringHelper;
 use craft\models\FieldLayout;
 use craft\models\FieldLayoutTab;
 use craft\records\Field as FieldRecord;
-use craft\records\FieldLayoutField;
 use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
 use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
 use Throwable;
@@ -375,59 +376,42 @@ class Fields extends Component
      * @param FormElement $form
      * @param int         $tabId
      * @param int         $nextId the next field Id
+     * @param bool        $required whether the field should be required
      *
      * @return boolean
      */
-    public function addFieldToLayout($field, $form, $tabId, $nextId = null): bool
+    public function addFieldToLayout($field, $form, $tabId, $nextId = null, bool $required = false): bool
     {
-        $response = false;
-        $sortOrder = null;
+        $layout = $form->getFieldLayout();
+        /** @var FieldLayoutTab|null $tab */
+        $tab = ArrayHelper::firstWhere($layout->getTabs(), 'id', $tabId);
 
-        if ($field !== null && $form !== null) {
-            // Let's try to order the field where is dropped
-
-            if ($nextId) {
-                $fieldLayoutFieldNext = FieldLayoutFieldRecord::findOne([
-                    'tabId' => $tabId, 'layoutId' => $form->fieldLayoutId, 'fieldId' => $nextId
-                ]);
-
-                if ($fieldLayoutFieldNext) {
-                    $fieldLayoutFields = FieldLayoutFieldRecord::find()
-                        ->where([
-                            'tabId' => $tabId, 'layoutId' => $form->fieldLayoutId
-
-                        ])
-                        ->andWhere(['>=', 'sortOrder', $fieldLayoutFieldNext->sortOrder])
-                        ->all();
-
-                    $sortOrder = $fieldLayoutFieldNext->sortOrder;
-
-                    foreach ($fieldLayoutFields as $fieldLayoutFieldRecord) {
-                        ++$fieldLayoutFieldRecord->sortOrder;
-                        $fieldLayoutFieldRecord->save();
-                    }
-                }
-            }
-
-            if (null === $sortOrder) {
-                $fieldLayoutFields = FieldLayoutFieldRecord::findAll([
-                    'tabId' => $tabId, 'layoutId' => $form->fieldLayoutId
-                ]);
-                // At last
-                $sortOrder = count($fieldLayoutFields) + 1;
-            }
-
-            $fieldRecord = new FieldLayoutFieldRecord();
-            $fieldRecord->layoutId = $form->fieldLayoutId;
-            $fieldRecord->tabId = $tabId;
-            $fieldRecord->fieldId = $field->id;
-            $fieldRecord->required = 0;
-            $fieldRecord->sortOrder = $sortOrder;
-
-            $response = $fieldRecord->save(false);
+        if (!$tab) {
+            Craft::warning("Invalid field layout tab ID: $tabId", __METHOD__);
+            return false;
         }
 
-        return $response;
+        $fieldElement = new CustomField($field, [
+            'required' => $required,
+        ]);
+
+        $placed = false;
+
+        if ($nextId) {
+            foreach ($tab->elements as $i => $element) {
+                if ($element instanceof CustomField && $element->getField()->id == $nextId) {
+                    array_splice($tab->elements, $i, 0, [$fieldElement]);
+                    $placed = true;
+                    break;
+                }
+            }
+        }
+
+        if (!$placed) {
+            $tab->elements[] = $fieldElement;
+        }
+
+        return Craft::$app->getFields()->saveLayout($layout);
     }
 
     /**
@@ -436,29 +420,33 @@ class Fields extends Component
      * @param Field       $field
      * @param FormElement $form
      * @param int         $tabId
+     * @param bool        $required whether the field should be required
      *
      * @return boolean
      */
-    public function updateFieldToLayout($field, $form, $tabId): bool
+    public function updateFieldToLayout($field, $form, $tabId, bool $required = false): bool
     {
-        $response = false;
+        $layout = $form->getFieldLayout();
 
-        if ($field !== null && $form !== null) {
-            $fieldRecord = FieldLayoutFieldRecord::findOne([
-                'fieldId' => $field->id,
-                'layoutId' => $form->fieldLayoutId
-            ]);
+        // Find and update/remove the current field element
+        foreach ($layout->getTabs() as $tab) {
+            foreach ($tab->elements as $i => $element) {
+                if ($element instanceof CustomField && $element->getField()->id == $field->id) {
+                    if ($tab->id == $tabId) {
+                        // The field is already where it needs to be. Just update its `required` setting and save.
+                        $element->required = $required;
+                        return Craft::$app->getFields()->saveLayout($layout);
+                    }
 
-            if ($fieldRecord) {
-                $fieldRecord->tabId = $tabId;
-
-                $response = $fieldRecord->save(false);
-            } else {
-                Craft::error('Unable to find the FieldLayoutFieldRecord', __METHOD__);
+                    // It's in the wrong tab so remove it
+                    unset($tab->elements[$i]);
+                    break 2;
+                }
             }
         }
 
-        return $response;
+        // Append the field to the expected tab
+        return $this->addFieldToLayout($field, $form, $tabId, null, $required);
     }
 
     public function getDefaultTabName(): string

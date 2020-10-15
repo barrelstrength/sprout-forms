@@ -2,8 +2,14 @@
 
 ## Unreleased
 
+### Changed
+- Sprout Forms now requires Craft 3.5 or later.
+
 ### Fixed
+- Fixed a bug where manually saving a form or editing field settings would wipe out all fields on the form in Craft 3.5. ([#521])
 - Fixed a Twig error that would occur when editing a form if its field layout had no tabs.
+
+[#521]: https://github.com/barrelstrength/craft-sprout-forms/issues/521
 
 ## 3.12.2 - 2020-05-28
 
