@@ -269,9 +269,21 @@ let autoScroll = require('dom-autoscroller');
           '</ul>'
         ].join('')));
 
-        // Add fieldLayout input
+        // Add elementPlacements input
         $(el).append($([
-            '<input type="hidden" name="fieldLayout[', tabName, '][]" value="', defaultField.id, '" class="id-input">'
+            '<input type="hidden" name="elementPlacements[', tabName, '][]" value="', defaultField.id, '" class="id-input">',
+          ].join(''),
+        ));
+
+        let elementConfigValue = {
+          type: "craft\\fieldlayoutelements\\CustomField",
+          fieldUid: defaultField.uid,
+          required: false
+        };
+
+        // Add elementConfigs input
+        $(el).append($([
+          '<input type="hidden" name="elementConfigs[',defaultField.id, ']" value=\'', JSON.stringify(elementConfigValue), '\'>',
           ].join('')
         ));
 

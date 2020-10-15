@@ -72,12 +72,11 @@ tab      = tab or null
 
         {# Manage hidden input fields #}
         {% if instance == 'active' %}
-            {# todo - why are we using tabName and not tabId? #}
-            <input type="hidden" name="fieldLayout[{{ tab.name }}][]" value="{{ field.id }}" class="id-input">
+            <input type="hidden" name="elementPlacements[{{ tab.name }}][]" value="{{ field.id }}" class="id-input">
 
-            {% if field.required %}
-                <input type="hidden" name="requiredFields[]" value="{{ field.id }}" class="sproutforms-required-input">
-            {% endif %}
+            {% set elementRequired = field.required ? 'true' : 'false' %}
+            {% set elementConfigValue = '{"type":"craft\\\\fieldlayoutelements\\\\CustomField", "fieldUid":"'~field.uid~'","required":'~ elementRequired ~'}' %}
+            <input type="hidden" name="elementConfigs[{{ field.id }}]" value="{{ elementConfigValue }}">
         {% endif %}
     </div>
 {% endmacro %}

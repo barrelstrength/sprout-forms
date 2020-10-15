@@ -124,16 +124,15 @@ class Fields extends Component
             return null;
         }
 
-        $postedFieldLayout = [];
-        $requiredFields = [];
-
         /** @var FieldLayoutTab[] $tabs */
-        $tabs = $postFieldLayout->getTabs();
+        $oldTabs = $postFieldLayout->getTabs();
+        $tabs = [];
+        $fields = [];
 
-        foreach ($tabs as $tab) {
+        foreach ($oldTabs as $oldTab) {
             /** @var Field[] $fieldLayoutFields */
-            $fieldLayoutFields = $tab->getFields();
-            $fields = [];
+            $fieldLayoutFields = $oldTab->getFields();
+            $tabFields = [];
 
             foreach ($fieldLayoutFields as $fieldLayoutField) {
 
@@ -154,24 +153,21 @@ class Fields extends Component
                 Craft::$app->fields->saveField($field);
 
                 $fields[] = $field;
-
-                if ($field->required) {
-                    $requiredFields[] = $field->id;
-                }
+                $tabFields[] = $field;
             }
 
-            foreach ($fields as $field) {
-                // Add our new field
-                if ($field !== null && $field->id != null) {
-                    $postedFieldLayout[$tab->name][] = $field->id;
-                }
-            }
+            $newTab = new FieldLayoutTab();
+            $newTab->name = urldecode($oldTab->name);
+            $newTab->sortOrder = 0;
+            $newTab->setFields($tabFields);
+
+            $tabs[] = $newTab;
         }
 
-        // Set the field layout
-        $fieldLayout = Craft::$app->fields->assembleLayout($postedFieldLayout, $requiredFields);
-
+        $fieldLayout = new FieldLayout();
         $fieldLayout->type = FormElement::class;
+        $fieldLayout->setTabs($tabs);
+        $fieldLayout->setFields($fields);
 
         return $fieldLayout;
     }
@@ -333,6 +329,9 @@ class Fields extends Component
             return null;
         }
 
+        $fields = [];
+        $tabFields = [];
+
         if ($field === null) {
             $fieldsService = Craft::$app->getFields();
             $handle = $this->getFieldAsNew('handle', 'defaultField');
@@ -347,6 +346,9 @@ class Fields extends Component
             // Save our field
             Craft::$app->content->fieldContext = $form->getFieldContext();
             Craft::$app->fields->saveField($field);
+
+            $fields[] = $field;
+            $tabFields[] = $field;
         }
 
         // Create a tab
@@ -355,13 +357,21 @@ class Fields extends Component
         $postedFieldLayout = [];
 
         // Add our new field
-        if ($field !== null && $field->id != null) {
-            $postedFieldLayout[$tabName][] = $field->id;
-        }
+//        if ($field !== null && $field->id != null) {
+//            $postedFieldLayout[$tabName][] = $field->id;
+//        }
 
-        $fieldLayout = Craft::$app->fields->assembleLayout($postedFieldLayout, $requiredFields);
+        $tab = new FieldLayoutTab();
+        $tab->name = urldecode($tabName);
+        $tab->sortOrder = 0;
+        $tab->setFields($tabFields);
 
+        $tabs[] = $tab;
+
+        $fieldLayout = new FieldLayout();
         $fieldLayout->type = FormElement::class;
+        $fieldLayout->setTabs($tabs);
+        $fieldLayout->setFields($fields);
 
         // Set the tab to the form
         $form->setFieldLayout($fieldLayout);

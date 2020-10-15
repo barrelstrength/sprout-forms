@@ -84,6 +84,7 @@ class FieldsController extends BaseController
             $tab = null;
         }
 
+        $field = null;
 
         if ($type && $form && $tab) {
             /** @var Field $field */
@@ -103,8 +104,7 @@ class FieldsController extends BaseController
             }
         }
 
-        // @todo - add error messages
-        return $this->returnJson(false, null, $form, null, $tabId);
+        return $this->returnJson(false, $field, $form, null, $tabId);
     }
 
     /**
@@ -212,7 +212,6 @@ class FieldsController extends BaseController
         // field layout of our Form Element
         if ($response) {
             Craft::info('Field Saved', __METHOD__);
-            SproutForms::$app->forms->saveForm($form);
 
             return $this->returnJson(true, $field, $form, $tabName, $tabId);
         }
@@ -395,6 +394,7 @@ class FieldsController extends BaseController
                     'name' => $tabName,
                     'id' => $tabId
                 ],
+                'uid' => $field->uid
             ],
             'template' => $success ? false : SproutForms::$app->fields->getModalFieldTemplate($form, $field),
         ]);
