@@ -13,10 +13,12 @@ use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\base\Field;
+use craft\base\FieldLayoutElementInterface;
 use craft\errors\ElementNotFoundException;
+use craft\fieldlayoutelements\CustomField;
+use craft\helpers\ArrayHelper;
 use craft\helpers\Json;
-use craft\records\FieldLayoutField as FieldLayoutFieldRecord;
-use craft\records\FieldLayoutTab as FieldLayoutTabRecord;
+use craft\models\FieldLayoutTab;
 use craft\web\Controller as BaseController;
 use Throwable;
 use Twig\Error\LoaderError;
@@ -72,12 +74,16 @@ class FieldsController extends BaseController
         $request = Craft::$app->getRequest();
         $type = $request->getBodyParam('type');
         $tabId = $request->getBodyParam('tabId');
-
-        $tab = FieldLayoutTabRecord::findOne($tabId);
         $formId = $request->getBodyParam('formId');
         $nextId = $request->getBodyParam('nextId');
 
         $form = SproutForms::$app->forms->getFormById($formId);
+        if ($form) {
+            $tab = ArrayHelper::firstWhere($form->getFieldLayout()->getTabs(), 'id', $tabId);
+        } else {
+            $tab = null;
+        }
+
         $field = null;
 
         if ($type && $form && $tab) {
@@ -143,22 +149,6 @@ class FieldsController extends BaseController
             'settings' => $request->getBodyParam('types.'.$type),
         ]);
 
-        // required field validation
-        $fieldLayout = $form->getFieldLayout();
-        $fieldLayoutField = FieldLayoutFieldRecord::findOne([
-                'layoutId' => $fieldLayout->id,
-                'tabId' => $tabId,
-                'fieldId' => $fieldId
-            ]
-        );
-
-        if ($fieldLayoutField) {
-            $required = $request->getBodyParam('required');
-            $fieldLayoutField->required = $required !== '';
-            $fieldLayoutField->save(false);
-            $field->required = $fieldLayoutField->required;
-        }
-
         // Set our field context
         Craft::$app->content->fieldContext = $form->getFieldContext();
         Craft::$app->content->contentTable = $form->getContentTable();
@@ -206,12 +196,15 @@ class FieldsController extends BaseController
         $response = false;
 
         if ($oldTabs) {
-            $tabName = FieldLayoutTabRecord::findOne($tabId)->name;
+            /** @var FieldLayoutTab $tab */
+            $tab = ArrayHelper::firstWhere($form->getFieldLayout()->getTabs(), 'id', $tabId);
+            $tabName = $tab->name;
+            $required = $request->getBodyParam('required');
 
             if ($isNewField) {
-                $response = SproutForms::$app->fields->addFieldToLayout($field, $form, $tabId);
+                $response = SproutForms::$app->fields->addFieldToLayout($field, $form, $tabId, null, $required);
             } else {
-                $response = SproutForms::$app->fields->updateFieldToLayout($field, $form, $tabId);
+                $response = SproutForms::$app->fields->updateFieldToLayout($field, $form, $tabId, $required);
             }
         }
 
@@ -260,31 +253,32 @@ class FieldsController extends BaseController
         $field = Craft::$app->fields->getFieldById($id);
 
         if ($field) {
-            $fieldLayoutField = FieldLayoutFieldRecord::findOne([
-                'fieldId' => $field->id,
-                'layoutId' => $form->fieldLayoutId
-            ]);
-
-            $field->required = $fieldLayoutField->required;
-
-            $group = FieldLayoutTabRecord::findOne($fieldLayoutField->tabId);
-
-            return $this->asJson([
-                'success' => true,
-                'errors' => $field->getErrors(),
-                'field' => [
-                    'id' => $field->id,
-                    'name' => $field->name,
-                    'handle' => $field->handle,
-                    'instructions' => $field->instructions,
-                    'required' => $field->required,
-                    //'translatable' => $field->translatable,
-                    'group' => [
-                        'name' => $group->name,
-                    ],
-                ],
-                'template' => SproutForms::$app->fields->getModalFieldTemplate($form, $field, $group->id),
-            ]);
+            // Find the field in the field layout
+            foreach ($form->getFieldLayout()->getTabs() as $tab) {
+                /** @var CustomField|null $fieldElement */
+                $fieldElement = ArrayHelper::firstWhere($tab->elements, function(FieldLayoutElementInterface $element) use ($field) {
+                    return $element instanceof CustomField && $element->getField()->id == $field->id;
+                });
+                if ($fieldElement) {
+                    $field->required = $fieldElement->required;
+                    return $this->asJson([
+                        'success' => true,
+                        'errors' => $field->getErrors(),
+                        'field' => [
+                            'id' => $field->id,
+                            'name' => $field->name,
+                            'handle' => $field->handle,
+                            'instructions' => $field->instructions,
+                            'required' => $field->required,
+                            //'translatable' => $field->translatable,
+                            'group' => [
+                                'name' => $tab->name,
+                            ],
+                        ],
+                        'template' => SproutForms::$app->fields->getModalFieldTemplate($form, $field, $tab->id),
+                    ]);
+                }
+            }
         }
 
         $message = Craft::t('sprout-forms', 'The field requested to edit no longer exists.');
