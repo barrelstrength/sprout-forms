@@ -1,6 +1,9 @@
 # Changelog
 
-## Unreleased
+## 3.13.0 - 2020-10-27
+
+### Added
+- Adds support for Address and Phone field in Entries Report ([#94-sprout-reports])
 
 ### Changed
 - Updated `craftcms/cms` requirement to v3.5.13
@@ -11,8 +14,10 @@
 - Fixed a bug where manually saving a form or editing field settings would wipe out all fields on the form in Craft 3.5. ([#521])
 - Fixed a Twig error that would occur when editing a form if its field layout had no tabs.
 - Fixed an issue where Settings page would not load in Craft 3.5
+- Fixed position of quotation mark in multiplechoice Form Field template
 
 [#521]: https://github.com/barrelstrength/craft-sprout-forms/issues/521
+[#94-sprout-reports]: https://github.com/barrelstrength/craft-sprout-reports/issues/94
 
 ## 3.12.2 - 2020-05-28
 
