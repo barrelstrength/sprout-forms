@@ -908,7 +908,7 @@ class Forms extends Component
         $fieldLayout = $form->getFieldLayout();
         $flTabs = $fieldLayout->getTabs();
         if (empty($flTabs)) {
-            $flTabs[] = new FieldLayoutTab(['name' => 'Tab 1', 'sortOrder' => 1]);
+            $flTabs[] = new FieldLayoutTab(['name' => 'Page 1', 'sortOrder' => 1]);
             $fieldLayout->setTabs($flTabs);
             Craft::$app->getFields()->saveLayout($fieldLayout);
         }
