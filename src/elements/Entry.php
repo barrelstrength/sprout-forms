@@ -644,4 +644,20 @@ class Entry extends Element
 
         return $rules;
     }
+
+    /**
+     * @inheritdoc
+     */
+    protected static function defineFieldLayouts(string $source): array
+    {
+        $fieldLayouts = [];
+
+        if (preg_match('/^form:(.+)$/', $source, $matches) && ($form = SproutForms::$app->forms->getFormById($matches[1]))) {
+            if ($fieldLayout = $form->getFieldLayout()) {
+                $fieldLayouts[] = $fieldLayout;
+            }
+        }
+
+        return $fieldLayouts;
+    }
 }
