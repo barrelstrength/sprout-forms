@@ -1,9 +1,18 @@
 # Changelog
 
+## 3.13.1
+
+## Improved
+
+- Improved support for custom fields in element index layouts ([#486], [#543])
+
+[#486]: https://github.com/barrelstrength/craft-sprout-forms/issues/486 
+[#543]: https://github.com/barrelstrength/craft-sprout-forms/issues/543
+
 ## 3.13.0 - 2020-10-27
 
 ### Added
-- Adds support for Address and Phone field in Entries Report ([#94-sprout-reports])
+- Added support for Address and Phone field in Entries Report ([#94-sprout-reports])
 
 ### Changed
 - Updated `craftcms/cms` requirement to v3.5.13
