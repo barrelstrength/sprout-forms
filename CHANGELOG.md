@@ -2,7 +2,7 @@
 
 ## 3.13.1
 
-## Improved
+## Changed
 
 - Improved support for custom fields in element index layouts ([#486], [#543])
 
