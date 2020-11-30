@@ -27,6 +27,7 @@ use barrelstrength\sproutforms\captchas\HoneypotCaptcha;
 use barrelstrength\sproutforms\captchas\JavascriptCaptcha;
 use barrelstrength\sproutforms\controllers\EntriesController;
 use barrelstrength\sproutforms\elements\Entry as EntryElement;
+use barrelstrength\sproutforms\elements\Form;
 use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
 use barrelstrength\sproutforms\events\OnSaveEntryEvent;
 use barrelstrength\sproutforms\events\RegisterFieldsEvent;
@@ -56,6 +57,7 @@ use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
 use craft\helpers\UrlHelper;
 use craft\services\Dashboard;
+use craft\services\Elements;
 use craft\services\Fields;
 use craft\services\Plugins;
 use craft\services\UserPermissions;
@@ -144,6 +146,11 @@ class SproutForms extends Plugin implements SproutEditionsInterface, SproutDepen
         SproutBaseEmailHelper::registerModule();
         SproutBaseFieldsHelper::registerModule();
         SproutBaseReportsHelper::registerModule();
+
+        Event::on(Elements::class, Elements::EVENT_REGISTER_ELEMENT_TYPES, function(RegisterComponentTypesEvent $event) {
+            $event->types[] = EntryElement::class;
+            $event->types[] = Form::class;
+        });
 
         Event::on(Dashboard::class, Dashboard::EVENT_REGISTER_WIDGET_TYPES, static function(RegisterComponentTypesEvent $event) {
             $event->types[] = RecentEntries::class;
