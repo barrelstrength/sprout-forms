@@ -19,12 +19,10 @@ class m200418_000001_rename_formTemplateId_column extends Migration
      */
     public function safeUp()
     {
-        if ($this->db->columnExists(Form::tableName(), 'formTemplateId')) {
+        if (!$this->db->columnExists(Form::tableName(), 'formTemplateId')) {
             // Migration has already run
-            return;
+            $this->renameColumn(Form::tableName(), 'formTemplate', 'formTemplateId');
         }
-
-        $this->renameColumn(Form::tableName(), 'formTemplate', 'formTemplateId');
     }
 
     /**

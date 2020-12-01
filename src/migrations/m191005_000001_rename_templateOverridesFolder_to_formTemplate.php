@@ -19,7 +19,12 @@ class m191005_000001_rename_templateOverridesFolder_to_formTemplate extends Migr
      */
     public function safeUp()
     {
-        $this->renameColumn('{{%sproutforms_forms}}', 'templateOverridesFolder', 'formTemplate');
+        $table = '{{%sproutforms_forms}}';
+
+        // Moved to payload forwarding migration
+        if (!$this->db->columnExists($table, 'formTemplate') && !$this->db->columnExists($table, 'formTemplateId')) {
+            $this->renameColumn('{{%sproutforms_forms}}', 'templateOverridesFolder', 'formTemplate');
+        }
     }
 
     /**

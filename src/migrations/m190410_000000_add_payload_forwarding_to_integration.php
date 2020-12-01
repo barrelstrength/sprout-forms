@@ -32,6 +32,30 @@ class m190410_000000_add_payload_forwarding_to_integration extends Migration
      */
     public function safeUp(): bool
     {
+        // Adds various schema updates so that calls to the
+        // service layer in this migration don't throw errors.
+        // - m200322_000000_add_form_method_and_message_columns
+        // - m191116_000007_add_enable_captchas_form_setting
+        // - m191005_000001_rename_templateOverridesFolder_to_formTemplate
+        // - m200418_000001_rename_formTemplateId_column
+
+        $table = '{{%sproutforms_forms}}';
+
+        if (!$this->db->columnExists($table, 'submissionMethod')) {
+            $this->addColumn($table, 'submissionMethod', $this->string()->defaultValue('sync')->notNull()->after('redirectUri'));
+            $this->addColumn($table, 'errorDisplayMethod', $this->string()->defaultValue('inline')->notNull()->after('submissionMethod'));
+            $this->addColumn($table, 'successMessage', $this->text()->after('errorDisplayMethod'));
+            $this->addColumn($table, 'errorMessage', $this->text()->after('successMessage'));
+        }
+
+        if (!$this->db->columnExists($table, 'formTemplate')) {
+            $this->renameColumn($table, 'templateOverridesFolder', 'formTemplate');
+            $this->addColumn($table, 'enableCaptchas', $this->boolean()->after('formTemplate')->defaultValue(true)->notNull());
+            $this->renameColumn($table, 'formTemplate', 'formTemplateId');
+        }
+
+        // End schema migration prep
+
         $forms = (new Query())
             ->select(['id', 'submitAction'])
             ->from(['{{%sproutforms_forms}}'])
