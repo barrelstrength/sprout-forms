@@ -8,6 +8,7 @@
 namespace barrelstrength\sproutforms\integrations\sproutreports\datasources;
 
 use barrelstrength\sproutbasefields\models\Address;
+use barrelstrength\sproutbasefields\models\Name;
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use barrelstrength\sproutbasereports\base\DataSource;
 use barrelstrength\sproutbasereports\elements\Report;
@@ -206,6 +207,8 @@ class EntriesDataSource extends DataSource
                 } else if ($field instanceof Address) {
                     $addressWithSpanTags = SproutBaseFields::$app->addressFormatter->getAddressDisplayHtml($field, ['html' => false]);
                     $value = strip_tags($addressWithSpanTags);
+                } else if ($field instanceof Name) {
+                    $value = $field->getFullName();
                 } else if ($field instanceof Phone) {
                     $value = $field->getInternational();
                 } else if (is_array($field)) {
