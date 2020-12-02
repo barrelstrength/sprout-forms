@@ -188,6 +188,7 @@ class m180314_161540_craft2_to_craft3 extends Migration
                 $notificationEmail->enableFileAttachments = $form['enableFileAttachments'];
                 $notificationEmail->settings = Json::encode($settings);
                 $notificationEmail->enabled = $form['notificationEnabled'] ?? 0;
+                $notificationEmail->emailTemplateId = 'barrelstrength\sproutforms\integrations\sproutemail\emailtemplates\basic\BasicSproutFormsNotification';
                 $notificationEmail->eventId = 'barrelstrength\sproutforms\integrations\sproutemail\events\notificationevents\SaveEntryEvent';
 
                 SproutBaseEmail::$app->notifications->saveNotification($notificationEmail);
