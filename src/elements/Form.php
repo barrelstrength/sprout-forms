@@ -178,7 +178,7 @@ class Form extends Element
     protected static function defineSortOptions(): array
     {
         $attributes = [
-            'name' => Craft::t('sprout-forms', 'Form Name'),
+            'sproutforms_forms.name' => Craft::t('sprout-forms', 'Form Name'),
             'elements.dateCreated' => Craft::t('sprout-forms', 'Date Created'),
             'elements.dateUpdated' => Craft::t('sprout-forms', 'Date Updated'),
         ];
