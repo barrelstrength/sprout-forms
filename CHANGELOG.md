@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.13.2.3 - 2021-02-10
+
+### Changed
+- Updated `barrelstrength/sprout-base-reports` requirement v1.5.9
+
+### Fixed
+- Fixed specificity of name column on Report Element index page
+
 ## 3.13.2.2 - 2021-02-10
 
 ### Fixed
