@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.13.2.2 - 2021-02-10
+
+### Fixed
+- Fixed bug where Form query value was not specific enough on Form Element Index page
+
 ## 3.13.2.1 - 2021-02-10
 
 ### Fixed
