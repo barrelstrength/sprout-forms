@@ -1,12 +1,29 @@
 # Changelog
 
+## 3.13.2 - 2021-02-10
+
+### Added
+- Added support for Name field in Reports ([#94][#94-sprout-base-reports])
+
+### Changed
+- Updated `barrelstrength/sprout-base-reports` requirement v1.5.8
+
+### Fixed
+- Registered Form and Entry Elements via `EVENT_REGISTER_ELEMENT_TYPES`
+- Fixed Email Template migration ([#506], [#538])
+- Fixed payload forwarding migration ([#494])
+
+[#494]: https://github.com/barrelstrength/craft-sprout-forms/issues/494
+[#506]: https://github.com/barrelstrength/craft-sprout-forms/issues/506
+[#538]: https://github.com/barrelstrength/craft-sprout-forms/issues/538
+[#94-sprout-base-reports]: https://github.com/barrelstrength/craft-sprout-reports/issues/94
+
 ## 3.13.1 - 2020-11-16
 
-## Changed
-
+### Changed
 - Improved support for custom fields in element index layouts ([#486], [#543])
 
-[#486]: https://github.com/barrelstrength/craft-sprout-forms/issues/486 
+[#486]: https://github.com/barrelstrength/craft-sprout-forms/issues/486
 [#543]: https://github.com/barrelstrength/craft-sprout-forms/issues/543
 
 ## 3.13.0 - 2020-10-27
@@ -55,7 +72,7 @@
 ### Added
 - Added Global targets for Rendering Options
 - Added `container` and `input` targets for Rendering Option classes
-- Added `container` and `input` targets for Rendering Option error classes 
+- Added `container` and `input` targets for Rendering Option error classes
 - Added Enabled/Disabled status filters to Notification Email Element Index
 - Add Notification Email SetStatus Element Action
 
@@ -68,7 +85,7 @@
 ### Fixed
 - Fixed bug when rendering class name on field wrapper
 - Fixed bug where renamed field would not update Rule targeting same field
-- Fixed default return type for `barrelstrength/sproutbaseemail/base/NotificationEvent:getDescription()` 
+- Fixed default return type for `barrelstrength/sproutbaseemail/base/NotificationEvent:getDescription()`
 - Fixed Notification Email Element Index CP Edit URL after modal close behavior  ([#163])
 
 ## 3.11.9 - 2020-05-21
@@ -87,7 +104,7 @@
 - Updated `barrelstrength/sprout-base-fields` requirement to v1.4.2
 - Updated `barrelstrength/sprout-base-reports` requirement to v1.5.3
 - Updated `giggsey/libphonenumber-for-php` requirement to v8.12.4
-    
+
 ### Fixed
 - Fixed bug processing Test recipients to ensure only Test Recipients receive Test Emails
 - Fixed bug where valid Test email addresses could be marked invalid
@@ -111,7 +128,7 @@
 - Improved cleanup of Field Rule settings when a Form Field is deleted
 
 ### Fixed
-- Fixed bug where Element Integration would not map Post Date properly ([#440]) 
+- Fixed bug where Element Integration would not map Post Date properly ([#440])
 - Fixed bug where Rules would not retain condition target values ([#473])
 - Fixed Rule logic around disabling fields
 
@@ -146,7 +163,7 @@
 ### Fixed
 - Fixed bug where hyphens were being escaped when processing front-end regular expression pattern
 - Fixed display bug managing Address field 'Highlight Country' settings
-- Fixed bug with display tab settings 
+- Fixed bug with display tab settings
 
 [#476]: https://github.com/barrelstrength/craft-sprout-forms/issues/476
 
@@ -177,9 +194,9 @@
 
 ### Added
 - Added support for global field rendering options
- 
+
 ### Fixed
-- Fixed `renderingOptions` output bug when using Name Field 
+- Fixed `renderingOptions` output bug when using Name Field
 
 ## 3.11.0 - 2020-04-28
 
@@ -222,8 +239,8 @@
 
 ### Fixed
 - Fixed path in `barrelstrength\sproutbaseemail\emailtemplates\CustomTemplates::getTemplateRoot()`
-- Fixed migration bug where email table may not exist ([#463]) 
- 
+- Fixed migration bug where email table may not exist ([#463])
+
 ### Removed
 - Removed `barrelstrength\sprout-base-import` dependency
 - Removed `barrelstrength\sproutforms\base\Captcha::getCaptchaId()`
@@ -264,7 +281,7 @@
 - Improved front-end JS to make less assumptions about how a user might customize a given form ([#413])
 - Updated `disable-submit-button.js` behavior to watch new events and re-enable submit button after submissions
 - Updated Email Template rendering to treat Email Template folder as a subfolder of the template folder to allow more flexible use of extending other templates ([#111][#111-sprout-email], [#122][#122-sprout-email])
-- Updated `craft.sproutForms.lastEntry()` tag to support more than one form on a page 
+- Updated `craft.sproutForms.lastEntry()` tag to support more than one form on a page
 - Updated `barrelstrength\sproutbaseemail\base\EmailTemplates::getPath()` to define path within target template folder
 - Updated `barrelstrength/sprout-base-email` requirement to v1.2.7
 - Updated `barrelstrength/sprout-base-fields` requirement to v1.3.4
@@ -337,7 +354,7 @@
 
 ### Fixed
 - Fixed bug where spam entries were not respecting `saveSpamToDatabase` setting
-- Fixed validation logic in Javascript Captcha 
+- Fixed validation logic in Javascript Captcha
 - Notification Events are no longer initialized on install and migration requests ([#143][#143-sproutemail])
 - Notification Events are no longer initialized on console requests
 
@@ -404,7 +421,7 @@
 [#368]: https://github.com/barrelstrength/craft-sprout-forms/issues/368
 [#369]: https://github.com/barrelstrength/craft-sprout-forms/issues/369
 [#381]: https://github.com/barrelstrength/craft-sprout-forms/issues/381
-[#414]: https://github.com/barrelstrength/craft-sprout-forms/issues/414 
+[#414]: https://github.com/barrelstrength/craft-sprout-forms/issues/414
 
 ## 3.8.1 - 2020-02-12
 
@@ -433,10 +450,10 @@
 
 > {note}: This update migrates recipient emails in some conditions from the cc and bcc fields to the standard recipients field. Please review your recipients after updating and ensure they are working as expected.
 
-### Added 
+### Added
 - Improved Form Builder and Field Layout Editor
 - Added Page Manager modal to reorder, rename, and delete form pages
-- Added status icon and saving spinner to indicate current state of form 
+- Added status icon and saving spinner to indicate current state of form
 - Added support for Notification Emails to send to Mailing List Reports
 - Added settings to show or hide Notifications and Reports tabs
 - Added `barrelstrength\sproutforms\elements\Form::pluralDisplayName()`
@@ -445,13 +462,13 @@
 ### Changed
 - Updated UI to match look and field of Craft 3.4
 - Updated tab management to use the Page Manager modal
-- Moved several elements of the sidebar navigation to the header 
+- Moved several elements of the sidebar navigation to the header
 - Updated models to use `defineRules()` method
 - Updated Page deletion behavior to throw error if trying to delete the final Page on a form
 - Updated Entry Status settings page to use `Craft.VueAdminTable`
 - Updated Notifications integration to redirect to Sprout Email if plugin is installed
 - Updated Reports integration to redirect to Sprout Reports if plugin is installed
-- Added `dragula` and `dom-autoscroller` assets as dependencies  
+- Added `dragula` and `dom-autoscroller` assets as dependencies
 - Updated `barrelstrength/sprout-base-email` requirement to v1.2.0
 - Updated `barrelstrength/sprout-base-fields` requirement to v1.3.0
 - Updated `barrelstrength/sprout-base-reports` requirement to v1.4.0
@@ -471,16 +488,16 @@
 
 ## 3.7.1.1 - 2020-01-18
 
-### Fixed 
-- Fixed composer release number 
+### Fixed
+- Fixed composer release number
 
 ## 3.7.1 - 2020-01-18
 
 ### Updated
 - Updated `barrelstrength/sprout-base-fields` to v1.2.3
 
-### Fixed 
-- Fixed array offset error in PHP 7.4 ([#405][405-sproutbasefields]) 
+### Fixed
+- Fixed array offset error in PHP 7.4 ([#405][405-sproutbasefields])
 
 [405-sproutbasefields]: https://github.com/barrelstrength/craft-sprout-forms/issues/405
 
@@ -494,7 +511,7 @@
 ### Updated
 - Updated `barrelstrength/sprout-base-fields` to v1.2.2
 
-### Fixed 
+### Fixed
 - Fixed error in address table migration
 
 ## 3.6.9 - 2020-01-15
@@ -537,9 +554,9 @@
 
 ### Updated
 - Updated how Address Fields are saved and retrieved to better handle integrations
-- Updated and standardized shared logic, validation, and response for fields Email, Name, Phone, Regular Expression, and Url 
+- Updated and standardized shared logic, validation, and response for fields Email, Name, Phone, Regular Expression, and Url
 - Updated dynamic email validation to exclude check for unique email setting
-- Addresses are now stored only in the `sproutfields_adddresses` table. Updated `barrelstrength\sproutforms\fields\formfields\Address::hasContentColumn` to return false. 
+- Addresses are now stored only in the `sproutfields_adddresses` table. Updated `barrelstrength\sproutforms\fields\formfields\Address::hasContentColumn` to return false.
 - Added `barrelstrength\sproutbasefields\models\Address::getCountryCode()`
 - Updated `barrelstrength\sproutbasefields\services\Address::deleteAddressById()` to require address ID
 - Improved fallbacks for Address Field's default country and language
@@ -558,10 +575,10 @@
 
 ### Fixed
 - Added `site` translation category to Form Templates errors
-- Fixed naming conventions in Name field `input` template. Updated input element references to `address` => `name` 
+- Fixed naming conventions in Name field `input` template. Updated input element references to `address` => `name`
 - Fixed js console error when rules are not defined
 - Fixed spacing around rule attribute in Form Templates
-- Fixed Form Element index settings icon target to open in same page 
+- Fixed Form Element index settings icon target to open in same page
 - Fixed output of Form Field modal Field Type name setting
 - Fixed order of events in uninstall migration
 - Fixed display issue with Gibraltar addresses
@@ -580,7 +597,7 @@
 
 ## 3.6.6 - 2019-12-11
 
-### Fixed 
+### Fixed
 - Fixed bug where Entries Report did not display correct dates ([#384])
 
 [#384]: https://github.com/barrelstrength/craft-sprout-forms/issues/384
@@ -631,7 +648,7 @@
 ### Fixed
 - Fixed error migrating report ID ([#370])
 
-[#225]: https://github.com/barrelstrength/craft-sprout-forms/issues/225 
+[#225]: https://github.com/barrelstrength/craft-sprout-forms/issues/225
 [#370]: https://github.com/barrelstrength/craft-sprout-forms/issues/370
 
 ## 3.6.1 - 2019-11-19
@@ -642,20 +659,20 @@
 - Added Spam status and additional control over management workflow
 - Added Spam Log to Failed Captchas an error messages when a Form Entry is flagged as spam
 - Added Failed Captchas to sidebar of Entry Edit page
-- Added Spam filter to Entries Element Index page 
+- Added Spam filter to Entries Element Index page
 - Added 'Mark as Default Status' Element Action
 - Added 'Mark as Spam' Element Action
 - Added 'Save Spam to the database' setting
-- Added 'Spam Redirect Behavior' setting to control where a user gets redirected when an entry is flagged as spam 
-- Added 'Spam Limit' setting to control how many Spam Entries to track in the database 
+- Added 'Spam Redirect Behavior' setting to control where a user gets redirected when an entry is flagged as spam
+- Added 'Spam Limit' setting to control how many Spam Entries to track in the database
 - Added 'Cleanup Probability' setting to set the probability the Spam cleanup task will run
-- Added 'Track Remote IP' setting 
+- Added 'Track Remote IP' setting
 - Added 'Default Section' setting to set the initial page to _Forms_ or _Entries_
 - Added 'Referrer' tracking to Entries
 - Added 'Entry Status' setting to _Entries Data Source_ to limit reports by status
 - Added 'Status Name', 'IP Address', 'Referrer', and 'User Agent' to _Entries Data Source_ reports
 - Added 'Enable Captchas' setting for individual Forms
-- Added `Entry::getCaptchaErrors()` method to retrieve all Failed Captcha error messages 
+- Added `Entry::getCaptchaErrors()` method to retrieve all Failed Captcha error messages
 - Added default translation file
 
 ### Changed
@@ -666,10 +683,10 @@
 - Updated 'Save Data' Form setting to only display when the global Save Data setting is enabled
 - Moved all Form settings to Form Settings
 - Added new _Templates_ tab in Form Settings
-- Updated navigation sidebar to hide _Entries_ tab if 'Save Data' setting is disabled 
+- Updated navigation sidebar to hide _Entries_ tab if 'Save Data' setting is disabled
 - Updated generic class name used in conditional logic: `hidden` => `sprout-hidden` ([#354])
 - Renamed Data Source _Submission Log_ to _Integrations Log_
-- Updated IP Address tracking to use 'Remote IP' instead of 'User IP' 
+- Updated IP Address tracking to use 'Remote IP' instead of 'User IP'
 - Updated `saveData` and `displaySectionTitles` columns to not allow null values
 - Updated barrelstrength/sprout-base requirement to v5.0.8
 - Updated barrelstrength/sprout-base-email requirement to v1.1.6
@@ -684,7 +701,7 @@
 
 ### Removed
 - Removed `Entry::statusHandle` attribute
-- Removed `getSpamStatusHandle` variable 
+- Removed `getSpamStatusHandle` variable
 - Removed the `fakeIt` and isValid properties from the `OnBeforeValidateEntryEvent` in favor of new Spam Redirect Behavior setting
 - Removed `fakeIt` from `OnBeforeSaveEntryEvent` in favor of Spam Redirect Behavior setting
 
@@ -702,7 +719,7 @@
 
 ## 3.5.0 - 2019-10-10
 
-> {tip} IF: you upgrade, THEN: Conditional Fields! Projects using Custom Form Templates or extending Sprout Forms in other custom ways should read the upgrade notes before upgrading: [Changes in Sprout Forms v3.5.0](https://sprout.barrelstrengthdesign.com/docs/forms/installing-and-updating-craft-3.html#upgrading-to-forms-v3-5-0) 
+> {tip} IF: you upgrade, THEN: Conditional Fields! Projects using Custom Form Templates or extending Sprout Forms in other custom ways should read the upgrade notes before upgrading: [Changes in Sprout Forms v3.5.0](https://sprout.barrelstrengthdesign.com/docs/forms/installing-and-updating-craft-3.html#upgrading-to-forms-v3-5-0)
 
 ### Added
 - Added Field Rules
@@ -723,7 +740,7 @@
 - Updated Basic Email Template to exclude fields hidden by Field Rules
 - Updated front-end js resources to use files and only require initialization from main form template
 - Updated Javascript Captcha to ensure initialization runs after page load
-- Updated script elements in Accessible Form Templates to use `{% js %}` tag 
+- Updated script elements in Accessible Form Templates to use `{% js %}` tag
 - Renamed `barrelstrength\sproutforms\elements\Form::templateOverridesFolder` => `barrelstrength\sproutforms\elements\Form::formTemplate`
 - Renamed `barrelstrength\sproutforms\models\Settings::saveDataByDefault` => `barrelstrength\sproutforms\models\Settings::enableSaveDataDefaultValue`
 - Renamed `barrelstrength\sproutforms\models\Settings::templateFolderDefaultValue` => `barrelstrength\sproutforms\models\Settings::formTemplateDefaultValue`
@@ -732,8 +749,8 @@
 - Removed `barrelstrength\sproutforms\web\twig\variables\getIntegrationById()`
 - Removed `barrelstrength\sproutforms\elements\Form::deleteById()`
 - Removed `barrelstrength\sproutforms\models\Settings::enablePerFormTemplateFolderOverride`
-- Removed `barrelstrength\sproutforms\models\Settings::enableSaveDataPerFormBasis` 
-- Removed `barrelstrength\sproutforms\models\Settings::enableIntegrationsPerFormBasis` 
+- Removed `barrelstrength\sproutforms\models\Settings::enableSaveDataPerFormBasis`
+- Removed `barrelstrength\sproutforms\models\Settings::enableIntegrationsPerFormBasis`
 
 ### Fixed
 - Update Opt-in field to add required attribute when required ([#336])
@@ -770,7 +787,7 @@
 
 ### Fixed
 - Fixed bug where field classes did not display in Basic Form Templates ([#335])
-- Fixed migration bug where `viewContext` column may not be found 
+- Fixed migration bug where `viewContext` column may not be found
 
 [#335]: https://github.com/barrelstrength/craft-sprout-forms/issues/335
 
@@ -973,7 +990,7 @@
 
 ## 3.1.0 - 2019-06-17
 
-> {tip} New Form Integrations feature provides extensible, user-friendly interface to send Form data to custom endpoints (CRM, Mailing List, etc.) or create Elements within Craft. Add multiple Integrations to a single form, log success and failure messages, and monitor your form submissions with Reports or Notifications.  
+> {tip} New Form Integrations feature provides extensible, user-friendly interface to send Form data to custom endpoints (CRM, Mailing List, etc.) or create Elements within Craft. Add multiple Integrations to a single form, log success and failure messages, and monitor your form submissions with Reports or Notifications.
 
 ### Added
 - Added Integration API
@@ -1026,7 +1043,7 @@
 ## 3.0.0-beta.57 - 2019-05-16
 
 ### Fixed
-- Fixed issue where Form Entries results were based on incorrect Element ID match 
+- Fixed issue where Form Entries results were based on incorrect Element ID match
 
 ## 3.0.0-beta.56 - 2019-05-15
 
@@ -1166,7 +1183,7 @@
 - Updated craftcms/cms requirement to v3.1.15
 - Updated barrelstrength/sprout-base-fields requirement v1.0.1
 
-### Fixed 
+### Fixed
 - Fixed Address Field settings that blocked field from being saved in Postgres and Project Config ([#77][77-sprout-fields], [#81][81-sprout-fields])
 - Fixed bug where Address Table was not created on new installation
 
@@ -1354,7 +1371,7 @@
 
 ### Fixed
 - Fixed bug where user was unable to update Opt-in Field message
-- Fixed issue where payload was sending empty POST params. [#145] 
+- Fixed issue where payload was sending empty POST params. [#145]
 - Fixed issue where Email Dropdown field would not render the correct value in Notification Email templates ([#171])
 - Fixed bug where Name field would not throw error if it was required and submitted blank [#172]
 - Fixed various issues in Notification Email migrations from Craft 2
@@ -1529,13 +1546,13 @@
 - Updated folder structure
 - Moved schema and component definitions to Plugin class
 - Moved templates to Sprout Base
-- Moved asset bundles to Sprout Base 
+- Moved asset bundles to Sprout Base
 
 ### Fixed
 - Fixed several deprecation errors
 - Fixed bug when using CLI ([#91](https://github.com/barrelstrength/craft-sprout-forms/issues/91), [#5](https://github.com/barrelstrength/craft-sprout-base/issues/5))
 - Fixed bug where form handle casing could cause error during migration ([#84](https://github.com/barrelstrength/craft-sprout-forms/issues/84))
-- Fixed Notification exception where parameter did not work in PHP 7.2 ([#86](https://github.com/barrelstrength/craft-sprout-forms/issues/86))   
+- Fixed Notification exception where parameter did not work in PHP 7.2 ([#86](https://github.com/barrelstrength/craft-sprout-forms/issues/86))
 
 ## 3.0.0-beta.10 - 2018-04-17
 
@@ -1556,8 +1573,8 @@
 
 ### Added
 - Added Notifications powered by Sprout Email
-- Added Basic Notification Email Templates integration 
-- Added Custom Save Entry Event for Notification Emails  
+- Added Basic Notification Email Templates integration
+- Added Custom Save Entry Event for Notification Emails
 - Added Reports powered by Sprout Reports
 - Added Sprout Forms Entries Data Source
 
@@ -1574,7 +1591,7 @@
 - Added user permissions to Manage, View, and Edit forms
 
 ### Fixed
-- Fixed various migration bugs  
+- Fixed various migration bugs
 - Fixed bug where "Save as New Form" did not copy all data
 - Fixed bug where Tags field did not allow selecting multiple tags
 
@@ -1592,7 +1609,7 @@
 
 ### Fixed
 - Fixed Form submission error where Sprout Email was being referenced when not present
-- Fixed javascript bug that could occur when Sprout Fields was disabled 
+- Fixed javascript bug that could occur when Sprout Fields was disabled
 
 ## 3.0.0-beta.2 - 2018-04-01
 
@@ -1624,8 +1641,8 @@
 - Added International Phone Field
 - Added autocomplete support for Name, Email, and Phone fields
 - Added Form Templates API
-- Added Accessible Templates Form Templates which include support for several WCAG 2.0 guidelines 
-- Added Captcha API 
+- Added Accessible Templates Form Templates which include support for several WCAG 2.0 guidelines
+- Added Captcha API
 - Added support for several Invisible Captcha integrations
 
 ### Removed
