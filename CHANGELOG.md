@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.13.3 - 2021-02-11
+
+## Changed
+- Updated `barrelstrength/sprout-base-email` requirement to v1.3.9
+
+### Fixed
+- Fixed migration bug where Notification Email enabled setting could be set to false ([#545])
+
+[#545]: https://github.com/barrelstrength/craft-sprout-forms/issues/545
+
 ## 3.13.2.3 - 2021-02-10
 
 ### Changed
