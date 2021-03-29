@@ -24,6 +24,7 @@ use Craft;
 use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\db\Query;
+use craft\db\Table;
 use craft\errors\MissingComponentException;
 use craft\events\RegisterComponentTypesEvent;
 use craft\helpers\MigrationHelper;
@@ -628,8 +629,10 @@ class Forms extends Component
 
         if ($this->saveForm($form)) {
             // Let's delete the default field
-            if ($field !== null && $field->id) {
-                Craft::$app->getFields()->deleteFieldById($field->id);
+            if ($field !== null && $field->uid) {
+                Craft::$app->getContent()->contentTable = Table::CONTENT;
+                Craft::$app->getFields()->applyFieldDelete($field->uid);
+                Craft::$app->getContent()->contentTable = $form->getContentTable();
             }
 
             return $form;
