@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.13.4 - 2021-03-29
+
+### Fixed
+- Fixed Project Config default settings in captcha settings migration ([#491], [#513])
+- Fixed form field save behavior when initially creating a new form ([#493])
+
+[#491]: https://github.com/barrelstrength/craft-sprout-forms/issues/491
+[#493]: https://github.com/barrelstrength/craft-sprout-forms/issues/493
+[#513]: https://github.com/barrelstrength/craft-sprout-forms/issues/513
+[#560]: https://github.com/barrelstrength/craft-sprout-forms/issues/560
+
 ## 3.13.3 - 2021-02-11
 
 ## Changed
