@@ -71,7 +71,25 @@ class m200416_000000_update_captcha_keys extends Migration
             $newCaptchaSettings[$captcha['newKey']] = $oldCaptchaSettings;
         }
 
-        $pluginSettings['captchaSettings'] = ProjectConfigHelper::packAssociativeArray($newCaptchaSettings) ?? [];
+        if (!empty($newCaptchaSettings)) {
+            $pluginSettings['captchaSettings'] = ProjectConfigHelper::packAssociativeArray($newCaptchaSettings);
+        } else {
+            $defaultCaptchaSettings = [
+                'barrelstrength\sproutforms\captchas\DuplicateCaptcha' => [
+                    'enabled' => false
+                ],
+                'barrelstrength\sproutforms\captchas\JavascriptCaptcha' => [
+                    'enabled' => false
+                ],
+                'barrelstrength\sproutforms\captchas\HoneypotCaptcha' => [
+                    'enabled' => false,
+                    'honeypotFieldName' => 'sprout-forms-hc',
+                    'honeypotScreenReaderMessage' => 'Leave this field blank'
+                ],
+            ];
+
+            $pluginSettings['captchaSettings'] = ProjectConfigHelper::packAssociativeArray($defaultCaptchaSettings);
+        }
 
         Craft::$app->getProjectConfig()->set(Plugins::CONFIG_PLUGINS_KEY.'.sprout-forms.settings', $pluginSettings, 'Updated Sprout Forms Captcha settings.');
 
