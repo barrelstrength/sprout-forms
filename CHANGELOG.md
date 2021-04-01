@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.13.5 - 2021-04-01
+
+> {warning} If you have duplicated a form, please review your original and duplicate form and make sure they have independent field layouts. You may need to [manually fix duplicated form layouts](https://github.com/barrelstrength/craft-sprout-forms/issues/568#issuecomment-811906515)
+
+### Fixed
+- Fixed issue where duplicating a form did not properly assign the layout ID ([#568])
+
+[#568]: https://github.com/barrelstrength/craft-sprout-forms/issues/568
+
 ## 3.13.4 - 2021-03-29
 
 ### Fixed

@@ -146,6 +146,7 @@ class FormsController extends BaseController
 
             if ($duplicateForm) {
                 $form->id = $duplicateForm->id;
+                $form->fieldLayoutId = $duplicateForm->fieldLayoutId;
                 $form->uid = $duplicateForm->uid;
             } else {
                 throw new Exception('Error creating Form');
