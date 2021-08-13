@@ -1,9 +1,5 @@
 @import '~dragula/dist/dragula.min.css';
 
-.sprout-forms.forms.edit [sproutforms-fieldlayouteditor] #content {
-    padding: 24px 0;
-}
-
 // Stop page title from jumping down when we add the spinner
 .sprout-forms.forms.edit #page-title h1 {
     padding-top: 2px;
