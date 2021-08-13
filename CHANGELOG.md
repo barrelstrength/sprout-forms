@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.13.6 - 2021-08-13
+
+### Fixed
+- Fixed display issue with form tabs introduced in Craft 3.7 ([#582])
+
+[#582]: https://github.com/barrelstrength/craft-sprout-forms/issues/582
+
 ## 3.13.5 - 2021-04-01
 
 > {warning} If you have duplicated a form, please review your original and duplicate form and make sure they have independent field layouts. You may need to [manually fix duplicated form layouts](https://github.com/barrelstrength/craft-sprout-forms/issues/568#issuecomment-811906515)
