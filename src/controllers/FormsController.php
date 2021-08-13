@@ -498,8 +498,8 @@ class FormsController extends BaseController
 
         $tabs = SproutForms::$app->forms->getTabsForFieldLayout($form);
 
-        $tabsHtml = !empty($tabs) ? $view->renderTemplate('_includes/tabs', [
-            'tabs' => $tabs
+        $tabsHtml = !empty($tabs) ? $view->renderTemplate('sprout-forms/_includes/tabs', [
+            'formTabs' => $tabs
         ]) : null;
 
         $contentHtml = $view->renderTemplate('sprout-forms/forms/_editFormContent', [

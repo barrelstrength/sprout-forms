@@ -182,7 +182,7 @@ let autoScroll = require('dom-autoscroller');
 
     resizeContainers() {
       let globalHeader = $('#global-header');
-      let tabsContainer = $('#tabs');
+      let tabsContainer = $('#content-header');
       let contentContainer = $('#content-container');
 
       let body = $('body');
@@ -482,7 +482,7 @@ let autoScroll = require('dom-autoscroller');
 
       Craft.postActionRequest('sprout-forms/forms/get-updated-layout-html', data, function(response) {
         if (response.success) {
-          let $tabs = $('#tabs');
+          let $tabs = $('#content-header');
           if ($tabs.length) {
             $tabs.replaceWith(response.tabsHtml);
           } else {
@@ -492,7 +492,7 @@ let autoScroll = require('dom-autoscroller');
           $('#sproutforms-fieldlayout-container').html(response.contentHtml);
 
           // Grab content again because it may have changed
-          Craft.initUiElements($('#content'));
+          Craft.initUiElements($('#sproutforms-fieldlayout-container'));
           Craft.appendHeadHtml(response.headHtml);
           Craft.appendFootHtml(response.bodyHtml);
 
