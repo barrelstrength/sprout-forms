@@ -377,7 +377,9 @@ class EntriesController extends BaseController
         }
 
         if (!$entryId) {
-            return new EntryElement();
+            $entry = new EntryElement();
+            $entry->firstSave = true;
+            return $entry;
         }
 
         $entry = SproutForms::$app->entries->getEntryById($entryId);
