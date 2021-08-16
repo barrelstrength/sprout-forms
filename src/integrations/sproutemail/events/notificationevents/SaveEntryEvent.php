@@ -16,6 +16,7 @@ use Craft;
 use craft\errors\ElementNotFoundException;
 use craft\events\ElementEvent;
 use craft\events\ModelEvent;
+use craft\helpers\ElementHelper;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -170,14 +171,18 @@ class SaveEntryEvent extends NotificationEvent
     public function validateWhenTriggers()
     {
         /**
-         * @var ElementEvent $event
+         * @var OnSaveEntryEvent $event
          */
         $event = $this->event ?? null;
 
-        $isNewEntry = $event->isNewEntry ?? false;
+        /** @var Entry $entry */
+        $entry = $event->entry;
+
+        $isNewEntry = $entry->firstSave;
+        $isUpdatedEntry  = $this->isUpdatedElement($entry);
 
         $matchesWhenNew = $this->whenNew && $isNewEntry ?? false;
-        $matchesWhenUpdated = $this->whenUpdated && !$isNewEntry ?? false;
+        $matchesWhenUpdated = $this->whenUpdated && $isUpdatedEntry ?? false;
 
         if (!$matchesWhenNew && !$matchesWhenUpdated) {
             $this->addError('event', Craft::t('sprout-forms', 'When a form entry is saved Event does not match any scenarios.'));
@@ -189,7 +194,7 @@ class SaveEntryEvent extends NotificationEvent
         }
 
         // Make sure updated entries are not new
-        if (($this->whenUpdated && $isNewEntry) && !$this->whenNew) {
+        if (($this->whenUpdated && !$isUpdatedEntry) && !$this->whenNew) {
             $this->addError('event', Craft::t('sprout-forms', '"When an entry is updated" is selected but the entry is new.'));
         }
     }
@@ -257,5 +262,13 @@ class SaveEntryEvent extends NotificationEvent
         }
 
         return $options;
+    }
+
+    protected function isUpdatedElement($element): bool
+    {
+        return
+            !$element->firstSave &&
+            !ElementHelper::isDraftOrRevision($element) &&
+            !$element->resaving;
     }
 }
