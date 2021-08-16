@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.13.7 - 2021-08-13
+
+### Changed
+- Updated `craftcms/cms` requirement v7.5.0
+
+### Fixed
+- Fixed email event trigger for Craft 3.7 compatibility ([#580])
+
+[#580]: https://github.com/barrelstrength/craft-sprout-forms/issues/580
+
 ## 3.13.6 - 2021-08-13
 
 ### Fixed
