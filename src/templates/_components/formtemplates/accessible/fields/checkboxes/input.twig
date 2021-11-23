@@ -39,7 +39,7 @@
                     {%- if value in values %} checked aria-checked="true"{% else %} aria-checked="false"{% endif %}
                     {{- dataAttributes|raw -}}
                 >
-                {%- if label is defined %} {{ label|raw }}{% endif -%}
+                {%- if label is defined %} {{ label|raw|t('site') }}{% endif -%}
             </label>
 
         {% endfor %}

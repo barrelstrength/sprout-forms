@@ -27,6 +27,6 @@
             {%- if selectedByDefault %} checked aria-checked="true"{% else %} aria-checked="false"{% endif %}
             {{- dataAttributes|raw -}}
         >
-        {%- if label is defined %} {{ label|markdown('original', true) }}{% endif -%}
+        {%- if label is defined %} {{ label|markdown('original', true)|t('site') }}{% endif -%}
     </label>
 {% endspaceless %}

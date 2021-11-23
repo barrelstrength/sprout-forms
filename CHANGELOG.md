@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.13.8 - 2021-11-23
+
+### Fixed
+- Fixed label and message translations in Checkboxes, Multiple Choice and Opt-in fields ([#592])
+
+[#592]: https://github.com/barrelstrength/craft-sprout-forms/issues/592
+
 ## 3.13.7 - 2021-08-13
 
 ### Changed
