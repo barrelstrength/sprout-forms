@@ -1,46 +1,22 @@
 {
-  "name": "barrelstrength/sprout-forms",
-  "description": "Simple, beautiful forms. 100% control.",
-  "version": "3.13.8",
-  "type": "craft-plugin",
-  "keywords": [
-    "craft",
-    "cms",
-    "craftcms",
-    "craft-plugin",
-    "sprout forms"
-  ],
-  "license": "proprietary",
-  "authors": [
-    {
-      "name": "Barrel Strength",
-      "homepage": "https://www.barrelstrengthdesign.com/"
-    }
-  ],
-  "support": {
-    "email": "sprout@barrelstrengthdesign.com",
-    "issues": "https://github.com/barrelstrength/sprout-forms/issues?state=open",
-    "source": "https://github.com/barrelstrength/sprout-forms",
-    "docs": "https://sprout.barrelstrengthdesign.com/docs/forms",
-    "rss": "https://github.com/barrelstrength/sprout-forms/commits/v2.atom"
-  },
-  "require": {
-    "craftcms/cms": "^3.7.5",
-    "barrelstrength/sprout-base": "^6.0.2",
-    "barrelstrength/sprout-base-email": "^1.3.9",
-    "barrelstrength/sprout-base-fields": "^1.4.5",
-    "barrelstrength/sprout-base-reports": "^1.5.9"
-  },
-  "autoload": {
-    "psr-4": {
-      "barrelstrength\\sproutforms\\": "src/"
-    }
-  },
-  "extra": {
-    "name": "Sprout Forms",
-    "handle": "sprout-forms",
-    "developer": "Barrel Strength",
-    "documentationUrl": "https://sprout.barrelstrengthdesign.com/docs/forms",
-    "class": "barrelstrength\\sproutforms\\SproutForms"
-  }
+	"name": "barrelstrength/sprout-forms",
+	"type": "craft-plugin",
+	"version": "0.0.1",
+	"require": {
+		"barrelstrength/sprout": "^0"
+	},
+	"autoload": {
+		"psr-4": {
+			"BarrelStrength\\SproutForms\\": "src/"
+		}
+	},
+	"extra": {
+		"name": "Sprout Forms",
+		"handle": "sprout-forms",
+		"developer": "Barrel Strength Design",
+		"developerUrl": "https://barrelstrengthdesign.com",
+		"developerEmail": "support@barrelstrengthdesign.com",
+		"documentationUrl": "https://barrelstrengthdesign.com",
+		"class": "BarrelStrength\\SproutForms\\SproutForms"
+	}
 }
