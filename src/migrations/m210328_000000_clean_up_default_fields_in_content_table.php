@@ -58,7 +58,7 @@ class m210328_000000_clean_up_default_fields_in_content_table extends Migration
             $orphanFieldPrefix = Craft::$app->content->fieldColumnPrefix . 'defaultField';
 
             // If field doesn't start with field_defaultField[XYZ]
-            if (!strpos($customColumnName, $orphanFieldPrefix) === 0) {
+            if (strpos($customColumnName, $orphanFieldPrefix) !== 0) {
                 continue;
             }
 
