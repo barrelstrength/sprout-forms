@@ -2,11 +2,12 @@
 
 namespace BarrelStrength\SproutForms;
 
-use BarrelStrength\Sprout\core\db\InstallHelper;
+use BarrelStrength\Sprout\core\db\MigrationHelper;
 use BarrelStrength\Sprout\core\db\SproutPluginMigrationInterface;
 use BarrelStrength\Sprout\core\db\SproutPluginMigrator;
 use BarrelStrength\Sprout\core\editions\Edition;
 use BarrelStrength\Sprout\core\modules\Modules;
+use BarrelStrength\Sprout\datastudio\DataStudioModule;
 use BarrelStrength\Sprout\fields\FieldsModule;
 use BarrelStrength\Sprout\forms\FormsModule;
 use BarrelStrength\Sprout\reports\ReportsModule;
@@ -39,8 +40,7 @@ class SproutForms extends Plugin implements SproutPluginMigrationInterface
     {
         return [
             FormsModule::class,
-            FieldsModule::class,
-            ReportsModule::class,
+            DataStudioModule::class,
         ];
     }
 
@@ -57,13 +57,13 @@ class SproutForms extends Plugin implements SproutPluginMigrationInterface
     public function init()
     {
         parent::init();
-        
+
         Event::on(
             Modules::class,
             Modules::EVENT_REGISTER_SPROUT_AVAILABLE_MODULES,
-            function(RegisterComponentTypesEvent $event) {
+            function (RegisterComponentTypesEvent $event) {
                 $event->types[] = FormsModule::class;
-                $event->types[] = ReportsModule::class;
+                $event->types[] = DataStudioModule::class;
             }
         );
 
@@ -74,14 +74,14 @@ class SproutForms extends Plugin implements SproutPluginMigrationInterface
     protected function instantiateSproutModules(): void
     {
         FormsModule::isEnabled() && FormsModule::getInstance();
-        ReportsModule::isEnabled() && ReportsModule::getInstance();
+        DataStudioModule::isEnabled() && DataStudioModule::getInstance();
     }
 
     protected function grantModuleEditions(): void
     {
         if ($this->edition === self::EDITION_PRO) {
 //            Forms::isEnabled() && Forms::getInstance()->grantEdition(Edition::PRO);
-            ReportsModule::isEnabled() && ReportsModule::getInstance()->grantEdition(Edition::PRO);
+            DataStudioModule::isEnabled() && DataStudioModule::getInstance()->grantEdition(Edition::PRO);
         }
     }
 
@@ -90,7 +90,7 @@ class SproutForms extends Plugin implements SproutPluginMigrationInterface
      */
     protected function afterInstall(): void
     {
-        InstallHelper::runInstallMigrations($this);
+        MigrationHelper::runMigrations($this);
 
         if (Craft::$app->getRequest()->getIsConsoleRequest()) {
             return;
@@ -106,6 +106,6 @@ class SproutForms extends Plugin implements SproutPluginMigrationInterface
      */
     protected function beforeUninstall(): void
     {
-        InstallHelper::runUninstallMigrations($this);
+        MigrationHelper::runUninstallMigrations($this);
     }
 }
