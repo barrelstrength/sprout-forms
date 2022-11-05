@@ -11,6 +11,8 @@ use craft\base\FieldInterface;
 use craft\db\Migration;
 use craft\db\Table;
 use Craft;
+use craft\helpers\ElementHelper;
+use craft\helpers\FieldHelper;
 
 class m210328_000000_clean_up_default_fields_in_content_table extends Migration
 {
@@ -35,37 +37,45 @@ class m210328_000000_clean_up_default_fields_in_content_table extends Migration
         // Get all global fields
         $allFields = Craft::$app->getFields()->getAllFields();
 
-        $globalFields = array_filter($allFields, function(FieldInterface $field) {
-            return strpos($field->context, 'global') === 0;
+        $globalFields = array_filter($allFields, static function(FieldInterface $field) {
+            return $field->context === 'global';
         });
 
-        // Append fieldColumnPrefix to the field handles and make them
-        // the array keys so we can easily check if they exist later
-        $globalFieldHandles = array_flip(array_map(function($handle) {
-            return Craft::$app->content->fieldColumnPrefix . $handle;
-        }, array_column($globalFields, 'handle')));
+        $globalFieldColumnNames = [];
 
-        $orphanedColumns = [];
+        foreach ($globalFields as $field) {
+            if (!$field::hasContentColumn()) {
+                continue;
+            }
+
+            if (is_array($field->getContentColumnType())) {
+                $columnKeys = array_keys($field->getContentColumnType());
+                foreach($columnKeys as $columnKey) {
+                    $globalFieldColumnNames[] = ElementHelper::fieldColumnFromField($field, $columnKey);
+                }
+
+                continue;
+            }
+
+            if (is_string($field->getContentColumnType())) {
+                $globalFieldColumnNames[] = ElementHelper::fieldColumnFromField($field);
+            }
+        }
+
+        // the prefix of the fields Sprout Forms created by accident
+        $orphanFieldPrefix = Craft::$app->content->fieldColumnPrefix . 'defaultField';
 
         // Check if a custom column has a matching field
         foreach($customColumnNames as $customColumnName) {
-            // If a custom field column doesn't have a matching custom field handle
-            if (isset($globalFieldHandles[$customColumnName])) {
+            // If a custom field column is in array of things we don't own, continue
+            if (in_array($customColumnName, $globalFieldColumnNames, true)) {
                 continue;
             }
-
-            // the prefix of the fields Sprout Forms created by accident
-            $orphanFieldPrefix = Craft::$app->content->fieldColumnPrefix . 'defaultField';
 
             // If field doesn't start with field_defaultField[XYZ]
-            if (!strpos($customColumnName, $orphanFieldPrefix) === 0) {
+            if (strpos($customColumnName, $orphanFieldPrefix) !== 0) {
                 continue;
             }
-
-            // If no matching content table column is found
-            if (!Craft::$app->getMigrator()->db->columnExists(Table::CONTENT, $customColumnName)) {
-                continue;
-            };
 
             // Still here? Drop our errant field and log it
             $this->dropColumn(Table::CONTENT, $customColumnName);
