@@ -1,5 +1,17 @@
 # Changelog
 
+## 3.13.9 - 2022-11-04
+
+### Fixed
+- Fixed content table migration ([#596])
+- Added support for exporting Unicode characters ([#579], [#127][#127-base-reports])
+- Fixes error when processing Address subdivision ([#609])
+
+[#579]: https://github.com/barrelstrength/craft-sprout-forms/issues/579
+[#596]: https://github.com/barrelstrength/craft-sprout-forms/issues/596
+[#127-base-reports]: https://github.com/barrelstrength/craft-sprout-reports/issues/127
+[#609]: https://github.com/barrelstrength/craft-sprout-forms/issues/609
+
 ## 3.13.8 - 2021-11-23
 
 ### Fixed
