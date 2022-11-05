@@ -1,0 +1,41 @@
+name: Bug Report - Craft 4
+description: Report an issue or unexpected behavior in Sprout for Craft 4
+labels: [ "c4", "bug" ]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: |
+        A clear and concise description of the problem. What are you trying to do? What's not working as expected? Screenshots and logs are helpful.
+    validations:
+      required: true
+  - type: textarea
+    id: how-to-reproduce
+    attributes:
+      label: How to reproduce
+      description: |
+        Without a way to easily reproduce your issue, there is little chance we will be able to help you and work on a fix. Please, take the time to show us some code and/or config that is needed for others to reproduce the problem easily. Walk us through how to create your issue step-by-step and describe any solutions you've considered.
+    validations:
+      required: true
+  - type: input
+    id: sprout-version
+    attributes:
+      label: Sprout Version
+      placeholder: x.y.z
+    validations:
+      required: true
+  - type: input
+    id: craft-version
+    attributes:
+      label: Craft Version
+      placeholder: x.y.z
+    validations:
+      required: true
+  - type: input
+    id: database-info
+    attributes:
+      label: Database Type Version
+      placeholder: MySQL/Postgres x.y.z
+    validations:
+      required: true
