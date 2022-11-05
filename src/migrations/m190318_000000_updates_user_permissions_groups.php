@@ -26,11 +26,11 @@ class m190318_000000_updates_user_permissions_groups extends Migration
             ],
             1 => [
                 'oldType' => 'viewSproutFormsEntries',
-                'newType' => 'sproutForms-viewFormEntries'
+                'newType' => 'sproutForms-viewEntries'
             ],
             2 => [
                 'oldType' => 'editSproutFormsEntries',
-                'newType' => 'sproutForms-editFormEntries'
+                'newType' => 'sproutForms-editEntries'
             ],
             4 => [
                 'oldType' => 'editSproutReports',
