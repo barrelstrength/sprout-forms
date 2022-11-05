@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.13.10 - 2022-11-05
+
+### Fixed
+- Fixed Opt-in Field markdown output ([#608])
+- Fixed permission names in migration ([#611])
+
+[#608]: https://github.com/barrelstrength/craft-sprout-forms/issues/608
+[#611]: https://github.com/barrelstrength/craft-sprout-forms/issues/611
+
 ## 3.13.9 - 2022-11-04
 
 ### Fixed
