@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.13.11 - 2022-12-21
+
+### Added
+- Added IsCondition support for Checkboxes field
+
 ## 3.13.10 - 2022-11-05
 
 ### Fixed
