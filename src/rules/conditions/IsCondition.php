@@ -26,6 +26,10 @@ class IsCondition extends Condition
 
     public function validateCondition()
     {
+        if (is_array($this->inputValue) && in_array($this->ruleValue, $this->inputValue, true)) {
+            return;
+        }
+
         if ($this->inputValue === $this->ruleValue) {
             return;
         }

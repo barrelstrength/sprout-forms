@@ -128,6 +128,18 @@ class SproutFormsRules {
                 }
               }
             }
+
+            let checkboxes = inputField.querySelectorAll('input[type="checkbox"]');
+            if (checkboxes.length >= 1) {
+              let checkboxValues = [];
+              for (let i = 0; i < checkboxes.length; i++) {
+                let checkbox = checkboxes[i];
+                if (checkbox.checked) {
+                  checkboxValues.push(checkbox.value);
+                }
+              }
+              inputValue = checkboxValues;
+            }
           }
 
           orConditions.push({

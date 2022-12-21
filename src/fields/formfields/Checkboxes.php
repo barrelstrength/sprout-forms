@@ -10,6 +10,7 @@ namespace barrelstrength\sproutforms\fields\formfields;
 use barrelstrength\sproutforms\base\FormFieldTrait;
 use barrelstrength\sproutforms\elements\Entry;
 use barrelstrength\sproutforms\fields\formfields\base\BaseOptionsConditionalTrait;
+use barrelstrength\sproutforms\rules\conditions\IsCondition;
 use Craft;
 use craft\fields\Checkboxes as CraftCheckboxes;
 use craft\fields\Checkboxes as CraftCheckboxesField;
@@ -24,9 +25,9 @@ use yii\base\Exception;
  * Class SproutFormsCheckboxesField
  *
  * @property string $svgIconPath
- * @property array  $compatibleCraftFields
- * @property array  $compatibleCraftFieldTypes
- * @property mixed  $exampleInputHtml
+ * @property array $compatibleCraftFields
+ * @property array $compatibleCraftFieldTypes
+ * @property mixed $exampleInputHtml
  */
 class Checkboxes extends CraftCheckboxesField
 {
@@ -67,7 +68,7 @@ class Checkboxes extends CraftCheckboxesField
     {
         return Craft::$app->getView()->renderTemplate('sprout-forms/_components/fields/formfields/checkboxes/example',
             [
-                'field' => $this
+                'field' => $this,
             ]
         );
     }
@@ -92,7 +93,7 @@ class Checkboxes extends CraftCheckboxesField
                 'value' => $value,
                 'field' => $this,
                 'entry' => $entry,
-                'renderingOptions' => $renderingOptions
+                'renderingOptions' => $renderingOptions,
             ]
         );
 
@@ -102,10 +103,20 @@ class Checkboxes extends CraftCheckboxesField
     /**
      * @inheritdoc
      */
+    public function getCompatibleConditions()
+    {
+        return [
+            new IsCondition(),
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getCompatibleCraftFieldTypes(): array
     {
         return [
-            CraftCheckboxes::class
+            CraftCheckboxes::class,
         ];
     }
 }
