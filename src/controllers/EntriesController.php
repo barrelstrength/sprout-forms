@@ -264,7 +264,9 @@ class EntriesController extends BaseController
             return $this->redirectWithValidationErrors($entry);
         }
 
-        $this->createLastEntryId($entry);
+        if ($this->form->submissionMethod === 'sync') {
+            $this->createLastEntryId($entry);
+        }
 
         $successMessageTemplate = $entry->getForm()->successMessage ?? '';
         $successMessage = Craft::$app->getView()->renderObjectTemplate($successMessageTemplate, $entry);
