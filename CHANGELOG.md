@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.13.12 - 2023-01-17
+
+### Fixed
+- Fixed bug where async submissions were not getting properly wrapped in Promise
+- Fixed bug where lastEntry variable was added to session during async submissions
+
 ## 3.13.11 - 2022-12-21
 
 ### Added
