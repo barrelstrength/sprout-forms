@@ -205,112 +205,117 @@ class SproutFormsSubmitHandler {
   submitAsync() {
     let self = this;
 
-    let xhr = new XMLHttpRequest();
+    return new Promise(async (resolve) => {
 
-    xhr.onreadystatechange = function() {
-      // Only run if the request is complete
-      if (xhr.readyState !== 4) {
-        return;
-      }
+      let xhr = new XMLHttpRequest();
 
-      /**
-       * @param {Object} response
-       * @param {boolean} response.success
-       * @param {string} response.errorDisplayMethod
-       * @param {string} response.message
-       */
-      let response = JSON.parse(xhr.responseText);
-
-      if (xhr.status >= 200 || xhr.status < 300) {
-
-        self.removeInlineErrors();
-
-        let oldMessageBox = document.getElementById(self.messageBoxId);
-        if (oldMessageBox !== null) {
-          oldMessageBox.parentNode.removeChild(oldMessageBox);
+      xhr.onreadystatechange = function() {
+        // Only run if the request is complete
+        if (xhr.readyState !== 4) {
+          return;
         }
 
-        if (response.success) {
+        /**
+         * @param {Object} response
+         * @param {boolean} response.success
+         * @param {string} response.errorDisplayMethod
+         * @param {string} response.message
+         */
+        let response = JSON.parse(xhr.responseText);
 
-          if (response.message) {
-            self.displayMessageBox({
-              id: self.messageBoxId,
-              message: response.message,
-              messageClass: self.successMessageClass
-            });
+        if (xhr.status >= 200 || xhr.status < 300) {
+
+          self.removeInlineErrors();
+
+          let oldMessageBox = document.getElementById(self.messageBoxId);
+          if (oldMessageBox !== null) {
+            oldMessageBox.parentNode.removeChild(oldMessageBox);
           }
 
-          self.form.reset();
+          if (response.success) {
+
+            if (response.message) {
+              self.displayMessageBox({
+                id: self.messageBoxId,
+                message: response.message,
+                messageClass: self.successMessageClass
+              });
+            }
+
+            self.form.reset();
+
+          } else {
+
+            let globalErrorsEnabled = response && response.errorDisplayMethod
+                ? ['global', 'both'].indexOf(response.errorDisplayMethod) >= 0
+                : false;
+            let inlineErrorsEnabled = response && response.errorDisplayMethod
+                ? ['inline', 'both'].indexOf(response.errorDisplayMethod) >= 0
+                : false;
+
+            let globalErrors = [];
+
+            if (globalErrorsEnabled) {
+              for (let errors of Object.entries(response.errors)) {
+                if (errors[1] !== undefined) {
+                  globalErrors = [...globalErrors, ...errors[1]];
+                }
+              }
+            }
+
+            let errorListHtml = self.getErrorList(globalErrors);
+            if (response.message || errorListHtml) {
+              self.displayMessageBox({
+                id: self.messageBoxId,
+                message: response.message ?? null,
+                messageClass: self.errorMessageClass,
+                errors: errorListHtml
+              });
+            }
+
+            // Add inline errors to fields
+            if (inlineErrorsEnabled) {
+              for (let [fieldHandle, errors] of Object.entries(response.errors)) {
+                let fieldId = self.fieldWrapperIdPrefix + fieldHandle + self.fieldWrapperIdSuffix;
+                let fieldWrapper = document.getElementById(fieldId);
+
+                // Make sure we don't display two copies of the inline errors box on subsequent requests
+                let errorClasses = '.' + self.getTargetElementClasses(self.errorsContainerElement).join('.');
+                let oldErrorList = fieldWrapper.querySelector(errorClasses);
+                if (oldErrorList) {
+                  oldErrorList.parentNode.removeChild(oldErrorList);
+                }
+
+                fieldWrapper.append(self.getErrorList(errors));
+              }
+            }
+          }
 
         } else {
+          // Something went wrong, response outside the range 200-299
+          let errors = {};
 
-          let globalErrorsEnabled = response && response.errorDisplayMethod
-            ? ['global', 'both'].indexOf(response.errorDisplayMethod) >= 0
-            : false;
-          let inlineErrorsEnabled = response && response.errorDisplayMethod
-            ? ['inline', 'both'].indexOf(response.errorDisplayMethod) >= 0
-            : false;
-
-          let globalErrors = [];
-
-          if (globalErrorsEnabled) {
-            for (let errors of Object.entries(response.errors)) {
-              if (errors[1] !== undefined) {
-                globalErrors = [...globalErrors, ...errors[1]];
-              }
-            }
+          if (typeof response.error === 'string') {
+            errors = self.getErrorList([response.error])
           }
 
-          let errorListHtml = self.getErrorList(globalErrors);
-          if (response.message || errorListHtml) {
-            self.displayMessageBox({
-              id: self.messageBoxId,
-              message: response.message ?? null,
-              messageClass: self.errorMessageClass,
-              errors: errorListHtml
-            });
-          }
-
-          // Add inline errors to fields
-          if (inlineErrorsEnabled) {
-            for (let [fieldHandle, errors] of Object.entries(response.errors)) {
-              let fieldId = self.fieldWrapperIdPrefix + fieldHandle + self.fieldWrapperIdSuffix;
-              let fieldWrapper = document.getElementById(fieldId);
-
-              // Make sure we don't display two copies of the inline errors box on subsequent requests
-              let errorClasses = '.' + self.getTargetElementClasses(self.errorsContainerElement).join('.');
-              let oldErrorList = fieldWrapper.querySelector(errorClasses);
-              if (oldErrorList) {
-                oldErrorList.parentNode.removeChild(oldErrorList);
-              }
-
-              fieldWrapper.append(self.getErrorList(errors));
-            }
-          }
+          self.displayMessageBox({
+            id: self.messageBoxId,
+            message: '<p>' + self.failureMessage + '</p>',
+            messageClass: self.errorMessageClass,
+            errors: errors
+          });
         }
 
-      } else {
-        // Something went wrong, response outside the range 200-299
-        let errors = {};
+        resolve(true);
+      };
 
-        if (typeof response.error === 'string') {
-          errors = self.getErrorList([response.error])
-        }
+      let formData = new FormData(self.form);
 
-        self.displayMessageBox({
-          id: self.messageBoxId,
-          message: '<p>' + self.failureMessage + '</p>',
-          messageClass: self.errorMessageClass,
-          errors: errors
-        });
-      }
-    };
-
-    let formData = new FormData(self.form);
-
-    xhr.open('POST', '/');
-    xhr.setRequestHeader('Accept', 'application/json');
-    xhr.send(formData);
+      xhr.open('POST', '/');
+      xhr.setRequestHeader('Accept', 'application/json');
+      xhr.send(formData);
+    });
   }
 
   displayMessageBox(config) {
