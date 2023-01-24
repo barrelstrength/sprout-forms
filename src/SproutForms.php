@@ -8,9 +8,7 @@ use BarrelStrength\Sprout\core\db\SproutPluginMigrator;
 use BarrelStrength\Sprout\core\editions\Edition;
 use BarrelStrength\Sprout\core\modules\Modules;
 use BarrelStrength\Sprout\datastudio\DataStudioModule;
-use BarrelStrength\Sprout\fields\FieldsModule;
 use BarrelStrength\Sprout\forms\FormsModule;
-use BarrelStrength\Sprout\reports\ReportsModule;
 use Craft;
 use craft\base\Plugin;
 use craft\db\MigrationManager;
@@ -22,7 +20,7 @@ use yii\base\InvalidConfigException;
 
 class SproutForms extends Plugin implements SproutPluginMigrationInterface
 {
-    public string $minVersionRequired = '4.6.8';
+    public string $minVersionRequired = '3.13.8';
 
     public string $schemaVersion = '0.0.1.3';
 
@@ -53,14 +51,14 @@ class SproutForms extends Plugin implements SproutPluginMigrationInterface
         return SproutPluginMigrator::make($this);
     }
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 
         Event::on(
             Modules::class,
             Modules::EVENT_REGISTER_SPROUT_AVAILABLE_MODULES,
-            function (RegisterComponentTypesEvent $event) {
+            static function (RegisterComponentTypesEvent $event) {
                 $event->types[] = FormsModule::class;
                 $event->types[] = DataStudioModule::class;
             }
@@ -79,7 +77,7 @@ class SproutForms extends Plugin implements SproutPluginMigrationInterface
     protected function grantModuleEditions(): void
     {
         if ($this->edition === Edition::PRO) {
-//            Forms::isEnabled() && Forms::getInstance()->grantEdition(Edition::PRO);
+            FormsModule::isEnabled() && FormsModule::getInstance()->grantEdition(Edition::PRO);
             DataStudioModule::isEnabled() && DataStudioModule::getInstance()->grantEdition(Edition::PRO);
         }
     }
