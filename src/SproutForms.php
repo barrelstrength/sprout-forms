@@ -332,7 +332,7 @@ class SproutForms extends Plugin implements SproutEditionsInterface, SproutDepen
             }
         }
 
-        if (Craft::$app->getUser()->getIsAdmin()) {
+        if (Craft::$app->getUser()->getIsAdmin() && Craft::$app->getConfig()->getGeneral()->allowAdminChanges) {
             $parent['subnav']['settings'] = [
                 'label' => Craft::t('sprout-forms', 'Settings'),
                 'url' => 'sprout-forms/settings'

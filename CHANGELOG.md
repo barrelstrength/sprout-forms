@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.13.15 - UNRELEASED
+
+### Fixed
+- Updated settings section to be removed from nav if `allowAdminChanges` is disabled 
+
 ## 3.13.14 - 2023-01-18
 
 ### Fixed
