@@ -41,6 +41,21 @@
     otherPlaceholderText: '_forms/mycustomtemplates'|t('sprout-forms')
 })) }}
 
+{{ forms.selectField({
+    label: 'Default Submission Method'|t('sprout-forms'),
+    instructions: 'The method used to submit your forms.'|t('sprout-forms'),
+    id: 'defaultSubmissionMethod',
+    name: 'defaultSubmissionMethod',
+    value: settings.defaultSubmissionMethod,
+    options: [{
+        value: "sync",
+        label: "Reload Page (Synchronous)",
+    },{
+        value: "async",
+        label: "AJAX (Asynchronous)",
+    }]
+}) }}
+
 <hr>
 
 {{ forms.lightswitchField({

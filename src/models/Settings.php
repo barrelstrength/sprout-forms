@@ -30,6 +30,8 @@ class Settings extends Model implements SproutSettingsInterface
 
     public $formTemplateId = AccessibleTemplates::class;
 
+    public $defaultSubmissionMethod = 'sync';
+
     public $enableSaveData = true;
 
     public $saveSpamToDatabase = false;

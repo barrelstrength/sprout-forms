@@ -620,6 +620,7 @@ class Forms extends Component
         $form->titleFormat = "{dateCreated|date('D, d M Y H:i:s')}";
         $form->formTemplateId = '';
         $form->saveData = $settings->enableSaveData ? $settings->enableSaveDataDefaultValue : false;
+        $form->submissionMethod = $settings->defaultSubmissionMethod ?: 'sync';
 
         // Set default tab
 

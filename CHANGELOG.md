@@ -2,6 +2,9 @@
 
 ## 3.13.15 - UNRELEASED
 
+### Added
+- Added support for Default Submission Method setting
+
 ### Fixed
 - Updated settings section to be removed from nav if `allowAdminChanges` is disabled 
 
