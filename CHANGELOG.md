@@ -5,6 +5,7 @@
 ### Added
 - Added support for Default Submission Method setting
 - Added _Allowed Asset Volumes_ setting to limit the available asset volumes available to the File Upload field
+- Added support for overriding async Success and Error messages in `SproutFormsSubmitHandler` JS
 
 ### Fixed
 - Updated settings section to be removed from nav if `allowAdminChanges` is disabled 

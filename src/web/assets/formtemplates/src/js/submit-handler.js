@@ -17,6 +17,8 @@ class SproutFormsSubmitHandler {
 
     this.successMessageClass = settings.successMessageClass ?? 'sproutforms-message-success';
     this.errorMessageClass = settings.errorMessageClass ?? 'sproutforms-message-errors';
+    this.successMessageHtml = settings.successMessageHtml ?? null;
+    this.errorMessageHtml = settings.errorMessageHtml ?? null;
     this.failureMessage = settings.failureMessage ?? 'Submission failed';
 
     this.messageElement = settings.messageElement ?? 'div';
@@ -234,10 +236,10 @@ class SproutFormsSubmitHandler {
 
           if (response.success) {
 
-            if (response.message) {
+            if (self.successMessageHtml || response.message) {
               self.displayMessageBox({
                 id: self.messageBoxId,
-                message: response.message,
+                message: self.successMessageHtml ?? response.message,
                 messageClass: self.successMessageClass
               });
             }
@@ -264,10 +266,10 @@ class SproutFormsSubmitHandler {
             }
 
             let errorListHtml = self.getErrorList(globalErrors);
-            if (response.message || errorListHtml) {
+            if (self.errorMessageHtml || response.message || errorListHtml) {
               self.displayMessageBox({
                 id: self.messageBoxId,
-                message: response.message ?? null,
+                message: self.errorMessageHtml ?? response.message ?? null,
                 messageClass: self.errorMessageClass,
                 errors: errorListHtml
               });
