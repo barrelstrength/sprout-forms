@@ -143,4 +143,16 @@
     options: assetField.getSourceOptions(),
     values: settings.allowedAssetVolumes,
     showAllOption: true,
+    warning: config.allowedAssetVolumes is defined ? configWarning('allowedAssetVolumes')
+}) }}
+
+{{ forms.textField({
+    label: "Default File Upload Location Subpath"|t('sprout-forms'),
+    instructions: "The default subpath will be used whenever a new File Upload field is added to a form. The subfolder path can contain variables like the Form Entry ID <code>{id}</code> or the Form handle <code>{{ object.getForm().handle }}</code>"|t
+        ('sprout-forms'),
+    id: 'defaultUploadLocationSubpath',
+    name: 'defaultUploadLocationSubpath',
+    value: settings.defaultUploadLocationSubpath,
+    placeholder: '{{ object.getForm().handle }}',
+    warning: config.defaultUploadLocationSubpath is defined ? configWarning('defaultUploadLocationSubpath')
 }) }}

@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.13.16 - 2023-02-07
+
+### Added
+- Added _Default File Upload Location Subpath_ setting
+
 ## 3.13.15 - 2023-02-06
 
 ### Added
