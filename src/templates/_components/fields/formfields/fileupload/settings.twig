@@ -55,7 +55,7 @@
             label: "Upload Location"|t('app'),
             instructions: uploadLocationNote,
             errors: field.getErrors('singleUploadLocationSubpath')
-        }, uploadLocationInput('singleUploadLocation', field, sourceOptions)) }}
+        }, uploadLocationInput('singleUploadLocation', field, allowedSourceOptions)) }}
     </div>
 
     {{ forms.checkboxField({
@@ -84,4 +84,5 @@
     {{ block('limitField') }}
     {#    {{ block('viewModeField') }}#}
     {{ block('selectionLabelField') }}
+
 {% endblock %}

@@ -54,6 +54,8 @@ class Settings extends Model implements SproutSettingsInterface
 
     public $showReportsTab = true;
 
+    public $allowedAssetVolumes = '*';
+
     /**
      * @inheritdoc
      */

@@ -131,3 +131,16 @@
     onLabel: "Enable"|t('sprout-forms'),
     warning: config.enableEditFormEntryViaFrontEnd is defined ? configWarning('enableEditFormEntryViaFrontEnd')
 }) }}
+
+<hr>
+
+{% set assetField = create('craft\\fields\\Assets') %}
+
+{{ forms.checkboxSelectField({
+    label: 'Allowed Asset Volumes'|t('sprout-forms'),
+    instructions: 'The asset volumes that will be available to select when adding a File Upload field to a form.'|t('sprout-forms'),
+    name: 'allowedAssetVolumes',
+    options: assetField.getSourceOptions(),
+    values: settings.allowedAssetVolumes,
+    showAllOption: true,
+}) }}

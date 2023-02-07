@@ -9,6 +9,7 @@ namespace barrelstrength\sproutforms\fields\formfields;
 
 use barrelstrength\sproutforms\base\FormFieldTrait;
 use barrelstrength\sproutforms\elements\Entry;
+use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\fields\Assets as CraftAssets;
 use craft\helpers\Template as TemplateHelper;
@@ -136,6 +137,27 @@ class FileUpload extends CraftAssets
         );
 
         return TemplateHelper::raw($rendered);
+    }
+
+    protected function settingsTemplateVariables(): array
+    {
+        $variables = parent::settingsTemplateVariables();
+
+        $settings = SproutForms::$app->getSettings();
+
+        $allowedSourceOptions = $this->getSourceOptions();
+
+        if ($settings->allowedAssetVolumes !== '*') {
+            foreach ($allowedSourceOptions as $key => $sourceOption) {
+                if (!in_array($sourceOption['value'], $settings->allowedAssetVolumes, false)) {
+                    unset($allowedSourceOptions[$key]);
+                }
+            }
+        }
+
+        $variables['allowedSourceOptions'] = $allowedSourceOptions;
+
+        return $variables;
     }
 
     /**
