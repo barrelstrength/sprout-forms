@@ -55,7 +55,7 @@ class FileUpload extends CraftAssets
     public function __construct(array $config = [])
     {
         parent::__construct($config);
-        
+
         if (!$this->singleUploadLocationSubpath) {
             $settings = SproutForms::$app->getSettings();
             $this->singleUploadLocationSubpath = $settings->defaultUploadLocationSubpath;
