@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.13.15 - UNRELEASED
+## 3.13.15 - 2023-02-06
 
 ### Added
 - Added support for Default Submission Method setting
