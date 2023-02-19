@@ -12,21 +12,16 @@ use BarrelStrength\Sprout\forms\FormsModule;
 use Craft;
 use craft\base\Plugin;
 use craft\db\MigrationManager;
-use craft\errors\MigrationException;
 use craft\events\RegisterComponentTypesEvent;
 use craft\helpers\UrlHelper;
 use yii\base\Event;
-use yii\base\InvalidConfigException;
 
 class SproutForms extends Plugin implements SproutPluginMigrationInterface
 {
     public string $minVersionRequired = '3.13.8';
 
-    public string $schemaVersion = '0.0.1.3';
+    public string $schemaVersion = '4.44.444';
 
-    /**
-     * @inheritDoc
-     */
     public static function editions(): array
     {
         return [
@@ -43,9 +38,6 @@ class SproutForms extends Plugin implements SproutPluginMigrationInterface
         ];
     }
 
-    /**
-     * @throws InvalidConfigException
-     */
     public function getMigrator(): MigrationManager
     {
         return SproutPluginMigrator::make($this);
@@ -58,7 +50,7 @@ class SproutForms extends Plugin implements SproutPluginMigrationInterface
         Event::on(
             Modules::class,
             Modules::EVENT_REGISTER_SPROUT_AVAILABLE_MODULES,
-            static function (RegisterComponentTypesEvent $event) {
+            static function(RegisterComponentTypesEvent $event) {
                 $event->types[] = FormsModule::class;
                 $event->types[] = DataStudioModule::class;
             }
@@ -82,9 +74,6 @@ class SproutForms extends Plugin implements SproutPluginMigrationInterface
         }
     }
 
-    /**
-     * @throws MigrationException
-     */
     protected function afterInstall(): void
     {
         MigrationHelper::runMigrations($this);
@@ -98,9 +87,6 @@ class SproutForms extends Plugin implements SproutPluginMigrationInterface
         Craft::$app->getResponse()->redirect($url)->send();
     }
 
-    /**
-     * @throws MigrationException
-     */
     protected function beforeUninstall(): void
     {
         MigrationHelper::runUninstallMigrations($this);
