@@ -56,7 +56,7 @@ class Settings extends Model implements SproutSettingsInterface
 
     public $allowedAssetVolumes = '*';
 
-    public $defaultUploadLocationSubpath = null;
+    public $defaultUploadLocationSubpath = '';
 
     /**
      * @inheritdoc
