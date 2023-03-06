@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.13.17 - 2023-03-06
+
+### Fixed
+- Fixed bug where default upload subpath setting could trigger an error when viewing a Submission ([#622PR])
+- Fixed bug where form field layout scrolling could be disabled after editing a field modal
+
+- [#622PR]: https://github.com/barrelstrength/craft-sprout-forms/pull/622
+
 ## 3.13.16 - 2023-02-07
 
 ### Added
