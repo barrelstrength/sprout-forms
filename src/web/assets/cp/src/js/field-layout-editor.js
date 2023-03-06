@@ -518,6 +518,8 @@ let autoScroll = require('dom-autoscroller');
           self.$revisionStatus.addClass('checkmark-icon');
           self.$revisionStatus.removeClass('invisible unsaved');
 
+          self.resizeContainers();
+
           return true;
         }
 
