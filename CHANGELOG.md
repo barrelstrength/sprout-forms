@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.13.18 - 2023-03-07
+
+### Updated
+- Updated Phone field default country setting
+
 ## 3.13.17 - 2023-03-06
 
 ### Fixed

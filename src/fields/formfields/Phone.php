@@ -61,7 +61,7 @@ class Phone extends FormField implements PreviewableFieldInterface
     /**
      * @var string|null
      */
-    public $country;
+    public $country = 'US';
 
     /**
      * @var string|null
