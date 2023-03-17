@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.13.19 - 2023-03-17
+
+### Fixed
+- Fixed bug where synchronous submissions could be handled asynchronously
+
 ## 3.13.18 - 2023-03-07
 
 ### Updated

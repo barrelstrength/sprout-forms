@@ -174,15 +174,17 @@ class SproutFormsSubmitHandler {
 
     let submissionMethod = self.form.dataset.submissionMethod;
 
-    return new Promise(async (resolve) => {
-      if (submissionMethod === 'async') {
-        await self.submitAsync()
+    if (submissionMethod === 'async') {
+        return new Promise(async (resolve) => {
+            await self.submitAsync();
+            resolve(true);
+        });
       } else {
-        self.form.submit();
+        return new Promise((resolve) => {
+            self.form.submit();
+            resolve(true);
+        });
       }
-
-      resolve(true);
-    });
   }
 
   onAfterFormSubmitEvent() {
