@@ -179,12 +179,13 @@ class SproutFormsSubmitHandler {
             await self.submitAsync();
             resolve(true);
         });
-      } else {
-        return new Promise((resolve) => {
-            self.form.submit();
-            resolve(true);
-        });
-      }
+    } else {
+      self.form.submit();
+
+      // End the promise chain here. The form will redirect
+      // before any after submit behaviors can take place.
+      throw new Error('Form Redirected after Submission');
+    }
   }
 
   onAfterFormSubmitEvent() {

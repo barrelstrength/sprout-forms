@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.13.20 - 2023-03-17
+
+### Updated
+- Improves promise chain for synchronous submissions 
+
 ## 3.13.19 - 2023-03-17
 
 ### Fixed
