@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.14.0 - 2023-04-06
+
+### Updated
+- Improves performance of new form and new field creation
+
 ## 3.13.20 - 2023-03-17
 
 ### Updated

@@ -111,14 +111,6 @@ class Forms extends Component
         return static::$fieldVariables;
     }
 
-    /**
-     * @param FormElement $form
-     * @param bool        $duplicate
-     *
-     * @return bool
-     * @throws Throwable
-     * @throws InvalidConfigException
-     */
     public function saveForm(FormElement $form, bool $duplicate = false): bool
     {
         $isNew = !$form->id;
@@ -548,32 +540,6 @@ class Forms extends Component
     }
 
     /**
-     * Create a secuencial string for the "name" and "handle" fields if they are already taken
-     *
-     * @param $field
-     * @param $value
-     *
-     * @return null|string
-     */
-    public function getFieldAsNew($field, $value)
-    {
-        $newField = null;
-        $i = 1;
-        $band = true;
-        do {
-            $newField = $field == 'handle' ? $value.$i : $value.' '.$i;
-            $form = $this->getFieldValue($field, $newField);
-            if ($form === null) {
-                $band = false;
-            }
-
-            $i++;
-        } while ($band);
-
-        return $newField;
-    }
-
-    /**
      * Removes forms and related records from the database given the ids
      *
      * @param $formElements
@@ -598,48 +564,40 @@ class Forms extends Component
     }
 
     /**
-     * Creates a form with a empty default tab
-     *
-     * @param string|null $name
-     * @param string|null $handle
-     *
-     * @return FormElement|null
-     * @throws \Exception
-     * @throws Throwable
+     * Creates a form with an empty default tab
      */
-    public function createNewForm($name = null, $handle = null)
+    public function createNewForm($name = null, $handle = null): ?Form
     {
         $form = new FormElement();
         $name = $name ?? 'Form';
         $handle = $handle ?? 'form';
 
+        $formHandles = (new Query())
+            ->select(['handle'])
+            ->from([FormRecord::tableName()])
+            ->where(['LIKE', 'handle', 'form'])
+            ->column();
+
+        if ($appendValue = $this->newFormAppendValue($formHandles)) {
+            $name .= ' ' . $appendValue;
+            $handle .= $appendValue;
+        }
+
         $settings = SproutForms::$app->getSettings();
 
-        $form->name = $this->getFieldAsNew('name', $name);
-        $form->handle = $this->getFieldAsNew('handle', $handle);
+        $form->name = $name;
+        $form->handle = $handle;
         $form->titleFormat = "{dateCreated|date('D, d M Y H:i:s')}";
         $form->formTemplateId = '';
         $form->saveData = $settings->enableSaveData ? $settings->enableSaveDataDefaultValue : false;
         $form->submissionMethod = $settings->defaultSubmissionMethod ?: 'sync';
 
-        // Set default tab
-
-        /** @var Field $field */
-        $field = null;
-        $form = SproutForms::$app->fields->addDefaultTab($form, $field);
-
-        if ($this->saveForm($form)) {
-            // Let's delete the default field
-            if ($field !== null && $field->uid) {
-                Craft::$app->getContent()->contentTable = Table::CONTENT;
-                Craft::$app->getFields()->applyFieldDelete($field->uid);
-                Craft::$app->getContent()->contentTable = $form->getContentTable();
-            }
-
-            return $form;
+        if (!$this->saveForm($form)) {
+            return null;
         }
 
-        return null;
+        return $form;
+
     }
 
     /**
@@ -938,6 +896,27 @@ class Forms extends Component
         }
 
         return $tabs;
+    }
+
+    private function newFormAppendValue($handles): ?int
+    {
+        $defaultHandleIncrementValues = array_map(static function($handle) {
+            preg_match('/(\d*)$/', $handle, $matches);
+
+            if (!isset($matches[0])) {
+                return null;
+            }
+
+            return (int)$matches[0];
+        }, $handles);
+
+        // If we don't have any handles ending in numbers but we did find forms
+        // that began with 'form', we can assume the only formHandle is the default
+        if (empty($defaultHandleIncrementValues)) {
+            return count($handles) ? 1 : null;
+        }
+
+        return max($defaultHandleIncrementValues) + 1;
     }
 
     /**

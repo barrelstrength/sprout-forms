@@ -279,107 +279,6 @@ class Fields extends Component
     }
 
     /**
-     * Create a sequential string for the "name" and "handle" fields if they are already taken
-     *
-     * @param $field
-     * @param $value
-     *
-     * @return null|string|string[]
-     */
-    public function getFieldAsNew($field, $value)
-    {
-        $newField = null;
-        $i = 1;
-        $band = true;
-
-        do {
-            if ($field == 'handle') {
-                // Append a number to our handle to ensure it is unique
-                $newField = $value.$i;
-
-                $form = $this->getFieldValue($field, $newField);
-
-                if (null === $form) {
-                    $band = false;
-                }
-            } else {
-                // Add spaces before any capital letters in our name
-                $newField = preg_replace('/([a-z])([A-Z])/', '$1 $2', $value);
-                $band = false;
-            }
-
-            $i++;
-        } while ($band);
-
-        return $newField;
-    }
-
-    /**
-     * This service allows create a default tab given a form
-     *
-     * @param Form                      $form
-     * @param Field|FieldInterface|null $field
-     *
-     * @return null
-     * @throws Throwable
-     */
-    public function addDefaultTab(Form $form, &$field = null)
-    {
-        if (!$form) {
-            return null;
-        }
-
-        $fields = [];
-        $tabFields = [];
-
-        if ($field === null) {
-            $fieldsService = Craft::$app->getFields();
-            $handle = $this->getFieldAsNew('handle', 'defaultField');
-
-            $field = $fieldsService->createField([
-                'type' => SingleLine::class,
-                'name' => Craft::t('sprout-forms', 'Default Field'),
-                'handle' => $handle,
-                'instructions' => '',
-                'translationMethod' => Field::TRANSLATION_METHOD_NONE,
-            ]);
-            // Save our field
-            Craft::$app->content->fieldContext = $form->getFieldContext();
-            Craft::$app->fields->saveField($field);
-
-            $fields[] = $field;
-            $tabFields[] = $field;
-        }
-
-        // Create a tab
-        $tabName = $this->getDefaultTabName();
-        $requiredFields = [];
-        $postedFieldLayout = [];
-
-        // Add our new field
-//        if ($field !== null && $field->id != null) {
-//            $postedFieldLayout[$tabName][] = $field->id;
-//        }
-
-        $tab = new FieldLayoutTab();
-        $tab->name = urldecode($tabName);
-        $tab->sortOrder = 0;
-        $tab->setFields($tabFields);
-
-        $tabs[] = $tab;
-
-        $fieldLayout = new FieldLayout();
-        $fieldLayout->type = FormElement::class;
-        $fieldLayout->setTabs($tabs);
-        $fieldLayout->setFields($fields);
-
-        // Set the tab to the form
-        $form->setFieldLayout($fieldLayout);
-
-        return $form;
-    }
-
-    /**
      * This service allows add a field to a current FieldLayoutFieldRecord
      *
      * @param Field       $field
@@ -459,11 +358,6 @@ class Fields extends Component
         return $this->addFieldToLayout($field, $form, $tabId, null, $required);
     }
 
-    public function getDefaultTabName(): string
-    {
-        return Craft::t('sprout-forms', 'Page 1');
-    }
-
     /**
      * Loads the sprout modal field via ajax.
      *
@@ -536,13 +430,21 @@ class Fields extends Component
         // strip all non-alphanumeric characters
         $fieldName = preg_replace('/[^A-Za-z0-9 ]/', '', $fieldName);
         $handleName = StringHelper::toCamelCase(lcfirst($fieldName));
-        $name = $this->getFieldAsNew('name', $fieldName);
-        $handle = $this->getFieldAsNew('handle', $handleName);
+
+        $fieldHandles = (new Query())
+            ->select(['handle'])
+            ->from(['{{%fields}}'])
+            ->where(['context' => 'sproutForms:'.$form->id])
+            ->column();
+
+        if ($appendValue = $this->newFieldAppendValue($fieldHandles)) {
+            $handleName .= $appendValue;
+        }
 
         $field = $fieldsService->createField([
             'type' => $type,
-            'name' => $name,
-            'handle' => $handle,
+            'name' => $fieldName,
+            'handle' => $handleName,
             'instructions' => '',
             // @todo - test locales/sites behavior
             'translationMethod' => Field::TRANSLATION_METHOD_NONE,
@@ -711,5 +613,26 @@ class Fields extends Component
         }
 
         return new FieldLayoutFieldRecord();
+    }
+
+    private function newFieldAppendValue($handles): ?int
+    {
+        $defaultHandleIncrementValues = array_map(static function($handle) {
+            preg_match('/(\d*)$/', $handle, $matches);
+
+            if (!isset($matches[0])) {
+                return null;
+            }
+
+            return (int)$matches[0];
+        }, $handles);
+
+        // If we don't have any handles ending in numbers but we did find forms
+        // that began with 'form', we can assume the only formHandle is the default
+        if (empty($defaultHandleIncrementValues)) {
+            return count($handles) ? 1 : null;
+        }
+
+        return max($defaultHandleIncrementValues) + 1;
     }
 }
