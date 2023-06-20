@@ -1,22 +1,24 @@
 {
-	"name": "barrelstrength/sprout-forms",
-	"type": "craft-plugin",
-	"version": "0.0.1",
-	"require": {
-		"barrelstrength/sprout": "^0"
-	},
-	"autoload": {
-		"psr-4": {
-			"BarrelStrength\\SproutForms\\": "src/"
-		}
-	},
-	"extra": {
-		"name": "Sprout Forms",
-		"handle": "sprout-forms",
-		"developer": "Barrel Strength Design",
-		"developerUrl": "https://barrelstrengthdesign.com",
-		"developerEmail": "support@barrelstrengthdesign.com",
-		"documentationUrl": "https://barrelstrengthdesign.com",
-		"class": "BarrelStrength\\SproutForms\\SproutForms"
-	}
+    "name": "barrelstrength/sprout-forms",
+    "type": "craft-plugin",
+    "version": "4.44.444",
+    "license": "proprietary",
+    "require": {
+        "barrelstrength/sprout": "^4.0.0",
+        "craftcms/cms": "^4.3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "BarrelStrength\\SproutForms\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Sprout Forms",
+        "handle": "sprout-forms",
+        "developer": "Barrel Strength Design",
+        "developerUrl": "https://barrelstrengthdesign.com",
+        "developerEmail": "support@barrelstrengthdesign.com",
+        "documentationUrl": "https://barrelstrengthdesign.com",
+        "class": "BarrelStrength\\SproutForms\\SproutForms"
+    }
 }
