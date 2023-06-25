@@ -212,6 +212,7 @@ class Install extends Migration
             'ipAddress' => $this->string(),
             'referrer' => $this->string(),
             'userAgent' => $this->longText(),
+            'submissionMetadata' => $this->text(),
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull(),
             'uid' => $this->uid(),

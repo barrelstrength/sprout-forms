@@ -24,6 +24,8 @@ class Settings extends Model implements SproutSettingsInterface
     const SPAM_REDIRECT_BEHAVIOR_NORMAL = 'redirectAsNormal';
     const SPAM_REDIRECT_BEHAVIOR_BACK_TO_FORM = 'redirectBackToForm';
 
+    const SUBMISSION_METADATA_HANDLE = 'sproutSubmissionMetadata';
+
     public $pluginNameOverride = '';
 
     public $defaultSection = 'entries';
@@ -31,6 +33,8 @@ class Settings extends Model implements SproutSettingsInterface
     public $formTemplateId = AccessibleTemplates::class;
 
     public $defaultSubmissionMethod = 'sync';
+
+    public $captureSubmissionMetadata = false;
 
     public $enableSaveData = true;
 

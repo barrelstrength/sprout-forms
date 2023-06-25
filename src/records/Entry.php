@@ -20,6 +20,7 @@ use yii\db\ActiveQueryInterface;
  * @property int                  $statusId
  * @property string               $ipAddress
  * @property string               $userAgent
+ * @property string               $submissionMetadata
  * @property ActiveQueryInterface $element
  * @property ActiveQueryInterface $entryStatuses
  * @property ActiveQueryInterface $form

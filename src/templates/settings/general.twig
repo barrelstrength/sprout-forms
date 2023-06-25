@@ -100,6 +100,15 @@
         warning: config.trackRemoteIp is defined ? configWarning('trackRemoteIp')
     }) }}
 
+    {{ forms.lightswitchField({
+        label: "Capture Submission Metadata"|t('sprout-forms'),
+        instructions: "Capture all URL parameters along with the form submission data."|t('sprout-forms'),
+        id: 'captureSubmissionMetadata',
+        name: 'captureSubmissionMetadata',
+        on: settings.captureSubmissionMetadata,
+        onLabel: "Enable"|t('sprout-forms'),
+    }) }}
+
     {{ forms.selectField({
         label: "Default Section"|t('sprout-forms'),
         instructions: "The form section that will be selected by default in the sidebar navigation."|t('sprout-forms'),

@@ -61,6 +61,8 @@ class Entry extends Element
 
     public $userAgent;
 
+    public $submissionMetadata;
+
     /** @var Captcha[] $captchas */
     protected $captchas = [];
 
@@ -453,6 +455,7 @@ class Entry extends Element
         $record->formId = $this->formId;
         $record->statusId = $this->statusId;
         $record->userAgent = $this->userAgent;
+        $record->submissionMetadata = $this->submissionMetadata;
 
         $record->save(false);
 

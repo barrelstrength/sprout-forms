@@ -13,10 +13,12 @@ use barrelstrength\sproutforms\elements\Form as FormElement;
 use barrelstrength\sproutforms\events\OnBeforePopulateEntryEvent;
 use barrelstrength\sproutforms\events\OnBeforeValidateEntryEvent;
 use barrelstrength\sproutforms\models\Settings;
+use barrelstrength\sproutforms\services\Forms;
 use barrelstrength\sproutforms\SproutForms;
 use Craft;
 use craft\errors\ElementNotFoundException;
 use craft\errors\MissingComponentException;
+use craft\helpers\Json;
 use craft\helpers\UrlHelper;
 use craft\web\Controller as BaseController;
 use Throwable;
@@ -353,6 +355,12 @@ class EntriesController extends BaseController
         $entry->ipAddress = $settings->trackRemoteIp ? $request->getRemoteIP() : null;
         $entry->referrer = $request->getReferrer();
         $entry->userAgent = $request->getUserAgent();
+
+
+        if ($settings->captureSubmissionMetadata) {
+
+            $entry->submissionMetadata = Json::encode(Craft::$app->getRequest()->getQueryParams());
+        }
 
         // Set the entry attributes, defaulting to the existing values for whatever is missing from the post data
         $fieldsLocation = $request->getBodyParam('fieldsLocation', 'fields');

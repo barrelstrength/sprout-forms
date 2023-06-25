@@ -17,6 +17,7 @@ use barrelstrength\sproutforms\rules\conditions\EndsWithCondition;
 use barrelstrength\sproutforms\rules\conditions\IsCondition;
 use barrelstrength\sproutforms\rules\conditions\IsNotCondition;
 use barrelstrength\sproutforms\rules\conditions\StartsWithCondition;
+use barrelstrength\sproutforms\services\Forms;
 use Craft;
 use craft\base\ElementInterface;
 use craft\base\PreviewableFieldInterface;

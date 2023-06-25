@@ -5,8 +5,10 @@
     'currentUser': currentUser,
     'siteName': siteName,
     'siteUrl': siteUrl,
-    'systemName': systemName
+    'systemName': systemName,
+    'submissionMetadata': craft.app.getRequest().getQueryParams()|json_encode,
 }) -%}
+
 {%- set renderingOptions = renderingOptions is defined and renderingOptions is not empty ? renderingOptions : {} -%}
 {%- set lastEntry = craft.sproutForms.lastEntry(form.id) -%}
 {%- set globalErrorsEnabled = form.errorDisplayMethod in ['both', 'global'] ? true : false -%}
