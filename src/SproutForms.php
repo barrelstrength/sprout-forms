@@ -9,6 +9,8 @@ use BarrelStrength\Sprout\core\editions\Edition;
 use BarrelStrength\Sprout\core\modules\Modules;
 use BarrelStrength\Sprout\datastudio\DataStudioModule;
 use BarrelStrength\Sprout\forms\FormsModule;
+use BarrelStrength\Sprout\mailer\MailerModule;
+use BarrelStrength\Sprout\transactional\TransactionalModule;
 use Craft;
 use craft\base\Plugin;
 use craft\db\MigrationManager;
@@ -35,6 +37,8 @@ class SproutForms extends Plugin implements SproutPluginMigrationInterface
         return [
             FormsModule::class,
             DataStudioModule::class,
+            MailerModule::class, // Install first
+            TransactionalModule::class,
         ];
     }
 
@@ -49,10 +53,11 @@ class SproutForms extends Plugin implements SproutPluginMigrationInterface
 
         Event::on(
             Modules::class,
-            Modules::EVENT_REGISTER_SPROUT_AVAILABLE_MODULES,
+            Modules::INTERNAL_SPROUT_EVENT_REGISTER_AVAILABLE_MODULES,
             static function(RegisterComponentTypesEvent $event) {
                 $event->types[] = FormsModule::class;
                 $event->types[] = DataStudioModule::class;
+                $event->types[] = TransactionalModule::class;
             }
         );
 
@@ -64,6 +69,7 @@ class SproutForms extends Plugin implements SproutPluginMigrationInterface
     {
         FormsModule::isEnabled() && FormsModule::getInstance();
         DataStudioModule::isEnabled() && DataStudioModule::getInstance();
+        TransactionalModule::isEnabled() && TransactionalModule::getInstance();
     }
 
     protected function grantModuleEditions(): void
@@ -71,6 +77,7 @@ class SproutForms extends Plugin implements SproutPluginMigrationInterface
         if ($this->edition === Edition::PRO) {
             FormsModule::isEnabled() && FormsModule::getInstance()->grantEdition(Edition::PRO);
             DataStudioModule::isEnabled() && DataStudioModule::getInstance()->grantEdition(Edition::PRO);
+            TransactionalModule::isEnabled() && TransactionalModule::getInstance()->grantEdition(Edition::PRO);
         }
     }
 
