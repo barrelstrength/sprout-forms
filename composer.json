@@ -1,11 +1,11 @@
 {
     "name": "barrelstrength/sprout-forms",
     "type": "craft-plugin",
-    "version": "4.44.444-beta.1",
+    "version": "5.0.0-alpha.1",
     "license": "proprietary",
     "require": {
-        "barrelstrength/sprout": "^4.2.3",
-        "craftcms/cms": "^4.5.10"
+        "barrelstrength/sprout": "^5.0.0-alpha.1",
+        "craftcms/cms": "^5.1.7"
     },
     "autoload": {
         "psr-4": {
